@@ -4,6 +4,7 @@ import { Utils } from '../../../utils/utils';
 import { gettext, orgID } from '../../../utils/constants';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import toaster from '../../../components/toast';
+import SetGroupQuotaDialog from '../../../components/dialog/org-set-group-quota-dialog';
 import AddDepartmentDialog from '../../../components/dialog/sysadmin-dialog/add-department-v2-dialog';
 import AddDepartMemberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
 import RenameDepartmentDialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
@@ -30,6 +31,7 @@ class Departments extends React.Component {
       isRenameDepartmentDialogShow: false,
       isDeleteDepartmentDialogShow: false,
       isShowAddRepoDialog: false,
+      isSetQuotaDialogShow: false,
       membersList: [],
       isTopDepartmentLoading: false,
       isMembersListLoading: false,
@@ -48,6 +50,7 @@ class Departments extends React.Component {
               id: item.id,
               name: item.name,
               orgId: item.org_id,
+              quota: item.quota,
             });
             return node;
           });
@@ -102,6 +105,7 @@ class Departments extends React.Component {
         parentGroupId: department.parent_group_id,
         orgId: department.org_id,
         parentNode: node,
+        quota: department.quota,
       }));
       node.setChildren(childrenNodes);
       cb && cb(childrenNodes);
@@ -285,6 +289,28 @@ class Departments extends React.Component {
     });
   };
 
+  toggleSetQuotaDialog = (node) => {
+    this.setState({ operateNode: node, isSetQuotaDialogShow: !this.state.isSetQuotaDialogShow });
+  };
+
+  onSetQuota = (newNode) => {
+    const rootNodes = this.state.rootNodes.slice(0);
+    this._setQuota(rootNodes[0], newNode);
+    this.setState({
+      rootNodes: rootNodes
+    });
+  };
+
+  _setQuota = (node, newNode) => {
+    if (node.id === newNode.id) {
+      node.quota = newNode.quota;
+    } else {
+      node.children.forEach(child => {
+        this._setQuota(child, newNode);
+      });
+    }
+  };
+
 
   render() {
     const { rootNodes, operateNode, checkedDepartmentId, isAddDepartmentDialogShow, isAddMembersDialogShow,
@@ -308,6 +334,7 @@ class Departments extends React.Component {
                     onChangeDepartment={this.onChangeDepartment}
                     listSubDepartments={this.listSubDepartments}
                     toggleAddDepartment={this.toggleAddDepartment}
+                    toggleSetQuotaDialog={this.toggleSetQuotaDialog}
                     toggleAddLibrary={this.toggleAddLibrary}
                     toggleAddMembers={this.toggleAddMembers}
                     toggleRename={this.toggleRename}
@@ -328,6 +355,7 @@ class Departments extends React.Component {
                     deleteGroup={this.deleteGroup}
                     createGroup={this.createGroup}
                     toggleAddDepartment={this.toggleAddDepartment}
+                    toggleSetQuotaDialog={this.toggleSetQuotaDialog}
                     toggleAddLibrary={this.toggleAddLibrary}
                     toggleAddMembers={this.toggleAddMembers}
                     toggleRename={this.toggleRename}
@@ -384,6 +412,13 @@ class Departments extends React.Component {
             groupID={String(operateNode.id)}
           />
         )}
+        {this.state.isSetQuotaDialogShow &&
+          <SetGroupQuotaDialog
+            group={operateNode}
+            onSetQuota={this.onSetQuota}
+            toggle={this.toggleSetQuotaDialog}
+          />
+        }
       </Fragment>
     );
   }

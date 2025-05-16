@@ -1,0 +1,14 @@
+ @keyframes displaySelectedToolbar {
+   from {
+     top: 24px;
+   }
+   to {
+     top: 0;
+   }
+ }
+ 
+.cur-view-path .selected-items-toolbar {
+   height: 24px;
+   position: relative;
+   animation: displaySelectedToolbar .3s ease-in-out 1;
+}

@@ -3,7 +3,6 @@
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
 pro_pylibs_dir=${INSTALLPATH}/pro/python
@@ -49,7 +48,7 @@ function check_python_executable() {
 
 function prepare_log_dir() {
     logdir=${TOPDIR}/logs
-    if ! [[ -d ${logsdir} ]]; then
+    if ! [[ -d ${logdir} ]]; then
         if ! mkdir -p "${logdir}"; then
             echo "ERROR: failed to create logs dir \"${logdir}\""
             exit 1

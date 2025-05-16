@@ -320,20 +320,16 @@ class EnvManager(object):
         for path in paths:
             error_if_not_exists(path)
 
-        if os.path.exists(ccnet_config.ccnet_dir):
-            Utils.error('Ccnet config dir \"%s\" already exists.' % ccnet_config.ccnet_dir)
-
     def get_seahub_env(self):
         '''Prepare for seahub syncdb'''
         env = dict(os.environ)
-        env['CCNET_CONF_DIR'] = ccnet_config.ccnet_dir
         env['SEAFILE_CONF_DIR'] = seafile_config.seafile_dir
         env['SEAFES_DIR'] = os.path.join(self.install_path, 'pro', 'python', 'seafes')
         self.setup_python_path(env)
         return env
 
     def setup_python_path(self, env):
-        '''And PYTHONPATH and CCNET_CONF_DIR/SEAFILE_CONF_DIR to env, which is
+        '''And PYTHONPATH and SEAFILE_CONF_DIR to env, which is
         needed by seahub
 
         '''
@@ -761,15 +757,6 @@ class CcnetConfigurator(AbstractConfigurator):
             self.ask_server_ip_or_domain()
         # self.ask_port()
 
-    def generate(self):
-        print('Generating ccnet configuration ...\n')
-        with open(self.ccnet_conf, 'w') as fp:
-            fp.write('[General]')
-
-        self.generate_db_conf()
-
-        Utils.must_mkdir(self.ccnet_dir)
-
     def generate_db_conf(self):
         config = Utils.read_config(self.ccnet_conf)
         # [Database]
@@ -1021,7 +1008,6 @@ class SeahubConfigurator(AbstractConfigurator):
             fp.write('\n')
             fp.write('SERVICE_URL = "%s://%s"' % (self.get_proto(), ccnet_config.ip_or_domain))
             fp.write('\n')
-            self.write_database_config(fp)
 
     def write_utf8_comment(self, fp):
         fp.write('# -*- coding: utf-8 -*-')
@@ -1034,29 +1020,6 @@ class SeahubConfigurator(AbstractConfigurator):
         ]
         key = Utils.get_command_output(cmd).strip()
         fp.write('SECRET_KEY = "%s"' % key.decode())
-
-    def write_database_config(self, fp):
-        template = '''\
-\nDATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': '%(name)s',
-        'USER': '%(username)s',
-        'PASSWORD': '%(password)s',
-        'HOST': '%(host)s',
-        'PORT': '%(port)s',
-        'OPTIONS': {'charset': 'utf8mb4'},
-    }
-}
-
-'''
-        text = template % dict(name=db_config.seahub_db_name,
-                               username=db_config.seafile_mysql_user,
-                               password=db_config.seafile_mysql_password,
-                               host=db_config.mysql_host,
-                               port=db_config.mysql_port)
-
-        fp.write(text)
 
     def ask_admin_email(self):
         print()
@@ -1272,6 +1235,9 @@ pidfile = os.path.join(pids_dir, 'seahub.pid')
 timeout = 1200
 
 limit_request_line = 8190
+
+# for forwarder headers
+forwarder_headers = 'SCRIPT_NAME,PATH_INFO,REMOTE_USER'
 '''
 
         text = template % dict(pids_dir=env_mgr.central_pids_dir,
@@ -1362,7 +1328,6 @@ def set_file_perm():
     ]
     dirs = [
         env_mgr.central_config_dir,
-        ccnet_config.ccnet_dir,
         seafile_config.seafile_dir,
         seahub_config.seahub_settings_py,
     ]
@@ -1541,8 +1506,6 @@ def main():
 
     # Part 2: generate configuration
     db_config.generate()
-    # ccnet_config.generate()  # do not create ccnet.conf
-    Utils.must_mkdir(ccnet_config.ccnet_dir)
     seafile_config.generate()
     seafdav_config.generate()
     gunicorn_config.generate()

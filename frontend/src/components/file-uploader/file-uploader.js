@@ -630,16 +630,21 @@ class FileUploader extends React.Component {
   };
 
   replaceRepetitionFile = () => {
+    let resumableFile = this.resumable.files[this.resumable.files.length - 1];
     let { repoID, path } = this.props;
     seafileAPI.getUpdateLink(repoID, path).then(res => {
       this.resumable.opts.target = res.data;
 
-      let resumableFile = this.resumable.files[this.resumable.files.length - 1];
       resumableFile.formData['replace'] = 1;
       resumableFile.formData['target_file'] = resumableFile.formData.parent_dir + resumableFile.fileName;
-      this.setState({ isUploadRemindDialogShow: false });
-      this.setUploadFileList(this.resumable.files);
-      this.resumable.upload();
+      this.setState({
+        isUploadRemindDialogShow: false,
+        isUploadProgressDialogShow: true,
+        uploadFileList: [...this.state.uploadFileList, resumableFile]
+      }, () => {
+        this.resumable.upload();
+      });
+      Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', true);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);

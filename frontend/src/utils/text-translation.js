@@ -31,6 +31,10 @@ const TextTranslation = {
     key: 'New Whiteboard File',
     value: gettext('New Whiteboard File')
   },
+  NEW_EXCALIDRAW_FILE: {
+    key: 'New Excalidraw File',
+    value: gettext('New Excalidraw File')
+  },
   NEW_SEADOC_FILE: {
     key: 'New SeaDoc File',
     value: gettext('New SeaDoc File')
@@ -87,6 +91,14 @@ const TextTranslation = {
     key: 'Unfreeze Document',
     value: gettext('Unfreeze Document')
   },
+  FREEZE_PAGE: {
+    key: 'Freeze page',
+    value: gettext('Freeze page')
+  },
+  EXPORT_PAGE: {
+    key: 'Export',
+    value: gettext('Export')
+  },
   CONVERT_AND_EXPORT: {
     key: 'Convert & Export',
     value: gettext('Convert & Export')
@@ -138,6 +150,14 @@ const TextTranslation = {
   EXPORT_SDOC: {
     key: 'Export sdoc',
     value: gettext('Export as zip')
+  },
+  STAR: {
+    key: 'Star',
+    value: gettext('Star')
+  },
+  UNSTAR: {
+    key: 'Unstar',
+    value: gettext('Unstar')
   },
 
   // repo operations

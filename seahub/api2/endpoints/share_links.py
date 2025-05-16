@@ -40,7 +40,7 @@ from seahub.utils import gen_shared_link, is_org_context, normalize_file_path, \
     check_filename_with_rename, gen_file_upload_url, \
     get_password_strength_level, is_valid_password, is_valid_email, string2list, gen_file_get_url_by_sharelink
 from seahub.utils.file_op import if_locked_by_online_office
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND, PDF
+from seahub.utils.file_types import IMAGE, VIDEO, PDF
 from seahub.utils.file_tags import get_tagged_files, get_files_tags_in_dir
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, \
         timestamp_to_isoformat_timestr
@@ -655,10 +655,7 @@ class ShareLink(APIView):
             file_path = normalize_file_path(fs.path)
             folder_path = os.path.dirname(file_path)
 
-        username = request.user.username
-        repo_folder_permission = seafile_api.check_permission_by_path(repo_id,
-                                                                      folder_path,
-                                                                      username)
+        repo_folder_permission = check_folder_permission(request, repo_id, folder_path)
         if not repo_folder_permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -953,10 +950,7 @@ class ShareLinkDirents(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            current_commit = seafile_api.get_commit_list(repo_id, 0, 1)[0]
-            dirent_list = seafile_api.list_dir_by_commit_and_path(repo_id,
-                                                                  current_commit.id,
-                                                                  path, -1, -1)
+            dirent_list = seafile_api.list_dir_by_path(repo_id, path)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -989,7 +983,7 @@ class ShareLinkDirents(APIView):
                 dirent_info['file_name'] = dirent.obj_name
 
                 file_type, file_ext = get_file_type_and_ext(dirent.obj_name)
-                if file_type in (IMAGE, XMIND) or \
+                if file_type == IMAGE or \
                         (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL) or \
                         (file_type == PDF and ENABLE_PDF_THUMBNAIL):
 
@@ -1127,7 +1121,7 @@ class ShareLinkUploadDone(APIView):
         if not (share_link or upload_link):
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         if share_link:
 
             # check if login required
@@ -1182,7 +1176,7 @@ class ShareLinkUploadDone(APIView):
             if upload_link.is_expired():
                 error_msg = 'Upload link is expired'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            
+
             repo_id = upload_link.repo_id
             repo = seafile_api.get_repo(repo_id)
             if not repo:
@@ -1196,7 +1190,7 @@ class ShareLinkUploadDone(APIView):
                                                     link_owner) != 'rw':
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            
+
         # send signal
         dirent_path = request.data.get('file_path')
         if not dirent_path:

@@ -1,4 +1,4 @@
-import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableFileTags, enableRepoSnapshotLabel,
+import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
   enableOfficeWebApp, officeWebAppEditFileExtension } from './constants';
@@ -114,6 +114,7 @@ export const Utils = {
     'webp': 'pic.png',
     'jfif': 'pic.png',
     'draw': 'draw.png',
+    'exdraw': 'draw.png',
 
     // photoshop file
     'psd': 'psd.png',
@@ -490,7 +491,7 @@ export const Utils = {
   getFolderOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
 
     let list = [];
-    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
+    const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT, STAR, UNSTAR } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
 
@@ -532,6 +533,12 @@ export const Utils = {
       list.push(COPY);
     }
 
+    if (dirent.starred) {
+      list.push(UNSTAR);
+    } else {
+      list.push(STAR);
+    }
+
     if (permission == 'rw') {
       if (folderPermEnabled && ((isRepoOwner && currentRepoInfo.has_been_shared_out) || currentRepoInfo.is_admin)) {
         list.push('Divider', PERMISSION);
@@ -554,9 +561,10 @@ export const Utils = {
   getFileOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
     let list = [];
     const {
-      SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
+      SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
       HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT,
-      CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC, EXPORT_SDOC
+      CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC, EXPORT_SDOC,
+      STAR, UNSTAR
     } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
@@ -611,10 +619,13 @@ export const Utils = {
       }
     }
 
+    if (dirent.starred) {
+      list.push(UNSTAR);
+    } else {
+      list.push(STAR);
+    }
+
     if (permission == 'rw') {
-      if (enableFileTags) {
-        list.push(TAGS);
-      }
       if (isPro) {
         if (dirent.is_locked) {
           if (dirent.locked_by_me || dirent.lock_owner == 'OnlineOffice' || isRepoOwner || currentRepoInfo.is_admin) {
@@ -1088,7 +1099,7 @@ export const Utils = {
 
   isInternalMarkdownLink: function (url, repoID) {
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/lib/' + repoID + '.*\.md$');
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '.*(\\.md)$');
     return re.test(url);
   },
 
@@ -1099,7 +1110,7 @@ export const Utils = {
 
   getPathFromInternalMarkdownLink: function (url, repoID) {
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(serviceURL + '/lib/' + repoID + '/file' + '.*(\\.md)$');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
@@ -1117,7 +1128,7 @@ export const Utils = {
   isWikiInternalMarkdownLink: function (url, slug) {
     slug = encodeURIComponent(slug);
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/published/' + slug + '.*\.md$');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*(\\.md)$');
     return re.test(url);
   },
 
@@ -1130,7 +1141,7 @@ export const Utils = {
   getPathFromWikiInternalMarkdownLink: function (url, slug) {
     slug = encodeURIComponent(slug);
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/published/' + slug + '(.*\.md)');
+    var re = new RegExp(serviceURL + '/published/' + slug + '.*(\\.md)$');
     var array = re.exec(url);
     var path = array[1];
     try {
@@ -1578,21 +1589,34 @@ export const Utils = {
     }
   },
 
-  generatePassword: function (length, hasNum = 1, hasChar = 1, hasSymbol = 1) {
+  generateSecureRandomInRange: function (min, max) {
+    const start = Math.min(min, max);
+    const end = Math.max(min, max);
+    const range = end - start + 1;
+    const byteSize = Math.ceil(Math.log2(range) / 8);
+
+    const randomBytes = new Uint8Array(byteSize);
+    window.crypto.getRandomValues(randomBytes);
+
+    const randomValue = Array.from(randomBytes).reduce((pre, byte) => (pre << 8) | byte, 0);
+    return start + (randomValue % range);
+  },
+
+  generatePassword: function (length) {
 
     var password = '';
 
     // 65~90：A~Z
-    password += String.fromCharCode(Math.floor((Math.random() * (90 - 65)) + 65));
+    password += String.fromCharCode(this.generateSecureRandomInRange(65, 90));
 
     // 97~122：a~z
-    password += String.fromCharCode(Math.floor((Math.random() * (122 - 97)) + 97));
+    password += String.fromCharCode(this.generateSecureRandomInRange(97, 122));
 
     // 48~57：0~9
-    password += String.fromCharCode(Math.floor((Math.random() * (57 - 48)) + 48));
+    password += String.fromCharCode(this.generateSecureRandomInRange(48, 57));
 
     // 33~47：!~/
-    password += String.fromCharCode(Math.floor((Math.random() * (47 - 33)) + 33));
+    password += String.fromCharCode(this.generateSecureRandomInRange(33, 47));
 
     // 33~47：!~/
     // 48~57：0~9
@@ -1602,8 +1626,7 @@ export const Utils = {
     // 97~122：a~z
     // 123~127：{~
     for (var i = 0; i < length - 4; i++) {
-      var num = Math.floor((Math.random() * (127 - 33)) + 33);
-      password += String.fromCharCode(num);
+      password += String.fromCharCode(this.generateSecureRandomInRange(33, 127));
     }
 
     return password;

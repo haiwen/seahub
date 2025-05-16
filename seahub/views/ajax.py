@@ -45,7 +45,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_file_upload_url, is_org_context, is_pro_version, normalize_dir_path, \
     FILEEXT_TYPE_MAP
 from seahub.utils.star import get_dir_starred_files
-from seahub.utils.file_types import IMAGE, VIDEO, XMIND
+from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER
 from seahub.utils.repo import get_locked_files_by_dir, get_repo_owner, \
         repo_has_been_shared_out, parse_repo_perm
@@ -259,10 +259,7 @@ def list_lib_dir(request, repo_id):
             if file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
                 f_['is_video'] = True
 
-            if file_type == XMIND:
-                f_['is_xmind'] = True
-
-            if file_type in (IMAGE, XMIND) or \
+            if file_type == IMAGE or \
                     (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
                 # if thumbnail has already been created, return its src.
                 # Then web browser will use this src to get thumbnail instead of

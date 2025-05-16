@@ -15,7 +15,6 @@ class UserItem extends React.Component {
     this.state = {
       isOperationShow: false
     };
-    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -115,7 +114,7 @@ class SysAdminShareToUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOption: null,
+      selectedUsers: [],
       errorMsg: [],
       permission: 'rw',
       sharedItems: []
@@ -127,8 +126,8 @@ class SysAdminShareToUser extends React.Component {
     }
   }
 
-  handleSelectChange = (option) => {
-    this.setState({ selectedOption: option });
+  handleSelectChange = (options) => {
+    this.setState({ selectedUsers: options });
     this.options = [];
   };
 
@@ -151,9 +150,9 @@ class SysAdminShareToUser extends React.Component {
   shareToUser = () => {
     let users = [];
     let repoID = this.props.repoID;
-    if (this.state.selectedOption && this.state.selectedOption.length > 0) {
-      for (let i = 0; i < this.state.selectedOption.length; i ++) {
-        users[i] = this.state.selectedOption[i].email;
+    if (this.state.selectedUsers && this.state.selectedUsers.length > 0) {
+      for (let i = 0; i < this.state.selectedUsers.length; i ++) {
+        users[i] = this.state.selectedUsers[i].email;
       }
     }
     systemAdminAPI.sysAdminAddRepoSharedItem(repoID, 'user', users, this.state.permission).then(res => {
@@ -167,10 +166,9 @@ class SysAdminShareToUser extends React.Component {
       this.setState({
         errorMsg: errorMsg,
         sharedItems: this.state.sharedItems.concat(newItems),
-        selectedOption: null,
+        selectedUsers: [],
         permission: 'rw',
       });
-      this.userSelect.current.clearSelect();
     }).catch(error => {
       if (error.response) {
         let message = gettext('Library can not be shared to owner.');
@@ -178,7 +176,7 @@ class SysAdminShareToUser extends React.Component {
         errMessage.push(message);
         this.setState({
           errorMsg: errMessage,
-          selectedOption: null,
+          selectedUsers: [],
         });
       }
     });
@@ -236,10 +234,10 @@ class SysAdminShareToUser extends React.Component {
             <tr>
               <td>
                 <UserSelect
-                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleSelectChange}
+                  selectedUsers={this.state.selectedUsers}
                 />
               </td>
               <td>

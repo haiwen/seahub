@@ -17,7 +17,7 @@ class Dirent {
       this.mtime_relative = dayjs.unix(json.mtime).fromNow();
     }
     this.permission = json.permission || 'rw';
-    this.isSelected = false; // is check or not
+    this.isSelected = json.isSelected || false; // is check or not
     this.starred = json.starred || false;
     if (json.type === 'dir') {
       this.has_been_shared_out = false;

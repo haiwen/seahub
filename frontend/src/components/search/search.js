@@ -12,7 +12,10 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
-import { PRIVATE_FILE_TYPE } from '../../constants';
+import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_KEY, SEARCH_FILTERS_SHOW_KEY } from '../../constants';
+import SearchFilters from './search-filters';
+import SearchTags from './search-tags';
+import IconBtn from '../icon-btn';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -21,6 +24,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
   isPublic: PropTypes.bool,
   isViewFile: PropTypes.bool,
+  onSelectTag: PropTypes.func,
 };
 
 const PER_PAGE = 20;
@@ -49,6 +53,19 @@ class Search extends Component {
       isSearchInputShow: false, // for mobile
       searchTypesMax: 0,
       highlightSearchTypesIndex: 0,
+      isFiltersShow: false,
+      isFilterControllerActive: false,
+      filters: {
+        search_filename_only: false,
+        creator_list: [],
+        date: {
+          type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
+          value: '',
+          from: null,
+          to: null,
+        },
+        suffixes: '',
+      },
     };
     this.highlightRef = null;
     this.source = null; // used to cancel request;
@@ -64,6 +81,8 @@ class Search extends Component {
     document.addEventListener('keydown', this.onDocumentKeydown);
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
+    const isFiltersShow = localStorage.getItem(SEARCH_FILTERS_SHOW_KEY) === 'true';
+    this.setState({ isFiltersShow });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -119,7 +138,7 @@ class Search extends Component {
   };
 
   onFocusHandler = () => {
-    this.setState({ width: '570px', isMaskShow: true, isCloseShow: true });
+    this.setState({ width: '570px', isMaskShow: true });
     this.calculateHighlightType();
   };
 
@@ -308,7 +327,9 @@ class Search extends Component {
   };
 
   onItemClickHandler = (item) => {
-    this.resetToDefault();
+    if (item.is_dir === true) {
+      this.resetToDefault();
+    }
     this.keepVisitedItem(item);
     this.props.onSearchedClick(item);
   };
@@ -355,7 +376,7 @@ class Search extends Component {
     if (this.state.showRecent) {
       this.setState({ showRecent: false });
     }
-    this.setState({ value: newValue });
+    this.setState({ value: newValue, isCloseShow: newValue.length > 0 });
     setTimeout(() => {
       const trimmedValue = newValue.trim();
       const isInRepo = this.props.repoID;
@@ -390,8 +411,8 @@ class Search extends Component {
         isLoading: false,
       });
     }).catch(error => {
-      // eslint-disable-next-line no-console
-      console.log(error);
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
       this.setState({ isLoading: false });
     });
   };
@@ -415,7 +436,7 @@ class Search extends Component {
     this.queryData = queryData;
 
     if (isPublic) {
-      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, page, PER_PAGE).then(res => {
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, page, PER_PAGE, queryData.search_filename_only).then(res => {
         this.source = null;
         if (res.data.total > 0) {
           this.setState({
@@ -463,8 +484,8 @@ class Search extends Component {
         isResultGotten: true,
       });
     }).catch(error => {
-      /* eslint-disable */
-      console.log(error);
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
       this.setState({ isLoading: false });
     });
   };
@@ -483,6 +504,8 @@ class Search extends Component {
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
+      items[i]['mtime'] = data[i].mtime || '';
+      items[i]['repo_owner_email'] = data[i].repo_owner_email || '';
     }
     return items;
   }
@@ -499,6 +522,18 @@ class Search extends Component {
       highlightIndex: 0,
       isSearchInputShow: false,
       showRecent: true,
+      isFilterControllerActive: false,
+      filters: {
+        search_filename_only: false,
+        creator_list: [],
+        date: {
+          type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
+          value: '',
+          start: null,
+          end: null,
+        },
+        suffixes: '',
+      }
     });
   }
 
@@ -510,8 +545,9 @@ class Search extends Component {
       resultItems: [],
       highlightIndex: 0,
       isSearchInputShow: false,
+      isCloseShow: false,
     });
-  }
+  };
 
   renderSearchResult() {
     const { resultItems, width, showRecent, isResultGotten, isLoading } = this.state;
@@ -524,6 +560,7 @@ class Search extends Component {
       }
     }
 
+    const filteredItems = this.filterByCreator(resultItems);
     if (isLoading) {
       return <Loading />;
     }
@@ -533,8 +570,8 @@ class Search extends Component {
     else if (!isResultGotten) {
       return this.renderSearchTypes(this.state.inputValue.trim());
     }
-    else if (resultItems.length > 0) {
-      return this.renderResults(resultItems);
+    else if (filteredItems.length > 0) {
+      return this.renderResults(filteredItems);
     }
     else {
       return <div className="search-result-none">{gettext('No results matching')}</div>;
@@ -587,7 +624,8 @@ class Search extends Component {
     if (this.props.repoID) {
       const { path } = this.props;
       const isMetadataView = path && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
-      if (path && path !== '/' && !this.props.isViewFile && !isMetadataView) {
+      const isTagView = path && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES);
+      if (path && path !== '/' && !this.props.isViewFile && !isMetadataView && !isTagView) {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
@@ -629,7 +667,7 @@ class Search extends Component {
         );
       }
     }
-  }
+  };
 
   searchRepo = () => {
     const { value } = this.state;
@@ -638,7 +676,7 @@ class Search extends Component {
       search_repo: this.props.repoID,
       search_ftypes: 'all',
     };
-    this.getSearchResult(queryData);
+    this.getSearchResult(this.buildSearchParams(queryData));
   };
 
   searchFolder = () => {
@@ -649,7 +687,7 @@ class Search extends Component {
       search_ftypes: 'all',
       search_path: this.props.path,
     };
-    this.getSearchResult(queryData);
+    this.getSearchResult(this.buildSearchParams(queryData));
   };
 
   searchAllRepos = () => {
@@ -659,7 +697,7 @@ class Search extends Component {
       search_repo: 'all',
       search_ftypes: 'all',
     };
-    this.getSearchResult(queryData);
+    this.getSearchResult(this.buildSearchParams(queryData));
   };
 
   renderResults = (resultItems, isVisited) => {
@@ -667,27 +705,28 @@ class Search extends Component {
 
     const results = (
       <>
-      {isVisited && <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>}
-      <ul className="search-result-list" ref={this.searchResultListRef}>
-        {resultItems.map((item, index) => {
-          const isHighlight = index === highlightIndex;
-          return (
-            <SearchResultItem
-              key={index}
-              item={item}
-              onItemClickHandler={this.onItemClickHandler}
-              isHighlight={isHighlight}
-              setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
-            />
-          );
-        })}
-      </ul>
+        {isVisited && <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>}
+        <ul className="search-result-list" ref={this.searchResultListRef}>
+          {resultItems.map((item, index) => {
+            const isHighlight = index === highlightIndex;
+            return (
+              <SearchResultItem
+                key={index}
+                item={item}
+                onItemClickHandler={this.onItemClickHandler}
+                isHighlight={isHighlight}
+                setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
+              />
+            );
+          })}
+        </ul>
       </>
     );
 
     return (
       <>
         <MediaQuery query="(min-width: 768px)">
+          {!isVisited && <h4 className="search-results-title">{gettext('Files')}</h4>}
           <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
@@ -695,7 +734,7 @@ class Search extends Component {
         </MediaQuery>
       </>
     );
-  }
+  };
 
   onSearchToggle = () => {
     this.setState({
@@ -704,11 +743,97 @@ class Search extends Component {
     });
   };
 
+  handleFiltersShow = () => {
+    const { isFiltersShow } = this.state;
+    localStorage.setItem(SEARCH_FILTERS_SHOW_KEY, !isFiltersShow);
+    this.setState({ isFiltersShow: !isFiltersShow });
+  };
+
+  buildSearchParams = (baseParams) => {
+    const { filters } = this.state;
+    const params = { ...baseParams };
+
+    if (filters.search_filename_only) {
+      params.search_filename_only = filters.search_filename_only;
+    }
+
+    if (filters.date.value) {
+      const isCustom = filters.date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
+      params.time_from = isCustom ? filters.date.start?.unix() : filters.date.from;
+      params.time_to = isCustom ? filters.date.end?.unix() : filters.date.to;
+    }
+
+    if (filters.suffixes) {
+      params.input_fexts = filters.suffixes;
+      params.search_ftypes = 'custom';
+    }
+
+    if (filters.creator_list.length > 0) {
+      params.creator_emails = filters.creator_list.map(c => c.email).join(',');
+    }
+
+    return params;
+  };
+
+  handleFiltersChange = (key, value) => {
+    const newFilters = { ...this.state.filters, [key]: value };
+    const hasActiveFilter = newFilters.suffixes || newFilters.creator_list.length > 0 || newFilters.date.value;
+    this.setState({ filters: newFilters, isFilterControllerActive: hasActiveFilter });
+
+    // build query data
+    if (!this.state.value || !this.state.isResultGotten) return;
+    const queryUpdates = {};
+
+    if (key === SEARCH_FILTERS_KEY.CREATOR_LIST) return;
+    if (key === SEARCH_FILTERS_KEY.SEARCH_FILENAME_ONLY) {
+      queryUpdates.search_filename_only = value;
+    }
+    if (key === SEARCH_FILTERS_KEY.SUFFIXES) {
+      queryUpdates.search_ftypes = 'custom';
+      queryUpdates.input_fexts = value;
+      if (!value) {
+        queryUpdates.search_ftypes = 'all';
+      }
+    }
+    if (key === SEARCH_FILTERS_KEY.DATE) {
+      const date = value;
+      const isCustom = date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
+      queryUpdates.time_from = isCustom ? value.from?.unix() : value.from;
+      queryUpdates.time_to = isCustom ? value.to?.unix() : value.to;
+    }
+
+    const newQueryData = {
+      ...this.queryData,
+      ...queryUpdates,
+    };
+
+    this.getSearchResult(newQueryData);
+  };
+
+  filterByCreator = (results) => {
+    const { filters } = this.state;
+    return results.filter(item => {
+      if (filters.creator_list && filters.creator_list.length > 0) {
+        if (!filters.creator_list.some(creator => creator.email === item.repo_owner_email)) {
+          return false;
+        }
+      }
+      return true;
+    });
+  };
+
+  handleSelectTag = (tag) => {
+    this.props.onSelectTag(tag);
+    this.resetToDefault();
+  };
+
   render() {
     let width = this.state.width !== 'default' ? this.state.width : '';
-    let style = {'width': width};
-    const { isMaskShow } = this.state;
+    let style = { 'width': width };
+    const { repoID, isTagEnabled, tagsData } = this.props;
+    const { isMaskShow, isResultGotten, isCloseShow, isFiltersShow, isFilterControllerActive, filters } = this.state;
     const placeholder = `${this.props.placeholder}${isMaskShow ? '' : ` (${controlKey} + k)`}`;
+    const isTagsShow = this.props.repoID && isTagEnabled && isMaskShow && isResultGotten;
     return (
       <Fragment>
         <MediaQuery query="(min-width: 768px)">
@@ -729,15 +854,34 @@ class Search extends Component {
                   autoComplete="off"
                   ref={this.inputRef}
                 />
-                {this.state.isCloseShow &&
+                {isCloseShow &&
                   <button
                     type="button"
-                    className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
+                    className="search-icon-right sf3-font sf3-font-x-01"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
-                  ></button>
+                  >
+                  </button>
                 }
+                {isMaskShow && (
+                  <IconBtn
+                    symbol="filter-circled"
+                    size={20}
+                    className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
+                    onClick={this.handleFiltersShow}
+                    title={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
+                    aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
+                    tabIndex={0}
+                    id="search-filter-controller"
+                  />
+                )}
               </div>
+              {isMaskShow && isFiltersShow &&
+                <SearchFilters filters={filters} onChange={this.handleFiltersChange} />
+              }
+              {isTagsShow &&
+                <SearchTags repoID={repoID} tagsData={tagsData} keyword={this.state.value} onSelectTag={this.handleSelectTag} />
+              }
               <div
                 className="search-result-container dropdown-search-result-container"
                 ref={this.searchContainer}
@@ -774,7 +918,8 @@ class Search extends Component {
                       className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
                       onClick={this.onClearSearch}
                       aria-label={gettext('Clear search')}
-                    ></button>
+                    >
+                    </button>
                   }
                 </div>
                 <div className="search-result-container dropdown-search-result-container">

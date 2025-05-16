@@ -5,6 +5,7 @@
 # 
 # Translators:
 # Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Icelandic (https://app.transifex.com/haiwen/teams/5086/is/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,7 +24,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Hliðarvalmynd"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -32,28 +33,28 @@ msgstr "Kynning"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Stjórna skrám og möppum"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Stjórna skrám með söfnum"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Endurheimta eyddar skrár"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Finna eldri útgáfur af skrám"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Sögu og skyndimyndir safns"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Stilla varðveislutíma sögu"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -62,75 +63,75 @@ msgstr "Eyða safni"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Skoða skrár í vefforritinu"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Leita í fullum texta í skrám"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Deiling og samvinna"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Deila skrám og möppum"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Stjórna hópum"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Læsa skrám"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Möppuheimild"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Deilda deiling"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki og þekkingarstjórnun"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Stjórna safni sem Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Biðlarinn og samstilling"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Setja upp og samstilla skrár"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "Samstilla núverandi möppur"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Velja samstillingu undirmöppur"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Skrifvarin samstilling"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Hætta samstillingu og samstilla aftur söfn"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Stilla samstillingartíðni"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr ""
+msgstr "Proxy stillingar"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
@@ -142,23 +143,23 @@ msgstr "Hundsa skrár"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Drif biðlari"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Nota Seafile drif biðlara"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Nota drif biðlara 2.0 á Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Öryggi og dulkóðun"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Hvernig á að nota dulkóðuð söfn"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -166,6 +167,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"Þegar þú og vinir þínir samstilla sameiginlegt skjalasafn yfir á tölvurnar "
+"ykkar, getið þið bætt við, eytt eða breytt skrám í safninu saman. Allar "
+"breytingar sem þú gerir á safninu verða sjálfkrafa samstilltar við tölvur "
+"annarra."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -176,36 +181,48 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"Stundum geta þú og vinir þínir breytt sömu skrá á sama tíma. Breytingar "
+"þínar geta verið í mótsögn við breytingar hvers annars. Í þessu tilviki "
+"myndi Seafile halda fyrstu útgáfunni samstilltri við skýið óbreyttri, en "
+"endurnefna hina útgáfuna í „átakaskrá“. Nafn átakaskrár endar á netfangi "
+"höfundar, plús núverandi tíma, td test.txt (SFConflict name@example.com "
+"2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Þú getur eytt safni í eigu þinni. Eyða má safnið af þér eða kerfisstjóra "
+"Seafile þjónsins."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Eftir að safni hefur verið eytt hefur það eftirfarandi áhrif:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Deiling skráa og mappa innan þessa safns er öll hætt."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Biðlarar sem eru samstilltir við þetta safn geta ekki lengur samstillt við "
+"það. En skrárnar á tölvunni verða ekki eytt."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Stjórna og nota deildir"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Sumar stofnanir samanstanda af flóknu deildarskipan. Það eru venjulega tvö "
+"algeng notkunartilvik fyrir skjalastjórnun í þessum stofnunum:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -213,6 +230,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Það ætti að vera sameiginlegt skjalasamnýtingarrými fyrir stofnunina. Mappan"
+" skipulagið ætti að kortleggja deildarskipulagið. Það verður sérstök mappa "
+"eða rými úthlutað til hverrar deildar."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -220,46 +240,54 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Samnýtingarrýmið ætti að vera í eigu og stjórnað af stofnuninni, en ekki "
+"einstökum starfsmönnum. Þannig að ekki þarf að breyta eignarhaldi skráa "
+"þegar starfsmaður hættir hjá stofnuninni."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"„Deildirnar“ eiginleikinn er hannaður til að mæta ofangreindum tveimur "
+"notkunartilvikum. Við munum kynna þennan eiginleika frá 3 mismunandi "
+"sjónarhornum:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Kerfisstjóri"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Deildarstjóri"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Deildarmeðlimir"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Kerfisstjórinn getur:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Stjórnað deildarskipan og meðlimum"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Úthlutað geymslukvóta fyrir deildir"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Búa til og stjórna sameiginlegum skjalasöfnum í deildum"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Kerfisstjórinn getur sett upp deildarskipulagið á tvo vegu: handvirkt "
+"uppsetning eða innflutningur frá Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -269,6 +297,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Kerfisstjórinn getur búið til hvaða fjölda sem er af deildum á efsta stigi "
+"og búið til hvaða stig sem er af undirdeildum undir hverri deild. Og hvert "
+"stig deildar er hægt að fylla með meðlimum. Kerfisstjórinn getur stillt "
+"hlutverk hvers meðlims sem 'meðlimur' eða 'stjórnandi'. Við munum kynna "
+"hvernig deildarstjóri getur stjórnað deild síðar."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -277,12 +310,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Kerfisstjórinn getur einnig flutt inn stigveldið frá OU (Organizational "
+"Units) í AD. Hver OU verður flutt inn sem deild. Og undir-OU undir OU verður"
+" flutt inn sem undirdeild. Deildarsöfn er hægt að búa til sjálfkrafa í "
+"innflutningsferlinu."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Kerfisstjóri getur einnig eytt deild eftir að öllum undirdeildum og "
+"skjalasöfnum hefur verið eytt."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -292,6 +331,11 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Skjalasöfnin sem búin eru til innan deildar eru í eigu deildarinnar "
+"sjálfrar, ekki af neinum einstökum notanda. Þannig að kerfisstjórinn getur "
+"úthlutað geymslukvóta til deildar. Heildarstærð allra skjalasafna í deild má"
+" ekki fara yfir geymslukvótann. <strong>Vinsamlegast athugið að kvóti "
+"undirdeildar er ekki háður kvóta yfirdeildar hennar.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -299,12 +343,17 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"Deildarsöfn geta verið búin til af kerfisstjóra eða deildarstjóra. Það er "
+"einnig möguleiki á að stjórna því hvort einstakir notendur geti deilt "
+"skjalasöfnum til deildar."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Allar ofangreindar aðgerðir er hægt að gera í kerfisstjórnendaviðmótinu. Sjá"
+" skjámyndina hér að neðan til að fá upplýsingar."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -312,18 +361,22 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Eins og fram kemur hér að ofan er deildarstjóri sérstakt hlutverk sem "
+"kerfisstjóri úthlutar sumum meðlimum deildar. Deildarstjórar geta framkvæmt "
+"eftirfarandi aðgerðir í deild eftir að hafa skráð sig inn á sinn eigin "
+"reikning."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Aðgangur að skjalasöfnum deildarinnar"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Stjórna meðlimum í sinni deild"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Stjórna skjalasöfnum í sinni deild"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -332,26 +385,34 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Ef notandi er stjórnandi deildar getur hann/hún bætt við eða eytt meðlimum í"
+" deildinni. Hverjum sem er skráður í kerfið er hægt að bæta við sem meðlim í"
+" deildinni. En ef deildirnar eru fluttar inn frá AD, verða breytingar á "
+"aðild yfirskrifaðar við næstu samstillingu við AD."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"Deildarstjóri getur stjórnað skjalasöfnunum í deildinni. Studdar aðgerðir "
+"eru:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Búa til eða eyða skjalasafni"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Breyta nafni skjalasafns"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
+"Deila skjalasafni til notenda eða hópa utan þessarar deildar. Þetta er mjög "
+"gagnlegt fyrir samvinnu milli deilda."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -361,6 +422,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Stilltu nákvæm leyfi fyrir möppur í skjalasöfnum fyrir notendur eða "
+"undirdeildir í þessari deild. Þetta virkar eins og <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">möppuleyfis eiginleikinn</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -373,16 +437,26 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"Venjulegur meðlimur deildarinnar getur notað deildina alveg eins og hóp. "
+"Hver deild er kynnt fyrir meðlimum sínum sem hópur. Notandi getur ekki "
+"aðeins fengið aðgang að skjalasöfnunum í deildinni sem hann/hún tilheyrir, "
+"heldur einnig skjalasöfnunum í yfirdeildum deildar sinnar. Til dæmis, ef "
+"John er í \"EMEA\" undirdeildinni undir \"Sölu\" deildinni, og \"Sala\" er "
+"undirdeild undir fyrirtækinu \"ACME\", þá getur John fengið aðgang að hópum "
+"\"EMEA\", \"Sala\" og \"ACME\". Hóparnir fyrir deildir eru merktir með "
+"\"byggingar\" tákni við hliðina á nafni sínu."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Nota proxy í Seafile biðlara"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+"Seafile biðlari styður 3 gerðir af proxy þjónum: HTTP proxy, SOCKS5 proxy og"
+" kerfis proxy stillingar."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -392,6 +466,11 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"HTTP proxy og SOCKS5 proxy krefjast þess að þú slærð inn heimilisfang og "
+"tengi proxy þjónsins. Ef þú notar kerfis proxy stillingar, les Seafile "
+"biðlarinn proxy stillingar frá stýrikerfinu. Stýrikerfið hefur einhverja "
+"virkni til að greina sjálfkrafa upplýsingar um proxy þjón. Svo þú þarft ekki"
+" að slá inn heimilisfang proxy þjóns handvirkt."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -399,10 +478,13 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"Til að breyta proxy stillingum, smelltu á Seafile táknið á "
+"tilkynningasvæðinu. Veldu \"Stillingar\" í valmyndinni. Í sprettiglugganum "
+"geturðu breytt proxy stillingum í \"Network\" flipanum."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 fyrir Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -411,10 +493,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (og framtíðarútgáfur) er endurhannað með dýpri samþættingu við "
+"Windows 10 stýrikerfið. Það styður Windows 10 1709 útgáfuna (2017 "
+"haustuppfærslu fyrir Windows 10) og síðari útgáfur. Við mælum með því að "
+"Windows 10 notendur uppfæri í SeaDrive 2.0 fyrir meiri innfædda sýndardrif "
+"upplifun."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Settu upp og fáðu aðgang að sýndardrifi"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -425,40 +512,56 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+" geta h velja SeaDrive 2.0 fr  opinnan Seafile vefsv stu. Eftir uppsetningu "
+"og innskr ningu n Seafile reikning, mun SeaDrive byrja a ni oura skjalasafn "
+"og skr nalisti fr  vefsv stu (sama og n SeaDrive 1.0.x).  getur teki  nekkra"
+" t ma, eftir fj ldum fj lsa sem eru til sta  n reikningi. Ni ourin er framkv"
+" mduleg, svo a  me i getur n  jafnvel komist a einhvern hluta skjala n "
+"virtuellum reiti."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Til a  opna virtuellan reit, opna a eiginlega Windows skjalasko an.  er "
+"\"seadrive\" hn ttr n  flj tanlega ramma Windows skjalasko anar."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "A gangast a skj l n  virtuellum reiti"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Skjalasfnin eru flokku  n  fj rri flokkum n virtuellum reiti: M n skjalasfn,"
+" Deilt vi  mig, Deilt vi  h p og Deilt vi  allt."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Eins og  s t getur, skr sta irt knarnir eru betur samlaga  Windows skr sko "
+"ara. T knarnir eru svol ti  breytilegir fr  tg fu 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Skr r n  virtuellum reiti eru b nar til sem \"sta haldarar\" n  sta bundnu "
+"skr kerfi.  r geta veri  3 r kjum:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Sta haldarskrá</b>: T m framsetning skr arinnar og getur a eins veri  "
+"opnu  egar nettenging er til sta ar."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -468,12 +571,18 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Full skr</b>: Skr nin hefur veri  s tt og vistu  sta bundnu. Ni urhal er "
+"sjálfvirkt egar sta haldarskrá er opnu  fyrsta sinn. essar skr r eru f "
+"anlegar hven r sem er egar  opnar SeaDrive burts  fr  nettengingum. St "
+"rkerfi getur kve i  a hreinsa fulla skr  egar meira diskpl ss er rf."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Föst full skrár</b>: Skránni hefur verið hlaðið niður og hún hefur verið "
+"vistuð á staðnum. Það er tryggt að hún sé tiltæk án nettengingar."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -483,6 +592,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Þú getur stjórnað hvaða skrár eða möppur eru geymdar á staðnum. Þetta er "
+"hægt að breyta úr samhengisvalmyndinni þegar þú hægrismellir á skrá eða "
+"möppu. Veldu „Geyma alltaf á þessu tæki“ þegar þú vilt festa skrá eða möppu "
+"á staðnum; veldu „Losar um pláss“ þegar þú vilt hreinsa skyndiminnið fyrir "
+"skrá eða möppu."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -490,10 +604,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"Í SeaDrive 1.0 eru skyndiminni skrár ekki sjálfkrafa uppfærðar þegar þær eru"
+" uppfærðar á þjóninum. Í SeaDrive 2.0 eru fullar og festar skrár sjálfkrafa "
+"haldið samstilltar við þjóninn."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Niðurhal og stjórnun skráa"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -502,6 +619,10 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Hvenær sem þú opnar staðgengilsskrár, mun stýrikerfið sjálfkrafa byrja að "
+"hlaða henni niður. Ef það getur tekið nokkurn tíma að hlaða niður skránni, "
+"mun framvindustika birtast í skráarskoðaranum og þú getur hætt við "
+"niðurhalið."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -510,15 +631,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Stundum getur bakgrunnsforrit reynt að hlaða niður skrá í sýndardrifinu "
+"(eins og vírusvarnarforrit). Þú verður látinn vita af stýrikerfinu um þetta "
+"og þú getur valið að hætta við niðurhalið eða leyfa forritinu ekki að hlaða "
+"niður skrám sjálfkrafa í framtíðinni."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "Algengar spurningar"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Get ég búið til, eytt eða endurnefnt söfn?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -527,10 +652,14 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Já. Þegar þú býrð til, eyðir eða endurnefnir safnamöppur í sýndardrifinu, "
+"mun aðgerðin endurspeglast á þjóninum. Þú getur aðeins búið til, eytt eða "
+"endurnefnt söfn undir \"Mín söfn\" flokknum. Að búa til, eyða eða endurnefna"
+" söfn í öðrum flokkum verður hunsað."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Get ég búið til skrár eða möppur utan safnamöppu?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -538,10 +667,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Já. En skrár sem eru búnar til utan safnamöppu verða hunsaðar og EKKI "
+"samstilltar við þjóninn. Ný mappa undir \"Mín söfn\" möppunni verður "
+"meðhöndluð sem nýtt safn."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Get ég fengið aðgang að dulkóðuðum söfnum?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -551,10 +683,15 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Já. Sjálfgefið er að dulkóðuð söfn eru ekki samstillt og sýnd í "
+"sýndardrifinu. Þú þarft að velja handvirkt hvaða dulkóðuðu söfn á að "
+"samstilla og slá inn lykilorðið. Hægrismelltu bara á SeaDrive táknið á "
+"kerfisbakkanum og veldu \"Sýna dulkóðuð söfn\". Gluggi mun birtast og þú "
+"getur valið að samstilla eða hætta samstillingu dulkóðaðs safns."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Er það samhæft við SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -564,10 +701,16 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive 2.0 mun nota alla núverandi reikninga og lýsigögn þeirra (geymd "
+"undir C:\\users\\username\\seadrive\\ möppunni). En það mun ekki nota "
+"skyndiminni skrárnar frá SeaDrive 1.0. Þannig að allar staðbundnar "
+"skyndiminni skrár í 1.0 útgáfunni verða ekki aðgengilegar í 2.0 útgáfunni. "
+"Þú getur ræst SeaDrive 1.0 aftur til að hlaða skrám upp á þjóninn eða afrita"
+" þær út."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Hvernig hreinsa ég skyndiminnið?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -578,10 +721,20 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Þú getur handvirkt valið hvaða möppur eða skrár á að geyma í skyndiminni á "
+"staðnum. Ef þú finnur að mappa notar of mikið pláss, veldu bara að \"Losar "
+"um pláss\" á þeirri möppu og allar skyndiminni skrár í þeirri möppu verða "
+"hreinsaðar. Það er engin þörf á að stilla skyndiminni hreinsunartíma og "
+"skyndiminni stærðarmörk eins og í SeaDrive 1.0. Vegna þess að staðgenglar "
+"eru bara venjulegar skrár búnar til á staðbundnum diskinum þínum, er "
+"skyndiminni stærðin þín aðeins takmörkuð af tiltæku diskplássi á tölvunni "
+"þinni."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
+"Hvernig á að fjarlægja SeaDrive flýtileiðir sem eru eftir í Windows "
+"Explorer?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -590,12 +743,18 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"„SeaDrive“ flýtileiðin í Windows Explorer hverfur ekki eftir að þú hættir í "
+"SeaDrive forritinu eða skiptir um Seafile reikninga í SeaDrive. Þetta er "
+"ætlað hegðun. Þú þarft ekki að fjarlægja þær ef þú þarft enn að fá aðgang að"
+" reikningnum síðar."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Þú getur venjulega fjarlægt þessar flýtileiðir með því að fjarlægja SeaDrive"
+" forritið og velja \"Fjarlægja reikningsupplýsingar\" í svarglugganum."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -606,10 +765,16 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Ef fjarlæging fjarlægir ekki flýtileiðirnar með góðum árangri geturðu "
+"fjarlægt SeaDrive flýtileiðina í Windows Explorer með því að breyta skránni."
+" Opnaðu slóðina "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" í ritstjóranum. Fjarlægðu undirlyklana sem samsvara flýtileiðinni sem þú "
+"vilt fjarlægja."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Hvernig á að nota dulkóðuð söfn"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -619,10 +784,15 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Seafile býður upp á end-til-enda gagnadulkóðun á viðskiptavinarhlið. Þú "
+"getur búið til dulkóðuð söfn til að nota þennan eiginleika. Skráainnihald í "
+"dulkóðuðum söfnum er dulkóðað á viðskiptavinarhlið. Dulkóðunarlykilorðið er "
+"ekki geymt á þjóninum. Þannig að jafnvel þjónustustjórinn getur ekki fengið "
+"aðgang að skráainnihaldi þínu."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr ""
+msgstr "Þegar þú býrð til dulkóðað safn:"
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -630,6 +800,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Ef þú býrð til dulkóðað safn í vefforritinu er lykilorðið sent á þjóninn. "
+"Þjónninn notar þetta lykilorð til að búa til safnið. En það geymir ekki "
+"lykilorðið í venjulegu textaformi."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -638,10 +811,13 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Ef þú býrð til dulkóðað safn úr staðbundinni möppu með skjáborðsbiðlaranum "
+"(sjá <a href=\"%(SITE_ROOT)shelp/install_sync/\">skráasamstillingu</a>), er "
+"lykilorðið ekki sent á þjóninn."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "Þegar þú færð aðgang að dulkóðuðu safninu:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -649,6 +825,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Ef þú notar vefforritið verður þú að slá inn lykilorðið á þjóninn. Þjónninn "
+"mun geyma lykilorðið í dulkóðuðu formi í 1 klukkustund. Það mun ekki geyma "
+"lykilorðið á diski."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -656,22 +835,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Ef þú notar skjáborðsbiðlarann til að samstilla safnið er lykilorðið ekki "
+"sent á þjóninn. Biðlarinn afkóðar og dulkóðar skráainnihaldið á staðnum. "
+"Lykilorðið í venjulegu textaformi er heldur ekki geymt á disk biðlarans."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOS biðlarinn styður dulkóðun á viðskiptavinarhlið síðan útgáfa 2.1.6. "
+"Android biðlarinn styður það síðan útgáfa 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Athugið að dulkóðað safn dulkóðar aðeins innihald skránna, en ekki möppu- og"
+" skráanöfn."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Skráalæsing"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -681,22 +867,31 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Þegar fleiri en einn einstaklingur vinna saman að skrá er líklegt að fleiri "
+"en einn einstaklingur breyti skránni á svipuðum tíma. Seafile meðhöndlar "
+"þetta ástand ágætlega með átakaskrám. En það er oft þægilegra að læsa "
+"skránni þegar einn einstaklingur vill eingöngu breyta skránni. Seafile "
+"Professional Edition styður skráalæsingar."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Skráalæsing virkar bæði á vefforritinu og skjáborðssamstillingarbiðlaranum. "
+"Við munum kynna þau eitt af öðru."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Skráalæsing í vefforritinu"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Til að læsa skrá geturðu farið í möppu skrárinnar í vefforritinu og smellt á"
+" fellivalmyndina „aðgerðir“."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -705,28 +900,38 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Eftir að skránni er læst geturðu séð rautt „stöðvunarmerki“ í horninu á "
+"skráartákninu. Með því að færa músina á stöðvunarmerkið geturðu séð hver "
+"læsti skránni. Og þú getur líka opnað skrá sem þú hefur læst. En þú getur "
+"ekki opnað skrár sem aðrir hafa læst."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Skráalæsing í skjáborðsbiðlaranum"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Eftir að safn er samstillt við skjáborðið geturðu læst/opnað skrár í því "
+"safni í File Explorer í Windows eða Finder í Mac OS."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Til að læsa skrá, hægrismelltu bara á samstillta skrá og veldu „læsa þessari"
+" skrá“ í „Seafile“ valmyndinni."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Ef skrá er læst af þér geturðu séð appelsínugult „stöðvunarmerki“ á "
+"skráartákninu. Þú getur valið að opna hana."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -734,16 +939,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Ef skrá er læst af öðrum notanda geturðu séð rautt „stöðvunarmerki“ á "
+"skráartákninu. Skráin er sjálfkrafa stillt á skrifvarin. Þú getur ekki "
+"breytt henni fyrr en hún er opnuð."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Ef safn er ekki samstillt geturðu samt notað skýjaskráavafra til að læsa og "
+"opna skrár í því."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Sjálfvirk læsing á Office skrám"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -753,18 +963,23 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Eftir að safn er samstillt við skjáborðið, þegar þú opnar Microsoft Office "
+"skrá í safninu, læsir Seafile skránni sjálfkrafa. Þegar þú lokar skránni "
+"opnar Seafile skránna sjálfkrafa. Læsingarstaðan er send til annarra tölva "
+"sem samstilla þetta safn. Það kemur í veg fyrir samtímis breytingar á sömu "
+"Office skrá og er þægilegt fyrir samvinnu."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Upplýsingar um skráalæsingar"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "Hér eru nokkur gagnleg ráð um hvernig skráalæsing virkar:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "Læsta skrá er aðeins hægt að opna af notandanum sem læsti henni."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -773,16 +988,22 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Ekki er hægt að breyta, færa, endurnefna eða eyða læstri skrá af öðrum "
+"notendum. En aðrir notendur geta samt fært, eytt eða endurnefnt yfirmöppu "
+"læstrar skrár. Tilgangur skráalæsingar er fyrst og fremst að koma í veg "
+"fyrir samtímis breytingar."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Þegar yfirmappa læstrar skrár er endurnefnd eða færð innan sama safns, helst"
+" hún læst eftir aðgerðina."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Finna eldri útgáfu af skrám"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -791,10 +1012,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile fylgist með breytingasögu allra skráa. Alltaf þegar skrá er breytt "
+"er ný útgáfa búin til, en gamla útgáfan er enn geymd í stillanlegan tíma. "
+"Þegar þú vilt fá aðgang að eldri útgáfu af skrá, verður "
+"skráasögueiginleikinn mjög handhægur."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Til að telja upp allar útgáfur af skrá:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -802,16 +1027,22 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Í Seafile vefforritinu skaltu fara í möppuna sem inniheldur skrána. Færðu "
+"bendilinn á röðina á þeirri skrá. Aðgerðavalmynd birtist. Þú getur smellt á "
+"„Saga“ hnappinn í þeirri valmynd."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Listi yfir allar útgáfur af þeirri skrá birtist í tímaröð, frá nýrri til "
+"eldri. Listinn inniheldur einnig endurnefningarsögu skrárinnar."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
 msgstr ""
+"Þú getur hlaðið niður, endurheimt, skoðað hvaða útgáfu sem er af skránni."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -820,10 +1051,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Þú getur stillt varðveislutíma skráaútgáfa: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">stilla varðveislutíma "
+"sögu</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Notaðu möppuheimild fyrir fínstillta aðgangsstýringu"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -834,6 +1068,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Fyrir sameiginleg söfn eða möppur geturðu stillt heimild fyrir undirmöppur "
+"þess fyrir einstakling eða hóp. Tiltækar heimildir eru þær sömu og lýst er í"
+" <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">deilingu "
+"safna</a>. Hér eru nokkur notkunartilvik:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -841,6 +1079,9 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Þú deildir safni til hóps með „skrifvarin“ heimild. Þú vilt einnig leyfa "
+"ákveðnum meðlim hópsins að breyta skrám í einni undirmöppu. Þú getur veitt "
+"þessum einstaklingi skrifheimild fyrir þessa undirmöppu."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -849,6 +1090,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Þú deildir safni til 3 hópa. Það eru 3 undirmöppur undir því safni, ein "
+"fyrir hvern hóp til að hlaða upp skrám. Hins vegar viltu ekki að notendur "
+"breyti skrám sem tilheyra ekki hans/hennar hópi. Þú getur veitt skrifheimild"
+" fyrir undirmöppu aðeins til hópsins."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -857,17 +1102,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Möppuheimildir eru aðeins áhrifaríkar fyrir söfn og möppur sem þú deilir með"
+" öðrum. Til að stilla möppuheimildir á áhrifaríkan hátt fyrir undirmöppur "
+"þess, ættirðu fyrst að deila yfirsafninu eða möppunni; annars mun "
+"möppuheimildin ekki hafa áhrif."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Eitt mikilvægt hönnunarmarkmið möppuheimildar er að styðja "
+"stigveldisheimildir:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Undirmöppur erfa sjálfkrafa möppuheimildir frá yfirmöppu sinni."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -877,10 +1128,15 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Heimildir sem eru stilltar á undirmöppur skrifa yfir heimildir sem eru "
+"stilltar á yfirmöppu þess. Til dæmis, þú stillir „lesa skrifa“ heimild á "
+"möppuna „fundarskrár“ fyrir notanda A, og þú stillir „skrifvarin“ heimild á "
+"undirmöppuna „fundarskrár/í dag“ fyrir notanda A. Þá er heimild notanda A "
+"fyrir „fundarskrár/í dag“ aðeins „skrifvarin“."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Grunnnotkun"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -889,6 +1145,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Aðeins eigandi safns getur stillt möppuheimildir fyrir undirmöppur þess. Í "
+"skráavafra viðmótinu, smelltu á „fleiri aðgerðir“ hnappinn, veldu „heimild“ "
+"í fellivalmyndinni. Í sprettiglugganum geturðu séð og stillt möppuheimildir "
+"á þessari möppu."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -897,6 +1157,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"Ef þú vilt sjá allar möppuheimildir sem eru stilltar í safni, sveimaðu "
+"músinni yfir safnið. Smelltu á „fleiri aðgerðir“ hnappinn, veldu "
+"„Möppuheimild“ í fellivalmyndinni. Í sprettiglugganum geturðu séð og stillt "
+"möppuheimildir í þessu safni."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -904,16 +1168,21 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Þegar aðrir notendur fara í möppu, verður lítið „auga“ tákn við hliðina á "
+"„skrifvarin“ undirmöppum. Þegar notandinn fer í þá undirmöppu mun hann/hún "
+"ekki geta bætt við/breytt/eytt skrám."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Ef „skrifvarin“ mappa er samstillt við tölvu með Seafile skjáborðsforritinu,"
+" verður breytingum undir „skrifvarin“ möppu ekki hlaðið upp í skýið."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Ítarlegt: forgangsröðun milli mismunandi heimilda"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -923,6 +1192,11 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Möppuheimildir hafa hærri forgang en heimildin sem er stillt í deilingu. Til"
+" dæmis, ef þú deilir safni til notanda A með „lesa skrifa“ heimild, og "
+"stillir einnig „skrifvarin“ heimild á undirmöppu þess safns. Þá hefur "
+"notandi A aðeins „skrifvarin“ aðgang að undirmöppunni, á meðan hann/hún "
+"hefur „lesa skrifa“ aðgang að öllum öðrum undirmöppum og skrám."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -931,16 +1205,21 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Möppuheimildir sem eru stilltar fyrir ákveðinn notanda hafa hærri forgang en"
+" heimildir sem eru stilltar fyrir hóp. Það er, þegar athugað er heimild "
+"fyrir möppu, ef kerfið passar við heimild sem er sértæk fyrir notandann, mun"
+" það hunsa allar heimildir sem eru stilltar fyrir hópa sem notandinn "
+"tilheyrir."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
-msgstr ""
+msgstr "Heimildir á undirmöppum hafa hærri forgang en þær á yfirmöppum."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Hér er flóknara dæmi:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -952,6 +1231,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Segjum að möppuskipulagið líti út eins og „A/B“, notandi „John“ er í hópnum "
+"„Starfsfólk“. Ef þú stillir „skrifvarin“ heimild á möppuna A fyrir John, og "
+"þú stillir einnig „lesa skrifa“ heimild á möppuna „A/B“ fyrir hópinn "
+"„Starfsfólk“. Þá er heimild Johns fyrir möppuna „A/B“ enn aðeins "
+"„skrifvarin“. Það er vegna þess að samkvæmt reglu 2 er „skrifvarin“ heimild "
+"fyrst passað fyrir möppuna „A/B“ og notandann „John“, sem er erfð frá "
+"yfirmöppu sinni „A“."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -959,46 +1245,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Ef þú ert að nota Pro Edition þjón, geturðu leitað að skráa- og möppunöfnum,"
+" sem og innihaldi ákveðinna skráa, í Seafile vefforritinu. Sem stendur getur"
+" Seafile leitað í innihaldi eftirfarandi skráargerða:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (aðeins Pro Edition þjónn)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (aðeins Pro Edition þjónn)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (aðeins Pro Edition þjónn)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice skrár"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF skrár"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown skrár: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Ýmsar frumkóðaskrár"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Textaskrár: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1006,34 +1295,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Athugaðu að Seafile kerfisstjórinn þinn hefur hugsanlega ekki virkjað "
+"fulltextaleitareiginleikann. Í því tilviki geturðu aðeins leitað að skráa- "
+"og möppunöfnum."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Að búa til hóp er þægileg leið til að deila skrám með mörgum. Í Seafile "
+"geturðu búið til og stjórnað hóp auðveldlega."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Svona virka hópar í Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Hver hópur hefur eiganda. Eigandinn er sjálfgefinn höfundur hópsins. "
+"Hann/hún getur flutt eignarhald hópsins til annars meðlims."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Hver hópur getur haft marga stjórnendur. Hópseigandinn og hópstjórnendur "
+"geta bætt við fleiri hópstjórnendum."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Hópstjórnandinn getur bætt við/eytt meðlimum í hópnum. Og hann/hún getur "
+"einnig hætt að deila safni í hópnum."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1041,6 +1341,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Smelltu á flipann „Deilt með hópum“ í vinstri spjaldinu og þú munt sjá alla "
+"hópa sem þú ert í. Með því að smella á hvaða hóp sem er, muntu sjá söfnin "
+"sem deilt er í þennan hóp."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1048,6 +1351,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Til að búa til nýjan hóp, smelltu á flipann „Deilt með hópum“ í vinstri "
+"spjaldinu. Smelltu síðan á „Allir hópar“. Á síðunni geturðu smellt á „Nýr "
+"hópur“ hnappinn til að búa til hóp."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1055,6 +1361,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Sjá <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">deila skrám og "
+"möppum</a> um hvernig á að deila söfnum eða möppum í hóp."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1068,6 +1376,11 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Stundum viltu ekki samstilla sumar skrár eða möppur inni í safni. Til að ná "
+"þessu skaltu búa til seafile-ignore.txt skrá í rótarmöppu safns. Þessi "
+"sérstaka skrá tilgreinir skrárnar og möppurnar sem Seafile ætti ekki að "
+"samstilla. Hver lína í ignore.txt skrá tilgreinir mynstur. Eftirfarandi "
+"mynstursnið eru studd."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
@@ -1096,7 +1409,7 @@ msgid ""
 "If the pattern ends with a slash, it would only match a folder. In other "
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
-msgstr ""
+msgstr "Ef mynstrið endar á skástriki, passar það aðeins við möppu"
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1460,6 +1773,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Í listanum yfir eyddar skrár geturðu endurheimt skrár og möppur. Ef "
+"yfirmappa skrár eða möppu hefur verið eytt, verður hún endurheimt í "
+"rótarmöppu safnsins."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1467,6 +1783,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Athugið að ruslakistan inniheldur aðeins skrár og undirmöppur sem hafa verið"
+" eytt undir núverandi möppu. Skrár sem hafa verið eytt í undirmöppum "
+"núverandi möppu eru einnig innifaldar í listanum."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1475,6 +1794,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Þú getur stillt varðveislutíma eyttra skráa: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">stilla varðveislutíma "
+"sögu</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1483,6 +1805,9 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Þú gætir haft mjög stór söfn á Seafile þjóninum. Og þú hefur aðeins áhuga á "
+"undirmöppu innan eins safns. Þá geturðu valið að samstilla undirmöppu í "
+"safni, í stað þess að samstilla allt safnið."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1491,40 +1816,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Til að samstilla undirmöppu skaltu opna skýjaskráavafra með því að tvísmella"
+" á safn sem hefur ekki verið samstillt. Farðu í yfirmöppu þeirrar "
+"undirmöppu. Hægrismelltu á undirmöppuna. Veldu „Samstilla þessa möppu“ í "
+"sprettivalmyndinni."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Eftir að hafa samstillt undirmöppuna geturðu séð samstillingarstöðu hennar í"
+" hópnum „Samstillt söfn“ í aðalglugga biðlarans."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Stilla varðveislutíma sögu safns"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Varðveislutími sögu safns stjórnar því hversu lengi þú getur fengið aðgang "
+"að sögugögnum þínum í eftirfarandi eiginleikum:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Endurheimta eyddar skrár: þú getur ekki endurheimt skrár og möppur sem hafa "
+"verið eytt fyrir varðveislutímann."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Skráaútgáfur: þú getur ekki fengið aðgang að skráaútgáfum sem eru eldri en "
+"varðveislutíminn."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Saga og skyndimyndir safns: þú getur ekki fengið aðgang að skyndimyndum "
+"safns sem eru eldri en varðveislutíminn."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1532,51 +1871,69 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Hægt er að stilla varðveislutíma gamalla skráaútgáfa fyrir hvert safn, "
+"sérstaklega. Þú verður að vera eigandi safnsins til að stilla "
+"varðveislutímann. Til að stilla lengd varðveislutíma:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"Í Seafile vefforritinu, smelltu á flipann „Mitt“ í yfirlitsspjaldið (eins og"
+" á skjámyndinni hér að neðan). Öll söfn í þinni eigu verða talin upp."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Færðu bendilinn yfir línuna í safninu. Aðgerðavalmynd birtist. Smelltu á "
+"\"Sögustillingar\" í fellivalmyndinni."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"Í sprettiglugganum geturðu stillt lengd varðveislutímabils skrárinnar."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "Í Seafile eru nokkrar leiðir til að deila skrám og möppum með öðrum:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Með því að nota tengla: Það eru margar tegundir tengla sem hægt er að nota "
+"til að deila með ýmsum samstarfsaðilum."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Deilingartenglar: Allir notendur sem hafa aðgang að tenglunum geta fengið "
+"aðgang að skrám eða möppum sem tengillinn vísar á. Engin innskráning er "
+"nauðsynleg."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Upphleðslutenglar: Allir notendur sem hafa aðgang að tenglunum geta hlaðið "
+"upp skrám í möppuna sem tengillinn vísar á. Engin innskráning er nauðsynleg."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Innri tenglar: Aðeins innskráðir notendur sem hafa lesheimild á skránni eða "
+"möppunni geta fengið aðgang að þessum tengli. Notað til innri "
+"skráadeilingar."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1584,10 +1941,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Deila söfnum eða möppum: notað til að stilla aðgangsheimildir á safn eða "
+"möppu fyrir tiltekna notendur eða hópa. Notendur verða að skrá sig inn til "
+"að fá aðgang að möppunum."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Búa til deilingartengla á skrár eða möppur"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1595,12 +1955,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Deilingartenglar eru opinberir tenglar á skrár eða möppur. Hægt er að "
+"nálgast þá af hverjum sem er, þar á meðal þeim sem ekki eru með Seafile "
+"reikning. Þú getur einnig notað lykilorð og gildistíma til að vernda "
+"tenglana þína."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Þú getur einnig stillt aðgangsheimild til að deila tenglum. Það eru þrjár "
+"tegundir heimilda:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1608,6 +1974,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Aðeins forskoðun: aðeins er hægt að skoða skrána eða skrárnar í möppunni í "
+"vefskoðara, en ekki er hægt að hlaða þeim niður. Þetta er gagnlegt til að "
+"deila trúnaðargögnum."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1615,16 +1984,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Breyta í skýinu og hlaða niður: Svipað og „Forskoða og hlaða niður“, en ef "
+"hægt er að breyta skránni í vefskoðara (t.d. Office skrá), hefur hver "
+"notandi sem hefur aðgang að tenglinum leyfi til að breyta henni."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Til að búa til deilingartengil í Seafile vefforritinu:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Farðu í yfirmöppuna sem inniheldur skrána eða möppuna. Haltu músinni yfir "
+"skrána eða möppuna og smelltu á „Deila“ táknið sem birtist."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1632,6 +2006,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Sprettigluggi birtist með deilingarvalkostum. Smelltu á flipann „Deila "
+"tengli“ í vinstri spjaldinu. Smelltu síðan á „Búa til“ hnappinn til að búa "
+"til tengil. Þú getur notað lykilorð, gildistíma og leyfi til að vernda "
+"tengilinn þinn."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1639,10 +2017,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Afritaðu tengilinn í tölvupóst, spjallforrit eða annað tól til að senda hann"
+" til annarra."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Þú getur einnig búið til deilingartengla frá skjáborðsbiðlarunum."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1651,6 +2031,10 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Ef safnið er samstillt skaltu tvísmella á safnið í aðalglugga Seafile "
+"biðlarans. Staðbundin mappa þess safns verður opnuð. Hægrismelltu á skrána "
+"eða möppuna sem þú vilt búa til tengil á. Í sprettivalmyndinni skaltu velja "
+"„Seafile“ og síðan „Búa til deilingartengil“."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1658,10 +2042,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Ef safnið er ekki samstillt skaltu tvísmella á safnið í aðalglugga Seafile "
+"biðlarans. Glugginn fyrir skýjaskráavafra verður opnaður og þú getur búið "
+"til tengil á skrá eða möppu í honum."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Búa til upphleðslutengla á möppur"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1669,16 +2056,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Þú getur notað upphleðslutengla til að safna skrám frá öðrum. Þú getur "
+"aðeins búið til upphleðslutengla fyrir möppur. Aðrir geta ekki séð skrárnar "
+"í möppunum. Þeir geta aðeins hlaðið upp skrám í þær."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Til að búa til upphleðslutengil í Seafile vefforritinu:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Farðu í yfirmöppuna sem inniheldur möppuna. Haltu músinni yfir möppuna og "
+"smelltu á „Deila“ táknið sem birtist."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1686,10 +2078,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Sprettigluggi birtist með deilingarvalkostum. Smelltu á flipann „Hlaða upp "
+"tengli“ í vinstri spjaldinu. Smelltu síðan á „Búa til“ hnappinn til að búa "
+"til tengil. Þú getur notað lykilorð til að vernda tengilinn þinn."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Deila söfnum eða möppum"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1697,62 +2092,75 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Þú getur deilt safni eða möppu með öðrum skráðum Seafile notendum. Aðrir "
+"geta fengið aðgang að sameiginlega safninu eða möppunni með vefforritinu og "
+"Seafile biðlarunum."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Þú getur valið svið deilingarinnar:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Deila með notanda: Þú getur deilt með einum eða fleiri notendum."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Deila með hópi: Þú getur deilt með hópi."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Deila með stofnun: Ef þú ert að nota einkarekinn þjón er stundum gagnlegt að"
+" deila með öllum meðlimum á þjóninum (öll stofnunin)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Þú getur einnig stillt leyfi á deilingunni:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Lesa-Skrifa: notendur geta lesið, skrifað, hlaðið upp, hlaðið niður og "
+"samstillt skrár."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "Skrifvarið: notendur geta lesið, hlaðið niður og samstillt skrár."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "Stjórnandi: auk skrifleyfis geta notendur einnig deilt safninu."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Lesa-Skrifa á netinu: notendur geta skoðað og breytt skrám á netinu í gegnum"
+" vefskoðara. Ekki er hægt að hlaða niður skrám."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Skrifvarið á netinu: notendur geta aðeins skoðað skrár á netinu í gegnum "
+"vefskoðara. Ekki er hægt að hlaða niður skrám."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Til að deila safni eða möppu með notanda eða hópi:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Haltu músinni yfir safnið eða möppuna og smelltu á „Deila“ táknið sem "
+"birtist."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1760,6 +2168,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Sprettigluggi birtist með deilingarvalkostum. Smelltu á flipann „Deila með "
+"notanda“ eða „Deila með hópi“ í vinstri spjaldinu. Veldu notandann eða "
+"hópinn. Smelltu síðan á „Senda“."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1768,6 +2179,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Eftir að þú deilir safni eða möppu með notanda getur notandinn séð það með "
+"því að smella á flipann „Deilt með mér“ í vinstri spjaldinu í Seafile "
+"vefforritinu. Ef þú deilir því með hópi geta hópmeðlimir aðeins séð það með "
+"því að fara inn í hópinn."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1776,10 +2191,14 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Til að deila safni með allri stofnuninni: Í Seafile vefforritinu skaltu "
+"smella á flipann „Deilt með öllum“ í vinstri spjaldinu. Smelltu síðan á "
+"„Bæta við safni“ hnappinn. Í fellivalmyndinni geturðu valið að deila "
+"núverandi safni eða búa til nýtt safn og deila því."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Innri tenglar"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1789,6 +2208,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Aðeins innskráðir notendur sem hafa lesheimild á skránni eða möppunni geta "
+"fengið aðgang að þessum tengli. Það er notað til innri skráadeilingar. Það "
+"er þægileg leið til að deila skrám meðal liðsmanna sem hafa aðgang að "
+"sameiginlegu safni. Þú getur bara afritað tengilinn og límt hann inn í "
+"tölvupóst eða spjallforrit."
 
 #: templates/help/sync_interval.html:8
 msgid ""

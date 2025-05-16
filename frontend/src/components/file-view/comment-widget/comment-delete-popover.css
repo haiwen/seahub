@@ -1,0 +1,9 @@
+.comment-delete-popover .comment-delete-popover-container {
+  padding: 16px;
+}
+
+.comment-delete-popover .comment-delete-popover-container .delete-control {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}

@@ -102,16 +102,11 @@ class AbstractApi(object) :
     def __httpPost(self, url, args) :
         realUrl = self.__appendToken(url)
 
-        if DEBUG is True : 
-            print(realUrl, args) 
 
         return requests.post(realUrl, data = json.dumps(args, ensure_ascii = False).encode('utf-8')).json()
 
     def __httpGet(self, url) :
         realUrl = self.__appendToken(url)
-
-        if DEBUG is True : 
-            print(realUrl) 
 
         return requests.get(realUrl).json()
 

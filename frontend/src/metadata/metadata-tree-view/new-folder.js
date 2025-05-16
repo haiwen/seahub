@@ -25,8 +25,7 @@ const NewFolder = ({ closeNewFolder }) => {
       inputRef.current && inputRef.current.focus();
       return;
     }
-    addFolder(message);
-    closeNewFolder();
+    addFolder({ name: message, successCallback: closeNewFolder });
   }, [addFolder, getFoldersNames, closeNewFolder]);
 
   return (

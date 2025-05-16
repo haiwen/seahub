@@ -172,7 +172,7 @@ class SidePanel extends PureComponent {
   };
 
   // default page name
-  handleAddNewPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME) => {
+  handleAddNewPage = (jumpToNewPage = true, pageName = gettext(DEFAULT_PAGE_NAME)) => {
     if (this.isAddingPage === true) return;
     this.isAddingPage = true;
     wikiAPI.createWiki2Page(wikiId, pageName).then(res => {
@@ -195,7 +195,7 @@ class SidePanel extends PureComponent {
     });
   };
 
-  onAddWikiPage = (jumpToNewPage = true, pageName = DEFAULT_PAGE_NAME, insert_position) => {
+  onAddWikiPage = (jumpToNewPage = true, pageName = gettext(DEFAULT_PAGE_NAME), insert_position) => {
     if (this.isAddingPage === true) return;
     this.isAddingPage = true;
     const currentPageId = this.props.getCurrentPageId();

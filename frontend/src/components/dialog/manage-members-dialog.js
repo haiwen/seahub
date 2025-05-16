@@ -8,7 +8,7 @@ import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import '../../css/manage-members-dialog.css';
 
 const propTypes = {
-  groupID: PropTypes.string,
+  groupID: PropTypes.number.isRequired,
   isOwner: PropTypes.bool.isRequired,
   toggleManageMembersDialog: PropTypes.func,
   toggleDepartmentDetailDialog: PropTypes.func,

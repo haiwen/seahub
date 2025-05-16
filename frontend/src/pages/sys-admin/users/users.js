@@ -16,6 +16,7 @@ import SysAdminAdminUser from '../../../models/sysadmin-admin-user';
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import UsersNav from './users-nav';
+import UsersFilterBar from './users-filter-bar';
 import Content from './users-content';
 
 const { availableRoles } = window.sysadmin.pageOptions;
@@ -44,8 +45,8 @@ class Users extends Component {
       isBatchSetQuotaDialogOpen: false,
       isBatchDeleteUserDialogOpen: false,
       isBatchAddAdminDialogOpen: false,
-      is_active: null,
-      role: null,
+      is_active: '',
+      role: ''
     };
   }
 
@@ -59,15 +60,17 @@ class Users extends Component {
         sortBy = '',
         sortOrder = 'asc',
         is_active,
-        role,
+        role
       } = this.state;
       this.setState({
         perPage: parseInt(urlParams.get('per_page') || perPage),
         currentPage: parseInt(urlParams.get('page') || currentPage),
         sortBy: urlParams.get('order_by') || sortBy,
         sortOrder: urlParams.get('direction') || sortOrder,
+        is_active: urlParams.get('is_active') || is_active,
+        role: urlParams.get('role') || role
       }, () => {
-        this.getUsersListByPage(this.state.currentPage, is_active, role);
+        this.getUsersListByPage(this.state.currentPage);
       });
     }
   }
@@ -164,8 +167,8 @@ class Users extends Component {
     });
   };
 
-  getUsersListByPage = (page, is_active, role) => {
-    const { perPage, sortBy, sortOrder } = this.state;
+  getUsersListByPage = (page) => {
+    const { perPage, sortBy, sortOrder, is_active, role } = this.state;
     const { isLDAPImported } = this.props;
     systemAdminAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder, is_active, role).then(res => {
       let users = res.data.data.map(user => {return new SysAdminUser(user);});
@@ -183,11 +186,12 @@ class Users extends Component {
     });
   };
 
-  updateURL = (page, perPage) => {
+  updateURLSearchParams = (obj) => {
     let url = new URL(location.href);
     let searchParams = new URLSearchParams(url.search);
-    searchParams.set('page', page);
-    searchParams.set('per_page', perPage);
+    for (const key in obj) {
+      searchParams.set(key, obj[key]);
+    }
     url.search = searchParams.toString();
     navigate(url.toString());
   };
@@ -198,21 +202,28 @@ class Users extends Component {
       is_active: is_active,
       currentPage: 1
     }, () => {
-      const { currentPage, perPage, is_active, role } = this.state;
-      this.updateURL(currentPage, perPage);
-      this.getUsersListByPage(currentPage, is_active, role);
+      const { currentPage, perPage } = this.state;
+      this.updateURLSearchParams({
+        'page': currentPage,
+        'per_page': perPage,
+        'is_active': is_active
+      });
+      this.getUsersListByPage(currentPage);
     });
   };
 
-  // role: 'default', 'guest', ''
   onRoleChange = (role) => {
     this.setState({
       role: role,
       currentPage: 1
     }, () => {
-      const { currentPage, perPage, is_active, role } = this.state;
-      this.updateURL(currentPage, perPage);
-      this.getUsersListByPage(currentPage, is_active, role);
+      const { currentPage, perPage } = this.state;
+      this.updateURLSearchParams({
+        'page': currentPage,
+        'per_page': perPage,
+        'role': role
+      });
+      this.getUsersListByPage(currentPage);
     });
   };
 
@@ -222,15 +233,14 @@ class Users extends Component {
       sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc',
       currentPage: 1
     }, () => {
-      let url = new URL(location.href);
-      let searchParams = new URLSearchParams(url.search);
-      const { currentPage, sortBy, sortOrder, is_active, role } = this.state;
-      searchParams.set('page', currentPage);
-      searchParams.set('order_by', sortBy);
-      searchParams.set('direction', sortOrder);
-      url.search = searchParams.toString();
-      navigate(url.toString());
-      this.getUsersListByPage(currentPage, is_active, role);
+      const { currentPage, perPage, sortBy, sortOrder } = this.state;
+      this.updateURLSearchParams({
+        'page': currentPage,
+        'per_page': perPage,
+        'order_by': sortBy,
+        'direction': sortOrder
+      });
+      this.getUsersListByPage(currentPage);
     });
   };
 
@@ -346,12 +356,12 @@ class Users extends Component {
     this.setState({
       perPage: perPage
     }, () => {
-      this.getUsersListByPage(1, this.state.is_active, this.state.role);
+      this.getUsersListByPage(1);
     });
   };
 
-  updateUser = (email, key, value) => {
-    systemAdminAPI.sysAdminUpdateUser(email, key, value).then(res => {
+  updateUser = (email, key, value, options = {}) => {
+    systemAdminAPI.sysAdminUpdateUser(email, key, value, options).then(res => {
       let newUserList = this.state.userList.map(item => {
         if (item.email == email) {
           item[key] = res.data[key];
@@ -471,6 +481,8 @@ class Users extends Component {
   render() {
     const { isAdmin, isLDAPImported } = this.props;
     const {
+      is_active,
+      role,
       hasUserSelected,
       isImportUserDialogOpen,
       isAddUserDialogOpen,
@@ -478,6 +490,7 @@ class Users extends Component {
       isBatchSetQuotaDialogOpen,
       isBatchAddAdminDialogOpen
     } = this.state;
+    const curTab = this.getCurrentNavItem();
     return (
       <Fragment>
         <MainPanelTopbar search={this.getSearch()} {...this.props}>
@@ -491,8 +504,16 @@ class Users extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <UsersNav currentItem={this.getCurrentNavItem()} />
+            <UsersNav currentItem={curTab} />
             <div className="cur-view-content">
+              {curTab == 'database' &&
+              <UsersFilterBar
+                isActive={is_active}
+                role={role}
+                onStatusChange={this.onStatusChange}
+                onRoleChange={this.onRoleChange}
+              />
+              }
               <Content
                 isAdmin={isAdmin}
                 isLDAPImported={isLDAPImported}
@@ -505,8 +526,6 @@ class Users extends Component {
                 currentPage={this.state.currentPage}
                 hasNextPage={this.state.hasNextPage}
                 curPerPage={this.state.perPage}
-                is_active={this.state.is_active}
-                role={this.state.role}
                 resetPerPage={this.resetPerPage}
                 getListByPage={this.getUsersListByPage}
                 updateUser={this.updateUser}
@@ -516,9 +535,6 @@ class Users extends Component {
                 onUserSelected={this.onUserSelected}
                 isAllUsersSelected={this.isAllUsersSelected}
                 toggleSelectAllUsers={this.toggleSelectAllUsers}
-                onRoleChange={this.onRoleChange}
-                onStatusChange={this.onStatusChange}
-                currentItem={this.getCurrentNavItem()}
               />
             </div>
           </div>

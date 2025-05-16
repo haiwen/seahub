@@ -18,6 +18,7 @@ import StatisticStorage from './statistic/statistic-storage';
 import StatisticTraffic from './statistic/statistic-traffic';
 import StatisticUsers from './statistic/statistic-users';
 import StatisticReport from './statistic/statistic-reports';
+import StatisticMetrics from './statistic/statistic-metrics';
 
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
@@ -68,7 +69,7 @@ import FileAccessLogs from './logs-page/file-access-logs';
 import FileUpdateLogs from './logs-page/file-update-logs';
 import SharePermissionLogs from './logs-page/share-permission-logs';
 import FIleTransferLogs from './logs-page/file-transfer-log';
-
+import GroupMemberAuditLogs from './logs-page/group-member-audit-logs';
 import WebSettings from './web-settings/web-settings';
 import Notifications from './notifications/notifications';
 import FileScanRecords from './file-scan-records';
@@ -112,7 +113,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'statistic',
-        urlPartList: ['statistics/file', 'statistics/storage', 'statistics/user', 'statistics/traffic', 'statistics/reports']
+        urlPartList: ['statistics/file', 'statistics/storage', 'statistics/user', 'statistics/traffic', 'statistics/reports', 'statistics/metrics']
       },
       {
         tab: 'users',
@@ -222,6 +223,7 @@ class SysAdmin extends React.Component {
             <StatisticUsers path={siteRoot + 'sys/statistics/user'} {...commonProps} />
             <StatisticTraffic path={siteRoot + 'sys/statistics/traffic'} {...commonProps} />
             <StatisticReport path={siteRoot + 'sys/statistics/reports'} {...commonProps} />
+            <StatisticMetrics path={siteRoot + 'sys/statistics/metrics'} {...commonProps} />
             <DesktopDevices path={siteRoot + 'sys/desktop-devices'} {...commonProps} />
             <MobileDevices path={siteRoot + 'sys/mobile-devices'} {...commonProps} />
             <DeviceErrors path={siteRoot + 'sys/device-errors'} {...commonProps} />
@@ -253,6 +255,7 @@ class SysAdmin extends React.Component {
             <LoginLogs path={siteRoot + 'sys/logs/login'} {...commonProps} />
             <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} {...commonProps} />
             <FIleTransferLogs path={siteRoot + 'sys/logs/repo-transfer'} {...commonProps} />
+            <GroupMemberAuditLogs path={siteRoot + 'sys/logs/group-member-audit'} {...commonProps} />
             <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} {...commonProps} />
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} {...commonProps} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />

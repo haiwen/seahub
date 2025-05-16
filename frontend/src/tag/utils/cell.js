@@ -41,27 +41,23 @@ export const getTagFilesCount = (tag) => {
   return Array.isArray(links) ? links.length : 0;
 };
 
-export const getTagsByNameOrColor = (tags, nameOrColor) => {
+export const getTagsByName = (tags, name) => {
   if (!Array.isArray(tags) || tags.length === 0) return [];
-  if (!nameOrColor) return tags;
-  const value = nameOrColor.toLowerCase();
+  if (!name) return tags;
+  const value = name.toLowerCase();
   return tags.filter((tag) => {
     const tagName = getTagName(tag);
     if (tagName && tagName.toLowerCase().includes(value)) return true;
-    const tagColor = getTagColor(tag);
-    if (tagColor && tagColor.toLowerCase().includes(value)) return true;
     return false;
   });
 };
 
-export const getTagByNameOrColor = (tags, nameOrColor) => {
+export const getTagByName = (tags, name) => {
   if (!Array.isArray(tags) || tags.length === 0) return null;
-  if (!nameOrColor) return null;
+  if (!name) return null;
   return tags.find((tag) => {
     const tagName = getTagName(tag);
-    if (tagName && tagName === nameOrColor) return true;
-    const tagColor = getTagColor(tag);
-    if (tagColor && tagColor === nameOrColor) return true;
+    if (tagName && tagName === name) return true;
     return false;
   });
 };

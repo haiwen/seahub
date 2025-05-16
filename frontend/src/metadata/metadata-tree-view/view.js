@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { gettext } from '../../utils/constants';
+import { baiduMapKey, gettext } from '../../utils/constants';
 import Icon from '../../components/icon';
 import ItemDropdownMenu from '../../components/dropdown-menu/metadata-item-dropdown-menu';
 import toaster from '../../components/toast';
@@ -74,7 +74,11 @@ const ViewItem = ({
         subOpList: moveableFolders.map((folder) => ({ key: `${MOVE_TO_FOLDER_PREFIX}${folder._id}`, value: folder.name, icon_dom: <i className="sf3-font sf3-font-folder"></i> })),
       });
     }
-    const convertableViews = Object.values(VIEW_TYPE).filter(type => type !== viewType && type !== VIEW_TYPE.FACE_RECOGNITION);
+    const convertableViews = Object.values(VIEW_TYPE).filter(type =>
+      type !== viewType &&
+      type !== VIEW_TYPE.FACE_RECOGNITION &&
+      !(type === VIEW_TYPE.MAP && !baiduMapKey)
+    );
     value.push({
       key: 'turn',
       value: gettext('Change view type'),

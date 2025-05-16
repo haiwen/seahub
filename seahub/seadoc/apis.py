@@ -11,7 +11,6 @@ import time
 import shutil
 from datetime import datetime, timedelta
 
-from pypinyin import lazy_pinyin
 from zipfile import is_zipfile, ZipFile
 
 from rest_framework.response import Response
@@ -20,17 +19,16 @@ from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.utils.translation import gettext as _
-from django.http import HttpResponseRedirect, HttpResponse, FileResponse, HttpResponseNotModified
+from django.http import HttpResponseRedirect, HttpResponse, FileResponse
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.db import transaction
 from django.urls import reverse
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from django.views.decorators.http import condition
 
-from seaserv import seafile_api, check_quota, get_org_id_by_repo_id, ccnet_api
+from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.views import check_folder_permission
@@ -49,7 +47,8 @@ from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, \
         gen_inner_file_get_url, gen_inner_file_upload_url, gen_file_get_url, \
         get_service_url, is_valid_username, is_pro_version, \
-        get_file_history_by_day, get_file_daily_history_detail, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_upload_url, \
+        get_file_history_by_day, get_file_daily_history_detail, \
+        HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_upload_url, \
         get_non_sdoc_file_exts
 from seahub.tags.models import FileUUIDMap
 from seahub.utils.error_msg import file_type_error_msg
@@ -64,7 +63,6 @@ from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seahub.file_participants.models import FileParticipant
 from seahub.base.accounts import User
-from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.repo_tags.models import RepoTags
 from seahub.file_tags.models import FileTags
 from seahub.wiki2.models import Wiki2Publish
@@ -76,7 +74,7 @@ logger = logging.getLogger(__name__)
 
 try:
     TO_TZ = time.strftime('%z')[:3] + ':' + time.strftime('%z')[3:]
-except Exception as error:
+except Exception:
     TO_TZ = '+00:00'
 
 
@@ -165,6 +163,7 @@ class SeadocUploadFile(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_path = os.path.normpath(file_path)
         file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
         if not file_id:  # save file anyway
             seafile_api.post_empty_file(
@@ -210,6 +209,7 @@ class SeadocUploadLink(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_path = os.path.normpath(file_path)
         file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
         if not file_id:  # save file anyway
             seafile_api.post_empty_file(
@@ -391,6 +391,7 @@ class SeadocUploadImage(APIView):
         relative_path = []
         for file in file_list:
             file_path = posixpath.join(parent_path, file.name)
+            file_path = os.path.normpath(file_path)
             files = {'file': file}
             data = {'parent_dir': parent_path, 'filename': file.name, 'target_file': file_path}
             resp = requests.post(upload_link, files=files, data=data)
@@ -411,6 +412,7 @@ def latest_entry(request, file_uuid, filename):
             username = request.user.username
             parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
             filepath = os.path.join(parent_path, filename)
+            filepath = os.path.normpath(filepath)
             file_obj = seafile_api.get_dirent_by_path(repo_id, filepath)
             dt = datetime.fromtimestamp(file_obj.mtime)
             return dt
@@ -440,6 +442,7 @@ class SeadocDownloadImage(APIView):
         # permission check
         if not wiki_publish:
             file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+            file_path = os.path.normpath(file_path)
             if not can_access_seadoc_asset(request, repo_id, file_path, file_uuid):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -509,6 +512,7 @@ class SeadocUploadVideo(APIView):
         relative_path = []
         for file in file_list:
             file_path = posixpath.join(parent_path, file.name)
+            file_path = os.path.normpath(file_path) 
             files = {'file': file}
             data = {'parent_dir': parent_path, 'filename': file.name, 'target_file': file_path}
             resp = requests.post(upload_link, files=files, data=data)
@@ -540,6 +544,7 @@ class SeadocDownloadVideo(APIView):
         # permission check
         if not wiki_publish:
             file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+            file_path = os.path.normpath(file_path)
             if not can_access_seadoc_asset(request, repo_id, file_path, file_uuid):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -677,10 +682,11 @@ class SeadocCopyHistoryFile(APIView):
         new_file_name = '.'.join(file_name.split('.')[0:-1]) + \
             '(' + str(ctime) + ').' + file_name.split('.')[-1]
         new_file_path = posixpath.join(parent_dir, new_file_name)
+        new_file_path = os.path.normpath(new_file_path)
 
         # download
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                obj_id, 'download', username)
+        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
+                                                        'download', username)
         if not token:
             error_msg = 'file %s not found.' % obj_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -751,8 +757,8 @@ class SeadocHistory(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = uuid_map.repo_id
-        username = request.user.username
         path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        path = os.path.normpath(path)
 
         # permission check
         if not check_folder_permission(request, repo_id, path):
@@ -777,7 +783,7 @@ class SeadocHistory(APIView):
         # if path parameter is `rev_renamed_old_path`.
         # seafile_api.get_file_id_by_path() will return None.
         file_id = seafile_api.get_file_id_by_commit_and_path(repo_id,
-                commit_id, path)
+                                                             commit_id, path)
         if not file_id:
             error_msg = 'File %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -834,6 +840,7 @@ class SeadocHistory(APIView):
         repo_id = uuid_map.repo_id
         username = request.user.username
         path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        path = os.path.normpath(path)
 
         # permission check
         if not check_folder_permission(request, repo_id, path):
@@ -847,7 +854,7 @@ class SeadocHistory(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         token = seafile_api.get_fileserver_access_token(repo_id,
-                obj_id, 'download', username)
+                                                        obj_id, 'download', username)
         if not token:
             error_msg = 'history %s not found.' % obj_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -892,8 +899,8 @@ class SeadocDailyHistoryDetail(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = uuid_map.repo_id
-        username = request.user.username
         path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        path = os.path.normpath(path)
 
         # permission check
         if not check_folder_permission(request, repo_id, path):
@@ -941,8 +948,11 @@ class SeadocDailyHistoryDetail(APIView):
         }
         return Response(result)
 
+
 class SeadocNotificationsView(APIView):
-    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    authentication_classes = (SdocJWTTokenAuthentication,
+                              TokenAuthentication,
+                              SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -950,10 +960,6 @@ class SeadocNotificationsView(APIView):
         """list unseen notifications
         """
         username = request.user.username
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         notifications = []
@@ -1050,11 +1056,6 @@ class SeadocCommentsView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         resolved = request.GET.get('resolved', None)
         if resolved not in ('true', 'false', None):
             error_msg = 'resolved invalid.'
@@ -1080,7 +1081,12 @@ class SeadocCommentsView(APIView):
             file_comments = FileComment.objects.list_by_file_uuid(file_uuid)[start: end]
         else:
             comment_resolved = to_python_boolean(resolved)
-            file_comments = FileComment.objects.list_by_file_uuid(file_uuid).filter(resolved=comment_resolved)[start: end]
+            file_comments = (
+                FileComment.objects
+                .list_by_file_uuid(file_uuid)
+                .filter(resolved=comment_resolved)
+                [start:end]
+            )
 
         reply_queryset = SeadocCommentReply.objects.list_by_doc_uuid(file_uuid)
 
@@ -1126,7 +1132,7 @@ class SeadocCommentsView(APIView):
         detail = {
             'author': username,
             'comment_id': int(file_comment.id),
-            'comment' : str(file_comment.comment),
+            'comment': str(file_comment.comment),
             'msg_type': 'comment',
             'created_at': datetime_to_isoformat_timestr(file_comment.created_at),
             'updated_at': datetime_to_isoformat_timestr(file_comment.updated_at),
@@ -1141,7 +1147,7 @@ class SeadocCommentsView(APIView):
                     username=to_user,
                     msg_type='comment',
                     detail=json.dumps(detail),
-            ))
+                ))
         try:
             SeadocNotification.objects.bulk_create(new_notifications)
         except Exception as e:
@@ -1208,11 +1214,6 @@ class SeadocCommentView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
-
         # argument check
         resolved = request.data.get('resolved')
         if resolved not in ('true', 'false', None):
@@ -1262,10 +1263,6 @@ class SeadocCommentRepliesView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
         start = None
         end = None
         page = request.GET.get('page', '')
@@ -1307,10 +1304,6 @@ class SeadocCommentRepliesView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
         reply_content = request.data.get('reply', '')
         type_content = request.data.get('type', 'reply')
         author = request.data.get('author', '')
@@ -1365,7 +1358,7 @@ class SeadocCommentRepliesView(APIView):
                     username=to_user,
                     msg_type='reply',
                     detail=json.dumps(detail),
-            ))
+                ))
         try:
             SeadocNotification.objects.bulk_create(new_notifications)
         except Exception as e:
@@ -1390,11 +1383,6 @@ class SeadocCommentReplyView(APIView):
         if not is_valid_seadoc_access_token(auth, file_uuid):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         file_comment = FileComment.objects.filter(
@@ -1445,10 +1433,6 @@ class SeadocCommentReplyView(APIView):
         reply_content = request.data.get('reply')
         if reply_content is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'reply invalid.')
-        try:
-            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = AVATAR_DEFAULT_SIZE
 
         # resource check
         file_comment = FileComment.objects.filter(
@@ -1571,7 +1555,7 @@ class SdocRepoTagsView(APIView):
         tag_objs = list()
         try:
             for tag in tags:
-                name = tag.get('name' ,'')
+                name = tag.get('name', '')
                 color = tag.get('color', '')
                 if name and color:
                     obj = RepoTags(repo_id=repo_id, name=name, color=color)
@@ -1673,10 +1657,11 @@ class SdocRepoTagView(APIView):
         return Response({'success': True}, status=status.HTTP_200_OK)
 
 
-
 class SdocRepoFileTagsView(APIView):
 
-    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    authentication_classes = (SdocJWTTokenAuthentication,
+                              TokenAuthentication,
+                              SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
@@ -1834,8 +1819,9 @@ class SeadocStartRevise(APIView):
         # save origin file
         try:
             sdoc_server_api = SdocServerAPI(origin_file_uuid, filename, username)
-            res = sdoc_server_api.save_doc()
+            sdoc_server_api.save_doc()
         except Exception as e:
+            logger.error(e)
             warning_msg = 'Save origin sdoc %s failed.' % origin_file_uuid
             logger.warning(warning_msg)
 
@@ -1943,7 +1929,7 @@ class SeadocRevisions(APIView):
         start = (page - 1) * per_page
         end = page * per_page
 
-        revisions_queryset= revision_queryset[start:end]
+        revisions_queryset = revision_queryset[start:end]
         uuid_set = set()
         for item in revisions_queryset:
             uuid_set.add(item.doc_uuid)
@@ -2051,6 +2037,7 @@ class SeadocRevisionView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_path = os.path.normpath(file_path)
         file_id = seafile_api.get_file_id_by_path(uuid_map.repo_id, file_path)
         if not file_id:  # save file anyway
             seafile_api.post_empty_file(
@@ -2167,8 +2154,11 @@ class DeleteSeadocOtherRevision(APIView):
             'success': True,
         })
 
+
 class SeadocPublishRevision(APIView):
-    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    authentication_classes = (SdocJWTTokenAuthentication,
+                              TokenAuthentication,
+                              SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
@@ -2217,6 +2207,7 @@ class SeadocPublishRevision(APIView):
             origin_file_parent_path = os.path.dirname(revision.origin_doc_path)
             origin_file_filename = os.path.basename(revision.origin_doc_path)
         origin_file_path = posixpath.join(origin_file_parent_path, origin_file_filename)
+        origin_file_path = os.path.normpath(origin_file_path)
 
         # check if origin file's parent folder exists
         if not seafile_api.get_dir_id_by_path(repo_id, origin_file_parent_path):
@@ -2233,7 +2224,7 @@ class SeadocPublishRevision(APIView):
         username = request.user.username
         try:
             sdoc_server_api = SdocServerAPI(file_uuid, revision_filename, username)
-            res = sdoc_server_api.save_doc()
+            sdoc_server_api.save_doc()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2273,7 +2264,7 @@ class SeadocPublishRevision(APIView):
                 repo_id, SDOC_IMAGES_DIR, json.dumps([str(revision_file_uuid.uuid)]), username)
 
         try:
-            res = sdoc_server_api.publish_doc(str(origin_file_uuid.uuid), origin_file_filename)
+            sdoc_server_api.publish_doc(str(origin_file_uuid.uuid), origin_file_filename)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2299,6 +2290,7 @@ class SeadocFileView(APIView):
 
         repo_id = uuid_map.repo_id
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_path = os.path.normpath(file_path)
         file_url = reverse('view_lib_file', args=[repo_id, file_path])
         return HttpResponseRedirect(file_url)
 
@@ -2361,6 +2353,7 @@ class SeadocFileUUIDView(APIView):
         if repo.is_virtual:
             repo_id = repo.origin_repo_id
             path = posixpath.join(repo.origin_path, path.strip('/'))
+            path = os.path.normpath(path)
 
             path = normalize_file_path(path)
             parent_dir = os.path.dirname(path)
@@ -2368,7 +2361,9 @@ class SeadocFileUUIDView(APIView):
 
         try:
             uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id,
-                    parent_dir, dirent_name, is_dir)
+                                                                     parent_dir,
+                                                                     dirent_name,
+                                                                     is_dir)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -2413,6 +2408,7 @@ class SeadocFilesInfoView(APIView):
                         continue
                     repo_id = uuid_map.repo_id
                     path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+                    path = os.path.normpath(path)
                     is_dir = uuid_map.is_dir
                 elif file_url_re.match(file_url) is not None:
                     re_result = file_url_re.match(file_url)
@@ -2578,7 +2574,8 @@ class SdocRevisionBaseVersionContent(APIView):
 
         username = request.user.username
         token = seafile_api.get_fileserver_access_token(origin_doc_uuid_map.repo_id,
-                origin_file_version, 'download', username)
+                                                        origin_file_version,
+                                                        'download', username)
 
         if not token:
             error_msg = 'Origin file %s not found.' % origin_doc_uuid
@@ -2631,7 +2628,8 @@ class SeadocPublishedRevisionContent(APIView):
 
         username = request.user.username
         token = seafile_api.get_fileserver_access_token(origin_doc_uuid_map.repo_id,
-                publish_file_version, 'download', username)
+                                                        publish_file_version,
+                                                        'download', username)
 
         if not token:
             error_msg = 'Origin file %s not found.' % origin_doc_uuid
@@ -2734,7 +2732,7 @@ class SdocParticipantsView(APIView):
                 continue
 
             # permission check
-            if not seafile_api.check_permission_by_path(repo_id, '/', user.username):
+            if not check_folder_permission(request, repo_id, '/'):
                 error_dic = {'email': email, 'error_msg': _('Permission denied.'), 'error_code': 403}
                 failed.append(error_dic)
                 continue
@@ -2841,6 +2839,7 @@ class SdocRelatedUsers(APIView):
 
         return Response({'related_users': related_users})
 
+
 class SeadocEditorCallBack(APIView):
 
     authentication_classes = ()
@@ -2874,6 +2873,7 @@ class SeadocEditorCallBack(APIView):
         # unlock file
         repo_id = uuid_map.repo_id
         file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        file_path = os.path.normpath(file_path)
         try:
             if is_pro_version() and if_locked_by_online_office(repo_id, file_path):
                 seafile_api.unlock_file(repo_id, file_path)
@@ -2973,7 +2973,7 @@ class SeadocSearchFilenameView(APIView):
                 f['doc_uuid'] = get_seadoc_file_uuid(repo, f['fullpath'])
 
             has_more = True if total > current_page * per_page else False
-            return Response({"total":total, "results":results, "has_more":has_more})
+            return Response({"total": total, "results": results, "has_more": has_more})
 
         elif HAS_FILE_SEASEARCH:
             repo_obj = repo
@@ -3010,6 +3010,7 @@ class SeadocExportView(APIView):
 
     def get(self, request, file_uuid):
         username = request.user.username
+        wiki_page_name = request.GET.get('wiki_page_name')
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -3036,10 +3037,16 @@ class SeadocExportView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        response = FileResponse(open(tmp_zip_path, 'rb'), content_type="application/x-zip-compressed", as_attachment=True)
+        response = FileResponse(open(tmp_zip_path, 'rb'),
+                                content_type="application/x-zip-compressed",
+                                as_attachment=True)
+        
         response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename[:-4] + ZSDOC)
+        if wiki_page_name:
+            response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(wiki_page_name[:-4] + ZSDOC)
 
         tmp_dir = os.path.join('/tmp/sdoc', str(uuid_map.uuid))
+        tmp_dict = os.path.normpath(tmp_dir)
         if os.path.exists(tmp_dir):
             shutil.rmtree(tmp_dir)
 
@@ -3119,6 +3126,7 @@ class SdocImportView(APIView):
         # upload file
         tmp_dir = str(uuid.uuid4())
         tmp_extracted_path = os.path.join('/tmp/seahub', str(repo_id), 'sdoc_zip_extracted/', tmp_dir)
+        tmp_extracted_path = os.path.normpath(tmp_extracted_path)
         try:
             with ZipFile(uploaded_temp_path) as zip_file:
                 zip_file.extractall(tmp_extracted_path)
@@ -3128,12 +3136,15 @@ class SdocImportView(APIView):
 
         sdoc_file_name = filename.replace(ZSDOC, 'sdoc')
         new_file_path = os.path.join(parent_dir, relative_path, sdoc_file_name)
+        new_file_path = os.path.normpath(new_file_path)
 
         data = {'parent_dir': parent_dir, 'target_file': new_file_path, 'relative_path': relative_path}
         if replace:
             data['replace'] = 1
         sdoc_file_path = os.path.join(tmp_extracted_path, 'content.json')
+        sdoc_file_path = os.path.normpath(sdoc_file_path)
         new_sdoc_file_path = os.path.join(tmp_extracted_path, sdoc_file_name)
+        new_sdoc_file_path = os.path.normpath(new_sdoc_file_path)
         os.rename(sdoc_file_path, new_sdoc_file_path)
 
         files = {'file': open(new_sdoc_file_path, 'rb')}
@@ -3144,10 +3155,12 @@ class SdocImportView(APIView):
 
         sdoc_name = json.loads(resp.content)[0].get('name')
         new_sdoc_file_path = os.path.join(parent_dir, relative_path, sdoc_name)
+        new_sdoc_file_path = os.path.normpath(new_sdoc_file_path)
         doc_uuid = get_seadoc_file_uuid(repo, new_sdoc_file_path)
 
         # upload sdoc images
         image_dir = os.path.join(tmp_extracted_path, 'images/')
+        image_dir = os.path.normpath(image_dir)
         if os.path.exists(image_dir):
             batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir)
 
@@ -3166,7 +3179,9 @@ def batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir):
 
     for filename in file_list:
         file_path = posixpath.join(parent_path, filename)
+        file_path = os.path.normpath(file_path)
         image_path = os.path.join(image_dir, filename)
+        image_path = os.path.normpath(image_path)
         image_file = open(image_path, 'rb')
         files = {'file': image_file}
         data = {'parent_dir': parent_path, 'filename': filename, 'target_file': file_path}

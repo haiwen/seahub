@@ -5,6 +5,7 @@ import { gettext } from './utils/constants';
 import Logo from './components/logo';
 import Account from './components/common/account';
 import TermsPreviewWidget from './components/terms-preview-widget';
+import { Utils } from './utils/utils';
 
 import './css/tc-accept.css';
 
@@ -30,7 +31,7 @@ class TCAccept extends React.Component {
         </div>
         <div className="o-auto">
           <div className="py-4 px-4 my-6 mx-auto content">
-            <h2 dangerouslySetInnerHTML={{ __html: termsName }}></h2>
+            <h2 dangerouslySetInnerHTML={{ __html: Utils.HTMLescape(termsName) }}></h2>
             <div className="article">
               <TermsPreviewWidget content={termsText} />
             </div>

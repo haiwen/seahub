@@ -6,6 +6,7 @@
 # Translators:
 # zheng xie <xiez1989@gmail.com>, 2024
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/haiwen/teams/5086/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -753,6 +754,8 @@ msgstr ""
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
+"¿Cómo eliminar los accesos directos sobrantes de SeaDrive en el Explorador "
+"de Windows?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -761,12 +764,19 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"El acceso directo \"SeaDrive\" en el Explorador de Windows no desaparecerá "
+"después de salir del programa SeaDrive o cambiar de cuentas de Seafile en "
+"SeaDrive. Esto es un comportamiento previsto. No necesita eliminarlos si aún"
+" necesita acceder a la cuenta más tarde."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Por lo general, puede eliminar esos accesos directos desinstalando el "
+"programa SeaDrive y eligiendo \"Eliminar información de la cuenta\" en el "
+"diálogo de aviso."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -777,6 +787,12 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Si la desinstalación no elimina los accesos directos con éxito, puede "
+"eliminar el acceso directo de SeaDrive en el Explorador de Windows editando "
+"el registro. Abra el camino "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" en el editor de registro. Elimine las claves secundarias correspondientes "
+"al acceso directo que desee eliminar."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -806,6 +822,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Si crea una biblioteca encriptada en la aplicación web, la contraseña se "
+"envía al servidor. El servidor utiliza esta contraseña para crear la "
+"biblioteca. Pero no almacena la contraseña en texto plano."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -839,18 +858,26 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Si utiliza el cliente de escritorio para sincronizar la biblioteca, la "
+"contraseña no se envía al servidor. El cliente descifra y cifra el contenido"
+" de los archivos localmente. La contraseña en texto plano tampoco se "
+"almacena en el disco del cliente."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"El cliente iOS admite la encriptación en el lado del cliente desde la "
+"versión 2.1.6. El cliente Android admite desde la versión 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Ten en cuenta que la biblioteca encriptada solo cifra el contenido de los "
+"archivos, pero no los nombres de las carpetas y archivos."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
@@ -1743,6 +1770,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Capturar y almacenar pequeñas cantidades de datos estructurados de una "
+"manera fácil de usar – eso es lo que se busca en las wikis de Seafile. Las "
+"páginas de la wiki se escriben en Markdown (MD), un lenguaje de marcado "
+"sencillo, para asegurar la compatibilidad entre diferentes plataformas. Los "
+"archivos MD almacenan información textual, tabular y gráfica; también puedes"
+" agregar enlaces a otros documentos en un archivo Markdown."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1751,10 +1784,15 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Puedes administrar una biblioteca estándar en Seafile como una wiki, con la "
+"\"Vista de columna\" introducida en la versión 7.0. Como las wikis de "
+"Seafile son implementadas como bibliotecas de Seafile estándar, pueden ser "
+"sincronizadas y compartidas con otros usuarios como cualquier biblioteca "
+"ordinaria."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Vista de columna"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1765,10 +1803,18 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Las wikis suelen tener una barra lateral que contiene una estructura de "
+"carpetas en forma de árbol, para permitir el acceso rápido y fácil a las "
+"páginas de la wiki. La Vista de columna de Seafile te permite administrar "
+"los archivos en una biblioteca de la misma manera que un espacio de wiki. "
+"Los usuarios pueden navegar en ella y mover archivos y carpetas simplemente "
+"arrastrando y soltando. Las acciones de archivo como renombrar, mover y "
+"abrir mediante el cliente están disponibles en un menú contextual accesible "
+"con un click con el botón derecho."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "Editor de Markdown WYSIWYG"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1784,12 +1830,27 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Las páginas wiki en Seafile se guardan como documentos normales en formato "
+"Markdown. Para crear una nueva página wiki en una biblioteca, simplemente "
+"crea un nuevo documento Markdown. Los archivos MD se pueden editar "
+"directamente desde la interfaz web de Seafile con el editor de MD en línea. "
+"El editor basado en web ofrece una experiencia de usuario suave y opciones "
+"de formato rico para texto, imágenes y tablas. Las imágenes se pueden "
+"importar en archivos MD desde bibliotecas y almacenamiento local, así como "
+"mediante hipervínculos. Las funciones de edición de imágenes básicas, como "
+"escalar, también se pueden realizar en la interfaz del editor WYSIWYG. Las "
+"tablas se pueden insertar y modificar con solo unos pocos clics. Lo mismo se"
+" aplica al contenido de una tabla: una tabla se puede copiar en su totalidad"
+" o en parte sin salir de la vista WYSIWYG."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"El historial de cambios de un archivo Markdown se puede acceder fácilmente "
+"haciendo click en el botón \"Historial de archivo\" en el menú de la parte "
+"superior de la interfaz del editor."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1797,10 +1858,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Puedes abrir una barra lateral oculta en el lado derecho del editor de "
+"Markdown. La tabla de contenido, la información del archivo y el comentario "
+"colaborativo se proporcionan en esta barra lateral."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Etiquetado de archivos y documentos relacionados"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1809,22 +1873,31 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"El etiquetado de archivos es una característica importante para la gestión "
+"del conocimiento. Seafile permite a los usuarios definir etiquetas para cada"
+" biblioteca y aplicar etiquetas a los archivos. Las etiquetas se pueden "
+"administrar desde la barra lateral del editor de Markdown o desde la "
+"interfaz del navegador de archivos."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"La interfaz del navegador de archivos proporciona un resumen de todas las "
+"etiquetas de archivos en la biblioteca actual."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Si desea que los usuarios compartidos no puedan modificar copias locales, "
+"puede considerar usar el cliente Seafile Drive."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Restaurar archivos y carpetas eliminados"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1832,16 +1905,22 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Cada biblioteca en Seafile rastrea automáticamente sus operaciones de "
+"eliminación de archivos. A veces encuentra que los archivos se eliminan por "
+"error. Puede recuperar sus archivos eliminados en la papelera de cada "
+"biblioteca."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Aquí se explica cómo usar la función de papelera:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"En la aplicación web de Seafile, navegue hasta la carpeta contenedora del "
+"archivo o carpeta eliminados."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1849,6 +1928,10 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Haga clic en el icono de \"papelera\" en la barra de operaciones de la "
+"biblioteca. Los archivos y carpetas eliminados se listarán en orden de "
+"eliminación. Al final de la lista, puede hacer clic en el botón \"más\" para"
+" cargar más archivos eliminados."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1856,6 +1939,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"En la lista de archivos eliminados, puede restaurar archivos y carpetas. Si "
+"la carpeta contenedora de un archivo o carpeta ha sido eliminada, se "
+"restaurará en la carpeta raíz de la biblioteca."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1863,6 +1949,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Observe que la papelera solo contiene archivos y subcarpetas eliminadas bajo"
+" la carpeta actual. Los archivos eliminados en las subcarpetas de la carpeta"
+" actual también se incluyen en la lista."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1871,6 +1960,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Puede configurar el período de retención de archivos eliminados: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">configurando el período "
+"de retención del historial</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1879,6 +1971,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Puede que tenga algunas bibliotecas muy grandes en el servidor de Seafile. Y"
+" actualmente solo está interesado en una sub-carpeta dentro de una "
+"biblioteca. Luego puede sincronizar selectivamente una sub-carpeta en una "
+"biblioteca, en lugar de sincronizar toda la biblioteca."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1903,31 +1999,40 @@ msgstr ""
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Estableciendo el período de retención del historial de la biblioteca"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"La duración del período de retención del historial de una biblioteca "
+"controla cuánto tiempo puede acceder a sus datos históricos en las "
+"siguientes funciones:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Restaurar archivos eliminados: no puede restaurar archivos y carpetas "
+"eliminados antes del período de retención."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Versiones de archivos: no puede acceder a versiones de archivos anteriores "
+"al período de retención."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Historial de la biblioteca e instantáneas: no puede acceder a instantáneas "
+"de la biblioteca anteriores al período de retención."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1935,51 +2040,75 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"El periodo de retención de las versiones antiguas de archivos se puede "
+"configurar para cada biblioteca por separado. Debe ser el propietario de la "
+"biblioteca para establecer el período de retención. Para establecer la "
+"duración del período de retención:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"En la aplicación web de Seafile, haga clic en la pestaña \"Mías\" en el "
+"panel de navegación (como en la captura de pantalla a continuación). Se "
+"listarán todas las bibliotecas que posee."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Mueva el cursor sobre la fila de la biblioteca. Aparecerá un menú de "
+"operaciones. Haga clic en \"Configuración de Historial\" en el menú "
+"desplegable."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"En el cuadro de diálogo emergente, puede establecer la duración del periodo "
+"de retención de archivos."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"En Seafile hay varias formas de compartir archivos y carpetas con otros:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Uso de enlaces: hay varios tipos de enlaces que se pueden utilizar para "
+"compartir con ámbitos de colaboradores diferentes."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Enlaces de compartir: cualquier usuario que tenga acceso a los enlaces puede"
+" acceder a los archivos o carpetas apuntados por el enlace. No se requiere "
+"iniciar sesión."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Enlaces de subida: cualquier usuario que tenga acceso a los enlaces puede "
+"subir archivos a la carpeta apuntada por el enlace. No se requiere iniciar "
+"sedeo."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Enlaces internos: solo los usuarios que han iniciado sesión y tienen permiso"
+" de lectura sobre el archivo o carpeta pueden acceder a este enlace. Se usa "
+"para compartir archivos internamente."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1987,10 +2116,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Compartir bibliotecas o carpetas: se utiliza para establecer permisos de "
+"acceso a una biblioteca o carpeta para usuarios o grupos específicos. Los "
+"usuarios deben iniciar sesión para acceder a las carpetas."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Crear enlaces de compartir para archivos o carpetas"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1998,12 +2130,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Los enlaces de compartir son enlaces públicos a archivos o carpetas. "
+"Cualquiera puede acceder a ellos, incluyendo aquellos que no tienen una "
+"cuenta de Seafile. También puede utilizar contraseña y fecha de caducidad "
+"para proteger sus enlaces."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"También puede establecer permisos de acceso a enlaces de compartir. Hay tres"
+" tipos de permisos:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -2011,6 +2149,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Sólo vista previa: el archivo o archivos en la carpeta solo se pueden ver en"
+" el navegador web, pero no se pueden descargar. Esto es útil para compartir "
+"datos confidenciales."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -2018,16 +2159,22 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Editar en la nube y descargar: Similar a \"Vista previa y Descargar\", pero "
+"si el archivo puede editarse en el navegador web (por ejemplo, un archivo de"
+" Office), cualquier usuario que tenga acceso al enlace puede editarlo."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Para crear un enlace de compartir en la aplicación web de Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navegue en la carpeta principal que contiene el archivo o carpeta. Pase el "
+"cursor sobre el archivo o carpeta y haga clic en el icono \"Compartir\" que "
+"aparece."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -2035,6 +2182,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Se abrirá una ventana emergente con opciones de compartir. Haga clic en la "
+"pestaña \"Enlace de compartir\" en el panel izquierdo. Luego haga clic en el"
+" botón \"Generar\" para crear un enlace. Puede utilizar contraseña, fecha de"
+" caducidad y permiso para proteger su enlace."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -2042,10 +2193,13 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Copie el enlace en un correo electrónico, un cliente de mensajería "
+"instantánea o cualquier otra herramienta para enviarlo a otros."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
 msgstr ""
+"También puede crear enlaces de compartir desde los clientes de escritorio."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -2054,6 +2208,11 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Si la biblioteca se sincroniza, haga doble clic en la biblioteca en la "
+"ventana principal del cliente Seafile. Se abrirá la carpeta local de esa "
+"biblioteca. Haga clic en el archivo o carpeta en el que desee crear un "
+"enlace. En el menú emergente, seleccione \"Seafile\" y luego \"Crear enlace "
+"de compartir\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -2061,10 +2220,14 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Si la biblioteca no se sincroniza, haga doble clic en la biblioteca en la "
+"ventana principal del cliente Seafile. Se abrirá la ventana del explorador "
+"de archivos en la nube, y podrá crear un enlace a un archivo o carpeta en "
+"él."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Crear enlaces de subida a carpetas"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -2072,16 +2235,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Puedes utilizar enlaces de subida para recopilar archivos de otros. Solo "
+"puedes crear enlaces de subida para carpetas. Otros no pueden ver los "
+"archivos en las carpetas. Solo pueden subir archivos a ellas."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Para crear un enlace de subida en la aplicación web de Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navega en la carpeta principal que contiene la carpeta. Pase el cursor sobre"
+" la carpeta y haga clic en el icono \"Compartir\" que aparece."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -2089,10 +2257,14 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Se abrirá una ventana emergente con opciones de compartir. Haga clic en la "
+"pestaña \"Enlace de subida\" en el panel izquierdo. Luego haga clic en el "
+"botón \"Generar\" para crear un enlace. Puede utilizar contraseña para "
+"proteger su enlace."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Compartir bibliotecas o carpetas"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -2100,62 +2272,79 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Puede compartir una biblioteca o carpeta con otros usuarios registrados de "
+"Seafile. La biblioteca o carpeta compartida se puede acceder a través de la "
+"aplicación web y los clientes de Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Puede elegir el rango de la compartición:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Compartir con usuario: puede compartir con uno o varios usuarios."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Compartir con grupo: puede compartir con un grupo."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Compartir con organización: si está utilizando un servidor privado, a veces "
+"es útil compartir con todos los miembros del servidor (toda la "
+"organización)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Tambi n puede establecer permiso en la compartici n:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Lectura-Escritura: los usuarios pueden leer, escribir, subir, descargar y "
+"sincronizar archivos."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Solo lectura: los usuarios pueden leer, descargar y sincronizar archivos."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Administrador: adem s del permiso de escritura, los usuarios tambi n pueden "
+"compartir la biblioteca."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Escritura en l nea: los usuarios pueden ver y editar archivos en l nea a "
+"trav s de un navegador web. Los archivos no se pueden descargar."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Solo lectura en l nea: los usuarios solo pueden ver archivos en l nea a trav"
+" s de un navegador web. Los archivos no se pueden descargar."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Para compartir una biblioteca o carpeta con un usuario o grupo:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Pase el cursor sobre la biblioteca o carpeta y haga clic en el icono "
+"\"Compartir\" que aparece."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -2163,6 +2352,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Se abrir  una ventana emergente con opciones de compartir. Haga clic en la "
+"pesta a \"Compartir con usuario\" o \"Compartir con grupo\" en el panel "
+"izquierdo. Seleccione el usuario o grupo. Luego haga clic en \"Enviar\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -2171,6 +2363,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Despu s de compartir una biblioteca o carpeta con un usuario, el usuario "
+"puede verla haciendo clic en la pesta a \"Compartido con m\" en el panel "
+"izquierdo en la aplicaci n web de Seafile. Si la comparte con un grupo, los "
+"miembros del grupo solo pueden verla navegando en el grupo."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -2179,10 +2375,15 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Para compartir una biblioteca con toda la organizaci n: en la aplicaci n web"
+" de Seafile, haga clic en la pesta a \"Compartido con todos\" en el panel "
+"izquierdo. Luego haga clic en el bot n \"A adir Biblioteca\". En el men  "
+"desplegable, puede elegir compartir una biblioteca existente o crear una "
+"nueva y compartirla."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Enlaces internos"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -2192,6 +2393,12 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Solo los usuarios que han iniciado sesión y tienen permiso de lectura sobre "
+"el archivo o carpeta pueden acceder a este enlace. Se utiliza para compartir"
+" archivos internamente. Es una forma conveniente de compartir archivos entre"
+" miembros de un equipo que tienen acceso a una biblioteca común. Puede "
+"simplemente copiar el enlace y pegarlo en un correo electrónico o software "
+"de mensajería instantánea."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -2212,7 +2419,7 @@ msgstr ""
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Sincronizar con una carpeta existente"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -2258,7 +2465,7 @@ msgstr ""
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Desincronizar y resincronizar biblioteca"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -2270,6 +2477,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Cuando ya no desee sincronizar una carpeta local con una biblioteca, puede "
+"desincronizarla. Despu s de desincronizar una biblioteca, los cambios en la "
+"carpeta local y los archivos no se subir n, y los cambios en la biblioteca "
+"no se descargar n. Si desea sincronizar la biblioteca con la carpeta local "
+"nuevamente, puede usar la caracter stica <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sincronizar con carpeta"
+" existente</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2287,16 +2501,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Despu s de instalar un cliente de unidad en la p gina de <a "
+"href=\"https://www.seafile.com/es/descargas/\">descargas</a>, puede "
+"iniciarla haciendo doble clic en el icono de la aplicaci n \"SeaDrive\" en "
+"el escritorio."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Se le pedir  elegir una letra de unidad para la unidad virtual. De forma "
+"predeterminada, se utilizar  \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Luego se le pedir  iniciar sesi n en su servidor Seafile."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -2305,6 +2525,11 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Despu s de iniciar sesi n en el servidor correctamente, el cliente de unidad"
+" comienza a obtener la lista de bibliotecas y archivos del servidor. En este"
+" momento, no se descargan los contenidos de los archivos. As  que no tardar"
+"  mucho. Puede dejarlo correr en segundo plano. Se le notificar  cuando se "
+"complete la recuperaci n."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -2314,26 +2539,34 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"La carpeta de la unidad virtual se abrirá. Encontrará que funciona como un "
+"disco duro ordinario en su computadora. Las carpetas de nivel superior en la"
+" unidad virtual son bibliotecas en el servidor Seafile. Los contenidos de "
+"los archivos se descargarán cuando abra un archivo. Los archivos abiertos "
+"recientemente se almacenarán en caché en su disco local. Todos los archivos "
+"almacenados en caché se marcarán con una marca verde."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Estado sincronizado"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Los archivos y carpetas en la unidad virtual están en estado sólo en la "
+"nube, sincronizado o parcialmente sincronizado."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Ícono"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -2342,7 +2575,7 @@ msgstr "Detalles"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Contenido s lo en la nube"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -2352,71 +2585,94 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"El contenido s lo en la nube se muestra en la unidad virtual, pero no "
+"utiliza la cantidad total de espacio que utilizar a el archivo. En su "
+"explorador de archivos, puede ver el archivo, pero el contenido no se "
+"descarga completamente hasta que no lo necesite. Lo que se descarga es solo "
+"informaci n sobre el archivo, como su nombre, su tama o y la fecha en que se"
+" actualiz ."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Contenido sincronizado"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"El contenido sincronizado se descarga y se guarda en el disco duro de su "
+"computadora. Puede editar directamente estos archivos desde aplicaciones en "
+"su computadora."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Contenido parcialmente sincronizado"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Las carpetas sincronizadas parcialmente contienen tanto archivos o carpetas "
+"sincronizados como solo en la nube."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Estados Especiales"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Para los archivos que ya están sincronizados con la computadora local, "
+"pueden estar en otros 3 estados especiales, además del estado "
+"\"sincronizado\" normal."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Bloqueado por otro usuario"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"El archivo est  bloqueado por otro usuario en el servidor. S lo puede abrir "
+"el archivo en modo de lectura. No puede modificar, eliminar, renombrar o "
+"mover el archivo."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Bloqueado por m "
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
 msgstr ""
+"El archivo est  bloqueado por usted. Esto impide que otros lo modifiquen."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "S lo lectura"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"La carpeta o biblioteca de este archivo se ha compartido con permiso de "
+"lectura a usted. No puede modificar, eliminar o mover el archivo."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"El cliente de unidad limpi  peri dicamente los archivos en cach  no "
+"utilizados en segundo plano. Tambi n puede limitar el espacio de cach  "
+"local."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2424,10 +2680,15 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Puede iniciar sesi n en varias cuentas en el cliente de unidad. Sin embargo,"
+" s lo se mostrar n los archivos en el servidor actual seleccionado en la "
+"unidad virtual. Puede cambiar entre cuentas."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1.  Por qu  no puedo crear nuevos archivos ni eliminar carpetas en la "
+"carpeta ra z?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2438,13 +2699,22 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"La carpeta ra z de la unidad virtual contiene solo carpetas de biblioteca. "
+"Seafile s lo puede sincronizar archivos dentro de bibliotecas. Los archivos "
+"en la carpeta ra z no pueden ser subidos al servidor Seafile. As  que no "
+"tiene sentido admitir la creaci n de archivos en la carpeta ra z. Como las "
+"carpetas de nivel superior en la unidad virtual representan bibliotecas, no "
+"queremos que los usuarios eliminen sus bibliotecas por error. As  que el "
+"cliente de unidad no admite la eliminaci n de carpetas de nivel superior."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Algunos tipos de archivos pueden abrirse y visualizarse directamente en la "
+"Aplicaci n web de Seafile. Actualmente son:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Archivos de im genes"

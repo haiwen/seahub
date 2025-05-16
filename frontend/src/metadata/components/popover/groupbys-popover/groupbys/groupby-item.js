@@ -1,56 +1,13 @@
-import React, { Fragment, useCallback, useMemo } from 'react';
+import React, { Fragment, useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { DragSource, DropTarget } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import CustomizeSelect from '../../../../../components/customize-select';
 import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { getColumnByKey } from '../../../../utils/column';
 import { COLUMNS_ICON_CONFIG, SORT_TYPE, SORT_COLUMN_OPTIONS } from '../../../../constants';
 import { getGroupbyGranularityByColumn, isShowGroupCountType, getSelectedCountType, getDefaultCountType } from '../../../../utils/group';
-
-const dragSource = {
-  beginDrag: props => {
-    return { idx: props.index, data: props.groupby, mode: 'sfMetadataGroupbyItem' };
-  },
-  endDrag(props, monitor) {
-    const groupSource = monitor.getItem();
-    const didDrop = monitor.didDrop();
-    let groupTarget = {};
-    if (!didDrop) {
-      return { groupSource, groupTarget };
-    }
-  },
-  isDragging(props) {
-    const { index, dragged } = props;
-    const { idx } = dragged;
-    return idx > index;
-  }
-};
-
-const dropTarget = {
-  drop(props, monitor) {
-    const groupSource = monitor.getItem();
-    const { index: targetIdx } = props;
-    if (targetIdx !== groupSource.idx) {
-      let groupTarget = { idx: targetIdx, data: props.groupby };
-      props.onMove(groupSource, groupTarget);
-    }
-  }
-};
-
-const dragCollect = (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  connectDragPreview: connect.dragPreview(),
-  isDragging: monitor.isDragging(),
-});
-
-const dropCollect = (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop(),
-  dragged: monitor.getItem(),
-});
 
 /*
   groupby: {
@@ -59,10 +16,46 @@ const dropCollect = (connect, monitor) => ({
     sort_type: 'xxx',
   }
 */
-const GroupbyItem = ({
-  isOver, isDragging, canDrop, connectDragSource, connectDragPreview, connectDropTarget,
-  showDragBtn, index, readOnly, groupby, columns, onDelete, onUpdate
-}) => {
+const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete, onUpdate, onMove }) => {
+  const ref = useRef(null);
+
+  const [dropPosition, setDropPosition] = useState(null);
+
+  const [, drag, preview] = useDrag({
+    type: 'sfMetadataGroupbyItem',
+    item: () => ({
+      idx: index,
+      data: groupby,
+    }),
+  });
+
+  const [{ isOver, canDrop }, drop] = useDrop({
+    accept: 'sfMetadataGroupbyItem',
+    hover: (item, monitor) => {
+      if (!ref.current) return;
+
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+      const newPosition = hoverClientY < hoverMiddleY ? 'top' : 'bottom';
+      setDropPosition(newPosition);
+    },
+    drop: (item) => {
+      if (item.idx === index) return;
+      if (item.idx === index - 1 && dropPosition === 'top') return;
+      if (item.idx === index + 1 && dropPosition === 'bottom') return;
+      onMove(item, { idx: index, data: groupby });
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    })
+  });
+
+  drop(preview(ref));
+
   const column = useMemo(() => {
     return getColumnByKey(columns, groupby.column_key);
   }, [groupby, columns]);
@@ -165,59 +158,58 @@ const GroupbyItem = ({
     onUpdate(newGroupby, index);
   }, [groupby, index, onUpdate]);
 
-  return connectDropTarget(
-    connectDragPreview(
-      <div
-        className={classnames('groupby-item',
-          { 'group-can-drop-top': isOver && canDrop && isDragging },
-          { 'group-can-drop': isOver && canDrop && !isDragging }
-        )}
-      >
-        {!readOnly && (
-          <div className="delete-groupby" onClick={deleteGroupby} aria-label={gettext('Delete')}>
-            <Icon className="sf-metadata-icon" symbol="fork-number"/>
-          </div>
-        )}
-        <div className="condition">
-          <div className="groupby-column">
+  return (
+    <div
+      ref={ref}
+      className={classnames('groupby-item',
+        { 'group-can-drop-top': isOver && canDrop && dropPosition === 'top' },
+        { 'group-can-drop-bottom': isOver && canDrop && dropPosition === 'bottom' }
+      )}
+    >
+      {!readOnly && (
+        <div className="delete-groupby" onClick={deleteGroupby} aria-label={gettext('Delete')}>
+          <Icon className="sf-metadata-icon" symbol="fork-number"/>
+        </div>
+      )}
+      <div className="condition">
+        <div className="groupby-column">
+          <CustomizeSelect
+            readOnly={readOnly}
+            value={selectedColumn}
+            options={columnsOptions}
+            onSelectOption={selectColumn}
+            searchable={true}
+            searchPlaceholder={gettext('Search property')}
+            noOptionsPlaceholder={gettext('No results')}
+          />
+        </div>
+        {isShowGroupCountType(column) && (
+          <div className="groupby-count-type">
             <CustomizeSelect
               readOnly={readOnly}
-              value={selectedColumn}
-              options={columnsOptions}
-              onSelectOption={selectColumn}
-              searchable={true}
-              searchPlaceholder={gettext('Search property')}
-              noOptionsPlaceholder={gettext('No results')}
+              value={selectedCountType}
+              onSelectOption={selectCountType}
+              options={countTypeOptions}
             />
           </div>
-          {isShowGroupCountType(column) && (
-            <div className="groupby-count-type">
-              <CustomizeSelect
-                readOnly={readOnly}
-                value={selectedCountType}
-                onSelectOption={selectCountType}
-                options={countTypeOptions}
-              />
-            </div>
-          )}
-          <div className="groupby-predicate">
-            {(!column.key || SORT_COLUMN_OPTIONS.includes(column.type)) && (
-              <CustomizeSelect
-                readOnly={readOnly}
-                value={selectedSortType}
-                options={sortOptions}
-                onSelectOption={selectSortType}
-              />
-            )}
-          </div>
-        </div>
-        {!readOnly && showDragBtn && connectDragSource(
-          <div className="groupby-drag">
-            <Icon symbol="drag" />
-          </div>
         )}
+        <div className="groupby-predicate">
+          {(!column.key || SORT_COLUMN_OPTIONS.includes(column.type)) && (
+            <CustomizeSelect
+              readOnly={readOnly}
+              value={selectedSortType}
+              options={sortOptions}
+              onSelectOption={selectSortType}
+            />
+          )}
+        </div>
       </div>
-    )
+      {!readOnly && showDragBtn && (
+        <div ref={drag} className="groupby-drag">
+          <Icon symbol="drag" />
+        </div>
+      )}
+    </div>
   );
 
 };
@@ -229,16 +221,7 @@ GroupbyItem.propTypes = {
   columns: PropTypes.array,
   onDelete: PropTypes.func,
   onUpdate: PropTypes.func,
-
-  // drag
-  isDragging: PropTypes.bool,
-  isOver: PropTypes.bool,
-  canDrop: PropTypes.bool,
-  connectDropTarget: PropTypes.func,
-  connectDragSource: PropTypes.func,
-  connectDragPreview: PropTypes.func,
+  onMove: PropTypes.func,
 };
 
-export default DropTarget('sfMetadataGroupbyItem', dropTarget, dropCollect)(
-  DragSource('sfMetadataGroupbyItem', dragSource, dragCollect)(GroupbyItem)
-);
+export default GroupbyItem;

@@ -41,6 +41,16 @@ def extract_file_details(params):
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['details']
 
+
+def recognize_faces(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/recognize-faces')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp
+
+
 def update_people_cover_photo(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -62,7 +72,6 @@ def gen_unique_id(id_set, length=4):
         if _id not in id_set:
             return _id
         _id = generator_base64_code(length)
-
 
 def get_face_columns():
     from seafevents.repo_metadata.constants import FACES_TABLE

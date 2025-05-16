@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableSeadoc, gettext, enableWhiteboard } from '../../utils/constants';
+import { enableSeadoc, gettext, enableWhiteboard, enableExcalidraw } from '../../utils/constants';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -74,7 +74,8 @@ class DirentNoneView extends React.Component {
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
       NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE
+      NEW_TLDRAW_FILE,
+      NEW_EXCALIDRAW_FILE
     } = TextTranslation;
     const direntsContainerMenuList = [
       NEW_FOLDER, NEW_FILE, 'Divider',
@@ -91,6 +92,9 @@ class DirentNoneView extends React.Component {
     );
     if (enableWhiteboard) {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
+    }
+    if (enableExcalidraw) {
+      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
     let id = 'dirent-container-menu';
     if (isCustomPermission) {

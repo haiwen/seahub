@@ -46,9 +46,11 @@ html, body, #wrapper { height:100%; }
         <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Log In" %}</button>
     </form>
     <div class="login-panel-bottom-container d-flex justify-content-center" id="login-bottom"></div>
+    <div>
+        {% include "snippets/policy_service_link.html" %}
+    </div>
 </div>
 </div>
-{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}

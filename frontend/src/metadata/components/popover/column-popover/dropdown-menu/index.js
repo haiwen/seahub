@@ -42,7 +42,8 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME,
     canChangeName: false,
     data: { format: DEFAULT_DATE_FORMAT },
-    groupby: 'predefined'
+    groupby: 'predefined',
+    canSetData: true,
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
     type: CellType.LONG_TEXT,
@@ -67,7 +68,8 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.CAPTURE_TIME,
     canChangeName: false,
     data: { format: DEFAULT_SHOOTING_TIME_FORMAT },
-    groupby: 'predefined'
+    groupby: 'predefined',
+    canSetData: true,
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.RATE],
     type: CellType.RATE,
@@ -76,7 +78,8 @@ const COLUMNS = [
     key: PRIVATE_COLUMN_KEY.FILE_RATE,
     canChangeName: false,
     data: DEFAULT_RATE_DATA,
-    groupby: 'predefined'
+    groupby: 'predefined',
+    canSetData: true,
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.TEXT],
     type: CellType.TEXT,

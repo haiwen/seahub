@@ -22,6 +22,10 @@ GROUP_CREATE = 'group_create'
 GROUP_TRANSFER = 'group_transfer'
 # 'group_delete': {'id': group_id, 'name': group_name, 'owner': group_owner}
 GROUP_DELETE = 'group_delete'
+# 'group_invite': {'id': group_id, 'name': group_name, 'user': user}
+GROUP_MEMBER_ADD = 'group_member_add'
+# 'group_member_delete': {'id': group_id, 'name': group_name, 'user': user}
+GROUP_MEMBER_DELETE = 'group_member_delete'
 
 # 'user_add': {'email': new_user}
 USER_ADD = 'user_add'
@@ -32,8 +36,8 @@ USER_DELETE = 'user_delete'
 USER_MIGRATE = 'user_migrate'
 
 ADMIN_LOG_OPERATION_TYPE = (REPO_TRANSFER, REPO_DELETE,
-        GROUP_CREATE, GROUP_TRANSFER, GROUP_DELETE,
-        USER_ADD, USER_DELETE, USER_MIGRATE)
+        GROUP_CREATE, GROUP_TRANSFER, GROUP_DELETE, GROUP_MEMBER_ADD,
+        GROUP_MEMBER_DELETE, USER_ADD, USER_DELETE, USER_MIGRATE)
 
 
 class AdminLogManager(models.Manager):

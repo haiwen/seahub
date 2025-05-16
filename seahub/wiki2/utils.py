@@ -13,7 +13,7 @@ import time
 from urllib.parse import urljoin
 
 from seaserv import seafile_api
-from seahub.constants import PERMISSION_READ_WRITE
+from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.utils import gen_inner_file_get_url, gen_file_upload_url
 from seahub.group.utils import is_group_admin, is_group_member
 from seahub.wiki2.models import WikiPageTrash
@@ -88,6 +88,8 @@ def check_wiki_admin_permission(wiki, username):
 
 def check_wiki_permission(wiki, username):
     permission = seafile_api.check_permission_by_path(wiki.repo_id, '/', username)
+    if permission == PERMISSION_INVISIBLE:
+        return None
     return permission
 
 

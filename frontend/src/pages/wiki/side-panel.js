@@ -66,7 +66,7 @@ class SidePanel extends Component {
           {this.props.isTreeDataLoading && <Loading /> }
           {!this.props.isTreeDataLoading && this.props.indexNode && this.renderIndexView() }
           {!this.props.isTreeDataLoading && !this.props.indexNode && this.renderTreeView() }
-          {(username && permission) && <div className="text-left p-2"><a href={siteRoot + 'library/' + repoID + '/' + slug + '/'} className="text-dark text-decoration-underline">{gettext('Go to Library')}</a></div>}
+          {(username && permission) && <div className="p-2"><a href={siteRoot + 'library/' + repoID + '/' + slug + '/'} className="text-dark text-decoration-underline">{gettext('Go to Library')}</a></div>}
         </div>
       </div>
     );

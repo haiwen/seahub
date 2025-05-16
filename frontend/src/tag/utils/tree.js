@@ -1,7 +1,10 @@
 import { checkTreeNodeHasChildNodes, createTreeNode, generateNodeKey, getAllSubTreeNodes, getTreeNodeId, getTreeNodeKey } from '../../components/sf-table/utils/tree';
-import { getRowsByIds } from '../../components/sf-table/utils/table';
+import { getRowById, getRowsByIds } from '../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../metadata/utils/cell';
-import { getParentLinks, getChildLinks } from './cell';
+import { getParentLinks, getChildLinks, getTagName, getTagFilesCount } from './cell';
+import { ALL_TAGS_SORT_KEY } from '../constants/sort';
+import { compareString } from '../../metadata/utils/sort';
+import { getSortBy, getSortOrder } from './sort';
 
 const KEY_ALL_CHILD_TAGS_IDS = 'all_child_tags_ids';
 
@@ -95,4 +98,75 @@ export const buildTagsTree = (rows, table) => {
 
 export const getAllChildTagsIdsFromNode = (node) => {
   return (node && node[KEY_ALL_CHILD_TAGS_IDS]) || [];
+};
+
+export const sortTree = (tree, sort, table) => {
+  const sortBy = getSortBy(sort);
+  const sortOrder = getSortOrder(sort);
+
+  const getAllFileCount = (node) => {
+    let count = 0;
+    const root = getRowById(table, getTreeNodeId(node));
+    count += getTagFilesCount(root);
+    getAllChildTagsIdsFromNode(node).forEach((id) => {
+      const row = getRowById(table, id);
+      count += getTagFilesCount(row);
+    });
+    return count;
+  };
+
+  const compare = (a, b) => {
+    let valueA = '';
+    let valueB = '';
+    const rowA = getRowById(table, getTreeNodeId(a));
+    const rowB = getRowById(table, getTreeNodeId(b));
+
+    switch (sortBy) {
+      case ALL_TAGS_SORT_KEY.NAME:
+        valueA = getTagName(rowA);
+        valueB = getTagName(rowB);
+        break;
+      case ALL_TAGS_SORT_KEY.CHILD_TAGS_COUNT:
+        valueA = getChildLinks(rowA).length;
+        valueB = getChildLinks(rowB).length;
+        break;
+      case ALL_TAGS_SORT_KEY.TAG_FILE_COUNT:
+        valueA = getAllFileCount(a);
+        valueB = getAllFileCount(b);
+        break;
+      default:
+        break;
+    }
+
+    const result =
+      sortBy === ALL_TAGS_SORT_KEY.NAME
+        ? compareString(valueA, valueB) // String comparison for name
+        : valueA - valueB; // Numeric comparison for count
+
+    return sortOrder === 'asc' ? result : -result;
+  };
+
+  const sortNodesRecursively = (nodes, allNodes) => {
+    const sortedNodes = [];
+
+    nodes.forEach((node) => {
+      sortedNodes.push(node);
+
+      const children = allNodes.filter(
+        (child) => child.node_key.startsWith(node.node_key) && child.node_depth === node.node_depth + 1
+      );
+
+      if (children.length > 0) {
+        const sortedChildren = sortNodesRecursively(children, allNodes);
+        sortedNodes.push(...sortedChildren);
+      }
+    });
+
+    return sortedNodes;
+  };
+
+  tree.sort(compare);
+
+  const topLevelNodes = tree.filter((node) => node.node_depth === 0);
+  return sortNodesRecursively(topLevelNodes, tree);
 };

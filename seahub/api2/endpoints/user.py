@@ -252,7 +252,7 @@ class ResetPasswordView(APIView):
         user.save()
 
         if not request.session.is_empty():
-            # update session auth hash
+            # invalidate all active sessions after change password.
             update_session_auth_hash(request, request.user)
 
         return Response({'success': True})

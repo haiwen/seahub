@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, InputGroup, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -48,7 +49,7 @@ class AddOrgUserDialog extends React.Component {
   };
 
   generatePassword = () => {
-    let val = Math.random().toString(36).substr(5);
+    let val = Utils.generatePassword(8);
     this.setState({
       password: val,
       newPassword: val,

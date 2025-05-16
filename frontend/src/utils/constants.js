@@ -31,6 +31,7 @@ export const fileServerRoot = window.app.config.fileServerRoot;
 export const useGoFileserver = window.app.config.useGoFileserver;
 export const seafileVersion = window.app.config.seafileVersion;
 export const serviceURL = window.app.config.serviceURL;
+export const notificationServerUrl = window.app.config.notificationServerUrl;
 export const appAvatarURL = window.app.config.avatarURL;
 export const faviconPath = window.app.config.faviconPath;
 export const loginBGPath = window.app.config.loginBGPath;
@@ -99,6 +100,7 @@ export const enableSSOToThirdpartWebsite = window.app.pageOptions.enableSSOToThi
 export const enableSeadoc = window.app.pageOptions.enableSeadoc;
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI;
 export const enableWhiteboard = window.app.pageOptions.enableWhiteboard;
+export const enableExcalidraw = window.app.pageOptions.enableExcalidraw;
 export const enableMultipleOfficeSuite = window.app.pageOptions.enableMultipleOfficeSuite;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
@@ -172,6 +174,7 @@ export const orgEnableAdminCustomName = window.org ? window.org.pageOptions.orgE
 export const orgEnableAdminInviteUser = window.org ? window.org.pageOptions.orgEnableAdminInviteUser === 'True' : false;
 export const enableMultiADFS = window.org ? window.org.pageOptions.enableMultiADFS === 'True' : false;
 export const enableSubscription = window.org ? window.org.pageOptions.enableSubscription : false;
+export const enableExternalBillingService = window.org ? window.org.pageOptions.enableExternalBillingService : false;
 
 // sys admin
 export const constanceEnabled = window.sysadmin ? window.sysadmin.pageOptions.constance_enabled : '';

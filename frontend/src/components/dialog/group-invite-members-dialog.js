@@ -11,7 +11,7 @@ import { Utils } from '../../utils/utils';
 import '../../css/group-invite-members-dialog.css';
 
 const propTypes = {
-  groupID: PropTypes.string.isRequired,
+  groupID: PropTypes.number.isRequired,
   toggleInviteMembersDialog: PropTypes.func.isRequired,
 };
 

@@ -182,6 +182,8 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
 
   const onOpenFile = useCallback((record) => {
     const repoID = window.sfMetadataContext.getSetting('repoID');
+    const canPreview = window.sfMetadataContext.canPreview();
+    if (!canPreview) return;
     openFile(repoID, record, () => {
       currentImageRef.current = record;
       setImagePreviewerVisible(true);

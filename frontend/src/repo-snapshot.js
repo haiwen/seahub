@@ -153,7 +153,7 @@ class RepoSnapshot extends React.Component {
                 {folderPath == '/' && (
                   <div className="d-flex mb-2 align-items-center">
                     <p className="m-0 text-truncate" title={commitDesc}>{commitDesc}</p>
-                    <div className="ml-4 border-left pl-4 d-flex align-items-center flex-shrink-0">
+                    <div className="ml-4 border-start pl-4 d-flex align-items-center flex-shrink-0">
                       {showAuthor ? (
                         <React.Fragment>
                           <img src={authorAvatarURL} width="20" height="20" alt="" className="rounded mr-1" />

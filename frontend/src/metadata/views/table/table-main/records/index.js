@@ -646,6 +646,7 @@ class Records extends Component {
           addFolder={this.props.addFolder}
           selectNone={this.selectNone}
           updateRecordDetails={this.props.updateRecordDetails}
+          updateFaceRecognition={this.props.updateFaceRecognition}
           updateRecordDescription={this.props.updateRecordDescription}
           ocr={this.props.ocr}
         />
@@ -737,7 +738,7 @@ class Records extends Component {
         {this.isWindows && this.isWebkit && (
           <HorizontalScrollbar
             ref={this.setHorizontalScrollbarRef}
-            innerWidth={totalWidth + CANVAS_RIGHT_INTERVAL}
+            innerWidth={totalWidth + CANVAS_RIGHT_INTERVAL + SEQUENCE_COLUMN_WIDTH}
             onScrollbarScroll={this.onHorizontalScrollbarScroll}
             onScrollbarMouseUp={this.onHorizontalScrollbarMouseUp}
           />

@@ -72,7 +72,10 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
               </div>
             }
           </div>
-          <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
+          {!currentPageConfig.locked ?
+            <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} /> :
+            <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>
+          }
         </>
         :
         <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>}

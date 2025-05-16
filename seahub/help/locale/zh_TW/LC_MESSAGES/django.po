@@ -48,16 +48,16 @@ msgstr "還原已删除的檔案"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "尋找舊檔案版本"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "資料庫歷史和快照"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "設定歷史保留期限"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -66,51 +66,51 @@ msgstr "刪除資料庫"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "於 Web 應用程式中檢視檔案"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "檔案全文搜索"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "分享和協作"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "分享檔案和資料夾"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "管理群組"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "鎖定檔案"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "資料夾權限"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "部門共享"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki 和知識管理"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "將資料庫作為 Wiki 管理"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "桌面客戶端和同步"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "安裝和同步檔案"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
@@ -118,11 +118,11 @@ msgstr "同步已存在資料夾"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "選擇性同步子資料夾"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "唯讀同步"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
@@ -146,19 +146,19 @@ msgstr "忽略檔案目錄"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "驅動器客戶端"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "使用 Seafile 驱动器客戶端"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "在 Windows 上使用驱动器客戶端 2.0"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "安全性和加密"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
@@ -207,67 +207,67 @@ msgstr "與此庫同步的案頭用戶端無法再與其同步。 但用戶端�
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "管理和使用部門"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
-msgstr ""
+msgstr "有些組織由複雜的部門階層組成。在這些組織中，檔案管理通常有兩種常見用途："
 
 #: templates/help/departments.html:8
 msgid ""
 "There should be a common file sharing space for the organization. The folder"
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
-msgstr ""
+msgstr "組織應該有一個共同的檔案共享空間。資料夾結構應該對應部門階層。每個部門將分配到單獨的資料夾或空間。"
 
 #: templates/help/departments.html:9
 msgid ""
 "The sharing space should be owned and managed by the organization, but not "
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
-msgstr ""
+msgstr "共享空間應由組織擁有和管理，而不是由個別員工管理。這樣，當員工離開組織時，檔案的所有權不必更改。"
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "「部門」功能是為了滿足上述兩個使用案例。 我們將從三個不同的角度介紹這個功能："
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "系統管理員"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "部門管理員"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "部門成員"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "系統管理員可以："
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "管理部門階層和成員"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "為部門分配存儲配額"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "在部門中創建和管理共享庫"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
-msgstr ""
+msgstr "系統管理員可以透過兩種方式設定部門階層：手動設定或從 Active Directory 進行導入。"
 
 #: templates/help/departments.html:26
 msgid ""
@@ -277,6 +277,8 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"系統管理員可以創建任何數量的頂級部門，並在每個部門下創建任何級別的子部門。每個級別的部門都可以被填充成員。系統管理員可以將每個成員的角色設為 '成員' "
+"或 '管理員'。我們將在後面介紹部門管理員如何管理部門。"
 
 #: templates/help/departments.html:27
 msgid ""
@@ -285,12 +287,14 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"系統管理員也可以從 AD 中的 OUs (組織單位) 導入部門的階層。每個 OU 將被導入為一個部門。OU 下的子 OU "
+"將被導入為子部門。在導入過程中，部門庫可以自動被創建。"
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
-msgstr ""
+msgstr "系統管理員還可以在刪除所有子部門和庫後刪除一個部門。"
 
 #: templates/help/departments.html:30
 msgid ""
@@ -300,38 +304,39 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"部門內創建的資料庫由部門自身擁有，而不是由任何個別用戶擁有。因此，系統管理員可以為部門分配存儲配額。部門中所有資料庫的總大小不能超過存儲配額。<strong>請注意，子部門的配額不依賴於其父部門的配額。</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
 "Department libraries can be created by the system admin or department admin."
 " There is also an option to control whether individual users can share "
 "libraries to a department."
-msgstr ""
+msgstr "部門資料庫可以由系統管理員或部門管理員創建。還有一個選項可以控制個別用戶是否可以將資料庫分享給部門。"
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
-msgstr ""
+msgstr "上述所有操作都可以在系統管理界面中完成。請參閱下面的截圖以獲取信息。"
 
 #: templates/help/departments.html:36
 msgid ""
 "As noted above, department admin is a special role assigned by the system "
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
-msgstr ""
+msgstr "如上所述，部門管理員是系統管理員指派給某些部門成員的特殊角色。部門管理員可以在登入自己的帳戶後，在部門中執行以下操作。"
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "存取部門的庫"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "管理部門的成員"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "管理部門的庫"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -340,26 +345,28 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"如果用戶是部門的管理員，他/她可以在部門中添加或刪除成員。系統中的任何用戶都可以被添加為部門的成員。 但是，如果部門是從 AD "
+"中導入的，則成員的變化將在下一次與 AD 的同步中被覆蓋。"
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "部門管理員可以管理部門中的庫。支持的操作有："
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "創建或刪除庫"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "更改庫名"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "將庫分享給本部門外的用戶或群組。這對跨部門協作非常有用。"
 
 #: templates/help/departments.html:49
 #, python-format
@@ -369,6 +376,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"在部門中的庫中，對用戶或子部門設定細粒度的資料夾存取權限。這個功能與 <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">資料夾存取權限</a> 功能類似。"
 
 #: templates/help/departments.html:53
 msgid ""
@@ -381,10 +390,13 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"部門中的普通成員可以像使用群組一樣使用部門。每個部門都會以群組的形式呈現給它的成員。用戶不僅可以存取自己所屬部門中的庫，也可以存取自己部門的上層部門中的庫。例如，如果"
+" John 在 \"EMEA\" 子部門中，\"EMEA\" 子部門在 \"Sales\" 部門下，而 \"Sales\" 部門在 \"ACME\" "
+"公司下，則 John 就可以存取 \"EMEA\"、\"Sales\" 和 \"ACME\" 的群組。部門的群組旁邊會標示一個 \"建築\" 圖示。"
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "在 Seafile 客戶端中使用代理"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
@@ -668,23 +680,23 @@ msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
-msgstr ""
+msgstr "如果您使用桌面客戶端同步資料庫，密碼不會被發送到伺服器上。客戶端將在本地進行檔案內容的加密和解密，密碼也並不會被儲存在客戶端的硬碟上。"
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
-msgstr ""
+msgstr "iOS 客戶端於 2.1.6 版本中開始支持客戶端加密，而 Android 客戶端於 2.1.0 版本中開始支持。"
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
-msgstr ""
+msgstr "注意加密資料庫只加密檔案的內容，而不包括資料夾和檔案名稱。"
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "檔案鎖定"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -1162,7 +1174,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "安裝 Seafile 客戶端"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1225,7 +1237,7 @@ msgstr ""
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
-msgstr ""
+msgstr "Seafile 是一個具有高度可靠性和性能的企業檔案托管平臺。"
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1236,6 +1248,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile 包含一個網頁界面，以便您管理和共享檔案。它有兩種桌面客戶端：<a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">檔案同步客戶端</a> 和 <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">磁碟客戶端</a>。它還有 Android 和 iOS "
+"的流動應用程式。"
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1243,6 +1259,8 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"你可以在 <a href=\"https://www.seafile.com/en/download/\" "
+"target=\"_blank\">Seafile 網站</a> 上下載客戶端。"
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1250,6 +1268,8 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"如果這份手冊中不包含你需要的資訊，你可以在我們的論壇中尋求幫助：<a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>。"
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1259,18 +1279,21 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile 使用 \"資源庫\" 來組織您的檔案。一個資源庫是 highest  level "
+"的容器，包含一組檔案和資料夾。您可以為每個專案或每種檔案類型在 Seafile "
+"中創建一個資源庫。一個資源庫基本上與最高級別的資料夾相同，但它還有一些特殊的 屬性："
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
-msgstr ""
+msgstr "每個資源庫都擁有自己的檔案修改歷史記錄。沒有跨越所有資源庫的全域檔案修改歷史記錄。"
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
-msgstr ""
+msgstr "每個資源庫都可以與桌面客戶端分開同步。您可以選擇要同步的資源庫。"
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1279,12 +1302,14 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"當您第一次登入 Seafile 的網頁應用程式時，Seafile 會自動為您創建一個名為 \"My Library\" "
+"的預設資源庫。您也可以創建更多的資源庫。下面是您創建了一些資源庫 後的畫面："
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
-msgstr ""
+msgstr "您可以瀏覽資源庫，並管理您的檔案和資料夾。您可以上傳、下載、重新命名、移動、複製和刪除檔案。"
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1293,6 +1318,8 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"在 <a href=\"%(SITE_ROOT)shelp/install_sync/\">使用桌面客戶端同步資源庫</a> "
+"之後，您可以在本地資源庫資料夾中進行任何檔案操作。這些操作將被上傳到伺服器。"
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1301,6 +1328,8 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile 追蹤整個資源庫的修改歷史。每當檔案操作適用于資源庫（例如檔案更新、檔案刪除等）時，Seafile 都會創建一個 "
+"\"快照\"，以便將資源庫的先前狀態 完整地記錄下來。"
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1311,23 +1340,25 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"有時候，您在資源庫中修改了許多檔案，卻發現您想要還原所有這些變更。將多個檔案還原到舊版本可能很麻煩。此時，快照功能就非常有幫助了。您可以將整個 "
+"資源庫還原到過去的任何時刻。所有的檔案都將被還原到該時刻，且都是同時進行的。這就像是一個 \"時間機器\"， 專門用於資源庫。"
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "檢視資源庫歷史和快照："
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
 "In Seafile Web App, navigate into the root folder of a library. Click the "
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
-msgstr ""
+msgstr "在 Seafile 的網頁應用程式中，瀏覽至某個資源庫的根目錄。點擊資源庫導航欄中的 \"歷史\" 圖示。所有的變更記錄都將被顯示在一個列表中。"
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
-msgstr ""
+msgstr "點擊任何修改記錄上的 \"檢視快照\" 連結。您將可以看到資源庫在該時刻的狀態。"
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1336,6 +1367,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"您可以設定資源庫歷史的保留期限：<a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">設定歷史保留期限</a>。"
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1345,6 +1378,8 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"捕捉和儲存少量的無結構化資料，以便實現易於使用的 wiki  – 這是 Seafile 的 wikis 的用途。Wiki 頁面使用 Markdown "
+"(MD)，一個簡單的標記語言，以確保跨平台的相容性。MD 檔案可以儲存文字、表格、圖形資訊，也可以在 Markdown 檔案中添加到其他 文檔的連結。"
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1353,10 +1388,12 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"您可以像 wiki 一樣管理 Seafile 的標準資源庫，使用 7.0 版本中引入的 \"Column View\"。因為 Seafile 將 "
+"wikis 實現為標準的 Seafile 資 源庫，因此它們可以與其他用戶同步和共享，就像任何普通的資源庫一樣。"
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "行视图"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1367,10 +1404,13 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"wikis 通常具有側邊欄，包含樹狀的資料夾結構，以便快速瀏覽 Wiki 頁面。Seafile 的 Column View "
+"允許您以相同的方式管理資源庫中的檔案 ，就像 Wiki "
+"空間一樣。用戶可以在其中瀏覽、拖曳和拖曳檔案和資料夾。檔案操作，例如重新命名、移動和使用客戶端打開， 可以在右鍵可存取的上下文菜單中使用。"
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdown 編輯器"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1386,23 +1426,28 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Seafile 中的 Wiki 頁面以 Markdown 格式保存為普通文檔。在資源庫中創建一個新的 Wiki 頁面，只需創建一個新的 Markdown"
+" 文 檔。MD 檔案可以直接在 Seafile 的網頁界面中使用線上 MD 編輯器進行編輯。網頁基礎編輯器提供了流暢的用戶體驗和豐富的 "
+"文本、圖像和表格格式選項。圖像可以從資源庫、局部存儲和超鏈接中導入到 MD 檔案中。基本的圖像編輯功能，例如縮放， 也可以在編輯器的 what-you-"
+"see-is-what-you-get (WYSIWYG) 界面中進行。表格可以用幾個點擊進行插入和修改。同樣， "
+"表格的內容也可以分別或整體複製，不需要離開 WYSIWYG 界面。"
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
-msgstr ""
+msgstr " Markdown 檔案的變更歷史可以通過點擊編輯器界面頂部菜單中的 \"檔案歷史\" 按鈕輕鬆訪問。"
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
 "You can open a hidden side bar on the right side of the Markdown editor. "
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
-msgstr ""
+msgstr "您可以在 Markdown 編輯器的右側打開一個隱藏的側邊欄。這個側邊欄提供了目錄、檔案資訊和協作評論功能。"
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "檔案標籤和相關文檔"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1411,60 +1456,62 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"檔案標籤是知識管理的重要功能。Seafile 允許用戶為每個資源庫定義標籤，並將標籤應用於檔案。標籤可以從 Markdown 編 "
+"輯器的側邊欄或檔案瀏覽器界面進行管理。"
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
+msgstr "檔案瀏覽器界面提供了當前資源庫中所有檔案標籤的總結。"
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
-msgstr ""
+msgstr "如果您不想被共享的用戶能夠修改本地副本，則可以考慮使用 Seafile Drive 客戶端。"
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "還原已刪除的檔案和資料夾"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
 "Each library in Seafile tracks your file deletion operations automatically. "
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
-msgstr ""
+msgstr "每個資源庫在 Seafile 中自動追蹤檔案刪除操作。有時您發現檔案被錯誤刪除。您可以在每個資源庫的垃圾桶中找到已刪除的檔案。"
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "下面是使用垃圾桶功能的步驟："
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
-msgstr ""
+msgstr "在 Seafile Web App 中，導航到包含已刪除檔案或資料夾的父資料夾。"
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
 "Click the \"trash\" icon in the library operation bar. The deleted files and"
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
-msgstr ""
+msgstr "點擊圖書館操作欄中的 \"垃圾桶\" 圖示。已刪除的檔案和資料夾將按刪除時間順序列出。在列表底部，您可以點擊 \"更多\" 按鈕，以載入更多已刪除的檔案。"
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
 "In the deleted files list, you can restore file and folders. If a file or "
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
-msgstr ""
+msgstr "在已刪除的檔案列表中，您可以還原檔案和資料夾。如果某個檔案或資料夾的父資料夾已經被刪除，它將被還原到圖書館的根資料夾中。"
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
 "Note that the trash bin only contains files and sub-folders deleted under "
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
-msgstr ""
+msgstr "注意，垃圾桶中只包含在目前資料夾中刪除的檔案和子資料夾。在目前資料夾的子資料夾中刪除的檔案也將包含在列表中。"
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1473,6 +1520,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"您可以設定已刪除檔案的保留期限:<a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">設定歷史保留期限</a>。"
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1481,6 +1530,8 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"您可能在 Seafile "
+"伺服器上擁有一些非常大的圖書館。並且您目前只對圖書館中的某個子資料夾感興趣。那么您可以選擇性地同步某個圖書館中的子資料夾，而不是同步整個圖書館。"
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1499,114 +1550,114 @@ msgstr "同步子目錄後，你可以在客戶端主界面中的 “已同步�
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "設定資源庫歷史保留期限"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
-msgstr ""
+msgstr "一個資源庫的歷史保留期限長度控制了您可以訪問歷史資料的時長，以下是一些功能："
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
-msgstr ""
+msgstr "還原已刪除的檔案：您不能還原在保留期限之前刪除的檔案和資料夾。"
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
-msgstr ""
+msgstr "檔案版本：您不能訪問超過保留期限的檔案版本。"
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
-msgstr ""
+msgstr "資源庫歷史和快照：您不能訪問超過保留期限的資源庫快照。"
 
 #: templates/help/setting_library_history.html:13
 msgid ""
 "The retention period of old files versions can be configured for each "
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
-msgstr ""
+msgstr "每個資源庫的檔案版本保留期限可以分開設定。您必須是資源庫的擁有者，才能設定保留期限。要設定保留期限長度："
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
-msgstr ""
+msgstr "在 Seafile 的網頁應用程式中，點擊導航面板中的 \"我的\" 分頁（如下面的螢幕截圖所示）。所有由您擁有的資源庫將被列出。"
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
-msgstr ""
+msgstr "將游標移到資源庫的行上。一個操作菜單將出現。點擊下拉菜單中的 \"歷史設定\"。"
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "在彈出對話框中，您可以設定檔案保留期限的長度。"
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "在 Seafile 中，有多種方式可以與他人共享檔案和資料夾："
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
-msgstr ""
+msgstr "使用連結：可以使用多種類型的連結與不同範圍的協作者共享"
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
-msgstr ""
+msgstr "共享連結：任何擁有連結存取權的使用者都可以存取連結所指向的檔案或資料夾。無需登入"
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
-msgstr ""
+msgstr "上傳連結：任何擁有連結存取權的使用者都可以上傳檔案到連結所指向的資料夾中。無需登入"
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
-msgstr ""
+msgstr "內部連結：只有擁有檔案或資料夾讀取權限的已登入使用者可以存取這個連結。用於內部檔案共享"
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
 "Sharing libraries or folders: used for setting access permissions to a "
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
-msgstr ""
+msgstr "共享資源庫或資料夾：用於設定特定使用者或群組對資源庫或資料夾的存取權限。使用者需要登入以存取資料夾"
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "創建檔案或資料夾共享連結"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
 "Share links are public links to files or folders. They can be accessed by "
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
-msgstr ""
+msgstr "共享連結是檔案或資料夾的公開連結。任何人，包括那些沒有 Seafile 帳戶的人都可以存取。您也可以使用密碼和到期時間來保護您的連結。"
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
-msgstr ""
+msgstr "您也可以設定共享連結的存取權限。共有三種類型的權限："
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
 "Preview only: the file or files in the folder can only be viewed in web "
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
-msgstr ""
+msgstr "僅預覽：資料夾中的檔案只能在網頁浏览器中預覽，不能下載。這對於共享機密資料非常有用。"
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1614,16 +1665,17 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"在雲端上編輯和下載：與「預覽和下載」類似，但如果檔案可以在網頁浏览器中編輯（例如 Office 檔案），任何擁有連結存取權的使用者都可以編輯它。"
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "在 Seafile 網頁應用中創建共享連結："
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "在包含檔案或資料夾的父資料夾中導航。將游標移到檔案或資料夾上，然後點擊出現的 \"共享\" 圖示。"
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1631,17 +1683,19 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"一個彈出對話框將出現，提供共享選項。點擊左側面板中的 \"共享連結\" 分頁。然後點擊 \"產生\" "
+"按鈕以創建連結。您可以使用密碼、到期時間和權限保護您的連結。"
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
 msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
-msgstr ""
+msgstr "將連結複製到電子郵件、即時通訊客戶端或任何其他工具，以將其發送給他人。"
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "您也可以從桌面客戶端創建共享連結。"
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1650,45 +1704,47 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"如果資源庫已經同步，請在 Seafile 客戶端的主界面中雙擊資源庫。該資源庫的本地資料夾將被打開。右鍵點擊要創建連結的檔案或資料夾。在彈出菜單中，選擇"
+" \"Seafile\"，然後選擇 \"創建共享連結\"。"
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
 "If the library is not synced, double click the library in the main window of"
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
-msgstr ""
+msgstr "如果資源庫未同步，請在 Seafile 客戶端的主界面中雙擊資源庫。雲端檔案浏览器窗口將被打開，您可以在其中創建檔案或資料夾的連結。"
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "創建資料夾的上傳連結"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
 "You can use upload links to collect files from others. You can only create "
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
-msgstr ""
+msgstr "您可以使用上傳連結來收集其他人的檔案。您只能為資料夾創建上傳連結。其他人無法查看資料夾中的檔案，他們只能上傳檔案到其中。"
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "在 Seafile 網頁應用中創建上傳連結："
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "導航到包含該資料夾的父資料夾。將滑鼠懸停在資料夾上，然後點擊出現的 \"共享\" 圖示。"
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
 "A pop-up window will appear with share options. Click the \"Upload Link\" "
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
-msgstr ""
+msgstr "將出現一個帶有共享選項的彈出窗口。點擊左側面板中的 \"上傳連結\" 分頁。然後點擊 \"生成\" 按鈕以創建連結。您可以使用密碼保護您的連結。"
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "共享資源庫或資料夾"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1696,69 +1752,70 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"您可以將資源庫或資料夾與其他已註冊的 Seafile 使用者共享。共享的資源庫或資料夾可以在網頁應用和 Seafile 客戶端上被其他人存取。"
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "您可以選擇共享的範圍："
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "共享到使用者：您可以將資源庫或資料夾共享給一個或多個使用者。"
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "共享到群組：您可以將資源庫或資料夾共享給一個群組。"
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
-msgstr ""
+msgstr "共享到組織：如果您使用的是私人伺服器，有時候共享給所有伺服器上的成員（整個組織）可能會有用。"
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "您也可以在共享上設定權限："
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
-msgstr ""
+msgstr "讀取/寫入：使用者可以讀取、寫入、上傳、下載和同步檔案。"
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "唯讀：使用者可以讀取、下載和同步檔案。"
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "管理員：除了寫入權限外，使用者還可以共享資源庫。"
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
-msgstr ""
+msgstr "線上讀取/寫入：使用者可以透過網頁浏览器線上查看和編輯檔案。檔案不能被下載。"
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
-msgstr ""
+msgstr "線上唯讀：使用者只能透過網頁浏览器線上查看檔案。檔案不能被下載。"
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "要將資源庫或資料夾與使用者或群組共享："
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
-msgstr ""
+msgstr "將游標移到資源庫或資料夾上，然後點擊出現的 \"共享\" 圖示。"
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
 "A pop-up window will appear with share options. Click the \"Share to user\" "
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
-msgstr ""
+msgstr "一個彈出對話框將出現，提供共享選項。點擊左側面板中的 \"共享到使用者\" 或 \"共享到群組\" 分頁。選擇使用者或群組。然後點擊 \"提交\"。"
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1767,6 +1824,8 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"在您將資源庫或資料夾共享給使用者後，使用者可以透過點擊 Seafile 網頁應用中的 \"與我共享\" "
+"分頁來查看它。如果您將它共享給群組，群組成員只能透過導航到群組中來查看它。"
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1775,10 +1834,12 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"要將資源庫與整個組織共享：在 Seafile 網頁應用中，點擊左側面板中的 \"與所有人共享\" 分頁。然後點擊 \"新增資源庫\" "
+"按鈕。在下拉菜單中，您可以選擇共享現有的資源庫或建立一個新的資源庫並共享它。"
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "內部連結"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1788,6 +1849,7 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"只有擁有檔案或資料夾讀取權限的已登入使用者可以存取此連結。此連結用於內部檔案共享，方便具有共同資源庫存取權的團隊成員間共享檔案。您可以將連結複製並貼上到電子郵件或即時通訊軟體中。"
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1803,7 +1865,7 @@ msgstr ""
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "與現有的資料夾同步"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1837,7 +1899,7 @@ msgstr "然後選擇一個已有資料夾來同步到這個資料庫。"
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "解除同步並重新同步資料庫"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1849,6 +1911,8 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"當你不想將本地資料夾與資料庫同步時，你可以解除同步。在你解除同步資料庫後，本地資料夾和檔案的變更將不會上傳，資料庫中的變更也將不會下載。如果你想將資料庫重新同步到本地資料夾，你可以使用<a"
+" href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">同步已有資料夾</a>功能。"
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1865,17 +1929,17 @@ msgid ""
 "After installing a drive client with the instructions on the <a "
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
-msgstr ""
+msgstr "按照下載頁面上的指令安裝了硬碟客戶端後，你可以在桌面上雙擊 \"SeaDrive\" 應用程式圖示啟動它。"
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
-msgstr ""
+msgstr "你將被要求選擇一個磁碟機代號給虛擬硬碟。預設將使用 \"S:\"。"
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "然後你將被要求登入你的 Seafile 伺服器。"
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1884,6 +1948,8 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"成功登入伺服器後，Drive "
+"客戶端便會開始從伺服器取得資料庫和檔案清單。這時候檔案內容不會被下載，所以不需要很長時間。你可以讓它在背景執行。當取回完成時，你將會被通知。"
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1893,26 +1959,28 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"虛擬硬碟資料夾將被開啟，你將發現它跟電腦上的一般硬碟一樣。虛擬硬碟的頂層資料夾是 Seafile "
+"伺服器上的資料庫。當你開啟檔案時，檔案內容將被下載。最近開啟的檔案將被緩存在你的本機磁碟中。所有緩存的檔案都將被標示為綠色勾選符號。"
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "同步狀態"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
-msgstr ""
+msgstr "虛擬硬碟中的檔案和資料夾可能處於雲端、已同步或部分同步的狀態。"
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "狀態"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "圖示"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -1921,7 +1989,7 @@ msgstr "詳情"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "雲端限定的內容"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1931,82 +1999,84 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"雲端限定的內容顯示在虛擬硬碟中，但不需要使用檔案的完整空間。在檔案 瀏覽器中，你可以看到檔案，但是內容不會被完全下載，直到你需要它時。 "
+"下載的內容只是一些檔案資訊，例如檔案名稱、大小和更新日期。"
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "已同步的內容"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
-msgstr ""
+msgstr "已同步的內容已經被下載並儲存在你的電腦硬碟中。你可以直接在電腦上的應用 程式中編輯這些檔案。"
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "部分同步的內容"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
-msgstr ""
+msgstr "部分同步的資料夾包含已同步和雲端限定的檔案或資料夾。"
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "特殊状态"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
-msgstr ""
+msgstr "对已经同步到本地计算机的文件，可能处于3个特殊状态，除了常规的 \"synced\" 状态。"
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "被其他用户锁定"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
-msgstr ""
+msgstr "该文件被服务器上的其他用户锁定。您只能以只读模式打开该文件。您不能修改、删除、重命名或移动该文件。"
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "被我锁定"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "该文件被您锁定。这样可以防止其他人修改该文件。"
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "只读"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
-msgstr ""
+msgstr "该文件所在的文件夹或库被共享给您，以只读权限。您不能修改、删除或移动该文件。"
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
-msgstr ""
+msgstr "客户端会定期在后台清理未使用的缓存文件。你也可以限制本地缓存空间。"
 
 #: templates/help/using_drive_client.html:76
 msgid ""
 "You can log into multiple accounts in the Drive client. However, only files "
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
-msgstr ""
+msgstr "你可以在客户端登录多个帐户。但是，只有当前选定服务器上的文件会显示在虚拟硬盘中。你可以切换帐户。"
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr ""
+msgstr "1. 为什么我不能在根文件夹中创建新文件或删除文件夹？"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2017,13 +2087,15 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"虚拟硬盘的根文件夹仅包含资料库文件夹。Seafile 只能同步资料库内的文件。根文件夹中的文件无法上传到 Seafile "
+"服务器。因此不支持在根文件夹中创建文件。由于虚拟硬盘的顶层文件夹代表资料库，我们不想让用户误删他们的资料库，所以客户端不支持删除顶层文件夹。"
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
-msgstr ""
+msgstr "有些类型的文件可以直接在 Seafile Web 应用程序中打开查看。目前它们是："
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "图像文件"

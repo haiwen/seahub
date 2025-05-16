@@ -1,0 +1,42 @@
+.sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container {
+  position: relative;
+  align-items: center;
+  border-radius: 2px;
+  color: #212529;
+  display: flex;
+  font-size: 13px;
+  height: 30px;
+  width: 100%;
+}
+
+.sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container .sf-metadata-tags-editor-tree-expand-icon {
+  position: absolute;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  z-index: 1;
+}
+
+.sf-metadata-tag-color-and-name {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.sf-metadata-tag-color-and-name .sf-metadata-tag-color {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sf-metadata-tag-color-and-name .sf-metadata-tag-name {
+  flex: 1;
+  margin-left: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

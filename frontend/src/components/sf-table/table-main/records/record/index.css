@@ -38,6 +38,11 @@
   z-index: 1;
 }
 
+.sf-table-result-container.windows-browser::-webkit-scrollbar,
+.sf-table-canvas::-webkit-scrollbar {
+  display: none;
+}
+
 .sf-table-result-container.record-draggable .sf-table-row:hover .drag-handler {
   background-image: url(../../../../../../../media/img/grippy_large.png);
   background-repeat: no-repeat;

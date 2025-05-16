@@ -20,17 +20,17 @@ export default class AddDepartMemberV2Dialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedOptions: [],
+      selectedUsers: [],
       errMsgs: '',
     };
   }
 
   handleSelectChange = (options) => {
-    this.setState({ selectedOptions: options });
+    this.setState({ selectedUsers: options });
   };
 
   handleSubmit = () => {
-    const emails = this.state.selectedOptions.map(option => option.email);
+    const emails = this.state.selectedUsers.map(option => option.email);
     if (emails.length === 0) return;
     this.setState({ errMessage: '' });
     const { nodeId, orgID } = this.props;
@@ -38,7 +38,7 @@ export default class AddDepartMemberV2Dialog extends React.Component {
       orgAdminAPI.orgAdminAddGroupMember(orgID, nodeId, emails) :
       systemAdminAPI.sysAdminAddGroupMember(nodeId, emails);
     req.then((res) => {
-      this.setState({ selectedOptions: [] });
+      this.setState({ selectedUsers: [] });
       if (res.data.failed.length > 0) {
         this.setState({ errMsgs: res.data.failed.map(item => item.error_msg) });
       }
@@ -62,6 +62,7 @@ export default class AddDepartMemberV2Dialog extends React.Component {
             placeholder={gettext('Search users')}
             onSelectChange={this.handleSelectChange}
             isMulti={true}
+            selectedUsers={this.state.selectedUsers}
           />
           {errMsgs.length > 0 && (
             <ul className="list-unstyled">

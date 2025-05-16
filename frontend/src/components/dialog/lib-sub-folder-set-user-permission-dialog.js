@@ -16,7 +16,6 @@ class UserItem extends React.Component {
     this.state = {
       isOperationShow: false
     };
-    this.userSelect = React.createRef();
   }
 
   onMouseEnter = () => {
@@ -100,7 +99,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedUsers: null,
+      selectedUsers: [],
       errorMsg: [],
       permission: 'rw',
       userFolderPermItems: [],
@@ -159,11 +158,10 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       this.setState({
         errorMsg: errorMsg,
         userFolderPermItems: this.state.userFolderPermItems.concat(res.data.success),
-        selectedUsers: null,
+        selectedUsers: [],
         permission: 'rw',
         folderPath: '',
       });
-      this.userSelect.current.clearSelect();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -281,11 +279,10 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
             <tr>
               <td>
                 <UserSelect
-                  ref={this.userSelect}
                   isMulti={true}
                   placeholder={gettext('Search users')}
                   onSelectChange={this.handleUserSelectChange}
-                  value={this.state.selectedUsers}
+                  selectedUsers={this.state.selectedUsers}
                 />
               </td>
               {showPath &&

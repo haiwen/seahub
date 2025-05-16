@@ -395,6 +395,12 @@ class RepoView(APIView):
             has_been_shared_out = False
             logger.error(e)
 
+        monitored = False
+        monitored_repos = UserMonitoredRepos.objects.filter(email=username,
+                                                            repo_id=repo_id)
+        if monitored_repos:
+            monitored = True
+
         result = {
             "repo_id": repo.id,
             "repo_name": repo.name,
@@ -416,7 +422,8 @@ class RepoView(APIView):
             "lib_need_decrypt": lib_need_decrypt,
             "last_modified": timestamp_to_isoformat_timestr(repo.last_modify),
             "status": normalize_repo_status_code(repo.status),
-            "enable_onlyoffice": enable_onlyoffice
+            "enable_onlyoffice": enable_onlyoffice,
+            "monitored": monitored,
         }
 
         return Response(result)
@@ -541,7 +548,8 @@ class RepoShareInfoView(APIView):
         }
 
         return Response(result)
-    
+
+
 class RepoImageRotateView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -572,7 +580,7 @@ class RepoImageRotateView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         asset_name = os.path.basename(path)
         file_type, _ = get_file_type_and_ext(asset_name)
-        
+
         if file_type != file_types.IMAGE:
             error_msg = '%s is not a picture.' % (path,)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

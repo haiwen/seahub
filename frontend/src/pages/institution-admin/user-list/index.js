@@ -6,6 +6,7 @@ import Paginator from '../../../components/paginator';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserItem from './user-item';
 import instAdminAPI from '../api';
+import { Utils } from '../../../utils/utils';
 
 const UserList = ({ onUserLinkClick }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +69,7 @@ const UserList = ({ onUserLinkClick }) => {
 
   const deleteInstUserToggle = useCallback((user) => {
     if (user) {
-      const deleteMessage = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', user.name);
+      const deleteMessage = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', Utils.HTMLescape(user.name));
       setDeleteUser(user);
       setDeleteMessage(deleteMessage);
     }

@@ -44,6 +44,7 @@ const TagFiles = () => {
 
   const currentImageRef = useRef(null);
 
+  const canDelete = useMemo(() => window.sfTagsDataContext && window.sfTagsDataContext.canModifyTag(), []);
   const isSelectedAll = useMemo(() => {
     return selectedFileIds ? selectedFileIds.length === tagFiles.rows.length : false;
   }, [selectedFileIds, tagFiles]);
@@ -133,8 +134,8 @@ const TagFiles = () => {
     setImagePreviewerVisible(false);
   }, []);
 
-  const handleDeleteTagFiles = useCallback(() => {
-    deleteTagFiles();
+  const handleDeleteTagFiles = useCallback((ids) => {
+    deleteTagFiles(ids);
     updateSelectedFileIds([]);
   }, [deleteTagFiles, updateSelectedFileIds]);
 
@@ -376,7 +377,6 @@ const TagFiles = () => {
     enableDirPrivateShare = true;
   }
   const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
-  const canDelete = window.sfTagsDataContext && window.sfTagsDataContext.canModifyTag();
   return (
     <>
       <div className="table-container" onClick={onContainerClick}>
@@ -413,6 +413,7 @@ const TagFiles = () => {
           table={tagFiles}
           closeImagePopup={closeImagePreviewer}
           canDelete={canDelete}
+          deleteRecords={handleDeleteTagFiles}
         />
       )}
       <ContextMenu

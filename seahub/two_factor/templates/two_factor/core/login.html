@@ -3,77 +3,74 @@
 
 {% block main_content %}
 <div class="login-panel-outer-container vh">
-<div class="login-panel">
-    <h2 class="hd">{% trans "Two-Factor Authentication" %}</h2>
+  <div class="login-panel" id="log-in-panel">
+    <h1 class="login-panel-hd">{% trans "Two-Factor Authentication" %}</h1>
     <form action="" method="post" class="con">{% csrf_token %}
-        {{ wizard.management_form }}
-        {% if wizard.steps.current == 'token' %}
+      {{ wizard.management_form }}
+      {% if wizard.steps.current == 'token' %}
 
-        {% if device.method == 'call' %}
-        <p>We are calling your phone right now, please enter the
-            digits you hear.</p>
-        {% elif device.method == 'sms' %}
-        <p>We sent you a text message, please enter the tokens we
-            sent.</p>
-        {% else %}
-        <p>{% trans "Open the two-factor authentication app on your device to view your authentication token and verify your identify." %}</p>
-        {% endif %}
+      {% if device.method == 'call' %}
+      <p>We are calling your phone right now, please enter the
+      digits you hear.</p>
+      {% elif device.method == 'sms' %}
+      <p>We sent you a text message, please enter the tokens we
+      sent.</p>
+      {% else %}
+      <p>{% trans "Open the two-factor authentication app on your device to view your authentication token and verify your identify." %}</p>
+      {% endif %}
 
-        <label for="token">{% trans "Authentication token" %}</label>
-        <input id="token" type="text" name="{{form_prefix}}otp_token" value="" class="input two-factor-auth-login-token-input" autocomplete="off" autofocus="autofocus" />
+      <input id="token" type="text" name="{{form_prefix}}otp_token" placeholder="{% trans "Authentication token" %}" value="" class="input two-factor-auth-login-token-input" autocomplete="off" autofocus="autofocus" />
 
-	{% if remember_days > 0 %}
-        <label class="checkbox-label remember">
-            <input type="checkbox" name="{{form_prefix}}remember_me" class="vam remember-input" />
-            <span class="vam">{% blocktrans %}Remember this computer for {{remember_days}} days{% endblocktrans %}</span>
-        </label>
-        {% endif %}
-        
-        {% if form.errors %}
-        <p class="error">{% trans "Incorrect code" %}</p>
-        {% else %}
-        <p class="error hide"></p>
-        {% endif %}
-        <button type="submit" class="submit">{% trans "Verify" %}</button>
+      {% if remember_days > 0 %}
+      <label class="checkbox-label mt-3 mb-0 remember-me">
+        <input type="checkbox" name="{{form_prefix}}remember_me" class="vam remember-input" />
+        <span class="vam">{% blocktrans %}Remember this computer for {{remember_days}} days{% endblocktrans %}</span>
+      </label>
+      {% endif %}
 
-        {% if backup_tokens > 0 %}
-        <div class="two-factor-auth-login-no-phone">
-            <p>
-            {% trans "Don't have your phone?" %}
-            <button name="wizard_goto_step" value="backup" type="submit" class="sf-link-btn">{% trans "Enter a two-factor backup code" %}</button>
-            </p>
-        </div>
-        {% endif %}
+      {% if form.errors %}
+      <p class="error">{% trans "Incorrect code" %}</p>
+      {% else %}
+      <p class="error hide"></p>
+      {% endif %}
+      <button type="submit" class="submit btn btn-primary btn-block h-auto mb-3">{% trans "Verify" %}</button>
 
-        {% elif wizard.steps.current == 'backup' %}
-        <label for="token">{% trans "Backup code" %}</label>
-        <input id="token" type="text" name="{{form_prefix}}otp_token" value="" class="input" autocomplete="off" />
-        {% if form.errors %}
-        <p class="error">{% trans "Incorrect code" %}</p>
-        {% else %}
-        <p class="error hide"></p>
-        {% endif %}
-        <p class="tip">{% trans "You can enter one of your backup codes in case you lost access to your mobile device." %}</p>
-        <button type="submit" class="submit">{% trans "Verify" %}</button>
-        {% endif %}
+      {% if backup_tokens > 0 %}
+      <div class="two-factor-auth-login-no-phone">
+        <p>
+        {% trans "Don't have your phone?" %}
+        <button name="wizard_goto_step" value="backup" type="submit" class="sf-link-btn">{% trans "Enter a two-factor backup code" %}</button>
+        </p>
+      </div>
+      {% endif %}
+
+      {% elif wizard.steps.current == 'backup' %}
+      <input id="token" type="text" name="{{form_prefix}}otp_token" placeholder="{% trans "Backup code" %}" value="" class="input" autocomplete="off" />
+      <p class="tip">{% trans "You can enter one of your backup codes in case you lost access to your mobile device." %}</p>
+
+      {% if form.errors %}
+      <p class="error">{% trans "Incorrect code" %}</p>
+      {% else %}
+      <p class="error hide"></p>
+      {% endif %}
+
+      <button type="submit" class="submit btn btn-primary btn-block h-auto mb-5">{% trans "Verify" %}</button>
+      {% endif %}
     </form>
-</div>
+  </div>
 </div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.login-panel-outer-container').prepend($($('#logo').html()).attr({'width': 160, 'height':40}).addClass('login-panel-logo'));
+  $('.login-panel-outer-container').prepend($($('#logo').html()).attr({'width': 160, 'height':40}).addClass('login-panel-logo'));
 
-var $el = $('.login-panel-outer-container');
-var elHeight = $el.outerHeight();
-var wdHeight = $(window).height();
-if (wdHeight > elHeight) {
+  var $el = $('.login-panel-outer-container');
+  var elHeight = $el.outerHeight();
+  var wdHeight = $(window).height();
+  if (wdHeight > elHeight) {
     $el.css({'margin-top': (wdHeight - elHeight)/2});
-}
-$el.removeClass('vh');
-
-
-$('.new-narrow-panel .input').trigger('focus');
+  }
+  $el.removeClass('vh');
 </script>
 {% endblock %}

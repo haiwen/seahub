@@ -15,7 +15,7 @@ import OpMenu from '../../../components/dialog/op-menu';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
-import UsersFilterBar from './users-filter-bar';
+import SysAdminUserDeactivateDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);
@@ -42,11 +42,11 @@ class Content extends Component {
   };
 
   getPreviousPage = () => {
-    this.props.getListByPage(this.props.currentPage - 1, this.props.is_active, this.props.role);
+    this.props.getListByPage(this.props.currentPage - 1);
   };
 
   getNextPage = () => {
-    this.props.getListByPage(this.props.currentPage + 1, this.props.is_active, this.props.role);
+    this.props.getListByPage(this.props.currentPage + 1);
   };
 
   sortByQuotaUsage = (e) => {
@@ -164,14 +164,6 @@ class Content extends Component {
 
       return (
         <div>
-          {this.props.currentItem === 'database' &&
-            <UsersFilterBar
-              isActive={this.props.is_active}
-              role={this.props.role}
-              onStatusChange={this.props.onStatusChange}
-              onRoleChange={this.props.onRoleChange}
-            />
-          }
           {items.length ? table : <EmptyTip text={gettext('No users')} />}
         </div>
       );
@@ -201,12 +193,7 @@ Content.propTypes = {
   onUserSelected: PropTypes.func,
   curPerPage: PropTypes.number,
   hasNextPage: PropTypes.bool,
-  sortOrder: PropTypes.string,
-  is_active: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  role: PropTypes.string,
-  currentItem: PropTypes.string,
-  onStatusChange: PropTypes.func,
-  onRoleChange: PropTypes.func
+  sortOrder: PropTypes.string
 };
 
 class Item extends Component {
@@ -220,7 +207,7 @@ class Item extends Component {
       isDeleteUserDialogOpen: false,
       isResetUserPasswordDialogOpen: false,
       isRevokeAdminDialogOpen: false,
-      isConfirmInactiveDialogOpen: false
+      isConfirmInactiveDialogOpen: false,
     };
   }
 
@@ -266,7 +253,10 @@ class Item extends Component {
     this.setState({ isRevokeAdminDialogOpen: !this.state.isRevokeAdminDialogOpen });
   };
 
-  toggleConfirmInactiveDialog = () => {
+  toggleConfirmInactiveDialog = (targetItem) => {
+    if (targetItem?.value === 'active') {
+      return;
+    }
     this.setState({ isConfirmInactiveDialogOpen: !this.state.isConfirmInactiveDialogOpen });
   };
 
@@ -282,9 +272,13 @@ class Item extends Component {
     this.props.updateUser(this.props.item.email, 'is_active', isActive);
   };
 
-  setUserInactive = () => {
-    this.props.updateUser(this.props.item.email, 'is_active', false);
+  setUserInactive = (keepSharing) => {
+    this.props.updateUser(this.props.item.email, 'is_active', false, {
+      keep_sharing: keepSharing
+    });
+    this.toggleConfirmInactiveDialog();
   };
+
 
   updateRole = (roleOption) => {
     this.props.updateUser(this.props.item.email, 'role', roleOption.value);
@@ -422,7 +416,6 @@ class Item extends Component {
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     const resetPasswordDialogMsg = gettext('Are you sure you want to reset the password of {placeholder} ?').replace('{placeholder}', itemName);
     const revokeAdminDialogMsg = gettext('Are you sure you want to revoke the admin permission of {placeholder} ?').replace('{placeholder}', itemName);
-    const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', itemName);
 
     // for 'user status'
     const curStatus = item.is_active ? 'active' : 'inactive';
@@ -599,12 +592,9 @@ class Item extends Component {
           />
         }
         {isConfirmInactiveDialogOpen &&
-          <CommonOperationConfirmationDialog
-            title={gettext('Set user inactive')}
-            message={confirmSetUserInactiveMsg}
-            executeOperation={this.setUserInactive}
-            confirmBtnText={gettext('Set')}
+          <SysAdminUserDeactivateDialog
             toggleDialog={this.toggleConfirmInactiveDialog}
+            onSubmit={this.setUserInactive}
           />
         }
       </Fragment>

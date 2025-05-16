@@ -9,9 +9,14 @@ import DirDetails from './dir-details';
 import FileDetails from './file-details';
 import ObjectUtils from '../../../utils/object';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
-import { Settings, AI } from '../../../metadata/components/metadata-details';
+import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
+import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
+import { eventBus } from '../../common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
 import './index.css';
+
+const { enableSeafileAI } = window.app.config;
 
 class DirentDetails extends React.Component {
 
@@ -48,6 +53,10 @@ class DirentDetails extends React.Component {
       const fullPath = Utils.joinPath(nextProps.path, nextProps.dirent.name);
       this.updateDetail(nextProps.repoID, nextProps.dirent, fullPath);
     }
+  }
+
+  componentWillUnmount() {
+    eventBus.dispatch(EVENT_BUS_TYPE.CLEAR_MAP_INSTANCE);
   }
 
   renderImage = () => {
@@ -94,8 +103,8 @@ class DirentDetails extends React.Component {
       >
         <Detail>
           <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} >
-            <AI />
-            <Settings />
+            {enableSeafileAI && <AIIcon />}
+            <SettingsIcon />
           </Header>
           <Body>
             {this.renderImage()}

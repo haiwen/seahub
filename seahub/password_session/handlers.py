@@ -11,6 +11,9 @@ PASSWORD_HASH_KEY = getattr(settings, 'PASSWORD_SESSION_PASSWORD_HASH_KEY', 'pas
 def get_password_hash(user):
     """Returns a string of crypted password hash"""
     password = user.enc_password or ''
+    # To achieve "invalidate all active sessions after change password",
+    # a hash value generated based on the user password is stored in the session,
+    # and compare it for each request in the MIDDLEWARE.
     return md5(
         md5(password.encode()).hexdigest().encode() + settings.SECRET_KEY.encode()
     ).hexdigest()

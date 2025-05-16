@@ -210,12 +210,8 @@ const ViewsFolder = ({
     setRenaming(false);
   }, [folderId, folderName, getFoldersNames, modifyFolder]);
 
-  const closeNewView = useCallback(() => {
-    setNewView(null);
-  }, []);
-
   const addViewIntoFolder = useCallback((viewName, viewType) => {
-    addView({ folderId, name: viewName, type: viewType });
+    addView({ folderId, name: viewName, type: viewType, successCallback: () => setNewView(null) });
   }, [folderId, addView]);
 
   const deleteViewFromFolder = useCallback((viewId, isSelected) => {
@@ -314,7 +310,7 @@ const ViewsFolder = ({
       </div>
       <div className="children views-folder-children">
         {expanded && renderViews()}
-        {newView && <NewView newView={newView} leftIndent={TREE_NODE_LEFT_INDENT * 3} closeNewView={closeNewView} addView={addViewIntoFolder} />}
+        {newView && <NewView newView={newView} leftIndent={TREE_NODE_LEFT_INDENT * 3} addView={addViewIntoFolder} />}
       </div>
     </div>
   );

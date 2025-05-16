@@ -31,7 +31,7 @@ from seahub.utils import get_site_name, \
     clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.licenseparse import user_number_over_limit
-from seahub.share.models import ExtraSharePermission
+from seahub.share.models import ExtraSharePermission, FileShare, UploadLinkShare
 from seahub.utils.auth import gen_user_virtual_id
 from seahub.auth.models import SocialAuthUser
 from seahub.repo_auto_delete.models import RepoAutoDelete
@@ -67,8 +67,10 @@ UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 def default_ldap_role_mapping(role):
     return role
 
+
 def default_ldap_role_list_mapping(role_list):
     return role_list[0] if role_list else ''
+
 
 ldap_role_mapping = default_ldap_role_mapping
 ldap_role_list_mapping = default_ldap_role_list_mapping
@@ -81,14 +83,15 @@ if ENABLE_LDAP:
     try:
         from seahub_custom_functions import ldap_role_mapping
         ldap_role_mapping = ldap_role_mapping
-    except:
+    except Exception:
         pass
     try:
         from seahub_custom_functions import ldap_role_list_mapping
         ldap_role_list_mapping = ldap_role_list_mapping
         USE_LDAP_ROLE_LIST_MAPPING = True
-    except:
+    except Exception:
         pass
+
 
 class UserManager(object):
 
@@ -425,7 +428,7 @@ class UserPermissions(object):
         if not settings.ENABLE_WIKI:
             return False
         return self._get_perm_by_roles('can_publish_wiki')
-    
+
     def can_choose_office_suite(self):
         if not settings.ENABLE_MULTIPLE_OFFICE_SUITE:
             return False
@@ -626,6 +629,10 @@ class User(object):
         except Exception as e:
             logger.error(e)
 
+        # clear share links
+        FileShare.objects.filter(username=username).delete()
+        UploadLinkShare.objects.filter(username=username).delete()
+
         # remove current user from joined groups
         ccnet_api.remove_group_user(username)
 
@@ -670,13 +677,6 @@ class User(object):
         Returns a boolean of whether the raw_password was correct. Handles
         encryption formats behind the scenes.
         """
-        # Backwards-compatibility check. Older passwords won't include the
-        # algorithm or salt.
-
-        # if '$' not in self.password:
-        #     is_correct = (self.password == \
-        #                       get_hexdigest('sha1', '', raw_password))
-        #     return is_correct
         return (ccnet_threaded_rpc.validate_emailuser(self.username, raw_password) == 0)
 
     def set_unusable_password(self):
@@ -915,7 +915,9 @@ class CustomLDAPBackend(object):
                     sasl_authc_id_attr, base_dn, login_attr_conf, login_attr, password, serch_filter,
                     contact_email_attr, role_attr, follow_referrals):
         try:
-            admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn, admin_password, enable_sasl, sasl_mechanism, follow_referrals)
+            admin_bind = self.ldap_bind(server_url, admin_dn, admin_dn,
+                                        admin_password, enable_sasl,
+                                        sasl_mechanism, follow_referrals)
         except Exception as e:
             raise Exception(e)
 
@@ -950,7 +952,9 @@ class CustomLDAPBackend(object):
             raise Exception('parse ldap result failed: %s' % e)
 
         try:
-            user_bind = self.ldap_bind(server_url, dn, authc_id, password, enable_sasl, sasl_mechanism, follow_referrals)
+            user_bind = self.ldap_bind(server_url, dn, authc_id,
+                                       password, enable_sasl,
+                                       sasl_mechanism, follow_referrals)
         except Exception as e:
             raise Exception(e)
 

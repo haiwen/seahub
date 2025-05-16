@@ -1,24 +1,76 @@
-.sf-metadata-auto-image-tags .modal-body {
+.sf-file-tags-backdrop.show {
+  opacity: 0;
+  background-color: #fff;
+}
+
+.sf-file-tags {
+  margin-top: 370px;
+}
+
+.sf-file-tags .modal-content {
+  border: 1px solid #efefef;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sf-file-tags .modal-header {
+  height: 48px;
+}
+
+.sf-file-tags .modal-body {
   min-height: 160px;
 }
 
-.sf-metadata-auto-image-tags .auto-image-tags-container {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.sf-metadata-auto-image-tags .auto-image-tag {
-  height: 28px;
+.sf-file-tags .sf-file-new-tag {
+  display: inline-flex;
+  height: 20px;
   padding: 0 8px;
   border: 1px solid #dedede;
-  border-radius: 4px;
+  border-radius: 14px;
   margin-right: 8px;
   margin-bottom: 8px;
-  line-height: 26px;
+  line-height: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  align-items: center;
+}
+
+
+.sf-file-exit-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  margin-right: 10px;
+  padding: 0 8px 0 2px;
+  font-size: 13px;
+  border-radius: 10px;
+  border: 1px solid #dbdbdb;
+  background: #fff;
+  margin-top: 5px;
+  margin-bottom: 5px;
   cursor: pointer;
 }
 
-.sf-metadata-auto-image-tags .auto-image-tag.selected {
+.sf-file-exit-tag .sf-file-exit-tag-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-left: 1px;
+}
+
+.sf-file-exit-tag .sf-file-exit-tag-name {
+  display: inline-block;
+  height: 20px;
+  line-height: 20px;
+  color: #212529;
+  margin-left: 8px;
+  max-width: 200px;
+  flex: 1 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-file-new-tag.selected,
+.sf-file-exit-tag.selected {
   border-color: #FF9800;
 }

@@ -10,7 +10,6 @@ default_conf_dir=${TOPDIR}/conf
 default_pids_dir=${TOPDIR}/pids
 default_logs_dir=${TOPDIR}/logs
 pro_pylibs_dir=${INSTALLPATH}/pro/python
-IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
 
@@ -18,7 +17,7 @@ server_manual_http='https://download.seafile.com/published/seafile-manual/home.m
 
 function welcome () {
     echo "-----------------------------------------------------------------"
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
+    if [[ $IS_PRO_VERSION = "true" ]]; then
         echo "This script will guide you to config and setup your seafile professional server."
     else
         echo "This script will guide you to config and setup your seafile server."

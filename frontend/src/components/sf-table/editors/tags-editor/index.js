@@ -8,7 +8,7 @@ import DeleteTags from './delete-tags';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
-import { getTagColor, getTagId, getTagName, getTagsByNameOrColor } from '../../../../tag/utils/cell';
+import { getTagColor, getTagId, getTagName, getTagsByName } from '../../../../tag/utils/cell';
 import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
 import { SELECT_OPTION_COLORS } from '../../../../metadata/constants';
 import { getRowById } from '../../utils/table';
@@ -38,7 +38,7 @@ const TagsEditor = ({
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
 
-  const displayTags = useMemo(() => getTagsByNameOrColor(allTagsRef.current, searchValue), [searchValue, allTagsRef]);
+  const displayTags = useMemo(() => getTagsByName(allTagsRef.current, searchValue), [searchValue, allTagsRef]);
 
   const isShowCreateBtn = useMemo(() => {
     if (!canAddTag || !searchValue || !Utils.isFunction(addNewTag)) return false;

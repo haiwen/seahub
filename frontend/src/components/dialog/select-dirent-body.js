@@ -130,7 +130,7 @@ class SelectDirentBody extends React.Component {
 
     return (
       <Row>
-        <Col className='repo-list-col border-right'>
+        <Col className='repo-list-col border-end'>
           <LibraryOption
             mode={MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY}
             label={gettext('Current Library')}

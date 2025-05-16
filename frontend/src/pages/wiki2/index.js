@@ -5,7 +5,7 @@ import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
-import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, wikiPermission } from '../../utils/constants';
+import { wikiId, siteRoot, lang, isWiki2, seadocServerUrl, wikiPermission, gettext } from '../../utils/constants';
 import WikiConfig from './models/wiki-config';
 import toaster from '../../components/toast';
 import SidePanel from './side-panel';
@@ -40,6 +40,7 @@ class Wiki extends Component {
       permission: '',
       isConfigLoading: true,
       currentPageId: '',
+      currentPageLocked: false,
       config: new WikiConfig({}),
       repoId: '',
       seadoc_access_token: '',
@@ -154,6 +155,35 @@ class Wiki extends Component {
     });
   }, 1000);
 
+  updatePageLock = (pageId, locked) => {
+    wikiAPI.updateWiki2PageLock(wikiId, pageId, locked).then(res => {
+      this.setState(prevState => {
+        const updatedPages = prevState.config.pages.map(page => {
+          if (page.id === pageId) {
+            return {
+              ...page,
+              locked: res.data.is_locked
+            };
+          }
+          return page;
+        });
+
+        return {
+          currentPageLocked: res.data.is_locked,
+          config: new WikiConfig({
+            ...prevState.config,
+            pages: updatedPages
+          })
+        };
+      });
+      const currentPage = PageUtils.getPageById(this.state.config.pages, pageId);
+      this.updateSdocPage(currentPage.id, currentPage.path);
+    }).catch((error) => {
+      let errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+    });
+  };
+
   saveWikiConfig = (wikiConfig, isUpdateBySide = false) => {
     this.setState({
       config: new WikiConfig(wikiConfig),
@@ -181,6 +211,7 @@ class Wiki extends Component {
       sdocServer: seadocServerUrl,
       accessToken,
     };
+    window.seafile = { docUuid };
     const sdocServerApi = new SDocServerApi(config);
     sdocServerApi.getDocContent().then(res => {
       this.setState({
@@ -215,6 +246,7 @@ class Wiki extends Component {
     } else {
       getWikiPage = wikiAPI.getWiki2Page(wikiId, pageId);
     }
+
     getWikiPage.then(res => {
       const { permission, seadoc_access_token, assets_url } = res.data;
       this.setState({
@@ -281,6 +313,7 @@ class Wiki extends Component {
     this.setState({
       currentPageId: pageId,
       path: path,
+      currentPageLocked: currentPage.locked,
     }, () => {
       callback && callback();
       eventBus.dispatch('update-wiki-current-page');
@@ -304,7 +337,7 @@ class Wiki extends Component {
 
   onUpdatePage = (pageId, newPage, isUpdateBySide) => {
     if (newPage.name === '') {
-      newPage.name = DEFAULT_PAGE_NAME;
+      newPage.name = gettext(DEFAULT_PAGE_NAME);
     }
     if (this.state.currentPageId === pageId) {
       this.updateDocumentTitle(newPage.name);
@@ -408,6 +441,8 @@ class Wiki extends Component {
           seadoc_access_token={this.state.seadoc_access_token}
           assets_url={this.state.assets_url}
           onUpdatePage={this.onUpdatePage}
+          currentPageLocked={this.state.currentPageLocked}
+          updatePageLock={this.updatePageLock}
           setCurrentPage={this.setCurrentPage}
           isUpdateBySide={this.state.isUpdateBySide}
           style={mainPanelStyle}

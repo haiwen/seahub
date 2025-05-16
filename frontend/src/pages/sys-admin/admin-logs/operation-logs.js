@@ -108,6 +108,8 @@ class Item extends Component {
       case 'user_add': return gettext('Add User');
       case 'user_delete': return gettext('Delete User');
       case 'user_migrate': return gettext('Migrate User');
+      case 'group_member_add': return gettext('Add User to Group');
+      case 'group_member_delete': return gettext('Delete User from Group');
       default: return '';
     }
   };
@@ -138,15 +140,15 @@ class Item extends Component {
         detailText = gettext('Created library {library_name} with {owner} as its owner')
           .replace('{owner}', '<a href="' + ownerPageUrl + '">' + detail.owner + '</a>');
         if (isPro && enableSysAdminViewRepo) {
-          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + detail.name + '</a>');
+          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + Utils.HTMLescape(detail.name) + '</a>');
         } else {
-          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + detail.name + '</span>');
+          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + Utils.HTMLescape(detail.name) + '</span>');
         }
         return detailText;
 
       case 'repo_delete':
         detailText = gettext('Deleted library {library_name}')
-          .replace('{library_name}', '<span class="font-weight-bold">' + detail.name + '</span>');
+          .replace('{library_name}', '<span class="font-weight-bold">' + Utils.HTMLescape(detail.name) + '</span>');
         return detailText;
 
       case 'repo_transfer':
@@ -154,9 +156,9 @@ class Item extends Component {
           .replace('{user_from}', '<span class="font-weight-bold">' + detail.from + '</span>')
           .replace('{user_to}', '<span class="font-weight-bold">' + detail.to + '</span>');
         if (isPro && enableSysAdminViewRepo) {
-          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + detail.name + '</a>');
+          detailText = detailText.replace('{library_name}', '<a href="' + repoPageUrl + '">' + Utils.HTMLescape(detail.name) + '</a>');
         } else {
-          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + detail.name + '</span>');
+          detailText = detailText.replace('{library_name}', '<span class="font-weight-bold">' + Utils.HTMLescape(detail.name) + '</span>');
         }
         return detailText;
 
@@ -191,6 +193,18 @@ class Item extends Component {
         detailText = gettext('User migrate from {user_from} to {user_to}')
           .replace('{user_from}', '<span class="font-weight-bold">' + detail.from + '</span>')
           .replace('{user_to}', '<span class="font-weight-bold">' + detail.to + '</span>');
+        return detailText;
+
+      case 'group_member_add':
+        detailText = gettext('Added user {user} to group {group}')
+          .replace('{user}', '<span class="font-weight-bold">' + detail.user + '</span>')
+          .replace('{group}', '<span class="font-weight-bold">' + detail.name + '</span>');
+        return detailText;
+
+      case 'group_member_delete':
+        detailText = gettext('Deleted user {user} from group {group}')
+          .replace('{user}', '<span class="font-weight-bold">' + detail.user + '</span>')
+          .replace('{group}', '<span class="font-weight-bold">' + detail.name + '</span>');
         return detailText;
 
       default: return '';

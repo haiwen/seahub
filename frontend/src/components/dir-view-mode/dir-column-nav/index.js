@@ -33,6 +33,7 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
   updateDirent: PropTypes.func,
   updateTreeNode: PropTypes.func,
+  updateRepoInfo: PropTypes.func
 };
 
 class DirColumnNav extends React.Component {
@@ -76,7 +77,7 @@ class DirColumnNav extends React.Component {
             />
             <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} updateRepoInfo={this.props.updateRepoInfo} />
           </>
         )}
       </div>

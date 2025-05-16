@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
 import Icon from '../../components/icon';
-import { gettext, siteRoot, enableSubscription, enableMultiADFS } from '../../utils/constants';
+import { gettext, siteRoot, enableSubscription, enableExternalBillingService, enableMultiADFS } from '../../utils/constants';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -87,6 +87,14 @@ class SidePanel extends React.Component {
                       <Icon symbol='currency' />
                       <span className="nav-text">{'付费管理'}</span>
                     </Link>
+                  </li>
+                }
+                {enableExternalBillingService &&
+                  <li className={`nav-item ${this.getActiveClass('billing')}`}>
+                    <a href={siteRoot + 'billing/'} target="_blank" rel="noreferrer" className="nav-link">
+                      <Icon symbol='currency' />
+                      <span className="nav-text">{gettext('Billing')}</span>
+                    </a>
                   </li>
                 }
                 <li className={`nav-item ${this.getActiveClass('publinkadmin')}`}>
