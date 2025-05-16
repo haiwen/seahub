@@ -519,6 +519,69 @@ class GroupMemberAudit(models.Model):
 
     class Meta:
         db_table = 'group_member_audit'
+
+
+class UserQuotaUsageManager(models.Manager):
+    def get_quota_alert_users(self, threshold=0.9, recent_days=1):
+        if recent_days == -1:
+            alert_users = self.filter(
+                quota__gt=0,
+                usage__gt=F('quota') * threshold
+            )
+        else:
+            recent_date = timezone.now() - datetime.timedelta(days=recent_days)
+            alert_users = self.filter(
+                timestamp__gte=recent_date,
+                quota__gt=0,
+                usage__gt=F('quota') * threshold
+            )
+        
+        if not alert_users.exists():
+            return None
+        
+        return alert_users
+
+class UserQuotaUsage(models.Model):
+    username = models.CharField(max_length=255, unique=True)
+    org_id = models.IntegerField(db_index=True)
+    quota = models.BigIntegerField()
+    usage = models.BigIntegerField()
+    timestamp = models.DateTimeField(db_index=True)
+    objects = UserQuotaUsageManager()
+    
+    class Meta:
+        db_table = 'user_quota_usage'
+
+
+class OrgQuotaUsageManager(models.Manager):
+    def get_quota_alert_orgs(self, threshold=0.9, recent_days=1):
+        if recent_days == -1:
+            alert_orgs = self.filter(
+                quota__gt=0,
+                usage__gt=F('quota') * threshold
+            )
+        else:
+            recent_date = timezone.now() - datetime.timedelta(days=recent_days)
+            alert_orgs = self.filter(
+                timestamp__gte=recent_date,
+                quota__gt=0,
+                usage__gt=F('quota') * threshold
+            )
+        
+        if not alert_orgs.exists():
+            return None
+        
+        return alert_orgs
+
+class OrgQuotaUsage(models.Model):
+    org_id = models.IntegerField(db_index=True, unique=True)
+    quota = models.BigIntegerField()
+    usage = models.BigIntegerField()
+    timestamp = models.DateTimeField(db_index=True)
+    objects = OrgQuotaUsageManager()
+    
+    class Meta:
+        db_table = 'org_quota_usage'
         
 
 
@@ -542,41 +605,3 @@ def add_group_invite_log(sender, org_id, group_id, users, operator, operation, *
             operation=operation
         ))
     GroupMemberAudit.objects.bulk_create(group_member_audit_list)
-
-
-
-class UserQuotaUsageManager(models.Manager):
-    
-    def get_quota_alert_users(self, threshold=0.9, recent_days=1):
-        if recent_days == -1:
-            alert_users = self.filter(
-                quota__gt=0,
-                usage__gt=F('quota') * threshold
-            )
-        else:
-            recent_date = timezone.now() - datetime.timedelta(days=recent_days)
-            alert_users = self.filter(
-                timestamp__gte=recent_date,
-                quota__gt=0,
-                usage__gt=F('quota') * threshold
-            )
-            
-        if not alert_users.exists():
-            return None
-        
-        return alert_users
-    
-    
-
-class UserQuotaUsage(models.Model):
-    username = models.CharField(max_length=255, unique=True, null=False, blank=False)
-    org_id = models.IntegerField(db_index=True)
-    quota = models.BigIntegerField()
-    usage = models.BigIntegerField()
-    timestamp = models.DateTimeField(db_index=True)
-    objects = UserQuotaUsageManager()
-
-    class Meta:
-        db_table = 'user_quota_usage'
-
-
