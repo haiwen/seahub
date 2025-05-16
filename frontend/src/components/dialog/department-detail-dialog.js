@@ -1,6 +1,6 @@
 import React, { Fragment, } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody } from 'reactstrap';
+import { Modal, ModalBody, Input } from 'reactstrap';
 import { gettext, isOrgContext, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
@@ -38,6 +38,9 @@ class DepartmentDetailDialog extends React.Component {
       membersLoading: true,
       selectedMemberMap: {},
       departmentsTree: [],
+      keyword: '',
+      searching: false,
+      usersFound: []
     };
   }
 
@@ -127,15 +130,13 @@ class DepartmentDetailDialog extends React.Component {
   };
 
   onMemberChecked = (member) => {
-    if (this.state.departmentMembers.indexOf(member) !== -1) {
-      let newMembersTempObj = this.state.newMembersTempObj;
-      if (member.email in newMembersTempObj) {
-        delete newMembersTempObj[member.email];
-      } else {
-        newMembersTempObj[member.email] = member;
-      }
-      this.setState({ newMembersTempObj: newMembersTempObj });
+    let { newMembersTempObj } = this.state;
+    if (member.email in newMembersTempObj) {
+      delete newMembersTempObj[member.email];
+    } else {
+      newMembersTempObj[member.email] = member;
     }
+    this.setState({ newMembersTempObj: newMembersTempObj });
   };
 
   addGroupMember = () => {
@@ -162,7 +163,10 @@ class DepartmentDetailDialog extends React.Component {
     this.setState({ currentDepartment: department });
   };
 
-  selectAll = (members) => {
+  selectAll = () => {
+    const { keyword, departmentMembers, usersFound } = this.state;
+    const members = keyword ? usersFound : departmentMembers; // 'members': to be compatible with the old code
+
     let { newMembersTempObj, selectedMemberMap } = this.state;
     for (let member of members) {
       if (Object.keys(selectedMemberMap).indexOf(member.email) !== -1) {
@@ -173,13 +177,58 @@ class DepartmentDetailDialog extends React.Component {
     this.setState({ newMembersTempObj: newMembersTempObj });
   };
 
+  unselectAll = () => {
+    const { keyword, departmentMembers, usersFound } = this.state;
+    const members = keyword ? usersFound : departmentMembers; // 'members': to be compatible with the old code
+
+    let { newMembersTempObj, selectedMemberMap } = this.state;
+
+    for (let member of members) {
+      if (Object.keys(selectedMemberMap).indexOf(member.email) !== -1) {
+        continue;
+      }
+      if (member.email in newMembersTempObj) {
+        delete newMembersTempObj[member.email];
+      }
+    }
+    this.setState({ newMembersTempObj: newMembersTempObj });
+  };
+
+  onKeywordChanged = (e) => {
+    this.setState({ keyword: e.target.value }, () => {
+      const { keyword } = this.state;
+      const q = keyword.trim();
+      if (!q) {
+        return false;
+      }
+      this.setState({ searching: true });
+      seafileAPI.searchUsers(q).then((res) => {
+        this.setState({
+          searching: false,
+          usersFound: res.data.users
+        });
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+        this.setState({
+          searching: false,
+        });
+      });
+    });
+  };
+
+  clearKeyword = () => {
+    this.setState({ keyword: '' });
+  };
+
   renderHeader = () => {
     const title = this.props.usedFor === 'add_group_member' ? gettext('Select group members') : gettext('Select shared users');
     return <SeahubModalHeader toggle={this.toggle}>{title}</SeahubModalHeader>;
   };
 
   render() {
-    let { departmentsLoading, departments } = this.state;
+    const { departmentsLoading, departments, keyword } = this.state;
+
     if (departmentsLoading) {
       return (
         <Modal isOpen={true} toggle={this.toggle}>
@@ -206,20 +255,48 @@ class DepartmentDetailDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle} className="department-dialog" style={{ maxWidth: '900px' }}>
         {this.renderHeader()}
         <ModalBody className="department-dialog-content">
-          <DepartmentGroup
-            departments={this.state.departments}
-            getMembers={this.getMembers}
-            setCurrent={this.setCurrent}
-            currentDepartment={this.state.currentDepartment}
-            loading={this.state.departmentsLoading}
-            departmentsTree={this.state.departmentsTree}
-          />
+          <div className="department-dialog-left-panel">
+            <div className="mb-2 position-relative">
+              <i className="sf3-font sf3-font-search input-icon-addon"></i>
+              <Input
+                bsSize="sm"
+                className="px-6"
+                type="text"
+                value={keyword}
+                onChange={this.onKeywordChanged}
+                placeholder={gettext('Search users')}
+              />
+              {keyword &&
+                <span className="input-icon-addon pe-auto">
+                  <i
+                    className="sf3-font sf3-font-x-01 clear-keyword-icon"
+                    onClick={this.clearKeyword}
+                  >
+                  </i>
+                </span>
+              }
+            </div>
+            {!keyword &&
+            <DepartmentGroup
+              departments={this.state.departments}
+              getMembers={this.getMembers}
+              setCurrent={this.setCurrent}
+              currentDepartment={this.state.currentDepartment}
+              loading={this.state.departmentsLoading}
+              departmentsTree={this.state.departmentsTree}
+            />
+            }
+          </div>
           <DepartmentGroupMembers
+            keyword={this.state.keyword}
+            searching={this.state.searching}
+            usersFound={this.state.usersFound}
             members={this.state.departmentMembers}
             memberSelected={this.state.newMembersTempObj}
             onUserChecked={this.onMemberChecked}
             currentDepartment={this.state.currentDepartment}
             selectAll={this.selectAll}
+            unselectAll={this.unselectAll}
             loading={this.state.membersLoading}
             selectedMemberMap={this.state.selectedMemberMap}
             isLoadingMore={this.state.isLoadingMore}
