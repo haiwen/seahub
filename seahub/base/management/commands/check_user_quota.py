@@ -83,7 +83,7 @@ class Command(BaseCommand):
         available_alert_user_email_list = ccnet_db.get_active_users_by_user_list(alert_users_email_list)
         if not available_alert_user_email_list:
             return
-        available_alert_user_email_map = {u.get('email'): u for u in alert_users if u.get('email') in available_alert_user_email_list}
+        available_alert_user_email_map = {u.username: u for u in alert_users if u.username in available_alert_user_email_list}
         user_obj_email_list = available_alert_user_email_map.keys()
         
         
