@@ -31,7 +31,7 @@ class RPCProxy(object):
             try:
                 return real_func(*args, **kwargs)
             except SearpcError as e:
-                logger.warn(e, exc_info=True)
+                logger.warning(e, exc_info=True)
                 return None
         else:
             return real_func(*args, **kwargs)

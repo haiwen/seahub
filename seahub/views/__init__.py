@@ -97,7 +97,7 @@ def validate_owner(request, repo_id):
 
 def is_registered_user(email):
     """
-    Check whether user is registerd.
+    Check whether user is registered.
 
     """
     try:
@@ -193,7 +193,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
     """List repo dirents based on commit id and path. Use ``offset`` and
     ``limit`` to do paginating.
 
-    Returns: A tupple of (file_list, dir_list, dirent_more)
+    Returns: A tuple of (file_list, dir_list, dirent_more)
 
     TODO: Some unrelated parts(file sharing, stars, modified info, etc) need
     to be pulled out to multiple functions.
@@ -737,7 +737,7 @@ def demo(request):
     try:
         user = User.objects.get(email=settings.CLOUD_DEMO_USER)
     except User.DoesNotExist:
-        logger.warn('CLOUD_DEMO_USER: %s does not exist.' % settings.CLOUD_DEMO_USER)
+        logger.warning('CLOUD_DEMO_USER: %s does not exist.' % settings.CLOUD_DEMO_USER)
         raise Http404
 
     for backend in get_backends():

@@ -147,7 +147,7 @@ def get_enabled_admin_role_permissions():
         default_admin_permissions = DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS[DEFAULT_ADMIN]
         for k in list(perms.keys()):
             if k not in list(default_admin_permissions.keys()):
-                logger.warn('"%s" is not valid permission, please review the ENABLED_ADMIN_ROLE_PERMISSIONS setting.' % k)
+                logger.warning('"%s" is not valid permission, please review the ENABLED_ADMIN_ROLE_PERMISSIONS setting.' % k)
 
         all_false_permission = {}
         for permission in list(default_admin_permissions.keys()):

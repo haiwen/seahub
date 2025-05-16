@@ -138,7 +138,7 @@ def login(request, template_name='registration/login.html',
         if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
             if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
                 # log user in if password is valid otherwise freeze account
-                logger.warn('Login attempt limit reached, try freeze the user, email/username: %s, ip: %s, attemps: %d' %
+                logger.warning('Login attempt limit reached, try freeze the user, email/username: %s, ip: %s, attempts: %d' %
                             (login, ip, failed_attempt))
                 email = Profile.objects.get_username_by_login_id(login)
                 if email is None:
@@ -149,16 +149,16 @@ def login(request, template_name='registration/login.html',
                     user = User.objects.get(email)
                     if user.is_active:
                         user.freeze_user(notify_admins=True, notify_org_admins=True)
-                        logger.warn('Login attempt limit reached, freeze the user email/username: %s, ip: %s, attemps: %d' %
+                        logger.warning('Login attempt limit reached, freeze the user email/username: %s, ip: %s, attempts: %d' %
                                     (login, ip, failed_attempt))
                 except User.DoesNotExist:
-                    logger.warn('Login attempt limit reached with invalid email/username: %s, ip: %s, attemps: %d' %
+                    logger.warning('Login attempt limit reached with invalid email/username: %s, ip: %s, attempts: %d' %
                                 (login, ip, failed_attempt))
                     pass
                 form.errors['freeze_account'] = _('This account has been frozen due to too many failed login attempts.')
             else:
                 # use a new form with Captcha
-                logger.warn('Login attempt limit reached, show Captcha, email/username: %s, ip: %s, attemps: %d' %
+                logger.warning('Login attempt limit reached, show Captcha, email/username: %s, ip: %s, attempts: %d' %
                             (login, ip, failed_attempt))
                 if not used_captcha_already:
                     form = CaptchaAuthenticationForm()
@@ -170,7 +170,7 @@ def login(request, template_name='registration/login.html',
             if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
                 form = authentication_form()
             else:
-                logger.warn('Login attempt limit reached, show Captcha, ip: %s, attempts: %d' %
+                logger.warning('Login attempt limit reached, show Captcha, ip: %s, attempts: %d' %
                             (ip, failed_attempt))
                 form = CaptchaAuthenticationForm()
         else:

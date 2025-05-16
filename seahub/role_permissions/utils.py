@@ -21,7 +21,7 @@ def get_enabled_role_permissions_by_role(role=DEFAULT_USER):
         role = DEFAULT_USER
     
     if role not in list(ENABLED_ROLE_PERMISSIONS.keys()):
-        logger.warn('%s is not a valid role, use default role.' % role)
+        logger.warning('%s is not a valid role, use default role.' % role)
         role = DEFAULT_USER
 
     return ENABLED_ROLE_PERMISSIONS[role]
@@ -41,7 +41,7 @@ def get_enabled_admin_role_permissions_by_role(role):
         role = DEFAULT_ADMIN
 
     if role not in list(ENABLED_ADMIN_ROLE_PERMISSIONS.keys()):
-        logger.warn('%s is not a valid admin role, use audit admin role.' % role)
+        logger.warning('%s is not a valid admin role, use audit admin role.' % role)
         role = AUDIT_ADMIN
 
     return ENABLED_ADMIN_ROLE_PERMISSIONS[role]
