@@ -947,6 +947,12 @@ SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system
 
 ENABLE_SMIME = False
 
+###########################
+# Full disk email sending #
+##########################
+ENABLE_QUOTA_ALERT = True
+
+
 ##########################
 # Settings for seadoc    #
 ##########################
