@@ -950,7 +950,7 @@ ENABLE_SMIME = False
 ###########################
 # Full disk email sending #
 ##########################
-ENABLE_QUOTA_ALERT = False
+ENABLE_QUOTA_ALERT = True
 
 
 ##########################
