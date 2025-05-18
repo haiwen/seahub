@@ -46,7 +46,7 @@
 }
 
 .old-history-main p {
-  color: #808080;
+  color: #666;
   font-size: 12px;
   margin-top: 0;
   margin-bottom: 1rem;
@@ -78,7 +78,7 @@
 
 .old-history-main .commit-list .username {
   vertical-align: middle;
-  color: #eb8205;
+  color: #EC8000;
   text-decoration: none;
   font-weight: bold;
 }

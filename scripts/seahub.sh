@@ -15,7 +15,6 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 central_config_dir=${TOPDIR}/conf
 seafile_rpc_pipe_path=${INSTALLPATH}/runtime
@@ -29,7 +28,6 @@ gunicorn_exe=${INSTALLPATH}/seahub/thirdpart/bin/gunicorn
 pro_pylibs_dir=${INSTALLPATH}/pro/python
 seafesdir=$pro_pylibs_dir/seafes
 seahubdir=${INSTALLPATH}/seahub
-IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 script_name=$0
 function usage () {
@@ -136,7 +134,7 @@ function warning_if_seafile_not_running () {
 
 function prepare_seahub_log_dir() {
     logdir=${TOPDIR}/logs
-    if ! [[ -d ${logsdir} ]]; then
+    if ! [[ -d ${logdir} ]]; then
         if ! mkdir -p "${logdir}"; then
             echo "ERROR: failed to create logs dir \"${logdir}\""
             exit 1
@@ -151,7 +149,7 @@ function before_start() {
     validate_seahub_running;
     prepare_seahub_log_dir;
 
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
+    if [[ $IS_PRO_VERSION = "true" ]]; then
         if [[ -z "$LANG" ]]; then
             echo "LANG is not set in ENV, set to en_US.UTF-8"
             export LANG='en_US.UTF-8'
@@ -231,7 +229,6 @@ function prepare_env() {
         export LC_ALL='en_US.UTF-8'
     fi
 
-    export CCNET_CONF_DIR=${default_ccnet_conf_dir}
     export SEAFILE_CONF_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
     export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}

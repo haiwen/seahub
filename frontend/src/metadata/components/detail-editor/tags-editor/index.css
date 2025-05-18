@@ -10,13 +10,11 @@
 }
 
 .sf-metadata-tags-property-detail-editor .sf-metadata-delete-select-tags {
-  min-height: 34px;
   border-bottom: none;
   background-color: inherit;
-  border-radius: 0;
   border-radius: initial;
   padding: 2px 0px;
-  max-height: fit-content;
+  overflow-y: auto;
 }
 
 .sf-metadata-tags-property-detail-editor .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {

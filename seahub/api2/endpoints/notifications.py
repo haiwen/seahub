@@ -10,7 +10,7 @@ from rest_framework import status
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.notifications.models import UserNotification
+from seahub.notifications.models import UserNotification, SysUserNotification
 
 from seahub.notifications.utils import update_notice_detail, update_sdoc_notice_detail
 from seahub.api2.utils import api_error
@@ -370,3 +370,61 @@ class AllNotificationsView(APIView):
 
 
         return Response({'success': True})
+
+class SysUserNotificationUnseenView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """
+        get the unseen sys-user-notifications by login user
+        """
+        username = request.user.username
+        notifications = SysUserNotification.objects.unseen_notes(username)
+        return Response({
+            'notifications': [n.to_dict() for n in notifications],
+        })
+
+class SysUserNotificationSeenView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, nid):
+        """
+        mark a sys-user-notification seen by login user
+        Permission checking:
+        1. login user.
+        """
+        # arguments check
+        username = request.user.username
+        try:
+            nid = int(nid)
+        except ValueError:
+            error_msg = 'nid invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if nid <= 0:
+            error_msg = 'nid invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resouce check
+        notification = SysUserNotification.objects.filter(id=nid).first()
+        if not notification:
+            error_msg = 'notification %s not found.' % nid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if notification.to_user != username:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # set notification to seen
+        try:
+            notification.update_notification_to_seen()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'notification': notification.to_dict()})

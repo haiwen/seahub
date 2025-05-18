@@ -815,13 +815,14 @@ class SeafileAPI {
     return source;
   }
 
-  searchFilesInPublishedRepo(repoID, q, page, perPage) {
+  searchFilesInPublishedRepo(repoID, q, page, perPage, searchFilenameOnly) {
     const url = this.server + '/api/v2.1/published-repo-search/';
     let params = {
       repo_id: repoID,
       q: q,
       page: page,
-      per_page: perPage
+      per_page: perPage,
+      search_filename_only: searchFilenameOnly || false,
     };
     return this.req.get(url, { params: params });
   }
@@ -1276,46 +1277,61 @@ class SeafileAPI {
     return this.req.post(url, form);
   }
 
-  // file commit api
-  deleteComment(repoID, commentID) {
-    const url = this.server + '/api2/repos/' + repoID + '/file/comments/' + commentID + '/';
-    return this.req.delete(url);
-  }
-
-  listComments(repoID, filePath, resolved) {
-    const path = encodeURIComponent(filePath);
-    let url = this.server + '/api2/repos/' + repoID + '/file/comments/?p=' + path;
-    if (resolved) {
-      url = url + '&resolved=' + resolved;
-    }
+  listComments(repoID, fileUuid) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/`;
     return this.req.get(url);
   }
 
-  postComment(repoID, filePath, comment, detail) {
-    const path = encodeURIComponent(filePath);
-    const url = this.server + '/api2/repos/' + repoID + '/file/comments/?p=' + path;
+  postComment(repoID, fileUuid, comment) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/`;
     let form = new FormData();
     form.append('comment', comment);
-    if (detail) {
-      form.append('detail', detail);
-    }
     return this._sendPostRequest(url, form);
   }
 
-  getCommentsNumber(repoID, path) {
-    const p = encodeURIComponent(path);
-    const url = this.server + '/api2/repos/' + repoID + '/file/comments/counts/?p=' + p;
-    return this.req.get(url);
+  deleteComment(repoID, fileUuid, commentID) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/`;
+    return this.req.delete(url);
   }
 
-  updateComment(repoID, commentID, resolved, detail, comment) {
-    const url = this.server + '/api2/repos/' + repoID + '/file/comments/' + commentID + '/';
+  updateComment(repoID, fileUuid, commentID, resolved, detail, comment) {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/`;
     let params = {};
-    if (resolved) params.resolved = resolved;
-    if (detail) params.detail = detail;
-    if (comment) params.comment = comment;
+    if (resolved) {
+      params.resolved = resolved;
+    }
+    if (detail) {
+      params.detail = detail;
+    }
+    if (comment) {
+      params.comment = comment;
+    }
     return this.req.put(url, params);
   }
+
+  listReplies = (repoID, fileUuid, commentID) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/`;
+    return this.req.get(url);
+  };
+
+  insertReply = (repoID, fileUuid, commentID, replyData) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/`;
+    let form = new FormData();
+    for (let key in replyData) {
+      form.append(key, replyData[key]);
+    }
+    return this._sendPostRequest(url, form);
+  };
+
+  deleteReply = (repoID, fileUuid, commentID, replyId) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/${replyId}/`;
+    return this.req.delete(url);
+  };
+
+  updateReply = (repoID, fileUuid, commentID, replyId, replyData) => {
+    let url = `${this.server}/api/v2.1/repos/${repoID}/file/${fileUuid}/comments/${commentID}/replies/${replyId}/`;
+    return this.req.put(url, replyData);
+  };
 
   // starred
   listStarredItems() {
@@ -1361,26 +1377,6 @@ class SeafileAPI {
     form.append('name', name);
     form.append('color', color);
     return this._sendPostRequest(url, form);
-  }
-
-  createRepoTags(repoID, tags) {
-    var url = this.server + '/api/v2.1/repos/' + repoID + '/repo-tags/';
-    var params = { tags };
-    return this.req.put(url, params);
-  }
-
-  deleteRepoTag(repoID, repo_tag_id) {
-    var url = this.server + '/api/v2.1/repos/' + repoID + '/repo-tags/' + repo_tag_id + '/';
-    return this.req.delete(url);
-  }
-
-  updateRepoTag(repoID, repo_tag_id, name, color) {
-    var url = this.server + '/api/v2.1/repos/' + repoID + '/repo-tags/' + repo_tag_id + '/';
-    var params = {
-      name: name,
-      color: color,
-    };
-    return this.req.put(url, params);
   }
 
   listTaggedFiles(repoID, repoTagId) {
@@ -2233,6 +2229,12 @@ class SeafileAPI {
       per_page: perPage
     };
     return this.req.get(url, { params: params });
+  }
+
+  getExdrawToken(repoID, filePath) {
+    const url = this.server + `/api/v2.1/exdraw/access-token/${repoID}/?p=${filePath}`;
+
+    return this.req.get(url);
   }
 
 }

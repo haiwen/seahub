@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { SdocWikiEditor, DocInfo } from '@seafile/sdoc-editor';
-import { gettext, username, wikiPermission, wikiId, siteRoot } from '../../utils/constants';
+import { gettext, username, wikiPermission, wikiId, siteRoot, isPro } from '../../utils/constants';
+import TextTranslation from '../../utils/text-translation';
+import Switch from '../../components/switch';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
 import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
 import RightHeader from './wiki-right-header';
+
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -22,9 +26,11 @@ const propTypes = {
   currentPageId: PropTypes.string,
   isUpdateBySide: PropTypes.bool,
   onUpdatePage: PropTypes.func,
+  updatePageLock: PropTypes.func,
+  currentPageLocked: PropTypes.bool,
   onAddWikiPage: PropTypes.func,
   style: PropTypes.object.isRequired,
-  mobileOpenSidePanel: PropTypes.func.isRequired
+  mobileOpenSidePanel: PropTypes.func.isRequired,
 };
 
 class MainPanel extends Component {
@@ -34,8 +40,11 @@ class MainPanel extends Component {
     this.state = {
       docUuid: '',
       currentPageConfig: {},
+      isDropdownMenuOpen: false,
+      showExportSubmenu: false,
     };
     this.scrollRef = React.createRef();
+    this.exportDropdownRef = React.createRef();
   }
 
   static getDerivedStateFromProps(props, state) {
@@ -60,15 +69,88 @@ class MainPanel extends Component {
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
+  handleEditorStateChange = ({ pageId, locked }) => {
+    this.forceUpdate();
+  };
+
   openHistory = () => {
     window.location.href = `${siteRoot}wiki/file_revisions/${wikiId}/?page_id=${this.state.currentPageConfig.id}`;
   };
 
+  toggleDropdownMenu = () => {
+    this.setState({
+      isDropdownMenuOpen: !this.state.isDropdownMenuOpen
+    });
+  };
+
+  getMenu = () => {
+    const list = [];
+    if (wikiPermission === 'rw' && this.state.currentPageConfig) {
+      const { HISTORY, FREEZE_PAGE, EXPORT_PAGE } = TextTranslation;
+      if (isPro) {
+        list.push(FREEZE_PAGE);
+      }
+      list.push(HISTORY);
+      list.push(EXPORT_PAGE);
+    }
+    return list;
+  };
+
+  onMenuItemClick = (item) => {
+    const { key } = item;
+    switch (key) {
+      case 'History':
+        this.openHistory();
+        break;
+      case 'ExportAsSdoc':
+        this.exportAsSdoc();
+        break;
+      case 'ExportAsMarkdown':
+        this.exportAsMarkdown();
+        break;
+    }
+  };
+
+  exportPage = (exportType) => {
+    const serviceUrl = window.app.config.serviceURL;
+    const pageId = this.state.currentPageConfig.id;
+    let exportPageUrl = serviceUrl + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/export/?export_type=' + exportType;
+    window.location.href = exportPageUrl;
+    this.setState({ showExportSubmenu: false });
+  };
+
+  exportAsSdoc = () => {
+    this.exportPage('sdoc');
+  };
+
+  exportAsMarkdown = () => {
+    this.exportPage('markdown');
+  };
+
+  onMenuItemKeyDown = (e, item) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onMenuItemClick(item);
+    }
+  };
+
+  toggleFreezeStatus = () => {
+    this.props.updatePageLock(this.state.currentPageConfig.id, !this.props.currentPageLocked);
+  };
+
+  showExportSubmenu = () => {
+    this.setState({ showExportSubmenu: true });
+  };
+
+  hideExportSubmenu = () => {
+    this.setState({ showExportSubmenu: false });
+  };
+
   render() {
-    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style } = this.props;
-    const { currentPageConfig = {} } = this.state;
+    const menuItems = this.getMenu();
+    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked } = this.props;
+    const { currentPageConfig = {}, isDropdownMenuOpen, showExportSubmenu } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
-    const isReadOnly = !(permission === 'rw');
+    const isReadOnly = currentPageLocked || !(permission === 'rw');
     return (
       <div className="wiki2-main-panel" style={style}>
         <div className='wiki2-main-panel-north'>
@@ -84,8 +166,9 @@ class MainPanel extends Component {
               <WikiTopNav
                 config={config}
                 currentPageId={this.props.currentPageId}
-                currentPageConfig={currentPageConfig}
+                currentPageLocked={currentPageLocked}
                 setCurrentPage={this.props.setCurrentPage}
+                toggleFreezeStatus={this.toggleFreezeStatus}
               />
               {isViewingFile &&
                 <DocInfo key={this.props.currentPageId} initContext={true} />
@@ -93,10 +176,79 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className='d-flex align-items-center'>
-            {(wikiPermission === 'rw' && this.state.currentPageConfig) &&
-              <div className='wiki2-file-history-button' onClick={this.openHistory} role="button">
-                <i className='sf3-font sf3-font-history' aria-hidden="true" />
-              </div>
+            {menuItems.length > 0 &&
+            <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
+              <DropdownToggle
+                tag="i"
+                id="cur-folder-more-op-toggle"
+                className='wiki2-file-history-button sf3-font-more sf3-font'
+                data-toggle="dropdown"
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+                aria-expanded={isDropdownMenuOpen}
+              >
+              </DropdownToggle>
+              <DropdownMenu>
+                {menuItems.map((menuItem, index) => {
+                  if (menuItem.key === 'Freeze page') {
+                    return <Switch
+                      key={index}
+                      checked={currentPageLocked}
+                      disabled={false}
+                      size="small"
+                      textPosition="left"
+                      className='freeze-document-switch w-100 dropdown-item'
+                      onChange={this.toggleFreezeStatus}
+                      placeholder={gettext('Freeze page')}
+                    />;
+                  } else if (menuItem.key === 'Export') {
+                    return (
+                      <div
+                        key={index}
+                        className="position-relative"
+                        onMouseEnter={this.showExportSubmenu}
+                        onMouseLeave={this.hideExportSubmenu}
+                        ref={this.exportDropdownRef}
+                      >
+                        <DropdownItem className="d-flex justify-content-between align-items-center">
+                          <span>{menuItem.value}</span>
+                          <i className="fas fa-caret-right ml-2"></i>
+                        </DropdownItem>
+                        {showExportSubmenu && (
+                          <div
+                            className="dropdown-menu show"
+                            style={{
+                              position: 'absolute',
+                              left: 'auto',
+                              right: '100%',
+                              top: 0,
+                              marginTop: 0,
+                              marginRight: '0'
+                            }}
+                          >
+                            <DropdownItem onClick={this.exportAsSdoc}>
+                              {gettext('Export as sdoc')}
+                            </DropdownItem>
+                            <DropdownItem onClick={this.exportAsMarkdown}>
+                              {gettext('Export as Markdown')}
+                            </DropdownItem>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <DropdownItem
+                        key={index}
+                        onClick={this.onMenuItemClick.bind(this, menuItem)}
+                        onKeyDown={this.onMenuItemKeyDown.bind(this, menuItem)}
+                      >{menuItem.value}
+                      </DropdownItem>
+                    );
+                  }
+                })}
+              </DropdownMenu>
+            </Dropdown>
             }
             {username && <Account />}
           </div>

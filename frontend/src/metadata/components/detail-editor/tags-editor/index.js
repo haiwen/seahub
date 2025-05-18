@@ -71,23 +71,27 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
 
   const renderEditor = useCallback(() => {
     if (!showEditor) return null;
-    const { width } = ref.current.getBoundingClientRect();
+    const { width, bottom } = ref.current.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const shouldPlaceBottom = (viewportHeight - bottom) > 400;
+
     return (
       <Popover
         target={ref}
         isOpen={true}
-        placement="bottom-end"
+        placement={shouldPlaceBottom ? 'bottom-end' : 'top-end'}
         hideArrow={true}
         fade={false}
         className="sf-metadata-property-editor-popover sf-metadata-tags-property-editor-popover"
-        boundariesElement={document.body}
+        boundariesElement="viewport"
       >
         <Editor
           saveImmediately={true}
           value={value}
-          column={{ ...field, width: Math.max(width - 2, 200) }}
+          column={{ ...field, width: Math.max(width - 2, 400) }}
           record={record}
           updateFileTags={updateFileTags}
+          showTagsAsTree={true}
         />
       </Popover>
     );

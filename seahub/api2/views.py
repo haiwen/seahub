@@ -41,7 +41,7 @@ from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
-from seahub.api2.utils import get_search_repos
+from seahub.api2.utils import get_search_repos, is_wiki_repo
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -97,16 +97,15 @@ from seahub.views import is_registered_user, check_folder_permission, \
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT, ai_search_files, \
-        RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos
-from seahub.utils import HAS_OFFICE_CONVERTER, transfer_repo
-if HAS_OFFICE_CONVERTER:
-    from seahub.utils import query_office_convert_status, prepare_converted_html
+        RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos, is_invisible_path, \
+        get_invisible_repos_info_by_username, USER_REPO_INVISIBLE_PATH_PREFIX, USER_REPO_INVISIBLE_PATH_CACHE_TIMEOUT
+from seahub.utils import transfer_repo
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
     STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
-        SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
+    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
@@ -570,6 +569,12 @@ class Search(APIView):
 
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
+        invisible_path_cache_key = normalize_cache_key(username, USER_REPO_INVISIBLE_PATH_PREFIX)
+        repo_id_to_invisible_paths = cache.get(invisible_path_cache_key)
+        if repo_id_to_invisible_paths is None:
+            repo_id_to_invisible_paths = get_invisible_repos_info_by_username(username, org_id)
+            cache.set(invisible_path_cache_key, repo_id_to_invisible_paths, USER_REPO_INVISIBLE_PATH_CACHE_TIMEOUT)
+
         if HAS_FILE_SEARCH:
             repo_id_map = {}
             # check recourse and permissin when search in a single repo
@@ -610,8 +615,9 @@ class Search(APIView):
                 results, total = [], 0
                 return Response({"total": total, "results": results, "has_more": False})
 
+            new_results = []
             for e in results:
-                e.pop('repo', None)
+                repo = e.pop('repo', None)
                 e.pop('exists', None)
                 e.pop('last_modified_by', None)
                 e.pop('name_highlight', None)
@@ -619,9 +625,20 @@ class Search(APIView):
 
                 repo_id = e['repo_id']
 
+                fullpath = e.get('fullpath', '')
+                origin_full_path = fullpath
+                origin_repo_id = repo_id
+                if repo.origin_repo_id:
+                    origin_repo_id = repo.origin_repo_id
+                    origin_full_path = os.path.join(repo.origin_path + fullpath)
+
+                if is_invisible_path(repo_id_to_invisible_paths, origin_repo_id, origin_full_path):
+                    continue
+
                 if with_permission.lower() == 'true':
                     permission = check_folder_permission(request, repo_id, '/')
                     if not permission:
+                        # it should not happen
                         continue
                     e['permission'] = permission
 
@@ -641,8 +658,10 @@ class Search(APIView):
                     params = '?p={}&size={}'.format(quote(e.get('fullpath', '').encode('utf-8')), 72)
                     e['thumbnail_url'] = thumbnail_url + params
 
+                new_results.append(e)
+
             has_more = True if total > current_page * per_page else False
-            return Response({"total": total, "results": results, "has_more": has_more})
+            return Response({"total": total, "results": new_results, "has_more": has_more})
 
         elif HAS_FILE_SEASEARCH:
             if search_repo == 'all':
@@ -650,8 +669,9 @@ class Search(APIView):
                 key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
                 repos = cache.get(key, [])
                 if not repos:
-                    repos = get_search_repos(username, org_id)[:SEARCH_REPOS_LIMIT]
+                    repos = get_search_repos(username, org_id)
                     cache.set(key, repos, RELATED_REPOS_CACHE_TIMEOUT)
+                repos = repos[: SEARCH_REPOS_LIMIT]
             else:
                 try:
                     repo = seafile_api.get_repo(search_repo)
@@ -668,8 +688,26 @@ class Search(APIView):
                 repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
 
             searched_repos, repos_map = format_repos(repos)
-            results, total = ai_search_files(keyword, searched_repos, per_page, suffixes, search_path=search_path, obj_type=obj_type)
 
+            size_range = [size_from, size_to]
+            time_range = [time_from, time_to]
+            results, total = ai_search_files(keyword, searched_repos, per_page, suffixes,
+                                             search_path=search_path, obj_type=obj_type, time_range=time_range, size_range=size_range, search_filename_only=search_filename_only)
+
+            repo_ids = {f['repo_id'] for f in results}
+            owner_map = {}
+            for repo_id in repo_ids:
+                try:
+                    if is_org_context(request):
+                        owner = seafile_api.get_org_repo_owner(repo_id)
+                    else:
+                        owner = seafile_api.get_repo_owner(repo_id)
+                except Exception as e:
+                    logger.error(e)
+                    owner = ''
+                owner_map[repo_id] = owner
+
+            new_results = []
             for f in results:
                 repo_id = f['repo_id']
                 repo = repos_map.get(repo_id, None)
@@ -681,6 +719,11 @@ class Search(APIView):
                 f['repo_name'] = repo_name
                 f.pop('_id', None)
 
+                origin_repo_id = f['repo_id']
+                origin_full_path = f['fullpath']
+                if is_invisible_path(repo_id_to_invisible_paths, origin_repo_id, origin_full_path):
+                    continue
+
                 if origin_path:
                     if not f['fullpath'].startswith(origin_path):
                         # this operation will reduce the result items, but it will not happen now
@@ -689,16 +732,17 @@ class Search(APIView):
                         f['repo_id'] = real_repo_id
                         f['fullpath'] = f['fullpath'].split(origin_path)[-1]
 
-            return Response({"total": total, "results": results, "has_more": False})
+                f['repo_owner_email'] = owner_map.get(repo_id, '')
+
+                new_results.append(f)
+
+            return Response({"total": total, "results": new_results, "has_more": False})
 
 
 class ItemsSearch(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
-
-    USER_REPOS_CACHE_PREFIX = 'user_repos_'
-    USER_REPOS_CACHE_TIMEOUT = 2 * 60 * 60
 
     def get(self, request):
         """search items"""
@@ -721,14 +765,14 @@ class ItemsSearch(APIView):
         org_id = request.user.org.org_id if is_org_context(request) else None
 
         if query_type == 'library':
-            cache_key = normalize_cache_key(username, self.USER_REPOS_CACHE_PREFIX)
-            all_repos = cache.get(cache_key)
+            cache_key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
+            all_repos = cache.get(cache_key, [])
             if not all_repos:
                 all_repos = get_search_repos(username, org_id)
-                cache.set(cache_key, all_repos, self.USER_REPOS_CACHE_TIMEOUT)
+                cache.set(cache_key, all_repos, RELATED_REPOS_CACHE_TIMEOUT)
 
-            query_result = []
             # Iterator avoids loading all memory at once
+            safe_pattern = re.escape(query_str)
             query_result = [
                 {
                     "fullpath": "/",
@@ -738,7 +782,7 @@ class ItemsSearch(APIView):
                     "name": repo_info[3]
                 }
                 for repo_info in all_repos
-                if re.search(query_str, repo_info[3], re.IGNORECASE)
+                if re.search(safe_pattern, repo_info[3], re.IGNORECASE)
             ]
         return Response({'results': query_result})
 
@@ -858,6 +902,9 @@ class Repos(APIView):
                 if r.is_virtual:
                     continue
 
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
@@ -914,6 +961,10 @@ class Repos(APIView):
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
             for r in shared_repos:
+
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
@@ -979,6 +1030,10 @@ class Repos(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in group_repos:
+
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
@@ -1024,6 +1079,10 @@ class Repos(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in public_repos:
+
+                if is_wiki_repo(r):
+                    continue
+
                 if q and q.lower() not in r.name.lower():
                     continue
 
@@ -1264,7 +1323,8 @@ class Repos(APIView):
                                                           pwd_hash_params=pwd_hash_params)
         except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return repo_id, None
 
@@ -5043,19 +5103,6 @@ class UserAvatarView(APIView):
             "mtime": get_timestamp(date_uploaded) }
         return Response(ret)
 
-class GroupAvatarView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, group_id, size, format=None):
-        url, is_default, date_uploaded = api_grp_avatar_url(group_id, int(size))
-        ret = {
-            "url": request.build_absolute_uri(url),
-            "is_default": is_default,
-            "mtime": get_timestamp(date_uploaded)}
-        return Response(ret)
-
 class RepoHistoryChange(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -5082,94 +5129,6 @@ class RepoHistoryChange(APIView):
         return HttpResponse(json.dumps(details),
                             content_type=json_content_type)
 
-
-# based on views/file.py::office_convert_query_status
-class OfficeConvertQueryStatus(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        if not HAS_OFFICE_CONVERTER:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Office converter not enabled.')
-
-        content_type = 'application/json; charset=utf-8'
-
-        ret = {'success': False}
-
-        file_id = request.GET.get('file_id', '')
-        if len(file_id) != 40:
-            ret['error'] = 'invalid param'
-        else:
-            try:
-                d = query_office_convert_status(file_id)
-                if d.error:
-                    ret['error'] = d.error
-                else:
-                    ret['success'] = True
-                    ret['status'] = d.status
-            except Exception as e:
-                logging.exception('failed to call query_office_convert_status')
-                ret['error'] = str(e)
-
-        return HttpResponse(json.dumps(ret), content_type=content_type)
-
-# based on views/file.py::view_file and views/file.py::handle_document
-class OfficeGenerateView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, repo_id, format=None):
-        username = request.user.username
-        # check arguments
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
-
-
-        path = request.GET.get('p', '/').rstrip('/')
-        commit_id = request.GET.get('commit_id', None)
-
-        if commit_id:
-            try:
-                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
-                    repo.id, commit_id, path)
-            except:
-                return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
-        else:
-            try:
-                obj_id = seafile_api.get_file_id_by_path(repo_id, path)
-            except:
-                return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
-
-        if not obj_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
-
-        # Check whether user has permission to view file and get file raw path,
-        # render error page if permission deny.
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
-                                                                      repo_id,
-                                                                      obj_id, path)
-
-        if not user_perm:
-            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to view this file.')
-
-        u_filename = os.path.basename(path)
-        filetype, fileext = get_file_type_and_ext(u_filename)
-        if filetype != DOCUMENT:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'File is not a convertable document')
-
-        ret_dict = {}
-        if HAS_OFFICE_CONVERTER:
-            err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
-            # populate return value dict
-            ret_dict['err'] = err
-            ret_dict['obj_id'] = obj_id
-        else:
-            ret_dict['filetype'] = 'Unknown'
-
-        return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
 
 class ThumbnailView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

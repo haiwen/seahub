@@ -1,356 +1,413 @@
-import React, { Component } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useDrag, useDrop } from 'react-dnd';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import NameEditPopover from '../../common/name-edit-popover';
 import NavItemIcon from '../../common/nav-item-icon';
 import PageDropdownMenu from './page-dropdownmenu';
-import { gettext, wikiPermission } from '../../../../utils/constants';
+import { gettext, wikiId, wikiPermission } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
 import Icon from '../../../../components/icon';
-import DraggedPageItem from './dragged-page-item';
 import CustomIcon from '../../custom-icon';
 import { eventBus } from '../../../../components/common/event-bus';
 import { INSERT_POSITION } from '../constants';
+import toaster from '../../../../components/toast';
+import wikiAPI from '../../../../utils/wiki-api';
+import { Utils } from '../../../../utils/utils';
 
-class PageItem extends Component {
+const PageItem = ({
+  page,
+  pageIndex,
+  pages,
+  pagesLength,
+  parentPageId,
+  duplicatePage,
+  setCurrentPage,
+  onUpdatePage,
+  onDeletePage,
+  onMovePage,
+  isOnlyOnePage,
+  pathStr,
+  toggleExpand,
+  getCurrentPageId,
+  addSiblingPage,
+  addPageInside,
+  getFoldState,
+  updateWikiConfig,
+  getClassName,
+  setClassName,
+}) => {
+  const [isShowNameEditor, setIsShowNameEditor] = useState(false);
+  const [isShowOperationDropdown, setIsShowOperationDropdown] = useState(false);
+  const [isShowInsertPage, setIsShowInsertPage] = useState(false);
+  const [isShowAddSiblingPage, setIsShowAddSiblingPage] = useState(false);
+  const [insertPosition, setInsertPosition] = useState('');
+  const [dropPosition, setDropPosition] = useState(null);
+  const [pageName, setPageName] = useState(page.name || '');
+  const [isSelected, setIsSelected] = useState(page.id === getCurrentPageId());
+  const [isMouseEntered, setIsMouseEntered] = useState(false);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isShowNameEditor: false,
-      isShowOperationDropdown: false,
-      isShowInsertPage: false,
-      isShowAddSiblingPage: false,
-      insertPosition: '',
-      pageName: props.page.name || '',
-      isSelected: props.getCurrentPageId() === props.page.id,
-      isMouseEnter: false,
-    };
-    this.pageItemRef = React.createRef();
-  }
+  const ref = useRef(null);
 
-  componentDidMount() {
-    this.unsubscribeEvent = eventBus.subscribe('update-wiki-current-page', this.updateSelected);
-  }
+  const [, drag] = useDrag(() => ({
+    type: 'wiki-page',
+    item: () => ({
+      idx: pageIndex,
+      data: { ...page, index: pageIndex },
+    }),
+  }));
 
-  componentWillUnmount() {
-    this.unsubscribeEvent();
-    this.setState = () => {
-      return;
-    };
-  }
+  const [{ isOver, canDrop }, drop] = useDrop(() => ({
+    accept: 'wiki-page',
+    hover: (item, monitor) => {
+      if (!ref.current) return;
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const height = hoverBoundingRect.bottom - hoverBoundingRect.top;
+      const clientOffset = monitor.getClientOffset();
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      if (hoverClientY < 10) {
+        setDropPosition('top');
+        item.dropPosition = 'move_above';
+      } else if (hoverClientY > height - 10) {
+        setDropPosition('bottom');
+        item.dropPosition = 'move_below';
+      } else {
+        setDropPosition(null);
+        item.dropPosition = 'move_into';
+      }
+    },
+    drop: (item, monitor) => {
+      const target = page;
+      const source = item.data;
+      const moved_page_id = source.id;
+      const target_page_id = target.id;
 
-  updateSelected = () => {
-    const isSelected = this.props.getCurrentPageId() === this.props.page.id;
-    if (isSelected !== this.state.isSelected) {
-      this.setState({ isSelected });
+      if (moved_page_id === target_page_id) return;
+
+      if (target._path && target._path.includes(moved_page_id)) {
+        toaster.danger(gettext('Cannot move parent page to child page'));
+        return;
+      }
+
+      const move_position = item.dropPosition || 'move_into';
+      wikiAPI.moveWiki2Page(wikiId, moved_page_id, target_page_id, move_position).then(res => {
+        onMovePage({ moved_page_id, target_page_id, move_position });
+        setDropPosition(null);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop()
+    })
+  }));
+
+  drag(drop(ref));
+
+  const onMouseEnter = () => {
+    setIsMouseEntered(true);
+  };
+
+  const onMouseMove = () => {
+    if (!isMouseEntered) {
+      setIsMouseEntered(true);
     }
   };
 
-  onMouseEnter = () => {
-    this.setState({ isMouseEnter: true });
-    if (this.state.isSelected) return;
+  const onMouseLeave = () => {
+    setIsMouseEntered(false);
   };
 
-  onMouseMove = () => {
-    if (!this.state.isMouseEnter) this.setState({ isMouseEnter: true });
+  const onClickPageItem = () => {
+    if (!isShowNameEditor) {
+      setCurrentPage(page.id);
+    }
   };
 
-  onMouseLeave = () => {
-    this.setState({ isMouseEnter: false });
-    if (this.state.isSelected) return;
+  const onChangeName = (name) => {
+    setPageName(name);
   };
 
-  toggleNameEditor = (e) => {
-    if (e) e.stopPropagation();
-    this.setState({ isShowNameEditor: !this.state.isShowNameEditor }, () => {
-      if (!this.state.isShowNameEditor) {
-        this.savePageProperties();
+  const savePageProperties = useCallback(() => {
+    const { name, id } = page;
+    const currentPageName = pageName.trim();
+    if (currentPageName !== name) {
+      const isUpdateBySide = true;
+      onUpdatePage(id, { name: currentPageName }, isUpdateBySide);
+    }
+  }, [page, pageName, onUpdatePage]);
+
+  const toggleNameEditor = useCallback((e) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setIsShowNameEditor(!isShowNameEditor, () => {
+      if (!isShowNameEditor) {
+        savePageProperties();
       }
     });
+  }, [isShowNameEditor, savePageProperties]);
+
+  const changeItemFreeze = (isFreeze) => {
+    if (isFreeze) {
+      ref.current.classList.add('wiki-page-freezed');
+    } else {
+      ref.current.classList.remove('wiki-page-freezed');
+    }
   };
 
-  toggleInsertPage = () => {
-    this.setState({ isShowInsertPage: !this.state.isShowInsertPage });
-  };
+  const toggleDropdown = useCallback(() => {
+    const isShow = !isShowOperationDropdown;
+    setIsShowOperationDropdown(isShow);
+    changeItemFreeze(isShow);
+  }, [isShowOperationDropdown]);
 
-  toggleInsertSiblingPage = (position) => {
+  const toggleInsertSiblingPage = useCallback((position) => {
     let insertPosition = null;
     if (position === INSERT_POSITION.BELOW || position === INSERT_POSITION.ABOVE) {
       insertPosition = position;
     }
-    this.setState({
-      insertPosition,
-      isShowAddSiblingPage: !this.state.isShowAddSiblingPage,
-    });
-  };
+    setInsertPosition(insertPosition);
+    setIsShowAddSiblingPage(!isShowAddSiblingPage);
+  }, [isShowAddSiblingPage]);
 
-  savePageProperties = () => {
-    const { name, id } = this.props.page;
-    const pageName = this.state.pageName.trim();
-    if (pageName !== name) {
-      const isUpdateBySide = true;
-      this.props.onUpdatePage(id, { name: pageName }, isUpdateBySide);
+  const toggleInsertPage = useCallback(() => {
+    setIsShowInsertPage(!isShowInsertPage);
+  }, [isShowInsertPage]);
+
+  const onAddNewPage = useCallback((newPage) => {
+    const folded = getFoldState(page.id);
+    if (folded) {
+      toggleExpand(page.id);
     }
-  };
+    addPageInside(Object.assign({ parentPageId: page.id }, newPage));
+  }, [page, addPageInside, getFoldState, toggleExpand]);
 
-  onChangeName = (newName) => {
-    this.setState({ pageName: newName });
-  };
+  const onAddSiblingPage = useCallback((newPage) => {
+    addSiblingPage(newPage, parentPageId, insertPosition, page.id, toggleInsertSiblingPage);
+  }, [page, parentPageId, addSiblingPage, insertPosition, toggleInsertSiblingPage]);
 
-  toggleDropdown = () => {
-    const isShowOperationDropdown = !this.state.isShowOperationDropdown;
-    this.setState({ isShowOperationDropdown });
-    this.changeItemFreeze(isShowOperationDropdown);
-  };
-
-  changeItemFreeze = (isFreeze) => {
-    if (isFreeze) {
-      this.pageItemRef.classList.add('wiki-page-freezed');
-    } else {
-      this.pageItemRef.classList.remove('wiki-page-freezed');
+  const updateSelected = useCallback(() => {
+    const isCurrentSelected = getCurrentPageId() === page.id;
+    if (isSelected !== isCurrentSelected) {
+      setIsSelected(isCurrentSelected);
     }
-  };
+  }, [page, isSelected, getCurrentPageId]);
 
-  setDocUuid = (docUuid) => {
-    window.seafile['docUuid'] = docUuid;
-  };
+  useEffect(() => {
+    const unsubscribeUpdateCurrentPage = eventBus.subscribe('update-wiki-current-page', updateSelected);
 
-  getPageChildrenStyle = () => {
-    const folded = this.props.getFoldState(this.props.page.id);
-    return folded ? { height: 0, overflowY: 'hidden' } : { height: 'auto', overflowY: 'visible' };
-  };
+    return () => {
+      unsubscribeUpdateCurrentPage();
+    };
+  }, [updateSelected]);
 
-  onClickPageChildren = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-  };
-
-  renderPage = (page, index, pagesLength, isOnlyOnePage) => {
+  const renderPage = (page, index, pagesLength, isOnlyOnePage) => {
     if (!page) return;
-    const { pages, pathStr } = this.props;
-    const id = page.id;
-    if (!pages.find(item => item.id === id)) return;
+    if (!pages.find(item => item.id === page.id)) return;
     return (
-      <DraggedPageItem
-        key={id}
-        pagesLength={pagesLength}
-        isOnlyOnePage={isOnlyOnePage}
-        page={Object.assign({}, pages.find(item => item.id === id), page)}
+      <PageItem
+        key={page.id}
+        page={Object.assign({}, pages.find(item => item.id === page.id), page)}
         pageIndex={index}
-        parentPageId={this.props.page.id}
-        duplicatePage={this.props.duplicatePage}
-        setCurrentPage={this.props.setCurrentPage}
-        onUpdatePage={this.props.onUpdatePage}
-        onDeletePage={this.props.onDeletePage}
-        onMovePage={this.props.onMovePage}
-        updateWikiConfig={this.props.updateWikiConfig}
         pages={pages}
+        pagesLength={pagesLength}
+        parentPageId={page.id}
+        isOblyOnePage={isOnlyOnePage}
+        duplicatePage={duplicatePage}
+        setCurrentPage={setCurrentPage}
+        onUpdatePage={onUpdatePage}
+        onDeletePage={onDeletePage}
+        onMovePage={onMovePage}
+        updateWikiConfig={updateWikiConfig}
         pathStr={pathStr + '-' + page.id}
-        getCurrentPageId={this.props.getCurrentPageId}
-        addPageInside={this.props.addPageInside}
-        getFoldState={this.props.getFoldState}
-        toggleExpand={this.props.toggleExpand}
-        setClassName={this.props.setClassName}
-        getClassName={this.props.getClassName}
-        layerDragProps={this.props.layerDragProps}
-        addSiblingPage={this.props.addSiblingPage}
+        getCurrentPageId={getCurrentPageId}
+        addPageInside={addPageInside}
+        addSiblingPage={addSiblingPage}
+        getFoldState={getFoldState}
+        toggleExpand={toggleExpand}
+        setClassName={setClassName}
+        getClassName={getClassName}
       />
     );
   };
 
-  toggleExpand = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-    this.props.toggleExpand(this.props.page.id);
-    this.forceUpdate();
+  const childNumber = Array.isArray(page.children) ? page.children.length : 0;
+  const customIcon = page.icon;
+  const navItemId = `page-editor-${page.id}`;
+  const pageChildrenStyle = getFoldState(page.id) ? {
+    height: 0, overflowY: 'hidden'
+  } : {
+    height: 'auto', overflowY: 'visible'
   };
 
-  onClickPageItem = () => {
-    if (!this.state.isShowNameEditor) {
-      this.props.setCurrentPage(this.props.page.id);
-    }
-  };
-
-  onAddNewPage = (newPage) => {
-    const { page } = this.props;
-    const folded = this.props.getFoldState(page.id);
-    if (folded) {
-      this.props.toggleExpand(page.id);
-    }
-    this.props.addPageInside(Object.assign({ parentPageId: this.props.page.id }, newPage));
-  };
-
-  onAddSiblingPage = (newPage) => {
-    const { page } = this.props;
-    this.props.addSiblingPage(newPage, this.props.parentPageId, this.state.insertPosition, page.id, this.toggleInsertSiblingPage);
-  };
-
-  getPageClassName = () => {
-    const { isOver, canDrop, layerDragProps } = this.props;
-    const isOverPage = isOver && canDrop;
-    const readonly = wikiPermission === 'r' || wikiPermission === 'public';
-    if (!isOverPage || ! layerDragProps || !layerDragProps.clientOffset) {
-      return classnames('wiki-page-item', { 'selected-page': this.state.isSelected }, { 'readonly': readonly });
-    }
-    let y = layerDragProps.clientOffset.y;
-    let top = this.pageItemRef.getBoundingClientRect().y;
-    const className = classnames(
-      'wiki-page-item',
-      { 'dragged-page-over': (top + 10 < y && y < top + 30) },
-      { 'page-can-drop-top': (top + 10 > y) },
-      { 'page-can-drop-bottom': (top + 30 < y) },
-      { 'selected-page': this.state.isSelected },
-      { 'readonly': readonly },
-    );
-    this.props.setClassName(className);
-    return className;
-  };
-
-  render() {
-    const { connectDragSource, connectDragPreview, connectDropTarget, page, pagesLength, isOnlyOnePage, pathStr } = this.props;
-    const { isShowNameEditor, pageName, isSelected, isMouseEnter } = this.state;
-    if (isSelected) this.setDocUuid(page.docUuid);
-
-    let navItemId = `page-editor-${page.id}`;
-    let childNumber = Array.isArray(page.children) ? page.children.length : 0;
-    const customIcon = page.icon;
-    const folded = this.props.getFoldState(page.id);
-
-    if (wikiPermission === 'rw') {
-      return (
-        <div>
-          {connectDragSource(connectDropTarget(connectDragPreview(
+  if (wikiPermission === 'rw') {
+    return (
+      <>
+        <div
+          id={navItemId}
+          ref={ref}
+          className={classnames('wiki-page-item', {
+            'selected-page': isSelected,
+            'dragged-page-over': isOver && canDrop && !dropPosition,
+            'page-can-drop-top': isOver && canDrop && dropPosition === 'top',
+            'page-can-drop-bottom': isOver && canDrop && dropPosition === 'bottom',
+          })}
+          onMouseEnter={onMouseEnter}
+          onMouseMove={onMouseMove}
+          onMouseLeave={onMouseLeave}
+        >
+          <div className="wiki-page-item-main" onClick={onClickPageItem}>
             <div
-              className={this.getPageClassName()}
-              ref={ref => this.pageItemRef = ref}
-              onMouseEnter={this.onMouseEnter}
-              onMouseMove={this.onMouseMove}
-              onMouseLeave={this.onMouseLeave}
-              id={navItemId}
+              className="wiki-page-content"
+              style={pathStr ? {
+                marginLeft: (pathStr.split('-').length - 1) * 24
+              } : {}}
             >
-              <div className="wiki-page-item-main" onClick={this.onClickPageItem}>
-                <div className='wiki-page-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
-                  {childNumber === 0 && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'file'} disable={true} />)
-                  }
-                  {(!isMouseEnter && childNumber > 0) && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'files'} disable={true} />)}
-                  {(isMouseEnter && childNumber > 0) &&
-                    <div className='nav-item-icon' onClick={this.toggleExpand} role='button'>
-                      <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`} aria-hidden="true"></i>
-                    </div>
-                  }
-                  <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
-                  {isShowNameEditor && (
-                    <NameEditPopover
-                      oldName={pageName}
-                      targetId={navItemId}
-                      onChangeName={this.onChangeName}
-                      toggleEditor={this.toggleNameEditor}
-                    />
-                  )}
+              {childNumber === 0 && (customIcon ? (
+                <CustomIcon icon={customIcon} />
+              ) : (
+                <NavItemIcon symbol={'file'} disable={true} />
+              ))}
+              {(!isMouseEntered && childNumber > 0) && (customIcon ? (
+                <CustomIcon icon={customIcon} />
+              ) : (
+                <NavItemIcon symbol={'file'} disable={true} />
+              ))}
+              {(isMouseEntered && childNumber > 0) && (
+                <div role="button" className="nav-item-icon" onClick={() => toggleExpand(page.id)}>
+                  <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
                 </div>
-              </div>
-              <div className="d-none d-md-flex">
-                <div className="more-wiki-page-operation" onClick={this.toggleDropdown}>
-                  <Icon symbol={'more-level'} />
-                  {this.state.isShowOperationDropdown &&
-                    <PageDropdownMenu
-                      page={page}
-                      pages={this.props.pages}
-                      pagesLength={pagesLength}
-                      isOnlyOnePage={isOnlyOnePage}
-                      toggle={this.toggleDropdown}
-                      toggleNameEditor={this.toggleNameEditor}
-                      duplicatePage={this.props.duplicatePage}
-                      onDeletePage={this.props.onDeletePage.bind(this, page.id)}
-                      toggleInsertSiblingPage={this.toggleInsertSiblingPage}
-                    />
-                  }
-                </div>
-                <div className="wiki-add-page-btn" onClick={this.toggleInsertPage} role='button'>
-                  <span className='sf3-font sf3-font-enlarge' aria-hidden="true"></span>
-                </div>
-              </div>
-              {this.state.isShowInsertPage &&
-                <AddNewPageDialog
-                  toggle={this.toggleInsertPage}
-                  onAddNewPage={this.onAddNewPage}
-                  title={gettext('Add page inside')}
-                  page={this.props.page}
+              )}
+              <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
+              {isShowNameEditor && (
+                <NameEditPopover
+                  oldName={pageName}
+                  target_page_id={navItemId}
+                  onChangeName={onChangeName}
+                  toggleEditor={toggleNameEditor}
                 />
-              }
-              {this.state.isShowAddSiblingPage &&
-                <AddNewPageDialog
-                  toggle={this.toggleInsertSiblingPage}
-                  onAddNewPage={this.onAddSiblingPage}
-                  title={gettext('Add page')}
-                  insertPosition={this.state.insertPosition}
-                  page={this.props.page}
+              )}
+            </div>
+          </div>
+          <div className="d-none d-md-flex">
+            <div className="more-wiki-page-operation" onClick={toggleDropdown}>
+              <Icon symbol="more-level" />
+              {isShowOperationDropdown && (
+                <PageDropdownMenu
+                  page={page}
+                  pages={pages}
+                  pagesLength={pagesLength}
+                  isOnlyOnePage={isOnlyOnePage}
+                  toggle={toggleDropdown}
+                  toggleNameEditor={toggleNameEditor}
+                  duplicatePage={duplicatePage}
+                  onDeletePage={() => onDeletePage(page.id)}
+                  toggleInsertSiblingPage={toggleInsertSiblingPage}
                 />
-              }
+              )}
             </div>
-          )))}
-          <div className="page-children" style={this.getPageChildrenStyle()} onClick={this.onClickPageChildren}>
-            {page.children &&
-              page.children.map((item, index) => {
-                return this.renderPage(item, index, pagesLength, isOnlyOnePage);
-              })
-            }
-          </div>
-        </div>
-      );
-    } else {
-      // permission is 'r' or 'public'
-      return (
-        <div>
-          <div
-            className={this.getPageClassName()}
-            ref={ref => this.pageItemRef = ref}
-            onMouseEnter={this.onMouseEnter}
-            onMouseMove={this.onMouseMove}
-            onMouseLeave={this.onMouseLeave}
-            id={navItemId}
-          >
-            <div className="wiki-page-item-main" onClick={this.onClickPageItem}>
-              <div className='wiki-page-content' style={pathStr ? { marginLeft: `${(pathStr.split('-').length - 1) * 24}px` } : {}}>
-                {childNumber === 0 && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'file'} disable={true} />)
-                }
-                {(!isMouseEnter && childNumber > 0) && (customIcon ? <CustomIcon icon={customIcon} /> : <NavItemIcon symbol={'files'} disable={true} />)}
-                {(isMouseEnter && childNumber > 0) &&
-                  <div className='nav-item-icon' onClick={this.toggleExpand} role='button'>
-                    <i className={`sf3-font-down sf3-font ${folded ? 'rotate-270' : ''}`} aria-hidden="true"></i>
-                  </div>
-                }
-                <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
-              </div>
+            <div className="wiki-add-page-btn" onClick={toggleInsertPage} role='button'>
+              <span className='sf3-font sf3-font-enlarge' aria-hidden="true"></span>
             </div>
-            <div className="d-none d-md-flex"></div>
           </div>
-          <div className="page-children" style={this.getPageChildrenStyle()} onClick={this.onClickPageChildren}>
-            {page.children &&
-              page.children.map((item, index) => {
-                return this.renderPage(item, index, pagesLength, isOnlyOnePage);
-              })
-            }
-          </div>
+          {isShowInsertPage && (
+            <AddNewPageDialog
+              toggle={toggleInsertPage}
+              onAddNewPage={onAddNewPage}
+              title={gettext('Add page inside')}
+              page={page}
+            />
+          )}
+          {isShowAddSiblingPage && (
+            <AddNewPageDialog
+              toggle={toggleInsertSiblingPage}
+              onAddNewPage={onAddSiblingPage}
+              title={gettext('Add page')}
+              insertPosition={insertPosition}
+              page={page}
+            />
+          )}
         </div>
-      );
-    }
+        <div
+          className="page-children"
+          style={pageChildrenStyle}
+          onClick={(e) => {
+            e.stopPropagation();
+            e.nativeEvent.stopImmediatePropagation();
+          }}
+        >
+          {page.children && page.children.map((item, index) => renderPage(item, index, pagesLength, isOnlyOnePage))}
+        </div>
+      </>
+    );
   }
-}
+
+  return (
+    <>
+      <div
+        id={navItemId}
+        ref={ref}
+        className={classnames('wiki-page-item readonly', {
+          'selected-page': isSelected,
+          'dragged-page-over': isOver && canDrop,
+          'page-can-drop-top': isOver && canDrop && dropPosition === 'top',
+          'page-can-drop-bottom': isOver && canDrop && dropPosition === 'bottom',
+        })}
+        onMouseEnter={onMouseEnter}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
+      >
+        <div className="wiki-page-item-main" onClick={onClickPageItem}>
+          <div
+            className="wiki-page-content"
+            style={pathStr ? {
+              marginLeft: (pathStr.split('-').length - 1) * 24,
+            } : {}}
+          >
+            {childNumber === 0 && (customIcon ? (
+              <CustomIcon icon={customIcon} />
+            ) : (
+              <NavItemIcon symbol="file" disable={true} />
+            ))}
+            {(!isMouseEntered && childNumber > 0) && (customIcon ? (
+              <CustomIcon icon={customIcon} />
+            ) : (
+              <NavItemIcon symbol="files" disable={true} />
+            ))}
+            {(isMouseEntered && childNumber > 0) && (
+              <div role="button" className="nav-item-icon" onClick={() => toggleExpand(page.id)}>
+                <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
+              </div>
+            )}
+            <span className="wiki-page-title text-truncate">{page.name}</span>
+          </div>
+        </div>
+        <div className="d-none d-md-flex"></div>
+      </div>
+      <div
+        className="page-children"
+        style={pageChildrenStyle}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.nativeEvent.stopImmediatePropagation();
+        }}
+      >
+        {page.children && page.children.map((item, index) => renderPage(item, index, pagesLength, isOnlyOnePage))}
+      </div>
+    </>
+  );
+};
 
 PageItem.propTypes = {
-  isOver: PropTypes.bool,
-  canDrop: PropTypes.bool,
-  isDragging: PropTypes.bool,
-  draggedPage: PropTypes.object,
   page: PropTypes.object,
   pages: PropTypes.array,
   pageIndex: PropTypes.number,
   pagesLength: PropTypes.number,
-  connectDragSource: PropTypes.func,
-  connectDragPreview: PropTypes.func,
-  connectDropTarget: PropTypes.func,
+  parentPageId: PropTypes.string,
+  addSiblingPage: PropTypes.func,
   duplicatePage: PropTypes.func,
   setCurrentPage: PropTypes.func,
   onUpdatePage: PropTypes.func,

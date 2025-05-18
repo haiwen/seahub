@@ -39,10 +39,10 @@
   min-height: 34px;
 }
 
-.dirent-detail-item .dirent-detail-item-value:hover {
+.dirent-detail-item .dirent-detail-item-value.editable:hover {
   background-color: #F5F5F5;
   border-radius: 3px;
-  cursor: default;
+  cursor: pointer;
 }
 
 .dirent-detail-item .dirent-detail-item-value.editable:hover {

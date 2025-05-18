@@ -44,6 +44,7 @@ export const EVENT_BUS_TYPE = {
   MOVE_RECORD: 'move_record',
   DELETE_RECORDS: 'delete_records',
   UPDATE_RECORD_DETAILS: 'update_record_details',
+  UPDATE_FACE_RECOGNITION: 'update_face_recognition',
   GENERATE_DESCRIPTION: 'generate_description',
   OCR: 'ocr',
 
@@ -86,6 +87,7 @@ export const EVENT_BUS_TYPE = {
   // map
   MODIFY_MAP_TYPE: 'modify_map_type',
   MAP_VIEW: 'map_view',
+  CLEAR_MAP_INSTANCE: 'clear_map_instance',
 
   // tag file
   MOVE_TAG_FILE: 'move_tag_file',
@@ -98,12 +100,14 @@ export const EVENT_BUS_TYPE = {
   DELETE_TAG_FILES: 'delete_tag_files',
   SELECT_TAG_FILES: 'select_tag_files',
   UNSELECT_TAG_FILES: 'unselect_tag_files',
+  MODIFY_TAG_FILES_SORT: 'modify_tag_files_sort',
 
   // tags
   SELECT_TAGS: 'select_tags',
   DELETE_TAGS: 'delete_tags',
   MERGE_TAGS: 'merge_tags',
   NEW_SUB_TAG: 'new_sub_tag',
+  MODIFY_TAGS_SORT: 'modify_tags_sort',
 
   // file
   FILE_HISTORY: 'file_history',

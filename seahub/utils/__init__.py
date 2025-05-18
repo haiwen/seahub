@@ -11,11 +11,10 @@ import logging
 import hashlib
 import tempfile
 import configparser
-import mimetypes
 import contextlib
 import json
 from datetime import datetime
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse
 
 from constance import config
 import seaserv
@@ -26,7 +25,7 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template import loader
 from django.utils.translation import gettext as _
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from urllib.parse import quote
 from django.utils.html import escape
 from django.utils.timezone import make_naive, is_aware
@@ -39,6 +38,7 @@ from seahub.settings import MEDIA_URL, LOGO_PATH, \
         MEDIA_ROOT, CUSTOM_LOGO_PATH
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.db_api import SeafileDB
+from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, ONLYOFFICE_FILE_EXTENSION
 
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
@@ -77,15 +77,7 @@ else:
     seafevents_api = RPCProxy()
 
 def is_pro_version():
-    if seahub.settings.DEBUG:
-        if hasattr(seahub.settings, 'IS_PRO_VERSION') \
-            and seahub.settings.IS_PRO_VERSION:
-            return True
-
-    try:
-        return bool(seafevents_api.is_pro())
-    except AttributeError:
-        return False
+    return getattr(seahub.settings, 'IS_PRO_VERSION', False) is True
 
 def is_cluster_mode():
     cfg = configparser.ConfigParser()
@@ -120,11 +112,6 @@ def is_db_sqlite3():
 
 IS_DB_SQLITE3 = is_db_sqlite3()
 
-try:
-    from seahub.settings import OFFICE_CONVERTOR_ROOT
-except ImportError:
-    OFFICE_CONVERTOR_ROOT = ''
-
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
 
@@ -141,9 +128,9 @@ PREVIEW_FILEEXT = {
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
     #'3D': ('stl', 'obj'),
-    XMIND: ('xmind',),
     SEADOC: ('sdoc',),
     TLDRAW: ('draw',),
+    EXCALIDRAW: ('exdraw',),
 }
 
 def get_non_sdoc_file_exts():
@@ -433,6 +420,12 @@ def get_file_type_and_ext(filename):
     otherwise, return unknown type.
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
+
+    if fileExt == 'csv' \
+            and ENABLE_ONLYOFFICE \
+            and fileExt in ONLYOFFICE_FILE_EXTENSION:
+        return (SPREADSHEET, fileExt)
+
     if fileExt in get_conf_text_ext():
         return (TEXT, fileExt)
 
@@ -697,7 +690,7 @@ if EVENTS_CONFIG_FILE:
         """Return log events list by start/end timestamp. (If no logs, return 'None')
         """
         with _get_seafevents_session() as session:
-            events = seafevents_api.get_event_log_by_time(session, log_type, tstart, tend)
+            events = seafevents_api.get_events_by_time(session, log_type, tstart, tend)
 
         return events if events else None
 
@@ -743,6 +736,12 @@ if EVENTS_CONFIG_FILE:
         """
         with _get_seafevents_session() as session:
             events = seafevents_api.get_file_audit_events(session, email, org_id, repo_id, start, limit)
+
+        return events if events else None
+
+    def get_log_events_by_users_and_repos(type, emails, repo_ids, start, limit):
+        with _get_seafevents_session() as session:
+            events = seafevents_api.get_events_by_users_and_repos(session, type, emails, repo_ids, start, limit)
 
         return events if events else None
 
@@ -899,6 +898,8 @@ else:
         pass
     def get_file_audit_events():
         pass
+    def get_log_events_by_users_and_repos():
+        pass
     def get_file_ops_stats_by_day():
         pass
     def get_org_file_ops_stats_by_day():
@@ -1000,6 +1001,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
     """
 
     # get logo path
+    from seahub.utils.mail import SmimeEmailMessage
     logo_path = LOGO_PATH
     custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
     if os.path.exists(custom_logo_file):
@@ -1019,9 +1021,10 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
         if reply_to is not None:
             headers['Reply-to'] = reply_to
 
-    msg = EmailMessage(subject, t.render(con_context), from_email,
+    msg = SmimeEmailMessage(subject, t.render(con_context), from_email,
                        to_email, headers=headers)
     msg.content_subtype = "html"
+
     msg.send()
 
 def gen_dir_share_link(token):
@@ -1153,77 +1156,8 @@ if EVENTS_CONFIG_FILE:
 
     FILE_AUDIT_ENABLED = check_file_audit_enabled()
 
-# office convert related
-def check_office_converter_enabled():
-    if OFFICE_CONVERTOR_ROOT:
-        return True
-    return False
-
-HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 OFFICE_PREVIEW_MAX_PAGES = 50
-
-if HAS_OFFICE_CONVERTER:
-
-    import time
-    import requests
-    import jwt
-
-    def add_office_convert_task(file_id, doctype, raw_path):
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token}
-        params = {'file_id': file_id, 'doctype': doctype, 'raw_path': raw_path}
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/add-task')
-        requests.get(url, params, headers=headers)
-        return {'exists': False}
-
-    def query_office_convert_status(file_id, doctype):
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token}
-        params = {'file_id': file_id, 'doctype': doctype}
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/query-status')
-        d = requests.get(url, params, headers=headers)
-        d = d.json()
-        ret = {}
-        if 'error' in d:
-            ret['error'] = d['error']
-            ret['status'] = 'ERROR'
-        else:
-            ret['success'] = True
-            ret['status'] = d['status']
-        return ret
-
-    def get_office_converted_page(path, static_filename, file_id):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/get-converted-page')
-        payload = {'exp': int(time.time()) + 300, }
-        token = jwt.encode(payload, seahub.settings.SECRET_KEY, algorithm='HS256')
-        headers = {"Authorization": "Token %s" % token}
-        params = {'static_filename': static_filename, 'file_id': file_id}
-        try:
-            ret = requests.get(url, params, headers=headers)
-        except urllib.error.HTTPError as e:
-            raise Exception(e)
-
-        content_type = ret.headers.get('content-type', None)
-        if content_type is None:
-            dummy, ext = os.path.splitext(os.path.basename(path))
-            content_type = mimetypes.types_map.get(ext, 'application/octet-stream')
-
-        resp = HttpResponse(ret, content_type=content_type)
-        if 'last-modified' in ret.headers:
-            resp['Last-Modified'] = ret.headers.get('last-modified')
-
-        return resp
-
-    def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
-        try:
-            add_office_convert_task(obj_id, doctype, raw_path)
-        except Exception as e:
-            logging.exception('failed to add_office_convert_task: %s' % e)
-            return _('Internal Server Error')
-        return None
 
 # search realted
 HAS_FILE_SEARCH = False
@@ -1565,3 +1499,17 @@ def transfer_repo(repo_id, new_owner, is_share, org_id=None):
                 seafile_api.transfer_repo_to_group(repo_id, group_id, PERMISSION_READ_WRITE)
             else:
                 seafile_api.set_repo_owner(repo_id, new_owner)
+
+
+def uuid_str_to_32_chars(file_uuid):
+    if len(file_uuid) == 36:
+        return uuid.UUID(file_uuid).hex
+    else:
+        return file_uuid
+
+
+def uuid_str_to_36_chars(file_uuid):
+    if len(file_uuid) == 32:
+        return str(uuid.UUID(file_uuid))
+    else:
+        return file_uuid

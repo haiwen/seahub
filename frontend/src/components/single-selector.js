@@ -56,7 +56,7 @@ class Selector extends Component {
   selectItem = (e, targetItem) => {
     e.stopPropagation();
     if (this.props.operationBeforeSelect) {
-      this.props.operationBeforeSelect();
+      this.props.operationBeforeSelect(targetItem);
     } else {
       this.props.selectOption(targetItem);
     }
@@ -73,8 +73,8 @@ class Selector extends Component {
         <div onClick={this.onToggleClick}>
           {customSelectorToggle ? customSelectorToggle : (
             <span className="cur-option">
-              {currentSelectedOption.text}
-              {isDropdownToggleShown && <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>}
+              {currentSelectedOption ? currentSelectedOption.text : ''}
+              {isDropdownToggleShown && <i className="sf3-font sf3-font-down ml-1 toggle-icon"></i>}
             </span>
           )}
         </div>

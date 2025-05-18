@@ -8,28 +8,29 @@ import { Header, Body } from '../detail';
 import FileDetails from '../dirent-details/file-details';
 import { MetadataContext } from '../../../metadata';
 import { MetadataDetailsProvider } from '../../../metadata/hooks';
-import { AI, Settings } from '../../../metadata/components/metadata-details';
+import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
+import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
+import Loading from '../../loading';
 
 import './index.css';
+
+const { enableSeafileAI } = window.app.config;
 
 const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
+  const [isFetching, setIsFetching] = useState(true);
 
   const isView = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.has('view');
   }, []);
 
-  const isTag = useMemo(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.has('tag');
-  }, []);
-
   useEffect(() => {
     const fullPath = path.split('/').pop() === dirent?.name ? path : Utils.joinPath(path, dirent?.name || '');
     seafileAPI.getFileInfo(repoID, fullPath).then(res => {
       setDirentDetail(res.data);
+      setIsFetching(false);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -37,7 +38,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   }, [repoID, path, dirent]);
 
   useEffect(() => {
-    if (isView || isTag) return;
+    if (isView) return;
 
     let isExistContext = true;
     if (!window.sfMetadataContext) {
@@ -75,17 +76,20 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent}>
           {onClose && (
             <>
-              <AI />
-              <Settings />
+              {enableSeafileAI && <AIIcon />}
+              <SettingsIcon />
             </>
           )}
         </Header>
         <Body>
-          {dirent && direntDetail && (
-            <div className="detail-content">
-              <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
-            </div>
-          )}
+          {isFetching ?
+            <div className="detail-content"><Loading /></div>
+            :
+            dirent && direntDetail && (
+              <div className="detail-content">
+                <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
+              </div>
+            )}
         </Body>
       </div>
     </MetadataDetailsProvider>

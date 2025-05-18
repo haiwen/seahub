@@ -5,6 +5,8 @@
   flex-wrap: wrap;
   flex: 1;
   align-content: flex-start;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .grid-item {
@@ -84,10 +86,6 @@
 
 .grid-drop-show {
   background: #f8f8f8;
-}
-
-.grid-drop-show * {
-  pointer-events: none;
 }
 
 .selection-box {

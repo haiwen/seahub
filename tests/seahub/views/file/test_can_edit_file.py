@@ -128,16 +128,6 @@ class CanEditFileTest(BaseTestCase):
         assert not self.can_edit_in_encrypted_repo_normal_size(file_name)
         assert not self.can_edit_in_encrypted_repo_exceeded_size(file_name)
 
-    @patch('seahub.views.file.HAS_OFFICE_CONVERTER', True)
-    def test_doc_has_office_converter(self):
-
-        file_name = '123.doc'
-
-        assert not self.can_edit_in_normal_repo_normal_size(file_name)
-        assert not self.can_edit_in_normal_repo_exceeded_size(file_name)
-        assert not self.can_edit_in_encrypted_repo_normal_size(file_name)
-        assert not self.can_edit_in_encrypted_repo_exceeded_size(file_name)
-
     @patch('seahub.views.file.ENABLE_ONLYOFFICE', True)
     @patch('seahub.views.file.ONLYOFFICE_FILE_EXTENSION',
             ONLYOFFICE_FILE_EXTENSION)
@@ -168,16 +158,6 @@ class CanEditFileTest(BaseTestCase):
         assert not self.can_edit_in_encrypted_repo_exceeded_size(file_name)
 
     def test_docx(self):
-
-        file_name = '123.docx'
-
-        assert not self.can_edit_in_normal_repo_normal_size(file_name)
-        assert not self.can_edit_in_normal_repo_exceeded_size(file_name)
-        assert not self.can_edit_in_encrypted_repo_normal_size(file_name)
-        assert not self.can_edit_in_encrypted_repo_exceeded_size(file_name)
-
-    @patch('seahub.views.file.HAS_OFFICE_CONVERTER', True)
-    def test_docx_has_office_converter(self):
 
         file_name = '123.docx'
 

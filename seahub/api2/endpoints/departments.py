@@ -66,12 +66,6 @@ class Departments(APIView):
                 if not is_group_member(department.id, username):
                     continue
 
-            try:
-                avatar_url, is_default, date_uploaded = api_grp_avatar_url(department.id, avatar_size)
-            except Exception as e:
-                logger.error(e)
-                avatar_url = get_default_group_avatar_url()
-
             created_at = timestamp_to_isoformat_timestr(department.timestamp)
 
             department_info = {
@@ -81,7 +75,6 @@ class Departments(APIView):
                 "name": department.group_name,
                 "owner": department.creator_name,
                 "created_at": created_at,
-                "avatar_url": request.build_absolute_uri(avatar_url),
             }
 
             result.append(department_info)

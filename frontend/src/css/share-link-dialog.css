@@ -117,7 +117,8 @@
 }
 
 .tip {
-  color: #808080;
+  color: #666;
+  font-size: 13px;
   margin-bottom: 1rem;
 }
 

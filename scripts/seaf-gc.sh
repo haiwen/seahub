@@ -5,13 +5,11 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
-default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_conf_dir=${TOPDIR}/conf
 seaf_gc=${INSTALLPATH}/seafile/bin/seafserv-gc
 seaf_gc_opts=""
 pro_pylibs_dir=${INSTALLPATH}/pro/python
-IS_PRO_SEAFEVENTS=`awk '/is_pro/{getline;print $2;exit}' ${pro_pylibs_dir}/seafevents/seafevents_api.py`
 
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
@@ -20,7 +18,7 @@ export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
 script_name=$0
 function usage () {
     echo "usage : "
-    if [[ $IS_PRO_SEAFEVENTS = "True" ]]; then
+    if [[ $IS_PRO_VERSION = "true" ]]; then
         echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [--rm-fs | -R] [repo-id1] [repo-id2]"
     else
         echo "$(basename ${script_name}) [--dry-run | -D] [--rm-deleted | -r] [repo-id1] [repo-id2]"
@@ -125,7 +123,6 @@ function run_seaf_gc () {
     echo "Starting seafserv-gc, please wait ..."
 
     LD_LIBRARY_PATH=$SEAFILE_LD_LIBRARY_PATH ${seaf_gc} \
-        -c "${default_ccnet_conf_dir}" \
         -d "${default_seafile_data_dir}" \
         -F "${default_conf_dir}" \
         ${seaf_gc_opts}

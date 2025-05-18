@@ -23,6 +23,7 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250313" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20250218" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
@@ -57,7 +58,9 @@
             avatarURL: '{{ avatar_url }}',
             cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
-
+            enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+            enableSeafileOCR: {% if enable_seafile_ocr %} true {% else %} false {% endif %},
+            notificationServerUrl: '{{ notification_server_url }}'
         },
         pageOptions: {
             csrfToken: "{{ csrf_token }}",
@@ -159,6 +162,7 @@
             officeWebAppEditFileExtension: {% if office_web_app_edit_file_extension %} {{office_web_app_edit_file_extension|safe}} {% else %} [] {% endif %},
             enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
             enableWhiteboard: {% if enable_whiteboard %} true {% else %} false {% endif %},
+            enableExcalidraw: {% if enable_excalidraw %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
             enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
             isMultiTenacy: {% if multi_tenancy %} true {% else %} false {% endif %},

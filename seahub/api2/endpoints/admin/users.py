@@ -66,7 +66,7 @@ from seahub.auth.utils import get_virtual_id_by_email
 from seahub.auth.models import SocialAuthUser
 
 from seahub.options.models import UserOptions
-from seahub.share.models import FileShare, UploadLinkShare
+from seahub.share.models import FileShare, UploadLinkShare, ExtraSharePermission
 from seahub.utils.ldap import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM, ENABLE_SSO_USER_CHANGE_PASSWORD, \
     LDAP_PROVIDER, LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR, LDAP_USER_OBJECT_CLASS, \
     ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_ADMIN_DN, \
@@ -721,9 +721,11 @@ class AdminUsers(APIView):
                 social_auth_user_dict[item.username] = [item]
 
         for user in users:
+            url, _, _ = api_avatar_url(user.email)
             profile = Profile.objects.get_profile_by_user(user.email)
 
             info = {}
+            info['avatar_url'] = url
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
             info['contact_email'] = email2contact_email(user.email)
@@ -1161,6 +1163,8 @@ class AdminSearchUser(APIView):
                 has_appended.append(user.email)
 
             info = {}
+            url, is_default, date_uploaded = api_avatar_url(user.email)
+            info['avatar_url'] = url
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
             info['contact_email'] = email2contact_email(user.email)
@@ -1258,7 +1262,20 @@ class AdminUser(APIView):
 
         is_active = request.data.get("is_active", None)
         if is_active:
-
+            keep_sharing = request.data.get("keep_sharing", None)
+            username = request.user.username
+            
+            if keep_sharing and keep_sharing == 'false':
+                seafile_db = SeafileDB()
+                orgs = ccnet_api.get_orgs_by_user(email)
+                if orgs:
+                    org_id = orgs[0].org_id
+                    seafile_db.delete_received_share_by_user(email, org_id)
+                    seafile_db.delete_share_by_user(email, org_id)
+                else:
+                    seafile_db.delete_received_share_by_user(email)
+                    seafile_db.delete_share_by_user(email)
+                ExtraSharePermission.objects.filter(share_to=username).delete()
             try:
                 is_active = to_python_boolean(is_active)
             except ValueError:

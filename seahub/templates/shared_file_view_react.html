@@ -5,21 +5,21 @@
 {% block sub_title %}{{file_name}} - {% endblock %}
 
 {% block extra_ogp_tags %}
-<meta property="og:type" content="object" />
+<meta property="og:type" content="object">
 <meta property="og:site_name" content="{{ site_name }}">
-<meta property="og:url" content="{{ service_url }}{{ file_share_link }}" />
-<meta property="og:title" content="{{ file_name }}" />
-<meta property="og:image" content="{{ service_url }}{{ MEDIA_URL }}img/file/{{ icon_path_for_ogp }}" />
-<meta property="og:description" content="{{ desc_for_ogp }}" />
+<meta property="og:url" content="{{ service_url }}{{ file_share_link }}">
+<meta property="og:title" content="{{ file_name }}">
+<meta property="og:image" content="{{ service_url }}{{ MEDIA_URL }}img/file/{{ icon_path_for_ogp }}">
+<meta property="og:description" content="{{ desc_for_ogp }}">
 {% endblock %}
 
 {% block extra_style %}
 {% if filetype == 'Markdown' %}
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css" />
-    {% render_bundle 'sharedFileViewMarkdown' 'css' %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css">
+{% render_bundle 'sharedFileViewMarkdown' 'css' %}
 {% elif filetype == 'Text' %}
     {% render_bundle 'sharedFileViewText' 'css' %}
-{% elif filetype == 'Image' or filetype == 'XMind' %}
+{% elif filetype == 'Image' %}
     {% render_bundle 'sharedFileViewImage' 'css' %}
 {% elif filetype == 'SVG' %}
     {% render_bundle 'sharedFileViewSVG' 'css' %}
@@ -28,20 +28,22 @@
 {% elif filetype == 'Audio' %}
     {% render_bundle 'sharedFileViewAudio' 'css' %}
 {% elif filetype == 'PDF' %}
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/viewer.css" />
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/custom.css" />
-    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
-    {% render_bundle 'sharedFileViewPDF' 'css' %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/viewer.css">
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/pdf/web/custom.css">
+<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties">
+{% render_bundle 'sharedFileViewPDF' 'css' %}
 {% elif filetype == 'Document' %}
-    <link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties" />
-    {% render_bundle 'sharedFileViewDocument' 'css' %}
+<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/web/locale/locale.properties">
+{% render_bundle 'sharedFileViewDocument' 'css' %}
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'css' %}
 {% elif filetype == 'SDoc' %}
-    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
-    {% render_bundle 'sharedFileViewSdoc' 'css' %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css">
+{% render_bundle 'sharedFileViewSdoc' 'css' %}
 {% elif filetype == 'Unknown' %}
     {% render_bundle 'sharedFileViewUnknown' 'css' %}
+{% elif filetype == 'Excalidraw' %}
+    {% render_bundle 'sharedFileViewExdraw' 'css' %}
 {% endif %}
 {% if not permissions.can_download %}
 <style type="text/css">
@@ -81,7 +83,7 @@ body {
       fileExt: '{{ fileext }}',
       commitID: '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}',
       enableShareLinkReportAbuse: {% if enable_share_link_report_abuse %}true{% else %}false{% endif %},
-      
+
       // for 'view file in shared dir'
       {% if zipped %}
       zipped: (function() {
@@ -117,7 +119,7 @@ body {
     {% render_bundle 'sharedFileViewMarkdown' 'js' %}
 {% elif filetype == 'Text' %}
     {% render_bundle 'sharedFileViewText' 'js' %}
-{% elif filetype == 'Image' or filetype == 'XMind' %}
+{% elif filetype == 'Image' %}
     {% render_bundle 'sharedFileViewImage' 'js' %}
 {% elif filetype == 'SVG' %}
     {% render_bundle 'sharedFileViewSVG' 'js' %}
@@ -127,25 +129,27 @@ body {
     {% render_bundle 'sharedFileViewAudio' 'js' %}
 {% elif filetype == 'PDF' %}
     {% render_bundle 'sharedFileViewPDF' 'js' %}
-    <script type="text/javascript">
+<script type="text/javascript">
       var SEAFILE_FILE_URL = '{{ raw_path|escapejs }}';
       var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf';
-    </script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/web/viewer.js"></script>
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/web/viewer.js"></script>
 {% elif filetype == 'Document' %}
     {% render_bundle 'sharedFileViewDocument' 'js' %}
-    <script type="text/javascript">
+<script type="text/javascript">
       var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
       var SEAFILE_FILE_URL = '{{ SITE_ROOT }}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/fake.pdf?token={{shared_token}}';
       var SEAFILE_PDFJS_DIR = '{{MEDIA_URL}}js/pdf';
-    </script>
-    <script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/build/pdf.js"></script>
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'js' %}
 {% elif filetype == 'SDoc' %}
     {% render_bundle 'sharedFileViewSdoc' 'js' %}
 {% elif filetype == 'Unknown' %}
     {% render_bundle 'sharedFileViewUnknown' 'js' %}
+{% elif filetype == 'Excalidraw' %}
+    {% render_bundle 'sharedFileViewExdraw' 'js' %}
 {% endif %}
 {% endblock %}

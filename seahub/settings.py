@@ -5,6 +5,7 @@
 import sys
 import os
 import re
+import copy
 
 from seaserv import FILE_SERVER_PORT
 
@@ -35,6 +36,7 @@ DATABASES = {
         'PORT': '3306',
     }
 }
+_preset_db_cfg = copy.deepcopy(DATABASES)
 
 # New in Django 3.2
 # Default primary key field type to use for models that don’t have a field with primary_key=True.
@@ -287,6 +289,8 @@ INSTALLED_APPS = [
     'seahub.django_cas_ng',
     'seahub.seadoc',
     'seahub.subscription',
+    'seahub.billing',
+    'seahub.exdraw',
 ]
 
 
@@ -538,13 +542,11 @@ central_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR', '')
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(CACHE_DIR, 'seahub_cache'),
-        'OPTIONS': {
-            'MAX_ENTRIES': 1000000
-        }
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://redis:6379',
     },
 }
+_preset_cache_cfg = copy.deepcopy(CACHES)
 
 # rest_framwork
 REST_FRAMEWORK = {
@@ -943,6 +945,12 @@ FILESERVER_TOKEN_ONCE_ONLY = True
 SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system staff adding new member.
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
+ENABLE_SMIME = False
+
+###########################
+# Full disk email sending #
+##########################
+ENABLE_QUOTA_ALERT = True
 
 
 ##########################
@@ -960,6 +968,19 @@ FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 ##########################
 
 ENABLE_WHITEBOARD = False
+
+##########################
+# Settings for excalidraw    #
+##########################
+
+ENABLE_EXCALIDRAW = False
+EXCALIDRAW_SERVER_URL = 'http://127.0.0.1:7070'
+
+######################################
+# Settings for notification server   #
+######################################
+
+NOTIFICATION_SERVER_URL = os.environ.get('NOTIFICATION_SERVER_URL', '')
 
 ############################
 # Settings for Seahub Priv #
@@ -1049,9 +1070,9 @@ METADATA_FILE_TYPES = {
               'py', 'rb', 'scala', 'script', 'sh', 'sql', 'groovy', 'go', 'yml', 'xhtml', 'json', ),
     '_video': ('mp4', 'ogv', 'webm', 'mov', 'avi', 'wmv', 'asf', 'asx', 'rm', 'rmvb', 'mpg', 'mpeg', 'mpe', '3gp',
                'm4v', 'mkv', 'flv', 'vob'),
-    '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus', 'aac', 'au', 'm4a', 'aif', 'aiff', 'wma', 'rm', 'mp1', 'mp2'),
+    '_audio': ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus', 'aac', 'au', 'm4a', 'aif', 'aiff', 'wma', 'mp1', 'mp2'),
     '_compressed': ('rar', 'zip', '7z', 'tar', 'gz', 'bz2', 'tgz', 'xz', 'lzma'),
-    '_diagram': ('draw', ),
+    '_diagram': ('draw', 'exdraw'),
 }
 
 ##############################
@@ -1062,6 +1083,7 @@ SEAFILE_AI_SERVER_URL = ''
 SEAFILE_AI_SECRET_KEY = ''
 
 ENABLE_SEAFILE_AI = False
+ENABLE_SEAFILE_OCR = False
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
@@ -1086,7 +1108,7 @@ BAIDU_MAP_URL = ''
 # google map
 GOOGLE_MAP_KEY = ''
 GOOGLE_MAP_URL = ''
-GOOGLE_MAP_ID = ''
+GOOGLE_MAP_ID = 'google_map_id'
 
 
 #####################
@@ -1162,11 +1184,95 @@ for module in LOGGING_IGNORE_MODULES:
 # config in env
 JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 
+# For database conf., now Seafile only support MySQL, skip for other engine
+
+## use update methods to get user's cfg
+_tmp_db_cfg = copy.deepcopy(_preset_db_cfg)
+_tmp_db_cfg.update(DATABASES)
+DATABASES = _tmp_db_cfg
+    
+if 'mysql' in DATABASES['default'].get('ENGINE', ''):
+
+    ## For dtable_db
+    _rewrite_db_env_key_map = {
+        'HOST': 'SEAFILE_MYSQL_DB_HOST',
+        'PORT': 'SEAFILE_MYSQL_DB_PORT',
+        'USER': 'SEAFILE_MYSQL_DB_USER',
+        'PASSWORD': 'SEAFILE_MYSQL_DB_PASSWORD',
+        'NAME': 'SEAFILE_MYSQL_DB_SEAHUB_DB_NAME'
+    }
+
+    for db_key, env_key in _rewrite_db_env_key_map.items():
+        if env_value := os.environ.get(env_key):
+            DATABASES['default'][db_key] = env_value
+
+    if DATABASES['default'].get('PORT'):
+        try:
+            int(DATABASES['default']['PORT'])
+        except:
+            raise ValueError(f"Invalid database port: {DATABASES['default']['PORT']}")
+
+CACHE_PROVIDER = os.getenv('CACHE_PROVIDER', 'redis')
+
+## use update methods to get user's cfg
+_tmp_cache_cfg = copy.deepcopy(_preset_cache_cfg)
+_tmp_cache_cfg.update(CACHES)
+CACHES = _tmp_cache_cfg
+
+if CACHE_PROVIDER =='redis':
+    CACHES['default']['BACKEND'] = 'django.core.cache.backends.redis.RedisCache'
+    cfg_redis_host = 'redis'
+    cfg_redis_port = 6379
+    cfg_redis_pwd = ''
+    if 'LOCATION' in CACHES['default']:
+        cache_cfg = CACHES['default'].get('LOCATION').split('://', 1)[-1]
+        try:
+            cfg_redis_pwd, redis_host_info = cache_cfg.split('@', 1)
+            cfg_redis_host, cfg_redis_port = redis_host_info.split(':', 1)
+        except:
+            cfg_redis_host, cfg_redis_port = cache_cfg.split(':', 1)
+            try:
+                cfg_redis_pwd = CACHES['default']['OPTIONS']['PASSWORD']
+            except:
+                pass
+
+    redis_host = os.environ.get('REDIS_HOST') or cfg_redis_host
+    redis_port = os.environ.get('REDIS_PORT') or cfg_redis_port
+    redis_pwd = os.environ.get('REDIS_PASSWORD') or cfg_redis_pwd
+
+    CACHES['default']['LOCATION'] = f'redis://{(redis_pwd + "@") if redis_pwd else ""}{redis_host}:{redis_port}'
+    if redis_pwd:
+        try:
+            del CACHES['default']['OPTIONS']['PASSWORD']
+        except:
+            pass
+
+elif CACHE_PROVIDER == 'memcached':
+    try:
+        conf_mem_host, conf_mem_port = CACHES['default']['LOCATION'].split(':')
+    except:
+        conf_mem_host = 'memcached'
+        conf_mem_port = 11211
+
+    mem_host = os.getenv('MEMCACHED_HOST') or conf_mem_host
+    mem_port = int(os.getenv('MEMCACHED_PORT', 0)) or conf_mem_port
+
+    CACHES['default'] = {
+        'BACKEND': 'django_pylibmc.memcached.PyLibMCCache',
+        'LOCATION': f'{mem_host}:{mem_port}'
+    }
+else:
+    raise ValueError(f'Invalid CACHE_PROVIDER: {CACHE_PROVIDER}')
+
 if os.environ.get('ENABLE_SEADOC', ''):
     ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'
 SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
 FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
+
+if os.environ.get('ENABLE_EXCALIDRAW', ''):
+    ENABLE_EXCALIDRAW = os.environ.get('ENABLE_EXCALIDRAW', '').lower() == 'true'
+EXCALIDRAW_PRIVATE_KEY = JWT_PRIVATE_KEY
 
 if os.environ.get('SITE_ROOT', ''):
     SITE_ROOT = os.environ.get('SITE_ROOT', '')
@@ -1190,6 +1296,8 @@ SEAFILE_AI_SERVER_URL = os.environ.get('SEAFILE_AI_SERVER_URL', '') or SEAFILE_A
 
 
 SEAFEVENTS_SERVER_URL = 'http://127.0.0.1:8889'
+
+IS_PRO_VERSION = os.environ.get('IS_PRO_VERSION', 'false') == 'true'
 
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {

@@ -3,97 +3,112 @@
 {% block sub_title %}{% trans "Signup" %} - {% endblock %}
 {% block extra_style %}{{block.super}}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}bootstrap/bootstrap.popover.min.css" />
 {% endblock %}
 
 {% block main_content %}
-<div class="login-panel-outer-container vh">
-    <div class="login-panel">
-        <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
-        {% if request.user.is_authenticated %}
-        <p>{% trans "Welcome back, you are already signed in." %}</p>
-        {% else %}
-        <form action="" method="post" id="signup-form">{% csrf_token %}
-            <label for="org_name">{% trans "Organization Name" %}</label>
-            <input id="org_name" type="text" name="org_name" value="{{ form.org_name.value|default_if_none:"" }}" class="input" />
-            {{ form.org_name.errors }}
-
-            {% if not org_auto_url_prefix %}
-            <label for="org-url-prefix">Organization URL</label>
-            <div id="org-url">
-            {{ service_url_scheme }}:// <input type="text" name="url_prefix" value="{{ form.url_prefix.value|default_if_none:"" }}" class="input" id="org-url-prefix" />.{{ service_url_remaining }}
-            </div>
-            {% endif %}
-
-            {{ form.url_prefix.errors }}
-
-            {% if form.name.field.required %}
-            <label for="id_name">{% trans "Admin Name" %}</label>
-            <input id="name" type="text" name="name" maxlength="255" value="{{ form.name.value|default_if_none:"" }}" class="input" />
-            {{ form.name.errors }}
-            {% endif %}
-
-            <label for="email">{% trans "Admin Email" %}</label>
-            <input id="email" type="text" name="email" maxlength="255" value="{{ form.email.value|default_if_none:"" }}" class="input" />
-            {{ form.email.errors }}
-
-            <label for="password1">{% trans "Password" %}</label>
-            <div class="position-relative" id="password-input1">
-                <input id="password1" type="password" name="password1" value="" class="input" />
-            </div>
-            <label for="password2">{% trans "Confirm Password" %}</label>
-            <div class="position-relative" id="password-input2">
-            <input id="password2" type="password" name="password2" value="" class="input" />
-            </div>
-
-            {{ form.non_field_errors }}
-            <p class="error hide"></p>
-            <button type="submit" class="submit btn btn-primary btn-block">{% trans "Submit" %}</button>
-        </form>
-        <div class="login-panel-bottom-container">
-            {# language will be shown here #}
-        </div>
-        {% endif %}
+<div class="login-panel-outer-container vh" id="org-register">
+  {% if request.user.is_authenticated %}
+  <div class="login-panel" id="log-in-panel">
+    <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
+    <div class="reg-logged-panel">
+      <span class="loading-icon loading-tip"></span>
+      <p class="m-0">{% trans "Welcome back, you are already signed in." %}</p>
+      <p>{% trans "You will be redirected to the home page within 5 seconds." %}</p>
     </div>
+  </div>
+
+  {% else %}
+  <div class="login-panel">
+    <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
+    <form action="" method="post" id="signup-form">{% csrf_token %}
+      <label for="org_name">{% trans "Organization Name" %}</label>
+      <input id="org_name" type="text" name="org_name" value="{{ form.org_name.value|default_if_none:"" }}" class="input" />
+      {{ form.org_name.errors }}
+
+      {% if not org_auto_url_prefix %}
+      <label for="org-url-prefix">Organization URL</label>
+      <div id="org-url">
+        {{ service_url_scheme }}:// <input type="text" name="url_prefix" value="{{ form.url_prefix.value|default_if_none:"" }}" class="input" id="org-url-prefix" />.{{ service_url_remaining }}
+      </div>
+      {% endif %}
+
+      {{ form.url_prefix.errors }}
+
+      {% if form.name.field.required %}
+      <label for="name">{% trans "Admin Name" %}</label>
+      <input id="name" type="text" name="name" maxlength="255" value="{{ form.name.value|default_if_none:"" }}" class="input" />
+      {{ form.name.errors }}
+      {% endif %}
+
+      <label for="email">{% trans "Admin Email" %}</label>
+      <input id="email" type="text" name="email" maxlength="255" value="{{ form.email.value|default_if_none:"" }}" class="input" />
+      {{ form.email.errors }}
+
+      <label for="password1">{% trans "Password" %}</label>
+      <div class="position-relative" id="password-input1">
+        <input id="password1" type="password" name="password1" value="" class="input" />
+      </div>
+      <label for="password2">{% trans "Confirm Password" %}</label>
+      <div class="position-relative" id="password-input2">
+        <input id="password2" type="password" name="password2" value="" class="input" />
+      </div>
+
+      {{ form.non_field_errors }}
+      <p class="error hide"></p>
+      <button type="submit" class="submit btn btn-primary btn-block">{% trans "Submit" %}</button>
+    </form>
+    <div class="login-panel-bottom-container">
+      {# language will be shown here #}
+    </div>
+    <div>
+      {% include "snippets/policy_service_link.html" %}
+    </div>
+  </div>
+  {% endif %}
 </div>
-{% include "snippets/policy_service_link.html" %}
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.popover.min.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.min.js"></script>
 <script type="text/javascript">
-{% include "snippets/password_strength_js.html" %}
+  {% if request.user.is_authenticated %}
+  setTimeout(function() {
+    location.href = '{{SITE_ROOT}}';
+  }, 5000);
 
-$('#signup-form').on('submit', function(){
-        var email = $('input[name="email"]').val().trim(),
-        pwd1 = $('input[name="password1"]').val().trim(),
-        pwd2 = $('input[name="password2"]').val().trim();
+  {% else %}
+  {% include "snippets/password_strength_js.html" %}
+  $('#signup-form').on('submit', function(){
+    var email = $('input[name="email"]').val().trim(),
+      pwd1 = $('input[name="password1"]').val().trim(),
+      pwd2 = $('input[name="password2"]').val().trim();
 
-        if (!email) {
-            $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');
-            return false;
-        }
-        if (!pwd1) {
-            $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
-            return false;
-        }
-        if (!pwd2) {
-            $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
-            return false;
-        }
-        if (pwd1 != pwd2) {
-            $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
-            return false;
-        }
-        if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
-            $('.error').html(passwd_tip).removeClass('hide');
-            return false;
-        }
-   });
-$(function () {
+    if (!email) {
+      $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');
+      return false;
+    }
+    if (!pwd1) {
+      $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
+      return false;
+    }
+    if (!pwd2) {
+      $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
+      return false;
+    }
+    if (pwd1 != pwd2) {
+      $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
+      return false;
+    }
+    if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
+      $('.error').html(passwd_tip).removeClass('hide');
+      return false;
+    }
+  });
+  $(function () {
     setupPasswordField("password1", passwd_tip, template);
-});
+  });
+  {% endif %}
 </script>
 {% endblock %}

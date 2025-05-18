@@ -9,6 +9,7 @@ import { CellType } from '../../../../../constants';
 import './index.css';
 
 const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
+  // eslint-disable-next-line no-unused-vars
   const [active, setActive] = useState(false);
 
   const headerRef = useRef();
@@ -53,16 +54,14 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, on
         )}
         <span className="cards-quantity">{cardsQuantity}</span>
       </div>
-      {active && (
-        <div className="board-header-operation-btn">
-          {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />}
-          <i
-            className={classNames('sf3-font sf3-font-down kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
-            title={isCollapsed ? gettext('Expand') : gettext('Collapse')}
-            onClick={handleCollapse}>
-          </i>
-        </div>
-      )}
+      <div className="board-header-operation-btn">
+        {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />}
+        <i
+          className={classNames('sf3-font sf3-font-down kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
+          title={isCollapsed ? gettext('Expand') : gettext('Collapse')}
+          onClick={handleCollapse}>
+        </i>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ModalBody, ModalFooter, Button } from 'reactstrap';
-import classnames from 'classnames';
 import Switch from '../../../../components/switch';
 import { gettext } from '../../../../utils/constants';
 import metadataAPI from '../../../api';
@@ -11,7 +10,7 @@ import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 
 import './index.css';
 
-const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
+const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit, enableMetadata }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
@@ -63,12 +62,13 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: 
       {!showTurnOffConfirmDialog && (
         <>
           <ModalBody className="metadata-face-recognition-dialog">
+            {!enableMetadata && <p className="oepn-metadata-tip">{gettext('Please turn on extended properties setting first')}</p>}
             <Switch
               checked={value}
-              disabled={submitting}
+              disabled={submitting || !enableMetadata}
               size="large"
               textPosition="right"
-              className={classnames('change-face-recognition-status-management w-100', { 'disabled': submitting || oldValue })}
+              className="change-face-recognition-status-management w-100"
               onChange={onValueChange}
               placeholder={gettext('Face recognition')}
             />
@@ -78,7 +78,7 @@ const MetadataFaceRecognitionDialog = ({ value: oldValue, repoID, toggleDialog: 
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
-            <Button color="primary" disabled={oldValue === value || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
+            <Button color="primary" disabled={oldValue === value || submitting || !enableMetadata} onClick={onSubmit}>{gettext('Submit')}</Button>
           </ModalFooter>
         </>
       )}
@@ -96,6 +96,7 @@ MetadataFaceRecognitionDialog.propTypes = {
   repoID: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
   submit: PropTypes.func.isRequired,
+  enableMetadata: PropTypes.bool.isRequired,
 };
 
 export default MetadataFaceRecognitionDialog;

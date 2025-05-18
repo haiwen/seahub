@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
+import { enableExcalidraw, enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -112,6 +112,13 @@ class DirOperationToolbar extends React.Component {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.draw'
+    });
+  };
+
+  onCreateExcalidrawToggle = () => {
+    this.setState({
+      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
+      fileType: '.exdraw'
     });
   };
 
@@ -265,6 +272,9 @@ class DirOperationToolbar extends React.Component {
         );
         if (enableWhiteboard) {
           newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': this.onCreateTldrawToggle });
+        }
+        if (enableExcalidraw) {
+          newSubOpList.push({ 'text': gettext('New Excalidraw File'), 'onClick': this.onCreateExcalidrawToggle });
         }
         opList.push({
           'icon': 'new',

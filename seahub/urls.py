@@ -3,6 +3,8 @@ from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
 from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant
+from seahub.api2.endpoints.file_comments import FileCommentsView, FileCommentView, FileCommentRepliesView, \
+    FileCommentReplyView
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView, InternalCheckShareLinkAccess, \
     InternalCheckFileOperationAccess, CheckThumbnailAccess, CheckShareLinkThumbnailAccess
@@ -92,7 +94,8 @@ from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchV
 from seahub.api2.endpoints.invitation import InvitationView, InvitationRevokeView
 from seahub.api2.endpoints.repo_share_invitations import RepoShareInvitationsView, RepoShareInvitationsBatchView
 from seahub.api2.endpoints.repo_share_invitation import RepoShareInvitationView
-from seahub.api2.endpoints.notifications import NotificationsView, NotificationView, SdocNotificationView, SdocNotificationsView, AllNotificationsView
+from seahub.api2.endpoints.notifications import NotificationsView, NotificationView, SdocNotificationView, SdocNotificationsView, \
+    SysUserNotificationSeenView, AllNotificationsView, SysUserNotificationUnseenView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
@@ -141,7 +144,7 @@ from seahub.api2.endpoints.admin.web_settings import AdminWebSettings
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
     SystemUserTrafficExcelView, SystemUserStorageExcelView, SystemUserTrafficView, \
-    SystemOrgTrafficView
+    SystemOrgTrafficView, SystemMetricsView
 )
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
@@ -192,9 +195,10 @@ from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLib
 from seahub.api2.endpoints.admin.user_activities import UserActivitiesView
 from seahub.api2.endpoints.admin.file_scan_records import AdminFileScanRecords
 from seahub.api2.endpoints.admin.notifications import AdminNotificationsView
-from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView
+from seahub.api2.endpoints.admin.sys_notifications import AdminSysNotificationsView, AdminSysNotificationView, \
+    AdminSysUserNotificationView, AdminSysUserNotificationsView
 from seahub.api2.endpoints.admin.logs import AdminLogsLoginLogs, AdminLogsFileAccessLogs, AdminLogsFileUpdateLogs, \
-    AdminLogsSharePermissionLogs, AdminLogsFileTransferLogs
+    AdminLogsSharePermissionLogs, AdminLogsFileTransferLogs, AdminLogGroupMemberAuditLogs
 from seahub.api2.endpoints.admin.terms_and_conditions import AdminTermsAndConditions, AdminTermAndCondition
 from seahub.api2.endpoints.admin.work_weixin import AdminWorkWeixinDepartments, \
     AdminWorkWeixinDepartmentMembers, AdminWorkWeixinUsersBatch, AdminWorkWeixinDepartmentsImport
@@ -211,7 +215,7 @@ from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
-    WikiSearch, WikiConvertView
+    WikiSearch, WikiConvertView, WikiPageExport
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
@@ -477,7 +481,15 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/image-rotate/$', RepoImageRotateView.as_view(), name='api-v2.1-repo-image-rotate-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
-
+    
+    
+    ## user: repo file comments
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/$', FileCommentsView.as_view(), name='api-v2.1-file-comments'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/$', FileCommentView.as_view(), name='api-v2.1-file-comment'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/replies/$', FileCommentRepliesView.as_view(), name='api-v2.1-file-comment-replies'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/replies/(?P<reply_id>\d+)/$', FileCommentReplyView.as_view(), name='api-v2.1-file-comment-repolies'),
+    
+    
     ## user:: repo-api-tokens
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/(?P<app_name>.*)/$', RepoAPITokenView.as_view(), name='api-v2.1-repo-api-token'),
@@ -530,6 +542,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/sdoc-notification/$', SdocNotificationView.as_view(), name='api-v2.1-notification'),
     re_path(r'^api/v2.1/all-notifications/$', AllNotificationsView.as_view(), name='api-v2.1-all-notification'),
 
+    re_path(r'^api/v2.1/sys-user-notifications/(?P<nid>\d+)/seen/$', SysUserNotificationSeenView.as_view(), name='api-v2.1-notification-seen'),
+    re_path(r'^api/v2.1/sys-user-notifications/unseen/$', SysUserNotificationUnseenView.as_view(), name='api-v2.1-notification-unseen'),
     ## user::invitations
     re_path(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
     re_path(r'^api/v2.1/invitations/batch/$', InvitationsBatchView.as_view()),
@@ -565,6 +579,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/config/$', Wiki2PublishConfigView.as_view(), name='api-v2.1-wiki2-publish-config'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/pages/$', Wiki2PagesView.as_view(), name='api-v2.1-wiki2-pages'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PageView.as_view(), name='api-v2.1-wiki2-page'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/page/(?P<page_id>[-0-9a-zA-Z]{4})/export/$', WikiPageExport.as_view(), name='api-v2.1-wiki2-page-export'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PublishPageView.as_view(), name='api-v2.1-wiki2-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/duplicate-page/$', Wiki2DuplicatePageView.as_view(), name='api-v2.1-wiki2-duplicate-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/trash/', WikiPageTrashView.as_view(), name='api-v2.1-wiki2-trash'),
@@ -572,7 +587,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     ## user::drafts
-    
+
 
     ## user::activities
     re_path(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
@@ -627,6 +642,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/statistics/system-org-traffic/$', SystemOrgTrafficView.as_view(), name='api-v2.1-admin-statistics-system-org-traffic'),
     re_path(r'^api/v2.1/admin/statistics/system-user-traffic/excel/$', SystemUserTrafficExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-traffic-excel'),
     re_path(r'^api/v2.1/admin/statistics/system-user-storage/excel/$', SystemUserStorageExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-storage-excel'),
+    re_path(r'^api/v2.1/admin/statistics/system-metrics/$', SystemMetricsView.as_view(), name='api-v2.1-admin-statistics-system-metrics'),
     ## admin::users
     re_path(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
     re_path(r'^api/v2.1/admin/ldap-users/$', AdminLDAPUsers.as_view(), name='api-v2.1-admin-ldap-users'),
@@ -699,6 +715,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/logs/file-update-logs/$', AdminLogsFileUpdateLogs.as_view(), name='api-v2.1-admin-logs-file-update-logs'),
     re_path(r'^api/v2.1/admin/logs/share-permission-logs/$', AdminLogsSharePermissionLogs.as_view(), name='api-v2.1-admin-logs-share-permission-logs'),
     re_path(r'^api/v2.1/admin/logs/repo-transfer-logs/$', AdminLogsFileTransferLogs.as_view(), name='api-v2.1-admin-logs-repo-transfer-logs'),
+    re_path(r'^api/v2.1/admin/logs/group-member-audit/$', AdminLogGroupMemberAuditLogs.as_view(), name='api-v2.1-admin-logs-group-member-audit'),
 
     ## admin::admin logs
     re_path(r'^api/v2.1/admin/admin-logs/$', AdminOperationLogs.as_view(), name='api-v2.1-admin-admin-operation-logs'),
@@ -794,7 +811,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/notifications/$', AdminNotificationsView.as_view(), name='api-2.1-admin-notifications'),
     re_path(r'^api/v2.1/admin/sys-notifications/$', AdminSysNotificationsView.as_view(), name='api-2.1-admin-sys-notifications'),
     re_path(r'^api/v2.1/admin/sys-notifications/(?P<nid>\d+)/$', AdminSysNotificationView.as_view(),name='api-2.1-admin-sys-notification'),
-
+    re_path(r'^api/v2.1/admin/sys-user-notifications/$', AdminSysUserNotificationsView.as_view(), name='api-2.1-admin-sys-user-notifications'),
+    re_path(r'^api/v2.1/admin/sys-user-notifications/(?P<nid>\d+)/$', AdminSysUserNotificationView.as_view(), name='api-2.1-admin-sys-user-notification'),
     ## admin::terms and conditions
     re_path(r'^api/v2.1/admin/terms-and-conditions/$', AdminTermsAndConditions.as_view(), name='api-v2.1-admin-terms-and-conditions'),
     re_path(r'^api/v2.1/admin/terms-and-conditions/(?P<term_id>\d+)/$', AdminTermAndCondition.as_view(), name='api-v2.1-admin-term-and-condition'),
@@ -840,6 +858,7 @@ urlpatterns = [
     path('sys/statistics/user/', sysadmin_react_fake_view, name="sys_statistics_user"),
     path('sys/statistics/traffic/', sysadmin_react_fake_view, name="sys_statistics_traffic"),
     path('sys/statistics/reports/', sysadmin_react_fake_view, name="sys_statistics_reports"),
+    path('sys/statistics/metrics/', sysadmin_react_fake_view, name="sys_statistics_metrics"),
     path('sys/desktop-devices/', sysadmin_react_fake_view, name="sys_desktop_devices"),
     path('sys/mobile-devices/', sysadmin_react_fake_view, name="sys_mobile_devices"),
     path('sys/device-errors/', sysadmin_react_fake_view, name="sys_device_errors"),
@@ -875,6 +894,7 @@ urlpatterns = [
     path('sys/logs/file-update/', sysadmin_react_fake_view, name="sys_logs_file_update"),
     path('sys/logs/share-permission/', sysadmin_react_fake_view, name="sys_logs_share_permission"),
     path('sys/logs/repo-transfer/', sysadmin_react_fake_view, name="sys_logs_file_transfer"),
+    path('sys/logs/group-member-audit/', sysadmin_react_fake_view, name="sys_logs_group_member_audit"),
     path('sys/admin-logs/operation/', sysadmin_react_fake_view, name="sys_admin_logs_operation"),
     path('sys/admin-logs/login/', sysadmin_react_fake_view, name="sys_admin_logs_login"),
     path('sys/organizations/', sysadmin_react_fake_view, name="sys_organizations"),
@@ -972,18 +992,6 @@ if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
         re_path(r'^sso-auto-login/', login_simple_check),
     ]
 
-# serve office converter static files
-from seahub.utils import HAS_OFFICE_CONVERTER
-if HAS_OFFICE_CONVERTER:
-    from seahub.views.file import (
-        office_convert_query_status, office_convert_get_page
-    )
-    urlpatterns += [
-        re_path(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
-            office_convert_get_page, name='office_convert_get_page'),
-        path('office-convert/status/', office_convert_query_status, name='office_convert_query_status'),
-    ]
-
 if getattr(settings, 'ENABLE_MULTI_ADFS', False):
     from seahub.adfs_auth.views import *
     urlpatterns += [
@@ -1042,6 +1050,10 @@ if getattr(settings, 'ENABLE_SEADOC', False):
         re_path(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
     ]
 
+if getattr(settings, 'ENABLE_EXCALIDRAW', False):
+    urlpatterns += [
+        re_path(r'^api/v2.1/exdraw/', include('seahub.exdraw.urls')),
+    ]
 
 if getattr(settings, 'CLIENT_SSO_VIA_LOCAL_BROWSER', False):
     urlpatterns += [
@@ -1055,6 +1067,11 @@ if getattr(settings, 'ENABLE_SUBSCRIPTION', False):
         re_path(r'^api/v2.1/subscription/$', SubscriptionView.as_view(), name='api-v2.1-subscription'),
         re_path(r'^api/v2.1/subscription/plans/$', SubscriptionPlansView.as_view(), name='api-v2.1-subscription-plans'),
         re_path(r'^api/v2.1/subscription/logs/$', SubscriptionLogsView.as_view(), name='api-v2.1-subscription-logs'),
+    ]
+
+if getattr(settings, 'ENABLE_EXTERNAL_BILLING_SERVICE', False):
+    urlpatterns += [
+        re_path(r'^billing/', include('seahub.billing.urls')),
     ]
 
 if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):

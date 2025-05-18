@@ -15,6 +15,8 @@ import UserLink from '../user-link';
 import ModalPortal from '../../../components/modal-portal';
 import CommitDetails from '../../../components/dialog/commit-details';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
+import LogUserSelector from '../../dashboard/log-user-selector';
+import LogRepoSelector from '../../dashboard/log-repo-selector';
 
 dayjs.extend(relativeTime);
 
@@ -173,6 +175,11 @@ class FileUpdateLogs extends Component {
       currentPage: 1,
       hasNextPage: false,
       isExportExcelDialogOpen: false,
+      availableUsers: [],
+      selectedUsers: [],
+      availableRepos: [],
+      selectedRepos: [],
+      openSelector: null,
     };
     this.initPage = 1;
   }
@@ -193,8 +200,10 @@ class FileUpdateLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage } = this.state;
-    systemAdminAPI.sysAdminListFileUpdateLogs(page, perPage).then((res) => {
+    let { perPage, selectedUsers, selectedRepos } = this.state;
+    let emails = selectedUsers.map(user => user.email);
+    let repos = selectedRepos.map(repo => repo.id);
+    systemAdminAPI.sysAdminListFileUpdateLogs(page, perPage, { 'email': emails, 'repo': repos }).then((res) => {
       this.setState({
         logList: res.data.file_update_log_list,
         loading: false,
@@ -215,8 +224,80 @@ class FileUpdateLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
+
+  handleUserFilter = (user, shouldFetchData = true) => {
+    const { selectedUsers } = this.state;
+    let newSelectedUsers;
+
+    if (user === null) {
+      newSelectedUsers = selectedUsers;
+    } else {
+      const isSelected = selectedUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleSelectorToggle = (selectorType) => {
+    const { openSelector } = this.state;
+    const wasOpen = openSelector === selectorType;
+
+    this.setState({
+      openSelector: wasOpen ? null : selectorType
+    }, () => {
+      if (wasOpen) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleRepoFilter = (repo, shouldFetchData = true) => {
+    const { selectedRepos } = this.state;
+    let newSelectedRepos;
+
+    if (repo === null) {
+      newSelectedRepos = selectedRepos;
+    } else {
+      const isSelected = selectedRepos.find(item => item.id === repo.id);
+      if (isSelected) {
+        newSelectedRepos = selectedRepos.filter(item => item.id !== repo.id);
+      } else {
+        newSelectedRepos = [...selectedRepos, repo];
+      }
+    }
+
+    this.setState({
+      selectedRepos: newSelectedRepos,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
+  searchRepos = (value) => {
+    return systemAdminAPI.sysAdminSearchRepos(value);
+  };
+
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen } = this.state;
+    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers, availableRepos, selectedRepos } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
@@ -226,16 +307,38 @@ class FileUpdateLogs extends Component {
           <div className="cur-view-container">
             <LogsNav currentItem="fileUpdateLogs" />
             <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={logList}
-                currentPage={currentPage}
-                perPage={perPage}
-                hasNextPage={hasNextPage}
-                getLogsByPage={this.getLogsByPage}
-                resetPerPage={this.resetPerPage}
-              />
+              <Fragment>
+                <div className="d-flex align-items-center mb-2">
+                  <LogUserSelector
+                    componentName={gettext('Users')}
+                    items={availableUsers}
+                    selectedItems={selectedUsers}
+                    onSelect={this.handleUserFilter}
+                    isOpen={this.state.openSelector === 'user'}
+                    onToggle={() => this.handleSelectorToggle('user')}
+                    searchUsersFunc={this.searchUsers}
+                  />
+                  <div className="mx-3"></div>
+                  <LogRepoSelector
+                    items={availableRepos}
+                    selectedItems={selectedRepos}
+                    onSelect={this.handleRepoFilter}
+                    isOpen={this.state.openSelector === 'repo'}
+                    onToggle={() => this.handleSelectorToggle('repo')}
+                    searchReposFunc={this.searchRepos}
+                  />
+                </div>
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={logList}
+                  currentPage={currentPage}
+                  perPage={perPage}
+                  hasNextPage={hasNextPage}
+                  getLogsByPage={this.getLogsByPage}
+                  resetPerPage={this.resetPerPage}
+                />
+              </Fragment>
             </div>
           </div>
         </div>

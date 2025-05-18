@@ -22,10 +22,12 @@ from seahub.base.accounts import User
 from seahub.base.models import OrgLastActivityTime
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.permissions import IsProVersion
 from seahub.role_permissions.utils import get_available_roles
 from seahub.organizations.models import OrgSAMLConfig
+from seahub.utils.ccnet_db import CcnetDB
+
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -515,7 +517,8 @@ class AdminOrganizationsBaseInfo(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        org_ids = request.GET.getlist('org_ids', [])
+        org_ids = request.GET.getlist('org_ids',[])
+        include_org_staffs = to_python_boolean(request.GET.get('include_org_staffs', 'false'))
         orgs = []
         for org_id in org_ids:
             try:
@@ -525,5 +528,13 @@ class AdminOrganizationsBaseInfo(APIView):
             except Exception:
                 continue
             base_info = {'org_id': org.org_id, 'org_name': org.org_name}
+            staffs = []
+            if include_org_staffs:
+                try:
+                    ccnet_db = CcnetDB()
+                    staffs = ccnet_db.get_org_staffs(int(org_id))
+                except Exception:
+                    pass
+                base_info['org_staffs'] = staffs
             orgs.append(base_info)
         return Response({'organization_list': orgs})

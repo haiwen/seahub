@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import posixpath
 from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
@@ -13,7 +14,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.views import check_folder_permission
-from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, init_metadata, \
+from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
@@ -21,7 +22,9 @@ from seahub.repo_metadata.utils import add_init_metadata_task, gen_unique_id, in
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
-from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID
+from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
+from seahub.file_tags.models import FileTags
+from seahub.repo_tags.models import RepoTags
 
 
 logger = logging.getLogger(__name__)
@@ -374,6 +377,10 @@ class MetadataRecords(APIView):
         if not records_data:
             error_msg = 'records_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if len(records_data) > METADATA_RECORD_UPDATE_LIMIT:
+            error_msg = 'Number of records exceeds the limit of 1000.'
+            return api_error(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
@@ -1799,6 +1806,46 @@ class MetadataExtractFileDetails(APIView):
         return Response({'details': resp})
 
 
+class MetadataRecognizeFaces(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        obj_ids = request.data.get('obj_ids')
+        if not obj_ids or not isinstance(obj_ids, list) or len(obj_ids) > 50:
+            error_msg = 'obj_ids is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        params = {
+            'obj_ids': obj_ids,
+            'repo_id': repo_id
+        }
+        try:
+            resp = recognize_faces(params=params)
+            resp_json = resp.json()
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response(resp_json, resp.status_code)
+
+
 # tags
 class MetadataTagsStatusManage(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -2735,4 +2782,195 @@ class PeopleCoverPhoto(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        return Response({'success': True})
+
+
+class MetadataMigrateTags(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def _create_metadata_tags(self, repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE):
+        sql = f'SELECT `{TAGS_TABLE.columns.name.name}`,`{TAGS_TABLE.columns.id.name}` FROM {TAGS_TABLE.name}'
+        existing_tags_result = metadata_server_api.query_rows(sql)
+        existing_tag_records = existing_tags_result.get('results', [])
+        existing_tag_map = {
+            tag_dict.get(TAGS_TABLE.columns.name.name, '') :
+            tag_dict.get(TAGS_TABLE.columns.id.name, '')
+            for tag_dict in existing_tag_records
+        }
+        
+        tags_to_create = [] # [{name:'', color:''}, ...]
+        old_tag_name_to_metadata_tag_id = {} # {old_tag_name:id,} Existing tags
+
+        for repo_tag in repo_tags:
+            tag_name = repo_tag.name
+            tag_color = repo_tag.color
+            
+            if tag_name in existing_tag_map:
+                # Tag already exists, no need to create it
+                new_tag_id = existing_tag_map.get(tag_name)
+                old_tag_name_to_metadata_tag_id[tag_name] = new_tag_id
+            else:
+                # Tag needs to be created
+                tags_to_create.append({
+                    TAGS_TABLE.columns.name.name: tag_name,
+                    TAGS_TABLE.columns.color.name: tag_color
+                })
+        
+        if tags_to_create:
+            response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
+            new_tag_ids = response.get('row_ids', [])
+            for idx, tag in enumerate(tags_to_create):
+                new_tag_id = new_tag_ids[idx]
+                tag_name = tag.get(TAGS_TABLE.columns.name.name)
+                old_tag_name_to_metadata_tag_id[tag_name] = new_tag_id
+        return old_tag_name_to_metadata_tag_id
+    
+    def _get_old_tags_info(self, tagged_files):
+        old_tag_name_to_file_paths = {} # {old_tag_name: {file_path,....}}
+        file_paths_set = set() # Used for querying metadata later
+        for tagged_file in tagged_files:
+            old_tag_name = tagged_file.repo_tag.name
+            parent_path = tagged_file.file_uuid.parent_path
+            filename = tagged_file.file_uuid.filename
+            file_path = posixpath.join(parent_path, filename)
+            
+            if old_tag_name not in old_tag_name_to_file_paths:
+                old_tag_name_to_file_paths[old_tag_name] = set()
+            
+            old_tag_name_to_file_paths[old_tag_name].add(file_path)
+            file_paths_set.add(file_path)
+        return old_tag_name_to_file_paths, file_paths_set
+
+    def _get_metadata_records(self, metadata_server_api, file_paths_set, METADATA_TABLE):
+        if not file_paths_set:
+            return []
+        dir_paths = []
+        filenames = []
+        for file_path in file_paths_set:
+            parent_dir = os.path.dirname(file_path)
+            filename = os.path.basename(file_path)
+            dir_paths.append(parent_dir)
+            filenames.append(filename)
+        
+        batch_size = 100
+        all_metadata_records = []
+        
+        for i in range(0, len(dir_paths), batch_size):
+            batch_dir_paths = dir_paths[i:i+batch_size]
+            batch_filenames = filenames[i:i+batch_size]
+            
+            where_conditions = []
+            parameters = []
+            for j in range(len(batch_dir_paths)):
+                where_conditions.append(f"(`{METADATA_TABLE.columns.parent_dir.name}` = ? AND `{METADATA_TABLE.columns.file_name.name}` = ?)")
+                parameters.append(batch_dir_paths[j])
+                parameters.append(batch_filenames[j])
+                
+            where_clause = " OR ".join(where_conditions)
+            sql = f'''
+                SELECT `{METADATA_TABLE.columns.id.name}`, 
+                `{METADATA_TABLE.columns.file_name.name}`, 
+                `{METADATA_TABLE.columns.parent_dir.name}` 
+                FROM `{METADATA_TABLE.name}` 
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = FALSE
+                AND ({where_clause})
+                '''
+                
+            query_result = metadata_server_api.query_rows(sql, parameters)
+            batch_metadata_records = query_result.get('results', [])
+            all_metadata_records.extend(batch_metadata_records)
+
+        return all_metadata_records
+    
+    def _handle_tags_link(self, metadata_records, metadata_tag_id_to_file_paths, METADATA_TABLE):
+        file_path_to_record_id = {}  # {file_path: record_id}
+        for record in metadata_records:
+            parent_dir = record.get(METADATA_TABLE.columns.parent_dir.name)
+            file_name = record.get(METADATA_TABLE.columns.file_name.name)
+            record_id = record.get(METADATA_TABLE.columns.id.name)
+            
+            file_path = posixpath.join(parent_dir, file_name)
+            file_path_to_record_id[file_path] = record_id
+        # create record id to tag id mapping
+        record_to_tags_map = {}  # {record_id: [tag_id1, tag_id2]}
+        for tag_id, file_paths in metadata_tag_id_to_file_paths.items():
+            for file_path in file_paths:
+                record_id = file_path_to_record_id.get(file_path)
+                if not record_id:
+                    continue
+                    
+                if record_id not in record_to_tags_map:
+                    record_to_tags_map[record_id] = []
+                    
+                record_to_tags_map[record_id].append(tag_id)
+        
+        return record_to_tags_map
+    
+    def post(self, request, repo_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_name = repo.name
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'Metadata extension is not enabled for library {repo_name}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        tags_enabled = metadata.tags_enabled
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        if not tags_enabled:
+            metadata.tags_enabled = True
+            metadata.tags_lang = 'en'
+            metadata.save()
+            init_tags(metadata_server_api)
+        
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
+        tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
+        if not tags_table:
+            return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+        tags_table_id = tags_table['id']
+        
+        # create new tags
+        repo_tags = RepoTags.objects.get_all_by_repo_id(repo_id)
+        if not repo_tags:
+            return Response({'success': True})
+        metadata_tags = self._create_metadata_tags(repo_tags, tags_table_id, metadata_server_api, TAGS_TABLE)
+
+        tagged_files = FileTags.objects.select_related('repo_tag').filter(repo_tag__repo_id=repo_id)
+        if not tagged_files:
+            repo_tags.delete()
+            return Response({'success': True})
+        old_tag_name_to_file_paths, file_paths_set = self._get_old_tags_info(tagged_files)
+        
+        metadata_tag_id_to_file_paths = {}  # {tag_id: file_paths}
+        for tag_name, tag_id in metadata_tags.items():
+            if tag_name not in old_tag_name_to_file_paths:
+                continue
+            file_paths = old_tag_name_to_file_paths[tag_name]
+            metadata_tag_id_to_file_paths[tag_id] = file_paths
+        
+        try:
+            # query records
+            metadata_records = self._get_metadata_records(metadata_server_api, file_paths_set, METADATA_TABLE)
+            record_to_tags_map = self._handle_tags_link(metadata_records, metadata_tag_id_to_file_paths, METADATA_TABLE)
+            metadata_server_api.insert_link(
+                TAGS_TABLE.file_link_id, 
+                METADATA_TABLE.id, 
+                record_to_tags_map
+            )
+            # clear old tag data
+            tagged_files.delete()
+            repo_tags.delete()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({'success': True})

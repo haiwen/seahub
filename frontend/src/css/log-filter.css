@@ -1,0 +1,76 @@
+.activity-details {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.activity-details:hover {
+  color: #212529;
+}
+
+.mobile-activity-time {
+  display: inline-block;
+  margin-bottom: .2em;
+}
+
+.cur-activity-modifiers {
+  margin-left: -0.5rem;
+}
+
+.cur-activity-modifiers:hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.cur-activity-modifiers .toggle-icon {
+  color: #999;
+}
+
+.activity-modifier-selector-container {
+  width: 320px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  margin-top: 2px;
+  z-index: 2;
+}
+
+.activity-selected-modifiers {
+  min-height: 2rem;
+  background: #f6f6f6;
+  border-bottom: 1px solid #dde2ea;
+  line-height: 1;
+}
+
+.activity-selected-modifier {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  padding: 0 8px 0 2px;
+  border-radius: 10px;
+  background: #eaeaea;
+}
+
+.unselect-activity-user {
+  color: #909090;
+  cursor: pointer;
+}
+
+.unselect-activity-user:hover {
+  color: #5a5a5a;
+}
+
+.activity-user-list {
+  min-height: 4rem;
+  max-height: 200px;
+}
+
+.activity-user-item {
+  cursor: pointer;
+}
+
+.activity-user-item:hover {
+  background: #f5f5f5;
+}
+
+.activity-user-name {
+  font-size: 14px;
+}

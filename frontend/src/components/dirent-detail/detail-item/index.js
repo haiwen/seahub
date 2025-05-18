@@ -8,7 +8,9 @@ import './index.css';
 
 const DetailItem = ({ readonly = true, field, className, children }) => {
   const icon = useMemo(() => {
-    if (field.type === 'size') return COLUMNS_ICON_CONFIG[CellType.NUMBER];
+    if (field.type === 'size') {
+      return COLUMNS_ICON_CONFIG[CellType.NUMBER];
+    }
     return COLUMNS_ICON_CONFIG[field.type];
   }, [field]);
 

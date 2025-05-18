@@ -617,6 +617,7 @@ CREATE TABLE `organizations_orgsettings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `org_id` int(11) NOT NULL,
   `role` varchar(100) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `organizations_orgsettings_org_id_630f6843_uniq` (`org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1465,7 +1466,8 @@ CREATE TABLE `sdoc_notification` (
   `seen` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `sdoc_notification_doc_uuid_username` (`doc_uuid`, `username`),
-  KEY `sdoc_notification_created_at` (`created_at`)
+  KEY `sdoc_notification_created_at` (`created_at`),
+  KEY `idx_user_seen` (`username`, `seen`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `base_clientssotoken` (
@@ -1536,9 +1538,14 @@ CREATE TABLE `repo_metadata`  (
   `created_time` DATETIME NOT NULL,
   `from_commit` varchar(40) NULL,
   `to_commit` varchar(40) NULL,
+  `tags_enabled` tinyint(1) DEFAULT NULL,
+  `tags_lang` varchar(36) DEFAULT NULL,
+  `details_settings` longtext DEFAULT NULL,
+  `ocr_enabled` tinyint(1) DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
   KEY `key_repo_metadata_face_recognition_enabled`(`face_recognition_enabled`),
+  KEY `key_last_face_cluster_time_face_recognition_enabled` (`face_recognition_enabled`,`last_face_cluster_time`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1598,4 +1605,51 @@ CREATE TABLE `group_invite_link` (
   PRIMARY KEY (`id`),
   KEY `group_invite_link_group_id` (`group_id`),
   KEY `group_invite_link_token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `repo_extra_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `config_type` varchar(50) NOT NULL,
+  `config_details` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ix_repo_extra_repo_id` (`repo_id`),
+  UNIQUE KEY `ix_repo_extra_repo_idconfig_type` (`repo_id`, `config_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `org_last_active_time` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `timestamp` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `org_id` (`org_id`),
+  KEY `ix_org_last_active_time_org_id` (`org_id`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `group_member_audit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `operator` varchar(255) NOT NULL,
+  `user` varchar(255) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `operation` varchar(128) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_group_member_audit_org_id` (`org_id`),
+  KEY `idx_group_member_audit_timestamp` (`timestamp`),
+  KEY `idx_group_member_audit_operator` (`operator`),
+  KEY `idx_group_member_audit_user` (`user`),
+  KEY `idx_group_member_audit_group_id` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `notifications_sysusernotification` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `message` longtext NOT NULL,
+  `to_user` varchar(255) NOT NULL,
+  `seen` tinyint(1) NOT NULL,
+  `created_at` datetime(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `notifications_sysusernotification_to_user_e0c9101e` (`to_user`),
+  KEY `notifications_sysusernotification_seen_9d851bf7` (`seen`),
+  KEY `notifications_sysusernotification_created_at_56ffd2a0` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

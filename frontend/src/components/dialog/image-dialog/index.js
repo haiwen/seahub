@@ -5,7 +5,6 @@ import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { SYSTEM_FOLDERS } from '../../../constants';
-import { Utils } from '../../../utils/utils';
 import Icon from '../../icon';
 
 import '@seafile/react-image-lightbox/style.css';
@@ -39,11 +38,11 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   const nextImg = imageItems[(imageIndex + 1) % imageItemsLength];
   const prevImg = imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength];
 
-  // The backend server does not support rotating HEIC images
+  // The backend server does not support rotating HEIC, GIF, SVG images
   let enableRotate = oldEnableRotate;
   const urlParts = mainImg.src.split('?')[0].split('.');
-  const suffix = urlParts[urlParts.length - 1];
-  if (suffix === 'heic') {
+  const suffix = urlParts[urlParts.length - 1].toLowerCase();
+  if (suffix === 'heic' || suffix === 'svg' || suffix === 'gif') {
     enableRotate = false;
   }
 
@@ -54,9 +53,6 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   }
 
   const renderSidePanel = () => {
-    const dirent = { id, name, type: 'file' };
-    const path = mainImg.parentDir;
-
     return (
       <div
         className="lightbox-side-panel"
@@ -66,9 +62,15 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
         <div className="side-panel-controller" onClick={onToggleSidePanel}>
           <Icon className="expand-button" symbol={expanded ? 'right_arrow' : 'left_arrow'} />
         </div>
-        {expanded && (<EmbeddedFileDetails repoID={repoID} repoInfo={repoInfo} path={path} dirent={dirent} />)}
+        {expanded &&
+          <EmbeddedFileDetails
+            repoID={repoID}
+            repoInfo={repoInfo}
+            path={mainImg.parentDir}
+            dirent={{ id, name, type: 'file' }}
+          />
+        }
       </div>
-
     );
   };
 

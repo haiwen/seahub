@@ -13,21 +13,21 @@ import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import ShareLinkPermissionSelect from '../../components/dialog/share-link-permission-select';
 import ShareAdminLink from '../../components/dialog/share-admin-link';
-import SortOptionsDialog from '../../components/dialog/sort-options';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Selector from '../../components/single-selector';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 
+import '../../css/share-admin-links.css';
+
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,
   isLoadingMore: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
-  sortBy: PropTypes.string.isRequired,
-  sortOrder: PropTypes.string.isRequired,
-  sortItems: PropTypes.func.isRequired,
+  toggleSelectAllLinks: PropTypes.func.isRequired,
+  toggleSelectLink: PropTypes.func.isRequired,
   onRemoveLink: PropTypes.func.isRequired
 };
 
@@ -44,22 +44,12 @@ class Content extends Component {
     this.setState({ isItemFreezed: isFreezed });
   };
 
-  sortByName = (e) => {
-    e.preventDefault();
-    const sortBy = 'name';
-    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
-    this.props.sortItems(sortBy, sortOrder);
-  };
-
-  sortByTime = (e) => {
-    e.preventDefault();
-    const sortBy = 'time';
-    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
-    this.props.sortItems(sortBy, sortOrder);
+  toggleSelectAllLinks = (e) => {
+    this.props.toggleSelectAllLinks(e.target.checked);
   };
 
   render() {
-    const { loading, errorMsg, items, sortBy, sortOrder } = this.props;
+    const { loading, errorMsg, items } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -76,10 +66,8 @@ class Content extends Component {
       );
     }
 
-    // sort
-    const sortByName = sortBy == 'name';
-    const sortByTime = sortBy == 'time';
-    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+    const selectedItems = items.filter(item => item.isSelected);
+    const isAllLinksSelected = selectedItems.length == items.length;
 
     const isDesktop = Utils.isDesktop();
     // only for some columns
@@ -90,12 +78,13 @@ class Content extends Component {
         <FixedWidthTable
           className={classnames('', { 'table-thead-hidden': !isDesktop })}
           headers={isDesktop ? [
+            { isFixed: true, width: 30, className: 'text-center', children: (<input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />) }, // checkbox
             { isFixed: true, width: 40 }, // icon
-            { isFixed: false, width: 0.35, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
+            { isFixed: false, width: 0.35, children: gettext('Name') },
             { isFixed: false, width: columnWidths[0], children: gettext('Library') },
             isPro ? { isFixed: false, width: 0.2, children: gettext('Permission') } : null,
             { isFixed: false, width: columnWidths[1], children: gettext('Visits') },
-            { isFixed: false, width: columnWidths[2], children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Expiration')} {sortByTime && sortIcon}</a>) },
+            { isFixed: false, width: columnWidths[2], children: gettext('Expiration') },
             { isFixed: false, width: 0.1 }, // operations
           ].filter(i => i) : [
             { isFixed: false, width: 0.12 },
@@ -111,6 +100,7 @@ class Content extends Component {
               onRemoveLink={this.props.onRemoveLink}
               isItemFreezed={this.state.isItemFreezed}
               toggleItemFreezed={this.toggleItemFreezed}
+              toggleSelectLink={this.props.toggleSelectLink}
             />);
           })}
         </FixedWidthTable>
@@ -127,7 +117,8 @@ const itemPropTypes = {
   isDesktop: PropTypes.bool.isRequired,
   onRemoveLink: PropTypes.func.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
-  toggleItemFreezed: PropTypes.func.isRequired
+  toggleItemFreezed: PropTypes.func.isRequired,
+  toggleSelectLink: PropTypes.func.isRequired
 };
 
 class Item extends Component {
@@ -233,9 +224,19 @@ class Item extends Component {
     });
   };
 
+  onCheckboxClicked = (e) => {
+    e.stopPropagation();
+  };
+
+  toggleSelectLink = (e) => {
+    const { item } = this.props;
+    this.props.toggleSelectLink(item, e.target.checked);
+  };
+
   render() {
-    const item = this.props.item;
-    const { currentPermission, permissionOptions, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
+    const { item } = this.props;
+    const { isSelected = false } = item;
+    const { highlight, currentPermission, permissionOptions, isOpIconShown, isPermSelectDialogOpen, isLinkDialogOpen } = this.state;
     this.permOptions = permissionOptions.map(item => {
       return {
         value: item,
@@ -245,7 +246,8 @@ class Item extends Component {
     });
     const currentSelectedPermOption = this.permOptions.filter(item => item.isSelected)[0] || {};
 
-    let iconUrl; let objUrl;
+    let iconUrl;
+    let objUrl;
     if (item.is_dir) {
       let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
       iconUrl = Utils.getFolderIconUrl(false);
@@ -259,11 +261,23 @@ class Item extends Component {
       <Fragment>
         {this.props.isDesktop ?
           <tr
-            className={this.state.highlight ? 'tr-highlight' : ''}
+            className={classnames({
+              'tr-highlight': highlight,
+              'tr-active': isSelected
+            })}
             onMouseEnter={this.handleMouseEnter}
             onMouseLeave={this.handleMouseLeave}
             onFocus={this.handleMouseEnter}
           >
+            <td className="text-center">
+              <input
+                type="checkbox"
+                checked={isSelected}
+                className="vam"
+                onClick={this.onCheckboxClicked}
+                onChange={this.toggleSelectLink}
+              />
+            </td>
             <td className="pl-2 pr-2"><img src={iconUrl} width="24" alt="" /></td>
             <td>
               {item.is_dir ?
@@ -368,75 +382,16 @@ class ShareAdminShareLinks extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isCleanInvalidShareLinksDialogOpen: false,
       loading: true,
       hasMore: false,
       isLoadingMore: false,
       page: 1,
       errorMsg: '',
       items: [],
-      sortBy: 'name', // 'name' or 'time'
-      sortOrder: 'asc' // 'asc' or 'desc'
+      isCleanInvalidShareLinksDialogOpen: false,
+      isDeleteShareLinksDialogOpen: false
     };
-
-    // for mobile
-    this.sortOptions = [
-      { value: 'name-asc', text: gettext('By name ascending') },
-      { value: 'name-desc', text: gettext('By name descending') },
-      { value: 'time-asc', text: gettext('By expiration ascending') },
-      { value: 'time-desc', text: gettext('By expiration descending') }
-    ];
   }
-
-  _sortItems = (items, sortBy, sortOrder) => {
-    let comparator;
-
-    switch (`${sortBy}-${sortOrder}`) {
-      case 'name-asc':
-        comparator = function (a, b) {
-          var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
-          return result;
-        };
-        break;
-      case 'name-desc':
-        comparator = function (a, b) {
-          var result = Utils.compareTwoWord(a.obj_name, b.obj_name);
-          return -result;
-        };
-        break;
-      case 'time-asc':
-        comparator = function (a, b) {
-          return a.expire_date < b.expire_date ? -1 : 1;
-        };
-        break;
-      case 'time-desc':
-        comparator = function (a, b) {
-          return a.expire_date < b.expire_date ? 1 : -1;
-        };
-        break;
-
-      // no default
-    }
-
-    items.sort((a, b) => {
-      if (a.is_dir && !b.is_dir) {
-        return -1;
-      } else if (!a.is_dir && b.is_dir) {
-        return 1;
-      } else {
-        return comparator(a, b);
-      }
-    });
-    return items;
-  };
-
-  sortItems = (sortBy, sortOrder) => {
-    this.setState({
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      items: this._sortItems(this.state.items, sortBy, sortOrder)
-    });
-  };
 
   componentDidMount() {
     this.listUserShareLinks();
@@ -451,7 +406,7 @@ class ShareAdminShareLinks extends Component {
       this.setState({
         loading: false,
         hasMore: res.data.length == PER_PAGE,
-        items: this._sortItems(items, this.state.sortBy, this.state.sortOrder)
+        items,
       });
     }).catch((error) => {
       this.setState({
@@ -485,7 +440,7 @@ class ShareAdminShareLinks extends Component {
         isLoadingMore: false,
         hasMore: res.data.length == PER_PAGE,
         page: page + 1,
-        items: this._sortItems(this.state.items.concat(moreItems), this.state.sortBy, this.state.sortOrder)
+        items: this.state.items.concat(moreItems),
       });
     }).catch((error) => {
       this.setState({
@@ -509,12 +464,6 @@ class ShareAdminShareLinks extends Component {
     });
   };
 
-  toggleSortOptionsDialog = () => {
-    this.setState({
-      isSortOptionsDialogOpen: !this.state.isSortOptionsDialogOpen
-    });
-  };
-
   toggleCleanInvalidShareLinksDialog = () => {
     this.setState({ isCleanInvalidShareLinksDialogOpen: !this.state.isCleanInvalidShareLinksDialogOpen });
   };
@@ -530,26 +479,103 @@ class ShareAdminShareLinks extends Component {
     });
   };
 
+  toggleDeleteShareLinksDialog = () => {
+    this.setState({ isDeleteShareLinksDialogOpen: !this.state.isDeleteShareLinksDialogOpen });
+  };
+
+  cancelSelectAllLinks = () => {
+    this.toggleSelectAllLinks(false);
+  };
+
+  toggleSelectAllLinks = (isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => {
+        item.isSelected = isSelected;
+        return item;
+      })
+    });
+  };
+
+  toggleSelectLink = (link, isSelected) => {
+    const { items: links } = this.state;
+    this.setState({
+      items: links.map(item => {
+        if (item.token == link.token) {
+          item.isSelected = isSelected;
+        }
+        return item;
+      })
+    });
+  };
+
+  deleteShareLinks = () => {
+    const { items: shareLinks } = this.state;
+    const tokens = shareLinks.filter(item => item.isSelected).map(link => link.token);
+    seafileAPI.deleteShareLinks(tokens).then(res => {
+      const { success, failed } = res.data;
+      if (success.length) {
+        let newShareLinkList = shareLinks.filter(shareLink => {
+          return !success.some(deletedShareLink => {
+            return deletedShareLink.token == shareLink.token;
+          });
+        });
+        this.setState({
+          items: newShareLinkList
+        });
+        const length = success.length;
+        const msg = length == 1 ?
+          gettext('Successfully deleted 1 share link') :
+          gettext('Successfully deleted {number_placeholder} share links')
+            .replace('{number_placeholder}', length);
+        toaster.success(msg);
+      }
+      failed.forEach(item => {
+        const msg = `${item.token}: ${item.error_msg}`;
+        toaster.danger(msg);
+      });
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
+    const { items } = this.state;
+    const selectedLinksLen = items.filter(item => item.isSelected).length;
     return (
       <Fragment>
         <div className="main-panel-center">
           <div className="cur-view-container">
-            <div className="cur-view-path share-upload-nav">
-              <ul className="nav">
-                <li className="nav-item">
-                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
-                    {gettext('Share Links')}
-                    <SingleDropdownToolbar
-                      opList={[{ 'text': gettext('Clean invalid share links'), 'onClick': this.toggleCleanInvalidShareLinksDialog }]}
-                    />
-                  </Link>
-                </li>
-                {canGenerateUploadLink && (
-                  <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
-                )}
-              </ul>
-              {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+            <div className={classnames('cur-view-path share-upload-nav', { 'o-hidden': selectedLinksLen > 0 })}>
+              {selectedLinksLen > 0
+                ? (
+                  <div className="selected-items-toolbar">
+                    <span className="cur-view-path-btn px-1" onClick={this.cancelSelectAllLinks}>
+                      <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+                      <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
+                    </span>
+                    <span className="cur-view-path-btn ml-4" onClick={this.toggleDeleteShareLinksDialog}>
+                      <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
+                    </span>
+                  </div>
+                )
+                : (
+                  <ul className="nav">
+                    <li className="nav-item">
+                      <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">
+                        {gettext('Share Links')}
+                        <SingleDropdownToolbar
+                          opList={[{ 'text': gettext('Clean invalid share links'), 'onClick': this.toggleCleanInvalidShareLinksDialog }]}
+                        />
+                      </Link>
+                    </li>
+                    {canGenerateUploadLink && (
+                      <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
+                    )}
+                  </ul>
+                )
+              }
             </div>
             <div className="cur-view-content" onScroll={this.handleScroll}>
               <Content
@@ -557,23 +583,13 @@ class ShareAdminShareLinks extends Component {
                 isLoadingMore={this.state.isLoadingMore}
                 errorMsg={this.state.errorMsg}
                 items={this.state.items}
-                sortBy={this.state.sortBy}
-                sortOrder={this.state.sortOrder}
-                sortItems={this.sortItems}
                 onRemoveLink={this.onRemoveLink}
+                toggleSelectAllLinks={this.toggleSelectAllLinks}
+                toggleSelectLink={this.toggleSelectLink}
               />
             </div>
           </div>
         </div>
-        {this.state.isSortOptionsDialogOpen &&
-        <SortOptionsDialog
-          toggleDialog={this.toggleSortOptionsDialog}
-          sortBy={this.state.sortBy}
-          sortOrder={this.state.sortOrder}
-          sortOptions={this.sortOptions}
-          sortItems={this.sortItems}
-        />
-        }
         {this.state.isCleanInvalidShareLinksDialogOpen &&
           <CommonOperationConfirmationDialog
             title={gettext('Clean invalid share links')}
@@ -583,6 +599,15 @@ class ShareAdminShareLinks extends Component {
             toggleDialog={this.toggleCleanInvalidShareLinksDialog}
           />
         }
+        {this.state.isDeleteShareLinksDialogOpen && (
+          <CommonOperationConfirmationDialog
+            title={gettext('Delete share links')}
+            message={gettext('Are you sure you want to delete the selected share link(s) ?')}
+            executeOperation={this.deleteShareLinks}
+            confirmBtnText={gettext('Delete')}
+            toggleDialog={this.toggleDeleteShareLinksDialog}
+          />
+        )}
       </Fragment>
     );
   }

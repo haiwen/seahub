@@ -335,7 +335,6 @@ class EnvManager(object):
     def get_seahub_env(self):
         '''Prepare for seahub syncdb'''
         env = dict(os.environ)
-        env['CCNET_CONF_DIR'] = self.ccnet_dir
         env['SEAFILE_CONF_DIR'] = self.seafile_dir
         env['SEAFILE_CENTRAL_CONF_DIR'] = self.central_config_dir
         env['SEAFILE_RPC_PIPE_PATH'] = self.seafile_rpc_pipe_path
@@ -345,7 +344,7 @@ class EnvManager(object):
         return env
 
     def setup_python_path(self, env):
-        '''And PYTHONPATH and CCNET_CONF_DIR/SEAFILE_CONF_DIR to env, which is
+        '''And PYTHONPATH and SEAFILE_CONF_DIR to env, which is
         needed by seahub
 
         '''
@@ -717,12 +716,12 @@ def update_seasearch_index():
 def update_file_seasearch_index():
     argv = [
         Utils.get_python_executable(),
-        '-m', 'seafevents.seasearch.script.repo_filename_index_local',
+        '-m', 'seafevents.seasearch.script.repo_file_index_local',
         '--loglevel', 'debug',
         'update',
     ]
 
-    Utils.info('\nUpdating seasearch filename index, this may take a while...\n')
+    Utils.info('\nUpdating seasearch file index, this may take a while...\n')
 
     Utils.run_argv(argv, env=get_seafes_env())
 
@@ -756,12 +755,12 @@ def delete_seasearch_index():
 def delete_file_seasearch_index():
     argv = [
         Utils.get_python_executable(),
-        '-m', 'seafevents.seasearch.script.repo_filename_index_local',
+        '-m', 'seafevents.seasearch.script.repo_file_index_local',
         '--loglevel', 'debug',
         'clear',
     ]
 
-    Utils.info('\nDelete seasearch filename index, this may take a while...\n')
+    Utils.info('\nDelete seasearch file index, this may take a while...\n')
 
     Utils.run_argv(argv, env=get_seafes_env())
 

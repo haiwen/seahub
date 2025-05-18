@@ -1,14 +1,14 @@
 @font-face {
   font-family: "sdocfont";
   /* Project id 4097705 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1734689650019');
+  src: url('./sdoc-editor-font/iconfont.eot?t=1744104550669');
   /* IE9 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1734689650019#iefix') format('embedded-opentype'),
+  src: url('./sdoc-editor-font/iconfont.eot?t=1744104550669#iefix') format('embedded-opentype'),
     /* IE6-IE8 */
-    url('./sdoc-editor-font/iconfont.woff2?t=1734689650019') format('woff2'),
-    url('./sdoc-editor-font/iconfont.woff?t=1734689650019') format('woff'),
-    url('./sdoc-editor-font/iconfont.ttf?t=1734689650019') format('truetype'),
-    url('./sdoc-editor-font/iconfont.svg?t=1734689650019#sdocfont') format('svg');
+    url('./sdoc-editor-font/iconfont.woff2?t=1744104550669') format('woff2'),
+    url('./sdoc-editor-font/iconfont.woff?t=1744104550669') format('woff'),
+    url('./sdoc-editor-font/iconfont.ttf?t=1744104550669') format('truetype'),
+    url('./sdoc-editor-font/iconfont.svg?t=1744104550669#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -19,8 +19,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.sdoc-ask-ai:before {
+.sdoc-presentation:before {
+  content: "\e688";
+}
+
+.sdoc-close-presentation:before {
+  content: "\e689";
+}
+
+.sdoc-seatable-row:before {
   content: "\e687";
+}
+
+.sdoc-ask-ai:before {
+  content: "\e685";
 }
 
 .sdoc-document-link:before {

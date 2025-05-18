@@ -18,8 +18,6 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
-from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
-    get_default_group_avatar_url
 from seahub.utils import is_org_context, is_valid_username, is_pro_version
 from seahub.utils.repo import get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -50,12 +48,6 @@ def get_group_admins(group_id):
 
 def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
     group = ccnet_api.get_group(group_id)
-    try:
-        avatar_url, is_default, date_uploaded = api_grp_avatar_url(group.id, avatar_size)
-    except Exception as e:
-        logger.error(e)
-        avatar_url = get_default_group_avatar_url()
-
     isoformat_timestr = timestamp_to_isoformat_timestr(group.timestamp)
     group_info = {
         "id": group.id,
@@ -63,7 +55,6 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         "name": group.group_name,
         "owner": group.creator_name,
         "created_at": isoformat_timestr,
-        "avatar_url": request.build_absolute_uri(avatar_url),
         "admins": get_group_admins(group.id),
     }
     # parent_group_id = 0: non department group

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard, useGoFileserver } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard, useGoFileserver, enableExcalidraw } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -15,7 +15,6 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import Rename from '../../components/dialog/rename-dirent';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
@@ -53,7 +52,6 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func,
   repoTags: PropTypes.array.isRequired,
-  onFileTagChanged: PropTypes.func,
   onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
@@ -80,7 +78,6 @@ class DirentGridView extends React.Component {
       isShareDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
-      isEditFileTagShow: false,
       isZipDialogOpen: false,
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
@@ -355,6 +352,12 @@ class DirentGridView extends React.Component {
       case 'Copy':
         this.onItemCopyToggle();
         break;
+      case 'Star':
+        this.onToggleStarItem();
+        break;
+      case 'Unstar':
+        this.onToggleStarItem();
+        break;
       case 'Unfreeze Document':
         this.onUnlockItem(currentObject);
         break;
@@ -375,9 +378,6 @@ class DirentGridView extends React.Component {
         break;
       case 'Convert to sdoc':
         this.onItemConvert(currentObject, event, 'sdoc');
-        break;
-      case 'Tags':
-        this.onEditFileTagToggle();
         break;
       case 'Permission':
         this.onPermissionItem();
@@ -411,6 +411,9 @@ class DirentGridView extends React.Component {
         break;
       case 'New Whiteboard File':
         this.onCreateFileToggle('.draw');
+        break;
+      case 'New Excalidraw File':
+        this.onCreateFileToggle('.exdraw');
         break;
       case 'New SeaDoc File':
         this.onCreateFileToggle('.sdoc');
@@ -448,18 +451,6 @@ class DirentGridView extends React.Component {
     }
 
     hideMenu();
-  };
-
-  onEditFileTagToggle = () => {
-    this.setState({
-      isEditFileTagShow: !this.state.isEditFileTagShow
-    });
-  };
-
-  onFileTagChanged = () => {
-    let dirent = this.state.activeDirent ? this.state.activeDirent : '';
-    let direntPath = Utils.joinPath(this.props.path, dirent.name);
-    this.props.onFileTagChanged(dirent, direntPath);
   };
 
   getDirentPath = (dirent) => {
@@ -520,6 +511,35 @@ class DirentGridView extends React.Component {
 
   onItemCopyToggle = () => {
     this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
+  };
+
+  onToggleStarItem = () => {
+    const { activeDirent: dirent } = this.state;
+    const { repoID } = this.props;
+    const filePath = this.getDirentPath(dirent);
+    const itemName = dirent.name;
+
+    if (dirent.starred) {
+      seafileAPI.unstarItem(repoID, filePath).then(() => {
+        this.props.updateDirent(dirent, 'starred', false);
+        const msg = gettext('Successfully unstarred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.starItem(repoID, filePath).then(() => {
+        this.props.updateDirent(dirent, 'starred', true);
+        const msg = gettext('Successfully starred {name_placeholder}.')
+          .replace('{name_placeholder}', itemName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
   };
 
   onPermissionItem = () => {
@@ -734,13 +754,15 @@ class DirentGridView extends React.Component {
     if (!['admin', 'rw'].includes(this.props.userPerm)) return;
 
     const {
-      NEW_FOLDER, NEW_FILE,
+      NEW_FOLDER,
+      NEW_FILE,
       NEW_MARKDOWN_FILE,
       NEW_EXCEL_FILE,
       NEW_POWERPOINT_FILE,
       NEW_WORD_FILE,
       NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE
+      NEW_TLDRAW_FILE,
+      NEW_EXCALIDRAW_FILE
     } = TextTranslation;
 
     let direntsContainerMenuList = [
@@ -761,6 +783,10 @@ class DirentGridView extends React.Component {
 
     if (enableWhiteboard) {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
+    }
+
+    if (enableExcalidraw) {
+      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
 
     if (selectedDirentList.length === 0) {
@@ -993,16 +1019,6 @@ class DirentGridView extends React.Component {
             onItemsCopy={this.props.onItemsCopy}
             onCancelCopy={this.onCopyToggle}
             onAddFolder={this.props.onAddFolder}
-          />
-        }
-        {this.state.isEditFileTagShow &&
-          <EditFileTagDialog
-            repoID={this.props.repoID}
-            fileTagList={dirent.file_tags}
-            filePath={direntPath}
-            toggleCancel={this.onEditFileTagToggle}
-            repoTags={this.props.repoTags}
-            onFileTagChanged={this.onFileTagChanged}
           />
         }
         {this.state.isShareDialogShow &&

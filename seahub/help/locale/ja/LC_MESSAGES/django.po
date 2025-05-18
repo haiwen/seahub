@@ -6,6 +6,7 @@
 # Translators:
 # Hiroshi Miura <miurahr@northside.tokyo>, 2024
 # 鑫 王 <wangxin@oneby.com.cn>, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: 鑫 王 <wangxin@oneby.com.cn>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Japanese (https://app.transifex.com/haiwen/teams/5086/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +25,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "サイドナビゲーションメニュー"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -167,6 +168,7 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"あなたとあなたの友人が共有ファイルライブラリをコンピュータに同期すると、ライブラリ内のファイルを追加、削除、または編集できます。ライブラリに加えたすべての変更は、他のユーザーのコンピュータに自動的に同期されます。"
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -177,36 +179,38 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"あなたとあなたの友人が同じファイルを同時に編集することがあります。あなたが行った変更は、他のユーザーの変更と競合する可能性があります。この場合、Seafileは最初にクラウドに同期されたバージョンを変更せずに保持し、他のバージョンを「競合ファイル」に名前変更します。競合ファイルの名前は、作成者のメールアドレスと現在の時刻で終わります。例：test.txt（SFConflict"
+" name@example.com 2015-03-07-11-30-28）。"
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
-msgstr ""
+msgstr "自分が所有するライブラリは削除できます。削除されたライブラリは、自分またはSeafileサーバーの管理者によって復元できます。"
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "ライブラリを削除すると、次の影響があります。"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "このライブラリ内のファイルとフォルダーの共有はすべてキャンセルされます。"
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
-msgstr ""
+msgstr "このライブラリと同期されたデスクトップクライアントは、それ以上同期できません。ただし、クライアント上のローカルファイルは削除されません。"
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "部門の管理と使用"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
-msgstr ""
+msgstr "一部の組織は、複雑な部門階層で構成されています。通常、これらの組織でのファイル管理には、2つの一般的なユースケースがあります。"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -214,6 +218,7 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"組織には、共通のファイル共有スペースが必要です。フォルダー階層は、部門階層に対応している必要があります。各部門には、個別のフォルダーまたはスペースが割り当てられます。"
 
 #: templates/help/departments.html:9
 msgid ""
@@ -221,12 +226,13 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"共有スペースは、組織が所有および管理する必要がありますが、個々の従業員が所有および管理する必要はありません。これにより、従業員が組織を離れるときにファイルの所有権を変更する必要がなくなります。"
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
-msgstr ""
+msgstr "「部門」機能は、上記の2つのユースケースを満たすように設計されています。この機能について、3つの異なる視点から紹介します。"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
@@ -242,25 +248,25 @@ msgstr "部門のメンバー"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "システム管理者は以下を実行できます:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "部門の階層とメンバーを管理する"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "部門のストレージクォータを割り当てる"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "部門で共有ライブラリを作成および管理する"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
-msgstr ""
+msgstr "システム管理者は、部門の階層を2つの方法で設定できます。手動設定またはActive Directoryからのインポート。"
 
 #: templates/help/departments.html:26
 msgid ""
@@ -270,6 +276,7 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"システム管理者は、任意の数の最上位部門を作成し、各部門の下に任意のレベルのサブ部門を作成できます。また、各レベルの部門にはメンバーを入力できます。システム管理者は、各メンバーの役割を「メンバー」または「管理者」に設定できます。部門管理者が部門を管理する方法については、後で説明します。"
 
 #: templates/help/departments.html:27
 msgid ""
@@ -278,12 +285,13 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"システム管理者は、ADのOU（組織単位）から階層をインポートすることもできます。各OUは部門としてインポートされます。また、OUの下のサブOUはサブ部門としてインポートされます。部門ライブラリは、インポートプロセスで自動的に作成できます。"
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
-msgstr ""
+msgstr "システム管理者は、すべてのサブ部門とライブラリが削除された後、部門を削除することもできます。"
 
 #: templates/help/departments.html:30
 msgid ""
@@ -293,6 +301,7 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"部門内に作成されたライブラリは、個々のユーザーではなく、部門自体が所有しています。したがって、システム管理者は部門にストレージクォータを割り当てることができます。部門内のすべてのライブラリの合計サイズは、ストレージクォータを超えることはできません。<strong>サブ部門のクォータは、親部門のクォータに依存しないことに注意してください。</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -300,12 +309,13 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"部門ライブラリは、システム管理者または部門管理者が作成できます。個々のユーザーがライブラリを部門と共有できるかどうかを制御するオプションもあります。"
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
-msgstr ""
+msgstr "上記のすべての操作は、システム管理インターフェイスで実行できます。詳細については、以下のスクリーンショットを参照してください。"
 
 #: templates/help/departments.html:36
 msgid ""
@@ -313,18 +323,19 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"上記のように、部門管理者は、システム管理者によって部門のメンバーに割り当てられた特別な役割です。部門管理者は、自分のアカウントにログインした後、部門で次の操作を実行できます。"
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "部門のライブラリへのアクセス"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "自分の部門のメンバーを管理する"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "自分の部門のライブラリを管理する"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -333,26 +344,27 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"ユーザーが部門の管理者である場合、その部門のメンバーを追加または削除できます。システムに登録されているすべてのユーザーを部門のメンバーとして追加できます。ただし、部門がADからインポートされた場合、メンバーシップへの変更は、ADとの次の同期で上書きされます。"
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
-msgstr ""
+msgstr "部門管理者は、部門のライブラリを管理できます。サポートされている操作は次のとおりです。"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "ライブラリを作成または削除する"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "ライブラリ名を変更する"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
-msgstr ""
+msgstr "この部門外のユーザーまたはグループとライブラリを共有します。これは、部門間のコラボレーションに非常に役立ちます。"
 
 #: templates/help/departments.html:49
 #, python-format
@@ -362,6 +374,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"この部門のユーザーまたはサブ部門のライブラリ内のフォルダーに、きめ細かい権限を設定します。これは、＜a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\"＞フォルダー権限機能＜/a＞のように機能します。"
 
 #: templates/help/departments.html:53
 msgid ""
@@ -374,16 +388,17 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"部門の通常のメンバーは、グループと同じように部門を使用できます。各部門は、そのメンバーにグループとして提示されます。ユーザーは、自分が所属する部門のライブラリだけでなく、自分の部門の親部門のライブラリにもアクセスできます。たとえば、Johnが「Sales」部門の「EMEA」サブ部門に所属し、「Sales」が会社「ACME」のサブ部門である場合、Johnは「EMEA」、「Sales」、および「ACME」グループにアクセスできます。部門のグループには、名前の横に「建物」アイコンが付いています。"
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Seafileクライアントでプロキシを使用する"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
-msgstr ""
+msgstr "Seafileクライアントは、HTTPプロキシ、SOCKS5プロキシ、システムプロキシ設定の3種類のプロキシサーバーをサポートしています。"
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -393,6 +408,7 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"HTTPプロキシとSOCKS5プロキシでは、プロキシサーバーのアドレスとポートを入力する必要があります。システムプロキシ設定を使用する場合、Seafileクライアントはオペレーティングシステムからプロキシ設定を読み取ります。オペレーティングシステムには、プロキシサーバー情報を自動検出するメカニズムがあります。したがって、プロキシサーバーアドレスを手動で入力する必要はありません。"
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -400,10 +416,11 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"プロキシ設定を変更するには、システム通知領域にあるSeafileアイコンをクリックします。メニューで[設定]を選択します。ポップアップ設定ダイアログで、[ネットワーク]タブでプロキシ設定を変更できます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "Windows 10用SeaDrive 2.0"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -412,10 +429,13 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0（および将来のバージョン）は、Windows 10オペレーティングシステムとのより深い統合で再設計されています。Windows "
+"10 1709バージョン（Windows 10の2017年秋のアップデート）以降のバージョンをサポートしています。Windows "
+"10ユーザーは、よりネイティブな仮想ドライブエクスペリエンスのためにSeaDrive 2.0にアップグレードすることをお勧めします。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "仮想ドライブのインストールとアクセス"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -426,40 +446,46 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"Seafileの公式WebサイトからSeaDrive "
+"2.0をダウンロードできます。インストールしてSeafileアカウントにログインすると、SeaDriveはサーバーからライブラリとファイルリストのダウンロードを開始します（SeaDrive"
+" "
+"1.0.xと同様）。seafileアカウントで利用可能なファイルの数によっては、時間がかかる場合があります。ダウンロードは段階的に行われるため、その間に仮想ドライブ内のファイルにアクセスできます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"仮想ドライブにアクセスするには、Windowsファイルエクスプローラーを開くだけです。Windowsファイルエクスプローラーのナビゲーションペインに「seadrive」ノードがあります。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "仮想ドライブ内のファイルへのアクセス"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
-msgstr ""
+msgstr "ライブラリは、仮想ドライブで4つのカテゴリにグループ化されています：マイライブラリ、自分と共有、グループと共有、すべてと共有。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"ご覧のとおり、ファイルステータスアイコンはWindowsファイルエクスプローラーに統合されています。アイコンはバージョン1.0とは少し異なります。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
-msgstr ""
+msgstr "仮想ドライブ内のファイルは、ローカルファイルシステムに「プレースホルダー」として作成されます。それらは3つの状態になる可能性があります。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
-msgstr ""
+msgstr "<b>プレースホルダーファイル</b>：ファイルの空の表現であり、ネットワーク接続がある場合にのみ開くことができます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -469,12 +495,14 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>フルファイル</b>：ファイルはダウンロードされ、ローカルに保存されています。プレースホルダーファイルが初めて開かれると、ダウンロードは自動的に行われます。これらのファイルは、ネットワーク接続に関係なく、SeaDriveを開くときはいつでも使用できます。オペレーティングシステムは、より多くのディスク容量が必要な場合にフルファイルをクリアすることを決定する場合があります。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>固定されたフルファイル</b>：ファイルはダウンロードされ、ローカルに保存されています。オフラインで使用できることが保証されています。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -484,6 +512,7 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"ローカルにキャッシュされるファイルまたはフォルダーを制御できます。これは、ファイルまたはフォルダーを右クリックすると、コンテキストメニューから変更できます。ファイルまたはフォルダーをローカルに固定する場合は、[常にこのデバイスに保持する]を選択します。ファイルまたはフォルダーのキャッシュをクリアする場合は、[空き容量を増やす]を選択します。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -491,10 +520,12 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"SeaDrive 1.0では、キャッシュされたファイルは、サーバーで更新されても自動的に更新されません。SeaDrive "
+"2.0では、フルファイルと固定ファイルはサーバーと自動的に同期されます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "ファイルのダウンロードと制御"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -503,6 +534,7 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"プレースホルダーファイルを開くと、オペレーティングシステムは自動的にダウンロードを開始します。ファイルのダウンロードに時間がかかる場合は、ファイルエクスプローラーに進行状況バーが表示され、ダウンロードをキャンセルできます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -511,15 +543,16 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"バックグラウンドアプリケーションが仮想ドライブ内のファイルをダウンロードしようとする場合があります（アンチウイルスソフトウェアなど）。これについてオペレーティングシステムから通知され、ダウンロードをキャンセルするか、アプリケーションが将来ファイルを自動的にダウンロードすることを禁止するかを選択できます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "よくある質問"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "ライブラリを作成、削除、名前変更できますか？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -528,10 +561,11 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"はい。仮想ドライブでライブラリフォルダーを作成、削除、または名前変更すると、その操作はサーバーに反映されます。「マイライブラリ」カテゴリの下にあるライブラリのみを作成、削除、名前変更できます。他のカテゴリのライブラリを作成、削除、または名前変更すると、無視されます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "ライブラリフォルダーの外にファイルまたはフォルダーを作成できますか？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -539,10 +573,11 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"はい。ただし、ライブラリフォルダーの外に作成されたファイルは無視され、サーバーに同期されません。「マイライブラリ」フォルダーの下にある新しいフォルダーは、新しいライブラリとして処理されます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "暗号化されたライブラリにアクセスできますか？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -552,10 +587,11 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"はい。デフォルトでは、暗号化されたライブラリは同期されず、仮想ドライブに表示されません。同期する暗号化されたライブラリを手動で選択し、パスワードを入力する必要があります。システムトレイ領域にあるSeaDriveアイコンを右クリックし、[暗号化されたライブラリを表示]を選択します。ウィンドウが表示され、暗号化されたライブラリを同期または同期解除することを選択できます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "SeaDrive 1.0と互換性がありますか？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -565,10 +601,15 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive "
+"2.0は、既存のアカウントとそのメタデータ（C:\\users\\username\\seadrive\\フォルダーに保存）を使用します。ただし、SeaDrive"
+" "
+"1.0のキャッシュされたファイルは使用しません。そのため、1.0バージョンのローカルにキャッシュされたファイルは2.0バージョンではアクセスできません。SeaDrive"
+" 1.0を再度起動して、ファイルをサーバーにアップロードするか、コピーして取り出すことができます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "キャッシュをクリアするにはどうすればよいですか？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -579,10 +620,13 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"ローカルにキャッシュするフォルダーまたはファイルを手動で選択できます。フォルダーが過剰なスペースを消費している場合は、そのフォルダーで[空き容量を増やす]を選択するだけで、そのフォルダー内のキャッシュされたファイルはすべてクリアされます。SeaDrive"
+" "
+"1.0のように、キャッシュのクリア時間とキャッシュサイズの制限を設定する必要はありません。プレースホルダーはローカルディスクに作成された通常のファイルであるため、キャッシュサイズはコンピューターで使用可能なディスク容量によってのみ制限されます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "Windowsエクスプローラーに残ったSeaDriveショートカットを削除するにはどうすればよいですか？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -591,12 +635,14 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Windowsエクスプローラーの「SeaDrive」ショートカットは、SeaDriveプログラムを終了するか、SeaDriveでSeafileアカウントを切り替えても消えません。これは意図された動作です。後でアカウントにアクセスする必要がある場合は、削除する必要はありません。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"通常、これらのショートカットは、SeaDriveプログラムをアンインストールし、プロンプトダイアログで[アカウント情報の削除]を選択することで削除できます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -607,10 +653,11 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"アンインストールでショートカットが正常に削除されない場合は、レジストリを編集してWindowsエクスプローラーのSeaDriveショートカットを削除できます。レジストリエディターでパス「HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\」を開きます。削除するショートカットに対応するサブキーを削除します。"
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "暗号化されたライブラリの使用方法"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -620,10 +667,11 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Seafileは、クライアント側のエンドツーエンドのデータ暗号化を提供します。暗号化されたライブラリを作成して、この機能を使用できます。暗号化されたライブラリ内のファイルコンテンツは、クライアント側で暗号化されます。暗号化パスワードはサーバーに保存されません。そのため、サーバー管理者でさえ、ファイルコンテンツにアクセスできません。"
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr ""
+msgstr "暗号化されたライブラリを作成する場合："
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -631,6 +679,7 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Webアプリで暗号化されたライブラリを作成する場合、パスワードはサーバーに送信されます。サーバーはこのパスワードを使用してライブラリを作成します。ただし、プレーンテキストパスワードは保存しません。"
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -639,10 +688,12 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"デスクトップクライアントを使用してローカルフォルダーから暗号化されたライブラリを作成する場合（<a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">ファイル同期</a>を参照）、パスワードはサーバーに送信されません。"
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "暗号化されたライブラリにアクセスする場合："
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -650,6 +701,7 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Webアプリを使用する場合は、サーバーにパスワードを入力する必要があります。サーバーは、パスワードを暗号化された形式で1時間キャッシュします。パスワードはディスクに保存されません。"
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -657,22 +709,24 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"デスクトップクライアントを使用してライブラリを同期する場合、パスワードはサーバーに送信されません。クライアントは、ファイルの内容をローカルで復号化および暗号化します。プレーンテキストパスワードもクライアントディスクに保存されません。"
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOSクライアントはバージョン2.1.6以降、クライアント側の暗号化をサポートしています。Androidクライアントはバージョン2.1.0以降でサポートしています。"
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
-msgstr ""
+msgstr "暗号化されたライブラリは、ファイルの内容のみを暗号化し、フォルダーとファイル名は暗号化しないことに注意してください。"
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "ファイルのロック"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -682,22 +736,24 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"複数の人がファイルを共同編集する場合、複数の人がほぼ同時にファイルを変更する可能性があります。Seafileは、競合ファイルを使用してこの状況をうまく処理します。ただし、1人のユーザーがファイルを排他的に変更したい場合は、ファイルをロックする方が便利なことがよくあります。Seafile"
+" Professional Editionは、ファイルのロックをサポートしています。"
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
-msgstr ""
+msgstr "ファイルのロックは、Webアプリとデスクトップ同期クライアントの両方で機能します。それらを1つずつ紹介します。"
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Webアプリでのファイルのロック"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
-msgstr ""
+msgstr "ファイルをロックするには、Webアプリでファイルのフォルダーに移動し、[操作]ドロップダウンメニューをクリックします。"
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -706,28 +762,31 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"ファイルがロックされると、ファイルアイコンの隅に赤い「停止標識」が表示されます。停止標識にマウスを移動すると、誰がファイルをロックしているかを確認できます。また、自分がロックしたファイルのロックを解除することもできます。ただし、他のユーザーがロックしたファイルのロックを解除することはできません。"
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "デスクトップクライアントでのファイルのロック"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"ライブラリがデスクトップに同期されると、WindowsのエクスプローラーまたはMac "
+"OSのFinder内のそのライブラリ内のファイルをロック/ロック解除できます。"
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
-msgstr ""
+msgstr "ファイルをロックするには、同期されたファイルを右クリックし、[Seafile]メニューの[このファイルをロック]を選択します。"
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
-msgstr ""
+msgstr "ファイルがロックされている場合、ファイルアイコンにオレンジ色の「停止標識」が表示されます。ロックを解除することを選択できます。"
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -735,16 +794,17 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"ファイルが別のユーザーによってロックされている場合、ファイルアイコンに赤い「停止標識」が表示されます。ファイルは自動的に読み取り専用に設定されます。ロックが解除されるまで変更できません。"
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
-msgstr ""
+msgstr "ライブラリが同期されていない場合でも、クラウドファイルブラウザを使用してファイル内のファイルをロックおよびロック解除できます。"
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Officeファイルの自動ロック"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -754,18 +814,20 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"ライブラリがデスクトップに同期されると、ライブラリ内のMicrosoft "
+"Officeファイルを開くと、Seafileは自動的にファイルをロックします。ファイルを閉じると、Seafileは自動的にファイルのロックを解除します。ロック状態は、このライブラリを同期している他のコンピューターに伝播されます。これにより、同じOfficeファイルの同時編集を防ぎ、コラボレーションに便利です。"
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "ファイルのロックに関する詳細"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "ファイルのロックの仕組みに関するいくつかの役立つヒントがあります。"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "ロックされたファイルは、ロックしたユーザーのみがロックを解除できます。"
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -774,16 +836,17 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"ロックされたファイルは、他のユーザーによって変更、移動、名前変更、または削除できません。ただし、他のユーザーは、ロックされたファイルの親フォルダーを移動、削除、または名前変更できます。ファイルロックの目的は、主に同時編集を防ぐことです。"
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
-msgstr ""
+msgstr "ロックされたファイルの親フォルダーの名前が変更されたり、同じライブラリ内で移動されたりした場合でも、操作後もロックされたままになります。"
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "ファイルの古いバージョンを見つける"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -792,10 +855,11 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafileは、すべてのファイルの変更履歴を追跡します。ファイルが変更されるたびに、新しいバージョンが作成され、古いバージョンは構成可能な期間保持されます。ファイルの古いバージョンにアクセスする場合、ファイル履歴機能が非常に役立ちます。"
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "ファイルのすべてのバージョンを一覧表示するには："
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -803,16 +867,18 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Seafile "
+"Webアプリで、ファイルを含むフォルダーに移動します。カーソルをそのファイルの行に移動します。操作メニューが表示されます。そのメニューの[履歴]ボタンをクリックできます。"
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
-msgstr ""
+msgstr "そのファイルのすべてのバージョンのリストが、新しい順から古い順に時間順に表示されます。リストには、ファイルの名前変更履歴も含まれています。"
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "ファイルの任意のバージョンをダウンロード、復元、表示できます。"
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -821,10 +887,12 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"ファイルバージョンの保持期間を設定できます：<a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">履歴保持期間の設定</a>。"
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "フォルダーのアクセス許可を使用して、きめ細かいアクセス制御を行う"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -835,6 +903,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"共有ライブラリまたはフォルダーの場合、個人またはグループのサブフォルダーへのアクセス許可を設定できます。利用可能なアクセス許可は、<a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">ライブラリの共有</a>で説明されているものと同じです。いくつかのユースケースを次に示します。"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -842,6 +912,7 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"「読み取り専用」権限でライブラリをグループと共有しました。また、グループの特定のメンバーが1つのサブフォルダー内のファイルを変更できるようにしたいと考えています。このサブフォルダーの書き込み権限をこのユーザーに付与できます。"
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -850,6 +921,7 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"ライブラリを3つのグループと共有しました。そのライブラリには3つのサブフォルダーがあり、各グループがファイルをアップロードできます。ただし、ユーザーが自分のグループに属していないファイルを変更することは望ましくありません。サブフォルダーの書き込み権限をそのグループのみに付与できます。"
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -858,17 +930,18 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"フォルダーのアクセス許可は、他のユーザーと共有するライブラリとフォルダーにのみ有効です。サブフォルダーにフォルダーのアクセス許可を効果的に設定するには、最初に親ライブラリまたはフォルダーを共有する必要があります。そうしないと、フォルダーのアクセス許可は有効になりません。"
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
-msgstr ""
+msgstr "フォルダーのアクセス許可の重要な設計目標の1つは、階層的なアクセス許可をサポートすることです。"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "サブフォルダーは、親フォルダーからフォルダーのアクセス許可を自動的に継承します。"
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -878,10 +951,11 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"サブフォルダーに設定された権限は、親フォルダーに設定された権限を上書きします。たとえば、ユーザーAのフォルダー「会議ファイル」に「読み取り/書き込み」権限を設定し、ユーザーAのサブフォルダー「会議ファイル/今日」に「読み取り専用」権限を設定します。次に、ユーザーAの「会議ファイル/今日」へのアクセス許可は「読み取り専用」です。"
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "基本的な使い方"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -890,6 +964,7 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"ライブラリの所有者のみが、サブフォルダーのフォルダー権限を設定できます。ファイルブラウジングインターフェイスで、[その他の操作]ボタンをクリックし、ドロップダウンメニューで[権限]を選択します。ポップアップウィンドウで、このフォルダーのフォルダー権限を表示および設定できます。"
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -898,6 +973,7 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"ライブラリに設定されているすべてのフォルダー権限を表示する場合は、ライブラリにマウスを合わせます。[その他の操作]ボタンをクリックし、ドロップダウンメニューで[フォルダー権限]を選択します。ポップアップウィンドウで、このライブラリのフォルダー権限を表示および設定できます。"
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -905,16 +981,18 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"他のユーザーがフォルダーに移動すると、「読み取り専用」サブフォルダーの横に小さな「目」アイコンが表示されます。ユーザーがそのサブフォルダーに移動すると、ファイルを追加/変更/削除できなくなります。"
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"\"読み取り専用\"フォルダーがSeafileデスクトップアプリでPCに同期されている場合、\"読み取り専用\"フォルダーの下の変更はクラウドにアップロードされません。"
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "詳細：異なる権限間の優先順位"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -924,6 +1002,7 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"フォルダーの権限は、共有で設定された権限よりも優先度が高くなります。たとえば、ライブラリをユーザーAと「読み取り/書き込み」権限で共有し、そのライブラリのサブフォルダーに「読み取り専用」権限を設定したとします。次に、ユーザーAはサブフォルダーへの「読み取り専用」アクセス権のみを持ち、他のすべてのサブフォルダーとファイルへの「読み取り/書き込み」アクセス権を持ちます。"
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -932,16 +1011,17 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"特定のユーザーに設定されたフォルダー権限は、グループに設定された権限よりも優先度が高くなります。つまり、フォルダーの権限を確認するときに、システムがユーザーに固有の権限と一致する場合、ユーザーが属するグループに設定されたすべての権限を無視します。"
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
-msgstr ""
+msgstr "サブフォルダーの権限は、親フォルダーの権限よりも優先度が高くなります。"
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "より複雑な例を次に示します。"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -953,6 +1033,11 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"フォルダー構造が「A / B」のようになっていると仮定します。ユーザー「John」はグループ「Staff」に属しています。 "
+"JohnのフォルダーAに「読み取り専用」権限を設定し、グループ「Staff」のフォルダー「A / "
+"B」に「読み取り/書き込み」権限も設定した場合。次に、フォルダー「A / "
+"B」に対するJohnの権限は、依然として「読み取り専用」です。これは、ルール2に従って、「読み取り専用」権限が最初にフォルダー「A / "
+"B」とユーザー「John」に対して一致するためです。これは、その親「A」から継承されます。"
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -960,46 +1045,48 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Pro Edition Serverを使用している場合、Seafile "
+"Webアプリでファイルとフォルダーの名前、および特定のファイルの内容を検索できます。現在、Seafileは次の種類のファイルの内容を検索できます。"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc：.doc、.docx（Pro Edition Serverのみ）"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint：.ppt、.pptx（Pro Edition Serverのみ）"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel：.xls、.xlsx（Pro Edition Serverのみ）"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOfficeファイル"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDFファイル"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdownファイル：.md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "各種ソースコードファイル"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "テキストファイル：.txt、.log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1007,34 +1094,35 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Seafileシステム管理者が全文検索機能を有効にしていない場合があることに注意してください。その場合は、ファイルとフォルダーの名前のみを検索できます。"
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "グループの作成は、多くの人とファイルを共有するのに便利な方法です。Seafileでは、グループを簡単に作成および管理できます。"
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Seafileでのグループの仕組みは次のとおりです。"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
-msgstr ""
+msgstr "各グループには所有者がいます。所有者は、デフォルトでグループの作成者です。彼はグループの所有権を別のメンバーに譲渡できます。"
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
-msgstr ""
+msgstr "各グループは、複数の管理者を持つことができます。グループの所有者とグループ管理者は、さらにグループ管理者を追加できます。"
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
-msgstr ""
+msgstr "グループ管理者は、グループのメンバーを追加/削除できます。また、グループ内のライブラリの共有を解除することもできます。"
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1042,6 +1130,7 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"左側のパネルにある[グループと共有]タブをクリックすると、参加しているすべてのグループが表示されます。任意のグループをクリックすると、このグループに共有されているライブラリが表示されます。"
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1049,6 +1138,7 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"新しいグループを作成するには、左側のパネルにある[グループと共有]タブをクリックします。次に、[すべてのグループ]をクリックします。ページで、[新しいグループ]ボタンをクリックしてグループを作成できます。"
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1056,6 +1146,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"グループにライブラリまたはフォルダーを共有する方法については、＜a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\"＞ファイルとフォルダーの共有＜/a＞を参照してください。"
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1069,6 +1161,9 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"ライブラリー内部のファイルやフォルダーを同期させない場合があります。この場合、seafile-ignore.txt "
+"ファイルをライブラリーのルートフォルダーに作成します。この特別なファイルでは、Seafileが同期すべきでないファイルやフォルダーを指定します。ignore.txt"
+" ファイルの各行はパターンを指定します。以下のパターン形式がサポートされます。"
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
@@ -1098,6 +1193,8 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"パターンがスラッシュで終わっている場合、フォルダーにのみ合致します。つまり、\"foo/\" は \"foo/\" "
+"やその配下のパスに合致しますが、通常ファイルやシンボリックリンクの\"foo\" には合致しません。"
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1151,7 +1248,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Seafile "
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1165,7 +1262,7 @@ msgstr "１．ローカルのSeafileデータを保存するディスク領域�
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr ""
+msgstr "Seafileデータを保存するフォルダーを選択する"
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
@@ -1199,7 +1296,7 @@ msgstr "ローカルフォルダにライブラリを作成することもでき
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr ""
+msgstr "5. クラウド上のファイルを参照する"
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1207,12 +1304,13 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
+"場合によっては、ファイルを同期せずにクラウド上で直接変更したいことがあります。Seafileクライアントには、このニーズを満たすための「クラウドファイルブラウザ」が付属しています。同期されていないライブラリをクリックすると、クラウドファイルブラウザが開きます。"
 
 #: templates/help/introduction.html:8
 msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
-msgstr ""
+msgstr "Seafileは、高い信頼性とパフォーマンスを備えたエンタープライズファイルホスティングプラットフォームです。"
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1223,20 +1321,24 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafileには、ファイルを管理し共有するためのWebインタフェースが含まれています。デスクトップクライアントは2種類あり、<a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">ファイル同期クライアント</a> と <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">ドライブクライアント</a>. "
+"AndroidやiOS向けのモバイルクライアントも提供しています。"
 
 #: templates/help/introduction.html:10
 msgid ""
 "You can download the clients in <a "
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
-msgstr ""
+msgstr "クライアントは、Seafile Webサイトからダウンロードできます。"
 
 #: templates/help/introduction.html:11
 msgid ""
 "If this manual does not contain the information you needed, you can seek "
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
-msgstr ""
+msgstr "このマニュアルに必要な情報が含まれていない場合は、フォーラムでヘルプを求めることができます。"
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1246,18 +1348,19 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafileは「ライブラリ」を使用してファイルを整理します。ライブラリは、ファイルとフォルダーのセットの最上位コンテナーです。作業するプロジェクトごと、またはSeafileに保存するドキュメントの種類ごとにライブラリを作成できます。ライブラリは、ほとんどの場合、最上位フォルダーのように機能します。ただし、いくつかの特別なプロパティもあります。"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
-msgstr ""
+msgstr "各ライブラリは、独自のファイル変更履歴を保持します。すべてのライブラリにわたるグローバルなファイル変更履歴はありません。"
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
-msgstr ""
+msgstr "各ライブラリは、デスクトップクライアントと個別に同期できます。同期するライブラリを選択できます。"
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1266,12 +1369,13 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"SeafileのWebアプリに初めてログインすると、Seafileは「マイライブラリ」という名前のデフォルトライブラリを自動的に作成します。ライブラリをさらに作成することもできます。いくつかのライブラリを作成した場合の表示は次のとおりです。"
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
-msgstr ""
+msgstr "ライブラリに移動して、ファイルとフォルダーを管理できます。ファイルのアップロード、ダウンロード、名前変更、移動、コピー、削除が可能です。"
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1280,6 +1384,8 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"＜a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\"＞デスクトップクライアントとライブラリを同期する＜/a＞と、ローカルライブラリフォルダ内で任意のファイル操作を実行できます。操作はサーバーにアップロードされます。"
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1288,6 +1394,7 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafileは、ライブラリ全体の変更履歴を追跡します。ファイル操作がライブラリに適用されるたびに（ファイルの更新、ファイルの削除など）、Seafileはライブラリの以前の状態の「スナップショット」を作成します。スナップショットには、ライブラリの完全なファイルとフォルダー構造が含まれています。"
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1298,10 +1405,11 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"場合によっては、ライブラリ内の多くのファイルを変更し、これらの変更をすべて元に戻したい場合があります。多くのファイルを古いバージョンに復元するのは面倒な場合があります。このとき、スナップショット機能が非常に役立ちます。ライブラリ全体を過去の任意の時点に復元できます。ライブラリ内のすべてのファイルが、その時点に一度に復元されます。これは、ライブラリの「タイムマシン」のように機能します。"
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "ライブラリの履歴とスナップショットを表示するには："
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1309,12 +1417,14 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Seafile "
+"Webアプリで、ライブラリのルートフォルダーに移動します。ライブラリナビゲーションの上部バーにある[履歴]アイコンをクリックします。ライブラリのすべての変更レコードがリストに表示されます。"
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
-msgstr ""
+msgstr "変更レコードの[スナップショットの表示]リンクをクリックします。その時点でのライブラリの状態が表示されます。"
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1323,6 +1433,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"ライブラリの履歴の保持期間を設定できます：<a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\"＞履歴の保持期間の設定＜/a＞。"
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1332,6 +1444,10 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"使いやすい方法で構造化されていないデータをキャプチャして保存すること—これがSeafileのwikiの目的です。 "
+"Wikiページは、クロスプラットフォームの互換性を確保するために、シンプルなマークアップ言語であるMarkdown（MD）で記述されています。 "
+"MDファイルには、テキスト、表形式、およびグラフィカルな情報が保存されます。 "
+"Markdownファイル内の他のドキュメントへのリンクを追加することもできます。"
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1340,10 +1456,11 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Seafileの標準ライブラリをWikiのように管理できます。バージョン7.0で導入された「カラム表示」を使用します。SeafileはWikiを標準のSeafileライブラリとして実装しているため、通常のライブラリと同じように他のユーザーと同期および共有できます。"
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "カラム表示"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1354,10 +1471,11 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"通常、Wikiには、Wikiページをすばやく簡単に閲覧できるように、ツリーのようなフォルダー構造を含むサイドバーがあります。Seafileのカラム表示を使用すると、Wikiスペースと同じ方法でライブラリ内のファイルを管理できます。ユーザーはそれを閲覧し、ドラッグアンドドロップするだけでファイルとフォルダーを移動できます。名前の変更、移動、クライアント経由でのオープンなどのファイルアクションは、右クリックでアクセスできるコンテキストメニューで使用できます。"
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdownエディター"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1373,12 +1491,14 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"SeafileのWikiページは、Markdown形式の通常のドキュメントとして保存されます。ライブラリに新しいWikiページを作成するには、新しいMarkdownドキュメントを作成するだけです。MDファイルは、オンラインMDエディターを使用して、SeafileのWebインターフェースから直接編集できます。Webベースのエディターは、スムーズなユーザーエクスペリエンスと、テキスト、画像、テーブルの豊富な書式設定オプションを提供します。画像は、ライブラリやローカルストレージから、またはハイパーリンクでMDファイルにインポートできます。スケーリングなどの基本的な画像編集機能も、エディターのWYSIWYGインターフェースで実行できます。テーブルは、数回クリックするだけで挿入および変更できます。テーブルのコンテンツも同様です。テーブルは、WYSIWYGビューを離れることなく、全体または一部をコピーできます。"
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Markdownファイルの変更履歴には、エディターインターフェース上部のメニューにある[ファイル履歴]ボタンをクリックすると簡単にアクセスできます。"
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1386,10 +1506,11 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Markdownエディターの右側に隠されたサイドバーを開くことができます。目次、ファイル情報、および共同コメントがこのサイドバーに表示されます。"
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "ファイルのタグ付けと関連ドキュメント"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1398,22 +1519,23 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"ファイルのタグ付けは、ナレッジ管理の重要な機能です。Seafileを使用すると、ユーザーは各ライブラリのタグを定義し、ファイルにタグを適用できます。タグは、Markdownエディターのサイドバーまたはファイルブラウザーインターフェースから管理できます。"
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
-msgstr ""
+msgstr "ファイルブラウザーインターフェースは、現在のライブラリ内のすべてのファイルタグの概要を提供します。"
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
-msgstr ""
+msgstr "共有されるユーザーがローカルコピーを変更できないようにする場合は、Seafile Driveクライアントの使用を検討してください。"
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "削除されたファイルとフォルダーの復元"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1421,16 +1543,17 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Seafileの各ライブラリは、ファイルの削除操作を自動的に追跡します。ファイルが誤って削除される場合があります。削除されたファイルは、各ライブラリのゴミ箱で見つけることができます。"
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "ゴミ箱機能の使用方法は次のとおりです。"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
-msgstr ""
+msgstr "Seafile Webアプリで、削除されたファイルまたはフォルダーを含む親フォルダーに移動します。"
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1438,6 +1561,7 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"ライブラリ操作バーの[ゴミ箱]アイコンをクリックします。削除されたファイルとフォルダーが削除時間順に一覧表示されます。リストの下部にある[詳細]ボタンをクリックすると、削除されたファイルがさらに読み込まれます。"
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1445,6 +1569,7 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"削除されたファイルリストで、ファイルとフォルダーを復元できます。ファイルまたはフォルダーの親フォルダーが削除されている場合は、ライブラリのルートフォルダーに復元されます。"
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1452,6 +1577,7 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"ゴミ箱には、現在のフォルダーの下に削除されたファイルとサブフォルダーのみが含まれていることに注意してください。現在のフォルダーのサブフォルダーに削除されたファイルもリストに含まれています。"
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1460,6 +1586,8 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"削除されたファイルの保持期間を設定できます：<a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">履歴保持期間の設定</a>。"
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1468,6 +1596,7 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Seafileサーバーに非常に大きなライブラリがある場合があります。現在、1つのライブラリ内のサブフォルダーのみに関心がある場合は、ライブラリ全体を同期する代わりに、ライブラリ内のサブフォルダーを選択的に同期できます。"
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1476,40 +1605,41 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"サブフォルダーを同期するには、同期されていないライブラリをダブルクリックしてクラウドファイルブラウザーを開きます。そのサブフォルダーの親フォルダーに移動します。サブフォルダーを右クリックします。ポップアップメニューで[このフォルダーを同期]を選択します。"
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
-msgstr ""
+msgstr "サブフォルダを同期した後、クライアントのメインウィンドウの「同期されたライブラリ」グループでその同期ステータスを確認できます。"
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "ライブラリの履歴保持期間の設定"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
-msgstr ""
+msgstr "ライブラリの履歴保持期間の長さは、次の機能で履歴データにアクセスできる期間を制御します。"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
-msgstr ""
+msgstr "削除されたファイルの復元：保持期間より前に削除されたファイルとフォルダーは復元できません。"
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
-msgstr ""
+msgstr "ファイルのバージョン：保持期間より古いファイルのバージョンにはアクセスできません。"
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
-msgstr ""
+msgstr "ライブラリの履歴とスナップショット：保持期間より古いライブラリスナップショットにはアクセスできません。"
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1517,51 +1647,55 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"古いファイルバージョンの保持期間は、ライブラリごとに個別に設定できます。保持期間を設定するには、ライブラリの所有者である必要があります。保持期間の長さを設定するには："
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"Seafile "
+"Webアプリで、ナビゲーションパネルの[Mine]タブをクリックします（下のスクリーンショットのように）。あなたが所有するすべてのライブラリが一覧表示されます。"
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
-msgstr ""
+msgstr "カーソルをライブラリの行に移動します。操作メニューが表示されます。ドロップダウンメニューの[履歴設定]をクリックします。"
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "ポップアップダイアログで、ファイルの保持期間の長さを設定できます。"
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "Seafileには、他のユーザーとファイルやフォルダーを共有する方法がいくつかあります。"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
-msgstr ""
+msgstr "リンクの使用：さまざまな範囲のコラボレーターと共有するために使用できるリンクには、複数の種類があります。"
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
-msgstr ""
+msgstr "共有リンク：リンクにアクセスできるユーザーは、リンクが指すファイルまたはフォルダーにアクセスできます。ログインは不要です。"
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
-msgstr ""
+msgstr "アップロードリンク：リンクにアクセスできるユーザーは、リンクが指すフォルダーにファイルをアップロードできます。ログインは不要です。"
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"内部リンク：ファイルまたはフォルダーへの読み取り権限を持っているログインユーザーのみが、このリンクにアクセスできます。内部ファイル共有に使用されます。"
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1569,10 +1703,11 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"ライブラリまたはフォルダーの共有：特定のユーザーまたはグループのライブラリまたはフォルダーへのアクセス許可を設定するために使用されます。ユーザーはフォルダーにアクセスするためにログインする必要があります。"
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "ファイルまたはフォルダーへの共有リンクの作成"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1580,12 +1715,13 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"共有リンクは、ファイルまたはフォルダーへのパブリックリンクです。Seafileアカウントを持っていない人を含め、誰でもアクセスできます。パスワードと有効期限を使用してリンクを保護することもできます。"
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
-msgstr ""
+msgstr "共有リンクへのアクセス許可を設定することもできます。アクセス許可には、次の3種類があります。"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1593,6 +1729,7 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"プレビューのみ：フォルダー内のファイルは、Webブラウザーでのみ表示でき、ダウンロードできません。これは、機密データを共有する場合に役立ちます。"
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1600,16 +1737,18 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"クラウドで編集してダウンロード：「プレビューとダウンロード」と同様ですが、ファイルがWebブラウザーで編集できる場合（Officeファイルなど）、リンクにアクセスできるすべてのユーザーが編集できます。"
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Seafile Webアプリで共有リンクを作成するには："
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"ファイルまたはフォルダーを含む親フォルダーに移動します。ファイルまたはフォルダーの上にマウスを置き、表示される[共有]アイコンをクリックします。"
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1617,17 +1756,18 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"共有オプションを含むポップアップウィンドウが表示されます。左側のパネルにある[共有リンク]タブをクリックします。次に、[生成]ボタンをクリックしてリンクを作成します。パスワード、有効期限、およびアクセス許可を使用してリンクを保護できます。"
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
 msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
-msgstr ""
+msgstr "リンクをメール、インスタントメッセージングクライアント、またはその他のツールにコピーして、他のユーザーに送信します。"
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "デスクトップクライアントから共有リンクを作成することもできます。"
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1636,6 +1776,7 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"ライブラリが同期されている場合は、Seafileクライアントのメインウィンドウでライブラリをダブルクリックします。そのライブラリのローカルフォルダーが開きます。リンクを作成するファイルまたはフォルダーを右クリックします。ポップアップメニューで、[Seafile]、[共有リンクの作成]の順に選択します。"
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1643,10 +1784,11 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"ライブラリが同期されていない場合は、Seafileクライアントのメインウィンドウでライブラリをダブルクリックします。クラウドファイルブラウザウィンドウが開き、その中のファイルまたはフォルダーへのリンクを作成できます。"
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "フォルダーへのアップロードリンクの作成"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1654,16 +1796,17 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"アップロードリンクを使用して、他のユーザーからファイルを収集できます。フォルダーのアップロードリンクのみを作成できます。他のユーザーはフォルダー内のファイルを表示できません。ファイルをアップロードすることしかできません。"
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Seafile Webアプリでアップロードリンクを作成するには："
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
-msgstr ""
+msgstr "フォルダーを含む親フォルダーに移動します。フォルダーの上にマウスを置き、表示される[共有]アイコンをクリックします。"
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1671,10 +1814,11 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"共有オプションを含むポップアップウィンドウが表示されます。左側のパネルにある[アップロードリンク]タブをクリックします。次に、[生成]ボタンをクリックしてリンクを作成します。パスワードを使用してリンクを保護できます。"
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "ライブラリまたはフォルダーの共有"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1682,62 +1826,65 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"ライブラリまたはフォルダーを他の登録済みSeafileユーザーと共有できます。共有ライブラリまたはフォルダーは、WebアプリおよびSeafileクライアントで他のユーザーがアクセスできます。"
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "共有の範囲を選択できます："
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "ユーザーと共有：1人以上のユーザーと共有できます。"
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "グループと共有：グループと共有できます。"
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
-msgstr ""
+msgstr "組織と共有：プライベートサーバーを使用している場合、サーバー上のすべてのメンバー（組織全体）と共有すると便利な場合があります。"
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "共有のアクセス許可を設定することもできます："
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
-msgstr ""
+msgstr "読み取り/書き込み：ユーザーは、ファイルの読み取り、書き込み、アップロード、ダウンロード、および同期を行うことができます。"
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "読み取り専用：ユーザーは、ファイルの読み取り、ダウンロード、および同期を行うことができます。"
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
-msgstr ""
+msgstr "管理者：書き込み権限に加えて、ユーザーはライブラリを共有することもできます。"
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"オンライン読み取り/書き込み：ユーザーは、Webブラウザーを介してオンラインでファイルを表示および編集できます。ファイルはダウンロードできません。"
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"オンライン読み取り専用：ユーザーは、Webブラウザーを介してオンラインでファイルを表示することしかできません。ファイルはダウンロードできません。"
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "ライブラリまたはフォルダーをユーザーまたはグループと共有するには："
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
-msgstr ""
+msgstr "ライブラリまたはフォルダーの上にマウスを置き、表示される[共有]アイコンをクリックします。"
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1745,6 +1892,7 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"共有オプションを含むポップアップウィンドウが表示されます。左側のパネルにある[ユーザーと共有]または[グループと共有]タブをクリックします。ユーザーまたはグループを選択します。次に、[送信]をクリックします。"
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1753,6 +1901,8 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"ライブラリまたはフォルダーをユーザーと共有すると、ユーザーはSeafile "
+"Webアプリの左側のパネルにある[自分と共有]タブをクリックして表示できます。グループと共有する場合、グループメンバーはグループに移動することによってのみ表示できます。"
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1761,10 +1911,12 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"ライブラリを組織全体と共有するには：Seafile "
+"Webアプリで、左側のパネルにある[すべてと共有]タブをクリックします。次に、[ライブラリの追加]ボタンをクリックします。ドロップダウンメニューで、既存のライブラリを共有するか、新しいライブラリを作成して共有するかを選択できます。"
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "内部リンク"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1774,6 +1926,7 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"ログインしているユーザーのみが、ファイルまたはフォルダーへの読み取り権限を持っている場合に、このリンクにアクセスできます。これは、内部ファイル共有に使用されます。共通のライブラリにアクセスできるチームメンバー間でファイルを共有するのに便利な方法です。リンクをコピーして、メールまたはIMソフトウェアに貼り付けるだけです。"
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1784,10 +1937,11 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"通常、Seafileクライアントはローカルフォルダーの変更を自動的に検出し、変更をサーバーにアップロードします。ただし、ローカルフォルダーがWindowsネットワーク共有ドライブにある場合、Seafileクライアントは変更を確実に検出できません。この場合、Seafileクライアントにローカルフォルダーの変更を定期的にチェックするように依頼できます。この定期的な同期の間隔を設定できます。間隔は秒単位で設定されます。"
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "既存のフォルダーとの同期"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1801,24 +1955,27 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Seafileサーバーにライブラリが既にある場合（他のユーザーによって共有されているか、別のコンピューターからアップロードされた場合）があります。このライブラリをコンピューター上の既存のフォルダーと同期できます。ローカルフォルダーには、ライブラリと同じ名前が必要です。ローカルフォルダー内のファイルは、ライブラリ内のファイルとマージされます。ローカルフォルダーまたはライブラリ内のファイルが上書きまたは失われることはありません。ローカルフォルダーとライブラリでファイルの内容が異なる場合、マージによって<a"
+" href=\"%(SITE_ROOT)shelp/conflicts/\">競合ファイル</a>が生成されます。"
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"ライブラリを既存のフォルダーと同期するには、Seafileクライアントのメインウィンドウでライブラリを右クリックし、[このライブラリを同期]をクリックします。"
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
-msgstr ""
+msgstr "ポップアップダイアログで、[既存のフォルダーと同期]リンクをクリックします。"
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr ""
+msgstr "次に、このライブラリと同期する既存のフォルダーを選択します。"
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "ライブラリの同期解除と再同期"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1830,6 +1987,9 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"ローカルフォルダーをライブラリと同期する必要がなくなった場合は、同期を解除できます。ライブラリの同期を解除すると、ローカルフォルダーとファイルの変更はアップロードされず、ライブラリの変更はダウンロードされません。ライブラリをローカルフォルダーと再度同期する場合は、<a"
+" "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">既存のフォルダーと同期</a>機能を使用できます。"
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1838,23 +1998,24 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"クライアントに同期をブロックする内部エラーが発生する場合があります。このような場合、「再同期」ライブラリが役立つことがよくあります。再同期とは、同期を解除し、すぐに同じフォルダーでライブラリを同期することを意味します。このアクションは、クライアントのメインウィンドウのポップアップメニューにあります。"
 
 #: templates/help/using_drive_client.html:7
 msgid ""
 "After installing a drive client with the instructions on the <a "
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
-msgstr ""
+msgstr "ドライブクライアントをインストールした後、デスクトップにある「SeaDrive」アプリのアイコンをダブルクリックして起動できます。"
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
-msgstr ""
+msgstr "仮想ドライブのドライブ文字を選択するように求められます。デフォルトでは、「S:」が使用されます。"
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "次に、Seafileサーバーにログインするように求められます。"
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1863,6 +2024,7 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"サーバーへのログインに成功すると、ドライブクライアントはサーバーからライブラリとファイルリストのフェッチを開始します。この時点ではファイルコンテンツはダウンロードされません。したがって、それほど時間はかかりません。バックグラウンドで実行させることができます。フェッチが完了すると通知されます。"
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1872,26 +2034,27 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"仮想ドライブフォルダーが開きます。これは、コンピューター上の通常のハードドライブと同じように機能します。仮想ドライブの最上位フォルダーは、Seafileサーバー上のライブラリです。ファイルを開くと、ファイルコンテンツがダウンロードされます。最近開いたファイルはローカルディスクにキャッシュされます。キャッシュされたファイルはすべて緑色のチェックマークでマークされます。"
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "同期状態"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
-msgstr ""
+msgstr "仮想ドライブ内のファイルとフォルダーは、クラウドのみ、同期、または部分的に同期された状態のいずれかです。"
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "状態"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "アイコン"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -1900,7 +2063,7 @@ msgstr "詳細"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "クラウドのみのコンテンツ"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1910,71 +2073,75 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"クラウドのみのコンテンツは、仮想ドライブに表示されますが、ファイルが使用するはずの容量をすべて使用するわけではありません。ファイルエクスプローラーでは、ファイルを表示できますが、コンテンツは必要なときに完全にダウンロードされるまでダウンロードされません。ダウンロードされるのは、ファイルの名前、サイズ、更新日などのファイルに関する情報のみです。"
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "同期されたコンテンツ"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"同期されたコンテンツは、コンピューターのハードドライブにダウンロードされて保存されます。コンピューター上のアプリケーションからこれらのファイルを直接編集できます。"
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "部分的に同期されたコンテンツ"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
-msgstr ""
+msgstr "部分的に同期されたフォルダーには、同期されたファイルとクラウドのみのファイルまたはフォルダーの両方が含まれています。"
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "特別な状態"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
-msgstr ""
+msgstr "ローカルコンピューターにすでに同期されているファイルの場合、通常の「同期」状態に加えて、他の3つの特別な状態になる可能性があります。"
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "他のユーザーによってロックされています"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"ファイルは、サーバー上の別のユーザーによってロックされています。ファイルは読み取り専用モードでのみ開くことができます。ファイルの変更、削除、名前変更、または移動はできません。"
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "私がロックしました"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "ファイルはあなたがロックしています。これにより、他のユーザーがファイルを変更できなくなります。"
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "読み取り専用"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
-msgstr ""
+msgstr "このファイルのフォルダーまたはライブラリは、読み取り専用のアクセス許可で共有されています。ファイルの変更、削除、または移動はできません。"
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"ドライブクライアントは、バックグラウンドで未使用のキャッシュファイルを定期的にクリーンアップします。ローカルキャッシュの容量を制限することもできます。"
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -1982,10 +2149,11 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"ドライブクライアントで複数のアカウントにログインできます。ただし、仮想ドライブには、現在選択されているサーバー上のファイルのみが表示されます。アカウントを切り替えることができます。"
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
-msgstr ""
+msgstr "1. ルートフォルダに新しいファイルを作成したり、フォルダを削除したりできないのはなぜですか？"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -1996,13 +2164,14 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"仮想ドライブのルートフォルダには、ライブラリフォルダのみが含まれています。Seafileは、ライブラリ内のファイルのみを同期できます。ルートフォルダ内のファイルはSeafileサーバーにアップロードできません。したがって、ルートフォルダにファイルを作成することをサポートするのは意味がありません。仮想ドライブの最上位フォルダはライブラリを表しているため、ユーザーが誤ってライブラリを削除することを防ぎたいと考えています。そのため、ドライブクライアントは最上位フォルダの削除をサポートしていません。"
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
-msgstr ""
+msgstr "一部の種類のファイルは、Seafile Webアプリ内で直接開いて表示できます。現在、それらは次のとおりです。"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "イメージファイル"

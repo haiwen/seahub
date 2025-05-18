@@ -8,6 +8,7 @@ import { Utils, isMobile } from './utils/utils';
 import SystemNotification from './components/system-notification';
 import EventBus from './components/common/event-bus';
 import Header from './components/header';
+import SystemUserNotification from './components/system-user-notification';
 import SidePanel from './components/side-panel';
 import ResizeBar from './components/resize-bar';
 import {
@@ -157,19 +158,6 @@ class App extends Component {
     }
   };
 
-  onGroupChanged = (groupID) => {
-    setTimeout(function () {
-      let url;
-      if (groupID) {
-        url = siteRoot + 'group/' + groupID + '/';
-      }
-      else {
-        url = siteRoot + 'libraries/';
-      }
-      window.location = url.toString();
-    }, 1);
-  };
-
   tabItemClick = (tabName, groupID) => {
     let pathPrefix = [];
     if (groupID || this.dirViewPanels.indexOf(tabName) > -1) {
@@ -291,6 +279,7 @@ class App extends Component {
     return (
       <React.Fragment>
         <SystemNotification />
+        <SystemUserNotification />
         <Header
           isSidePanelClosed={isSidePanelClosed}
           onCloseSidePanel={this.onCloseSidePanel}
@@ -343,7 +332,7 @@ class App extends Component {
               <InvitationsView path={siteRoot + 'invitations/'} />
               <FilesActivities path={siteRoot + 'dashboard'} />
               <MyFileActivities path={siteRoot + 'my-activities'} />
-              <GroupView path={siteRoot + 'group/:groupID'} onGroupChanged={this.onGroupChanged} />
+              <GroupView path={siteRoot + 'group/:groupID'} />
               <LinkedDevices path={siteRoot + 'linked-devices'} />
               <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
               <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />

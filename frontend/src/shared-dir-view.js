@@ -1,8 +1,7 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import MD5 from 'MD5';
 import { createRoot } from 'react-dom/client';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, UncontrolledTooltip } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Account from './components/common/account';
@@ -141,6 +140,7 @@ class SharedDirView extends React.Component {
   listItems = () => {
     const { path, currentMode } = this.state;
     const thumbnailSize = currentMode == LIST_MODE ? thumbnailDefaultSize : thumbnailSizeForGrid;
+    this.setState({ isLoading: true });
     seafileAPI.listSharedDir(token, path, thumbnailSize).then((res) => {
       const items = res.data['dirent_list'].map(item => {
         item.isSelected = false;
@@ -639,8 +639,7 @@ class SharedDirView extends React.Component {
       return;
     } else {
       this.setState({
-        currentMode: mode,
-        isLoading: true
+        currentMode: mode
       }, () => {
         this.listItems();
       });
@@ -1113,14 +1112,6 @@ class Item extends React.Component {
   render() {
     const { item, isDesktop, mode } = this.props;
     const { isIconShown } = this.state;
-
-    let toolTipID = '';
-    let tagTitle = '';
-    if (item.file_tags && item.file_tags.length > 0) {
-      toolTipID = MD5(item.file_name).slice(0, 7);
-      tagTitle = item.file_tags.map(item => item.tag_name).join(' ');
-    }
-
     if (item.is_dir) {
       return isDesktop ? (
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
@@ -1180,21 +1171,6 @@ class Item extends React.Component {
             <a href={fileURL} onClick={this.handleFileClick}>{item.file_name}</a>
           </td>
           <td className="tag-list-title">
-            {(item.file_tags && item.file_tags.length > 0) && (
-              <Fragment>
-                <div id={`tag-list-title-${toolTipID}`} className="dirent-item tag-list tag-list-stacked">
-                  {item.file_tags.map((fileTag, index) => {
-                    let length = item.file_tags.length;
-                    return (
-                      <span className="file-tag" key={fileTag.file_tag_id} style={{ zIndex: length - index, backgroundColor: fileTag.tag_color }}></span>
-                    );
-                  })}
-                </div>
-                <UncontrolledTooltip target={`tag-list-title-${toolTipID}`} placement="bottom">
-                  {tagTitle}
-                </UncontrolledTooltip>
-              </Fragment>
-            )}
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
           <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>

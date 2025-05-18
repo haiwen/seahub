@@ -30,6 +30,7 @@ const Table = () => {
     addFolder,
     updateSelectedRecordIds,
     updateRecordDetails,
+    updateFaceRecognition,
     updateRecordDescription,
     ocr,
   } = useMetadataView();
@@ -182,6 +183,7 @@ const Table = () => {
         addFolder={addFolder}
         updateSelectedRecordIds={updateSelectedRecordIds}
         updateRecordDetails={updateRecordDetails}
+        updateFaceRecognition={updateFaceRecognition}
         updateRecordDescription={updateRecordDescription}
         ocr={ocr}
       />

@@ -138,8 +138,7 @@ class Item extends Component {
   };
 
   transferRepo = (owner, reshare) => {
-    this.props.transferRepo(this.props.item.id, owner.email, reshare);
-    this.toggleTransferDialog();
+    this.props.transferRepo(this.props.item.id, owner, reshare);
   };
 
   renderRepoName = () => {

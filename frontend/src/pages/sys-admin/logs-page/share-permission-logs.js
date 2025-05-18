@@ -15,6 +15,8 @@ import Paginator from '../../../components/paginator';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogsNav from './logs-nav';
+import LogUserSelector from '../../dashboard/log-user-selector';
+import LogRepoSelector from '../../dashboard/log-repo-selector';
 
 dayjs.extend(relativeTime);
 
@@ -151,6 +153,13 @@ class SharePermissionLogs extends Component {
       currentPage: 1,
       hasNextPage: false,
       isExportExcelDialogOpen: false,
+      availableUsers: [],
+      selectedFromUsers: [],
+      selectedToUsers: [],
+      selectedToGroups: [],
+      availableRepos: [],
+      selectedRepos: [],
+      openSelector: null,
     };
     this.initPage = 1;
   }
@@ -171,8 +180,25 @@ class SharePermissionLogs extends Component {
   }
 
   getLogsByPage = (page) => {
-    let { perPage } = this.state;
-    systemAdminAPI.sysAdminListSharePermissionLogs(page, perPage).then((res) => {
+    let {
+      perPage,
+      selectedFromUsers,
+      selectedToUsers,
+      selectedToGroups,
+      selectedRepos
+    } = this.state;
+
+    const options = {
+      'from_email': selectedFromUsers.map(user => user.email),
+      'to_email': selectedToUsers.map(user => user.email),
+      'to_group': selectedToGroups.map(group => group.id),
+      'repo': selectedRepos.map(repo => repo.id)
+    };
+    systemAdminAPI.sysAdminListSharePermissionLogs(
+      page,
+      perPage,
+      options
+    ).then((res) => {
       this.setState({
         logList: res.data.share_permission_log_list,
         loading: false,
@@ -182,7 +208,7 @@ class SharePermissionLogs extends Component {
     }).catch((error) => {
       this.setState({
         loading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        errorMsg: Utils.getErrorMsg(error, true)
       });
     });
   };
@@ -193,8 +219,124 @@ class SharePermissionLogs extends Component {
     }, () => this.getLogsByPage(this.initPage));
   };
 
+  handleFromUserFilter = (user, shouldFetchData = true) => {
+    const { selectedFromUsers } = this.state;
+    let newSelectedUsers;
+
+    if (user === null) {
+      newSelectedUsers = selectedFromUsers;
+    } else {
+      const isSelected = selectedFromUsers.find(item => item.email === user.email);
+      if (isSelected) {
+        newSelectedUsers = selectedFromUsers.filter(item => item.email !== user.email);
+      } else {
+        newSelectedUsers = [...selectedFromUsers, user];
+      }
+    }
+
+    this.setState({
+      selectedFromUsers: newSelectedUsers,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleToUserFilter = (item, shouldFetchData = true) => {
+    const { selectedToUsers, selectedToGroups } = this.state;
+    let newSelectedUsers = selectedToUsers;
+    let newSelectedGroups = selectedToGroups;
+
+    if (item === null) {
+      newSelectedUsers = selectedToUsers;
+      newSelectedGroups = selectedToGroups;
+    } else {
+      if (item.email) {
+        const isSelected = selectedToUsers.find(user => user.email === item.email);
+        if (isSelected) {
+          newSelectedUsers = selectedToUsers.filter(user => user.email !== item.email);
+        } else {
+          newSelectedUsers = [...selectedToUsers, item];
+        }
+      } else {
+        const isSelected = selectedToGroups.find(group => group.id === item.id);
+        if (isSelected) {
+          newSelectedGroups = selectedToGroups.filter(group => group.id !== item.id);
+        } else {
+          newSelectedGroups = [...selectedToGroups, item];
+        }
+      }
+    }
+
+    this.setState({
+      selectedToUsers: newSelectedUsers,
+      selectedToGroups: newSelectedGroups,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleSelectorToggle = (selectorType) => {
+    const { openSelector } = this.state;
+    const wasOpen = openSelector === selectorType;
+
+    this.setState({
+      openSelector: wasOpen ? null : selectorType
+    }, () => {
+      if (wasOpen) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  handleRepoFilter = (repo, shouldFetchData = true) => {
+    const { selectedRepos } = this.state;
+    let newSelectedRepos;
+
+    if (repo === null) {
+      newSelectedRepos = selectedRepos;
+    } else {
+      const isSelected = selectedRepos.find(item => item.id === repo.id);
+      if (isSelected) {
+        newSelectedRepos = selectedRepos.filter(item => item.id !== repo.id);
+      } else {
+        newSelectedRepos = [...selectedRepos, repo];
+      }
+    }
+
+    this.setState({
+      selectedRepos: newSelectedRepos,
+      currentPage: 1
+    }, () => {
+      if (shouldFetchData) {
+        this.getLogsByPage(1);
+      }
+    });
+  };
+
+  searchUsers = (value) => {
+    return systemAdminAPI.sysAdminSearchUsers(value);
+  };
+
+  searchRepos = (value) => {
+    return systemAdminAPI.sysAdminSearchRepos(value);
+  };
+
+  searchGroups = (value) => {
+    return systemAdminAPI.sysAdminSearchGroups(value);
+  };
+
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen } = this.state;
+    let {
+      logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen,
+      availableUsers, selectedFromUsers, selectedToUsers,
+      selectedToGroups, availableRepos, selectedRepos, openSelector
+    } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
@@ -204,16 +346,48 @@ class SharePermissionLogs extends Component {
           <div className="cur-view-container">
             <LogsNav currentItem="sharePermissionLogs" />
             <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={logList}
-                currentPage={currentPage}
-                perPage={perPage}
-                hasNextPage={hasNextPage}
-                getLogsByPage={this.getLogsByPage}
-                resetPerPage={this.resetPerPage}
-              />
+              <Fragment>
+                <div className="d-flex align-items-center mb-2">
+                  <LogUserSelector
+                    componentName={gettext('Share From')}
+                    items={availableUsers}
+                    selectedItems={selectedFromUsers}
+                    onSelect={this.handleFromUserFilter}
+                    isOpen={openSelector === 'fromUser'}
+                    onToggle={() => this.handleSelectorToggle('fromUser')}
+                    searchUsersFunc={this.searchUsers}
+                  />
+                  <LogUserSelector
+                    componentName={gettext('Share To')}
+                    items={availableUsers}
+                    selectedItems={[...selectedToUsers, ...selectedToGroups]}
+                    onSelect={this.handleToUserFilter}
+                    isOpen={openSelector === 'toUser'}
+                    onToggle={() => this.handleSelectorToggle('toUser')}
+                    searchUsersFunc={this.searchUsers}
+                    searchGroupsFunc={this.searchGroups}
+                  />
+                  <div className="mx-3"></div>
+                  <LogRepoSelector
+                    items={availableRepos}
+                    selectedItems={selectedRepos}
+                    onSelect={this.handleRepoFilter}
+                    isOpen={openSelector === 'repo'}
+                    onToggle={() => this.handleSelectorToggle('repo')}
+                    searchReposFunc={this.searchRepos}
+                  />
+                </div>
+                <Content
+                  loading={this.state.loading}
+                  errorMsg={this.state.errorMsg}
+                  items={logList}
+                  currentPage={currentPage}
+                  perPage={perPage}
+                  hasNextPage={hasNextPage}
+                  getLogsByPage={this.getLogsByPage}
+                  resetPerPage={this.resetPerPage}
+                />
+              </Fragment>
             </div>
           </div>
         </div>

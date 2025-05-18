@@ -88,7 +88,7 @@
 }
 
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover,
-.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value:hover {
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value.editable:hover {
   background-color: #666;
 }
 

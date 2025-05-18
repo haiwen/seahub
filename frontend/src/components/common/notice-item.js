@@ -19,6 +19,7 @@ const MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group';
 const MSG_TYPE_REPO_TRANSFER = 'repo_transfer';
 const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
 const MSG_TYPE_FOLDER_UPLOADED = 'folder_uploaded';
+const MSG_TYPE_FILE_COMMENT = 'file_comment';
 // const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
@@ -38,17 +39,34 @@ class NoticeItem extends React.Component {
     let noticeType = noticeItem.type;
     let detail = noticeItem.detail;
 
+    if (noticeType === MSG_TYPE_FILE_COMMENT) {
+      let avatar_url = detail.author_avatar_url;
+      let author = detail.author_name;
+      let fileName = detail.file_name;
+      let fileUrl = siteRoot + 'lib/' + detail.repo_id + '/' + 'file' + detail.file_path;
+      // 1. handle translate
+      let notice = gettext('File {file_link} has a new comment form user {author}.');
+      // 2. handle xss(cross-site scripting)
+      notice = notice.replace('{file_link}', `{tagA}${fileName}{/tagA}`);
+      notice = notice.replace('{author}', author);
+      notice = Utils.HTMLescape(notice);
+      // 3. add jump link
+      notice = notice.replace('{tagA}', `<a href=${Utils.encodePath(fileUrl)}>`);
+      notice = notice.replace('{/tagA}', '</a>');
+      return { avatar_url, notice };
+    }
+
     if (noticeType === MSG_TYPE_ADD_USER_TO_GROUP) {
       let avatar_url = detail.group_staff_avatar_url;
       let groupStaff = detail.group_staff_name;
       // group name does not support special characters
-      let userHref = siteRoot + 'profile/' + detail.group_staff_email + '/';
+      let userHref = siteRoot + 'profile/' + encodeURIComponent(detail.group_staff_email) + '/';
       let groupHref = siteRoot + 'group/' + detail.group_id + '/';
       let groupName = detail.group_name;
       let username = detail.group_staff_name;
       let notice = gettext('User {user_link} has added you to {group_link}');
-      let userLink = '<a href=' + userHref + '>' + groupStaff + '</a>';
-      let groupLink = '<a href=' + groupHref + '>' + groupName + '</a>';
+      let userLink = '<a href=' + userHref + '>' + Utils.HTMLescape(groupStaff) + '</a>';
+      let groupLink = '<a href=' + groupHref + '>' + Utils.HTMLescape(groupName) + '</a>';
       notice = notice.replace('{user_link}', userLink);
       notice = notice.replace('{group_link}', groupLink);
       return { avatar_url, notice, username };
@@ -346,8 +364,8 @@ class NoticeItem extends React.Component {
       let sdoc_name = detail.sdoc_name;
       const repo_id = detail.repo_id;
       const sdoc_path = detail.sdoc_path;
-      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
-      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
+      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + encodeURIComponent(sdoc_path);
+      let sdoc_link = '<a href=' + sdoc_href + '>' + Utils.HTMLescape(sdoc_name) + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });
@@ -374,8 +392,8 @@ class NoticeItem extends React.Component {
       let sdoc_name = detail.sdoc_name;
       const repo_id = detail.repo_id;
       const sdoc_path = detail.sdoc_path;
-      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + sdoc_path;
-      let sdoc_link = '<a href=' + sdoc_href + '>' + sdoc_name + '</a>';
+      const sdoc_href = siteRoot + 'lib/' + repo_id + '/file' + encodeURIComponent(sdoc_path);
+      let sdoc_link = '<a href=' + sdoc_href + '>' + Utils.HTMLescape(sdoc_name) + '</a>';
       processor.process(notice, (error, vfile) => {
         notice = String(vfile);
       });

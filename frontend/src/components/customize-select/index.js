@@ -88,7 +88,7 @@ class CustomizeSelect extends Component {
 
   render() {
     const { className, value, options, placeholder, searchable, searchPlaceholder, noOptionsPlaceholder,
-      readOnly, isInModal, addOptionAble, component } = this.props;
+      readOnly, isInModal, addOptionAble, component, enableDeleteSelected } = this.props;
 
     return (
       <div
@@ -101,9 +101,16 @@ class CustomizeSelect extends Component {
         onClick={this.onSelectToggle}>
         <div className="selected-option">
           {value && value.label ?
-            <span className="selected-option-show">{value.label}</span>
-            :
-            <span className="select-placeholder">{placeholder}</span>
+            (enableDeleteSelected ?
+              <span className="selected-option-show-container">
+                <span className='selected-option-show'>{value.label}</span>
+                <span className='selected-option-delete ml-1' onClick={this.props.deleteSelected}>
+                  <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                </span>
+              </span>
+              : <span className="selected-option-show">{value.label}</span>
+            )
+            : <span className="select-placeholder">{placeholder}</span>
           }
           {this.renderDropDownIcon()}
         </div>
@@ -168,6 +175,8 @@ CustomizeSelect.propTypes = {
   supportMultipleSelect: PropTypes.bool,
   isShowSelected: PropTypes.bool,
   isInModal: PropTypes.bool, // if select component in a modal (option group need ModalPortal to show)
+  enableDeleteSelected: PropTypes.bool,
+  deleteSelected: PropTypes.func,
 };
 
 export default CustomizeSelect;

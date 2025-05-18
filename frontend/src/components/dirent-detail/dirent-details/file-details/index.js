@@ -92,12 +92,17 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
       </DetailItem>
       {isShowRepoTags && window.app.pageOptions.enableFileTags && !enableMetadata && (
         <DetailItem field={tagsField} className="sf-metadata-property-detail-formatter">
-          <FileTag repoID={repoID} dirent={dirent} path={path} repoTags={repoTags} fileTagList={fileTagList} onFileTagChanged={onFileTagChanged} />
+          <FileTag
+            repoID={repoID}
+            dirent={dirent}
+            path={path}
+            repoTags={repoTags}
+            fileTagList={fileTagList}
+            onFileTagChanged={onFileTagChanged}
+          />
         </DetailItem>
       )}
-      {enableMetadata && (
-        <MetadataDetails />
-      )}
+      {enableMetadata && <MetadataDetails />}
     </>
   );
 
