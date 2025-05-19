@@ -115,24 +115,22 @@ class DepartmentGroup extends Component {
     }
     return (
       <div className="department-dialog-group">
-        <div>
-          {departments.length > 0 && departments.map((department, index) => {
-            if (department.parent_group_id !== -1) return null;
-            return (
-              <Item
-                key={department.id}
-                department={department}
-                departments={departments}
-                getMembers={this.getMembers}
-                setCurrent={this.props.setCurrent}
-                toggleExpanded={this.toggleExpanded}
-                currentDepartment={this.props.currentDepartment}
-                allMembersClick={this.state.allMembersClick}
-                padding={10}
-              />
-            );
-          })}
-        </div>
+        {departments.length > 0 && departments.map((department, index) => {
+          if (department.parent_group_id !== -1) return null;
+          return (
+            <Item
+              key={department.id}
+              department={department}
+              departments={departments}
+              getMembers={this.getMembers}
+              setCurrent={this.props.setCurrent}
+              toggleExpanded={this.toggleExpanded}
+              currentDepartment={this.props.currentDepartment}
+              allMembersClick={this.state.allMembersClick}
+              padding={10}
+            />
+          );
+        })}
       </div>
     );
   }

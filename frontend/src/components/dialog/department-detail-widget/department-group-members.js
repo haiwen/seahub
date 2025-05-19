@@ -94,21 +94,20 @@ const DepartmentGroupMembersPropTypes = {
   currentDepartment: PropTypes.object.isRequired,
   selectedMemberMap: PropTypes.object,
   selectAll: PropTypes.func.isRequired,
+  unselectAll: PropTypes.func.isRequired,
   loading: PropTypes.bool,
   usedFor: PropTypes.oneOf(['add_group_member', 'add_user_share']),
+  keyword: PropTypes.string,
+  searching: PropTypes.bool,
+  usersFound: PropTypes.array
 };
 
 class DepartmentGroupMembers extends Component {
 
-  selectAll = () => {
-    const { members } = this.props;
-    this.props.selectAll(members);
-  };
-
   render() {
-    const { members, memberSelected, loading, selectedMemberMap, currentDepartment, usedFor } = this.props;
+    const { members, memberSelected, loading, selectedMemberMap, currentDepartment, usedFor, keyword, searching, usersFound } = this.props;
     let headerTitle = (currentDepartment.name || '') + ' ' + gettext('members');
-    if (loading) {
+    if (loading || searching) {
       return (
         <div className="department-dialog-member pt-4">
           <div className="w-100">
@@ -119,26 +118,35 @@ class DepartmentGroupMembers extends Component {
         </div>
       );
     }
-    const enableSelectAll = Object.keys(memberSelected).length < members.length;
+
+    const itemsShown = keyword ? usersFound : members;
+    const unselectedItems = itemsShown.filter(item => !(item.email in memberSelected) && !selectedMemberMap[item.email]);
+    const addedItems = itemsShown.filter(item => selectedMemberMap[item.email]);
+
     const tip = usedFor === 'add_group_member' ? gettext('User is already in this group') : gettext('It is already shared to user');
     return (
       <div className="department-dialog-member pt-4">
         <div className="w-100">
           <div className='department-dialog-member-head px-4'>
             <div className='department-name'>
-              {headerTitle}
+              {keyword ? gettext('Search results') : headerTitle}
             </div>
-            {enableSelectAll ?
-              <div className='select-all' onClick={this.selectAll}>{gettext('Select All')}</div>
-              :
-              <div className='select-all-disable'>{gettext('Select All')}</div>
-            }
+            {itemsShown.length > 0 && (
+              <>
+                {unselectedItems.length > 0
+                  ? <div className='select-all' onClick={this.props.selectAll}>{gettext('Select all')}</div>
+                  : itemsShown.length > addedItems.length
+                    ? <div className='select-all' onClick={this.props.unselectAll}>{gettext('Unselect all')}</div>
+                    : ''
+                }
+              </>
+            )}
           </div>
-          {members.length > 0 ?
+          {itemsShown.length > 0 ?
             <Fragment>
               <table className="department-dialog-member-table">
                 <tbody>
-                  {members.map((member, index) => {
+                  {itemsShown.map((member, index) => {
                     return (
                       <Item
                         key={index}
@@ -156,7 +164,7 @@ class DepartmentGroupMembers extends Component {
             </Fragment>
             :
             <EmptyTip tipSrc={`${mediaUrl}img/no-users-tip.png`}>
-              <h2>{gettext('No members')}</h2>
+              <h2>{keyword ? gettext('No users found') : gettext('No members')}</h2>
             </EmptyTip>
           }
         </div>
