@@ -44,7 +44,7 @@ def billing(request):
         "aud": billing_domain,
         "exp": exp,
         "jti": str(uuid.uuid4()),
-        "uid": ccnet_email,
+        "user_id": ccnet_email,
         "email": contact_email,
         "name": nickname,
         "org_id": org.org_id,
