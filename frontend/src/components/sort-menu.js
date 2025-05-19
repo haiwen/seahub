@@ -59,7 +59,6 @@ class SortMenu extends React.Component {
         >
           <span className="cur-view-path-btn px-1" role="button">
             <i className="sf3-font-sort2 sf3-font"></i>
-            <i className="sf3-font-down sf3-font"></i>
           </span>
         </DropdownToggle>
         <DropdownMenu className="mt-1">

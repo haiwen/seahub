@@ -68,7 +68,6 @@ class ViewModes extends React.Component {
         >
           <span className='cur-view-path-btn px-1'>
             <span className={`sf3-font sf3-font-${currentViewMode}-view`}></span>
-            <span className={'sf3-font sf3-font-down'}></span>
           </span>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
