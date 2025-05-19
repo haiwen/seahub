@@ -51,7 +51,11 @@ class Location extends React.Component {
     if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
     if (prevProps.position?.lng === position?.lng && prevProps.position?.lat === position?.lat) return;
     this.currentPosition = position;
-    this.addMarkerByPosition(position.lng, position.lat);
+    let convertedPos = wgs84_to_gcj02(position.lng, position.lat);
+    if (this.mapType === MAP_TYPE.B_MAP) {
+      convertedPos = gcj02_to_bd09(convertedPos.lng, convertedPos.lat);
+    }
+    this.addMarkerByPosition(convertedPos.lng, convertedPos.lat);
     this.setState({ address: record._location_translated?.address });
   }
 
