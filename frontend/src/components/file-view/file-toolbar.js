@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import Switch from '../switch';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -71,7 +72,13 @@ class FileToolbar extends React.Component {
     this.setState({ isShareDialogOpen: !this.state.isShareDialogOpen });
   };
 
-  toggleMoreOpMenu = () => {
+  toggleMoreOpMenu = (event) => {
+    if (this.state.moreDropdownOpen) {
+      const el = document.getElementById('txt-line-wrap-menu');
+      if (el && el.contains(event.target)) {
+        return;
+      }
+    }
     this.setState({
       moreDropdownOpen: !this.state.moreDropdownOpen
     });
@@ -232,6 +239,16 @@ class FileToolbar extends React.Component {
                 <a href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`} className="dropdown-item">
                   {gettext('Open via client')}
                 </a>
+              )}
+              {fileExt && fileExt.toLowerCase() === 'txt' && (
+                <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
+                  <Switch
+                    checked={this.props.lineWrapping}
+                    placeholder={gettext('Line wrapping')}
+                    className="txt-line-wrap-menu w-100"
+                    onChange={() => this.props.updatelineWrapping(!this.props.lineWrapping)}
+                  />
+                </DropdownItem>
               )}
             </DropdownMenu>
           </Dropdown>
