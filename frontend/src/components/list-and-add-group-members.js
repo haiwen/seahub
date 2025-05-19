@@ -21,6 +21,7 @@ class ManageMembersDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      enableSelectMembersFromDept: false,
       isLoading: true, // first loading
       isLoadingMore: false,
       groupMembers: [],
@@ -37,6 +38,7 @@ class ManageMembersDialog extends React.Component {
   }
 
   componentDidMount() {
+    this.getPermForSelectMembersFromDept();
     this.listGroupMembers(this.state.page);
   }
 
@@ -164,19 +166,41 @@ class ManageMembersDialog extends React.Component {
     this.props.toggleDepartmentDetailDialog();
   };
 
+  getPermForSelectMembersFromDept = () => {
+    if (window.app.config.lang !== 'zh-cn') {
+      this.setState({
+        enableSelectMembersFromDept: false
+      });
+      return;
+    }
+
+    if (cloudMode && !isOrgContext) {
+      this.setState({
+        enableSelectMembersFromDept: false
+      });
+      return;
+    }
+
+    seafileAPI.listAddressBookDepartments().then((res) => {
+      this.setState({
+        enableSelectMembersFromDept: res.data.departments.length > 0
+      });
+    }).catch(error => {
+      this.setState({
+        enableSelectMembersFromDept: false
+      });
+    });
+  };
+
+
   render() {
     const {
+      enableSelectMembersFromDept,
       isLoading, hasNextPage, groupMembers,
       keyword, membersFound,
       searchActive
     } = this.state;
-    let showDeptBtn = true;
-    if (window.app.config.lang !== 'zh-cn') {
-      showDeptBtn = false;
-    }
-    if (cloudMode && !isOrgContext) {
-      showDeptBtn = false;
-    }
+
     return (
       <Fragment>
         <p className="mb-2">{gettext('Add group member')}</p>
@@ -188,7 +212,7 @@ class ManageMembersDialog extends React.Component {
             isMulti={true}
             className="add-members-select"
           />
-          {showDeptBtn &&
+          {enableSelectMembersFromDept &&
             <span onClick={this.onClickDeptBtn} className="sf3-font sf3-font-invite-visitors toggle-detail-btn"></span>
           }
           {this.state.selectedUsers.length > 0 ?
