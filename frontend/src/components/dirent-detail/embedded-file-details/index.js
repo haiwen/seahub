@@ -13,6 +13,7 @@ import SettingsIcon from '../../../metadata/components/metadata-details/settings
 import Loading from '../../loading';
 
 import './index.css';
+import DirDetails from '../dirent-details/dir-details';
 
 const { enableSeafileAI } = window.app.config;
 
@@ -28,7 +29,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
 
   useEffect(() => {
     const fullPath = path.split('/').pop() === dirent?.name ? path : Utils.joinPath(path, dirent?.name || '');
-    seafileAPI.getFileInfo(repoID, fullPath).then(res => {
+    seafileAPI[dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo'](repoID, fullPath).then(res => {
       setDirentDetail(res.data);
       setIsFetching(false);
     }).catch(error => {
@@ -64,7 +65,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
       path={path}
       dirent={dirent}
       direntDetail={direntDetail}
-      direntType="file"
+      direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
     >
       <div
         className={classnames('cur-view-detail', className, {
@@ -87,7 +88,11 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
             :
             dirent && direntDetail && (
               <div className="detail-content">
-                <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
+                {dirent.type !== 'file' ? (
+                  <DirDetails direntDetail={direntDetail} />
+                ) : (
+                  <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
+                )}
               </div>
             )}
         </Body>

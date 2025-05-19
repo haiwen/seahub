@@ -16,9 +16,14 @@ import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_D
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
 import IconBtn from '../icon-btn';
+import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
+import { MetadataStatusProvider } from '../../hooks';
+import { TagsProvider } from '../../tag/hooks';
+import { CollaboratorsProvider } from '../../metadata';
 
 const propTypes = {
   repoID: PropTypes.string,
+  repoInfo: PropTypes.object,
   path: PropTypes.string,
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
@@ -138,7 +143,7 @@ class Search extends Component {
   };
 
   onFocusHandler = () => {
-    this.setState({ width: '570px', isMaskShow: true });
+    this.setState({ width: '100%', isMaskShow: true });
     this.calculateHighlightType();
   };
 
@@ -702,20 +707,27 @@ class Search extends Component {
 
   renderResults = (resultItems, isVisited) => {
     const { highlightIndex } = this.state;
-
+    console.log(resultItems);
+    const repoInfo = { permission: 'r', is_admin: false };
     const results = (
       <>
-        {isVisited && <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>}
+        {isVisited ? (
+          <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>
+        ) : (
+          <h4 className="search-results-title">{gettext('Files')}</h4>
+        )}
         <ul className="search-result-list" ref={this.searchResultListRef}>
           {resultItems.map((item, index) => {
             const isHighlight = index === highlightIndex;
             return (
               <SearchResultItem
                 key={index}
+                idx={index}
                 item={item}
                 onItemClickHandler={this.onItemClickHandler}
                 isHighlight={isHighlight}
                 setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
+                onHighlightIndex={(idx) => this.setState({ highlightIndex: idx })}
               />
             );
           })}
@@ -726,8 +738,23 @@ class Search extends Component {
     return (
       <>
         <MediaQuery query="(min-width: 768px)">
-          {!isVisited && <h4 className="search-results-title">{gettext('Files')}</h4>}
-          <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
+          <div className="search-result-sidepanel-wrapper d-flex">
+            <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
+            <div className="search-result-container-sidepanel d-flex flex-column flex-grow-1">
+              <MetadataStatusProvider repoID={resultItems[highlightIndex].repo_id} repoInfo={repoInfo}>
+                <TagsProvider repoID={resultItems[highlightIndex].repo_id} repoInfo={repoInfo}>
+                  <CollaboratorsProvider repoID={resultItems[highlightIndex].repo_id} repoInfo={repoInfo}>
+                    <EmbeddedFileDetails
+                      repoID={resultItems[highlightIndex].repo_id}
+                      repoInfo={repoInfo}
+                      path={Utils.getDirName(resultItems[highlightIndex].path)}
+                      dirent={{ name: resultItems[highlightIndex].name, type: resultItems[highlightIndex].is_dir ? 'dir' : 'file' }}
+                    />
+                  </CollaboratorsProvider>
+                </TagsProvider>
+              </MetadataStatusProvider>
+            </div>
+          </div>
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           {results}

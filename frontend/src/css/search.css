@@ -22,7 +22,7 @@
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
   background-color: #fff;
   cursor: default;
-  width: 600px;
+  width: 700px;
   padding: 16px 0;
 }
 
@@ -113,7 +113,6 @@
 
 .dropdown-search-result-container {
   max-height: 300px;
-  overflow: auto;
   position: relative;
   top: 0;
   box-shadow: none;
@@ -134,6 +133,9 @@
 
 
 .search-result-container .search-result-list-container {
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
   overflow: auto;
   scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
   flex: 1;
@@ -152,6 +154,11 @@
 .search-result-container .search-result-item:hover,
 .search-result-container .search-result-item.search-result-item-highlight {
   background-color: #f0f0f0;
+}
+
+.search-result-container .search-result-container-sidepanel {
+  max-width: 300px;
+  max-height: 300px;
 }
 
 .search-result-item .item-img {

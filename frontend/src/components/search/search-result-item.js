@@ -5,16 +5,42 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
+  idx: PropTypes.number.isRequired,
   onItemClickHandler: PropTypes.func.isRequired,
   isHighlight: PropTypes.bool,
   setRef: PropTypes.func,
+  onHighlightIndex: PropTypes.func,
 };
 
 class SearchResultItem extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.ref = null;
+  }
+
   onClickHandler = () => {
     this.props.onItemClickHandler(this.props.item);
   };
+
+  onMouseEnter = () => {
+    if (this.props.onHighlightIndex) {
+      this.props.onHighlightIndex(this.props.idx);
+    }
+  };
+
+  // onMouseLeave = (e) => {
+  //   const rect = this.ref.getBoundingClientRect();
+  //   const mouseX = e.clientX;
+  //   const mouseY = e.clientY;
+  //   if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
+  //     return;
+  //   }
+
+  //   if (this.props.onHighlightChange) {
+  //     this.props.onHighlightChange(-1);
+  //   }
+  // };
 
   render() {
     const { item, setRef = (() => {}) } = this.props;
@@ -31,7 +57,9 @@ class SearchResultItem extends React.Component {
       <li
         className={classnames('search-result-item', { 'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
-        ref={ref => setRef(ref)}
+        ref={ref => {setRef(ref); this.ref = ref;}}
+        onMouseEnter={this.onMouseEnter}
+        // onMouseLeave={this.onMouseLeave}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">
