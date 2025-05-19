@@ -1,3 +1,7 @@
 .detail-body .empty-tip-text {
   color: #666;
 }
+
+.sdoc-editor-page-wrapper .sf-metadata-ai-dropdown-menu .dropdown-item:hover {
+  color: #fff;
+}
