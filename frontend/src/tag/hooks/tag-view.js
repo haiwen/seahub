@@ -175,6 +175,7 @@ export const TagViewProvider = ({
     setSortBy(sort.sort_by);
     setSortOrder(sort.order);
     window.sfTagsDataContext?.localStorage?.setItem(TAG_FILES_SORT, JSON.stringify(sort));
+    window.sfTagsDataContext?.eventBus?.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, sort);
   }, [tagFiles]);
 
   useEffect(() => {

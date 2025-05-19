@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
+import classNames from 'classnames';
 import { useTagView, useTags } from '../../hooks';
 import { gettext, username } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
@@ -375,8 +376,7 @@ const TagFiles = () => {
       width: 0.5,
       children: (
         <a className="d-block table-sort-op" href="#" onClick={onSortName}>
-          {gettext('Name')}
-          {sortBy == 'name' && sortIcon}
+          {gettext('Name')} {sortBy == 'name' && sortIcon}
         </a>
       ),
     }, {
@@ -390,8 +390,7 @@ const TagFiles = () => {
       width: 0.11,
       children: (
         <a className="d-block table-sort-op" href="#" onClick={onSortSize}>
-          {gettext('Size')}
-          {sortBy == 'size' && sortIcon}
+          {gettext('Size')} {sortBy == 'size' && sortIcon}
         </a>
       ),
     }, {
@@ -399,13 +398,19 @@ const TagFiles = () => {
       width: 0.15,
       children: (
         <a className="d-block table-sort-op" href="#" onClick={onSortTime}>
-          {gettext('Last Update')}
-          {sortBy == 'time' && sortIcon}
+          {gettext('Last Update')} {sortBy == 'time' && sortIcon}
         </a>
       ),
     }
   ];
 
+  const mobileHeaders = [
+    { isFixed: false, width: 0.12 },
+    { isFixed: false, width: 0.8 },
+    { isFixed: false, width: 0.08 },
+  ];
+
+  const isDesktop = Utils.isDesktop();
   let enableDirPrivateShare = false;
   let isRepoOwner = repoInfo.owner_email === username;
   let isVirtual = repoInfo.is_virtual;
@@ -418,12 +423,12 @@ const TagFiles = () => {
     <>
       <div className="table-container" onClick={onContainerClick}>
         <FixedWidthTable
-          headers={headers}
-          className="table-hover"
-          theadOptions={{
+          headers={isDesktop ? headers : mobileHeaders}
+          className={classNames('table-hover', { 'table-thead-hidden': !isDesktop })}
+          theadOptions={isDesktop ? {
             onMouseDown: onThreadMouseDown,
             onContextMenu: onThreadContextMenu,
-          }}
+          } : {}}
         >
           {tagFiles.rows.map(file => {
             const fileId = getRecordIdFromRecord(file);
