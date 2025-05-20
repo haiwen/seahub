@@ -24,7 +24,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
 
-  const lastSettingsValue = parseInt(localStorage.getItem('sf_cur_view_detail_width'));
+  const lastSettingsValue = parseInt(localStorage.getItem('sf_cur_view_detail_width') || 300);
   const { tagsData, addTags } = useTags();
 
   useEffect(() => {
@@ -78,11 +78,11 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
     }
 
     let selectedNewTags = [];
-    let selectedExitTags = [];
+    let selectedExitTagIds = [];
     selectedTags.forEach(tagName => {
       const tag = getTagByName(tagsData, tagName);
       if (tag) {
-        selectedExitTags.push(tag);
+        selectedExitTagIds.push(getTagId(tag));
       } else {
         selectedNewTags.push(tagName);
       }
@@ -97,20 +97,20 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       };
     });
     const recordId = getRecordIdFromRecord(record);
-    let value = getTagsFromRecord(record);
-    value = value ? value.map(item => item.row_id) : [];
+    let oldTags = getTagsFromRecord(record);
+    let oldTagIds = oldTags ? oldTags.map(item => item.row_id) : [];
 
     if (selectedNewTags.length > 0) {
       addTags(selectedNewTags, {
         success_callback: (operation) => {
-          const newTagIds = operation.tags?.map(tag => getTagId(tag));
-          let newValue = [...value, ...newTagIds];
-          selectedExitTags.forEach(id => {
-            if (!newValue.includes(id)) {
-              newValue.push(id);
+          const tagIds = operation.tags?.map(tag => getTagId(tag)) || [];
+          let newTagIds = [...oldTagIds, ...tagIds];
+          selectedExitTagIds.forEach(id => {
+            if (!newTagIds.includes(id)) {
+              newTagIds.push(id);
             }
           });
-          onSubmit([{ record_id: recordId, tags: newValue, old_tags: value }]);
+          onSubmit([{ record_id: recordId, tags: newTagIds, old_tags: oldTagIds }]);
           onToggle();
         },
         fail_callback: (error) => {
@@ -118,14 +118,14 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
         },
       });
     } else {
-      let newValue = [...value];
-      selectedExitTags.forEach(id => {
-        if (!newValue.includes(id)) {
-          newValue.push(id);
+      let newTagIds = [...oldTagIds];
+      selectedExitTagIds.forEach(id => {
+        if (!newTagIds.includes(id)) {
+          newTagIds.push(id);
         }
       });
-      if (newValue.length !== value.length) {
-        onSubmit([{ record_id: recordId, tags: newValue, old_tags: value }]);
+      if (newTagIds.length !== oldTagIds.length) {
+        onSubmit([{ record_id: recordId, tags: newTagIds, old_tags: oldTagIds }]);
       }
       onToggle();
     }
