@@ -14,6 +14,7 @@ import { getColumnDisplayName } from '../../../utils/column';
 import { createBMapZoomControl } from '../../map-controller';
 import { Utils } from '../../../../utils/utils';
 import { eventBus } from '../../../../components/common/event-bus';
+import { createZoomControl } from '../../map-controller/zoom';
 
 import './index.css';
 
@@ -30,7 +31,6 @@ class Location extends React.Component {
     this.mapType = type;
     this.mapKey = key;
     this.map = null;
-    this.currentPosition = {};
     this.state = {
       address: '',
       isLoading: false,
@@ -50,12 +50,12 @@ class Location extends React.Component {
     const { position, record } = this.props;
     if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
     if (prevProps.position?.lng === position?.lng && prevProps.position?.lat === position?.lat) return;
-    this.currentPosition = position;
-    let convertedPos = wgs84_to_gcj02(position.lng, position.lat);
+    let transformedPos = wgs84_to_gcj02(position.lng, position.lat);
     if (this.mapType === MAP_TYPE.B_MAP) {
-      convertedPos = gcj02_to_bd09(convertedPos.lng, convertedPos.lat);
+      transformedPos = gcj02_to_bd09(transformedPos.lng, transformedPos.lat);
     }
-    this.addMarkerByPosition(convertedPos.lng, convertedPos.lat);
+    this.addMarkerByPosition(transformedPos.lng, transformedPos.lat);
+
     this.setState({ address: record._location_translated?.address });
   }
 
@@ -68,7 +68,6 @@ class Location extends React.Component {
 
     const { position, record } = this.props;
     if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
-    this.currentPosition = position;
 
     this.setState({ isLoading: true, address: record._location_translated?.address });
     if (this.mapType === MAP_TYPE.B_MAP) {
@@ -156,11 +155,15 @@ class Location extends React.Component {
         scaleControl: false,
         streetViewControl: false,
         rotateControl: false,
-        fullscreenControl: false
+        fullscreenControl: false,
+        disableDefaultUI: true,
+        gestureHandling: 'cooperative',
       });
       this.map = window.mapInstance;
 
       this.addMarkerByPosition(lng, lat);
+      const zoomControl = createZoomControl(this.map);
+      this.map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
       this.map.setCenter(gcPosition);
     });
   };

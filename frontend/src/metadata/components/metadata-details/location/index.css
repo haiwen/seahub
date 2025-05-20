@@ -27,3 +27,8 @@
 .dirent-detail-item-value-map .sf-map-control-container .sf-map-control-divider::before {
   height: 14px;
 }
+
+.dirent-detail-item-value-map .sf-map-control-container.sf-map-zoom-control-container {
+  right: 10px !important;
+  bottom: 16px !important;
+}
