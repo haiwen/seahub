@@ -126,10 +126,6 @@ const PageItem = ({
     }
   };
 
-  const onChangeName = (name) => {
-    setPageName(name);
-  };
-
   const savePageProperties = useCallback(() => {
     const { name, id } = page;
     const currentPageName = pageName.trim();
@@ -143,12 +139,8 @@ const PageItem = ({
     if (e) {
       e.stopPropagation();
     }
-    setIsShowNameEditor(!isShowNameEditor, () => {
-      if (!isShowNameEditor) {
-        savePageProperties();
-      }
-    });
-  }, [isShowNameEditor, savePageProperties]);
+    setIsShowNameEditor(!isShowNameEditor);
+  }, [isShowNameEditor]);
 
   const changeItemFreeze = (isFreeze) => {
     if (isFreeze) {
@@ -203,6 +195,12 @@ const PageItem = ({
       unsubscribeUpdateCurrentPage();
     };
   }, [updateSelected]);
+
+  useEffect(() => {
+    if (!isShowNameEditor) {
+      savePageProperties();
+    }
+  }, [isShowNameEditor, savePageProperties]);
 
   const renderPage = (page, index, pagesLength, isOnlyOnePage) => {
     if (!page) return;
@@ -285,8 +283,8 @@ const PageItem = ({
               {isShowNameEditor && (
                 <NameEditPopover
                   oldName={pageName}
-                  target_page_id={navItemId}
-                  onChangeName={onChangeName}
+                  targetId={navItemId}
+                  onChangeName={setPageName}
                   toggleEditor={toggleNameEditor}
                 />
               )}
