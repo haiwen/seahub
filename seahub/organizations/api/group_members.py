@@ -22,8 +22,6 @@ from seahub.group.utils import is_group_member, get_group_member_info, get_group
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.group.signals import add_user_to_group
-from seahub.admin_log.signals import admin_operation
-from seahub.admin_log.models import GROUP_MEMBER_ADD, GROUP_MEMBER_DELETE
 
 logger = logging.getLogger(__name__)
 
@@ -157,14 +155,6 @@ class AdminGroupMembers(APIView):
                                    group_id=group_id,
                                    added_user=email)
 
-            admin_op_detail = {
-                'id': group_id,
-                'name': group.group_name,
-                'user': email
-            }
-            admin_operation.send(sender=None, admin_name=request.user.username,
-                                 operation=GROUP_MEMBER_ADD, detail=admin_op_detail)
-
         return Response(result)
 
 
@@ -264,13 +254,6 @@ class AdminGroupMember(APIView):
             ccnet_api.group_remove_member(group_id, group.creator_name, email)
             # remove repo-group share info of all 'email' owned repos
             seafile_api.remove_group_repos_by_owner(group_id, email)
-            admin_op_detail = {
-                'id': group_id,
-                'name': group.group_name,
-                'user': email
-            }
-            admin_operation.send(sender=None, admin_name=request.user.username,
-                                 operation=GROUP_MEMBER_DELETE, detail=admin_op_detail)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
