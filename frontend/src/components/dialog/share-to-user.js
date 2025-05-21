@@ -230,6 +230,7 @@ class ShareToUser extends React.Component {
       sharedItems: [],
       isWiki: this.props.repoType === 'wiki',
       tmpUserList: [],
+      enableSelectMembersFromDept: false,
       isShowDepartmentDetailDialog: false
     };
     this.options = [];
@@ -259,6 +260,7 @@ class ShareToUser extends React.Component {
   componentDidMount() {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
+    this.getPermForSelectMembersFromDept();
     seafileAPI.listSharedItems(repoID, path, 'user').then((res) => {
       if (res.data.length !== 0) {
         let tmpUserList = res.data.map(item => {
@@ -483,15 +485,34 @@ class ShareToUser extends React.Component {
     this.toggleDepartmentDetailDialog();
   };
 
-  render() {
-    let showDeptBtn = true;
+  getPermForSelectMembersFromDept = () => {
     if (window.app.config.lang !== 'zh-cn') {
-      showDeptBtn = false;
+      this.setState({
+        enableSelectMembersFromDept: false
+      });
+      return;
     }
+
     if (cloudMode && !isOrgContext) {
-      showDeptBtn = false;
+      this.setState({
+        enableSelectMembersFromDept: false
+      });
+      return;
     }
-    let { sharedItems } = this.state;
+
+    seafileAPI.listAddressBookDepartments().then((res) => {
+      this.setState({
+        enableSelectMembersFromDept: res.data.departments.length > 0
+      });
+    }).catch(error => {
+      this.setState({
+        enableSelectMembersFromDept: false
+      });
+    });
+  };
+
+  render() {
+    const { sharedItems, enableSelectMembersFromDept } = this.state;
     let thead = (
       <thead>
         <tr>
@@ -522,12 +543,12 @@ class ShareToUser extends React.Component {
                 <div className='add-members'>
                   <UserSelect
                     isMulti={true}
-                    className={classnames('reviewer-select', { 'user-select-right-btn': showDeptBtn })}
+                    className={classnames('reviewer-select', { 'user-select-right-btn': enableSelectMembersFromDept })}
                     placeholder={gettext('Search users...')}
                     onSelectChange={this.handleSelectChange}
                     selectedUsers={this.state.selectedUsers}
                   />
-                  {showDeptBtn &&
+                  {enableSelectMembersFromDept &&
                     <span
                       onClick={this.toggleDepartmentDetailDialog}
                       className="sf3-font sf3-font-invite-visitors toggle-detail-btn">

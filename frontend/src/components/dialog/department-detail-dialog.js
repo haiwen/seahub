@@ -35,7 +35,7 @@ class DepartmentDetailDialog extends React.Component {
       newMembersTempObj: {},
       currentDepartment: {},
       departmentsLoading: true,
-      membersLoading: true,
+      membersLoading: false,
       selectedMemberMap: {},
       departmentsTree: [],
       keyword: '',
@@ -107,7 +107,9 @@ class DepartmentDetailDialog extends React.Component {
         departmentsLoading: false,
         departmentsTree: departmentsTree
       });
-      this.getMembers(currentDepartment.id);
+      if (currentDepartment.id) {
+        this.getMembers(currentDepartment.id);
+      }
     }).catch(error => {
       this.onError(error);
     });
@@ -118,10 +120,14 @@ class DepartmentDetailDialog extends React.Component {
     seafileAPI.listAddressBookDepartmentMembers(department_id).then((res) => {
       this.setState({
         departmentMembers: res.data.members,
-        membersLoading: false,
+        membersLoading: false
       });
     }).catch(error => {
-      this.onError(error);
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      this.setState({
+        membersLoading: false
+      });
     });
   };
 
