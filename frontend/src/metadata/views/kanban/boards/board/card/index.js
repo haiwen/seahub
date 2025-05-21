@@ -14,6 +14,7 @@ const Card = ({
   record,
   titleColumn,
   displayColumns,
+  tagsData,
   onOpenFile,
   onSelectCard,
   onContextMenu,
@@ -45,7 +46,7 @@ const Card = ({
     >
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header">
-          <Formatter value={titleValue} column={titleColumn} record={record} onFileNameClick={handleFilenameClick} />
+          <Formatter value={titleValue} column={titleColumn} record={record} onFileNameClick={handleFilenameClick} tagsData={tagsData} />
         </div>
       )}
       <div className="sf-metadata-kanban-card-body">
@@ -65,7 +66,7 @@ const Card = ({
           return (
             <div className="sf-metadata-kanban-card-record" key={column.key}>
               {displayColumnName && (<div className="sf-metadata-kanban-card-record-name">{column.name}</div>)}
-              <Formatter value={value} column={column} record={record}/>
+              <Formatter value={value} column={column} record={record} tagsData={tagsData} />
             </div>
           );
         })}

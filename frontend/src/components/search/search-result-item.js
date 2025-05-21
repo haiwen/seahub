@@ -24,23 +24,11 @@ class SearchResultItem extends React.Component {
   };
 
   onMouseEnter = () => {
+    if (this.props.isHighlight) return;
     if (this.props.onHighlightIndex) {
       this.props.onHighlightIndex(this.props.idx);
     }
   };
-
-  // onMouseLeave = (e) => {
-  //   const rect = this.ref.getBoundingClientRect();
-  //   const mouseX = e.clientX;
-  //   const mouseY = e.clientY;
-  //   if (mouseX >= rect.left && mouseX <= rect.right && mouseY >= rect.top && mouseY <= rect.bottom) {
-  //     return;
-  //   }
-
-  //   if (this.props.onHighlightChange) {
-  //     this.props.onHighlightChange(-1);
-  //   }
-  // };
 
   render() {
     const { item, setRef = (() => {}) } = this.props;

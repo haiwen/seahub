@@ -11,6 +11,7 @@ import { checkIsDir } from '../../../../../../utils/row';
 import { openFile } from '../../../../../../utils/file';
 
 import './index.css';
+import { useTags } from '../../../../../../../tag/hooks';
 
 const Cell = React.memo(({
   needBindEvents = true,
@@ -27,6 +28,7 @@ const Cell = React.memo(({
   frozen,
   height,
 }) => {
+  const { tagsData } = useTags();
   const canEditable = useMemo(() => {
     const { type } = column;
     if (!window.sfMetadataContext.canModifyColumn(column)) return false;
@@ -171,7 +173,7 @@ const Cell = React.memo(({
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
-      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} onFileNameClick={onFileNameClick} />
+      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} tagsData={tagsData} onFileNameClick={onFileNameClick} />
       {isCellSelected && (<CellOperationBtn record={record} column={column}/>)}
     </div>
   );

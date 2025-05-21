@@ -733,6 +733,10 @@ class Search(APIView):
                         f['fullpath'] = f['fullpath'].split(origin_path)[-1]
 
                 f['repo_owner_email'] = owner_map.get(repo_id, '')
+                
+                if with_permission:
+                    permission = check_folder_permission(request, real_repo_id, '/')
+                    f['permission'] = permission if permission else ''
 
                 new_results.append(f)
 

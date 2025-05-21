@@ -16,9 +16,7 @@ import { PRIVATE_FILE_TYPE, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_D
 import SearchFilters from './search-filters';
 import SearchTags from './search-tags';
 import IconBtn from '../icon-btn';
-import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
-import { MetadataStatusProvider } from '../../hooks';
-import { TagsProvider } from '../../tag/hooks';
+import SearchedItemDetails from './details';
 import { CollaboratorsProvider } from '../../metadata';
 
 const propTypes = {
@@ -511,6 +509,7 @@ class Search extends Component {
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
       items[i]['mtime'] = data[i].mtime || '';
       items[i]['repo_owner_email'] = data[i].repo_owner_email || '';
+      items[i]['permission'] = data[i].permission || '';
     }
     return items;
   }
@@ -705,10 +704,23 @@ class Search extends Component {
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
+  renderDetails = (results) => {
+    const { highlightIndex } = this.state;
+    const item = results[highlightIndex];
+    if (!item) return null;
+    const repoID = item.repo_id;
+    const repoInfo = { permission: item.permission };
+    const dirent = { name: item.name, type: item.is_dir ? 'dir' : 'file' };
+    return (
+      <CollaboratorsProvider repoID={repoID}>
+        <SearchedItemDetails currentRepoID={this.props.repoID} repoID={repoID} repoInfo={repoInfo} path={item.path} dirent={dirent} />
+      </CollaboratorsProvider>
+    );
+  };
+
   renderResults = (resultItems, isVisited) => {
     const { highlightIndex } = this.state;
-    console.log(resultItems);
-    const repoInfo = { permission: 'r', is_admin: false };
+
     const results = (
       <>
         {isVisited ? (
@@ -741,18 +753,7 @@ class Search extends Component {
           <div className="search-result-sidepanel-wrapper d-flex">
             <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
             <div className="search-result-container-sidepanel d-flex flex-column flex-grow-1">
-              <MetadataStatusProvider repoID={resultItems[highlightIndex].repo_id} repoInfo={repoInfo}>
-                <TagsProvider repoID={resultItems[highlightIndex].repo_id} repoInfo={repoInfo}>
-                  <CollaboratorsProvider repoID={resultItems[highlightIndex].repo_id} repoInfo={repoInfo}>
-                    <EmbeddedFileDetails
-                      repoID={resultItems[highlightIndex].repo_id}
-                      repoInfo={repoInfo}
-                      path={Utils.getDirName(resultItems[highlightIndex].path)}
-                      dirent={{ name: resultItems[highlightIndex].name, type: resultItems[highlightIndex].is_dir ? 'dir' : 'file' }}
-                    />
-                  </CollaboratorsProvider>
-                </TagsProvider>
-              </MetadataStatusProvider>
+              {this.renderDetails(resultItems)}
             </div>
           </div>
         </MediaQuery>

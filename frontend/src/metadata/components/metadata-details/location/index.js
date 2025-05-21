@@ -41,8 +41,10 @@ class Location extends React.Component {
     this.initMap();
 
     this.unsubscribeClearMapInstance = eventBus.subscribe(EVENT_BUS_TYPE.CLEAR_MAP_INSTANCE, () => {
-      window.mapInstance = null;
-      delete window.mapInstance;
+      if (window.mapInstance) {
+        window.mapInstance = null;
+        delete window.mapInstance;
+      }
     });
   }
 

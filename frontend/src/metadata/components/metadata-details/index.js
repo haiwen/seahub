@@ -10,11 +10,13 @@ import { useMetadataDetails } from '../../hooks';
 import { checkIsDir } from '../../utils/row';
 import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
 import Location from './location';
+import { useTags } from '../../../tag/hooks';
 
 import './index.css';
 
 const MetadataDetails = () => {
   const { canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
+  const { tagsData } = useTags();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
 
@@ -51,6 +53,7 @@ const MetadataDetails = () => {
                 modifyColumnData={modifyColumnData}
                 onChange={onChange}
                 updateFileTags={updateFileTags}
+                tagsData={tagsData}
               />
               :
               <CellFormatter
@@ -59,6 +62,7 @@ const MetadataDetails = () => {
                 value={value}
                 emptyTip={gettext('Empty')}
                 className="sf-metadata-property-detail-formatter"
+                tagsData={tagsData}
               />
             }
           </DetailItem>

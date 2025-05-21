@@ -8,6 +8,7 @@ import { useMetadataView } from '../../../../hooks/metadata-view';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getRecordIdFromRecord } from '../../../../utils/cell';
 import { gettext } from '@/utils/constants';
+import { useTags } from '../../../../../tag/hooks';
 
 import './index.css';
 
@@ -37,6 +38,7 @@ const Board = ({
   const cardsQuantity = useMemo(() => board.children.length, [board.children]);
 
   const { metadata } = useMetadataView();
+  const { tagsData } = useTags();
 
   const onDragStart = useCallback(({ payload }) => {
     updateDragging(true);
@@ -68,6 +70,7 @@ const Board = ({
         groupByColumn={groupByColumn}
         haveFreezed={haveFreezed}
         cardsQuantity={cardsQuantity}
+        tagsData={tagsData}
         onDelete={() => deleteOption(board.key)}
         onFreezed={onFreezed}
         onUnFreezed={onUnFreezed}
@@ -114,6 +117,7 @@ const Board = ({
                 record={record}
                 titleColumn={titleColumn}
                 displayColumns={displayColumns}
+                tagsData={tagsData}
                 onOpenFile={onOpenFile}
                 onSelectCard={onSelectCard}
                 onContextMenu={(e) => onContextMenu(e, recordId)}
