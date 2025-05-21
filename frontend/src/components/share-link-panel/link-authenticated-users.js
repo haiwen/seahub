@@ -57,7 +57,7 @@ class UserItem extends React.Component {
           <span
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf2-icon-x3 op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}

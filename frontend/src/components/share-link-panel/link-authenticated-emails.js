@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import Loading from '../loading';
 import toaster from '../toast';
 import { shareLinkAPI } from '../../utils/share-link-api';
 
@@ -51,7 +50,7 @@ class EmailItem extends React.Component {
           <span
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf2-icon-x3 op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
@@ -108,6 +107,7 @@ class LinkAuthenticatedEmails extends React.Component {
     this.setState({
       isSubmitting: true
     });
+    toaster.notify(gettext('It may take some time, please wait.'));
     shareLinkAPI.addShareLinkAuthEmails(linkToken, inputEmails, path).then(res => {
       const { success, failed } = res.data;
       let newEmails = [];
@@ -196,7 +196,7 @@ class LinkAuthenticatedEmails extends React.Component {
               </td>
               <td>
                 <Button disabled={btnDisabled} onClick={this.onSubmit}>
-                  {isSubmitting ? <Loading /> : gettext('Submit')}
+                  {gettext('Submit')}
                 </Button>
               </td>
             </tr>
