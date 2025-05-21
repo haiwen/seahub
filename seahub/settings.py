@@ -1101,7 +1101,7 @@ BAIDU_MAP_URL = ''
 
 # google map
 GOOGLE_MAP_KEY = '' # Used in frontend page for rendering map in browser
-GOOGLE_MAP_GEOCODE_API_KEY = '' # Used in backend server for address / position convert
+SERVER_GOOGLE_MAP_KEY = '' # Used in backend server for address / position convert
 GOOGLE_MAP_ID = 'google_map_id'
 
 
