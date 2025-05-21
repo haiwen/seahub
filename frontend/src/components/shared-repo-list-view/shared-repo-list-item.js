@@ -484,7 +484,7 @@ class SharedRepoListItem extends React.Component {
     if (this.isDepartmentOwnerGroupMember) {
       const advancedOperations = this.getAdvancedOperations();
       return (
-        <Fragment>
+        <div className="d-flex align-items-center">
           {shareOperation}
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
@@ -492,7 +492,7 @@ class SharedRepoListItem extends React.Component {
               tag="i"
               role="button"
               tabIndex="0"
-              className="sf-dropdown-toggle sf3-font-more sf3-font"
+              className="op-icon sf3-font-more sf3-font"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
@@ -537,11 +537,11 @@ class SharedRepoListItem extends React.Component {
               })}
             </DropdownMenu>
           </Dropdown>
-        </Fragment>
+        </div>
       );
     } else {
       return (
-        <Fragment>
+        <div className="d-flex align-items-center">
           {operations.map(item => {
             switch (item) {
               case 'Share':
@@ -556,7 +556,7 @@ class SharedRepoListItem extends React.Component {
                       tag="i"
                       role="button"
                       tabIndex="0"
-                      className="sf-dropdown-toggle sf3-font-more sf3-font"
+                      className="op-icon sf3-font-more sf3-font"
                       title={gettext('More operations')}
                       aria-label={gettext('More operations')}
                       data-toggle="dropdown"
@@ -578,7 +578,7 @@ class SharedRepoListItem extends React.Component {
                 return null;
             }
           })}
-        </Fragment>
+        </div>
       );
     }
   };

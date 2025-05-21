@@ -342,7 +342,7 @@ class MylibRepoListItem extends React.Component {
         </td>
         <td>
           {(repo.repo_name && this.state.isOpIconShow) && (
-            <div>
+            <div className="d-flex align-items-center">
               <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
               <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
               <MylibRepoMenu
@@ -397,7 +397,7 @@ class MylibRepoListItem extends React.Component {
           }
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 d-flex align-items-center">
             <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
             <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
             <MylibRepoMenu

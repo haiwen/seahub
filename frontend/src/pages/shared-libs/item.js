@@ -208,27 +208,29 @@ class Item extends Component {
                 </Fragment>
               </td>
               <td>
-                {(isPro && data.is_admin) &&
-                <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
-                }
-                <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
-                {enableMonitorRepo &&
-                <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                  <DropdownToggle
-                    tag="i"
-                    role="button"
-                    tabIndex="0"
-                    className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
-                    title={gettext('More operations')}
-                    aria-label={gettext('More operations')}
-                    data-toggle="dropdown"
-                    aria-expanded={this.state.isOpMenuOpen}
-                  />
-                  <DropdownMenu>
-                    <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-                }
+                <div className="d-flex align-items-center">
+                  {(isPro && data.is_admin) &&
+                  <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+                  }
+                  <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+                  {enableMonitorRepo &&
+                  <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
+                    <DropdownToggle
+                      tag="i"
+                      role="button"
+                      tabIndex="0"
+                      className={`op-icon sf3-font-more sf3-font ${iconVisibility}`}
+                      title={gettext('More operations')}
+                      aria-label={gettext('More operations')}
+                      data-toggle="dropdown"
+                      aria-expanded={this.state.isOpMenuOpen}
+                    />
+                    <DropdownMenu>
+                      <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
+                  }
+                </div>
               </td>
               <td>{data.size}</td>
               <td title={dayjs(data.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(data.last_modified).fromNow()}</td>
@@ -258,7 +260,7 @@ class Item extends Component {
                 {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
               </div>
 
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 d-flex align-items-center">
                 {(isPro && data.is_admin) &&
                 <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
                 }
@@ -269,7 +271,7 @@ class Item extends Component {
                     tag="i"
                     role="button"
                     tabIndex="0"
-                    className={`sf-dropdown-toggle sf3-font-more sf3-font ${iconVisibility}`}
+                    className={`op-icon sf3-font-more sf3-font ${iconVisibility}`}
                     title={gettext('More operations')}
                     aria-label={gettext('More operations')}
                     data-toggle="dropdown"
