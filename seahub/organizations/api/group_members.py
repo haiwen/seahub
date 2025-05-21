@@ -18,7 +18,7 @@ from seahub.api2.endpoints.admin.group_members import AdminGroupMember as SysAdm
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.api.utils import check_org_admin
 from seahub.base.accounts import User
-from seahub.group.utils import is_group_member, get_group_member_info
+from seahub.group.utils import is_group_member, get_group_member_info, get_group_members_info
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.group.signals import add_user_to_group
@@ -49,11 +49,47 @@ class AdminGroupMembers(APIView):
 
         # permission check
         group_id = int(group_id)
-        if get_org_id_by_group(group_id) != org_id:
+        group = ccnet_api.get_group(group_id)
+        if not group or get_org_id_by_group(group_id) != org_id:
             error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        return SysAdminGroupMembers().get(request, group_id, format)
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            page = 1
+            per_page = 100
+
+        start = (page - 1) * per_page
+        limit = per_page + 1
+
+        try:
+            members = ccnet_api.get_group_members(group_id, start, limit)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if len(members) > per_page:
+            members = members[:per_page]
+            has_next_page = True
+        else:
+            has_next_page = False
+
+        
+        member_usernames = [m.user_name for m in members]
+        members_info = get_group_members_info(group_id, member_usernames)
+        group_members = {
+            'group_id': group_id,
+            'group_name': group.group_name,
+            'members': members_info,
+            'page_info': {
+                'has_next_page': has_next_page,
+                'current_page': page
+            }
+        }
+        return Response(group_members)
 
     @check_org_admin
     def post(self, request, org_id, group_id):
