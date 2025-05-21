@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, canGenerateShareLink, canGenerateUploadLink } from '../../utils/constants';
+import { gettext, canGenerateShareLink, canGenerateUploadLink, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import RepoShareAdminShareLinks from './repo-share-admin/share-links';
 import RepoShareAdminUploadLinks from './repo-share-admin/upload-links';
@@ -56,7 +56,7 @@ class RepoShareAdminDialog extends React.Component {
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName) + '</span>');
     return (
       <div>
-        <Modal isOpen={true} className="repo-share-admin-container share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} className="repo-share-admin-container share-dialog" style={LARGE_DIALOG_STYLE } toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog}>
             <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
           </SeahubModalHeader>

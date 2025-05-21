@@ -23,13 +23,16 @@
   .share-dialog .share-dialog-content {
     flex-direction: row;
   }
+
   .share-dialog-content .share-dialog-side {
     border: 0;
     border-right: 1px solid #eee;
   }
+
   .share-dialog-side .nav {
     flex-direction: column;
   }
+
   .share-dialog-side .nav-pills .nav-item .nav-link {
     width: 100%;
     padding: 0.3125rem 0.5rem;

@@ -226,3 +226,5 @@ export const MimetypesKind = {
   svg: 'image/svg+xml',
   webp: 'image/webp'
 };
+
+export const LARGE_DIALOG_STYLE = { maxWidth: '980px' };

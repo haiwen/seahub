@@ -5,14 +5,8 @@
   flex-direction: column;
 }
 
-@media (min-width: 768px) {
-  .transfer-dialog .transfer-dialog-content {
-    flex-direction: row;
-  }
-}
-
 .transfer-dialog-content .transfer-dialog-side {
-  flex-basis: 29%;
+  flex-basis: 22%;
   padding: 1rem;
   border-bottom: 1px solid #eee;
 }
@@ -22,8 +16,11 @@
 }
 
 @media (min-width: 768px) {
+  .transfer-dialog .transfer-dialog-content {
+    flex-direction: row;
+  }
+
   .transfer-dialog-content .transfer-dialog-side {
-    padding: 12px 8px;
     border: 0;
     border-right: 1px solid #eee;
   }
@@ -74,20 +71,20 @@
 }
 
 .transfer-dialog-side .nav-item .nav-link.active {
+  background-color: #f0f0f0;
+  color: inherit;
   position: relative;
-  background-color: #f5f5f5;
-  color: #212529;
-  border-bottom: 0.125rem solid transparent;
 }
 
 .transfer-dialog-side .nav-item .nav-link.active::before {
   content: '';
-  position: absolute;
   display: block;
-  width: 3px;
-  height: 28px;
-  left: -4px;
-  top: 3px;
+  width: 4px;
   background-color: #ff9800;
   border-radius: 2px;
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: -8px;
+  z-index: 0;
 }

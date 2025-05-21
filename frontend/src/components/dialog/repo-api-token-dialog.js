@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import { Modal, ModalBody, Button, Input } from 'reactstrap';
 import RepoAPITokenPermissionEditor from '../select-editor/repo-api-token-permission-editor';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -282,10 +282,7 @@ class RepoAPITokenDialog extends React.Component {
     const itemName = '<span class="op-target text-truncate mr-1">' + Utils.HTMLescape(this.props.repo.repo_name) + '</span>';
     const title = gettext('{placeholder} API Token').replace('{placeholder}', itemName);
     return (
-      <Modal
-        isOpen={true} style={{ maxWidth: '800px' }}
-        toggle={this.props.onRepoAPITokenToggle}
-      >
+      <Modal isOpen={true} style={LARGE_DIALOG_STYLE} toggle={this.props.onRepoAPITokenToggle}>
         <SeahubModalHeader toggle={this.props.onRepoAPITokenToggle}>
           <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
         </SeahubModalHeader>
