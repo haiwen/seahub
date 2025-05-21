@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext } from '../../utils/constants';
+import { gettext, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import LibSubFolderSetUserPermissionDialog from './lib-sub-folder-set-user-permission-dialog';
 import LibSubFolderSetGroupPermissionDialog from './lib-sub-folder-set-group-permission-dialog';
@@ -92,7 +92,7 @@ class LibSubFolderPermissionDialog extends React.Component {
     title = title.replace('{placeholder}', '<span class="op-target text-truncate mx-1">' + Utils.HTMLescape(repoName || folderName) + '</span>');
     return (
       <div>
-        <Modal isOpen={true} style={{ maxWidth: '980px' }} className="share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} style={LARGE_DIALOG_STYLE} className="share-dialog" toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog}>
             <span dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></span>
           </SeahubModalHeader>

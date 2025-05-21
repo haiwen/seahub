@@ -1,7 +1,7 @@
 import React, { Fragment, } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, Input } from 'reactstrap';
-import { gettext, isOrgContext, username } from '../../utils/constants';
+import { gettext, isOrgContext, username, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -258,7 +258,7 @@ class DepartmentDetailDialog extends React.Component {
     );
 
     const details = (
-      <Modal isOpen={true} toggle={this.toggle} className="department-dialog" style={{ maxWidth: '900px' }}>
+      <Modal isOpen={true} toggle={this.toggle} className="department-dialog" style={LARGE_DIALOG_STYLE}>
         {this.renderHeader()}
         <ModalBody className="department-dialog-content">
           <div className="department-dialog-left-panel">

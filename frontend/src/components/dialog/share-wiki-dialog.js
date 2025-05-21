@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, additionalShareDialogNote, canShareRepo } from '../../utils/constants';
+import { gettext, username, additionalShareDialogNote, canShareRepo, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import ShareToUser from './share-to-user';
 import ShareToGroup from './share-to-group';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -156,7 +156,7 @@ class ShareWikiDialog extends React.Component {
     const { itemType, itemName } = this.props;
     return (
       <div>
-        <Modal isOpen={true} style={{ maxWidth: '760px' }} className="share-dialog" toggle={this.props.toggleDialog}>
+        <Modal isOpen={true} style={LARGE_DIALOG_STYLE} className="share-dialog" toggle={this.props.toggleDialog}>
           <SeahubModalHeader toggle={this.props.toggleDialog} tag="div">
             <h5 className="text-truncate">{gettext('Share')} <span className="op-target" title={itemName}>{itemName}</span></h5>
             {this.renderExternalShareMessage()}
