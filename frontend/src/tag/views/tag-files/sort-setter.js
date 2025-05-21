@@ -21,7 +21,14 @@ const SortSetter = () => {
     const storedSort = localStorage && localStorage.getItem(TAG_FILES_SORT);
     const sort = storedSort ? JSON.parse(storedSort) : TAG_FILES_DEFAULT_SORT;
     setSort(sort);
-  }, [localStorage]);
+
+    const unsubscribeSort = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, (newSort) => {
+      setSort(newSort);
+    });
+    return () => {
+      unsubscribeSort && unsubscribeSort();
+    };
+  }, [localStorage, eventBus]);
 
   return (
     <SortMenu sortBy={getSortBy(sort)} sortOrder={getSortOrder(sort)} onSelectSortOption={onSelectSortOption} />

@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
+import classNames from 'classnames';
 import { useTagView, useTags } from '../../hooks';
 import { gettext, username } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
@@ -31,7 +32,7 @@ const TagFiles = () => {
   const { tagsData } = useTags();
   const {
     tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
-    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile,
+    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile, sortBy, sortOrder, sortFiles
   } = useTagView();
 
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
@@ -290,6 +291,27 @@ const TagFiles = () => {
     showMenu(showMenuConfig);
   }, [selectedFileIds, updateSelectedFileIds, getMenuList]);
 
+  const onSortName = useCallback((e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const order = sortOrder == 'asc' ? 'desc' : 'asc';
+    sortFiles({ sort_by: sortBy, order });
+  }, [sortOrder, sortFiles]);
+
+  const onSortSize = useCallback((e) => {
+    e.preventDefault();
+    const sortBy = 'size';
+    const order = sortOrder == 'asc' ? 'desc' : 'asc';
+    sortFiles({ sort_by: sortBy, order });
+  }, [sortOrder, sortFiles]);
+
+  const onSortTime = useCallback((e) => {
+    e.preventDefault();
+    const sortBy = 'time';
+    const order = sortOrder == 'asc' ? 'desc' : 'asc';
+    sortFiles({ sort_by: sortBy, order });
+  }, [sortOrder, sortFiles]);
+
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
     const unsubscribeUnselectFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => updateSelectedFileIds([]));
@@ -329,6 +351,7 @@ const TagFiles = () => {
     return (<EmptyTip text={gettext('No files')} />);
   }
 
+  const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
   const headers = [
     {
       isFixed: true,
@@ -351,7 +374,11 @@ const TagFiles = () => {
     }, {
       isFixed: false,
       width: 0.5,
-      children: (<a className="d-block table-sort-op" href="#">{gettext('Name')}</a>),
+      children: (
+        <a className="d-block table-sort-op" href="#" onClick={onSortName}>
+          {gettext('Name')} {sortBy == 'name' && sortIcon}
+        </a>
+      ),
     }, {
       isFixed: false,
       width: 0.06,
@@ -361,14 +388,29 @@ const TagFiles = () => {
     }, {
       isFixed: false,
       width: 0.11,
-      children: (<a className="d-block table-sort-op" href="#">{gettext('Size')}</a>),
+      children: (
+        <a className="d-block table-sort-op" href="#" onClick={onSortSize}>
+          {gettext('Size')} {sortBy == 'size' && sortIcon}
+        </a>
+      ),
     }, {
       isFixed: false,
       width: 0.15,
-      children: (<a className="d-block table-sort-op" href="#">{gettext('Last Update')}</a>),
+      children: (
+        <a className="d-block table-sort-op" href="#" onClick={onSortTime}>
+          {gettext('Last Update')} {sortBy == 'time' && sortIcon}
+        </a>
+      ),
     }
   ];
 
+  const mobileHeaders = [
+    { isFixed: false, width: 0.12 },
+    { isFixed: false, width: 0.8 },
+    { isFixed: false, width: 0.08 },
+  ];
+
+  const isDesktop = Utils.isDesktop();
   let enableDirPrivateShare = false;
   let isRepoOwner = repoInfo.owner_email === username;
   let isVirtual = repoInfo.is_virtual;
@@ -381,12 +423,12 @@ const TagFiles = () => {
     <>
       <div className="table-container" onClick={onContainerClick}>
         <FixedWidthTable
-          headers={headers}
-          className="table-hover"
-          theadOptions={{
+          headers={isDesktop ? headers : mobileHeaders}
+          className={classNames('table-hover', { 'table-thead-hidden': !isDesktop })}
+          theadOptions={isDesktop ? {
             onMouseDown: onThreadMouseDown,
             onContextMenu: onThreadContextMenu,
-          }}
+          } : {}}
         >
           {tagFiles.rows.map(file => {
             const fileId = getRecordIdFromRecord(file);

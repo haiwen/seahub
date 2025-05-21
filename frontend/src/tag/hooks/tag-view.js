@@ -28,6 +28,8 @@ export const TagViewProvider = ({
   const [tagFiles, setTagFiles] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [selectedFileIds, setSelectedFileIds] = useState([]);
+  const [sortBy, setSortBy] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   const { tagsData, updateLocalTags } = useTags();
 
@@ -165,11 +167,15 @@ export const TagViewProvider = ({
   }, [repoID, convertFileCallback]);
 
   const sortFiles = useCallback((sort) => {
-    const sorted = sortTagFiles(tagFiles, sort);
+    const sorted = sortTagFiles(tagFiles?.rows, sort);
     setTagFiles({
       ...tagFiles,
       rows: sorted,
     });
+    setSortBy(sort.sort_by);
+    setSortOrder(sort.order);
+    window.sfTagsDataContext?.localStorage?.setItem(TAG_FILES_SORT, JSON.stringify(sort));
+    window.sfTagsDataContext?.eventBus?.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, sort);
   }, [tagFiles]);
 
   useEffect(() => {
@@ -202,12 +208,22 @@ export const TagViewProvider = ({
         ...tagFiles,
         rows: sorted,
       });
+      setSortBy(sort.sort_by);
+      setSortOrder(sort.order);
+      window.sfTagsDataContext?.localStorage?.setItem(TAG_FILES_SORT, JSON.stringify(sort));
     });
 
     return () => {
       unsubscribeModifyTagFilesSort && unsubscribeModifyTagFilesSort();
     };
   }, [tagFiles]);
+
+  useEffect(() => {
+    const savedSort = window.sfTagsDataContext?.localStorage?.getItem(TAG_FILES_SORT);
+    const sort = savedSort ? JSON.parse(savedSort) : TAG_FILES_DEFAULT_SORT;
+    setSortBy(sort.sort_by);
+    setSortOrder(sort.order);
+  }, []);
 
   return (
     <TagViewContext.Provider value={{
@@ -229,6 +245,8 @@ export const TagViewProvider = ({
       renameTagFile,
       convertFile,
       sortFiles,
+      sortBy,
+      sortOrder,
     }}>
       {children}
     </TagViewContext.Provider>
