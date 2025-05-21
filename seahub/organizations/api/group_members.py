@@ -13,8 +13,6 @@ from seahub.organizations.views import get_org_id_by_group
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
-from seahub.api2.endpoints.admin.group_members import AdminGroupMembers as SysAdminGroupMembers
-from seahub.api2.endpoints.admin.group_members import AdminGroupMember as SysAdminGroupMember
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.api.utils import check_org_admin
 from seahub.base.accounts import User
