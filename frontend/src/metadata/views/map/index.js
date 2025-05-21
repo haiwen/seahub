@@ -11,8 +11,8 @@ import { MAP_TYPE as MAP_PROVIDER, PRIVATE_FILE_TYPE } from '../../../constants'
 import { EVENT_BUS_TYPE, MAP_TYPE, PREDEFINED_FILE_TYPE_OPTION_KEY, STORAGE_MAP_CENTER_KEY, STORAGE_MAP_TYPE_KEY, STORAGE_MAP_ZOOM_KEY, DEFAULT_POSITION, DEFAULT_ZOOM } from '../../constants';
 import ModalPortal from '../../../components/modal-portal';
 import ImageDialog from '../../../components/dialog/image-dialog';
-import { createClusterer, createGoogleMap } from './google';
-import { createBaiduMap } from './baidu';
+import { createGoogleMap, createGoogleMarkerClusterer } from './google';
+import { createBaiduMap, createBaiduMarkerClusterer } from './baidu';
 
 import './index.css';
 
@@ -101,11 +101,16 @@ const Map = () => {
   const renderBaiduMap = useCallback(() => {
     if (!window.BMapGL.Map) return;
     mapRef.current = createBaiduMap({ images, center, zoom, getPoints, onMapState, onClusterLeaveIds });
+    createBaiduMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
+
+    window.mapViewInstance = mapRef.current;
   }, [images, center, zoom, getPoints, onMapState, onClusterLeaveIds]);
 
   const renderGoogleMap = useCallback(() => {
     if (!window.google?.maps?.Map) return;
-    mapRef.current = createGoogleMap({ images, center, zoom, onMapState, onClusterLeaveIds });
+    mapRef.current = createGoogleMap({ center, zoom, onMapState });
+    createGoogleMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
+
     window.mapViewInstance = mapRef.current;
   }, [images, center, zoom, onMapState, onClusterLeaveIds]);
 
@@ -191,7 +196,7 @@ const Map = () => {
         viewDom.replaceChild(container, containerRef.current);
 
         mapRef.current = window.mapViewInstance;
-        window.BMapCluster.setData(getPoints());
+        createBaiduMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
       }
     } else if (mapInfo.type === MAP_PROVIDER.G_MAP) {
       if (!window.mapViewInstance) {
@@ -202,7 +207,7 @@ const Map = () => {
         viewDom.replaceChild(container, containerRef.current);
 
         mapRef.current = window.mapViewInstance;
-        createClusterer(mapRef.current, images, onMapState);
+        createGoogleMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,5 +1,6 @@
 import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
+import { wgs84_to_gcj02 } from '../../../utils/coord-transform';
 
 export const createGeolocationControl = (map) => {
   const container = document.createElement('div');
@@ -18,22 +19,11 @@ export const createGeolocationControl = (map) => {
     const originalClass = container.className;
     container.className = classnames(originalClass, 'sf-map-control-loading');
 
-    try {
-      const position = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((userInfo) => {
+        const gcPosition = wgs84_to_gcj02(userInfo.coords.longitude, userInfo.coords.latitude);
+        map.setCenter(gcPosition);
       });
-
-      if (position) {
-        const point = {
-          lng: position.coords.longitude,
-          lat: position.coords.latitude
-        };
-        map.setCenter(point);
-      }
-    } catch (error) {
-      // console.error('Geolocation error:', error);
-    } finally {
-      container.className = originalClass;
     }
   });
 

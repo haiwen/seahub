@@ -16,7 +16,7 @@ const getPoints = (images) => {
   }));
 };
 
-const createClusterer = (map, images, onClusterLeaveIds) => {
+export const createBaiduMarkerClusterer = (map, images, onClusterLeaveIds) => {
   let clickTimeout = null;
   const cluster = new window.Cluster.View(map, {
     clusterRadius: 60,
@@ -61,7 +61,7 @@ const createClusterer = (map, images, onClusterLeaveIds) => {
   return cluster;
 };
 
-export const createBaiduMap = ({ type, images, center, zoom, onMapState, onClusterLeaveIds }) => {
+export const createBaiduMap = ({ type, center, zoom, onMapState }) => {
   if (!window.BMapGL) return;
   const map = new window.BMapGL.Map('sf-metadata-map-container', {
     enableMapClick: false,
@@ -108,8 +108,6 @@ export const createBaiduMap = ({ type, images, center, zoom, onMapState, onClust
       onMapState();
     });
   }
-
-  window.BMapCluster = createClusterer(map, images, onClusterLeaveIds);
 
   return map;
 };

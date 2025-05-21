@@ -6,7 +6,7 @@ import { customImageOverlay, googleCustomAvatarOverlay } from './overlay';
 
 let clickTimeout = null;
 
-export const createClusterer = (map, images, onClusterLeaveIds) => {
+export const createGoogleMarkerClusterer = (map, images, onClusterLeaveIds) => {
   const markers = images.map(image => {
     const overlay = customImageOverlay({ isCluster: false, src: image.src });
     overlay.addEventListener('click', () => {
@@ -31,7 +31,7 @@ export const createClusterer = (map, images, onClusterLeaveIds) => {
     });
   });
 
-  new window.markerClusterer.MarkerClusterer({
+  return new window.markerClusterer.MarkerClusterer({
     map,
     markers,
     renderer: {
@@ -63,7 +63,7 @@ export const createClusterer = (map, images, onClusterLeaveIds) => {
   });
 };
 
-export const createGoogleMap = ({ images, center, zoom, onMapState, onClusterLeaveIds }) => {
+export const createGoogleMap = ({ center, zoom, onMapState }) => {
   if (!window.google?.maps?.Map) return;
 
   const map = new window.google.maps.Map(document.getElementById('sf-metadata-map-container'), {
@@ -85,8 +85,6 @@ export const createGoogleMap = ({ images, center, zoom, onMapState, onClusterLea
 
   map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
   map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControl);
-
-  createClusterer(map, images, onClusterLeaveIds);
 
   map.addListener('center_changed', () => onMapState());
   map.addListener('zoom_changed', () => onMapState());
