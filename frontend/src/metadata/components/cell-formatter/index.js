@@ -19,7 +19,6 @@ const CellFormatter = ({ readonly, value, field, record, tagsData, ...params }) 
       record,
     };
   }, [readonly, value, field, collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser, record]);
-  // const { tagsData } = useTags();
 
   if (field.type === CellType.FILE_NAME) {
     return (<FileName { ...props } { ...params } record={record} />);

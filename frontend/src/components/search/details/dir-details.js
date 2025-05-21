@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import DetailItem from '../../dirent-detail/detail-item';
 import Formatter from '../../../metadata/components/formatter';
@@ -99,10 +99,16 @@ const DirDetails = ({ repoInfo, direntDetail, enableMetadata, record, columns, d
 };
 
 DirDetails.propTypes = {
+  repoInfo: PropTypes.object,
   direntDetail: PropTypes.object,
   enableMetadata: PropTypes.bool,
   record: PropTypes.object,
+  columns: PropTypes.array,
   displayColumns: PropTypes.array,
+  tagsData: PropTypes.object,
+  modifyColumnData: PropTypes.func,
+  onChange: PropTypes.func,
+  updateFileTags: PropTypes.func
 };
 
 export default DirDetails;

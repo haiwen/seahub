@@ -168,14 +168,19 @@ const FileDetails = ({ repoID, repoInfo, dirent, direntDetail, enableMetadata, e
 };
 
 FileDetails.propTypes = {
-  isShowRepoTags: PropTypes.bool,
   repoID: PropTypes.string,
   repoInfo: PropTypes.object,
   dirent: PropTypes.object,
-  path: PropTypes.string,
   direntDetail: PropTypes.object,
-  repoTags: PropTypes.array,
-  fileTagList: PropTypes.array,
+  enableMetadata: PropTypes.bool,
+  enableFaceRecognition: PropTypes.bool,
+  record: PropTypes.object,
+  columns: PropTypes.array,
+  displayColumns: PropTypes.array,
+  tagsData: PropTypes.array,
+  modifyColumnData: PropTypes.func,
+  onChange: PropTypes.func,
+  updateFileTags: PropTypes.func,
 };
 
 export default FileDetails;

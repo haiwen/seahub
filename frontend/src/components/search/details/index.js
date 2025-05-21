@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Body, Header } from '../../dirent-detail/detail';
 import { Utils } from '../../../utils/utils';
 import Loading from '../../loading';
@@ -17,9 +18,12 @@ import tagsAPI from '../../../tag/api';
 
 import './index.css';
 import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import LibDetail from './lib-details';
+import { Repo } from '../../../models';
 
-const SearchedItemDetails = ({ currentRepoID, repoID, repoInfo, path, dirent }) => {
+const SearchedItemDetails = ({ currentRepoID, repoID, path, dirent }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [repoInfo, setRepoInfo] = useState(null);
   const [direntDetail, setDirentDetail] = useState(null);
   const [metadataStatus, setMetadataStatus] = useState(null);
   const [record, setRecord] = useState(null);
@@ -140,17 +144,32 @@ const SearchedItemDetails = ({ currentRepoID, repoID, repoInfo, path, dirent }) 
   }, [currentRepoID, repoID, record, modifyLocalFileTags]);
 
   useEffect(() => {
-    if (!repoID || !repoInfo || !path || !dirent) return;
     setIsLoading(true);
+    seafileAPI.getRepoInfo(repoID).then(res => {
+      const repo = new Repo(res.data);
+      setRepoInfo(repo);
+    }).catch(error => {
+      const errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      setIsLoading(false);
+    });
+  }, [currentRepoID, repoID]);
+
+  useEffect(() => {
+    if (!repoID || !path || !dirent || dirent.isLib) {
+      setIsLoading(false);
+      return;
+    }
     seafileAPI[dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo'](repoID, path).then(res => {
       setDirentDetail(res.data);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [repoID, repoInfo, path, dirent]);
+  }, [currentRepoID, repoID, repoInfo, path, dirent]);
 
   useEffect(() => {
+    if (dirent.isLib) return;
     metadataAPI.getMetadataStatus(repoID).then(res => {
       const metadataStatus = res.data;
       setMetadataStatus(metadataStatus);
@@ -160,7 +179,12 @@ const SearchedItemDetails = ({ currentRepoID, repoID, repoInfo, path, dirent }) 
         return;
       }
 
-      const parentDir = path.endsWith('/') ? Utils.getDirName(path.slice(0, -1)) : Utils.getDirName(path);
+      let parentDir = '';
+      if (path === '/') {
+        parentDir = '/';
+      } else {
+        parentDir = path.endsWith('/') ? Utils.getDirName(path.slice(0, -1)) : Utils.getDirName(path);
+      }
       metadataAPI.getRecord(repoID, { parentDir, fileName: dirent?.name }).then(res => {
         const { results, metadata } = res.data;
         const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
@@ -176,7 +200,22 @@ const SearchedItemDetails = ({ currentRepoID, repoID, repoInfo, path, dirent }) 
         setIsLoading(false);
       });
     });
-  }, [repoID, path, dirent]);
+  }, [currentRepoID, repoID, path, dirent]);
+
+  if (!repoInfo) return null;
+
+  if (dirent.isLib) {
+    return (
+      <div className="searched-item-details">
+        <div
+          className="cur-view-detail"
+          style={{ width: 300 }}
+        >
+          {isLoading ? <div className="detail-content"><Loading /></div> : <LibDetail repoInfo={repoInfo} />}
+        </div>
+      </div>
+    );
+  }
 
   let src = '';
   if (repoInfo.encrypted) {
@@ -235,6 +274,14 @@ const SearchedItemDetails = ({ currentRepoID, repoID, repoInfo, path, dirent }) 
       </div>
     </div>
   );
+};
+
+SearchedItemDetails.propTypes = {
+  currentRepoID: PropTypes.string.isRequired,
+  repoID: PropTypes.string.isRequired,
+  repoInfo: PropTypes.object.isRequired,
+  path: PropTypes.string.isRequired,
+  dirent: PropTypes.object.isRequired,
 };
 
 export default SearchedItemDetails;

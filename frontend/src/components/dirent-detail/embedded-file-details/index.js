@@ -11,7 +11,6 @@ import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
 import Loading from '../../loading';
-import DirDetails from '../dirent-details/dir-details';
 
 import './index.css';
 
@@ -29,7 +28,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
 
   useEffect(() => {
     const fullPath = path.split('/').pop() === dirent?.name ? path : Utils.joinPath(path, dirent?.name || '');
-    seafileAPI[dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo'](repoID, fullPath).then(res => {
+    seafileAPI.getFileInfo(repoID, fullPath).then(res => {
       setDirentDetail(res.data);
       setIsFetching(false);
     }).catch(error => {
@@ -65,7 +64,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
       path={path}
       dirent={dirent}
       direntDetail={direntDetail}
-      direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
+      direntType="file"
     >
       <div
         className={classnames('cur-view-detail', className, {
@@ -88,11 +87,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
             :
             dirent && direntDetail && (
               <div className="detail-content">
-                {dirent.type !== 'file' ? (
-                  <DirDetails direntDetail={direntDetail} />
-                ) : (
-                  <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
-                )}
+                <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
               </div>
             )}
         </Body>

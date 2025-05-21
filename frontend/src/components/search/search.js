@@ -705,15 +705,17 @@ class Search extends Component {
   };
 
   renderDetails = (results) => {
+    const { repoID: currentRepoID } = this.props;
     const { highlightIndex } = this.state;
     const item = results[highlightIndex];
     if (!item) return null;
     const repoID = item.repo_id;
-    const repoInfo = { permission: item.permission };
-    const dirent = { name: item.name, type: item.is_dir ? 'dir' : 'file' };
+    const repoInfo = { permission: item.permission, is_admin: item.is_admin, encrypted: item.encrypted };
+    const isLib = !currentRepoID && item.path === '/';
+    const dirent = { name: item.name, type: item.is_dir ? 'dir' : 'file', isLib };
     return (
       <CollaboratorsProvider repoID={repoID}>
-        <SearchedItemDetails currentRepoID={this.props.repoID} repoID={repoID} repoInfo={repoInfo} path={item.path} dirent={dirent} />
+        <SearchedItemDetails currentRepoID={currentRepoID || ''} repoID={repoID} repoInfo={repoInfo} path={item.path} dirent={dirent} />
       </CollaboratorsProvider>
     );
   };
