@@ -1,4 +1,4 @@
 import SeahubSelect from './seahub-select';
-import { MenuSelectStyle, UserSelectStyle, NoOptionsStyle } from './seahub-select-style';
+import { MenuSelectStyle } from './seahub-select-style';
 
-export { SeahubSelect, MenuSelectStyle, UserSelectStyle, NoOptionsStyle };
+export { SeahubSelect, MenuSelectStyle };
