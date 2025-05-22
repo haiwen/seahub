@@ -17,11 +17,11 @@
 }
 
 .side-panel .nav-link {
-  color: #888;
+  color: #666;
 }
 
 .side-panel .nav-link.active {
-  color: #EC8000;
+  color: #ED7109;
 }
 
 .side-panel-content {
@@ -57,7 +57,7 @@
   text-align: center;
   line-height: 150px;
   font-size: 30px;
-  color: #EC8000;
+  color: #ED7109;
   -moz-animation: rotate 1.5s ease infinite;
   -webkit-animation: rotate 1.5s ease infinite;
   animation: rotate 1.5s ease infinite;
@@ -82,7 +82,7 @@
 }
 
 .outline-h2:hover {
-  color: #EC8000;
+  color: #ED7109;
 }
 
 .outline-h3 {
@@ -94,7 +94,7 @@
 }
 
 .outline-h3:hover {
-  color: #EC8000;
+  color: #ED7109;
 }
 
 /*tree view */

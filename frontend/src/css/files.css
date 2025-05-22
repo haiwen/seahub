@@ -12,14 +12,14 @@
 }
 
 #files-content-container .libraries-empty-tip-in-list-mode {
-  color: #a4a4a4;
+  color: #666;
   text-align: center;
   padding: 4px 0;
   border-bottom: 1px solid #e8e8e8;
 }
 
 #files-content-container .libraries-empty-tip-in-grid-mode {
-  color: #a4a4a4;
+  color: #666;
   text-align: center;
   height: 56px;
   line-height: 52px;
