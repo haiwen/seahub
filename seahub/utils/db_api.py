@@ -586,6 +586,8 @@ class SeafileDB:
             return repo_id_to_invisible_paths
 
     def get_share_to_group_invisible_repos_info_by_group_ids(self, group_ids):
+        if not group_ids:
+            return {}
         placeholders = ','.join(['%s'] * len(group_ids))
         repo_ids_sql = f"""
             SELECT repo_id, `path`
