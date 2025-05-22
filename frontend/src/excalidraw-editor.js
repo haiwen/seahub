@@ -6,7 +6,7 @@ import FileView from './components/file-view/file-view';
 
 const ViewFileExcaliEditor = () => {
   return (
-    <FileView content={<ExcaliEditor />} isOnlyofficeFile={true} isHeaderShown={true} />
+    <FileView content={<ExcaliEditor />} isOnlyofficeFile={true} />
   );
 };
 
