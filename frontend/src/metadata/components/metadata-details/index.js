@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import CellFormatter from '../cell-formatter';
 import DetailEditor from '../detail-editor';
 import DetailItem from '../../../components/dirent-detail/detail-item';
@@ -10,13 +11,11 @@ import { useMetadataDetails } from '../../hooks';
 import { checkIsDir } from '../../utils/row';
 import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
 import Location from './location';
-import { useTags } from '../../../tag/hooks';
 
 import './index.css';
 
-const MetadataDetails = () => {
+const MetadataDetails = ({ readOnly, tagsData, addTag }) => {
   const { canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
-  const { tagsData } = useTags();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
 
@@ -36,7 +35,7 @@ const MetadataDetails = () => {
           return <Location key={field.key} position={value} record={record} />;
         }
 
-        let canEdit = canModifyRecord && field.editable;
+        let canEdit = canModifyRecord && field.editable && !readOnly;
         if (!isImageOrVideo && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
           canEdit = false;
         } else if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) {
@@ -53,7 +52,6 @@ const MetadataDetails = () => {
                 modifyColumnData={modifyColumnData}
                 onChange={onChange}
                 updateFileTags={updateFileTags}
-                tagsData={tagsData}
               />
               :
               <CellFormatter
@@ -70,6 +68,12 @@ const MetadataDetails = () => {
       })}
     </>
   );
+};
+
+MetadataDetails.propTypes = {
+  readOnly: PropTypes.bool,
+  tagsData: PropTypes.object,
+  addTag: PropTypes.func,
 };
 
 export default MetadataDetails;

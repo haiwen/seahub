@@ -21,7 +21,6 @@ import { CollaboratorsProvider } from '../../metadata';
 
 const propTypes = {
   repoID: PropTypes.string,
-  repoInfo: PropTypes.object,
   path: PropTypes.string,
   placeholder: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
@@ -78,6 +77,7 @@ class Search extends Component {
     this.isChineseInput = false;
     this.searchResultListContainerRef = React.createRef();
     this.calculateStoreKey(props);
+    this.hoverTimer = React.createRef();
   }
 
   componentDidMount() {
@@ -509,7 +509,6 @@ class Search extends Component {
       items[i]['thumbnail_url'] = data[i].thumbnail_url;
       items[i]['mtime'] = data[i].mtime || '';
       items[i]['repo_owner_email'] = data[i].repo_owner_email || '';
-      items[i]['permission'] = data[i].permission || '';
     }
     return items;
   }
@@ -710,12 +709,11 @@ class Search extends Component {
     const item = results[highlightIndex];
     if (!item) return null;
     const repoID = item.repo_id;
-    const repoInfo = { permission: item.permission, is_admin: item.is_admin, encrypted: item.encrypted };
     const isLib = !currentRepoID && item.path === '/';
-    const dirent = { name: item.name, type: item.is_dir ? 'dir' : 'file', isLib };
+    const dirent = { name: item.name, type: item.is_dir ? 'dir' : 'file', isLib, file_tags: [], path: item.path };
     return (
       <CollaboratorsProvider repoID={repoID}>
-        <SearchedItemDetails currentRepoID={currentRepoID || ''} repoID={repoID} repoInfo={repoInfo} path={item.path} dirent={dirent} />
+        <SearchedItemDetails currentRepoID={currentRepoID || ''} repoID={repoID} path={item.path} dirent={dirent} />
       </CollaboratorsProvider>
     );
   };

@@ -116,7 +116,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
       tag_id: id,
     };
     setDisplayNodeKey(nodeKey || '');
-    selectTagsView && selectTagsView(node);
+    selectTagsView(node);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, selectTagsView]);
 
@@ -247,7 +247,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
   }, [storeRef]);
 
   useEffect(() => {
-    if (!selectTagsView) return;
+    if (!handleSelectTag) return;
     if (isLoading) return;
     const { search } = window.location;
     const urlParams = new URLSearchParams(search);

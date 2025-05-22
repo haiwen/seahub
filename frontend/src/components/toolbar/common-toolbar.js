@@ -88,7 +88,6 @@ class CommonToolbar extends React.Component {
       return (
         <Search
           repoID={repoID}
-          repoInfo={this.state.currentRepoInfo}
           placeholder={placeholder}
           onSearchedClick={this.onSearchedClick}
           isViewFile={isViewFile}

@@ -31,7 +31,7 @@ export const normalizeColumns = (columns) => {
     );
   }
 
-  const keyColumnWidth = window.sfTagsDataContext.localStorage.getItem('columns_width') || {};
+  const keyColumnWidth = window.sfTagsDataContext?.localStorage?.getItem('columns_width') || {};
   return normalizedColumns.map((column) => {
     const { key } = column;
     let width = keyColumnWidth[column.key];

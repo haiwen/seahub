@@ -16,7 +16,6 @@ class SearchResultItem extends React.Component {
 
   constructor(props) {
     super(props);
-    this.ref = null;
   }
 
   onClickHandler = () => {
@@ -24,9 +23,10 @@ class SearchResultItem extends React.Component {
   };
 
   onMouseEnter = () => {
-    if (this.props.isHighlight) return;
+    const { isHighlight, idx } = this.props;
+    if (isHighlight) return;
     if (this.props.onHighlightIndex) {
-      this.props.onHighlightIndex(this.props.idx);
+      this.props.onHighlightIndex(idx);
     }
   };
 
@@ -45,9 +45,8 @@ class SearchResultItem extends React.Component {
       <li
         className={classnames('search-result-item', { 'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
-        ref={ref => {setRef(ref); this.ref = ref;}}
+        ref={ref => setRef(ref)}
         onMouseEnter={this.onMouseEnter}
-        // onMouseLeave={this.onMouseLeave}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">

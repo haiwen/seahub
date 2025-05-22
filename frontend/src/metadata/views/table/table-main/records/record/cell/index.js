@@ -9,9 +9,9 @@ import { isCellValueChanged, getCellValueByColumn } from '../../../../../../util
 import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP, EDITOR_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
 import { checkIsDir } from '../../../../../../utils/row';
 import { openFile } from '../../../../../../utils/file';
+import { useTags } from '../../../../../../../tag/hooks';
 
 import './index.css';
-import { useTags } from '../../../../../../../tag/hooks';
 
 const Cell = React.memo(({
   needBindEvents = true,
