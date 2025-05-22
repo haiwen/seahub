@@ -1240,7 +1240,7 @@ if CACHE_PROVIDER =='redis':
     redis_port = os.environ.get('REDIS_PORT') or cfg_redis_port
     redis_pwd = os.environ.get('REDIS_PASSWORD') or cfg_redis_pwd
 
-    CACHES['default']['LOCATION'] = f'redis://{(redis_pwd + "@") if redis_pwd else ""}{redis_host}:{redis_port}'
+    CACHES['default']['LOCATION'] = f'redis://{(":" + redis_pwd + "@") if redis_pwd else ""}{redis_host}:{redis_port}'
     if redis_pwd:
         try:
             del CACHES['default']['OPTIONS']['PASSWORD']
