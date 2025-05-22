@@ -11,6 +11,7 @@ import ExdrawServerApi from './collab/exdraw-server-api';
 import './index.css';
 
 const { docUuid, excalidrawServerUrl } = window.app.pageOptions;
+window.name = `${docUuid}`;
 
 const ExcaliEditor = () => {
   const [fileContent, setFileContent] = useState(null);

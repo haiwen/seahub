@@ -13,3 +13,7 @@ export const langList = {
   'de': 'de-DE',
   'cs': 'cs-CZ',
 };
+
+export const STORAGE_KEYS = {
+  IDB_LIBRARY: 'excalidraw-library',
+};

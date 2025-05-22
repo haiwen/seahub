@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
+import { Excalidraw, MainMenu, useHandleLibrary } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import CodeMirrorLoading from '../../components/code-mirror-loading';
 import { langList } from './constants';
+import { LibraryIndexedDBAdapter } from './library-adapter';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -21,6 +22,12 @@ const SimpleEditor = ({
     },
     tools: { image: false },
   };
+
+  useHandleLibrary({
+    excalidrawAPI,
+    adapter: LibraryIndexedDBAdapter
+  });
+
   const handleChange = () => {
     const elements = excalidrawAPI.getSceneElements();
     if (hasChanged(elements, prevElementsRef.current)) {
