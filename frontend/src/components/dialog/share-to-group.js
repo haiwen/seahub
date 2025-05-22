@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
+import classnames from 'classnames';
 import { gettext, isPro, enableShareToDepartment } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils, isMobile } from '../../utils/utils';
@@ -15,16 +16,23 @@ class GroupItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOperationShow: false
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   deleteShareItem = () => {
@@ -38,6 +46,7 @@ class GroupItem extends React.Component {
   };
 
   render() {
+    const { isHighlighted } = this.state;
     let item = this.props.item;
     let currentPermission = Utils.getSharedPermission(item);
     if (isMobile) {
@@ -49,7 +58,7 @@ class GroupItem extends React.Component {
               repoID={this.props.repoID}
               isTextMode={true}
               autoFocus={true}
-              isEditIconShow={this.state.isOperationShow}
+              isEditIconShow={true}
               currentPermission={currentPermission}
               permissions={this.props.permissions}
               onPermissionChanged={this.onChangeUserPermission}
@@ -59,7 +68,7 @@ class GroupItem extends React.Component {
             <span
               tabIndex="0"
               role="button"
-              className='sf2-icon-x3 action-icon'
+              className="sf3-font sf3-font-x-01 op-icon"
               onClick={this.deleteShareItem}
               onKeyDown={Utils.onKeyDown}
               title={gettext('Delete')}
@@ -71,7 +80,15 @@ class GroupItem extends React.Component {
       );
     }
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        tabIndex="0"
+        onFocus={this.onMouseEnter}
+      >
         <td className='name'>{item.group_info.name}</td>
         <td>
           <SharePermissionEditor
@@ -88,7 +105,7 @@ class GroupItem extends React.Component {
           <span
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             onClick={this.deleteShareItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
