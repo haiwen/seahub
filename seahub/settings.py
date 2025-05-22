@@ -1035,7 +1035,6 @@ if os.environ.get('SEAFILE_DOCS', None):
 ##############################
 ENABLE_METADATA_MANAGEMENT = False
 METADATA_SERVER_URL = ''
-METADATA_SERVER_SECRET_KEY = ''
 
 #############################
 # multi office suite support
