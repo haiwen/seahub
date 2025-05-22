@@ -543,7 +543,7 @@ class ShareToUser extends React.Component {
                 <div className='add-members'>
                   <UserSelect
                     isMulti={true}
-                    className={classnames('reviewer-select', { 'user-select-right-btn': enableSelectMembersFromDept })}
+                    className={classnames('share-to-user-select', { 'user-select-right-btn': enableSelectMembersFromDept })}
                     placeholder={gettext('Search users...')}
                     onSelectChange={this.handleSelectChange}
                     selectedUsers={this.state.selectedUsers}
