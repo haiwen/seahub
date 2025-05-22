@@ -86,7 +86,7 @@ from seahub.utils.repo import get_repo_owner, get_library_storages, \
         parse_repo_perm
 from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.file_types import DOCUMENT, MARKDOWN
+from seahub.utils.file_types import MARKDOWN
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, \
