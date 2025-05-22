@@ -29,8 +29,7 @@
   position: relative;
 }
 
-.share-link-container .add-members .reviewer-select {
-  width: 300px;
+.share-link-container .add-members .share-to-user-select {
   max-width: calc(100% - 10px);
 }
 
