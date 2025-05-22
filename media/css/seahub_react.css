@@ -776,7 +776,7 @@ a, a:hover {
 .nav .nav-item .nav-link {
   padding: 0.5rem 0;
   margin-right: 30px;
-  color: #8A948F;
+  color: #212529;
   font-weight: normal;
   transition: none;
   border-bottom: 0.125rem solid transparent;
@@ -1766,4 +1766,8 @@ a.table-sort-op:hover {
 
 .input-group .input-group-text:not(:first-child) {
   border-left: none;
+}
+
+.custom-switch-description {
+  color: #212529;
 }
