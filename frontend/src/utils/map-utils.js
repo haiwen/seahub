@@ -8,26 +8,27 @@ export const initMapInfo = ({ baiduMapKey, googleMapKey, mineMapKey }) => {
 };
 
 export const loadMapSource = (type, key, callback) => {
-  if (!type || !key) return;
   let scriptUrl = '';
   const sourceId = 'map-source-script';
+
   if (document.getElementById(sourceId)) return;
-  let script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.id = sourceId;
+
   if (type === MAP_TYPE.B_MAP) {
     scriptUrl = `https://api.map.baidu.com/api?type=webgl&v=3.0&ak=${key}&callback=renderBaiduMap`;
   } else if (type === MAP_TYPE.G_MAP) {
-    scriptUrl = `https://maps.googleapis.com/maps/api/js?key=${key}&callback=renderGoogleMap&libraries=marker&v=weekly`;
+    scriptUrl = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=marker,geometry&v=weekly&callback=renderGoogleMap`;
   }
+
   if (scriptUrl) {
+    const script = document.createElement('script');
+    script.id = sourceId;
     script.src = scriptUrl;
+    script.onload = callback;
     document.body.appendChild(script);
   }
-  callback && callback();
 };
 
-export default function loadBMap(ak) {
+export function loadBMap(ak) {
   return new Promise((resolve, reject) => {
     if (typeof window.BMapGL !== 'undefined' && document.querySelector(`script[src*="${mediaUrl}js/map/cluster.js"]`)) {
       resolve(true);
@@ -52,6 +53,36 @@ export function asyncLoadBaiduJs(ak) {
     let script = document.createElement('script');
     script.type = 'text/javascript';
     script.src = `https://api.map.baidu.com/api?type=webgl&v=1.0&ak=${ak}&callback=renderMap`;
+    script.onerror = reject;
+    document.body.appendChild(script);
+  });
+}
+
+export function loadGMap(ak) {
+  return new Promise((resolve, reject) => {
+    if (typeof window.google !== 'undefined' && document.querySelector(`script[src*="${mediaUrl}js/map/cluster.js"]`)) {
+      resolve(true);
+      return;
+    }
+    asyncLoadGMapJs(ak)
+      .then(() => asyncLoadJs('https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js'))
+      .then(() => resolve(true))
+      .catch((err) => reject(err));
+  });
+}
+
+export function asyncLoadGMapJs(key) {
+  return new Promise((resolve, reject) => {
+    if (typeof window.google !== 'undefined') {
+      resolve(window.google);
+      return;
+    }
+    window.renderGoogleMap = function () {
+      resolve(window.google);
+    };
+    let script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&libraries=marker,geometry&v=weekly&callback=renderGoogleMap&loading=async`;
     script.onerror = reject;
     document.body.appendChild(script);
   });
