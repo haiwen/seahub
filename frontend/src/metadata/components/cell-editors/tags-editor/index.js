@@ -226,7 +226,8 @@ const TagsEditor = forwardRef(({
       event.keyCode === KeyCodes.ChineseInputMethod ||
       event.keyCode === KeyCodes.Enter ||
       event.keyCode === KeyCodes.LeftArrow ||
-      event.keyCode === KeyCodes.RightArrow
+      event.keyCode === KeyCodes.RightArrow ||
+      event.keyCode === KeyCodes.Space
     ) {
       event.stopPropagation();
     }
