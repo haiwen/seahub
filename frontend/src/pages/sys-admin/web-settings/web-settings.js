@@ -5,10 +5,10 @@ import { gettext, isPro, mediaUrl, logoPath, faviconPath, loginBGPath } from '..
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
-import Section from './section';
+import Section from '../../common-admin/web-settings/section';
+import CheckboxItem from '../../common-admin/web-settings/checkbox-item';
+import FileItem from '../../common-admin/web-settings/file-item';
 import InputItem from './input-item';
-import FileItem from './file-item';
-import CheckboxItem from './checkbox-item';
 
 import '../../../css/system-admin-web-settings.css';
 

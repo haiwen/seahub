@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import SettingItemBase from './setting-item-base';
@@ -11,7 +11,7 @@ const propTypes = {
   displayName: PropTypes.string.isRequired
 };
 
-class WebSettingCheckbox extends Component {
+class CheckboxItem extends Component {
 
   constructor(props) {
     super(props);
@@ -35,17 +35,18 @@ class WebSettingCheckbox extends Component {
     return (
       <SettingItemBase
         displayName={displayName}
+        mainClassName='d-flex'
         mainContent={
-          <Fragment>
+          <>
             <Input className="ml-0" checked={inputChecked} type='checkbox' onChange={this.onInputChange} />
-            <p className="ml-4">{helpTip}</p>
-          </Fragment>
+            <p className="ml-2">{helpTip}</p>
+          </>
         }
       />
     );
   }
 }
 
-WebSettingCheckbox.propTypes = propTypes;
+CheckboxItem.propTypes = propTypes;
 
-export default WebSettingCheckbox;
+export default CheckboxItem;
