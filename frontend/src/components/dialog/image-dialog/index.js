@@ -45,6 +45,9 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   if (suffix === 'heic' || suffix === 'svg' || suffix === 'gif') {
     enableRotate = false;
   }
+  if (repoInfo.permission === 'r') {
+    enableRotate = false;
+  }
 
   const isSystemFolder = SYSTEM_FOLDERS.find(folderPath => mainImg.parentDir.startsWith(folderPath));
   let onOCR = null;
