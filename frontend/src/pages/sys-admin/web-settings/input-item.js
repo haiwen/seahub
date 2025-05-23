@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
-import SettingItemBase from './setting-item-base';
+import SettingItemBase from '../../common-admin/web-settings/setting-item-base';
 
 const propTypes = {
   inputType: PropTypes.string,

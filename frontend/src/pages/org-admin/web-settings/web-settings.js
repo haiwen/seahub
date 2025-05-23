@@ -6,10 +6,10 @@ import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnable
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
-import Section from './section';
+import Section from '../../common-admin/web-settings/section';
+import CheckboxItem from '../../common-admin/web-settings/checkbox-item';
+import FileItem from '../../common-admin/web-settings/file-item';
 import InputItem from './input-item';
-import FileItem from './file-item';
-import CheckboxItem from '../../sys-admin/web-settings/checkbox-item';
 
 import '../../../css/system-admin-web-settings.css';
 
@@ -133,15 +133,16 @@ class OrgWebSettings extends Component {
                       helpTip={''}
                       disabled={!orgEnableAdminCustomName}
                     />
-                    { orgEnableAdminCustomLogo && <FileItem
-                      postFile={this.updateLogo}
-                      displayName='Logo'
-                      keyText='Logo'
-                      filePath={logoPath}
-                      fileWidth={256}
-                      fileHeight={64}
-                      helpTip='logo.png, 256px * 64px'
-                    />
+                    {orgEnableAdminCustomLogo &&
+                      <FileItem
+                        postFile={this.updateLogo}
+                        displayName='Logo'
+                        keyText='Logo'
+                        filePath={logoPath}
+                        fileWidth={256}
+                        fileHeight={64}
+                        helpTip='logo.png, 256px * 64px'
+                      />
                     }
                   </Fragment>
                 </Section>
