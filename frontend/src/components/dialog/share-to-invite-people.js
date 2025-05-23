@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { gettext } from '../../utils/constants';
 import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -15,16 +16,23 @@ class UserItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOperationShow: false
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   deleteShareItem = () => {
@@ -38,10 +46,19 @@ class UserItem extends React.Component {
   };
 
   render() {
-    let item = this.props.item;
+    const { isHighlighted } = this.state;
+    const { item } = this.props;
     let currentPermission = item.is_admin ? 'admin' : item.permission;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        tabIndex="0"
+        onFocus={this.onMouseEnter}
+      >
         <td className="name">{item.accepter}</td>
         <td>
           <SharePermissionEditor
@@ -55,16 +72,16 @@ class UserItem extends React.Component {
         <td>{dayjs(item.expire_time).format('YYYY-MM-DD')}</td>
         <td className="name">{item.inviter_name}</td>
         <td>
-          <span
+          <i
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             onClick={this.deleteShareItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-          </span>
+          </i>
         </td>
       </tr>
     );
