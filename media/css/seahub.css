@@ -410,7 +410,7 @@ dd {
 }
 
 a {
-  color: #EC8000;
+  color: #ED7109;
   text-decoration: none;
   font-weight: bold;
 }
@@ -421,7 +421,7 @@ a.normal {
 
 a:focus,
 a:hover {
-  color: #EC8000;
+  color: #ED7109;
 }
 
 img {
@@ -896,7 +896,7 @@ a.op-icon:focus {
   padding: .5em 0;
   background: #efefef;
   border: 0;
-  color: #777;
+  color: #666;
 }
 
 .full-width-btn:hover {
@@ -985,7 +985,7 @@ textarea:-moz-placeholder {
 
 /**** btn with link styles ****/
 .sf-link-btn {
-  color: #EC8000;
+  color: #ED7109;
   border: none;
   padding: 0;
   background: none;
@@ -993,7 +993,7 @@ textarea:-moz-placeholder {
 
 .sf-link-btn:focus,
 .sf-link-btn:hover {
-  color: #EC8000;
+  color: #ED7109;
   background: none;
   text-decoration: underline;
 }
@@ -1353,14 +1353,14 @@ textarea:-moz-placeholder {
   display: block;
   padding: 10px 0;
   font-weight: normal;
-  color: #999;
+  color: #666;
   border-bottom: 1px solid #eee;
   margin-bottom: 3px;
 }
 
 .side-textnav-tabs .tab-cur a,
 .side-textnav-tabs .tab a:hover {
-  color: #de3f1c;
+  color: #ED7109;
   text-decoration: none;
 }
 
@@ -1562,9 +1562,9 @@ textarea:-moz-placeholder {
 
 .cur-view-path .tab-tabs-nav .ui-state-active .a,
 .cur-view-path .tab-tabs-nav .a:hover {
-  color: #EC8000;
+  color: #ED7109;
   text-decoration: none;
-  border-bottom-color: #EC8000;
+  border-bottom-color: #ED7109;
 }
 
 .tab-tabs .ui-tabs-panel {
@@ -1732,7 +1732,7 @@ textarea:-moz-placeholder {
 }
 
 .article blockquote {
-  color: #777;
+  color: #666;
   padding: 0 15px;
   border-left: 4px solid #DDD;
   margin: 1.2em 0;
@@ -1883,9 +1883,9 @@ a.sf-popover-item {
 .wiki-nav .link:hover,
 #right-panel .hd .ui-state-active .a,
 #right-panel .hd .a:hover {
-  color: #EC8000;
+  color: #ED7109;
   text-decoration: none;
-  border-bottom-color: #EC8000;
+  border-bottom-color: #ED7109;
 }
 
 .tabnav button,
@@ -2173,6 +2173,10 @@ a.sf-popover-item {
   text-align: right;
 }
 
+.login-panel .login-panel-bottom-container a {
+  color: #E16C0A;
+}
+
 #login-with-wechat {
   color: #a6a6a6;
 }
@@ -2188,7 +2192,7 @@ a.sf-popover-item {
 }
 
 #login-bottom .bottom-item {
-  border-right: 1px solid #EC8000;
+  border-right: 1px solid #ED7109;
 }
 
 #signup-form .input {
@@ -2219,14 +2223,14 @@ a.sf-popover-item {
 }
 
 .login-panel-bottom-privacy-policy a {
-  color: #EC8000;
+  color: #ED7109;
   font-size: 12px;
   font-weight: normal;
   padding: 0 0.5rem;
 }
 
 .login-panel-bottom-privacy-policy .login-panel-bottom-seperator {
-  border-right: 1px solid #EC8000;
+  border-right: 1px solid #ED7109;
 }
 
 #registration-form .login-panel-bottom-divider,

@@ -69,10 +69,10 @@
   font-weight: normal;
   padding: 0px 8px;
   border: 0;
-  color: #EC8000;
+  color: #ED7109;
 }
 
 .repo-info-bar .repo-info-bar-migrate .btn-link:active {
-  color: #EC8000;
+  color: #ED7109;
   background-color: #fff;
 }

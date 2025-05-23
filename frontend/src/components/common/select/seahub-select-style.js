@@ -54,68 +54,18 @@ const MenuSelectStyle = {
   control: controlCallback,
   menuPortal: base => ({ ...base, zIndex: 9999 }),
   indicatorSeparator: noneCallback,
-};
-
-const UserSelectStyle = {
-  option: (provided, state) => {
-    const { isDisabled, isFocused } = state;
-    return ({
-      ...provided,
-      cursor: isDisabled ? 'default' : 'pointer',
-      backgroundColor: isFocused ? '#f5f5f5' : '#fff',
-    });
-  },
-  control: controlCallback,
-  indicatorSeparator: noneCallback,
-  dropdownIndicator: noneCallback,
-  clearIndicator: noneCallback,
-  // multi select style
-  multiValue: (provided) => {
-    return {
-      ...provided,
-      display: 'inline-flex',
-      alignItems: 'center',
-      background: '#eaeaea',
-      borderRadius: '10px',
-      margin: '0 10px 0 0',
-      padding: '0 0 0 2px',
-    };
-  },
-  multiValueLabel: (provided) => {
-    return {
-      ...provided,
-      padding: '0px',
-    };
-  },
-  multiValueRemove: (provided) => {
-    return {
-      ...provided,
-      color: '#666',
-      ':hover': {
-        backgroundColor: 'transparent',
-        color: '#666666',
-      }
-    };
-  },
-  // single select style
   singleValue: (provided) => {
     return {
       ...provided,
-      display: 'inline-flex',
-      alignItems: 'center',
-      background: '#eaeaea',
-      borderRadius: '10px',
-      margin: '0',
-      padding: '0 2px',
-      width: 'fit-content',
+      color: '#212529',
+    };
+  },
+  multiValue: (provided) => {
+    return {
+      ...provided,
+      color: '#212529',
     };
   },
 };
 
-const NoOptionsStyle = {
-  margin: '6px 10px',
-  textAlign: 'center',
-  color: 'hsl(0, 0%, 50%)',
-};
-
-export { MenuSelectStyle, UserSelectStyle, NoOptionsStyle };
+export { MenuSelectStyle };

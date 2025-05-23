@@ -283,13 +283,27 @@ export const getNormalizedColumnType = (key, type) => {
 
 export const getFileTypeColumnOptions = () => {
   return {
-    [PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE]: { name: gettext('Picture'), color: '#FFFCB5', textColor: '#202428' },
-    [PREDEFINED_FILE_TYPE_OPTION_KEY.DOCUMENT]: { name: gettext('Document'), color: '#B7CEF9', textColor: '#202428' },
-    [PREDEFINED_FILE_TYPE_OPTION_KEY.VIDEO]: { name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2' },
-    [PREDEFINED_FILE_TYPE_OPTION_KEY.AUDIO]: { name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142' },
-    [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: { name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5' },
-    [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: { name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5' },
-    [PREDEFINED_FILE_TYPE_OPTION_KEY.DIAGRAM]: { name: gettext('Diagram'), color: '#4afbbd', textColor: '#FFFFFF', borderColor: '#e5428e' },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE]: {
+      name: gettext('Picture'), color: '#FFFCB5', textColor: '#212529'
+    },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.DOCUMENT]: {
+      name: gettext('Document'), color: '#B7CEF9', textColor: '#212529'
+    },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.VIDEO]: {
+      name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2'
+    },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.AUDIO]: {
+      name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142'
+    },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: {
+      name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5'
+    },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: {
+      name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5'
+    },
+    [PREDEFINED_FILE_TYPE_OPTION_KEY.DIAGRAM]: {
+      name: gettext('Diagram'), color: '#4afbbd', textColor: '#FFFFFF', borderColor: '#e5428e'
+    },
   };
 };
 
@@ -316,10 +330,18 @@ const getFileStatusColumnData = (column) => {
   const { data } = column;
   let newData = { ...data };
   const _OPTIONS = {
-    [PREDEFINED_FILE_STATUS_OPTION_KEY.IN_PROGRESS]: { name: gettext('In progress'), color: '#EED5FF', textColor: '#202428' },
-    [PREDEFINED_FILE_STATUS_OPTION_KEY.IN_REVIEW]: { name: gettext('In review'), color: '#FFFDCF', textColor: '#202428' },
-    [PREDEFINED_FILE_STATUS_OPTION_KEY.DONE]: { name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2' },
-    [PREDEFINED_FILE_STATUS_OPTION_KEY.OUTDATED]: { name: gettext('Outdated'), color: '#C2C2C2', textColor: '#FFFFFF', borderColor: '#ADADAD' }
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.IN_PROGRESS]: {
+      name: gettext('In progress'), color: '#EED5FF', textColor: '#212529'
+    },
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.IN_REVIEW]: {
+      name: gettext('In review'), color: '#FFFDCF', textColor: '#212529'
+    },
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.DONE]: {
+      name: gettext('Done'), color: '#59CB74', textColor: '#FFFFFF', borderColor: '#844BD2'
+    },
+    [PREDEFINED_FILE_STATUS_OPTION_KEY.OUTDATED]: {
+      name: gettext('Outdated'), color: '#C2C2C2', textColor: '#FFFFFF', borderColor: '#ADADAD'
+    }
   };
   newData.options = Array.isArray(data?.options) ? data.options.map(o => {
     return { ...o, ..._OPTIONS[o.id] };

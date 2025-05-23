@@ -281,11 +281,11 @@ dd {
 
 input::placeholder,
 textarea::placeholder {
-  color: #999;
+  color: #666;
 }
 
 a, a:hover {
-  color: #ec8000;
+  color: #ED7109;
 }
 
 .vam {
@@ -325,7 +325,7 @@ a, a:hover {
 }
 
 .op-target {
-  color: #ec8000;
+  color: #ED7109;
   word-wrap: break-word;
 }
 
@@ -776,7 +776,7 @@ a, a:hover {
 .nav .nav-item .nav-link {
   padding: 0.5rem 0;
   margin-right: 30px;
-  color: #8A948F;
+  color: #212529;
   font-weight: normal;
   transition: none;
   border-bottom: 0.125rem solid transparent;
@@ -787,15 +787,16 @@ a, a:hover {
 }
 
 .nav .nav-item .nav-link.active {
-  color: #EC8000;
+  color: #ED7109;
   text-decoration: none;
-  border-bottom-color: #EC8000;
+  border-bottom-color: #ED7109;
   z-index: 1;
 }
 
 .nav-pills .nav-item .nav-link {
   padding: 0.25rem;
   color: #212529;
+  font-size: 15px;
 }
 
 .nav-pills .nav-item .nav-link:hover {
@@ -930,7 +931,7 @@ a, a:hover {
 
 .side-nav-con .heading {
   font-size: .9375rem;
-  color: #999999;
+  color: #666666;
 }
 
 .side-nav-con>.nav {
@@ -1166,7 +1167,7 @@ a.sf-popover-item:hover {
 }
 
 .path-link {
-  color: #EC8000 !important;
+  color: #ED7109 !important;
   text-decoration: none;
 }
 
@@ -1268,7 +1269,7 @@ table td {
   padding: 0.25rem 0.75rem;
   line-height: 2rem;
   text-align: center;
-  color: #EC8000;
+  color: #ED7109;
   cursor: pointer;
 }
 
@@ -1582,7 +1583,7 @@ a.table-sort-op:hover {
 
 .seafile-md-viewer-outline-heading2:hover,
 .seafile-md-viewer-outline-heading3:hover {
-  color: #EC8000;
+  color: #ED7109;
 }
 
 .seafile-markdown-outline {
@@ -1600,8 +1601,8 @@ a.table-sort-op:hover {
 }
 
 .seafile-markdown-outline .active {
-  color: #EC8000;
-  border-left: 1px solid #EC8000;
+  color: #ED7109;
+  border-left: 1px solid #ED7109;
 }
 
 .seafile-markdown-outline .outline-h2,
@@ -1631,7 +1632,7 @@ a.table-sort-op:hover {
 
 #wiki-file-content .seafile-markdown-outline .outline-h2.active,
 #wiki-file-content .seafile-markdown-outline .outline-h3.active {
-  color: #EC8000;
+  color: #ED7109;
 }
 
 #wiki-file-content .seafile-markdown-outline .seafile-markdown-outline {
@@ -1765,4 +1766,8 @@ a.table-sort-op:hover {
 
 .input-group .input-group-text:not(:first-child) {
   border-left: none;
+}
+
+.custom-switch-description {
+  color: #212529;
 }
