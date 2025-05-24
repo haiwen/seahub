@@ -111,6 +111,8 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
 };
 
 ImageDialog.propTypes = {
+  repoID: PropTypes.string.isRequired,
+  repoInfo: PropTypes.object.isRequired,
   imageItems: PropTypes.array.isRequired,
   imageIndex: PropTypes.number.isRequired,
   closeImagePopup: PropTypes.func.isRequired,
@@ -119,6 +121,7 @@ ImageDialog.propTypes = {
   onDeleteImage: PropTypes.func,
   onRotateImage: PropTypes.func,
   enableRotate: PropTypes.bool,
+  isCustomPermission: PropTypes.bool,
 };
 
 export default ImageDialog;

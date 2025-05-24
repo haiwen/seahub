@@ -56,7 +56,7 @@ class ActionsCell extends Component {
   };
 
   render() {
-    const { isSelected, isLastFrozenCell, height, recordId } = this.props;
+    const { isSelected, isLastFrozenCell, height, recordId, canModify = true } = this.props;
     const cellStyle = {
       height,
       width: SEQUENCE_COLUMN_WIDTH,
@@ -70,7 +70,7 @@ class ActionsCell extends Component {
         onMouseEnter={this.onCellMouseEnter}
         onMouseLeave={this.onCellMouseLeave}
       >
-        {this.props.recordDraggable &&
+        {(this.props.recordDraggable && canModify) &&
           <div
             draggable
             className="drag-handler"
@@ -114,6 +114,7 @@ ActionsCell.propTypes = {
   height: PropTypes.number,
   onSelectRecord: PropTypes.func,
   handleDragStart: PropTypes.func,
+  canModify: PropTypes.bool,
 };
 
 export default ActionsCell;

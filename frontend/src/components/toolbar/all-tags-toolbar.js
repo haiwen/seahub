@@ -21,10 +21,12 @@ const AllTagsToolbar = () => {
   }, [selectedTagIds, eventBus]);
 
   const getMenuList = useCallback(() => {
+    if (!canModify) return [];
     const { MERGE_TAGS, NEW_CHILD_TAG } = TextTranslation;
     const list = [];
     if (selectedTagIds.length > 1) {
-      return canModify ? list.push(MERGE_TAGS) : [];
+      list.push(MERGE_TAGS);
+      return list;
     }
     list.push(NEW_CHILD_TAG);
     return list;
