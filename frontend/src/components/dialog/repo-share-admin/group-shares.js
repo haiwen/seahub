@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Link } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -23,8 +24,8 @@ class Item extends Component {
     super(props);
     this.state = {
       permission: this.props.item.permission,
+      isHighlighted: false,
       isOperationShow: false,
-      isShowPermEditor: false,
     };
     this.permissions = ['rw', 'r'];
     if (isPro) {
@@ -36,11 +37,17 @@ class Item extends Component {
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   onDeleteLink = (e) => {
@@ -60,12 +67,8 @@ class Item extends Component {
     });
   };
 
-  onEditPermission = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
-    this.setState({ isShowPermEditor: true });
-  };
-
   render() {
+    const { isHighlighted } = this.state;
 
     let objUrl;
     let item = this.props.item;
@@ -74,49 +77,40 @@ class Item extends Component {
     objUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}${Utils.encodePath(path)}`;
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+      >
         <td>
           <Link to={objUrl}>{Utils.getFolderName(item.path)}</Link>
         </td>
         <td className="name">{item.share_to_name}</td>
         <td>
-          {!this.state.isShowPermEditor && (
-            <div>
-              <span>{item.permission_name || Utils.sharePerms(this.state.permission)}</span>
-              {this.state.isOperationShow && (
-                <a href="#"
-                  role="button"
-                  aria-label={gettext('Edit')}
-                  title={gettext('Edit')}
-                  className="sf3-font sf3-font-rename attr-action-icon"
-                  onClick={this.onEditPermission}>
-                </a>
-              )}
-            </div>
-          )}
-          {this.state.isShowPermEditor && (
-            <SharePermissionEditor
-              repoID={item.repo_id}
-              isTextMode={true}
-              isEditIconShow={this.state.isOperationShow}
-              isEditing={true}
-              currentPermission={this.state.permission}
-              permissions={this.permissions}
-              onPermissionChanged={this.changePerm}
-            />
-          )}
+          <SharePermissionEditor
+            repoID={item.repo_id}
+            isTextMode={true}
+            autoFocus={true}
+            isEditIconShow={this.state.isOperationShow}
+            currentPermission={this.state.permission}
+            permissions={this.permissions}
+            onPermissionChanged={this.changePerm}
+          />
         </td>
         <td>
-          <span
+          <i
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
+            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
             onClick={this.onDeleteLink}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-          </span>
+          </i>
         </td>
       </tr>
     );

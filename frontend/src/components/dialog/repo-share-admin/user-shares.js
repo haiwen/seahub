@@ -24,8 +24,6 @@ class Item extends Component {
       permission: this.props.item.permission,
       isHighlighted: false,
       isOperationShow: false,
-      isShowPermEditor: false,
-
     };
     this.permissions = ['rw', 'r'];
     if (isPro) {
@@ -79,8 +77,7 @@ class Item extends Component {
     return (
       <tr
         className={classnames({
-          'tr-highlight': isHighlighted,
-          'tr-active': item.isSelected
+          'tr-highlight': isHighlighted
         })}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
