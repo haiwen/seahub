@@ -196,7 +196,7 @@ class Item extends Component {
                   title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                   aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                   onClick={this.onToggleStarRepo}
-                  className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+                  className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
                 >
                 </i>
               </td>
