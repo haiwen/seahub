@@ -38,7 +38,7 @@ export const MetadataViewProvider = ({
 
   const { collaborators } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
-  const { onOCR, generateDescription, extractFilesDetails, faceRecognition } = useMetadataAIOperations();
+  const { onOCR, generateDescription, extractFilesDetails, faceRecognition, extractText } = useMetadataAIOperations();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -403,6 +403,17 @@ export const MetadataViewProvider = ({
     });
   }, [modifyRecords, onOCR]);
 
+  const updateExtractText = useCallback((record) => {
+    const parentDir = getParentDirFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
+    if (!fileName || !parentDir) return;
+    extractText({ parentDir, fileName }, {
+      success_callback: ({ extractedText }) => {
+        console.log(extractedText)
+      }
+    });
+  }, [extractText]);
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -442,6 +453,7 @@ export const MetadataViewProvider = ({
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
     const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, ocr);
+    const unsubscribeUpdateExtract = eventBus.subscribe(EVENT_BUS_TYPE.EXTRACT_TEXT, updateExtractText);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -468,6 +480,7 @@ export const MetadataViewProvider = ({
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();
       unsubscribeOCR();
+      unsubscribeUpdateExtract();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -507,6 +520,7 @@ export const MetadataViewProvider = ({
         updateRecordDetails,
         updateFaceRecognition,
         updateRecordDescription,
+        updateExtractText,
         ocr,
       }}
     >
