@@ -507,8 +507,6 @@ class ProfessionalConfigurator(object):
 
     def generate_seafevents_conf(self):
         template = '''\
-%(db_config_text)s
-
 [SEAHUB EMAIL]
 enabled = true
 
@@ -524,13 +522,12 @@ enabled=true
 enabled = true
 suffix = md,txt,doc,docx,xls,xlsx,ppt,pptx,sdoc
 '''
-        db_config_text = self.db_config.generate_config_text()
         if not os.path.exists(env_mgr.pro_data_dir):
             os.makedirs(env_mgr.pro_data_dir)
         os.chmod(env_mgr.pro_data_dir, 0o700)
 
         with open(self.seafevents_conf, 'w') as fp:
-            fp.write(template % dict(db_config_text=db_config_text))
+            fp.write(template)
 
 class SetupProfessionalConfigurator(ProfessionalConfigurator):
     '''This script is invokded by setup-seafile.sh/setup-seafile-mysql.sh to
