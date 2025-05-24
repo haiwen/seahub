@@ -9,6 +9,7 @@ const AllTagsToolbar = () => {
   const [selectedTagIds, setSelectedTagIds] = useState([]);
 
   const canDelete = window.sfTagsDataContext && window.sfTagsDataContext.checkCanDeleteTag();
+  const canModify = window.sfTagsDataContext && window.sfTagsDataContext.canModify();
   const eventBus = EventBus.getInstance();
 
   const unSelect = useCallback(() => {
@@ -20,6 +21,7 @@ const AllTagsToolbar = () => {
   }, [selectedTagIds, eventBus]);
 
   const getMenuList = useCallback(() => {
+    if (!canModify) return [];
     const { MERGE_TAGS, NEW_CHILD_TAG } = TextTranslation;
     const list = [];
     if (selectedTagIds.length > 1) {
@@ -28,7 +30,7 @@ const AllTagsToolbar = () => {
     }
     list.push(NEW_CHILD_TAG);
     return list;
-  }, [selectedTagIds]);
+  }, [selectedTagIds, canModify]);
 
   const onMenuItemClick = useCallback((operation, e) => {
     switch (operation) {

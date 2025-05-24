@@ -60,16 +60,18 @@ const KanbanViewToolBar = ({
           columns={viewColumns}
           modifySorts={modifySorts}
         />
-        <IconBtn
-          symbol="set-up"
-          className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting"
-          size={24}
-          role="button"
-          aria-label={gettext('Settings')}
-          title={gettext('Settings')}
-          tabIndex={0}
-          onClick={onToggleKanbanSetting}
-        />
+        {!readOnly && (
+          <IconBtn
+            symbol="set-up"
+            className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting"
+            size={24}
+            role="button"
+            aria-label={gettext('Settings')}
+            title={gettext('Settings')}
+            tabIndex={0}
+            onClick={onToggleKanbanSetting}
+          />
+        )}
         {!isCustomPermission && (
           <div className="cur-view-path-btn ml-2" onClick={toggleDetails} aria-label={gettext('Properties')} title={gettext('Properties')}>
             <span className="sf3-font sf3-font-info"></span>
