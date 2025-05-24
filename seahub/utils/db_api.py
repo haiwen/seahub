@@ -35,27 +35,28 @@ class SeafileDB:
 
     def _get_seafile_db_name(self):
 
+        if env_seafile_db_name := os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', ''):
+            return env_seafile_db_name
+
         conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR') or \
                 os.environ.get('SEAFILE_CONF_DIR')
 
         if not conf_dir:
-            return ""
+            return ''
 
         config = configparser.ConfigParser()
         seafile_conf_path = os.path.join(conf_dir, 'seafile.conf')
         config.read(seafile_conf_path)
 
         if not config.has_section('database'):
-            return ''
+            return 'seafile_db'
 
-        if 'sqlite' in config.get('database', 'type'):
+        if config.has_option('database', 'type') and config.get('database', 'type') != 'sqlite':
             return ''
 
         db_name = config.get('database', 'db_name')
-        if not db_name:
-            raise Exception("Database name not configured.")
 
-        return db_name
+        return db_name or 'seafile_db'
 
     def get_repo_user_share_list(self, repo_id, org_id=''):
 
