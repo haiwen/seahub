@@ -49,14 +49,14 @@ class SeafileDB:
         config.read(seafile_conf_path)
 
         if not config.has_section('database'):
-            return 'seafile'
+            return 'seafile_db'
 
         if config.has_option('database', 'type') and config.get('database', 'type') != 'sqlite':
             return ''
 
         db_name = config.get('database', 'db_name')
 
-        return db_name or 'seafile'
+        return db_name or 'seafile_db'
 
     def get_repo_user_share_list(self, repo_id, org_id=''):
 
