@@ -32,6 +32,7 @@ const Table = () => {
     updateRecordDetails,
     updateFaceRecognition,
     updateRecordDescription,
+    updateExtractText,
     ocr,
   } = useMetadataView();
   const containerRef = useRef(null);
@@ -185,6 +186,7 @@ const Table = () => {
         updateRecordDetails={updateRecordDetails}
         updateFaceRecognition={updateFaceRecognition}
         updateRecordDescription={updateRecordDescription}
+        updateExtractText={updateExtractText}
         ocr={ocr}
       />
     </div>

@@ -33,6 +33,7 @@ const OPERATION = {
   FILE_DETAILS: 'file-details',
   DETECT_FACES: 'detect-faces',
   MOVE: 'move',
+  EXTRACT_TEXT: 'extract_text',
 };
 
 const { enableSeafileAI } = window.app.config;
@@ -40,7 +41,7 @@ const { enableSeafileAI } = window.app.config;
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
   getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder, updateRecordDetails,
-  updateFaceRecognition, updateRecordDescription, ocr,
+  updateFaceRecognition, updateRecordDescription, ocr, updateExtractText
 }) => {
   const currentRecord = useRef(null);
 
@@ -211,6 +212,7 @@ const ContextMenu = ({
       const isDescribableFile = checkIsDescribableFile(record);
       const isImage = Utils.imageCheck(fileName);
       const isVideo = Utils.videoCheck(fileName);
+      const isPdf = Utils.pdfCheck(fileName);
       const aiOptions = [];
 
       if (isImage || isVideo) {
@@ -234,6 +236,10 @@ const ContextMenu = ({
 
       if (enableOCR && isImage) {
         aiOptions.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
+      }
+
+      if (isImage || isPdf) {
+        aiOptions.push({ value: OPERATION.EXTRACT_TEXT, label: gettext('Extract text'), record });
       }
 
       if (aiOptions.length > 0) {
@@ -293,6 +299,11 @@ const ContextMenu = ({
         ocr(record);
         break;
       }
+      case OPERATION.EXTRACT_TEXT: {
+        const { record } = option;
+        updateExtractText(record)
+        break;
+      }
       case OPERATION.DELETE_RECORD: {
         const { record } = option;
         if (!record || !record._id || !deleteRecords) break;
@@ -346,7 +357,7 @@ const ContextMenu = ({
         break;
       }
     }
-  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, toggleFileTagsRecord, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, updateFaceRecognition, toggleMoveDialog]);
+  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, toggleFileTagsRecord, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, updateFaceRecognition, toggleMoveDialog, updateExtractText]);
 
   useEffect(() => {
     const unsubscribeToggleMoveDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, toggleMoveDialog);
