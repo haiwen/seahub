@@ -27,7 +27,8 @@ from django.views.decorators.csrf import csrf_exempt
 from seaserv import seafile_api
 
 
-from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, ONLYOFFICE_JWT_SECRET
+from seahub.onlyoffice.settings import VERIFY_ONLYOFFICE_CERTIFICATE, \
+        ONLYOFFICE_JWT_SECRET, ONLYOFFICE_FILE_EXTENSION
 from seahub.onlyoffice.utils import get_onlyoffice_dict, get_doc_key_by_repo_id_file_path
 from seahub.onlyoffice.utils import delete_doc_key, get_file_info_by_doc_key
 from seahub.onlyoffice.converter_utils import get_file_name_without_ext, \
@@ -38,8 +39,6 @@ from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
     gen_inner_file_get_url, get_service_url, get_file_type_and_ext, gen_file_get_url
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.views import check_folder_permission
-from seahub.utils.file_types import SPREADSHEET
-
 
 
 # Get an instance of a logger
@@ -454,7 +453,7 @@ class OnlyofficeGetReferenceData(APIView):
 
         try:
             payload = jwt.decode(file_key, ONLYOFFICE_JWT_SECRET, algorithms=['HS256'])
-        except:
+        except Exception:
             err_msg = 'File key invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, err_msg)
 
@@ -478,22 +477,20 @@ class OnlyofficeGetReferenceData(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         filetype, fileext = get_file_type_and_ext(source_file_path)
-        if filetype != SPREADSHEET:
+        if fileext not in ONLYOFFICE_FILE_EXTENSION:
             err_msg = 'file type invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, err_msg)
 
         file_id = seafile_api.get_file_id_by_path(source_repo_id,
                                                   source_file_path)
-        dl_token = seafile_api.get_fileserver_access_token(
-            source_repo_id,
-            file_id,
-            'download',
-            username,
-            use_onetime=False
-        )
+        dl_token = seafile_api.get_fileserver_access_token(source_repo_id,
+                                                           file_id,
+                                                           'download',
+                                                           username,
+                                                           use_onetime=False)
 
         doc_url = gen_file_get_url(dl_token, file_name)
-        link = "%s%s"% (instance_id, reverse('view_lib_file', args=[
+        link = "%s%s" % (instance_id, reverse('view_lib_file', args=[
             source_repo_id, source_file_path]))
 
         result = {

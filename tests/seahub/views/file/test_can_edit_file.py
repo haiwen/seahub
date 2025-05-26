@@ -3,8 +3,7 @@ from seaserv import seafile_api
 from seahub.views.file import can_edit_file
 from seahub.test_utils import BaseTestCase
 
-from seahub.settings import FILE_PREVIEW_MAX_SIZE
-from seahub.utils import OFFICE_PREVIEW_MAX_SIZE
+from seahub.settings import FILE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_SIZE
 
 OFFICE_WEB_APP_FILE_EXTENSION = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx')
 OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ('docx', 'pptx', 'xlsx')
