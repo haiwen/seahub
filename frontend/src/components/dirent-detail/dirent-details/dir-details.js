@@ -9,7 +9,7 @@ import { useMetadataStatus } from '../../../hooks';
 import { Utils } from '../../../utils/utils';
 import { SYSTEM_FOLDERS } from '../../../constants';
 
-const DirDetails = ({ direntDetail, tagsData, addTag }) => {
+const DirDetails = ({ readOnly = false, direntDetail, tagsData }) => {
   const { enableMetadata, enableMetadataManagement } = useMetadataStatus();
 
   const lastModifiedTimeField = useMemo(() => {
@@ -40,7 +40,7 @@ const DirDetails = ({ direntDetail, tagsData, addTag }) => {
               <Formatter field={CellType.TEXT} value={'--'} /> :
               <Formatter field={sizeField} value={size} />}
           </DetailItem>
-          <MetadataDetails tagsData={tagsData} addTag={addTag} />
+          <MetadataDetails readOnly={readOnly} tagsData={tagsData} />
         </>
       )}
       <DetailItem field={lastModifiedTimeField} className="sf-metadata-property-detail-formatter">
@@ -51,9 +51,9 @@ const DirDetails = ({ direntDetail, tagsData, addTag }) => {
 };
 
 DirDetails.propTypes = {
+  readOnly: PropTypes.bool,
   direntDetail: PropTypes.object,
   tagsData: PropTypes.object,
-  addTag: PropTypes.func,
 };
 
 export default DirDetails;

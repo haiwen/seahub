@@ -77,7 +77,6 @@ class Search extends Component {
     this.isChineseInput = false;
     this.searchResultListContainerRef = React.createRef();
     this.calculateStoreKey(props);
-    this.hoverTimer = React.createRef();
   }
 
   componentDidMount() {
@@ -713,7 +712,7 @@ class Search extends Component {
     const dirent = { name: item.name, type: item.is_dir ? 'dir' : 'file', isLib, file_tags: [], path: item.path };
     return (
       <CollaboratorsProvider repoID={repoID}>
-        <SearchedItemDetails currentRepoID={currentRepoID || ''} repoID={repoID} path={item.path} dirent={dirent} />
+        <SearchedItemDetails repoID={repoID} path={item.path} dirent={dirent} />
       </CollaboratorsProvider>
     );
   };

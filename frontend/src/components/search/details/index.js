@@ -9,6 +9,7 @@ import { MetadataStatusProvider } from '../../../hooks';
 import Details from './details';
 
 import './index.css';
+import LibDetail from '../../dirent-detail/lib-details';
 
 const SearchedItemDetails = ({ repoID, path, dirent }) => {
   const [repoInfo, setRepoInfo] = useState(null);
@@ -37,7 +38,17 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
     });
   }, [repoID, repoInfo, path, dirent]);
 
-  if (!repoInfo || !direntDetail) return null;
+  if (!repoInfo) return;
+
+  if (dirent.isLib) {
+    return (
+      <div className="searched-item-details">
+        <LibDetail currentRepoInfo={repoInfo} />
+      </div>
+    );
+  }
+
+  if (!direntDetail) return null;
 
   let parentDir = path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path; // deal with folder path comes from search results, eg: /folder/
   parentDir = Utils.getDirName(parentDir);
@@ -64,7 +75,6 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
 };
 
 SearchedItemDetails.propTypes = {
-  currentRepoID: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,

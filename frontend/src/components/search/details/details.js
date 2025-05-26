@@ -4,7 +4,6 @@ import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import FileDetails from '../../dirent-detail/dirent-details/file-details';
 import DirDetails from '../../dirent-detail/dirent-details/dir-details';
-import LibDetail from '../../dirent-detail/lib-details';
 import { useEffect, useState } from 'react';
 import { useMetadataStatus } from '../../../hooks';
 import tagsAPI from '../../../tag/api';
@@ -32,19 +31,6 @@ const Details = ({ repoID, repoInfo, path, dirent, direntDetail }) => {
     }
   }, [repoID, enableMetadata, enableTags]);
 
-  if (dirent.isLib) {
-    return (
-      <div className="searched-item-details">
-        <div
-          className="cur-view-detail"
-          style={{ width: 300 }}
-        >
-          <LibDetail repoInfo={repoInfo} />
-        </div>
-      </div>
-    );
-  }
-
   let src = '';
   if (repoInfo.encrypted) {
     src = `${siteRoot}repo/${repoID}/raw` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
@@ -68,8 +54,8 @@ const Details = ({ repoID, repoInfo, path, dirent, direntDetail }) => {
             {dirent.type !== 'file' ? (
               <DirDetails
                 direntDetail={direntDetail}
+                readOnly={true}
                 tagsData={tagsData}
-                addTag={() => {}}
               />
             ) : (
               <FileDetails
@@ -81,7 +67,6 @@ const Details = ({ repoID, repoInfo, path, dirent, direntDetail }) => {
                 fileTagList={dirent ? dirent.file_tags : []}
                 readOnly={true}
                 tagsData={tagsData}
-                addTag={() => {}}
                 onFileTagChanged={() => {}}
               />
             )}

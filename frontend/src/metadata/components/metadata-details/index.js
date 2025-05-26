@@ -14,7 +14,7 @@ import Location from './location';
 
 import './index.css';
 
-const MetadataDetails = ({ readOnly, tagsData, addTag }) => {
+const MetadataDetails = ({ readOnly, tagsData }) => {
   const { canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
@@ -73,7 +73,6 @@ const MetadataDetails = ({ readOnly, tagsData, addTag }) => {
 MetadataDetails.propTypes = {
   readOnly: PropTypes.bool,
   tagsData: PropTypes.object,
-  addTag: PropTypes.func,
 };
 
 export default MetadataDetails;
