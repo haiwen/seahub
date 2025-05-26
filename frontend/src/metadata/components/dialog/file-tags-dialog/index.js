@@ -24,7 +24,6 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
 
-  const lastSettingsValue = parseInt(localStorage.getItem('sf_cur_view_detail_width') || 300);
   const { tagsData, addTags } = useTags();
 
   useEffect(() => {
@@ -137,7 +136,6 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       toggle={() => { handelSubmit(); }}
       className="sf-file-tags"
       backdropClassName="sf-file-tags-backdrop"
-      style={{ marginRight: lastSettingsValue }}
     >
       <div onClick={(e) => e.stopPropagation()} className="modal-content">
         <ModalHeader>{fileName + ' ' + gettext('tags')}</ModalHeader>
