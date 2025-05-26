@@ -1259,7 +1259,7 @@ def view_shared_file(request, fileshare):
 
     # check file lock info
     try:
-        is_locked, _ = check_file_lock(repo_id, path, username)
+        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
     except Exception as e:
         logger.error(e)
         is_locked = False
