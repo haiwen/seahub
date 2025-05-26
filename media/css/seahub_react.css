@@ -585,6 +585,11 @@ a, a:hover {
   background: #e5e5e5;
 }
 
+.op-icon-bg-light:focus,
+.op-icon-bg-light:hover {
+  background: #efefef; /* for .op-icon shown in white containers */
+}
+
 .action-icon,
 .attr-action-icon {
   margin-left: 0.5rem;

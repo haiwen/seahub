@@ -9,6 +9,7 @@ import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser';
 import GroupSelect from '../common/group-select';
 import toaster from '../../components/toast';
+import BackIcon from '../../components/back-icon';
 
 class GroupItem extends React.Component {
 
@@ -298,7 +299,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
         <>
           <div className="d-flex align-items-center justify-content-between pb-2 border-bottom">
             <h6 className="font-weight-normal m-0">
-              <button className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2" onClick={this.toggleFileChooser} title={gettext('Back')} aria-label={gettext('Back')}></button>
+              <BackIcon onClick={this.toggleFileChooser} />
               {gettext('Add Folder')}
             </h6>
             <Button color="primary" size="sm" outline={true} onClick={this.handleSubmit}>{gettext('Submit')}</Button>

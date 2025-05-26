@@ -5,6 +5,7 @@ import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { shareLinkAPI } from '../../utils/share-link-api';
+import BackIcon from '../back-icon';
 
 class EmailItem extends React.Component {
 
@@ -177,13 +178,7 @@ class LinkAuthenticatedEmails extends React.Component {
       <Fragment>
         <div className="d-flex align-items-center pb-2 border-bottom">
           <h6 className="font-weight-normal m-0">
-            <button
-              className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2"
-              onClick={this.goBack}
-              title={gettext('Back')}
-              aria-label={gettext('Back')}
-            >
-            </button>
+            <BackIcon onClick={this.goBack} />
             {gettext('Authenticated emails')}
           </h6>
         </div>
