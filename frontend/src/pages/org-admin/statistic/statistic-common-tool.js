@@ -6,7 +6,7 @@ import { gettext } from '../../../utils/constants';
 import Picker from './picker';
 
 const propTypes = {
-  getActiviesFiles: PropTypes.func.isRequired,
+  getActivesFiles: PropTypes.func.isRequired,
   children: PropTypes.object,
 };
 
@@ -26,7 +26,7 @@ class StatisticCommonTool extends React.Component {
     let endTime = today;
     let startTime = dayjs().subtract(6, 'd').format('YYYY-MM-DD 00:00:00');
     let group_by = 'day';
-    this.props.getActiviesFiles(startTime, endTime, group_by);
+    this.props.getActivesFiles(startTime, endTime, group_by);
   }
 
   changeActive = (statisticTypeName) => {
@@ -52,7 +52,7 @@ class StatisticCommonTool extends React.Component {
       statisticType: statisticTypeName,
     });
     let group_by = 'day';
-    this.props.getActiviesFiles(startTime, endTime, group_by);
+    this.props.getActivesFiles(startTime, endTime, group_by);
   };
 
   disabledStartDate = (startValue) => {
@@ -99,7 +99,7 @@ class StatisticCommonTool extends React.Component {
     let startTime = dayjs(startValue).format('YYYY-MM-DD 00:00:00');
     let endTime = dayjs(endValue).format('YYYY-MM-DD 00:00:00');
     let group_by = 'day';
-    this.props.getActiviesFiles(startTime, endTime, group_by);
+    this.props.getActivesFiles(startTime, endTime, group_by);
   };
 
   render() {
