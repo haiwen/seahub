@@ -7,20 +7,23 @@ import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import Loading from '../../../components/loading';
 import UsersTraffic from './statistic-traffic-users';
-import StatisticChart from './statistic-chart';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
+import Chart from '../../../chart';
 
 class OrgStatisticTraffic extends React.Component {
 
   constructor(props) {
     super(props);
+    this.legends = [
+      { key: 'upload', name: gettext('Upload'), color: '#fd913a' },
+      { key: 'download', name: gettext('Download'), color: '#57cd6b' }
+    ];
     this.state = {
-      filesData: [],
+      totalData: [],
       linkData: [],
       syncData: [],
       webData: [],
-      labels: [],
       isLoading: true,
       tabActive: 'system'
     };
@@ -30,94 +33,59 @@ class OrgStatisticTraffic extends React.Component {
     this.setState({ tabActive: activeName });
   };
 
-  getActiviesFiles = (startTime, endTime, groupBy) => {
+  getActivesFiles = (startTime, endTime, groupBy) => {
     orgAdminAPI.orgAdminStatisticSystemTraffic(orgID, startTime, endTime, groupBy).then((res) => {
-      let labels = [];
-      let total_upload = [];
-      let total_download = [];
-      let link_upload = [];
-      let link_download = [];
-      let sync_upload = [];
-      let sync_download = [];
-      let web_upload = [];
-      let web_download = [];
+      let totalData = [];
+      let webData = [];
+      let linkData = [];
+      let syncData = [];
       let data = res.data;
       if (Array.isArray(data)) {
         data.forEach(item => {
-          labels.push(dayjs(item.datetime).format('YYYY-MM-DD'));
-          link_upload.push(item['link-file-upload']);
-          link_download.push(item['link-file-download']);
-          sync_upload.push(item['sync-file-upload']);
-          sync_download.push(item['sync-file-download']);
-          web_upload.push(item['web-file-upload']);
-          web_download.push(item['web-file-download']);
-          total_upload.push(item['link-file-upload'] + item['sync-file-upload'] + item['web-file-upload']);
-          total_download.push(item['link-file-download'] + item['sync-file-download'] + item['web-file-download']);
-        });
-        let linkUpload = {
-          label: gettext('Upload'),
-          data: link_upload,
-          borderColor: '#fd913a',
-          backgroundColor: '#fd913a' };
-        let linkDownload = {
-          label: gettext('Download'),
-          data: link_download,
-          borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b' };
-        let syncUpload = {
-          label: gettext('Upload'),
-          data: sync_upload,
-          borderColor: '#fd913a',
-          backgroundColor: '#fd913a' };
-        let syncDownload = {
-          label: gettext('Download'),
-          data: sync_download,
-          borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b' };
-        let webUpload = {
-          label: gettext('Upload'),
-          data: web_upload,
-          borderColor: '#fd913a',
-          backgroundColor: '#fd913a' };
-        let webDownload = {
-          label: gettext('Download'),
-          data: web_download,
-          borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b' };
-        let totalUpload = {
-          label: gettext('Upload'),
-          data: total_upload,
-          borderColor: '#fd913a',
-          backgroundColor: '#fd913a' };
-        let totalDownload = {
-          label: gettext('Download'),
-          data: total_download,
-          borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b' };
-        let linkData = [linkUpload, linkDownload];
-        let syncData = [syncUpload, syncDownload];
-        let webData = [webUpload, webDownload];
-        let filesData = [totalUpload, totalDownload];
-        this.setState({
-          linkData: linkData,
-          syncData: syncData,
-          webData: webData,
-          filesData: filesData,
-          labels: labels,
-          isLoading: false
+          const { datetime, } = item;
+          const name = dayjs(datetime).format('YYYY-MM-DD');
+
+          webData.push({
+            name,
+            upload: item['web-file-upload'],
+            download: item['web-file-download'],
+          });
+
+          linkData.push({
+            name,
+            upload: item['link-file-upload'],
+            download: item['link-file-download'],
+          });
+
+          syncData.push({
+            name,
+            upload: item['sync-file-upload'],
+            download: item['sync-file-download'],
+          });
+
+          totalData.push({
+            name,
+            upload: item['link-file-upload'] + item['sync-file-upload'] + item['web-file-upload'],
+            download: item['link-file-download'] + item['sync-file-download'] + item['web-file-download'],
+          });
         });
       }
+      this.setState({ linkData, syncData, webData, totalData, isLoading: false });
     }).catch(err => {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
   };
 
+  getDisplayValue = (value) => {
+    return Utils.bytesToSize(value);
+  };
+
   renderCommonTool = () => {
     let { tabActive } = this.state;
     if (tabActive === 'system') {
       return (
-        <StatisticCommonTool getActiviesFiles={this.getActiviesFiles}>
+        <StatisticCommonTool getActivesFiles={this.getActivesFiles}>
           <div className="statistic-traffic-tab">
             <div className={`statistic-traffic-tab-item ${tabActive === 'system' ? 'active' : ''}`} onClick={this.changeTabActive.bind(this, 'system')}>{gettext('System')}</div>
             <div className={`statistic-traffic-tab-item ${tabActive === 'user' ? 'active' : ''}`} onClick={this.changeTabActive.bind(this, 'user')}>{gettext('Users')}</div>
@@ -134,7 +102,7 @@ class OrgStatisticTraffic extends React.Component {
   };
 
   render() {
-    let { labels, filesData, linkData, syncData, webData, isLoading, tabActive } = this.state;
+    const { totalData, linkData, syncData, webData, isLoading, tabActive } = this.state;
 
     return (
       <Fragment>
@@ -146,58 +114,54 @@ class OrgStatisticTraffic extends React.Component {
             {isLoading && <Loading />}
             {!isLoading && tabActive === 'system' &&
               <div className="statistic-traffic-chart-container">
-                <div className="mb-4">
-                  {labels.length > 0 &&
-                    <StatisticChart
-                      labels={labels}
-                      filesData={filesData}
-                      chartTitle={gettext('Total Traffic')}
-                      suggestedMaxNumbers={10 * 1000 * 1000}
-                      isTitleCallback={true}
-                      isTicksCallback={true}
-                      isLegendStatus={true}
+                {totalData.length > 0 && (
+                  <div className="mb-4">
+                    <Chart
+                      legends={this.legends}
+                      data={totalData}
+                      title={gettext('Total Traffic')}
+                      ySuggestedMax={10 * 1000 * 1000}
+                      margin={{ top: 60, right: 30, bottom: 30, left: 60 }}
+                      getDisplayValue={this.getDisplayValue}
                     />
-                  }
-                </div>
-                <div className="mb-4">
-                  {labels.length > 0 &&
-                    <StatisticChart
-                      labels={labels}
-                      filesData={webData}
-                      chartTitle={gettext('Web Traffic')}
-                      suggestedMaxNumbers={10 * 1000 * 1000}
-                      isTitleCallback={true}
-                      isTicksCallback={true}
-                      isLegendStatus={true}
+                  </div>
+                )}
+                {webData.length > 0 && (
+                  <div className="mb-4">
+                    <Chart
+                      legends={this.legends}
+                      data={webData}
+                      title={gettext('Web Traffic')}
+                      ySuggestedMax={10 * 1000 * 1000}
+                      margin={{ top: 60, right: 30, bottom: 30, left: 60 }}
+                      getDisplayValue={this.getDisplayValue}
                     />
-                  }
-                </div>
-                <div className="mb-4">
-                  {labels.length > 0 &&
-                    <StatisticChart
-                      labels={labels}
-                      filesData={linkData}
-                      chartTitle={gettext('Share Link Traffic')}
-                      suggestedMaxNumbers={10 * 1000 * 1000}
-                      isTitleCallback={true}
-                      isTicksCallback={true}
-                      isLegendStatus={true}
+                  </div>
+                )}
+                {linkData.length > 0 && (
+                  <div className="mb-4">
+                    <Chart
+                      legends={this.legends}
+                      data={linkData}
+                      title={gettext('Share Link Traffic')}
+                      ySuggestedMax={10 * 1000 * 1000}
+                      margin={{ top: 60, right: 30, bottom: 30, left: 60 }}
+                      getDisplayValue={this.getDisplayValue}
                     />
-                  }
-                </div>
-                <div className="mb-4">
-                  {labels.length > 0 &&
-                    <StatisticChart
-                      labels={labels}
-                      filesData={syncData}
-                      chartTitle={gettext('Sync Traffic')}
-                      suggestedMaxNumbers={10 * 1000 * 1000}
-                      isTitleCallback={true}
-                      isTicksCallback={true}
-                      isLegendStatus={true}
+                  </div>
+                )}
+                {syncData.length > 0 && (
+                  <div className="mb-4">
+                    <Chart
+                      legends={this.legends}
+                      data={syncData}
+                      title={gettext('Sync Traffic')}
+                      ySuggestedMax={10 * 1000 * 1000}
+                      margin={{ top: 60, right: 30, bottom: 30, left: 60 }}
+                      getDisplayValue={this.getDisplayValue}
                     />
-                  }
-                </div>
+                  </div>
+                )}
               </div>
             }
             {!isLoading && tabActive === 'user' &&

@@ -1,79 +1,60 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { gettext, orgID } from '../../../utils/constants';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import StatisticChart from './statistic-chart';
 import Loading from '../../../components/loading';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
+import Chart from '../../../chart';
 
-class OrgStatisticUsers extends React.Component {
+const OrgStatisticUsers = () => {
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      filesData: [],
-      labels: [],
-      isLoading: true,
-    };
-  }
+  const legends = useMemo(() => [{
+    key: 'count',
+    name: gettext('Active Users'),
+    color: '#fd913a',
+  }], []);
+  const yMax = useMemo(() => 10, []);
 
-  getActiviesFiles = (startTime, endTime, groupBy) => {
-    let { filesData } = this.state;
+  const getActivesFiles = useCallback((startTime, endTime, groupBy) => {
+    setLoading(true);
     orgAdminAPI.orgAdminStatisticActiveUsers(orgID, startTime, endTime, groupBy).then((res) => {
-      let labels = [];
-      let count = [];
-      let data = res.data;
-      if (Array.isArray(data)) {
-        data.forEach(item => {
-          labels.push(dayjs(item.datetime).format('YYYY-MM-DD'));
-          count.push(item.count);
-        });
-        let userCount = {
-          label: gettext('Active Users'),
-          data: count,
-          borderColor: '#fd913a',
-          backgroundColor: '#fd913a' };
-        filesData = [userCount];
-      }
-      this.setState({
-        filesData: filesData,
-        labels: labels,
-        isLoading: false
-      });
+      const data = Array.isArray(res.data) ? res.data.map(d => {
+        const { count, datetime } = d;
+        return {
+          name: dayjs(datetime).format('YYYY-MM-DD'),
+          count,
+        };
+      }) : [];
+      setData(data);
+      setLoading(false);
     }).catch(err => {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  };
+  }, []);
 
-  render() {
-    let { labels, filesData, isLoading } = this.state;
-    return (
-      <Fragment>
-        <MainPanelTopbar />
-        <div className="cur-view-container">
-          <StatisticNav currentItem="usersStatistic" />
-          <div className="cur-view-content">
-            <StatisticCommonTool getActiviesFiles={this.getActiviesFiles} />
-            {isLoading && <Loading />}
-            {!isLoading && labels.length > 0 &&
-              <StatisticChart
-                labels={labels}
-                filesData={filesData}
-                suggestedMaxNumbers={10}
-                isLegendStatus={false}
-                chartTitle={gettext('Active Users')}
-              />
-            }
-          </div>
+  return (
+    <Fragment>
+      <MainPanelTopbar />
+      <div className="cur-view-container">
+        <StatisticNav currentItem="usersStatistic" />
+        <div className="cur-view-content">
+          <StatisticCommonTool getActivesFiles={getActivesFiles} />
+          {isLoading && <Loading />}
+          {!isLoading && data.length > 0 && (
+            <Chart title={gettext('Active Users')} legends={legends} data={data} ySuggestedMax={yMax} />
+          )}
         </div>
-      </Fragment>
-    );
-  }
-}
+      </div>
+    </Fragment>
+  );
+
+};
 
 export default OrgStatisticUsers;

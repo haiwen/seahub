@@ -1,0 +1,116 @@
+@keyframes fadeLine {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.sf-chart {
+  font-family: inherit;
+}
+
+/* axis */
+.sf-chart .axis path,
+.sf-chart .axis line {
+  fill: none;
+  stroke: #CCCCCC;
+  shape-rendering: crispEdges;
+}
+
+.sf-chart .axis .axis-y path,
+.sf-chart .axis .axis-y line {
+  stroke: #fff;
+}
+
+.sf-chart .axis .tick text {
+  fill: #666;
+}
+
+/* grid */
+.sf-chart .grid line {
+  shape-rendering: crispEdges;
+}
+
+.sf-chart .grid .grid-y line {
+  stroke-dasharray: 8,3;
+  stroke: #F3F3F3;
+}
+
+.sf-chart .grid .grid-x .tick {
+  opacity: 0;
+}
+
+.sf-chart .grid-x-tip-line {
+  stroke: #CCC;
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.sf-chart .grid path {
+  stroke-width: 0;
+}
+
+/* line */
+.sf-chart .line {
+  fill: none;
+  stroke-width: 2px;
+}
+
+.sf-chart .highlight-line {
+  stroke-width: 3px !important;
+  opacity: 1 !important;
+}
+
+.sf-chart .fade-line {
+  animation: fadeLine .3s;
+  animation-fill-mode: forwards;
+}
+
+/* dot */
+.sf-chart .dot {
+  pointer-events: none;
+  transform: all .3s;
+  /* r: 3; */
+}
+
+.sf-chart .dot.highlight-dot {
+  r: 5;
+  stroke: #FFF;
+  stroke-width: 2;
+}
+
+.sf-chart .fade-dot {
+  opacity: 0.2 !important;
+}
+
+/* title */
+.sf-chart .title {
+  font-size: 16px;
+  font-weight: 500;
+  text-anchor: middle;
+}
+
+/* legend */
+.sf-chart .legend {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sf-chart .legend .legend-text {
+  fill: #333;
+  user-select: none;
+}
+
+.sf-chart .legend .legend-gap {
+  fill: transparent;
+  opacity: 1;
+}
+
+.sf-chart .legend.hidden-legend .legend-color,
+.sf-chart .legend.hidden-legend .legend-text {
+  fill: #bfbfbf;
+}
+
+
