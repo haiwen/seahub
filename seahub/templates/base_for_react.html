@@ -109,6 +109,7 @@
             shareLinkPasswordMinLength: {{ share_link_password_min_length }},
             shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
             sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
+            helpLink: "{{ help_link }}",
             aboutDialogCustomHtml: "{{ about_dialog_custom_html|safe|escapejs }}",
             maxFileName: "{{ max_file_name }}",
             canCreateWiki: {% if user.permissions.can_create_wiki %} true {% else %} false {% endif %},

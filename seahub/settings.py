@@ -625,6 +625,7 @@ LOGO_HEIGHT = 32
 CUSTOM_LOGO_PATH = 'custom/mylogo.png'
 CUSTOM_FAVICON_PATH = 'custom/favicon.ico'
 CUSTOM_LOGIN_BG_PATH = 'custom/login-bg.jpg'
+HELP_LINK = ''
 
 # used before version 6.3: the relative path of css file under seahub-data (e.g. custom/custom.css)
 BRANDING_CSS = ''
