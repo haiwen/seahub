@@ -16,8 +16,9 @@ class PDFViewer extends React.Component {
 
           <div id="sidebarContainer">
             <div id="toolbarSidebar">
-              <div id="thumbnails-header" className="p-4 d-flex justify-content-between">
-                <h3 className="m-0 title font-weight-normal">{gettext('Thumbnail')}</h3>
+              <div id="sidebarHeader" className="px-4 py-2 d-flex justify-content-between align-items-center">
+                <h3 id="thumbnailHeader" className="m-0 title font-weight-normal">{gettext('Thumbnail')}</h3>
+                <h3 id="outlineHeader" className="m-0 title font-weight-normal hidden">{gettext('Outline')}</h3>
                 <button id="close-thumbnail-panel" className="close-thumbnail-panel sf2-icon-x3 border-0 bg-transparent" aria-controls="sidebarContainer"></button>
               </div>
               <div id="toolbarSidebarLeft" className="sf-hide">
@@ -37,7 +38,7 @@ class PDFViewer extends React.Component {
                 </div>
               </div>
 
-              <div id="toolbarSidebarRight">
+              <div id="toolbarSidebarRight" className="sf-hide">
                 <div id="outlineOptionsContainer" className="hidden">
                   <div className="verticalToolbarSeparator"></div>
 

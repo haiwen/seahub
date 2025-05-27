@@ -7496,6 +7496,8 @@ class PDFSidebar {
         }
         break;
       case _ui_utils.SidebarView.OUTLINE:
+        document.getElementById("thumbnailHeader")?.classList.add("hidden");
+        document.getElementById("outlineHeader")?.classList.remove("hidden");
         if (this.outlineButton.disabled) {
           return;
         }
@@ -12357,7 +12359,6 @@ class BasePreferences {
     for (const name in this.#defaults) {
       obj[name] = this.#prefs[name] ?? this.#defaults[name];
     }
-    console.log(obj);
     return obj;
   }
 }
