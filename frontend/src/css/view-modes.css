@@ -27,7 +27,7 @@
 .view-modes-dropdown-shortcut {
   display: flex;
   align-items: center;
-  color: #999;
+  color: #666;
 }
 
 .dropdown-item:hover .view-modes-dropdown-shortcut {
