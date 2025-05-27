@@ -35,14 +35,16 @@ def generate_views_unique_id(length, type, folders_views_ids=None):
 
 class RepoMetadataManager(models.Manager):
 
-    def enable_metadata(self, repo_id):
+    def enable_metadata_and_tags(self, repo_id):
         metadata = self.filter(repo_id=repo_id).first()
         enabled = True
         from_commit = '0000000000000000000000000000000000000000'
         if not metadata:
-            metadata = self.model(repo_id=repo_id, enabled=enabled, from_commit=from_commit)
+            metadata = self.model(repo_id=repo_id, enabled=enabled, tags_enabled=enabled, tags_lang='en', from_commit=from_commit)
         else:
             metadata.enabled = enabled
+            metadata.tags_enabled = True
+            metadata.tags_lang = 'en'
             metadata.from_commit = from_commit
             metadata.to_commit = None
         metadata.save()
