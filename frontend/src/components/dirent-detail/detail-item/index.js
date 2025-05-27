@@ -16,7 +16,7 @@ const DetailItem = ({ readonly = true, field, className, children }) => {
 
   return (
     <div className={classnames('dirent-detail-item', className)}>
-      <div className="dirent-detail-item-name d-flex">
+      <div className="dirent-detail-item-name">
         <div><Icon className="sf-metadata-icon" symbol={icon} /></div>
         <span className="dirent-detail-item-name-value">{field.name}</span>
       </div>

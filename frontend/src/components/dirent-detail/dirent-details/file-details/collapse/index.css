@@ -13,6 +13,8 @@
   height: 28px;
   width: 100%;
   border-radius: 3px;
+  padding: 0 8px;
+  margin-bottom: 8px;
 }
 
 .file-details-collapse .file-details-collapse-header .file-details-collapse-header-title {
