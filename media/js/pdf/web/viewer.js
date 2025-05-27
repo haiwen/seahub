@@ -12357,7 +12357,6 @@ class BasePreferences {
     for (const name in this.#defaults) {
       obj[name] = this.#prefs[name] ?? this.#defaults[name];
     }
-    console.log(obj);
     return obj;
   }
 }

@@ -1157,8 +1157,8 @@
   --field-border-color: rgba(187, 187, 188, 1);
   --treeitem-color: rgba(0, 0, 0, 0.8);
   --treeitem-bg-color: rgba(0, 0, 0, 0.15);
-  --treeitem-hover-color: rgba(0, 0, 0, 0.9);
-  --treeitem-selected-color: rgba(0, 0, 0, 0.9);
+  --treeitem-hover-color: #ED7109;
+  --treeitem-selected-color: #ED7109;
   --treeitem-selected-bg-color: rgba(0, 0, 0, 0.25);
   --thumbnail-hover-color: rgba(0, 0, 0, 0.1);
   --thumbnail-selected-color: rgba(0, 0, 0, 0.2);
@@ -1245,8 +1245,8 @@
     --field-border-color: rgba(115, 115, 115, 1);
     --treeitem-color: rgba(255, 255, 255, 0.8);
     --treeitem-bg-color: rgba(255, 255, 255, 0.15);
-    --treeitem-hover-color: rgba(255, 255, 255, 0.9);
-    --treeitem-selected-color: rgba(255, 255, 255, 0.9);
+    --treeitem-hover-color: #ED7109;
+    --treeitem-selected-color: #ED7109;
     --treeitem-selected-bg-color: rgba(255, 255, 255, 0.25);
     --thumbnail-hover-color: rgba(255, 255, 255, 0.1);
     --thumbnail-selected-color: rgba(255, 255, 255, 0.2);
@@ -2412,7 +2412,6 @@ a:focus > .thumbnail > .thumbnailImage,
 }
 
 .treeItem.selected > a {
-  background-color: var(--treeitem-selected-bg-color);
   color: var(--treeitem-selected-color);
 }
 
@@ -2420,9 +2419,6 @@ a:focus > .thumbnail > .thumbnailImage,
 .treeItemToggler:hover + a,
 .treeItemToggler:hover ~ .treeItems,
 .treeItem > a:hover {
-  background-color: var(--treeitem-bg-color);
-  background-clip: padding-box;
-  border-radius: 2px;
   color: var(--treeitem-hover-color);
 }
 

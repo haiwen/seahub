@@ -1,5 +1,4 @@
 .pdf-file-view {
-  /*overflow: hidden; */
   position: relative;
   z-index: 0;
 }
@@ -212,7 +211,6 @@ select#scaleSelect {
   left: 0;
   position: absolute;
   right: 0;
-  /*z-index: 1000;*/
   z-index: 998; /* for seahub */
   padding: 3px 6px;
 }
@@ -224,7 +222,6 @@ select#scaleSelect {
   left: 0;
   right: 0;
   bottom: 0;
-  /*z-index: 9999;*/
   z-index: 998; /* 1048: for seahub 'file view' */
 }
 
@@ -277,7 +274,7 @@ input#pageNumber {
 }
 
 #thumbnails-header .title {
-  font-size: 1rem;
+  font-size: 14px;
 }
 
 #thumbnails-header .sf2-icon-x3 {
@@ -328,7 +325,7 @@ input#pageNumber {
 }
 
 #sidebarContent {
-  inset-block: 51.5px 0;
+  inset-block: 36px 0;
 }
 
 .splitToolbarButton > .toolbarButton {
@@ -343,7 +340,6 @@ input#pageNumber {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.2);
-  /*z-index: 40000;*/
   z-index: 999; /* 1049: for seahub 'share' dialog */
 }
 
@@ -361,4 +357,11 @@ input#pageNumber {
   #wrapper {
     display: none;
   }
+}
+
+#thumbnailView,
+#outlineView,
+#attachmentsView,
+#layersView {
+  width: calc(100%);
 }
