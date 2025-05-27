@@ -227,7 +227,7 @@ class WikiCardItem extends Component {
                   tag="i"
                   role="button"
                   tabIndex="0"
-                  className="sf-dropdown-toggle sf3-font-more sf3-font"
+                  className="sf3-font-more sf3-font op-icon op-icon-bg-light"
                   title={gettext('More operations')}
                   aria-label={gettext('More operations')}
                   data-toggle="dropdown"
