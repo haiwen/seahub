@@ -29,8 +29,7 @@ const RepoItem = ({ repo, filterRestoredRepo }) => {
     setHighlight(false);
   }, []);
 
-  const restoreDeletedRepo = useCallback((event) => {
-    event.preventDefault();
+  const restoreDeletedRepo = useCallback(() => {
     seafileAPI.restoreDeletedRepo(repoID).then(res => {
       const message = gettext('Successfully restored the library {library_name}.').replace('{library_name}', repoName);
       toaster.success(message);
@@ -53,10 +52,14 @@ const RepoItem = ({ repo, filterRestoredRepo }) => {
       <td className="name">{repoName}</td>
       <td className="update">{localTime}</td>
       <td>
-        <a href="#" onClick={restoreDeletedRepo} title={gettext('Restore')}
-          role="button" aria-label={gettext('Restore')}
-          className={`sf2-icon-reply action-icon ${highlight ? '' : 'vh'}`}>
-        </a>
+        <i
+          role="button"
+          onClick={restoreDeletedRepo}
+          title={gettext('Restore')}
+          aria-label={gettext('Restore')}
+          className={`sf2-icon-reply op-icon ${highlight ? '' : 'vh'}`}
+        >
+        </i>
       </td>
     </tr>
   );
