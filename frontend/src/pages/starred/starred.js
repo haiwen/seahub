@@ -4,6 +4,7 @@ import { DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import classnames from 'classnames';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, enableVideoThumbnail, enablePDFThumbnail, thumbnailDefaultSize } from '../../utils/constants';
@@ -135,6 +136,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       showOpIcon: false,
       unstarred: false
     };
@@ -142,12 +144,14 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       showOpIcon: true
     });
   };
 
   handleMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       showOpIcon: false
     });
   };
@@ -209,10 +213,18 @@ class Item extends Component {
   };
 
   renderDesktop = () => {
+    const { isHighlighted } = this.state;
     const data = this.props.data;
     const linkUrl = data.dirent_view_url;
     const desktopItem = (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseOver={this.handleMouseOver}
+        onMouseOut={this.handleMouseOut}
+        onFocus={this.handleMouseOver}
+      >
         <td className="text-center">
           {
             data.thumbnail_url ?
@@ -237,7 +249,7 @@ class Item extends Component {
         <td>
           <i
             role="button"
-            className={`sf2-icon-x3 unstar action-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
+            className={`sf3-font sf3-font-x-01 op-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
             title={gettext('Unstar')}
             aria-label={gettext('Unstar')}
             onClick={this.unstar}
