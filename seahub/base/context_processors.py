@@ -54,6 +54,7 @@ from seahub.work_weixin.settings import ENABLE_WORK_WEIXIN
 from seahub.weixin.settings import ENABLE_WEIXIN
 from seahub.dingtalk.settings import ENABLE_DINGTALK
 
+from seahub.settings import HELP_LINK
 try:
     from seahub.settings import SIDE_NAV_FOOTER_CUSTOM_HTML
 except ImportError:
@@ -177,6 +178,7 @@ def base(request):
         'privacy_policy_link': PRIVACY_POLICY_LINK,
         'terms_of_service_link': TERMS_OF_SERVICE_LINK,
         'side_nav_footer_custom_html': SIDE_NAV_FOOTER_CUSTOM_HTML,
+        'help_link': HELP_LINK,
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
         'enable_seadoc': ENABLE_SEADOC,

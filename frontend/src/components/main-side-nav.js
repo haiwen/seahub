@@ -6,7 +6,7 @@ import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
-  canViewOrg, isPro, isDBSqlite3, customNavItems, mediaUrl
+  canViewOrg, isPro, isDBSqlite3, customNavItems, mediaUrl, helpLink
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
@@ -293,7 +293,7 @@ class MainSideNav extends React.Component {
             ) : (
               <ul className="nav nav-pills flex-column nav-container">
                 <li className='nav-item'>
-                  <a className={'nav-link'} href={siteRoot + 'help/'} title={gettext('Help')}>
+                  <a className={'nav-link'} href={helpLink || siteRoot + 'help/'} title={gettext('Help')}>
                     <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('Help')}</span>
                   </a>
