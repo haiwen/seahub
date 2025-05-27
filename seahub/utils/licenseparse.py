@@ -37,7 +37,7 @@ def parse_license():
         with open(get_license_path(), encoding='utf-8') as f:
             lines = f.readlines()
     except Exception as e:
-        logger.warn(e)
+        logger.warning(e)
         return {}
 
     for line in lines:

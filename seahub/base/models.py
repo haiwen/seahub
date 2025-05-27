@@ -284,7 +284,7 @@ class UserLastLoginManager(models.Manager):
             ret = dups[0]
             for dup in dups[1:]:
                 dup.delete()
-                logger.warn('Delete duplicate user last login record: %s' % username)
+                logger.warning('Delete duplicate user last login record: %s' % username)
             return ret
 
 

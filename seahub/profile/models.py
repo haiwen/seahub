@@ -64,7 +64,7 @@ class ProfileManager(models.Manager):
             profile = self.get(user=username)
             profile.contact_email = contact_email
         except Profile.DoesNotExist:
-            logger.warn('%s profile does not exists' % username)
+            logger.warning('%s profile does not exists' % username)
             return None
 
         try:
@@ -207,7 +207,7 @@ class DetailedProfileManager(models.Manager):
         else:
             # XXX: got multiple records, delete them all.
             super(DetailedProfileManager, self).filter(user=username).delete()
-            logger.warn('Remove multiple detailed profile records for user %s' % username)
+            logger.warning('Remove multiple detailed profile records for user %s' % username)
             return None
 
 class DetailedProfile(models.Model):

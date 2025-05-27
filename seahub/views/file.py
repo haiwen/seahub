@@ -664,7 +664,7 @@ def view_lib_file(request, repo_id, path):
     return_dict['latest_contributor'] = latest_contributor
     return_dict['last_modified'] = last_modified
 
-    # get file type and extention
+    # get file type and extension
     filetype, fileext = get_file_type_and_ext(filename)
     return_dict['fileext'] = fileext
     return_dict['filetype'] = filetype
@@ -682,7 +682,7 @@ def view_lib_file(request, repo_id, path):
         raw_path = gen_file_get_url(token, filename)
         inner_path = gen_inner_file_get_url(token, filename)
 
-    # handle file preview/edit according to file extention
+    # handle file preview/edit according to file extension
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
     # template = 'view_file_%s.html' % filetype.lower()
     template = '%s_file_view_react.html' % filetype.lower()
@@ -1000,7 +1000,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     if not obj_id:
         raise Http404
 
-    # construct some varibles
+    # construct some variables
     u_filename = os.path.basename(path)
     current_commit = get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
@@ -1742,7 +1742,7 @@ def view_raw_file(request, repo_id, file_path):
     return HttpResponseRedirect(raw_path)
 
 def send_file_access_msg(request, repo, path, access_from, custom_ip=None, custom_agent=None):
-    """Send file downlaod msg for audit.
+    """Send file download msg for audit.
 
     Arguments:
     - `request`:
@@ -1752,7 +1752,7 @@ def send_file_access_msg(request, repo, path, access_from, custom_ip=None, custo
     """
     access_from = access_from.lower()
     if access_from not in ['web', 'api', 'share-link']:
-        logger.warn('Invalid access_from in file access msg: %s' % access_from)
+        logger.warning('Invalid access_from in file access msg: %s' % access_from)
         return
 
     username = request.user.username
