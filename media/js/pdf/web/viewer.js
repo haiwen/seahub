@@ -7496,6 +7496,8 @@ class PDFSidebar {
         }
         break;
       case _ui_utils.SidebarView.OUTLINE:
+        document.getElementById("thumbnailHeader")?.classList.add("hidden");
+        document.getElementById("outlineHeader")?.classList.remove("hidden");
         if (this.outlineButton.disabled) {
           return;
         }

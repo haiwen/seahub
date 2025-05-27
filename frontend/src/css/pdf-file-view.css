@@ -273,20 +273,20 @@ input#pageNumber {
   padding: 0;
 }
 
-#thumbnails-header .title {
+#sidebarHeader .title {
   font-size: 14px;
 }
 
-#thumbnails-header .sf2-icon-x3 {
+#sidebarHeader .sf2-icon-x3 {
   font-family: 'seafile-font2';
 }
 
-#thumbnails-header .close-thumbnail-panel {
+#sidebarHeader .close-thumbnail-panel {
   font-size: 1rem;
   color: #999;
 }
 
-#thumbnails-header .close-thumbnail-panel:hover {
+#sidebarHeader .close-thumbnail-panel:hover {
   color: #666;
 }
 
