@@ -112,13 +112,14 @@ class MetadataManage(APIView):
         }
 
         try:
-            RepoMetadata.objects.enable_metadata(repo_id)
+            RepoMetadata.objects.enable_metadata_and_tags(repo_id)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         init_metadata(metadata_server_api)
+        init_tags(metadata_server_api)
 
         try:
             task_id = add_init_metadata_task(params=params)

@@ -93,6 +93,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
     setDetailsSettings({});
     setIsBeingBuilt(newValue);
     setEnableMetadata(newValue);
+    setTagsLang('en');
+    setEnableTags(newValue);
   }, [enableMetadata, cancelMetadataURL]);
 
   const updateEnableTags = useCallback((newValue, lang = 'en') => {
