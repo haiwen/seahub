@@ -48,6 +48,7 @@ const PageItem = ({
   const [isMouseEntered, setIsMouseEntered] = useState(false);
 
   const ref = useRef(null);
+  const toggleTriggeredRef = useRef(false);
 
   const [, drag] = useDrag(() => ({
     type: 'wiki-page',
@@ -140,6 +141,7 @@ const PageItem = ({
       e.stopPropagation();
     }
     setIsShowNameEditor(!isShowNameEditor);
+    toggleTriggeredRef.current = true;
   }, [isShowNameEditor]);
 
   const changeItemFreeze = (isFreeze) => {
@@ -197,8 +199,9 @@ const PageItem = ({
   }, [updateSelected]);
 
   useEffect(() => {
-    if (!isShowNameEditor) {
+    if (!isShowNameEditor && toggleTriggeredRef.current) {
       savePageProperties();
+      toggleTriggeredRef.current = false;
     }
   }, [isShowNameEditor, savePageProperties]);
 
