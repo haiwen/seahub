@@ -2381,6 +2381,7 @@ class LibContentView extends React.Component {
                             ) : (
                               <SelectedDirentsToolbar
                                 repoID={this.props.repoID}
+                                eventBus={this.props.eventBus}
                                 path={this.state.path}
                                 userPerm={userPerm}
                                 repoEncrypted={this.state.repoEncrypted}
@@ -2448,6 +2449,15 @@ class LibContentView extends React.Component {
                             userPerm={userPerm}
                             currentPath={path}
                             currentMode={this.state.currentMode}
+                            switchViewMode={this.switchViewMode}
+                            isCustomPermission={isCustomPermission}
+                            sortBy={this.state.sortBy}
+                            sortOrder={this.state.sortOrder}
+                            sortItems={this.sortItems}
+                            viewId={this.state.viewId}
+                            viewType={this.props.viewType}
+                            onToggleDetail={this.toggleDirentDetail}
+                            onCloseDetail={this.closeDirentDetail}
                           />
                         </div>
                         }

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard, useGoFileserver, enableExcalidraw } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard, enableExcalidraw } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
