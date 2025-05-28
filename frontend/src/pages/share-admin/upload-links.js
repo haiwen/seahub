@@ -127,13 +127,11 @@ class Item extends Component {
     });
   };
 
-  viewLink = (e) => {
-    e.preventDefault();
+  viewLink = () => {
     this.toggleLinkDialog();
   };
 
-  removeLink = (e) => {
-    e.preventDefault();
+  removeLink = () => {
     this.props.onRemoveLink(this.props.item);
   };
 
@@ -195,8 +193,26 @@ class Item extends Component {
             <td>{item.view_cnt}</td>
             <td>{this.renderExpiration()}</td>
             <td>
-              {!item.is_expired && <a href="#" className={`sf2-icon-link action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('View')} aria-label={gettext('View')} role="button" onClick={this.viewLink}></a>}
-              <a href="#" className={`sf3-font-delete1 sf3-font action-icon op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Remove')} aria-label={gettext('Remove')} role="button" onClick={this.removeLink}></a>
+              <div className="d-flex align-items-center">
+                {!item.is_expired &&
+                <i
+                  role="button"
+                  className={`sf2-icon-link op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  title={gettext('View')}
+                  aria-label={gettext('View')}
+                  onClick={this.viewLink}
+                >
+                </i>
+                }
+                <i
+                  role="button"
+                  className={`sf3-font-delete1 sf3-font op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  title={gettext('Remove')}
+                  aria-label={gettext('Remove')}
+                  onClick={this.removeLink}
+                >
+                </i>
+              </div>
             </td>
           </tr>
           :
