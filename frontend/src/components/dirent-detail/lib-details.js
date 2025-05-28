@@ -73,7 +73,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
 
 LibDetail.propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
-  onClose: PropTypes.func.isRequired,
+  onClose: PropTypes.func,
 };
 
 export default LibDetail;

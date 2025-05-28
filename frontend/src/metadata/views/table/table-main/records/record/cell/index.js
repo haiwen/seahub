@@ -9,6 +9,7 @@ import { isCellValueChanged, getCellValueByColumn } from '../../../../../../util
 import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP, EDITOR_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
 import { checkIsDir } from '../../../../../../utils/row';
 import { openFile } from '../../../../../../utils/file';
+import { useTags } from '../../../../../../../tag/hooks';
 
 import './index.css';
 
@@ -27,6 +28,7 @@ const Cell = React.memo(({
   frozen,
   height,
 }) => {
+  const { tagsData } = useTags();
   const canEditable = useMemo(() => {
     const { type } = column;
     if (!window.sfMetadataContext.canModifyColumn(column)) return false;
@@ -171,7 +173,7 @@ const Cell = React.memo(({
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
-      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} onFileNameClick={onFileNameClick} />
+      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} tagsData={tagsData} onFileNameClick={onFileNameClick} />
       {isCellSelected && (<CellOperationBtn record={record} column={column}/>)}
     </div>
   );

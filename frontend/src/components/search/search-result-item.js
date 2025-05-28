@@ -5,15 +5,36 @@ import { Utils } from '../../utils/utils';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
+  idx: PropTypes.number.isRequired,
   onItemClickHandler: PropTypes.func.isRequired,
   isHighlight: PropTypes.bool,
   setRef: PropTypes.func,
+  onHighlightIndex: PropTypes.func,
+  timer: PropTypes.number,
+  onSetTimer: PropTypes.func,
 };
 
 class SearchResultItem extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.controller = null;
+  }
+
   onClickHandler = () => {
     this.props.onItemClickHandler(this.props.item);
+  };
+
+  onMouseEnter = () => {
+    if (this.props.isHighlight) return;
+    if (this.controller) {
+      this.controller.abort();
+    }
+    this.controller = new AbortController();
+
+    if (this.props.onHighlightIndex) {
+      this.props.onHighlightIndex(this.props.idx);
+    }
   };
 
   render() {
@@ -32,6 +53,7 @@ class SearchResultItem extends React.Component {
         className={classnames('search-result-item', { 'search-result-item-highlight': this.props.isHighlight })}
         onClick={this.onClickHandler}
         ref={ref => setRef(ref)}
+        onMouseEnter={this.onMouseEnter}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">

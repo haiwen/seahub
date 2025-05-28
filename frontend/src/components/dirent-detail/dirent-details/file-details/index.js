@@ -55,7 +55,7 @@ const getImageInfoValue = (key, value) => {
   }
 };
 
-const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepoTags = true, repoTags, fileTagList, onFileTagChanged }) => {
+const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepoTags = true, repoTags, fileTagList, readOnly = false, tagsData, onFileTagChanged }) => {
   const [isCaptureInfoShow, setCaptureInfoShow] = useState(false);
   const { enableFaceRecognition, enableMetadata } = useMetadataStatus();
   const { record } = useMetadataDetails();
@@ -102,7 +102,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
           />
         </DetailItem>
       )}
-      {enableMetadata && <MetadataDetails />}
+      {enableMetadata && <MetadataDetails readOnly={readOnly} tagsData={tagsData} />}
     </>
   );
 
@@ -162,6 +162,8 @@ FileDetails.propTypes = {
   direntDetail: PropTypes.object,
   repoTags: PropTypes.array,
   fileTagList: PropTypes.array,
+  readOnly: PropTypes.bool,
+  tagsData: PropTypes.object,
   onFileTagChanged: PropTypes.func,
 };
 

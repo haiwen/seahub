@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import CellFormatter from '../cell-formatter';
 import DetailEditor from '../detail-editor';
 import DetailItem from '../../../components/dirent-detail/detail-item';
@@ -13,7 +14,7 @@ import Location from './location';
 
 import './index.css';
 
-const MetadataDetails = () => {
+const MetadataDetails = ({ readOnly, tagsData }) => {
   const { canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
   const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
@@ -34,7 +35,7 @@ const MetadataDetails = () => {
           return <Location key={field.key} position={value} record={record} />;
         }
 
-        let canEdit = canModifyRecord && field.editable;
+        let canEdit = canModifyRecord && field.editable && !readOnly;
         if (!isImageOrVideo && IMAGE_PRIVATE_COLUMN_KEYS.includes(field.key)) {
           canEdit = false;
         } else if (field.key === PRIVATE_COLUMN_KEY.TAGS && isDir) {
@@ -59,6 +60,7 @@ const MetadataDetails = () => {
                 value={value}
                 emptyTip={gettext('Empty')}
                 className="sf-metadata-property-detail-formatter"
+                tagsData={tagsData}
               />
             }
           </DetailItem>
@@ -66,6 +68,11 @@ const MetadataDetails = () => {
       })}
     </>
   );
+};
+
+MetadataDetails.propTypes = {
+  readOnly: PropTypes.bool,
+  tagsData: PropTypes.object,
 };
 
 export default MetadataDetails;

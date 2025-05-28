@@ -8,7 +8,7 @@ import { CellType } from '../../../../../constants';
 
 import './index.css';
 
-const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
+const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, tagsData, onDelete, onFreezed, onUnFreezed, isCollapsed, onCollapse }) => {
   // eslint-disable-next-line no-unused-vars
   const [active, setActive] = useState(false);
 
@@ -48,7 +48,7 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, on
     <div className="sf-metadata-view-kanban-board-header" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <div className="sf-metadata-view-kanban-board-header-title" ref={headerRef}>
         {value ? (
-          <CellFormatter value={titleValue} field={groupByColumn} readonly={true} />
+          <CellFormatter value={titleValue} field={groupByColumn} readonly={true} tagsData={tagsData} />
         ) : (
           <span>{gettext('Uncategorized')}</span>
         )}

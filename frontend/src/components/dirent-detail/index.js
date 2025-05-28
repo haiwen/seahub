@@ -8,8 +8,13 @@ import { MetadataContext } from '../../metadata';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { METADATA_MODE, TAGS_MODE } from '../dir-view-mode/constants';
 import { FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
+import { useTags } from '../../tag/hooks';
+import { useMetadataStatus } from '../../hooks';
 
 const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
+  const { enableMetadata, enableFaceRecognition, detailsSettings, modifyDetailsSettings } = useMetadataStatus();
+  const { tagsData, addTag, modifyLocalFileTags } = useTags();
+
   const isView = useMemo(() => currentMode === METADATA_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [currentMode, path]);
   const isTag = useMemo(() => currentMode === TAGS_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES), [currentMode, path]);
 
@@ -53,6 +58,13 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
       currentRepoInfo={currentRepoInfo}
       repoTags={repoTags}
       fileTags={fileTags}
+      enableMetadata={enableMetadata}
+      enableFaceRecognition={enableFaceRecognition}
+      detailsSettings={detailsSettings}
+      modifyDetailsSettings={modifyDetailsSettings}
+      tagsData={tagsData}
+      addTag={addTag}
+      modifyLocalFileTags={modifyLocalFileTags}
       onFileTagChanged={onFileTagChanged}
       onClose={onClose}
     />

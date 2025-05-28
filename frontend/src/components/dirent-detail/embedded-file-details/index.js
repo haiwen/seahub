@@ -11,6 +11,7 @@ import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
 import Loading from '../../loading';
+import { useTags } from '../../../tag/hooks';
 
 import './index.css';
 
@@ -20,6 +21,8 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
   const [isFetching, setIsFetching] = useState(true);
+
+  const { tagsData, addTag } = useTags();
 
   const isView = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -87,7 +90,15 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
             :
             dirent && direntDetail && (
               <div className="detail-content">
-                <FileDetails repoID={repoID} isShowRepoTags={false} dirent={dirent} direntDetail={direntDetail} />
+                <FileDetails
+                  repoID={repoID}
+                  isShowRepoTags={false}
+                  dirent={dirent}
+                  direntDetail={direntDetail}
+                  tagsData={tagsData}
+                  addTag={addTag}
+                  onFileTagChanged={() => {}}
+                />
               </div>
             )}
         </Body>

@@ -126,11 +126,10 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
 
   if (isLoading) {
     return (
-      <div style={{ width: '300px' }}>
+      <div className="metadata-status-loading-container">
         <Loading/>
       </div>
     );
-
   }
 
   return (

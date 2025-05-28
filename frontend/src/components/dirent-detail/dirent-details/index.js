@@ -100,6 +100,7 @@ class DirentDetails extends React.Component {
         dirent={dirent}
         direntDetail={direntDetail}
         direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
+        modifyLocalFileTags={this.props.modifyLocalFileTags}
       >
         <Detail>
           <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} >
@@ -111,7 +112,11 @@ class DirentDetails extends React.Component {
             {dirent && direntDetail && (
               <div className="detail-content">
                 {dirent.type !== 'file' ? (
-                  <DirDetails direntDetail={direntDetail} />
+                  <DirDetails
+                    direntDetail={direntDetail}
+                    tagsData={this.props.tagsData}
+                    addTag={this.props.addTag}
+                  />
                 ) : (
                   <FileDetails
                     repoID={repoID}
@@ -120,6 +125,8 @@ class DirentDetails extends React.Component {
                     direntDetail={direntDetail}
                     repoTags={this.props.repoTags}
                     fileTagList={dirent ? dirent.file_tags : fileTags}
+                    tagsData={this.props.tagsData}
+                    addTag={this.props.addTag}
                     onFileTagChanged={this.props.onFileTagChanged}
                   />
                 )}
@@ -141,6 +148,13 @@ DirentDetails.propTypes = {
   onFileTagChanged: PropTypes.func.isRequired,
   repoTags: PropTypes.array,
   fileTags: PropTypes.array,
+  enableMetadata: PropTypes.bool,
+  enableFaceRecognition: PropTypes.bool,
+  detailsSettings: PropTypes.object,
+  tagsData: PropTypes.object,
+  addTag: PropTypes.func,
+  modifyDetailsSettings: PropTypes.func,
+  modifyLocalFileTags: PropTypes.func,
 };
 
 export default DirentDetails;
