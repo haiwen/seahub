@@ -88,11 +88,10 @@ class Item extends Component {
     super(props);
     this.state = {
       share_permission: this.props.item.share_permission,
-      share_permission_name: this.props.item.share_permission_name,
+      isHighlighted: false,
       isOpIconShown: false,
       isPermSelectDialogOpen: false, // for mobile
-      unshared: false,
-      isShowPermEditor: false,
+      unshared: false
     };
 
     this.permissions = ['rw', 'r'];
@@ -108,16 +107,20 @@ class Item extends Component {
   };
 
   onMouseEnter = () => {
-    this.setState({ isOpIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isOpIconShown: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOpIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isOpIconShown: false
+    });
   };
 
-  unshare = (e) => {
-    e.preventDefault();
-
+  unshare = () => {
     const item = this.props.item;
     let options = {
       'p': item.path
@@ -175,18 +178,13 @@ class Item extends Component {
     });
   };
 
-  onEditPermission = (event) => {
-    event.nativeEvent.stopImmediatePropagation();
-    this.setState({ isShowPermEditor: true });
-  };
-
   render() {
     if (this.state.unshared) {
       return null;
     }
 
     const item = this.props.item;
-    let { share_permission, share_permission_name, isOpIconShown, isPermSelectDialogOpen, isShowPermEditor } = this.state;
+    let { share_permission, isOpIconShown, isPermSelectDialogOpen, isHighlighted } = this.state;
 
     let is_readonly = false;
     if (share_permission == 'r' || share_permission == 'preview') {
@@ -206,7 +204,14 @@ class Item extends Component {
 
     if (this.props.isDesktop) {
       return (
-        <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          onFocus={this.onMouseEnter}
+        >
           <td className="pl10 pr-2"><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td><Link to={folderUrl}>{item.folder_name}</Link></td>
           <td><Link to={repoUrl}>{item.repo_name}</Link></td>
@@ -215,34 +220,26 @@ class Item extends Component {
               <span title={item.contact_email}>{item.user_name}</span> : item.group_name}
           </td>
           <td>
-            {!isShowPermEditor && (
-              <div>
-                <span>{Utils.sharePerms(share_permission) || share_permission_name}</span>
-                {isOpIconShown && (
-                  <a href="#"
-                    role="button"
-                    aria-label={gettext('Edit')}
-                    title={gettext('Edit')}
-                    className="sf3-font sf3-font-rename attr-action-icon"
-                    onClick={this.onEditPermission}>
-                  </a>
-                )}
-              </div>
-            )}
-            {isShowPermEditor && (
-              <SharePermissionEditor
-                repoID={item.repo_id}
-                isTextMode={true}
-                isEditIconShow={isOpIconShown}
-                isEditing={true}
-                autoFocus={true}
-                currentPermission={share_permission}
-                permissions={this.permissions}
-                onPermissionChanged={this.changePerm}
-              />
-            )}
+            <SharePermissionEditor
+              repoID={item.repo_id}
+              isTextMode={true}
+              autoFocus={true}
+              isEditIconShow={this.state.isOpIconShown}
+              currentPermission={share_permission}
+              permissions={this.permissions}
+              onPermissionChanged={this.changePerm}
+            />
           </td>
-          <td><a href="#" role="button" aria-label={gettext('Unshare')} className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.unshare}></a></td>
+          <td>
+            <i
+              role="button"
+              aria-label={gettext('Unshare')}
+              className={`sf3-font sf3-font-x-01 op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              title={gettext('Unshare')}
+              onClick={this.unshare}
+            >
+            </i>
+          </td>
         </tr>
       );
     } else {

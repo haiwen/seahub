@@ -88,7 +88,6 @@ class Item extends Component {
     let item = this.props.item;
     this.state = {
       share_permission: item.share_permission,
-      share_permission_name: item.share_permission_name,
       is_admin: item.is_admin,
       isHighlighted: false,
       isOpIconShown: false,
