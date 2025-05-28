@@ -8,7 +8,7 @@ import searchAPI from '../../utils/search-api';
 import { gettext } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
-import { Utils } from '../../utils/utils';
+import { debounce, Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
@@ -77,6 +77,7 @@ class Search extends Component {
     this.isChineseInput = false;
     this.searchResultListContainerRef = React.createRef();
     this.calculateStoreKey(props);
+    this.timer = null;
   }
 
   componentDidMount() {
@@ -717,6 +718,10 @@ class Search extends Component {
     );
   };
 
+  debounceHighlight = debounce((index) => {
+    this.setState({ highlightIndex: index });
+  }, 200);
+
   renderResults = (resultItems, isVisited) => {
     const { highlightIndex } = this.state;
 
@@ -738,7 +743,9 @@ class Search extends Component {
                 onItemClickHandler={this.onItemClickHandler}
                 isHighlight={isHighlight}
                 setRef={isHighlight ? (ref) => {this.highlightRef = ref;} : () => {}}
-                onHighlightIndex={(idx) => this.setState({ highlightIndex: idx })}
+                onHighlightIndex={this.debounceHighlight}
+                timer={this.timer}
+                onSetTimer={(timer) => {this.timer = timer;}}
               />
             );
           })}

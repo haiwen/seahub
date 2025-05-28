@@ -11,7 +11,6 @@ import { MetadataDetailsProvider } from '../../../metadata/hooks';
 import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
 import Loading from '../../loading';
-import { useMetadataStatus } from '../../../hooks';
 import { useTags } from '../../../tag/hooks';
 
 import './index.css';

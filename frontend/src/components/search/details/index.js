@@ -7,9 +7,9 @@ import { MetadataDetailsProvider } from '../../../metadata';
 import { Repo } from '../../../models';
 import { MetadataStatusProvider } from '../../../hooks';
 import Details from './details';
+import LibDetail from '../../dirent-detail/lib-details';
 
 import './index.css';
-import LibDetail from '../../dirent-detail/lib-details';
 
 const SearchedItemDetails = ({ repoID, path, dirent }) => {
   const [repoInfo, setRepoInfo] = useState(null);
@@ -26,16 +26,35 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   }, [repoID]);
 
   useEffect(() => {
-    if (!repoID || !path || !dirent || dirent.isLib) {
-      setDirentDetail(null);
-      return;
-    }
-    seafileAPI[dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo'](repoID, path).then(res => {
-      setDirentDetail(res.data);
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    const controller = new AbortController();
+
+    const fetchData = async () => {
+      if (!repoID || !path || !dirent || dirent.isLib) {
+        setDirentDetail(null);
+        return;
+      }
+
+      try {
+        const res = await seafileAPI[dirent.type === 'file' ? 'getFileInfo' : 'getDirInfo'](
+          repoID,
+          path,
+          { signal: controller.signal }
+        );
+        setDirentDetail(res.data);
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          const errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        }
+      }
+    };
+
+    const timer = setTimeout(fetchData, 200);
+
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
   }, [repoID, repoInfo, path, dirent]);
 
   if (!repoInfo) return;

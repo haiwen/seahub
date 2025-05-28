@@ -10,12 +10,15 @@ const propTypes = {
   isHighlight: PropTypes.bool,
   setRef: PropTypes.func,
   onHighlightIndex: PropTypes.func,
+  timer: PropTypes.number,
+  onSetTimer: PropTypes.func,
 };
 
 class SearchResultItem extends React.Component {
 
   constructor(props) {
     super(props);
+    this.controller = null;
   }
 
   onClickHandler = () => {
@@ -23,10 +26,14 @@ class SearchResultItem extends React.Component {
   };
 
   onMouseEnter = () => {
-    const { isHighlight, idx } = this.props;
-    if (isHighlight) return;
+    if (this.props.isHighlight) return;
+    if (this.controller) {
+      this.controller.abort();
+    }
+    this.controller = new AbortController();
+
     if (this.props.onHighlightIndex) {
-      this.props.onHighlightIndex(idx);
+      this.props.onHighlightIndex(this.props.idx);
     }
   };
 

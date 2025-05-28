@@ -150,7 +150,6 @@
   border-radius: 4px;
 }
 
-.search-result-container .search-result-item:hover,
 .search-result-container .search-result-item.search-result-item-highlight {
   background-color: #f0f0f0;
 }
@@ -163,6 +162,14 @@
 .search-result-container .search-result-container-sidepanel .searched-item-details {
   height: 100%;
   overflow: auto;
+}
+
+.search-result-container .sf-metadata-status-loading-container {
+  width: 300px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .search-result-item .item-img {

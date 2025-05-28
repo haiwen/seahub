@@ -11,6 +11,7 @@ import { PER_LOAD_NUMBER } from '../../../metadata/constants';
 import { normalizeColumns } from '../../../tag/utils/column';
 import { TAGS_DEFAULT_SORT } from '../../../tag/constants/sort';
 import TagsData from '../../../tag/model/tagsData';
+import toaster from '../../toast';
 
 const Details = ({ repoID, repoInfo, path, dirent, direntDetail }) => {
   const [tagsData, setTagsData] = useState(null);
@@ -24,7 +25,8 @@ const Details = ({ repoID, repoInfo, path, dirent, direntDetail }) => {
         const tagsData = new TagsData({ rows, columns, TAGS_DEFAULT_SORT });
         setTagsData(tagsData);
       }).catch(error => {
-        // ignore
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
       });
     } else {
       setTagsData(null);
