@@ -1,12 +1,3 @@
-@keyframes fadeLine {
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-}
-
 .sf-chart {
   font-family: inherit;
 }
@@ -56,16 +47,17 @@
 .sf-chart .line {
   fill: none;
   stroke-width: 2px;
+  transition: opacity 0.3s, stroke-width 0.3s;
 }
 
-.sf-chart .highlight-line {
+.sf-chart .line.highlight-line {
   stroke-width: 3px !important;
   opacity: 1 !important;
 }
 
-.sf-chart .fade-line {
-  animation: fadeLine .3s;
-  animation-fill-mode: forwards;
+.sf-chart .line.fade-line {
+  opacity: 0;
+  stroke-width: 0;
 }
 
 /* dot */
@@ -81,8 +73,8 @@
   stroke-width: 2;
 }
 
-.sf-chart .fade-dot {
-  opacity: 0.2 !important;
+.sf-chart .dot.fade-dot {
+  opacity: 0 !important;
 }
 
 /* title */

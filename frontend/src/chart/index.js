@@ -28,7 +28,9 @@ const Chart = ({
   const svgRef = useRef(null);
   const hiddenLegendsRef = useRef([]);
   const tooltipData = useRef(null);
-  const reDrawTimer = useRef(null);
+
+  const axisX = useRef(null);
+  const axisY = useRef(null);
 
   const d3DataSource = useMemo(() => {
     return legends.map(legend => {
@@ -45,6 +47,35 @@ const Chart = ({
       };
     });
   }, [data, legends]);
+
+  const gridXCall = useCallback((x, { height }) => {
+    return d3.axisBottom(x)
+      .tickSizeOuter(0)
+      .tickSize(height)
+      .tickFormat('');
+  }, []);
+
+  const gridYCall = useCallback((y, { width }) => {
+    return d3.axisLeft(y)
+      .ticks(5)
+      .tickSize(-width)
+      .tickFormat('');
+  }, []);
+
+  const updateXY = useCallback((svg, x, y, displayLegends) => {
+    // update y
+    // nothing todo
+
+    // update y
+    // nice y
+    let yMaxValue = d3.max(data, d => Math.max(...displayLegends.map(l => d[l.key] || 0)));
+    if (ySuggestedMax) {
+      yMaxValue = Math.max(ySuggestedMax, yMaxValue);
+    }
+    const niceEnd = d3.nice(0, yMaxValue, 5)[1];
+    y.domain([0, niceEnd]);
+
+  }, [ySuggestedMax, data]);
 
   const init = useCallback(() => {
     const { width: containerWidth } = ref.current.getBoundingClientRect();
@@ -76,6 +107,18 @@ const Chart = ({
     return { svg, x, y, tickValues, style };
   }, [data, margin]);
 
+  const updateAxis = useCallback((svg, x, y, tickValues, duration = 500) => {
+    axisX.current
+      .transition()
+      .duration(duration)
+      .call(d3.axisBottom(x).tickSizeOuter(0).tickValues(tickValues));
+
+    axisY.current
+      .transition()
+      .duration(duration)
+      .call(d3.axisLeft(y).tickSizeInner(0).ticks(5).tickFormat(getDisplayValue));
+  }, [getDisplayValue]);
+
   const drawAxis = useCallback((svg, x, y, tickValues, { height }, d3Data) => {
     // axis
     const axis = svg
@@ -83,21 +126,18 @@ const Chart = ({
       .attr('class', 'axis');
 
     // axis-x
-    axis
+    axisX.current = axis
       .append('g')
       .attr('class', 'axis-x')
-      .attr('transform', `translate(0, ${height})`)
-      .call(d3.axisBottom(x)
-        .tickSizeOuter(0)
-        .tickValues(tickValues)
-      );
+      .attr('transform', `translate(0, ${height})`);
 
     // axis-y
-    axis
+    axisY.current = axis
       .append('g')
-      .attr('class', 'axis-y')
-      .call(d3.axisLeft(y).tickSizeInner(0).ticks(5).tickFormat(getDisplayValue));
-  }, [getDisplayValue]);
+      .attr('class', 'axis-y');
+
+    updateAxis(svg, x, y, tickValues, 0);
+  }, [updateAxis]);
 
   const drawGrid = useCallback((svg, x, y, tickValues, { height, width }, d3Data) => {
     // grid
@@ -107,11 +147,7 @@ const Chart = ({
     // grid x
     const gridX = grid.append('g')
       .attr('class', 'grid-x')
-      .call(d3.axisBottom(x)
-        .tickSizeOuter(0)
-        .tickSize(height)
-        .tickFormat('')
-      );
+      .call(gridXCall(x, { height }));
 
     // gridX tip
     const gridXTipLine = grid.append('line')
@@ -178,14 +214,10 @@ const Chart = ({
     // grid y
     const gridY = grid.append('g')
       .attr('class', 'grid-y')
-      .call(d3.axisLeft(y)
-        .ticks(5)
-        .tickSize(-width)
-        .tickFormat('')
-      );
+      .call(gridYCall(y, { width }));
     gridY.selectAll('.tick')
       .classed('d-none', (d, i) => i === 0);
-  }, [d3DataSource, getDisplayValue]);
+  }, [d3DataSource, getDisplayValue, gridXCall, gridYCall]);
 
   const drawData = useCallback((svg, x, y, tickValues, { height, width }, d3Data) => {
     // line
@@ -194,8 +226,8 @@ const Chart = ({
       .y(d => y(d.value))
       .curve(d3.curveLinear);
 
-    const dataGroups = svg.append('g')
-      .attr('class', 'groups');
+    const dataGroups = svg.select('.groups').empty() ? svg.append('g')
+      .attr('class', 'groups') : svg.select('.groups');
 
     const groups = dataGroups.selectAll('.group')
       .data(d3Data)
@@ -219,6 +251,21 @@ const Chart = ({
         .attr('cy', d => y(d.value))
         .attr('fill', group.color);
     });
+
+    dataGroups.selectAll('.line')
+      .classed('fade-line', d => hiddenLegendsRef.current.includes(d.key))
+      .attr('d', d => line(d.values))
+      .transition()
+      .duration(500);
+
+    dataGroups.selectAll('.dot')
+      .classed('fade-dot', d => hiddenLegendsRef.current.includes(d.key))
+      .attr('cx', d => x(d.name))
+      .attr('cy', d => y(d.value))
+      .transition()
+      .duration(500);
+
+    dataGroups.exit().remove();
 
     // line and dot UI
     // groups
@@ -272,7 +319,6 @@ const Chart = ({
     // margin right: 16px
     // text and color gap: 8px
     // last one: margin right 0px
-
     // 44: width + margin right + gap
     const legendDisplayWidth = legendTextWidths.reduce((sum, cur) => sum + cur, 0) + legends.length * 44 - 16;
     const offset = (width - legendDisplayWidth) / 2;
@@ -295,18 +341,7 @@ const Chart = ({
         d3.select(this)
           .classed('hidden-legend', hiddenLegendsRef.current.includes(d.key));
 
-        svg.selectAll('.line')
-          .filter(line => line.key === d.key)
-          .classed('fade-line', true);
-
-        if (reDrawTimer.current) {
-          clearTimeout(reDrawTimer.current);
-          reDrawTimer.current = null;
-        }
-        reDrawTimer.current = setTimeout(() => {
-          draw(svg, x, y, tickValues, { height, width }, true);
-          reDrawTimer.current = null;
-        }, 300);
+        update(svg, x, y, tickValues, { height, width });
       });
 
     legend.append('rect')
@@ -333,7 +368,7 @@ const Chart = ({
       .attr('class', 'legend-text');
 
   // eslint-disable-next-line no-use-before-define
-  }, [legends, draw]);
+  }, [legends, update]);
 
   const drawTitle = useCallback((svg, x, y, tickValues, { height, width }, d3Data) => {
     if (!title) return;
@@ -344,34 +379,41 @@ const Chart = ({
       .text(title);
   }, [title]);
 
-  const updateY = useCallback((y, displayLegends) => {
-    // nice y
-    let yMaxValue = d3.max(data, d => Math.max(...displayLegends.map(l => d[l.key] || 0)));
-    if (ySuggestedMax) {
-      yMaxValue = Math.max(ySuggestedMax, yMaxValue);
-    }
-    const niceEnd = d3.nice(0, yMaxValue, 5)[1];
-    y.domain([0, niceEnd]);
-
-  }, [ySuggestedMax, data]);
-
-  const draw = useCallback((svg, x, y, tickValues, style, isReDraw = false) => {
-    if (isReDraw) {
-      d3.select(svgRef.current).selectAll('.axis').remove();
-      d3.select(svgRef.current).selectAll('.grid').remove();
-      d3.select(svgRef.current).selectAll('.groups').remove();
-    }
+  const update = useCallback((svg, x, y, tickValues, { width, height }) => {
     const displayLegends = legends.filter(legend => !hiddenLegendsRef.current.includes(legend.key));
-    updateY(y, displayLegends);
     const d3Data = d3DataSource.filter(d => displayLegends.find(l => l.key === d.key));
 
+    // update y
+    updateXY(svg, x, y, displayLegends);
+
+    // update axis
+    updateAxis(svg, x, y, tickValues);
+
+    // update grid
+    svg.select('.grid-x')
+      .transition()
+      .duration(500)
+      .call(gridXCall(x, { height }));
+
+    svg.select('.grid-y')
+      .transition()
+      .duration(500)
+      .call(gridYCall(y, { width }));
+
+    drawData(svg, x, y, tickValues, { width, height }, d3Data);
+  }, [legends, d3DataSource, updateXY, updateAxis, gridXCall, gridYCall, drawData]);
+
+  const draw = useCallback((svg, x, y, tickValues, style) => {
+    const displayLegends = legends.filter(legend => !hiddenLegendsRef.current.includes(legend.key));
+    const d3Data = d3DataSource.filter(d => displayLegends.find(l => l.key === d.key));
+
+    updateXY(svg, x, y, displayLegends);
     drawAxis(svg, x, y, tickValues, style);
     drawGrid(svg, x, y, tickValues, style, d3Data);
     drawData(svg, x, y, tickValues, style, d3Data);
-    if (isReDraw) return;
     drawLegend(svg, x, y, tickValues, style, d3Data);
     drawTitle(svg, x, y, tickValues, style, d3Data);
-  }, [legends, d3DataSource, updateY, drawAxis, drawGrid, drawData, drawLegend, drawTitle]);
+  }, [legends, d3DataSource, updateXY, drawAxis, drawGrid, drawData, drawLegend, drawTitle]);
 
   const create = useCallback(() => {
     const { svg, x, y, tickValues, style } = init();
@@ -393,10 +435,6 @@ const Chart = ({
     window.addEventListener('resize', handleResize);
     return () => {
       destroy();
-      if (reDrawTimer.current) {
-        clearTimeout(reDrawTimer.current);
-        reDrawTimer.current = null;
-      }
       window.removeEventListener('resize', handleResize);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
