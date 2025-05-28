@@ -1,6 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './utils/constants';
@@ -249,21 +250,26 @@ class FolderItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isIconShown: false
     };
   }
 
   handleMouseOver = () => {
-    this.setState({ isIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isIconShown: true
+    });
   };
 
   handleMouseOut = () => {
-    this.setState({ isIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isIconShown: false
+    });
   };
 
-  restoreItem = (e) => {
-    e.preventDefault();
-
+  restoreItem = () => {
     const item = this.props.item;
     const path = Utils.joinPath(this.props.folderPath, item.name);
     const request = item.type == 'dir' ?
@@ -287,26 +293,56 @@ class FolderItem extends React.Component {
 
   render() {
     const item = this.props.item;
-    const { isIconShown } = this.state;
+    const { isIconShown, isHighlighted } = this.state;
     const { folderPath } = this.props;
 
     return item.type == 'dir' ? (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseOver={this.handleMouseOver}
+        onMouseOut={this.handleMouseOut}
+        onFocus={this.handleMouseOver}
+      >
         <td className="text-center"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
         <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
         <td></td>
         <td>
-          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
+          <i
+            role="button"
+            className={`op-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`}
+            onClick={this.restoreItem}
+            title={gettext('Restore')}
+            aria-label={gettext('Restore')}
+          >
+          </i>
         </td>
       </tr>
     ) : (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseOver={this.handleMouseOver}
+        onMouseOut={this.handleMouseOut}
+        onFocus={this.handleMouseOver}
+      >
         <td className="text-center"><img src={Utils.getFileIconUrl(item.name)} alt={gettext('File')} width="24" /></td>
         <td><a href={`${siteRoot}repo/${repoID}/snapshot/files/?obj_id=${item.obj_id}&commit_id=${commitID}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} target="_blank" rel="noreferrer">{item.name}</a></td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          <a href="#" className={`action-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`} onClick={this.restoreItem} title={gettext('Restore')} aria-label={gettext('Restore')} role="button"></a>
-          <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`action-icon sf2-icon-download ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')}></a>
+          <div className="d-flex align-items-center">
+            <i
+              className={`op-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`}
+              onClick={this.restoreItem}
+              title={gettext('Restore')}
+              aria-label={gettext('Restore')}
+              role="button"
+            >
+            </i>
+            <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`op-icon sf3-font sf3-font-download1 ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')}></a>
+          </div>
         </td>
       </tr>
     );
