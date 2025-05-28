@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard, useGoFileserver, enableExcalidraw } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard, enableExcalidraw } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -14,7 +14,6 @@ import TextTranslation from '../../utils/text-translation';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 import Rename from '../../components/dialog/rename-dirent';
 import CreateFile from '../dialog/create-file-dialog';
 import CreateFolder from '../dialog/create-folder-dialog';
@@ -79,7 +78,6 @@ class DirentGridView extends React.Component {
       isShareDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
-      isEditFileTagShow: false,
       isRenameDialogShow: false,
       isCreateFolderDialogShow: false,
       isCreateFileDialogShow: false,

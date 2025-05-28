@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
-import MediaQuery from 'react-responsive';
 import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -10,18 +9,15 @@ import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
-import MobileItemMenu from '../mobile-item-menu';
 import Rename from '../rename';
 import ModalPortal from '../modal-portal';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import ShareDialog from '../dialog/share-dialog';
-import EditFileTagDialog from '../dialog/edit-filetag-dialog';
-import EditFileTagPopover from '../popover/edit-filetag-popover';
 import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
-import FileTag from './file-tag';
+import MobileItemMenu from '../../components/mobile-item-menu';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import { Dirent } from '../../models';
 
@@ -952,32 +948,6 @@ class DirentListItem extends React.Component {
             />
           </ModalPortal>
         }
-        <MediaQuery query="(min-width: 768px)">
-          {this.state.isEditFileTagShow &&
-            <EditFileTagPopover
-              repoID={this.props.repoID}
-              repoTags={this.props.repoTags}
-              fileTagList={dirent.file_tags}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-              target={this.tagListTitleID}
-              isEditFileTagShow={this.state.isEditFileTagShow}
-            />
-          }
-        </MediaQuery>
-        <MediaQuery query="(max-width: 767.8px)">
-          {this.state.isEditFileTagShow &&
-            <EditFileTagDialog
-              repoID={this.props.repoID}
-              repoTags={this.props.repoTags}
-              fileTagList={dirent.file_tags}
-              filePath={direntPath}
-              toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.onFileTagChanged}
-            />
-          }
-        </MediaQuery>
         {this.state.isShareDialogShow &&
           <ModalPortal>
             <ShareDialog
