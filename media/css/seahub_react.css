@@ -1326,10 +1326,7 @@ a.table-sort-op:hover {
   font-size: 14px;
 }
 
-.dropdown-item .sf3-font {
-  color: #666;
-}
-
+.dropdown-item .sf3-font,
 .dropdown-item .sf2-icon-tick {
   color: #666;
 }

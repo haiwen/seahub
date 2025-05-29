@@ -300,7 +300,7 @@
   width: 100%;
 }
 
-.dropdown-item .collaborator,
+.sf-metadata-filters-list .dropdown-item .collaborator,
 .sf-metadata-filters-list .seafile-option-group .seafile-option-group-content .collaborator {
   background-color: unset;
 }
