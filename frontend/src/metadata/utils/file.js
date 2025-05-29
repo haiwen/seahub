@@ -2,7 +2,6 @@ import { getFileNameFromRecord, getParentDirFromRecord } from './cell';
 import { checkIsDir } from './row';
 import { Utils } from '../../utils/utils';
 import { siteRoot } from '../../utils/constants';
-import URLDecorator from '../../utils/url-decorator';
 
 const FILE_TYPE = {
   FOLDER: 'folder',
@@ -115,14 +114,4 @@ export const openParentFolder = (record) => {
   }
   const url = window.location.origin + window.location.pathname + Utils.encodePath(parentDir);
   window.open(url, '_blank');
-};
-
-export const downloadFile = (repoID, record) => {
-  if (!repoID || !record) return;
-  if (checkIsDir(record)) return;
-  const parentDir = _getParentDir(record);
-  const name = getFileNameFromRecord(record);
-  const direntPath = Utils.joinPath(parentDir, name);
-  const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-  location.href = url;
 };
