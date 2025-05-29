@@ -70,10 +70,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
       direntType="file"
     >
       <div
-        className={classnames('cur-view-detail', className, {
-          'cur-view-detail-small': width < 400,
-          'cur-view-detail-large': width > 400
-        })}
+        className={classnames('cur-view-detail', className)}
         style={{ width }}
       >
         <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent}>

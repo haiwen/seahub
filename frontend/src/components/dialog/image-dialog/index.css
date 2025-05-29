@@ -60,6 +60,7 @@
 .lightbox-side-panel .detail-header .detail-title .name,
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-title,
 .lightbox-side-panel .dirent-detail-item .dirent-detail-item-name,
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value,
 .lightbox-side-panel .sf-metadata-number-property-detail-editor {
   color: #fff;
 }
@@ -85,6 +86,14 @@
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .sf3-font-down,
 .lightbox-side-panel .sf-metadata-number-property-detail-editor::placeholder {
   color: #666;
+}
+
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value.editable:hover .sf-metadata-record-cell-empty:empty::before,
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value.editable:hover .sf-metadata-property-detail-editor:empty::before,
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value.editable:hover .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value:empty::before,
+.lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover .sf3-font-down,
+.lightbox-side-panel .dirent-detail-item .dirent-detail-item-value.editable:hover .sf-metadata-number-property-detail-editor::placeholder {
+  color: #999;
 }
 
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover,
