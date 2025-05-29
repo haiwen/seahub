@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { createRoot } from 'react-dom/client';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import dayjs from 'dayjs';
+import classnames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Account from './components/common/account';
 import { useGoFileserver, fileServerRoot, gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle,
@@ -1066,6 +1067,7 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isIconShown: false,
       isOpMenuOpen: false
     };
@@ -1076,11 +1078,17 @@ class Item extends React.Component {
   };
 
   handleMouseOver = () => {
-    this.setState({ isIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isIconShown: true
+    });
   };
 
   handleMouseOut = () => {
-    this.setState({ isIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isIconShown: false
+    });
   };
 
   zipDownloadFolder = (e) => {
@@ -1111,10 +1119,17 @@ class Item extends React.Component {
 
   render() {
     const { item, isDesktop, mode } = this.props;
-    const { isIconShown } = this.state;
+    const { isIconShown, isHighlighted } = this.state;
     if (item.is_dir) {
       return isDesktop ? (
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseOver={this.handleMouseOver}
+          onMouseOut={this.handleMouseOut}
+          onFocus={this.handleMouseOver}
+        >
           {showDownloadIcon &&
             <td className="text-center">
               <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
@@ -1155,7 +1170,14 @@ class Item extends React.Component {
       const fileURL = `${siteRoot}d/${token}/files/?p=${encodeURIComponent(item.file_path)}`;
       const thumbnailURL = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}?mtime=${item.last_modified}` : '';
       return isDesktop ? (
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseOver={this.handleMouseOver}
+          onMouseOut={this.handleMouseOut}
+          onFocus={this.handleMouseOver}
+        >
           {showDownloadIcon &&
             <td className="text-center">
               <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
