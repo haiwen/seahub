@@ -124,7 +124,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       const newValue = tags ? tags.map(id => ({ row_id: id, display_value: id })) : [];
       const update = { [PRIVATE_COLUMN_KEY.TAGS]: newValue };
       setRecord({ ...record, ...update });
-      modifyLocalFileTags(record_id, tags);
+      modifyLocalFileTags && modifyLocalFileTags(record_id, tags);
       if (window?.sfMetadataContext?.eventBus) {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId: record_id }, update);
       }
