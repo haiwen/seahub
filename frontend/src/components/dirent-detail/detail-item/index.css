@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   padding: 0 8px;
-  min-height: 28px;
+  margin-bottom: 4px;
   height: fit-content;
   color: #666;
   font-size: 12px;
