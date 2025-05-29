@@ -55,8 +55,7 @@ const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [],
       isMounted && setCollaborator(collaborator);
     });
     return () => isMounted = false;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [value, api, mediaUrl, collaborators, collaboratorsCache, updateCollaboratorsCache]);
 
   if (!collaborator) return emptyFormatter || null;
   return (
