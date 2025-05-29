@@ -1,14 +1,13 @@
 .sf-metadata-property-detail-capture-information-item .dirent-detail-item-name {
   font-size: 12px;
-  min-height: 24px;
-  padding: 3px 0;
+  padding: 0 8px;
   word-break: break-all;
 }
 
 .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value {
-  font-size: 12px;
-  min-height: 24px;
-  padding: 3px 6px;
+  font-size: 14px;
+  min-height: 28px;
+  padding: 3px 8px;
   display: block;
   word-break: break-all;
 }
@@ -16,5 +15,5 @@
 .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value:empty::before {
   content: attr(placeholder);
   color: #666;
-  font-size: 12px;
+  font-size: 14px;
 }

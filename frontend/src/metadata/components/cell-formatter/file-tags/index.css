@@ -29,7 +29,6 @@
   width: max-content;
   min-height: 1rem;
   position: relative;
-  cursor: pointer;
 }
 
 .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {

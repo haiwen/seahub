@@ -1,12 +1,15 @@
 .sf-metadata-tags-property-detail-editor {
-  padding: 0 6px;
-  min-height: 34px;
+  height: fit-content;
+  min-height: 28px;
   width: 100%;
-  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .sf-metadata-tags-property-detail-editor:empty {
-  line-height: 34px;
+  height: 28px;
+  align-items: center;
 }
 
 .sf-metadata-tags-property-detail-editor .sf-metadata-delete-select-tags {

@@ -1,9 +1,9 @@
 .dirent-detail-item {
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 4px;
-  font-size: 14px;
+  flex-direction: column;
+  justify-content: flex-end;
+  margin-bottom: 14px;
 }
 
 .dirent-detail-item:last-child {
@@ -11,18 +11,20 @@
 }
 
 .dirent-detail-item .dirent-detail-item-name {
-  width: 160px;
-  padding: 6.5px 0px;
-  min-height: 34px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  margin-bottom: 4px;
   height: fit-content;
   color: #666;
-  font-size: 14px;
+  font-size: 12px;
   cursor: default;
 }
 
 .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon {
   margin-right: 6px;
-  font-size: 14px;
+  font-size: 12px;
   fill: #999;
   flex-shrink: 0;
 }
@@ -33,10 +35,13 @@
 }
 
 .dirent-detail-item .dirent-detail-item-value {
-  width: 200px;
+  width: 100%;
   display: flex;
+  align-items: center;
   height: fit-content;
-  min-height: 34px;
+  min-height: 28px;
+  padding: 0 8px;
+  color: #212529;
 }
 
 .dirent-detail-item .dirent-detail-item-value.editable:hover {
@@ -49,52 +54,31 @@
   cursor: pointer;
 }
 
-/* media */
-.cur-view-detail-small .dirent-detail-item .dirent-detail-item-name {
-  width: calc((100% - 8px) * 0.44);
+.dirent-detail-item .dirent-detail-item-value .sf-metadata-record-cell-empty {
+  height: 28px;
+  display: flex;
+  align-items: center;
 }
 
-.cur-view-detail-small .dirent-detail-item .dirent-detail-item-value {
-  width: calc((100% - 8px) * 0.56);
-}
-
-.cur-view-detail-large .dirent-detail-item .dirent-detail-item-name {
-  width: 160px;
-  margin-right: 8px;
-}
-
-.cur-view-detail-large .dirent-detail-item .dirent-detail-item-value {
-  flex: 1;
-}
-
-.dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty {
-  display: inline-block;
-  height: 34px;
-  width: 100%;
-  line-height: 1.5;
-  padding: 6.5px 6px;
-}
-
-.dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty:empty::before {
+.dirent-detail-item .dirent-detail-item-value .sf-metadata-record-cell-empty:empty::before {
   content: attr(placeholder);
+  display: flex;
+  align-items: center;
   color: #666;
   font-size: 14px;
-}
-
-/* formatter */
-.dirent-detail-item .dirent-detail-item-value .text-formatter,
-.dirent-detail-item .dirent-detail-item-value .ctime-formatter,
-.dirent-detail-item .dirent-detail-item-value .mtime-formatter,
-.dirent-detail-item .dirent-detail-item-value .date-formatter,
-.dirent-detail-item .dirent-detail-item-value .geolocation-formatter {
-  padding: 6.5px 6px;
-  line-height: 1.5;
 }
 
 .dirent-detail-item .dirent-detail-item-value .date-formatter {
   text-align: left;
 }
 
-.dirent-detail-item-value .creator-formatter {
-  padding: 7px 6px;
+.dirent-detail-item .dirent-detail-item-value .cell-formatter-container {
+  display: flex;
+  align-items: center;
+}
+
+.dirent-detail-item .dirent-detail-item-value .sf-metadata-property-detail-editor:empty::before {
+  height: 28px;
+  display: flex;
+  align-items: center;
 }
