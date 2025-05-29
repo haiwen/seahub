@@ -8,7 +8,7 @@ import searchAPI from '../../utils/search-api';
 import { gettext } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
-import { debounce, Utils } from '../../utils/utils';
+import { debounce, Utils, isCanceled } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
@@ -414,8 +414,10 @@ class Search extends Component {
         isLoading: false,
       });
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+      if (!isCanceled(error)) {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
       this.setState({ isLoading: false });
     });
   };
