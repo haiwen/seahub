@@ -80,7 +80,6 @@
 }
 
 .dirent-detail-item-value:not(.editable) .sf-metadata-tags-formatter .sf-metadata-ui-tags-container {
-  width: 100%;
   overflow: hidden;
 }
 
