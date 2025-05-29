@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
@@ -1996,4 +1997,8 @@ export const throttle = (func, delay) => {
 
 export const getType = (value) => {
   return Object.prototype.toString.call(value).slice(8, -1);
+};
+
+export const isCanceled = (error) => {
+  return axios.isCancel(error);
 };
