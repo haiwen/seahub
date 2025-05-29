@@ -106,6 +106,24 @@ export const MetadataAIOperationsProvider = ({
     });
   }, [repoID]);
 
+
+  const extractText = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
+    const filePath = Utils.joinPath(parentDir, fileName);
+    const inProgressToaster = toaster.notifyInProgress(gettext('Extracting text by AI...'), { duration: null });
+    metadataAPI.extractText(repoID, filePath).then(res => {
+      console.log(res)
+      const extractedText = res?.data?.text || res.data.text || '';
+      inProgressToaster.close();
+      success_callback && success_callback({ parentDir, fileName, extractedText });
+    }).catch(error => {
+      inProgressToaster.close();
+      const errorMessage = gettext('Failed to extract text');
+      toaster.danger(errorMessage);
+      fail_callback && fail_callback();
+    });
+  }, [repoID]);
+
+
   return (
     <MetadataAIOperationsContext.Provider value={{
       enableMetadata,
@@ -119,6 +137,7 @@ export const MetadataAIOperationsProvider = ({
       extractFilesDetails,
       extractFileDetails,
       faceRecognition,
+      extractText
     }}>
       {children}
     </MetadataAIOperationsContext.Provider>

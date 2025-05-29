@@ -17,6 +17,7 @@ const OPERATION = {
   OCR: 'ocr',
   FILE_TAGS: 'file-tags',
   FILE_DETAIL: 'file-detail',
+  EXTRACT_TEXT: 'extract-text',
 };
 
 const AIIcon = () => {
@@ -24,9 +25,9 @@ const AIIcon = () => {
   const [isMenuShow, setMenuShow] = useState(false);
   const [isFileTagsDialogShow, setFileTagsDialogShow] = useState(false);
 
-  const { enableMetadata, enableTags, enableOCR } = useMetadataStatus();
+  const { enableMetadata, enableTags } = useMetadataStatus();
   const { canModifyRecord, columns, record, onChange, onLocalRecordChange, updateFileTags } = useMetadataDetails();
-  const { onOCR, generateDescription, extractFileDetails } = useMetadataAIOperations();
+  const { onOCR, generateDescription, extractFileDetails, extractText } = useMetadataAIOperations();
 
   const options = useMemo(() => {
     if (!canModifyRecord || !record || checkIsDir(record)) return [];
@@ -34,6 +35,7 @@ const AIIcon = () => {
     const fileName = getFileNameFromRecord(record);
     const isImage = Utils.imageCheck(fileName);
     const isVideo = Utils.videoCheck(fileName);
+    const isPdf = Utils.pdfCheck(fileName);
     const isDescribableDoc = Utils.isDescriptionSupportedFile(fileName);
     let list = [];
 
@@ -45,10 +47,6 @@ const AIIcon = () => {
       });
     }
 
-    if (enableOCR && isImage) {
-      list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
-    }
-
     if (isImage || isVideo) {
       list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record });
     }
@@ -56,8 +54,12 @@ const AIIcon = () => {
     if (enableTags && isDescribableDoc && !isVideo) {
       list.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record });
     }
+
+    if (isImage || isPdf) {
+      list.push({ value: OPERATION.EXTRACT_TEXT, label: gettext('Extract text'), record });
+    }
     return list;
-  }, [enableOCR, enableTags, canModifyRecord, columns, record]);
+  }, [enableTags, canModifyRecord, columns, record]);
 
   const onToggle = useCallback((event) => {
     event && event.preventDefault();
@@ -122,6 +124,14 @@ const AIIcon = () => {
               update[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = address;
             }
             Object.keys(update).length > 0 && onLocalRecordChange(recordId, update);
+          },
+        });
+        break;
+      }
+      case OPERATION.EXTRACT_TEXT: {
+        extractText({ parentDir, fileName }, {
+          success_callback: ({ extractedText }) => {
+            console.log(extractedText)
           },
         });
         break;
