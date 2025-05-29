@@ -69,7 +69,7 @@ class Paginator extends Component {
 
   renderDropdownItem = (curPerPage, perPage) => {
     return (
-      <DropdownItem onClick={() => {this.resetPerPage(perPage);}} key={perPage}>
+      <DropdownItem onClick={() => {this.resetPerPage(perPage);}} key={perPage} className='paginator-dropdown-item'>
         <span className='paginator-dropdown-tick'>
           {curPerPage === perPage && <i className="sf2-icon-tick"></i>}
         </span>
@@ -111,7 +111,7 @@ class Paginator extends Component {
             <span className='pr-3'>{this.getPerPageText(curPerPage)}</span>
             <span className={className('sf3-font sf3-font-down d-inline-block', { 'rotate-180': this.state.isMenuShow })}></span>
           </DropdownToggle>
-          <DropdownMenu>
+          <DropdownMenu className="paginator-dropdown-menu">
             {PER_PAGES.map(perPage => {
               return this.renderDropdownItem(curPerPage, perPage);
             })}

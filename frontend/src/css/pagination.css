@@ -11,7 +11,7 @@
   box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
 }
 
-.paginator-dropdown .dropdown-menu {
+.paginator-dropdown .paginator-dropdown-menu {
   min-width: auto;
 }
 
@@ -19,13 +19,13 @@
   color: #666;
 }
 
-.paginator-dropdown .dropdown-menu .dropdown-item {
+.paginator-dropdown .paginator-dropdown-menu .paginator-dropdown-item {
   display: flex;
   padding-left: 10px;
   padding-right: 24px;
 }
 
-.paginator-dropdown .dropdown-menu .dropdown-item .paginator-dropdown-tick {
+.paginator-dropdown .paginator-dropdown-menu .paginator-dropdown-item .paginator-dropdown-tick {
   display: inline-block;
   width: 14px;
   margin-right: 4px;

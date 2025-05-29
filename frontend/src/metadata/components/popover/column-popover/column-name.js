@@ -2,10 +2,10 @@ import React, { useState, forwardRef, useImperativeHandle, useCallback, useEffec
 import PropTypes from 'prop-types';
 import { FormGroup, FormFeedback, Input } from 'reactstrap';
 import classnames from 'classnames';
-import { gettext } from '../../../../../utils/constants';
+import { gettext } from '../../../../utils/constants';
 
 // eslint-disable-next-line react/display-name
-const Name = forwardRef(({ readOnly, value }, ref) => {
+const ColumnName = forwardRef(({ readOnly, value }, ref) => {
   const [error, setError] = useState('');
   const [name, setName] = useState(value || '');
 
@@ -39,9 +39,9 @@ const Name = forwardRef(({ readOnly, value }, ref) => {
   );
 });
 
-Name.propTypes = {
+ColumnName.propTypes = {
   readOnly: PropTypes.bool,
   value: PropTypes.string,
 };
 
-export default Name;
+export default ColumnName;

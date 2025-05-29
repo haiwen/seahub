@@ -3,13 +3,11 @@ import { FormGroup, FormFeedback, Label, Dropdown, DropdownToggle } from 'reacts
 import Icon from '@/components/icon';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { gettext } from '../../../../../utils/constants';
-import CustomDropdownMenu from '../dropdown-menu';
-import ModalPortal from '../../../../../components/modal-portal';
+import { gettext } from '../../../../utils/constants';
+import CustomDropdownMenu from './dropdown-menu';
+import ModalPortal from '../../../../components/modal-portal';
 
-import './index.css';
-
-const Type = forwardRef(({ column, onChange }, ref) => {
+const ColumnType = forwardRef(({ column, onChange }, ref) => {
   const [error, setError] = useState('');
   const [isPredefinedPropertiesOpen, setPredefinedPropertiesOpen] = useState(false);
   const [isCustomPropertiesOpen, setCustomPropertiesOpen] = useState(false);
@@ -74,10 +72,10 @@ const Type = forwardRef(({ column, onChange }, ref) => {
   );
 });
 
-Type.propTypes = {
+ColumnType.propTypes = {
   parentWidth: PropTypes.number,
   column: PropTypes.object,
   onChange: PropTypes.func,
 };
 
-export default Type;
+export default ColumnType;

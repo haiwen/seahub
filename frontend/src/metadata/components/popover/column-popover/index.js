@@ -9,8 +9,8 @@ import ObjectUtils from '../../../../utils/object';
 import { getDefaultFileStatusOptions } from '../../../utils/column';
 import { ValidateColumnFormFields } from './utils';
 import { COMMON_FORM_FIELD_TYPE } from './constants';
-import Name from './name';
-import Type from './type';
+import ColumnType from './column-type';
+import ColumnName from './column-name';
 import Data from './data';
 
 import './index.css';
@@ -86,8 +86,8 @@ const ColumnPopover = ({ target, column, onSelect, onCancel, onSubmit }) => {
     >
       <div className="sf-metadata-column-popover-inner" ref={popoverInnerRef} style={{ width: popoverInnerWidth }}>
         <div>
-          <Name ref={nameRef} readOnly={column?.unique} value={column?.unique ? column.name : ''} />
-          <Type ref={typeRef} column={column} onChange={onColumnChange} />
+          <ColumnName ref={nameRef} readOnly={column?.unique} value={column?.unique ? column.name : ''} />
+          <ColumnType ref={typeRef} column={column} onChange={onColumnChange} />
           <Data ref={dataRef} column={column} />
         </div>
         <div className={classnames('sf-metadata-column-popover-footer', { 'sf-metadata-number-column-popover-footer': column.type === CellType.NUMBER })}>
