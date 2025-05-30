@@ -1,6 +1,7 @@
 .sf-metadata-rate-property-detail-editor {
+  padding: 7px 6px;
   width: 100%;
-  height: 28px;
+  line-height: 1;
 }
 
 .sf-metadata-rate-property-detail-editor .sf-metadata-rate-editor {
