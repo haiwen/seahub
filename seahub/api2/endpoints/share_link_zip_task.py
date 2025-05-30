@@ -87,7 +87,9 @@ class ShareLinkZipTaskView(APIView):
 
         # get file server access token
         dir_name = repo.name if real_path == '/' else os.path.basename(real_path.rstrip('/'))
-
+        
+        parent_dir = os.path.dirname(real_path.rstrip('/'))
+        parent_dir = normalize_dir_path(parent_dir)
         is_windows = 0
         if is_windows_operating_system(request):
             is_windows = 1
@@ -95,7 +97,8 @@ class ShareLinkZipTaskView(APIView):
         fake_obj_id = {
             'obj_id': dir_id,
             'dir_name': dir_name,
-            'is_windows': is_windows
+            'is_windows': is_windows,
+            'parent_dir': parent_dir
         }
 
         try:

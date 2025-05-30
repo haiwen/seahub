@@ -99,7 +99,8 @@ class ZipTaskView(APIView):
             fake_obj_id = {
                 'obj_id': dir_id,
                 'dir_name': dir_name,
-                'is_windows': is_windows
+                'is_windows': is_windows,
+                'parent_dir': parent_dir,
             }
 
         if download_type == 'download-multi':
@@ -215,7 +216,8 @@ class ZipTaskView(APIView):
             fake_obj_id = {
                 'obj_id': dir_id,
                 'dir_name': dir_name,
-                'is_windows': is_windows
+                'is_windows': is_windows,
+                'parent_dir': parent_dir,
             }
 
         if download_type == 'download-multi':
