@@ -2,6 +2,8 @@
   color: #666;
 }
 
+/* The sdoc-editor uses a specific style that cannot be modified,
+so this special style can only be overridden in seahub */
 .sdoc-editor-page-wrapper .sf-metadata-ai-dropdown-menu .dropdown-item:hover {
   color: #fff;
 }

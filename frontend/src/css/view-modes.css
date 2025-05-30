@@ -14,22 +14,4 @@
   position: absolute;
   top: 0;
   left: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.view-modes-dropdown-content {
-  display: flex;
-  align-items: center;
-}
-
-.view-modes-dropdown-shortcut {
-  display: flex;
-  align-items: center;
-  color: #666;
-}
-
-.dropdown-item:hover .view-modes-dropdown-shortcut {
-  color: #fff;
 }

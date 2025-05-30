@@ -229,6 +229,11 @@
   margin: 0.2rem 0;
 }
 
+.page-operation-dropdown-menu .dropdown-item .sf3-font {
+  font-size: 14px;
+  margin-right: 10px;
+}
+
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after,
 .wiki-nav .wiki-page-item.page-can-drop-top::after {
   content: '';
@@ -250,23 +255,6 @@
 .wiki-nav .wiki-page-item.dragged-page-over {
   border-radius: 3px;
   background-color: rgb(200, 220, 240) !important;
-}
-
-.dtable-dropdown-menu .dropdown-item .sf3-font {
-  font-size: 14px;
-  margin-right: 10px;
-  color: #666;
-}
-
-.dtable-dropdown-menu .dropdown-item:hover .sf3-font {
-  color: #fff;
-}
-
-.dtable-dropdown-menu.large .dropdown-item {
-  min-height: 32px;
-  padding: 3px 12px;
-  display: flex;
-  align-items: center;
 }
 
 .wiki-nav,

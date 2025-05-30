@@ -78,11 +78,11 @@ class ViewModes extends React.Component {
                   <span className='view-modes-dropdown-tick'>
                     {currentViewMode === item.value && <i className="sf2-icon-tick"></i>}
                   </span>
-                  <span className="view-modes-dropdown-content">
+                  <span className="view-modes-dropdown-content d-flex align-items-center">
                     <span className={`sf3-font-${item.icon} sf3-font mr-2`}></span>
                     <span>{item.text}</span>
                   </span>
-                  <span className="view-modes-dropdown-shortcut ml-4">{item.shortcut}</span>
+                  <span className="view-modes-dropdown-shortcut ml-4 d-flex align-items-center">{item.shortcut}</span>
                 </div>
               </DropdownItem>
             );

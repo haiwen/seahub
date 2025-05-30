@@ -49,10 +49,6 @@
   max-width: 120px;
 }
 
-.search-filters-container .dropdown-menu {
-  max-height: 400px;
-}
-
 .search-filter-menu.filter-by-text-menu,
 .search-filter-menu.filter-by-date-menu,
 .search-filter-menu.filter-by-creator-menu {
@@ -95,8 +91,6 @@
 
 .search-filter-menu .dropdown-item {
   position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .search-filter-menu .dropdown-item .dropdown-item-tick {

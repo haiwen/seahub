@@ -1,12 +1,3 @@
-.excalidraw .dropdown-menu {
-  display: block !important;
-}
-
-.excalidraw .dropdown-menu {
-  --bs-dropdown-padding-x: auto;
-  border: unset;
-}
-
 .file-view-body #unfold-onlyoffice-file-view-header {
   right: 116px;
   z-index: 6
