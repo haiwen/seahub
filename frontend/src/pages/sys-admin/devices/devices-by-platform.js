@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import classnames from 'classnames';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
@@ -93,21 +94,27 @@ class Item extends Component {
     super(props);
     this.state = {
       unlinked: false,
+      isHighlighted: false,
       isOpIconShown: false,
       isUnlinkDeviceDialogOpen: false
     };
   }
 
   handleMouseOver = () => {
-    this.setState({ isOpIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isOpIconShown: true
+    });
   };
 
   handleMouseOut = () => {
-    this.setState({ isOpIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isOpIconShown: false
+    });
   };
 
-  handleUnlink = (e) => {
-    e.preventDefault();
+  handleUnlink = () => {
     if (this.props.item.is_desktop_client) {
       this.toggleUnlinkDeviceDialog();
     } else {
@@ -133,7 +140,7 @@ class Item extends Component {
 
   render() {
     const item = this.props.item;
-    const { unlinked, isUnlinkDeviceDialogOpen, isOpIconShown } = this.state;
+    const { unlinked, isUnlinkDeviceDialogOpen, isHighlighted, isOpIconShown } = this.state;
 
     if (unlinked) {
       return null;
@@ -141,7 +148,14 @@ class Item extends Component {
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseOver}
+          onMouseLeave={this.handleMouseOut}
+          onFocus={this.onMouseEnter}
+        >
           <td>{item.user_name}</td>
           <td>{item.platform}{' / '}{item.client_version}</td>
           <td>{item.device_name}</td>
@@ -150,7 +164,12 @@ class Item extends Component {
             <span title={dayjs(item.last_accessed).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_accessed).fromNow()}</span>
           </td>
           <td>
-            <a href="#" className={`sf3-font-delete1 sf3-font action-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unlink')} onClick={this.handleUnlink}></a>
+            <i
+              className={`sf3-font-delete1 sf3-font op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              title={gettext('Unlink')}
+              onClick={this.handleUnlink}
+            >
+            </i>
           </td>
         </tr>
         {isUnlinkDeviceDialogOpen &&
