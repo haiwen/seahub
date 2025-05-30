@@ -49,7 +49,7 @@ class OpMenu extends React.Component {
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle
           tag="i"
-          className="d-flex w-5 h-5 align-items-center justify-content-center sf-dropdown-toggle sf3-font sf3-font-more-vertical"
+          className="sf3-font sf3-font-more op-icon"
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
