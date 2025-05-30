@@ -66,9 +66,13 @@ class Store {
     await this.loadTagsData(limit);
   }
 
-  async reload(limit = PER_LOAD_NUMBER) {
+  async reload(limit = PER_LOAD_NUMBER, force = false) {
     const currentTime = new Date();
-    if (dayjs(currentTime).diff(this.loadTime, 'hours') > 1) {
+    if (force) {
+      this.loadTime = currentTime;
+      this.startIndex = 0;
+      await this.loadTagsData(limit);
+    } else if (dayjs(currentTime).diff(this.loadTime, 'hours') > 1) {
       this.loadTime = currentTime;
       this.startIndex = 0;
       await this.loadTagsData(limit);

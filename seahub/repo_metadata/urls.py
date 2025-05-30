@@ -3,7 +3,7 @@ from .apis import MetadataRecognizeFaces, MetadataRecords, MetadataManage, Metad
     MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
-    MetadataOCRManageView, PeopleCoverPhoto, MetadataMigrateTags
+    MetadataOCRManageView, PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -44,4 +44,6 @@ urlpatterns = [
     re_path(r'^merge-tags/$', MetadataMergeTags.as_view(), name='api-v2.1-metadata-merge-tags'),
     re_path(r'^tags-files/$', MetadataTagsFiles.as_view(), name='api-v2.1-metadata-tags-files'),
     re_path(r'^migrate-tags/$', MetadataMigrateTags.as_view(), name='api-v2.1-metadata-migrate-tags'),
+    re_path(r'^export-tags/$', MetadataExportTags.as_view(), name='api-v2.1-metadata-export-tags'),
+    re_path(r'^import-tags/$', MetadataImportTags.as_view(), name='api-v2.1-metadata-import-tags'),
 ]
