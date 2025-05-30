@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import classnames from 'classnames';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
@@ -101,18 +102,21 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
     };
   }
 
   handleMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       isOpIconShown: true
     });
   };
 
   handleMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       isOpIconShown: false
     });
   };
@@ -132,12 +136,17 @@ class Item extends Component {
   };
 
   render() {
-    let { isOpIconShown } = this.state;
+    let { isOpIconShown, isHighlighted } = this.state;
     let { item } = this.props;
-    let deleteIcon = `action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`;
     return (
       <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseOver={this.handleMouseOver}
+          onMouseOut={this.handleMouseOut}
+        >
           <td>{item.path}</td>
           <td>{item.token}</td>
           <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
@@ -145,7 +154,12 @@ class Item extends Component {
           <td>{item.view_cnt}</td>
           <td>{this.renderExpiration()}</td>
           <td>
-            <a href="#" className={deleteIcon} title={gettext('Remove')} onClick={this.deleteUploadLink}></a>
+            <i
+              className={`op-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`}
+              title={gettext('Remove')}
+              onClick={this.deleteUploadLink}
+            >
+            </i>
           </td>
         </tr>
       </Fragment>
