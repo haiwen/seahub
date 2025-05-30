@@ -3,6 +3,7 @@ import { OPERATION_TYPE } from './operations';
 import { getColumnByKey } from '../../metadata/utils/column';
 import ObjectUtils from '../../utils/object';
 import { PRIVATE_COLUMN_KEY } from '../constants';
+import tagsAPI from '../api';
 
 const MAX_LOAD_RECORDS = 100;
 
@@ -115,6 +116,37 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.EXPORT_TAGS: {
+        const { repo_id, tags_ids } = operation;
+        tagsAPI.exportTags(repo_id, tags_ids).then((res) => {
+          let fileName;
+          if (res.data && Array.isArray(res.data)) {
+            if (res.data.length === 1) {
+              fileName = `${res.data[0]._tag_name}.json`;
+            } else {
+              const now = new Date();
+              const dateStr = now.toISOString().split('T')[0];
+              fileName = `tags-export-${dateStr}.json`;
+            }
+          } else {
+            fileName = 'tags.json';
+          }
+
+          const blob = new Blob([JSON.stringify(res.data, null, 2)], { type: 'application/json' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+          callback({ operation });
+        }).catch((error) => {
+          callback({ error: gettext('Failed to export tags') });
+        });
+        break;
+      }
       case OPERATION_TYPE.RESTORE_RECORDS: {
         const { repo_id, rows_data } = operation;
         if (!Array.isArray(rows_data) || rows_data.length === 0) {
@@ -194,7 +226,6 @@ class ServerOperator {
     }).catch (error => {
       // for debug
       // eslint-disable-next-line no-console
-      console.log(error);
       this.asyncReloadRecords(restRowsIds, repoId, relatedColumnKeyMap, callback);
     });
   }

@@ -5,14 +5,17 @@ import EditTagDialog from '../../dialog/edit-tag-dialog';
 import { isEnter, isSpace } from '../../../../utils/hotkey';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../hooks';
+import tagsAPI from '../../../api';
 
+import toaster from '../../../../components/toast';
+import { Utils } from '../../../../utils/utils';
 import './index.css';
 
-const AllTagsOperationToolbar = () => {
+const AllTagsOperationToolbar = ({ repoID }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isShowEditTagDialog, setShowEditTagDialog] = useState(false);
 
-  const { tagsData, addTag } = useTags();
+  const { tagsData, addTag, reloadTags } = useTags();
 
   const tags = useMemo(() => {
     if (!tagsData) return [];
@@ -41,6 +44,32 @@ const AllTagsOperationToolbar = () => {
     addTag(tag, callback);
   }, [addTag]);
 
+  const handleImportTags = useCallback(() => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    fileInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      tagsAPI.importTags(repoID, file).then(res => {
+        const failedTags = res.data.failed_tags;
+        const successTags = res.data.success_tags;
+        if (failedTags.length > 0) {
+          toaster.danger(gettext('Failed to import tags: ') + failedTags.join(', '));
+        }
+        if (successTags.length > 0) {
+          toaster.success(gettext('Successfully imported tags: ') + successTags.join(', '));
+        }
+        setTimeout(() => {
+          reloadTags(true);
+        }, 10);
+      }).catch(error => {
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg || gettext('Failed to import tags'));
+      });
+    };
+    fileInput.click();
+  }, [reloadTags, repoID]);
+
   return (
     <>
       <div className="dir-operation">
@@ -61,6 +90,10 @@ const AllTagsOperationToolbar = () => {
             <DropdownItem onClick={openAddTag}>
               <i className="sf3-font sf3-font-new mr-2 dropdown-item-icon"></i>
               {gettext('New tag')}
+            </DropdownItem>
+            <DropdownItem onClick={handleImportTags}>
+              <i className="sf3-font sf3-font-upload mr-2 dropdown-item-icon"></i>
+              {gettext('Import tags')}
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>

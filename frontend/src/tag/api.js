@@ -143,6 +143,20 @@ class TagsManagerAPI {
     return this.req.post(url);
   };
 
+  exportTags = (repoID, tagsIds) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/export-tags/';
+    const params = {
+      tags_ids: tagsIds,
+    };
+    return this.req.post(url, params);
+  };
+
+  importTags = (repoID, file) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/import-tags/';
+    const formData = new FormData();
+    formData.append('file', file);
+    return this._sendPostRequest(url, formData);
+  };
 }
 
 const tagsAPI = new TagsManagerAPI();

@@ -98,6 +98,11 @@ class Context {
     return true;
   };
 
+  checkCanExportTags = () => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
+
   canModifyTags = () => {
     if (this.permission === 'r') return false;
     return true;
@@ -130,6 +135,14 @@ class Context {
 
   mergeTags = (target_tag_id, merged_tags_ids) => {
     return this.api.mergeTags(this.repoId, target_tag_id, merged_tags_ids);
+  };
+
+  exportTags = (tagsIds) => {
+    return this.api.exportTags(this.repoId, tagsIds);
+  };
+
+  importTags = (file) => {
+    return this.api.importTags(this.repoId, file);
   };
 }
 

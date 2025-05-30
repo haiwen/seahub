@@ -42,9 +42,9 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
     setTagsData(data);
   }, []);
 
-  const reloadTags = useCallback(() => {
+  const reloadTags = useCallback((force = false) => {
     setReloading(true);
-    storeRef.current.reload(PER_LOAD_NUMBER).then(() => {
+    storeRef.current.reload(PER_LOAD_NUMBER, force).then(() => {
       setTagsData(storeRef.current.data);
       setReloading(false);
     }).catch(error => {
@@ -326,6 +326,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
       modifyColumnWidth,
       modifyLocalFileTags,
       modifyTagsSort,
+      reloadTags,
     }}>
       {children}
     </TagsContext.Provider>
