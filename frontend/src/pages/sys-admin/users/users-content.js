@@ -522,11 +522,11 @@ class Item extends Component {
           }
           <td>
             {`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}
-            <span
+            <i
               title={gettext('Edit')}
-              className={`sf3-font sf3-font-rename attr-action-icon ${isOpIconShown ? '' : 'invisible'}`}
+              className={`sf3-font sf3-font-rename op-icon ml-1 ${isOpIconShown ? '' : 'invisible'}`}
               onClick={this.toggleSetQuotaDialog}>
-            </span>
+            </i>
           </td>
           {(multiInstitution && !isAdmin) &&
             <td>
