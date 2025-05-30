@@ -1,5 +1,5 @@
 import React from 'react';
-import { SDocViewer } from '@seafile/sdoc-editor';
+import { SDocViewer } from '@seafile/seafile-sdoc-editor';
 
 import '../../css/sdoc-file-view.css';
 

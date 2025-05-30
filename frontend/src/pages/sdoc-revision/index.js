@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
-import { DiffViewer } from '@seafile/sdoc-editor';
+import { DiffViewer } from '@seafile/seafile-sdoc-editor';
 import { gettext } from '../../utils/constants';
 import Loading from '../../components/loading';
 import GoBack from '../../components/common/go-back';

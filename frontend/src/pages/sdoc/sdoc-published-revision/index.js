@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
-import { PublishedRevisionViewer } from '@seafile/sdoc-editor';
+import { PublishedRevisionViewer } from '@seafile/seafile-sdoc-editor';
 import i18n from '../../../_i18n/i18n-sdoc-editor';
 import { Utils } from '../../../utils/utils';
 import Loading from '../../../components/loading';

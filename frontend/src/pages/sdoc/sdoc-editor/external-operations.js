@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
+import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';

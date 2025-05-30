@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { SdocWikiEditor, DocInfo } from '@seafile/sdoc-editor';
+import { SdocWikiEditor, DocInfo } from '@seafile/seafile-sdoc-editor';
 import { gettext, username, wikiPermission, wikiId, siteRoot, isPro } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import Switch from '../../components/switch';

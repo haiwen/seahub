@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from '../../../_i18n/i18n-sdoc-editor';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
-import { DiffViewer } from '@seafile/sdoc-editor';
+import { DiffViewer } from '@seafile/seafile-sdoc-editor';
 import dayjs from 'dayjs';
 import { seafileAPI } from '../../../utils/seafile-api';
 import SDocServerApi from '../../../utils/sdoc-server-api';

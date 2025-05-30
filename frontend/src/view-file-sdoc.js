@@ -8,7 +8,7 @@ import SdocEditor from './pages/sdoc/sdoc-editor';
 import { MetadataStatusProvider } from './hooks';
 import { CollaboratorsProvider } from './metadata';
 import { TagsProvider } from './tag/hooks';
-import { SimpleViewer } from '@seafile/sdoc-editor';
+import { SimpleViewer } from '@seafile/seafile-sdoc-editor';
 
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro, fileServerRoot } = window.app.config;
 const { username, name } = window.app.userInfo;

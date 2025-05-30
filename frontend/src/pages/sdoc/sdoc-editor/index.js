@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { SimpleEditor } from '@seafile/sdoc-editor';
+import { SimpleEditor } from '@seafile/seafile-sdoc-editor';
 import ExternalOperations from './external-operations';
 import { seafileAPI } from '../../../utils/seafile-api';
 import Dirent from '../../../models/dirent';

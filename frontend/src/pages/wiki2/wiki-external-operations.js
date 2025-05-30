@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EventBus, EXTERNAL_EVENT } from '@seafile/sdoc-editor';
+import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import AddWikiPageDialog from '../../components/dialog/add-wiki-page-dialog';
 import { INSERT_POSITION } from './wiki-nav/constants';
 
