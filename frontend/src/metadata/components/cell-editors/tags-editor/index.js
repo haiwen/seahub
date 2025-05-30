@@ -336,7 +336,7 @@ const TagsEditor = forwardRef(({
   }, [onHotKey]);
 
   useEffect(() => {
-    const saved = localStorage.getItem(RECENTLY_USED_TAG_IDS);
+    const saved = localStorage && localStorage.getItem(RECENTLY_USED_TAG_IDS);
     const ids = saved ? JSON.parse(saved) : [];
     const tags = ids.map(id => getRowById(tagsData, id)).filter(Boolean);
     setRecentlyUsed(tags);
