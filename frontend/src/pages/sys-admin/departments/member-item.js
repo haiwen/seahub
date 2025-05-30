@@ -112,9 +112,9 @@ class MemberItem extends React.Component {
               direction="down"
             >
               <DropdownToggle
-                tag='a'
+                tag='i'
                 role="button"
-                className='attr-action-icon sf3-font sf3-font-more-vertical'
+                className='op-icon sf3-font sf3-font-more'
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
