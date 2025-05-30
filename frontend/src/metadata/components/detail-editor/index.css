@@ -34,8 +34,6 @@
 
 .sf-metadata-property-detail-editor {
   border-radius: inherit;
-  display: flex;
-  align-items: center;
 }
 
 .sf-metadata-property-detail-editor:empty::before {

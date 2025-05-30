@@ -45,7 +45,10 @@ const Detail = ({ children, className }) => {
 
   return (
     <div
-      className={classnames('cur-view-detail', className)}
+      className={classnames('cur-view-detail', className, {
+        'cur-view-detail-small': width < 400,
+        'cur-view-detail-large': width > 400
+      })}
       style={{ width }}
     >
       {children}

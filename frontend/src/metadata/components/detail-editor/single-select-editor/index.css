@@ -1,9 +1,10 @@
 .sf-metadata-single-select-property-detail-editor {
-  height: 28px;
+  height: 34px;
   width: 100%;
   overflow: hidden;
   display: flex;
   align-items: center;
+  padding: 0 6px;
   position: relative;
 }
 

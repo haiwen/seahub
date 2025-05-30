@@ -1,6 +1,7 @@
 .sf-metadata-long-text-property-detail-editor {
-  min-height: 28px;
+  min-height: 34px;
   width: 100%;
+  padding: 7px 6px 0 6px;
 }
 
 .sf-metadata-long-text-property-detail-editor .sf-metadata-property-detail-formatter {
