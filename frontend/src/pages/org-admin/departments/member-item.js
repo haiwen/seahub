@@ -113,7 +113,7 @@ class DepartmentsV2MembersItem extends React.Component {
               <DropdownToggle
                 tag='a'
                 role="button"
-                className='attr-action-icon sf3-font sf3-font-more-vertical'
+                className='op-icon sf3-font-more sf3-font'
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
