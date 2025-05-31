@@ -1,10 +1,11 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
+import EditIcon from '../../../components/edit-icon';
 import SysAdminSetInstitutionQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import MainPanelTopbar from '../main-panel-topbar';
 import InstitutionNav from './institution-nav';
@@ -22,16 +23,6 @@ class Content extends Component {
     this.setState({ isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen });
   };
 
-  showEditIcon = (action) => {
-    return (
-      <span
-        title={gettext('Edit')}
-        className="sf3-font sf3-font-rename attr-action-icon"
-        onClick={action}>
-      </span>
-    );
-  };
-
   render() {
     const { loading, errorMsg, institutionInfo } = this.props;
     if (loading) {
@@ -42,20 +33,18 @@ class Content extends Component {
       const { name, user_count, quota_total, quota_used } = institutionInfo;
       const { isSetQuotaDialogOpen } = this.state;
       return (
-        <Fragment>
+        <>
           <dl className="m-0">
             <dt className="info-item-heading">{gettext('Name')}</dt>
             <dd className="info-item-content">
               {name}
             </dd>
-
             <dt className="info-item-heading">{gettext('Number of members')}</dt>
             <dd className="info-item-content">{user_count}</dd>
-
             <dt className="info-item-heading">{gettext('Space Used')}</dt>
             <dd className="info-item-content">
               {`${Utils.bytesToSize(quota_used)} / ${quota_total > 0 ? Utils.bytesToSize(quota_total) : '--'}`}
-              {this.showEditIcon(this.toggleSetQuotaDialog)}
+              <EditIcon onClick={this.toggleSetQuotaDialog} />
             </dd>
           </dl>
           {isSetQuotaDialogOpen &&
@@ -64,7 +53,7 @@ class Content extends Component {
             toggle={this.toggleSetQuotaDialog}
           />
           }
-        </Fragment>
+        </>
       );
     }
   }
@@ -127,7 +116,7 @@ class InstitutionInfo extends Component {
   render() {
     const { institutionInfo } = this.state;
     return (
-      <Fragment>
+      <>
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -142,7 +131,7 @@ class InstitutionInfo extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

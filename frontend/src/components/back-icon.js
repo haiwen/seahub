@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
 
-
 function BackIcon({ onClick }) {
   return (
     <i

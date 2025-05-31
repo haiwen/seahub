@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
@@ -6,6 +6,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, serviceURL } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
+import EditIcon from '../../../components/edit-icon';
 import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminSetOrgNameDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog';
 import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
@@ -35,16 +36,6 @@ class Content extends Component {
     this.setState({ isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen });
   };
 
-  showEditIcon = (action) => {
-    return (
-      <span
-        title={gettext('Edit')}
-        className="sf3-font sf3-font-rename attr-action-icon"
-        onClick={action}>
-      </span>
-    );
-  };
-
   render() {
     const { loading, errorMsg } = this.props;
     if (loading) {
@@ -55,25 +46,25 @@ class Content extends Component {
       const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, metadata_url, domain } = this.props.orgInfo;
       const { isSetQuotaDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
       return (
-        <Fragment>
+        <>
           <dl className="m-0">
             <dt className="info-item-heading">{gettext('Name')}</dt>
             <dd className="info-item-content">
               {org_name}
-              {this.showEditIcon(this.toggleSetNameDialog)}
+              <EditIcon onClick={this.toggleSetNameDialog} />
             </dd>
 
             <dt className="info-item-heading">{gettext('Number of members')}</dt>
             <dd className="info-item-content">{users_count}</dd>
 
             {max_user_number &&
-              <Fragment>
+              <>
                 <dt className="info-item-heading">{gettext('Max number of members')}</dt>
                 <dd className="info-item-content">
                   {max_user_number}
-                  {this.showEditIcon(this.toggleSetMaxUserNumberDialog)}
+                  <EditIcon onClick={this.toggleSetMaxUserNumberDialog} />
                 </dd>
-              </Fragment>
+              </>
             }
 
             <dt className="info-item-heading">{gettext('Number of groups')}</dt>
@@ -82,10 +73,10 @@ class Content extends Component {
             <dt className="info-item-heading">{gettext('Space Used')}</dt>
             <dd className="info-item-content">
               {`${Utils.bytesToSize(quota_usage)} / ${quota > 0 ? Utils.bytesToSize(quota) : '--'}`}
-              {this.showEditIcon(this.toggleSetQuotaDialog)}
+              <EditIcon onClick={this.toggleSetQuotaDialog} />
             </dd>
             {enable_saml_login &&
-              <Fragment>
+              <>
                 <dt className="info-item-heading">{gettext('SAML Config')}</dt>
                 <dd className="info-item-content">
                   <Row className="my-4">
@@ -111,7 +102,7 @@ class Content extends Component {
                     <Col md="6">{domain}</Col>
                   </Row>
                 </dd>
-              </Fragment>
+              </>
             }
           </dl>
           {isSetQuotaDialogOpen &&
@@ -134,7 +125,7 @@ class Content extends Component {
             toggle={this.toggleSetMaxUserNumberDialog}
           />
           }
-        </Fragment>
+        </>
       );
     }
   }
@@ -224,7 +215,7 @@ class OrgInfo extends Component {
   render() {
     const { orgInfo } = this.state;
     return (
-      <Fragment>
+      <>
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -242,7 +233,7 @@ class OrgInfo extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }
