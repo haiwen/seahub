@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, LARGE_DIALOG_STYLE } from '../../utils/constants';
+import classnames from 'classnames';
 import { Modal, ModalBody, Button, Input } from 'reactstrap';
+import { gettext, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import RepoAPITokenPermissionEditor from '../select-editor/repo-api-token-permission-editor';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -22,16 +23,23 @@ class APITokenItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOperationShow: false,
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   onDeleteAPIToken = () => {
@@ -50,9 +58,18 @@ class APITokenItem extends React.Component {
 
   render() {
     let item = this.props.item;
+    const { isHighlighted } = this.state;
 
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        tabIndex="0"
+        onFocus={this.onMouseEnter}
+      >
         <td className="name">{item.app_name}</td>
         <td>
           <RepoAPITokenPermissionEditor
@@ -63,18 +80,20 @@ class APITokenItem extends React.Component {
           />
         </td>
         <td>
-          <span>{item.api_token}</span>
-          {this.state.isOperationShow &&
+          <div className="d-flex align-items-center">
+            <span>{item.api_token}</span>
+            {this.state.isOperationShow &&
             <OpIcon
-              className="action-icon sf3-font sf3-font-copy1"
+              className="op-icon sf3-font sf3-font-copy1 ml-1"
               op={this.onCopyAPIToken}
               title={gettext('Copy')}
             />
-          }
+            }
+          </div>
         </td>
         <td>
           <OpIcon
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             op={this.onDeleteAPIToken}
             title={gettext('Delete')}
           />

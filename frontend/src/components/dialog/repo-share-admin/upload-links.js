@@ -23,16 +23,23 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOperationShow: false
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   onDeleteLink = () => {
@@ -50,6 +57,7 @@ class Item extends Component {
   };
 
   render() {
+    const { isHighlighted } = this.state;
     let item = this.props.item;
     let path = item.path === '/' ? '/' : item.path.slice(0, item.path.length - 1);
     let objUrl = `${siteRoot}library/${item.repo_id}/${encodeURIComponent(item.repo_name)}${Utils.encodePath(path)}`;
@@ -59,7 +67,10 @@ class Item extends Component {
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onFocus={this.onMouseEnter}
-        className={classnames({ 'tr-highlight': item.isSelected })}
+        className={classnames({
+          'tr-highlight': isHighlighted,
+          'tr-active': item.isSelected
+        })}
       >
         <td className="text-center">
           <input
@@ -228,11 +239,11 @@ class RepoShareAdminUploadLinks extends Component {
           {withCheckbox && <input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />}
         </th>
         <th width="20%">{gettext('Creator')}</th>
-        <th width="24%">{gettext('Name')}</th>
-        <th width="19%">{gettext('Link')}</th>
-        <th width="17%">{gettext('Expiration')}</th>
+        <th width="22%">{gettext('Name')}</th>
+        <th width="20%">{gettext('Link')}</th>
+        <th width="20%">{gettext('Expiration')}</th>
         <th width="8%">{gettext('Visits')}</th>
-        <th width="7%"></th>
+        <th width="5%"></th>
       </tr>
     );
   };

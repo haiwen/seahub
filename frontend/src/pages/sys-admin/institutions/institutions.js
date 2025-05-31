@@ -4,6 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
@@ -97,17 +98,24 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
       isDeleteDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({ isOpIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isOpIconShown: true
+    });
   };
 
   handleMouseLeave = () => {
-    this.setState({ isOpIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isOpIconShown: false
+    });
   };
 
   toggleDeleteDialog = (e) => {
@@ -123,18 +131,29 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen } = this.state;
+    const { isOpIconShown, isDeleteDialogOpen, isHighlighted } = this.state;
 
     const institutionName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', institutionName);
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
           <td><Link to={`${siteRoot}sys/institutions/${item.id}/info/`}>{item.name}</Link></td>
           <td>{dayjs(item.ctime).fromNow()}</td>
           <td>
-            <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <i
+              className={`op-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`}
+              title={gettext('Delete')}
+              onClick={this.toggleDeleteDialog}
+            >
+            </i>
           </td>
         </tr>
         {isDeleteDialogOpen &&

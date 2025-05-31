@@ -1,8 +1,9 @@
-import { useParams } from '@gatsbyjs/reach-router';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import Loading from '../../../components/loading';
+import EditIcon from '../../../components/edit-icon';
 import SetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import instAdminAPI from '../api';
 
@@ -37,7 +38,6 @@ export default function UserInfo() {
     return <Loading />;
   }
 
-
   return (
     <>
       <dl className="m-0">
@@ -57,11 +57,7 @@ export default function UserInfo() {
         <dt className="info-item-heading">{gettext('Space Used / Quota')}</dt>
         <dd className="info-item-content">
           {`${Utils.bytesToSize(user.quota_usage)} / ${user.quota_total > 0 ? Utils.bytesToSize(user.quota_total) : '--'}`}
-          <span
-            title={gettext('Edit')}
-            className="sf3-font sf3-font-rename attr-action-icon"
-            onClick={toggleSetQuotaDialog}>
-          </span>
+          <EditIcon onClick={toggleSetQuotaDialog} />
         </dd>
       </dl>
       {isShowEditDialog && (

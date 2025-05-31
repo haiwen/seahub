@@ -6,6 +6,7 @@ import { shareLinkAPI } from '../../utils/share-link-api';
 import { Utils } from '../../utils/utils';
 import UserSelect from '../user-select';
 import toaster from '../toast';
+import BackIcon from '../../components/back-icon';
 
 class UserItem extends React.Component {
 
@@ -57,7 +58,7 @@ class UserItem extends React.Component {
           <span
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf2-icon-x3 op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
@@ -175,13 +176,7 @@ class LinkAuthenticatedUsers extends React.Component {
       <Fragment>
         <div className="d-flex align-items-center pb-2 border-bottom">
           <h6 className="font-weight-normal m-0">
-            <button
-              className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon border-0 bg-transparent text-secondary p-0 mr-2"
-              onClick={this.goBack}
-              title={gettext('Back')}
-              aria-label={gettext('Back')}
-            >
-            </button>
+            <BackIcon onClick={this.goBack} />
             {gettext('Authenticated users')}
           </h6>
         </div>

@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { gettext, ocmRemoteServers } from '../../utils/constants';
 import { Input, Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -20,11 +21,17 @@ class ShareItem extends React.Component {
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   deleteShareItem = () => {
@@ -40,9 +47,16 @@ class ShareItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    const { isOperationShow, isOpFrozen } = this.state;
+    const { isOperationShow, isOpFrozen, isHighlighted } = this.state;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+      >
         <td><a href={item.to_server_url} target="_blank" rel="noreferrer">{item.to_server_name}</a></td>
         <td>{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
@@ -57,7 +71,7 @@ class ShareItem extends React.Component {
         </td> */}
         <td>
           <OpIcon
-            className={`sf2-icon-x3 action-icon ${isOperationShow && !isOpFrozen ? '' : 'hide'}`}
+            className={`sf3-font sf3-font-x-01 op-icon ${isOperationShow && !isOpFrozen ? '' : 'd-none'}`}
             op={this.deleteShareItem}
             title={gettext('Delete')}
           />

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormGroup, Label, Input, Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
@@ -6,6 +6,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, isPro } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
+import EditIcon from '../../../components/edit-icon';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
@@ -83,16 +84,6 @@ class Content extends Component {
     this.toggleDialog('', '');
   };
 
-  showEditIcon = (action) => {
-    return (
-      <span
-        title={gettext('Edit')}
-        className="sf3-font sf3-font-rename attr-action-icon"
-        onClick={action}>
-      </span>
-    );
-  };
-
   render() {
     const { loading, errorMsg } = this.props;
     const { highlight } = this.state;
@@ -108,7 +99,7 @@ class Content extends Component {
         isSetUserUploadRateLimitDialogOpen, isSetUserDownloadRateLimitDialogOpen
       } = this.state;
       return (
-        <Fragment>
+        <>
           <dl className="m-0">
             <dt className="info-item-heading">{gettext('Avatar')}</dt>
             <dd className="info-item-content">
@@ -119,28 +110,28 @@ class Content extends Component {
             <dd className="info-item-content">{user.email}</dd>
 
             {user.org_name &&
-              <Fragment>
+              <>
                 <dt className="info-item-heading">{gettext('Organization')}</dt>
                 <dd className="info-item-content">{user.org_name}</dd>
-              </Fragment>
+              </>
             }
 
             <dt className="info-item-heading">{gettext('Name')}</dt>
             <dd className="info-item-content">
               {user.name || '--'}
-              {this.showEditIcon(this.toggleSetNameDialog)}
+              <EditIcon onClick={this.toggleSetNameDialog} />
             </dd>
 
             <dt className="info-item-heading">{gettext('Login ID')}</dt>
             <dd className="info-item-content">
               {user.login_id || '--'}
-              {this.showEditIcon(this.toggleSetUserLoginIDDialog)}
+              <EditIcon onClick={this.toggleSetUserLoginIDDialog} />
             </dd>
 
             <dt className="info-item-heading">{gettext('Contact Email')}</dt>
             <dd className="info-item-content">
               {user.contact_email || '--'}
-              {this.showEditIcon(this.toggleSetUserContactEmailDialog)}
+              <EditIcon onClick={this.toggleSetUserContactEmailDialog} />
             </dd>
 
             <dt className="info-item-heading">{gettext('Role')}</dt>
@@ -157,24 +148,24 @@ class Content extends Component {
             <dt className="info-item-heading">{gettext('Space Used / Quota')}</dt>
             <dd className="info-item-content">
               {`${Utils.bytesToSize(user.quota_usage)} / ${user.quota_total > 0 ? Utils.bytesToSize(user.quota_total) : '--'}`}
-              {this.showEditIcon(this.toggleSetQuotaDialog)}
+              <EditIcon onClick={this.toggleSetQuotaDialog} />
             </dd>
             {isPro &&
-              <Fragment>
+              <>
                 <dt className="info-item-heading">{gettext('Upload Rate Limit')}</dt>
                 <dd className="info-item-content">
                   {user.upload_rate_limit > 0 ? user.upload_rate_limit + ' kB/s' : '--'}
-                  {this.showEditIcon(this.toggleSetUserUploadRateLimitDialog)}
+                  <EditIcon onClick={this.toggleSetUserUploadRateLimitDialog} />
                 </dd>
                 <dt className="info-item-heading">{gettext('Download Rate Limit')}</dt>
                 <dd className="info-item-content">
                   {user.download_rate_limit > 0 ? user.download_rate_limit + ' kB/s' : '--'}
-                  {this.showEditIcon(this.toggleSetUserDownloadRateLimitDialog)}
+                  <EditIcon onClick={this.toggleSetUserDownloadRateLimitDialog} />
                 </dd>
-              </Fragment>
+              </>
             }
             {twoFactorAuthEnabled &&
-              <Fragment>
+              <>
                 <dt className="info-item-heading">{gettext('Two-Factor Authentication')}</dt>
                 <dd className="info-item-content">
                   {user.has_default_device ?
@@ -193,7 +184,7 @@ class Content extends Component {
                     </Label>
                   </FormGroup>
                 </dd>
-              </Fragment>
+              </>
             }
           </dl>
           {isSetQuotaDialogOpen &&
@@ -224,7 +215,7 @@ class Content extends Component {
             toggleDialog={this.toggleUpdateUserDialog}
           />
           }
-        </Fragment>
+        </>
       );
     }
   }
@@ -347,7 +338,7 @@ class User extends Component {
     };
 
     return (
-      <Fragment>
+      <>
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -367,7 +358,7 @@ class User extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

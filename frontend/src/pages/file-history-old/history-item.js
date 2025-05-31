@@ -52,7 +52,11 @@ class HistoryItem extends React.Component {
     const snapshotURL = `${siteRoot}repo/${historyRepoID}/snapshot/?commit_id=${item.commit_id}`;
     return (
       <Fragment>
-        <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} className={this.state.active ? 'tr-highlight' : ''}>
+        <tr
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          className={this.state.active ? 'tr-highlight' : ''}
+        >
           <td>
             <span>{dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</span>
             {this.props.index === 0 && <span className="ml-1">{gettext('(current version)')}</span>}
@@ -115,7 +119,7 @@ class MoreMenu extends React.PureComponent {
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
         <DropdownToggle
           tag='i'
-          className='sf3-font sf3-font-more-vertical'
+          className='sf3-font sf3-font-more op-icon'
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"

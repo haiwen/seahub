@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import classnames from 'classnames';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -20,6 +21,7 @@ class Item extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
       isRevokeDialogOpen: false
     };
@@ -27,12 +29,14 @@ class Item extends React.Component {
 
   onMouseEnter = () => {
     this.setState({
+      isHighlighted: true,
       isOpIconShown: true
     });
   };
 
   onMouseLeave = () => {
     this.setState({
+      isHighlighted: false,
       isOpIconShown: false
     });
   };
@@ -67,14 +71,26 @@ class Item extends React.Component {
   };
 
   render() {
-    const { isOpIconShown, isRevokeDialogOpen } = this.state;
+    const {
+      isHighlighted,
+      isOpIconShown,
+      isRevokeDialogOpen
+    } = this.state;
 
     const item = this.props.invitation;
 
     return (
       <Fragment>
         {this.props.isDesktop ?
-          <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onMouseEnter} tabIndex="0">
+          <tr
+            className={classnames({
+              'tr-highlight': isHighlighted
+            })}
+            onMouseEnter={this.onMouseEnter}
+            onMouseLeave={this.onMouseLeave}
+            onFocus={this.onMouseEnter}
+            tabIndex="0"
+          >
             <td>{item.accepter}</td>
             <td>{dayjs(item.invite_time).format('YYYY-MM-DD')}</td>
             <td>{dayjs(item.expire_time).format('YYYY-MM-DD')}</td>
@@ -84,7 +100,7 @@ class Item extends React.Component {
                 item.accept_time ?
                   <i
                     role="button"
-                    className="action-icon sf3-font sf3-font-cancel-invitation"
+                    className="op-icon sf3-font sf3-font-cancel-invitation"
                     title={gettext('Revoke Access')}
                     aria-label={gettext('Revoke Access')}
                     onClick={this.toggleRevokeDialog}
@@ -92,7 +108,7 @@ class Item extends React.Component {
                   </i> :
                   <i
                     role="button"
-                    className="action-icon sf2-icon-x3"
+                    className="sf3-font sf3-font-x-01 op-icon"
                     title={gettext('Delete')}
                     aria-label={gettext('Delete')}
                     onClick={this.deleteItem}

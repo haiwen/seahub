@@ -40,7 +40,7 @@ class Item extends Component {
         <td width="78%">{member.name}</td>
         <td width="10%">
           <i
-            className="sf3-font sf3-font-close cursor-pointer"
+            className="sf3-font sf3-font-close op-icon"
             name={member.email}
             onClick={this.removeSelectedMember.bind(this, member.email)}>
           </i>

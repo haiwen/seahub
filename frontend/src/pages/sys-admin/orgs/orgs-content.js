@@ -262,7 +262,12 @@ class Item extends Component {
             {`${item.last_activity_time ? dayjs(item.last_activity_time).fromNow() : '--'} `}
           </td>
           <td>
-            <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <i
+              className={`op-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`}
+              title={gettext('Delete')}
+              onClick={this.toggleDeleteDialog}
+            >
+            </i>
           </td>
         </tr>
         {isDeleteDialogOpen &&

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
+import classnames from 'classnames';
 import toaster from '../toast';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -19,6 +20,7 @@ class LinkItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isItemOpVisible: false,
       isDeleteShareLinkDialogOpen: false
     };
@@ -26,12 +28,14 @@ class LinkItem extends React.Component {
 
   onMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       isItemOpVisible: true
     });
   };
 
   onMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       isItemOpVisible: false
     });
   };
@@ -78,7 +82,7 @@ class LinkItem extends React.Component {
   };
 
   render() {
-    const { isItemOpVisible } = this.state;
+    const { isHighlighted, isItemOpVisible } = this.state;
     const { item } = this.props;
     const { isSelected = false, permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
@@ -88,7 +92,11 @@ class LinkItem extends React.Component {
           onClick={this.clickItem}
           onMouseOver={this.onMouseOver}
           onMouseOut={this.onMouseOut}
-          className={`cursor-pointer ${isSelected ? 'tr-highlight' : ''}`}
+          className={classnames('cursor-pointer', {
+            'tr-highlight': isHighlighted,
+            'tr-active': isSelected
+          }
+          )}
         >
           <td className="text-center">
             <input
@@ -109,8 +117,8 @@ class LinkItem extends React.Component {
             {expire_date ? dayjs(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
           <td>
-            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 action-icon op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font action-icon op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
           </td>
         </tr>
         {this.state.isDeleteShareLinkDialogOpen && (

@@ -697,7 +697,7 @@ class DirentListItem extends React.Component {
         {selectedDirentList.length > 1 ?
           <>
             {this.state.isOperationShow && !dirent.isSelected &&
-              <div className="operations">
+              <div className="operations d-flex align-items-center">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
                   <a
                     href="#"
@@ -721,6 +721,7 @@ class DirentListItem extends React.Component {
                   </a>
                 )}
                 <ItemDropdownMenu
+                  toggleClass="sf3-font-more sf3-font op-icon ml-0"
                   item={this.state.dirent}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
@@ -733,7 +734,7 @@ class DirentListItem extends React.Component {
           </> :
           <>
             {this.state.isOperationShow &&
-              <div className="operations">
+              <div className="operations d-flex align-items-center">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
                   <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
                 )}
@@ -741,6 +742,7 @@ class DirentListItem extends React.Component {
                   <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
                 )}
                 <ItemDropdownMenu
+                  toggleClass="sf3-font-more sf3-font op-icon ml-0"
                   item={this.state.dirent}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}

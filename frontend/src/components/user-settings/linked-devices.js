@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import classnames from 'classnames';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -48,7 +49,7 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       return items.length ? (
-        <table className={`table-hover ${isDesktop ? '' : 'table-thead-hidden'}`}>
+        <table className={`${isDesktop ? '' : 'table-thead-hidden'}`}>
           {isDesktop ? desktopThead : mobileThead}
           <tbody>
             {items.map((item, index) => {
@@ -72,6 +73,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
       unlinked: false,
       isConfirmUnlinkDialogOpen: false
@@ -80,12 +82,14 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       isOpIconShown: true
     });
   };
 
   handleMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       isOpIconShown: false
     });
   };
@@ -96,9 +100,7 @@ class Item extends Component {
     });
   };
 
-  handleClick = (e) => {
-    e.preventDefault();
-
+  handleClick = () => {
     const data = this.props.data;
     if (data.is_desktop_client) {
       this.toggleDialog();
@@ -125,16 +127,31 @@ class Item extends Component {
 
   renderDesktop = () => {
     const data = this.props.data;
-    let opClasses = 'sf3-font-delete1 sf3-font unlink-device action-icon';
+    const { isHighlighted } = this.state;
+    let opClasses = 'sf3-font-delete1 sf3-font unlink-device op-icon';
     opClasses += this.state.isOpIconShown ? '' : ' invisible';
     return (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseOver={this.handleMouseOver}
+        onMouseOut={this.handleMouseOut}
+        onFocus={this.handleMouseOver}
+      >
         <td>{data.platform}</td>
         <td>{data.device_name}</td>
         <td>{data.last_login_ip}</td>
         <td>{dayjs(data.last_accessed).fromNow()}</td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unlink')} role="button" aria-label={gettext('Unlink')} onClick={this.handleClick}></a>
+          <i
+            role="button"
+            className={opClasses}
+            title={gettext('Unlink')}
+            aria-label={gettext('Unlink')}
+            onClick={this.handleClick}
+          >
+          </i>
         </td>
       </tr>
     );

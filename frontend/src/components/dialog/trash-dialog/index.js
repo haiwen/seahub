@@ -11,6 +11,7 @@ import Table from './table';
 import CleanTrash from '../clean-trash';
 import Paginator from '../../paginator';
 import Loading from '../../loading';
+import BackIcon from '../../back-icon';
 import EmptyTip from '../../empty-tip';
 
 import '../../../css/toolbar.css';
@@ -210,14 +211,7 @@ class TrashDialog extends React.Component {
             }
           >
             {!isDesktop &&
-              <span
-                role="button"
-                className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon mr-2"
-                title={gettext('Back')}
-                aria-label={gettext('Back')}
-                onClick={toggleTrashDialog}
-              >
-              </span>
+              <BackIcon onClick={toggleTrashDialog} />
             }
             <span dangerouslySetInnerHTML={{ __html: title }}></span>
           </ModalHeader>

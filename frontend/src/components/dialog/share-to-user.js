@@ -18,17 +18,24 @@ class UserItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOperationShow: false,
       isUserDetailsPopoverOpen: false
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({
+      isHighlighted: true,
+      isOperationShow: true
+    });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({
+      isHighlighted: false,
+      isOperationShow: false
+    });
   };
 
   userAvatarOnMouseEnter = () => {
@@ -50,7 +57,7 @@ class UserItem extends React.Component {
   render() {
     let item = this.props.item;
     let currentPermission = Utils.getSharedPermission(item);
-    const { isUserDetailsPopoverOpen } = this.state;
+    const { isUserDetailsPopoverOpen, isHighlighted } = this.state;
     if (isMobile) {
       return (
         <tr>
@@ -99,7 +106,7 @@ class UserItem extends React.Component {
             <span
               tabIndex="0"
               role="button"
-              className='sf2-icon-x3 action-icon'
+              className='sf3-font sf3-font-x-01 op-icon'
               onClick={this.deleteShareItem}
               onKeyDown={Utils.onKeyDown}
               title={gettext('Delete')}
@@ -111,7 +118,15 @@ class UserItem extends React.Component {
       );
     }
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} tabIndex="0" onFocus={this.onMouseEnter}>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        tabIndex="0"
+        onFocus={this.onMouseEnter}
+      >
         <td className="name">
           <div className="position-relative d-flex align-items-center">
             <img
@@ -157,7 +172,7 @@ class UserItem extends React.Component {
           <span
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             onClick={this.deleteShareItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}

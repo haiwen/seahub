@@ -58,12 +58,12 @@ class RepoAPITokenPermissionEditor extends React.Component {
     return (
       <div onClick={this.onSelectHandler}>
         {(isTextMode && !this.state.isEditing) ?
-          <>
+          <div className="d-flex align-items-center">
             <span>{optionTranslation}</span>
             {this.props.isEditIconShow &&
-              <OpIcon title={gettext('Edit')} className="sf3-font sf3-font-rename attr-action-icon" op={this.onEditPermission} />
+              <OpIcon title={gettext('Edit')} className="sf3-font sf3-font-rename op-icon ml-1" op={this.onEditPermission} />
             }
-          </>
+          </div>
           :
           <SeahubSelect
             isSearchable={false}

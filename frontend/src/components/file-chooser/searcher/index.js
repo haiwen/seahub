@@ -122,7 +122,7 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
           autoFocus
         />
         {inputValue.length !== 0 && (
-          <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={onCloseSearching}></span>
+          <span className="search-control op-icon op-icon-bg-light m-0 sf3-font sf3-font-x-01" onClick={onCloseSearching}></span>
         )}
       </div>
     </div>

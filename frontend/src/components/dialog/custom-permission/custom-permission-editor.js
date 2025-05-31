@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Alert, FormGroup, Input, Label, Tooltip } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
-import OpIcon from '../../op-icon';
+import BackIcon from '../../back-icon';
 
 class CustomPermissionEditor extends React.Component {
   constructor(props) {
@@ -102,11 +102,7 @@ class CustomPermissionEditor extends React.Component {
       <div className="custom-permission">
         <div className="permission-header">
           <div className="d-flex align-items-center">
-            <OpIcon
-              className="sf3-font sf3-font-arrow rotate-180 d-inline-block back-icon"
-              op={this.props.onChangeMode}
-              title={gettext('Back')}
-            />
+            <BackIcon onClick={this.props.onChangeMode} />
             <span>{title}</span>
           </div>
           <div className="operation">

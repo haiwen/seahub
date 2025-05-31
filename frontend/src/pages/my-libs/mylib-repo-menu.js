@@ -207,8 +207,8 @@ class MylibRepoMenu extends React.Component {
           className={isLibView ? 'd-block' : ''}
         >
           <DropdownToggle
-            tag={isLibView ? 'div' : 'span'}
-            className={isLibView ? 'dir-others-item' : ''}
+            tag={isLibView ? 'div' : 'i'}
+            className={isLibView ? 'dir-others-item' : 'op-icon sf3-font-more sf3-font'}
             role="button"
             tabIndex="0"
             title={isLibView ? gettext('More') : gettext('More operations')}
@@ -217,7 +217,7 @@ class MylibRepoMenu extends React.Component {
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
           >
-            {children || <i className="sf-dropdown-toggle sf3-font-more sf3-font"></i>}
+            {children}
           </DropdownToggle>
           <DropdownMenu onMouseMove={this.onDropDownMouseMove} container={isLibView ? 'body' : ''}>
             {operations.map((item, index) => {

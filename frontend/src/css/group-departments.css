@@ -53,11 +53,6 @@
   border-top: none;
 }
 
-.department-dialog-content .department-dialog-member-selected .sf3-font-close {
-  cursor: pointer;
-  color: #666;
-}
-
 .department-dialog-content .department-dialog-group .group-item {
   cursor: pointer;
   padding: 5px;

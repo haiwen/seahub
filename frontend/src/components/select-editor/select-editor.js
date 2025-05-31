@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { gettext } from '../../utils/constants';
 import Select from 'react-select';
 import { MenuSelectStyle } from '../common/select';
@@ -106,7 +107,9 @@ class SelectEditor extends React.Component {
   };
 
   render() {
-    let { currentOption, isTextMode, autoFocus = false } = this.props;
+    const {
+      currentOption, isTextMode, autoFocus = false, isEditIconShow
+    } = this.props;
     return (
       <div className="permission-editor" onClick={this.onSelectHandler}>
         {(!isTextMode || this.state.isEditing) &&
@@ -127,17 +130,15 @@ class SelectEditor extends React.Component {
           />
         }
         {(isTextMode && !this.state.isEditing) &&
-          <div>
-            {this.props.translateOption(currentOption)}
-            {this.props.isEditIconShow && (
-              <a href="#"
-                role="button"
-                aria-label={gettext('Edit')}
-                title={gettext('Edit')}
-                className="sf3-font sf3-font-rename attr-action-icon"
-                onClick={this.onEditPermission}>
-              </a>
-            )}
+          <div className="d-flex align-item-center">
+            <span>{this.props.translateOption(currentOption)}</span>
+            <i
+              role="button"
+              aria-label={gettext('Edit')}
+              title={gettext('Edit')}
+              className={classnames('sf3-font sf3-font-rename op-icon ml-1', { 'invisible': !isEditIconShow })}
+              onClick={this.onEditPermission}>
+            </i>
           </div>
         }
       </div>

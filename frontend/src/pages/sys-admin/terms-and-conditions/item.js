@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { processor } from '@seafile/seafile-editor';
+import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import getPreviewContent from '../../../utils/markdown-utils';
@@ -20,6 +21,7 @@ class Item extends Component {
     super(props);
     this.state = {
       itemContent: '...',
+      isHighlighted: false,
       isOpIconShown: false,
       isUpdateDialogOpen: false,
       isDeleteDialogOpen: false,
@@ -49,7 +51,7 @@ class Item extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({
         isOpIconShown: true,
-        highlight: true
+        isHighlighted: true
       });
     }
   };
@@ -58,7 +60,7 @@ class Item extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({
         isOpIconShown: false,
-        highlight: false
+        isHighlighted: false
       });
     }
   };
@@ -88,7 +90,7 @@ class Item extends Component {
 
   onUnfreezedItem = () => {
     this.setState({
-      highlight: false,
+      isHighlighted: false,
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
@@ -122,13 +124,19 @@ class Item extends Component {
 
   render() {
     let { item } = this.props;
-    let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPreviewDialogOpen } = this.state;
+    let { isDeleteDialogOpen, isUpdateDialogOpen, isTermsPreviewDialogOpen, isHighlighted } = this.state;
     let previewContent = getPreviewContent(item.text);
     let itemName = '<span class="op-target">' + Utils.HTMLescape(item.name) + '</span>';
     let deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
           <td>{item.name}</td>
           <td>{item.version_number}</td>
           <td className="ellipsis">

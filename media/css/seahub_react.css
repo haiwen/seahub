@@ -564,7 +564,32 @@ a, a:hover {
 }
 
 /** op-icon **/
-.op-icon,
+.op-icon {
+  font-size: 1rem;
+  line-height: 1;
+  color: #999;
+  cursor: pointer;
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  margin-right: 0.25rem;
+}
+
+.op-icon:focus,
+.op-icon:hover {
+  color: #666;
+  text-decoration: none;
+  background: #e5e5e5;
+}
+
+.op-icon-bg-light:focus,
+.op-icon-bg-light:hover {
+  background: #efefef; /* for .op-icon shown in white containers */
+}
+
 .action-icon,
 .attr-action-icon {
   margin-left: 0.5rem;
@@ -575,16 +600,6 @@ a, a:hover {
   vertical-align: middle;
 }
 
-.op-icon {
-  font-size: 1rem;
-  color: #999;
-}
-
-.op-icon:focus,
-.op-icon:hover {
-  color: #212529;
-  text-decoration: none;
-}
 
 .action-icon,
 .attr-action-icon {
