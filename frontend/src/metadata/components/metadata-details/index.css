@@ -30,7 +30,7 @@
 }
 
 .dirent-detail-item .sf-metadata-record-checkbox-cell-empty::before {
-  content: '';
+  content: '' !important;
   position: relative;
   display: inline-block;
   height: 20px;
@@ -81,10 +81,16 @@
 
 .dirent-detail-item-value:not(.editable) .sf-metadata-tags-formatter .sf-metadata-ui-tags-container {
   width: 100%;
-  overflow: hidden;
+  max-height: 150px;
+  display: flex;
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: auto;
+  cursor: default;
 }
 
 .dirent-detail-item-value:not(.editable) .sf-metadata-tags-formatter .sf-metadata-ui-tags-container .sf-metadata-ui-tag {
   top: 0;
   cursor: default;
+  margin-bottom: 5px;
 }
