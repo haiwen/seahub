@@ -14,12 +14,10 @@ ONLYOFFICE_FILE_EXTENSION = getattr(settings,
                                     ('doc', 'docx', 'ppt', 'pptx',
                                      'xls', 'xlsx', 'odt', 'fodt',
                                      'odp', 'fodp', 'ods', 'fods',
-                                     'ppsx', 'pps', 'csv', 'pages',
-                                     'pdf'))
+                                     'ppsx', 'pps', 'csv', 'pages'))
 ONLYOFFICE_EDIT_FILE_EXTENSION = getattr(settings,
                                          'ONLYOFFICE_EDIT_FILE_EXTENSION',
-                                         ('docx', 'pptx', 'xlsx', 'csv',
-                                          'pages', 'pdf'))
+                                         ('docx', 'pptx', 'xlsx', 'csv', 'pages'))
 
 VERIFY_ONLYOFFICE_CERTIFICATE = getattr(settings, 'VERIFY_ONLYOFFICE_CERTIFICATE', True)
 ONLYOFFICE_JWT_HEADER = getattr(settings, 'ONLYOFFICE_JWT_HEADER', 'Authorization')

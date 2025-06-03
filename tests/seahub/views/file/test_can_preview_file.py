@@ -6,7 +6,7 @@ from seahub.test_utils import BaseTestCase
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_SIZE
 
 OFFICE_WEB_APP_FILE_EXTENSION = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx')
-ONLYOFFICE_FILE_EXTENSION = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'pdf')
+ONLYOFFICE_FILE_EXTENSION = ('doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx')
 
 class CanPreviewFileTest(BaseTestCase):
 
