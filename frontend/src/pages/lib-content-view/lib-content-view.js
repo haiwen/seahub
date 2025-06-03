@@ -1715,6 +1715,7 @@ class LibContentView extends React.Component {
 
   onFileUploadSuccess = (direntObject) => {
     const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
+    console.log('dev test: ', isExist);
     if (isExist) {
       const dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
       const mtime = dayjs.unix(direntObject.mtime).fromNow();
