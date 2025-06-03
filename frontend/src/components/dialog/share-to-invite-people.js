@@ -9,6 +9,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
+import EmptyTip from '../empty-tip';
 import '../../css/invitations.css';
 
 class UserItem extends React.Component {
@@ -140,6 +141,7 @@ class ShareToInvitePeople extends React.Component {
       sharedItems: [],
       emails: '',
       isSubmitting: false,
+      isLoading: true
     };
     this.permissions = ['rw', 'r'];
   }
@@ -168,9 +170,15 @@ class ShareToInvitePeople extends React.Component {
     const repoID = this.props.repoID;
     seafileAPI.listRepoShareInvitations(repoID, path).then((res) => {
       if (res.data.length !== 0) {
-        this.setState({ sharedItems: res.data.repo_share_invitation_list });
+        this.setState({ 
+          sharedItems: res.data.repo_share_invitation_list,
+          isLoading: false
+        });
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch(error => {
+      this.setState({ isLoading: false });
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -327,23 +335,33 @@ class ShareToInvitePeople extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="w-xs-200">
-            <thead>
-              <tr>
-                <th width="25%">{gettext('Email')}</th>
-                <th width="20%">{gettext('Permission')}</th>
-                <th width="20%">{gettext('Expiration')}</th>
-                <th width="20%">{gettext('Inviter')}</th>
-                <th width="15%">{''}</th>
-              </tr>
-            </thead>
-            <UserList
-              items={sharedItems}
-              permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem}
-              onChangeUserPermission={this.onChangeUserPermission}
-            />
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {sharedItems.length === 0 ? (
+                <EmptyTip text={gettext('No results')} />
+              ) : (
+                <table className="w-xs-200">
+                  <thead>
+                    <tr>
+                      <th width="25%">{gettext('Email')}</th>
+                      <th width="20%">{gettext('Permission')}</th>
+                      <th width="20%">{gettext('Expiration')}</th>
+                      <th width="20%">{gettext('Inviter')}</th>
+                      <th width="15%">{''}</th>
+                    </tr>
+                  </thead>
+                  <UserList
+                    items={sharedItems}
+                    permissions={this.permissions}
+                    deleteShareItem={this.deleteShareItem}
+                    onChangeUserPermission={this.onChangeUserPermission}
+                  />
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );
