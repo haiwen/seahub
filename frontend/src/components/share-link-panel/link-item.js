@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
+import { QRCodeSVG } from 'qrcode.react';
+import { Popover, PopoverBody } from 'reactstrap';
 import toaster from '../toast';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -22,9 +24,30 @@ class LinkItem extends React.Component {
     this.state = {
       isHighlighted: false,
       isItemOpVisible: false,
-      isDeleteShareLinkDialogOpen: false
+      isDeleteShareLinkDialogOpen: false,
+      isQRCodePopoverOpen: false
     };
+    this.qrCodeBtn = null;
+    this.popoverContainerRef = React.createRef();
   }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  handleClickOutside = (event) => {
+    if (this.state.isQRCodePopoverOpen && this.popoverContainerRef.current &&
+        !this.popoverContainerRef.current.contains(event.target) &&
+        this.qrCodeBtn && !this.qrCodeBtn.contains(event.target)) {
+      this.setState({
+        isQRCodePopoverOpen: false
+      });
+    }
+  };
 
   onMouseOver = () => {
     this.setState({
@@ -81,8 +104,20 @@ class LinkItem extends React.Component {
     this.props.deleteLink(item.token);
   };
 
+  toggleQRCodePopover = () => {
+    this.setState({
+      isQRCodePopoverOpen: !this.state.isQRCodePopoverOpen
+    });
+  };
+
+  onQRCodeIconClicked = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.toggleQRCodePopover();
+  };
+
   render() {
-    const { isHighlighted, isItemOpVisible } = this.state;
+    const { isHighlighted, isItemOpVisible, isQRCodePopoverOpen } = this.state;
     const { item } = this.props;
     const { isSelected = false, permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
@@ -119,6 +154,17 @@ class LinkItem extends React.Component {
           <td>
             <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
             <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+            <a href="#" role="button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
+            {this.qrCodeBtn && (
+              <div ref={this.popoverContainerRef}>
+                <Popover placement="bottom" isOpen={isQRCodePopoverOpen} target={this.qrCodeBtn}>
+                  <PopoverBody>
+                    <QRCodeSVG value={link} size={128} />
+                    <p className="m-0 mt-1 text-center" style={{ 'maxWidth': '128px' }}>{gettext('Scan the QR code to view the shared content directly')}</p>
+                  </PopoverBody>
+                </Popover>
+              </div>
+            )}
           </td>
         </tr>
         {this.state.isDeleteShareLinkDialogOpen && (
