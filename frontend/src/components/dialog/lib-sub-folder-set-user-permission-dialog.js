@@ -10,6 +10,8 @@ import SharePermissionEditor from '../select-editor/share-permission-editor';
 import FileChooser from '../file-chooser';
 import toaster from '../../components/toast';
 import BackIcon from '../../components/back-icon';
+import EmptyTip from '../../components/empty-tip';
+import Loading from '../../components/loading';
 
 class UserItem extends React.Component {
 
@@ -121,7 +123,8 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       permission: 'rw',
       userFolderPermItems: [],
       folderPath: '',
-      showFileChooser: false
+      showFileChooser: false,
+      isLoading: true
     };
     if (!isPro) {
       this.permissions = ['r', 'rw'];
@@ -141,9 +144,15 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       seafileAPI.listUserFolderPerm(repoID, folderPath);
     request.then((res) => {
       if (res.data.length !== 0) {
-        this.setState({ userFolderPermItems: res.data });
+        this.setState({ 
+          userFolderPermItems: res.data,
+          isLoading: false
+        });
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -341,24 +350,34 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden w-xs-250">
-            {thead}
-            <tbody>
-              {userFolderPermItems.map((item, index) => {
-                return (
-                  <UserItem
-                    key={index}
-                    item={item}
-                    permissions={this.permissions}
-                    deleteUserFolderPermission={this.deleteUserFolderPermItem}
-                    onChangeUserFolderPerm={this.onChangeUserFolderPerm}
-                    showPath={showPath}
-                    repoName={this.props.repoName}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {userFolderPermItems.length === 0 ? (
+                <EmptyTip text={gettext('No results')} />
+              ) : (
+                <table className="table-thead-hidden w-xs-250">
+                  {thead}
+                  <tbody>
+                    {userFolderPermItems.map((item, index) => {
+                      return (
+                        <UserItem
+                          key={index}
+                          item={item}
+                          permissions={this.permissions}
+                          deleteUserFolderPermission={this.deleteUserFolderPermItem}
+                          onChangeUserFolderPerm={this.onChangeUserFolderPerm}
+                          showPath={showPath}
+                          repoName={this.props.repoName}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );
