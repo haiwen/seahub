@@ -46,6 +46,7 @@ class LinkCreation extends React.Component {
       newPassword: '',
       errorInfo: '',
       currentPermission: props.currentPermission,
+      description: '',
 
       currentScope: 'all_users',
       selectedUsers: [],
@@ -107,7 +108,7 @@ class LinkCreation extends React.Component {
     if (isValid) {
       this.setState({ errorInfo: '' });
       let { type, itemPath, repoID } = this.props;
-      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate } = this.state;
+      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate, description } = this.state;
 
       const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
       let permissions;
@@ -135,7 +136,7 @@ class LinkCreation extends React.Component {
         if (currentScope === 'specific_emails' && inputEmails) {
           users = inputEmails;
         }
-        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users);
+        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users, description.trim);
       }
 
       request.then((res) => {

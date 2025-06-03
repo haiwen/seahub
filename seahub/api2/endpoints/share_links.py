@@ -295,6 +295,7 @@ class ShareLinks(APIView):
             link_info['permissions'] = fs.get_permissions()
             link_info['password'] = fs.get_password()
             link_info['user_scope'] = fs.user_scope
+            link_info['description'] = fs.description
 
             tmp_key = f"{repo_id}_{path}"
             link_info['repo_folder_permission'] = repo_folder_permission_dict.get(tmp_key, "")

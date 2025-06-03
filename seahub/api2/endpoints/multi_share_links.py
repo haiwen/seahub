@@ -104,6 +104,11 @@ class MultiShareLinks(APIView):
         if config.SHARE_LINK_FORCE_USE_PASSWORD and not password:
             error_msg = _('Password is required.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        description = request.data.get('description', '')
+        if description and len(description) > 100:
+            error_msg = _('Description is too long.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if password:
             if len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
@@ -251,7 +256,7 @@ class MultiShareLinks(APIView):
         if s_type == 'f':
             fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                     password, expire_date,
-                                                    permission=perm, org_id=org_id)
+                                                    permission=perm, org_id=org_id, description=description)
 
         else:
             fs = FileShare.objects.create_dir_link(username, repo_id, path,
