@@ -327,7 +327,6 @@ class FileUploader extends React.Component {
       let isExist = this.notifiedFolders.some(item => {return item.name === dirent.name;});
       if (!isExist) {
         this.notifiedFolders.push(dirent);
-        console.log('test dev: ', JSON.stringify(dirent));
         this.props.onFileUploadSuccess(dirent);
       }
 

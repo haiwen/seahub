@@ -208,7 +208,6 @@ class LibContentView extends React.Component {
       }
     } else if (noticeData.type === 'repo-update') {
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
-        console.log('test dev:', 'socket updated');
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
         this.setState({
@@ -621,7 +620,6 @@ class LibContentView extends React.Component {
       path,
     });
     seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
-      console.log('test dev: ', 'page updated');
       const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
       const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), sortBy, sortOrder);
       this.setState({
@@ -1716,26 +1714,24 @@ class LibContentView extends React.Component {
   };
 
   onFileUploadSuccess = (direntObject) => {
-    console.log(this.state.direntList);
+    let dirent = null;
     const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
-    console.log('dev test: ', isExist);
     if (isExist) {
-      const dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
+      dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
       const mtime = dayjs.unix(direntObject.mtime).fromNow();
       dirent && this.updateDirent(dirent, 'mtime', mtime);
     } else {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
-      const dirent = new Dirent(direntObject);
+      dirent = new Dirent(direntObject);
 
       this.setState(prevState => ({
         direntList: direntObject.type === 'dir' ? [dirent, ...prevState.direntList] : [...prevState.direntList, dirent]
       }));
+    }
 
-      console.log('dev test: ', this.state.isTreePanelShown);
-      if (this.state.isTreePanelShown) {
-        this.addNodeToTree(dirent.name, this.state.path, dirent.type);
-      }
+    if (this.state.isTreePanelShown) {
+      this.addNodeToTree(dirent.name, this.state.path, dirent.type);
     }
   };
 
@@ -2033,7 +2029,6 @@ class LibContentView extends React.Component {
   };
 
   addNodeToTree = (name, parentPath, type) => {
-    console.log(name, parentPath, type);
     let node = this.createTreeNode(name, type);
     let tree = treeHelper.addNodeToParentByPath(this.state.treeData, node, parentPath);
     this.setState({ treeData: tree });
