@@ -79,12 +79,14 @@ class LinkList extends React.Component {
             <table className="table-place-header">
               <thead>
                 <tr>
-                  <th width="5%" className="text-center">
+                  <th width="3%" className="text-center">
                     <input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />
                   </th>
-                  <th width="26%">{gettext('Link')}</th>
-                  <th width="30%">{gettext('Permission')}</th>
-                  <th width="25%">{gettext('Expiration')}</th>
+                  <th width="18%">{gettext('Link')}</th>
+                  <th width="25%">{gettext('Permission')}</th>
+                  <th width="20%">{gettext('Access scope')}</th>
+                  <th width="20%">{gettext('Expiration')}</th>
+                  <th width="11%">{gettext('Password')}</th>
                   <th width="14%"></th>
                 </tr>
               </thead>
@@ -93,10 +95,12 @@ class LinkList extends React.Component {
               <table className="table-real-content table-thead-hidden">
                 <thead>
                   <tr>
-                    <th width="5%" className="text-center"></th>
-                    <th width="26%">{gettext('Link')}</th>
-                    <th width="30%">{gettext('Permission')}</th>
-                    <th width="25%">{gettext('Expiration')}</th>
+                    <th width="3%" className="text-center"></th>
+                    <th width="18%">{gettext('Link')}</th>
+                    <th width="25%">{gettext('Permission')}</th>
+                    <th width="20%">{gettext('Access scope')}</th>
+                    <th width="20%">{gettext('Expiration')}</th>
+                    <th width="11%">{gettext('Password')}</th>
                     <th width="14%"></th>
                   </tr>
                 </thead>

@@ -6,7 +6,7 @@
 }
 
 .share-dialog-content .share-dialog-side {
-  flex-basis: 22%;
+  flex-basis: 18%;
   padding: 1rem;
   border-bottom: 1px solid #eee;
 }
@@ -69,7 +69,7 @@
 
 .share-dialog-content .share-dialog-main {
   display: flex;
-  flex-basis: 78%;
+  flex-basis: 82%;
   padding: 1rem;
 }
 
@@ -209,4 +209,12 @@ input.expire-input {
 .custom-permission .permissions-list-body {
   max-height: 350px;
   overflow-y: scroll;
+}
+
+.link-item-qrcode-popover .link-item-qrcode-tip {
+  margin: 0;
+  margin-top: 0.25rem;
+  text-align: center;
+  max-width: 128px;
+  color: #666;
 }
