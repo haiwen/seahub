@@ -5,7 +5,6 @@ import copy from 'copy-to-clipboard';
 import { Button, Input, InputGroup } from 'reactstrap';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax, shareLinkExpireDaysDefault, canSendShareLinkEmail } from '../../utils/constants';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
-import { seafileAPI } from '../../utils/seafile-api';
 import { shareLinkAPI } from '../../utils/share-link-api';
 import { Utils } from '../../utils/utils';
 import ShareLink from '../../models/share-link';
@@ -94,7 +93,7 @@ class LinkDetails extends React.Component {
     } else {
       expirationTime = expDate.format();
     }
-    seafileAPI.updateShareLink(sharedLinkInfo.token, '', expirationTime).then((res) => {
+    shareLinkAPI.updateShareLink(sharedLinkInfo.token, '', expirationTime).then((res) => {
       this.setState({
         isEditingExpiration: false
       });
@@ -108,7 +107,7 @@ class LinkDetails extends React.Component {
   changePerm = (permOption) => {
     const { sharedLinkInfo } = this.props;
     const { permissionDetails } = Utils.getShareLinkPermissionObject(permOption);
-    seafileAPI.updateShareLink(sharedLinkInfo.token, JSON.stringify(permissionDetails)).then((res) => {
+    shareLinkAPI.updateShareLink(sharedLinkInfo.token, JSON.stringify(permissionDetails)).then((res) => {
       this.props.updateLink(new ShareLink(res.data));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
