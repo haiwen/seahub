@@ -334,23 +334,6 @@ class SeafileAPI {
     return this.req.get(url, { params: params });
   }
 
-  createMultiShareLink(repoID, path, password, expirationTime, permissions) {
-    const url = this.server + '/api/v2.1/multi-share-links/';
-    let form = new FormData();
-    form.append('path', path);
-    form.append('repo_id', repoID);
-    if (permissions) {
-      form.append('permissions', permissions);
-    }
-    if (password) {
-      form.append('password', password);
-    }
-    if (expirationTime) {
-      form.append('expiration_time', expirationTime);
-    }
-    return this._sendPostRequest(url, form);
-  }
-
   batchCreateMultiShareLink(repoID, path, shareLinkNum, autoGeneratePassword, expirationTime, permissions) {
     const url = this.server + '/api/v2.1/multi-share-links/batch/';
     let form = new FormData();
@@ -384,18 +367,6 @@ class SeafileAPI {
       form.append('expiration_time', expirationTime);
     }
     return this._sendPostRequest(url, form);
-  }
-
-  updateShareLink(token, permissions, expirationTime = '') {
-    var url = this.server + '/api/v2.1/share-links/' + token + '/';
-    let form = new FormData();
-    if (permissions) {
-      form.append('permissions', permissions);
-    }
-    if (expirationTime) {
-      form.append('expiration_time', expirationTime);
-    }
-    return this.req.put(url, form);
   }
 
   deleteShareLink(token) {

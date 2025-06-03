@@ -4,6 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import { DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
+import { shareLinkAPI } from '../../utils/share-link-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { isPro, gettext, siteRoot, canGenerateUploadLink } from '../../utils/constants';
@@ -210,7 +211,7 @@ class Item extends Component {
   changePerm = (permission) => {
     const item = this.props.item;
     const permissionDetails = Utils.getShareLinkPermissionObject(permission).permissionDetails;
-    seafileAPI.updateShareLink(item.token, JSON.stringify(permissionDetails)).then(() => {
+    shareLinkAPI.updateShareLink(item.token, JSON.stringify(permissionDetails)).then(() => {
       this.setState({
         currentPermission: permission
       });
