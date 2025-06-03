@@ -4,6 +4,8 @@ import { isPro, gettext } from '../../../utils/constants';
 import { Button } from 'reactstrap';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
+import EmptyTip from '../../../components/empty-tip';
+import Loading from '../../loading';
 import toaster from '../../toast';
 import UserSelect from '../../user-select';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
@@ -117,7 +119,8 @@ class SysAdminShareToUser extends React.Component {
       selectedUsers: [],
       errorMsg: [],
       permission: 'rw',
-      sharedItems: []
+      sharedItems: [],
+      isLoading: true
     };
     this.options = [];
     this.permissions = ['rw', 'r'];
@@ -135,9 +138,15 @@ class SysAdminShareToUser extends React.Component {
     let repoID = this.props.repoID;
     systemAdminAPI.sysAdminListRepoSharedItems(repoID, 'user').then((res) => {
       if (res.data.length !== 0) {
-        this.setState({ sharedItems: res.data });
+        this.setState({
+          sharedItems: res.data,
+          isLoading: false
+        });
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -273,21 +282,31 @@ class SysAdminShareToUser extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden">
-            <thead>
-              <tr>
-                <th width="50%">{gettext('User')}</th>
-                <th width="35%">{gettext('Permission')}</th>
-                <th width="15%"></th>
-              </tr>
-            </thead>
-            <UserList
-              items={sharedItems}
-              permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem}
-              onChangeUserPermission={this.onChangeUserPermission}
-            />
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {this.state.sharedItems.length === 0 ? (
+                <EmptyTip text={gettext('No share link')} className="mt-8 mb-8" />
+              ) : (
+                <table className="table-thead-hidden">
+                  <thead>
+                    <tr>
+                      <th width="50%">{gettext('User')}</th>
+                      <th width="35%">{gettext('Permission')}</th>
+                      <th width="15%"></th>
+                    </tr>
+                  </thead>
+                  <UserList
+                    items={sharedItems}
+                    permissions={this.permissions}
+                    deleteShareItem={this.deleteShareItem}
+                    onChangeUserPermission={this.onChangeUserPermission}
+                  />
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );

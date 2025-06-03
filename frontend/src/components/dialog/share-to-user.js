@@ -9,6 +9,8 @@ import toaster from '../toast';
 import UserSelect from '../user-select';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import DepartmentDetailDialog from './department-detail-dialog';
+import EmptyTip from '../../components/empty-tip';
+import Loading from '../../components/loading';
 
 import '../../css/invitations.css';
 import '../../css/share-to-user.css';
@@ -246,7 +248,8 @@ class ShareToUser extends React.Component {
       isWiki: this.props.repoType === 'wiki',
       tmpUserList: [],
       enableSelectMembersFromDept: false,
-      isShowDepartmentDetailDialog: false
+      isShowDepartmentDetailDialog: false,
+      isLoading: true
     };
     this.options = [];
     this.permissions = [];
@@ -287,9 +290,16 @@ class ShareToUser extends React.Component {
             'permission': item.permission
           };
         });
-        this.setState({ sharedItems: res.data, tmpUserList: tmpUserList });
+        this.setState({
+          sharedItems: res.data,
+          tmpUserList: tmpUserList,
+          isLoading: false
+        });
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -606,16 +616,26 @@ class ShareToUser extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden">
-            {thead}
-            <UserList
-              repoID={this.props.repoID}
-              items={sharedItems}
-              permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem}
-              onChangeUserPermission={this.onChangeUserPermission}
-            />
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {sharedItems.length === 0 ? (
+                <EmptyTip text={gettext('No share link')} />
+              ) : (
+                <table className="table-thead-hidden">
+                  {thead}
+                  <UserList
+                    repoID={this.props.repoID}
+                    items={sharedItems}
+                    permissions={this.permissions}
+                    deleteShareItem={this.deleteShareItem}
+                    onChangeUserPermission={this.onChangeUserPermission}
+                  />
+                </table>
+              )}
+            </>
+          )}
           {this.state.isShowDepartmentDetailDialog &&
           <DepartmentDetailDialog
             toggleDepartmentDetailDialog={this.toggleDepartmentDetailDialog}

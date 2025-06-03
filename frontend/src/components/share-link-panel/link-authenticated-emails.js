@@ -6,6 +6,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { shareLinkAPI } from '../../utils/share-link-api';
 import BackIcon from '../back-icon';
+import EmptyTip from '../empty-tip';
+import Loading from '../loading';
 
 class EmailItem extends React.Component {
 
@@ -84,7 +86,8 @@ class LinkAuthenticatedEmails extends React.Component {
     this.state = {
       inputEmails: '',
       authEmails: [],
-      isSubmitting: false
+      isSubmitting: false,
+      isLoading: true
     };
   }
 
@@ -95,8 +98,12 @@ class LinkAuthenticatedEmails extends React.Component {
   getItems = () => {
     const { linkToken, path } = this.props;
     shareLinkAPI.listShareLinkAuthEmails(linkToken, path).then(res => {
-      this.setState({ authEmails: res.data.auth_list });
+      this.setState({
+        authEmails: res.data.auth_list,
+        isLoading: false
+      });
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -198,21 +205,31 @@ class LinkAuthenticatedEmails extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden w-xs-200">
-            {thead}
-            <tbody>
-              {authEmails.map((item, index) => {
-                return (
-                  <EmailItem
-                    key={index}
-                    item={item}
-                    repoID={this.props.repoID}
-                    deleteItem={this.deleteItem}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {authEmails.length === 0 ? (
+                <EmptyTip text={gettext('No results')} />
+              ) : (
+                <table className="table-thead-hidden w-xs-200">
+                  {thead}
+                  <tbody>
+                    {authEmails.map((item, index) => {
+                      return (
+                        <EmailItem
+                          key={index}
+                          item={item}
+                          repoID={this.props.repoID}
+                          deleteItem={this.deleteItem}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );

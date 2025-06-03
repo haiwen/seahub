@@ -10,6 +10,8 @@ import FileChooser from '../file-chooser';
 import GroupSelect from '../common/group-select';
 import toaster from '../../components/toast';
 import BackIcon from '../../components/back-icon';
+import EmptyTip from '../../components/empty-tip';
+import Loading from '../../components/loading';
 
 class GroupItem extends React.Component {
 
@@ -118,7 +120,8 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
       permission: 'rw',
       groupPermissionItems: [],
       folderPath: '',
-      showFileChooser: false
+      showFileChooser: false,
+      isLoading: true
     };
     this.options = [];
     if (!isPro) {
@@ -157,10 +160,14 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
     request.then((res) => {
       if (res.data.length !== 0) {
         this.setState({
-          groupPermissionItems: res.data
+          groupPermissionItems: res.data,
+          isLoading: false
         });
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -378,24 +385,34 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden w-xs-250">
-            {thead}
-            <tbody>
-              {this.state.groupPermissionItems.map((item, index) => {
-                return (
-                  <GroupItem
-                    key={index}
-                    item={item}
-                    permissions={this.permissions}
-                    deleteGroupPermissionItem={this.deleteGroupPermissionItem}
-                    onChangeGroupPermission={this.onChangeGroupPermission}
-                    showPath={showPath}
-                    repoName={this.props.repoName}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {this.state.groupPermissionItems.length === 0 ? (
+                <EmptyTip text={gettext('No results')} />
+              ) : (
+                <table className="table-thead-hidden w-xs-250">
+                  {thead}
+                  <tbody>
+                    {this.state.groupPermissionItems.map((item, index) => {
+                      return (
+                        <GroupItem
+                          key={index}
+                          item={item}
+                          permissions={this.permissions}
+                          deleteGroupPermissionItem={this.deleteGroupPermissionItem}
+                          onChangeGroupPermission={this.onChangeGroupPermission}
+                          showPath={showPath}
+                          repoName={this.props.repoName}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );

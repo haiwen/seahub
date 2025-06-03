@@ -6,8 +6,10 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
+import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
 import GroupSelect from '../../common/group-select';
+import Loading from '../../../components/loading';
 
 class GroupItem extends React.Component {
 
@@ -119,7 +121,8 @@ class SysAdminShareToGroup extends React.Component {
       selectedOptions: [],
       errorMsg: [],
       permission: 'rw',
-      sharedItems: []
+      sharedItems: [],
+      isLoading: true
     };
     this.options = [];
     this.permissions = ['rw', 'r'];
@@ -175,10 +178,14 @@ class SysAdminShareToGroup extends React.Component {
     systemAdminAPI.sysAdminListRepoSharedItems(repoID, 'group').then((res) => {
       if (res.data.length !== 0) {
         this.setState({
-          sharedItems: res.data
+          sharedItems: res.data,
+          isLoading: false
         });
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -301,21 +308,31 @@ class SysAdminShareToGroup extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden">
-            <thead>
-              <tr>
-                <th width="50%">{gettext('Group')}</th>
-                <th width="35%">{gettext('Permission')}</th>
-                <th width="15%"></th>
-              </tr>
-            </thead>
-            <GroupList
-              items={this.state.sharedItems}
-              permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem}
-              onChangeUserPermission={this.onChangeUserPermission}
-            />
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {this.state.sharedItems.length === 0 ? (
+                <EmptyTip text={gettext('No share link')} className="mt-8 mb-8" />
+              ) : (
+                <table className="table-thead-hidden">
+                  <thead>
+                    <tr>
+                      <th width="50%">{gettext('Group')}</th>
+                      <th width="35%">{gettext('Permission')}</th>
+                      <th width="15%"></th>
+                    </tr>
+                  </thead>
+                  <GroupList
+                    items={this.state.sharedItems}
+                    permissions={this.permissions}
+                    deleteShareItem={this.deleteShareItem}
+                    onChangeUserPermission={this.onChangeUserPermission}
+                  />
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );

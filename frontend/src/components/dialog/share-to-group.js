@@ -10,6 +10,8 @@ import SharePermissionEditor from '../select-editor/share-permission-editor';
 import EventBus from '../common/event-bus';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import GroupSelect from '../common/group-select';
+import EmptyTip from '../../components/empty-tip';
+import Loading from '../../components/loading';
 
 class GroupItem extends React.Component {
 
@@ -178,7 +180,8 @@ class ShareToGroup extends React.Component {
       errorMsg: [],
       permission: 'rw',
       sharedItems: [],
-      isWiki: this.props.repoType === 'wiki'
+      isWiki: this.props.repoType === 'wiki',
+      isLoading: true
     };
     this.permissions = [];
     let { itemType, isRepoOwner } = props;
@@ -253,10 +256,14 @@ class ShareToGroup extends React.Component {
     seafileAPI.listSharedItems(repoID, path, 'group').then((res) => {
       if (res.data.length !== 0) {
         this.setState({
-          sharedItems: res.data
+          sharedItems: res.data,
+          isLoading: false
         });
+      } else {
+        this.setState({ isLoading: false });
       }
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -466,16 +473,26 @@ class ShareToGroup extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden">
-            {thead}
-            <GroupList
-              repoID={this.props.repoID}
-              items={this.state.sharedItems}
-              permissions={this.permissions}
-              deleteShareItem={this.deleteShareItem}
-              onChangeUserPermission={this.onChangeUserPermission}
-            />
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {this.state.sharedItems.length === 0 ? (
+                <EmptyTip text={gettext('No share link')} />
+              ) : (
+                <table className="table-thead-hidden">
+                  {thead}
+                  <GroupList
+                    repoID={this.props.repoID}
+                    items={this.state.sharedItems}
+                    permissions={this.permissions}
+                    deleteShareItem={this.deleteShareItem}
+                    onChangeUserPermission={this.onChangeUserPermission}
+                  />
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );

@@ -9,6 +9,8 @@ import toaster from '../toast';
 import OpIcon from '../op-icon';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import { SeahubSelect } from '../common/select';
+import EmptyTip from '../empty-tip';
+import Loading from '../loading';
 
 class ShareItem extends React.Component {
 
@@ -60,15 +62,6 @@ class ShareItem extends React.Component {
         <td><a href={item.to_server_url} target="_blank" rel="noreferrer">{item.to_server_name}</a></td>
         <td>{item.to_user}</td>
         <td>{Utils.sharePerms(item.permission)}</td>
-        {/* <td>
-          <SharePermissionEditor
-            isTextMode={true}
-            isEditIconShow={this.state.isOperationShow}
-            currentPermission={currentPermission}
-            permissions={this.props.permissions}
-            onPermissionChanged={this.onChangeUserPermission}
-          />
-        </td> */}
         <td>
           <OpIcon
             className={`sf3-font sf3-font-x-01 op-icon ${isOperationShow && !isOpFrozen ? '' : 'd-none'}`}
@@ -140,18 +133,23 @@ class ShareToOtherServer extends React.Component {
       permission: 'rw',
       btnDisabled: true,
       isSubmitting: false,
-      ocmShares: []
+      ocmShares: [],
+      isLoading: true
     };
     this.permissions = ['rw', 'r'];
   }
 
   componentDidMount() {
     seafileAPI.listOCMSharesPrepare(this.props.repoID).then((res) => {
-      this.setState({ ocmShares: res.data.ocm_share_list });
+      this.setState({
+        ocmShares: res.data.ocm_share_list,
+        isLoading: false
+      });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       this.setState({
-        errorMsg: errMessage
+        errorMsg: errMessage,
+        isLoading: false
       });
     });
   }
@@ -275,13 +273,22 @@ class ShareToOtherServer extends React.Component {
             </tr>
           </tbody>
         </table>
-        {errorMsg ?
-          <p className="error text-center mt-4">{errorMsg}</p> :
-          <ShareList
-            items={ocmShares}
-            deleteShareItem={this.deleteShareItem}
-          />
-        }
+        {errorMsg ? (
+          <p className="error text-center mt-4">{errorMsg}</p>
+        ) : this.state.isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            {ocmShares.length === 0 ? (
+              <EmptyTip text={gettext('No results')} />
+            ) : (
+              <ShareList
+                items={ocmShares}
+                deleteShareItem={this.deleteShareItem}
+              />
+            )}
+          </>
+        )}
       </Fragment>
     );
   }
