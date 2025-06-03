@@ -161,8 +161,8 @@ class LibContentView extends React.Component {
   componentDidMount() {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
-    this.calculatePara(this.props);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
+    this.calculatePara(this.props);
   }
 
   onMessageCallback = (noticeData) => {
@@ -208,6 +208,7 @@ class LibContentView extends React.Component {
       }
     } else if (noticeData.type === 'repo-update') {
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
+        console.log('test dev:', 'socket updated');
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
         this.setState({
@@ -620,6 +621,7 @@ class LibContentView extends React.Component {
       path,
     });
     seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
+      console.log('test dev: ', 'page updated');
       const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
       const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), sortBy, sortOrder);
       this.setState({
