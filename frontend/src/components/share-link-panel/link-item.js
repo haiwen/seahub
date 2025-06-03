@@ -172,10 +172,10 @@ class LinkItem extends React.Component {
             <a href="#" role="button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
             {this.qrCodeBtn && (
               <div ref={this.popoverContainerRef}>
-                <Popover placement="bottom" isOpen={isQRCodePopoverOpen} target={this.qrCodeBtn}>
+                <Popover className="link-item-qrcode-popover" placement="bottom" isOpen={isQRCodePopoverOpen} target={this.qrCodeBtn}>
                   <PopoverBody>
                     <QRCodeSVG value={link} size={128} />
-                    <p className="m-0 mt-1 text-center" style={{ 'maxWidth': '128px', color: '#666' }}>{gettext('Scan the QR code to view the shared content directly')}</p>
+                    <p className="link-item-qrcode-tip">{gettext('Scan the QR code to view the shared content directly')}</p>
                   </PopoverBody>
                 </Popover>
               </div>
