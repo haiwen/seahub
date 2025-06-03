@@ -1728,6 +1728,7 @@ class LibContentView extends React.Component {
         direntList: direntObject.type === 'dir' ? [dirent, ...prevState.direntList] : [...prevState.direntList, dirent]
       }));
 
+      console.log('dev test: ', this.state.isTreePanelShown);
       if (this.state.isTreePanelShown) {
         this.addNodeToTree(dirent.name, this.state.path, dirent.type);
       }
@@ -2028,6 +2029,7 @@ class LibContentView extends React.Component {
   };
 
   addNodeToTree = (name, parentPath, type) => {
+    console.log(name, parentPath, type);
     let node = this.createTreeNode(name, type);
     let tree = treeHelper.addNodeToParentByPath(this.state.treeData, node, parentPath);
     this.setState({ treeData: tree });
