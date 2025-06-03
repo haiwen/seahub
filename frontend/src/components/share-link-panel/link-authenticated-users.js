@@ -7,6 +7,8 @@ import { Utils } from '../../utils/utils';
 import UserSelect from '../user-select';
 import toaster from '../toast';
 import BackIcon from '../../components/back-icon';
+import EmptyTip from '../empty-tip';
+import Loading from '../loading';
 
 class UserItem extends React.Component {
 
@@ -90,7 +92,8 @@ class LinkAuthenticatedUsers extends React.Component {
     super(props);
     this.state = {
       selectedUsers: [],
-      authUsers: []
+      authUsers: [],
+      isLoading: true
     };
   }
 
@@ -101,8 +104,12 @@ class LinkAuthenticatedUsers extends React.Component {
   listLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
     shareLinkAPI.listShareLinkAuthUsers(linkToken, path).then(res => {
-      this.setState({ authUsers: res.data.auth_list });
+      this.setState({ 
+        authUsers: res.data.auth_list,
+        isLoading: false
+      });
     }).catch(error => {
+      this.setState({ isLoading: false });
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
@@ -199,21 +206,31 @@ class LinkAuthenticatedUsers extends React.Component {
           </tbody>
         </table>
         <div className="share-list-container">
-          <table className="table-thead-hidden w-xs-200">
-            {thead}
-            <tbody>
-              {authUsers.map((item, index) => {
-                return (
-                  <UserItem
-                    key={index}
-                    item={item}
-                    repoID={this.props.repoID}
-                    deleteItem={this.deleteItem}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
+          {this.state.isLoading ? (
+            <Loading />
+          ) : (
+            <>
+              {authUsers.length === 0 ? (
+                <EmptyTip text={gettext('No results')} />
+              ) : (
+                <table className="table-thead-hidden w-xs-200">
+                  {thead}
+                  <tbody>
+                    {authUsers.map((item, index) => {
+                      return (
+                        <UserItem
+                          key={index}
+                          item={item}
+                          repoID={this.props.repoID}
+                          deleteItem={this.deleteItem}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </>
+          )}
         </div>
       </Fragment>
     );
