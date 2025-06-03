@@ -376,7 +376,7 @@ def can_preview_file(file_name, file_size, repo):
 
     # Seafile defines 10 kinds of filetype:
     # TEXT, MARKDOWN, IMAGE, VIDEO, AUDIO, PDF, SVG
-    if filetype in (TEXT, MARKDOWN, IMAGE) or fileext in get_conf_text_ext():
+    if filetype in (TEXT, MARKDOWN, IMAGE, PDF) or fileext in get_conf_text_ext():
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
@@ -502,6 +502,7 @@ def convert_repo_path_when_can_not_view_file(request, repo_id, path):
 
     next_url = reverse('view_lib_file', args=[repo_id, path])
     return HttpResponseRedirect(next_url)
+
 
 @login_required
 @repo_passwd_set_required
@@ -676,8 +677,9 @@ def view_lib_file(request, repo_id, path):
     raw_path = ''
     inner_path = ''
     use_onetime = False if filetype in (VIDEO, AUDIO) else True
-    token = seafile_api.get_fileserver_access_token(repo_id,
-            file_id, 'view', username, use_onetime=use_onetime)
+    token = seafile_api.get_fileserver_access_token(repo_id, file_id,
+                                                    'view', username,
+                                                    use_onetime=use_onetime)
     if token:
         raw_path = gen_file_get_url(token, filename)
         inner_path = gen_inner_file_get_url(token, filename)
@@ -727,6 +729,80 @@ def view_lib_file(request, repo_id, path):
         # revision
         revision_info = is_seadoc_revision(file_uuid)
         return_dict.update(revision_info)
+
+        send_file_access_msg(request, repo, path, 'web')
+        return render(request, template, return_dict)
+
+    elif ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
+            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+
+        if repo.encrypted:
+            return_dict['err'] = _('The library is encrypted, can not open file online.')
+            return render(request, template, return_dict)
+
+        if file_size > OFFICE_PREVIEW_MAX_SIZE:
+            error_msg = _('File size surpasses %s, can not be opened online.') % \
+                    filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
+            return_dict['err'] = error_msg
+            return render(request, template, return_dict)
+
+        if ENABLE_OFFICE_WEB_APP:
+            action_name = None
+            # first check if can view file
+            if fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+                action_name = 'view'
+
+            # then check if can edit file
+            if ENABLE_OFFICE_WEB_APP_EDIT and parse_repo_perm(permission).can_edit_on_web and \
+                    fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
+                action_name = 'edit'
+
+            wopi_dict = get_wopi_dict(username, repo_id, path,
+                                      action_name=action_name,
+                                      language_code=request.LANGUAGE_CODE,
+                                      can_download=parse_repo_perm(permission).can_download)
+
+            if wopi_dict:
+                send_file_access_msg(request, repo, path, 'web')
+                return render(request, 'wopi_file_view_react.html', {**return_dict, **wopi_dict})
+            else:
+                return_dict['err'] = _('Error when prepare Office Online file preview page.')
+
+        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+
+            can_edit = False
+            if parse_repo_perm(permission).can_edit_on_web and \
+                    fileext in ONLYOFFICE_EDIT_FILE_EXTENSION and \
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
+                can_edit = True
+
+            from seahub.constants import PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+            can_copy_content = permission not in (PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT)
+            onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
+                                                  can_edit=can_edit,
+                                                  can_download=parse_repo_perm(permission).can_download,
+                                                  can_copy=can_copy_content)
+
+            if onlyoffice_dict:
+                if is_pro_version() and can_edit:
+                    try:
+                        if not is_locked:
+                            logger.info('{} lock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
+                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
+                                                  int(time.time()) + 40 * 60)
+                        elif locked_by_online_office:
+                            logger.info('{} relock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
+                            seafile_api.refresh_file_lock(repo_id, path,
+                                                          int(time.time()) + 40 * 60)
+                    except Exception as e:
+                        logger.error(e)
+
+                send_file_access_msg(request, repo, path, 'web')
+
+                return render(request, 'onlyoffice_file_view_react.html', {**return_dict, **onlyoffice_dict})
+            else:
+                return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
@@ -848,80 +924,6 @@ def view_lib_file(request, repo_id, path):
         return_dict['img_prev'] = img_prev
         return_dict['img_next'] = img_next
         return_dict['raw_path'] = raw_path
-
-        send_file_access_msg(request, repo, path, 'web')
-        return render(request, template, return_dict)
-
-    elif ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
-            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
-
-        if repo.encrypted:
-            return_dict['err'] = _('The library is encrypted, can not open file online.')
-            return render(request, template, return_dict)
-
-        if file_size > OFFICE_PREVIEW_MAX_SIZE:
-            error_msg = _('File size surpasses %s, can not be opened online.') % \
-                    filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
-            return_dict['err'] = error_msg
-            return render(request, template, return_dict)
-
-        if ENABLE_OFFICE_WEB_APP:
-            action_name = None
-            # first check if can view file
-            if fileext in OFFICE_WEB_APP_FILE_EXTENSION:
-                action_name = 'view'
-
-            # then check if can edit file
-            if ENABLE_OFFICE_WEB_APP_EDIT and parse_repo_perm(permission).can_edit_on_web and \
-                    fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_online_office)):
-                action_name = 'edit'
-
-            wopi_dict = get_wopi_dict(username, repo_id, path,
-                                      action_name=action_name,
-                                      language_code=request.LANGUAGE_CODE,
-                                      can_download=parse_repo_perm(permission).can_download)
-
-            if wopi_dict:
-                send_file_access_msg(request, repo, path, 'web')
-                return render(request, 'wopi_file_view_react.html', {**return_dict, **wopi_dict})
-            else:
-                return_dict['err'] = _('Error when prepare Office Online file preview page.')
-
-        if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
-
-            can_edit = False
-            if parse_repo_perm(permission).can_edit_on_web and \
-                    fileext in ONLYOFFICE_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_online_office)):
-                can_edit = True
-
-            from seahub.constants import PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
-            can_copy_content = permission not in (PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT)
-            onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
-                                                  can_edit=can_edit,
-                                                  can_download=parse_repo_perm(permission).can_download,
-                                                  can_copy=can_copy_content)
-
-            if onlyoffice_dict:
-                if is_pro_version() and can_edit:
-                    try:
-                        if not is_locked:
-                            logger.info('{} lock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
-                            seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER,
-                                                  int(time.time()) + 40 * 60)
-                        elif locked_by_online_office:
-                            logger.info('{} relock {} in repo {} when open it via OnlyOffice.'.format(ONLINE_OFFICE_LOCK_OWNER, path, repo_id))
-                            seafile_api.refresh_file_lock(repo_id, path,
-                                                          int(time.time()) + 40 * 60)
-                    except Exception as e:
-                        logger.error(e)
-
-                send_file_access_msg(request, repo, path, 'web')
-
-                return render(request, 'onlyoffice_file_view_react.html', {**return_dict, **onlyoffice_dict})
-            else:
-                return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)

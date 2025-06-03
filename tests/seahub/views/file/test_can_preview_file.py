@@ -67,7 +67,7 @@ class CanPreviewFileTest(BaseTestCase):
             file_size = self.exceeded_file_size
 
         can_preview, error_msg = can_preview_file(file_name, file_size,
-                self.encrypted_repo)
+                                                  self.encrypted_repo)
         return can_preview
 
     def test_iso(self):
@@ -84,9 +84,9 @@ class CanPreviewFileTest(BaseTestCase):
         file_name = '123.pdf'
 
         assert self.can_preview_in_normal_repo_normal_size(file_name)
-        assert self.can_preview_in_normal_repo_exceeded_size(file_name)
+        assert not self.can_preview_in_normal_repo_exceeded_size(file_name)
         assert self.can_preview_in_encrypted_repo_normal_size(file_name)
-        assert self.can_preview_in_encrypted_repo_exceeded_size(file_name)
+        assert not self.can_preview_in_encrypted_repo_exceeded_size(file_name)
 
     def test_jpg(self):
 
