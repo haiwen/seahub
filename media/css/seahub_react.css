@@ -590,6 +590,10 @@ a, a:hover {
   background: #efefef; /* for .op-icon shown in white containers */
 }
 
+.tr-highlight .op-icon {
+  color: #666;
+}
+
 .action-icon,
 .attr-action-icon {
   margin-left: 0.5rem;
