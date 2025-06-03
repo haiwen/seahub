@@ -98,7 +98,7 @@ class LinkAuthenticatedEmails extends React.Component {
   getItems = () => {
     const { linkToken, path } = this.props;
     shareLinkAPI.listShareLinkAuthEmails(linkToken, path).then(res => {
-      this.setState({ 
+      this.setState({
         authEmails: res.data.auth_list,
         isLoading: false
       });

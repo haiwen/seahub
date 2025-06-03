@@ -138,7 +138,7 @@ class SysAdminShareToUser extends React.Component {
     let repoID = this.props.repoID;
     systemAdminAPI.sysAdminListRepoSharedItems(repoID, 'user').then((res) => {
       if (res.data.length !== 0) {
-        this.setState({ 
+        this.setState({
           sharedItems: res.data,
           isLoading: false
         });

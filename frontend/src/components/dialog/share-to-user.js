@@ -290,8 +290,8 @@ class ShareToUser extends React.Component {
             'permission': item.permission
           };
         });
-        this.setState({ 
-          sharedItems: res.data, 
+        this.setState({
+          sharedItems: res.data,
           tmpUserList: tmpUserList,
           isLoading: false
         });

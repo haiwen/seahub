@@ -144,7 +144,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       seafileAPI.listUserFolderPerm(repoID, folderPath);
     request.then((res) => {
       if (res.data.length !== 0) {
-        this.setState({ 
+        this.setState({
           userFolderPermItems: res.data,
           isLoading: false
         });

@@ -141,7 +141,7 @@ class ShareToOtherServer extends React.Component {
 
   componentDidMount() {
     seafileAPI.listOCMSharesPrepare(this.props.repoID).then((res) => {
-      this.setState({ 
+      this.setState({
         ocmShares: res.data.ocm_share_list,
         isLoading: false
       });

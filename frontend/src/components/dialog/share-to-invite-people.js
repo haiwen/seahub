@@ -170,7 +170,7 @@ class ShareToInvitePeople extends React.Component {
     const repoID = this.props.repoID;
     seafileAPI.listRepoShareInvitations(repoID, path).then((res) => {
       if (res.data.length !== 0) {
-        this.setState({ 
+        this.setState({
           sharedItems: res.data.repo_share_invitation_list,
           isLoading: false
         });

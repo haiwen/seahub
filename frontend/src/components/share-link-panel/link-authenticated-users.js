@@ -104,7 +104,7 @@ class LinkAuthenticatedUsers extends React.Component {
   listLinkAuthUsers = () => {
     const { linkToken, path } = this.props;
     shareLinkAPI.listShareLinkAuthUsers(linkToken, path).then(res => {
-      this.setState({ 
+      this.setState({
         authUsers: res.data.auth_list,
         isLoading: false
       });
