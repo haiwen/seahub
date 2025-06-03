@@ -1714,23 +1714,24 @@ class LibContentView extends React.Component {
   };
 
   onFileUploadSuccess = (direntObject) => {
+    let dirent = null;
     const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
     if (isExist) {
-      const dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
+      dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
       const mtime = dayjs.unix(direntObject.mtime).fromNow();
       dirent && this.updateDirent(dirent, 'mtime', mtime);
     } else {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
-      const dirent = new Dirent(direntObject);
+      dirent = new Dirent(direntObject);
 
       this.setState(prevState => ({
         direntList: direntObject.type === 'dir' ? [dirent, ...prevState.direntList] : [...prevState.direntList, dirent]
       }));
+    }
 
-      if (this.state.isTreePanelShown) {
-        this.addNodeToTree(dirent.name, this.state.path, dirent.type);
-      }
+    if (this.state.isTreePanelShown) {
+      this.addNodeToTree(dirent.name, this.state.path, dirent.type);
     }
   };
 
