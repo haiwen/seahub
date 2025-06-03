@@ -116,6 +116,19 @@ class LinkItem extends React.Component {
     this.toggleQRCodePopover();
   };
 
+  translateScope = (scope) => {
+    if (scope === 'all_users') {
+      return gettext('Anyone with the link');
+    }
+    if (scope === 'specific_users') {
+      return gettext('Specific users in the team');
+    }
+    if (scope === 'specific_emails') {
+      return gettext('Specific people with email address');
+    }
+    return '';
+  };
+
   render() {
     const { isHighlighted, isItemOpVisible, isQRCodePopoverOpen } = this.state;
     const { item } = this.props;
@@ -148,9 +161,11 @@ class LinkItem extends React.Component {
           <td>
             {permissions && Utils.getShareLinkPermissionObject(currentPermission).text}
           </td>
+          <td>{this.translateScope(item.user_scope)}</td>
           <td>
             {expire_date ? dayjs(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
+          <td>{item.password && <i className='sf2-icon-tick'></i>}</td>
           <td>
             <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
             <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
@@ -160,7 +175,7 @@ class LinkItem extends React.Component {
                 <Popover placement="bottom" isOpen={isQRCodePopoverOpen} target={this.qrCodeBtn}>
                   <PopoverBody>
                     <QRCodeSVG value={link} size={128} />
-                    <p className="m-0 mt-1 text-center" style={{ 'maxWidth': '128px' }}>{gettext('Scan the QR code to view the shared content directly')}</p>
+                    <p className="m-0 mt-1 text-center" style={{ 'maxWidth': '128px', color: '#666' }}>{gettext('Scan the QR code to view the shared content directly')}</p>
                   </PopoverBody>
                 </Popover>
               </div>

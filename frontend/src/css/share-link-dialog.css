@@ -6,7 +6,7 @@
 }
 
 .share-dialog-content .share-dialog-side {
-  flex-basis: 22%;
+  flex-basis: 18%;
   padding: 1rem;
   border-bottom: 1px solid #eee;
 }
@@ -69,7 +69,7 @@
 
 .share-dialog-content .share-dialog-main {
   display: flex;
-  flex-basis: 78%;
+  flex-basis: 82%;
   padding: 1rem;
 }
 
