@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import Loading from '../../../components/loading';
@@ -14,18 +15,21 @@ class DirentItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false
     };
   }
 
   handleMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       isOpIconShown: true
     });
   };
 
   handleMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       isOpIconShown: false
     });
   };
@@ -34,24 +38,28 @@ class DirentItem extends React.Component {
     this.props.openFolder(this.props.dirent);
   };
 
-  deleteDirent = (e) => {
-    e.preventDefault();
+  deleteDirent = () => {
     this.props.deleteDirent(this.props.dirent);
   };
 
-  downloadDirent = (e) => {
-    e.preventDefault();
+  downloadDirent = () => {
     this.props.downloadDirent(this.props.dirent);
   };
 
   render() {
-    let { isOpIconShown } = this.state;
+    let { isOpIconShown, isHighlighted } = this.state;
     let { dirent, fromSystemRepo } = this.props;
     let iconUrl = Utils.getDirentIcon(dirent);
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseOver}
+          onMouseLeave={this.handleMouseOut}
+        >
           <td className="text-center"><img src={iconUrl} width="24" alt='' /></td>
           <td>
             {dirent.is_file ?
@@ -61,10 +69,20 @@ class DirentItem extends React.Component {
           </td>
           <td>
             {isOpIconShown && fromSystemRepo &&
-              <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} onClick={this.deleteDirent}></a>
+              <i
+                className="op-icon sf3-font-delete1 sf3-font"
+                title={gettext('Delete')}
+                onClick={this.deleteDirent}
+              >
+              </i>
             }
             {isOpIconShown && dirent.is_file &&
-            <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} onClick={this.downloadDirent}></a>
+            <i
+              className="op-icon sf3-font sf3-font-download1"
+              title={gettext('Download')}
+              onClick={this.downloadDirent}
+            >
+            </i>
             }
           </td>
           <td>{dirent.size}</td>
