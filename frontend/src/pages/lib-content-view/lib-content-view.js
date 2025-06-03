@@ -1714,6 +1714,7 @@ class LibContentView extends React.Component {
   };
 
   onFileUploadSuccess = (direntObject) => {
+    console.log(this.state.direntList);
     const isExist = this.state.direntList.some(item => item.name === direntObject.name && item.type === direntObject.type);
     console.log('dev test: ', isExist);
     if (isExist) {
