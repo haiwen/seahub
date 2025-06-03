@@ -9,7 +9,7 @@ import { Utils } from '../../../../utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord, getTagsFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
 import { getTagByName } from '../../../../tag/utils/row';
 import { getTagId } from '../../../../tag/utils/cell';
-import { PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
+import { RECENTLY_USED_TAG_IDS, PRIVATE_COLUMN_KEY as TAGS_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
 import { SELECT_OPTION_COLORS } from '../../../constants';
 import { useTags } from '../../../../tag/hooks';
 
@@ -24,7 +24,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
 
   const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
 
-  const { tagsData, addTags } = useTags();
+  const { tagsData, addTags, context } = useTags();
 
   useEffect(() => {
     let path = '';
@@ -110,6 +110,10 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
             }
           });
           onSubmit([{ record_id: recordId, tags: newTagIds, old_tags: oldTagIds }]);
+          const saved = context.localStorage && context.localStorage.getItem(RECENTLY_USED_TAG_IDS);
+          const ids = saved ? JSON.parse(saved) : [];
+          const newIds = [...tagIds, ...ids].slice(0, 10);
+          context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
           onToggle();
         },
         fail_callback: (error) => {
@@ -128,7 +132,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       }
       onToggle();
     }
-  }, [selectedTags, onSubmit, onToggle, record, addTags, tagsData, isLoading]);
+  }, [selectedTags, onSubmit, onToggle, record, addTags, tagsData, isLoading, context.localStorage]);
 
   return (
     <Modal
