@@ -185,7 +185,7 @@ class FileShareManager(models.Manager):
     # public methods
     def create_file_link(self, username, repo_id, path, password=None,
                          expire_date=None, permission='view_download',
-                         org_id=None):
+                         org_id=None, description=''):
         """Create download link for file.
         """
         path = normalize_file_path(path)
@@ -370,6 +370,7 @@ class FileShare(models.Model):
     username = LowerCaseCharField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
+    description = models.TextField(default='', blank=True)
     token = models.CharField(max_length=100, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)

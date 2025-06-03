@@ -86,7 +86,7 @@ class ShareLinkAPI {
     return this.req.delete(url, { data: params });
   }
 
-  updateShareLink(token, permissions, expirationTime = '', userScope = '') {
+  updateShareLink(token, permissions, expirationTime = '', userScope = '', description = '') {
     var url = this.server + '/api/v2.1/share-links/' + token + '/';
     let form = new FormData();
     if (permissions) {
@@ -98,10 +98,13 @@ class ShareLinkAPI {
     if (userScope) {
       form.append('user_scope', userScope);
     }
+    if (description) {
+      form.append('description', description);
+    }
     return this.req.put(url, form);
   }
 
-  createMultiShareLink(repoID, path, password, expirationTime, permissions, scope, users) {
+  createMultiShareLink(repoID, path, password, expirationTime, permissions, scope, users, description) {
     const url = this.server + '/api/v2.1/multi-share-links/';
     let form = {
       'path': path,
@@ -119,6 +122,9 @@ class ShareLinkAPI {
     }
     if (users) {
       form['emails'] = users;
+    }
+    if (description) {
+      form['description'] = description;
     }
     return this._sendPostRequest(url, form);
   }
