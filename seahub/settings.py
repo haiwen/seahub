@@ -1008,6 +1008,9 @@ ENABLE_REPO_SNAPSHOT_LABEL = False
 #  Repo wiki mode
 ENABLE_REPO_WIKI_MODE = True
 
+# Enable metadata and tags by default
+ENABLE_METADATA_AND_TAGS_BY_DEFAULT = False
+
 ############################
 # HU berlin additional #
 ############################
