@@ -17,7 +17,8 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
 
   const [showEditor, setShowEditor] = useState(false);
 
-  const { tagsData } = useTags();
+  const { tagsData, addTag, context } = useTags();
+  const canEditData = useMemo(() => window.sfMetadataContext && window.sfMetadataContext.canEditData || false, []);
 
   const validValue = useMemo(() => {
     if (!Array.isArray(value) || value.length === 0) return [];
@@ -90,12 +91,16 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
           value={value}
           column={{ ...field, width: Math.max(width - 2, 400) }}
           record={record}
-          updateFileTags={updateFileTags}
+          tagsData={tagsData}
+          onUpdate={updateFileTags}
           showTagsAsTree={true}
+          canEditData={canEditData}
+          canAddTag={context.canAddTag}
+          addTag={addTag}
         />
       </Popover>
     );
-  }, [showEditor, field, record, value, updateFileTags]);
+  }, [showEditor, field, record, value, tagsData, context, canEditData, addTag, updateFileTags]);
 
   return (
     <div
