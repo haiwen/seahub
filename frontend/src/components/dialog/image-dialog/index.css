@@ -87,6 +87,10 @@
   color: #666;
 }
 
+.lightbox-side-panel .dirent-detail-item-value.editable:hover .sf-metadata-property-detail-editor:empty::before {
+  color: #999;
+}
+
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover,
 .lightbox-side-panel .dirent-detail-item .dirent-detail-item-value.editable:hover {
   background-color: #666;
