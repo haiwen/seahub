@@ -1510,7 +1510,6 @@ class AdminUserResetPassword(APIView):
         profile = Profile.objects.get_profile_by_user(email)
         if IS_EMAIL_CONFIGURED and profile and profile.contact_email:
 
-            from seahub.utils import get_site_name
             from django.utils.http import int_to_base36
             from seahub.auth.tokens import default_token_generator
 
