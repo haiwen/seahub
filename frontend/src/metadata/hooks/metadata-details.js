@@ -15,7 +15,7 @@ import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constant
 
 const MetadataDetailsContext = React.createContext(null);
 
-export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, direntDetail, direntType, modifyLocalFileTags, children }) => {
+export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, direntDetail, direntType, modifyLocalFileTags, onErrMessage, children }) => {
   const { enableMetadata, detailsSettings, modifyDetailsSettings } = useMetadataStatus();
 
   const [isLoading, setLoading] = useState(true);
@@ -183,6 +183,12 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       setOriginColumns(columns);
       setLoading(false);
     }).catch(error => {
+      if (error.response && error.response.status === 404 && onErrMessage) {
+        const err = `${direntType === 'file' ? 'File' : 'Folder' } does not exist`;
+        onErrMessage(err);
+        setLoading(false);
+        return;
+      }
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
       setLoading(false);

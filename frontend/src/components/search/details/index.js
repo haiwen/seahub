@@ -8,12 +8,15 @@ import { Repo } from '../../../models';
 import { MetadataStatusProvider } from '../../../hooks';
 import Details from './details';
 import LibDetail from '../../dirent-detail/lib-details';
+import { Body, Header } from '../../dirent-detail/detail';
+import { gettext } from '../../../utils/constants';
 
 import './index.css';
 
 const SearchedItemDetails = ({ repoID, path, dirent }) => {
   const [repoInfo, setRepoInfo] = useState(null);
   const [direntDetail, setDirentDetail] = useState(null);
+  const [errMessage, setErrMessage] = useState(null);
 
   useEffect(() => {
     seafileAPI.getRepoInfo(repoID).then(res => {
@@ -31,6 +34,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
     const fetchData = async () => {
       if (!repoID || !path || !dirent || dirent.isLib) {
         setDirentDetail(null);
+        setErrMessage(null);
         return;
       }
 
@@ -41,11 +45,18 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           { signal: controller.signal }
         );
         setDirentDetail(res.data);
+        setErrMessage(null);
       } catch (error) {
-        if (error.name !== 'AbortError') {
-          const errMessage = Utils.getErrorMsg(error);
-          toaster.danger(errMessage);
+        if (error.name === 'AbortError') {
+          return; // Ignore abort errors
         }
+        if (error.response && error.response.status === 404) {
+          const err = `${dirent.type === 'file' ? 'File' : 'Folder'} does not exist`;
+          setErrMessage(err);
+          return;
+        }
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
       }
     };
 
@@ -58,6 +69,22 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   }, [repoID, repoInfo, path, dirent]);
 
   if (!repoInfo) return;
+
+  if (errMessage) {
+    return (
+      <div className="searched-item-details">
+        <div
+          className="cur-view-detail"
+          style={{ width: 300 }}
+        >
+          <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)}></Header>
+          <Body className="error">
+            {gettext(errMessage)}
+          </Body>
+        </div>
+      </div>
+    );
+  }
 
   if (dirent.isLib) {
     return (
@@ -80,6 +107,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
         dirent={dirent}
         direntDetail={direntDetail}
         direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
+        onErrMessage={(message) => setErrMessage(message)}
       >
         <Details
           repoID={repoID}
@@ -87,6 +115,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           path={parentDir}
           dirent={dirent}
           direntDetail={direntDetail}
+          errMessage={errMessage}
         />
       </MetadataDetailsProvider>
     </MetadataStatusProvider>
