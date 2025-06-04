@@ -579,7 +579,12 @@ class Search extends Component {
       return this.renderResults(filteredItems);
     }
     else {
-      return <div className="search-result-none">{gettext('No results matching')}</div>;
+      return (
+        <div className="search-result-none">
+          <h4 className="search-results-title text-start">{gettext('Files')}</h4>
+          {gettext('No results matching')}
+        </div>
+      );
     }
   }
 
