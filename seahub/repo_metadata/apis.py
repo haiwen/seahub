@@ -3028,23 +3028,44 @@ class MetadataImportTags(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def _handle_tag_links(self, formatted_tags, resp, TAGS_TABLE):
+    def _handle_tag_links(self, new_tags, exist_tags_info, exist_tags_id_map, import_exist_tags_info, resp, TAGS_TABLE):
+        exist_tags_ids = [tag.get(TAGS_TABLE.columns.id.name, '') for tag in exist_tags_info]
+        all_tags = new_tags + import_exist_tags_info
+
         tags_id_map = {}
-        for index, tag in enumerate(formatted_tags):
+        tags_ids = [tag_data.get(TAGS_TABLE.columns.id.name, '') for tag_data in all_tags]
+        for index, tag in enumerate(new_tags):
             old_tag_id = tag.get(TAGS_TABLE.columns.id.name, '')
             tag[TAGS_TABLE.columns.id.name] = resp.get('row_ids', [])[index]
             tags_id_map[old_tag_id] = tag.get(TAGS_TABLE.columns.id.name, '')
-            
-        parent_links = {}
+        tags_id_map.update(exist_tags_id_map)
+        formatted_tags = [] # remove some non-existent tag ids
+        for tag in new_tags:
+            child_tags_ids = tag.get(TAGS_TABLE.columns.sub_links.key, [])
+            new_child_tags_ids = list(set(child_tags_ids) & set(tags_ids))
+            tag[TAGS_TABLE.columns.sub_links.key] = new_child_tags_ids
+            formatted_tags.append(tag)
+        for tag in import_exist_tags_info:
+            child_tags_ids = tag.get(TAGS_TABLE.columns.sub_links.key, [])
+            new_child_tags_ids = list(set(child_tags_ids) & set(tags_ids))
+            tag[TAGS_TABLE.columns.sub_links.key] = new_child_tags_ids
+            tag[TAGS_TABLE.columns.id.name] = tags_id_map[tag.get(TAGS_TABLE.columns.id.name, '')]
+            formatted_tags.append(tag)
+        
+        child_links_map = {}
+        
         for tag in formatted_tags:
             tag_id = tag.get(TAGS_TABLE.columns.id.name, '')
-            old_parent_links = tag.get(TAGS_TABLE.columns.parent_links.key, [])
-            new_parent_links = [tags_id_map[link] for link in old_parent_links if link in tags_id_map]
-            
-            tag[TAGS_TABLE.columns.parent_links.key] = new_parent_links
-            if new_parent_links:
-                parent_links[tag_id] = new_parent_links
-        return parent_links
+            old_child_links = tag.get(TAGS_TABLE.columns.sub_links.key, [])
+            new_child_links = [tags_id_map[link] for link in old_child_links if link in tags_id_map]
+            formatted_child_links = []
+            for child_tag_id in new_child_links:
+                if child_tag_id not in exist_tags_ids:
+                    formatted_child_links.append(child_tag_id)
+            if formatted_child_links:
+                child_links_map[tag_id] = formatted_child_links
+        
+        return child_links_map
 
     def post(self, request, repo_id):
         file = request.FILES.get('file', None)
@@ -3081,48 +3102,43 @@ class MetadataImportTags(APIView):
         b_file = file.read()
         file_content = json.loads(b_file.decode('utf-8'))
 
-        new_tags = []
         tag_names = [tag_data.get(TAGS_TABLE.columns.name.name, '') for tag_data in file_content]
         tag_names_str = ', '.join([f'"{tag_name}"' for tag_name in tag_names])
         sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.name.name}` in ({tag_names_str})'
         try:
             exist_rows = metadata_server_api.query_rows(sql)
-            exist_tags_info = exist_rows.get('results', [])
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        failed_tags = []
+        # update _tag_sub_links
+        exist_tags_info = exist_rows.get('results', [])
+        exist_tags_info = [
+            {**item, '_tag_sub_links': list(map(lambda link: link['row_id'], item['_tag_sub_links']))}
+            if item.get('_tag_sub_links') else item for item in exist_tags_info
+        ]
+        new_tags = []
+        exist_tags_id_map = {}
+        import_exist_tags_info = []
         if exist_tags_info:
             exist_tag_names = [tag_info.get(TAGS_TABLE.columns.name.name, '') for tag_info in exist_tags_info]
-            failed_tags = exist_tag_names
             mark_tag_names = [] # Avoid mixing the same tag name in JSON
             for tag_data in file_content:
                 tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
                 if tag_name not in exist_tag_names and tag_name not in mark_tag_names:
                     new_tags.append(tag_data)
                     mark_tag_names.append(tag_name)
+                if tag_name in exist_tag_names:
+                    import_exist_tags_info.append(tag_data)
+                    exist_tags_id_map[tag_data.get(TAGS_TABLE.columns.id.name, '')] = exist_tags_info[exist_tag_names.index(tag_name)].get(TAGS_TABLE.columns.id.name, '')
+                
         else:
             new_tags = file_content
-
-        tags_ids = [tag_data.get(TAGS_TABLE.columns.id.name, '') for tag_data in new_tags]
-        formatted_tags = [] # remove some non-existent tag ids
-        for tag in new_tags:
-            parent_tags_ids = tag.get(TAGS_TABLE.columns.parent_links.key, [])
-            child_tags_ids = tag.get(TAGS_TABLE.columns.sub_links.key, [])
-            new_parent_tags_ids = list(set(parent_tags_ids) & set(tags_ids))
-            new_child_tags_ids = list(set(child_tags_ids) & set(tags_ids))
-            tag[TAGS_TABLE.columns.parent_links.key] = new_parent_tags_ids
-            tag[TAGS_TABLE.columns.sub_links.key] = new_child_tags_ids
-            formatted_tags.append(tag)
-
-        if not formatted_tags:
-            return Response({'failed_tags': failed_tags, 'success_tags': []})
         
         create_tags = [{TAGS_TABLE.columns.name.name: tag.get(TAGS_TABLE.columns.name.name, ''),
                         TAGS_TABLE.columns.color.name: tag.get(TAGS_TABLE.columns.color.name, '')}
-                        for tag in formatted_tags]
+                        for tag in new_tags]
         try:
             # create tags
             resp = metadata_server_api.insert_rows(tags_table_id, create_tags)
@@ -3131,13 +3147,12 @@ class MetadataImportTags(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        # parent links structure: {tag_id: [parent_tag_id1, parent_tag_id2], ....}
-        parent_links = self._handle_tag_links(formatted_tags, resp, TAGS_TABLE)
+        # child links structure: {tag_id: [child_tag_id1, child_tag_id2], ....}
+        child_links_map = self._handle_tag_links(new_tags, exist_tags_info, exist_tags_id_map, import_exist_tags_info, resp, TAGS_TABLE)
         link_id = TAGS_TABLE.self_link_id
         try:
-            metadata_server_api.insert_link(link_id, tags_table_id, parent_links, False)
+            metadata_server_api.insert_link(link_id, tags_table_id, child_links_map, True)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        success_tags = [tag.get(TAGS_TABLE.columns.name.name, '') for tag in formatted_tags]
-        return Response({'failed_tags': failed_tags, 'success_tags': success_tags})
+        return Response({'success': True})
