@@ -22,8 +22,8 @@ class EnvManager(object):
         self.upgrade_dir = os.path.dirname(__file__)
         self.install_path = os.path.dirname(self.upgrade_dir)
         self.top_dir = os.path.dirname(self.install_path)
-        self.ccnet_dir = os.environ['CCNET_CONF_DIR']
-        self.seafile_dir = os.environ['SEAFILE_CONF_DIR']
+        self.ccnet_dir = os.environ.get('CCNET_CONF_DIR')
+        self.seafile_dir = os.environ.get('SEAFILE_CONF_DIR')
         self.central_config_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR')
         self.seafevents_db_dir = os.path.join(os.path.dirname(self.install_path), 'pro-data')
 
