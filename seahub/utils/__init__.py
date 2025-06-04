@@ -610,7 +610,7 @@ if EVENTS_CONFIG_FILE:
 
     try:
         EVENTS_ENABLED = True
-        SeafEventsSession = seafevents_api.init_db_session_class(parsed_events_conf)
+        SeafEventsSession = seafevents_api.init_db_session_class()
     except ImportError:
         logging.exception('Failed to import seafevents package.')
         seafevents = None
