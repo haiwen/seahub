@@ -6,3 +6,11 @@
   overflow-x: hidden;
   padding: 8px;
 }
+
+.detail-body.dirent-info.error {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
