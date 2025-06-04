@@ -24,12 +24,13 @@ const TagsEditor = forwardRef(({
   value: oldValue,
   editorPosition = { left: 0, top: 0 },
   onPressTab,
-  updateFileTags,
+  onUpdate,
   showTagsAsTree,
+  canEditData = false,
+  canAddTag = false,
+  addTag,
 }, ref) => {
-  const { tagsData, addTag, context } = useTags();
-
-  const canAddTag = context.canAddTag();
+  const { tagsData, context } = useTags();
 
   const [value, setValue] = useState((oldValue || []).map(item => item.row_id).filter(item => getRowById(tagsData, item)));
   const [searchValue, setSearchValue] = useState('');
@@ -44,7 +45,7 @@ const TagsEditor = forwardRef(({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
 
-  const canEditData = window.sfMetadataContext.canModifyColumnData(column);
+  const localStorage = context.localStorage;
 
   const tags = useMemo(() => {
     if (!tagsData) return [];
@@ -79,7 +80,7 @@ const TagsEditor = forwardRef(({
     }
     setValue(newValue);
     const recordId = getRecordIdFromRecord(record);
-    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+    onUpdate && onUpdate([{ record_id: recordId, tags: newValue, old_tags: value }]);
 
     const ids = recentlyUsed.map(item => getTagId(item));
     if (ids.indexOf(tagId) > -1) return;
@@ -88,8 +89,8 @@ const TagsEditor = forwardRef(({
     setRecentlyUsed(updated);
 
     const newIds = updated.map(tag => getTagId(tag));
-    context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
-  }, [value, record, tagsData, updateFileTags, recentlyUsed, context.localStorage]);
+    localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
+  }, [value, record, tagsData, onUpdate, recentlyUsed, localStorage]);
 
   const onMenuMouseEnter = useCallback((i, id) => {
     setHighlightIndex(i);
@@ -117,19 +118,19 @@ const TagsEditor = forwardRef(({
         const tags = operation.tags?.map(tag => getTagId(tag));
         const recordId = getRecordIdFromRecord(record);
         const newValue = [...value, ...tags];
-        updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
+        onUpdate && onUpdate([{ record_id: recordId, tags: newValue, old_tags: value }]);
         setValue(newValue);
 
         const updatedRecentlyUsed = [...tags.map(tag => getRowById(tagsData, tag)), ...recentlyUsed].slice(0, 10);
         setRecentlyUsed(updatedRecentlyUsed);
         const ids = updatedRecentlyUsed.map(item => getTagId(item));
-        context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(ids));
+        localStorage && localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(ids));
       },
       fail_callback: () => {
 
       },
     });
-  }, [value, searchValue, record, tagsData, recentlyUsed, context.localStorage, addTag, updateFileTags]);
+  }, [value, searchValue, record, tagsData, recentlyUsed, localStorage, addTag, onUpdate]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
@@ -338,11 +339,11 @@ const TagsEditor = forwardRef(({
   }, [onHotKey]);
 
   useEffect(() => {
-    const saved = context.localStorage && context.localStorage.getItem(RECENTLY_USED_TAG_IDS);
+    const saved = localStorage && localStorage.getItem(RECENTLY_USED_TAG_IDS);
     const ids = saved ? JSON.parse(saved) : [];
     const tags = ids.map(id => getRowById(tagsData, id)).filter(Boolean);
     setRecentlyUsed(tags);
-  }, [tagsData, context.localStorage]);
+  }, [tagsData, localStorage]);
 
   useEffect(() => {
     if (tagsData?.rows_tree && showTagsAsTree) {
@@ -501,7 +502,7 @@ TagsEditor.propTypes = {
   value: PropTypes.array,
   editorPosition: PropTypes.object,
   onPressTab: PropTypes.func,
-  updateFileTags: PropTypes.func,
+  onUpdate: PropTypes.func,
   showTagsAsTree: PropTypes.bool,
 };
 
