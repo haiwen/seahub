@@ -1070,6 +1070,24 @@ class InteractionMasks extends React.Component {
     }
   };
 
+  handlePreviewImageChange = (newRowIdx) => {
+    const { selectedPosition } = this.state;
+    if (selectedPosition.rowIdx !== newRowIdx) {
+      const newPosition = {
+        ...selectedPosition,
+        rowIdx: newRowIdx,
+        groupRecordIndex: this.props.isGroupView ? newRowIdx : -1,
+      };
+
+      if (this.isCellWithinBounds(newPosition)) {
+        this.setState({
+          selectedPosition: newPosition,
+          editorPosition: this.getEditorPosition(),
+        });
+      }
+    }
+  };
+
   renderSingleCellSelectView = () => {
     const { columns } = this.props;
     const { isEditorEnabled, selectedPosition } = this.state;
@@ -1161,6 +1179,7 @@ class InteractionMasks extends React.Component {
               updateFileTags={this.props.updateFileTags}
               editorPosition={editorPosition}
               deleteRecords={this.props.deleteRecords}
+              onChangePosition={this.handlePreviewImageChange}
               {...{
                 ...this.getSelectedDimensions(selectedPosition),
                 ...this.state.editorPosition
