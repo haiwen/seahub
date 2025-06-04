@@ -51,14 +51,7 @@ const AllTagsOperationToolbar = ({ repoID }) => {
     fileInput.onchange = async (e) => {
       const file = e.target.files[0];
       tagsAPI.importTags(repoID, file).then(res => {
-        const failedTags = res.data.failed_tags;
-        const successTags = res.data.success_tags;
-        if (failedTags.length > 0) {
-          toaster.danger(gettext('Failed to import tags: ') + failedTags.join(', '));
-        }
-        if (successTags.length > 0) {
-          toaster.success(gettext('Successfully imported tags: ') + successTags.join(', '));
-        }
+        toaster.success(gettext('Successfully imported tags.'));
         setTimeout(() => {
           reloadTags(true);
         }, 10);
