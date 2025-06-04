@@ -2,20 +2,20 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
 
-const EditIcon = (props) => {
+function EditIcon({ onClick }) {
   return (
-    <span
+    <i
       role="button"
       title={gettext('Edit')}
       aria-label={gettext('Edit')}
-      className="sf3-font sf3-font-rename attr-action-icon"
-      onClick={props.onClick}>
-    </span>
+      className="sf3-font sf3-font-rename op-icon op-icon-bg-light ml-1"
+      onClick={onClick}>
+    </i>
   );
-};
+}
 
 EditIcon.propTypes = {
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired
 };
 
 export default EditIcon;
