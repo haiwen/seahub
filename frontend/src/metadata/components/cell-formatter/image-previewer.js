@@ -8,7 +8,7 @@ import { Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 
-const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, deleteRecords, canDelete }) => {
+const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, deleteRecords, canDelete, onChangePosition }) => {
   const [imageIndex, setImageIndex] = useState(0);
   const [imageItems, setImageItems] = useState([]);
 
@@ -49,12 +49,28 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
 
   const moveToPrevImage = () => {
     const imageItemsLength = imageItems.length;
-    setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
+    const newIndex = (imageIndex + imageItemsLength - 1) % imageItemsLength;
+    setImageIndex(newIndex);
+
+    // update selected cell in table
+    const recordId = imageItems[newIndex].id;
+    const rowIdx = table.rows.findIndex(row => getRecordIdFromRecord(row) === recordId);
+    if (rowIdx !== -1) {
+      onChangePosition(rowIdx, true);
+    }
   };
 
   const moveToNextImage = () => {
     const imageItemsLength = imageItems.length;
-    setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
+    const newIndex = (imageIndex + 1) % imageItemsLength;
+    setImageIndex(newIndex);
+
+    // update selected cell in table
+    const recordId = imageItems[newIndex].id;
+    const rowIdx = table.rows.findIndex(row => getRecordIdFromRecord(row) === recordId);
+    if (rowIdx !== -1) {
+      onChangePosition(rowIdx, true);
+    }
   };
 
   const rotateImage = (imageIndex, angle) => {
@@ -123,6 +139,7 @@ ImagePreviewer.propTypes = {
   closeImagePopup: PropTypes.func,
   deleteRecords: PropTypes.func,
   canDelete: PropTypes.bool,
+  onChangePosition: PropTypes.func,
 };
 
 export default ImagePreviewer;
