@@ -1,10 +1,11 @@
 const OVERLAY_SIZE = 80;
 
 const customImageOverlay = (props) => {
-  const { isCluster, pointCount, reduces } = props;
+  const { isCluster, pointCount, reduces, className } = props;
   const src = isCluster ? reduces.src : props.src;
 
   const div = document.createElement('div');
+  div.className = className;
   div.style.position = 'absolute';
 
   const container = document.createElement('div');

@@ -8,14 +8,14 @@ let clickTimeout = null;
 
 export const createGoogleMarkerClusterer = (map, images, onClusterLeaveIds) => {
   const markers = images.map(image => {
-    const overlay = customImageOverlay({ isCluster: false, src: image.src });
+    const overlay = customImageOverlay({ isCluster: false, src: image.src, className: 'custom-image-overlay google-custom-overlay' });
     overlay.addEventListener('click', () => {
       if (clickTimeout) {
         clearTimeout(clickTimeout);
         clickTimeout = null;
         const zoom = map.getZoom();
         map.setZoom(Math.min(zoom + 1, MAX_ZOOM));
-        map.setCenter(image.wgs_84);
+        map.setCenter(image.gcPosition);
         return;
       }
       clickTimeout = setTimeout(() => {
@@ -25,7 +25,7 @@ export const createGoogleMarkerClusterer = (map, images, onClusterLeaveIds) => {
     });
 
     return new window.google.maps.marker.AdvancedMarkerElement({
-      position: image.wgs_84,
+      position: image.gcPosition,
       map,
       content: overlay,
     });
@@ -36,8 +36,8 @@ export const createGoogleMarkerClusterer = (map, images, onClusterLeaveIds) => {
     markers,
     renderer: {
       render: (cluster) => {
-        const imagesInBounds = images.filter(image => cluster.bounds.contains(image.wgs_84));
-        const overlay = customImageOverlay({ isCluster: true, reduces: { src: imagesInBounds[0].src }, pointCount: cluster.count });
+        const imagesInBounds = images.filter(image => cluster.bounds.contains(image.gcPosition));
+        const overlay = customImageOverlay({ isCluster: true, reduces: { src: imagesInBounds[0].src }, pointCount: cluster.count, className: 'custom-image-overlay google-custom-overlay' });
         overlay.addEventListener('click', () => {
           if (clickTimeout) {
             clearTimeout(clickTimeout);
@@ -48,13 +48,14 @@ export const createGoogleMarkerClusterer = (map, images, onClusterLeaveIds) => {
             return;
           }
           clickTimeout = setTimeout(() => {
-            const imagesInBounds = images.filter(image => cluster.bounds.contains(image.wgs_84));
+            const imagesInBounds = images.filter(image => cluster.bounds.contains(image.gcPosition));
             onClusterLeaveIds(imagesInBounds.map(image => image.id));
             clickTimeout = null;
           }, 300);
         });
+
         return new window.google.maps.marker.AdvancedMarkerElement({
-          position: cluster.position,
+          position: imagesInBounds[0].gcPosition,
           content: overlay,
         });
       }
