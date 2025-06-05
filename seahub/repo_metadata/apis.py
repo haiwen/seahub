@@ -3028,44 +3028,80 @@ class MetadataImportTags(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def _handle_tag_links(self, new_tags, exist_tags_info, exist_tags_id_map, import_exist_tags_info, resp, TAGS_TABLE):
-        exist_tags_ids = [tag.get(TAGS_TABLE.columns.id.name, '') for tag in exist_tags_info]
-        all_tags = new_tags + import_exist_tags_info
+    def _handle_tag_links(self, new_tags, existing_tags, exist_tags_id_map, imported_existing_tags, resp, TAGS_TABLE):
+        exist_tags_ids = [tag.get(TAGS_TABLE.columns.id.name, '') for tag in existing_tags]
+        all_tags = new_tags + imported_existing_tags
 
         tags_id_map = {}
-        tags_ids = [tag_data.get(TAGS_TABLE.columns.id.name, '') for tag_data in all_tags]
+        imported_tags_ids = [tag_data.get(TAGS_TABLE.columns.id.name, '') for tag_data in all_tags]
         for index, tag in enumerate(new_tags):
             old_tag_id = tag.get(TAGS_TABLE.columns.id.name, '')
             tag[TAGS_TABLE.columns.id.name] = resp.get('row_ids', [])[index]
             tags_id_map[old_tag_id] = tag.get(TAGS_TABLE.columns.id.name, '')
         tags_id_map.update(exist_tags_id_map)
-        formatted_tags = [] # remove some non-existent tag ids
+
+        processed_tags = [] # remove some non-existent tag ids
         for tag in new_tags:
             child_tags_ids = tag.get(TAGS_TABLE.columns.sub_links.key, [])
-            new_child_tags_ids = list(set(child_tags_ids) & set(tags_ids))
+            new_child_tags_ids = list(set(child_tags_ids) & set(imported_tags_ids))
             tag[TAGS_TABLE.columns.sub_links.key] = new_child_tags_ids
-            formatted_tags.append(tag)
-        for tag in import_exist_tags_info:
+            processed_tags.append(tag)
+        for tag in imported_existing_tags:
             child_tags_ids = tag.get(TAGS_TABLE.columns.sub_links.key, [])
-            new_child_tags_ids = list(set(child_tags_ids) & set(tags_ids))
+            new_child_tags_ids = list(set(child_tags_ids) & set(imported_tags_ids))
             tag[TAGS_TABLE.columns.sub_links.key] = new_child_tags_ids
+            # Update the imported tag ID to an existing tag ID on the server
             tag[TAGS_TABLE.columns.id.name] = tags_id_map[tag.get(TAGS_TABLE.columns.id.name, '')]
-            formatted_tags.append(tag)
+            processed_tags.append(tag)
         
         child_links_map = {}
-        
-        for tag in formatted_tags:
+        for tag in processed_tags:
             tag_id = tag.get(TAGS_TABLE.columns.id.name, '')
             old_child_links = tag.get(TAGS_TABLE.columns.sub_links.key, [])
             new_child_links = [tags_id_map[link] for link in old_child_links if link in tags_id_map]
-            formatted_child_links = []
-            for child_tag_id in new_child_links:
-                if child_tag_id not in exist_tags_ids:
-                    formatted_child_links.append(child_tag_id)
+            formatted_child_links = list(set(new_child_links) - set(exist_tags_ids))
             if formatted_child_links:
                 child_links_map[tag_id] = formatted_child_links
         
         return child_links_map
+
+    def _get_existing_tags(self, metadata_server_api, tag_names, TAGS_TABLE):
+        tag_names_str = ', '.join([f'"{tag_name}"' for tag_name in tag_names])
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.name.name}` in ({tag_names_str})'
+        
+        exist_rows = metadata_server_api.query_rows(sql)
+        existing_tags = exist_rows.get('results', [])
+        
+        return [
+            {**item, '_tag_sub_links': list(map(lambda link: link['row_id'], item['_tag_sub_links']))}
+            if item.get('_tag_sub_links') else item for item in existing_tags
+        ]
+
+    def _classify_tags(self, file_content, existing_tags, TAGS_TABLE):
+        new_tags = []
+        imported_existing_tags = []
+        existing_id_map = {}
+        
+        if existing_tags:
+            existing_tag_names = [tag.get(TAGS_TABLE.columns.name.name, '') for tag in existing_tags]
+            processed_names = set()
+            
+            for tag_data in file_content:
+                tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
+                
+                if tag_name in existing_tag_names and tag_name not in processed_names:
+                    idx = existing_tag_names.index(tag_name)
+                    imported_existing_tags.append(tag_data)
+                    existing_id_map[tag_data.get(TAGS_TABLE.columns.id.name, '')] = (
+                        existing_tags[idx].get(TAGS_TABLE.columns.id.name, '')
+                    )
+                elif tag_name not in processed_names:
+                    new_tags.append(tag_data)
+                    processed_names.add(tag_name)
+        else:
+            new_tags = file_content
+            
+        return new_tags, imported_existing_tags, existing_id_map
 
     def post(self, request, repo_id):
         file = request.FILES.get('file', None)
@@ -3087,71 +3123,42 @@ class MetadataImportTags(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-
         from seafevents.repo_metadata.constants import TAGS_TABLE
         try:
             tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        if not tags_table:
-            return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
-        tags_table_id = tags_table['id']
-        b_file = file.read()
-        file_content = json.loads(b_file.decode('utf-8'))
-
-        tag_names = [tag_data.get(TAGS_TABLE.columns.name.name, '') for tag_data in file_content]
-        tag_names_str = ', '.join([f'"{tag_name}"' for tag_name in tag_names])
-        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.name.name}` in ({tag_names_str})'
-        try:
-            exist_rows = metadata_server_api.query_rows(sql)
-        except Exception as e:
-            logger.exception(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        # update _tag_sub_links
-        exist_tags_info = exist_rows.get('results', [])
-        exist_tags_info = [
-            {**item, '_tag_sub_links': list(map(lambda link: link['row_id'], item['_tag_sub_links']))}
-            if item.get('_tag_sub_links') else item for item in exist_tags_info
-        ]
-        new_tags = []
-        exist_tags_id_map = {}
-        import_exist_tags_info = []
-        if exist_tags_info:
-            exist_tag_names = [tag_info.get(TAGS_TABLE.columns.name.name, '') for tag_info in exist_tags_info]
-            mark_tag_names = [] # Avoid mixing the same tag name in JSON
-            for tag_data in file_content:
-                tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
-                if tag_name not in exist_tag_names and tag_name not in mark_tag_names:
-                    new_tags.append(tag_data)
-                    mark_tag_names.append(tag_name)
-                if tag_name in exist_tag_names:
-                    import_exist_tags_info.append(tag_data)
-                    exist_tags_id_map[tag_data.get(TAGS_TABLE.columns.id.name, '')] = exist_tags_info[exist_tag_names.index(tag_name)].get(TAGS_TABLE.columns.id.name, '')
+            if not tags_table:
+                return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+            tags_table_id = tags_table['id']
+            file_content = json.loads(file.read().decode('utf-8'))
+            tag_names = [tag.get(TAGS_TABLE.columns.name.name, '') for tag in file_content]
+            if not tag_names:
+                return Response({'success': True})
                 
-        else:
-            new_tags = file_content
-        
-        create_tags = [{TAGS_TABLE.columns.name.name: tag.get(TAGS_TABLE.columns.name.name, ''),
-                        TAGS_TABLE.columns.color.name: tag.get(TAGS_TABLE.columns.color.name, '')}
-                        for tag in new_tags]
-        try:
-            # create tags
-            resp = metadata_server_api.insert_rows(tags_table_id, create_tags)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        # child links structure: {tag_id: [child_tag_id1, child_tag_id2], ....}
-        child_links_map = self._handle_tag_links(new_tags, exist_tags_info, exist_tags_id_map, import_exist_tags_info, resp, TAGS_TABLE)
-        link_id = TAGS_TABLE.self_link_id
-        try:
-            metadata_server_api.insert_link(link_id, tags_table_id, child_links_map, True)
+            existing_tags = self._get_existing_tags(metadata_server_api, tag_names, TAGS_TABLE)
+            new_tags, imported_existing_tags, existing_id_map = self._classify_tags(
+                file_content, existing_tags, TAGS_TABLE
+            )
+            
+            if new_tags:
+                create_tags_data = [
+                    {
+                        TAGS_TABLE.columns.name.name: tag.get(TAGS_TABLE.columns.name.name, ''),
+                        TAGS_TABLE.columns.color.name: tag.get(TAGS_TABLE.columns.color.name, '')
+                    }
+                    for tag in new_tags
+                ]
+                resp = metadata_server_api.insert_rows(tags_table_id, create_tags_data)
+            else:
+                return Response({'success': True})
+            
+            # child links map structure: {tag_id: [child_tag_id1, child_tag_id2], ....}
+            child_links_map = self._handle_tag_links(
+                new_tags, existing_tags, existing_id_map, 
+                imported_existing_tags, resp, TAGS_TABLE
+            )
+            
+            if child_links_map:
+                metadata_server_api.insert_link(TAGS_TABLE.self_link_id, tags_table_id, child_links_map, True)            
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
