@@ -106,7 +106,7 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-    ENABLE_METADATA_AND_TAGS_BY_DEFAULT, ENABLE_METADATA_MANAGEMENT
+    ENABLE_METADATA_FOR_NEW_LIBRARY, ENABLE_METADATA_MANAGEMENT
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
@@ -1166,7 +1166,7 @@ class Repos(APIView):
             else:
                 repo_id, error = self._create_repo(request, repo_name, repo_desc, username, org_id)
             # enable metadata and tags
-            if ENABLE_METADATA_MANAGEMENT and ENABLE_METADATA_AND_TAGS_BY_DEFAULT:
+            if ENABLE_METADATA_MANAGEMENT and ENABLE_METADATA_FOR_NEW_LIBRARY:
                 RepoMetadata.objects.enable_metadata_and_tags(repo_id)
                 metadata_server_api = MetadataServerAPI(repo_id, username)
                 init_metadata(metadata_server_api)
