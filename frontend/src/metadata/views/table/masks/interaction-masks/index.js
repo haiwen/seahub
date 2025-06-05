@@ -1093,7 +1093,8 @@ class InteractionMasks extends React.Component {
     const { columns, updateFileTags, recordGetterByIndex } = this.props;
     const recordId = getRecordIdFromRecord(getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex }));
     const value = getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex }) || [];
-    const newValue = value.slice(0);
+    const ids = value.map(item => item.row_id);
+    const newValue = ids.slice(0);
     if (!newValue.includes(tagId)) {
       newValue.push(tagId);
     }
@@ -1105,8 +1106,9 @@ class InteractionMasks extends React.Component {
     const { columns, updateFileTags, recordGetterByIndex } = this.props;
     const recordId = getRecordIdFromRecord(getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex }));
     const value = getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex }) || [];
-    const newValue = value.slice(0);
-    const tagIndex = value.indexOf(tagId);
+    const ids = value.map(item => item.row_id);
+    const newValue = ids.slice(0);
+    const tagIndex = newValue.indexOf(tagId);
     if (tagIndex > -1) {
       newValue.splice(tagIndex, 1);
     }
