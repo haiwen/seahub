@@ -18,6 +18,11 @@
   height: 100%;
 }
 
+.sf-metadata-view-map .custom-image-overlay.google-custom-overlay {
+  left: -40px;
+  top: -80px;
+}
+
 .sf-metadata-view-map .custom-image-container {
   width: 86px;
   height: 86px;

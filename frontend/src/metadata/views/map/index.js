@@ -67,6 +67,7 @@ const Map = () => {
           parentDir,
           location: bdPosition,
           wgs_84: { lng, lat },
+          gcPosition,
         };
       })
       .filter(Boolean);
@@ -109,7 +110,7 @@ const Map = () => {
   const renderGoogleMap = useCallback(() => {
     if (!window.google?.maps?.Map) return;
     mapRef.current = createGoogleMap({ center, zoom, onMapState });
-    createGoogleMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
+    window.mapClustererInstance = createGoogleMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
 
     window.mapViewInstance = mapRef.current;
   }, [images, center, zoom, onMapState, onClusterLeaveIds]);
@@ -207,7 +208,8 @@ const Map = () => {
         viewDom.replaceChild(container, containerRef.current);
 
         mapRef.current = window.mapViewInstance;
-        createGoogleMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
+        window.mapClustererInstance && window.mapClustererInstance.clearMarkers();
+        window.mapClustererInstance = createGoogleMarkerClusterer(mapRef.current, images, onClusterLeaveIds);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
