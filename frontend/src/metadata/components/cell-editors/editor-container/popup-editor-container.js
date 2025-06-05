@@ -63,7 +63,7 @@ class PopupEditorContainer extends React.Component {
   };
 
   createEditor = () => {
-    const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, updateFileTags } = this.props;
+    const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, onSelectTag, onDeselectTag } = this.props;
     const readOnly = !canEditCell(column, record, true) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
     const value = this.getInitialValue(readOnly);
 
@@ -86,7 +86,6 @@ class PopupEditorContainer extends React.Component {
       column,
       readOnly,
       onPressTab,
-      updateFileTags,
       showTagsAsTree: true,
     };
 
@@ -97,6 +96,10 @@ class PopupEditorContainer extends React.Component {
     if (column.type === CellType.TAGS) {
       editorProps = {
         ...editorProps,
+        onSelect: onSelectTag,
+        onDeselect: onDeselectTag,
+        canEditData: window.sfMetadataContext.canModifyRow(),
+        canAddTag: window.sfMetadataContext.canModifyColumn(column),
         column: {
           ...column,
           width: TAGS_EDITOR_WIDTH,

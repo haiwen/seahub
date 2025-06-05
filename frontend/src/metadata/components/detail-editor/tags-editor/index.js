@@ -17,8 +17,8 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
 
   const [showEditor, setShowEditor] = useState(false);
 
-  const { tagsData, addTag, context } = useTags();
-  const canEditData = useMemo(() => window.sfMetadataContext && window.sfMetadataContext.canEditData || false, []);
+  const { tagsData, context } = useTags();
+  const canEditData = useMemo(() => window.sfMetadataContext && window.sfMetadataContext.canModifyRow() || false, []);
 
   const validValue = useMemo(() => {
     if (!Array.isArray(value) || value.length === 0) return [];
@@ -70,6 +70,25 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
     updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
   }, [validValue, value, record, updateFileTags]);
 
+  const onSelectTag = useCallback((tagId) => {
+    const recordId = getRecordIdFromRecord(record);
+    const newValue = validValue.slice(0);
+    if (!newValue.includes(tagId)) {
+      newValue.push(tagId);
+    }
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
+  }, [record, value, validValue, updateFileTags]);
+
+  const onDeselectTag = useCallback((tagId) => {
+    const recordId = getRecordIdFromRecord(record);
+    const newValue = validValue.slice(0);
+    let optionIdx = validValue.indexOf(tagId);
+    if (optionIdx > -1) {
+      newValue.splice(optionIdx, 1);
+    }
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
+  }, [record, value, validValue, updateFileTags]);
+
   const renderEditor = useCallback(() => {
     if (!showEditor) return null;
     const { width, bottom } = ref.current.getBoundingClientRect();
@@ -90,17 +109,15 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
           saveImmediately={true}
           value={value}
           column={{ ...field, width: Math.max(width - 2, 400) }}
-          record={record}
-          tagsData={tagsData}
-          onUpdate={updateFileTags}
+          onSelect={onSelectTag}
+          onDeselect={onDeselectTag}
           showTagsAsTree={true}
           canEditData={canEditData}
           canAddTag={context.canAddTag}
-          addTag={addTag}
         />
       </Popover>
     );
-  }, [showEditor, field, record, value, tagsData, context, canEditData, addTag, updateFileTags]);
+  }, [showEditor, field, value, context, canEditData, onSelectTag, onDeselectTag]);
 
   return (
     <div

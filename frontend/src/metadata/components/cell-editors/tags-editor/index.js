@@ -8,7 +8,6 @@ import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../../tag/hooks';
 import { getTagId, getTagName, getTagsByName, getTagByName, getTagColor } from '../../../../tag/utils/cell';
-import { getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { SELECT_OPTION_COLORS } from '../../../constants';
 import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY, RECENTLY_USED_TAG_IDS } from '../../../../tag/constants';
@@ -20,17 +19,16 @@ import './index.css';
 const TagsEditor = forwardRef(({
   height,
   column,
-  record,
   value: oldValue,
   editorPosition = { left: 0, top: 0 },
   onPressTab,
-  onUpdate,
+  onSelect,
+  onDeselect,
   showTagsAsTree,
   canEditData = false,
   canAddTag = false,
-  addTag,
 }, ref) => {
-  const { tagsData, context } = useTags();
+  const { tagsData, context, addTag } = useTags();
 
   const [value, setValue] = useState((oldValue || []).map(item => item.row_id).filter(item => getRowById(tagsData, item)));
   const [searchValue, setSearchValue] = useState('');
@@ -70,17 +68,17 @@ const TagsEditor = forwardRef(({
     setSearchValue(newSearchValue);
   }, [searchValue]);
 
-  const onSelectTag = useCallback((tagId) => {
+  const handleSelectTags = useCallback((tagId) => {
     const newValue = value.slice(0);
     let optionIdx = value.indexOf(tagId);
     if (optionIdx > -1) {
       newValue.splice(optionIdx, 1);
+      onDeselect(tagId);
     } else {
       newValue.push(tagId);
+      onSelect(tagId);
     }
     setValue(newValue);
-    const recordId = getRecordIdFromRecord(record);
-    onUpdate && onUpdate([{ record_id: recordId, tags: newValue, old_tags: value }]);
 
     const ids = recentlyUsed.map(item => getTagId(item));
     if (ids.indexOf(tagId) > -1) return;
@@ -90,7 +88,7 @@ const TagsEditor = forwardRef(({
 
     const newIds = updated.map(tag => getTagId(tag));
     localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
-  }, [value, record, tagsData, onUpdate, recentlyUsed, localStorage]);
+  }, [value, tagsData, recentlyUsed, localStorage, onSelect, onDeselect]);
 
   const onMenuMouseEnter = useCallback((i, id) => {
     setHighlightIndex(i);
@@ -116,9 +114,8 @@ const TagsEditor = forwardRef(({
     addTag({ [TAG_PRIVATE_COLUMN_KEY.TAG_NAME]: searchValue, [TAG_PRIVATE_COLUMN_KEY.TAG_COLOR]: defaultOption.COLOR }, {
       success_callback: (operation) => {
         const tags = operation.tags?.map(tag => getTagId(tag));
-        const recordId = getRecordIdFromRecord(record);
         const newValue = [...value, ...tags];
-        onUpdate && onUpdate([{ record_id: recordId, tags: newValue, old_tags: value }]);
+        onSelect(tags[0]);
         setValue(newValue);
 
         const updatedRecentlyUsed = [...tags.map(tag => getRowById(tagsData, tag)), ...recentlyUsed].slice(0, 10);
@@ -130,7 +127,7 @@ const TagsEditor = forwardRef(({
 
       },
     });
-  }, [value, searchValue, record, tagsData, recentlyUsed, localStorage, addTag, onUpdate]);
+  }, [value, searchValue, tagsData, localStorage, recentlyUsed, addTag, onSelect]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
@@ -155,13 +152,13 @@ const TagsEditor = forwardRef(({
     }
     if (tag) {
       const newTagId = getTagId(tag);
-      onSelectTag(newTagId);
+      handleSelectTags(newTagId);
       return;
     }
     if (isShowCreateBtn) {
       createTag();
     }
-  }, [displayTags, highlightIndex, isShowCreateBtn, onSelectTag, createTag, showTagsAsTree, tagsData, highlightNodeIndex, nodes]);
+  }, [displayTags, highlightIndex, isShowCreateBtn, handleSelectTags, createTag, showTagsAsTree, tagsData, highlightNodeIndex, nodes]);
 
   const updateScroll = useCallback((index) => {
     const visibleStart = Math.floor(editorContainerRef.current.scrollTop / itemHeight);
@@ -380,14 +377,14 @@ const TagsEditor = forwardRef(({
           tag={tag}
           isSelected={value.includes(tagId)}
           highlight={highlightIndex === i}
-          onSelect={onSelectTag}
+          onSelect={handleSelectTags}
           onMouseEnter={() => onMenuMouseEnter(i, tagId)}
           onMouseLeave={onMenuMouseLeave}
         />
       );
     });
 
-  }, [displayTags, searchValue, value, highlightIndex, onSelectTag, onMenuMouseEnter, onMenuMouseLeave]);
+  }, [displayTags, searchValue, value, highlightIndex, handleSelectTags, onMenuMouseEnter, onMenuMouseLeave]);
 
   const renderRecentlyUsed = useCallback(() => {
     if (recentlyUsedTags.length === 0) return null;
@@ -406,7 +403,7 @@ const TagsEditor = forwardRef(({
                 'sf-metadata-ui-tag-selected': isSelected,
               })}
               title={tagName}
-              onClick={() => onSelectTag(tagId)}
+              onClick={() => handleSelectTags(tagId)}
             >
               <span className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
               <span className="sf-metadata-ui-tag-text">{tagName}</span>
@@ -415,7 +412,7 @@ const TagsEditor = forwardRef(({
         })}
       </div>
     );
-  }, [recentlyUsedTags, value, onSelectTag]);
+  }, [recentlyUsedTags, value, handleSelectTags]);
 
   const renderOptionsAsTree = useCallback(() => {
     if (nodes.length === 0) {
@@ -446,7 +443,7 @@ const TagsEditor = forwardRef(({
               tag={tag}
               isSelected={value.includes(tagId)}
               highlight={highlightNodeIndex === i}
-              onSelect={onSelectTag}
+              onSelect={handleSelectTags}
               onMouseEnter={() => onTreeMenuMouseEnter(i)}
               onMouseLeave={onTreeMenuMouseLeave}
               depth={getTreeNodeDepth(node)}
@@ -458,7 +455,7 @@ const TagsEditor = forwardRef(({
         })}
       </>
     );
-  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, renderRecentlyUsed, toggleExpandTreeNode, keyNodeFoldedMap, searchedKeyNodeFoldedMap, onSelectTag, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
+  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, renderRecentlyUsed, toggleExpandTreeNode, keyNodeFoldedMap, searchedKeyNodeFoldedMap, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
 
   return (
     <div className={classnames('sf-metadata-tags-editor', { 'tags-tree-container': showTagsAsTree })} style={style} ref={editorRef}>
@@ -502,8 +499,11 @@ TagsEditor.propTypes = {
   value: PropTypes.array,
   editorPosition: PropTypes.object,
   onPressTab: PropTypes.func,
-  onUpdate: PropTypes.func,
   showTagsAsTree: PropTypes.bool,
+  onSelect: PropTypes.func,
+  onDeselect: PropTypes.func,
+  canEditData: PropTypes.bool,
+  canAddTag: PropTypes.bool,
 };
 
 export default TagsEditor;
