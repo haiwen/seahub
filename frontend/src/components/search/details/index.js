@@ -89,7 +89,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   if (dirent.isLib) {
     return (
       <div className="searched-item-details">
-        <LibDetail currentRepoInfo={repoInfo} />
+        <LibDetail currentRepoInfo={repoInfo} isInSearch={true} />
       </div>
     );
   }
