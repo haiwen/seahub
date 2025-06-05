@@ -48,7 +48,9 @@ class CustomizePopover extends React.Component {
   onMouseDown = (e) => {
     const { canHidePopover = true } = this.props;
     if (!canHidePopover) return;
-    if (this.popoverRef && e && getEventClassName(e).indexOf('popover') === -1 && !this.popoverRef.contains(e.target)) {
+
+    const clickOutside = this.popoverRef && !this.popoverRef.contains(e.target) && !e.target.closest('.popover');
+    if (clickOutside) {
       this.props.hidePopover(e);
     }
   };
