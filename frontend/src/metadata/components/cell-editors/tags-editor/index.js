@@ -13,6 +13,7 @@ import { SELECT_OPTION_COLORS } from '../../../constants';
 import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY, RECENTLY_USED_TAG_IDS } from '../../../../tag/constants';
 import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getNodesWithAncestors, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '../../../../components/sf-table/utils/tree';
 import TagItem from './tag-item';
+import DeleteTag from './delete-tags';
 
 import './index.css';
 
@@ -27,6 +28,8 @@ const TagsEditor = forwardRef(({
   showTagsAsTree,
   canEditData = false,
   canAddTag = false,
+  showDeletableTags = false,
+  showRecentlyUsed = true,
 }, ref) => {
   const { tagsData, context, addTag } = useTags();
 
@@ -419,10 +422,10 @@ const TagsEditor = forwardRef(({
       const noOptionsTip = searchValue ? gettext('No tags available') : gettext('No tag');
       return (<span className="none-search-result px-4">{noOptionsTip}</span>);
     }
-    const showRecentlyUsed = recentlyUsedTags.length > 0 && !searchValue;
+    const isRecentlyUsedVisible = showRecentlyUsed && recentlyUsedTags.length > 0 && !searchValue;
     return (
       <>
-        {showRecentlyUsed && (
+        {isRecentlyUsedVisible && (
           <>
             <div className="sf-metadata-tags-editor-title">{gettext('Recently used tags')}</div>
             {renderRecentlyUsed()}
@@ -455,10 +458,11 @@ const TagsEditor = forwardRef(({
         })}
       </>
     );
-  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, renderRecentlyUsed, toggleExpandTreeNode, keyNodeFoldedMap, searchedKeyNodeFoldedMap, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
+  }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, keyNodeFoldedMap, searchedKeyNodeFoldedMap, showRecentlyUsed, renderRecentlyUsed, toggleExpandTreeNode, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
 
   return (
     <div className={classnames('sf-metadata-tags-editor', { 'tags-tree-container': showTagsAsTree })} style={style} ref={editorRef}>
+      {showDeletableTags && <DeleteTag value={value} tags={tagsData} onDelete={handleSelectTags} />}
       <div className="sf-metadata-search-tags-container">
         <SearchInput
           placeholder={gettext('Search tag')}

@@ -53,7 +53,7 @@ const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
               return (<FileTypeFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeFileTypeFilter} />);
             }
             if (column_key === PRIVATE_COLUMN_KEY.TAGS) {
-              return (<TagsFilter key={column_key} readOnly={readOnly} value={filter_term} onChange={onChangeTagsFilter} />);
+              return (<TagsFilter key={column_key} value={filter_term} onChange={onChangeTagsFilter} />);
             }
             return null;
           })}

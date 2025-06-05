@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
-import Icon from '../../../../../components/icon';
 
 import './index.css';
 
@@ -50,7 +49,7 @@ const TagItem = ({
           <div className="sf-metadata-tag-name">{tagName}</div>
         </div>
         <div className="sf-metadata-tags-editor-tag-check-icon mr-1">
-          {isSelected && <Icon className="sf-metadata-icon" symbol="check-mark" />}
+          {isSelected && <i className="sf2-icon-tick"></i>}
         </div>
       </div>
     </div>

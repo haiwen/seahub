@@ -13,6 +13,7 @@
 }
 
 .sf-metadata-tags-editor .sf-metadata-search-tags-container {
+  position: relative;
   padding: 10px 10px 0;
 }
 

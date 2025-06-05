@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import CustomizeSelect from '../../../../../components/customize-select';
 import { gettext } from '../../../../../utils/constants';
 import { getFileTypeColumnOptions } from '../../../../utils/column';
@@ -33,15 +34,14 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
   }, [OPTIONS, value]);
 
   const displayValue = useMemo(() => {
-    const selectedOptions = OPTIONS.filter(o => value.includes(o.value));
     return {
       label: (
-        <div className="select-basic-filter-display-name">
-          {selectedOptions.length > 0 ? selectedOptions.map(o => o.name).join(', ') : gettext('File type')}
+        <div>
+          {gettext('File type')}
         </div>
       )
     };
-  }, [OPTIONS, value]);
+  }, []);
 
   const onChange = useCallback((newValue) => {
     if (value.includes(newValue)) {
@@ -54,7 +54,9 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
   return (
     <CustomizeSelect
       readOnly={readOnly}
-      className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select mr-4"
+      className={classNames('sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select mr-4', {
+        'highlighted': value.length > 0,
+      })}
       value={displayValue}
       options={options}
       onSelectOption={onChange}

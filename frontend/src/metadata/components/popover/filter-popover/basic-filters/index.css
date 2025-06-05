@@ -9,20 +9,42 @@
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select:hover {
-  background: #f5f5f5;
+  background: #efefef;
+}
+
+.sf-metadata-basic-filters-select.seafile-customize-select.highlighted:hover {
+  background-color: rgba(255, 152, 0, 0.2);
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select .selected-option {
-  background-color: inherit;
+  background-color: transparent;
+}
+
+.sf-metadata-basic-filters-select.seafile-customize-select .selected-option .sf3-font-down,
+.sf-metadata-basic-filters-select.sf-metadata-basic-filter-tags-select .sf3-font-down {
+  margin-left: 0;
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select.focus {
   border-color: unset;
   box-shadow: none;
+  background-color: rgba(255, 152, 0, 0.2);
 }
 
-.sf-metadata-basic-filters-select .selected-option-show {
-  margin-right: 8px;
+.sf-metadata-basic-filters-select.focus .selected-option .selected-option-show,
+.sf-metadata-basic-filters-select.focus .selected-option .sf3-font-down,
+.sf-metadata-basic-filters-select.highlighted .selected-option .selected-option-show,
+.sf-metadata-basic-filters-select.highlighted .selected-option .sf3-font-down {
+  color: #ff9800;
+}
+
+.sf-metadata-basic-filters-select.seafile-customize-select .selected-option .selected-option-show {
+  width: 100%;
+}
+
+.sf-metadata-basic-filters-select .selected-option-show,
+.sf-metadata-basic-filters-select .select-placeholder {
+  margin-right: 4px;
 }
 
 .sf-metadata-basic-filters-select .selected-option .custom-select-dropdown-icon {
@@ -74,4 +96,22 @@
 .sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox,
 .sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox input {
   cursor: inherit;
+}
+
+.sf-metadata-basic-filters-select .select-basic-filter-display-name:hover {
+  cursor: pointer;
+}
+
+.sf-metadata-basic-filter-tags-select .tag-options-container {
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 28px;
+  left: -340px;
+  z-index: 10001;
+}
+
+.sf-metadata-basic-filter-tags-select .tag-options-container .sf-metadata-delete-select-tags {
+  padding: 8px 16px;
+  min-height: 28px;
 }
