@@ -1,104 +1,65 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useMemo, useCallback } from 'react';
 import dayjs from 'dayjs';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import StatisticChart from './statistic-chart';
 import Loading from '../../../components/loading';
 import { gettext, orgID } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
+import Chart from '../../../chart';
 
 import '../../../css/system-stat.css';
 
-class OrgStatisticFile extends React.Component {
+const OrgStatisticFile = () => {
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      filesData: [],
-      labels: [],
-      isLoading: true
-    };
-  }
+  const legends = useMemo(() => [
+    { key: 'added', color: '#57cd6b', name: gettext('Added') },
+    { key: 'visited', color: '#fd913a', name: gettext('Visited') },
+    { key: 'modified', color: '#72c3fc', name: gettext('Modified') },
+    { key: 'deleted', color: '#f75356', name: gettext('Deleted') },
+  ], []);
 
-  getActiviesFiles = (startTime, endTime, groupBy) => {
-    let { filesData } = this.state;
-
+  const getActivesFiles = useCallback((startTime, endTime, groupBy) => {
+    setLoading(true);
     orgAdminAPI.orgAdminStatisticFiles(orgID, startTime, endTime, groupBy).then((res) => {
-      let labels = [];
-      let added = [];
-      let deleted = [];
-      let visited = [];
-      let modified = [];
-      let data = res.data;
-      if (Array.isArray(data)) {
-        data.forEach(item => {
-          labels.push(dayjs(item.datetime).format('YYYY-MM-DD'));
-          added.push(item.added);
-          deleted.push(item.deleted);
-          modified.push(item.modified);
-          visited.push(item.visited);
-        });
-        let addedData = {
-          label: gettext('Added'),
-          data: added,
-          borderColor: '#57cd6b',
-          backgroundColor: '#57cd6b' };
-        let visitedData = {
-          label: gettext('Visited'),
-          data: visited,
-          borderColor: '#fd913a',
-          backgroundColor: '#fd913a' };
-        let modifiedData = {
-          label: gettext('Modified'),
-          data: modified,
-          borderColor: '#72c3fc',
-          backgroundColor: '#72c3fc' };
-        let deletedData = {
-          label: gettext('Deleted'),
-          data: deleted,
-          borderColor: '#f75356',
-          backgroundColor: '#f75356' };
-        filesData = [visitedData, addedData, modifiedData, deletedData];
-      }
-      this.setState({
-        filesData: filesData,
-        labels: labels,
-        isLoading: false
-      });
+      const data = Array.isArray(res.data) ? res.data.map(d => {
+        const { added, deleted, modified, visited, datetime } = d;
+        return {
+          name: dayjs(datetime).format('YYYY-MM-DD'),
+          added,
+          deleted,
+          modified,
+          visited,
+        };
+      }) : [];
+      setLoading(false);
+      setData(data);
     }).catch(err => {
       let errMessage = Utils.getErrorMsg(err);
       toaster.danger(errMessage);
     });
-  };
+  }, []);
 
-  render() {
-    let { labels, filesData, isLoading } = this.state;
-
-    return (
-      <Fragment>
-        <MainPanelTopbar />
-        <div className="cur-view-container">
-          <StatisticNav currentItem="fileStatistic" />
-          <div className="cur-view-content">
-            <StatisticCommonTool getActiviesFiles={this.getActiviesFiles} />
-            {isLoading && <Loading />}
-            {!isLoading && labels.length > 0 &&
-              <StatisticChart
-                labels={labels}
-                filesData={filesData}
-                suggestedMaxNumbers={10}
-                isLegendStatus={true}
-                chartTitle={gettext('File Operations')}
-              />
-            }
-          </div>
+  return (
+    <Fragment>
+      <MainPanelTopbar />
+      <div className="cur-view-container">
+        <StatisticNav currentItem="fileStatistic" />
+        <div className="cur-view-content">
+          <StatisticCommonTool getActivesFiles={getActivesFiles} />
+          {isLoading && <Loading />}
+          {!isLoading && data.length > 0 &&
+            <Chart title={gettext('File Operations')} data={data} legends={legends} ySuggestedMax={10} />
+          }
         </div>
-      </Fragment>
-    );
-  }
-}
+      </div>
+    </Fragment>
+  );
+
+};
 
 export default OrgStatisticFile;
