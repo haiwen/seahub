@@ -230,7 +230,7 @@ const style = `
       padding: 0;
     }
     
-    .loading-tip {
+    .metrics-container .loading-tip {
       margin: 100px auto;
       text-align: center;
     }
