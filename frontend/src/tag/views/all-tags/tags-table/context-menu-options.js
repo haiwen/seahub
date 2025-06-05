@@ -164,7 +164,7 @@ export const createContextMenuOptions = ({
           parentTagId: tag._id,
         },
         {
-          label: gettext('Add child tags'),
+          label: gettext('Set child tags'),
           value: OPERATION.ADD_CHILD_TAGS,
         }
       );
