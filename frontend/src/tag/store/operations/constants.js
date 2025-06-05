@@ -9,7 +9,7 @@ export const OPERATION_TYPE = {
   DELETE_TAG_LINKS: 'delete_tag_links',
   DELETE_TAGS_LINKS: 'delete_tags_links',
   MERGE_TAGS: 'merge_tags',
-
+  EXPORT_TAGS: 'export_tags',
   MODIFY_LOCAL_RECORDS: 'modify_local_records',
   MODIFY_LOCAL_FILE_TAGS: 'modify_local_file_tags',
 
@@ -32,6 +32,7 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.MODIFY_LOCAL_FILE_TAGS]: ['file_id', 'tags_ids'],
   [OPERATION_TYPE.MODIFY_COLUMN_WIDTH]: ['column_key', 'new_width', 'old_width'],
   [OPERATION_TYPE.MODIFY_TAGS_SORT]: ['sort'],
+  [OPERATION_TYPE.EXPORT_TAGS]: ['repo_id', 'tags_ids'],
 };
 
 export const UNDO_OPERATION_TYPE = [

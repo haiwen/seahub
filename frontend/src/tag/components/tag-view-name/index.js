@@ -8,7 +8,7 @@ import { gettext } from '../../../utils/constants';
 import AllTagsOperationToolbar from './all-tags-operation-toolbar';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
-const TagViewName = ({ id, canSelectAllTags }) => {
+const TagViewName = ({ id, canSelectAllTags, repoID }) => {
   const { tagsData, context } = useTags();
 
   const selectAllTags = () => {
@@ -31,7 +31,7 @@ const TagViewName = ({ id, canSelectAllTags }) => {
       );
     }
     return (
-      <AllTagsOperationToolbar/>
+      <AllTagsOperationToolbar repoID={repoID} />
     );
   }
   const tag = getRowById(tagsData, id);
@@ -43,6 +43,7 @@ const TagViewName = ({ id, canSelectAllTags }) => {
 
 TagViewName.propTypes = {
   id: PropTypes.string,
+  repoID: PropTypes.string,
   canSelectAllTags: PropTypes.bool,
 };
 

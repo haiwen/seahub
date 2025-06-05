@@ -161,7 +161,7 @@ class DirPath extends React.Component {
         <span className="path-split">/</span>
         <span className="path-item path-item-read-only">{gettext('Tags')}</span>
         <span className="path-split">/</span>
-        <TagViewName id={tagId} canSelectAllTags={canSelectAllTags} />
+        <TagViewName id={tagId} canSelectAllTags={canSelectAllTags} repoID={this.props.repoID} />
         {children && (
           <>
             <span className="path-split">/</span>
