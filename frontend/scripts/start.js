@@ -143,9 +143,20 @@ checkBrowsers(paths.appPath, isInteractive)
       openBrowser(urls.localUrlForBrowser);
     });
 
+    async function stopServer() {
+      try {
+        await devServer.stop();
+      } catch (error) {
+        console.error('Close devServer error:', error);
+        process.exit(1);
+      }
+    }
+
     ['SIGINT', 'SIGTERM'].forEach(function (sig) {
       process.on(sig, function () {
-        devServer.close();
+        stopServer().then(() => {
+          process.exit(0);
+        });
         process.exit();
       });
     });
@@ -153,7 +164,9 @@ checkBrowsers(paths.appPath, isInteractive)
     if (process.env.CI !== 'true') {
       // Gracefully exit when stdin ends
       process.stdin.on('end', function () {
-        devServer.close();
+        stopServer().then(() => {
+          process.exit(0);
+        });
         process.exit();
       });
     }
