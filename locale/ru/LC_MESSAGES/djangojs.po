@@ -2791,7 +2791,7 @@ msgstr "Переименовать группу в"
 #: frontend/src/components/dialog/rename-repo.js:59
 #| msgid "Renamed library"
 msgid "Rename Library"
-msgstr ""
+msgstr "Переименовать библиотеку"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:57
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:68
@@ -2957,12 +2957,12 @@ msgstr "Просмотр снимка"
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:43
 #| msgid "Successfully change the group"
 msgid "Successfully changed the office suite."
-msgstr ""
+msgstr "Офисный пакет изменен."
 
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:88
 #| msgid "Select all"
 msgid "Select an office suite"
-msgstr ""
+msgstr "Выбрать офисный пакет"
 
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:103
 msgid "{library_name} Office Suite"
@@ -3864,17 +3864,17 @@ msgstr "Корзина"
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:87
 #| msgid "Successfully restored the library."
 msgid "Successfully watched the library."
-msgstr ""
+msgstr "Просмотрел библиотеку."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:99
 #| msgid "Successfully restored the library."
 msgid "Successfully unwatched the library."
-msgstr ""
+msgstr "Отключил просмотр библиотеки."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:148
 #| msgid "Successfully restored the library."
 msgid "Successfully renamed the library."
-msgstr ""
+msgstr "Переименовал библиотеку."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:160
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:239
@@ -8349,7 +8349,7 @@ msgstr "Устройства"
 
 #: frontend/src/pages/org-admin/side-panel.js:96
 msgid "Billing"
-msgstr ""
+msgstr "Выставление счетов"
 
 #: frontend/src/pages/org-admin/side-panel.js:109
 #: frontend/src/pages/sys-admin/side-panel.js:186
@@ -10053,7 +10053,7 @@ msgstr "Информация о группе"
 #: frontend/src/translate.js:36
 #| msgid "Change cover"
 msgid "Change view type"
-msgstr ""
+msgstr "Изменить тип представления"
 
 #: frontend/src/user-notifications.js:202
 msgid "Mark all read"
