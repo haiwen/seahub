@@ -2,6 +2,7 @@
 from django.core.cache import cache
 from django.urls import reverse
 
+from seahub.invitations.models import Invitation
 from seahub.utils import gen_token, get_service_url
 
 
@@ -38,3 +39,12 @@ def get_or_create_invitation_link(org_id):
     link = '%s/weixin/oauth-login/?next=%s' % (
         get_service_url().rstrip('/'), reverse('org_associate', args=[token]))
     return link
+
+
+def generate_org_re_active_link(org_id, ccnet_email):
+    i = Invitation.objects.add(inviter='Seafile Admin',
+                               accepter=f'{org_id}_{ccnet_email}',
+                               invite_type='org')
+
+    url = reverse('org_re_activate', args=[i.token])
+    return url

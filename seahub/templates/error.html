@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block main_content %}
 <div class="text-panel">
@@ -8,6 +9,13 @@
   {% elif organization_inactive %}
   <img src="{{MEDIA_URL}}img/organization-inactive.png" alt="" width="100" />
   <p>{{ error_msg }}</p>
+    {% if re_active_link %}
+    <p>
+      {% blocktrans with link=re_active_link %}
+        Please click this <a href="{{ link }}">link</a> to re activate.
+      {% endblocktrans %}
+    </p>
+    {% endif %}
   {% else %}
   <p class="error">{{ error_msg }}</p>
   {% endif %}
