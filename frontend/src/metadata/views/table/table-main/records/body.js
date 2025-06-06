@@ -561,6 +561,7 @@ class RecordsBody extends Component {
             updateFileTags={this.props.updateFileTags}
             deleteRecords={this.props.deleteRecords}
             moveRecord={this.props.moveRecord}
+            generateFileTags={this.props.generateFileTags}
           />
           <div className="sf-metadata-result-table" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
             {this.renderRecords()}

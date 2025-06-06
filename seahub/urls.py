@@ -2,8 +2,6 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant, \
-    ExtractText
 from seahub.api2.endpoints.file_comments import FileCommentsView, FileCommentView, FileCommentRepliesView, \
     FileCommentReplyView
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
@@ -1080,13 +1078,8 @@ if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/', include('seahub.repo_metadata.urls')),
     ]
 
-# ai API
-urlpatterns += [
-    re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
-    re_path(r'^api/v2.1/ai/generate-file-tags/$', GenerateFileTags.as_view(), name='api-v2.1-generate-file-tags'),
-    re_path(r'^api/v2.1/ai/generate-summary/$', GenerateSummary.as_view(), name='api-v2.1-generate-summary'),
-    re_path(r'^api/v2.1/ai/ocr/$', OCR.as_view(), name='api-v2.1-ocr'),
-    re_path(r'^api/v2.1/ai/translate/$', Translate.as_view(), name='api-v2.1-translate'),
-    re_path(r'^api/v2.1/ai/writing-assistant/$', WritingAssistant.as_view(), name='api-v2.1-writing-assistant'),
-    re_path(r'^api/v2.1/ai/extract-text/$', ExtractText.as_view(), name='api-v2.1-extract-text'),
-]
+    if getattr(settings, 'ENABLE_SEAFILE_AI', False):
+        urlpatterns += [
+            re_path(r'^api/v2.1/ai/', include('seahub.ai.urls')),
+        ]
+

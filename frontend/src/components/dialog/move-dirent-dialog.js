@@ -22,7 +22,7 @@ const propTypes = {
   onAddFolder: PropTypes.func,
 };
 
-class MoveDirent extends React.Component {
+class MoveDirentDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -382,6 +382,6 @@ class MoveDirent extends React.Component {
   }
 }
 
-MoveDirent.propTypes = propTypes;
+MoveDirentDialog.propTypes = propTypes;
 
-export default MoveDirent;
+export default MoveDirentDialog;

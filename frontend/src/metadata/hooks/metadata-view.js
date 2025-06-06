@@ -38,7 +38,7 @@ export const MetadataViewProvider = ({
 
   const { collaborators } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
-  const { onOCR, generateDescription, extractFilesDetails, faceRecognition, extractText } = useMetadataAIOperations();
+  const { onOCR: OCRAPI, generateDescription, extractFilesDetails, faceRecognition, generateFileTags: generateFileTagsAPI } = useMetadataAIOperations();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -381,38 +381,35 @@ export const MetadataViewProvider = ({
     });
   }, [modifyRecords, generateDescription]);
 
-  const ocr = useCallback((record) => {
+  const onOCR = useCallback((record) => {
     const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
-    if (!Utils.imageCheck(fileName)) return;
-
-    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
-    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
-    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
-    onOCR({ parentDir, fileName }, {
-      success_callback: ({ ocrResult }) => {
-        if (!ocrResult) return;
+    if (!fileName || !parentDir) return;
+    const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
+    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    OCRAPI(record, {
+      success_callback: (description) => {
+        if (!description) return;
         const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
         const recordIds = [updateRecordId];
         let idRecordUpdates = {};
         let idOriginalRecordUpdates = {};
-        idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
-        idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+        idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description || null };
+        idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description || null };
         modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
-      },
+      }
     });
-  }, [modifyRecords, onOCR]);
+  }, [modifyRecords, OCRAPI]);
 
-  const updateExtractText = useCallback((record) => {
+  const generateFileTags = useCallback((record) => {
     const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
     if (!fileName || !parentDir) return;
-    extractText({ parentDir, fileName }, {
-      success_callback: ({ extractedText }) => {
-        console.log(extractedText)
-      }
+    generateFileTagsAPI(record, {
+      success_callback: updateFileTags
     });
-  }, [extractText]);
+  }, [updateFileTags, generateFileTagsAPI]);
 
   // init
   useEffect(() => {
@@ -452,8 +449,7 @@ export const MetadataViewProvider = ({
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
-    const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, ocr);
-    const unsubscribeUpdateExtract = eventBus.subscribe(EVENT_BUS_TYPE.EXTRACT_TEXT, updateExtractText);
+    const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, onOCR);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -480,7 +476,6 @@ export const MetadataViewProvider = ({
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();
       unsubscribeOCR();
-      unsubscribeUpdateExtract();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -520,8 +515,8 @@ export const MetadataViewProvider = ({
         updateRecordDetails,
         updateFaceRecognition,
         updateRecordDescription,
-        updateExtractText,
-        ocr,
+        onOCR,
+        generateFileTags,
       }}
     >
       {children}

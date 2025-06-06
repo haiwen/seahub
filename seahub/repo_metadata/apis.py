@@ -17,8 +17,8 @@ from seahub.views import check_folder_permission
 from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, gen_unique_id, init_metadata, \
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
-    init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, init_ocr, \
-    remove_ocr_column, get_update_record, update_people_cover_photo
+    init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, \
+    get_update_record, update_people_cover_photo
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin
 from seaserv import seafile_api
@@ -249,9 +249,6 @@ class MetadataOCRManageView(APIView):
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        init_ocr(metadata_server_api)
-
         return Response({'success': True})
 
     def delete(self, request, repo_id):
@@ -271,14 +268,6 @@ class MetadataOCRManageView(APIView):
         if not record or not record.enabled or not record.ocr_enabled:
             error_msg = f'The repo {repo_id} has disabled the OCR.'
             return api_error(status.HTTP_409_CONFLICT, error_msg)
-
-        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        try:
-            remove_ocr_column(metadata_server_api)
-        except Exception as err:
-            logger.error(err)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
             record.ocr_enabled = False

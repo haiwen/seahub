@@ -406,15 +406,6 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
-  extractText = (repoID, filePath) => {
-    const url = this.server + '/api/v2.1/ai/extract-text/';
-    const params = {
-      path: filePath,
-      repo_id: repoID,
-    };
-    return this.req.post(url, params);
-  };
-
 }
 
 const metadataAPI = new MetadataManagerAPI();

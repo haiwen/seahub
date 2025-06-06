@@ -5,9 +5,7 @@ import i18n from './_i18n/i18n-sdoc-editor';
 import { Utils } from './utils/utils';
 import Loading from './components/loading';
 import SdocEditor from './pages/sdoc/sdoc-editor';
-import { MetadataStatusProvider } from './hooks';
-import { CollaboratorsProvider } from './metadata';
-import { TagsProvider } from './tag/hooks';
+import { MetadataMiddlewareProvider, MetadataStatusProvider } from './hooks';
 import { SimpleViewer } from '@seafile/seafile-sdoc-editor';
 
 const { serviceURL, avatarURL, siteRoot, lang, mediaUrl, isPro, fileServerRoot } = window.app.config;
@@ -64,11 +62,9 @@ root.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
       <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
-        <CollaboratorsProvider repoID={repoID}>
-          <TagsProvider repoID={repoID} repoInfo={repoInfo}>
-            {filePerm === 'rw' ? <SdocEditor /> : <SimpleViewer />}
-          </TagsProvider>
-        </CollaboratorsProvider>
+        <MetadataMiddlewareProvider repoID={repoID} repoInfo={repoInfo}>
+          {filePerm === 'rw' ? <SdocEditor /> : <SimpleViewer />}
+        </MetadataMiddlewareProvider>
       </MetadataStatusProvider>
     </Suspense>
   </I18nextProvider>

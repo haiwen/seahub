@@ -1,9 +1,11 @@
-import React, { useContext, useCallback, useMemo } from 'react';
+import React, { useContext, useCallback, useMemo, useState, useRef } from 'react';
 import metadataAPI from '../metadata/api';
 import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../metadata/constants';
 import { gettext, lang } from '../utils/constants';
+import OCRResultDialog from '../metadata/components/dialog/ocr-result-dialog';
+import FileTagsDialog from '../metadata/components/dialog/file-tags-dialog';
 
 // This hook provides content related to metadata ai operation
 const MetadataAIOperationsContext = React.createContext(null);
@@ -17,33 +19,48 @@ export const MetadataAIOperationsProvider = ({
   repoInfo,
   children
 }) => {
+  const [isOcrResultDialogShow, setOcrResultDialogShow] = useState(false);
+  const [isFileTagsDialogShow, setFileTagsDialogShow] = useState(false);
+
+  const recordRef = useRef(null);
+  const opCallBack = useRef(null);
+
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
   const canModify = useMemo(() => permission === 'rw', [permission]);
 
-  const OCRSuccessCallBack = useCallback(({ parentDir, fileName, ocrResult } = {}) => {
-    if (!ocrResult) return;
-    const update = { [PRIVATE_COLUMN_KEY.OCR]: ocrResult };
-    metadataAPI.modifyRecord(repoID, { parentDir, fileName }, update).then(res => {
-      const eventBus = window?.sfMetadataContext?.eventBus;
-      eventBus && eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { parentDir, fileName }, update);
-    });
-  }, [repoID]);
+  const closeFileTagsDialog = useCallback(() => {
+    recordRef.current = null;
+    opCallBack.current = null;
+    setFileTagsDialogShow(false);
+  }, []);
 
-  const onOCR = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
-    const filePath = Utils.joinPath(parentDir, fileName);
-    const inProgressToaster = toaster.notifyInProgress(gettext('Extracting text by AI...'), { duration: null });
-    metadataAPI.ocr(repoID, filePath).then(res => {
-      const ocrResult = res.data.ocr_result;
-      const validResult = Array.isArray(ocrResult) && ocrResult.length > 0 ? JSON.stringify(ocrResult) : null;
-      inProgressToaster.close();
-      toaster.success(gettext('Text extracted'));
-      success_callback && success_callback({ parentDir, fileName, ocrResult: validResult });
-    }).catch(error => {
-      inProgressToaster.close();
-      const errorMessage = gettext('Failed to extract text');
-      toaster.danger(errorMessage);
-      fail_callback && fail_callback();
-    });
+  const closeOcrResultDialog = useCallback(() => {
+    recordRef.current = null;
+    opCallBack.current = null;
+    setOcrResultDialogShow(false);
+  }, []);
+
+  const onOCR = useCallback((record, { success_callback }) => {
+    recordRef.current = record;
+    opCallBack.current = success_callback;
+    setOcrResultDialogShow(true);
+  }, []);
+
+  const onOCRByImageDialog = useCallback(({ parentDir, fileName } = {}) => {
+    recordRef.current = {
+      [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir,
+      [PRIVATE_COLUMN_KEY.FILE_NAME]: fileName,
+    };
+
+    opCallBack.current = (description) => {
+      const update = { [PRIVATE_COLUMN_KEY.FILE_DESCRIPTION]: description };
+      metadataAPI.modifyRecord(repoID, { parentDir, fileName }, update).then(res => {
+        const eventBus = window?.sfMetadataContext?.eventBus;
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { parentDir, fileName }, update);
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { parentDir, fileName }, update);
+      });
+    };
+    setOcrResultDialogShow(true);
   }, [repoID]);
 
   const generateDescription = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
@@ -106,23 +123,11 @@ export const MetadataAIOperationsProvider = ({
     });
   }, [repoID]);
 
-
-  const extractText = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
-    const filePath = Utils.joinPath(parentDir, fileName);
-    const inProgressToaster = toaster.notifyInProgress(gettext('Extracting text by AI...'), { duration: null });
-    metadataAPI.extractText(repoID, filePath).then(res => {
-      console.log(res)
-      const extractedText = res?.data?.text || res.data.text || '';
-      inProgressToaster.close();
-      success_callback && success_callback({ parentDir, fileName, extractedText });
-    }).catch(error => {
-      inProgressToaster.close();
-      const errorMessage = gettext('Failed to extract text');
-      toaster.danger(errorMessage);
-      fail_callback && fail_callback();
-    });
-  }, [repoID]);
-
+  const generateFileTags = useCallback((record, { success_callback }) => {
+    recordRef.current = record;
+    opCallBack.current = success_callback;
+    setFileTagsDialogShow(true);
+  }, []);
 
   return (
     <MetadataAIOperationsContext.Provider value={{
@@ -132,14 +137,20 @@ export const MetadataAIOperationsProvider = ({
       tagsLang,
       canModify,
       onOCR,
-      OCRSuccessCallBack,
+      onOCRByImageDialog,
       generateDescription,
       extractFilesDetails,
       extractFileDetails,
       faceRecognition,
-      extractText
+      generateFileTags,
     }}>
       {children}
+      {isFileTagsDialogShow && (
+        <FileTagsDialog record={recordRef.current} onToggle={closeFileTagsDialog} onSubmit={opCallBack.current} />
+      )}
+      {isOcrResultDialogShow && (
+        <OCRResultDialog repoID={repoID} record={recordRef.current} onToggle={closeOcrResultDialog} saveToDescription={opCallBack.current} />
+      )}
     </MetadataAIOperationsContext.Provider>
   );
 };
