@@ -5,7 +5,7 @@ import { gettext, username } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import toaster from '../../../components/toast';
 import ContextMenu from '../../../components/context-menu/context-menu';
-import MoveDirent from '../../../components/dialog/move-dirent-dialog';
+import MoveDirentDialog from '../../../components/dialog/move-dirent-dialog';
 import CopyDirent from '../../../components/dialog/copy-dirent-dialog';
 import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
@@ -464,7 +464,7 @@ const TagFiles = () => {
         getMenuContainerSize={getMenuContainerSize}
       />
       {isMoveDialogOpen && (
-        <MoveDirent
+        <MoveDirentDialog
           path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
           repoID={repoID}
           repoEncrypted={repoInfo.encrypted}

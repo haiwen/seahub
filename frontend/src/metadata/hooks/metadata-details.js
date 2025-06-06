@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState, useMemo, useRef } from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import metadataAPI from '../api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
@@ -6,12 +8,17 @@ import { useMetadataStatus } from '../../hooks/metadata-status';
 import { SYSTEM_FOLDERS } from '../../constants';
 import Column from '../model/column';
 import { normalizeFields } from '../components/metadata-details/utils';
-import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../constants';
-import { getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord, getServerOptions } from '../utils/cell';
+import { CellType, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY, UTC_FORMAT_DEFAULT } from '../constants';
+import {
+  getCellValueByColumn, getColumnOptionNamesByIds, getColumnOptionNameById, getRecordIdFromRecord,
+  getServerOptions, getFileNameFromRecord, getParentDirFromRecord
+} from '../utils/cell';
 import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
 import ObjectUtils from '../../utils/object';
 import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
+
+dayjs.extend(utc);
 
 const MetadataDetailsContext = React.createContext(null);
 
@@ -50,10 +57,16 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     return [...exitColumnsOrder, ...newColumns];
   }, [originColumns, detailsSettings]);
 
-  const onLocalRecordChange = useCallback((recordId, updates) => {
-    if (getRecordIdFromRecord(record) !== recordId) return;
-    const newRecord = { ...record, ...updates };
-    setRecord(newRecord);
+  const onLocalRecordChange = useCallback(({ recordId, parentDir, fileName }, updates) => {
+    if (getRecordIdFromRecord(record) === recordId || (getParentDirFromRecord(record) === parentDir && getFileNameFromRecord(record) === fileName)) {
+      const newRecord = {
+        ...record,
+        [PRIVATE_COLUMN_KEY.MTIME]: dayjs().utc().format(UTC_FORMAT_DEFAULT),
+        [PRIVATE_COLUMN_KEY.LAST_MODIFIER]: window.sfMetadataContext.getUsername(),
+        ...updates,
+      };
+      setRecord(newRecord);
+    }
   }, [record]);
 
   const onChange = useCallback((fieldKey, newValue) => {
@@ -70,7 +83,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       setRecord({ ...record, ...update });
       if (window?.sfMetadataContext?.eventBus) {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId }, update);
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, recordId, update);
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId }, update);
       }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
@@ -133,6 +146,10 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       toaster.danger(errorMsg);
     });
   }, [repoID, record, modifyLocalFileTags]);
+
+  const updateDescription = useCallback((description) => {
+    onChange(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION, description);
+  }, [onChange]);
 
   const saveColumns = useCallback((columns) => {
     modifyDetailsSettings && modifyDetailsSettings({ columns: columns.map(c => ({ key: c.key, shown: c.shown })) });
@@ -219,6 +236,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         updateFileTags,
         modifyHiddenColumns,
         modifyColumnOrder,
+        updateDescription,
       }}
     >
       {children}

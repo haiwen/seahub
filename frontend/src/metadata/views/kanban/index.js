@@ -23,7 +23,7 @@ const Kanban = () => {
     modifyRecordAPI(rowId, updates, oldRowData, originalUpdates, originalOldRowData, false, { success_callback: () => {
       success_callback && success_callback();
       const eventBus = window.sfMetadataContext.eventBus;
-      eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, rowId, updates);
+      eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId: rowId }, updates);
     } });
   }, [modifyRecordAPI]);
 

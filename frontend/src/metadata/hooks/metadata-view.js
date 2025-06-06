@@ -38,7 +38,7 @@ export const MetadataViewProvider = ({
 
   const { collaborators } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
-  const { onOCR, generateDescription, extractFilesDetails, faceRecognition } = useMetadataAIOperations();
+  const { onOCR: OCRAPI, generateDescription, extractFilesDetails, faceRecognition, generateFileTags: generateFileTagsAPI } = useMetadataAIOperations();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -381,27 +381,35 @@ export const MetadataViewProvider = ({
     });
   }, [modifyRecords, generateDescription]);
 
-  const ocr = useCallback((record) => {
+  const onOCR = useCallback((record) => {
     const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
-    if (!Utils.imageCheck(fileName)) return;
-
-    const ocrResultColumnKey = PRIVATE_COLUMN_KEY.OCR;
-    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
-    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [ocrResultColumnKey]: record[ocrResultColumnKey] } };
-    onOCR({ parentDir, fileName }, {
-      success_callback: ({ ocrResult }) => {
-        if (!ocrResult) return;
+    if (!fileName || !parentDir) return;
+    const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
+    let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
+    OCRAPI(record, {
+      success_callback: (description) => {
+        if (!description) return;
         const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
         const recordIds = [updateRecordId];
         let idRecordUpdates = {};
         let idOriginalRecordUpdates = {};
-        idRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
-        idOriginalRecordUpdates[updateRecordId] = { [ocrResultColumnKey]: ocrResult ? JSON.stringify(ocrResult) : null };
+        idRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description || null };
+        idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description || null };
         modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
-      },
+      }
     });
-  }, [modifyRecords, onOCR]);
+  }, [modifyRecords, OCRAPI]);
+
+  const generateFileTags = useCallback((record) => {
+    const parentDir = getParentDirFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
+    if (!fileName || !parentDir) return;
+    generateFileTagsAPI(record, {
+      success_callback: updateFileTags
+    });
+  }, [updateFileTags, generateFileTagsAPI]);
 
   // init
   useEffect(() => {
@@ -441,7 +449,7 @@ export const MetadataViewProvider = ({
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
-    const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, ocr);
+    const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, onOCR);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -507,7 +515,8 @@ export const MetadataViewProvider = ({
         updateRecordDetails,
         updateFaceRecognition,
         updateRecordDescription,
-        ocr,
+        onOCR,
+        generateFileTags,
       }}
     >
       {children}

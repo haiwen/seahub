@@ -61,3 +61,10 @@ def writing_assistant(params):
     url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/writing-assistant/')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp
+
+
+def extract_text(params):
+    headers = gen_headers()
+    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/extract-text/')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp

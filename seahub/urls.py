@@ -2,7 +2,6 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant
 from seahub.api2.endpoints.file_comments import FileCommentsView, FileCommentView, FileCommentRepliesView, \
     FileCommentReplyView
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
@@ -481,15 +480,15 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/image-rotate/$', RepoImageRotateView.as_view(), name='api-v2.1-repo-image-rotate-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
-    
-    
+
+
     ## user: repo file comments
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/$', FileCommentsView.as_view(), name='api-v2.1-file-comments'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/$', FileCommentView.as_view(), name='api-v2.1-file-comment'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/replies/$', FileCommentRepliesView.as_view(), name='api-v2.1-file-comment-replies'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/replies/(?P<reply_id>\d+)/$', FileCommentReplyView.as_view(), name='api-v2.1-file-comment-repolies'),
-    
-    
+
+
     ## user:: repo-api-tokens
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/$', RepoAPITokensView.as_view(), name='api-v2.1-repo-api-tokens'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-api-tokens/(?P<app_name>.*)/$', RepoAPITokenView.as_view(), name='api-v2.1-repo-api-token'),
@@ -1079,12 +1078,8 @@ if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
         re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/metadata/', include('seahub.repo_metadata.urls')),
     ]
 
-# ai API
-urlpatterns += [
-    re_path(r'^api/v2.1/ai/image-caption/$', ImageCaption.as_view(), name='api-v2.1-image-caption'),
-    re_path(r'^api/v2.1/ai/generate-file-tags/$', GenerateFileTags.as_view(), name='api-v2.1-generate-file-tags'),
-    re_path(r'^api/v2.1/ai/generate-summary/$', GenerateSummary.as_view(), name='api-v2.1-generate-summary'),
-    re_path(r'^api/v2.1/ai/ocr/$', OCR.as_view(), name='api-v2.1-ocr'),
-    re_path(r'^api/v2.1/ai/translate/$', Translate.as_view(), name='api-v2.1-translate'),
-    re_path(r'^api/v2.1/ai/writing-assistant/$', WritingAssistant.as_view(), name='api-v2.1-writing-assistant'),
-]
+    if getattr(settings, 'ENABLE_SEAFILE_AI', False):
+        urlpatterns += [
+            re_path(r'^api/v2.1/ai/', include('seahub.ai.urls')),
+        ]
+

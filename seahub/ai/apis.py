@@ -10,12 +10,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, get_file_size
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
-from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, generate_file_tags, ocr
+from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
+    generate_file_tags, ocr
 
 logger = logging.getLogger(__name__)
 
@@ -225,7 +226,7 @@ class OCR(APIView):
 
     def post(self, request):
         if not verify_ai_config():
-            return api_error(status.HTTP_400_BAD_REQUEST, 'OCR server not configured')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'AI server not configured')
 
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
@@ -235,17 +236,14 @@ class OCR(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
 
+        file_type, _ = get_file_type_and_ext(os.path.basename(path))
+        if file_type != IMAGE and not path.lower().endswith('.pdf'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file type not image or pdf')
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        try:
-            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
@@ -261,20 +259,26 @@ class OCR(APIView):
         if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, f"File {path} not found")
 
+        file_size = get_file_size(repo.store_id, repo.version, file_id)
+        if file_size >> 20 > 5:
+            error_msg = 'File size exceed the limit.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', request.user.username, use_onetime=True)
         if not token:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         params = {
-            'path': path,
-            'download_token': token
+            'file_name': os.path.basename(path),
+            'download_token': token,
         }
 
         try:
             resp = ocr(params)
             resp_json = resp.json()
         except Exception as e:
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
@@ -341,7 +345,9 @@ class WritingAssistant(APIView):
             resp = writing_assistant(params)
             resp_json = resp.json()
         except Exception as e:
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(resp_json, resp.status_code)
+

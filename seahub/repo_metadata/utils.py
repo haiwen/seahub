@@ -273,32 +273,6 @@ def remove_tags_table(metadata_server_api):
                     metadata_server_api.delete_column(table['id'], column['key'], True)
 
 
-# ocr
-def init_ocr(metadata_server_api):
-    from seafevents.repo_metadata.constants import METADATA_TABLE
-
-    remove_ocr_column(metadata_server_api)
-
-    # init ocr column
-    columns = [
-        METADATA_TABLE.columns.ocr.to_dict(),
-    ]
-    metadata_server_api.add_columns(METADATA_TABLE.id, columns)
-
-
-def remove_ocr_column(metadata_server_api):
-    from seafevents.repo_metadata.constants import METADATA_TABLE
-    metadata = metadata_server_api.get_metadata()
-
-    tables = metadata.get('tables', [])
-    for table in tables:
-        if table['name'] == METADATA_TABLE.name:
-            columns = table.get('columns', [])
-            for column in columns:
-                if column['key'] == METADATA_TABLE.columns.ocr.key:
-                    metadata_server_api.delete_column(table['id'], METADATA_TABLE.columns.ocr.key, True)
-
-
 def get_file_download_token(repo_id, file_id, username):
     return seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username, use_onetime=True)
 

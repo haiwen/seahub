@@ -915,6 +915,7 @@ class GroupBody extends Component {
             modifyColumnData={this.props.modifyColumnData}
             getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
             updateFileTags={this.props.updateFileTags}
+            generateFileTags={this.props.generateFileTags}
           />
           <div className="sf-metadata-result-table" ref={this.setResultRef}>
             {this.renderGroups()}
