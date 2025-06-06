@@ -46,7 +46,6 @@ export const EVENT_BUS_TYPE = {
   UPDATE_RECORD_DETAILS: 'update_record_details',
   UPDATE_FACE_RECOGNITION: 'update_face_recognition',
   GENERATE_DESCRIPTION: 'generate_description',
-  EXTRACT_TEXT: 'extract_text',
   OCR: 'ocr',
 
   // metadata

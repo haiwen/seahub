@@ -4,7 +4,7 @@ import { useMetadataStatus } from '@/hooks';
 import { gettext } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
-import MoveDirent from '@/components/dialog/move-dirent-dialog';
+import MoveDirentDialog from '@/components/dialog/move-dirent-dialog';
 import { Dirent } from '@/models';
 import { useMetadataView } from '../../hooks/metadata-view';
 import RowUtils from './utils/row-utils';
@@ -12,7 +12,6 @@ import { checkIsDir } from '../../utils/row';
 import { getColumnByKey, isNameColumn } from '../../utils/column';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
-import FileTagsDialog from '../../components/dialog/file-tags-dialog';
 import ContextMenuComponent from '../../components/context-menu';
 import { openInNewTab, openParentFolder } from '../../utils/file';
 
@@ -33,19 +32,17 @@ const OPERATION = {
   FILE_DETAILS: 'file-details',
   DETECT_FACES: 'detect-faces',
   MOVE: 'move',
-  EXTRACT_TEXT: 'extract_text',
 };
 
 const { enableSeafileAI } = window.app.config;
 
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
-  getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder, updateRecordDetails,
-  updateFaceRecognition, updateRecordDescription, ocr, updateExtractText
+  getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, moveRecord, addFolder, updateRecordDetails,
+  updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags
 }) => {
   const currentRecord = useRef(null);
 
-  const [fileTagsRecord, setFileTagsRecord] = useState(null);
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
   const [isMoveDialogShow, setMoveDialogShow] = useState(false);
 
@@ -230,16 +227,12 @@ const ContextMenu = ({
         });
       }
 
-      if (tagsColumn && isDescribableFile && !isVideo) {
+      if (enableSeafileAI && tagsColumn && isDescribableFile && !isVideo) {
         aiOptions.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
       }
 
-      if (enableOCR && isImage) {
-        aiOptions.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
-      }
-
-      if (isImage || isPdf) {
-        aiOptions.push({ value: OPERATION.EXTRACT_TEXT, label: gettext('Extract text'), record });
+      if (enableSeafileAI && enableOCR && (isImage || isPdf)) {
+        aiOptions.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
       }
 
       if (aiOptions.length > 0) {
@@ -250,10 +243,6 @@ const ContextMenu = ({
 
     return list;
   }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, enableOCR, getAbleDeleteRecords]);
-
-  const toggleFileTagsRecord = useCallback((record = null) => {
-    setFileTagsRecord(record);
-  }, []);
 
   const handleMoveRecord = useCallback((...params) => {
     selectNone();
@@ -290,18 +279,13 @@ const ContextMenu = ({
       case OPERATION.FILE_TAGS: {
         const { record } = option;
         if (!record) break;
-        toggleFileTagsRecord(record);
+        generateFileTags(record);
         break;
       }
       case OPERATION.OCR: {
         const { record } = option;
         if (!record) break;
-        ocr(record);
-        break;
-      }
-      case OPERATION.EXTRACT_TEXT: {
-        const { record } = option;
-        updateExtractText(record)
+        onOCR(record);
         break;
       }
       case OPERATION.DELETE_RECORD: {
@@ -357,7 +341,7 @@ const ContextMenu = ({
         break;
       }
     }
-  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, toggleFileTagsRecord, ocr, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, updateFaceRecognition, toggleMoveDialog, updateExtractText]);
+  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, generateFileTags, onOCR, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, updateFaceRecognition, toggleMoveDialog]);
 
   useEffect(() => {
     const unsubscribeToggleMoveDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, toggleMoveDialog);
@@ -380,9 +364,6 @@ const ContextMenu = ({
         boundaryCoordinates={{ top, left, right, bottom }}
         onOptionClick={handleOptionClick}
       />
-      {fileTagsRecord && (
-        <FileTagsDialog record={fileTagsRecord} onToggle={toggleFileTagsRecord} onSubmit={updateFileTags} />
-      )}
       {deletedFolderPath && (
         <DeleteFolderDialog
           repoID={repoID}
@@ -392,7 +373,7 @@ const ContextMenu = ({
         />
       )}
       {isMoveDialogShow && (
-        <MoveDirent
+        <MoveDirentDialog
           path={getParentDirFromRecord(currentRecord.current)}
           repoID={repoID}
           dirent={new Dirent({ name: fileName })}

@@ -40,9 +40,6 @@ export const PRIVATE_COLUMN_KEY = {
   // tag
   TAGS: '_tags',
 
-  // ocr
-  OCR: '_ocr',
-
   // location
   LOCATION_TRANSLATED: '_location_translated'
 };
@@ -81,7 +78,6 @@ export const PRIVATE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FACE_VECTORS,
   PRIVATE_COLUMN_KEY.FILE_RATE,
   PRIVATE_COLUMN_KEY.TAGS,
-  PRIVATE_COLUMN_KEY.OCR,
   PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED,
 ];
 

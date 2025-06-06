@@ -84,6 +84,7 @@ const TableFilesToolbar = ({ repoID }) => {
       const isDescribableFile = canModifyRow && Utils.isDescriptionSupportedFile(fileName);
       const isImage = Utils.imageCheck(fileName);
       const isVideo = Utils.videoCheck(fileName);
+      const isPDF = Utils.pdfCheck(fileName);
       const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
       const aiOptions = [];
 
@@ -95,7 +96,7 @@ const TableFilesToolbar = ({ repoID }) => {
         aiOptions.push(GENERATE_DESCRIPTION);
       }
 
-      if (enableOCR && isImage) {
+      if (enableOCR && (isImage || isPDF)) {
         aiOptions.push(OCR);
       }
 

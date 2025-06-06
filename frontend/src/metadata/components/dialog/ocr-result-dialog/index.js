@@ -1,0 +1,139 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import { I18nextProvider } from 'react-i18next';
+import { SimpleEditor, getBrowserInfo, LongTextModal, BrowserTip, slateToMdString, MarkdownPreview } from '@seafile/seafile-editor';
+import CenteredLoading from '../../../../components/centered-loading';
+import toaster from '../../../../components/toast';
+import { gettext, lang } from '../../../../utils/constants';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
+import { Utils } from '../../../../utils/utils';
+import i18n from '../../../../_i18n/i18n-seafile-editor';
+import Icon from '../../../../components/icon';
+
+import './index.css';
+
+const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
+  const [isLoading, setLoading] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [dialogStyle, setDialogStyle] = useState({});
+
+  const ocrResult = useRef(null);
+
+  const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
+  const fileName = useMemo(() => getFileNameFromRecord(record), [record]);
+
+  const editorRef = useRef(null);
+
+  const { isValidBrowser, isWindowsWechat } = useMemo(() => {
+    return getBrowserInfo(true);
+  }, []);
+
+  const onFullScreenToggle = useCallback(() => {
+    let containerStyle = {};
+    if (!isFullScreen) {
+      containerStyle = {
+        width: '100%',
+        height: '100%',
+        top: 0,
+        border: 'none'
+      };
+    }
+    setIsFullScreen(!isFullScreen);
+    setDialogStyle(containerStyle);
+  }, [isFullScreen]);
+
+  const onContainerKeyDown = useCallback((event) => {
+    event.stopPropagation();
+    if (event.keyCode === 27) {
+      event.stopPropagation();
+      event.preventDefault();
+      onToggle();
+    }
+  }, [onToggle]);
+
+  const onSave = useCallback(() => {
+    const newContent = editorRef.current?.getSlateValue();
+    const value = slateToMdString(newContent);
+    saveToDescription(value);
+    onToggle();
+  }, [saveToDescription, onToggle]);
+
+  useEffect(() => {
+    const path = window.sfMetadataContext.canModifyRow(record) ? Utils.joinPath(parentDir, fileName) : '';
+    if (path === '') {
+      setLoading(false);
+      return;
+    }
+    window.sfMetadataContext.ocr(path).then(res => {
+      const result = res.data?.ocr_result || '';
+      ocrResult.current = result.replaceAll('\n\n', '\n').replaceAll('\n', '\n\n');
+      setLoading(false);
+    }).catch(error => {
+      const errorMessage = gettext('Failed to extract text');
+      toaster.danger(errorMessage);
+      setLoading(false);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <I18nextProvider i18n={ i18n }>
+      <LongTextModal onModalClick={onToggle} containerClass="sf-metadata-ocr-file-dialog">
+        <div style={dialogStyle} className="longtext-dialog-container">
+          <div className={classnames('longtext-header-container', { 'longtext-header-container-border': isWindowsWechat })}>
+            <div className="longtext-header">
+              <span className="longtext-header-name">{gettext('OCR result')}</span>
+              <div className="longtext-header-tool">
+                <span
+                  className="longtext-header-tool-item d-flex align-items-center mr-1"
+                  title={gettext('Save to description property')}
+                  onClick={onSave}
+                >
+                  <Icon symbol="save" />
+                </span>
+                <span
+                  className={classnames('longtext-header-tool-item mr-1 iconfont icon-full-screen', { 'long-text-full-screen': isFullScreen })}
+                  onClick={onFullScreenToggle}
+                  title={gettext('Full screen')}
+                >
+                </span>
+                <span
+                  className="longtext-header-tool-item iconfont icon-x"
+                  onClick={onToggle}
+                  title={gettext('Close')}
+                >
+                </span>
+              </div>
+            </div>
+            {!isValidBrowser && <BrowserTip lang={lang} isWindowsWechat={isWindowsWechat} />}
+          </div>
+          <div
+            onKeyDown={onContainerKeyDown}
+            className={classnames('longtext-content-container', { 'longtext-container-scroll': isWindowsWechat })}
+          >
+            {isLoading ? (
+              <CenteredLoading />
+            ) : (
+              <>
+                {isWindowsWechat ? (
+                  <MarkdownPreview isWindowsWechat={isWindowsWechat} value={ocrResult.current} isShowOutline={false} />
+                ) : (
+                  <SimpleEditor ref={editorRef} focusEnd={false} value={ocrResult.current} />
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </LongTextModal>
+    </I18nextProvider>
+  );
+};
+
+OCRResultDialog.propTypes = {
+  record: PropTypes.object,
+  onToggle: PropTypes.func,
+  saveToDescription: PropTypes.func,
+};
+
+export default OCRResultDialog;

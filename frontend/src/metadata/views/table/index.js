@@ -32,8 +32,8 @@ const Table = () => {
     updateRecordDetails,
     updateFaceRecognition,
     updateRecordDescription,
-    updateExtractText,
-    ocr,
+    onOCR,
+    generateFileTags,
   } = useMetadataView();
   const containerRef = useRef(null);
 
@@ -178,6 +178,7 @@ const Table = () => {
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
         updateFileTags={updateFileTags}
+        generateFileTags={generateFileTags}
         onGridKeyDown={onHotKey}
         onGridKeyUp={onHotKeyUp}
         moveRecord={moveRecord}
@@ -186,8 +187,7 @@ const Table = () => {
         updateRecordDetails={updateRecordDetails}
         updateFaceRecognition={updateFaceRecognition}
         updateRecordDescription={updateRecordDescription}
-        updateExtractText={updateExtractText}
-        ocr={ocr}
+        onOCR={onOCR}
       />
     </div>
   );
