@@ -64,6 +64,7 @@
 # Scheffczyk, 2015
 # Scheffczyk, 2015
 # Schnuffel <th.grethlein@gmx.net>, 2014
+# Seafile Info <info@seafile.com>, 2025
 # siljaj <silja.jackson@jackson-it.de>, 2014-2015
 # Stanislav Kopp <staskopp@gmail.com>, 2015
 # Stefan Lorenz <stefan.lorenz@it-consulting-lorenz.de>, 2014
@@ -83,7 +84,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-15 17:15+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2021,2024-2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2556,7 +2557,7 @@ msgstr "Abmelden"
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Danke, dass Sie Seafile verwendet haben! "
+msgstr "Danke für Ihre Teilnahme!"
 
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
@@ -2975,7 +2976,7 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr ""
+msgstr "Ersatz-Token können verwendet werden, falls keine primäre oder alternative Telefonnummer verfügbar ist. Die angegebenen Ersatz-Token können jeweils einmal für die Verifizierung der Anmeldung verwendet werden. Falls alle Ersatz-Token aufgebraucht sind, können neue generiert werden. Nur die hier gelisteten Token sind gültig."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."

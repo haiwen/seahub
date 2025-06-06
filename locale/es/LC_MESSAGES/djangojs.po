@@ -79,7 +79,7 @@ msgstr "Configuración"
 #: frontend/src/components/common/account.js:168
 #| msgid "Custom properties"
 msgid "Customer Portal"
-msgstr ""
+msgstr "Portal para clientes"
 
 #: frontend/src/components/common/account.js:169
 #: frontend/src/components/common/logout.js:6
@@ -91,7 +91,7 @@ msgstr "Desconectarse"
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1248
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1276
 msgid "Undo"
-msgstr ""
+msgstr "Deshacer"
 
 #: frontend/src/components/common/notice-item.js:48
 msgid "File {file_link} has a new comment form user {author}."
@@ -109,21 +109,21 @@ msgstr "{share_from} ha compartido una carpeta llamada {repo_link} contigo."
 msgid ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
-msgstr ""
+msgstr "{share_from} ha cambiado el permiso de la biblioteca {repo_link} a {permission}."
 
 #: frontend/src/components/common/notice-item.js:110
 msgid ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
-msgstr ""
+msgstr "{share_from} ha cambiado el permiso de la carpeta {repo_link} a {permission}."
 
 #: frontend/src/components/common/notice-item.js:131
 msgid "{share_from} has cancelled the sharing of library {repo_name}."
-msgstr ""
+msgstr "{share_from} ha cancelado el uso compartido de la biblioteca {repo_name}."
 
 #: frontend/src/components/common/notice-item.js:133
 msgid "{share_from} has cancelled the sharing of folder {repo_name}."
-msgstr ""
+msgstr "{share_from} ha cancelado el uso compartido de la carpeta {repo_name}."
 
 #: frontend/src/components/common/notice-item.js:153
 msgid ""
@@ -141,102 +141,102 @@ msgstr "{user} te ha transferido una biblioteca llamada {repo_link}."
 
 #: frontend/src/components/common/notice-item.js:274
 msgid "{user} created file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha creado el archivo {fileName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:274
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} ha creado el archivo {fileName} y {fileCount} archivo(s) más en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:277
 msgid "{user} deleted file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha eliminado el archivo {fileName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:277
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} ha eliminado el archivo {fileName} y {fileCount} archivo(s) más en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:281
 msgid "{user} restored file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha restaurado el archivo {fileName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:284
 msgid "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha renombrado el archivo {oldFileName} a {fileName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:288
 msgid "{user} moved file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha movido el archivo {fileName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:288
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} ha movido el archivo {fileName} y {fileCount} archivo(s) más en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:291
 msgid "{user} updated file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha actualizado el archivo {fileName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:303
 msgid "{user} created folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha creado la carpeta {folderName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:303
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} ha creado la carpeta {folderName} y {folderCount} carpeta(s) más en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:306
 msgid "{user} deleted folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha eliminado la carpeta {folderName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:306
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} ha eliminado la carpeta {folderName} y {folderCount} carpeta(s) más en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:310
 msgid "{user} restored folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha restaurado la carpeta {folderName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:313
 msgid ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha renombrado la carpeta {oldFolderName} a {folderName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:317
 msgid "{user} moved folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} ha movido la carpeta {folderName} en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:317
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} ha movido la carpeta {folderName} y {folderCount} carpeta(s) más en la biblioteca {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:374
 #: frontend/src/components/common/notice-item.js:402
 msgid "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
-msgstr ""
+msgstr "Marcado \"{resolve_comment}\" como resuelto en el documento {sdoc_link}"
 
 #: frontend/src/components/common/notice-item.js:378
 #: frontend/src/components/common/notice-item.js:406
 msgid "Marked as resolved in document {sdoc_link}"
-msgstr ""
+msgstr "Marcado como resuelto en el documento {sdoc_link}"
 
 #: frontend/src/components/common/notice-item.js:382
 msgid "Added a new comment in document {sdoc_link}:"
-msgstr ""
+msgstr "Se ha agregado un nuevo comentario en el documento {sdoc_link}:"
 
 #: frontend/src/components/common/notice-item.js:410
 msgid "Added a new reply in document {sdoc_link}:"
-msgstr ""
+msgstr "Se ha agregado una nueva respuesta en el documento {sdoc_link}:"
 
 #: frontend/src/components/common/notice-item.js:444
 #: frontend/src/components/common/notice-item.js:462
@@ -253,7 +253,7 @@ msgstr "Sistema"
 #: frontend/src/user-notifications.js:230
 #| msgid "Generate Link"
 msgid "General"
-msgstr ""
+msgstr "General"
 
 #: frontend/src/components/common/notification-popover/index.js:67
 #: frontend/src/user-notifications.js:241
@@ -275,12 +275,12 @@ msgstr "Notificación"
 #: frontend/src/components/common/notification.js:185
 #| msgid "Mark all read"
 msgid "Mark all as read"
-msgstr ""
+msgstr "Marcar todo como leído"
 
 #: frontend/src/components/common/notification.js:186
 #| msgid "All Notifications"
 msgid "View all notifications"
-msgstr ""
+msgstr "Ver todas las notificaciones"
 
 #: frontend/src/components/common/seahub-modal-close.js:7
 #: frontend/src/components/common/seahub-modal-header.js:8
@@ -315,12 +315,12 @@ msgstr "Un archivo está siendo subido, ¿estás seguro que deseas abandonar est
 #: frontend/src/components/cur-dir-path/dir-path.js:130
 #: frontend/src/components/dir-view-mode/dir-views/index.js:57
 msgid "Views"
-msgstr ""
+msgstr "Vistas"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:148
 #| msgid "Refresh"
 msgid "Refresh the view"
-msgstr ""
+msgstr "Actualizar la vista"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:162
 #: frontend/src/components/dialog/lib-settings.js:164
@@ -387,7 +387,7 @@ msgstr "Se requiere información de contacto."
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:45
 msgid "Abuse report added"
-msgstr ""
+msgstr "Informe de abuso agregado"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:76
 #: frontend/src/components/shared-file-view/shared-file-view.js:137
@@ -1429,11 +1429,11 @@ msgstr "Descripción requerida"
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:99
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:23
 msgid "Add permission"
-msgstr ""
+msgstr "Agregar permiso"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:99
 msgid "Edit permission"
-msgstr ""
+msgstr "Editar permiso"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:108
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:285
@@ -5094,60 +5094,60 @@ msgstr "Seleccionar"
 #: frontend/src/components/share-link-panel/index.js:135
 #: frontend/src/pages/share-admin/share-links.js:528
 msgid "Successfully deleted 1 share link"
-msgstr ""
+msgstr "Se eliminó correctamente 1 enlace de compartir"
 
 #: frontend/src/components/share-link-panel/index.js:136
 #: frontend/src/pages/share-admin/share-links.js:529
 msgid "Successfully deleted {number_placeholder} share links"
-msgstr ""
+msgstr "Se eliminaron correctamente {number_placeholder} enlaces de compartir"
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:116
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:121
 #, javascript-format
 #| msgid "successfully added user %s."
 msgid "Successfully added %s."
-msgstr ""
+msgstr "Se agregó correctamente %s."
 
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:187
 #: frontend/src/components/share-link-panel/link-details.js:280
 #| msgid "Activated Users"
 msgid "Authenticated emails"
-msgstr ""
+msgstr "Correos electrónicos autenticados"
 
 #: frontend/src/components/share-link-panel/link-authenticated-users.js:185
 #: frontend/src/components/share-link-panel/link-details.js:277
 #| msgid "Activated Users"
 msgid "Authenticated users"
-msgstr ""
+msgstr "Usuarios autenticados"
 
 #: frontend/src/components/share-link-panel/link-creation.js:152
 msgid ""
 "Share links cannot be generated because \"Invisible\", \"Online Read-Write\""
 " or \"Online Read-Only\" is set for you on some folder(s) in the library."
-msgstr ""
+msgstr "No se pueden generar enlaces de compartir porque se ha establecido \"Invisible\", \"Lectura-Escritura en línea\" o \"Solo lectura en línea\" para usted en alguna(s) carpeta(s) de la biblioteca."
 
 #: frontend/src/components/share-link-panel/link-creation.js:176
 msgid "Please enter an integer bigger than 1 as number of links."
-msgstr ""
+msgstr "Por favor, ingrese un número entero mayor que 1 como número de enlaces."
 
 #: frontend/src/components/share-link-panel/link-creation.js:180
 msgid ""
 "Please enter an integer not bigger than {max_number} as number of links."
-msgstr ""
+msgstr "Por favor, ingrese un número entero no mayor que {max_number} como número de enlaces."
 
 #: frontend/src/components/share-link-panel/link-creation.js:288
 #: frontend/src/components/share-link-panel/link-list.js:64
 msgid "Generate links in batch"
-msgstr ""
+msgstr "Generar enlaces en lote"
 
 #: frontend/src/components/share-link-panel/link-creation.js:288
 #: frontend/src/components/share-link-panel/link-list.js:63
 msgid "Generate Link"
-msgstr ""
+msgstr "Generar Enlace"
 
 #: frontend/src/components/share-link-panel/link-creation.js:294
 msgid "Number of links"
-msgstr ""
+msgstr "Número de enlaces"
 
 #: frontend/src/components/share-link-panel/link-creation.js:360
 #| msgid "Edit permission"
@@ -5791,92 +5791,92 @@ msgstr "Historial de Versiones"
 #: frontend/src/file-view.js:42
 #| msgid "Images"
 msgid "Image saved"
-msgstr ""
+msgstr "Imagen guardada"
 
 #: frontend/src/hooks/metadata-ai-operation.js:34
 msgid "Extracting text by AI..."
-msgstr ""
+msgstr "Extrayendo texto por IA..."
 
 #: frontend/src/hooks/metadata-ai-operation.js:39
 msgid "Text extracted"
-msgstr ""
+msgstr "Texto extraído"
 
 #: frontend/src/hooks/metadata-ai-operation.js:43
 #| msgid "Failed to extract file details"
 msgid "Failed to extract text"
-msgstr ""
+msgstr "Error al extraer texto"
 
 #: frontend/src/hooks/metadata-ai-operation.js:57
 #| msgid "Generate description"
 msgid "Generating description by AI..."
-msgstr ""
+msgstr "Generando descripción por IA..."
 
 #: frontend/src/hooks/metadata-ai-operation.js:61
 #| msgid "Description is required"
 msgid "Description generated"
-msgstr ""
+msgstr "Descripción generada"
 
 #: frontend/src/hooks/metadata-ai-operation.js:65
 msgid "Failed to generate description"
-msgstr ""
+msgstr "Error al generar descripción"
 
 #: frontend/src/hooks/metadata-ai-operation.js:72
 #| msgid "Extract file details"
 msgid "Extracting file details by AI..."
-msgstr ""
+msgstr "Extrayendo detalles del archivo por IA..."
 
 #: frontend/src/hooks/metadata-ai-operation.js:76
 #| msgid "File details"
 msgid "File details extracted"
-msgstr ""
+msgstr "Detalles del archivo extraídos"
 
 #: frontend/src/hooks/metadata-ai-operation.js:80
 msgid "Failed to extract file details"
-msgstr ""
+msgstr "Error al extraer detalles del archivo"
 
 #: frontend/src/hooks/metadata-ai-operation.js:96
 #| msgid "Extract file details"
 msgid "Detecting faces by AI..."
-msgstr ""
+msgstr "Detectando caras por IA..."
 
 #: frontend/src/hooks/metadata-ai-operation.js:99
 #| msgid "selected"
 msgid "Faces detected"
-msgstr ""
+msgstr "Caras detectadas"
 
 #: frontend/src/hooks/metadata-ai-operation.js:103
 #| msgid "Failed to delete {name}"
 msgid "Failed to detect faces"
-msgstr ""
+msgstr "Error al detectar caras"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:215
 msgid "No collaborators available"
-msgstr ""
+msgstr "No hay colaboradores disponibles"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:215
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/collaborator-filter/index.js:89
 msgid "No collaborators"
-msgstr ""
+msgstr "Sin colaboradores"
 
 #: frontend/src/metadata/components/cell-editors/collaborator-editor/index.js:251
 msgid "Search collaborators"
-msgstr ""
+msgstr "Buscar colaboradores"
 
 #: frontend/src/metadata/components/cell-editors/date-editor.js:193
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-calendar.js:121
 #| msgid "End date"
 msgid "Enter date"
-msgstr ""
+msgstr "Introducir fecha"
 
 #: frontend/src/metadata/components/cell-editors/date-editor.js:221
 #| msgid "Please select a file"
 msgid "Please select"
-msgstr ""
+msgstr "Por favor seleccione"
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:214
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:212
 msgid "No option"
-msgstr ""
+msgstr "Sin opción"
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:253
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:250
@@ -5884,18 +5884,18 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:462
 #: frontend/src/metadata/components/popover/options-popover/index.js:210
 msgid "Search option"
-msgstr ""
+msgstr "Buscar opción"
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:266
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:263
 #: frontend/src/metadata/components/popover/options-popover/index.js:225
 msgid "Add option"
-msgstr ""
+msgstr "Añadir opción"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:416
 #| msgid "Space Used"
 msgid "Recently used tags"
-msgstr ""
+msgstr "Etiquetas usadas recientemente"
 
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:421
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:47
@@ -5905,31 +5905,31 @@ msgstr ""
 #: frontend/src/tag/tags-tree-view/all-tags/index.js:25
 #| msgid "No tags"
 msgid "All tags"
-msgstr ""
+msgstr "Todas las etiquetas"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
 msgid "1 filter"
-msgstr ""
+msgstr "1 filtro"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
 msgid "Filters"
-msgstr ""
+msgstr "Filtros"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:39
 msgid "Filter"
-msgstr ""
+msgstr "Filtro"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:9
 msgid "Year"
-msgstr ""
+msgstr "Año"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:10
 msgid "Month"
-msgstr ""
+msgstr "Mes"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:11
 msgid "Day"
-msgstr ""
+msgstr "Día"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:12
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:325
@@ -5947,107 +5947,107 @@ msgstr "Todas"
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:31
 msgid "Grouped by 1 property"
-msgstr ""
+msgstr "Agrupado por 1 propiedad"
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:32
 #| msgid "Grouped by xxx properties"
 msgid "Grouped by {name_placeholder} properties"
-msgstr ""
+msgstr "Agrupado por {name_placeholder} propiedades"
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:34
 #: frontend/src/metadata/views/kanban/settings/index.js:107
 msgid "Group by"
-msgstr ""
+msgstr "Agrupar por"
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:21
 msgid "1 hidden property"
-msgstr ""
+msgstr "1 propiedad oculta"
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:22
 #| msgid "Failed to modify hidden properties"
 msgid "{name_placeholder} hidden properties"
-msgstr ""
+msgstr "{name_placeholder} propiedades ocultas"
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:23
 msgid "Hide properties"
-msgstr ""
+msgstr "Ocultar propiedades"
 
 #: frontend/src/metadata/components/data-process-setter/map-type-setter.js:9
 msgid "Satellite"
-msgstr ""
+msgstr "Satélite"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:46
 msgid "Preset hide properties"
-msgstr ""
+msgstr "Propiedades ocultas preestablecidas"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:48
 msgid "1 preset hidden property"
-msgstr ""
+msgstr "1 propiedad oculta preestablecida"
 
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:50
 #| msgid "xxx preset hidden properties"
 msgid "{name_placeholder} preset hidden properties"
-msgstr ""
+msgstr "{name_placeholder} propiedades ocultas preestablecidas"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:20
 msgid "1 sort"
-msgstr ""
+msgstr "1 ordenación"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:21
 msgid "sorts"
-msgstr ""
+msgstr "ordenaciones"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:22
 msgid "Sort"
-msgstr ""
+msgstr "Ordenar"
 
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:12
 msgid "Are you sure to delete "
-msgstr ""
+msgstr "¿Estás seguro de eliminar "
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:56
 #| msgid "Failed to generate image description"
 msgid "Failed to generate file tags"
-msgstr ""
+msgstr "Error al generar etiquetas de archivo"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:143
 #| msgid "No tags"
 msgid "tags"
-msgstr ""
+msgstr "etiquetas"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:150
 #| msgid "Set Quota"
 msgid "Matching tags"
-msgstr ""
+msgstr "Etiquetas coincidentes"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:170
 #| msgid "No results matching"
 msgid "No matching tags"
-msgstr ""
+msgstr "No hay etiquetas coincidentes"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:174
 msgid "Recommended new tags"
-msgstr ""
+msgstr "Nuevas etiquetas recomendadas"
 
 #: frontend/src/metadata/components/dialog/file-tags-dialog/index.js:192
 msgid "No recommended new tags"
-msgstr ""
+msgstr "No hay nuevas etiquetas recomendadas"
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:65
 #: frontend/src/metadata/components/dialog/metadata-ocr-status-management-dialog/index.js:65
 #: frontend/src/metadata/components/dialog/metadata-tags-status-dialog/index.js:92
 #| msgid "Turn off extended properties"
 msgid "Please turn on extended properties setting first"
-msgstr ""
+msgstr "Por favor, active primero la configuración de propiedades extendidas"
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:76
 msgid "Enable face recognition to identify people in your photos."
-msgstr ""
+msgstr "Habilite el reconocimiento facial para identificar personas en sus fotos."
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:86
 #| msgid "Face recognition"
 msgid "Turn off face recognition"
-msgstr ""
+msgstr "Desactivar reconocimiento facial"
 
 #: frontend/src/metadata/components/dialog/metadata-face-recognition-dialog/index.js:87
 #| msgid ""
@@ -6056,11 +6056,11 @@ msgstr ""
 msgid ""
 "Do you really want to turn off face recognition? Existing results will all "
 "be deleted."
-msgstr ""
+msgstr "¿Realmente desea desactivar el reconocimiento facial? Todos los resultados existentes serán eliminados."
 
 #: frontend/src/metadata/components/dialog/metadata-ocr-status-management-dialog/index.js:73
 msgid "Enable OCR"
-msgstr ""
+msgstr "Habilitar OCR"
 
 #: frontend/src/metadata/components/dialog/metadata-ocr-status-management-dialog/index.js:76
 msgid "After enable OCR, you can extract text from images or scanned PDFs."

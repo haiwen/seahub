@@ -237,20 +237,20 @@ msgstr "Der Benutzer {user} hat den Ordner {folderName} und {folderCount} weiter
 #: frontend/src/components/common/notice-item.js:374
 #: frontend/src/components/common/notice-item.js:402
 msgid "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
-msgstr ""
+msgstr "Hat im Dokument {sdoc_link} den Kommentar \"{resolve_comment}\" als gelöst markiert:"
 
 #: frontend/src/components/common/notice-item.js:378
 #: frontend/src/components/common/notice-item.js:406
 msgid "Marked as resolved in document {sdoc_link}"
-msgstr ""
+msgstr "Hat im Dokument {sdoc_link} als gelöst markiert:"
 
 #: frontend/src/components/common/notice-item.js:382
 msgid "Added a new comment in document {sdoc_link}:"
-msgstr ""
+msgstr "Hat im Dokument {sdoc_link} einen neuen Kommentar hinzugefügt:"
 
 #: frontend/src/components/common/notice-item.js:410
 msgid "Added a new reply in document {sdoc_link}:"
-msgstr ""
+msgstr "Hat im Dokument {sdoc_link} eine neue Antwort hinzugefügt:"
 
 #: frontend/src/components/common/notice-item.js:444
 #: frontend/src/components/common/notice-item.js:462
@@ -2806,7 +2806,7 @@ msgstr "Gruppe umbenennen in"
 #: frontend/src/components/dialog/rename-repo.js:59
 #| msgid "Renamed library"
 msgid "Rename Library"
-msgstr ""
+msgstr "Bibliothek umbenennen"
 
 #: frontend/src/components/dialog/rename-wiki-dialog.js:57
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-or-update-term-dialog.js:68
@@ -2972,12 +2972,12 @@ msgstr "Schnappschuss ansehen"
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:43
 #| msgid "Successfully change the group"
 msgid "Successfully changed the office suite."
-msgstr ""
+msgstr "Die Office Suite wurde geändert."
 
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:88
 #| msgid "Select all"
 msgid "Select an office suite"
-msgstr ""
+msgstr "Office Suite auswählen"
 
 #: frontend/src/components/dialog/repo-office-suite-dialog.js:103
 msgid "{library_name} Office Suite"
@@ -3608,7 +3608,7 @@ msgstr "Benutzer auf inaktiv setzen"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:39
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
 msgid "Do you want to keep the sharing relationships?"
-msgstr ""
+msgstr "Wollen Sie die Freigabe-Verbindungen beibehalten?"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:50
 #: frontend/src/components/dialog/transfer-dialog.js:203
@@ -3619,7 +3619,7 @@ msgstr "Freigabe beibehalten"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:63
 #| msgid "Keep sharing"
 msgid "Do not keep sharing"
-msgstr ""
+msgstr "Freigabe löschen"
 
 #: frontend/src/components/dialog/terms-editor-dialog.js:44
 #: frontend/src/components/dialog/terms-preview-dialog.js:21
@@ -3879,17 +3879,17 @@ msgstr "Papierkorb"
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:87
 #| msgid "Successfully restored the library."
 msgid "Successfully watched the library."
-msgstr ""
+msgstr "Bibliothek wird nun beobachtet."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:99
 #| msgid "Successfully restored the library."
 msgid "Successfully unwatched the library."
-msgstr ""
+msgstr "Bibliothek wird nicht mehr beobachtet."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:148
 #| msgid "Successfully restored the library."
 msgid "Successfully renamed the library."
-msgstr ""
+msgstr "Bibliothek wurde umbenannt.."
 
 #: frontend/src/components/dir-view-mode/dir-others/library-more-operations.js:160
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:239
@@ -4082,14 +4082,14 @@ msgstr "von {name} gesperrt"
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:126
 #| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unstarred {name_placeholder}."
-msgstr ""
+msgstr "{placeholder} ist nicht mehr als Favorit markiert."
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:535
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:256
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:136
 #| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully starred {name_placeholder}."
-msgstr ""
+msgstr "{name_placeholder} wurde den Favoriten hinzugefügt."
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:828
 #| msgid "Unselect"
@@ -4339,11 +4339,11 @@ msgstr "Status"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:14
 msgid "Total {comments_count} comment"
-msgstr ""
+msgstr "Insgesamt {comments_count} Kommentar"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:18
 msgid "Total {comments_count} comments"
-msgstr ""
+msgstr "Insgesamt {comments_count} Kommentare"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:25
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:31
@@ -6967,7 +6967,7 @@ msgstr "Elemente"
 #: frontend/src/metadata/views/face-recognition/person-photos/index.js:155
 #| msgid "Convert to sdoc"
 msgid "Cover photo set"
-msgstr ""
+msgstr "Titelfoto gesetzt"
 
 #: frontend/src/metadata/views/gallery/context-menu/index.js:40
 #: frontend/src/metadata/views/kanban/context-menu/index.js:47
@@ -6983,7 +6983,7 @@ msgstr "Aus der Gruppe entfernen"
 #: frontend/src/metadata/views/gallery/context-menu/index.js:49
 #| msgid "Add group"
 msgid "Add to groups"
-msgstr ""
+msgstr "Den Gruppen hinzufügen"
 
 #: frontend/src/metadata/views/gallery/context-menu/index.js:52
 #| msgid "Set user quota"
@@ -7012,7 +7012,7 @@ msgstr "Reduzieren"
 
 #: frontend/src/metadata/views/kanban/boards/board/index.js:78
 msgid "This list is collapsed"
-msgstr ""
+msgstr "Diese Liste ist eingeklappt"
 
 #: frontend/src/metadata/views/kanban/boards/index.js:278
 #| msgid "No changes"
@@ -7096,7 +7096,7 @@ msgstr "Dateidetails extrahieren"
 #: frontend/src/metadata/views/table/context-menu/index.js:216
 #| msgid "Select Image"
 msgid "Detect faces"
-msgstr ""
+msgstr "Gesichter finden"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:193
 #: frontend/src/utils/text-translation.js:257
@@ -7206,11 +7206,11 @@ msgstr "Gelöschte Option"
 
 #: frontend/src/metadata/views/table/table-main/records/record/cell/operation-btn/file-name-operation-btn/index.js:46
 msgid "Open folder"
-msgstr ""
+msgstr "Ordner öffnen"
 
 #: frontend/src/metadata/views/table/table-main/records/record/cell/operation-btn/file-name-operation-btn/index.js:46
 msgid "Open file"
-msgstr ""
+msgstr "Datei öffnen"
 
 #: frontend/src/pages/dashboard/activity-item.js:66
 msgid "Created library"
@@ -7235,12 +7235,12 @@ msgstr "Papierkorb geleert"
 #: frontend/src/pages/dashboard/activity-item.js:84
 #| msgid "Removed all items from trash."
 msgid "Removed all items from trash"
-msgstr ""
+msgstr "Alle Objekte im Papierkorb wurden gelöscht"
 
 #: frontend/src/pages/dashboard/activity-item.js:86
 #| msgid "Removed items older than {n} days from trash."
 msgid "Removed items older than {n} days from trash"
-msgstr ""
+msgstr "Objekte gelöscht, die sich länger als {n} Tage im Papierkorb befunden haben"
 
 #: frontend/src/pages/dashboard/activity-item.js:95
 msgid "{file} and {n} other files"
@@ -7327,7 +7327,7 @@ msgstr "Meine Aktivitäten"
 #: frontend/src/pages/dashboard/log-repo-selector.js:116
 #| msgid "in all libraries"
 msgid "Find libraries"
-msgstr ""
+msgstr "Bibliotheken suchen"
 
 #: frontend/src/pages/dashboard/log-repo-selector.js:123
 #: frontend/src/pages/dashboard/log-user-selector.js:156
@@ -7338,12 +7338,12 @@ msgstr "Wird geladen …"
 #: frontend/src/pages/dashboard/log-repo-selector.js:126
 #| msgid "Tag not found"
 msgid "Library not found"
-msgstr ""
+msgstr "Bibliothek nicht gefunden"
 
 #: frontend/src/pages/dashboard/log-user-selector.js:149
 #| msgid "Add user"
 msgid "Find users"
-msgstr ""
+msgstr "Benutzer suchen"
 
 #: frontend/src/pages/dashboard/user-selector.js:78
 msgid "Modified by:"
@@ -7401,7 +7401,7 @@ msgstr "Keine Bibliotheken"
 #: frontend/src/pages/groups/group-op-menu.js:122
 #| msgid "Successfully sent to {placeholder}"
 msgid "Successfully imported {user_placeholder}"
-msgstr ""
+msgstr "{user_placeholder} wurde hinzugefügt."
 
 #: frontend/src/pages/groups/group-op-menu.js:170
 msgid "Import members"
@@ -8088,14 +8088,14 @@ msgstr "Nur anzeigen"
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:434
 #| msgid "Transfer Group"
 msgid "Transfer From"
-msgstr ""
+msgstr "Übertragen von"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:73
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:47
 #: frontend/src/pages/sys-admin/logs-page/file-transfer-log.js:444
 #| msgid "Transfer"
 msgid "Transfer To"
-msgstr ""
+msgstr "Übertragen nach"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:74
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:73
@@ -8105,7 +8105,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:339
 #| msgid "Operation"
 msgid "Operator"
-msgstr ""
+msgstr "Operator"
 
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:143
 #: frontend/src/pages/org-admin/org-logs-file-transfer.js:154
@@ -8136,13 +8136,13 @@ msgstr "Aktion"
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:121
 #| msgid "Add Member"
 msgid "Add member"
-msgstr ""
+msgstr "Mitglied hinzufügen"
 
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:128
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:123
 #| msgid "Delete Member"
 msgid "Delete member"
-msgstr ""
+msgstr "Mitglied löschen"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:80
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:49
@@ -8191,12 +8191,12 @@ msgstr "Dateiaktualisierung"
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:19
 #| msgid "Transfer"
 msgid "Repo Transfer"
-msgstr ""
+msgstr "Repositorium übertragen"
 
 #: frontend/src/pages/org-admin/org-logs.js:81
 #| msgid "deleted"
 msgid "Group Invite"
-msgstr ""
+msgstr "Gruppeneinladung"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:65
 msgid "SAML config updated"
@@ -8364,7 +8364,7 @@ msgstr "Geräte"
 
 #: frontend/src/pages/org-admin/side-panel.js:96
 msgid "Billing"
-msgstr ""
+msgstr "Bezahlung"
 
 #: frontend/src/pages/org-admin/side-panel.js:109
 #: frontend/src/pages/sys-admin/side-panel.js:186
@@ -8535,7 +8535,7 @@ msgstr "Das Logo wurde aktualisiert."
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:91
 #| msgid "System settings updated"
 msgid "Setting updated"
-msgstr ""
+msgstr "Einstellungen aktualisiert"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:100
 #| msgid "Set user default quota"
@@ -8756,12 +8756,12 @@ msgstr "Benutzer migrieren"
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:111
 #| msgid "Add group"
 msgid "Add User to Group"
-msgstr ""
+msgstr "Benutzer zur Gruppe hinzufügen"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:112
 #| msgid "Delete Group"
 msgid "Delete User from Group"
-msgstr ""
+msgstr "Benutzer aus der Gruppe löschen"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:140
 msgid "Created library {library_name} with {owner} as its owner"
@@ -8802,12 +8802,12 @@ msgstr "Benutzer von {user_from} zu {user_to} migrieren"
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:199
 #| msgid "Added user {user}"
 msgid "Added user {user} to group {group}"
-msgstr ""
+msgstr "Benutzer {user} wurde zur Gruppe {group} hinzugefügt"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:205
 #| msgid "Deleted user {user}"
 msgid "Deleted user {user} from group {group}"
-msgstr ""
+msgstr "Benutzer {user} wurde aus der Gruppe {group} gelöscht"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
@@ -9047,7 +9047,7 @@ msgstr "Login"
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:20
 #| msgid "Group members"
 msgid "Group Member"
-msgstr ""
+msgstr "Gruppenmitglied"
 
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
 #: frontend/src/pages/wiki2/main-panel.js:161
@@ -9107,7 +9107,7 @@ msgstr "Organisation löschen"
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:279
 #| msgid "Search organizations"
 msgid "Set organization inactive"
-msgstr ""
+msgstr "Organisation deaktivieren"
 
 #: frontend/src/pages/sys-admin/orgs/orgs.js:80
 #: frontend/src/pages/sys-admin/orgs/orgs.js:98
@@ -9187,20 +9187,20 @@ msgstr "Administrationsprotokolle"
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:177
 #: frontend/src/pages/sys-admin/statistic/statistic-nav.js:20
 msgid "Metrics"
-msgstr ""
+msgstr "Kennzahlen"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:178
 msgid "Node"
-msgstr ""
+msgstr "Knoten"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:179
 msgid "Value"
-msgstr ""
+msgstr "Wert"
 
 #: frontend/src/pages/sys-admin/statistic/statistic-metrics.js:180
 #| msgid "Created time"
 msgid "Collected time"
-msgstr ""
+msgstr "Gesammelt um"
 
 #: frontend/src/pages/sys-admin/terms-and-conditions/content.js:52
 msgid "Created"
@@ -9622,17 +9622,17 @@ msgstr "Name bearbeiten"
 #: frontend/src/utils/text-translation.js:96
 #| msgid "Delete page"
 msgid "Freeze page"
-msgstr ""
+msgstr "Seite einfrieren"
 
 #: frontend/src/pages/wiki2/main-panel.js:230
 #| msgid "Export as docx"
 msgid "Export as sdoc"
-msgstr ""
+msgstr "Als sdoc-Datei exportieren"
 
 #: frontend/src/pages/wiki2/main-panel.js:233
 #| msgid "Export as docx"
 msgid "Export as Markdown"
-msgstr ""
+msgstr "Als Markdown-Datei exportieren"
 
 #: frontend/src/pages/wiki2/side-panel.js:58
 #| msgid "{number_placeholder} / Page"
@@ -9641,7 +9641,7 @@ msgstr "Die Seite {name_placeholder} wurde gelöscht."
 
 #: frontend/src/pages/wiki2/top-nav/index.js:30
 msgid "Page is frozen"
-msgstr ""
+msgstr "Seite ist eingefroren"
 
 #: frontend/src/pages/wiki2/wiki-nav/add-new-page-dialog.js:54
 msgid "Name cannot be empty"
@@ -9735,7 +9735,7 @@ msgstr "Keine Wikis"
 
 #: frontend/src/pages/wikis/wikis.js:361
 msgid "You can click the \"Add Wiki\" button below to add a new Wiki."
-msgstr ""
+msgstr "Verwenden Sie die Schaltfläche „Wiki hinzufügen“, wenn Sie ein neues Wiki anlagen wollen."
 
 #: frontend/src/repo-snapshot.js:132
 msgid "{placeholder} Snapshot"
@@ -9784,7 +9784,7 @@ msgstr "Farbe"
 #: frontend/src/tag/components/merge-tags-selector/index.js:157
 #| msgid "Delete page"
 msgid "Merge tags to"
-msgstr ""
+msgstr "Tags zusammenführen in"
 
 #: frontend/src/tag/hooks/tags.js:151
 msgid "copy"
@@ -9888,32 +9888,32 @@ msgstr "Untergeordnete Tags hinzufügen"
 #: frontend/src/tag/views/all-tags/tags-table/sort-setter.js:16
 #| msgid "By name ascending"
 msgid "By tag name ascending"
-msgstr ""
+msgstr "Aufsteigend nach Name des Tags"
 
 #: frontend/src/tag/views/all-tags/tags-table/sort-setter.js:17
 #| msgid "By name descending"
 msgid "By tag name descending"
-msgstr ""
+msgstr "Absteigend nach Name des Tags"
 
 #: frontend/src/tag/views/all-tags/tags-table/sort-setter.js:18
 #| msgid "File name"
 msgid "By child tags count ascending"
-msgstr ""
+msgstr "Aufsteigend nach Zahl der Tags"
 
 #: frontend/src/tag/views/all-tags/tags-table/sort-setter.js:19
 #| msgid "By time descending"
 msgid "By child tags count descending"
-msgstr ""
+msgstr "Absteigend nach Zahl der Tags"
 
 #: frontend/src/tag/views/all-tags/tags-table/sort-setter.js:20
 #| msgid "By size ascending"
 msgid "By file count ascending"
-msgstr ""
+msgstr "Aufsteigend nach Zahl der Dateien"
 
 #: frontend/src/tag/views/all-tags/tags-table/sort-setter.js:21
 #| msgid "By size descending"
 msgid "By file count descending"
-msgstr ""
+msgstr "Absteigend nach Zahl der Dateien"
 
 #: frontend/src/tag/views/tag-files/index.js:329
 #| msgid "No file"
@@ -10068,7 +10068,7 @@ msgstr "Gruppeninformation"
 #: frontend/src/translate.js:36
 #| msgid "Change cover"
 msgid "Change view type"
-msgstr ""
+msgstr "Vorschautyp ändern"
 
 #: frontend/src/user-notifications.js:202
 msgid "Mark all read"
@@ -10083,7 +10083,7 @@ msgstr "Nachricht"
 #: frontend/src/user-notifications.js:286
 #| msgid "Updated file"
 msgid "Update time"
-msgstr ""
+msgstr "Zeit aktualisieren"
 
 #: frontend/src/utils/text-translation.js:88
 msgid "Freeze Document"
