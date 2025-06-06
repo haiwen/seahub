@@ -1165,17 +1165,6 @@ class Repos(APIView):
                 repo_id, error = self._create_enc_repo(request, repo_id, repo_name, repo_desc, username, org_id)
             else:
                 repo_id, error = self._create_repo(request, repo_name, repo_desc, username, org_id)
-            # enable metadata and tags
-            if ENABLE_METADATA_MANAGEMENT and ENABLE_METADATA_FOR_NEW_LIBRARY:
-                RepoMetadata.objects.enable_metadata_and_tags(repo_id)
-                metadata_server_api = MetadataServerAPI(repo_id, username)
-                init_metadata(metadata_server_api)
-                init_tags(metadata_server_api)
-                add_init_metadata_task(params={
-                    'repo_id': repo_id,
-                    'username': username
-                })
-                RepoMetadataViews.objects.add_view(repo_id, 'All files', 'table')
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -1186,6 +1175,10 @@ class Repos(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
         else:
+            try:
+                self._enable_metadata_and_tags(repo_id, username)
+            except Exception as e:
+                logger.error(e)
             library_template = request.data.get("library_template", '')
             repo_created.send(sender=None,
                               org_id=org_id,
@@ -1343,6 +1336,17 @@ class Repos(APIView):
 
         return repo_id, None
 
+    def _enable_metadata_and_tags(self, repo_id, username):
+        if ENABLE_METADATA_MANAGEMENT and ENABLE_METADATA_FOR_NEW_LIBRARY:
+            RepoMetadata.objects.enable_metadata_and_tags(repo_id)
+            metadata_server_api = MetadataServerAPI(repo_id, username)
+            init_metadata(metadata_server_api)
+            init_tags(metadata_server_api)
+            add_init_metadata_task(params={
+                'repo_id': repo_id,
+                'username': username
+            })
+            RepoMetadataViews.objects.add_view(repo_id, 'All files', 'table')
 
 class PubRepos(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
