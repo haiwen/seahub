@@ -57,7 +57,7 @@ const AIIcon = () => {
     }
 
     return list;
-  }, [enableTags, enableOCR, canModifyRecord, columns, record]);
+  }, [enableOCR, enableTags, canModifyRecord, columns, record]);
 
   const onToggle = useCallback((event) => {
     event && event.preventDefault();
