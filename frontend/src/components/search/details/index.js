@@ -9,7 +9,7 @@ import { MetadataStatusProvider } from '../../../hooks';
 import Details from './details';
 import LibDetail from '../../dirent-detail/lib-details';
 import { Body, Header } from '../../dirent-detail/detail';
-import { gettext } from '../../../utils/constants';
+import { gettext, mediaUrl } from '../../../utils/constants';
 
 import './index.css';
 
@@ -17,15 +17,33 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   const [repoInfo, setRepoInfo] = useState(null);
   const [direntDetail, setDirentDetail] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
+  const [libErrorMessage, setLibErrorMessage] = useState(null);
 
   useEffect(() => {
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      const repo = new Repo(res.data);
-      setRepoInfo(repo);
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    const controller = new AbortController();
+    const fetchData = async () => {
+      try {
+        const res = await seafileAPI.getRepoInfo(repoID);
+        const repo = new Repo(res.data);
+        setRepoInfo(repo);
+        setLibErrorMessage(null);
+      } catch (error) {
+        if (error.response && error.response.status === 404) {
+          const err = gettext('Library does not exist');
+          setRepoInfo(null);
+          setLibErrorMessage(err);
+        } else {
+          const errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        }
+      }
+    };
+    const timer = setTimeout(fetchData, 200);
+
+    return () => {
+      controller.abort();
+      clearTimeout(timer);
+    };
   }, [repoID]);
 
   useEffect(() => {
@@ -68,6 +86,22 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
     };
   }, [repoID, repoInfo, path, dirent]);
 
+  if (!repoInfo && libErrorMessage) {
+    return (
+      <div className="searched-item-details">
+        <div
+          className="cur-view-detail"
+          style={{ width: 300 }}
+        >
+          <Header title={dirent?.name || ''} icon={mediaUrl + 'img/lib/256/lib.png'}></Header>
+          <Body className="error">
+            {libErrorMessage}
+          </Body>
+        </div>
+      </div>
+    );
+  }
+
   if (!repoInfo) return;
 
   if (errMessage) {
@@ -89,7 +123,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   if (dirent.isLib) {
     return (
       <div className="searched-item-details">
-        <LibDetail currentRepoInfo={repoInfo} />
+        <LibDetail currentRepoInfo={repoInfo} isInSearch={true} />
       </div>
     );
   }

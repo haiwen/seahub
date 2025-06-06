@@ -711,13 +711,17 @@ class Search extends Component {
   };
 
   renderDetails = (results) => {
-    const { repoID: currentRepoID } = this.props;
     const { highlightIndex } = this.state;
     const item = results[highlightIndex];
     if (!item) return null;
     const repoID = item.repo_id;
-    const isLib = !currentRepoID && item.path === '/';
-    const dirent = { name: item.name, type: item.is_dir ? 'dir' : 'file', isLib, file_tags: [], path: item.path };
+    const dirent = {
+      name: item.name,
+      type: item.is_dir ? 'dir' : 'file',
+      isLib: item.path === '/',
+      file_tags: [],
+      path: item.path
+    };
     return (
       <CollaboratorsProvider repoID={repoID}>
         <SearchedItemDetails repoID={repoID} path={item.path} dirent={dirent} />

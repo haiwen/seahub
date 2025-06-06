@@ -6,9 +6,9 @@ import { DRAG_HANDLER_HEIGHT } from '../../../resize-bar/constants';
 
 import './index.css';
 
-const Detail = ({ children, className }) => {
+const Detail = ({ children, className, isInSearch }) => {
   const lastSettingsValue = localStorage.getItem('sf_cur_view_detail_width');
-  const [width, setWidth] = useState(lastSettingsValue ? parseInt(lastSettingsValue) : 300);
+  const [width, setWidth] = useState(isInSearch ? 300 : (lastSettingsValue ? parseInt(lastSettingsValue) : 300));
   const [isResizing, setResizing] = useState(false);
   const resizeBarRef = useRef(null);
   const dragHandlerRef = useRef(null);
@@ -52,22 +52,24 @@ const Detail = ({ children, className }) => {
       style={{ width }}
     >
       {children}
-      <ResizeBar
-        resizeBarRef={resizeBarRef}
-        dragHandlerRef={dragHandlerRef}
-        resizeBarStyle={{ left: -1 }}
-        dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
-        onResizeMouseDown={onResizeMouseDown}
-        onResizeMouseOver={onResizeMouseOver}
-      />
+      {!isInSearch &&
+        <ResizeBar
+          resizeBarRef={resizeBarRef}
+          dragHandlerRef={dragHandlerRef}
+          resizeBarStyle={{ left: -1 }}
+          dragHandlerStyle={{ height: DRAG_HANDLER_HEIGHT }}
+          onResizeMouseDown={onResizeMouseDown}
+          onResizeMouseOver={onResizeMouseOver}
+        />
+      }
     </div>
   );
-
 };
 
 Detail.propTypes = {
   className: PropTypes.string,
   children: PropTypes.any,
+  isInSearch: PropTypes.bool,
 };
 
 export default Detail;

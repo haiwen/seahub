@@ -11,7 +11,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import Repo from '../../models/repo';
 import { CellType } from '../../metadata/constants';
 
-const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
+const LibDetail = React.memo(({ currentRepoInfo, onClose, isInSearch }) => {
   const [isLoading, setLoading] = useState(true);
   const [repo, setRepo] = useState({});
   const libIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepoInfo), [currentRepoInfo]);
@@ -33,7 +33,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
   }, [currentRepoInfo.repo_id]);
 
   return (
-    <Detail>
+    <Detail isInSearch={isInSearch}>
       <Header title={currentRepoInfo.repo_name} icon={libIconUrl} onClose={onClose} />
       <Body>
         {isLoading ?
@@ -74,6 +74,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose }) => {
 LibDetail.propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
   onClose: PropTypes.func,
+  isInSearch: PropTypes.bool,
 };
 
 export default LibDetail;
