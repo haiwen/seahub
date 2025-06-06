@@ -88,7 +88,7 @@ const TagsEditor = forwardRef(({
     setRecentlyUsed(updated);
 
     const newIds = updated.map(tag => getTagId(tag));
-    context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
+    context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
   }, [value, record, tagsData, updateFileTags, recentlyUsed, context.localStorage]);
 
   const onMenuMouseEnter = useCallback((i, id) => {
@@ -123,7 +123,7 @@ const TagsEditor = forwardRef(({
         const updatedRecentlyUsed = [...tags.map(tag => getRowById(tagsData, tag)), ...recentlyUsed].slice(0, 10);
         setRecentlyUsed(updatedRecentlyUsed);
         const ids = updatedRecentlyUsed.map(item => getTagId(item));
-        context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(ids));
+        context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(ids));
       },
       fail_callback: () => {
 
