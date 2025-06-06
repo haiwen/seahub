@@ -179,7 +179,7 @@ class OrgGroups extends Component {
                     <th width="30%">{gettext('Name')}</th>
                     <th width="35%">{gettext('Creator')}</th>
                     <th width="23%">{gettext('Created At')}</th>
-                    <th width="12%" className="text-center">{gettext('Operations')}</th>
+                    <th width="12%"></th>
                   </tr>
                 </thead>
                 <tbody>
