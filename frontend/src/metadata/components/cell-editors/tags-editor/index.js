@@ -7,17 +7,15 @@ import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../../tag/hooks';
-import { getTagId, getTagName, getTagsByName, getTagByName } from '../../../../tag/utils/cell';
+import { getTagId, getTagName, getTagsByName, getTagByName, getTagColor } from '../../../../tag/utils/cell';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { SELECT_OPTION_COLORS } from '../../../constants';
-import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY } from '../../../../tag/constants';
+import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY, RECENTLY_USED_TAG_IDS } from '../../../../tag/constants';
 import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getNodesWithAncestors, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '../../../../components/sf-table/utils/tree';
 import TagItem from './tag-item';
 
 import './index.css';
-
-const RECENTLY_USED_TAG_IDS = 'recently_used_tag_ids';
 
 const TagsEditor = forwardRef(({
   height,
@@ -47,7 +45,6 @@ const TagsEditor = forwardRef(({
   const editorRef = useRef(null);
 
   const canEditData = window.sfMetadataContext.canModifyColumnData(column);
-  const localStorage = window.sfMetadataContext.localStorage;
 
   const tags = useMemo(() => {
     if (!tagsData) return [];
@@ -87,12 +84,12 @@ const TagsEditor = forwardRef(({
     const ids = recentlyUsed.map(item => getTagId(item));
     if (ids.indexOf(tagId) > -1) return;
     const tag = getRowById(tagsData, tagId);
-    const updated = [tag, ...recentlyUsed.filter(item => getTagId(item) !== tagId)].slice(0, 2);
+    const updated = [tag, ...recentlyUsed.filter(item => getTagId(item) !== tagId)].slice(0, 10);
     setRecentlyUsed(updated);
 
     const newIds = updated.map(tag => getTagId(tag));
-    localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
-  }, [value, record, tagsData, updateFileTags, recentlyUsed, localStorage]);
+    context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(newIds));
+  }, [value, record, tagsData, updateFileTags, recentlyUsed, context.localStorage]);
 
   const onMenuMouseEnter = useCallback((i, id) => {
     setHighlightIndex(i);
@@ -122,12 +119,17 @@ const TagsEditor = forwardRef(({
         const newValue = [...value, ...tags];
         updateFileTags([{ record_id: recordId, tags: newValue, old_tags: value }]);
         setValue(newValue);
+
+        const updatedRecentlyUsed = [...tags.map(tag => getRowById(tagsData, tag)), ...recentlyUsed].slice(0, 10);
+        setRecentlyUsed(updatedRecentlyUsed);
+        const ids = updatedRecentlyUsed.map(item => getTagId(item));
+        context.localStorage && context.localStorage.setItem(RECENTLY_USED_TAG_IDS, JSON.stringify(ids));
       },
       fail_callback: () => {
 
       },
     });
-  }, [value, searchValue, record, addTag, updateFileTags]);
+  }, [value, searchValue, record, tagsData, recentlyUsed, context.localStorage, addTag, updateFileTags]);
 
   const getMaxItemNum = useCallback(() => {
     let selectContainerStyle = getComputedStyle(editorContainerRef.current, null);
@@ -336,11 +338,11 @@ const TagsEditor = forwardRef(({
   }, [onHotKey]);
 
   useEffect(() => {
-    const saved = localStorage && localStorage.getItem(RECENTLY_USED_TAG_IDS);
+    const saved = context.localStorage && context.localStorage.getItem(RECENTLY_USED_TAG_IDS);
     const ids = saved ? JSON.parse(saved) : [];
     const tags = ids.map(id => getRowById(tagsData, id)).filter(Boolean);
     setRecentlyUsed(tags);
-  }, [tagsData, localStorage]);
+  }, [tagsData, context.localStorage]);
 
   useEffect(() => {
     if (tagsData?.rows_tree && showTagsAsTree) {
@@ -387,22 +389,32 @@ const TagsEditor = forwardRef(({
   }, [displayTags, searchValue, value, highlightIndex, onSelectTag, onMenuMouseEnter, onMenuMouseLeave]);
 
   const renderRecentlyUsed = useCallback(() => {
-    return recentlyUsedTags.length > 0 && recentlyUsedTags.map((tag, i) => {
-      const tagId = getTagId(tag);
-      return (
-        <TagItem
-          key={tagId}
-          tag={tag}
-          isSelected={value.includes(tagId)}
-          highlight={highlightIndex === i}
-          onSelect={onSelectTag}
-          onMouseEnter={() => onMenuMouseEnter(i, tagId)}
-          onMouseLeave={onMenuMouseLeave}
-        />
-      );
-    });
+    if (recentlyUsedTags.length === 0) return null;
 
-  }, [recentlyUsedTags, value, highlightIndex, onSelectTag, onMenuMouseEnter, onMenuMouseLeave]);
+    return (
+      <div className="sf-metadata-ui-tags-container">
+        {recentlyUsedTags.map((tag, i) => {
+          const tagId = getTagId(tag);
+          const tagName = getTagName(tag);
+          const tagColor = getTagColor(tag);
+          const isSelected = value.includes(tagId);
+          return (
+            <div
+              key={tagId}
+              className={classnames('sf-metadata-ui-tag', {
+                'sf-metadata-ui-tag-selected': isSelected,
+              })}
+              title={tagName}
+              onClick={() => onSelectTag(tagId)}
+            >
+              <span className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
+              <span className="sf-metadata-ui-tag-text">{tagName}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }, [recentlyUsedTags, value, onSelectTag]);
 
   const renderOptionsAsTree = useCallback(() => {
     if (nodes.length === 0) {
