@@ -2,7 +2,6 @@ import React from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { KeyCodes } from '../constants';
-import { getEventClassName } from '../utils/dom';
 
 const propTypes = {
   target: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired,
