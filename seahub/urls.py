@@ -2,7 +2,8 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
-from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant
+from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant, \
+    SdocGeneralAssistant
 from seahub.api2.endpoints.file_comments import FileCommentsView, FileCommentView, FileCommentRepliesView, \
     FileCommentReplyView
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
@@ -1087,4 +1088,5 @@ urlpatterns += [
     re_path(r'^api/v2.1/ai/ocr/$', OCR.as_view(), name='api-v2.1-ocr'),
     re_path(r'^api/v2.1/ai/translate/$', Translate.as_view(), name='api-v2.1-translate'),
     re_path(r'^api/v2.1/ai/writing-assistant/$', WritingAssistant.as_view(), name='api-v2.1-writing-assistant'),
+    re_path(r'^api/v2.1/ai/sdoc-general-assistant/$', SdocGeneralAssistant.as_view(), name='api-v2.1-sdoc-general-assistant'),
 ]
