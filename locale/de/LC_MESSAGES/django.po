@@ -2525,7 +2525,7 @@ msgstr "Abmelden"
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "Danke, dass Sie Seafile verwendet haben! "
+msgstr "Danke für Ihre Teilnahme!"
 
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
