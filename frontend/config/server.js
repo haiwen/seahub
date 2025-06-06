@@ -34,7 +34,7 @@ const devServerOptions = {
   },
   // Enable gzip compression of generated files.
   compress: true,
-  https: getHttpsConfig(),
+  server: getHttpsConfig(),
   host: HOST,
   port: PORT,
 };
@@ -50,9 +50,20 @@ try {
     console.log(`Listening at http://${HOST}:${PORT}${publicPath}`);
   });
 
+  async function stopServer() {
+    try {
+      await server.stop();
+    } catch (error) {
+      console.error('Close server error:', error);
+      process.exit(1);
+    }
+  }
+
   ['SIGINT', 'SIGTERM'].forEach(function (sig) {
     process.on(sig, function () {
-      server.close();
+      stopServer().then(() => {
+        process.exit(0);
+      });
       process.exit();
     });
   });
