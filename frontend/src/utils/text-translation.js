@@ -274,7 +274,7 @@ const TextTranslation = {
   },
   OCR: {
     key: 'OCR',
-    value: gettext('OCR'),
+    value: gettext('Extract text'),
   },
 
   // tag view
