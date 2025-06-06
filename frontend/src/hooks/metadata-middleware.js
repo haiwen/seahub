@@ -10,7 +10,7 @@ export const MetadataMiddlewareProvider = ({ repoID, currentPath, repoInfo, onTr
   const { enableMetadata, enableOCR, enableTags, tagsLang } = useMetadataStatus();
 
   return (
-    <MetadataMiddlewareContext.Provider>
+    <MetadataMiddlewareContext.Provider value={{}}>
       <CollaboratorsProvider repoID={repoID}>
         <TagsProvider repoID={repoID} currentPath={currentPath} repoInfo={repoInfo} selectTagsView={onTreeNodeClick} tagsChangedCallback={tagsChangedCallback}>
           <MetadataAIOperationsProvider
