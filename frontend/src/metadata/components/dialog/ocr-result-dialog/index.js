@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { I18nextProvider } from 'react-i18next';
 import { SimpleEditor, getBrowserInfo, LongTextModal, BrowserTip, slateToMdString, MarkdownPreview } from '@seafile/seafile-editor';
-import CenteredLoading from '../../../../components/centered-loading';
-import toaster from '../../../../components/toast';
 import { gettext, lang } from '../../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { Utils } from '../../../../utils/utils';
@@ -15,6 +13,7 @@ import './index.css';
 
 const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
   const [isLoading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [dialogStyle, setDialogStyle] = useState({});
 
@@ -46,7 +45,6 @@ const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
   const onContainerKeyDown = useCallback((event) => {
     event.stopPropagation();
     if (event.keyCode === 27) {
-      event.stopPropagation();
       event.preventDefault();
       onToggle();
     }
@@ -60,38 +58,52 @@ const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
   }, [saveToDescription, onToggle]);
 
   useEffect(() => {
-    const path = window.sfMetadataContext.canModifyRow(record) ? Utils.joinPath(parentDir, fileName) : '';
-    if (path === '') {
+    if (!window.sfMetadataContext.canModifyRow(record)) {
+      setErrorMessage(gettext('Permission denied'));
       setLoading(false);
       return;
     }
+
+    const path = Utils.joinPath(parentDir, fileName);
     window.sfMetadataContext.ocr(path).then(res => {
       const result = res.data?.ocr_result || '';
-      ocrResult.current = result.replaceAll('\n\n', '\n').replaceAll('\n', '\n\n');
+      ocrResult.current = result.replaceAll('\f', '\n').replaceAll('\n\n', '\n').replaceAll('\n', '\n\n');
       setLoading(false);
     }).catch(error => {
       const errorMessage = gettext('Failed to extract text');
-      toaster.danger(errorMessage);
+      setErrorMessage(errorMessage);
       setLoading(false);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    document.addEventListener('keydown', onContainerKeyDown);
+    return () => {
+      document.removeEventListener('keydown', onContainerKeyDown);
+    };
+  }, [onContainerKeyDown]);
+
   return (
     <I18nextProvider i18n={ i18n }>
       <LongTextModal onModalClick={onToggle} containerClass="sf-metadata-ocr-file-dialog">
         <div style={dialogStyle} className="longtext-dialog-container">
-          <div className={classnames('longtext-header-container', { 'longtext-header-container-border': isWindowsWechat })}>
+          <div className={classnames('longtext-header-container', {
+            'longtext-header-container-border': isWindowsWechat,
+            'longtext-header-divider': isLoading || errorMessage
+          })}>
             <div className="longtext-header">
               <span className="longtext-header-name">{gettext('OCR result')}</span>
               <div className="longtext-header-tool">
-                <span
-                  className="longtext-header-tool-item d-flex align-items-center mr-1"
-                  title={gettext('Save to description property')}
-                  onClick={onSave}
-                >
-                  <Icon symbol="save" />
-                </span>
+                {!isLoading && !errorMessage && (
+                  <span
+                    className="longtext-header-tool-item d-flex align-items-center mr-1"
+                    title={gettext('Save to description property')}
+                    onClick={onSave}
+                  >
+                    <Icon symbol="save" />
+                  </span>
+                )}
                 <span
                   className={classnames('longtext-header-tool-item mr-1 iconfont icon-full-screen', { 'long-text-full-screen': isFullScreen })}
                   onClick={onFullScreenToggle}
@@ -112,14 +124,14 @@ const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
             onKeyDown={onContainerKeyDown}
             className={classnames('longtext-content-container', { 'longtext-container-scroll': isWindowsWechat })}
           >
-            {isLoading ? (
-              <CenteredLoading />
+            {errorMessage ? (
+              <div className="w-100 h-100 d-flex align-items-center justify-content-center error">{errorMessage}</div>
             ) : (
               <>
                 {isWindowsWechat ? (
                   <MarkdownPreview isWindowsWechat={isWindowsWechat} value={ocrResult.current} isShowOutline={false} />
                 ) : (
-                  <SimpleEditor ref={editorRef} focusEnd={false} value={ocrResult.current} />
+                  <SimpleEditor ref={editorRef} isFetching={isLoading} focusEnd={false} value={ocrResult.current} />
                 )}
               </>
             )}
