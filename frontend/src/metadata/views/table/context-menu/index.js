@@ -34,6 +34,8 @@ const OPERATION = {
   MOVE: 'move',
 };
 
+const { enableSeafileAI } = window.app.config;
+
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
   getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateFileTags, moveRecord, addFolder, updateRecordDetails,
@@ -96,7 +98,10 @@ const ContextMenu = ({
 
     // handle selected multiple cells
     if (selectedRange) {
-      !isReadonly && list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
+      if (!isReadonly) {
+        list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
+      }
+
       list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
 
       const { topLeft, bottomRight } = selectedRange;
@@ -113,19 +118,21 @@ const ContextMenu = ({
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete selected'), records: ableDeleteRecords });
       }
 
-      const imageOrVideoRecords = records.filter(record => {
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-      });
-      if (imageOrVideoRecords.length > 0) {
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-      }
-      const imageRecords = records.filter(record => {
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName);
-      });
-      if (imageRecords.length > 0) {
-        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+      if (enableSeafileAI) {
+        const imageOrVideoRecords = records.filter(record => {
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+        });
+        if (imageOrVideoRecords.length > 0) {
+          list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+        }
+        const imageRecords = records.filter(record => {
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName);
+        });
+        if (imageRecords.length > 0) {
+          list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+        }
       }
       return list;
     }
@@ -145,27 +152,23 @@ const ContextMenu = ({
       if (ableDeleteRecords.length > 0) {
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
       }
-      const imageOrVideoRecords = records.filter(record => {
-        const isFolder = checkIsDir(record);
-        if (isFolder) return false;
-        const canModifyRow = checkCanModifyRow(record);
-        if (!canModifyRow) return false;
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-      });
-      if (imageOrVideoRecords.length > 0) {
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-      }
-      const imageRecords = records.filter(record => {
-        const isFolder = checkIsDir(record);
-        if (isFolder) return false;
-        const canModifyRow = checkCanModifyRow(record);
-        if (!canModifyRow) return false;
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName);
-      });
-      if (imageRecords.length > 0) {
-        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+      if (enableSeafileAI) {
+        const imageOrVideoRecords = records.filter(record => {
+          if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+        });
+        if (imageOrVideoRecords.length > 0) {
+          list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+        }
+        const imageRecords = records.filter(record => {
+          if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName);
+        });
+        if (imageRecords.length > 0) {
+          list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+        }
       }
       return list;
     }
@@ -202,7 +205,7 @@ const ContextMenu = ({
       list.push(...modifyOptions);
     }
 
-    if (!isFolder && canModifyRow) {
+    if (enableSeafileAI && !isFolder && canModifyRow) {
       const fileName = getFileNameFromRecord(record);
       const isDescribableFile = checkIsDescribableFile(record);
       const isImage = Utils.imageCheck(fileName);
