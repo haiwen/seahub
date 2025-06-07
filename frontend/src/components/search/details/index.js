@@ -20,6 +20,8 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   const [libErrorMessage, setLibErrorMessage] = useState(null);
 
   useEffect(() => {
+    setRepoInfo(null);
+    setLibErrorMessage(null);
     const controller = new AbortController();
     const fetchData = async () => {
       try {
@@ -38,7 +40,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
         }
       }
     };
-    const timer = setTimeout(fetchData, 200);
+    const timer = setTimeout(fetchData, 100);
 
     return () => {
       controller.abort();
@@ -47,6 +49,8 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   }, [repoID]);
 
   useEffect(() => {
+    setDirentDetail(null);
+    setErrMessage(null);
     const controller = new AbortController();
 
     const fetchData = async () => {
@@ -78,7 +82,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
       }
     };
 
-    const timer = setTimeout(fetchData, 200);
+    const timer = setTimeout(fetchData, 100);
 
     return () => {
       controller.abort();
@@ -86,6 +90,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
     };
   }, [repoID, repoInfo, path, dirent]);
 
+  // search result is repo, this repo has been deleted; search result is file or folder, the repo has been deleted
   if (!repoInfo && libErrorMessage) {
     return (
       <div className="searched-item-details">
@@ -93,7 +98,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           className="cur-view-detail"
           style={{ width: 300 }}
         >
-          <Header title={dirent?.name || ''} icon={mediaUrl + 'img/lib/256/lib.png'}></Header>
+          <Header title={dirent?.name || ''} icon={dirent.path === '/' ? (mediaUrl + 'img/lib/256/lib.png') : Utils.getDirentIcon(dirent)}></Header>
           <Body className="error">
             {libErrorMessage}
           </Body>
@@ -104,6 +109,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
 
   if (!repoInfo) return;
 
+  // search result is file or folder, but the file or folder has been deleted
   if (errMessage) {
     return (
       <div className="searched-item-details">
