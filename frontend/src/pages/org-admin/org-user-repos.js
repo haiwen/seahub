@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import classnames from 'classnames';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -102,6 +103,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
       deleted: false,
       isDeleteRepoDialogOpen: false,
@@ -111,18 +113,19 @@ class Item extends Component {
 
   handleMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       isOpIconShown: true
     });
   };
 
   handleMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       isOpIconShown: false
     });
   };
 
-  handleDeleteIconClick = (e) => {
-    e.preventDefault();
+  handleDeleteIconClick = () => {
     this.toggleDeleteRepoDialog();
   };
 
@@ -150,7 +153,7 @@ class Item extends Component {
   };
 
   render() {
-    const { deleted, isOpIconShown, isDeleteRepoDialogOpen } = this.state;
+    const { deleted, isOpIconShown, isDeleteRepoDialogOpen, isHighlighted } = this.state;
     const repo = this.props.data;
 
     if (deleted) {
@@ -159,7 +162,13 @@ class Item extends Component {
 
     return (
       <Fragment>
-        <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseOver={this.handleMouseOver}
+          onMouseOut={this.handleMouseOut}
+        >
           <td>
             <img src={Utils.getLibIconUrl(repo)} alt={Utils.getLibIconTitle(repo)} title={Utils.getLibIconTitle(repo)} width="24" />
           </td>
@@ -167,7 +176,13 @@ class Item extends Component {
           <td>{Utils.bytesToSize(repo.size)}</td>
           <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).format('YYYY-MM-DD')}</td>
           <td>
-            <a href="#" className={`action-icon sf3-font-delete1 sf3-font${isOpIconShown ? '' : ' invisible'}`} title={gettext('Delete')} onClick={this.handleDeleteIconClick}></a>
+            <i
+              role="button"
+              className={`op-icon sf3-font-delete1 sf3-font${isOpIconShown ? '' : ' invisible'}`}
+              title={gettext('Delete')}
+              onClick={this.handleDeleteIconClick}
+            >
+            </i>
           </td>
         </tr>
         {isDeleteRepoDialogOpen && (

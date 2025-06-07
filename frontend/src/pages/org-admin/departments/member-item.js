@@ -111,7 +111,7 @@ class DepartmentsV2MembersItem extends React.Component {
               direction="down"
             >
               <DropdownToggle
-                tag='a'
+                tag='i'
                 role="button"
                 className='op-icon sf3-font-more sf3-font'
                 title={gettext('More operations')}

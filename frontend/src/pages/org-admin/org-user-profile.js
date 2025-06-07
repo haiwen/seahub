@@ -8,6 +8,7 @@ import OrgAdminUserNav from '../../components/org-admin-user-nav';
 import SetOrgUserName from '../../components/dialog/set-org-user-name';
 import SetOrgUserContactEmail from '../../components/dialog/set-org-user-contact-email';
 import SetOrgUserQuota from '../../components/dialog/set-org-user-quota';
+import EditIcon from '../../components/edit-icon';
 import MainPanelTopbar from './main-panel-topbar';
 
 import '../../css/org-admin-user.css';
@@ -136,13 +137,13 @@ class Content extends Component {
           <dt>{gettext('Name')}</dt>
           <dd>
             {name || '--'}
-            <span title={gettext('Edit')} className="attr-action-icon sf3-font sf3-font-rename" onClick={this.toggleSetNameDialog}></span>
+            <EditIcon onClick={this.toggleSetNameDialog} />
           </dd>
 
           <dt>{gettext('Contact Email')}</dt>
           <dd>
             {contact_email || '--'}
-            <span title={gettext('Edit')} className="attr-action-icon sf3-font sf3-font-rename" onClick={this.toggleSetContactEmailDialog}></span>
+            <EditIcon onClick={this.toggleSetContactEmailDialog} />
           </dd>
 
           <dt>{gettext('Organization')}</dt>
@@ -151,7 +152,7 @@ class Content extends Component {
           <dt>{gettext('Space Used / Quota')}</dt>
           <dd>
             {`${Utils.bytesToSize(quota_usage)}${quota_total > 0 ? ' / ' + Utils.bytesToSize(quota_total) : ''}`}
-            <span title={gettext('Edit')} className="attr-action-icon sf3-font sf3-font-rename" onClick={this.toggleSetQuotaDialog}></span>
+            <EditIcon onClick={this.toggleSetQuotaDialog} />
           </dd>
         </dl>
         {isSetNameDialogOpen &&

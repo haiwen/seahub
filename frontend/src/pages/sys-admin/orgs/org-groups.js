@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
@@ -42,11 +43,13 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  deleteGroup={this.props.deleteGroup}
-                />);
+                return (
+                  <Item
+                    key={index}
+                    item={item}
+                    deleteGroup={this.props.deleteGroup}
+                  />
+                );
               })}
             </tbody>
           </table>
@@ -73,23 +76,27 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
       isDeleteDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({ isOpIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isOpIconShown: true
+    });
   };
 
   handleMouseLeave = () => {
-    this.setState({ isOpIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isOpIconShown: false
+    });
   };
 
-  toggleDeleteDialog = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
+  toggleDeleteDialog = () => {
     this.setState({ isDeleteDialogOpen: !this.state.isDeleteDialogOpen });
   };
 
@@ -100,7 +107,7 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen } = this.state;
+    const { isOpIconShown, isDeleteDialogOpen, isHighlighted } = this.state;
 
     const itemName = '<span class="op-target">' + Utils.HTMLescape(item.group_name) + '</span>';
     const deleteDialogMsg = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', itemName);
@@ -109,12 +116,23 @@ class Item extends Component {
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
           <td><a href={groupUrl}>{item.group_name}</a></td>
           <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
           <td>{dayjs(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
-            <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <i
+              className={`op-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`}
+              title={gettext('Delete')}
+              onClick={this.toggleDeleteDialog}
+            >
+            </i>
           </td>
         </tr>
         {isDeleteDialogOpen &&

@@ -157,7 +157,7 @@ class PermAuditItem extends React.Component {
         <a href={siteRoot + 'org/useradmin/info/' + permEvent.from_user_email + '/'}>{permEvent.from_user_name}</a>{' '}
         <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
           className={this.state.highlight ? '' : 'vh'} tag="span">
-          <DropdownToggle tag="i" className="sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
+          <DropdownToggle tag="i" className="op-icon sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={this.props.filterUser.bind(this, permEvent.from_user_email)}>
               {gettext('Only Show')}{' '}

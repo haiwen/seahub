@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { gettext, orgID } from '../../../utils/constants';
@@ -69,15 +70,17 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  repo={item}
-                  isItemFreezed={this.state.isItemFreezed}
-                  onFreezedItem={this.onFreezedItem}
-                  onUnfreezedItem={this.onUnfreezedItem}
-                  onDeleteRepo={this.props.onDeleteRepo}
-                  onRestoreRepo={this.props.onRestoreRepo}
-                />);
+                return (
+                  <Item
+                    key={index}
+                    repo={item}
+                    isItemFreezed={this.state.isItemFreezed}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
+                    onDeleteRepo={this.props.onDeleteRepo}
+                    onRestoreRepo={this.props.onRestoreRepo}
+                  />
+                );
               })}
             </tbody>
           </table>
@@ -117,7 +120,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlight: false,
+      isHighlighted: false,
       isOpIconShown: false,
       isDeleteRepoDialogOpen: false,
       isRestoreRepoDialogOpen: false
@@ -128,7 +131,7 @@ class Item extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({
         isOpIconShown: true,
-        highlight: true
+        isHighlighted: true
       });
     }
   };
@@ -137,14 +140,14 @@ class Item extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({
         isOpIconShown: false,
-        highlight: false
+        isHighlighted: false
       });
     }
   };
 
   onUnfreezedItem = () => {
     this.setState({
-      highlight: false,
+      isHighlighted: false,
       isOpIconShow: false
     });
     this.props.onUnfreezedItem();
@@ -219,14 +222,20 @@ class Item extends Component {
 
   render() {
     const { repo } = this.props;
-    const { isOpIconShown, isDeleteRepoDialogOpen, isRestoreRepoDialogOpen } = this.state;
+    const { isHighlighted, isOpIconShown, isDeleteRepoDialogOpen, isRestoreRepoDialogOpen } = this.state;
     const iconUrl = Utils.getLibIconUrl(repo);
     const iconTitle = Utils.getLibIconTitle(repo);
     const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.name) + '</span>';
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseOver}
+          onMouseLeave={this.handleMouseOut}
+        >
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>{repo.name}</td>
           <td>

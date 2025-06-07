@@ -173,7 +173,6 @@ class RepoItem extends React.Component {
   };
 
   onDropdownToggleClick = (e) => {
-    e.preventDefault();
     this.toggleOperationMenu(e);
   };
 
@@ -207,7 +206,7 @@ class RepoItem extends React.Component {
           {this.state.showMenu &&
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
-                tag="a"
+                tag="i"
                 className="op-icon sf3-font-more sf3-font"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}

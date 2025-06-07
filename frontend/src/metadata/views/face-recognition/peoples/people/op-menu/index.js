@@ -35,7 +35,7 @@ const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
         tag="i"
         role="button"
         tabIndex="0"
-        className="sf-dropdown-toggle sf3-font-more sf3-font face-recognition-more-operations-toggle"
+        className="sf-dropdown-toggle op-icon sf3-font-more sf3-font face-recognition-more-operations-toggle"
         title={gettext('More operations')}
         aria-label={gettext('More operations')}
         data-toggle="dropdown"

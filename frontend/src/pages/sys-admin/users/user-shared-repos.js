@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, siteRoot, gettext } from '../../../utils/constants';
@@ -24,7 +25,7 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const table = (
-        <table className="table-hover">
+        <table>
           <thead>
             <tr>
               <th width="5%"></th>
@@ -56,6 +57,25 @@ Content.propTypes = {
 };
 
 class Item extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isHighlighted: false
+    };
+  }
+
+  handleMouseOver = () => {
+    this.setState({
+      isHighlighted: true
+    });
+  };
+
+  handleMouseOut = () => {
+    this.setState({
+      isHighlighted: false
+    });
+  };
 
   renderRepoName = () => {
     const { item } = this.props;
@@ -89,8 +109,15 @@ class Item extends Component {
     const { item } = this.props;
     const iconUrl = Utils.getLibIconUrl(item);
     const iconTitle = Utils.getLibIconTitle(item);
+    const { isHighlighted } = this.state;
     return (
-      <tr>
+      <tr
+        className={classnames({
+          'tr-highlight': isHighlighted
+        })}
+        onMouseOver={this.handleMouseOver}
+        onMouseOut={this.handleMouseOut}
+      >
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>{this.renderRepoName()}</td>
         <td>{this.getOwnerLink()}</td>

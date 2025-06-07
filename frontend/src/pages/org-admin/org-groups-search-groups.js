@@ -37,7 +37,6 @@ class GroupItem extends React.Component {
   };
 
   onDropdownToggleClick = (e) => {
-    e.preventDefault();
     this.toggleOperationMenu(e);
   };
 
@@ -102,7 +101,7 @@ class GroupItem extends React.Component {
           {isOperationMenuShow &&
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
-                tag="a"
+                tag="i"
                 className="op-icon sf3-font-more sf3-font"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
@@ -156,7 +155,7 @@ class OrgGroupsSearchGroupsResult extends React.Component {
               <th width="30%">{gettext('Name')}</th>
               <th width="35%">{gettext('Creator')}</th>
               <th width="23%">{gettext('Created At')}</th>
-              <th width="12%" className="text-center">{gettext('Operations')}</th>
+              <th width="12%"></th>
             </tr>
           </thead>
           <tbody>
