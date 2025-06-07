@@ -580,6 +580,7 @@ a, a:hover {
 
 .op-icon:focus,
 .op-icon:hover {
+  color: #666; /* to overwrite the styles for `a:hover` */
   text-decoration: none;
   background: #e5e5e5;
 }
