@@ -184,7 +184,7 @@ class FileAuditItem extends React.Component {
         <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>{' '}
         <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
           className={this.state.highlight ? '' : 'vh'} tag="span">
-          <DropdownToggle tag="i" className="sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
+          <DropdownToggle tag="i" className="op-icon sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={this.props.filterUser.bind(this, fileEvent.user_email)}>
               {gettext('Only Show')}{' '}
@@ -225,7 +225,7 @@ class FileAuditItem extends React.Component {
         { fileEvent.repo_name &&
           <Dropdown size='sm' isOpen={this.state.repoDropdownOpen} toggle={this.toggleRepoDropdown}
             className={this.state.highlight ? '' : 'vh'} >
-            <DropdownToggle tag="i" className="sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
+            <DropdownToggle tag="i" className="op-icon sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
             <DropdownMenu>
               <DropdownItem size='sm' onClick={this.props.filterRepo.bind(this, fileEvent.repo_name)}>
                 {gettext('Only Show')}{' '}<span className="font-weight-bold">{fileEvent.repo_name}</span>
