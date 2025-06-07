@@ -7096,7 +7096,7 @@ msgstr "提取文件详细信息"
 #: frontend/src/metadata/views/table/context-menu/index.js:216
 #| msgid "Select Image"
 msgid "Detect faces"
-msgstr "删除人脸"
+msgstr "检测人脸"
 
 #: frontend/src/metadata/views/table/context-menu/index.js:193
 #: frontend/src/utils/text-translation.js:257
