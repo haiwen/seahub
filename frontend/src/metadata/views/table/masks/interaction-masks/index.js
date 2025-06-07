@@ -11,7 +11,7 @@ import { gettext } from '../../../../../utils/constants';
 import { KeyCodes } from '../../../../../constants';
 import { Utils } from '../../../../../utils/utils';
 import { isEmptyObject } from '../../../../utils/common';
-import { getCellValueByColumn, getTagsFromRecord, isValidCellValue } from '../../../../utils/cell';
+import { getCellValueByColumn, getRecordIdFromRecord, getTagsFromRecord, isValidCellValue } from '../../../../utils/cell';
 import { isCtrlKeyHeldDown, isKeyPrintable } from '../../../../../utils/keyboard-utils';
 import { isSpace } from '../../../../../utils/hotkey';
 import { getFormatRecordData } from '../../../../utils/cell/cell-format-utils';
@@ -1088,6 +1088,33 @@ class InteractionMasks extends React.Component {
     }
   };
 
+  handleSelectTags = (tagId) => {
+    const { selectedPosition, isGroupView } = this.state;
+    const { columns, updateFileTags, recordGetterByIndex } = this.props;
+    const recordId = getRecordIdFromRecord(getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex }));
+    const value = getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex }) || [];
+    const ids = value.map(item => item.row_id);
+    const newValue = ids.slice(0);
+    if (!newValue.includes(tagId)) {
+      newValue.push(tagId);
+    }
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
+  };
+
+  handleDeselectTags = (tagId) => {
+    const { selectedPosition, isGroupView } = this.state;
+    const { columns, updateFileTags, recordGetterByIndex } = this.props;
+    const recordId = getRecordIdFromRecord(getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex }));
+    const value = getSelectedCellValue({ selectedPosition, columns, isGroupView, recordGetterByIndex }) || [];
+    const ids = value.map(item => item.row_id);
+    const newValue = ids.slice(0);
+    const tagIndex = newValue.indexOf(tagId);
+    if (tagIndex > -1) {
+      newValue.splice(tagIndex, 1);
+    }
+    updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
+  };
+
   renderSingleCellSelectView = () => {
     const { columns } = this.props;
     const { isEditorEnabled, selectedPosition } = this.state;
@@ -1176,7 +1203,8 @@ class InteractionMasks extends React.Component {
               onCommit={this.onCommit}
               onCommitCancel={this.onCommitCancel}
               modifyColumnData={this.props.modifyColumnData}
-              updateFileTags={this.props.updateFileTags}
+              onSelectTag={this.handleSelectTags}
+              onDeselectTag={this.handleDeselectTags}
               editorPosition={editorPosition}
               deleteRecords={this.props.deleteRecords}
               onChangePosition={this.handlePreviewImageChange}
