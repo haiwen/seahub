@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { HorizontalScrollbar } from '../../../../components/scrollbar';
-import EmptyTip from '../../../../../components/empty-tip';
+import EmptyTip from '@/components/empty-tip';
+import { isMobile } from '@/utils/utils';
+import { isShiftKeyDown } from '@/utils/keyboard-utils';
+import { gettext } from '@/utils/constants';
+import { addClassName, removeClassName, getEventClassName } from '@/utils/dom';
+import { getColOverScanEndIdx, getColOverScanStartIdx } from '@/components/sf-table/utils/grid';
+import { getVisibleBoundaries } from '@/components/sf-table/utils/viewport';
 import Body from './body';
 import GroupBody from './group-body';
 import RecordsHeader from '../records-header';
 import RecordsFooter from '../records-footer';
 import ContextMenu from '../../context-menu';
 import { recalculate } from '../../../../utils/column';
-import { addClassName, removeClassName, getEventClassName } from '../../../../../utils/dom';
-import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
-import { isMobile } from '../../../../../utils/utils';
-import { isShiftKeyDown } from '../../../../../utils/keyboard-utils';
-import { gettext } from '../../../../../utils/constants';
 import RecordMetrics from '../../utils/record-metrics';
-import { getColOverScanEndIdx, getColOverScanStartIdx } from '../../../../../components/sf-table/utils/grid';
-import { getVisibleBoundaries } from '../../../../../components/sf-table/utils/viewport';
 import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
+import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
 
 class Records extends Component {
 
