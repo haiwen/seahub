@@ -354,11 +354,11 @@ class Search extends Component {
 
   keepVisitedItem = (targetItem) => {
     let targetIndex;
-    const storeKey = this.storeKey;
+    const { repo_id: targetRepoID, path: targetPath } = targetItem;
+    const storeKey = 'sfVisitedSearchItems' + targetRepoID;
     const items = JSON.parse(localStorage.getItem(storeKey)) || [];
     for (let i = 0, len = items.length; i < len; i++) {
       const { repo_id, path } = items[i];
-      const { repo_id: targetRepoID, path: targetPath } = targetItem;
       if (repo_id == targetRepoID && path == targetPath) {
         targetIndex = i;
         break;
