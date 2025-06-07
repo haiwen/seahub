@@ -1,20 +1,21 @@
 import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
-import { Utils } from '../../../../utils/utils';
-import { useMetadataView } from '../../../hooks/metadata-view';
-import { useMetadataStatus } from '../../../../hooks';
-import { getColumnByKey, isNameColumn } from '../../../utils/column';
-import { checkIsDir } from '../../../utils/row';
-import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
-import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../../utils/cell';
-import FileTagsDialog from '../../../components/dialog/file-tags-dialog';
-import { openInNewTab, openParentFolder } from '../../../utils/file';
-import DeleteFolderDialog from '../../../../components/dialog/delete-folder-dialog';
-import MoveDirent from '../../../../components/dialog/move-dirent-dialog';
-import { Dirent } from '../../../../models';
-import ContextMenuComponent from '../../../components/context-menu';
-import RowUtils from '../utils/row-utils';
+import { useMetadataStatus } from '@/hooks';
+import { gettext } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
+import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
+import MoveDirent from '@/components/dialog/move-dirent-dialog';
+import { Dirent } from '@/models';
+import { useMetadataView } from '../../hooks/metadata-view';
+import RowUtils from './utils/row-utils';
+import { checkIsDir } from '../../utils/row';
+import { getColumnByKey, isNameColumn } from '../../utils/column';
+import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../constants';
+import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
+import FileTagsDialog from '../../components/dialog/file-tags-dialog';
+import ContextMenuComponent from '../../components/context-menu';
+import { openInNewTab, openParentFolder } from '../../utils/file';
+
 
 const OPERATION = {
   CLEAR_SELECTED: 'clear-selected',
@@ -33,6 +34,8 @@ const OPERATION = {
   DETECT_FACES: 'detect-faces',
   MOVE: 'move',
 };
+
+const { enableSeafileAI } = window.app.config;
 
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
@@ -96,7 +99,10 @@ const ContextMenu = ({
 
     // handle selected multiple cells
     if (selectedRange) {
-      !isReadonly && list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
+      if (!isReadonly) {
+        list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
+      }
+
       list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
 
       const { topLeft, bottomRight } = selectedRange;
@@ -113,19 +119,21 @@ const ContextMenu = ({
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete selected'), records: ableDeleteRecords });
       }
 
-      const imageOrVideoRecords = records.filter(record => {
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-      });
-      if (imageOrVideoRecords.length > 0) {
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-      }
-      const imageRecords = records.filter(record => {
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName);
-      });
-      if (imageRecords.length > 0) {
-        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+      if (enableSeafileAI) {
+        const imageOrVideoRecords = records.filter(record => {
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+        });
+        if (imageOrVideoRecords.length > 0) {
+          list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+        }
+        const imageRecords = records.filter(record => {
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName);
+        });
+        if (imageRecords.length > 0) {
+          list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+        }
       }
       return list;
     }
@@ -145,27 +153,23 @@ const ContextMenu = ({
       if (ableDeleteRecords.length > 0) {
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
       }
-      const imageOrVideoRecords = records.filter(record => {
-        const isFolder = checkIsDir(record);
-        if (isFolder) return false;
-        const canModifyRow = checkCanModifyRow(record);
-        if (!canModifyRow) return false;
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-      });
-      if (imageOrVideoRecords.length > 0) {
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-      }
-      const imageRecords = records.filter(record => {
-        const isFolder = checkIsDir(record);
-        if (isFolder) return false;
-        const canModifyRow = checkCanModifyRow(record);
-        if (!canModifyRow) return false;
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName);
-      });
-      if (imageRecords.length > 0) {
-        list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+      if (enableSeafileAI) {
+        const imageOrVideoRecords = records.filter(record => {
+          if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+        });
+        if (imageOrVideoRecords.length > 0) {
+          list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+        }
+        const imageRecords = records.filter(record => {
+          if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName);
+        });
+        if (imageRecords.length > 0) {
+          list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
+        }
       }
       return list;
     }
@@ -202,7 +206,7 @@ const ContextMenu = ({
       list.push(...modifyOptions);
     }
 
-    if (!isFolder && canModifyRow) {
+    if (enableSeafileAI && !isFolder && canModifyRow) {
       const fileName = getFileNameFromRecord(record);
       const isDescribableFile = checkIsDescribableFile(record);
       const isImage = Utils.imageCheck(fileName);

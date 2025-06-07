@@ -13,6 +13,8 @@ import { getColumnByKey } from '../../metadata/utils/column';
 import { useMetadataStatus } from '../../hooks';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 
+const { enableSeafileAI } = window.app.config;
+
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const metadataRef = useRef([]);
@@ -48,16 +50,15 @@ const TableFilesToolbar = ({ repoID }) => {
     const length = selectedRecordIds.length;
     const list = [];
     if (length > 1) {
-      const imageOrVideoRecords = records.filter(record => {
-        const isFolder = checkIsDir(record);
-        if (isFolder) return false;
-        const canModifyRow = checkCanModifyRow(record);
-        if (!canModifyRow) return false;
-        const fileName = getFileName(record);
-        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-      });
-      if (imageOrVideoRecords.length > 0) {
-        list.push(EXTRACT_FILE_DETAILS);
+      if (enableSeafileAI) {
+        const imageOrVideoRecords = records.filter(record => {
+          if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
+          const fileName = getFileName(record);
+          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+        });
+        if (imageOrVideoRecords.length > 0) {
+          list.push(EXTRACT_FILE_DETAILS);
+        }
       }
 
       return list;
@@ -77,7 +78,7 @@ const TableFilesToolbar = ({ repoID }) => {
       list.push(...modifyOptions);
     }
 
-    if (!isFolder && canModifyRow) {
+    if (enableSeafileAI && !isFolder && canModifyRow) {
       const { columns } = metadataRef.current;
       const fileName = getFileNameFromRecord(record);
       const isDescribableFile = canModifyRow && Utils.isDescriptionSupportedFile(fileName);
