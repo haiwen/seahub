@@ -113,7 +113,7 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
           onDeselect={onDeselectTag}
           showTagsAsTree={true}
           canEditData={canEditData}
-          canAddTag={context.canAddTag}
+          canAddTag={context.canAddTag()}
         />
       </Popover>
     );

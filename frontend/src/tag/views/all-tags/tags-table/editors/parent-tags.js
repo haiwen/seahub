@@ -35,7 +35,7 @@ const ParentTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, delete
         onSelect={selectTag}
         onDeselect={deselectTag}
         canEditData={context.canModify()}
-        canAddTag={context.canAddTag}
+        canAddTag={context.canAddTag()}
       />
     </div>
   );
