@@ -102,10 +102,10 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
       onOCR={onOCR}
       OCRLabel={gettext('OCR')}
-      sidePanel={!isCustomPermission ? {
+      sidePanel={isCustomPermission ? null : {
         render: renderSidePanel,
         width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : SIDE_PANEL_COLLAPSED_WIDTH,
-      } : null}
+      }}
     />
   );
 };
