@@ -60,14 +60,16 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  isItemFreezed={this.state.isItemFreezed}
-                  toggleItemFreezed={this.toggleItemFreezed}
-                  removeMember={this.props.removeMember}
-                  updateMemberRole={this.props.updateMemberRole}
-                />);
+                return (
+                  <Item
+                    key={index}
+                    item={item}
+                    isItemFreezed={this.state.isItemFreezed}
+                    toggleItemFreezed={this.toggleItemFreezed}
+                    removeMember={this.props.removeMember}
+                    updateMemberRole={this.props.updateMemberRole}
+                  />
+                );
               })}
             </tbody>
           </table>
@@ -174,7 +176,13 @@ class Item extends Component {
           </td>
           <td>
             {item.role != 'Owner' &&
-            <a href="#" className={`action-icon sf2-icon-x3 ${highlighted ? '' : 'invisible'}`} title={gettext('Remove')} onClick={this.toggleDeleteDialog}></a>
+            <i
+              role="button"
+              className={`op-icon sf2-icon-x3 ${highlighted ? '' : 'invisible'}`}
+              title={gettext('Remove')}
+              onClick={this.toggleDeleteDialog}
+            >
+            </i>
             }
           </td>
         </tr>

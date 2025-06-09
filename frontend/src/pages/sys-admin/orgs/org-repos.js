@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
@@ -25,7 +26,7 @@ class Content extends Component {
       );
       const table = (
         <Fragment>
-          <table className="table-hover">
+          <table>
             <thead>
               <tr>
                 <th width="5%"></th>
@@ -37,11 +38,13 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  deleteRepo={this.props.deleteRepo}
-                />);
+                return (
+                  <Item
+                    key={index}
+                    item={item}
+                    deleteRepo={this.props.deleteRepo}
+                  />
+                );
               })}
             </tbody>
           </table>
@@ -64,17 +67,24 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
       isDeleteDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({ isOpIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isOpIconShown: true
+    });
   };
 
   handleMouseLeave = () => {
-    this.setState({ isOpIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isOpIconShown: false
+    });
   };
 
   toggleDeleteDialog = (e) => {
@@ -90,7 +100,7 @@ class Item extends Component {
 
   render() {
     const { item } = this.props;
-    const { isOpIconShown, isDeleteDialogOpen } = this.state;
+    const { isOpIconShown, isDeleteDialogOpen, isHighlighted } = this.state;
 
     const iconUrl = Utils.getLibIconUrl(item);
     const iconTitle = Utils.getLibIconTitle(item);
@@ -100,7 +110,13 @@ class Item extends Component {
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>{item.repo_name}</td>
           <td>{item.repo_id}</td>
@@ -113,7 +129,12 @@ class Item extends Component {
             }
           </td>
           <td>
-            <a href="#" className={`action-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Delete')} onClick={this.toggleDeleteDialog}></a>
+            <i
+              className={`op-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`}
+              title={gettext('Delete')}
+              onClick={this.toggleDeleteDialog}
+            >
+            </i>
           </td>
         </tr>
         {isDeleteDialogOpen &&

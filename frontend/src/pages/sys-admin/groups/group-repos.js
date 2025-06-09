@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext, isPro } from '../../../utils/constants';
@@ -32,7 +33,7 @@ class Content extends Component {
       );
       const table = (
         <Fragment>
-          <table className="table-hover">
+          <table>
             <thead>
               <tr>
                 <th width="5%">{/* icon */}</th>
@@ -44,11 +45,13 @@ class Content extends Component {
             </thead>
             <tbody>
               {items.map((item, index) => {
-                return (<Item
-                  key={index}
-                  item={item}
-                  unshareRepo={this.props.unshareRepo}
-                />);
+                return (
+                  <Item
+                    key={index}
+                    item={item}
+                    unshareRepo={this.props.unshareRepo}
+                  />
+                );
               })}
             </tbody>
           </table>
@@ -75,23 +78,27 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false,
       isUnshareRepoDialogOpen: false
     };
   }
 
   handleMouseEnter = () => {
-    this.setState({ isOpIconShown: true });
+    this.setState({
+      isHighlighted: true,
+      isOpIconShown: true
+    });
   };
 
   handleMouseLeave = () => {
-    this.setState({ isOpIconShown: false });
+    this.setState({
+      isHighlighted: false,
+      isOpIconShown: false
+    });
   };
 
-  toggleUnshareRepoDialog = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
+  toggleUnshareRepoDialog = () => {
     this.setState({ isUnshareRepoDialogOpen: !this.state.isUnshareRepoDialogOpen });
   };
 
@@ -117,7 +124,7 @@ class Item extends Component {
   };
 
   render() {
-    let { isOpIconShown, isUnshareRepoDialogOpen } = this.state;
+    let { isOpIconShown, isUnshareRepoDialogOpen, isHighlighted } = this.state;
     let { item } = this.props;
 
     let iconUrl = Utils.getLibIconUrl(item);
@@ -128,7 +135,13 @@ class Item extends Component {
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+        <tr
+          className={classnames({
+            'tr-highlight': isHighlighted
+          })}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+        >
           <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
           <td>{this.renderRepoName()}</td>
           <td>{Utils.bytesToSize(item.size)}</td>
@@ -136,7 +149,13 @@ class Item extends Component {
             <UserLink email={item.shared_by} name={item.shared_by_name} />
           </td>
           <td>
-            <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Unshare')} onClick={this.toggleUnshareRepoDialog}></a>
+            <i
+              role="button"
+              className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`}
+              title={gettext('Unshare')}
+              onClick={this.toggleUnshareRepoDialog}
+            >
+            </i>
           </td>
         </tr>
         {isUnshareRepoDialogOpen &&
