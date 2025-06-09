@@ -63,7 +63,7 @@ const Peoples = ({ peoples, onOpenPeople, onRename }) => {
     return () => {};
   }, []);
 
-  if (!Array.isArray(peoples) || peoples.length === 0) return (<EmptyTip text={gettext('Identifying portraits...')} />);
+  if (!Array.isArray(peoples) || peoples.length === 0) return (<EmptyTip className="w-100 h-100" text={gettext('Identifying portraits...')} />);
 
   return (
     <div className="sf-metadata-face-recognition-container sf-metadata-peoples-container" ref={containerRef} onScroll={handleScroll}>

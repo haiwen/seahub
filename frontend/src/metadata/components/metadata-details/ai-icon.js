@@ -9,7 +9,6 @@ import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, 
 import { getColumnByKey } from '../../utils/column';
 import { PRIVATE_COLUMN_KEY } from './constants';
 import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
-import FileTagsDialog from '../dialog/file-tags-dialog';
 import { checkIsDir } from '../../utils/row';
 
 const OPERATION = {
@@ -22,11 +21,10 @@ const OPERATION = {
 const AIIcon = () => {
 
   const [isMenuShow, setMenuShow] = useState(false);
-  const [isFileTagsDialogShow, setFileTagsDialogShow] = useState(false);
 
   const { enableMetadata, enableTags, enableOCR } = useMetadataStatus();
-  const { canModifyRecord, columns, record, onChange, onLocalRecordChange, updateFileTags } = useMetadataDetails();
-  const { onOCR, generateDescription, extractFileDetails } = useMetadataAIOperations();
+  const { canModifyRecord, columns, record, onChange, onLocalRecordChange, updateFileTags, updateDescription } = useMetadataDetails();
+  const { generateDescription, extractFileDetails, onOCR, generateFileTags } = useMetadataAIOperations();
 
   const options = useMemo(() => {
     if (!canModifyRecord || !record || checkIsDir(record)) return [];
@@ -34,6 +32,7 @@ const AIIcon = () => {
     const fileName = getFileNameFromRecord(record);
     const isImage = Utils.imageCheck(fileName);
     const isVideo = Utils.videoCheck(fileName);
+    const isPdf = Utils.pdfCheck(fileName);
     const isDescribableDoc = Utils.isDescriptionSupportedFile(fileName);
     let list = [];
 
@@ -45,8 +44,8 @@ const AIIcon = () => {
       });
     }
 
-    if (enableOCR && isImage) {
-      list.push({ value: OPERATION.OCR, label: gettext('OCR'), record });
+    if (enableOCR && (isImage || isPdf)) {
+      list.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
     }
 
     if (isImage || isVideo) {
@@ -56,6 +55,7 @@ const AIIcon = () => {
     if (enableTags && isDescribableDoc && !isVideo) {
       list.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record });
     }
+
     return list;
   }, [enableOCR, enableTags, canModifyRecord, columns, record]);
 
@@ -64,10 +64,6 @@ const AIIcon = () => {
     event && event.stopPropagation();
     setMenuShow(!isMenuShow);
   }, [isMenuShow]);
-
-  const toggleFileTagsDialog = useCallback(() => {
-    setFileTagsDialogShow(!isFileTagsDialogShow);
-  }, [isFileTagsDialogShow]);
 
   const handelOperation = useCallback((op) => {
     const { value: opType, record } = op;
@@ -87,16 +83,15 @@ const AIIcon = () => {
         break;
       }
       case OPERATION.OCR: {
-        onOCR({ parentDir, fileName }, {
-          success_callback: ({ ocrResult }) => {
-            if (!ocrResult) return;
-            onChange && onChange(PRIVATE_COLUMN_KEY.OCR, JSON.stringify(ocrResult));
-          },
+        onOCR(record, {
+          success_callback: updateDescription
         });
         break;
       }
       case OPERATION.FILE_TAGS: {
-        setFileTagsDialogShow(true);
+        generateFileTags(record, {
+          success_callback: updateFileTags
+        });
         break;
       }
       case OPERATION.FILE_DETAIL: {
@@ -131,43 +126,32 @@ const AIIcon = () => {
         break;
       }
     }
-  }, [columns, generateDescription, onOCR, extractFileDetails, onChange, onLocalRecordChange]);
+  }, [columns, generateDescription, onOCR, generateFileTags, extractFileDetails, onChange, onLocalRecordChange, updateFileTags, updateDescription]);
 
-  const renderDropdown = useCallback(() => {
-    if (!enableMetadata || !canModifyRecord || !record || options.length === 0) return null;
-    return (
-      <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
-        <DropdownToggle
-          tag="span"
-          role="button"
-          data-toggle="dropdown"
-          aria-expanded={isMenuShow}
-          title='AI'
-          aria-label='AI'
-          tabIndex={0}
-        >
-          <div className="detail-control mr-2">
-            <Icon symbol="ai" className="detail-control-icon" />
-          </div>
-        </DropdownToggle>
-        {isMenuShow && (
-          <div className="sf-metadata-ai-dropdown-menu large">
-            <DropdownMenu>
-              {options.map(op => (<DropdownItem key={op.value} onClick={() => handelOperation(op)}>{op.label}</DropdownItem>))}
-            </DropdownMenu>
-          </div>
-        )}
-      </Dropdown>
-    );
-  }, [isMenuShow, enableMetadata, canModifyRecord, record, options, onToggle, handelOperation]);
-
+  if (!enableMetadata || !canModifyRecord || !record || options.length === 0) return null;
   return (
-    <>
-      {renderDropdown()}
-      {isFileTagsDialogShow && (
-        <FileTagsDialog record={record} onToggle={toggleFileTagsDialog} onSubmit={updateFileTags} />
+    <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
+      <DropdownToggle
+        tag="span"
+        role="button"
+        data-toggle="dropdown"
+        aria-expanded={isMenuShow}
+        title='AI'
+        aria-label='AI'
+        tabIndex={0}
+      >
+        <div className="detail-control mr-2">
+          <Icon symbol="ai" className="detail-control-icon" />
+        </div>
+      </DropdownToggle>
+      {isMenuShow && (
+        <div className="sf-metadata-ai-dropdown-menu large">
+          <DropdownMenu>
+            {options.map(op => (<DropdownItem key={op.value} onClick={() => handelOperation(op)}>{op.label}</DropdownItem>))}
+          </DropdownMenu>
+        </div>
       )}
-    </>
+    </Dropdown>
   );
 };
 

@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useCallback, useState, useMemo } from 're
 import metadataAPI from '../metadata/api';
 import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
-import { MetadataAIOperationsProvider } from './metadata-ai-operation';
 import Loading from '../components/loading';
+
+const { enableSeafileAI, enableSeafileOCR } = window.app.config;
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
@@ -64,8 +65,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
       setEnableTags(enableTags);
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
-      setEnableOCR(enableOCR);
-      setEnableFaceRecognition(enableFaceRecognition);
+      setEnableOCR(enableSeafileOCR && enableOCR);
+      setEnableFaceRecognition(enableSeafileAI && enableFaceRecognition);
       setEnableMetadata(enableMetadata);
       setLoading(false);
     }).catch(error => {
@@ -154,16 +155,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
       }}
     >
       {!isLoading && (
-        <MetadataAIOperationsProvider
-          repoID={repoID}
-          enableMetadata={enableMetadata}
-          enableOCR={enableOCR}
-          enableTags={enableTags}
-          tagsLang={tagsLang}
-          repoInfo={repoInfo}
-        >
-          {children}
-        </MetadataAIOperationsProvider>
+        <>{children}</>
       )}
     </MetadataStatusContext.Provider>
   );

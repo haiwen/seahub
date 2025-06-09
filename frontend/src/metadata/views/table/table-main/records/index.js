@@ -648,7 +648,7 @@ class Records extends Component {
           updateRecordDetails={this.props.updateRecordDetails}
           updateFaceRecognition={this.props.updateFaceRecognition}
           updateRecordDescription={this.props.updateRecordDescription}
-          ocr={this.props.ocr}
+          onOCR={this.props.onOCR}
         />
       ),
       hasSelectedRecord: this.hasSelectedRecord(),

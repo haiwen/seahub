@@ -13,9 +13,7 @@ import FileToolbar from './file-toolbar';
 import CommentPanel from './comment-panel';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
-import { MetadataStatusProvider } from '../../hooks';
-import { CollaboratorsProvider } from '../../metadata';
-import { TagsProvider } from '../../tag/hooks';
+import { MetadataMiddlewareProvider, MetadataStatusProvider } from '../../hooks';
 import Loading from '../loading';
 
 import '../../css/file-view.css';
@@ -180,17 +178,15 @@ class FileView extends React.Component {
               }
               {isDetailsPanelOpen && (
                 <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
-                  <CollaboratorsProvider repoID={repoID}>
-                    <TagsProvider repoID={repoID} repoInfo={repoInfo}>
-                      <EmbeddedFileDetails
-                        repoID={repoID}
-                        path={filePath}
-                        dirent={{ 'name': fileName, type: 'file' }}
-                        repoInfo={repoInfo}
-                        onClose={this.toggleDetailsPanel}
-                      />
-                    </TagsProvider>
-                  </CollaboratorsProvider>
+                  <MetadataMiddlewareProvider repoID={repoID} repoInfo={repoInfo}>
+                    <EmbeddedFileDetails
+                      repoID={repoID}
+                      path={filePath}
+                      dirent={{ 'name': fileName, type: 'file' }}
+                      repoInfo={repoInfo}
+                      onClose={this.toggleDetailsPanel}
+                    />
+                  </MetadataMiddlewareProvider>
                 </MetadataStatusProvider>
               )}
             </div>
