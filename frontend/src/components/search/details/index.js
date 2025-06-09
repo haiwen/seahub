@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
-import toaster from '../../toast';
-import { MetadataDetailsProvider } from '../../../metadata';
 import { Repo } from '../../../models';
-import { MetadataStatusProvider } from '../../../hooks';
+import toaster from '../../toast';
 import Details from './details';
+import { MetadataDetailsProvider } from '../../../metadata';
+import { MetadataStatusProvider } from '../../../hooks';
 import LibDetail from '../../dirent-detail/lib-details';
 import { Body, Header } from '../../dirent-detail/detail';
-import { gettext, mediaUrl } from '../../../utils/constants';
+import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
 
 import './index.css';
 
@@ -138,27 +138,42 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
 
   let parentDir = path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path; // deal with folder path comes from search results, eg: /folder/
   parentDir = Utils.getDirName(parentDir);
+
+  let src = '';
+  if (repoInfo.encrypted) {
+    src = `${siteRoot}repo/${repoID}/raw` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
+  } else {
+    src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`) + '?mtime=' + direntDetail.mtime;
+  }
+
   return (
-    <MetadataStatusProvider key={repoID} repoID={repoID} repoInfo={repoInfo}>
-      <MetadataDetailsProvider
-        repoID={repoID}
-        repoInfo={repoInfo}
-        path={path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path}
-        dirent={dirent}
-        direntDetail={direntDetail}
-        direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
-        onErrMessage={(message) => setErrMessage(message)}
-      >
-        <Details
-          repoID={repoID}
-          repoInfo={repoInfo}
-          path={parentDir}
-          dirent={dirent}
-          direntDetail={direntDetail}
-          errMessage={errMessage}
-        />
-      </MetadataDetailsProvider>
-    </MetadataStatusProvider>
+    <div className="searched-item-details">
+      <div className="cur-view-detail" style={{ width: 300 }}>
+        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)}></Header>
+        <Body>
+          {Utils.imageCheck(dirent.name) && <div className="detail-image"><img src={src} alt="" /></div>}
+          <MetadataStatusProvider key={repoID} repoID={repoID} repoInfo={repoInfo}>
+            <MetadataDetailsProvider
+              repoID={repoID}
+              repoInfo={repoInfo}
+              path={path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path}
+              dirent={dirent}
+              direntDetail={direntDetail}
+              direntType={dirent?.type !== 'file' ? 'dir' : 'file'}
+              onErrMessage={(message) => setErrMessage(message)}
+            >
+              <Details
+                repoID={repoID}
+                path={parentDir}
+                dirent={dirent}
+                direntDetail={direntDetail}
+                errMessage={errMessage}
+              />
+            </MetadataDetailsProvider>
+          </MetadataStatusProvider>
+        </Body>
+      </div>
+    </div>
   );
 };
 
