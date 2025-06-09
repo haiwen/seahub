@@ -6,13 +6,13 @@ import { useMetadataStatus } from './metadata-status';
 
 const MetadataMiddlewareContext = React.createContext(null);
 
-export const MetadataMiddlewareProvider = ({ repoID, currentPath, repoInfo, onTreeNodeClick, tagsChangedCallback, children }) => {
+export const MetadataMiddlewareProvider = ({ repoID, currentPath, repoInfo, selectTagsView, tagsChangedCallback, children }) => {
   const { enableMetadata, enableOCR, enableTags, tagsLang } = useMetadataStatus();
 
   return (
     <MetadataMiddlewareContext.Provider value={{}}>
       <CollaboratorsProvider repoID={repoID}>
-        <TagsProvider repoID={repoID} currentPath={currentPath} repoInfo={repoInfo} selectTagsView={onTreeNodeClick} tagsChangedCallback={tagsChangedCallback}>
+        <TagsProvider repoID={repoID} currentPath={currentPath} repoInfo={repoInfo} selectTagsView={selectTagsView} tagsChangedCallback={tagsChangedCallback}>
           <MetadataAIOperationsProvider
             repoID={repoID}
             enableMetadata={enableMetadata}
