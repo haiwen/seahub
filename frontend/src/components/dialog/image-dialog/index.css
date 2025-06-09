@@ -80,9 +80,6 @@
 }
 
 .lightbox-side-panel .dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty:empty::before,
-.lightbox-side-panel .sf-metadata-property-detail-editor:empty::before,
-.lightbox-side-panel .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value:empty::before,
-.lightbox-side-panel .file-details-collapse .file-details-collapse-header .sf3-font-down,
 .lightbox-side-panel .sf-metadata-number-property-detail-editor::placeholder {
   color: #666;
 }
@@ -91,7 +88,6 @@
   color: #999;
 }
 
-.lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover,
 .lightbox-side-panel .dirent-detail-item .dirent-detail-item-value.editable:hover {
   background-color: #666;
 }
@@ -101,4 +97,18 @@
   transform: none;
   padding-bottom: 16px;
   border-bottom: 1px solid #999;
+}
+
+.lightbox-side-panel .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value:empty::before,
+.lightbox-side-panel .sf-metadata-property-detail-editor:empty::before,
+.lightbox-side-panel .file-details-collapse .file-details-collapse-header .sf3-font-down {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover {
+  background-color: transparent;
+}
+
+.lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover .sf3-font-down {
+  color: rgba(255, 255, 255, 1);
 }
