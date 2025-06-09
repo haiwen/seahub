@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LocationProvider, globalHistory } from '@gatsbyjs/reach-router';
 import { createRoot } from 'react-dom/client';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
@@ -30,4 +31,8 @@ export default function Institutions() {
 }
 
 const root = createRoot(document.getElementById('wrapper'));
-root.render(<Institutions />);
+root.render(
+  <LocationProvider history={globalHistory}>
+    <Institutions />
+  </LocationProvider>
+);
