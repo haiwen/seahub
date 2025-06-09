@@ -34,13 +34,7 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
   }, [OPTIONS, value]);
 
   const displayValue = useMemo(() => {
-    return {
-      label: (
-        <div>
-          {gettext('File type')}
-        </div>
-      )
-    };
+    return { label: <>{gettext('File type')}</> };
   }, []);
 
   const onChange = useCallback((newValue) => {

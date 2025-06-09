@@ -16,7 +16,7 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
 
   const { tagsData } = useTags();
   const { enableTags } = useMetadataStatus();
-  const invalidFilterTip = React.createRef();
+  const invalidFilterTip = useRef(null);
   const ref = useRef(null);
 
   const value = useMemo(() => {

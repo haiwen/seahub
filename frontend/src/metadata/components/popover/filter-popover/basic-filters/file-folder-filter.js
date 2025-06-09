@@ -30,13 +30,7 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
 
   const displayValue = useMemo(() => {
     const selectedOption = OPTIONS.find(o => o.value === value) || OPTIONS[2];
-    return {
-      label: (
-        <div>
-          {selectedOption.name}
-        </div>
-      )
-    };
+    return { label: <>{selectedOption.name}</> };
   }, [value]);
 
   const onChange = useCallback((newValue) => {
