@@ -450,9 +450,6 @@ module.exports = function (webpackEnv) {
                   }
                 }
               ],
-              issuer: {
-                and: [/\.(ts|tsx|js|jsx|md|mdx)$/],
-              },
             },
             // Process application JS with Babel.
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
@@ -595,34 +592,6 @@ module.exports = function (webpackEnv) {
                 },
                 'sass-loader'
               ),
-            },
-            // Handle svg icons
-            {
-              test: /\.svg$/,
-              use: [
-                {
-                  loader: require.resolve('@svgr/webpack'),
-                  options: {
-                    prettier: false,
-                    svgo: false,
-                    svgoConfig: {
-                      plugins: [{ removeViewBox: false }],
-                    },
-                    titleProp: true,
-                    ref: true,
-                  },
-                },
-                { loader: 'svgo-loader', options: {
-                  plugins: [
-                    'removeTitle',
-                    'removeStyleElement',
-                    'cleanupIDs',
-                    'inlineStyles',
-                    'removeXMLProcInst',
-                  ]
-                }
-                }
-              ]
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
