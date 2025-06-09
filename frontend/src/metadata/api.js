@@ -212,6 +212,14 @@ class MetadataManagerAPI {
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
   };
 
+  modifyGlobalHiddenColumns = (repoID, columns) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/global-hidden-columns/';
+    const params = {
+      hidden_columns: columns,
+    };
+    return this.req.put(url, params);
+  };
+
   // column
   insertColumn = (repoID, name, type, { key, data }) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
