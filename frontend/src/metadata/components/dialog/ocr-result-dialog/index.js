@@ -8,14 +8,17 @@ import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/ce
 import { Utils } from '../../../../utils/utils';
 import i18n from '../../../../_i18n/i18n-seafile-editor';
 import Icon from '../../../../components/icon';
+import metadataAPI from '../../../api';
+import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
 
 import './index.css';
 
-const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
+const OCRResultDialog = ({ repoID, record, onToggle, saveToDescription }) => {
   const [isLoading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [dialogStyle, setDialogStyle] = useState({});
+  const { canModify } = useMetadataAIOperations();
 
   const ocrResult = useRef(null);
 
@@ -58,14 +61,8 @@ const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
   }, [saveToDescription, onToggle]);
 
   useEffect(() => {
-    if (!window.sfMetadataContext.canModifyRow(record)) {
-      setErrorMessage(gettext('Permission denied'));
-      setLoading(false);
-      return;
-    }
-
     const path = Utils.joinPath(parentDir, fileName);
-    window.sfMetadataContext.ocr(path).then(res => {
+    metadataAPI.ocr(repoID, path).then(res => {
       const result = res.data?.ocr_result || '';
       ocrResult.current = result.replaceAll('\f', '\n').replaceAll('\n\n', '\n').replaceAll('\n', '\n\n');
       setLoading(false);
@@ -95,7 +92,7 @@ const OCRResultDialog = ({ record, onToggle, saveToDescription }) => {
             <div className="longtext-header">
               <span className="longtext-header-name">{gettext('OCR result')}</span>
               <div className="longtext-header-tool">
-                {!isLoading && !errorMessage && (
+                {!isLoading && !errorMessage && canModify && (
                   <span
                     className="longtext-header-tool-item d-flex align-items-center mr-1"
                     title={gettext('Save to description property')}
