@@ -1176,7 +1176,9 @@ class Repos(APIView):
                              'Failed to create library.')
         else:
             try:
-                self._enable_metadata_and_tags(repo_id, username)
+                passwd = request.data.get("passwd", None)
+                if not passwd:
+                    self._enable_metadata_and_tags(repo_id, username)
             except Exception as e:
                 logger.error(e)
             library_template = request.data.get("library_template", '')
