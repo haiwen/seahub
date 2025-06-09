@@ -15,6 +15,7 @@ const HideColumnItem = ({
   dragOverColumnKey,
   updateDraggingKey,
   updateDragOverKey,
+  canReorder = true,
   onChange,
   onMove,
 }) => {
@@ -83,7 +84,7 @@ const HideColumnItem = ({
       onDragLeave={onDragLeave}
       onDragEnd={onDragEnd}
     >
-      {!readOnly && (
+      {!readOnly && canReorder && (
         <div className="drag-hide-column-handle" draggable="true" onDragStart={onDragStart}>
           <Icon symbol="drag" />
         </div>
@@ -114,6 +115,7 @@ HideColumnItem.propTypes = {
   dragOverColumnKey: PropTypes.string,
   updateDraggingKey: PropTypes.func,
   updateDragOverKey: PropTypes.func,
+  canReorder: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onMove: PropTypes.func,
 };

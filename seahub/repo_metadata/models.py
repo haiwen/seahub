@@ -182,7 +182,8 @@ class RepoMetadataViewsManager(models.Manager):
             # init view data
             new_view = RepoView(view_name, view_type, {
                 'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
-                'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }]
+                'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }],
+                'hidden_columns': view_data.get('hidden_columns', [])
             })
 
             view_json = new_view.view_json
