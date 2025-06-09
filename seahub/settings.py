@@ -1008,6 +1008,9 @@ ENABLE_REPO_SNAPSHOT_LABEL = False
 #  Repo wiki mode
 ENABLE_REPO_WIKI_MODE = True
 
+# Enable metadata for new repo
+ENABLE_METADATA_FOR_NEW_LIBRARY = False
+
 ############################
 # HU berlin additional #
 ############################

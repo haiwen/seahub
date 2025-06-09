@@ -105,11 +105,15 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
     STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
-    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT
+    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+    ENABLE_METADATA_FOR_NEW_LIBRARY, ENABLE_METADATA_MANAGEMENT
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
 from seahub.views.file import get_office_feature_by_repo
+from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
+from seahub.repo_metadata.utils import init_metadata, init_tags, add_init_metadata_task
+from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -1171,6 +1175,12 @@ class Repos(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
         else:
+            try:
+                passwd = request.data.get("passwd", None)
+                if not passwd:
+                    self._enable_metadata_and_tags(repo_id, username)
+            except Exception as e:
+                logger.error(e)
             library_template = request.data.get("library_template", '')
             repo_created.send(sender=None,
                               org_id=org_id,
@@ -1328,6 +1338,17 @@ class Repos(APIView):
 
         return repo_id, None
 
+    def _enable_metadata_and_tags(self, repo_id, username):
+        if ENABLE_METADATA_MANAGEMENT and ENABLE_METADATA_FOR_NEW_LIBRARY:
+            RepoMetadata.objects.enable_metadata_and_tags(repo_id)
+            metadata_server_api = MetadataServerAPI(repo_id, username)
+            init_metadata(metadata_server_api)
+            init_tags(metadata_server_api)
+            add_init_metadata_task(params={
+                'repo_id': repo_id,
+                'username': username
+            })
+            RepoMetadataViews.objects.add_view(repo_id, 'All files', 'table')
 
 class PubRepos(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
