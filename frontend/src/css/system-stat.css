@@ -25,10 +25,6 @@
   width: 120px;
 }
 
-.error-tip {
-  color: red;
-}
-
 .statistic-traffic-tab {
   display: flex;
   font-size: 13px;

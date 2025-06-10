@@ -157,10 +157,8 @@ FILEEXT_TYPE_MAP = gen_fileext_type_map()
 def render_permission_error(request, msg=None, extra_ctx=None):
     """
     Return permisson error page.
-
     """
     ctx = {}
-    ctx['unable_view_file'] = msg == _('Unable to view file')
     ctx['error_msg'] = msg or _('permission error')
 
     if extra_ctx:
@@ -172,10 +170,8 @@ def render_permission_error(request, msg=None, extra_ctx=None):
 def render_error(request, msg=None, extra_ctx=None):
     """
     Return normal error page.
-
     """
     ctx = {}
-    ctx['unable_view_file'] = msg == _('Unable to view file')
     ctx['error_msg'] = msg or _('Internal Server Error')
 
     if extra_ctx:
@@ -187,7 +183,6 @@ def render_error(request, msg=None, extra_ctx=None):
 def list_to_string(l):
     """
     Return string of a list.
-
     """
     return ','.join(l)
 

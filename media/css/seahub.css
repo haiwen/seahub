@@ -336,7 +336,6 @@ img {
   margin: 0;
 }
 
-body,
 input,
 textarea,
 button,
@@ -680,17 +679,7 @@ table img {
 }
 
 .error {
-  color: red;
-}
-
-.errorlist {
-  color: red;
-  padding: 0;
-}
-
-.error-tip {
-  text-align: center;
-  margin-top: 5em;
+  color: #212529;
 }
 
 .ovhd {
@@ -1416,7 +1405,7 @@ textarea:-moz-placeholder {
   padding: 5px;
   background: #FDF;
   margin: 0;
-  color: #000;
+  color: #212529;
 }
 
 /**** narrow-panel ****/
@@ -3003,9 +2992,4 @@ a.sf-popover-item {
   width: 25%;
   margin-right: 2px;
   background-color: #DBDBDB;
-}
-
-.unable-view-file-tip {
-  margin-top: 20px;
-  font-size: 1.125rem;
 }

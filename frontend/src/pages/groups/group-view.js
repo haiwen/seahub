@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import classnames from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, username } from '../../utils/constants';
+import { gettext, siteRoot, username, mediaUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
@@ -335,28 +335,28 @@ class GroupView extends React.Component {
               className={classnames('cur-view-content', 'd-block', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}
               onScroll={this.handleScroll}
             >
-              {isLoading
-                ? <Loading />
-                : errMessage
-                  ? <p className="error text-center mt-2">{errMessage}</p>
-                  : repoList.length == 0
-                    ? emptyTip
-                    : (
-                      <SharedRepoListView
-                        repoList={this.state.repoList}
-                        hasNextPage={this.state.hasNextPage}
-                        currentGroup={this.state.currentGroup}
-                        sortBy={this.state.sortBy}
-                        sortOrder={this.state.sortOrder}
-                        sortItems={this.sortItems}
-                        onItemUnshare={this.onItemUnshare}
-                        onItemDelete={this.onItemDelete}
-                        onItemRename={this.onItemRename}
-                        onMonitorRepo={this.onMonitorRepo}
-                        onTransferRepo={this.onItemTransfer}
-                        currentViewMode={currentViewMode}
-                      />
-                    )
+              {isLoading ? <Loading /> : errMessage ?
+                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+                  <img src={`${mediaUrl}img/error-tip.png`} alt="" width="100" />
+                  <p className="mt-2">{errMessage}</p>
+                </div>
+                : repoList.length == 0
+                  ? emptyTip
+                  :
+                  <SharedRepoListView
+                    repoList={this.state.repoList}
+                    hasNextPage={this.state.hasNextPage}
+                    currentGroup={this.state.currentGroup}
+                    sortBy={this.state.sortBy}
+                    sortOrder={this.state.sortOrder}
+                    sortItems={this.sortItems}
+                    onItemUnshare={this.onItemUnshare}
+                    onItemDelete={this.onItemDelete}
+                    onItemRename={this.onItemRename}
+                    onMonitorRepo={this.onMonitorRepo}
+                    onTransferRepo={this.onItemTransfer}
+                    currentViewMode={currentViewMode}
+                  />
               }
             </div>
           </div>

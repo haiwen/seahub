@@ -1,15 +1,13 @@
 {% extends 'base.html' %}
 
 {% block main_content %}
-<div class="text-panel">
-  {% if unable_view_file %}
-  <img src="{{MEDIA_URL}}img/failed-to-view-file.png" alt="" width="100" />
-  <p class="unable-view-file-tip">{{ error_msg }}</p>
-  {% elif organization_inactive %}
+<div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+  {% if organization_inactive %}
   <img src="{{MEDIA_URL}}img/organization-inactive.png" alt="" width="100" />
   <p>{{ error_msg }}</p>
   {% else %}
-  <p class="error">{{ error_msg }}</p>
+  <img src="{{MEDIA_URL}}img/error-tip.png" alt="" width="100" />
+  <p>{{ error_msg }}</p>
   {% endif %}
 </div>
 {% endblock %}

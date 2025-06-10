@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { orgAdminAPI } from '../../utils/org-admin-api';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import OrgAdminGroupNav from '../../components/org-admin-group-nav';
@@ -69,7 +69,12 @@ class Content extends Component {
       return <Loading />;
     }
     if (errorMsg) {
-      return <p className="error text-center mt-2">{errorMsg}</p>;
+      return (
+        <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+          <img src={`${mediaUrl}img/error-tip.png`} alt="" width="100" />
+          <p className="mt-2">{errorMsg}</p>
+        </div>
+      );
     }
 
     return (
