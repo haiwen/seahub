@@ -8,10 +8,15 @@ import datetime
 import uuid
 import re
 import requests
+from zipfile import ZipFile
+import shutil
+from pathlib import Path
 from copy import deepcopy
 from constance import config
 from urllib.parse import quote
+from bs4 import BeautifulSoup
 
+from html_to_markdown import convert_to_markdown
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -38,7 +43,8 @@ from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_D
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, \
+    gen_file_upload_url, PREVIEW_FILEEXT
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis
 
@@ -48,7 +54,7 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
-    ENCRYPTED_LIBRARY_VERSION
+    ENCRYPTED_LIBRARY_VERSION, SERVICE_URL
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
@@ -60,6 +66,7 @@ from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
 from seahub.share.utils import is_repo_admin
+from seahub.api2.endpoints.utils import md_to_sdoc
 
 
 HTTP_520_OPERATION_FAILED = 520
@@ -1629,3 +1636,516 @@ class WikiPageExport(APIView):
         response['Content-Disposition'] = 'attachment;filename*=utf-8''%s;filename="%s"' % (encoded_filename, encoded_filename)
 
         return response
+
+
+class ImportConfluenceView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        # file check
+        file = request.FILES.get('file')
+        if not file:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File is required')
+        filename = file.name
+        if not filename.endswith('.html.zip'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File must be a zip file with .html.zip extension')
+        
+        # permission check
+        username = request.user.username
+        if not request.user.permissions.can_add_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create library.')
+
+        if not request.user.permissions.can_create_wiki():
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create wiki.')
+        
+        # create wiki
+        org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+        
+        underscore_index = filename.rfind('_')
+        if underscore_index != -1:
+            wiki_name = filename[:underscore_index]
+            space_key = filename[underscore_index + 1:-len('.html.zip')]
+        else:
+            wiki_name = filename 
+            space_key = filename
+        if org_id and org_id > 0:
+            repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
+        else:
+            repo_id = seafile_api.create_repo(wiki_name, '', username)
+
+        try:
+            seafile_db_api = SeafileDB()
+            seafile_db_api.set_repo_type(repo_id, 'wiki')
+        except Exception as e:
+            logger.error(e)
+            msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
+        seafile_server_url = f'{SERVICE_URL}/lib/{repo_id}/file/'
+        # extract html zip
+        extract_dir = self._extract_html_zip(file, space_key)
+        if not extract_dir:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        wiki = Wiki.objects.get(wiki_id=repo_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found')
+        
+        # handle zip file
+        try:
+            self._process_zip_file(wiki, extract_dir, seafile_server_url, username, space_key)
+            shutil.rmtree(extract_dir)
+        except Exception as e:
+            logger.error(e)
+            if os.path.exists(extract_dir):
+                shutil.rmtree(extract_dir)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        
+        repo = seafile_api.get_repo(repo_id)
+        wiki = Wiki(repo, username)
+        wiki_info = wiki.to_dict()
+        wiki_info['owner_nickname'] = email2nickname(wiki.owner)
+
+        return Response(wiki_info)
+
+    def _extract_html_zip(self, zip_file, space_key):
+        extract_dir = '/tmp/wiki'
+        if not os.path.exists(extract_dir):
+            os.mkdir(extract_dir)
+        try:
+            with ZipFile(zip_file, 'r') as zip_ref:
+                all_entries = zip_ref.infolist()
+                zip_ref.extractall(extract_dir)
+                if all_entries:
+                    first_entry = all_entries[1].filename
+                    top_dir = first_entry.split('/')[0] if '/' in first_entry else None
+                    if top_dir and top_dir != space_key:
+                        old_path = f'{extract_dir}/{top_dir}'
+                        new_path = f'{extract_dir}/{space_key}'
+                        if os.path.exists(new_path):
+                            shutil.rmtree(new_path)
+                        if os.path.exists(old_path):
+                            os.rename(old_path, new_path)
+                
+            return f'{extract_dir}/{space_key}'
+        except Exception as e:
+            logger.error(f"extract {zip_file} error: {e}")
+            return False
+    
+    def _process_zip_file(self, wiki, directory, seafile_server_url, username, space_key):
+        html_files = []
+        dir_path = Path(directory).resolve()
+        level_html = []
+        for root, _, files in os.walk(dir_path):
+            for file in files:
+                if file.endswith('.html') and file != 'index.html':
+                    html_files.append(Path(root) / file)
+                if file.endswith('.html') and file == 'index.html':
+                    level_html.append(Path(root) / file)
+        
+        md_output_dir = f'{directory}/md_output'
+        sdoc_output_dir = f'{directory}/sdoc_output'
+        attachment_dir = f'{directory}/attachments'
+        if not os.path.exists(md_output_dir):
+            os.mkdir(md_output_dir)
+        if not os.path.exists(sdoc_output_dir):
+            os.mkdir(sdoc_output_dir)
+
+        # html to md
+        cf_id_to_cf_title_map = {}
+        for html_file in html_files:
+            result = self._convert_html_to_md(html_file, md_output_dir, seafile_server_url)
+            if result:
+                cf_id_to_cf_title_map.update(result)
+        
+        # md to sdoc
+        md_files = list(Path(md_output_dir).glob('*.md'))
+        if not md_files:
+            logger.warning(f" {md_output_dir} not found md files")
+        for md_file in md_files:
+            self._md_to_sdoc(md_file, sdoc_output_dir, username)
+        sdoc_files = list(Path(sdoc_output_dir).glob('*.sdoc'))
+        # handle and upload sdoc files
+        wiki_id = wiki.repo_id
+        wiki_config = get_wiki_config(wiki_id, username)
+        cf_page_id_to_sf_page_id_map = {}
+        cf_page_id_to_sf_obj_id_map = {}
+        for sdoc_file in sdoc_files:
+            page_name_to_id_map, page_name_to_obj_id_map, wiki_config = self._process_page(wiki_id, wiki_config, sdoc_file, username, cf_id_to_cf_title_map)
+            if page_name_to_id_map:
+                cf_page_id_to_sf_page_id_map.update(page_name_to_id_map)
+            if page_name_to_obj_id_map:
+                cf_page_id_to_sf_obj_id_map.update(page_name_to_obj_id_map)
+
+        # handle page level
+        navigation = self._handle_page_level(level_html[0], cf_page_id_to_sf_page_id_map)
+        wiki_config['navigation'] = navigation
+        wiki_config = json.dumps(wiki_config)
+        save_wiki_config(wiki, username, wiki_config)
+
+        # handle attachment
+        exist_dir = []
+        if os.path.exists(attachment_dir):
+            self._upload_attachment(cf_page_id_to_sf_obj_id_map, attachment_dir, wiki_id, username, exist_dir)
+        self._upload_cf_images(wiki_id, directory, username, exist_dir)
+
+    
+    def _convert_html_to_md(self, html_file, md_output_dir, seafile_server_url):
+        try:
+            html_file = Path(html_file).resolve()
+            md_output_dir = Path(md_output_dir).resolve()
+            
+            with open(html_file, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+            
+            soup = BeautifulSoup(html_content, 'html.parser')
+            
+            title_element = soup.find('h1', id='title-heading')
+            title = title_element.get_text().strip() if title_element else Path(html_file).stem
+            
+            if ":" in title:
+                title = title.split(":", 1)[1].strip()
+            
+            content_div = soup.find('div', id='main-content')
+            if not content_div:
+                logger.warning(f"{html_file} content not found")
+                return False
+            md_file = f'{md_output_dir}/{html_file.stem}.md'
+            self._process_images_and_attachments(content_div, html_file, seafile_server_url)
+            md_content = convert_to_markdown(content_div, keep_inline_images_in=['span','h2', 'p'])
+            md_content = f"# {title}\n\n{md_content}"
+            with open(md_file, 'w', encoding='utf-8') as f:
+                f.write(md_content)
+            try:
+                os.remove(html_file)
+            except Exception as e:
+                logger.warning(f"delete html file {html_file} failed: {e}")
+            
+            return {html_file.stem: title}
+        except Exception as e:
+            logger.error(f"convert {html_file} failed: {e}")
+            return False
+
+    def _process_images_and_attachments(self, content_div, html_file, seafile_server_url):
+        for a in content_div.find_all('a'):
+            if 'confluence-embedded-file' in a.get('class', []):
+                # If it is an attachment, delete the thumbnail corresponding to the attachment
+                img = a.find('img')
+                if img:
+                    img.decompose()
+
+                alias = a.get('data-linked-resource-default-alias', 'Unknown attachment')
+                # update attachment name
+                if alias:
+                    a.clear()
+                    a.append(f'{alias} (attachment) \t')
+            href = a.get('href', '')
+            if href and not href.startswith(('http:', 'https:')):
+                # page redirect processing
+                if href.startswith('/wiki/spaces/'):
+                    last_slash_index = href.rfind('/')
+                    if last_slash_index == -1:
+                        continue
+                    file_name = href[last_slash_index + 1:]
+                    # TODO: need to handle the click file to jump to wiki sidebar, not to sdoc file
+                    a.attrs['href'] = f""
+                # TODO: if it is a link to other pages (Confluence page), then change to link to the other page in seafile file server
+                elif href.endswith('.html'):
+                    # href = href.replace('.html', '.sdoc')
+                    a.attrs['href'] = f""
+                # connect attachment:  currently only jump to the file
+                else:
+                    a.attrs['href'] = f"{seafile_server_url}/{href}"
+            
+        # process images
+        for img in content_div.find_all('img'):
+            src = img.get('src', '')
+            if not src or src.startswith(('data:')):
+                continue
+            alt = img.get('alt', '')
+            title = img.get('title', '')
+            width = img.get('width', '')
+            height = img.get('height', '')
+            img_name = src.split('/')[-1]
+            if '?' in img_name:
+                img_name = img_name.split('?')[0]
+            # if it is a relative path image
+            if not src.startswith(('http:', 'https:')):
+                try:
+                    # calculate the full path of the image
+                    if '?' in src:
+                        src = src.split('?')[0]
+                    img_path = (html_file.parent / src).resolve()
+                    if img_path.exists():
+                        # build new URL
+                        img['src'] = f"/{img_name}"
+                except Exception as e:
+                    logger.warning(f"handle image {src} failed: {e}")
+            
+            if width or height:
+                width_attr = f' width="{width}"' if width else ''
+                height_attr = f' height="{height}"' if height else ''
+                alt_attr = f' alt="{alt}"' if alt else ' alt="undefined"'
+                title_attr = f' title="{title}"' if title else ' title="undefined"'
+                
+                new_img_html = f'<img src="{img["src"]}"{alt_attr}{title_attr}{width_attr}{height_attr} />'
+                img.replace_with(BeautifulSoup(new_img_html, 'html.parser'))
+
+    def _upload_attachment(self, cf_page_id_to_sf_obj_id_map, attachment_dir, wiki_id, username, exist_dir):
+        # Image need to be uploaded to the appropriate sdoc directory in seafile
+        attachment_dir = Path(attachment_dir).resolve()
+        # Create the attachment directory in the wiki library
+        wiki_attachment_dir = 'attachments'
+        # Traverse all subdirectories and files in the attachment directory
+        for root, _, files in os.walk(attachment_dir):
+            # Get the relative path as the upload target path
+            rel_path = os.path.relpath(root, attachment_dir)
+            
+            # Process the files in the current directory
+            if files:
+                # Set the target directory
+                if rel_path == '.':
+                    target_dir = wiki_attachment_dir
+                else:
+                    target_dir = os.path.join(wiki_attachment_dir, rel_path)
+                
+                # Get the obj_id of the page corresponding to the current directory
+                page_name = os.path.basename(rel_path) if rel_path != '.' else None
+                obj_id = cf_page_id_to_sf_obj_id_map.get(page_name)
+                # Upload all files in the current directory
+                for file_name in files:
+                    file_path = os.path.join(root, file_name)
+                    if not os.path.isfile(file_path):
+                        continue
+                    is_image = self._is_image_file(file_name)
+                    if is_image and obj_id:
+                        wiki_page_images_dir = 'images/sdoc/'
+                        sdoc_image_dir = os.path.join(wiki_page_images_dir, obj_id)
+
+                        if sdoc_image_dir not in exist_dir:
+                            seafile_api.mkdir_with_parents(wiki_id, '/', sdoc_image_dir, username)
+                            exist_dir.append(sdoc_image_dir)
+                        self._upload_attachment_file(wiki_id, sdoc_image_dir, file_path, username)
+                    else:   
+                        # other files
+                        if target_dir not in exist_dir:
+                            seafile_api.mkdir_with_parents(wiki_id, '/', target_dir, username)
+                            exist_dir.append(target_dir)
+                        self._upload_attachment_file(wiki_id, target_dir, file_path, username)
+
+    def _upload_cf_images(self, wiki_id, extract_dir, username, exist_dir):
+        image_dir = os.path.join(extract_dir, 'images/')
+        image_dir = os.path.normpath(image_dir)
+        wiki_images_dir = 'images/'
+        if os.path.exists(image_dir):
+            for root, _, files in os.walk(image_dir):
+                rel_path = os.path.relpath(root, image_dir)
+                if rel_path == '.':
+                    target_dir = wiki_images_dir
+                else:
+                    target_dir = os.path.join(wiki_images_dir, rel_path)
+                if target_dir not in exist_dir:
+                    seafile_api.mkdir_with_parents(wiki_id, '/', target_dir, username)
+                    exist_dir.append(target_dir)
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    self._upload_attachment_file(wiki_id, target_dir, file_path, username)
+
+    def _is_image_file(self, file_name):
+        file_ext = file_name.split('.')[-1]
+        return file_ext in PREVIEW_FILEEXT.get('Image')
+    
+    def _upload_attachment_file(self, repo_id, parent_dir, file_path, username):
+        try:
+            obj_id = json.dumps({'parent_dir': parent_dir})
+            token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload', username, use_onetime=False)
+            
+            if not token:
+                error_msg = 'Internal Server Error'
+                logger.error(error_msg)
+                return
+            upload_link = gen_file_upload_url(token, 'upload-api')
+            upload_link += '?ret-json=1'
+            
+            filename = os.path.basename(file_path)
+            new_file_path = os.path.join(parent_dir, filename)
+            new_file_path = os.path.normpath(new_file_path)
+            
+            data = {'parent_dir': parent_dir, 'target_file': new_file_path}
+            files = {'file': open(file_path, 'rb')}
+            
+            resp = requests.post(upload_link, files=files, data=data)
+            if not resp.ok:
+                logger.error(f"upload file {filename} failed: {resp.text}")
+        except Exception as e:
+            logger.error(f"upload file {file_path} failed: {e}")
+        finally:
+            if 'files' in locals() and files.get('file') and not files['file'].closed:
+                files['file'].close()
+
+    def _handle_page_level(self, level_html, cf_page_id_to_sf_page_id_map):
+        result = []
+        html_file = level_html
+        try:
+            with open(html_file, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+            soup = BeautifulSoup(html_content, 'html.parser')
+            ul_element = soup.find('ul')
+            if not ul_element:
+                logger.warning(f"not found page level: {html_file}")
+                return result
+            result = self._parse_ul_structure(ul_element, cf_page_id_to_sf_page_id_map)
+        except Exception as e:
+            logger.error(f"handle page level error: {e}")
+        
+        return result
+    
+    def _parse_ul_structure(self, ul_element, cf_page_id_to_sf_page_id_map):
+        result = []
+        li = ul_element.find_all('li', recursive=False)[0]
+        a_tag = li.find('a')
+        if not a_tag:
+            return
+        href = a_tag.get('href', '')
+        page_name = a_tag.get_text().strip()
+        page_key = href.split('.')[0] if href else None
+        page_id = cf_page_id_to_sf_page_id_map.get(page_key)
+        
+        if not page_id:
+            page_id = cf_page_id_to_sf_page_id_map.get(page_name)
+            if not page_id:
+                logger.warning(f"not found page id: {page_name}, href: {href}")
+                return
+        
+        page_node = {
+            "id": page_id,
+            "type": "page"
+        }
+        sub_uls = li.find_all('ul', recursive=False)
+        if sub_uls:
+            children = []
+            for sub_ul in sub_uls:
+                # recursively process sub ul
+                sub_result = self._parse_ul_structure(sub_ul, cf_page_id_to_sf_page_id_map)
+                if sub_result:
+                    children.extend(sub_result)
+            if children:
+                page_node["children"] = children
+        result.append(page_node)
+        
+        return result
+
+    
+    def _md_to_sdoc(self, md_file, sdoc_output_dir, username):
+        try:
+            sdoc_file = f"{sdoc_output_dir}/{md_file.stem}.sdoc"
+            md_file_path = f"{md_file.parent}/{md_file.name}"
+            resp = json.loads(md_to_sdoc(md_file_path, username))
+            sdoc_content = resp.get('sdoc_content')
+            with open(sdoc_file, 'w', encoding='utf-8') as f:
+                f.write(sdoc_content)
+            with open(sdoc_file, 'r', encoding='utf-8') as f:
+                sdoc_content = f.read()
+
+                return True
+        except Exception as e:
+            logger.error(f"md to sdoc {md_file} failed: {e}")
+            return False
+
+    def _process_page(self, wiki_id, wiki_config, sdoc_file, username, cf_id_to_cf_title_map):
+        filename = os.path.basename(sdoc_file)
+        cf_page_id = filename.split('.')[0]
+        cf_page_title = cf_id_to_cf_title_map.get(cf_page_id)
+        if not cf_page_title:
+            cf_page_title = cf_page_id
+        navigation = wiki_config.get('navigation', [])
+        # side panel create page
+        pages = wiki_config.get('pages', [])
+        page_name = cf_page_title
+
+        sdoc_uuid = uuid.uuid4()
+        new_file_name = page_name + '.sdoc'
+        parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
+        file_path = os.path.join(parent_dir, os.path.basename(sdoc_file))
+
+        try:
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, wiki_id, parent_dir, filename, is_dir=False)
+            # update wiki_config
+            id_set = get_all_wiki_ids(navigation)
+            new_page_id = gen_unique_id(id_set)
+            is_find = [False]
+            gen_new_page_nav_by_id(navigation, new_page_id, None, None,is_find)
+            if not is_find[0]:
+                error_msg = 'Current page does not exist'
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            seafile_api.mkdir_with_parents(wiki_id, '/', parent_dir.strip('/'), username)
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'name invalid.')
+            # upload file
+            try:
+                obj_id = json.dumps({'parent_dir': parent_dir})
+                self._upload_file(wiki_id, parent_dir, sdoc_file, obj_id, username, page_name)
+            except Exception as e:
+                if str(e) == 'Too many files in library.':
+                    error_msg = _("The number of files in library exceeds the limit")
+                    return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+                else:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            page_name_to_id_map = {
+                page_name: new_page_id
+            }
+            page_name_to_obj_id_map = {
+                cf_page_id: str(sdoc_uuid)
+            }
+            new_page = {
+                'id': new_page_id,
+                'name': page_name,
+                'path': file_path,
+                'icon': '',
+                'docUuid': str(sdoc_uuid),
+                'locked': False
+            }
+            pages.append(new_page)
+
+            if len(wiki_config) == 0:
+                wiki_config['version'] = 1
+
+            wiki_config['navigation'] = navigation
+            wiki_config['pages'] = pages
+        except Exception as e:
+            logger.error(e)
+
+        return page_name_to_id_map, page_name_to_obj_id_map, wiki_config
+    def _upload_file(self, repo_id, parent_dir, sdoc_file, obj_id, username, page_name):
+        try:
+            token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload', username, use_onetime=False)
+        except Exception as e:
+            if str(e) == 'Too many files in library.':
+                error_msg = _("The number of files in library exceeds the limit")
+                return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+            else:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        upload_link = gen_file_upload_url(token, 'upload-api')
+        upload_link += '?ret-json=1'
+        filename = f'{page_name}.sdoc'
+        new_file_path = os.path.join(parent_dir, filename)
+        new_file_path = os.path.normpath(new_file_path)
+        
+        data = {'parent_dir': parent_dir}
+        files = {'file': open(sdoc_file, 'rb')}
+        resp = requests.post(upload_link, files=files, data=data)
+        if not resp.ok:
+            logger.error('save file: %s failed: %s' % (filename, resp.text))
+            return api_error(resp.status_code, resp.content)

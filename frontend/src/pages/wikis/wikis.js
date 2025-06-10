@@ -12,6 +12,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
 import WikiConvertStatusDialog from '../../components/dialog/wiki-convert-status-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import ImportConfluenceDialog from '../../components/dialog/import-confluence-dialog';
 
 
 const propTypes = {
@@ -31,6 +32,7 @@ class Wikis extends Component {
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
       isShowConvertStatusDialog: false,
+      isShowImportConfluenceDialog: false,
     };
   }
 
@@ -98,6 +100,45 @@ class Wikis extends Component {
         currentDeptID
       });
     }
+  };
+
+  toggleImportConfluenceDialog = () => {
+    this.setState({
+      isShowImportConfluenceDialog: !this.state.isShowImportConfluenceDialog,
+    });
+  };
+
+  importWikiFromConfluenceZip = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.zip';
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (file.type !== 'application/zip' && !file.name.endsWith('.zip')) {
+        toaster.danger(gettext('Please select a valid ZIP file'));
+        return;
+      }
+      this.toggleImportConfluenceDialog();
+      wikiAPI.importConfluence(file).then((res) => {
+        let wikis = this.state.wikis.slice(0);
+        let new_wiki = res.data;
+        new_wiki['version'] = 'v2';
+        new_wiki['admins'] = new_wiki.group_admins;
+        wikis.unshift(new_wiki);
+        this.setState({
+          wikis,
+        });
+        toaster.success(gettext('Successfully uploaded Confluence data'));
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg || gettext('Failed to upload Confluence data'));
+      }).finally(() => {
+        this.toggleImportConfluenceDialog();
+      });
+    });
+    fileInput.click();
   };
 
   addWiki = (wikiName, currentDeptID) => {
@@ -324,6 +365,13 @@ class Wikis extends Component {
             />
           </ModalPortal>
         }
+        {this.state.isShowImportConfluenceDialog &&
+          <ModalPortal>
+            <ImportConfluenceDialog
+              toggleDialog={this.toggleImportConfluenceDialog}
+            />
+          </ModalPortal>
+        }
         <div className="main-panel-center">
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
@@ -332,7 +380,10 @@ class Wikis extends Component {
                 {canCreateWiki &&
                   <SingleDropdownToolbar
                     withPlusIcon={true}
-                    opList={[{ 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() }]}
+                    opList={[
+                      { 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() },
+                      { 'text': gettext('Import Confluence'), 'onClick': () => this.importWikiFromConfluenceZip() }
+                    ]}
                   />
                 }
               </div>

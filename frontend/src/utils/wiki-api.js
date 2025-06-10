@@ -301,6 +301,14 @@ class WikiAPI {
     }
     return this._sendPostRequest(url, form);
   }
+
+  importConfluence(file) {
+    const url = this.server + '/api/v2.1/import-confluence/';
+    const formData = new FormData();
+    formData.append('file', file);
+    return this._sendPostRequest(url, formData);
+  }
+
 }
 
 let wikiAPI = new WikiAPI();
