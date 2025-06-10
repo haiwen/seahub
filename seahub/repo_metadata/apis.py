@@ -3028,36 +3028,37 @@ class MetadataImportTags(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def _handle_tag_links(self, new_tags, existing_tags, exist_tags_id_map, imported_existing_tags, resp, TAGS_TABLE):
-        exist_tags_ids = [tag.get(TAGS_TABLE.columns.id.name, '') for tag in existing_tags]
+    def _handle_tag_links(self, new_tags, existing_tags, exist_tags_id_map, imported_existing_tags, resp, tags_table):
+        exist_tags_ids = [tag.get(tags_table.columns.id.name, '') for tag in existing_tags]
         all_tags = new_tags + imported_existing_tags
 
         tags_id_map = {}
-        imported_tags_ids = [tag_data.get(TAGS_TABLE.columns.id.name, '') for tag_data in all_tags]
+        imported_tags_ids = [tag_data.get(tags_table.columns.id.name, '') for tag_data in all_tags]
         for index, tag in enumerate(new_tags):
-            old_tag_id = tag.get(TAGS_TABLE.columns.id.name, '')
-            tag[TAGS_TABLE.columns.id.name] = resp.get('row_ids', [])[index]
-            tags_id_map[old_tag_id] = tag.get(TAGS_TABLE.columns.id.name, '')
+            old_tag_id = tag.get(tags_table.columns.id.name, '')
+            tag[tags_table.columns.id.name] = resp.get('row_ids', [])[index]
+            tags_id_map[old_tag_id] = tag.get(tags_table.columns.id.name, '')
         tags_id_map.update(exist_tags_id_map)
 
         processed_tags = [] # remove some non-existent tag ids
         for tag in new_tags:
-            child_tags_ids = tag.get(TAGS_TABLE.columns.sub_links.key, [])
+            child_tags_ids = tag.get(tags_table.columns.sub_links.key, [])
             new_child_tags_ids = list(set(child_tags_ids) & set(imported_tags_ids))
-            tag[TAGS_TABLE.columns.sub_links.key] = new_child_tags_ids
+            tag[tags_table.columns.sub_links.key] = new_child_tags_ids
             processed_tags.append(tag)
         for tag in imported_existing_tags:
-            child_tags_ids = tag.get(TAGS_TABLE.columns.sub_links.key, [])
+            child_tags_ids = tag.get(tags_table.columns.sub_links.key, [])
             new_child_tags_ids = list(set(child_tags_ids) & set(imported_tags_ids))
-            tag[TAGS_TABLE.columns.sub_links.key] = new_child_tags_ids
+            tag[tags_table.columns.sub_links.key] = new_child_tags_ids
             # Update the imported tag ID to an existing tag ID on the server
-            tag[TAGS_TABLE.columns.id.name] = tags_id_map[tag.get(TAGS_TABLE.columns.id.name, '')]
+            tag[tags_table.columns.id.name] = tags_id_map[tag.get(tags_table.columns.id.name, '')]
             processed_tags.append(tag)
         
         child_links_map = {}
+        # old child links -> new child links  and remove exist tags
         for tag in processed_tags:
-            tag_id = tag.get(TAGS_TABLE.columns.id.name, '')
-            old_child_links = tag.get(TAGS_TABLE.columns.sub_links.key, [])
+            tag_id = tag.get(tags_table.columns.id.name, '')
+            old_child_links = tag.get(tags_table.columns.sub_links.key, [])
             new_child_links = [tags_id_map[link] for link in old_child_links if link in tags_id_map]
             formatted_child_links = list(set(new_child_links) - set(exist_tags_ids))
             if formatted_child_links:
@@ -3065,9 +3066,9 @@ class MetadataImportTags(APIView):
         
         return child_links_map
 
-    def _get_existing_tags(self, metadata_server_api, tag_names, TAGS_TABLE):
+    def _get_existing_tags(self, metadata_server_api, tag_names, tags_table):
         tag_names_str = ', '.join([f'"{tag_name}"' for tag_name in tag_names])
-        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.name.name}` in ({tag_names_str})'
+        sql = f'SELECT * FROM {tags_table.name} WHERE `{tags_table.columns.name.name}` in ({tag_names_str})'
         
         exist_rows = metadata_server_api.query_rows(sql)
         existing_tags = exist_rows.get('results', [])
@@ -3082,23 +3083,23 @@ class MetadataImportTags(APIView):
         
         return existing_tags
 
-    def _classify_tags(self, file_content, existing_tags, TAGS_TABLE):
+    def _classify_tags(self, file_content, existing_tags, tags_table):
         new_tags = []
         imported_existing_tags = []
         existing_id_map = {}
         
         if existing_tags:
-            existing_tag_names = [tag.get(TAGS_TABLE.columns.name.name, '') for tag in existing_tags]
+            existing_tag_names = [tag.get(tags_table.columns.name.name, '') for tag in existing_tags]
             processed_names = set()
             
             for tag_data in file_content:
-                tag_name = tag_data.get(TAGS_TABLE.columns.name.name, '')
+                tag_name = tag_data.get(tags_table.columns.name.name, '')
                 
                 if tag_name in existing_tag_names and tag_name not in processed_names:
                     idx = existing_tag_names.index(tag_name)
                     imported_existing_tags.append(tag_data)
-                    existing_id_map[tag_data.get(TAGS_TABLE.columns.id.name, '')] = (
-                        existing_tags[idx].get(TAGS_TABLE.columns.id.name, '')
+                    existing_id_map[tag_data.get(tags_table.columns.id.name, '')] = (
+                        existing_tags[idx].get(tags_table.columns.id.name, '')
                     )
                 elif tag_name not in processed_names:
                     new_tags.append(tag_data)
