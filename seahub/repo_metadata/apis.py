@@ -3071,11 +3071,16 @@ class MetadataImportTags(APIView):
         
         exist_rows = metadata_server_api.query_rows(sql)
         existing_tags = exist_rows.get('results', [])
+
+        for item in existing_tags:
+            tag_sub_links = item.get('_tag_sub_links', [])
+            if tag_sub_links:
+                sub_links = []
+                for link in tag_sub_links:
+                    sub_links.append(link['row_id'])
+                item['_tag_sub_links'] = sub_links
         
-        return [
-            {**item, '_tag_sub_links': list(map(lambda link: link['row_id'], item['_tag_sub_links']))}
-            if item.get('_tag_sub_links') else item for item in existing_tags
-        ]
+        return existing_tags
 
     def _classify_tags(self, file_content, existing_tags, TAGS_TABLE):
         new_tags = []
