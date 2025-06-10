@@ -6,6 +6,7 @@ import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, DEFAULT_DATE_FORMAT, DEFAULT_RATE_DATA, DEFAULT_SHOOTING_TIME_FORMAT, PRIVATE_COLUMN_KEY } from '../../../../constants';
 import { getColumnDisplayName } from '../../../../utils/column';
+import { DEFAULT_FILE_STATUS_OPTIONS } from '../../../../constants/column/format';
 
 import './index.css';
 
@@ -45,20 +46,13 @@ const COLUMNS = [
     groupby: 'predefined',
     canSetData: true,
   }, {
-    icon: COLUMNS_ICON_CONFIG[CellType.LONG_TEXT],
-    type: CellType.LONG_TEXT,
-    name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION),
-    unique: true,
-    key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION,
-    canChangeName: false,
-    groupby: 'predefined'
-  }, {
     icon: COLUMNS_ICON_CONFIG[CellType.SINGLE_SELECT],
     type: CellType.SINGLE_SELECT,
     name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_STATUS),
     unique: true,
     key: PRIVATE_COLUMN_KEY.FILE_STATUS,
     canChangeName: false,
+    data: { options: DEFAULT_FILE_STATUS_OPTIONS },
     groupby: 'predefined'
   }, {
     icon: COLUMNS_ICON_CONFIG[CellType.DATE],
