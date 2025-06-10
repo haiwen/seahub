@@ -45,7 +45,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   if (suffix === 'heic' || suffix === 'svg' || suffix === 'gif') {
     enableRotate = false;
   }
-  if (repoInfo.permission === 'r') {
+  if (repoInfo && (repoInfo.permission === 'r' || repoInfo.encrypted)) {
     enableRotate = false;
   }
 
