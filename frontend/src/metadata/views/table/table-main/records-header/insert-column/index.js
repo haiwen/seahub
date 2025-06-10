@@ -45,7 +45,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     setColumnMenuOpen(false);
     setSelectedColumn(column);
     if (column.groupby === 'predefined' && !column.canSetData) {
-      handleSubmit(column.key, column.type, { key: column.key, data: {} });
+      handleSubmit(column.key, column.type, { key: column.key, data: column.data || {} });
       return;
     }
     setColumnPopoverShow(true);
