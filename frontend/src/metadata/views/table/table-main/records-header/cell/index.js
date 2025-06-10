@@ -48,7 +48,8 @@ const Cell = ({
       value.left = left + groupOffsetLeft;
     }
     return value;
-  }, [frozen, groupOffsetLeft, column, height, propsStyle]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [frozen, groupOffsetLeft, column, column.left, height, propsStyle]);
 
   const getWidthFromMouseEvent = useCallback((e) => {
     let right = e.pageX || (e.touches && e.touches[0] && e.touches[0].pageX) || (e.changedTouches && e.changedTouches[e.changedTouches.length - 1].pageX);

@@ -72,6 +72,7 @@ class RepoMetadata(models.Model):
     last_face_cluster_time = models.DateTimeField(db_index=True, blank=True, null=True)
     details_settings = models.TextField()
     ocr_enabled = models.BooleanField(db_index=True)
+    global_hidden_columns = models.TextField()
 
     objects = RepoMetadataManager()
 
@@ -182,8 +183,7 @@ class RepoMetadataViewsManager(models.Manager):
             # init view data
             new_view = RepoView(view_name, view_type, {
                 'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
-                'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }],
-                'hidden_columns': view_data.get('hidden_columns', [])
+                'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }]
             })
 
             view_json = new_view.view_json

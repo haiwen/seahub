@@ -57,12 +57,14 @@ class MetadataManage(APIView):
         details_settings = '{}'
         is_ocr_enabled = False
         face_recognition_enabled = False
+        global_hidden_columns = []
 
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             if record and record.enabled:
                 is_enabled = True
                 details_settings = record.details_settings
+                global_hidden_columns = json.loads(record.global_hidden_columns) if record.global_hidden_columns else []
                 if not details_settings:
                     details_settings = '{}'
                 if record.tags_enabled:
@@ -72,6 +74,8 @@ class MetadataManage(APIView):
                     is_ocr_enabled = True
                 if record.face_recognition_enabled:
                     face_recognition_enabled = True
+                if not global_hidden_columns:
+                    global_hidden_columns = []
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -84,6 +88,7 @@ class MetadataManage(APIView):
             'face_recognition_enabled': face_recognition_enabled,
             'tags_lang': tags_lang,
             'details_settings': details_settings,
+            'global_hidden_columns': global_hidden_columns,
         })
 
     def put(self, request, repo_id):
@@ -218,6 +223,37 @@ class MetadataDetailsSettingsView(APIView):
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
+        return Response({'success': True})
+
+
+class MetadataGlobalHiddenColumnsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, repo_id):
+        global_hidden_columns = request.data.get('global_hidden_columns', [])
+        print(global_hidden_columns)
+        if not isinstance(global_hidden_columns, list):
+            error_msg = 'global_hidden_columns must be a list.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            metadata.global_hidden_columns = json.dumps(global_hidden_columns)
+            metadata.save()
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         return Response({'success': True})
 
 
