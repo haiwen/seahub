@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block main_panel %}
-<div class="text-panel">
+{% block main_content %}
+<div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+  <img src="{{MEDIA_URL}}img/error-tip.png" alt="" width="100" />
   <p>{% trans "Sorry, but the requested page could not be found." %}</p>
 </div>
 {% endblock %}

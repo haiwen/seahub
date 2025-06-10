@@ -3,7 +3,7 @@ import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import classnames from 'classnames';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
@@ -172,7 +172,12 @@ class Content extends Component {
     }
 
     if (errorMsg) {
-      return <p className="error text-center mt-2">{errorMsg}</p>;
+      return (
+        <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+          <img src={`${mediaUrl}img/error-tip.png`} alt="" width="100" />
+          <p className="mt-2">{errorMsg}</p>
+        </div>
+      );
     }
 
     if (!invitationsList.length) {
