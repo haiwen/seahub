@@ -17,6 +17,9 @@ import { isNumber } from '../../../../utils/number';
 import { getTreeNodeByKey, getTreeNodeId } from '../../../../components/sf-table/utils/tree';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getParentLinks } from '../../../utils/cell';
+import ServerOperator from '../../../store/server-operator';
+import toaster from '../../../../components/toast';
+import { OPERATION_TYPE } from '../../../store/operations/constants';
 
 import './index.css';
 
@@ -269,18 +272,35 @@ const TagsTable = ({
     }, 0);
   }, [eventBus, toggleShowDirentToolbar]);
 
+  const onExportTags = useCallback((tagsIds) => {
+    const operation = {
+      op_type: OPERATION_TYPE.EXPORT_TAGS,
+      repo_id: context.repoId,
+      tags_ids: tagsIds
+    };
+    const serverOperator = new ServerOperator(context);
+    serverOperator.applyOperation(operation, null, ({ error }) => {
+      if (error) {
+        toaster.danger(error);
+      }
+    });
+  }, [context]);
+
   useEffect(() => {
     const unsubscribeUpdateSearchResult = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, updateSearchResult);
     const unsubscribeDeleteTags = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAGS, onDeleteTags);
     const unsubscribeMergeTags = eventBus.subscribe(EVENT_BUS_TYPE.MERGE_TAGS, onMergeTags);
     const unsubscribeNewSubTag = eventBus.subscribe(EVENT_BUS_TYPE.NEW_SUB_TAG, onNewSubTag);
+    const unsubscribeExportTags = eventBus.subscribe(EVENT_BUS_TYPE.EXPORT_TAGS, onExportTags);
+
     return () => {
       unsubscribeUpdateSearchResult();
       unsubscribeDeleteTags();
       unsubscribeMergeTags();
       unsubscribeNewSubTag();
+      unsubscribeExportTags();
     };
-  }, [eventBus, updateSearchResult, onDeleteTags, onMergeTags, onNewSubTag, updateSelectedTagIds]);
+  }, [eventBus, updateSearchResult, onDeleteTags, onMergeTags, onNewSubTag, onExportTags]);
 
   return (
     <>

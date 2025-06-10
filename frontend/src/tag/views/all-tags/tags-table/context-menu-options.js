@@ -27,6 +27,7 @@ export const createContextMenuOptions = ({
   onMergeTags,
 }) => {
   const canDeleteTag = context.checkCanDeleteTag();
+  const canExportTags = context.checkCanExportTags();
   const canAddTag = context.canAddTag();
   const eventBus = EventBus.getInstance();
 
@@ -58,6 +59,10 @@ export const createContextMenuOptions = ({
         eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, null, option.value);
         break;
       }
+      case OPERATION.EXPORT_TAGS: {
+        eventBus.dispatch(EVENT_BUS_TYPE.EXPORT_TAGS, option.tagsIds);
+        break;
+      }
       default: {
         break;
       }
@@ -77,6 +82,13 @@ export const createContextMenuOptions = ({
         if (tag && tag._id) {
           tagsIds.push(tag._id);
         }
+      }
+      if (canExportTags && tagsIds.length > 0) {
+        options.push({
+          label: gettext('Export tags'),
+          value: OPERATION.EXPORT_TAGS,
+          tagsIds,
+        });
       }
       if (canDeleteTag && tagsIds.length > 0) {
         if (tagsIds.length === 1) {
@@ -125,6 +137,13 @@ export const createContextMenuOptions = ({
           tagsIds,
         });
       }
+      if (canExportTags && tagsIds.length > 0) {
+        options.push({
+          label: gettext('Export tags'),
+          value: OPERATION.EXPORT_TAGS,
+          tagsIds,
+        });
+      }
       return options;
     }
 
@@ -168,6 +187,13 @@ export const createContextMenuOptions = ({
           value: OPERATION.ADD_CHILD_TAGS,
         }
       );
+    }
+    if (isNameColumn && canExportTags) {
+      options.push({
+        label: gettext('Export tags'),
+        value: OPERATION.EXPORT_TAGS,
+        tagsIds: [tag._id],
+      });
     }
     return options;
   };

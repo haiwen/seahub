@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from django.http import HttpResponse
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -2963,4 +2964,208 @@ class MetadataMigrateTags(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        return Response({'success': True})
+
+
+class MetadataExportTags(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        tags_ids = request.data.get('tags_ids', None)
+        if not tags_ids:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'tags_ids invalid')
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+
+
+        export_data = []
+        tags_ids_str = ', '.join([f'"{id}"' for id in tags_ids])
+        sql = f'SELECT * FROM {TAGS_TABLE.name} WHERE `{TAGS_TABLE.columns.id.name}` in ({tags_ids_str})'
+        try:
+            query_result = metadata_server_api.query_rows(sql).get('results')
+            for tag in query_result:
+                tag_parent_links = tag.get(TAGS_TABLE.columns.parent_links.key, [])
+                tag_sub_links = tag.get(TAGS_TABLE.columns.sub_links.key, [])
+                export_data.append({
+                    '_id': tag.get(TAGS_TABLE.columns.id.name, ''),
+                    '_tag_name': tag.get(TAGS_TABLE.columns.name.name, ''),
+                    '_tag_color': tag.get(TAGS_TABLE.columns.color.name, ''),
+                    '_tag_parent_links': [link_info.get('row_id', '') for link_info in tag_parent_links],
+                    '_tag_sub_links': [link_info.get('row_id', '') for link_info in tag_sub_links],
+                })
+                
+            response = HttpResponse(
+                json.dumps(export_data, ensure_ascii=False),
+                content_type='application/json'
+            )
+            response['Content-Disposition'] = 'attachment; filename="tags.json"'
+            return response
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+
+class MetadataImportTags(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def _handle_tag_links(self, new_tags, existing_tags, exist_tags_id_map, imported_existing_tags, resp, tags_table):
+        exist_tags_ids = [tag.get(tags_table.columns.id.name, '') for tag in existing_tags]
+        all_tags = new_tags + imported_existing_tags
+
+        tags_id_map = {}
+        imported_tags_ids = [tag_data.get(tags_table.columns.id.name, '') for tag_data in all_tags]
+        for index, tag in enumerate(new_tags):
+            old_tag_id = tag.get(tags_table.columns.id.name, '')
+            tag[tags_table.columns.id.name] = resp.get('row_ids', [])[index]
+            tags_id_map[old_tag_id] = tag.get(tags_table.columns.id.name, '')
+        tags_id_map.update(exist_tags_id_map)
+
+        processed_tags = [] # remove some non-existent tag ids
+        for tag in new_tags:
+            child_tags_ids = tag.get(tags_table.columns.sub_links.key, [])
+            new_child_tags_ids = list(set(child_tags_ids) & set(imported_tags_ids))
+            tag[tags_table.columns.sub_links.key] = new_child_tags_ids
+            processed_tags.append(tag)
+        for tag in imported_existing_tags:
+            child_tags_ids = tag.get(tags_table.columns.sub_links.key, [])
+            new_child_tags_ids = list(set(child_tags_ids) & set(imported_tags_ids))
+            tag[tags_table.columns.sub_links.key] = new_child_tags_ids
+            # Update the imported tag ID to an existing tag ID on the server
+            tag[tags_table.columns.id.name] = tags_id_map[tag.get(tags_table.columns.id.name, '')]
+            processed_tags.append(tag)
+        
+        child_links_map = {}
+        # old child links -> new child links  and remove exist tags
+        for tag in processed_tags:
+            tag_id = tag.get(tags_table.columns.id.name, '')
+            old_child_links = tag.get(tags_table.columns.sub_links.key, [])
+            new_child_links = [tags_id_map[link] for link in old_child_links if link in tags_id_map]
+            formatted_child_links = list(set(new_child_links) - set(exist_tags_ids))
+            if formatted_child_links:
+                child_links_map[tag_id] = formatted_child_links
+        
+        return child_links_map
+
+    def _get_existing_tags(self, metadata_server_api, tag_names, tags_table):
+        tag_names_str = ', '.join([f'"{tag_name}"' for tag_name in tag_names])
+        sql = f'SELECT * FROM {tags_table.name} WHERE `{tags_table.columns.name.name}` in ({tag_names_str})'
+        
+        exist_rows = metadata_server_api.query_rows(sql)
+        existing_tags = exist_rows.get('results', [])
+
+        for item in existing_tags:
+            tag_sub_links = item.get('_tag_sub_links', [])
+            if tag_sub_links:
+                sub_links = []
+                for link in tag_sub_links:
+                    sub_links.append(link['row_id'])
+                item['_tag_sub_links'] = sub_links
+        
+        return existing_tags
+
+    def _classify_tags(self, file_content, existing_tags, tags_table):
+        new_tags = []
+        imported_existing_tags = []
+        existing_id_map = {}
+        
+        if existing_tags:
+            existing_tag_names = [tag.get(tags_table.columns.name.name, '') for tag in existing_tags]
+            processed_names = set()
+            
+            for tag_data in file_content:
+                tag_name = tag_data.get(tags_table.columns.name.name, '')
+                
+                if tag_name in existing_tag_names and tag_name not in processed_names:
+                    idx = existing_tag_names.index(tag_name)
+                    imported_existing_tags.append(tag_data)
+                    existing_id_map[tag_data.get(tags_table.columns.id.name, '')] = (
+                        existing_tags[idx].get(tags_table.columns.id.name, '')
+                    )
+                elif tag_name not in processed_names:
+                    new_tags.append(tag_data)
+                    processed_names.add(tag_name)
+        else:
+            new_tags = file_content
+            
+        return new_tags, imported_existing_tags, existing_id_map
+
+    def post(self, request, repo_id):
+        file = request.FILES.get('file', None)
+        if not file:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'file invalid')
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled or not metadata.tags_enabled:
+            error_msg = f'The tags is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = f'Library {repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+        from seafevents.repo_metadata.constants import TAGS_TABLE
+        try:
+            tags_table = get_table_by_name(metadata_server_api, TAGS_TABLE.name)
+            if not tags_table:
+                return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
+            tags_table_id = tags_table['id']
+            file_content = json.loads(file.read().decode('utf-8'))
+            tag_names = [tag.get(TAGS_TABLE.columns.name.name, '') for tag in file_content]
+            if not tag_names:
+                return Response({'success': True})
+                
+            existing_tags = self._get_existing_tags(metadata_server_api, tag_names, TAGS_TABLE)
+            new_tags, imported_existing_tags, existing_id_map = self._classify_tags(
+                file_content, existing_tags, TAGS_TABLE
+            )
+            
+            if new_tags:
+                create_tags_data = [
+                    {
+                        TAGS_TABLE.columns.name.name: tag.get(TAGS_TABLE.columns.name.name, ''),
+                        TAGS_TABLE.columns.color.name: tag.get(TAGS_TABLE.columns.color.name, '')
+                    }
+                    for tag in new_tags
+                ]
+                resp = metadata_server_api.insert_rows(tags_table_id, create_tags_data)
+            else:
+                return Response({'success': True})
+            
+            # child links map structure: {tag_id: [child_tag_id1, child_tag_id2], ....}
+            child_links_map = self._handle_tag_links(
+                new_tags, existing_tags, existing_id_map, 
+                imported_existing_tags, resp, TAGS_TABLE
+            )
+            
+            if child_links_map:
+                metadata_server_api.insert_link(TAGS_TABLE.self_link_id, tags_table_id, child_links_map, True)            
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         return Response({'success': True})

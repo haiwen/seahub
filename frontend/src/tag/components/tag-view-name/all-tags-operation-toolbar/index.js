@@ -5,14 +5,18 @@ import EditTagDialog from '../../dialog/edit-tag-dialog';
 import { isEnter, isSpace } from '../../../../utils/hotkey';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../hooks';
+import tagsAPI from '../../../api';
+import ImportTagsDialog from '../../../../components/dialog/import-tags-dialog';
 
+import toaster from '../../../../components/toast';
+import { Utils } from '../../../../utils/utils';
 import './index.css';
 
-const AllTagsOperationToolbar = () => {
+const AllTagsOperationToolbar = ({ repoID }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [isShowEditTagDialog, setShowEditTagDialog] = useState(false);
-
-  const { tagsData, addTag } = useTags();
+  const [isShowImportLoadingDialog, setShowImportLoadingDialog] = useState(false);
+  const { tagsData, addTag, reloadTags } = useTags();
 
   const tags = useMemo(() => {
     if (!tagsData) return [];
@@ -41,6 +45,28 @@ const AllTagsOperationToolbar = () => {
     addTag(tag, callback);
   }, [addTag]);
 
+  const handleImportTags = useCallback(() => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.json';
+    fileInput.onchange = async (e) => {
+      const file = e.target.files[0];
+      setShowImportLoadingDialog(true);
+      tagsAPI.importTags(repoID, file).then(res => {
+        toaster.success(gettext('Successfully imported tags.'));
+        setTimeout(() => {
+          reloadTags(true);
+        }, 10);
+      }).catch(error => {
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg || gettext('Failed to import tags'));
+      }).finally(() => {
+        setShowImportLoadingDialog(false);
+      });
+    };
+    fileInput.click();
+  }, [reloadTags, repoID]);
+
   return (
     <>
       <div className="dir-operation">
@@ -62,11 +88,18 @@ const AllTagsOperationToolbar = () => {
               <i className="sf3-font sf3-font-new mr-2 dropdown-item-icon"></i>
               {gettext('New tag')}
             </DropdownItem>
+            <DropdownItem onClick={handleImportTags}>
+              <i className="sf3-font-import-sdoc sf3-font mr-2 dropdown-item-icon"></i>
+              {gettext('Import tags')}
+            </DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </div>
       {isShowEditTagDialog && (
         <EditTagDialog tags={tags} title={gettext('New tag')} onToggle={closeAddTag} onSubmit={handelAddTags} />
+      )}
+      {isShowImportLoadingDialog && (
+        <ImportTagsDialog toggleDialog={() => setShowImportLoadingDialog(false)} />
       )}
     </>
   );
