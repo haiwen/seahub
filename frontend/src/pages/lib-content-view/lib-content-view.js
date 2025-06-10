@@ -1323,17 +1323,24 @@ class LibContentView extends React.Component {
       });
     }
 
-    if (this.state.isTreePanelShown) {
-      this.deleteTreeNode(direntPath);
-    }
-
     // 1. move to current repo
     // 2. tow columns mode need update left tree
-    if (repoID === targetRepo.repo_id && this.state.isTreePanelShown) {
-      this.updateMoveCopyTreeNode(moveToDirentPath);
-    }
+    const updateAfterMove = () => {
+      if (repoID === targetRepo.repo_id && this.state.isTreePanelShown) {
+        this.updateMoveCopyTreeNode(moveToDirentPath);
+      }
+      this.moveDirent(direntPath, moveToDirentPath);
+      this.setState({ path: moveToDirentPath });
+      if (this.state.path !== moveToDirentPath) {
+        this.loadDirentList(moveToDirentPath);
+      }
+    };
 
-    this.moveDirent(direntPath, moveToDirentPath);
+    if (this.state.isTreePanelShown) {
+      this.deleteTreeNode(direntPath, updateAfterMove);
+    } else {
+      updateAfterMove();
+    }
 
     // show tip message if move to current repo
     if (repoID === targetRepo.repo_id) {
@@ -1345,6 +1352,10 @@ class LibContentView extends React.Component {
     if (byDialog) {
       this.updateRecentlyUsedList(targetRepo, moveToDirentPath);
     }
+    // update location
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(moveToDirentPath);
+    window.history.pushState({ url, path: moveToDirentPath }, moveToDirentPath, url);
   };
 
   onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false) => {
@@ -2040,9 +2051,11 @@ class LibContentView extends React.Component {
     this.setState({ treeData: tree, currentNode });
   };
 
-  deleteTreeNode = (path) => {
+  deleteTreeNode = (path, callback) => {
     let tree = treeHelper.deleteNodeByPath(this.state.treeData, path);
-    this.setState({ treeData: tree });
+    this.setState({ treeData: tree }, () => {
+      callback && callback();
+    });
   };
 
   deleteTreeNodes = (paths) => {

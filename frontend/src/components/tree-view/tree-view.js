@@ -45,10 +45,6 @@ class TreeView extends React.Component {
     }
   }
 
-  onItemMove = (repo, dirent, selectedPath, currentPath) => {
-    this.props.onItemMove(repo, dirent, selectedPath, currentPath);
-  };
-
   onNodeDragStart = (e, node) => {
     if (Utils.isIEBrowser()) {
       return false;
@@ -133,7 +129,7 @@ class TreeView extends React.Component {
         this.setState({ isTreeViewDropTipShow: false });
         return;
       }
-      this.onItemMove(this.props.currentRepoInfo, nodeDirent, '/', nodeParentPath);
+      this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, '/', nodeParentPath);
       this.setState({ isTreeViewDropTipShow: false });
       return;
     }
@@ -163,7 +159,7 @@ class TreeView extends React.Component {
       }
     }
 
-    this.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
+    this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, dropNodeData.path, nodeParentPath);
   };
 
   onMoveItems = (dragStartNodeData, dropNodeData, destRepo, destDirentPath) => {
