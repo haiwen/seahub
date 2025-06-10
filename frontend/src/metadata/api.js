@@ -71,6 +71,12 @@ class MetadataManagerAPI {
     return this.req.put(url, data);
   }
 
+  modifyGlobalHiddenColumns(repoID, globalHiddenColumns) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/global-hidden-columns/';
+    const data = { global_hidden_columns: globalHiddenColumns };
+    return this.req.put(url, data);
+  }
+
   getMetadata(repoID, params) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/records/';
     return this.req.get(url, { params: params });
@@ -210,14 +216,6 @@ class MetadataManagerAPI {
       is_above_folder,
     };
     return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
-  };
-
-  modifyGlobalHiddenColumns = (repoID, columns) => {
-    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/global-hidden-columns/';
-    const params = {
-      hidden_columns: columns,
-    };
-    return this.req.put(url, params);
   };
 
   // column

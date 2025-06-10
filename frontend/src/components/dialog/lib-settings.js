@@ -40,7 +40,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
   const { updateEnableFaceRecognition } = useMetadata();
-  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags, enableOCR, updateEnableOCR, enableFaceRecognition } = useMetadataStatus();
+  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags, enableOCR, updateEnableOCR, enableFaceRecognition, globalHiddenColumns, modifyGlobalHiddenColumns } = useMetadataStatus();
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
@@ -204,6 +204,8 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                   <LibExtendedPropertiesSettingPanel
                     repoID={repoID}
                     value={enableMetadata}
+                    hiddenColumns={globalHiddenColumns}
+                    modifyHiddenColumns={modifyGlobalHiddenColumns}
                     submit={updateEnableMetadata}
                     toggleDialog={toggleDialog}
                   />

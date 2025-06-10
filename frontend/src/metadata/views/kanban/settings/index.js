@@ -8,6 +8,7 @@ import FieldDisplaySettings from '../../../components/data-process-setter/field-
 import { gettext } from '../../../../utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, KANBAN_SETTINGS_KEYS } from '../../../constants';
 import { getColumnByKey } from '../../../utils/column';
+import { useMetadataStatus } from '../../../../hooks';
 
 import './index.css';
 
@@ -18,6 +19,7 @@ const Settings = ({
   modifySettings,
   onClose
 }) => {
+  const { globalHiddenColumns } = useMetadataStatus();
   const groupByColumnOptions = useMemo(() => {
     return columns
       .filter(col => col.type === CellType.SINGLE_SELECT || col.type === CellType.COLLABORATOR)
@@ -32,21 +34,23 @@ const Settings = ({
       }));
   }, [columns]);
   const titleColumnOptions = useMemo(() => {
-    return columns.map(col => ({
-      value: col.key,
-      label: (
-        <>
-          <span className="sf-metadata-select-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} /></span>
-          <span>{col.name}</span>
-        </>
-      )
-    }));
-  }, [columns]);
+    return columns
+      .filter(col => !globalHiddenColumns.includes(col.key))
+      .map(col => ({
+        value: col.key,
+        label: (
+          <>
+            <span className="sf-metadata-select-icon"><Icon className="sf-metadata-icon" symbol={COLUMNS_ICON_CONFIG[col.type]} /></span>
+            <span>{col.name}</span>
+          </>
+        )
+      }));
+  }, [columns, globalHiddenColumns]);
 
   const displayColumns = useMemo(() => {
     const displayColumnsConfig = settings[KANBAN_SETTINGS_KEYS.COLUMNS];
     const titleColumnKey = settings[KANBAN_SETTINGS_KEYS.TITLE_COLUMN_KEY];
-    const validColumns = columns.filter(item => item.key !== titleColumnKey);
+    const validColumns = columns.filter(item => item.key !== titleColumnKey && !globalHiddenColumns.includes(item.key));
     if (!displayColumnsConfig) return validColumns.map(column => ({ ...column, shown: false }));
     const validDisplayColumnsConfig = displayColumnsConfig.map(columnConfig => {
       const column = columnsMap[columnConfig.key];
@@ -56,8 +60,8 @@ const Settings = ({
     const addedColumns = validColumns
       .filter(column => !getColumnByKey(validDisplayColumnsConfig, column.key))
       .map(column => ({ ...column, shown: false }));
-    return [...validDisplayColumnsConfig, ...addedColumns];
-  }, [columns, columnsMap, settings]);
+    return [...validDisplayColumnsConfig, ...addedColumns].filter(col => !globalHiddenColumns.includes(col.key));
+  }, [columns, columnsMap, settings, globalHiddenColumns]);
 
   const displayColumnsConfig = useMemo(() => displayColumns.map(column => ({ key: column.key, shown: column.shown })), [displayColumns]);
 

@@ -19,7 +19,7 @@
   margin: 4px 0;
 }
 
-.metadata-status-management-dialog .hide-properties-button {
+.metadata-status-management-dialog .metadata-status-hide-properties-button {
   width: fit-content;
   display: flex;
   flex-direction: row;
@@ -32,11 +32,11 @@
   cursor: pointer;
 }
 
-.metadata-status-management-dialog .hide-properties-button.disabled {
+.metadata-status-management-dialog .metadata-status-hide-properties-button.disabled {
   cursor: not-allowed;
 }
 
-.metadata-status-management-dialog .hide-properties-button:not(.disabled):hover {
+.metadata-status-management-dialog .metadata-status-hide-properties-button:not(.disabled):hover {
   color: #212529;
   background-color: #e9e9e9;
 }

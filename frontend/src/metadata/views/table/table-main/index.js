@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import Records from './records';
 import GridUtils from '../utils/grid-utils';
 import { GROUP_VIEW_OFFSET, TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../../constants';
+import { useMetadataStatus } from '../../../../hooks';
 
 import './index.css';
 
@@ -12,6 +13,7 @@ const TableMain = ({
   modifyColumnData, updateFileTags,
   ...props
 }) => {
+  const { globalHiddenColumns } = useMetadataStatus();
 
   const gridUtils = useMemo(() => {
     return new GridUtils(metadata, {
@@ -35,8 +37,8 @@ const TableMain = ({
 
   const columns = useMemo(() => {
     const { columns, hidden_columns } = metadata.view;
-    return columns.filter(column => !hidden_columns.includes(column.key) && !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
-  }, [metadata]);
+    return columns.filter(column => !globalHiddenColumns.includes(column.key) && !hidden_columns.includes(column.key) && !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key));
+  }, [metadata, globalHiddenColumns]);
 
   const getCopiedRecordsAndColumnsFromRange = useCallback(({ type, copied, isGroupView }) => {
     return gridUtils.getCopiedContent({ type, copied, isGroupView, columns });

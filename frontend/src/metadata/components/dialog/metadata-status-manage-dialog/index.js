@@ -64,13 +64,12 @@ const GLOBAL_CONFIGURABLE_COLUMNS = [
   }
 ];
 
-const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog: toggle, submit }) => {
+const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns: oldHiddenColumns, toggleDialog: toggle, submit, modifyHiddenColumns }) => {
   const [value, setValue] = useState(oldValue);
   const [submitting, setSubmitting] = useState(false);
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
   const [isHiddenColumnsVisible, setHiddenColumnsVisible] = useState(false);
-  const [globalHiddenColumns, setGlobalHiddenColumns] = useState([]);
-  const [prevHiddenColumns, setPrevHiddenColumns] = useState([]);
+  const [hiddenColumns, setHiddenColumns] = useState(oldHiddenColumns || []);
 
   const hideColumnBtnRef = useRef(null);
 
@@ -128,52 +127,28 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog:
 
   const hidePopover = useCallback(() => {
     setHiddenColumnsVisible(false);
-
-    if (JSON.stringify(globalHiddenColumns) !== JSON.stringify(prevHiddenColumns)) {
-      metadataAPI.modifyGlobalHiddenColumns(repoID, globalHiddenColumns)
-        .then(res => {
-          setPrevHiddenColumns(globalHiddenColumns);
-          localStorage.setItem(`metadata-hidden-columns-${repoID}`, JSON.stringify(globalHiddenColumns));
-        })
-        .catch(error => {
-          toaster.danger(Utils.getErrorMsg(error));
-          setGlobalHiddenColumns(prevHiddenColumns);
-        });
-    }
-  }, [repoID, globalHiddenColumns, prevHiddenColumns]);
-
-  const showPopover = useCallback(() => {
-    setPrevHiddenColumns(globalHiddenColumns);
-    setHiddenColumnsVisible(true);
-  }, [globalHiddenColumns]);
-
-  const onClickHideColumns = useCallback(() => {
-    isHiddenColumnsVisible ? hidePopover() : showPopover();
-  }, [isHiddenColumnsVisible, hidePopover, showPopover]);
-
-  const onHiddenColumnsChange = useCallback((columns) => {
-    setGlobalHiddenColumns(columns);
   }, []);
 
-  const handleClickOutside = useCallback((event) => {
-    const popoverElement = document.querySelector('.sf-metadata-hide-columns-popover');
+  const showPopover = useCallback(() => {
+    setHiddenColumnsVisible(true);
+  }, []);
 
-    if (hideColumnBtnRef.current &&
-      !hideColumnBtnRef.current.contains(event.target) &&
-      popoverElement &&
-      !popoverElement.contains(event.target)) {
-      hidePopover();
-    }
-  }, [hidePopover]);
+  const onClickHideColumns = useCallback(() => {
+    if (!oldValue) return;
+    isHiddenColumnsVisible ? hidePopover() : showPopover();
+  }, [oldValue, isHiddenColumnsVisible, hidePopover, showPopover]);
+
+  const onHiddenColumnsChange = useCallback((columns) => {
+    setHiddenColumns(columns);
+  }, []);
 
   useEffect(() => {
-    const savedHiddenColumns = localStorage.getItem(`metadata-hidden-columns-${repoID}`);
-    if (savedHiddenColumns) {
-      setGlobalHiddenColumns(JSON.parse(savedHiddenColumns));
+    if (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns)) {
+      modifyHiddenColumns(hiddenColumns);
     }
-  }, [repoID]);
+  }, [isHiddenColumnsVisible, oldHiddenColumns, hiddenColumns, modifyHiddenColumns]);
 
-  const count = globalHiddenColumns.length;
+  const count = hiddenColumns.length;
   const text = gettext('Hide properties');
   return (
     <>
@@ -194,30 +169,30 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, toggleDialog:
             </p>
             {value && (
               <div className="metadata-status-hide-columns-container mt-4">
-                <span className="text-truncate">{gettext('Hide global properties')}</span>
+                <span className="text-truncate">{gettext('Global hidden properties')}</span>
                 <p className="tip">
                   {gettext('Global hidden properties will not be displayed in all views.')}
                 </p>
                 <div
                   ref={hideColumnBtnRef}
-                  className={classnames('hide-properties-button', { 'disabled': !oldValue })}
+                  id="metadata-status-hide-properties-button"
+                  className={classnames('metadata-status-hide-properties-button', { 'disabled': !oldValue })}
                   onClick={onClickHideColumns}
                   aria-label="hide properties"
                 >
                   <Icon symbol="hide" size={24} />
-                  <span className="ml-1">{count > 0 ? `${count} ${text}` : text }</span>
+                  <span className="ml-1">{count > 0 ? `${count} ${gettext('Hidden properties')}` : text }</span>
                 </div>
                 {isHiddenColumnsVisible && (
-                  <ClickOutside onClickOutside={handleClickOutside}>
-                    <HideColumnPopover
-                      placement="bottom-start"
-                      target={hideColumnBtnRef}
-                      hiddenColumns={globalHiddenColumns}
-                      columns={columns}
-                      onChange={onHiddenColumnsChange}
-                      canReorder={false}
-                    />
-                  </ClickOutside>
+                  <HideColumnPopover
+                    placement="bottom-start"
+                    target="metadata-status-hide-properties-button"
+                    hiddenColumns={hiddenColumns}
+                    columns={columns}
+                    canReorder={false}
+                    hidePopover={hidePopover}
+                    onChange={onHiddenColumnsChange}
+                  />
                 )}
               </div>
             )}

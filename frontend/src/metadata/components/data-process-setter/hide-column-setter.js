@@ -6,11 +6,14 @@ import { HideColumnPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../../constants';
+import { useMetadataStatus } from '../../../hooks';
 
 const HideColumnSetter = ({ readOnly, columns, wrapperClass, target, hiddenColumns, modifyHiddenColumns, modifyColumnOrder }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
-  const validColumns = useMemo(() => columns.filter(column => !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key)), [columns]);
+  const { globalHiddenColumns } = useMetadataStatus();
+
+  const validColumns = useMemo(() => columns.filter(column => !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key) && !globalHiddenColumns.includes(column.key)), [columns, globalHiddenColumns]);
 
   const validHiddenColumns = useMemo(() => {
     return hiddenColumns.filter(key => columns.find(column => column.key === key));
