@@ -24,7 +24,6 @@ class RecordsBody extends Component {
       startRenderIndex: 0,
       endRenderIndex: this.getInitEndIndex(props),
       activeRecords: [],
-      menuPosition: null,
       selectedPosition: null,
       isScrollingRightScrollbar: false,
     };

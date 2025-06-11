@@ -87,10 +87,12 @@ const ContextMenu = ({
       setPosition(position);
     };
 
-    document.addEventListener('contextmenu', handleShow);
+    const metadataWrapper = document.querySelector('#sf-metadata-wrapper');
+    metadataWrapper && metadataWrapper.addEventListener('contextmenu', handleShow);
 
     return () => {
-      document.removeEventListener('contextmenu', handleShow);
+      const metadataWrapper = document.querySelector('#sf-metadata-wrapper');
+      metadataWrapper && metadataWrapper.removeEventListener('contextmenu', handleShow);
     };
   }, [getMenuPosition, ignoredTriggerElements]);
 

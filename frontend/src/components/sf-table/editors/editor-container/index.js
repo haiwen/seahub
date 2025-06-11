@@ -5,7 +5,7 @@ import PopupEditorContainer from './popup-editor-container';
 import PreviewEditorContainer from './preview-editor-container';
 import { checkIsColumnSupportPreview, checkIsPopupColumnEditor } from '../../utils/column';
 import { EDITOR_TYPE } from '../../constants/grid';
-import { POPUP_EDITOR_OPERATION_KEYS } from '../../constants/context-menu';
+import { POPUP_EDITOR_OPERATION_KEYS } from '../../constants/operation';
 
 const EditorContainer = (props) => {
   const { column, openEditorMode, operation } = props;

@@ -125,7 +125,12 @@ function convert2SingleSelect(cellValue, oldCellValue, fromColumn, targetColumn,
     return option.name;
   }
   const newOption = generatorCellOption(currentOptions, fromOptionName);
-  api.modifyColumnData(targetColumnKey, { options: [...currentOptions, newOption] }, targetColumn.data, { optionModifyType: COLUMN_DATA_OPERATION_TYPE.ADD_OPTION });
+  api.modifyColumnData(
+    targetColumnKey,
+    { options: [...currentOptions, newOption] },
+    targetColumn.data,
+    { optionModifyType: COLUMN_DATA_OPERATION_TYPE.ADD_OPTION }
+  );
   if (checkIsPredefinedOption(newOption)) return newOption.id;
   return newOption.name;
 }
@@ -280,8 +285,12 @@ const convert2Rate = (cellValue, oldCellValue, fromColumn, targetColumn) => {
 const _getPasteMultipleSelect = (copiedCellVal, pasteCellVal, copiedColumn, pasteColumn) => {
   const { type: copiedColumnType, key: copiedColumnKey } = copiedColumn;
   const { key: pasteColumnKey } = pasteColumn;
-  if (!copiedCellVal || (Array.isArray(copiedCellVal) && copiedCellVal.length === 0)) return { selectedOptionIds: [] };
-  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.MULTIPLE_SELECT].includes(copiedColumnType)) return { selectedOptionIds: pasteCellVal };
+  if (!copiedCellVal || (Array.isArray(copiedCellVal) && copiedCellVal.length === 0)) {
+    return { selectedOptionIds: [] };
+  }
+  if (!SUPPORT_PASTE_FROM_COLUMN[CellType.MULTIPLE_SELECT].includes(copiedColumnType)) {
+    return { selectedOptionIds: pasteCellVal };
+  }
   if (pasteColumnKey === copiedColumnKey) return { selectedOptionIds: copiedCellVal };
   let copiedOptionNames = [];
   if (copiedColumnType === CellType.MULTIPLE_SELECT) {

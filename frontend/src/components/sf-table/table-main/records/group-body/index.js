@@ -32,9 +32,7 @@ class GroupBody extends Component {
     const groupMetrics = createGroupMetrics(groups, groupbys, pathFoldedGroupMap, allColumns, rowHeight, false);
     const { startRenderIndex, endRenderIndex } = this.getGroupVisibleBoundaries(window.innerHeight, 0, groupMetrics, rowHeight);
     this.state = {
-      isContextMenuShow: false,
       activeRecords: [],
-      menuPosition: null,
       groupMetrics,
       startRenderIndex,
       endRenderIndex,
@@ -502,8 +500,6 @@ class GroupBody extends Component {
 
   onCloseContextMenu = () => {
     this.setState({
-      isContextMenuShow: false,
-      menuPosition: null,
       activeRecords: [],
     });
   };
