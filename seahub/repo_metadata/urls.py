@@ -31,7 +31,7 @@ urlpatterns = [
 
     # details settings
     re_path(r'^details-settings/', MetadataDetailsSettingsView.as_view(), name='api-v2.1-metadata-details-settings'),
-    
+
     # global hidden columns
     re_path(r'^global-hidden-columns/$', MetadataGlobalHiddenColumnsView.as_view(), name='api-v2.1-metadata-global-hidden-columns'),
 
