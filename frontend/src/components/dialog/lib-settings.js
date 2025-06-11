@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, enableRepoAutoDel } from '../../utils/constants';
+import { gettext, enableRepoAutoDel, enableSeafileAI } from '../../utils/constants';
 import { TAB } from '../../constants/repo-setting-tabs';
 import LibHistorySettingPanel from './lib-settings/lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-settings/lib-old-files-auto-del-setting-panel';
@@ -17,8 +17,6 @@ import { useMetadataStatus } from '../../hooks';
 import Loading from '../../components/loading';
 
 import '../../css/lib-settings.css';
-
-const { enableSeafileAI, enableSeafileOCR } = window.app.config;
 
 const propTypes = {
   toggleDialog: PropTypes.func.isRequired,
@@ -164,7 +162,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                         {gettext('Tags')}
                       </NavLink>
                     </NavItem>
-                    {enableSeafileAI && enableSeafileOCR &&
+                    {enableSeafileAI &&
                       <NavItem
                         role="tab"
                         aria-selected={activeTab === TAB.OCR_SETTING}

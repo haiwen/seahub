@@ -78,7 +78,6 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL, \
-    ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
     ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, EXCALIDRAW_SERVER_URL
 from seahub.constants import PERMISSION_INVISIBLE
 
@@ -616,15 +615,9 @@ def view_lib_file(request, repo_id, path):
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
         'can_download_file': parse_repo_perm(permission).can_download,
-        'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'file_download_url': gen_file_get_url_new(repo_id, path),
         'mobile_login': mobile_login,
     }
-
-    if ENABLE_METADATA_MANAGEMENT:
-        return_dict['baidu_map_key'] = BAIDU_MAP_KEY
-        return_dict['google_map_key'] = GOOGLE_MAP_KEY
-        return_dict['google_map_id'] = GOOGLE_MAP_ID
 
     # check whether file is starred
     is_starred = is_file_starred(username, repo_id, path, org_id)

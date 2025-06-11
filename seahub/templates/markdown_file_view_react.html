@@ -60,6 +60,7 @@
                   canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
                   fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
                   enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
+                  enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
               },
              userInfo: {
                username: '{{ user.username }}',

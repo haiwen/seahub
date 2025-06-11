@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import { siteRoot, thumbnailSizeForGrid, enableSeafileAI } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -15,8 +15,6 @@ import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
 import './index.css';
-
-const { enableSeafileAI } = window.app.config;
 
 class DirentDetails extends React.Component {
 

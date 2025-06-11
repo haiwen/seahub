@@ -99,6 +99,7 @@ export const ocmRemoteServers = window.app.pageOptions.ocmRemoteServers;
 export const enableOCMViaWebdav = window.app.pageOptions.enableOCMViaWebdav;
 export const enableSSOToThirdpartWebsite = window.app.pageOptions.enableSSOToThirdpartWebsite;
 export const enableSeadoc = window.app.pageOptions.enableSeadoc;
+export const enableMetadataManagement = window.app.pageOptions.enableMetadataManagement;
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI;
 export const enableWhiteboard = window.app.pageOptions.enableWhiteboard;
 export const enableExcalidraw = window.app.pageOptions.enableExcalidraw;

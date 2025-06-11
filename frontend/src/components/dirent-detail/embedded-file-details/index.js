@@ -12,10 +12,9 @@ import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
 import Loading from '../../loading';
 import { useTags } from '../../../tag/hooks';
+import { enableSeafileAI } from '../../../utils/constants';
 
 import './index.css';
-
-const { enableSeafileAI } = window.app.config;
 
 const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
   const { headerComponent } = component;
