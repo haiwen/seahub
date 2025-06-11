@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useMetadataStatus } from '@/hooks';
-import { gettext } from '@/utils/constants';
+import { gettext, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
 import MoveDirentDialog from '@/components/dialog/move-dirent-dialog';
@@ -33,8 +33,6 @@ const OPERATION = {
   DETECT_FACES: 'detect-faces',
   MOVE: 'move',
 };
-
-const { enableSeafileAI } = window.app.config;
 
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,

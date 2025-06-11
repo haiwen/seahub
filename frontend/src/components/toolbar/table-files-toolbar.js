@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
-import { gettext } from '../../utils/constants';
+import { gettext, enableSeafileAI } from '../../utils/constants';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
 import { getFileName } from '../../tag/utils/file';
@@ -12,8 +12,6 @@ import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { getColumnByKey } from '../../metadata/utils/column';
 import { useMetadataStatus } from '../../hooks';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
-
-const { enableSeafileAI } = window.app.config;
 
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);

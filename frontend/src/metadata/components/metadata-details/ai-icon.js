@@ -129,6 +129,7 @@ const AIIcon = () => {
   }, [columns, generateDescription, onOCR, generateFileTags, extractFileDetails, onChange, onLocalRecordChange, updateFileTags, updateDescription]);
 
   if (!enableMetadata || !canModifyRecord || !record || options.length === 0) return null;
+
   return (
     <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
       <DropdownToggle

@@ -56,8 +56,7 @@ from seahub.utils.auth import get_login_bg_image_path
 from seahub.api2.endpoints.utils import get_seafevents_metrics
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_REPO_SNAPSHOT_LABEL, \
-    SHARE_LINK_EXPIRE_DAYS_MIN, ENABLE_METADATA_MANAGEMENT, \
-    SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
+    SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
     UPLOAD_LINK_EXPIRE_DAYS_MIN, UPLOAD_LINK_EXPIRE_DAYS_MAX, UPLOAD_LINK_EXPIRE_DAYS_DEFAULT, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, \
     ADDITIONAL_SHARE_DIALOG_NOTE, ADDITIONAL_ABOUT_DIALOG_LINKS, \
@@ -1167,16 +1166,10 @@ def react_fake_view(request, **kwargs):
         'group_import_members_extra_msg': GROUP_IMPORT_MEMBERS_EXTRA_MSG,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in request.headers.get('user-agent', ''),
         'enable_sso_to_thirdpart_website': settings.ENABLE_SSO_TO_THIRDPART_WEBSITE,
-        'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
         'enable_show_about': settings.ENABLE_SHOW_ABOUT,
         'multi_tenancy': MULTI_TENANCY,
     }
-
-    if ENABLE_METADATA_MANAGEMENT:
-        return_dict['baidu_map_key'] = settings.BAIDU_MAP_KEY
-        return_dict['google_map_key'] = settings.GOOGLE_MAP_KEY
-        return_dict['google_map_id'] = settings.GOOGLE_MAP_ID
 
     return render(request, "react_app.html", return_dict)
 
