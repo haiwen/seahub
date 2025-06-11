@@ -169,7 +169,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
             </p>
             {value && (
               <div className="metadata-status-hide-columns-container mt-4">
-                <span className="text-truncate">{gettext('Hide global properties')}</span>
+                <span className="text-truncate">{gettext('Global hidden properties')}</span>
                 <p className="tip">
                   {gettext('Global hidden properties will not be displayed in all views.')}
                 </p>
@@ -181,7 +181,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
                   aria-label="hide properties"
                 >
                   <Icon symbol="hide" size={24} />
-                  <span className="ml-1">{count > 0 ? `${count} ${text}` : text }</span>
+                  <span className="ml-1">{count > 0 ? `${count} ${gettext('Hidden properties')}` : text }</span>
                 </div>
                 {isHiddenColumnsVisible && (
                   <HideColumnPopover
