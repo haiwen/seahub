@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../components/customize-select';
-import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
 
 const OPTIONS = [
@@ -21,7 +20,7 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
           <div className="select-basic-filter-option">
             <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
             <div className="select-basic-filter-option-check-icon">
-              {value === o.value && (<Icon symbol="check-mark" />)}
+              {value === o.value && (<i className="sf2-icon-tick"></i>)}
             </div>
           </div>
         )
@@ -31,13 +30,7 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
 
   const displayValue = useMemo(() => {
     const selectedOption = OPTIONS.find(o => o.value === value) || OPTIONS[2];
-    return {
-      label: (
-        <div>
-          {selectedOption.name}
-        </div>
-      )
-    };
+    return { label: <>{selectedOption.name}</> };
   }, [value]);
 
   const onChange = useCallback((newValue) => {

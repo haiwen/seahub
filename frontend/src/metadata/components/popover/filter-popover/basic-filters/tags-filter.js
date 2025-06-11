@@ -1,21 +1,23 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
 import PropTypes from 'prop-types';
-import CustomizeSelect from '../../../../../components/customize-select';
 import Icon from '../../../../../components/icon';
-import FileTagsFormatter from '../../../cell-formatter/file-tags';
 import { gettext } from '../../../../../utils/constants';
 import { useMetadataStatus } from '../../../../../hooks';
 import { useTags } from '../../../../../tag/hooks';
-import { getTagId, getTagName, getTagColor } from '../../../../../tag/utils/cell';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
 import IconBtn from '../../../../../components/icon-btn';
+import ClickOutside from '../../../../../components/click-outside';
+import TagsEditor from '../../../cell-editors/tags-editor';
+import classNames from 'classnames';
 
-const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
+const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
+  const [isOptionsVisible, setIsOptionsVisible] = useState(false);
 
   const { tagsData } = useTags();
   const { enableTags } = useMetadataStatus();
-  const invalidFilterTip = React.createRef();
+  const invalidFilterTip = useRef(null);
+  const ref = useRef(null);
 
   const value = useMemo(() => {
     if (!enableTags) return [];
@@ -24,62 +26,22 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
     return oldValue.filter(tagId => getRowById(tagsData, tagId));
   }, [oldValue, tagsData, enableTags]);
 
-  const options = useMemo(() => {
-    if (!tagsData) return [];
-    const tags = tagsData?.rows || [];
-    if (tags.length === 0) return [];
-    return tags.map(tag => {
-      const tagId = getTagId(tag);
-      const tagName = getTagName(tag);
-      const tagColor = getTagColor(tag);
-      const isSelected = Array.isArray(value) ? value.includes(tagId) : false;
-      return {
-        name: tagName,
-        value: tagId,
-        label: (
-          <div className="select-basic-filter-option">
-            <div className="sf-metadata-tag-color-and-name">
-              <div className="sf-metadata-tag-color" style={{ backgroundColor: tagColor }}></div>
-              <div className="sf-metadata-tag-name">{tagName}</div>
-            </div>
-            <div className="select-basic-filter-option-check-icon">
-              {isSelected && (<Icon symbol="check-mark" />)}
-            </div>
-          </div>
-        )
-      };
-    });
-  }, [value, tagsData]);
+  const onSelectToggle = useCallback(() => {
+    setIsOptionsVisible(!isOptionsVisible);
+  }, [isOptionsVisible]);
 
-  const displayValue = useMemo(() => {
-    const emptyTip = {
-      label: (
-        <div className="select-basic-filter-display-name">
-          {gettext('Tags')}
-        </div>
-      ),
-    };
-    if (!tagsData) return emptyTip;
-    const tags = tagsData?.rows || [];
-    if (tags.length === 0) emptyTip;
-    if (!Array.isArray(value) || value.length === 0) return emptyTip;
-    const selectedTags = value.map(tagId => getRowById(tagsData, tagId)).filter(item => item).map(tag => ({ row_id: getTagId(tag) }));
-    if (selectedTags.length === 0) return emptyTip;
-    return {
-      label: (
-        <div className="select-basic-filter-display-name">
-          <FileTagsFormatter className="sf-metadata-basic-tags-filter-formatter pr-2" tagsData={tagsData} value={selectedTags} />
-        </div>
-      )
-    };
-  }, [value, tagsData]);
-
-  const onChange = useCallback((newValue) => {
-    if (value.includes(newValue)) {
-      onChangeAPI(value.filter(v => v !== newValue));
-    } else {
-      onChangeAPI([...value, newValue]);
+  const onClickOutside = useCallback((e) => {
+    if (!ref.current.contains(e.target)) {
+      setIsOptionsVisible(false);
     }
+  }, []);
+
+  const handleSelect = useCallback((tagId) => {
+    onChangeAPI([...value, tagId]);
+  }, [value, onChangeAPI]);
+
+  const handleDeselect = useCallback((tagId) => {
+    onChangeAPI(value.filter(v => v !== tagId));
   }, [value, onChangeAPI]);
 
   const onDeleteFilter = useCallback((event) => {
@@ -88,7 +50,6 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
     // eslint-disable-next-line
     oldValue = [];
   }, [value, onChangeAPI, oldValue]);
-
 
   const renderErrorMessage = () => {
     return (
@@ -108,19 +69,38 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
     );
   };
 
-  const renderCustomizeSelect = () => {
+  const renderTagsTree = () => {
     return (
-      <CustomizeSelect
-        readOnly={readOnly}
-        searchable={true}
-        supportMultipleSelect={true}
-        className="sf-metadata-basic-filters-select sf-metadata-table-view-basic-filter-file-type-select mr-4"
-        value={displayValue}
-        options={options}
-        onSelectOption={onChange}
-        searchPlaceholder={gettext('Search tag')}
-        noOptionsPlaceholder={gettext('No tags')}
-      />
+      <div
+        ref={ref}
+        className={classNames('sf-metadata-basic-filters-select sf-metadata-basic-filter-tags-select seafile-customize-select custom-select  mr-4', {
+          'focus': isOptionsVisible,
+          'highlighted': value.length > 0
+        })}
+      >
+        <div
+          className="selected-option"
+          onClick={onSelectToggle}
+        >
+          <span className="selected-option-show">{gettext('Tags')}</span>
+          <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
+        </div>
+        {isOptionsVisible && (
+          <ClickOutside onClickOutside={onClickOutside}>
+            <div className="tag-options-container">
+              <TagsEditor
+                value={value.map(tagId => ({ row_id: tagId }))}
+                column={{ width: 400 }}
+                onSelect={handleSelect}
+                onDeselect={handleDeselect}
+                showTagsAsTree={true}
+                showDeletableTags={true}
+                showRecentlyUsed={false}
+              />
+            </div>
+          </ClickOutside>
+        )}
+      </div>
     );
   };
 
@@ -128,7 +108,7 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
     if (oldValue.length !== 0) {
       return (
         <div>
-          {renderCustomizeSelect()}
+          {renderTagsTree()}
           {renderErrorMessage()}
           <div className="delete-filter" onClick={onDeleteFilter}>
             <Icon className="sf-metadata-icon" symbol="fork-number"/>
@@ -141,9 +121,7 @@ const TagsFilter = ({ readOnly, value: oldValue, onChange: onChangeAPI }) => {
   }
 
   return (
-    <div>
-      {renderCustomizeSelect()}
-    </div>
+    <>{renderTagsTree()}</>
   );
 
 };
