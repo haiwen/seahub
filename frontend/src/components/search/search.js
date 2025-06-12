@@ -405,7 +405,7 @@ class Search extends Component {
       toaster.danger(errMessage);
     }
     this.setState({ isLoading: false });
-  }
+  };
 
   getRepoSearchResult = (query_str) => {
     if (this.source) {
