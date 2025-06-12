@@ -9,6 +9,6 @@ urlpatterns = [
     re_path(r'^ocr/$', OCR.as_view(), name='api-v2.1-ocr'),
     re_path(r'^translate/$', Translate.as_view(), name='api-v2.1-translate'),
     re_path(r'^writing-assistant/$', WritingAssistant.as_view(), name='api-v2.1-writing-assistant'),
-    re_path(r'^api/v2.1/ai/sdoc-general-assistant/$', SdocGeneralAssistant.as_view(), name='api-v2.1-sdoc-general-assistant'),
+    re_path(r'^sdoc-general-assistant/$', SdocGeneralAssistant.as_view(), name='api-v2.1-sdoc-general-assistant'),
 ]
 
