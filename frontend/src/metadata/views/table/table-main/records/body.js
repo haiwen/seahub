@@ -629,7 +629,6 @@ RecordsBody.propTypes = {
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
   moveRecord: PropTypes.func,
-  addFolder: PropTypes.func,
 };
 
 export default RecordsBody;

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { MetadataAIOperationsProvider } from './metadata-ai-operation';
-import { TagsProvider } from '../tag/hooks';
-import { CollaboratorsProvider } from '../metadata';
-import { useMetadataStatus } from './metadata-status';
+import { TagsProvider } from '../../tag/hooks';
+import { CollaboratorsProvider } from './collaborators';
+import { useMetadataStatus } from '../../hooks';
 
 const MetadataMiddlewareContext = React.createContext(null);
 

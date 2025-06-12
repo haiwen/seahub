@@ -3,13 +3,10 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { enableExcalidraw, enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
-import ModalPortal from '../modal-portal';
-import CreateFolder from '../../components/dialog/create-folder-dialog';
-import CreateFile from '../../components/dialog/create-file-dialog';
-import ShareDialog from '../../components/dialog/share-dialog';
 import toaster from '../toast';
 import { seafileAPI } from '../../utils/seafile-api';
 import TipDialog from '../dialog/tip-dailog';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -20,12 +17,11 @@ const propTypes = {
   userPerm: PropTypes.string.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
-  onAddFile: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
   children: PropTypes.object,
+  eventBus: PropTypes.object,
   loadDirentList: PropTypes.func
 };
 
@@ -35,9 +31,6 @@ class DirOperationToolbar extends React.Component {
     super(props);
     this.state = {
       fileType: '.md',
-      isCreateFileDialogShow: false,
-      isCreateFolderDialogShow: false,
-      isShareDialogShow: false,
       operationMenuStyle: '',
       isDesktopMenuOpen: false,
       isSubMenuShown: false,
@@ -64,82 +57,21 @@ class DirOperationToolbar extends React.Component {
   };
 
   onShareClick = () => {
-    this.setState({
-      isShareDialogShow: !this.state.isShareDialogShow
-    });
+    const { eventBus, path, repoName, userPerm } = this.props;
+    let type = path === '/' ? 'library' : 'dir';
+    let name = path == '/' ? repoName : Utils.getFolderName(path);
+
+    eventBus.dispatch(EVENT_BUS_TYPE.SHARE_FILE, path, { type, name, permission: userPerm });
   };
 
-  onCreateFolderToggle = () => {
-    this.setState({ isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow });
+  onCreateFolder = () => {
+    const { eventBus, path, direntList } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FOLDER, path, direntList);
   };
 
-  onCreateFileToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: ''
-    });
-  };
-
-  onCreateMarkdownToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.md'
-    });
-  };
-
-  onCreateExcelToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.xlsx'
-    });
-  };
-
-  onCreatePPTToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.pptx'
-    });
-  };
-
-  onCreateWordToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.docx'
-    });
-  };
-
-  onCreateTldrawToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.draw'
-    });
-  };
-
-  onCreateExcalidrawToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.exdraw'
-    });
-  };
-
-  onCreateSeaDocToggle = () => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: '.sdoc'
-    });
-  };
-
-  onAddFolder = (dirPath) => {
-    this.setState({ isCreateFolderDialogShow: false });
-    this.props.onAddFolder(dirPath);
-  };
-
-  checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
+  onCreateFile = (fileType = '') => {
+    const { eventBus, path, direntList } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, fileType);
   };
 
   onDropdownToggleKeyDown = (e) => {
@@ -209,7 +141,7 @@ class DirOperationToolbar extends React.Component {
   };
 
   render() {
-    let { path, repoName, userPerm } = this.props;
+    const { userPerm } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     const isShowDropdownMenu = (userPerm === 'rw' || userPerm === 'admin' || userPerm === 'cloud-edit' || isCustomPermission);
     if (!isShowDropdownMenu) {
@@ -219,9 +151,6 @@ class DirOperationToolbar extends React.Component {
         </div>
       );
     }
-
-    let itemType = path === '/' ? 'library' : 'dir';
-    let itemName = path == '/' ? repoName : Utils.getFolderName(path);
 
     let canUpload = true;
     let canCreate = true;
@@ -257,24 +186,24 @@ class DirOperationToolbar extends React.Component {
 
       if (canCreate) {
         let newSubOpList = [
-          { 'text': gettext('New Folder'), 'onClick': this.onCreateFolderToggle },
-          { 'text': gettext('New File'), 'onClick': this.onCreateFileToggle },
+          { 'text': gettext('New Folder'), 'onClick': this.onCreateFolder },
+          { 'text': gettext('New File'), 'onClick': () => this.onCreateFile('') },
           'Divider',
         ];
         if (enableSeadoc && !repoEncrypted) {
-          newSubOpList.push({ 'text': gettext('New SeaDoc File'), 'onClick': this.onCreateSeaDocToggle });
+          newSubOpList.push({ 'text': gettext('New SeaDoc File'), 'onClick': () => this.onCreateFile('.sdoc') });
         }
         newSubOpList.push(
-          { 'text': gettext('New Markdown File'), 'onClick': this.onCreateMarkdownToggle },
-          { 'text': gettext('New Excel File'), 'onClick': this.onCreateExcelToggle },
-          { 'text': gettext('New PowerPoint File'), 'onClick': this.onCreatePPTToggle },
-          { 'text': gettext('New Word File'), 'onClick': this.onCreateWordToggle },
+          { 'text': gettext('New Markdown File'), 'onClick': () => this.onCreateFile('.md') },
+          { 'text': gettext('New Excel File'), 'onClick': () => this.onCreateFile('.xlsx') },
+          { 'text': gettext('New PowerPoint File'), 'onClick': () => this.onCreateFile('.pptx') },
+          { 'text': gettext('New Word File'), 'onClick': () => this.onCreateFile('.docx') },
         );
         if (enableWhiteboard) {
-          newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': this.onCreateTldrawToggle });
+          newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': () => this.onCreateFile('.draw') });
         }
         if (enableExcalidraw) {
-          newSubOpList.push({ 'text': gettext('New Excalidraw File'), 'onClick': this.onCreateExcalidrawToggle });
+          newSubOpList.push({ 'text': gettext('New Excalidraw File'), 'onClick': () => this.onCreateFile('.exdraw') });
         }
         opList.push({
           'icon': 'new',
@@ -394,42 +323,6 @@ class DirOperationToolbar extends React.Component {
             {content}
           </div>
         )}
-        {this.state.isCreateFileDialogShow && (
-          <ModalPortal>
-            <CreateFile
-              parentPath={this.props.path}
-              fileType={this.state.fileType}
-              onAddFile={this.props.onAddFile}
-              checkDuplicatedName={this.checkDuplicatedName}
-              toggleDialog={this.onCreateFileToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isCreateFolderDialogShow && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.props.path}
-              onAddFolder={this.onAddFolder}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onCreateFolderToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isShareDialogShow &&
-          <ModalPortal>
-            <ShareDialog
-              itemType={itemType}
-              itemName={itemName}
-              itemPath={this.props.path}
-              repoID={this.props.repoID}
-              repoEncrypted={this.props.repoEncrypted}
-              enableDirPrivateShare={this.props.enableDirPrivateShare}
-              userPerm={this.props.userPerm}
-              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              toggleDialog={this.onShareClick}
-            />
-          </ModalPortal>
-        }
         {this.state.isImportingSdoc && (
           <TipDialog modalTitle={gettext('Import sdoc')} modalTip={gettext('Importing sdoc, please wait...')}/>
         )}

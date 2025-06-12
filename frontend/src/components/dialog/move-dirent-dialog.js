@@ -305,13 +305,10 @@ class MoveDirentDialog extends React.Component {
 
   renderTitle = () => {
     const { dirent, isMultipleOperation } = this.props;
-    let title = gettext('Move {placeholder} to');
+    if (isMultipleOperation) return gettext('Move selected item(s) to:');
 
-    if (isMultipleOperation) {
-      return gettext('Move selected item(s) to:');
-    } else {
-      return title.replace('{placeholder}', `<span class="op-target text-truncate mx-1">${Utils.HTMLescape(dirent.name)}</span>`);
-    }
+    const title = gettext('Move {placeholder} to');
+    return title.replace('{placeholder}', `<span class="op-target text-truncate mx-1">${Utils.HTMLescape(dirent.name)}</span>`);
   };
 
   render() {

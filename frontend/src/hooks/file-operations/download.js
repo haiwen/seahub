@@ -1,17 +1,17 @@
-import React, { useContext, useEffect, useCallback, useState, useRef } from 'react';
-import { useGoFileserver, fileServerRoot } from '../utils/constants';
-import { Utils } from '../utils/utils';
-import { seafileAPI } from '../utils/seafile-api';
-import URLDecorator from '../utils/url-decorator';
-import ModalPortal from '../components/modal-portal';
-import ZipDownloadDialog from '../components/dialog/zip-download-dialog';
-import toaster from '../components/toast';
-import { EVENT_BUS_TYPE } from '../components/common/event-bus-type';
+import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useGoFileserver, fileServerRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
+import URLDecorator from '../../utils/url-decorator';
+import ModalPortal from '../../components/modal-portal';
+import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
+import toaster from '../../components/toast';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 // This hook provides content about download
 const DownloadFileContext = React.createContext(null);
 
-export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
+export const DownloadFileProvider = forwardRef(({ repoID, eventBus, children }, ref) => {
   const [isZipDialogOpen, setZipDialogOpen] = useState();
 
   const pathRef = useRef('');
@@ -56,6 +56,11 @@ export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
     };
   }, [eventBus, handleDownload]);
 
+  useImperativeHandle(ref, () => ({
+    handleDownload,
+    cancelDownload,
+  }), [handleDownload, cancelDownload]);
+
   return (
     <DownloadFileContext.Provider value={{ eventBus, handleDownload }}>
       {children}
@@ -71,7 +76,7 @@ export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
       )}
     </DownloadFileContext.Provider>
   );
-};
+});
 
 export const useDownloadFile = () => {
   const context = useContext(DownloadFileContext);

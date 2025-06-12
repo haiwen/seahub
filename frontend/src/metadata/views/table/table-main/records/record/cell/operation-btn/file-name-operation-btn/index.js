@@ -18,7 +18,7 @@ const FileNameOperationBtn = ({ column, record, ...props }) => {
 
   const isDir = useMemo(() => checkIsDir(record), [record]);
 
-  const handelClick = (event) => {
+  const handleClick = (event) => {
     event.stopPropagation();
     event.nativeEvent.stopImmediatePropagation();
     const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -33,7 +33,7 @@ const FileNameOperationBtn = ({ column, record, ...props }) => {
 
   return (
     <>
-      <IconBtn id="sf-metadata-cell-open-file-btn" className="sf-metadata-cell-operation-btn" size={20} symbol="open-file" onClick={handelClick} />
+      <IconBtn id="sf-metadata-cell-open-file-btn" className="sf-metadata-cell-operation-btn" size={20} symbol="open-file" onClick={handleClick} />
       <UncontrolledTooltip
         hideArrow
         target="sf-metadata-cell-open-file-btn"

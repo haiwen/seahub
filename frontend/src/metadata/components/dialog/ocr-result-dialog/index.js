@@ -9,7 +9,7 @@ import { Utils } from '../../../../utils/utils';
 import i18n from '../../../../_i18n/i18n-seafile-editor';
 import Icon from '../../../../components/icon';
 import metadataAPI from '../../../api';
-import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
+import { useMetadataAIOperations } from '../../../../hooks';
 
 import './index.css';
 

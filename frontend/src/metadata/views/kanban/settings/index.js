@@ -65,7 +65,7 @@ const Settings = ({
 
   const displayColumnsConfig = useMemo(() => displayColumns.map(column => ({ key: column.key, shown: column.shown })), [displayColumns]);
 
-  const handelUpdateSettings = useCallback((key, value) => {
+  const handleUpdateSettings = useCallback((key, value) => {
     modifySettings({ ...settings, [key]: value });
   }, [settings, modifySettings]);
 
@@ -74,8 +74,8 @@ const Settings = ({
       if (columnConfig.key === key) return { ...columnConfig, shown };
       return columnConfig;
     });
-    handelUpdateSettings(KANBAN_SETTINGS_KEYS.COLUMNS, newDisplayColumnsConfig);
-  }, [displayColumnsConfig, handelUpdateSettings]);
+    handleUpdateSettings(KANBAN_SETTINGS_KEYS.COLUMNS, newDisplayColumnsConfig);
+  }, [displayColumnsConfig, handleUpdateSettings]);
 
   const onMoveField = useCallback((sourceKey, targetKey) => {
     const newDisplayColumnsConfig = displayColumnsConfig.slice(0);
@@ -84,13 +84,13 @@ const Settings = ({
     if (sourceIndex === -1 || targetIndex === -1) return;
     newDisplayColumnsConfig.splice(sourceIndex, 1, displayColumnsConfig[targetIndex]);
     newDisplayColumnsConfig.splice(targetIndex, 1, displayColumnsConfig[sourceIndex]);
-    handelUpdateSettings(KANBAN_SETTINGS_KEYS.COLUMNS, newDisplayColumnsConfig);
-  }, [displayColumnsConfig, handelUpdateSettings]);
+    handleUpdateSettings(KANBAN_SETTINGS_KEYS.COLUMNS, newDisplayColumnsConfig);
+  }, [displayColumnsConfig, handleUpdateSettings]);
 
   const onToggleFieldsVisibility = useCallback((visibility) => {
     const newDisplayColumnsConfig = displayColumnsConfig.map(columnConfig => ({ ...columnConfig, shown: visibility }));
-    handelUpdateSettings(KANBAN_SETTINGS_KEYS.COLUMNS, newDisplayColumnsConfig);
-  }, [displayColumnsConfig, handelUpdateSettings]);
+    handleUpdateSettings(KANBAN_SETTINGS_KEYS.COLUMNS, newDisplayColumnsConfig);
+  }, [displayColumnsConfig, handleUpdateSettings]);
 
   return (
     <div className="sf-metadata-view-kanban-setting-panel">
@@ -114,7 +114,7 @@ const Settings = ({
             value={settings[KANBAN_SETTINGS_KEYS.GROUP_BY_COLUMN_KEY]}
             defaultValue={groupByColumnOptions[0]?.value}
             options={groupByColumnOptions}
-            onChange={handelUpdateSettings}
+            onChange={handleUpdateSettings}
           />
         </div>
         <div className="sf-metadata-setting-divide-line"></div>
@@ -124,7 +124,7 @@ const Settings = ({
             settingKey={KANBAN_SETTINGS_KEYS.TITLE_COLUMN_KEY}
             value={settings[KANBAN_SETTINGS_KEYS.TITLE_COLUMN_KEY]}
             options={titleColumnOptions}
-            onChange={handelUpdateSettings}
+            onChange={handleUpdateSettings}
           />
         </div>
         <div className="sf-metadata-setting-divide-line"></div>
@@ -132,7 +132,7 @@ const Settings = ({
           <Switch
             placeholder={gettext('Don\'t show empty values')}
             checked={settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE] || false}
-            onChange={() => handelUpdateSettings(KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE, !settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE])}
+            onChange={() => handleUpdateSettings(KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE, !settings[KANBAN_SETTINGS_KEYS.HIDE_EMPTY_VALUE])}
           />
         </div>
         <div className="sf-metadata-setting-divide-line"></div>
@@ -140,7 +140,7 @@ const Settings = ({
           <Switch
             placeholder={gettext('Show property names')}
             checked={settings[KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME] || false}
-            onChange={() => handelUpdateSettings(KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME, !settings[KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME])}
+            onChange={() => handleUpdateSettings(KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME, !settings[KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME])}
           />
         </div>
         <div className="sf-metadata-setting-divide-line"></div>
@@ -148,7 +148,7 @@ const Settings = ({
           <Switch
             placeholder={gettext('Text wraps')}
             checked={settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP] || false}
-            onChange={() => handelUpdateSettings(KANBAN_SETTINGS_KEYS.TEXT_WRAP, !settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP])}
+            onChange={() => handleUpdateSettings(KANBAN_SETTINGS_KEYS.TEXT_WRAP, !settings[KANBAN_SETTINGS_KEYS.TEXT_WRAP])}
           />
         </div>
         <div className="sf-metadata-setting-divide-line"></div>

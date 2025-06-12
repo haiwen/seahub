@@ -22,7 +22,7 @@ dayjs.extend(relativeTime);
 const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePreview, onRenameFile, onContextMenu }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
-  const [isRenameing, setIsRenaming] = useState(false);
+  const [isRenaming, setIsRenaming] = useState(false);
 
   const fileId = useMemo(() => getRecordIdFromRecord(file), [file]);
   const parentDir = useMemo(() => getParentDirFromRecord(file), [file]);
@@ -74,20 +74,20 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
     setIconLoadError(true);
   }, []);
 
-  const handelClickFileName = useCallback((event) => {
+  const handleClickFileName = useCallback((event) => {
     event.preventDefault();
     const canPreview = window.sfTagsDataContext.canPreview();
-    if (isRenameing || !canPreview) return;
+    if (isRenaming || !canPreview) return;
     openFile(repoID, file, () => {
       openImagePreview(file);
     });
-  }, [repoID, file, openImagePreview, isRenameing]);
+  }, [repoID, file, openImagePreview, isRenaming]);
 
-  const handelClick = useCallback((event) => {
+  const handleClick = useCallback((event) => {
     event.stopPropagation();
-    if (isRenameing) return;
+    if (isRenaming) return;
     onSelectFile(event, fileId);
-  }, [fileId, onSelectFile, isRenameing]);
+  }, [fileId, onSelectFile, isRenaming]);
 
   const onRenameCancel = useCallback(() => {
     setIsRenaming(false);
@@ -110,7 +110,7 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
 
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
-    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE, (id) => toggleRename(id));
+    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_SITU, (id) => toggleRename(id));
 
     return () => {
       unsubscribeRenameTagFile && unsubscribeRenameTagFile();
@@ -123,7 +123,7 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
         'tr-highlight': highlight,
         'tr-active': isSelected
       })}
-      onClick={handelClick}
+      onClick={handleClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onContextMenu={handleContextMenu}
@@ -141,11 +141,11 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
       </td>
       <td className="pl-2 pr-2">
         <div className="dir-icon">
-          <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" onClick={handelClickFileName} />
+          <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" onClick={handleClickFileName} />
         </div>
       </td>
       <td className="name">
-        {isRenameing ? (
+        {isRenaming ? (
           <Rename
             hasSuffix={true}
             name={file[TAG_FILE_KEY.NAME]}
@@ -153,7 +153,7 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
             onRenameCancel={onRenameCancel}
           />
         ) : (
-          <a href={path} onClick={handelClickFileName}>{name}</a>
+          <a href={path} onClick={handleClickFileName}>{name}</a>
         )}
       </td>
       <td className="tag-list-title">
