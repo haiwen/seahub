@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
+import { userAPI } from '../../../utils/user-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import ModalPortal from '../../../components/modal-portal';
 import toaster from '../../../components/toast';
@@ -15,7 +16,6 @@ import LibSubFolderPermissionDialog from '../../../components/dialog/lib-sub-fol
 import RepoAPITokenDialog from '../../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../../components/dialog/repo-office-suite-dialog';
-import { userAPI } from '../../../utils/user-api';
 import MylibRepoMenu from '../../../pages/my-libs/mylib-repo-menu';
 
 const propTypes = {
