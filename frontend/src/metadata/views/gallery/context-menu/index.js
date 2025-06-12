@@ -2,11 +2,10 @@ import React, { useMemo, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
 import ModalPortal from '../../../../components/modal-portal';
-import CopyDirent from '../../../../components/dialog/copy-dirent-dialog';
 import PeoplesDialog from '../../../components/dialog/peoples-dialog';
 import { gettext } from '../../../../utils/constants';
 import { Dirent } from '../../../../models';
-import { useDownloadFile } from '../../../../hooks/download-file';
+import { useFileOperations } from '../../../../hooks/file-operations';
 
 const CONTEXT_MENU_KEY = {
   DOWNLOAD: 'download',
@@ -17,13 +16,11 @@ const CONTEXT_MENU_KEY = {
   ADD_PHOTO_TO_GROUPS: 'add_photo_to_groups',
 };
 
-const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
-  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
+const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
   const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
 
-  const { handleDownload: handleDownloadAPI } = useDownloadFile();
+  const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
 
-  const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
   const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
   const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
@@ -50,14 +47,17 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, 
     return validOptions;
   }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, canAddPhotoToPeople, selectedImages, onDuplicate, onDelete, onRemoveImage, onAddImage, canSetPeoplePhoto, onSetPeoplePhoto]);
 
-  const toggleCopyDialog = useCallback(() => {
-    setIsCopyDialogOpen(!isCopyDialogOpen);
-  }, [isCopyDialogOpen]);
-
   const handleDuplicate = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
     const selectedImage = selectedImages[0];
     onDuplicate(selectedImage.id, destRepo, dirent, destPath, nodeParentPath, isByDialog);
   }, [selectedImages, onDuplicate]);
+
+  const handleCopy = useCallback(() => {
+    if (!selectedImages.length) return;
+    const dirent = new Dirent({ name: selectedImages[0]?.name });
+    const path = selectedImages[0]?.parentDir;
+    handleCopyAPI(path, dirent, false, handleDuplicate);
+  }, [selectedImages, handleCopyAPI, handleDuplicate]);
 
   const handleDownload = useCallback(() => {
     if (!selectedImages.length) return;
@@ -77,7 +77,7 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, 
         onDelete(selectedImages);
         break;
       case CONTEXT_MENU_KEY.DUPLICATE:
-        toggleCopyDialog();
+        handleCopy();
         break;
       case CONTEXT_MENU_KEY.REMOVE:
         onRemoveImage(selectedImages);
@@ -91,7 +91,7 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, 
       default:
         break;
     }
-  }, [handleDownload, onDelete, selectedImages, toggleCopyDialog, onRemoveImage, onSetPeoplePhoto]);
+  }, [handleDownload, onDelete, selectedImages, handleCopy, onRemoveImage, onSetPeoplePhoto]);
 
   const closePeoplesDialog = useCallback(() => {
     setPeoplesDialogShow(false);
@@ -101,9 +101,6 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, 
     onAddImage(peopleIds, addedImages, callback);
   }, [onAddImage]);
 
-  const dirent = new Dirent({ name: selectedImages[0]?.name });
-  const parentDir = selectedImages[0]?.parentDir;
-
   return (
     <>
       <ContextMenu
@@ -111,20 +108,6 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, 
         ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
         onOptionClick={handleOptionClick}
       />
-      {isCopyDialogOpen && (
-        <ModalPortal>
-          <CopyDirent
-            path={parentDir}
-            repoID={repoID}
-            dirent={dirent}
-            isMultipleOperation={false}
-            repoEncrypted={false}
-            onItemCopy={handleDuplicate}
-            onCancelCopy={toggleCopyDialog}
-            onAddFolder={addFolder}
-          />
-        </ModalPortal>
-      )}
       {isPeoplesDialogShow && (
         <ModalPortal>
           <PeoplesDialog selectedImages={selectedImages} onToggle={closePeoplesDialog} onSubmit={addPeople} />
@@ -139,7 +122,6 @@ GalleryContextMenu.propTypes = {
   selectedImages: PropTypes.array,
   onDelete: PropTypes.func,
   onDuplicate: PropTypes.func,
-  addFolder: PropTypes.func,
 };
 
 export default GalleryContextMenu;

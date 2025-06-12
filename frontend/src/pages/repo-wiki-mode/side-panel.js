@@ -126,7 +126,6 @@ class SidePanel extends Component {
   };
 
   onRenameNode = (newName) => {
-    this.setState({ isRenameDialogShow: !this.state.isRenameDialogShow });
     let node = this.state.opNode;
     this.props.onRenameNode(node, newName);
   };

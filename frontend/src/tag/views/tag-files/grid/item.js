@@ -12,8 +12,8 @@ const TagFile = ({ repoID, file, selectedFileIds, onSelectFile, onMultiSelect, o
   const fileId = useMemo(() => getRecordIdFromRecord(file), [file]);
   const name = useMemo(() => getFileNameFromRecord(file), [file]);
   const displayFilename = useMemo(() => {
-    const convas = document.createElement('canvas');
-    const ctx = convas.getContext('2d');
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
     ctx.font = '14px Arial';
     const metrics = ctx.measureText(name);
     const textWidth = metrics.width;

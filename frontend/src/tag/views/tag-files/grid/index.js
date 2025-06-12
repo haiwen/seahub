@@ -4,7 +4,7 @@ import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
 import TagFile from './item';
 import { hideMenu } from '../../../../components/context-menu/actions';
 
-const GridView = ({ repoID, openImagePreview, handleRenameTagFile, onTagFileContextMenu }) => {
+const GridView = ({ repoID, openImagePreview, onTagFileContextMenu }) => {
   const [startPoint, setStartPoint] = useState(null);
   const [endPoint, setEndPoint] = useState(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -110,7 +110,6 @@ const GridView = ({ repoID, openImagePreview, handleRenameTagFile, onTagFileCont
               onSelectFile={updateSelectedFileIds}
               onMultiSelect={onMultiSelect}
               openImagePreview={openImagePreview}
-              onRenameFile={handleRenameTagFile}
               onContextMenu={onTagFileContextMenu}
             />
           );

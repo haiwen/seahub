@@ -1,20 +1,12 @@
-import { useCallback, useState, useRef, useMemo, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
 import { useTagView } from '../../hooks';
-import { gettext, username } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import toaster from '../../../components/toast';
 import ContextMenu from '../../../components/context-menu/context-menu';
-import MoveDirentDialog from '../../../components/dialog/move-dirent-dialog';
-import CopyDirent from '../../../components/dialog/copy-dirent-dialog';
-import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
-import ShareDialog from '../../../components/dialog/share-dialog';
-import FileAccessLog from '../../../components/dialog/file-access-log';
-import Rename from '../../../components/dialog/rename-dirent';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
 import TextTranslation from '../../../utils/text-translation';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { TAG_FILE_KEY } from '../../constants/file';
 import { Utils } from '../../../utils/utils';
 import { getFileById, getFileName, getFileParentDir, getTagFileOperationList } from '../../utils/file';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
@@ -30,17 +22,11 @@ const TAG_FILE_CONTEXT_MENU_ID = 'tag-files-context-menu';
 
 const TagFiles = () => {
   const {
-    tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
-    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile, viewMode
+    tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds, viewMode,
+    moveTagFile, copyTagFile, deleteTagFiles, downloadTagFiles, convertFile, shareTagFile, openTagFileAccessLog,
+    renameTagFileInDialog, renameTagFile,
   } = useTagView();
-
-  const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
-  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
-  const [isZipDialogOpen, setIsZipDialogOpen] = useState(false);
-  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
-  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
   const [isImagePreviewerVisible, setImagePreviewerVisible] = useState(false);
-  const [isFileAccessLogDialogOpen, setIsFileAccessLogDialogOpen] = useState(false);
 
   const currentImageRef = useRef(null);
 
@@ -61,26 +47,6 @@ const TagFiles = () => {
     return selectedFileParentDir && selectedFileName ? Utils.joinPath(selectedFileParentDir, selectedFileName) : '';
   }, [selectedFileParentDir, selectedFileName]);
 
-  const toggleMoveDialog = useCallback(() => {
-    setIsMoveDialogOpen(!isMoveDialogOpen);
-  }, [isMoveDialogOpen]);
-
-  const toggleCopyDialog = useCallback(() => {
-    setIsCopyDialogOpen(!isCopyDialogOpen);
-  }, [isCopyDialogOpen]);
-
-  const toggleZipDialog = useCallback(() => {
-    setIsZipDialogOpen(!isZipDialogOpen);
-  }, [isZipDialogOpen]);
-
-  const toggleShareDialog = useCallback(() => {
-    setIsShareDialogOpen(!isShareDialogOpen);
-  }, [isShareDialogOpen]);
-
-  const toggleRenameDialog = useCallback(() => {
-    setIsRenameDialogOpen(!isRenameDialogOpen);
-  }, [isRenameDialogOpen]);
-
   const openImagePreview = useCallback((record) => {
     currentImageRef.current = record;
     setImagePreviewerVisible(true);
@@ -95,24 +61,6 @@ const TagFiles = () => {
     deleteTagFiles(ids);
     updateSelectedFileIds([]);
   }, [deleteTagFiles, updateSelectedFileIds]);
-
-  const handleRenameTagFile = useCallback((newName) => {
-    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
-    const newPath = Utils.joinPath(path, newName);
-    seafileAPI.getFileInfo(repoID, newPath).then(() => {
-      let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
-      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
-      toaster.danger(errMessage);
-    }).catch(error => {
-      if (error && error.response && error.response.status === 404) {
-        const fullPath = Utils.joinPath(path, selectedFile[TAG_FILE_KEY.NAME]);
-        renameTagFile(selectedFile[TAG_FILE_KEY.ID], fullPath, newName);
-      } else {
-        const errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      }
-    });
-  }, [repoID, selectedFile, renameTagFile]);
 
   const openViaClient = useCallback(() => {
     let url = URLDecorator.getUrl({ type: 'open_via_client', repoID, selectedFilePath });
@@ -166,25 +114,25 @@ const TagFiles = () => {
     if (!option) return;
     switch (option) {
       case TextTranslation.MOVE.key:
-        toggleMoveDialog();
+        moveTagFile();
         break;
       case TextTranslation.COPY.key:
-        toggleCopyDialog();
+        copyTagFile();
         break;
       case TextTranslation.DELETE.key:
         handleDeleteTagFiles();
         break;
       case TextTranslation.SHARE.key:
-        toggleShareDialog();
+        shareTagFile();
         break;
       case TextTranslation.DOWNLOAD.key:
         downloadTagFiles();
         break;
       case TextTranslation.RENAME.key:
         if (viewMode === LIST_MODE) {
-          window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
+          window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_SITU, selectedFileIds[0]);
         } else {
-          toggleRenameDialog();
+          renameTagFileInDialog(selectedFileIds[0]);
         }
         break;
       case TextTranslation.CONVERT_TO_SDOC.key:
@@ -210,7 +158,7 @@ const TagFiles = () => {
         onHistory();
         break;
       case TextTranslation.ACCESS_LOG.key:
-        setIsFileAccessLogDialogOpen(true);
+        openTagFileAccessLog();
         break;
       case TextTranslation.OPEN_VIA_CLIENT.key:
         openViaClient();
@@ -219,7 +167,7 @@ const TagFiles = () => {
         break;
     }
     hideMenu();
-  }, [viewMode, toggleRenameDialog, toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, onConvertFile, exportDocx, exportSdoc, toggleShareDialog, openViaClient, onHistory]);
+  }, [moveTagFile, copyTagFile, handleDeleteTagFiles, shareTagFile, downloadTagFiles, viewMode, onConvertFile, onHistory, openTagFileAccessLog, openViaClient, selectedFileIds, renameTagFileInDialog, exportDocx, exportSdoc]);
 
   const onTagFileContextMenu = useCallback((event, file) => {
     let menuList = [];
@@ -255,14 +203,13 @@ const TagFiles = () => {
     if (!window.sfTagsDataContext) return;
     const unsubscribeUnselectFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.UNSELECT_TAG_FILES, () => updateSelectedFileIds([]));
     const unsubscribeDeleteTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DELETE_TAG_FILES, deleteTagFiles);
-    const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, toggleMoveDialog);
-    const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, toggleCopyDialog);
-    const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, toggleShareDialog);
-    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_RENAME_DIALOG, toggleRenameDialog);
+    const unsubScribeMoveTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.MOVE_TAG_FILE, moveTagFile);
+    const unsubScribeCopyTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.COPY_TAG_FILE, copyTagFile);
+    const unsubscribeShareTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.SHARE_TAG_FILE, shareTagFile);
+    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_DIALOG, renameTagFileInDialog);
     const unsubscribeDownloadTagFiles = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_TAG_FILES, downloadTagFiles);
-    const unsubscribeZipDownload = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_ZIP_DIALOG, toggleZipDialog);
     const unsubscribeFileHistory = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.FILE_HISTORY, onHistory);
-    const unsubscribeFileAccessLog = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.FILE_ACCESS_LOG, () => setIsFileAccessLogDialogOpen(true));
+    const unsubscribeFileAccessLog = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.FILE_ACCESS_LOG, openTagFileAccessLog);
     const unsubscribeOpenViaClient = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.OPEN_VIA_CLIENT, openViaClient);
     const unsubscribeConvertFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.CONVERT_FILE, onConvertFile);
     const unsubscribeExportDocx = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.EXPORT_DOCX, exportDocx);
@@ -276,7 +223,6 @@ const TagFiles = () => {
       unsubscribeShareTagFile();
       unsubscribeRenameTagFile();
       unsubscribeDownloadTagFiles();
-      unsubscribeZipDownload();
       unsubscribeFileHistory();
       unsubscribeFileAccessLog();
       unsubscribeOpenViaClient();
@@ -290,28 +236,19 @@ const TagFiles = () => {
     return (<EmptyTip text={gettext('No files')} />);
   }
 
-  let enableDirPrivateShare = false;
-  let isRepoOwner = repoInfo.owner_email === username;
-  let isVirtual = repoInfo.is_virtual;
-  let isAdmin = repoInfo.is_admin;
-  if (!isVirtual && (isRepoOwner || isAdmin)) {
-    enableDirPrivateShare = true;
-  }
-  const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
   return (
     <>
       {viewMode === LIST_MODE ? (
         <ListView
           repoID={repoID}
           openImagePreview={openImagePreview}
-          handleRenameTagFile={handleRenameTagFile}
+          renameTagFile={renameTagFile}
           onTagFileContextMenu={onTagFileContextMenu}
         />
       ) : (
         <GridView
           repoID={repoID}
           openImagePreview={openImagePreview}
-          handleRenameTagFile={handleRenameTagFile}
           onTagFileContextMenu={onTagFileContextMenu}
         />
       )}
@@ -331,67 +268,6 @@ const TagFiles = () => {
         onMenuItemClick={onMenuItemClick}
         getMenuContainerSize={getMenuContainerSize}
       />
-      {isMoveDialogOpen && (
-        <MoveDirentDialog
-          path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
-          repoID={repoID}
-          repoEncrypted={repoInfo.encrypted}
-          isMultipleOperation={false}
-          dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
-          onItemMove={moveTagFile}
-          onCancelMove={toggleMoveDialog}
-          onAddFolder={addFolder}
-        />
-      )}
-      {isCopyDialogOpen && (
-        <CopyDirent
-          path={selectedFile[TAG_FILE_KEY.PARENT_DIR]}
-          repoID={repoID}
-          repoEncrypted={repoInfo.encrypted}
-          isMultipleOperation={false}
-          dirent={{ name: selectedFile[TAG_FILE_KEY.NAME] }}
-          onItemCopy={copyTagFile}
-          onCancelCopy={toggleCopyDialog}
-          onAddFolder={addFolder}
-        />
-      )}
-      {isZipDialogOpen && (
-        <ZipDownloadDialog
-          repoID={repoID}
-          path="/"
-          target={getDownloadTarget()}
-          toggleDialog={toggleZipDialog}
-        />
-      )}
-      {isShareDialogOpen &&
-        <ShareDialog
-          itemType='file'
-          itemName={selectedFile[TAG_FILE_KEY.NAME]}
-          itemPath={Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], selectedFile[TAG_FILE_KEY.NAME])}
-          userPerm={repoInfo.permission}
-          repoID={repoID}
-          repoEncrypted={repoInfo.repoEncrypted}
-          enableDirPrivateShare={enableDirPrivateShare}
-          isGroupOwnedRepo={isGroupOwnedRepo}
-          toggleDialog={toggleShareDialog}
-        />
-      }
-      {isRenameDialogOpen &&
-        <Rename
-          dirent={{ name: selectedFile[TAG_FILE_KEY.NAME], type: 'file' }}
-          onRename={handleRenameTagFile}
-          checkDuplicatedName={() => {}}
-          toggleCancel={toggleRenameDialog}
-        />
-      }
-      {isFileAccessLogDialogOpen &&
-        <FileAccessLog
-          repoID={repoID}
-          filePath={Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], selectedFile[TAG_FILE_KEY.NAME])}
-          fileName={selectedFile[TAG_FILE_KEY.NAME]}
-          toggleDialog={() => setIsFileAccessLogDialogOpen(false)}
-        />
-      }
     </>
   );
 };

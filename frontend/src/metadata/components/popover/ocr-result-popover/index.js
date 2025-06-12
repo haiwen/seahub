@@ -8,7 +8,7 @@ import { gettext } from '../../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { Utils } from '../../../../utils/utils';
 import metadataAPI from '../../../api';
-import { useMetadataAIOperations } from '../../../../hooks/metadata-ai-operation';
+import { useMetadataAIOperations } from '../../../hooks';
 import Loading from '../../../../components/loading';
 import { getTarget } from '../../../../utils/dom';
 import BodyPortal from '../../../../components/body-portal';

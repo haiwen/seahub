@@ -81,7 +81,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     needDeleteFromParent && onDeletePeoplePhotos && onDeletePeoplePhotos(people._id, ids);
   }, [metadata, onClose, people, onDeletePeoplePhotos]);
 
-  const handelDelete = useCallback((deletedImages, { success_callback } = {}) => {
+  const handleDelete = useCallback((deletedImages, { success_callback } = {}) => {
     if (!deletedImages.length) return;
     let recordIds = [];
     let paths = [];
@@ -110,7 +110,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     });
   }, [deleteFilesCallback, repoID, deletedByIds]);
 
-  const handelRemove = useCallback((removedImages, callback) => {
+  const handleRemove = useCallback((removedImages, callback) => {
     if (!removedImages.length) return;
     let recordIds = [];
     removedImages.forEach((record) => {
@@ -128,7 +128,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     });
   }, [people, deletedByIds, onRemovePeoplePhotos]);
 
-  const handelAdd = useCallback((peopleIds, addedImages, { success_callback, fail_callback }) => {
+  const handleAdd = useCallback((peopleIds, addedImages, { success_callback, fail_callback }) => {
     if (!addedImages.length || !peopleIds.length) return;
     let recordIds = [];
     addedImages.forEach((record) => {
@@ -252,9 +252,9 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
         metadata={metadata}
         isLoadingMore={isLoadingMore}
         onLoadMore={onLoadMore}
-        onDelete={handelDelete}
-        onRemoveImage={people._is_someone ? handelRemove : null}
-        onAddImage={!people._is_someone ? handelAdd : null}
+        onDelete={handleDelete}
+        onRemoveImage={people._is_someone ? handleRemove : null}
+        onAddImage={!people._is_someone ? handleAdd : null}
         onSetPeoplePhoto={handleSetPeoplePhoto}
       />
     </div>

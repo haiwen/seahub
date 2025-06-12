@@ -13,16 +13,16 @@ import { getFileById, sortTagFiles } from '../utils/file';
 import { getRowById } from '../../components/sf-table/utils/table';
 import { getTagFilesLinks } from '../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../constants';
-import URLDecorator from '../../utils/url-decorator';
-import { fileServerRoot, gettext, useGoFileserver } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { TAG_FILES_DEFAULT_SORT, TAG_FILES_SORT } from '../constants/sort';
 import { TAG_FILES_VIEW_MODE, TAG_FILES_VIEW_MODE_DEFAULT } from '../constants/mode';
+import { useFileOperations } from '../../hooks/file-operations';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
 
 export const TagViewProvider = ({
-  repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, addFolderCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
+  repoID, tagID, nodeKey, children, moveFileCallback, copyFileCallback, deleteFilesCallback, renameFileCallback, convertFileCallback,
   toggleShowDirentToolbar, ...params
 }) => {
   const [isLoading, setLoading] = useState(true);
@@ -34,6 +34,7 @@ export const TagViewProvider = ({
   const [viewMode, setViewMode] = useState(TAG_FILES_VIEW_MODE_DEFAULT);
 
   const { tagsData, updateLocalTags } = useTags();
+  const { handleDownload, handleMove, handleCopy, handleRename, handleAccessLog, handleShare } = useFileOperations();
 
   const eventBus = useMemo(() => window.sfTagsDataContext?.eventBus, []);
   const localStorage = useMemo(() => window.sfTagsDataContext?.localStorage, []);
@@ -57,19 +58,34 @@ export const TagViewProvider = ({
     }, 0);
   }, [setSelectedFileIds, tagFiles, toggleShowDirentToolbar]);
 
-  const moveTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
-    seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
-      moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
-      updateSelectedFileIds([]);
-    });
-  }, [repoID, moveFileCallback, updateSelectedFileIds]);
+  const moveTagFile = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
+    const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
+    const callback = (targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
+      seafileAPI.moveDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
+        moveFileCallback && moveFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+        updateSelectedFileIds([]);
+      });
+    };
 
-  const copyTagFile = useCallback((targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
-    seafileAPI.copyDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
-      copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
-      updateSelectedFileIds([]);
-    });
-  }, [repoID, copyFileCallback, updateSelectedFileIds]);
+    handleMove(path, dirent, false, callback);
+  }, [repoID, selectedFileIds, tagFiles, moveFileCallback, updateSelectedFileIds, handleMove]);
+
+  const copyTagFile = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
+    const dirent = { name: selectedFile[TAG_FILE_KEY.NAME] };
+    const callback = (targetRepo, dirent, targetParentPath, sourceParentPath, isByDialog) => {
+      seafileAPI.copyDir(repoID, targetRepo.repo_id, targetParentPath, sourceParentPath, dirent.name).then(res => {
+        copyFileCallback && copyFileCallback(repoID, targetRepo, dirent, targetParentPath, sourceParentPath, res.data.task_id || null, isByDialog);
+        updateSelectedFileIds([]);
+      });
+    };
+    handleCopy(path, dirent, false, callback);
+  }, [repoID, selectedFileIds, tagFiles, copyFileCallback, updateSelectedFileIds, handleCopy]);
 
   const deleteTagFiles = useCallback((ids) => {
     const tagIds = ids?.length ? ids : selectedFileIds;
@@ -110,57 +126,80 @@ export const TagViewProvider = ({
     });
   }, [repoID, tagsData, tagFiles, selectedFileIds, updateLocalTags, deleteFilesCallback, updateSelectedFileIds]);
 
-  const getDownloadTarget = useCallback(() => {
-    if (!selectedFileIds.length) return [];
-    return selectedFileIds.map(id => {
-      const file = getFileById(tagFiles, id);
-      const path = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
-      return path;
-    });
-  }, [tagFiles, selectedFileIds]);
-
   const downloadTagFiles = useCallback(() => {
     if (!selectedFileIds.length) return;
-    if (selectedFileIds.length === 1) {
-      const file = getFileById(tagFiles, selectedFileIds[0]);
-      const filePath = Utils.joinPath(file[TAG_FILE_KEY.PARENT_DIR], file[TAG_FILE_KEY.NAME]);
-      const url = URLDecorator.getUrl({ type: 'download_file_url', repoID, filePath });
-      location.href = url;
-      return;
-    }
-    if (!useGoFileserver) {
-      window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_ZIP_DIALOG);
-      return;
-    }
-
-    const target = getDownloadTarget();
-    metadataAPI.zipDownload(repoID, '/', target).then(res => {
-      const zipToken = res.data['zip_token'];
-      location.href = `${fileServerRoot}zip/${zipToken}`;
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+    const direntList = selectedFileIds.map(id => {
+      const file = getFileById(tagFiles, id);
+      const name = file[TAG_FILE_KEY.PARENT_DIR] === '/' ? file[TAG_FILE_KEY.NAME] : `${file[TAG_FILE_KEY.PARENT_DIR]}/${file[TAG_FILE_KEY.NAME]}`;
+      return { name };
     });
-  }, [repoID, tagFiles, selectedFileIds, getDownloadTarget]);
+    handleDownload('/', direntList);
+  }, [tagFiles, selectedFileIds, handleDownload]);
 
-  const renameTagFile = useCallback((id, path, newName) => {
-    seafileAPI.renameFile(repoID, path, newName).then(res => {
-      renameFileCallback && renameFileCallback(path, newName);
-      setTagFiles(prevTagFiles => ({
-        ...prevTagFiles,
-        rows: prevTagFiles.rows.map(row => {
-          if (row[TAG_FILE_KEY.ID] === id) {
-            return { ...row, [TAG_FILE_KEY.NAME]: newName };
-          }
-          return row;
-        })
-      }));
-      updateSelectedFileIds([]);
-    }).catch(error => {
-      const errMessage = Utils.getErrorMsg(error);
+  const renameTagFile = useCallback((newName) => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const oldName = selectedFile[TAG_FILE_KEY.NAME];
+    const path = selectedFile[TAG_FILE_KEY.PARENT_DIR];
+    const id = selectedFile[TAG_FILE_KEY.ID];
+    const newPath = Utils.joinPath(path, newName);
+    seafileAPI.getFileInfo(repoID, newPath).then(() => {
+      let errMessage = gettext('The name "{name}" is already taken. Please choose a different name.');
+      errMessage = errMessage.replace('{name}', Utils.HTMLescape(newName));
       toaster.danger(errMessage);
+    }).catch(error => {
+      if (error && error.response && error.response.status === 404) {
+        const oldFullPath = Utils.joinPath(path, oldName);
+        seafileAPI.renameFile(repoID, oldFullPath, newName).then(res => {
+          renameFileCallback && renameFileCallback(path, newName);
+          setTagFiles(prevTagFiles => ({
+            ...prevTagFiles,
+            rows: prevTagFiles.rows.map(row => {
+              if (row[TAG_FILE_KEY.ID] === id) {
+                return { ...row, [TAG_FILE_KEY.NAME]: newName };
+              }
+              return row;
+            })
+          }));
+        }).catch(error => {
+          const errMessage = Utils.getErrorMsg(error);
+          toaster.danger(errMessage);
+        });
+      } else {
+        const errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
     });
-  }, [repoID, renameFileCallback, updateSelectedFileIds]);
+  }, [repoID, selectedFileIds, tagFiles, renameFileCallback]);
+
+  const renameTagFileInDialog = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const oldName = selectedFile[TAG_FILE_KEY.NAME];
+    const dirent = { name: oldName, type: 'file' };
+    handleRename(dirent, [], renameTagFile);
+  }, [selectedFileIds, tagFiles, handleRename, renameTagFile]);
+
+  const shareTagFile = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const name = selectedFile[TAG_FILE_KEY.NAME];
+    const path = Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], name);
+    const dirent = {
+      type: 'file',
+      name,
+      path,
+    };
+    handleShare(path, dirent);
+  }, [selectedFileIds, tagFiles, handleShare]);
+
+  const openTagFileAccessLog = useCallback(() => {
+    if (!selectedFileIds || selectedFileIds.length === 0) return null;
+    const selectedFile = getFileById(tagFiles, selectedFileIds[0]);
+    const name = selectedFile[TAG_FILE_KEY.NAME];
+    const path = Utils.joinPath(selectedFile[TAG_FILE_KEY.PARENT_DIR], name);
+    handleAccessLog(path, name);
+  }, [selectedFileIds, tagFiles, handleAccessLog]);
 
   const convertFile = useCallback((path, dstType) => {
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
@@ -244,16 +283,17 @@ export const TagViewProvider = ({
       updateSelectedFileIds,
       moveTagFile,
       copyTagFile,
-      addFolder: addFolderCallback,
       deleteTagFiles,
-      getDownloadTarget,
       downloadTagFiles,
+      renameTagFileInDialog,
       renameTagFile,
       convertFile,
       sortFiles,
       sortBy,
       sortOrder,
       viewMode,
+      openTagFileAccessLog,
+      shareTagFile,
     }}>
       {children}
     </TagViewContext.Provider>

@@ -15,7 +15,6 @@ const propTypes = {
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   direntList: PropTypes.array,
-  selectedDirentList: PropTypes.array.isRequired,
   currentNode: PropTypes.object,
   repoID: PropTypes.string.isRequired,
   navRate: PropTypes.number,
@@ -25,10 +24,7 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   onDeleteNode: PropTypes.func.isRequired,
-  onAddFileNode: PropTypes.func.isRequired,
-  onAddFolderNode: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
-  onItemCopy: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   getMenuContainerSize: PropTypes.func,
   updateDirent: PropTypes.func,
@@ -59,17 +55,14 @@ class DirColumnNav extends React.Component {
               userPerm={userPerm}
               currentRepoInfo={currentRepoInfo}
               direntList={this.props.direntList}
-              selectedDirentList={this.props.selectedDirentList}
               currentNode={this.props.currentNode}
+              eventBus={this.props.eventBus}
               getMenuContainerSize={this.props.getMenuContainerSize}
               onNodeClick={this.props.onNodeClick}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
               onRenameNode={this.props.onRenameNode}
               onDeleteNode={this.props.onDeleteNode}
-              onAddFileNode={this.props.onAddFileNode}
-              onAddFolderNode={this.props.onAddFolderNode}
-              onItemCopy={this.props.onItemCopy}
               onItemMove={this.props.onItemMove}
               onItemsMove={this.props.onItemsMove}
               updateDirent={this.props.updateDirent}

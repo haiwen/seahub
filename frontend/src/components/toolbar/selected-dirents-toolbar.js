@@ -1,18 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot, name } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import MoveDirentDialog from '../dialog/move-dirent-dialog';
-import CopyDirentDialog from '../dialog/copy-dirent-dialog';
-import ShareDialog from '../dialog/share-dialog';
-import Rename from '../dialog/rename-dirent';
-import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
-import ModalPortal from '../modal-portal';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
-import FileAccessLog from '../dialog/file-access-log';
 import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
@@ -25,8 +18,6 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   eventBus: PropTypes.object.isRequired,
-  onItemsMove: PropTypes.func.isRequired,
-  onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   isRepoOwner: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
@@ -36,10 +27,7 @@ const propTypes = {
   updateDirent: PropTypes.func.isRequired,
   currentMode: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
-  onItemRename: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
-  isGroupOwnedRepo: PropTypes.bool.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
 };
 
 class SelectedDirentsToolbar extends React.Component {
@@ -48,42 +36,42 @@ class SelectedDirentsToolbar extends React.Component {
     super(props);
     this.state = {
       isFileAccessLogDialogOpen: false,
-      isMoveDialogShow: false,
-      isCopyDialogShow: false,
-      isMultipleOperation: true,
       showLibContentViewDialogs: false,
-      showShareDialog: false,
       fileTagList: [],
-      isRenameDialogOpen: false,
-      isPermissionDialogOpen: false
     };
   }
-
-  onMoveToggle = () => {
-    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
-  };
-
-  onCopyToggle = () => {
-    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
-  };
 
   onItemsDelete = () => {
     this.props.onItemsDelete();
   };
 
-  onItemsDownload = () => {
+  onMove = () => {
+    const { path, selectedDirentList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.MOVE_FILE, path, selectedDirentList, true);
+  };
+
+  onCopy = () => {
+    const { path, selectedDirentList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.COPY_FILE, path, selectedDirentList, true);
+  };
+
+  onDownload = () => {
     const { path, selectedDirentList, eventBus } = this.props;
     const direntList = selectedDirentList.map(dirent => dirent instanceof Dirent ? dirent.toJson() : dirent);
     eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   };
 
-  checkDuplicatedName = (newName) => {
-    return Utils.checkDuplicatedNameInList(this.props.direntList, newName);
+  onShare = () => {
+    const { selectedDirentList, eventBus } = this.props;
+    const dirent = selectedDirentList[0];
+    const direntPath = this.getDirentPath(dirent);
+    eventBus.dispatch(EVENT_BUS_TYPE.SHARE_FILE, direntPath, dirent);
   };
 
-  onItemRename = (newName) => {
-    const dirent = this.props.selectedDirentList[0];
-    this.props.onItemRename(dirent, newName);
+  onRename = () => {
+    const { selectedDirentList, eventBus, direntList } = this.props;
+    const dirent = selectedDirentList[0];
+    eventBus.dispatch(EVENT_BUS_TYPE.RENAME_FILE, dirent, direntList);
   };
 
   onToggleStarItem = () => {
@@ -115,11 +103,17 @@ class SelectedDirentsToolbar extends React.Component {
     }
   };
 
-  onPermissionItem = () => {
-    this.setState({
-      showLibContentViewDialogs: !this.state.showLibContentViewDialogs,
-      isPermissionDialogOpen: !this.state.isPermissionDialogOpen
-    });
+  onPermission = () => {
+    const { eventBus, selectedDirentList } = this.props;
+    const dirent = selectedDirentList[0];
+    const direntPath = this.getDirentPath(dirent);
+    eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, dirent, direntPath);
+  };
+
+  openFileAccessLog = (dirent) => {
+    const { eventBus } = this.props;
+    const direntPath = this.getDirentPath(dirent);
+    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, dirent, direntPath);
   };
 
   onStartRevise = (dirent) => {
@@ -138,13 +132,6 @@ class SelectedDirentsToolbar extends React.Component {
     const { selectedDirentList, currentRepoInfo } = this.props;
     const dirent = selectedDirentList[0];
     return Utils.isHasPermissionToShare(currentRepoInfo, dirent.permission, dirent);
-  };
-
-  shareDirent = () => {
-    this.setState({
-      showLibContentViewDialogs: true,
-      showShareDialog: true
-    });
   };
 
   getDirentMenuList = (dirent) => {
@@ -170,10 +157,7 @@ class SelectedDirentsToolbar extends React.Component {
     const dirent = dirents[0];
     switch (operation) {
       case 'Rename':
-        this.setState({
-          showLibContentViewDialogs: true,
-          isRenameDialogOpen: true
-        });
+        this.onRename();
         break;
       case 'Star':
         this.onToggleStarItem();
@@ -194,7 +178,7 @@ class SelectedDirentsToolbar extends React.Component {
         this.onHistory(dirent);
         break;
       case 'Access Log':
-        this.toggleFileAccessLogDialog();
+        this.openFileAccessLog(dirent);
         break;
       case 'Properties':
         this.props.showDirentDetail('info');
@@ -293,19 +277,9 @@ class SelectedDirentsToolbar extends React.Component {
     location.href = url;
   };
 
-  toggleFileAccessLogDialog = () => {
-    this.setState({
-      isFileAccessLogDialogOpen: !this.state.isFileAccessLogDialogOpen,
-      showLibContentViewDialogs: !this.state.isFileAccessLogDialogOpen
-    });
-  };
-
   toggleCancel = () => {
     this.setState({
       showLibContentViewDialogs: false,
-      showShareDialog: false,
-      isRenameDialogOpen: false,
-      isPermissionDialogOpen: false,
     });
   };
 
@@ -314,10 +288,8 @@ class SelectedDirentsToolbar extends React.Component {
   };
 
   render() {
-    const { repoID, userPerm, selectedDirentList } = this.props;
-    const dirent = selectedDirentList[0];
+    const { userPerm, selectedDirentList } = this.props;
     const selectedLen = selectedDirentList.length;
-    const direntPath = this.getDirentPath(dirent);
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
 
     let canModify = false;
@@ -351,111 +323,35 @@ class SelectedDirentsToolbar extends React.Component {
     }
 
     return (
-      <Fragment>
-        <div className="selected-dirents-toolbar">
-          <span className="cur-view-path-btn px-2" onClick={this.props.unSelectDirent}>
-            <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
-            <span>{selectedLen}{' '}{gettext('selected')}</span>
-          </span>
-          {canModify &&
-            <span className="cur-view-path-btn sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')} onClick={this.onMoveToggle}></span>
-          }
-          {canCopy &&
-            <span className="cur-view-path-btn sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')} onClick={this.onCopyToggle}></span>
-          }
-          {canDelete &&
-            <span className="cur-view-path-btn sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')} onClick={this.onItemsDelete}></span>
-          }
-          {canDownload &&
-            <span className="cur-view-path-btn sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')} onClick={this.onItemsDownload}></span>
-          }
-          {selectedLen == 1 && this.getDirentSharePerm() &&
-            <span className="cur-view-path-btn sf3-font-share sf3-font" aria-label={gettext('Share')} title={gettext('Share')} onClick={this.shareDirent}></span>
-          }
-          {selectedLen === 1 &&
-            <ItemDropdownMenu
-              item={this.props.selectedDirentList[0]}
-              toggleClass={'cur-view-path-btn sf3-font-more sf3-font'}
-              onMenuItemClick={this.onMenuItemClick}
-              getMenuList={this.getDirentMenuList}
-            />
-          }
-        </div>
-        {this.state.isMoveDialogShow &&
-          <MoveDirentDialog
-            path={this.props.path}
-            repoID={this.props.repoID}
-            repoEncrypted={this.props.repoEncrypted}
-            isMultipleOperation={this.state.isMultipleOperation}
-            selectedDirentList={this.props.selectedDirentList}
-            onItemsMove={this.props.onItemsMove}
-            onCancelMove={this.onMoveToggle}
-            onAddFolder={this.props.onAddFolder}
+      <div className="selected-dirents-toolbar">
+        <span className="cur-view-path-btn px-2" onClick={this.props.unSelectDirent}>
+          <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+          <span>{selectedLen}{' '}{gettext('selected')}</span>
+        </span>
+        {canModify &&
+          <span className="cur-view-path-btn sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')} onClick={this.onMove}></span>
+        }
+        {canCopy &&
+          <span className="cur-view-path-btn sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')} onClick={this.onCopy}></span>
+        }
+        {canDelete &&
+          <span className="cur-view-path-btn sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')} onClick={this.onItemsDelete}></span>
+        }
+        {canDownload &&
+          <span className="cur-view-path-btn sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')} onClick={this.onDownload}></span>
+        }
+        {selectedLen == 1 && this.getDirentSharePerm() &&
+          <span className="cur-view-path-btn sf3-font-share sf3-font" aria-label={gettext('Share')} title={gettext('Share')} onClick={this.onShare}></span>
+        }
+        {selectedLen === 1 &&
+          <ItemDropdownMenu
+            item={this.props.selectedDirentList[0]}
+            toggleClass={'cur-view-path-btn sf3-font-more sf3-font'}
+            onMenuItemClick={this.onMenuItemClick}
+            getMenuList={this.getDirentMenuList}
           />
         }
-        {this.state.isCopyDialogShow &&
-          <CopyDirentDialog
-            path={this.props.path}
-            repoID={this.props.repoID}
-            repoEncrypted={this.props.repoEncrypted}
-            selectedDirentList={this.props.selectedDirentList}
-            isMultipleOperation={this.state.isMultipleOperation}
-            onItemsCopy={this.props.onItemsCopy}
-            onCancelCopy={this.onCopyToggle}
-            onAddFolder={this.props.onAddFolder}
-          />
-        }
-        {this.state.showLibContentViewDialogs && (
-          <Fragment>
-            {this.state.showShareDialog &&
-              <ModalPortal>
-                <ShareDialog
-                  itemType={dirent.type}
-                  itemName={dirent.name}
-                  itemPath={direntPath}
-                  userPerm={dirent.permission}
-                  repoID={repoID}
-                  repoEncrypted={this.props.repoEncrypted}
-                  enableDirPrivateShare={this.props.enableDirPrivateShare}
-                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                  toggleDialog={this.toggleCancel}
-                />
-              </ModalPortal>
-            }
-            {this.state.isRenameDialogOpen &&
-              <ModalPortal>
-                <Rename
-                  dirent={dirent}
-                  onRename={this.onItemRename}
-                  checkDuplicatedName={this.checkDuplicatedName}
-                  toggleCancel={this.toggleCancel}
-                />
-              </ModalPortal>
-            }
-            {this.state.isPermissionDialogOpen &&
-              <ModalPortal>
-                <LibSubFolderPermissionDialog
-                  toggleDialog={this.toggleCancel}
-                  repoID={repoID}
-                  folderPath={direntPath}
-                  folderName={dirent.name}
-                  isDepartmentRepo={this.props.isGroupOwnedRepo}
-                />
-              </ModalPortal>
-            }
-            {this.state.isFileAccessLogDialogOpen &&
-            <ModalPortal>
-              <FileAccessLog
-                repoID={this.props.repoID}
-                filePath={direntPath}
-                fileName={dirent.name}
-                toggleDialog={this.toggleFileAccessLogDialog}
-              />
-            </ModalPortal>
-            }
-          </Fragment>
-        )}
-      </Fragment>
+      </div>
     );
   }
 }

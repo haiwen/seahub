@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
+import { Dirent } from '@/models';
 import toaster from '../../components/toast';
 import Context from '../context';
 import Store from '../store';
@@ -12,7 +13,7 @@ import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, 
 import { gettext } from '../../utils/constants';
 import { checkIsDir } from '../utils/row';
 import { useTags } from '../../tag/hooks';
-import { useMetadataAIOperations } from '../../hooks/metadata-ai-operation';
+import { useFileOperations, useMetadataAIOperations } from '../../hooks';
 import { getColumnByKey } from '../utils/column';
 
 const MetadataViewContext = React.createContext(null);
@@ -39,6 +40,7 @@ export const MetadataViewProvider = ({
   const { collaborators } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
   const { onOCR: OCRAPI, generateDescription, extractFilesDetails, faceRecognition, generateFileTags: generateFileTagsAPI } = useMetadataAIOperations();
+  const { handleMove } = useFileOperations();
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
@@ -411,6 +413,18 @@ export const MetadataViewProvider = ({
     });
   }, [updateFileTags, generateFileTagsAPI]);
 
+  const handleMoveRecord = (record) => {
+    const path = getParentDirFromRecord(record);
+    const currentRecordId = getRecordIdFromRecord(record);
+    const fileName = getFileNameFromRecord(record);
+    const dirent = new Dirent({ name: fileName });
+    const callback = (...params) => {
+      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+      moveRecord && moveRecord(currentRecordId, ...params);
+    };
+    handleMove(path, dirent, false, callback);
+  };
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -450,6 +464,7 @@ export const MetadataViewProvider = ({
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
     const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, onOCR);
+    const unsubscribeToggleMoveDialog = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, handleMoveRecord);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -476,6 +491,7 @@ export const MetadataViewProvider = ({
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();
       unsubscribeOCR();
+      unsubscribeToggleMoveDialog();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -509,7 +525,6 @@ export const MetadataViewProvider = ({
         modifyColumnWidth,
         insertColumn,
         updateFileTags,
-        addFolder: params.addFolder,
         updateCurrentPath: params.updateCurrentPath,
         updateSelectedRecordIds,
         updateRecordDetails,

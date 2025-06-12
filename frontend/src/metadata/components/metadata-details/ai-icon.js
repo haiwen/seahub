@@ -2,13 +2,12 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Icon from '../../../components/icon';
 import { useMetadataDetails } from '../../hooks';
-import { useMetadataStatus } from '../../../hooks';
+import { useMetadataStatus, useMetadataAIOperations } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { getColumnByKey } from '../../utils/column';
 import { PRIVATE_COLUMN_KEY } from './constants';
-import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import { checkIsDir } from '../../utils/row';
 
 const OPERATION = {

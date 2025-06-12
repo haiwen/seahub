@@ -23,4 +23,13 @@ export const EVENT_BUS_TYPE = {
 
   // download file
   DOWNLOAD_FILE: 'download_file',
+  CREATE_FILE: 'create_file',
+  CREATE_FOLDER: 'create_folder',
+  MOVE_FILE: 'move_file',
+  COPY_FILE: 'copy_file',
+  SHARE_FILE: 'share_file',
+  RENAME_FILE: 'rename_file',
+  PERMISSION: 'permission',
+  ACCESS_LOG: 'access_log',
+  PREVIEW_IMAGE: 'preview_image',
 };
