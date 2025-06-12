@@ -721,7 +721,7 @@ export const Utils = {
     const showResetPasswordMenuItem = isPro && repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured;
     const operations = [];
     const DIVIDER = 'Divider';
-    const { SHARE, DELETE, RENAME, TRANSFER, FOLDER_PERMISSION, SHARE_ADMIN, CHANGE_PASSWORD, RESET_PASSWORD, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, ADVANCED } = TextTranslation;
+    const { SHARE, DELETE, RENAME, TRANSFER, FOLDER_PERMISSION, SHARE_ADMIN, CHANGE_PASSWORD, RESET_PASSWORD, ADVANCED } = TextTranslation;
 
     operations.push(SHARE, DELETE, DIVIDER, RENAME, TRANSFER);
 
@@ -736,11 +736,6 @@ export const Utils = {
     }
     if (showResetPasswordMenuItem) {
       operations.push(RESET_PASSWORD);
-    }
-
-    if (isPro) {
-      const monitorOp = repo.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
-      operations.push(monitorOp);
     }
 
     operations.push(DIVIDER);

@@ -80,30 +80,6 @@ class LibraryMoreOperations extends React.Component {
     }
   };
 
-  watchFileChanges = () => {
-    const { repo } = this.props;
-    seafileAPI.monitorRepo(repo.repo_id).then(() => {
-      this.props.updateRepoInfo({ 'monitored': true });
-      const message = gettext('Successfully watched the library.');
-      toaster.success(message);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  unwatchFileChanges = () => {
-    const { repo } = this.props;
-    seafileAPI.unMonitorRepo(repo.repo_id).then(() => {
-      this.props.updateRepoInfo({ 'monitored': false });
-      const message = gettext('Successfully unwatched the library.');
-      toaster.success(message);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
   onRenameToggle = () => {
     this.setState({ isRenameRepoDialogOpen: !this.state.isRenameRepoDialogOpen });
   };
