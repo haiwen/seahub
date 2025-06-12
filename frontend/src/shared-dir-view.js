@@ -21,7 +21,7 @@ import CopyMoveDirentProgressDialog from './components/dialog/copy-move-dirent-p
 import RepoInfoBar from './components/repo-info-bar';
 import RepoTag from './models/repo-tag';
 import { LIST_MODE } from './components/dir-view-mode/constants';
-import { MetadataAIOperationsProvider } from './hooks/metadata-ai-operation';
+import { MetadataAIOperationsProvider } from './hooks';
 import ViewModes from './components/view-modes';
 import SortMenu from './components/sort-menu';
 import { TreeHelper, TreeNode, TreeView } from './components/shared-dir-tree-view';
@@ -76,7 +76,6 @@ class SharedDirView extends React.Component {
       sortBy: 'name', // 'name' or 'time' or 'size'
       sortOrder: 'asc', // 'asc' or 'desc'
 
-      isZipDialogOpen: false,
       zipFolderPath: '',
 
       usedRepoTags: [],
@@ -377,16 +376,15 @@ class SharedDirView extends React.Component {
 
   zipDownloadSelectedItems = () => {
     const { path } = this.state;
+    let target = this.state.items.filter(item => item.isSelected).map(item => item.file_name || item.folder_name);
     if (!useGoFileserver) {
       this.setState({
         isZipDialogOpen: true,
         zipFolderPath: path,
-        selectedItems: this.state.items.filter(item => item.isSelected)
-          .map(item => item.file_name || item.folder_name)
+        selectedItems: target,
       });
     }
     else {
-      let target = this.state.items.filter(item => item.isSelected).map(item => item.file_name || item.folder_name);
       seafileAPI.getShareLinkDirentsZipTask(token, path, target).then((res) => {
         const zipToken = res.data['zip_token'];
         location.href = `${fileServerRoot}zip/${zipToken}`;

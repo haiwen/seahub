@@ -6,7 +6,7 @@ import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap'
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
-  currentNode: PropTypes.object,
+  dirent: PropTypes.object,
   onRename: PropTypes.func.isRequired,
   toggleCancel: PropTypes.func.isRequired,
   checkDuplicatedName: PropTypes.func.isRequired,
@@ -25,16 +25,16 @@ class Rename extends React.Component {
   }
 
   UNSAFE_componentWillMount() {
-    this.setState({ newName: this.props.currentNode.object.name });
+    this.setState({ newName: this.props.dirent.name });
   }
 
   componentDidMount() {
-    const { currentNode } = this.props;
-    this.changeState(currentNode);
+    const { dirent } = this.props;
+    this.changeState(dirent);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.changeState(nextProps.currentNode);
+    this.changeState(nextProps.dirent);
   }
 
   handleChange = (e) => {
@@ -62,6 +62,7 @@ class Rename extends React.Component {
       return;
     }
     this.props.onRename(newName);
+    this.toggle();
   };
 
   handleKeyDown = (e) => {
@@ -75,18 +76,18 @@ class Rename extends React.Component {
     this.props.toggleCancel();
   };
 
-  changeState = (currentNode) => {
-    let name = currentNode.object.name;
+  changeState = (dirent) => {
+    let name = dirent.name;
     this.setState({ newName: name });
   };
 
   onAfterModelOpened = () => {
     if (!this.newInput.current) return;
-    const { currentNode } = this.props;
-    let type = currentNode.object.type;
+    const { dirent } = this.props;
+    let type = dirent.type;
     this.newInput.current.focus();
     if (type === 'file') {
-      var endIndex = currentNode.object.name.lastIndexOf('.md');
+      var endIndex = dirent.name.lastIndexOf('.md');
       this.newInput.current.setSelectionRange(0, endIndex, 'forward');
     } else {
       this.newInput.current.setSelectionRange(0, -1);
@@ -94,7 +95,7 @@ class Rename extends React.Component {
   };
 
   render() {
-    let type = this.props.currentNode.object.type;
+    let type = this.props.dirent.type;
     return (
       <Modal isOpen={true} toggle={this.toggle} onOpened={this.onAfterModelOpened}>
         <SeahubModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</SeahubModalHeader>

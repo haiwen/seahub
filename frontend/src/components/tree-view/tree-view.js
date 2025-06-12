@@ -17,7 +17,6 @@ const propTypes = {
   onNodeCollapse: PropTypes.func.isRequired,
   onItemMove: PropTypes.func,
   currentRepoInfo: PropTypes.object,
-  selectedDirentList: PropTypes.array,
   onItemsMove: PropTypes.func,
   repoID: PropTypes.string.isRequired,
   posX: PropTypes.number,

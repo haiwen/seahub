@@ -20,7 +20,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onAddFolder, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -268,7 +268,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
   }, [onDelete, updateCurrentDirent]);
 
-  const handelRemoveSelectedImages = useCallback((selectedImages) => {
+  const handleRemoveSelectedImages = useCallback((selectedImages) => {
     if (!selectedImages.length) return;
     onRemoveImage && onRemoveImage(selectedImages, () => {
       updateCurrentDirent();
@@ -447,8 +447,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         selectedImages={selectedImages}
         onDelete={handleDeleteSelectedImages}
         onDuplicate={duplicateRecord}
-        addFolder={onAddFolder}
-        onRemoveImage={onRemoveImage ? handelRemoveSelectedImages : null}
+        onRemoveImage={onRemoveImage ? handleRemoveSelectedImages : null}
         onAddImage={onAddImage}
         onSetPeoplePhoto={handleMakeSelectedAsCoverPhoto}
       />

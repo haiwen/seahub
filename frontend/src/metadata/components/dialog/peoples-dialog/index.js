@@ -41,7 +41,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
     }
   }, [selectedPeopleIds]);
 
-  const handelSubmit = useCallback(() => {
+  const handleSubmit = useCallback(() => {
     setSubmitting(true);
     onSubmit(selectedPeopleIds, selectedImages, {
       success_callback: onToggle,
@@ -83,7 +83,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
       </ModalBody>
       <ModalFooter>
         <Button color="secondary" onClick={() => onToggle()}>{gettext('Cancel')}</Button>
-        <Button color="primary" disabled={isSubmitting || !selectedPeopleIds.length} onClick={handelSubmit}>{gettext('Submit')}</Button>
+        <Button color="primary" disabled={isSubmitting || !selectedPeopleIds.length} onClick={handleSubmit}>{gettext('Submit')}</Button>
       </ModalFooter>
     </Modal>
   );

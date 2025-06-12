@@ -9,7 +9,7 @@ import { gettext } from '../../../../utils/constants';
 import { openInNewTab, openParentFolder } from '../../../utils/file';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
-import { useDownloadFile } from '../../../../hooks/download-file';
+import { useFileOperations } from '../../../../hooks/file-operations';
 
 const CONTEXT_MENU_KEY = {
   OPEN_IN_NEW_TAB: 'open_in_new_tab',
@@ -23,7 +23,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
 
   const { metadata } = useMetadataView();
-  const { handelDownload: handelDownloadAPI } = useDownloadFile();
+  const { handleDownload: handleDownloadAPI } = useFileOperations();
 
   const selectedRecord = useMemo(() => getRowById(metadata, selectedCard), [metadata, selectedCard]);
   const isDir = useMemo(() => checkIsDir(selectedRecord), [selectedRecord]);
@@ -67,9 +67,9 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
     });
   }, [metadata, selectedCard, onRename]);
 
-  const handelDownload = useCallback(() => {
-    handelDownloadAPI(parentDir, [{ name: oldName, is_dir: isDir }]);
-  }, [handelDownloadAPI, parentDir, oldName, isDir]);
+  const handleDownload = useCallback(() => {
+    handleDownloadAPI(parentDir, [{ name: oldName, is_dir: isDir }]);
+  }, [handleDownloadAPI, parentDir, oldName, isDir]);
 
   const handleOptionClick = useCallback((option) => {
     if (!selectedCard) return;
@@ -86,7 +86,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
         break;
       }
       case CONTEXT_MENU_KEY.DOWNLOAD: {
-        handelDownload(record);
+        handleDownload(record);
         break;
       }
       case CONTEXT_MENU_KEY.DELETE: {
@@ -101,7 +101,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
         break;
       }
     }
-  }, [metadata, repoID, selectedCard, onDelete, openRenameDialog, handelDownload]);
+  }, [metadata, repoID, selectedCard, onDelete, openRenameDialog, handleDownload]);
 
   return (
     <>

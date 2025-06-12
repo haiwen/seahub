@@ -2,13 +2,12 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Icon from '../../../components/icon';
 import { useMetadataDetails } from '../../hooks';
-import { useMetadataStatus } from '../../../hooks';
+import { useMetadataStatus, useMetadataAIOperations } from '../../../hooks';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import { getColumnByKey } from '../../utils/column';
 import { PRIVATE_COLUMN_KEY } from './constants';
-import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
 import { checkIsDir } from '../../utils/row';
 
 const OPERATION = {
@@ -65,7 +64,7 @@ const AIIcon = () => {
     setMenuShow(!isMenuShow);
   }, [isMenuShow]);
 
-  const handelOperation = useCallback((op) => {
+  const handleOperation = useCallback((op) => {
     const { value: opType, record } = op;
     const recordId = getRecordIdFromRecord(record);
     const parentDir = getParentDirFromRecord(record);
@@ -148,7 +147,7 @@ const AIIcon = () => {
       {isMenuShow && (
         <div className="sf-metadata-ai-dropdown-menu large">
           <DropdownMenu>
-            {options.map(op => (<DropdownItem key={op.value} onClick={() => handelOperation(op)}>{op.label}</DropdownItem>))}
+            {options.map(op => (<DropdownItem key={op.value} onClick={() => handleOperation(op)}>{op.label}</DropdownItem>))}
           </DropdownMenu>
         </div>
       )}

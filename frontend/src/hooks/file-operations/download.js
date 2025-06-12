@@ -1,23 +1,23 @@
-import React, { useContext, useEffect, useCallback, useState, useRef } from 'react';
-import { useGoFileserver, fileServerRoot } from '../utils/constants';
-import { Utils } from '../utils/utils';
-import { seafileAPI } from '../utils/seafile-api';
-import URLDecorator from '../utils/url-decorator';
-import ModalPortal from '../components/modal-portal';
-import ZipDownloadDialog from '../components/dialog/zip-download-dialog';
-import toaster from '../components/toast';
-import { EVENT_BUS_TYPE } from '../components/common/event-bus-type';
+import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
+import { useGoFileserver, fileServerRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
+import URLDecorator from '../../utils/url-decorator';
+import ModalPortal from '../../components/modal-portal';
+import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
+import toaster from '../../components/toast';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 // This hook provides content about download
 const DownloadFileContext = React.createContext(null);
 
-export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
+export const DownloadFileProvider = forwardRef(({ repoID, eventBus, children }, ref) => {
   const [isZipDialogOpen, setZipDialogOpen] = useState();
 
   const pathRef = useRef('');
   const direntListRef = useRef([]);
 
-  const handelDownload = useCallback((path, direntList = []) => {
+  const handleDownload = useCallback((path, direntList = []) => {
     const direntCount = direntList.length;
     if (direntCount === 0) return;
     if (direntCount === 1 && !direntList[0].is_dir) {
@@ -50,14 +50,19 @@ export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribeDownloadFile = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_FILE, handelDownload);
+    const unsubscribeDownloadFile = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_FILE, handleDownload);
     return () => {
       unsubscribeDownloadFile();
     };
-  }, [eventBus, handelDownload]);
+  }, [eventBus, handleDownload]);
+
+  useImperativeHandle(ref, () => ({
+    handleDownload,
+    cancelDownload,
+  }), [handleDownload, cancelDownload]);
 
   return (
-    <DownloadFileContext.Provider value={{ eventBus, handelDownload }}>
+    <DownloadFileContext.Provider value={{ eventBus, handleDownload }}>
       {children}
       {isZipDialogOpen && (
         <ModalPortal>
@@ -71,7 +76,7 @@ export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
       )}
     </DownloadFileContext.Provider>
   );
-};
+});
 
 export const useDownloadFile = () => {
   const context = useContext(DownloadFileContext);

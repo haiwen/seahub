@@ -142,7 +142,7 @@ const TagsTable = ({
     setIsShowMergeTagsSelector(false);
   }, []);
 
-  const handelAddChildTag = useCallback((tagData, callback) => {
+  const handleAddChildTag = useCallback((tagData, callback) => {
     addChildTag(tagData, parentTagIdRef.current, callback);
   }, [addChildTag]);
 
@@ -333,7 +333,7 @@ const TagsTable = ({
         updateSelectedRecordIds={updateSelectedTagIds}
       />
       {isShowNewSubTagDialog && (
-        <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handelAddChildTag} />
+        <EditTagDialog tags={table.rows} title={gettext('New child tag')} onToggle={closeNewSubTagDialog} onSubmit={handleAddChildTag} />
       )}
       {isShowMergeTagsSelector && (
         <MergeTagsSelector {...mergeTagsSelectorProps.current} closeSelector={closeMergeTagsSelector} mergeTags={mergeTags} />

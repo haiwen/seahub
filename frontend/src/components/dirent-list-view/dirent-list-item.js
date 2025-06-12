@@ -10,12 +10,6 @@ import URLDecorator from '../../utils/url-decorator';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
-import ModalPortal from '../modal-portal';
-import MoveDirentDialog from '../dialog/move-dirent-dialog';
-import CopyDirentDialog from '../dialog/copy-dirent-dialog';
-import ShareDialog from '../dialog/share-dialog';
-import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
-import FileAccessLog from '../dialog/file-access-log';
 import toaster from '../toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
@@ -37,7 +31,6 @@ const propTypes = {
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
-  onItemCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
@@ -46,7 +39,6 @@ const propTypes = {
   isRepoOwner: PropTypes.bool,
   isAdmin: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
-  isGroupOwnedRepo: PropTypes.bool.isRequired,
   onItemMouseDown: PropTypes.func.isRequired,
   onItemContextMenu: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
@@ -82,16 +74,10 @@ class DirentListItem extends React.Component {
       dirent,
       isOperationShow: false,
       highlight: false,
-      isFileAccessLogDialogOpen: false,
-      isMoveDialogShow: false,
-      isCopyDialogShow: false,
-      isShareDialogShow: false,
-      isMultipleOperation: false,
       canDrag: this.canDrag,
       isShowTagTooltip: false,
       isDragTipShow: false,
-      isDropTipshow: false,
-      isPermissionDialogOpen: false
+      isDropTipShow: false,
     };
     this.isGeneratingThumbnail = false;
     this.thumbnailCenter = null;
@@ -302,10 +288,6 @@ class DirentListItem extends React.Component {
     this.props.onItemDelete(this.state.dirent);
   };
 
-  onItemShare = () => {
-    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
-  };
-
   exportDocx = () => {
     const serviceUrl = window.app.config.serviceURL;
     let repoID = this.props.repoID;
@@ -320,10 +302,6 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.state.dirent);
     let exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + filePath + '?dl=1';
     window.location.href = exportToSdocUrl;
-  };
-
-  closeSharedDialog = () => {
-    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   onMobileMenuItemClick = (e) => {
@@ -346,13 +324,13 @@ class DirentListItem extends React.Component {
         this.onItemRenameToggle();
         break;
       case 'Move':
-        this.onItemMoveToggle();
+        this.onItemMove();
         break;
       case 'Copy':
-        this.onItemCopyToggle();
+        this.onItemCopy();
         break;
       case 'Permission':
-        this.onPermissionItem();
+        this.onPermission();
         break;
       case 'Unlock':
         this.onUnlockItem();
@@ -385,7 +363,7 @@ class DirentListItem extends React.Component {
         this.onHistory();
         break;
       case 'Access Log':
-        this.toggleFileAccessLogDialog();
+        this.openFileAccessLog();
         break;
       case 'Properties':
         this.props.onDirentClick(this.state.dirent);
@@ -435,16 +413,18 @@ class DirentListItem extends React.Component {
     this.unfreezeItem();
   };
 
-  onItemMoveToggle = () => {
-    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
+  onPermission = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.state;
+    const direntPath = Utils.joinPath(path, dirent.name);
+    eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, dirent, direntPath);
   };
 
-  onItemCopyToggle = () => {
-    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
-  };
-
-  onPermissionItem = () => {
-    this.setState({ isPermissionDialogOpen: !this.state.isPermissionDialogOpen });
+  openFileAccessLog = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.state;
+    const direntPath = Utils.joinPath(path, dirent.name);
+    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, dirent, direntPath);
   };
 
   onLockItem = () => {
@@ -498,12 +478,6 @@ class DirentListItem extends React.Component {
     location.href = url;
   };
 
-  toggleFileAccessLogDialog = () => {
-    this.setState({
-      isFileAccessLogDialogOpen: !this.state.isFileAccessLogDialogOpen
-    });
-  };
-
   onOpenViaClient = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.state.dirent);
@@ -531,6 +505,25 @@ class DirentListItem extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   };
 
+  onItemMove = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.state;
+    eventBus.dispatch(EVENT_BUS_TYPE.MOVE_FILE, path, dirent, false);
+  };
+
+  onItemCopy = () => {
+    const { path, eventBus } = this.props;
+    const { dirent } = this.state;
+    eventBus.dispatch(EVENT_BUS_TYPE.COPY_FILE, path, dirent, false);
+  };
+
+  onItemShare = () => {
+    const { path, eventBus } = this.props;
+    const dirent = this.state.dirent;
+    const direntPath = Utils.joinPath(path, dirent.name);
+    eventBus.dispatch(EVENT_BUS_TYPE.SHARE_FILE, direntPath, dirent);
+  };
+
   getDirentPath = (dirent) => {
     let path = this.props.path;
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
@@ -539,10 +532,6 @@ class DirentListItem extends React.Component {
   onTagTooltipToggle = (e) => {
     e.stopPropagation();
     this.setState({ isShowTagTooltip: !this.state.isShowTagTooltip });
-  };
-
-  onItemMove = (destRepo, dirent, selectedPath, currentPath) => {
-    this.props.onItemMove(destRepo, dirent, selectedPath, currentPath);
   };
 
   onItemDragStart = (e) => {
@@ -581,7 +570,7 @@ class DirentListItem extends React.Component {
     }
     if (this.state.dirent.type === 'dir') {
       e.stopPropagation();
-      this.setState({ isDropTipshow: true });
+      this.setState({ isDropTipShow: true });
     }
   };
 
@@ -604,14 +593,14 @@ class DirentListItem extends React.Component {
     if (this.state.dirent.type === 'dir') {
       e.stopPropagation();
     }
-    this.setState({ isDropTipshow: false });
+    this.setState({ isDropTipShow: false });
   };
 
   onItemDragDrop = (e) => {
     if (Utils.isIEBrowser() || !this.state.canDrag) {
       return false;
     }
-    this.setState({ isDropTipshow: false });
+    this.setState({ isDropTipShow: false });
     if (e.dataTransfer.files.length) { // uploaded files
       return;
     }
@@ -654,7 +643,7 @@ class DirentListItem extends React.Component {
     }
 
     let selectedPath = Utils.joinPath(this.props.path, this.state.dirent.name);
-    this.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
+    this.props.onItemMove(this.props.currentRepoInfo, nodeDirent, selectedPath, nodeParentPath);
   };
 
   onItemMouseDown = (event) => {
@@ -759,9 +748,7 @@ class DirentListItem extends React.Component {
   };
 
   render() {
-    let { path } = this.props;
     let dirent = this.state.dirent;
-    let direntPath = Utils.joinPath(path, dirent.name);
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
@@ -781,7 +768,7 @@ class DirentListItem extends React.Component {
           <tr
             className={classnames(
               { 'tr-highlight': this.state.highlight },
-              { 'tr-drop-effect': this.state.isDropTipshow },
+              { 'tr-drop-effect': this.state.isDropTipShow },
               { 'tr-active': isSelected },
             )}
             draggable={canDrag}
@@ -921,70 +908,6 @@ class DirentListItem extends React.Component {
               </MobileItemMenu>
             </td>
           </tr>
-        }
-        {this.state.isMoveDialogShow &&
-          <ModalPortal>
-            <MoveDirentDialog
-              path={this.props.path}
-              repoID={this.props.repoID}
-              dirent={this.state.dirent}
-              isMultipleOperation={this.state.isMultipleOperation}
-              onItemMove={this.props.onItemMove}
-              onCancelMove={this.onItemMoveToggle}
-              repoEncrypted={this.props.repoEncrypted}
-              onAddFolder={this.props.onAddFolder}
-            />
-          </ModalPortal>
-        }
-        {this.state.isCopyDialogShow &&
-          <ModalPortal>
-            <CopyDirentDialog
-              path={this.props.path}
-              repoID={this.props.repoID}
-              dirent={this.state.dirent}
-              isMultipleOperation={this.state.isMultipleOperation}
-              onItemCopy={this.props.onItemCopy}
-              onCancelCopy={this.onItemCopyToggle}
-              repoEncrypted={this.props.repoEncrypted}
-              onAddFolder={this.props.onAddFolder}
-            />
-          </ModalPortal>
-        }
-        {this.state.isShareDialogShow &&
-          <ModalPortal>
-            <ShareDialog
-              itemType={dirent.type}
-              itemName={dirent.name}
-              itemPath={direntPath}
-              userPerm={dirent.permission}
-              repoID={this.props.repoID}
-              repoEncrypted={this.props.repoEncrypted}
-              enableDirPrivateShare={this.props.enableDirPrivateShare}
-              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              toggleDialog={this.closeSharedDialog}
-            />
-          </ModalPortal>
-        }
-        {this.state.isPermissionDialogOpen &&
-          <ModalPortal>
-            <LibSubFolderPermissionDialog
-              toggleDialog={this.onPermissionItem}
-              repoID={this.props.repoID}
-              folderPath={direntPath}
-              folderName={dirent.name}
-              isDepartmentRepo={this.props.isGroupOwnedRepo}
-            />
-          </ModalPortal>
-        }
-        {this.state.isFileAccessLogDialogOpen &&
-          <ModalPortal>
-            <FileAccessLog
-              repoID={this.props.repoID}
-              filePath={direntPath}
-              fileName={dirent.name}
-              toggleDialog={this.toggleFileAccessLogDialog}
-            />
-          </ModalPortal>
         }
       </>
     );

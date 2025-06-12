@@ -643,7 +643,6 @@ class Records extends Component {
           recordGetterByIndex={this.props.recordGetterByIndex}
           deleteRecords={this.props.deleteRecords}
           moveRecord={this.props.moveRecord}
-          addFolder={this.props.addFolder}
           selectNone={this.selectNone}
           updateRecordDetails={this.props.updateRecordDetails}
           updateFaceRecognition={this.props.updateFaceRecognition}
@@ -664,7 +663,6 @@ class Records extends Component {
       onCellContextMenu: this.onCellContextMenu,
       getTableCanvasContainerRect: this.getTableCanvasContainerRect,
       moveRecord: this.props.moveRecord,
-      addFolder: this.props.addFolder
     };
     if (this.props.isGroupView) {
       return (
@@ -791,7 +789,6 @@ Records.propTypes = {
   modifyColumnOrder: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveRecord: PropTypes.func,
-  addFolder: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
 };
 

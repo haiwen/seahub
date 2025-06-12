@@ -6,11 +6,7 @@ import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
-import CreateFile from '../dialog/create-file-dialog';
-import CreateFolder from '../dialog/create-folder-dialog';
 import ImageDialog from '../dialog/image-dialog';
-import MoveDirentDialog from '../dialog/move-dirent-dialog';
-import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
@@ -31,20 +27,16 @@ const propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
-  onAddFile: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
-  onItemCopy: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemsMove: PropTypes.func.isRequired,
-  onItemsCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   repoTags: PropTypes.array.isRequired,
@@ -70,13 +62,7 @@ class DirentListView extends React.Component {
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
-      fileType: '',
-      isCreateFileDialogShow: false,
-      isCreateFolderDialogShow: false,
-      isMoveDialogShow: false,
-      isCopyDialogShow: false,
       downloadItems: [],
-      isMultipleOperation: true,
       activeDirent: null,
       isListDropTipShow: false,
       isShowDirentsDraggablePreview: false,
@@ -294,39 +280,27 @@ class DirentListView extends React.Component {
     this.setState({ isImagePopupOpen: false });
   };
 
-  onCreateFileToggle = (fileType) => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: fileType || ''
-    });
+  onCreateFolder = () => {
+    const { path, direntList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FOLDER, path, direntList);
   };
 
-  onCreateFolderToggle = () => {
-    this.setState({ isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow });
+  onCreateFile = (fileType = '') => {
+    const { path, direntList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, fileType);
   };
 
-  onAddFolder = (dirPath) => {
-    this.setState({ isCreateFolderDialogShow: false });
-    this.props.onAddFolder(dirPath);
+  onMove = () => {
+    const { path, selectedDirentList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.MOVE_FILE, path, selectedDirentList, true);
   };
 
-  checkDuplicatedName = (newName) => {
-    let direntList = this.props.direntList;
-    let isDuplicated = direntList.some(object => {
-      return object.name === newName;
-    });
-    return isDuplicated;
+  onCopy = () => {
+    const { path, selectedDirentList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.COPY_FILE, path, selectedDirentList, true);
   };
 
-  onMoveToggle = () => {
-    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
-  };
-
-  onCopyToggle = () => {
-    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
-  };
-
-  onItemsDownload = () => {
+  onDownload = () => {
     const { path, selectedDirentList, eventBus } = this.props;
     const direntList = selectedDirentList.map(dirent => dirent instanceof Dirent ? dirent.toJson() : dirent);
     eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
@@ -483,31 +457,31 @@ class DirentListView extends React.Component {
   onContainerMenuItemClick = (operation) => {
     switch (operation) {
       case 'New Folder':
-        this.onCreateFolderToggle();
+        this.onCreateFolder();
         break;
       case 'New File':
-        this.onCreateFileToggle();
+        this.onCreateFile();
         break;
       case 'New Markdown File':
-        this.onCreateFileToggle('.md');
+        this.onCreateFile('.md');
         break;
       case 'New Excel File':
-        this.onCreateFileToggle('.xlsx');
+        this.onCreateFile('.xlsx');
         break;
       case 'New PowerPoint File':
-        this.onCreateFileToggle('.pptx');
+        this.onCreateFile('.pptx');
         break;
       case 'New Word File':
-        this.onCreateFileToggle('.docx');
+        this.onCreateFile('.docx');
         break;
       case 'New Whiteboard File':
-        this.onCreateFileToggle('.draw');
+        this.onCreateFile('.draw');
         break;
       case 'New Excalidraw File':
-        this.onCreateFileToggle('.exdraw');
+        this.onCreateFile('.exdraw');
         break;
       case 'New SeaDoc File':
-        this.onCreateFileToggle('.sdoc');
+        this.onCreateFile('.sdoc');
         break;
       default:
         break;
@@ -519,13 +493,13 @@ class DirentListView extends React.Component {
   onDirentsMenuItemClick = (operation) => {
     switch (operation) {
       case 'Move':
-        this.onMoveToggle();
+        this.onMove();
         break;
       case 'Copy':
-        this.onCopyToggle();
+        this.onCopy();
         break;
       case 'Download':
-        this.onItemsDownload();
+        this.onDownload();
         break;
       case 'Delete':
         this.props.onItemsDelete();
@@ -738,8 +712,7 @@ class DirentListView extends React.Component {
   };
 
   render() {
-    const { direntList, currentRepoInfo, userPerm } = this.props;
-    const { encrypted: repoEncrypted } = currentRepoInfo;
+    const { direntList, userPerm } = this.props;
     const isDesktop = Utils.isDesktop();
 
     let canModifyFile = false;
@@ -794,7 +767,6 @@ class DirentListView extends React.Component {
                   onItemDelete={this.props.onItemDelete}
                   onItemRename={this.onItemRename}
                   onItemMove={this.props.onItemMove}
-                  onItemCopy={this.props.onItemCopy}
                   onItemConvert={this.props.onItemConvert}
                   updateDirent={this.props.updateDirent}
                   isItemFreezed={this.state.isItemFreezed}
@@ -866,51 +838,6 @@ class DirentListView extends React.Component {
               />
             </ModalPortal>
           )}
-          {this.state.isCreateFolderDialogShow && (
-            <ModalPortal>
-              <CreateFolder
-                parentPath={this.props.path}
-                onAddFolder={this.onAddFolder}
-                checkDuplicatedName={this.checkDuplicatedName}
-                addFolderCancel={this.onCreateFolderToggle}
-              />
-            </ModalPortal>
-          )}
-          {this.state.isCreateFileDialogShow && (
-            <ModalPortal>
-              <CreateFile
-                parentPath={this.props.path}
-                fileType={this.state.fileType}
-                onAddFile={this.props.onAddFile}
-                checkDuplicatedName={this.checkDuplicatedName}
-                toggleDialog={this.onCreateFileToggle}
-              />
-            </ModalPortal>
-          )}
-          {this.state.isMoveDialogShow &&
-            <MoveDirentDialog
-              path={this.props.path}
-              repoID={this.props.repoID}
-              repoEncrypted={repoEncrypted}
-              isMultipleOperation={this.state.isMultipleOperation}
-              selectedDirentList={this.props.selectedDirentList}
-              onItemsMove={this.props.onItemsMove}
-              onCancelMove={this.onMoveToggle}
-              onAddFolder={this.props.onAddFolder}
-            />
-          }
-          {this.state.isCopyDialogShow &&
-            <CopyDirentDialog
-              path={this.props.path}
-              repoID={this.props.repoID}
-              repoEncrypted={repoEncrypted}
-              selectedDirentList={this.props.selectedDirentList}
-              isMultipleOperation={this.state.isMultipleOperation}
-              onItemsCopy={this.props.onItemsCopy}
-              onCancelCopy={this.onCopyToggle}
-              onAddFolder={this.props.onAddFolder}
-            />
-          }
         </Fragment>
       </div>
     );
