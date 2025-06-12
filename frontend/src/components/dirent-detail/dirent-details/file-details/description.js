@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import classNames from 'classnames';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataDetails } from '../../../../metadata';
 import { getCellValueByColumn } from '../../../../metadata/utils/cell';
@@ -6,7 +7,6 @@ import { PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
 import ClickOutside from '../../../click-outside';
 import { KeyCodes } from '../../../../constants';
 import { getTrimmedString } from '../../../../metadata/utils/common';
-import classNames from 'classnames';
 
 const Description = ({ content }) => {
   const ref = useRef(null);
