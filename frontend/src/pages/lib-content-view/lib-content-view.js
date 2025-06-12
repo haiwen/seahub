@@ -1330,10 +1330,6 @@ class LibContentView extends React.Component {
         this.updateMoveCopyTreeNode(moveToDirentPath);
       }
       this.moveDirent(direntPath, moveToDirentPath);
-      this.setState({ path: moveToDirentPath });
-      if (this.state.path !== moveToDirentPath) {
-        this.loadDirentList(moveToDirentPath);
-      }
     };
 
     if (this.state.isTreePanelShown) {
@@ -1352,10 +1348,6 @@ class LibContentView extends React.Component {
     if (byDialog) {
       this.updateRecentlyUsedList(targetRepo, moveToDirentPath);
     }
-    // update location
-    let repoInfo = this.state.currentRepoInfo;
-    let url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(moveToDirentPath);
-    window.history.pushState({ url, path: moveToDirentPath }, moveToDirentPath, url);
   };
 
   onMoveItem = (destRepo, dirent, moveToDirentPath, nodeParentPath, byDialog = false) => {
