@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback, useLayoutEffect, useEffect } from
 import { createRoot } from 'react-dom/client';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import { processor } from '@seafile/seafile-editor';
+import { processorWithMath } from '@seafile/seafile-editor';
 import SeafileCodeMirror from './code-mirror';
 import HeaderToolbar from '../markdown-editor/header-toolbar/header-toolbar';
 import editorApi from '../markdown-editor/editor-api';
@@ -68,7 +68,7 @@ const PlainMarkdownEditor = (props) => {
 
   const setContent = useCallback((markdownContent) => {
     setEditorValue(markdownContent);
-    processor.process(markdownContent, (error, vfile) => {
+    processorWithMath.process(markdownContent, (error, vfile) => {
       var html = String(vfile);
       setPreviewValue(html);
     });
