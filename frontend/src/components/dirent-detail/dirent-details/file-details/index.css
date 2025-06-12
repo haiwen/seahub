@@ -18,3 +18,35 @@
   color: #666;
   font-size: 12px;
 }
+
+.sf-metadata-dirent-detail-description-container {
+  width: calc(100% + 8px);
+  height: fit-content;
+  margin: 0 -4px;
+}
+
+.sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description {
+  width: 100%;
+  height: auto;
+  min-height: 34px;
+  overflow-y: hidden;
+  padding: 6px 4px;
+  border: none;
+  border-radius: 3px;
+  font-size: 0.875rem;
+  background-color: #f5f5f5;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+  cursor: text;
+}
+
+.sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description.empty::before {
+  content: attr(placeholder);
+  color: #666;
+  font-size: 14px;
+}
+
+.sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description:focus-visible {
+  outline: none;
+}

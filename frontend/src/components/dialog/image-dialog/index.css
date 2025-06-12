@@ -112,3 +112,12 @@
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-operation:hover .sf3-font-down {
   color: rgba(255, 255, 255, 1);
 }
+
+.lightbox-side-panel .sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description {
+  color: #fff;
+  background-color: #666;
+}
+
+.lightbox-side-panel .sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description.empty::before {
+  color: #999;
+}

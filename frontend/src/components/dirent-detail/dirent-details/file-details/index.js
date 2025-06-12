@@ -13,6 +13,7 @@ import { useMetadataStatus } from '../../../../hooks';
 import { CAPTURE_INFO_SHOW_KEY } from '../../../../constants';
 import People from '../../people';
 import FileTag from './file-tag';
+import Description from './description';
 
 import './index.css';
 
@@ -64,13 +65,16 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
   const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
   const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
+  const description = useMemo(() => {
+    return enableMetadata && getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION });
+  }, [record, enableMetadata]);
 
   useEffect(() => {
     const savedValue = window.localStorage.getItem(CAPTURE_INFO_SHOW_KEY) === 'true';
     setCaptureInfoShow(savedValue);
   }, []);
 
-  const dom = (
+  const basicInfo = (
     <>
       <DetailItem field={sizeField} className="sf-metadata-property-detail-formatter">
         <Formatter field={sizeField} value={Utils.bytesToSize(direntDetail.size)} />
@@ -106,16 +110,24 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
     </>
   );
 
-  let component = dom;
-  if (Utils.imageCheck(dirent.name) || Utils.videoCheck(dirent.name)) {
+  const renderGeneral = () => {
+    return (
+      <>
+        {enableMetadata && <Description content={description} />}
+        {basicInfo}
+      </>
+    );
+  };
+
+  const renderExtended = () => {
     const fileDetails = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DETAILS });
     const fileDetailsJson = JSON.parse(fileDetails?.slice(9, -7) || '{}');
-
-    component = (
+    return (
       <>
         {enableMetadata && enableFaceRecognition && <People repoID={repoID} record={record} />}
+        {enableMetadata && <Description content={description} />}
         <Collapse title={gettext('General information')}>
-          {dom}
+          {basicInfo}
         </Collapse>
         {Object.keys(fileDetailsJson).length > 0 && (
           <Collapse title={gettext('Capture information')} isShow={isCaptureInfoShow}>
@@ -131,11 +143,11 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
         )}
       </>
     );
-  }
-
+  };
+  const isMedia = Utils.imageCheck(dirent.name) || Utils.videoCheck(dirent.name);
   return (
     <>
-      {component}
+      {isMedia ? renderExtended() : renderGeneral()}
     </>
   );
 }, (props, nextProps) => {
