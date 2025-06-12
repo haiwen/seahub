@@ -87,10 +87,12 @@ const ContextMenu = ({
   }, [getMenuPosition]);
 
   useEffect(() => {
-    document.addEventListener('contextmenu', handleShow);
+    const metadataTagsWrapper = document.querySelector('.sf-metadata-tags-wrapper');
+    metadataTagsWrapper && metadataTagsWrapper.addEventListener('contextmenu', handleShow);
 
     return () => {
-      document.removeEventListener('contextmenu', handleShow);
+      const metadataTagsWrapper = document.querySelector('.sf-metadata-tags-wrapper');
+      metadataTagsWrapper && metadataTagsWrapper.removeEventListener('contextmenu', handleShow);
     };
 
   }, [handleShow]);

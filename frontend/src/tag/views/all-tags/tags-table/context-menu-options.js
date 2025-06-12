@@ -6,7 +6,7 @@ import { EVENT_BUS_TYPE } from '../../../../components/sf-table/constants/event-
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { TreeMetrics } from '../../../../components/sf-table/utils/tree-metrics';
 import { RecordMetrics } from '../../../../components/sf-table/utils/record-metrics';
-import { OPERATION } from '../../../../components/sf-table/constants/context-menu';
+import { OPERATION } from '../../../../components/sf-table/constants/operation';
 
 export const createContextMenuOptions = ({
   context,

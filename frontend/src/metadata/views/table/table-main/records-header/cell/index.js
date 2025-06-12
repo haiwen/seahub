@@ -108,7 +108,7 @@ const Cell = ({
     if (!window.sfMetadataBody) return;
     let defaultColumnWidth = 200;
     const offsetX = event.clientX;
-    const width = document.querySelector('.sf-metadata-wrapper')?.clientWidth;
+    const width = document.querySelector('#sf-metadata-wrapper')?.clientWidth;
     const left = window.innerWidth - width;
     if (width <= 800) {
       defaultColumnWidth = 20;

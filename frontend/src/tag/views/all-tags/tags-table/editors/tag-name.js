@@ -4,7 +4,7 @@ import ChildTagsEditor from './child-tags';
 import { gettext } from '../../../../../utils/constants';
 import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
 import { useTags } from '../../../../hooks';
-import { OPERATION } from '../../../../../components/sf-table/constants/context-menu';
+import { OPERATION } from '../../../../../components/sf-table/constants/operation';
 import { PRIVATE_COLUMN_KEY } from '../../../../constants';
 
 const TagNameEditor = forwardRef(({ record, updateTag, onCommitCancel, operation, addTagLinks, deleteTagLinks, column, ...editorProps }, ref) => {
@@ -21,12 +21,24 @@ const TagNameEditor = forwardRef(({ record, updateTag, onCommitCancel, operation
 
   if (operation && operation === OPERATION.ADD_CHILD_TAGS) {
     return (
-      <ChildTagsEditor {...editorProps} addTagLinks={addTagLinks} deleteTagLinks={deleteTagLinks} column={{ key: PRIVATE_COLUMN_KEY.SUB_LINKS, width: column.width }} />
+      <ChildTagsEditor
+        {...editorProps}
+        addTagLinks={addTagLinks}
+        deleteTagLinks={deleteTagLinks}
+        column={{ key: PRIVATE_COLUMN_KEY.SUB_LINKS, width: column.width }}
+      />
     );
   }
 
   return (
-    <EditTagDialog {...editorProps} tags={tags} title={gettext('Edit tag')} tag={record} onToggle={onCommitCancel} onSubmit={handelUpdateTag} />
+    <EditTagDialog
+      {...editorProps}
+      tags={tags}
+      title={gettext('Edit tag')}
+      tag={record}
+      onToggle={onCommitCancel}
+      onSubmit={handelUpdateTag}
+    />
   );
 });
 
