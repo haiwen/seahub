@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
 import isHotkey from 'is-hotkey';
 import classnames from 'classnames';
@@ -8,7 +9,7 @@ import searchAPI from '../../utils/search-api';
 import { gettext } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import SearchResultLibrary from './search-result-library';
-import { debounce, Utils, isCanceled } from '../../utils/utils';
+import { debounce, Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
@@ -398,6 +399,14 @@ class Search extends Component {
     }, 1);
   };
 
+  handleError = (e) => {
+    if (!axios.isCancel(e)) {
+      let errMessage = Utils.getErrorMsg(e);
+      toaster.danger(errMessage);
+    }
+    this.setState({ isLoading: false });
+  }
+
   getRepoSearchResult = (query_str) => {
     if (this.source) {
       this.source.cancel('prev request is cancelled');
@@ -414,11 +423,7 @@ class Search extends Component {
         isLoading: false,
       });
     }).catch(error => {
-      if (!isCanceled(error)) {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      }
-      this.setState({ isLoading: false });
+      this.handleError(error);
     });
   };
 
@@ -459,9 +464,7 @@ class Search extends Component {
           });
         }
       }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-        this.setState({ isLoading: false });
+        this.handleError(error);
       });
     } else {
       this.onNormalSearch(queryData, cancelToken, page);
@@ -489,9 +492,7 @@ class Search extends Component {
         isResultGotten: true,
       });
     }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-      this.setState({ isLoading: false });
+      this.handleError(error);
     });
   };
 
