@@ -47,7 +47,7 @@
 .sf-chart .line {
   fill: none;
   stroke-width: 2px;
-  transition: opacity 0.3s, stroke-width 0.3s;
+  transition: all 0.5s;
 }
 
 .sf-chart .line.highlight-line {
@@ -63,7 +63,7 @@
 /* dot */
 .sf-chart .dot {
   pointer-events: none;
-  transform: all .3s;
+  transform: all .5s;
   /* r: 3; */
 }
 
@@ -104,5 +104,3 @@
 .sf-chart .legend.hidden-legend .legend-text {
   fill: #bfbfbf;
 }
-
-

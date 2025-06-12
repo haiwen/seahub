@@ -222,8 +222,8 @@ const Chart = ({
   const drawData = useCallback((svg, x, y, tickValues, { height, width }, d3Data) => {
     // line
     const line = d3.line()
-      .x(d => x(d.name))
-      .y(d => y(d.value))
+      .x(d => x(d.name) || 0)
+      .y(d => y(d.value) || 0)
       .curve(d3.curveLinear);
 
     const dataGroups = svg.select('.groups').empty() ? svg.append('g')
@@ -247,8 +247,8 @@ const Chart = ({
         .enter()
         .append('circle')
         .attr('class', 'dot')
-        .attr('cx', d => x(d.name))
-        .attr('cy', d => y(d.value))
+        .attr('cx', d => x(d.name) || 0)
+        .attr('cy', d => y(d.value) || 0)
         .attr('fill', group.color);
     });
 
@@ -260,8 +260,8 @@ const Chart = ({
 
     dataGroups.selectAll('.dot')
       .classed('fade-dot', d => hiddenLegendsRef.current.includes(d.key))
-      .attr('cx', d => x(d.name))
-      .attr('cy', d => y(d.value))
+      .attr('cx', d => x(d.name) || 0)
+      .attr('cy', d => y(d.value) || 0)
       .transition()
       .duration(500);
 
@@ -331,6 +331,7 @@ const Chart = ({
       .enter()
       .append('g')
       .attr('class', 'legend')
+      .classed('hidden-legend', d => hiddenLegendsRef.current.includes(d.key))
       .on('click', function (event, d) {
         if (hiddenLegendsRef.current.includes(d.key)) {
           hiddenLegendsRef.current = hiddenLegendsRef.current.filter(l => l !== d.key);
@@ -370,7 +371,7 @@ const Chart = ({
   // eslint-disable-next-line no-use-before-define
   }, [legends, update]);
 
-  const drawTitle = useCallback((svg, x, y, tickValues, { height, width }, d3Data) => {
+  const drawTitle = useCallback((svg, x, y, tickValues, { height, width }) => {
     if (!title) return;
     svg.append('text')
       .attr('class', 'title')
@@ -381,7 +382,6 @@ const Chart = ({
 
   const update = useCallback((svg, x, y, tickValues, { width, height }) => {
     const displayLegends = legends.filter(legend => !hiddenLegendsRef.current.includes(legend.key));
-    const d3Data = d3DataSource.filter(d => displayLegends.find(l => l.key === d.key));
 
     // update y
     updateXY(svg, x, y, displayLegends);
@@ -400,19 +400,18 @@ const Chart = ({
       .duration(500)
       .call(gridYCall(y, { width }));
 
-    drawData(svg, x, y, tickValues, { width, height }, d3Data);
+    drawData(svg, x, y, tickValues, { width, height }, d3DataSource);
   }, [legends, d3DataSource, updateXY, updateAxis, gridXCall, gridYCall, drawData]);
 
   const draw = useCallback((svg, x, y, tickValues, style) => {
     const displayLegends = legends.filter(legend => !hiddenLegendsRef.current.includes(legend.key));
-    const d3Data = d3DataSource.filter(d => displayLegends.find(l => l.key === d.key));
 
     updateXY(svg, x, y, displayLegends);
     drawAxis(svg, x, y, tickValues, style);
-    drawGrid(svg, x, y, tickValues, style, d3Data);
-    drawData(svg, x, y, tickValues, style, d3Data);
-    drawLegend(svg, x, y, tickValues, style, d3Data);
-    drawTitle(svg, x, y, tickValues, style, d3Data);
+    drawGrid(svg, x, y, tickValues, style);
+    drawData(svg, x, y, tickValues, style, d3DataSource);
+    drawLegend(svg, x, y, tickValues, style, d3DataSource);
+    drawTitle(svg, x, y, tickValues, style);
   }, [legends, d3DataSource, updateXY, drawAxis, drawGrid, drawData, drawLegend, drawTitle]);
 
   const create = useCallback(() => {
