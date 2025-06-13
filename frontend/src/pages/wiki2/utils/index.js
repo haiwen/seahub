@@ -108,7 +108,14 @@ const getPaths = (navigation, currentPageId, pages, isGetPathStr) => {
     paths: pathStr,
     curNode
   };
-  return pathStr.split('-').map(id => idPageMap[id]);
+  const pathIds = pathStr.split('-');
+  const result = [];
+  for (const id of pathIds) {
+    const page = idPageMap[id];
+    if (!page) return result;
+    result.push(page);
+  }
+  return result;
 };
 
 const getNamePaths = (config, pageId) => {
@@ -134,6 +141,33 @@ const getNamePaths = (config, pageId) => {
   };
 };
 
+const isPageInSubtree = (navigation, targetPageId, currentPageId) => {
+  let found = false;
+  function traverse(node) {
+    if (node.id === targetPageId) {
+      function checkSubtree(subNode) {
+        if (subNode.id === currentPageId) {
+          found = true;
+          return;
+        }
+        if (subNode.children) {
+          subNode.children.forEach(child => {
+            if (child) checkSubtree(child);
+          });
+        }
+      }
+      checkSubtree(node);
+      return;
+    }
+    if (node.children) {
+      node.children.forEach(child => {
+        if (child) traverse(child);
+      });
+    }
+  }
+  navigation.forEach(item => traverse(item));
+  return found;
+};
 
 export {
   generatorBase64Code,
@@ -144,5 +178,6 @@ export {
   getWikPageLink,
   throttle,
   getPaths,
-  getNamePaths
+  getNamePaths,
+  isPageInSubtree
 };

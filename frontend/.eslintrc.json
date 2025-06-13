@@ -34,6 +34,7 @@
     "no-class-assign": "warn",
     "no-unused-vars": "warn",
     "no-useless-escape": "off",
+    "no-inner-declarations": "off",
     "no-irregular-whitespace": "warn",
     "no-trailing-spaces": "warn",
     "react/jsx-indent": ["warn", 2],
