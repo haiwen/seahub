@@ -26,10 +26,6 @@
   margin: 0 -4px;
   border-radius: 3px;
   font-size: 0.875rem;
-}
-
-.sf-metadata-dirent-detail-description-container .sf-metadata-property-detail-editor.sf-metadata-long-text-property-detail-editor {
-  padding: 6px 4px;
   cursor: pointer;
 }
 
