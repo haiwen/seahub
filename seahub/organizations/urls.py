@@ -6,6 +6,7 @@ from .views import *
 urlpatterns = [
     path('add/', org_add, name='org_add'),
     path('register/', org_register, name='org_register'),
+    re_path('reactivate/(?P<token>[a-f0-9]{32})/', org_reactivate, name='org_reactivate'),
 
     path('statistics-admin/file/', react_fake_view, name='org_statistics_admin_file'),
     path('statistics-admin/total-storage/', react_fake_view, name='org_statistics_admin_total_storage'),

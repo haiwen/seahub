@@ -17,6 +17,8 @@ ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN = getattr(settings,
                                                   'ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN',
                                                   False)
 
+ORG_ENABLE_REACTIVATE = getattr(settings, 'ORG_ENABLE_REACTIVATE', False)
+
 ORG_ENABLE_ADMIN_INVITE_USER = getattr(settings, 'ORG_ENABLE_ADMIN_INVITE_USER', True)
 ORG_ENABLE_ADMIN_CUSTOM_NAME = getattr(settings, 'ORG_ENABLE_ADMIN_CUSTOM_NAME', True)
 ORG_ENABLE_ADMIN_CUSTOM_LOGO = getattr(settings, 'ORG_ENABLE_ADMIN_CUSTOM_LOGO', True)

@@ -27,7 +27,8 @@ from seahub.profile.models import Profile
 from seahub.utils import get_service_url, render_error
 from seahub.utils.auth import get_login_bg_image_path
 
-from seahub.organizations.signals import org_created
+from seahub.organizations.models import OrgSettings
+from seahub.organizations.signals import org_created, org_reactivated
 from seahub.organizations.decorators import org_staff_required
 from seahub.organizations.forms import OrgRegistrationForm
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
@@ -38,6 +39,8 @@ from seahub.organizations.utils import get_or_create_invitation_link
 from seahub.subscription.utils import subscription_check
 from seahub.billing.settings import ENABLE_EXTERNAL_BILLING_SERVICE
 from registration.models import RegistrationProfile
+
+from seahub.invitations.models import Invitation
 
 # Get an instance of a logger
 
@@ -337,3 +340,24 @@ def org_associate(request, token):
     set_org_user(org_id, username)
 
     return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+
+
+def org_reactivate(request, token):
+
+    invite = Invitation.objects.get_by_token(token=token)
+    if not invite:
+        return render_error(request, _('Invalid token.'))
+
+    if invite.is_expired():
+        return render_error(request, _('Expired token.'))
+
+    org_id = invite.accepter
+    org_id = int(org_id)
+    org = ccnet_api.get_org_by_id(org_id)
+    if not org:
+        return render_error(request, f'Organization {org_id} not found')
+
+    invite.accept()
+    OrgSettings.objects.add_or_update(org, is_active=True)
+    org_reactivated.send(sender=None, email=None, org=org)
+    return HttpResponseRedirect(settings.SITE_ROOT)

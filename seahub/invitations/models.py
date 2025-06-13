@@ -41,6 +41,7 @@ class Invitation(models.Model):
     INVITE_TYPE_CHOICES = (
         (GUEST_USER, 'guest'),
         (DEFAULT_USER, 'default'),
+        ('Organization', 'org'),
     )
 
     token = models.CharField(max_length=40, db_index=True)
