@@ -304,6 +304,19 @@ def sdoc_export_to_md(path, doc_uuid, download_url,
     return resp
 
 
+def confluence_to_wiki(filename, download_url, upload_url, username, seafile_server_url):
+    headers = convert_file_gen_headers()
+    params = {
+        'filename': filename,
+        'download_url': download_url,
+        'upload_url': upload_url,
+        'username': username,
+        'seafile_server_url': seafile_server_url
+    }
+    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/confluence-to-wiki/'
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return resp.content
+
 def format_date(start, end):
     start_struct_time = datetime.datetime.strptime(start, "%Y-%m-%d")
     start_timestamp = time.mktime(start_struct_time.timetuple())
