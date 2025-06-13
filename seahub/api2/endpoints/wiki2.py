@@ -1688,7 +1688,6 @@ class ImportConfluenceView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
         seafile_server_url = f'{SERVICE_URL}/lib/{repo_id}/file/'
-
         wiki = Wiki.objects.get(wiki_id=repo_id)
         if not wiki:
             return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found')
@@ -1708,7 +1707,7 @@ class ImportConfluenceView(APIView):
         cf_id_to_cf_title_map = result.get('cf_id_to_cf_title_map')
         try:
             # extract html zip
-            extract_dir = f'/tmp/wiki/{space_key}'
+            extract_dir = os.path.join('/tmp/wiki', space_key)
             if not os.path.exists(extract_dir):
                 extract_dir = self._extract_html_zip(file, space_key)
             sdoc_output_dir = self._download_sdoc_files(repo_id, space_key, username)
@@ -1779,14 +1778,14 @@ class ImportConfluenceView(APIView):
                     first_entry = all_entries[1].filename
                     top_dir = first_entry.split('/')[0] if '/' in first_entry else None
                     if top_dir and top_dir != space_key:
-                        old_path = f'{extract_dir}/{top_dir}'
-                        new_path = f'{extract_dir}/{space_key}'
+                        old_path = os.path.join(extract_dir, top_dir)
+                        new_path = os.path.join(extract_dir, space_key)
                         if os.path.exists(new_path):
                             shutil.rmtree(new_path)
                         if os.path.exists(old_path):
                             os.rename(old_path, new_path)
                 
-            return f'{extract_dir}/{space_key}'
+            return os.path.join(extract_dir, space_key)
         except Exception as e:
             logger.error(f"extract {zip_file} error: {e}")
             return False
@@ -1806,17 +1805,17 @@ class ImportConfluenceView(APIView):
         if not os.path.exists(extract_dir):
             os.makedirs(extract_dir)
         
-        if not os.path.exists(f'{extract_dir}/{space_key}'):
-            os.makedirs(f'{extract_dir}/{space_key}')
+        if not os.path.exists(os.path.join(extract_dir, space_key)):
+            os.makedirs(os.path.join(extract_dir, space_key))
         
-        zip_file_path = f'{extract_dir}/{space_key}/sdoc_archive.zip'
+        zip_file_path = os.path.join(extract_dir, space_key, 'sdoc_archive.zip')
         if not os.path.exists(zip_file_path):
             with open(zip_file_path, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
                     if chunk:
                         f.write(chunk)
 
-        output_dir = f'{extract_dir}/{space_key}/sdoc-output'
+        output_dir = os.path.join(extract_dir, space_key, 'sdoc-output')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
             
@@ -1854,7 +1853,7 @@ class ImportConfluenceView(APIView):
 
         # handle attachment
         exist_dir = []
-        attachment_dir = f'{directory}/attachments'
+        attachment_dir = os.path.join(directory, 'attachments')
         image_dir = os.path.join(directory, 'images/')
         if os.path.exists(attachment_dir):
             self._upload_attachment(cf_page_id_to_sf_obj_id_map, attachment_dir, wiki_id, username, exist_dir)
