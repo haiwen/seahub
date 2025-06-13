@@ -760,16 +760,13 @@ export const Utils = {
   },
 
   getSharedLibsOperationList: function (lib) {
-    const { SHARE, UNSHARE, WATCH_FILE_CHANGES, UNWATCH_FILE_CHANGES } = TextTranslation;
+    const { SHARE, UNSHARE } = TextTranslation;
     const operations = [];
 
     if (isPro && lib.is_admin) {
       operations.push(SHARE);
     }
     operations.push(UNSHARE);
-
-    const monitorOp = lib.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
-    operations.push(monitorOp);
 
     return operations;
   },

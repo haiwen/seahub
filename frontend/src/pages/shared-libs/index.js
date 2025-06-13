@@ -66,16 +66,6 @@ class SharedLibraries extends Component {
     });
   };
 
-  onMonitorRepo = (repo, monitored) => {
-    let items = this.state.items.map(item => {
-      if (item.repo_id === repo.repo_id) {
-        item.monitored = monitored;
-      }
-      return item;
-    });
-    this.setState({ items: items });
-  };
-
   renderContent = (currentViewMode) => {
     const { inAllLibs = false, repoList } = this.props; // inAllLibs: in 'All Libs'('Files') page
     const { items } = this.state;
@@ -87,7 +77,6 @@ class SharedLibraries extends Component {
         sortBy={this.state.sortBy}
         sortOrder={this.state.sortOrder}
         sortItems={this.sortItems}
-        onMonitorRepo={this.onMonitorRepo}
         inAllLibs={inAllLibs}
         currentViewMode={currentViewMode}
       />
