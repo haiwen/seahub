@@ -118,7 +118,7 @@ class DirFiles extends React.Component {
       case 'Rename': {
         const parentNode = node.parentNode ? node.parentNode : node;
         const children = parentNode.children.map(item => item.object);
-        eventBus.dispatch(EVENT_BUS_TYPE.RENAME_FILE, node.object, children, (dirent, newName) => onRenameNode(node, newName));
+        eventBus.dispatch(EVENT_BUS_TYPE.RENAME_FILE, node.object, children, (newName) => onRenameNode(node, newName));
         break;
       }
       case 'Delete':
