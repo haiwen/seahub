@@ -245,7 +245,8 @@ def convert_file(path, username, doc_uuid, download_url, upload_url, src_type, d
         'src_type': src_type,
         'dst_type': dst_type,
     }
-    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/file-convert/'
+    # url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/file-convert/'
+    url = 'http://127.0.0.1:8888/api/v1/file-convert/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)
 
     return resp
@@ -303,13 +304,18 @@ def sdoc_export_to_md(path, doc_uuid, download_url,
 
     return resp
 
-def md_to_sdoc(file_path, username):
+
+def confluence_to_wiki(filename, download_url, upload_url, username, seafile_server_url):
     headers = convert_file_gen_headers()
     params = {
-        'file_path': file_path,
+        'filename': filename,
+        'download_url': download_url,
+        'upload_url': upload_url,
         'username': username,
+        'seafile_server_url': seafile_server_url
     }
-    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/md-to-sdoc/'
+    # url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/confluence-to-wiki/'
+    url = 'http://127.0.0.1:8888/api/v1/confluence-to-wiki/'
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return resp.content
 
