@@ -9,7 +9,6 @@ import metadataAPI from '../../../api';
 import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../../components/icon';
-import ClickOutside from '../../../../components/click-outside';
 import { HideColumnPopover } from '../../popover';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getColumnDisplayName } from '../../../utils/column';

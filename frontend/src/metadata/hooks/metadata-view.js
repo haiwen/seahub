@@ -14,7 +14,6 @@ import { checkIsDir } from '../utils/row';
 import { useTags } from '../../tag/hooks';
 import { useMetadataAIOperations } from '../../hooks/metadata-ai-operation';
 import { getColumnByKey } from '../utils/column';
-import { useMetadataStatus } from '../../hooks';
 
 const MetadataViewContext = React.createContext(null);
 
