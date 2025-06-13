@@ -357,25 +357,7 @@ def org_reactivate(request, token):
     if not org:
         return render_error(request, f'Organization {org_id} not found')
 
-    # from seahub.base.templatetags.seahub_tags import email2contact_email
-    # contact_email = email2contact_email(ccnet_email)
-    # try:
-    #     user = User.objects.get(email=ccnet_email)
-    # except User.DoesNotExist:
-    #     return render_error(request, f'User {contact_email} not found')
-
-    # if not user.is_active:
-    #     return render_error(request, f'User {contact_email} is not active')
-
-    # if not ccnet_api.org_user_exists(org_id, ccnet_email):
-    #     return render_error(request, _('User %s not found in organization.') % contact_email)
-
-    # if not ccnet_api.is_org_staff(org_id, ccnet_email):
-    #     return render_error(request, _('User %s is not organization staff.') % contact_email)
-
     invite.accept()
     OrgSettings.objects.add_or_update(org, is_active=True)
-    # user.backend = settings.AUTHENTICATION_BACKENDS[0]
-    # login(request, user)
     org_reactivated.send(sender=None, email=None, org=org)
     return HttpResponseRedirect(settings.SITE_ROOT)
