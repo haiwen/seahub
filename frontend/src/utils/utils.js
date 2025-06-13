@@ -785,7 +785,7 @@ export const Utils = {
 
   getSharedRepoOperationList: function (repo, currentGroup, isPublic) {
     const operations = [];
-    const { SHARE, UNSHARE, DELETE, RENAME, FOLDER_PERMISSION, SHARE_ADMIN, UNWATCH_FILE_CHANGES, WATCH_FILE_CHANGES, ADVANCED, CHANGE_PASSWORD, RESET_PASSWORD, API_TOKEN } = TextTranslation;
+    const { SHARE, UNSHARE, DELETE, RENAME, FOLDER_PERMISSION, SHARE_ADMIN, ADVANCED, CHANGE_PASSWORD, RESET_PASSWORD, API_TOKEN } = TextTranslation;
 
     const isStaff = currentGroup && currentGroup.admins && currentGroup.admins.indexOf(username) > -1;
     const isRepoOwner = repo.owner_email === username;
@@ -815,16 +815,12 @@ export const Utils = {
             if (repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured) {
               operations.push(RESET_PASSWORD);
             }
-            if (repo.permission === 'r' || repo.permission === 'rw') {
-              const monitorOp = repo.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
-              operations.push(monitorOp);
-            }
             if (Utils.isDesktop()) {
               operations.push(DIVIDER);
               const subOpList = [API_TOKEN];
               operations.push({ ...ADVANCED, subOpList });
             }
-            return operations;
+            return operations.filter((op, i, arr) => !(op === DIVIDER && arr[i + 1] === DIVIDER));
           } else {
             operations.push(UNSHARE);
           }
@@ -836,10 +832,6 @@ export const Utils = {
         if (isStaff || isRepoOwner || isAdmin) {
           operations.push(UNSHARE);
         }
-      }
-      if (repo.permission === 'r' || repo.permission === 'rw') {
-        const monitorOp = repo.monitored ? UNWATCH_FILE_CHANGES : WATCH_FILE_CHANGES;
-        operations.push(monitorOp);
       }
     } else {
       if (isRepoOwner) {
