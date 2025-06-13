@@ -230,25 +230,6 @@ class Libraries extends Component {
     this.setState({ repoList });
   };
 
-  monitorRepo = (repoId, monitored, repoList) => {
-    if (!Array.isArray(repoList) || repoList.length === 0) {
-      return repoList;
-    }
-    return repoList.map((repo) => {
-      if (repo.repo_id === repoId) {
-        return { ...repo, monitored };
-      }
-      return repo;
-    });
-  };
-
-  onMonitorRepo = (repo, monitored) => {
-    const targetRepoId = repo.repo_id;
-    const repoList = this.monitorRepo(targetRepoId, monitored, this.state.repoList);
-    this.monitorRelatedGroupsRepos(targetRepoId, monitored);
-    this.setState({ repoList });
-  };
-
   deleteRepo = (repoId, repoList) => {
     if (!Array.isArray(repoList) || repoList.length === 0) {
       return repoList;
@@ -355,24 +336,6 @@ class Libraries extends Component {
         return group;
       }
       const updatedRepos = this.renameRepo(repoId, newName, repos);
-      return { ...group, repos: updatedRepos };
-    });
-    this.setState({ groupList: updatedGroups });
-  };
-
-  monitorRelatedGroupsRepos = (repoId, monitored) => {
-    const relatedGroups = this.groupsReposManager.getRepoInGroupsIdsById(repoId);
-    if (relatedGroups.length === 0) {
-      return;
-    }
-
-    const { groupList } = this.state;
-    const updatedGroups = groupList.map((group) => {
-      const { repos } = group;
-      if (!relatedGroups.includes(group.id)) {
-        return group;
-      }
-      const updatedRepos = this.monitorRepo(repoId, monitored, repos);
       return { ...group, repos: updatedRepos };
     });
     this.setState({ groupList: updatedGroups });
@@ -486,7 +449,6 @@ class Libraries extends Component {
                               onRenameRepo={this.onRenameRepo}
                               onDeleteRepo={this.onDeleteRepo}
                               onTransferRepo={this.onTransferRepo}
-                              onMonitorRepo={this.onMonitorRepo}
                               onRepoClick={this.onRepoClick}
                               sortRepoList={this.sortRepoList}
                               inAllLibs={true}
@@ -521,7 +483,6 @@ class Libraries extends Component {
                         key={group.id}
                         inAllLibs={true}
                         group={group}
-                        onMonitorRepo={this.onMonitorRepo}
                         renameRelatedGroupsRepos={this.renameRelatedGroupsRepos}
                         deleteRelatedGroupsRepos={this.deleteRelatedGroupsRepos}
                         addRepoToGroup={this.addRepoToGroup}

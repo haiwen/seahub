@@ -178,16 +178,6 @@ class GroupView extends React.Component {
     });
   };
 
-  onMonitorRepo = (repo, monitored) => {
-    let repoList = this.state.repoList.map(item => {
-      if (item.repo_id === repo.repo_id) {
-        item.monitored = monitored;
-      }
-      return item;
-    });
-    this.setState({ repoList: repoList });
-  };
-
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
@@ -335,28 +325,32 @@ class GroupView extends React.Component {
               className={classnames('cur-view-content', 'd-block', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}
               onScroll={this.handleScroll}
             >
-              {isLoading ? <Loading /> : errMessage ?
-                <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
-                  <img src={`${mediaUrl}img/error-tip.png`} alt="" width="100" />
-                  <p className="mt-2">{errMessage}</p>
-                </div>
-                : repoList.length == 0
-                  ? emptyTip
-                  :
-                  <SharedRepoListView
-                    repoList={this.state.repoList}
-                    hasNextPage={this.state.hasNextPage}
-                    currentGroup={this.state.currentGroup}
-                    sortBy={this.state.sortBy}
-                    sortOrder={this.state.sortOrder}
-                    sortItems={this.sortItems}
-                    onItemUnshare={this.onItemUnshare}
-                    onItemDelete={this.onItemDelete}
-                    onItemRename={this.onItemRename}
-                    onMonitorRepo={this.onMonitorRepo}
-                    onTransferRepo={this.onItemTransfer}
-                    currentViewMode={currentViewMode}
-                  />
+              {isLoading
+                ? <Loading />
+                : errMessage
+                  ? (
+                    <div className="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+                      <img src={`${mediaUrl}img/error-tip.png`} alt="" width="100" />
+                      <p className="mt-2">{errMessage}</p>
+                    </div>
+                  )
+                  : repoList.length == 0
+                    ? emptyTip
+                    : (
+                      <SharedRepoListView
+                        repoList={this.state.repoList}
+                        hasNextPage={this.state.hasNextPage}
+                        currentGroup={this.state.currentGroup}
+                        sortBy={this.state.sortBy}
+                        sortOrder={this.state.sortOrder}
+                        sortItems={this.sortItems}
+                        onItemUnshare={this.onItemUnshare}
+                        onItemDelete={this.onItemDelete}
+                        onItemRename={this.onItemRename}
+                        onTransferRepo={this.onItemTransfer}
+                        currentViewMode={currentViewMode}
+                      />
+                    )
               }
             </div>
           </div>

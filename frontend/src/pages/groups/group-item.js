@@ -12,7 +12,6 @@ const propTypes = {
   inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
   group: PropTypes.object.isRequired,
-  onMonitorRepo: PropTypes.func,
   renameRelatedGroupsRepos: PropTypes.func,
   deleteRelatedGroupsRepos: PropTypes.func,
   addRepoToGroup: PropTypes.func,
@@ -50,10 +49,6 @@ class GroupItem extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  };
-
-  onMonitorRepo = (repo, monitored) => {
-    this.props.onMonitorRepo(repo, monitored);
   };
 
   addNewRepo = (newRepo) => {
@@ -109,7 +104,6 @@ class GroupItem extends React.Component {
             onItemUnshare={this.onItemUnshare}
             onItemDelete={this.onItemDelete}
             onItemRename={this.onItemRename}
-            onMonitorRepo={this.onMonitorRepo}
             onTransferRepo={this.props.onTransferRepo}
             currentViewMode={currentViewMode}
           />

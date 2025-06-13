@@ -21,7 +21,6 @@ import MylibRepoMenu from './mylib-repo-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
-import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
 
@@ -35,7 +34,6 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
-  onMonitorRepo: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
 };
 
@@ -113,12 +111,6 @@ class MylibRepoListItem extends React.Component {
       case 'Reset Password':
         this.onResetPasswordToggle();
         break;
-      case 'Watch File Changes':
-        this.watchFileChanges();
-        break;
-      case 'Unwatch File Changes':
-        this.unwatchFileChanges();
-        break;
       case 'Folder Permission':
         this.onFolderPermissionToggle();
         break;
@@ -168,26 +160,6 @@ class MylibRepoListItem extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  };
-
-  watchFileChanges = () => {
-    const { repo } = this.props;
-    seafileAPI.monitorRepo(repo.repo_id).then(() => {
-      this.props.onMonitorRepo(repo, true);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  unwatchFileChanges = () => {
-    const { repo } = this.props;
-    seafileAPI.unMonitorRepo(repo.repo_id).then(() => {
-      this.props.onMonitorRepo(repo, false);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   };
 
   onShareToggle = () => {
@@ -333,7 +305,6 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <Fragment>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
             </Fragment>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
@@ -389,7 +360,6 @@ class MylibRepoListItem extends React.Component {
                 >
                 </i>
               }
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="op-icon library-grid-item-icon" />}
             </Fragment>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
@@ -433,7 +403,6 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <div>
               <Link to={repoURL}>{repo.repo_name}</Link>
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&

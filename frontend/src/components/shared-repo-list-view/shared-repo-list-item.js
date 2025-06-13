@@ -19,7 +19,6 @@ import { userAPI } from '../../utils/user-api';
 import toaster from '../toast';
 import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
-import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import { LIST_MODE } from '../dir-view-mode/constants';
 import TransferDialog from '../dialog/transfer-dialog';
 
@@ -36,7 +35,6 @@ const propTypes = {
   onItemUnshare: PropTypes.func.isRequired,
   onItemRename: PropTypes.func,
   onItemDelete: PropTypes.func,
-  onMonitorRepo: PropTypes.func,
   onContextMenu: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func
 };
@@ -189,34 +187,8 @@ class SharedRepoListItem extends React.Component {
       case 'Reset Password':
         this.onResetPasswordToggle();
         break;
-      case 'Watch File Changes':
-        this.watchFileChanges();
-        break;
-      case 'Unwatch File Changes':
-        this.unwatchFileChanges();
-        break;
       // no default
     }
-  };
-
-  watchFileChanges = () => {
-    const { repo } = this.props;
-    seafileAPI.monitorRepo(repo.repo_id).then(() => {
-      this.props.onMonitorRepo(repo, true);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  unwatchFileChanges = () => {
-    const { repo } = this.props;
-    seafileAPI.unMonitorRepo(repo.repo_id).then(() => {
-      this.props.onMonitorRepo(repo, false);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   };
 
   onItemRenameToggle = () => {
@@ -402,14 +374,10 @@ class SharedRepoListItem extends React.Component {
             if (repo.encrypted && enableResetEncryptedRepoPassword && isEmailConfigured) {
               operations.push('Reset Password');
             }
-            if (repo.permission == 'r' || repo.permission == 'rw') {
-              const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
-              operations.push(monitorOp);
-            }
             if (Utils.isDesktop()) {
               operations.push('Divider', 'Advanced');
             }
-            return operations;
+            return operations.filter((op, i, arr) => !(op === 'Divider' && arr[i + 1] === 'Divider'));
           } else {
             operations.push('Unshare');
           }
@@ -421,10 +389,6 @@ class SharedRepoListItem extends React.Component {
         if (isStaff || isRepoOwner || isAdmin) {
           operations.push('Unshare');
         }
-      }
-      if (repo.permission == 'r' || repo.permission == 'rw') {
-        const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
-        operations.push(monitorOp);
       }
     } else {
       if (isRepoOwner) {
@@ -548,32 +512,6 @@ class SharedRepoListItem extends React.Component {
                 return <Fragment key={item}>{shareOperation}</Fragment>;
               case 'Unshare':
                 return <Fragment key={item}>{unshareOperation}</Fragment>;
-              case 'Watch File Changes':
-              case 'Unwatch File Changes':
-                return (
-                  <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu} key={item}>
-                    <DropdownToggle
-                      tag="i"
-                      role="button"
-                      tabIndex="0"
-                      className="op-icon sf3-font-more sf3-font"
-                      title={gettext('More operations')}
-                      aria-label={gettext('More operations')}
-                      data-toggle="dropdown"
-                      aria-expanded={this.state.isItemMenuShow}
-                      aria-haspopup={true}
-                      style={{ 'minWidth': '0' }}
-                      onClick={this.clickOperationMenuToggle}
-                      onKeyDown={this.onDropdownToggleKeyDown}
-                    />
-                    <DropdownMenu>
-                      {[item].map((item, index) => {
-                        return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>{this.translateMenuItem(item)}</DropdownItem>;
-                      })}
-                    </DropdownMenu>
-                  </Dropdown>
-                );
-              // no default
               default:
                 return null;
             }
@@ -642,7 +580,6 @@ class SharedRepoListItem extends React.Component {
             <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
             <Fragment>
               <Link to={libPath}>{repo.repo_name}</Link>
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
             </Fragment>
           }
         </td>
@@ -675,7 +612,6 @@ class SharedRepoListItem extends React.Component {
                 >
                 </i>
               }
-              {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="op-icon library-grid-item-icon" />}
             </Fragment>
           }
         </div>
@@ -703,10 +639,7 @@ class SharedRepoListItem extends React.Component {
           <td onClick={this.visitRepo}>
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <Fragment>
-                <Link to={libPath}>{repo.repo_name}</Link>
-                {repo.monitored && <RepoMonitoredIcon repoID={repo.repo_id} className="ml-1 op-icon" />}
-              </Fragment>
+              <Link to={libPath}>{repo.repo_name}</Link>
             }
             <br />
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>

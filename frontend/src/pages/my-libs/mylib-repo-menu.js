@@ -105,11 +105,6 @@ class MylibRepoMenu extends React.Component {
       operations.push('Reset Password');
     }
 
-    if (isPro) {
-      const monitorOp = repo.monitored ? 'Unwatch File Changes' : 'Watch File Changes';
-      operations.push(monitorOp);
-    }
-
     operations.push('Divider', 'Advanced');
     // Remove adjacent excess 'Divider'
     for (let i = 0; i < operations.length; i++) {
@@ -159,12 +154,6 @@ class MylibRepoMenu extends React.Component {
         break;
       case 'Reset Password':
         translateResult = gettext('Reset Password');
-        break;
-      case 'Watch File Changes':
-        translateResult = gettext('Watch File Changes');
-        break;
-      case 'Unwatch File Changes':
-        translateResult = gettext('Unwatch File Changes');
         break;
       case 'Folder Permission':
         translateResult = gettext('Folder Permission');

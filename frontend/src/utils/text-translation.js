@@ -181,14 +181,6 @@ const TextTranslation = {
     key: 'Reset Password',
     value: gettext('Reset Password')
   },
-  UNWATCH_FILE_CHANGES: {
-    key: 'Unwatch File Changes',
-    value: gettext('Unwatch File Changes')
-  },
-  WATCH_FILE_CHANGES: {
-    key: 'Watch File Changes',
-    value: gettext('Watch File Changes')
-  },
   ADVANCED: {
     key: 'advanced',
     value: gettext('Advanced')

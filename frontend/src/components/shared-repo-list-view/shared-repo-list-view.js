@@ -24,7 +24,6 @@ const propTypes = {
   onItemDelete: PropTypes.func,
   onItemRename: PropTypes.func,
   hasNextPage: PropTypes.bool,
-  onMonitorRepo: PropTypes.func,
   inAllLibs: PropTypes.bool,
   onTransferRepo: PropTypes.func,
 };
@@ -136,7 +135,6 @@ class SharedRepoListView extends React.Component {
               onItemUnshare={this.props.onItemUnshare}
               onItemDelete={this.props.onItemDelete}
               onItemRename={this.props.onItemRename}
-              onMonitorRepo={this.props.onMonitorRepo}
               currentViewMode={currentViewMode}
               onContextMenu={this.onContextMenu}
             />

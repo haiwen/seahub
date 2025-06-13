@@ -105,7 +105,6 @@ class Content extends Component {
               isDesktop={isDesktop}
               isItemFreezed={this.state.isItemFreezed}
               freezeItem={this.freezeItem}
-              onMonitorRepo={this.props.onMonitorRepo}
               currentViewMode={currentViewMode}
               onContextMenu={this.onContextMenu}
             />;
@@ -171,7 +170,6 @@ Content.propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
-  onMonitorRepo: PropTypes.func.isRequired
 };
 
 export default Content;

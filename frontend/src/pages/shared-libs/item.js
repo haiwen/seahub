@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -10,7 +10,6 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
-import RepoMonitoredIcon from '../../components/repo-monitored-icon';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 
@@ -124,26 +123,6 @@ class Item extends Component {
     navigate(this.repoURL);
   };
 
-  watchFileChanges = () => {
-    const { data: repo } = this.props;
-    seafileAPI.monitorRepo(repo.repo_id).then(() => {
-      this.props.onMonitorRepo(repo, true);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  unwatchFileChanges = () => {
-    const { data: repo } = this.props;
-    seafileAPI.unMonitorRepo(repo.repo_id).then(() => {
-      this.props.onMonitorRepo(repo, false);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
   handleContextMenu = (event) => {
     this.props.onContextMenu(event, this.props.data);
   };
@@ -155,12 +134,6 @@ class Item extends Component {
         break;
       case 'Unshare':
         this.leaveShare(event);
-        break;
-      case 'Watch File Changes':
-        this.watchFileChanges();
-        break;
-      case 'Unwatch File Changes':
-        this.unwatchFileChanges();
         break;
       default:
         break;
@@ -182,9 +155,6 @@ class Item extends Component {
     let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
     let shareRepoUrl = this.repoURL = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
 
-    // at present, only repo shared with 'r', 'rw' can be monitored.(Fri Feb 10 16:24:49 CST 2023)
-    const enableMonitorRepo = isPro && (data.permission == 'r' || data.permission == 'rw');
-
     if (this.props.isDesktop) {
       return (
         <Fragment>
@@ -204,7 +174,6 @@ class Item extends Component {
               <td>
                 <Fragment>
                   <Link to={shareRepoUrl}>{data.repo_name}</Link>
-                  {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
                 </Fragment>
               </td>
               <td>
@@ -213,23 +182,6 @@ class Item extends Component {
                   <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
                   }
                   <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
-                  {enableMonitorRepo &&
-                  <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                    <DropdownToggle
-                      tag="i"
-                      role="button"
-                      tabIndex="0"
-                      className={`op-icon sf3-font-more sf3-font ${iconVisibility}`}
-                      title={gettext('More operations')}
-                      aria-label={gettext('More operations')}
-                      data-toggle="dropdown"
-                      aria-expanded={this.state.isOpMenuOpen}
-                    />
-                    <DropdownMenu>
-                      <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                  }
                 </div>
               </td>
               <td>{data.size}</td>
@@ -257,7 +209,6 @@ class Item extends Component {
                   >
                   </i>
                 }
-                {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="op-icon library-grid-item-icon" />}
               </div>
 
               <div className="flex-shrink-0 d-flex align-items-center">
@@ -265,23 +216,6 @@ class Item extends Component {
                 <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
                 }
                 <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
-                {enableMonitorRepo &&
-                <Dropdown isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>
-                  <DropdownToggle
-                    tag="i"
-                    role="button"
-                    tabIndex="0"
-                    className={`op-icon sf3-font-more sf3-font ${iconVisibility}`}
-                    title={gettext('More operations')}
-                    aria-label={gettext('More operations')}
-                    data-toggle="dropdown"
-                    aria-expanded={this.state.isOpMenuOpen}
-                  />
-                  <DropdownMenu>
-                    <DropdownItem onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}>{data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}</DropdownItem>
-                  </DropdownMenu>
-                </Dropdown>
-                }
               </div>
             </div>
           )}
@@ -310,7 +244,6 @@ class Item extends Component {
             <td onClick={this.visitRepo}><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
             <td onClick={this.visitRepo}>
               <Link to={shareRepoUrl}>{data.repo_name}</Link>
-              {data.monitored && <RepoMonitoredIcon repoID={data.repo_id} className="ml-1 op-icon" />}
               <br />
               <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
               <span className="item-meta-info">{data.size}</span>
@@ -325,14 +258,6 @@ class Item extends Component {
                   <DropdownItem className="mobile-menu-item" onClick={this.share}>{gettext('Share')}</DropdownItem>
                 }
                 <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
-                {enableMonitorRepo &&
-                <DropdownItem
-                  className="mobile-menu-item"
-                  onClick={data.monitored ? this.unwatchFileChanges : this.watchFileChanges}
-                >
-                  {data.monitored ? gettext('Unwatch File Changes') : gettext('Watch File Changes')}
-                </DropdownItem>
-                }
               </MobileItemMenu>
             </td>
           </tr>
@@ -364,7 +289,6 @@ Item.propTypes = {
   data: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   freezeItem: PropTypes.func.isRequired,
-  onMonitorRepo: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,
 };
 
