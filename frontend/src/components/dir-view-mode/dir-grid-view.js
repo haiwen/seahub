@@ -15,15 +15,11 @@ const propTypes = {
   onSelectedDirentListUpdate: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func,
-  onAddFile: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
-  onItemCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
-  onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
-  onRenameNode: PropTypes.func.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
   isRepoInfoBarShow: PropTypes.bool.isRequired,
@@ -31,10 +27,8 @@ const propTypes = {
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
   repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
-  onItemRename: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
@@ -49,10 +43,9 @@ class DirGridView extends React.Component {
         <DirentNoneView
           path={this.props.path}
           isDirentListLoading={this.props.isDirentListLoading}
-          onAddFile={this.props.onAddFile}
           currentRepoInfo={this.props.currentRepoInfo}
           userPerm={this.props.userPerm}
-          onAddFolder={this.props.onAddFolder}
+          eventBus={this.props.eventBus}
           getMenuContainerSize={this.props.getMenuContainerSize}
         />
       );
@@ -79,22 +72,16 @@ class DirGridView extends React.Component {
           fullDirentList={this.props.fullDirentList}
           selectedDirentList={this.props.selectedDirentList}
           onSelectedDirentListUpdate={this.props.onSelectedDirentListUpdate}
-          onAddFile={this.props.onAddFile}
           onItemClick={this.props.onItemClick}
           onItemDelete={this.props.onItemDelete}
           onItemMove={this.props.onItemMove}
-          onItemCopy={this.props.onItemCopy}
           onItemConvert={this.props.onItemConvert}
           onItemsMove={this.props.onItemsMove}
-          onItemsCopy={this.props.onItemsCopy}
           onItemsDelete={this.props.onItemsDelete}
           isDirentListLoading={this.props.isDirentListLoading}
           updateDirent={this.props.updateDirent}
-          onRenameNode={this.props.onRenameNode}
           showDirentDetail={this.props.showDirentDetail}
           onGridItemClick={this.props.onGridItemClick}
-          onItemRename={this.props.onItemRename}
-          onAddFolder={this.props.onAddFolder}
           repoTags={this.props.repoTags}
           onFileTagChanged={this.props.onFileTagChanged}
           getMenuContainerSize={this.props.getMenuContainerSize}

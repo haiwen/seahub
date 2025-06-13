@@ -1,3 +1,6 @@
-export { DownloadFileProvider } from './download-file';
-export { MetadataMiddlewareProvider } from './metadata-middleware';
+export { FileOperationsProvider, useFileOperations } from './file-operations';
 export { MetadataStatusProvider, useMetadataStatus } from './metadata-status';
+export {
+  MetadataMiddlewareProvider,
+  MetadataAIOperationsProvider, useMetadataAIOperations,
+} from '../metadata';

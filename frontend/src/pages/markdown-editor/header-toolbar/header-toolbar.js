@@ -8,7 +8,6 @@ import MoreMenu from './more-menu';
 import FileInfo from './file-info';
 import Icon from '../../../components/icon';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
-import { TagsProvider } from '../../../tag/hooks';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import Dirent from '../../../../src/models/dirent';
@@ -98,11 +97,7 @@ class HeaderToolbar extends React.Component {
 
     eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, this.isFileInfoShow ? null : {
       component: (props) => {
-        return (
-          <TagsProvider repoID={repoID} repoInfo={repoInfo}>
-            <EmbeddedFileDetails {...props} />
-          </TagsProvider>
-        );
+        return (<EmbeddedFileDetails {...props} />);
       },
       props: {
         repoID: repoID,

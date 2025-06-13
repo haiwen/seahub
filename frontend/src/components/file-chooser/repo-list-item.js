@@ -68,16 +68,16 @@ class RepoListItem extends React.Component {
   componentDidUpdate(prevProps) {
     const { repo, selectedRepo, selectedPath, newFolderName } = this.props;
     // create new folder in selected repo or folder
-    if (repo && selectedRepo && repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo) {
+    if (repo && selectedRepo && repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo && this.isComponentMounted) {
       seafileAPI.listDir(repo.repo_id, selectedPath).then(res => {
-        if (!this.isComponentMounted) return;
-        const direntData = res.data.dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
-        if (direntData) {
-          const object = new Dirent(direntData);
-          const direntNode = new TreeNode({ object });
-          const newTreeData = treeHelper.addNodeToParentByPath(this.state.treeData, direntNode, selectedPath);
-          this.setState({ treeData: newTreeData });
-        }
+        const { dirent_list = [], dir_id = '', user_perm = 'r' } = res?.data || {};
+        const dirent = dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
+        const direntData = dirent || new Dirent({ name: newFolderName, tye: 'dir', id: dir_id, permission: user_perm });
+        const object = new Dirent(direntData);
+        const direntNode = new TreeNode({ object });
+        const path = dirent ? selectedPath : '/' + selectedPath.split('/').slice(0, -1).join('/');
+        const newTreeData = treeHelper.addNodeToParentByPath(this.state.treeData, direntNode, path);
+        this.setState({ treeData: newTreeData });
       }).catch(error => {
         if (!this.isComponentMounted) return;
         const errMessage = Utils.getErrorMsg(error);

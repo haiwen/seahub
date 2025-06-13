@@ -13,7 +13,7 @@ const propTypes = {
   addFolderCancel: PropTypes.func.isRequired,
 };
 
-class CreateForder extends React.Component {
+class CreateFolder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -61,6 +61,7 @@ class CreateForder extends React.Component {
       return;
     }
     this.props.onAddFolder(this.state.parentPath + newName);
+    this.toggle();
   };
 
   handleKeyDown = (e) => {
@@ -103,6 +104,6 @@ class CreateForder extends React.Component {
   }
 }
 
-CreateForder.propTypes = propTypes;
+CreateFolder.propTypes = propTypes;
 
-export default CreateForder;
+export default CreateFolder;
