@@ -1714,11 +1714,16 @@ class ImportConfluenceView(APIView):
             sdoc_output_dir = self._download_sdoc_files(repo_id, space_key, username)
             sdoc_files = list(Path(sdoc_output_dir).glob('*.sdoc'))
             self._process_zip_file(wiki, extract_dir, sdoc_files, cf_id_to_cf_title_map, username)
-            # shutil.rmtree(extract_dir)
+            # delete server tmp dir
+            seafile_api.del_file(repo_id, '/',
+                                 json.dumps(['tmp']), username)
+            # clean repo trash
+            seafile_api.clean_up_repo_history(repo_id, 0)
+            shutil.rmtree(extract_dir)
         except Exception as e:
             logger.error(e)
-            # if os.path.exists(extract_dir):
-            #     shutil.rmtree(extract_dir)
+            if os.path.exists(extract_dir):
+                shutil.rmtree(extract_dir)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         
         repo = seafile_api.get_repo(repo_id)
@@ -1899,9 +1904,7 @@ class ImportConfluenceView(APIView):
                             exist_dir.append(target_dir)
                         self._upload_attachment_file(wiki_id, target_dir, file_path, username)
 
-    def _upload_cf_images(self, wiki_id, directory, username, exist_dir):
-        image_dir = os.path.join(directory, 'images/')
-        image_dir = os.path.normpath(image_dir)
+    def _upload_cf_images(self, wiki_id, image_dir, username, exist_dir):
         wiki_images_dir = 'images/'
         if os.path.exists(image_dir):
             for root, _, files in os.walk(image_dir):
