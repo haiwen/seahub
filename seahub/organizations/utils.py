@@ -42,7 +42,7 @@ def get_or_create_invitation_link(org_id):
 
 
 def generate_org_reactivate_link(org_id):
-    i = Invitation.objects.add(inviter='Seafile Admin',
+    i = Invitation.objects.add(inviter='Administrator',
                                accepter=org_id,
                                invite_type='org')
 
