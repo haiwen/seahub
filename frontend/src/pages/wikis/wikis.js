@@ -102,10 +102,20 @@ class Wikis extends Component {
     }
   };
 
-  toggleImportConfluenceDialog = () => {
-    this.setState({
-      isShowImportConfluenceDialog: !this.state.isShowImportConfluenceDialog,
-    });
+  toggleImportConfluenceDialog = (value) => {
+    if (value == false) {
+      this.setState({
+        isShowImportConfluenceDialog: false,
+      });
+    } else if (value == true) {
+      this.setState({
+        isShowImportConfluenceDialog: true,
+      });
+    } else {
+      this.setState({
+        isShowImportConfluenceDialog: !this.state.isShowImportConfluenceDialog,
+      });
+    }
   };
 
   importWikiFromConfluenceZip = () => {
@@ -120,7 +130,7 @@ class Wikis extends Component {
         toaster.danger(gettext('Please select a valid ZIP file'));
         return;
       }
-      this.toggleImportConfluenceDialog();
+      this.toggleImportConfluenceDialog(true);
       wikiAPI.importConfluence(file).then((res) => {
         let wikis = this.state.wikis.slice(0);
         let new_wiki = res.data;
@@ -135,7 +145,7 @@ class Wikis extends Component {
         let errorMsg = Utils.getErrorMsg(error);
         toaster.danger(errorMsg || gettext('Failed to upload Confluence data'));
       }).finally(() => {
-        this.toggleImportConfluenceDialog();
+        this.toggleImportConfluenceDialog(false);
       });
     });
     fileInput.click();
