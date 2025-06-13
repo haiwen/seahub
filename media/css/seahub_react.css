@@ -309,7 +309,7 @@ a, a:hover {
 }
 
 .error {
-  color: #212529;
+  color: red;
 }
 
 .no-deco,
