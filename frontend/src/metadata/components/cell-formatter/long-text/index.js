@@ -8,7 +8,7 @@ import LongTextPreview from './long-text-preview';
 
 import './index.css';
 
-const LongTextFormatter = ({ value: oldValue, className, previewClassName, children: emptyFormatter }) => {
+const LongTextFormatter = ({ value: oldValue, className, previewClassName, textNeedSlice = true, children: emptyFormatter }) => {
   const [isPreview, setPreview] = useState(false);
 
   const ref = useRef(null);
@@ -21,11 +21,12 @@ const LongTextFormatter = ({ value: oldValue, className, previewClassName, child
     const valueType = typeof oldValue;
     if (valueType === 'object') return oldValue;
     if (valueType === 'string') {
-      const { previewText, images, links, checklist } = getPreviewContent(oldValue);
+      const isMarkdown = true;
+      const { previewText, images, links, checklist } = getPreviewContent(oldValue, isMarkdown, textNeedSlice);
       return { text: oldValue, preview: previewText, images: images, links: links, checklist };
     }
     return null;
-  }, [oldValue]);
+  }, [oldValue, textNeedSlice]);
 
   useEffect(() => {
     return () => {

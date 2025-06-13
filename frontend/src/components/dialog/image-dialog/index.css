@@ -113,11 +113,8 @@
   color: rgba(255, 255, 255, 1);
 }
 
-.lightbox-side-panel .sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description {
-  color: #fff;
+.lightbox-side-panel .sf-metadata-dirent-detail-description-container:hover,
+.lightbox-side-panel .sf-metadata-dirent-detail-description-container .sf-metadata-property-detail-editor.sf-metadata-long-text-property-detail-editor:not(:empty) {
   background-color: #666;
-}
-
-.lightbox-side-panel .sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description.empty::before {
-  color: #999;
+  color: rgba(255, 255, 255, 1);
 }

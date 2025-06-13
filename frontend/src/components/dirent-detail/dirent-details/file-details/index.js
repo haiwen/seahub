@@ -65,9 +65,6 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
   const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
   const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
-  const description = useMemo(() => {
-    return enableMetadata && getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION });
-  }, [record, enableMetadata]);
 
   useEffect(() => {
     const savedValue = window.localStorage.getItem(CAPTURE_INFO_SHOW_KEY) === 'true';
@@ -113,7 +110,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   const renderGeneral = () => {
     return (
       <>
-        {enableMetadata && <Description content={description} />}
+        {enableMetadata && <Description />}
         {basicInfo}
       </>
     );
@@ -125,7 +122,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
     return (
       <>
         {enableMetadata && enableFaceRecognition && <People repoID={repoID} record={record} />}
-        {enableMetadata && <Description content={description} />}
+        {enableMetadata && <Description />}
         <Collapse title={gettext('General information')}>
           {basicInfo}
         </Collapse>

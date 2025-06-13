@@ -1,77 +1,30 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import classNames from 'classnames';
-import { gettext } from '../../../../utils/constants';
+import { useCallback, useMemo } from 'react';
 import { useMetadataDetails } from '../../../../metadata';
 import { getCellValueByColumn } from '../../../../metadata/utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../../../../metadata/constants';
-import ClickOutside from '../../../click-outside';
-import { KeyCodes } from '../../../../constants';
+import LongTextEditor from '../../../../metadata/components/detail-editor/long-text-editor';
+import { getColumnDisplayName } from '../../../../metadata/utils/column';
+import { gettext } from '../../../../utils/constants';
 import { getTrimmedString } from '../../../../metadata/utils/common';
 
-const Description = ({ content }) => {
-  const ref = useRef(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState('');
-
+const Description = () => {
   const { record, onChange } = useMetadataDetails();
 
-  const displayEditor = useCallback(() => {
-    if (isEditing) return;
-    setIsEditing(true);
-    setTimeout(() => {
-      if (ref.current) {
-        ref.current.focus();
-        const range = document.createRange();
-        range.selectNodeContents(ref.current);
-        range.collapse(false);
-        const selection = window.getSelection();
-        selection.removeAllRanges();
-        selection.addRange(range);
-      }
-    }, 0);
-  }, [isEditing]);
+  const content = useMemo(() => {
+    let value = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION });
+    return getTrimmedString(value);
+  }, [record]);
 
-  const closeEditor = useCallback(() => {
-    if (!isEditing) return;
-    const value = ref.current.innerText;
-    if (value !== content) {
-      onChange(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION, getTrimmedString(value) || '');
-    }
-    setIsEditing(false);
-  }, [isEditing, content, onChange]);
+  const handleChange = useCallback((value) => {
+    const trimmed = getTrimmedString(value).replace(/^[\s\u200B]+|[\s\u200B]+$/g, '');
+    onChange && onChange(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION, trimmed);
+  }, [onChange]);
 
-  const onKeyDown = useCallback((event) => {
-    if (event.keyCode === KeyCodes.Enter) {
-      event.preventDefault();
-      closeEditor();
-    }
-  }, [closeEditor]);
-
-  const onInputChange = useCallback(() => {
-    setValue(ref.current.innerText);
-  }, []);
-
-  useEffect(() => {
-    setValue(content);
-    if (record) {
-      const description = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION });
-      ref.current.innerText = description || '';
-    }
-  }, [record, content]);
+  const column = { key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) };
 
   return (
     <div className="sf-metadata-dirent-detail-description-container">
-      <ClickOutside onClickOutside={closeEditor}>
-        <div
-          className={classNames('sf-metadata-dirent-detail-description', { 'empty': !value })}
-          ref={ref}
-          placeholder={gettext('Add description')}
-          contentEditable={isEditing}
-          onClick={displayEditor}
-          onKeyDown={onKeyDown}
-          onInput={onInputChange}
-        />
-      </ClickOutside>
+      <LongTextEditor field={column} value={content} placeholder={gettext('Add description')} textNeedSlice={false} onChange={handleChange} />
     </div>
   );
 };

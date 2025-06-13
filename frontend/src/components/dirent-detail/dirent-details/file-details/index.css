@@ -22,31 +22,23 @@
 .sf-metadata-dirent-detail-description-container {
   width: calc(100% + 8px);
   height: fit-content;
-  margin: 0 -4px;
-}
-
-.sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description {
-  width: 100%;
-  height: auto;
   min-height: 34px;
-  overflow-y: hidden;
-  padding: 6px 4px;
-  border: none;
+  margin: 0 -4px;
   border-radius: 3px;
   font-size: 0.875rem;
+}
+
+.sf-metadata-dirent-detail-description-container .sf-metadata-property-detail-editor.sf-metadata-long-text-property-detail-editor {
+  padding: 6px 4px;
+  cursor: pointer;
+}
+
+.sf-metadata-dirent-detail-description-container:hover,
+.sf-metadata-dirent-detail-description-container .sf-metadata-property-detail-editor.sf-metadata-long-text-property-detail-editor:not(:empty) {
   background-color: #f5f5f5;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
+}
+
+.sf-metadata-dirent-detail-description-container .sf-metadata-property-detail-editor.sf-metadata-long-text-property-detail-editor .long-text-formatter.sf-metadata-property-detail-formatter {
+  white-space: normal;
   word-break: normal;
-  cursor: text;
-}
-
-.sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description.empty::before {
-  content: attr(placeholder);
-  color: #666;
-  font-size: 14px;
-}
-
-.sf-metadata-dirent-detail-description-container .sf-metadata-dirent-detail-description:focus-visible {
-  outline: none;
 }
