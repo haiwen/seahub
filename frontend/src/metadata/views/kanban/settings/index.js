@@ -20,8 +20,9 @@ const Settings = ({
   onClose
 }) => {
   const { globalHiddenColumns } = useMetadataStatus();
+  const validColumns = useMemo(() => columns.filter(column => !globalHiddenColumns.includes(column.key)), [columns, globalHiddenColumns]);
   const groupByColumnOptions = useMemo(() => {
-    return columns
+    return validColumns
       .filter(col => col.type === CellType.SINGLE_SELECT || col.type === CellType.COLLABORATOR)
       .map(col => ({
         value: col.key,
@@ -32,10 +33,9 @@ const Settings = ({
           </>
         )
       }));
-  }, [columns]);
+  }, [validColumns]);
   const titleColumnOptions = useMemo(() => {
-    return columns
-      .filter(col => !globalHiddenColumns.includes(col.key))
+    return validColumns
       .map(col => ({
         value: col.key,
         label: (
@@ -45,23 +45,23 @@ const Settings = ({
           </>
         )
       }));
-  }, [columns, globalHiddenColumns]);
+  }, [validColumns]);
 
   const displayColumns = useMemo(() => {
-    const displayColumnsConfig = settings[KANBAN_SETTINGS_KEYS.COLUMNS];
+    const displayColumnsConfig = settings[KANBAN_SETTINGS_KEYS.COLUMNS].filter(column => !globalHiddenColumns.includes(column.key));
     const titleColumnKey = settings[KANBAN_SETTINGS_KEYS.TITLE_COLUMN_KEY];
-    const validColumns = columns.filter(item => item.key !== titleColumnKey && !globalHiddenColumns.includes(item.key));
-    if (!displayColumnsConfig) return validColumns.map(column => ({ ...column, shown: false }));
+    const filteredColumns = validColumns.filter(item => item.key !== titleColumnKey);
+    if (!displayColumnsConfig) return filteredColumns.map(column => ({ ...column, shown: false }));
     const validDisplayColumnsConfig = displayColumnsConfig.map(columnConfig => {
       const column = columnsMap[columnConfig.key];
       if (column) return { ...column, shown: columnConfig.shown };
       return null;
     }).filter(column => column && column.key !== titleColumnKey);
-    const addedColumns = validColumns
+    const addedColumns = filteredColumns
       .filter(column => !getColumnByKey(validDisplayColumnsConfig, column.key))
       .map(column => ({ ...column, shown: false }));
-    return [...validDisplayColumnsConfig, ...addedColumns].filter(col => !globalHiddenColumns.includes(col.key));
-  }, [columns, columnsMap, settings, globalHiddenColumns]);
+    return [...validDisplayColumnsConfig, ...addedColumns];
+  }, [validColumns, columnsMap, settings, globalHiddenColumns]);
 
   const displayColumnsConfig = useMemo(() => displayColumns.map(column => ({ key: column.key, shown: column.shown })), [displayColumns]);
 

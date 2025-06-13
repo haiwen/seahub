@@ -233,7 +233,6 @@ class MetadataGlobalHiddenColumnsView(APIView):
 
     def put(self, request, repo_id):
         global_hidden_columns = request.data.get('global_hidden_columns', [])
-        print(global_hidden_columns)
         if not isinstance(global_hidden_columns, list):
             error_msg = 'global_hidden_columns must be a list.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

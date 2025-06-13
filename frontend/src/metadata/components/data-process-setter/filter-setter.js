@@ -8,6 +8,7 @@ import { getValidFilters } from '../../utils/filter';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 import { VIEW_TYPE } from '../../constants';
+import { useMetadataStatus } from '../../../hooks';
 
 const FilterSetter = ({
   readOnly,
@@ -25,13 +26,19 @@ const FilterSetter = ({
 }) => {
   const [isShowSetter, setShowSetter] = useState(false);
 
+  const { globalHiddenColumns } = useMetadataStatus();
+
+  const validColumns = useMemo(() => columns.filter(column => !globalHiddenColumns.includes(column.key)), [globalHiddenColumns, columns]);
+
+  const validBasicFilters = useMemo(() => basicFilters.filter(filter => !globalHiddenColumns.includes(filter.column_key)), [globalHiddenColumns, basicFilters]);
+
   const filters = useMemo(() => {
-    return deepCopy(getValidFilters(propsFilters || [], columns));
-  }, [propsFilters, columns]);
+    return deepCopy(getValidFilters(propsFilters || [], validColumns));
+  }, [propsFilters, validColumns]);
 
   const filtersCount = useMemo(() => {
-    return filters.length + basicFilters.length;
-  }, [filters, basicFilters]);
+    return filters.length + validBasicFilters.length;
+  }, [filters, validBasicFilters]);
 
   const message = useMemo(() => {
     if (filtersCount === 1) return gettext('1 filter');
@@ -50,11 +57,11 @@ const FilterSetter = ({
 
   const onChange = useCallback((update) => {
     const { filters, filter_conjunction, basic_filters } = update || {};
-    const validFilters = getValidFilters(filters, columns);
+    const validFilters = getValidFilters(filters, validColumns);
     modifyFilters(validFilters, filter_conjunction, basic_filters);
-  }, [columns, modifyFilters]);
+  }, [validColumns, modifyFilters]);
 
-  if (!columns) return null;
+  if (!validColumns) return null;
   const className = classnames(wrapperClass, { 'active': filtersCount > 0 });
   return (
     <>
@@ -76,11 +83,11 @@ const FilterSetter = ({
           filtersClassName={filtersClassName}
           target={target}
           readOnly={readOnly}
-          columns={columns}
+          columns={validColumns}
           collaborators={collaborators}
           filterConjunction={filterConjunction}
           filters={filters}
-          basicFilters={basicFilters}
+          basicFilters={validBasicFilters}
           hidePopover={onSetterToggle}
           update={onChange}
           isPre={isPre}
