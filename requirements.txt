@@ -29,4 +29,3 @@ pypinyin==0.52.*
 dnspython==2.6.*
 pillow-heif==0.18.*
 redis==5.0.*
-html-to-markdown==1.3.*
