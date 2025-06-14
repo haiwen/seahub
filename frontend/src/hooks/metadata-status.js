@@ -3,12 +3,15 @@ import metadataAPI from '../metadata/api';
 import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
 import Loading from '../components/loading';
+import { PRIVATE_FILE_TYPE } from '../constants';
+import { EVENT_BUS_TYPE } from '../metadata/constants';
 import { enableSeafileAI } from '../utils/constants';
+
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
 
-export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, statusCallback, children }) => {
+export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMetadataView, statusCallback, children }) => {
   const enableMetadataManagement = useMemo(() => {
     if (repoInfo?.encrypted) return false;
     return window.app.pageOptions.enableMetadataManagement;
@@ -23,6 +26,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
   const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
+  const [globalHiddenColumns, setGlobalHiddenColumns] = useState([]);
 
   const cancelMetadataURL = useCallback((isSetRoot = false) => {
     // If attribute extension is turned off, unmark the URL
@@ -57,6 +61,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
         details_settings: detailsSettings,
         ocr_enabled: enableOCR,
         face_recognition_enabled: enableFaceRecognition,
+        global_hidden_columns: globalHiddenColumns,
       } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
@@ -67,6 +72,10 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
       setEnableOCR(enableSeafileAI && enableOCR);
       setEnableFaceRecognition(enableSeafileAI && enableFaceRecognition);
       setEnableMetadata(enableMetadata);
+      const parsedGlobalHiddenColumns = typeof globalHiddenColumns === 'string'
+        ? JSON.parse(globalHiddenColumns)
+        : (globalHiddenColumns || []);
+      setGlobalHiddenColumns(parsedGlobalHiddenColumns);
       setLoading(false);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error, true);
@@ -126,6 +135,19 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
     });
   }, [repoID, detailsSettings]);
 
+  const modifyGlobalHiddenColumns = useCallback((columns) => {
+    metadataAPI.modifyGlobalHiddenColumns(repoID, columns).then(res => {
+      setGlobalHiddenColumns(columns);
+      const isView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES);
+      if (isView) {
+        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
+      }
+    }).catch(error => {
+      toaster.danger(Utils.getErrorMsg(error));
+      setGlobalHiddenColumns(globalHiddenColumns);
+    });
+  }, [repoID, currentPath, globalHiddenColumns]);
+
   if (isLoading) {
     return (
       <div className="metadata-status-loading-container">
@@ -151,6 +173,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, hideMetadataView, sta
         updateEnableOCR,
         enableFaceRecognition,
         updateEnableFaceRecognition,
+        globalHiddenColumns,
+        modifyGlobalHiddenColumns,
       }}
     >
       {!isLoading && (
