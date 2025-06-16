@@ -186,6 +186,9 @@ class Item extends Component {
       case 'default':
         translateResult = gettext('Default');
         break;
+      case 'org':
+        translateResult = gettext('Organization');
+        break;
     }
     return translateResult;
   };

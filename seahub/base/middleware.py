@@ -13,11 +13,13 @@ from seaserv import ccnet_api
 from seahub.auth import logout
 from seahub.utils import render_error
 from seahub.organizations.models import OrgSettings
+from seahub.organizations.utils import generate_org_reactivate_link
 from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
 from seahub.api2.utils import api_error
 
 from seahub.settings import SITE_ROOT, SUPPORT_EMAIL
+from seahub.organizations.settings import ORG_ENABLE_REACTIVATE
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -34,30 +36,47 @@ class BaseMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
+
         username = request.user.username
         request.user.org = None
 
-        if CLOUD_MODE:
-            request.cloud_mode = True
+        # not enable multi-tenancy
+        request.cloud_mode = CLOUD_MODE
+        if not CLOUD_MODE or not MULTI_TENANCY:
+            return None
 
-            if MULTI_TENANCY:
-                orgs = ccnet_api.get_orgs_by_user(username)
-                if orgs:
-                    request.user.org = orgs[0]
-                    if not OrgSettings.objects.get_is_active_by_org(request.user.org):
-                        org_name = request.user.org.org_name
-                        error_msg = _(f"Team {org_name} is inactive.")
-                        if SUPPORT_EMAIL:
-                            error_msg += " " + _(f"Please contact {SUPPORT_EMAIL} if you want to activate the team.")
-                        logout(request)
-                        if "api2/" in request.path or "api/v2.1/" in request.path:
-                            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-                        return render_error(request, error_msg, {"organization_inactive": True})
+        # not org user
+        orgs = ccnet_api.get_orgs_by_user(username)
+        if not orgs:
+            return None
 
-        else:
-            request.cloud_mode = False
+        # org is active
+        request.user.org = orgs[0]
+        if OrgSettings.objects.get_is_active_by_org(request.user.org):
+            return None
 
-        return None
+        # handle inactive org
+        org_id = request.user.org.org_id
+        org_name = request.user.org.org_name
+        is_org_staff = request.user.org.is_staff
+        logout(request)
+
+        error_msg = _(f"Team {org_name} is inactive.")
+        if "api2/" in request.path or "api/v2.1/" in request.path:
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        extra_ctx = {"organization_inactive": True}
+
+        if ORG_ENABLE_REACTIVATE and is_org_staff:
+            reactivate_link = generate_org_reactivate_link(org_id)
+            extra_ctx["reactivate_link"] = reactivate_link
+            return render_error(request, error_msg, extra_ctx)
+
+        if SUPPORT_EMAIL:
+            contact_msg = _(f"Please contact {SUPPORT_EMAIL} if you want to activate the team.")
+            error_msg = f"{error_msg} {contact_msg}"
+
+        return render_error(request, error_msg, extra_ctx)
 
     def process_response(self, request, response):
         return response
