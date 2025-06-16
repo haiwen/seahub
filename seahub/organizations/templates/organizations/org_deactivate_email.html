@@ -1,0 +1,23 @@
+{% extends 'email_base.html' %}
+
+{% load i18n seahub_tags %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans with org_name=org_name %}You are receiving this email because your team {{org_name}} has been deactivated.{% endblocktrans %}
+</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans with link=reactivate_link %}
+If you like to continue using our site, click <a href="{{ link }}">here</a>. Otherwise your account will be deleted in 60 days.
+{% endblocktrans %}
+</p>
+
+{% endautoescape %}
+
+{% endblock %}

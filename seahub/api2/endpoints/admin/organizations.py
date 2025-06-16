@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 
+from django.utils.translation import gettext as _
 from django.utils.crypto import get_random_string
 
 from rest_framework.authentication import SessionAuthentication
@@ -12,8 +13,10 @@ from rest_framework import status
 from seaserv import ccnet_api, seafile_api
 
 from seahub.auth.utils import get_virtual_id_by_email
-from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT
-from seahub.utils import is_valid_email
+from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT, \
+        ORG_ENABLE_REACTIVATE
+from seahub.organizations.utils import generate_org_reactivate_link
+from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -182,7 +185,7 @@ class AdminOrganizations(APIView):
         result = []
         org_ids = [org.org_id for org in orgs]
         orgs_last_activity = OrgLastActivityTime.objects.filter(org_id__in=org_ids)
-        orgs_last_activity_dict = {org.org_id:org.timestamp for org in orgs_last_activity}
+        orgs_last_activity_dict = {org.org_id: org.timestamp for org in orgs_last_activity}
         for org in orgs:
             org_info = get_org_info(org)
             org_id = org_info['org_id']
@@ -408,6 +411,23 @@ class AdminOrganization(APIView):
 
             OrgSettings.objects.add_or_update(org, is_active=is_active == 'true')
 
+            if is_active == 'false' and IS_EMAIL_CONFIGURED and ORG_ENABLE_REACTIVATE:
+
+                subject = _(f'Your team {org.org_name} has been deactivated')
+                email_template = 'organizations/org_deactivate_email.html'
+                from_email = None
+
+                org_users = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
+                org_admin_users = [org_user.email for org_user in org_users
+                                   if ccnet_api.is_org_staff(org_id, org_user.email)]
+                for email in org_admin_users:
+                    con_context = {
+                        'org_name': org.org_name,
+                        'reactivate_link': generate_org_reactivate_link(org_id)
+                    }
+                    send_html_email(subject, email_template, con_context,
+                                    from_email, [email2contact_email(email)])
+
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
         return Response(org_info)
@@ -517,7 +537,7 @@ class AdminOrganizationsBaseInfo(APIView):
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        org_ids = request.GET.getlist('org_ids',[])
+        org_ids = request.GET.getlist('org_ids', [])
         include_org_staffs = to_python_boolean(request.GET.get('include_org_staffs', 'false'))
         orgs = []
         for org_id in org_ids:
