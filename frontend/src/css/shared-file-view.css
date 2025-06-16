@@ -20,8 +20,9 @@
 }
 
 .shared-file-view-head {
-  width: 950px;
+  width: 100%;
   height: 60px;
+  padding: 0 1rem;
   background: #fff;
   margin: 0 auto;
   display: flex;
