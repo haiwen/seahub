@@ -138,6 +138,10 @@
   margin-left: 0 !important;
 }
 
+.sdoc-editor-container .sdoc-editor-content.no-outline .sdoc-article-container {
+  margin: 0 auto !important;
+}
+
 .sdoc-file-history .sdoc-file-history-content .article {
   width: 100%;
 }
