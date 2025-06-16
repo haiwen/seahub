@@ -25,6 +25,8 @@ import { hideMenu, showMenu } from '../../../components/context-menu/actions';
 import URLDecorator from '../../../utils/url-decorator';
 
 import './index.css';
+import { LIST_MODE } from '../../../components/dir-view-mode/constants';
+import TagFileGrid from './tag-file-grid';
 
 const TAG_FILE_CONTEXT_MENU_ID = 'tag-files-context-menu';
 
@@ -32,7 +34,7 @@ const TagFiles = () => {
   const { tagsData } = useTags();
   const {
     tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
-    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile, sortBy, sortOrder, sortFiles
+    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile, sortBy, sortOrder, sortFiles, viewMode
   } = useTagView();
 
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
@@ -94,16 +96,9 @@ const TagFiles = () => {
     if (selectedFileIds.length > 0) updateSelectedFileIds([]);
   };
 
-  const onSelectFile = useCallback((event, fileId) => {
-    if (event.target.tagName === 'TD' && event.target.closest('td').querySelector('input[type="checkbox"]') === null) {
-      updateSelectedFileIds([fileId]);
-      return;
-    }
-    const newSelectedFileIds = selectedFileIds.includes(fileId)
-      ? selectedFileIds.filter(id => id !== fileId)
-      : [...selectedFileIds, fileId];
-    updateSelectedFileIds(newSelectedFileIds);
-  }, [selectedFileIds, updateSelectedFileIds]);
+  const onSelectFile = useCallback((fileIds) => {
+    updateSelectedFileIds(fileIds);
+  }, [updateSelectedFileIds]);
 
   const toggleMoveDialog = useCallback(() => {
     setIsMoveDialogOpen(!isMoveDialogOpen);
@@ -225,7 +220,11 @@ const TagFiles = () => {
         downloadTagFiles();
         break;
       case TextTranslation.RENAME.key:
-        window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
+        if (viewMode === LIST_MODE) {
+          window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
+        } else {
+          toggleRenameDialog();
+        }
         break;
       case TextTranslation.CONVERT_TO_SDOC.key:
         onConvertFile('sdoc');
@@ -259,7 +258,7 @@ const TagFiles = () => {
         break;
     }
     hideMenu();
-  }, [toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, onConvertFile, exportDocx, exportSdoc, toggleShareDialog, openViaClient, onHistory]);
+  }, [viewMode, toggleRenameDialog, toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, onConvertFile, exportDocx, exportSdoc, toggleShareDialog, openViaClient, onHistory]);
 
   const onTagFileContextMenu = useCallback((event, file) => {
     let menuList = [];
@@ -422,30 +421,59 @@ const TagFiles = () => {
   return (
     <>
       <div className="table-container" onClick={onContainerClick}>
-        <FixedWidthTable
-          headers={isDesktop ? headers : mobileHeaders}
-          className={classNames('table-hover', { 'table-thead-hidden': !isDesktop })}
-          theadOptions={isDesktop ? {
-            onMouseDown: onThreadMouseDown,
-            onContextMenu: onThreadContextMenu,
-          } : {}}
-        >
-          {tagFiles.rows.map(file => {
-            const fileId = getRecordIdFromRecord(file);
-            return (
-              <TagFile
-                key={fileId}
-                repoID={repoID}
-                isSelected={selectedFileIds ? selectedFileIds.includes(fileId) : false}
-                file={file}
-                tagsData={tagsData}
-                onSelectFile={onSelectFile}
-                openImagePreview={openImagePreview}
-                onRenameFile={handleRenameTagFile}
-                onContextMenu={onTagFileContextMenu}
-              />);
-          })}
-        </FixedWidthTable>
+        {viewMode === LIST_MODE ? (
+          <FixedWidthTable
+            headers={isDesktop ? headers : mobileHeaders}
+            className={classNames('table-hover', { 'table-thead-hidden': !isDesktop })}
+            theadOptions={isDesktop ? {
+              onMouseDown: onThreadMouseDown,
+              onContextMenu: onThreadContextMenu,
+            } : {}}
+          >
+            {tagFiles.rows.map(file => {
+              const fileId = getRecordIdFromRecord(file);
+              return (
+                <TagFile
+                  key={fileId}
+                  repoID={repoID}
+                  file={file}
+                  tagsData={tagsData}
+                  selectedFileIds={selectedFileIds}
+                  onSelectFile={onSelectFile}
+                  openImagePreview={openImagePreview}
+                  onRenameFile={handleRenameTagFile}
+                  onContextMenu={onTagFileContextMenu}
+                />);
+            })}
+          </FixedWidthTable>
+        ) : (
+          <>
+            {tagFiles.rows.length > 0 ? (
+              <ul className="grid-view">
+                {tagFiles.rows.map((file, index) => {
+                  const fileId = getRecordIdFromRecord(file);
+                  return (
+                    <TagFileGrid
+                      key={fileId}
+                      repoID={repoID}
+                      file={file}
+                      tagsData={tagsData}
+                      selectedFileIds={selectedFileIds}
+                      onSelectFile={onSelectFile}
+                      openImagePreview={openImagePreview}
+                      onRenameFile={handleRenameTagFile}
+                      onContextMenu={onTagFileContextMenu}
+                    />
+                  );
+                })}
+              </ul>
+            ) : (
+              <ul>
+                <EmptyTip text={gettext('No file')} className="w-100" />
+              </ul>
+            )}
+          </>
+        )}
       </div>
       {isImagePreviewerVisible && (
         <ImagePreviewer

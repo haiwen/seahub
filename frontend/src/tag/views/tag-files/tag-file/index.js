@@ -19,7 +19,7 @@ import './index.css';
 
 dayjs.extend(relativeTime);
 
-const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePreview, onRenameFile, onContextMenu }) => {
+const TagFile = ({ repoID, file, tagsData, selectedFileIds, onSelectFile, openImagePreview, onRenameFile, onContextMenu }) => {
   const [highlight, setHighlight] = useState(false);
   const [isIconLoadError, setIconLoadError] = useState(false);
   const [isRenameing, setIsRenaming] = useState(false);
@@ -57,6 +57,8 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
     return displayIcons.defaultIconUrl;
   }, [isIconLoadError, displayIcons]);
 
+  const isSelected = useMemo(() => selectedFileIds ? selectedFileIds.includes(fileId) : false, [fileId, selectedFileIds]);
+
   const onMouseEnter = useCallback(() => {
     setHighlight(true);
   }, []);
@@ -67,8 +69,11 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
 
   const handleSelected = useCallback((event) => {
     event.stopPropagation();
-    onSelectFile(event, fileId);
-  }, [fileId, onSelectFile]);
+    const newSelectedFileIds = selectedFileIds.includes(fileId)
+      ? selectedFileIds.filter(id => id !== fileId)
+      : [...selectedFileIds, fileId];
+    onSelectFile(newSelectedFileIds);
+  }, [fileId, selectedFileIds, onSelectFile]);
 
   const onIconLoadError = useCallback(() => {
     setIconLoadError(true);
@@ -86,8 +91,15 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
   const handelClick = useCallback((event) => {
     event.stopPropagation();
     if (isRenameing) return;
-    onSelectFile(event, fileId);
-  }, [fileId, onSelectFile, isRenameing]);
+    if (event.target.tagName === 'TD' && event.target.closest('td').querySelector('input[type="checkbox"]') === null) {
+      onSelectFile([fileId]);
+      return;
+    }
+    const newSelectedFileIds = selectedFileIds.includes(fileId)
+      ? selectedFileIds.filter(id => id !== fileId)
+      : [...selectedFileIds, fileId];
+    onSelectFile(newSelectedFileIds);
+  }, [fileId, selectedFileIds, isRenameing, onSelectFile]);
 
   const onRenameCancel = useCallback(() => {
     setIsRenaming(false);
@@ -168,9 +180,10 @@ const TagFile = ({ isSelected, repoID, file, tagsData, onSelectFile, openImagePr
 };
 
 TagFile.propTypes = {
-  isSelected: PropTypes.bool,
   repoID: PropTypes.string,
+  tagsData: PropTypes.object,
   file: PropTypes.object,
+  selectedFileIds: PropTypes.array,
   onSelectFile: PropTypes.func,
   openImagePreview: PropTypes.func,
   reSelectFiles: PropTypes.func,
