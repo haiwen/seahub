@@ -49,5 +49,4 @@ def generate_org_reactivate_link(org_id):
     service_url = get_service_url().strip('/')
     url = reverse('org_reactivate', args=[i.token])
     url = f'{service_url}{url}'
-    print(url)
     return url
