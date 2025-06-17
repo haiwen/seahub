@@ -6419,7 +6419,7 @@ msgstr "此视图未应用任何分组。"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:120
 msgid "Add group"
-msgstr "增加群组"
+msgstr "增加分组"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/index.js:126
 msgid "Collapse all"
