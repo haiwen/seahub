@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.db.models.functions import Coalesce
 from django.db.models import Sum, Value
 
-from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL, ORG_MEMBER_QUOTA_ENABLED
+from seahub.settings import SEAFILE_AI_SECRET_KEY, SEAFILE_AI_SERVER_URL
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.constants import DEFAULT_USER
 from seahub.utils.user_permissions import get_user_role
