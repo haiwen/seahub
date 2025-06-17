@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CodeMirror from '@uiw/react-codemirror';
+import { EditorView } from '@codemirror/view';
 import { getLanguageExtensions } from './languages';
 import { myTheme } from './theme';
 
@@ -24,8 +25,11 @@ class SeafileCodeMirror extends React.Component {
   };
 
   render() {
-    const { value, readOnly = true, fileExt } = this.props;
-    const extensions = [...getLanguageExtensions(fileExt).filter(item => item !== null)];
+    const { value, readOnly = true, fileExt, lineWrapping } = this.props;
+    let extensions = [...getLanguageExtensions(fileExt).filter(item => item !== null)];
+    if (lineWrapping) {
+      extensions.push(EditorView.lineWrapping);
+    }
     return (
       <div className='seafile-code-mirror-container'>
         <CodeMirror

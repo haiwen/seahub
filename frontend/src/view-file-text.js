@@ -32,6 +32,7 @@ class FileContent extends React.Component {
           value={this.props.content}
           readOnly={!canEditFile}
           onChange={this.props.updateContent}
+          lineWrapping={this.props.lineWrapping}
         />
       </div>
     );
@@ -48,6 +49,7 @@ class ViewFileText extends React.Component {
       needSave: false,
       isSaving: false,
       participants: [],
+      lineWrapping: localStorage.getItem('sf_txt_file_line_wrapping') === 'true' || false,
     };
     this.onSave = this.onSave.bind(this);
     this.isParticipant = false;
@@ -59,6 +61,13 @@ class ViewFileText extends React.Component {
       needSave: true,
       content: value,
     });
+  };
+
+  updatelineWrapping = (value) => {
+    this.setState({
+      lineWrapping: value,
+    });
+    localStorage.setItem('sf_txt_file_line_wrapping', value);
   };
 
   onSave() {
@@ -139,6 +148,7 @@ class ViewFileText extends React.Component {
           <FileContent
             content={this.state.content}
             updateContent={this.updateContent}
+            lineWrapping={this.state.lineWrapping}
           />
         }
         isSaving={this.state.isSaving}
@@ -146,6 +156,8 @@ class ViewFileText extends React.Component {
         onSave={this.onSave}
         participants={this.state.participants}
         onParticipantsChange={this.onParticipantsChange}
+        lineWrapping={this.state.lineWrapping}
+        updatelineWrapping={this.updatelineWrapping}
       />
     );
   }
