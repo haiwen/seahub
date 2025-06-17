@@ -488,6 +488,10 @@ class UploadLinkUpload(APIView):
         if not password_check_passed:
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if uls.is_expired():
+            error_msg = 'Share link is expired'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         repo_id = uls.repo_id
         repo = seafile_api.get_repo(repo_id)
         if not repo:
