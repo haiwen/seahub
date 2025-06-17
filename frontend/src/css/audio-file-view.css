@@ -1,4 +1,5 @@
 .audio-file-view .video-js {
+  display: block; /* for the current video.js(v8.22.0) */
   width: calc(100% - 40px);
   max-width: 500px;
   height: 3em;

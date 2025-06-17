@@ -110,7 +110,7 @@ body {
   font-size: .8125rem;
 }
 
-.file-view-content {
+.file-view-body .file-view-content {
   padding: 30px 0;
   background: #f4f4f4;
   border-right: 4px solid transparent;
