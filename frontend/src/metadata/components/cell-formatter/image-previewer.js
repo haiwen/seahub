@@ -75,7 +75,6 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
 
   const rotateImage = (imageIndex, angle) => {
     if (imageIndex >= 0 && angle !== 0) {
-      const repoID = window.sfMetadataContext.getSetting('repoID');
       const imageItem = imageItems[imageIndex];
       const path = imageItem.rawPath;
       imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {

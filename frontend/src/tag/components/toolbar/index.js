@@ -1,10 +1,10 @@
 import SortSetter from './sort-setter';
-import TagFilesViewMode from './view-mode';
+import ViewModeSetter from './view-mode-setter';
 
 const TagFilesViewToolbar = () => {
   return (
     <>
-      <TagFilesViewMode />
+      <ViewModeSetter />
       <SortSetter />
     </>
   );

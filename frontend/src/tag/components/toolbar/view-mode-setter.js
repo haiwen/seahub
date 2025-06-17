@@ -3,7 +3,7 @@ import ViewModes from '../../../components/view-modes';
 import { TAG_FILES_VIEW_MODE, TAG_FILES_VIEW_MODE_DEFAULT } from '../../constants/mode';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
-const TagFilesViewMode = () => {
+const ViewModeSetter = () => {
   const [mode, setMode] = useState(TAG_FILES_VIEW_MODE_DEFAULT);
 
   const eventBus = useMemo(() => window.sfTagsDataContext?.eventBus, []);
@@ -26,4 +26,4 @@ const TagFilesViewMode = () => {
   );
 };
 
-export default TagFilesViewMode;
+export default ViewModeSetter;

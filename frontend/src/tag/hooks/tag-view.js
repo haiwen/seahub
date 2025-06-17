@@ -155,11 +155,12 @@ export const TagViewProvider = ({
           return row;
         })
       }));
+      updateSelectedFileIds([]);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [repoID, renameFileCallback]);
+  }, [repoID, renameFileCallback, updateSelectedFileIds]);
 
   const convertFile = useCallback((path, dstType) => {
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
