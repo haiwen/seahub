@@ -109,9 +109,9 @@ class ReplyList extends React.Component {
   };
 
   onInputFocus = () => {
-    if (this.inpurBlurTimer) {
-      clearTimeout(this.inpurBlurTimer);
-      this.inpurBlurTimer = null;
+    if (this.inputBlurTimer) {
+      clearTimeout(this.inputBlurTimer);
+      this.inputBlurTimer = null;
     }
     if (this.state.isInputFocus === false) {
       let defaultStyle = this.state.defaultStyle;
@@ -131,7 +131,7 @@ class ReplyList extends React.Component {
 
   onInputBlur = () => {
     if (this.state.isInputFocus === true) {
-      this.inpurBlurTimer = setTimeout(() => {
+      this.inputBlurTimer = setTimeout(() => {
         let defaultStyle = this.state.defaultStyle;
         defaultStyle['&multiLine']['input'].minHeight = 40;
         defaultStyle['&multiLine']['input'].height = 40;
