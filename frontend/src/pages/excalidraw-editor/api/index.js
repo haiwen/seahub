@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-class ExdrawServerApi {
+class ExcalidrawServerApi {
 
   constructor(options) {
     this.server = options.exdrawServer;
@@ -25,4 +25,4 @@ class ExdrawServerApi {
   }
 }
 
-export default ExdrawServerApi;
+export default ExcalidrawServerApi;

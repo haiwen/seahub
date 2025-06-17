@@ -1,109 +1,77 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import SimpleEditor from './simple-editor';
-import editorApi from './editor-api';
-import isHotkey from 'is-hotkey';
+import SimpleEditor from './editor';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
-import { Utils } from '../../utils/utils';
-import ExdrawServerApi from './collab/exdraw-server-api';
+import { updateAppIcon } from './utils/common-utils';
+import context from './context';
 
 import './index.css';
 
-const { docUuid, excalidrawServerUrl } = window.app.pageOptions;
-window.name = `${docUuid}`;
-
 const ExcaliEditor = () => {
-  const [fileContent, setFileContent] = useState(null);
   const editorRef = useRef(null);
   const isChangedRef = useRef(false);
   const [isFetching, setIsFetching] = useState(true);
-  const exdrawServerConfigRef = useRef({
-    exdrawServer: '',
-    exdrawUuid: '',
-    accessToken: ''
-  });
+  const [fileContent, setFileContent] = useState(null);
 
-  useEffect(() => {
-    editorApi.getExdrawToken().then(res => {
-      exdrawServerConfigRef.current = {
-        exdrawServer: excalidrawServerUrl,
-        exdrawUuid: docUuid,
-        accessToken: res
-      };
-      const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
-      exdrawServerApi.getSceneContent().then(res => {
-        setFileContent(res.data);
-        setIsFetching(false);
-      });
-    });
-    onSetFavicon();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const saveSceneContent = useCallback(async () => {
-    if (isChangedRef.current) {
-      try {
-        const exdrawServerApi = new ExdrawServerApi(exdrawServerConfigRef.current);
-        await exdrawServerApi.saveSceneContent(JSON.stringify(editorRef.current));
-        isChangedRef.current = false;
-        toaster.success(gettext('Successfully saved'), { duration: 2 });
-      } catch {
-        toaster.danger(gettext('Failed to save'), { duration: 2 });
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    const handleHotkeySave = (event) => {
-      if (isHotkey('mod+s', event)) {
-        event.preventDefault();
-      }
-    };
-
-    document.addEventListener('keydown', handleHotkeySave, true);
-    return () => {
-      document.removeEventListener('keydown', handleHotkeySave, true);
-    };
-  }, [saveSceneContent]);
-
+  // saved file interval
   useEffect(() => {
     const saveInterval = setInterval(() => {
       if (isChangedRef.current) {
-        editorApi.saveContent(JSON.stringify(editorRef.current)).then(res => {
+        context.saveSceneContent(JSON.stringify(editorRef.current)).then(res => {
           isChangedRef.current = false;
         });
       }
     }, SAVE_INTERVAL_TIME);
 
+    return () => {
+      clearInterval(saveInterval);
+    };
+  }, []);
+
+  // tips before refresh current page
+  useEffect(() => {
     const handleBeforeUnload = (event) => {
       if (isChangedRef.current) {
         event.preventDefault();
         event.returnValue = '';
       }
     };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
-
     return () => {
-      clearInterval(saveInterval);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [saveSceneContent]);
+  }, []);
 
-  const onSaveContent = useCallback(() => {
-    saveSceneContent();
-  }, [saveSceneContent]);
+  useEffect(() => {
+    updateAppIcon();
+  }, []);
+
+  useEffect(() => {
+    async function loadFileContent() {
+      await context.initSettings();
+      context.getSceneContent().then(res => {
+        setFileContent(res.data);
+        setIsFetching(false);
+      });
+    }
+    loadFileContent();
+  }, []);
+
+  const saveSceneContent = useCallback(async () => {
+    if (isChangedRef.current) {
+      context.saveSceneContent(JSON.stringify(editorRef.current)).then(res => {
+        isChangedRef.current = false;
+        toaster.success(gettext('Successfully saved'), { duration: 2 });
+      }).catch(error => {
+        toaster.danger(gettext('Failed to save'), { duration: 2 });
+      });
+    }
+  }, []);
 
   const onChangeContent = useCallback((elements) => {
     editorRef.current = { elements };
     isChangedRef.current = true;
-  }, []);
-
-  const onSetFavicon = useCallback(() => {
-    const { docName } = window.app.pageOptions;
-    const fileIcon = Utils.getFileIconUrl(docName);
-    document.getElementById('favicon').href = fileIcon;
   }, []);
 
   return (
@@ -111,7 +79,7 @@ const ExcaliEditor = () => {
       <SimpleEditor
         isFetching={isFetching}
         sceneContent={fileContent}
-        onSaveContent={onSaveContent}
+        onSaveContent={saveSceneContent}
         onChangeContent={onChangeContent}
       />
     </div>

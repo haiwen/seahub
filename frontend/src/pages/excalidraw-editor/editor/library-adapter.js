@@ -1,9 +1,5 @@
-import {
-  createStore,
-  get,
-  set
-} from 'idb-keyval';
-import { STORAGE_KEYS } from './constants';
+import { createStore, get, set } from 'idb-keyval';
+import { STORAGE_KEYS } from '../constants';
 
 export class LibraryIndexedDBAdapter {
   /** IndexedDB database and store name */
