@@ -219,7 +219,7 @@ class FileToolbar extends React.Component {
               title={gettext('More operations')}
               tag="span"
             >
-              <Icon symbol="more-vertical" />
+              <Icon symbol="more-level" />
             </DropdownToggle>
             <DropdownMenu>
               {/* {(
@@ -276,7 +276,7 @@ class FileToolbar extends React.Component {
                   ))}
           </ButtonGroup>
           <DropdownToggle tag="span" className="mx-1" aria-label={gettext('More operations')}>
-            <Icon symbol="more-vertical" />
+            <Icon symbol="more-level" />
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem>
