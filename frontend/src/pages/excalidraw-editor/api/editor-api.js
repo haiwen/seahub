@@ -1,5 +1,5 @@
-import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../../utils/seafile-api';
+import { Utils } from '../../../utils/utils';
 
 const { repoID, filePath, fileName } = window.app.pageOptions;
 let dirPath = Utils.getDirName(filePath);

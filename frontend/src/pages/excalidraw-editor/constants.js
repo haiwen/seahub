@@ -17,3 +17,6 @@ export const langList = {
 export const STORAGE_KEYS = {
   IDB_LIBRARY: 'excalidraw-library',
 };
+
+export const DELETED_ELEMENT_TIMEOUT = 24 * 60 * 60 * 1000; // 1 day
+
