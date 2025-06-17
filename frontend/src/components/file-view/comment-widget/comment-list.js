@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import classname from 'classnames';
 import deepCopy from 'deep-copy';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -195,9 +194,7 @@ class CommentList extends React.Component {
             <p className="text-center my-4">{gettext('No comment yet.')}</p>
           }
         </div>
-        <div
-          className={classname('seafile-comment-footer flex-shrink-0')}
-        >
+        <div className='seafile-comment-footer flex-shrink-0'>
           <MentionsInput
             value={this.state.comment}
             onChange={this.handleCommentChange}
