@@ -148,7 +148,12 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
   }, [isHiddenColumnsVisible, oldHiddenColumns, hiddenColumns, modifyHiddenColumns]);
 
   const count = hiddenColumns.length;
-  const text = gettext('Hide properties');
+  let text = gettext('Hide properties');
+  if (count === 1) {
+    text = gettext('1 Hidden property');
+  } else if (count > 1) {
+    text = `${count} ${gettext('Hidden properties')}`;
+  }
   return (
     <>
       {!showTurnOffConfirmDialog && (
@@ -180,7 +185,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
                   aria-label="hide properties"
                 >
                   <Icon symbol="hide" size={24} />
-                  <span className="ml-1">{count > 0 ? `${count} ${gettext('Hidden properties')}` : text }</span>
+                  <span className="ml-1">{text}</span>
                 </div>
                 {isHiddenColumnsVisible && (
                   <HideColumnPopover
