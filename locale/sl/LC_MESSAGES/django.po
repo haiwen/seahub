@@ -5242,7 +5242,7 @@ msgstr "prikaži označene"
 #: seahub/templates/snippets/office_convert_js.html:188
 #: seahub/templates/snippets/office_convert_js.html:213
 #: seahub/templates/snippets/spreadsheet_convert_js.html:30
-msgid "Document convertion failed."
+msgid "Document conversion failed."
 msgstr "Sprememba dokumenta, spodletela."
 
 #: seahub/templates/snippets/repo_create_form.html:9
