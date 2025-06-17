@@ -4754,7 +4754,7 @@ msgstr ""
 #: seahub/templates/snippets/office_convert_js.html:163
 #: seahub/templates/snippets/office_convert_js.html:170
 #: seahub/templates/snippets/office_convert_js.html:195
-msgid "Document convertion failed."
+msgid "Document conversion failed."
 msgstr ""
 
 #: seahub/templates/snippets/repo_create_form.html:9

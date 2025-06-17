@@ -8646,7 +8646,7 @@ msgstr ""
 #: frontend/src/view-file-document.js:53 frontend/src/view-file-document.js:71
 #: frontend/src/view-file-spreadsheet.js:53
 #: frontend/src/view-file-spreadsheet.js:66
-msgid "Document convertion failed."
+msgid "Document conversion failed."
 msgstr ""
 
 #: frontend/src/shared-file-view-image.js:42

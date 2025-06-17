@@ -50,7 +50,7 @@ class FileContent extends React.Component {
           case 'ERROR':
             this.setState({
               isLoading: false,
-              errorMsg: gettext('Document convertion failed.')
+              errorMsg: gettext('Document conversion failed.')
             });
             break;
           case 'DONE':
@@ -68,7 +68,7 @@ class FileContent extends React.Component {
         if (error.response) {
           this.setState({
             isLoading: false,
-            errorMsg: gettext('Document convertion failed.')
+            errorMsg: gettext('Document conversion failed.')
           });
         } else {
           this.setState({

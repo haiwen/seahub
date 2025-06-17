@@ -5384,7 +5384,7 @@ msgstr "แสดงเอาท์ไลน์"
 #: seahub/templates/snippets/office_convert_js.html:194
 #: seahub/templates/snippets/office_convert_js.html:220
 #: seahub/templates/snippets/spreadsheet_convert_js.html:33
-msgid "Document convertion failed."
+msgid "Document conversion failed."
 msgstr "แปลงเอกสารผิดพลาด"
 
 #: seahub/templates/snippets/password_strength_js.html:42

@@ -51,7 +51,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
               ref={inputRef}
               type="text"
               className="form-control"
-              placeholder={gettext('Seperate multiple suffixes by ","(like sdoc, pdf)')}
+              placeholder={gettext('Separate multiple suffixes by ","(like sdoc, pdf)')}
               value={inputValue}
               autoFocus
               onChange={handleInput}
