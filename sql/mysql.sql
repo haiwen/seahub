@@ -1654,3 +1654,33 @@ CREATE TABLE `notifications_sysusernotification` (
   KEY `notifications_sysusernotification_seen_9d851bf7` (`seen`),
   KEY `notifications_sysusernotification_created_at_56ffd2a0` (`created_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `stats_ai_by_team` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `org_id` bigint(20) NOT NULL,
+  `month` date NOT NULL,
+  `model` varchar(100) NOT NULL,
+  `input_tokens` int(11) DEFAULT NULL,
+  `output_tokens` int(11) DEFAULT NULL,
+  `cost` double NOT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `stats_ai_by_team_org_id_month_model` (`org_id`,`month`,`model`),
+  KEY `ix_stats_ai_by_team_org_id_month` (`org_id`,`month`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `stats_ai_by_owner` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `month` date NOT NULL,
+  `model` varchar(100) NOT NULL,
+  `input_tokens` int(11) DEFAULT NULL,
+  `output_tokens` int(11) DEFAULT NULL,
+  `cost` double NOT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`),
+  KEY `ix_stats_ai_by_owner_username_month` (`username`,`month`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

@@ -16,7 +16,7 @@ from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthenti
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
 from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
-    generate_file_tags, ocr
+    generate_file_tags, ocr, is_ai_exceed_by_assistant
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,8 @@ class ImageCaption(APIView):
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
         lang = request.data.get('lang')
-
+        org_id = request.user.org.org_id if request.user.org else None
+        username = request.user.username
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not path:
@@ -49,6 +50,9 @@ class ImageCaption(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if is_ai_exceed_by_assistant(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         permission = check_folder_permission(request, repo_id, os.path.dirname(path))
         if not permission:
@@ -72,7 +76,9 @@ class ImageCaption(APIView):
         params = {
             'path': path,
             'download_token': token,
-            'lang': lang
+            'lang': lang,
+            'org_id': org_id,
+            'username': username
         }
 
         try:
@@ -96,6 +102,8 @@ class GenerateSummary(APIView):
 
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
+        org_id = request.user.org.org_id if request.user.org else None
+        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -111,6 +119,9 @@ class GenerateSummary(APIView):
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if is_ai_exceed_by_assistant(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
@@ -128,7 +139,9 @@ class GenerateSummary(APIView):
 
         params = {
             'path': path,
-            'download_token': token
+            'download_token': token,
+            'org_id': org_id,
+            'username': username
         }
 
         try:
@@ -152,6 +165,8 @@ class GenerateFileTags(APIView):
 
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
+        org_id = request.user.org.org_id if request.user.org else None
+        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -167,6 +182,9 @@ class GenerateFileTags(APIView):
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if is_ai_exceed_by_assistant(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
@@ -185,6 +203,8 @@ class GenerateFileTags(APIView):
         params = {
             'path': path,
             'download_token': token,
+            'org_id': org_id,
+            'username': username
         }
 
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
@@ -230,7 +250,8 @@ class OCR(APIView):
 
         repo_id = request.data.get('repo_id')
         path = request.data.get('path')
-
+        org_id = request.user.org.org_id if request.user.org else None
+        username = request.user.username
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not path:
@@ -249,6 +270,9 @@ class OCR(APIView):
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if is_ai_exceed_by_assistant(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
@@ -272,6 +296,8 @@ class OCR(APIView):
         params = {
             'file_name': os.path.basename(path),
             'download_token': token,
+            'org_id': org_id,
+            'username': username
         }
 
         try:
@@ -296,6 +322,8 @@ class Translate(APIView):
 
         text = request.data.get('text')
         lang = request.data.get('lang')
+        org_id = request.user.org.org_id if request.user.org else None
+        username = request.user.username
 
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
@@ -305,6 +333,8 @@ class Translate(APIView):
         params = {
             'text': text,
             'lang': lang,
+            'org_id': org_id,
+            'username': username
         }
 
         try:
@@ -329,16 +359,23 @@ class WritingAssistant(APIView):
         text = request.data.get('text')
         writing_type = request.data.get('writing_type')
         custom_prompt = request.data.get('custom_prompt')
+        org_id =  request.user.org.org_id if request.user.org else None
+        username = request.user.username
 
         if not text:
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not custom_prompt and not writing_type:
             return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
 
+        if is_ai_exceed_by_assistant(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
+
         params = {
             'text': text,
             'writing_type': writing_type,
             'custom_prompt': custom_prompt,
+            'org_id': org_id,
+            'username': username
         }
 
         try:

@@ -106,7 +106,8 @@ from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD, SHARE_LINK_EXPIRE_DAYS_MAX, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_DEFAULT, \
-    ENABLE_METADATA_FOR_NEW_LIBRARY, ENABLE_METADATA_MANAGEMENT
+    ENABLE_METADATA_FOR_NEW_LIBRARY, ENABLE_METADATA_MANAGEMENT, \
+    ENABLE_SEAFILE_AI, SEAFILE_AI_SERVER_URL
 from seahub.subscription.utils import subscription_check
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
@@ -114,6 +115,7 @@ from seahub.views.file import get_office_feature_by_repo
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.repo_metadata.utils import init_metadata, init_tags, add_init_metadata_task
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+from seahub.ai.utils import get_ai_credit_by_user, get_ai_cost_by_user
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -311,16 +313,24 @@ class AccountInfo(APIView):
         email = request.user.username
         p = Profile.objects.get_profile_by_user(email)
         d_p = DetailedProfile.objects.get_detailed_profile_by_user(email)
-
+        org_id = None
         if is_org_context(request):
             org_id = request.user.org.org_id
             quota_total = seafile_api.get_org_user_quota(org_id, email)
             quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
             is_org_staff = request.user.org.is_staff
             info['is_org_staff'] = is_org_staff
+                
         else:
             quota_total = seafile_api.get_user_quota(email)
             quota_usage = seafile_api.get_user_self_usage(email)
+
+        if ENABLE_SEAFILE_AI and SEAFILE_AI_SERVER_URL:
+            info['ai_credit'] = get_ai_credit_by_user(request.user, org_id)
+            info['ai_cost'] = round(get_ai_cost_by_user(request.user, org_id), 2)
+            info['ai_usage_rate'] = str(float(info['ai_cost']) / info['ai_credit'] * 100) + '%'
+            if info['ai_credit'] == -1:
+                info['ai_usage_rate'] = '0%'
 
         if quota_total > 0:
             info['space_usage'] = str(float(quota_usage) / quota_total * 100) + '%'

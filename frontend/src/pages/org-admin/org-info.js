@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { orgAdminAPI } from '../../utils/org-admin-api';
-import { mediaUrl, gettext, orgMemberQuotaEnabled } from '../../utils/constants';
+import { mediaUrl, gettext, orgMemberQuotaEnabled, enableSeafileAI } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
 import '../../css/org-admin-info-page.css';
@@ -27,12 +27,12 @@ class OrgInfo extends Component {
       const {
         org_id, org_name, traffic_this_month, traffic_limit,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage
+        storage_quota, storage_usage, ai_cost, ai_credit
       } = res.data;
       this.setState({
         org_id, org_name, traffic_this_month, traffic_limit,
         member_quota, member_usage, active_members,
-        storage_quota, storage_usage
+        storage_quota, storage_usage, ai_cost, ai_credit
       });
     });
   }
@@ -41,7 +41,7 @@ class OrgInfo extends Component {
     const {
       org_id, org_name, traffic_this_month, traffic_limit,
       member_quota, member_usage, active_members,
-      storage_quota, storage_usage
+      storage_quota, storage_usage, ai_cost, ai_credit
     } = this.state;
     let download_traffic = traffic_this_month.link_file_download + traffic_this_month.sync_file_download + traffic_this_month.web_file_download;
     download_traffic = download_traffic ? download_traffic : 0;
@@ -124,7 +124,21 @@ class OrgInfo extends Component {
                     <p>{Utils.bytesToSize(download_traffic)}</p>
                   )}
                 </div>
+                {enableSeafileAI && (
+                  <div className="info-content-item">
+                    <h4 className="info-content-item-heading">{gettext('AI credit used this month')}</h4>
 
+                    <>
+                      <p className="info-content-space-text">{`${ai_credit > 0 ? (ai_cost / ai_credit * 100).toFixed(2) : '0'}%`}</p>
+                      <div className="progress-container">
+                        <div className="progress">
+                          <div className="progress-bar" role="progressbar" style={{ width: `${ai_cost / ai_credit * 100}%` }} aria-valuenow={download_traffic / traffic_limit * 100} aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <p className="progress-text m-0">{`${ai_cost} / ${ai_credit > 0 ? ai_credit : '--'}`}</p>
+                      </div>
+                    </>
+                  </div>
+                )}
               </div>
             </div>
           </div>

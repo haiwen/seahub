@@ -1086,6 +1086,7 @@ ENABLE_SEAFILE_AI = False
 
 SEAFILE_AI_SERVER_URL = ''
 SEAFILE_AI_SECRET_KEY = ''
+AI_PRICES = {}
 
 d = os.path.dirname
 EVENTS_CONFIG_FILE = os.environ.get(
