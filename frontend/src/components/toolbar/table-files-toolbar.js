@@ -16,6 +16,7 @@ import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const metadataRef = useRef([]);
+  const menuRef = useRef(null);
   const { enableOCR } = useMetadataStatus();
 
   const canModify = window.sfMetadataContext && window.sfMetadataContext.canModify();
@@ -139,7 +140,7 @@ const TableFilesToolbar = ({ repoID }) => {
         break;
       }
       case TextTranslation.OCR.key: {
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OCR, records[0]);
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OCR, records[0], menuRef.current.dropdownRef.current);
         break;
       }
       default:
@@ -180,8 +181,9 @@ const TableFilesToolbar = ({ repoID }) => {
       }
       {length > 0 && (
         <ItemDropdownMenu
+          ref={menuRef}
           item={{}}
-          toggleClass={'cur-view-path-btn sf3-font-more sf3-font'}
+          toggleClass="cur-view-path-btn sf3-font-more sf3-font"
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

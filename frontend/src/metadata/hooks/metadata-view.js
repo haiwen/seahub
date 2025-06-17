@@ -381,7 +381,7 @@ export const MetadataViewProvider = ({
     });
   }, [modifyRecords, generateDescription]);
 
-  const onOCR = useCallback((record) => {
+  const onOCR = useCallback((record, target) => {
     const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
     if (!fileName || !parentDir) return;
@@ -399,7 +399,7 @@ export const MetadataViewProvider = ({
         idOriginalRecordUpdates[updateRecordId] = { [descriptionColumnKey]: description || null };
         modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
       }
-    });
+    }, target);
   }, [modifyRecords, OCRAPI]);
 
   const generateFileTags = useCallback((record) => {

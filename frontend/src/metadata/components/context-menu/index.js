@@ -33,11 +33,8 @@ const ContextMenu = ({
       const dividerHeight = 16;
       const optionHeight = 32;
       const menuDefaultHeight = options.reduce((total, option) => {
-        if (option === 'Divider') {
-          return total + dividerHeight;
-        } else {
-          return total + optionHeight;
-        }
+        if (option === 'Divider') return total + dividerHeight;
+        return total + optionHeight;
       }, menuMargin + indent);
       if (menuStyles.left + menuDefaultWidth + indent > window.innerWidth) {
         menuStyles.left = window.innerWidth - menuDefaultWidth - indent;

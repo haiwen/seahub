@@ -14,7 +14,8 @@ function DragMask({ draggedRange, getSelectedRangeDimensions, getSelectedDimensi
     return (
       <CellMask
         {...dimensions}
-        className='react-grid-cell-dragged-over-down'
+        className="react-grid-cell-dragged-over-down"
+        id="sf-table-cell-dragged-over-down"
       />
     );
   }
