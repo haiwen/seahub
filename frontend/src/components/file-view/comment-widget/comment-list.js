@@ -25,16 +25,10 @@ class CommentList extends React.Component {
 
   constructor(props) {
     super(props);
-    const initStyle = defaultStyle;
-    initStyle['&multiLine']['input'].minHeight = 40;
-    initStyle['&multiLine']['input'].height = 40;
-    initStyle['&multiLine']['input'].borderRadius = '5px';
-    initStyle['&multiLine']['input'].borderBottom = '1px solid rgb(230, 230, 221)';
-    initStyle['&multiLine']['input'].lineHeight = '24px';
     this.state = {
       comment: '',
       isInputFocus: false,
-      defaultStyle: initStyle,
+      defaultStyle: defaultStyle,
       commentType: 'All comments',
     };
     this.toBeAddedParticipant = [];
@@ -116,13 +110,7 @@ class CommentList extends React.Component {
     }
     if (this.state.isInputFocus === false) {
       let defaultStyle = this.state.defaultStyle;
-      defaultStyle['&multiLine']['input'].maxHeight = 90;
-      defaultStyle['&multiLine']['input'].minHeight = 90;
-      defaultStyle['&multiLine']['input'].height = 90;
-      defaultStyle['&multiLine']['input'].borderBottom = 'none';
-      defaultStyle['&multiLine']['input'].borderRadius = '5px 5px 0 0';
-      defaultStyle['&multiLine']['input'].overflowY = 'auto';
-      defaultStyle['&multiLine']['input'].lineHeight = 'default';
+      defaultStyle['&multiLine']['input'].border = '1px solid #ff8e03';
       this.setState({
         isInputFocus: true,
         defaultStyle: deepCopy(defaultStyle),
@@ -134,11 +122,7 @@ class CommentList extends React.Component {
     if (this.state.isInputFocus === true) {
       this.inputBlurTimer = setTimeout(() => {
         let defaultStyle = this.state.defaultStyle;
-        defaultStyle['&multiLine']['input'].minHeight = 40;
-        defaultStyle['&multiLine']['input'].height = 40;
-        defaultStyle['&multiLine']['input'].borderBottom = '1px solid rgb(230, 230, 221)';
-        defaultStyle['&multiLine']['input'].borderRadius = '5px';
-        defaultStyle['&multiLine']['input'].lineHeight = '24px';
+        defaultStyle['&multiLine']['input'].border = '1px solid #e6e6dd';
         this.setState({
           isInputFocus: false,
           defaultStyle: deepCopy(defaultStyle),
@@ -182,7 +166,7 @@ class CommentList extends React.Component {
 
         <div
           className="flex-fill o-auto"
-          style={{ height: this.state.isInputFocus ? 'calc(100% - 170px)' : 'calc(100% - 124px)' }}
+          style={{ height: 'calc(100% - 170px)' }}
           ref={this.commentListScrollRef}
         >
           <CommentBodyHeader
@@ -213,7 +197,6 @@ class CommentList extends React.Component {
         </div>
         <div
           className={classname('seafile-comment-footer flex-shrink-0')}
-          style={{ height: this.state.isInputFocus ? '120px' : '72px' }}
         >
           <MentionsInput
             value={this.state.comment}
@@ -233,13 +216,11 @@ class CommentList extends React.Component {
               appendSpaceOnAdd={true}
             />
           </MentionsInput>
-          {this.state.isInputFocus &&
-            <div className="comment-submit-container">
-              <div onClick={this.onSubmit}>
-                <i className="sdocfont sdoc-save sdoc-comment-btn"></i>
-              </div>
+          <div className="comment-submit-container" style={{ borderColor: this.state.isInputFocus ? '#ff8e03' : '#e6e6dd' }}>
+            <div onClick={this.onSubmit}>
+              <i className="sdocfont sdoc-save sdoc-comment-btn"></i>
             </div>
-          }
+          </div>
         </div>
       </div>
     );
