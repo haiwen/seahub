@@ -7,26 +7,27 @@ import { LibraryIndexedDBAdapter } from './library-adapter';
 
 import '@excalidraw/excalidraw/index.css';
 
-const SimpleEditor = ({
-  sceneContent = null,
-  onChangeContent,
-  onSaveContent,
-  isFetching
-}) => {
+const UIOptions = {
+  canvasActions: {
+    saveToActiveFile: false,
+    LoadScene: false
+  },
+  tools: { image: false },
+};
+
+const hasChanged = (prev, current) => {
+  if (prev.length !== current.length) return true;
+
+  return current.some((element, index) => {
+    return element.version !== prev[index]?.version;
+  });
+};
+
+const SimpleEditor = ({ sceneContent = null, onChangeContent, onSaveContent, isFetching }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const prevElementsRef = useRef([]);
-  const UIOptions = {
-    canvasActions: {
-      saveToActiveFile: false,
-      LoadScene: false
-    },
-    tools: { image: false },
-  };
 
-  useHandleLibrary({
-    excalidrawAPI,
-    adapter: LibraryIndexedDBAdapter
-  });
+  useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
 
   const handleChange = () => {
     const elements = excalidrawAPI.getSceneElements();
@@ -50,14 +51,6 @@ const SimpleEditor = ({
     };
   }, [excalidrawAPI, onSaveContent]);
 
-  const hasChanged = (prev, current) => {
-    if (prev.length !== current.length) return true;
-
-    return current.some((element, index) => {
-      return element.version !== prev[index]?.version;
-    });
-  };
-
   if (isFetching) {
     return (
       <div className='excali-container'>
@@ -67,26 +60,24 @@ const SimpleEditor = ({
   }
 
   return (
-    <>
-      <div className='excali-container' style={{ height: '100%', width: '100%' }}>
-        <Excalidraw
-          initialData={sceneContent}
-          excalidrawAPI={(api) => setExcalidrawAPI(api)}
-          onChange={handleChange}
-          UIOptions={UIOptions}
-          langCode={langList[window.app.config.lang] || 'en'}
-        >
-          <MainMenu>
-            <MainMenu.DefaultItems.Export />
-            <MainMenu.DefaultItems.SaveAsImage />
-            <MainMenu.DefaultItems.Help />
-            <MainMenu.DefaultItems.ClearCanvas />
-            <MainMenu.DefaultItems.ToggleTheme />
-            <MainMenu.DefaultItems.ChangeCanvasBackground />
-          </MainMenu>
-        </Excalidraw>
-      </div>
-    </>
+    <div className='excali-container' style={{ height: '100%', width: '100%' }}>
+      <Excalidraw
+        initialData={sceneContent}
+        excalidrawAPI={(api) => setExcalidrawAPI(api)}
+        onChange={handleChange}
+        UIOptions={UIOptions}
+        langCode={langList[window.app.config.lang] || 'en'}
+      >
+        <MainMenu>
+          <MainMenu.DefaultItems.Export />
+          <MainMenu.DefaultItems.SaveAsImage />
+          <MainMenu.DefaultItems.Help />
+          <MainMenu.DefaultItems.ClearCanvas />
+          <MainMenu.DefaultItems.ToggleTheme />
+          <MainMenu.DefaultItems.ChangeCanvasBackground />
+        </MainMenu>
+      </Excalidraw>
+    </div>
   );
 };
 
