@@ -1,16 +1,12 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import SimpleEditor from './editor';
-import editorApi from './api/editor-api';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
 import { updateAppIcon } from './utils/common-utils';
-
-import './index.css';
 import context from './context';
 
-const { docUuid } = window.app.pageOptions;
-window.name = `${docUuid}`;
+import './index.css';
 
 const ExcaliEditor = () => {
   const editorRef = useRef(null);

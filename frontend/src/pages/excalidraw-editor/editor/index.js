@@ -3,9 +3,12 @@ import { Excalidraw, MainMenu, useHandleLibrary } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
 import Loading from '../../../components/loading';
 import { langList } from '../constants';
-import { LibraryIndexedDBAdapter } from '../library-adapter';
+import { LibraryIndexedDBAdapter } from './library-adapter';
 
 import '@excalidraw/excalidraw/index.css';
+
+const { docUuid } = window.app.pageOptions;
+window.name = `${docUuid}`;
 
 const UIOptions = {
   canvasActions: {
