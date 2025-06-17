@@ -21,7 +21,7 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, 
   const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
 
-  const { handelDownload: handelDownloadAPI } = useDownloadFile();
+  const { handleDownload: handleDownloadAPI } = useDownloadFile();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
@@ -65,8 +65,8 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, addFolder, 
       const name = image.parentDir === '/' ? image.name : `${image.parentDir}/${image.name}`;
       return { name };
     });
-    handelDownloadAPI('/', direntList);
-  }, [handelDownloadAPI, selectedImages]);
+    handleDownloadAPI('/', direntList);
+  }, [handleDownloadAPI, selectedImages]);
 
   const handleOptionClick = useCallback(option => {
     switch (option.value) {

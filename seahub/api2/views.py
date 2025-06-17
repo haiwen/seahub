@@ -1987,7 +1987,7 @@ class RepoOwner(APIView):
 
             break
 
-        # send a signal when successfully transfered repo
+        # send a signal when successfully transferred repo
         try:
             repo_transfer.send(sender=None, org_id=org_id,
                     repo_owner=repo_owner, to_user=new_owner, repo_id=repo_id,

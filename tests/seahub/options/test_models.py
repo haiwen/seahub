@@ -90,7 +90,7 @@ class UserOptionsManagerTest(BaseTestCase):
         assert len(UserOptions.objects.filter(email=self.user.email,
                                               option_key=KEY_WEBDAV_SECRET)) == 0
 
-    def test_file_udpates_email_interval(self, ):
+    def test_file_updates_email_interval(self, ):
         assert len(UserOptions.objects.filter(
             email=self.user.email, option_key=KEY_FILE_UPDATES_EMAIL_INTERVAL)) == 0
 

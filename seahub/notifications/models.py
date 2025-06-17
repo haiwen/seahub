@@ -397,7 +397,7 @@ class UserNotificationManager(models.Manager):
             to_user, MSG_TYPE_GUEST_INVITATION_ACCEPTED, detail)
 
     def add_repo_transfer_msg(self, to_user, detail):
-        """Nofity ``to_user`` that a library has been transfered to him/her.
+        """Nofity ``to_user`` that a library has been transferred to him/her.
         """
         return self._add_user_notification(
             to_user, MSG_TYPE_REPO_TRANSFER, detail)
@@ -926,7 +926,7 @@ class UserNotification(models.Model):
         repo_id = d['repo_id']
         repo_name = d['repo_name']
         repo_url = reverse('lib_view', args=[repo_id, repo_name, ''])
-        msg = _('%(user)s has transfered a library named <a href="%(repo_url)s">%(repo_name)s</a> to you.') % {
+        msg = _('%(user)s has transferred a library named <a href="%(repo_url)s">%(repo_name)s</a> to you.') % {
             'user': repo_owner_name,
             'repo_url': repo_url,
             'repo_name': repo_name,

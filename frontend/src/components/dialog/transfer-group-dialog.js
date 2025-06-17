@@ -12,7 +12,7 @@ import '../../css/transfer-group-dialog.css';
 
 const propTypes = {
   groupID: PropTypes.number.isRequired,
-  onGroupTransfered: PropTypes.func.isRequired,
+  onGroupTransferred: PropTypes.func.isRequired,
   toggleDialog: PropTypes.func.isRequired
 };
 
@@ -41,8 +41,8 @@ class TransferGroupDialog extends React.Component {
       return false;
     }
     seafileAPI.transferGroup(this.props.groupID, email).then((res) => {
-      toaster.success(gettext('Group has been transfered'));
-      this.props.onGroupTransfered(res.data);
+      toaster.success(gettext('Group has been transferred'));
+      this.props.onGroupTransferred(res.data);
       this.props.toggleDialog();
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);

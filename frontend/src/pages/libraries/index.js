@@ -292,7 +292,7 @@ class Libraries extends Component {
     this.setState({ groupList: newGroupList });
   };
 
-  onGroupTransfered = (group) => {
+  onGroupTransferred = (group) => {
     const { groupList } = this.state;
     let newGroupList = [...groupList];
     let targetGroup = newGroupList.find((item) => item.id === group.id);
@@ -487,7 +487,7 @@ class Libraries extends Component {
                         deleteRelatedGroupsRepos={this.deleteRelatedGroupsRepos}
                         addRepoToGroup={this.addRepoToGroup}
                         onGroupNameChanged={this.onGroupNameChanged}
-                        onGroupTransfered={this.onGroupTransfered}
+                        onGroupTransferred={this.onGroupTransferred}
                         onGroupDeleted={this.onGroupDeleted}
                         onLeavingGroup={this.onLeavingGroup}
                         unshareRepoToGroup={this.unshareRepoToGroup}

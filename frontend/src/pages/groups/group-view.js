@@ -239,7 +239,7 @@ class GroupView extends React.Component {
     });
   };
 
-  onGroupTransfered = (group) => {
+  onGroupTransferred = (group) => {
     this.setState({
       currentGroup: group
     });
@@ -281,7 +281,7 @@ class GroupView extends React.Component {
                       group={currentGroup}
                       addNewRepo={this.addNewRepo}
                       onGroupNameChanged={this.onGroupNameChanged}
-                      onGroupTransfered={this.onGroupTransfered}
+                      onGroupTransferred={this.onGroupTransferred}
                       onGroupDeleted={this.onGroupDeleted}
                       onLeavingGroup={this.onLeavingGroup}
                     />
