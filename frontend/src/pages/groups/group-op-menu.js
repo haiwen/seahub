@@ -23,7 +23,7 @@ const propTypes = {
   group: PropTypes.object.isRequired,
   addNewRepo: PropTypes.func.isRequired,
   onGroupNameChanged: PropTypes.func.isRequired,
-  onGroupTransfered: PropTypes.func.isRequired,
+  onGroupTransferred: PropTypes.func.isRequired,
   onGroupDeleted: PropTypes.func.isRequired,
   onLeavingGroup: PropTypes.func.isRequired
 };
@@ -241,7 +241,7 @@ class GroupOperationMenu extends React.Component {
         {this.state.isTransferGroupDialogOpen &&
           <TransferGroupDialog
             groupID={groupID}
-            onGroupTransfered={this.props.onGroupTransfered}
+            onGroupTransferred={this.props.onGroupTransferred}
             toggleDialog={this.toggleTransferGroupDialog}
           />
         }

@@ -65,7 +65,7 @@ const AIIcon = () => {
     setMenuShow(!isMenuShow);
   }, [isMenuShow]);
 
-  const handelOperation = useCallback((op) => {
+  const handleOperation = useCallback((op) => {
     const { value: opType, record } = op;
     const recordId = getRecordIdFromRecord(record);
     const parentDir = getParentDirFromRecord(record);
@@ -148,7 +148,7 @@ const AIIcon = () => {
       {isMenuShow && (
         <div className="sf-metadata-ai-dropdown-menu large">
           <DropdownMenu>
-            {options.map(op => (<DropdownItem key={op.value} onClick={() => handelOperation(op)}>{op.label}</DropdownItem>))}
+            {options.map(op => (<DropdownItem key={op.value} onClick={() => handleOperation(op)}>{op.label}</DropdownItem>))}
           </DropdownMenu>
         </div>
       )}

@@ -173,7 +173,7 @@ class NoticeItem extends React.Component {
       let repoName = detail.repo_name;
       let repoUrl = siteRoot + 'library/' + detail.repo_id + '/' + repoName + '/';
       // 1. handle translate
-      let notice = gettext('{user} has transfered a library named {repo_link} to you.');
+      let notice = gettext('{user} has transferred a library named {repo_link} to you.');
       // 2. handle xss(cross-site scripting)
       notice = notice.replace('{user}', repoOwner);
       notice = notice.replace('{repo_link}', `{tagA}${repoName}{/tagA}`);

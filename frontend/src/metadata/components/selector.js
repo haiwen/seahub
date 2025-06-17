@@ -4,7 +4,7 @@ import { SeahubSelect } from '../../components/common/select';
 
 const Selector = ({ options, settingKey, value, defaultValue, onChange }) => {
 
-  const handelOnChange = useCallback((option) => {
+  const handleOnChange = useCallback((option) => {
     const newValue = option.value;
     if (newValue === value) return;
     onChange(settingKey, newValue);
@@ -20,7 +20,7 @@ const Selector = ({ options, settingKey, value, defaultValue, onChange }) => {
       classNamePrefix="sf-metadata-setting-selector"
       value={selectedOption}
       options={options}
-      onChange={handelOnChange}
+      onChange={handleOnChange}
       isSearchable={false}
       isClearable={false}
       menuPortalTarget=".sf-metadata-view-setting-panel"

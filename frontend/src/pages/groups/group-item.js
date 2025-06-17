@@ -18,7 +18,7 @@ const propTypes = {
   unshareRepoToGroup: PropTypes.func,
   onTransferRepo: PropTypes.func.isRequired,
   onGroupNameChanged: PropTypes.func.isRequired,
-  onGroupTransfered: PropTypes.func.isRequired,
+  onGroupTransferred: PropTypes.func.isRequired,
   onGroupDeleted: PropTypes.func.isRequired,
   onLeavingGroup: PropTypes.func.isRequired
 };
@@ -86,7 +86,7 @@ class GroupItem extends React.Component {
               group={group}
               addNewRepo={this.addNewRepo}
               onGroupNameChanged={this.onGroupNameChanged}
-              onGroupTransfered={this.props.onGroupTransfered}
+              onGroupTransferred={this.props.onGroupTransferred}
               onGroupDeleted={this.onGroupDeleted}
               onLeavingGroup={this.onLeavingGroup}
             />

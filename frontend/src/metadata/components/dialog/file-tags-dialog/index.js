@@ -70,7 +70,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
     setSelectedTags(newSelectedTags);
   }, [selectedTags]);
 
-  const handelSubmit = useCallback(() => {
+  const handleSubmit = useCallback(() => {
     if (isLoading || selectedTags.length === 0) {
       onToggle();
       return;
@@ -137,7 +137,7 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
   return (
     <Modal
       isOpen={true}
-      toggle={() => { handelSubmit(); }}
+      toggle={() => { handleSubmit(); }}
       className="sf-file-tags"
       backdropClassName="sf-file-tags-backdrop"
     >

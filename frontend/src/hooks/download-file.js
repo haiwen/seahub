@@ -17,7 +17,7 @@ export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
   const pathRef = useRef('');
   const direntListRef = useRef([]);
 
-  const handelDownload = useCallback((path, direntList = []) => {
+  const handleDownload = useCallback((path, direntList = []) => {
     const direntCount = direntList.length;
     if (direntCount === 0) return;
     if (direntCount === 1 && !direntList[0].is_dir) {
@@ -50,14 +50,14 @@ export const DownloadFileProvider = ({ repoID, eventBus, children }) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribeDownloadFile = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_FILE, handelDownload);
+    const unsubscribeDownloadFile = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_FILE, handleDownload);
     return () => {
       unsubscribeDownloadFile();
     };
-  }, [eventBus, handelDownload]);
+  }, [eventBus, handleDownload]);
 
   return (
-    <DownloadFileContext.Provider value={{ eventBus, handelDownload }}>
+    <DownloadFileContext.Provider value={{ eventBus, handleDownload }}>
       {children}
       {isZipDialogOpen && (
         <ModalPortal>
