@@ -3,16 +3,18 @@ import PropTypes from 'prop-types';
 import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../../data-process-setter';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
+import { useMetadataStatus } from '../../../../hooks';
 
 const GalleryViewToolbar = ({
   readOnly, isCustomPermission, view, collaborators,
   modifyFilters, modifySorts, onToggleDetail,
 }) => {
+  const { globalHiddenColumns } = useMetadataStatus();
   const viewType = useMemo(() => view.type, [view]);
   const viewColumns = useMemo(() => {
     if (!view) return [];
-    return view.columns;
-  }, [view]);
+    return view.columns.filter(column => !globalHiddenColumns.includes(column.key));
+  }, [view, globalHiddenColumns]);
 
   const filterColumns = useMemo(() => {
     return viewColumns.filter(c => c.key !== PRIVATE_COLUMN_KEY.FILE_TYPE);

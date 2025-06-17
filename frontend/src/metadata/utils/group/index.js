@@ -2,6 +2,7 @@ import { isDateColumn } from '../column';
 import {
   CellType, DISPLAY_GROUP_DATE_GRANULARITY, GROUP_DATE_GRANULARITY, SORT_TYPE, SUPPORT_GROUP_COLUMN_TYPES, GROUPBY_DATE_GRANULARITY_LIST,
   GROUP_GEOLOCATION_GRANULARITY, DISPLAY_GROUP_GEOLOCATION_GRANULARITY,
+  PRIVATE_COLUMN_KEY,
 } from '../../constants';
 
 const GROUPBY_GEOLOCATION_GRANULARITY_LIST = [
@@ -84,7 +85,7 @@ export const getGroupbyGranularityByColumn = (column) => {
 
 export const generateDefaultGroupby = (columns) => {
   const dateColumn = columns.find(column => column.type === CellType.DATE) || columns.find(column => isDateColumn(column));
-  let groupby = { column_key: null, sort_type: SORT_TYPE.UP };
+  let groupby = { column_key: columns[0].key, sort_type: SORT_TYPE.UP };
   if (dateColumn) {
     groupby.column_key = dateColumn.key;
     groupby.count_type = getDefaultCountType(dateColumn);
