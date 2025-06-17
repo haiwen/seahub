@@ -2036,7 +2036,7 @@ msgstr "Interne link is gekopieerd naar het klembord"
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
-msgstr ""
+msgstr "Een interne koppeling is een koppeling naar een bestand of folder die toegankelijk is voor gebruikers die leesrechten hebben tot het bestand of de folder."
 
 #: frontend/src/components/dialog/internal-link-dialog.js:68
 #: frontend/src/components/dialog/share-dialog.js:129
@@ -7723,15 +7723,15 @@ msgstr "Openen via programma"
 
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:61
 msgid "Switch to plain text editor"
-msgstr ""
+msgstr "Schakel over naar standaard tekstbewerker"
 
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:63
 msgid "Switch to rich text editor"
-msgstr ""
+msgstr "Schakel over naar tekstbewerker met opmaak"
 
 #: frontend/src/pages/markdown-editor/index.js:92
 msgid "This file has been updated."
-msgstr ""
+msgstr "Dit bestand is geüpdatet."
 
 #: frontend/src/pages/markdown-editor/index.js:93
 msgid "Refresh"
