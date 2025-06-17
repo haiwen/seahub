@@ -2,16 +2,18 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../../data-process-setter';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
+import { useMetadataStatus } from '../../../../hooks';
 
 const TableViewToolbar = ({
   readOnly, view, collaborators,
   modifyFilters, modifySorts, modifyGroupbys, modifyHiddenColumns, modifyColumnOrder
 }) => {
+  const { globalHiddenColumns } = useMetadataStatus();
   const viewType = useMemo(() => view.type, [view]);
   const viewColumns = useMemo(() => {
     if (!view) return [];
-    return view.columns;
-  }, [view]);
+    return view.columns.filter(column => !globalHiddenColumns.includes(column.key));
+  }, [view, globalHiddenColumns]);
 
   const filterColumns = useMemo(() => {
     return viewColumns.filter(c => c.key !== PRIVATE_COLUMN_KEY.FILE_TYPE);

@@ -24,7 +24,8 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
       left: lastColumn.left + lastColumn.width + groupOffsetLeft,
       position: 'absolute',
     };
-  }, [lastColumn, height, groupOffsetLeft]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastColumn, lastColumn.left, height, groupOffsetLeft]);
 
   const toggleAddColumn = useCallback(() => {
     setColumnMenuOpen(!isColumnMenuOpen);

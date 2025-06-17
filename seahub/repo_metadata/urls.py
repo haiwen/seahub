@@ -3,7 +3,7 @@ from .apis import MetadataRecognizeFaces, MetadataRecords, MetadataManage, Metad
     MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
-    MetadataOCRManageView, PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags
+    MetadataOCRManageView, PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -31,6 +31,9 @@ urlpatterns = [
 
     # details settings
     re_path(r'^details-settings/', MetadataDetailsSettingsView.as_view(), name='api-v2.1-metadata-details-settings'),
+
+    # global hidden columns
+    re_path(r'^global-hidden-columns/$', MetadataGlobalHiddenColumnsView.as_view(), name='api-v2.1-metadata-global-hidden-columns'),
 
     # ocr
     re_path(r'^ocr/', MetadataOCRManageView.as_view(), name='api-v2.1-metadata-ocr'),

@@ -72,6 +72,7 @@ class RepoMetadata(models.Model):
     last_face_cluster_time = models.DateTimeField(db_index=True, blank=True, null=True)
     details_settings = models.TextField()
     ocr_enabled = models.BooleanField(db_index=True)
+    global_hidden_columns = models.TextField()
 
     objects = RepoMetadataManager()
 

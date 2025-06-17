@@ -2363,8 +2363,8 @@ class LibContentView extends React.Component {
     return (
       <DownloadFileProvider repoID={repoID} eventBus={this.props.eventBus}>
         <DndProvider backend={HTML5Backend}>
-          <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} hideMetadataView={this.hideMetadataView} statusCallback={this.metadataStatusCallback} >
-            <MetadataMiddlewareProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} tagsChangedCallback={this.tagsChangedCallback}>
+          <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} currentPath={path} hideMetadataView={this.hideMetadataView} statusCallback={this.metadataStatusCallback} >
+            <MetadataMiddlewareProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} onTreeNodeClick={this.onTreeNodeClick} tagsChangedCallback={this.tagsChangedCallback}>
               <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
                 <div className="main-panel-center flex-row">
                   <div className="cur-view-container">
