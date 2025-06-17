@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Excalidraw, MainMenu, useHandleLibrary } from '@excalidraw/excalidraw';
 import isHotkey from 'is-hotkey';
-import CodeMirrorLoading from '../../components/code-mirror-loading';
-import { langList } from './constants';
-import { LibraryIndexedDBAdapter } from './library-adapter';
+import Loading from '../../../components/loading';
+import { langList } from '../constants';
+import { LibraryIndexedDBAdapter } from '../library-adapter';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -15,26 +15,31 @@ const UIOptions = {
   tools: { image: false },
 };
 
-const hasChanged = (prev, current) => {
-  if (prev.length !== current.length) return true;
+const hasChanged = (elements, oldElements) => {
+  if (elements.length !== oldElements.length) return true;
 
-  return current.some((element, index) => {
-    return element.version !== prev[index]?.version;
+  return elements.some((element, index) => {
+    return element.version !== oldElements[index]?.version;
   });
 };
 
 const SimpleEditor = ({ sceneContent = null, onChangeContent, onSaveContent, isFetching }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
-  const prevElementsRef = useRef([]);
+  const prevElementsRef = useRef();
 
   useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
 
   const handleChange = () => {
+    if (!prevElementsRef.current) {
+      prevElementsRef.current = sceneContent?.elements || [];
+    }
+
     const elements = excalidrawAPI.getSceneElements();
     if (hasChanged(elements, prevElementsRef.current)) {
       onChangeContent(elements);
+      prevElementsRef.current = elements;
     }
-    prevElementsRef.current = elements;
+
   };
 
   useEffect(() => {
@@ -54,7 +59,7 @@ const SimpleEditor = ({ sceneContent = null, onChangeContent, onSaveContent, isF
   if (isFetching) {
     return (
       <div className='excali-container'>
-        <CodeMirrorLoading />
+        <Loading />
       </div>
     );
   }

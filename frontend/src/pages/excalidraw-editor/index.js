@@ -1,12 +1,12 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
-import SimpleEditor from './simple-editor';
+import SimpleEditor from './editor';
 import editorApi from './editor-api';
 import isHotkey from 'is-hotkey';
 import { gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import { SAVE_INTERVAL_TIME } from './constants';
 import { Utils } from '../../utils/utils';
-import ExdrawServerApi from './collab/exdraw-server-api';
+import ExdrawServerApi from './api';
 
 import './index.css';
 
@@ -89,7 +89,7 @@ const ExcaliEditor = () => {
       clearInterval(saveInterval);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [saveSceneContent]);
+  }, []);
 
   const onSaveContent = useCallback(() => {
     saveSceneContent();
