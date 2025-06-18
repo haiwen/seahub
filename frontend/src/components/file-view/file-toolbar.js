@@ -84,7 +84,13 @@ class FileToolbar extends React.Component {
     });
   };
 
-  toggle = () => {
+  toggle = (event) => {
+    if (this.state.dropdownOpen) {
+      const el = document.getElementById('mobile-txt-line-wrap-menu');
+      if (el && el.contains(event.target)) {
+        return;
+      }
+    }
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
@@ -307,6 +313,16 @@ class FileToolbar extends React.Component {
               </DropdownItem>
             )}
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
+            {fileExt && fileExt.toLowerCase() === 'txt' && (
+              <DropdownItem id='mobile-txt-line-wrap-menu' className='dropdown-item'>
+                <Switch
+                  checked={this.props.lineWrapping}
+                  placeholder={gettext('Line wrapping')}
+                  className="txt-line-wrap-menu w-100"
+                  onChange={() => this.props.updatelineWrapping(!this.props.lineWrapping)}
+                />
+              </DropdownItem>
+            )}
           </DropdownMenu>
         </Dropdown>
 
