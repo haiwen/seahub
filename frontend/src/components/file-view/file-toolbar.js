@@ -132,6 +132,7 @@ class FileToolbar extends React.Component {
     }
 
     const shortcutMain = Utils.isMac() ? '⌘ + ' : 'Ctrl + ';
+    const isTxt = fileExt && fileExt.toLowerCase() === 'txt';
 
     return (
       <Fragment>
@@ -228,11 +229,6 @@ class FileToolbar extends React.Component {
               <Icon symbol="more-level" />
             </DropdownToggle>
             <DropdownMenu>
-              {/* {(
-                <DropdownItem onClick={this.props.toggleCommentPanel}>
-                  {gettext('Comment')}
-                </DropdownItem>
-              )} */}
               {filePerm == 'rw' && (
                 <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
                   {gettext('History')}
@@ -246,16 +242,16 @@ class FileToolbar extends React.Component {
                   {gettext('Open via client')}
                 </a>
               )}
-              {fileExt && fileExt.toLowerCase() === 'txt' && (
+              {isTxt &&
                 <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
                   <Switch
                     checked={this.props.lineWrapping}
                     placeholder={gettext('Line wrapping')}
                     className="txt-line-wrap-menu w-100"
-                    onChange={() => this.props.updatelineWrapping(!this.props.lineWrapping)}
+                    onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
                   />
                 </DropdownItem>
-              )}
+              }
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -313,16 +309,16 @@ class FileToolbar extends React.Component {
               </DropdownItem>
             )}
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
-            {fileExt && fileExt.toLowerCase() === 'txt' && (
+            {isTxt &&
               <DropdownItem id='mobile-txt-line-wrap-menu' className='dropdown-item'>
                 <Switch
                   checked={this.props.lineWrapping}
                   placeholder={gettext('Line wrapping')}
                   className="txt-line-wrap-menu w-100"
-                  onChange={() => this.props.updatelineWrapping(!this.props.lineWrapping)}
+                  onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
                 />
               </DropdownItem>
-            )}
+            }
           </DropdownMenu>
         </Dropdown>
 

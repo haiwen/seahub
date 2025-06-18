@@ -171,7 +171,7 @@ class SharedFileView extends React.Component {
                         checked={this.props.lineWrapping}
                         placeholder={gettext('Line wrapping')}
                         className="txt-line-wrap-menu w-100"
-                        onChange={() => this.props.updatelineWrapping(!this.props.lineWrapping)}
+                        onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
                       />
                     </DropdownItem>
                   )}

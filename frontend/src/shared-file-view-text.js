@@ -22,14 +22,14 @@ const FileContent = ({ lineWrapping }) => {
 const SharedFileViewText = () => {
   let [lineWrapping, setLineWrapping] = useState(localStorage.getItem('sf_txt_file_line_wrapping') === 'true' || false);
 
-  const updatelineWrapping = (newLineWrapping) => {
+  const updateLineWrapping = (newLineWrapping) => {
     setLineWrapping(newLineWrapping);
   };
 
   return (
     <SharedFileView
       content={<FileContent lineWrapping={lineWrapping}/>}
-      updatelineWrapping={updatelineWrapping}
+      updateLineWrapping={updateLineWrapping}
       lineWrapping={lineWrapping}
       canWrapLine={true}
     />
