@@ -34,3 +34,4 @@ gettext('No public libraries have been created yet. A public library is accessib
 gettext('No libraries have been shared directly with you. A shared library can be shared with full or restricted permission. If you need access to a library owned by another user, ask the user to share the library with you.');
 gettext('Group info');
 gettext('Change view type');
+gettext('User {user_link} has added you to {group_link}');
