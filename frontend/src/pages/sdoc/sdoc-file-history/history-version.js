@@ -125,7 +125,7 @@ class HistoryVersion extends React.Component {
             ? (
               <>
                 <a
-                  className={`sf3-font sf3-font-more-vertical ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                  className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
                   title={gettext('More operations')}
                   aria-label={gettext('More operations')}
                   aria-expanded={this.state.isMenuShow}
@@ -159,7 +159,7 @@ class HistoryVersion extends React.Component {
               <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
                 <DropdownToggle
                   tag='a'
-                  className={`sf3-font sf3-font-more-vertical ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                  className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
                   data-toggle="dropdown"
                   aria-expanded={this.state.isMenuShow}
                   title={gettext('More operations')}

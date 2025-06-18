@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import HisotyListItem from './history-list-item';
+import HistoryListItem from './history-list-item';
 import Loading from '../loading';
 
 const propTypes = {
@@ -64,7 +64,7 @@ class HistoryListView extends React.Component {
       <ul className="history-list-container" onScroll={this.onScrollHandler}>
         {this.props.historyList.map((item, index) => {
           return (
-            <HisotyListItem
+            <HistoryListItem
               key={index}
               item={item}
               index={index}

@@ -55,7 +55,7 @@ class OnlyofficeFileToolbar extends React.Component {
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
             >
-              <Icon symbol="more-vertical" />
+              <Icon symbol="more-level" />
             </DropdownToggle>
             <DropdownMenu>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
@@ -73,7 +73,7 @@ class OnlyofficeFileToolbar extends React.Component {
 
         <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle} className="d-block d-md-none flex-shrink-0 ml-4">
           <DropdownToggle tag="span" className="mx-1" aria-label={gettext('More operations')}>
-            <Icon symbol="more-vertical" />
+            <Icon symbol="more-level" />
           </DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={this.props.toggleHeader}>{gettext('Fold')}</DropdownItem>
