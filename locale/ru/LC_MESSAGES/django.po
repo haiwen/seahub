@@ -194,7 +194,7 @@ msgstr "Библиотека не может быть передана влад�
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Ваша команда {org.org_name} была деактивирована"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
@@ -1095,7 +1095,7 @@ msgstr "Ваша квота почти заполнена на %s"
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "Квота команды почти полна %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1848,7 +1848,7 @@ msgstr "Гость %(user)s принял ваше <a href=\"%(url_base)s%(inv_ur
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s передал вам библиотеку <a href=\"%(repo_url)s\">%(repo_name)s</a>."
 
 #: seahub/notifications/models.py:1002
 #, python-brace-format
@@ -2123,14 +2123,14 @@ msgstr "Email адрес недействителен"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "Вы получили это письмо, потому что ваша команда %(org_name)s была деактивирована."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nЕсли вы хотите продолжить пользоваться нашим сайтом, нажмите <a href=\"%(link)s\">здесь</a>. В противном случае ваша учетная запись будет удалена через 60 дней.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2230,7 +2230,7 @@ msgstr "Неверный токен"
 #: seahub/organizations/views.py:352
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Токен с истекшим сроком действия."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2496,7 +2496,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n        Нажмите <a href=\"%(link)s\">здесь</a>, чтобы повторно активировать свою команду и войти в систему заново.\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2912,7 +2912,7 @@ msgstr "Ваш пароль на %(site_name)s был сброшен. Новый
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Квота команды почти заполнена %(site_name)s."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14

@@ -160,7 +160,7 @@ msgstr "{share_from} hat den Ordner {repo_link} für die Gruppe {group_link} fre
 #: frontend/src/components/common/notice-item.js:176
 #| msgid "{user} has transfered a library named {repo_link} to you."
 msgid "{user} has transferred a library named {repo_link} to you."
-msgstr ""
+msgstr "{user} hat die Bibliothek {repo_link} auf Sie übertragen."
 
 #: frontend/src/components/common/notice-item.js:274
 msgid "{user} created file {fileName} in library {libraryName}."
@@ -1701,7 +1701,7 @@ msgstr "Es ist bereits an den Benutzer freigegeben."
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:132
 #| msgid "Search groups"
 msgid "Search results"
-msgstr ""
+msgstr "Suchergebnisse"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:137
 #: frontend/src/components/sf-table/table-main/records-header/select-all.js:83
@@ -1723,7 +1723,7 @@ msgstr "Alle abwählen"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:167
 #| msgid "No users"
 msgid "No users found"
-msgstr ""
+msgstr "Keine Benutzer gefunden"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:167
 #: frontend/src/pages/org-admin/departments/department.js:189
@@ -2066,7 +2066,7 @@ msgstr "Tags importieren"
 #: frontend/src/components/dialog/import-tags-dialog.js:31
 #| msgid "Import tags"
 msgid "Importing tags..."
-msgstr ""
+msgstr "Tags werden importiert …"
 
 #: frontend/src/components/dialog/insert-file-dialog.js:56
 msgid "Select File"
@@ -3296,7 +3296,7 @@ msgstr "Bibliotheken zum Freigeben auswählen"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:290
 #| msgid "No share links"
 msgid "No share link"
-msgstr ""
+msgstr "Kein Freigabe-Link"
 
 #: frontend/src/components/dialog/share-to-invite-people.js:351
 #: frontend/src/pages/sys-admin/invitations/invitations.js:61
@@ -3715,7 +3715,7 @@ msgstr "Übertragen von Bibliothek {library_name}"
 #: frontend/src/components/dialog/transfer-group-dialog.js:44
 #| msgid "Group has been transfered"
 msgid "Group has been transferred"
-msgstr ""
+msgstr "Die Gruppe wurde übertragen"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:60
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
@@ -5213,7 +5213,7 @@ msgstr "Möchten Sie den Freigabe-Link wirklich löschen?"
 #: frontend/src/components/share-link-panel/link-item.js:172
 #| msgid "Code"
 msgid "QR Code"
-msgstr ""
+msgstr "QR-Code"
 
 #: frontend/src/components/share-link-panel/link-list.js:70
 #: frontend/src/utils/text-translation.js:100
@@ -6101,12 +6101,12 @@ msgstr "Möchten Sie die Texterkennung (OCR) wirklich deaktivieren? Alle OCR-Erg
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:153
 #| msgid "1 hidden property"
 msgid "1 Hidden property"
-msgstr ""
+msgstr "1 ausgeblendete Eigenschaft"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:155
 #| msgid "Hide properties"
 msgid "Hidden properties"
-msgstr ""
+msgstr "Ausgeblendete Eigenschaften"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:169
 msgid "Enable extended properties"
@@ -6122,11 +6122,11 @@ msgstr "Erweiterte Dateieigenschaften ermöglichen die Erfassung von Metadaten f
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:176
 #| msgid "xxx hidden properties"
 msgid "Global hidden properties"
-msgstr ""
+msgstr "Zentral ausgeblendete Eigenschaften"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:178
 msgid "Global hidden properties will not be displayed in all views."
-msgstr ""
+msgstr "Zentral ausgeblendete Eigenschaften werden generell nicht angezeigt."
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:211
 msgid "Turn off extended properties"
@@ -6187,7 +6187,7 @@ msgstr "OCR-Ergebnisse"
 #: frontend/src/metadata/components/dialog/ocr-result-dialog/index.js:98
 #| msgid "Failed to delete property"
 msgid "Save to description property"
-msgstr ""
+msgstr "Zur Eigenschaft der Beschreibung hinzufügen"
 
 #: frontend/src/metadata/components/dialog/ocr-result-dialog/index.js:107
 msgid "Full screen"
@@ -6220,7 +6220,7 @@ msgstr "Beschreibung erstellen"
 #: frontend/src/utils/text-translation.js:269
 #| msgid "Exact date"
 msgid "Extract text"
-msgstr ""
+msgstr "Text extrahieren"
 
 #: frontend/src/metadata/components/metadata-details/ai-icon.js:52
 #: frontend/src/metadata/views/table/context-menu.js:214
@@ -9133,7 +9133,7 @@ msgstr "Anzahl der Mitglieder"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:62
 msgid "Max number of members"
-msgstr ""
+msgstr "Maximale Anzahl der Mitglieder"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:70
 msgid "Number of groups"
@@ -9142,7 +9142,7 @@ msgstr "Anzahl der Gruppen"
 #: frontend/src/pages/sys-admin/orgs/org-info.js:80
 #| msgid "SAML config"
 msgid "SAML Config"
-msgstr ""
+msgstr "SAML-Konfiguration"
 
 #: frontend/src/pages/sys-admin/orgs/org-users.js:235
 #: frontend/src/pages/sys-admin/users/users-content.js:417
@@ -9311,7 +9311,7 @@ msgstr "Benutzername"
 #: frontend/src/pages/sys-admin/users/user-info.js:160
 #| msgid "Set Download Rate Limit"
 msgid "Download Rate Limit"
-msgstr ""
+msgstr "Download-Durchsatzbegrenzung"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:183
 #| msgid "Two-Factor Authentication"
@@ -9863,12 +9863,12 @@ msgstr "Tags zusammenführen in"
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:56
 #| msgid "Successfully edited labels."
 msgid "Successfully imported tags."
-msgstr ""
+msgstr "Import der Tags erfolgreich."
 
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:62
 #| msgid "Failed to restore {name}"
 msgid "Failed to import tags"
-msgstr ""
+msgstr "Import der Tags fehlgeschlagen"
 
 #: frontend/src/tag/hooks/tags.js:151
 msgid "copy"
@@ -9905,7 +9905,7 @@ msgstr "Das Zusammenführen von Tags ist fehlgeschlagen."
 #: frontend/src/tag/store/server-operator.js:146
 #| msgid "Failed to restore {name}"
 msgid "Failed to export tags"
-msgstr ""
+msgstr "Export der Tags fehlgeschlagen"
 
 #: frontend/src/tag/store/server-operator.js:153
 #: frontend/src/tag/store/server-operator.js:159

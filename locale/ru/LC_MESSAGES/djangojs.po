@@ -145,7 +145,7 @@ msgstr "{share_from} поделился папкой {repo_link} в группе
 #: frontend/src/components/common/notice-item.js:176
 #| msgid "{user} has transfered a library named {repo_link} to you."
 msgid "{user} has transferred a library named {repo_link} to you."
-msgstr ""
+msgstr "{user} передал вам библиотеку {repo_link}."
 
 #: frontend/src/components/common/notice-item.js:274
 msgid "{user} created file {fileName} in library {libraryName}."
@@ -1686,7 +1686,7 @@ msgstr "Он уже доступен пользователю"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:132
 #| msgid "Search groups"
 msgid "Search results"
-msgstr ""
+msgstr "Результаты поиска"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:137
 #: frontend/src/components/sf-table/table-main/records-header/select-all.js:83
@@ -1708,7 +1708,7 @@ msgstr "Отменить выбор всех"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:167
 #| msgid "No users"
 msgid "No users found"
-msgstr ""
+msgstr "Пользователи не найдены"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:167
 #: frontend/src/pages/org-admin/departments/department.js:189
@@ -2051,7 +2051,7 @@ msgstr "Импорт тегов"
 #: frontend/src/components/dialog/import-tags-dialog.js:31
 #| msgid "Import tags"
 msgid "Importing tags..."
-msgstr ""
+msgstr "Импорт тегов..."
 
 #: frontend/src/components/dialog/insert-file-dialog.js:56
 msgid "Select File"
@@ -3281,7 +3281,7 @@ msgstr "Выберите библиотеки, общий доступ к кот
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-to-user.js:290
 #| msgid "No share links"
 msgid "No share link"
-msgstr ""
+msgstr "Нет общедоступной ссылки"
 
 #: frontend/src/components/dialog/share-to-invite-people.js:351
 #: frontend/src/pages/sys-admin/invitations/invitations.js:61
@@ -3700,7 +3700,7 @@ msgstr "Передать библиотеку {library_name}"
 #: frontend/src/components/dialog/transfer-group-dialog.js:44
 #| msgid "Group has been transfered"
 msgid "Group has been transferred"
-msgstr ""
+msgstr "Группа была передана"
 
 #: frontend/src/components/dialog/transfer-group-dialog.js:60
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:106
@@ -5198,7 +5198,7 @@ msgstr "Вы уверены, что хотите удалить ссылку?"
 #: frontend/src/components/share-link-panel/link-item.js:172
 #| msgid "Code"
 msgid "QR Code"
-msgstr ""
+msgstr "QR код"
 
 #: frontend/src/components/share-link-panel/link-list.js:70
 #: frontend/src/utils/text-translation.js:100
@@ -6086,12 +6086,12 @@ msgstr "Вы действительно хотите отключить расп
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:153
 #| msgid "1 hidden property"
 msgid "1 Hidden property"
-msgstr ""
+msgstr "1 Скрытое свойство"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:155
 #| msgid "Hide properties"
 msgid "Hidden properties"
-msgstr ""
+msgstr "Скрытые свойства"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:169
 msgid "Enable extended properties"
@@ -6107,11 +6107,11 @@ msgstr "После включения расширенных свойств фа
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:176
 #| msgid "xxx hidden properties"
 msgid "Global hidden properties"
-msgstr ""
+msgstr "Глобальные скрытые свойства"
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:178
 msgid "Global hidden properties will not be displayed in all views."
-msgstr ""
+msgstr "Глобальные скрытые свойства будут отображаться не во всех представлениях."
 
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:211
 msgid "Turn off extended properties"
@@ -6172,7 +6172,7 @@ msgstr "Результат распознавания текста"
 #: frontend/src/metadata/components/dialog/ocr-result-dialog/index.js:98
 #| msgid "Failed to delete property"
 msgid "Save to description property"
-msgstr ""
+msgstr "Сохранить в описании свойства"
 
 #: frontend/src/metadata/components/dialog/ocr-result-dialog/index.js:107
 msgid "Full screen"
@@ -6205,7 +6205,7 @@ msgstr "Создать описание"
 #: frontend/src/utils/text-translation.js:269
 #| msgid "Exact date"
 msgid "Extract text"
-msgstr ""
+msgstr "Извлечь текст"
 
 #: frontend/src/metadata/components/metadata-details/ai-icon.js:52
 #: frontend/src/metadata/views/table/context-menu.js:214
@@ -9127,7 +9127,7 @@ msgstr "Количество групп"
 #: frontend/src/pages/sys-admin/orgs/org-info.js:80
 #| msgid "SAML config"
 msgid "SAML Config"
-msgstr ""
+msgstr "Конфигурация SAML"
 
 #: frontend/src/pages/sys-admin/orgs/org-users.js:235
 #: frontend/src/pages/sys-admin/users/users-content.js:417
@@ -9296,7 +9296,7 @@ msgstr "Login ID"
 #: frontend/src/pages/sys-admin/users/user-info.js:160
 #| msgid "Set Download Rate Limit"
 msgid "Download Rate Limit"
-msgstr ""
+msgstr "Ограничение скорости скачивания"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:183
 #| msgid "Two-Factor Authentication"
@@ -9848,12 +9848,12 @@ msgstr "Объединить теги с"
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:56
 #| msgid "Successfully edited labels."
 msgid "Successfully imported tags."
-msgstr ""
+msgstr "Теги импортированы."
 
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:62
 #| msgid "Failed to restore {name}"
 msgid "Failed to import tags"
-msgstr ""
+msgstr "Не удалось импортировать теги"
 
 #: frontend/src/tag/hooks/tags.js:151
 msgid "copy"
@@ -9890,7 +9890,7 @@ msgstr "Не удалось объединить теги"
 #: frontend/src/tag/store/server-operator.js:146
 #| msgid "Failed to restore {name}"
 msgid "Failed to export tags"
-msgstr ""
+msgstr "Не удалось экспортировать теги"
 
 #: frontend/src/tag/store/server-operator.js:153
 #: frontend/src/tag/store/server-operator.js:159

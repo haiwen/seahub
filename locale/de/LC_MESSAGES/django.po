@@ -84,7 +84,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-17 16:53+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2021,2024-2025\n"
 "Language-Team: German (http://app.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -250,7 +250,7 @@ msgstr "Bibliotheken können nicht auf ihre Eigentümer übertragen werden."
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Das Team {org.org_name} ist deaktiviert."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
@@ -1151,7 +1151,7 @@ msgstr "Ihr Speicherplatz auf %s ist fast ganz verbraucht"
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "Der Speicherplatz des Teams auf %s ist fast ganz verbraucht"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1892,7 +1892,7 @@ msgstr "Gast %(user)s hat die <a href=\"%(url_base)s%(inv_url)s\">Einladung</a> 
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s hat die Bibliothek <a href=\"%(repo_url)s\">%(repo_name)s</a> auf Sie übertragen."
 
 #: seahub/notifications/models.py:1002
 #, python-brace-format
@@ -2165,14 +2165,14 @@ msgstr "Die E-Mail-Adresse ist ungültig"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "Sie erhalten diese E-Mail, weil Ihr Team %(org_name)s deaktiviert wurde."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nWenn Sie diese Website weiter nutzen möchten, klicken Sie bitte <a href=\"%(link)s\">hier</a>. Andernfalls wird Ihr Account in 60 Tagen gelöscht.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2272,7 +2272,7 @@ msgstr "Ungültiges Token."
 #: seahub/organizations/views.py:352
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Das Token ist abgelaufen."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2538,7 +2538,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n        Klicken Sie bitte <a href=\"%(link)s\">hier</a> um Ihr Team wieder zu aktivieren und sich neu einzuloggen\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2954,7 +2954,7 @@ msgstr "Ihr Passwort auf %(site_name)s wurde zurückgesetzt. Es lautet nun %(pas
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Der Speicherplatz des Teams auf %(site_name)s ist fast ganz verbraucht."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
