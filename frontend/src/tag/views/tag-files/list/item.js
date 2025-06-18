@@ -79,6 +79,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
 
   const handelClickFileName = useCallback((event) => {
     event.preventDefault();
+    event.stopPropagation();
     const canPreview = window.sfTagsDataContext.canPreview();
     if (isRenaming || !canPreview) return;
     openFile(repoID, file, () => {

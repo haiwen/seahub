@@ -56,7 +56,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
     const recordId = imageItems[newIndex].id;
     const rowIdx = table.rows.findIndex(row => getRecordIdFromRecord(row) === recordId);
     if (rowIdx !== -1) {
-      onChangePosition(rowIdx, true);
+      onChangePosition && onChangePosition(rowIdx, true);
     }
   };
 
@@ -69,7 +69,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
     const recordId = imageItems[newIndex].id;
     const rowIdx = table.rows.findIndex(row => getRecordIdFromRecord(row) === recordId);
     if (rowIdx !== -1) {
-      onChangePosition(rowIdx, true);
+      onChangePosition && onChangePosition(rowIdx, true);
     }
   };
 
