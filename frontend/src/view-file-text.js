@@ -63,7 +63,7 @@ class ViewFileText extends React.Component {
     });
   };
 
-  updatelineWrapping = (value) => {
+  updateLineWrapping = (value) => {
     this.setState({
       lineWrapping: value,
     });
@@ -157,7 +157,7 @@ class ViewFileText extends React.Component {
         participants={this.state.participants}
         onParticipantsChange={this.onParticipantsChange}
         lineWrapping={this.state.lineWrapping}
-        updatelineWrapping={this.updatelineWrapping}
+        updateLineWrapping={this.updateLineWrapping}
       />
     );
   }
