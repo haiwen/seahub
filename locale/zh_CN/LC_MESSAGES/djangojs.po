@@ -9937,7 +9937,7 @@ msgstr "文件个数"
 #: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:142
 #: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:193
 msgid "Export tags"
-msgstr "导入标签"
+msgstr "导出标签"
 
 #: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:96
 #: frontend/src/tag/views/all-tags/tags-table/context-menu-options.js:173
