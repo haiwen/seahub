@@ -325,7 +325,7 @@ class TreeNodeView extends React.Component {
             <div className="right-icon">
               <ItemDropdownMenu
                 item={this.props.node}
-                toggleClass={'sf3-font sf3-font-more-vertical'}
+                toggleClass={'sf3-font sf3-font-more'}
                 getMenuList={this.calculateMenuList}
                 onMenuItemClick={this.onMenuItemClick}
                 freezeItem={this.props.freezeItem}

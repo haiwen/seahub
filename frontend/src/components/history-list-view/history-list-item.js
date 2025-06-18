@@ -69,15 +69,15 @@ class HistoryListItem extends React.Component {
     }
     let item = this.props.item;
     let time = dayjs(item.ctime).format('YYYY-MM-DD HH:mm');
-    let isHigtlightItem = false;
+    let isHighlightItem = false;
     if (this.props.item && this.props.currentItem) {
-      isHigtlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;
+      isHighlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;
     }
     let objID = this.props.currentItem.rev_file_id;
     let url = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: objID });
     return (
       <li
-        className={`history-list-item ${isHigtlightItem ? 'item-active' : ''}`}
+        className={`history-list-item ${isHighlightItem ? 'item-active' : ''}`}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onClick={this.onItemClick}
@@ -93,7 +93,7 @@ class HistoryListItem extends React.Component {
           <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
             <DropdownToggle
               tag='a'
-              className={`sf3-font sf3-font-more-vertical ${(this.state.isShowOperationIcon || isHigtlightItem) ? '' : 'invisible'}`}
+              className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
               data-toggle="dropdown"
               aria-expanded={this.state.isMenuShow}
               title={gettext('More operations')}

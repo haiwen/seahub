@@ -131,7 +131,7 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       {selectedFilesLen === 1 &&
         <ItemDropdownMenu
           item={{}}
-          toggleClass={'cur-view-path-btn sf3-font-more-vertical sf3-font'}
+          toggleClass={'cur-view-path-btn sf3-font-more sf3-font'}
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

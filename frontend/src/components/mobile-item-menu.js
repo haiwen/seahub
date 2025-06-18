@@ -32,7 +32,7 @@ class MobileItemMenu extends React.Component {
       <Dropdown isOpen={isMenuOpen} toggle={toggleMenu}>
         <DropdownToggle
           tag="i"
-          className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
+          className="sf-dropdown-toggle sf3-font sf3-font-more ml-0"
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"

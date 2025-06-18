@@ -2,3 +2,8 @@
 kbd.tlui-kbd {
   background-color: transparent;
 }
+
+/* menu more icon use horizontal points */
+.tldraw-editor-container .tlui-menu-zone .tlui-buttons__horizontal .tlui-popover:last-child .tlui-icon {
+  transform: rotate(90deg);
+}
