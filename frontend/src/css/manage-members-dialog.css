@@ -33,21 +33,6 @@
   margin-top: 10px;
 }
 
-.group-manage-members-dialog .add-members .toggle-detail-btn {
-  position: absolute;
-  top: 6px;
-  right: 90px;
-  border-left: 1px solid #ccc;
-  padding-left: 9px;
-  font-size: 18px;
-  cursor: pointer;
-  color: #999;
-}
-
-.group-manage-members-dialog .add-members .toggle-detail-btn:hover {
-  color: #666;
-}
-
 .group-manage-members-dialog .search-group-members {
   color: #666;
   font-size: 14px;

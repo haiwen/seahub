@@ -28,22 +28,3 @@
   justify-content: space-between;
   position: relative;
 }
-
-.share-link-container .add-members .share-to-user-select {
-  max-width: calc(100% - 10px);
-}
-
-.share-link-container .add-members .toggle-detail-btn {
-  position: absolute;
-  top: 6px;
-  right: 20px;
-  border-left: 1px solid #ccc;
-  padding-left: 9px;
-  font-size: 18px;
-  color: #999;
-  cursor: pointer;
-}
-
-.user-select.user-select-right-btn .true__value-container {
-  padding-right: 40px;
-}

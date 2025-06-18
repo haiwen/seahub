@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { gettext, isPro, cloudMode, isOrgContext } from '../../utils/constants';
+import { gettext, isPro } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils, isMobile } from '../../utils/utils';
@@ -11,6 +11,7 @@ import SharePermissionEditor from '../select-editor/share-permission-editor';
 import DepartmentDetailDialog from './department-detail-dialog';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
+import SelectUsersIcon from '../select-members-to-share-with';
 
 import '../../css/invitations.css';
 import '../../css/share-to-user.css';
@@ -247,7 +248,6 @@ class ShareToUser extends React.Component {
       sharedItems: [],
       isWiki: this.props.repoType === 'wiki',
       tmpUserList: [],
-      enableSelectMembersFromDept: false,
       isShowDepartmentDetailDialog: false,
       isLoading: true
     };
@@ -278,7 +278,6 @@ class ShareToUser extends React.Component {
   componentDidMount() {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
-    this.getPermForSelectMembersFromDept();
     seafileAPI.listSharedItems(repoID, path, 'user').then((res) => {
       if (res.data.length !== 0) {
         let tmpUserList = res.data.map(item => {
@@ -510,34 +509,8 @@ class ShareToUser extends React.Component {
     this.toggleDepartmentDetailDialog();
   };
 
-  getPermForSelectMembersFromDept = () => {
-    if (window.app.config.lang !== 'zh-cn') {
-      this.setState({
-        enableSelectMembersFromDept: false
-      });
-      return;
-    }
-
-    if (cloudMode && !isOrgContext) {
-      this.setState({
-        enableSelectMembersFromDept: false
-      });
-      return;
-    }
-
-    seafileAPI.listAddressBookDepartments().then((res) => {
-      this.setState({
-        enableSelectMembersFromDept: res.data.departments.length > 0
-      });
-    }).catch(error => {
-      this.setState({
-        enableSelectMembersFromDept: false
-      });
-    });
-  };
-
   render() {
-    const { sharedItems, enableSelectMembersFromDept } = this.state;
+    const { sharedItems } = this.state;
     let thead = (
       <thead>
         <tr>
@@ -568,17 +541,12 @@ class ShareToUser extends React.Component {
                 <div className='add-members'>
                   <UserSelect
                     isMulti={true}
-                    className={classnames('share-to-user-select', { 'user-select-right-btn': enableSelectMembersFromDept })}
+                    className="share-to-user-select"
                     placeholder={gettext('Search users...')}
                     onSelectChange={this.handleSelectChange}
                     selectedUsers={this.state.selectedUsers}
                   />
-                  {enableSelectMembersFromDept &&
-                    <span
-                      onClick={this.toggleDepartmentDetailDialog}
-                      className="sf3-font sf3-font-invite-visitors toggle-detail-btn">
-                    </span>
-                  }
+                  <SelectUsersIcon onClick={this.toggleDepartmentDetailDialog} />
                 </div>
               </td>
               <td>

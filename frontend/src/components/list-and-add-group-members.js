@@ -2,12 +2,13 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, InputGroup, InputGroupText, Input } from 'reactstrap';
 import { Utils } from '../utils/utils';
-import { gettext, cloudMode, isOrgContext } from '../utils/constants';
+import { gettext } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import UserSelect from './user-select';
 import toaster from './toast';
 import Loading from './loading';
 import GroupMembers from './group-members';
+import SelectUsersIcon from './select-members-to-share-with';
 
 const propTypes = {
   toggleManageMembersDialog: PropTypes.func,
@@ -21,7 +22,6 @@ class ManageMembersDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      enableSelectMembersFromDept: false,
       isLoading: true, // first loading
       isLoadingMore: false,
       groupMembers: [],
@@ -38,7 +38,6 @@ class ManageMembersDialog extends React.Component {
   }
 
   componentDidMount() {
-    this.getPermForSelectMembersFromDept();
     this.listGroupMembers(this.state.page);
   }
 
@@ -162,40 +161,8 @@ class ManageMembersDialog extends React.Component {
     });
   };
 
-  onClickDeptBtn = () => {
-    this.props.toggleDepartmentDetailDialog();
-  };
-
-  getPermForSelectMembersFromDept = () => {
-    if (window.app.config.lang !== 'zh-cn') {
-      this.setState({
-        enableSelectMembersFromDept: false
-      });
-      return;
-    }
-
-    if (cloudMode && !isOrgContext) {
-      this.setState({
-        enableSelectMembersFromDept: false
-      });
-      return;
-    }
-
-    seafileAPI.listAddressBookDepartments().then((res) => {
-      this.setState({
-        enableSelectMembersFromDept: res.data.departments.length > 0
-      });
-    }).catch(error => {
-      this.setState({
-        enableSelectMembersFromDept: false
-      });
-    });
-  };
-
-
   render() {
     const {
-      enableSelectMembersFromDept,
       isLoading, hasNextPage, groupMembers,
       keyword, membersFound,
       searchActive
@@ -205,16 +172,16 @@ class ManageMembersDialog extends React.Component {
       <Fragment>
         <p className="mb-2">{gettext('Add group member')}</p>
         <div className='add-members'>
-          <UserSelect
-            placeholder={gettext('Search users')}
-            onSelectChange={this.onSelectChange}
-            selectedUsers={this.state.selectedUsers}
-            isMulti={true}
-            className="add-members-select"
-          />
-          {enableSelectMembersFromDept &&
-            <span onClick={this.onClickDeptBtn} className="sf3-font sf3-font-invite-visitors toggle-detail-btn"></span>
-          }
+          <div className="position-relative">
+            <UserSelect
+              placeholder={gettext('Search users')}
+              onSelectChange={this.onSelectChange}
+              selectedUsers={this.state.selectedUsers}
+              isMulti={true}
+              className="add-members-select"
+            />
+            <SelectUsersIcon onClick={this.props.toggleDepartmentDetailDialog} />
+          </div>
           {this.state.selectedUsers.length > 0 ?
             <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
             <Button color="primary" disabled>{gettext('Submit')}</Button>

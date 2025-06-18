@@ -1,0 +1,19 @@
+.add-members .toggle-detail-btn {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  border-left: 1px solid #ccc;
+  padding-left: 9px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #999;
+}
+
+.add-members .toggle-detail-btn:hover {
+  color: #666;
+}
+
+/* for the input before .toggle-detail-btn */
+.selected-user-item-container:has(+ .toggle-detail-btn) {
+  padding-right: 40px;
+}
