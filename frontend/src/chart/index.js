@@ -63,7 +63,7 @@ const Chart = ({
   }, []);
 
   const updateXY = useCallback((svg, x, y, displayLegends) => {
-    // update y
+    // update x
     // nothing todo
 
     // update y

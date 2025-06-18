@@ -64,7 +64,7 @@
 .sf-chart .dot {
   pointer-events: none;
   transform: all .5s;
-  /* r: 3; */
+  r: 3;
 }
 
 .sf-chart .dot.highlight-dot {
