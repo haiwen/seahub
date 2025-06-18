@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import MainPanelTopbar from '../main-panel-topbar';
 import StatisticNav from './statistic-nav';
 import { Button, Input } from 'reactstrap';
-import { siteRoot, gettext } from '../../../utils/constants';
+import { siteRoot, gettext, serviceURL } from '../../../utils/constants';
 
 class StatisticReports extends React.Component {
 
@@ -23,7 +23,7 @@ class StatisticReports extends React.Component {
   };
 
   onGenerateReports = (type) => {
-    let url = siteRoot + 'api/v2.1/admin/statistics/';
+    let url = serviceURL + siteRoot + 'api/v2.1/admin/statistics/';
     let { month } = this.state;
     if (!month) {
       let errorMessage = gettext('It is required.');
