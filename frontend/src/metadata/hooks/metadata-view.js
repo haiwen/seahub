@@ -12,7 +12,7 @@ import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, 
 import { gettext } from '../../utils/constants';
 import { checkIsDir } from '../utils/row';
 import { useTags } from '../../tag/hooks';
-import { useMetadataAIOperations } from '../../hooks/metadata-ai-operation';
+import { useMetadataAIOperations } from '../../hooks';
 import { getColumnByKey } from '../utils/column';
 
 const MetadataViewContext = React.createContext(null);
@@ -509,7 +509,6 @@ export const MetadataViewProvider = ({
         modifyColumnWidth,
         insertColumn,
         updateFileTags,
-        addFolder: params.addFolder,
         updateCurrentPath: params.updateCurrentPath,
         updateSelectedRecordIds,
         updateRecordDetails,

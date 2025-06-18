@@ -1,11 +1,11 @@
 import React, { useContext, useCallback, useMemo, useState, useRef } from 'react';
-import metadataAPI from '../metadata/api';
-import { Utils } from '../utils/utils';
-import toaster from '../components/toast';
-import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../metadata/constants';
-import { gettext, lang } from '../utils/constants';
-import OCRResultDialog from '../metadata/components/dialog/ocr-result-dialog';
-import FileTagsDialog from '../metadata/components/dialog/file-tags-dialog';
+import metadataAPI from '../api';
+import { Utils } from '../../utils/utils';
+import toaster from '../../components/toast';
+import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../constants';
+import { gettext, lang } from '../../utils/constants';
+import OCRResultDialog from '../components/dialog/ocr-result-dialog';
+import FileTagsDialog from '../components/dialog/file-tags-dialog';
 
 // This hook provides content related to metadata ai operation
 const MetadataAIOperationsContext = React.createContext(null);

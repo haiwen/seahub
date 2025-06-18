@@ -92,10 +92,9 @@ export const EVENT_BUS_TYPE = {
   // tag file
   MOVE_TAG_FILE: 'move_tag_file',
   COPY_TAG_FILE: 'copy_tag_file',
-  RENAME_TAG_FILE: 'rename_tag_file',
-  TOGGLE_RENAME_DIALOG: 'toggle_rename_dialog',
+  RENAME_TAG_FILE_IN_SITU: 'rename_tag_file_in_situ',
+  RENAME_TAG_FILE_IN_DIALOG: 'rename_tag_file_in_dialog',
   SHARE_TAG_FILE: 'share_tag_file',
-  TOGGLE_ZIP_DIALOG: 'toggle_zip_dialog',
   DOWNLOAD_TAG_FILES: 'download_tag_files',
   DELETE_TAG_FILES: 'delete_tag_files',
   SELECT_TAG_FILES: 'select_tag_files',

@@ -26,8 +26,6 @@ const propTypes = {
   userPerm: PropTypes.string.isRequired,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
-  onAddFile: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -197,9 +195,8 @@ class DirPath extends React.Component {
               showShareBtn={this.props.showShareBtn}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               userPerm={this.props.userPerm}
+              eventBus={this.props.eventBus}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              onAddFile={this.props.onAddFile}
-              onAddFolder={this.props.onAddFolder}
               onUploadFile={this.props.onUploadFile}
               onUploadFolder={this.props.onUploadFolder}
               loadDirentList={this.props.loadDirentList}
@@ -269,8 +266,7 @@ class DirPath extends React.Component {
             enableDirPrivateShare={this.props.enableDirPrivateShare}
             userPerm={this.props.userPerm}
             isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-            onAddFile={this.props.onAddFile}
-            onAddFolder={this.props.onAddFolder}
+            eventBus={this.props.eventBus}
             onUploadFile={this.props.onUploadFile}
             onUploadFolder={this.props.onUploadFolder}
             loadDirentList={this.props.loadDirentList}
