@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
@@ -12,6 +13,8 @@ const propTypes = {
   onHighlightIndex: PropTypes.func,
   timer: PropTypes.number,
   onSetTimer: PropTypes.func,
+  deletable: PropTypes.bool,
+  onDeleteItem: PropTypes.func,
 };
 
 class SearchResultItem extends React.Component {
@@ -34,6 +37,13 @@ class SearchResultItem extends React.Component {
 
     if (this.props.onHighlightIndex) {
       this.props.onHighlightIndex(this.props.idx);
+    }
+  };
+
+  deleteItem = (e) => {
+    e.stopPropagation();
+    if (this.props.onDeleteItem) {
+      this.props.onDeleteItem(this.props.item);
     }
   };
 
@@ -61,6 +71,15 @@ class SearchResultItem extends React.Component {
           <div className="item-link ellipsis">{showName}</div>
           <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content }}></div>
         </div>
+        {this.props.isHighlight && (
+          <button
+            type="button"
+            className="search-icon-right sf3-font sf3-font-x-01"
+            onClick={this.deleteItem}
+            aria-label={gettext('Delete')}
+          >
+          </button>
+        )}
       </li>
     );
   }

@@ -73,6 +73,12 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           return; // Ignore abort errors
         }
         if (error.response && error.response.status === 404) {
+          const storeKey = 'sfVisitedSearchItems' + repoID;
+          const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+          const filteredItems = visitedItems.filter(item =>
+            item.path !== path || item.repo_id !== repoID
+          );
+          localStorage.setItem(storeKey, JSON.stringify(filteredItems));
           const err = `${dirent.type === 'file' ? 'File' : 'Folder'} does not exist`;
           setErrMessage(err);
           return;
