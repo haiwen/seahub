@@ -284,10 +284,6 @@ textarea::placeholder {
   color: #666;
 }
 
-a, a:hover {
-  color: #ED7109;
-}
-
 .vam {
   vertical-align: middle;
 }
@@ -356,7 +352,7 @@ a, a:hover {
 }
 
 .sf-link {
-  color: #ee8204 !important;
+  color: #ed7109 !important;
   cursor: pointer;
 }
 

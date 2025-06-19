@@ -250,10 +250,6 @@
   white-space: nowrap;
 }
 
-.sdoc-file-history-versions .history-list-item.item-active .history-info .name {
-  color: #ff9800;
-}
-
 /* mobile options modal */
 .sdoc-mobile-history-options-modal {
   margin: 0;
@@ -286,8 +282,9 @@
   background-color: #FFECD9 !important;
 }
 
+.sdoc-file-history-versions .history-list-item.item-active .history-info .name,
 .sdoc-file-history-versions .history-list-item.item-active .history-info .time {
-  color: #ff9800;
+  color: #ed7109;
 }
 
 .history-info .owner {
