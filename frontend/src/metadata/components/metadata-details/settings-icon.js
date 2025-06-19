@@ -7,9 +7,10 @@ import { useMetadataStatus } from '../../../hooks';
 const SettingsIcon = () => {
   const [isShowSetter, setShowSetter] = useState(false);
 
-  const { enableMetadata } = useMetadataStatus();
+  const { enableMetadata, globalHiddenColumns } = useMetadataStatus();
   const { modifyColumnOrder, modifyHiddenColumns, record, columns, canModifyDetails } = useMetadataDetails();
-  const hiddenColumns = useMemo(() => columns.filter(c => !c.shown).map(c => c.key), [columns]);
+  const validColumns = useMemo(() => columns.filter(c => !globalHiddenColumns.includes(c.key)), [columns, globalHiddenColumns]);
+  const hiddenColumns = useMemo(() => validColumns.filter(c => !c.shown).map(c => c.key), [validColumns]);
 
   const onSetterToggle = useCallback(() => {
     setShowSetter(!isShowSetter);
@@ -29,7 +30,7 @@ const SettingsIcon = () => {
           hiddenColumns={hiddenColumns}
           target={target}
           placement="bottom-end"
-          columns={columns}
+          columns={validColumns}
           hidePopover={onSetterToggle}
           onChange={modifyHiddenColumns}
           modifyColumnOrder={modifyColumnOrder}
