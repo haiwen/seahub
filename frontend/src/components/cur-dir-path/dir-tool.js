@@ -8,7 +8,7 @@ import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-searcher
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/sort-setter';
-import TagFilesSortSetter from '../../tag/views/tag-files/sort-setter';
+import TagFilesViewToolbar from '../../tag/components/toolbar';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -55,7 +55,7 @@ class DirTool extends React.Component {
       return (
         <div className="dir-tool">
           {isAllTagsView && <TagsTableSearcher />}
-          {isAllTagsView ? <AllTagsSortSetter /> : <TagFilesSortSetter />}
+          {isAllTagsView ? <AllTagsSortSetter /> : <TagFilesViewToolbar />}
         </div>
       );
     }

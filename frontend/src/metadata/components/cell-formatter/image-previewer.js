@@ -56,7 +56,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
     const recordId = imageItems[newIndex].id;
     const rowIdx = table.rows.findIndex(row => getRecordIdFromRecord(row) === recordId);
     if (rowIdx !== -1) {
-      onChangePosition(rowIdx, true);
+      onChangePosition && onChangePosition(rowIdx, true);
     }
   };
 
@@ -69,13 +69,12 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
     const recordId = imageItems[newIndex].id;
     const rowIdx = table.rows.findIndex(row => getRecordIdFromRecord(row) === recordId);
     if (rowIdx !== -1) {
-      onChangePosition(rowIdx, true);
+      onChangePosition && onChangePosition(rowIdx, true);
     }
   };
 
   const rotateImage = (imageIndex, angle) => {
     if (imageIndex >= 0 && angle !== 0) {
-      const repoID = window.sfMetadataContext.getSetting('repoID');
       const imageItem = imageItems[imageIndex];
       const path = imageItem.rawPath;
       imageAPI.rotateImage(repoID, path, 360 - angle).then((res) => {

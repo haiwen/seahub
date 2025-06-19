@@ -1,6 +1,5 @@
-import React, { useCallback, useState, useRef, useMemo, useEffect } from 'react';
-import classNames from 'classnames';
-import { useTagView, useTags } from '../../hooks';
+import { useCallback, useState, useRef, useMemo, useEffect } from 'react';
+import { useTagView } from '../../hooks';
 import { gettext, username } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import toaster from '../../../components/toast';
@@ -11,9 +10,7 @@ import ZipDownloadDialog from '../../../components/dialog/zip-download-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
 import FileAccessLog from '../../../components/dialog/file-access-log';
 import Rename from '../../../components/dialog/rename-dirent';
-import FixedWidthTable from '../../../components/common/fixed-width-table';
 import ImagePreviewer from '../../../metadata/components/cell-formatter/image-previewer';
-import TagFile from './tag-file';
 import TextTranslation from '../../../utils/text-translation';
 import { getRecordIdFromRecord } from '../../../metadata/utils/cell';
 import { seafileAPI } from '../../../utils/seafile-api';
@@ -23,16 +20,18 @@ import { getFileById, getFileName, getFileParentDir, getTagFileOperationList } f
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import { hideMenu, showMenu } from '../../../components/context-menu/actions';
 import URLDecorator from '../../../utils/url-decorator';
+import { LIST_MODE } from '../../../components/dir-view-mode/constants';
+import ListView from './list';
+import GridView from './grid';
 
 import './index.css';
 
 const TAG_FILE_CONTEXT_MENU_ID = 'tag-files-context-menu';
 
 const TagFiles = () => {
-  const { tagsData } = useTags();
   const {
     tagFiles, repoID, repoInfo, selectedFileIds, updateSelectedFileIds,
-    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile, sortBy, sortOrder, sortFiles
+    moveTagFile, copyTagFile, addFolder, deleteTagFiles, renameTagFile, getDownloadTarget, downloadTagFiles, convertFile, viewMode
   } = useTagView();
 
   const [isMoveDialogOpen, setIsMoveDialogOpen] = useState(false);
@@ -46,9 +45,6 @@ const TagFiles = () => {
   const currentImageRef = useRef(null);
 
   const canDelete = useMemo(() => window.sfTagsDataContext && window.sfTagsDataContext.canModifyTag(), []);
-  const isSelectedAll = useMemo(() => {
-    return selectedFileIds ? selectedFileIds.length === tagFiles.rows.length : false;
-  }, [selectedFileIds, tagFiles]);
 
   // selectedFile
   const selectedFile = useMemo(() => {
@@ -64,46 +60,6 @@ const TagFiles = () => {
   const selectedFilePath = useMemo(() => {
     return selectedFileParentDir && selectedFileName ? Utils.joinPath(selectedFileParentDir, selectedFileName) : '';
   }, [selectedFileParentDir, selectedFileName]);
-
-  const onMouseDown = useCallback((event) => {
-    if (event.button === 2) {
-      event.stopPropagation();
-      return;
-    }
-  }, []);
-
-  const onThreadMouseDown = useCallback((event) => {
-    onMouseDown(event);
-  }, [onMouseDown]);
-
-  const onThreadContextMenu = useCallback((event) => {
-    event.stopPropagation();
-  }, []);
-
-  const onSelectedAll = useCallback(() => {
-    if (isSelectedAll) {
-      updateSelectedFileIds([]);
-    } else {
-      const allIds = tagFiles.rows.map(record => getRecordIdFromRecord(record));
-      updateSelectedFileIds(allIds);
-    }
-  }, [tagFiles, isSelectedAll, updateSelectedFileIds]);
-
-  const onContainerClick = (event) => {
-    hideMenu();
-    if (selectedFileIds.length > 0) updateSelectedFileIds([]);
-  };
-
-  const onSelectFile = useCallback((event, fileId) => {
-    if (event.target.tagName === 'TD' && event.target.closest('td').querySelector('input[type="checkbox"]') === null) {
-      updateSelectedFileIds([fileId]);
-      return;
-    }
-    const newSelectedFileIds = selectedFileIds.includes(fileId)
-      ? selectedFileIds.filter(id => id !== fileId)
-      : [...selectedFileIds, fileId];
-    updateSelectedFileIds(newSelectedFileIds);
-  }, [selectedFileIds, updateSelectedFileIds]);
 
   const toggleMoveDialog = useCallback(() => {
     setIsMoveDialogOpen(!isMoveDialogOpen);
@@ -225,7 +181,11 @@ const TagFiles = () => {
         downloadTagFiles();
         break;
       case TextTranslation.RENAME.key:
-        window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
+        if (viewMode === LIST_MODE) {
+          window.sfTagsDataContext && window.sfTagsDataContext.eventBus.dispatch(EVENT_BUS_TYPE.RENAME_TAG_FILE, selectedFileIds[0]);
+        } else {
+          toggleRenameDialog();
+        }
         break;
       case TextTranslation.CONVERT_TO_SDOC.key:
         onConvertFile('sdoc');
@@ -259,7 +219,7 @@ const TagFiles = () => {
         break;
     }
     hideMenu();
-  }, [toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, onConvertFile, exportDocx, exportSdoc, toggleShareDialog, openViaClient, onHistory]);
+  }, [viewMode, toggleRenameDialog, toggleMoveDialog, toggleCopyDialog, handleDeleteTagFiles, downloadTagFiles, selectedFileIds, onConvertFile, exportDocx, exportSdoc, toggleShareDialog, openViaClient, onHistory]);
 
   const onTagFileContextMenu = useCallback((event, file) => {
     let menuList = [];
@@ -290,27 +250,6 @@ const TagFiles = () => {
 
     showMenu(showMenuConfig);
   }, [selectedFileIds, updateSelectedFileIds, getMenuList]);
-
-  const onSortName = useCallback((e) => {
-    e.preventDefault();
-    const sortBy = 'name';
-    const order = sortOrder == 'asc' ? 'desc' : 'asc';
-    sortFiles({ sort_by: sortBy, order });
-  }, [sortOrder, sortFiles]);
-
-  const onSortSize = useCallback((e) => {
-    e.preventDefault();
-    const sortBy = 'size';
-    const order = sortOrder == 'asc' ? 'desc' : 'asc';
-    sortFiles({ sort_by: sortBy, order });
-  }, [sortOrder, sortFiles]);
-
-  const onSortTime = useCallback((e) => {
-    e.preventDefault();
-    const sortBy = 'time';
-    const order = sortOrder == 'asc' ? 'desc' : 'asc';
-    sortFiles({ sort_by: sortBy, order });
-  }, [sortOrder, sortFiles]);
 
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
@@ -351,66 +290,6 @@ const TagFiles = () => {
     return (<EmptyTip text={gettext('No files')} />);
   }
 
-  const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
-  const headers = [
-    {
-      isFixed: true,
-      width: 31,
-      className: 'pl10 pr-2',
-      children: (
-        <input
-          type="checkbox"
-          className="vam"
-          onChange={onSelectedAll}
-          checked={isSelectedAll}
-          title={isSelectedAll ? gettext('Unselect all') : gettext('Select all')}
-          disabled={tagFiles.rows.length === 0}
-        />
-      )
-    }, {
-      isFixed: true,
-      width: 41,
-      className: 'pl-2 pr-2',
-    }, {
-      isFixed: false,
-      width: 0.5,
-      children: (
-        <a className="d-block table-sort-op" href="#" onClick={onSortName}>
-          {gettext('Name')} {sortBy == 'name' && sortIcon}
-        </a>
-      ),
-    }, {
-      isFixed: false,
-      width: 0.06,
-    }, {
-      isFixed: false,
-      width: 0.18,
-    }, {
-      isFixed: false,
-      width: 0.11,
-      children: (
-        <a className="d-block table-sort-op" href="#" onClick={onSortSize}>
-          {gettext('Size')} {sortBy == 'size' && sortIcon}
-        </a>
-      ),
-    }, {
-      isFixed: false,
-      width: 0.15,
-      children: (
-        <a className="d-block table-sort-op" href="#" onClick={onSortTime}>
-          {gettext('Last Update')} {sortBy == 'time' && sortIcon}
-        </a>
-      ),
-    }
-  ];
-
-  const mobileHeaders = [
-    { isFixed: false, width: 0.12 },
-    { isFixed: false, width: 0.8 },
-    { isFixed: false, width: 0.08 },
-  ];
-
-  const isDesktop = Utils.isDesktop();
   let enableDirPrivateShare = false;
   let isRepoOwner = repoInfo.owner_email === username;
   let isVirtual = repoInfo.is_virtual;
@@ -421,32 +300,21 @@ const TagFiles = () => {
   const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
   return (
     <>
-      <div className="table-container" onClick={onContainerClick}>
-        <FixedWidthTable
-          headers={isDesktop ? headers : mobileHeaders}
-          className={classNames('table-hover', { 'table-thead-hidden': !isDesktop })}
-          theadOptions={isDesktop ? {
-            onMouseDown: onThreadMouseDown,
-            onContextMenu: onThreadContextMenu,
-          } : {}}
-        >
-          {tagFiles.rows.map(file => {
-            const fileId = getRecordIdFromRecord(file);
-            return (
-              <TagFile
-                key={fileId}
-                repoID={repoID}
-                isSelected={selectedFileIds ? selectedFileIds.includes(fileId) : false}
-                file={file}
-                tagsData={tagsData}
-                onSelectFile={onSelectFile}
-                openImagePreview={openImagePreview}
-                onRenameFile={handleRenameTagFile}
-                onContextMenu={onTagFileContextMenu}
-              />);
-          })}
-        </FixedWidthTable>
-      </div>
+      {viewMode === LIST_MODE ? (
+        <ListView
+          repoID={repoID}
+          openImagePreview={openImagePreview}
+          handleRenameTagFile={handleRenameTagFile}
+          onTagFileContextMenu={onTagFileContextMenu}
+        />
+      ) : (
+        <GridView
+          repoID={repoID}
+          openImagePreview={openImagePreview}
+          handleRenameTagFile={handleRenameTagFile}
+          onTagFileContextMenu={onTagFileContextMenu}
+        />
+      )}
       {isImagePreviewerVisible && (
         <ImagePreviewer
           repoID={repoID}

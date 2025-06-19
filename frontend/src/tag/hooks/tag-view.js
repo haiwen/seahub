@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import toaster from '../../components/toast';
 import { Utils } from '../../utils/utils';
 import { metadataAPI } from '../../metadata';
@@ -16,6 +16,7 @@ import { PRIVATE_COLUMN_KEY } from '../constants';
 import URLDecorator from '../../utils/url-decorator';
 import { fileServerRoot, gettext, useGoFileserver } from '../../utils/constants';
 import { TAG_FILES_DEFAULT_SORT, TAG_FILES_SORT } from '../constants/sort';
+import { TAG_FILES_VIEW_MODE, TAG_FILES_VIEW_MODE_DEFAULT } from '../constants/mode';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes, views data, etc.
 const TagViewContext = React.createContext(null);
@@ -30,8 +31,12 @@ export const TagViewProvider = ({
   const [selectedFileIds, setSelectedFileIds] = useState([]);
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [viewMode, setViewMode] = useState(TAG_FILES_VIEW_MODE_DEFAULT);
 
   const { tagsData, updateLocalTags } = useTags();
+
+  const eventBus = useMemo(() => window.sfTagsDataContext?.eventBus, []);
+  const localStorage = useMemo(() => window.sfTagsDataContext?.localStorage, []);
 
   const getChildTagsIds = useCallback((tagID, nodeKey) => {
     let displayNode = null;
@@ -150,11 +155,12 @@ export const TagViewProvider = ({
           return row;
         })
       }));
+      updateSelectedFileIds([]);
     }).catch(error => {
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [repoID, renameFileCallback]);
+  }, [repoID, renameFileCallback, updateSelectedFileIds]);
 
   const convertFile = useCallback((path, dstType) => {
     seafileAPI.convertFile(repoID, path, dstType).then((res) => {
@@ -174,9 +180,13 @@ export const TagViewProvider = ({
     });
     setSortBy(sort.sort_by);
     setSortOrder(sort.order);
-    window.sfTagsDataContext?.localStorage?.setItem(TAG_FILES_SORT, JSON.stringify(sort));
-    window.sfTagsDataContext?.eventBus?.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, sort);
-  }, [tagFiles]);
+    localStorage && localStorage.setItem(TAG_FILES_SORT, JSON.stringify(sort));
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, sort);
+  }, [tagFiles, localStorage, eventBus]);
+
+  const switchViewMode = useCallback((mode) => {
+    setViewMode(mode);
+  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -201,29 +211,25 @@ export const TagViewProvider = ({
   }, [repoID, tagID, nodeKey]);
 
   useEffect(() => {
-    const unsubscribeModifyTagFilesSort = window.sfTagsDataContext?.eventBus?.subscribe(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, (sort) => {
-      const files = tagFiles?.rows || [];
-      const sorted = sortTagFiles(files, sort);
-      setTagFiles({
-        ...tagFiles,
-        rows: sorted,
-      });
-      setSortBy(sort.sort_by);
-      setSortOrder(sort.order);
-      window.sfTagsDataContext?.localStorage?.setItem(TAG_FILES_SORT, JSON.stringify(sort));
-    });
+    const unsubscribeModifyTagFilesSort = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, sortFiles);
+    const unsubscribeSwitchViewMode = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TAG_FILES_VIEW_MODE, switchViewMode);
 
     return () => {
       unsubscribeModifyTagFilesSort && unsubscribeModifyTagFilesSort();
+      unsubscribeSwitchViewMode && unsubscribeSwitchViewMode();
     };
-  }, [tagFiles]);
+  }, [eventBus, sortFiles, switchViewMode]);
 
   useEffect(() => {
-    const savedSort = window.sfTagsDataContext?.localStorage?.getItem(TAG_FILES_SORT);
+    const savedSort = localStorage && localStorage.getItem(TAG_FILES_SORT);
     const sort = savedSort ? JSON.parse(savedSort) : TAG_FILES_DEFAULT_SORT;
     setSortBy(sort.sort_by);
     setSortOrder(sort.order);
-  }, []);
+
+    const savedViewMode = localStorage && localStorage.getItem(TAG_FILES_VIEW_MODE);
+    const viewMode = savedViewMode ? savedViewMode : TAG_FILES_VIEW_MODE_DEFAULT;
+    setViewMode(viewMode);
+  }, [localStorage]);
 
   return (
     <TagViewContext.Provider value={{
@@ -247,6 +253,7 @@ export const TagViewProvider = ({
       sortFiles,
       sortBy,
       sortOrder,
+      viewMode,
     }}>
       {children}
     </TagViewContext.Provider>
