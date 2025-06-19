@@ -8,6 +8,7 @@ function SelectionRangeMask({ selectedRange, innerRef, getSelectedRangeDimension
     <CellMask
       {...dimensions}
       className="rdg-selected-range"
+      id="sf-table-rdg-selected-range"
       innerRef={innerRef}
     >
       {children}

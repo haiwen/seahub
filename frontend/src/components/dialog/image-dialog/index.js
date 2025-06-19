@@ -52,7 +52,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   const isSystemFolder = SYSTEM_FOLDERS.find(folderPath => mainImg.parentDir.startsWith(folderPath));
   let onOCR = null;
   if (enableOCR && enableMetadata && canModify && !isSystemFolder) {
-    onOCR = () => onOCRByImageDialog({ parentDir: mainImg.parentDir, fileName: mainImg.name });
+    onOCR = () => onOCRByImageDialog({ parentDir: mainImg.parentDir, fileName: mainImg.name }, document.activeElement);
   }
 
   const renderSidePanel = () => {

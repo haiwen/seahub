@@ -4,7 +4,7 @@ import { Utils } from '../utils/utils';
 import toaster from '../components/toast';
 import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../metadata/constants';
 import { gettext, lang } from '../utils/constants';
-import OCRResultDialog from '../metadata/components/dialog/ocr-result-dialog';
+import { OCRResultPopover } from '../metadata/components/popover';
 import FileTagsDialog from '../metadata/components/dialog/file-tags-dialog';
 
 // This hook provides content related to metadata ai operation
@@ -23,6 +23,7 @@ export const MetadataAIOperationsProvider = ({
   const [isFileTagsDialogShow, setFileTagsDialogShow] = useState(false);
 
   const recordRef = useRef(null);
+  const targetRef = useRef(null);
   const opCallBack = useRef(null);
 
   const permission = useMemo(() => repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw', [repoInfo]);
@@ -36,21 +37,24 @@ export const MetadataAIOperationsProvider = ({
 
   const closeOcrResultDialog = useCallback(() => {
     recordRef.current = null;
+    targetRef.current = null;
     opCallBack.current = null;
     setOcrResultDialogShow(false);
   }, []);
 
-  const onOCR = useCallback((record, { success_callback }) => {
+  const onOCR = useCallback((record, { success_callback }, target) => {
+    targetRef.current = target;
     recordRef.current = record;
     opCallBack.current = success_callback;
     setOcrResultDialogShow(true);
   }, []);
 
-  const onOCRByImageDialog = useCallback(({ parentDir, fileName } = {}) => {
+  const onOCRByImageDialog = useCallback(({ parentDir, fileName } = {}, target) => {
     recordRef.current = {
       [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir,
       [PRIVATE_COLUMN_KEY.FILE_NAME]: fileName,
     };
+    targetRef.current = target;
 
     opCallBack.current = (description) => {
       const update = { [PRIVATE_COLUMN_KEY.FILE_DESCRIPTION]: description };
@@ -149,7 +153,13 @@ export const MetadataAIOperationsProvider = ({
         <FileTagsDialog record={recordRef.current} onToggle={closeFileTagsDialog} onSubmit={opCallBack.current} />
       )}
       {isOcrResultDialogShow && (
-        <OCRResultDialog repoID={repoID} record={recordRef.current} onToggle={closeOcrResultDialog} saveToDescription={opCallBack.current} />
+        <OCRResultPopover
+          repoID={repoID}
+          target={targetRef.current}
+          record={recordRef.current}
+          onToggle={closeOcrResultDialog}
+          saveToDescription={opCallBack.current}
+        />
       )}
     </MetadataAIOperationsContext.Provider>
   );

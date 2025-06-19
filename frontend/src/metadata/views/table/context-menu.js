@@ -283,7 +283,7 @@ const ContextMenu = ({
       case OPERATION.OCR: {
         const { record } = option;
         if (!record) break;
-        onOCR(record);
+        onOCR(record, 'sf-table-rdg-selected');
         break;
       }
       case OPERATION.DELETE_RECORD: {

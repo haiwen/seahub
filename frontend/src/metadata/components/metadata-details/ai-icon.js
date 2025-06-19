@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Icon from '../../../components/icon';
 import { useMetadataDetails } from '../../hooks';
@@ -19,6 +19,7 @@ const OPERATION = {
 };
 
 const AIIcon = () => {
+  const menuToggleRef = useRef(null);
 
   const [isMenuShow, setMenuShow] = useState(false);
 
@@ -85,7 +86,7 @@ const AIIcon = () => {
       case OPERATION.OCR: {
         onOCR(record, {
           success_callback: updateDescription
-        });
+        }, menuToggleRef.current);
         break;
       }
       case OPERATION.FILE_TAGS: {
@@ -141,7 +142,7 @@ const AIIcon = () => {
         aria-label='AI'
         tabIndex={0}
       >
-        <div className="detail-control mr-2">
+        <div className="detail-control mr-2" ref={menuToggleRef}>
           <Icon symbol="ai" className="detail-control-icon" />
         </div>
       </DropdownToggle>
