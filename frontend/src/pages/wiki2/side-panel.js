@@ -8,7 +8,7 @@ import Loading from '../../components/loading';
 import WikiNav from './wiki-nav/index';
 import PageUtils from './wiki-nav/page-utils';
 import Page from './models/page';
-import { isObjectNotEmpty } from './utils';
+import { isObjectNotEmpty, isPageInSubtree } from './utils';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
 import WikiExternalOperations from './wiki-external-operations';
@@ -46,7 +46,7 @@ class SidePanel extends PureComponent {
 
   onDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
-    const { pages } = config;
+    const { pages, navigation } = config;
     const index = PageUtils.getPageIndexById(pageId, pages);
     const deletePageName = pages[index].name;
     config.pages.splice(index, 1);
@@ -64,7 +64,8 @@ class SidePanel extends PureComponent {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-    if (this.props.getCurrentPageId() === pageId) {
+    const currentPageId = this.props.getCurrentPageId();
+    if (currentPageId === pageId || isPageInSubtree(navigation, pageId, currentPageId)) {
       const newPageId = config.pages.length > 0 ? config.pages[0].id : '';
       this.props.setCurrentPage(newPageId);
     }
