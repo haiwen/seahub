@@ -28,7 +28,7 @@ const TagsEditor = forwardRef(({
   showTagsAsTree,
   canEditData = false,
   canAddTag = false,
-  showDeletableTags = false,
+  showDeletableTags = true,
   showRecentlyUsed = true,
 }, ref) => {
   const { tagsData, context, addTag } = useTags();

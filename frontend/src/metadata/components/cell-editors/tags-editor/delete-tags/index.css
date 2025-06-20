@@ -2,11 +2,12 @@
   background-color: #f6f6f6;
   border-bottom: 1px solid #dde2ea;
   border-radius: 3px 3px 0 0;
-  min-height: 35px;
-  padding: 2px 10px;
+  min-height: 28px;
+  padding: 8px 16px;
   line-height: 1;
   max-height: 150px;
   overflow-y: auto;
+  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
 }
 
 .sf-metadata-delete-select-tags .sf-metadata-delete-select-tag {

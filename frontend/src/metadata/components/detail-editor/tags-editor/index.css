@@ -23,10 +23,6 @@
   margin-right: 10px;
 }
 
-.sf-metadata-tags-property-editor-popover .sf-metadata-delete-select-tags {
-  display: none;
-}
-
 .sf-metadata-tags-property-editor-popover .popover {
   max-width: unset;
 }
