@@ -114,7 +114,7 @@ def get_ai_cost_by_user(user, org_id):
     return cost
 
 
-def is_ai_exceed_by_assistant(user, org_id):
+def is_ai_usage_over_limit(user, org_id):
     ai_credit = get_ai_credit_by_user(user, org_id)
     cost = get_ai_cost_by_user(user, org_id)
 

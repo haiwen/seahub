@@ -16,7 +16,7 @@ from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthenti
 from seahub.utils import get_file_type_and_ext, IMAGE
 from seahub.views import check_folder_permission
 from seahub.ai.utils import image_caption, translate, writing_assistant, verify_ai_config, generate_summary, \
-    generate_file_tags, ocr, is_ai_exceed_by_assistant
+    generate_file_tags, ocr, is_ai_usage_over_limit
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class ImageCaption(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if is_ai_exceed_by_assistant(request.user, org_id):
+        if is_ai_usage_over_limit(request.user, org_id):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         permission = check_folder_permission(request, repo_id, os.path.dirname(path))
@@ -120,7 +120,7 @@ class GenerateSummary(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_exceed_by_assistant(request.user, org_id):
+        if is_ai_usage_over_limit(request.user, org_id):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -183,7 +183,7 @@ class GenerateFileTags(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_exceed_by_assistant(request.user, org_id):
+        if is_ai_usage_over_limit(request.user, org_id):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -271,7 +271,7 @@ class OCR(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_ai_exceed_by_assistant(request.user, org_id):
+        if is_ai_usage_over_limit(request.user, org_id):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
@@ -367,7 +367,7 @@ class WritingAssistant(APIView):
         if not custom_prompt and not writing_type:
             return api_error(status.HTTP_400_BAD_REQUEST, 'writing_type invalid')
 
-        if is_ai_exceed_by_assistant(request.user, org_id):
+        if is_ai_usage_over_limit(request.user, org_id):
             return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         params = {

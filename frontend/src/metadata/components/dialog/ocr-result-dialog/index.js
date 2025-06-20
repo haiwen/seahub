@@ -67,7 +67,11 @@ const OCRResultDialog = ({ repoID, record, onToggle, saveToDescription }) => {
       ocrResult.current = result.replaceAll('\f', '\n').replaceAll('\n\n', '\n').replaceAll('\n', '\n\n');
       setLoading(false);
     }).catch(error => {
-      const errorMessage = gettext('Failed to extract text');
+      let errorMessage = gettext('Failed to extract text');
+      if (error.status === 429) {
+        const err_data = error.response.data;
+        errorMessage = gettext(err_data.error_msg);
+      }
       setErrorMessage(errorMessage);
       setLoading(false);
     });
