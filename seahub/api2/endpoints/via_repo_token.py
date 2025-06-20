@@ -19,9 +19,14 @@ from urllib.parse import quote
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
 from seahub.base.models import FileComment
+from seahub.institutions.views import useradmin
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
+from seahub.repo_metadata.constants import METADATA_RECORD_UPDATE_LIMIT
+from seahub.repo_metadata.metadata_server_api import list_metadata_view_records, MetadataServerAPI
+from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
+from seahub.repo_metadata.utils import can_read_metadata, get_update_record
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
@@ -49,6 +54,7 @@ from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_fil
 from seahub.utils.file_op import check_file_lock
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.views import check_folder_permission
 from seahub.views.file import can_preview_file, can_edit_file
 
 logger = logging.getLogger(__name__)
@@ -1392,3 +1398,169 @@ class ViaRepoShareLink(APIView):
         fs.save()
         link_info = get_share_link_info(fs)
         return Response(link_info)
+
+class ViaRepoMetadataRecords(APIView):
+    authentication_classes = (RepoAPITokenAuthentication,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """
+            fetch a metadata results
+            request body:
+                parent_dir: optional, if not specify, search from all dirs
+                name: optional, if not specify, search from all objects
+                page: optional, the current page
+                per_page: optional, if use page, default is 25
+                is_dir: optional, True or False
+                order_by: list with string, like ['`parent_dir` ASC']
+        """
+
+        username = request.repo_api_token_obj.generated_by
+        #username = request.repo_api_token_obj.app_name
+       # username = ""
+        repo_id = request.repo_api_token_obj.repo_id
+        # repo_id = request.repo_api_token_obj.app_name
+
+        view_id = request.GET.get('view_id', '')
+        start = request.GET.get('start', 0)
+        limit = request.GET.get('limit', 1000)
+
+        try:
+            start = int(start)
+            limit = int(limit)
+        except:
+            start = 0
+            limit = 1000
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # metadata enable check
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        tags_enabled = False
+        if metadata.tags_enabled:
+            tags_enabled = True
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            view = RepoMetadataViews.objects.get_view(repo_id, view_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not view:
+            error_msg = 'Metadata view %s not found.' % view_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            results = list_metadata_view_records(repo_id, username, view, tags_enabled, start, limit)
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(results)
+
+    def put(self, request, repo_id, username):
+        records_data = request.data.get('records_data')
+        if not records_data:
+            error_msg = 'records_data invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if len(records_data) > METADATA_RECORD_UPDATE_LIMIT:
+            error_msg = 'Number of records exceeds the limit of 1000.'
+            return api_error(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, username)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+        try:
+            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+            columns = columns_data.get('columns', [])
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        unmodifiable_column_names = [column.get('name') for column in get_unmodifiable_columns()]
+
+        record_id_to_record = {}
+        sql = f'SELECT `_id` FROM `{METADATA_TABLE.name}` WHERE '
+        parameters = []
+        for record_data in records_data:
+            record = record_data.get('record', {})
+            if not record:
+                continue
+            record_id = record_data.get('record_id', '')
+            if not record_id:
+                error_msg = 'record_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            sql += f' `{METADATA_TABLE.columns.id.name}` = ? OR '
+            parameters.append(record_id)
+            record_id_to_record[record_id] = record
+
+        sql = sql.rstrip('OR ')
+        sql += ';'
+
+        if not parameters:
+            return Response({'success': True})
+
+        try:
+            query_result = metadata_server_api.query_rows(sql, parameters)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        results = query_result.get('results')
+        if not results:
+            # file or folder has been deleted
+            return Response({'success': True})
+
+        rows = []
+        for record in results:
+            to_updated_record = record_id_to_record.get(record_id)
+            update = get_update_record(to_updated_record, columns, unmodifiable_column_names)
+            if update:
+                record_id = record.get('_id')
+                update[METADATA_TABLE.columns.id.name] = record_id
+                rows.append(update)
+        if rows:
+            try:
+                metadata_server_api.update_rows(METADATA_TABLE.id, rows)
+            except Exception as e:
+                logger.exception(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

@@ -1,4 +1,6 @@
 import requests, jwt, time
+
+from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.settings import METADATA_SERVER_URL, JWT_PRIVATE_KEY
 
 
@@ -73,6 +75,7 @@ def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit
     sql = sql.replace('*', query_fields_str)
 
     response_results = metadata_server_api.query_rows(sql, [])
+    #response_results = metadata_server_api.query_rows_via_repo(sql, [])
     return response_results
 
 
@@ -92,6 +95,7 @@ class MetadataServerAPI:
         self.user = user
         self.headers = self.gen_headers()
         self.timeout = timeout
+        #self.headers_via_repo = self.gen_headers_via_repo()
 
     def gen_headers(self):
         payload = {
@@ -101,6 +105,16 @@ class MetadataServerAPI:
         }
         token = jwt.encode(payload, JWT_PRIVATE_KEY, algorithm='HS256')
         return {"Authorization": "Bearer %s" % token}
+
+    # def gen_headers_via_repo(self):
+    #     auth_token = self.headers
+    #     payload = {
+    #         "accept": "application/json",
+    #         "content-type": "application/json",
+    #         "authorization": f'Bearer {auth_token}'
+    #     }
+    #     token = RepoAPITokens.objects.create_token(app_name = None, self.base_id, self.user, permission='rw')
+    #     return {"Authorization": "Bearer %s" % token}
 
     def create_base(self):
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}'
@@ -150,6 +164,16 @@ class MetadataServerAPI:
             post_data['params'] = params
         url = f'{METADATA_SERVER_URL}/api/v1/base/{self.base_id}/query'
         response = requests.post(url, json=post_data, headers=self.headers, timeout=self.timeout)
+        return parse_response(response)
+
+    def query_rows_via_repo(self, sql, params=[]):
+        post_data = {
+            'sql': sql
+        }
+        if params:
+            post_data['params'] = params
+        url = f'{METADATA_SERVER_URL}/api/v2.1/via-repo-token/query'
+        response = requests.post(url, json=post_data, headers=self.headers_via_repo, timeout=self.timeout)
         return parse_response(response)
 
     # column
@@ -264,3 +288,6 @@ class MetadataServerAPI:
         }
         response = requests.delete(url, json=data, headers=self.headers, timeout=self.timeout)
         return parse_response(response)
+
+
+
