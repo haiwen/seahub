@@ -208,7 +208,7 @@ export const TagViewProvider = ({
       setLoading(false);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [repoID, tagID, nodeKey]);
+  }, [repoID, tagID, nodeKey, tagsData.rows]);
 
   useEffect(() => {
     const unsubscribeModifyTagFilesSort = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, sortFiles);

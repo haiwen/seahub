@@ -21,7 +21,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
   const [direntDetail, setDirentDetail] = useState('');
   const [isFetching, setIsFetching] = useState(true);
 
-  const { tagsData, addTag } = useTags();
+  const { tagsData, addTag, modifyLocalFileTags } = useTags();
 
   const isView = useMemo(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -67,6 +67,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
       dirent={dirent}
       direntDetail={direntDetail}
       direntType="file"
+      modifyLocalFileTags={modifyLocalFileTags}
     >
       <div
         className={classnames('cur-view-detail', className, {
