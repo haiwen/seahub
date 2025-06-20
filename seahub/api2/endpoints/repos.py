@@ -301,7 +301,7 @@ class ReposView(APIView):
                     all_repo_owner.append(repo_owner)
                     repo_id_owner_dict[repo_id] = repo_owner
 
-            # Reduce  fetch ops.
+            # Reduce memcache fetch ops.
             owner_set = set(all_repo_owner)
             share_from_set = {x.user for x in public_repos}
             modifiers_set = {x.last_modifier for x in public_repos}

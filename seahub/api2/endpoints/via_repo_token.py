@@ -26,7 +26,7 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.repo_metadata.constants import METADATA_RECORD_UPDATE_LIMIT
 from seahub.repo_metadata.metadata_server_api import list_metadata_view_records, MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
-from seahub.repo_metadata.utils import can_read_metadata, get_update_record
+from seahub.repo_metadata.utils import can_read_metadata, get_update_record, get_unmodifiable_columns
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
@@ -1404,22 +1404,9 @@ class ViaRepoMetadataRecords(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        """
-            fetch a metadata results
-            request body:
-                parent_dir: optional, if not specify, search from all dirs
-                name: optional, if not specify, search from all objects
-                page: optional, the current page
-                per_page: optional, if use page, default is 25
-                is_dir: optional, True or False
-                order_by: list with string, like ['`parent_dir` ASC']
-        """
-
+        
         username = request.repo_api_token_obj.generated_by
-        #username = request.repo_api_token_obj.app_name
-       # username = ""
         repo_id = request.repo_api_token_obj.repo_id
-        # repo_id = request.repo_api_token_obj.app_name
 
         view_id = request.GET.get('view_id', '')
         start = request.GET.get('start', 0)
@@ -1480,15 +1467,24 @@ class ViaRepoMetadataRecords(APIView):
 
         return Response(results)
 
-    def put(self, request, repo_id, username):
+    def put(self, request):
+        
+        repo_id = request.repo_api_token_obj.repo_id
+        username = request.repo_api_token_obj.generated_by
         records_data = request.data.get('records_data')
         if not records_data:
             error_msg = 'records_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
 
         if len(records_data) > METADATA_RECORD_UPDATE_LIMIT:
             error_msg = 'Number of records exceeds the limit of 1000.'
             return api_error(status.HTTP_413_REQUEST_ENTITY_TOO_LARGE, error_msg)
+
+        permission = check_folder_permission_by_repo_api(request, repo_id, None)
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
@@ -1544,7 +1540,6 @@ class ViaRepoMetadataRecords(APIView):
 
         results = query_result.get('results')
         if not results:
-            # file or folder has been deleted
             return Response({'success': True})
 
         rows = []
