@@ -1537,6 +1537,7 @@ class ViaRepoMetadataRecords(APIView):
 
         rows = []
         for record in results:
+            record_id = record.get('_id')
             to_updated_record = record_id_to_record.get(record_id)
             update = get_update_record(to_updated_record, columns, unmodifiable_column_names)
             if update:
