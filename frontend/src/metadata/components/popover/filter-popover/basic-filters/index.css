@@ -110,8 +110,3 @@
   left: -340px;
   z-index: 10001;
 }
-
-.sf-metadata-basic-filter-tags-select .tag-options-container .sf-metadata-delete-select-tags {
-  padding: 8px 16px;
-  min-height: 28px;
-}

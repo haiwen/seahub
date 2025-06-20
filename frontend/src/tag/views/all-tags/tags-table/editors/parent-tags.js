@@ -31,7 +31,6 @@ const ParentTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, delete
       <TagsEditor
         column={{ ...column, width: 400 }}
         value={parentLinks}
-        showTagsAsTree={true}
         onSelect={selectTag}
         onDeselect={deselectTag}
         canEditData={context.canModify()}

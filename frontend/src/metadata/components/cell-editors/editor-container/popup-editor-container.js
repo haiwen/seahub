@@ -86,7 +86,6 @@ class PopupEditorContainer extends React.Component {
       column,
       readOnly,
       onPressTab,
-      showTagsAsTree: true,
     };
 
     if (column.type === CellType.DATE) {
