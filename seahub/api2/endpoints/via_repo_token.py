@@ -6,27 +6,21 @@ import posixpath
 import requests
 import time
 import stat
-from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from rest_framework import status
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.reverse import reverse
 
 from rest_framework.views import APIView
-from urllib.parse import quote
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
 from seahub.base.models import FileComment
-from seahub.institutions.views import useradmin
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.repo_metadata.constants import METADATA_RECORD_UPDATE_LIMIT
 from seahub.repo_metadata.metadata_server_api import list_metadata_view_records, MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
-from seahub.repo_metadata.utils import can_read_metadata, get_update_record, get_unmodifiable_columns
+from seahub.repo_metadata.utils import get_update_record, get_unmodifiable_columns
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
@@ -54,7 +48,6 @@ from seahub.utils import normalize_dir_path, check_filename_with_rename, gen_fil
 from seahub.utils.file_op import check_file_lock
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.views import check_folder_permission
 from seahub.views.file import can_preview_file, can_edit_file
 
 logger = logging.getLogger(__name__)
