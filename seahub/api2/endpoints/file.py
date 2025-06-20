@@ -38,6 +38,7 @@ from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, OFFICE_TEMPLATE_ROOT
 from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
 from seahub.seadoc.utils import get_seadoc_file_uuid
 from seahub.exdraw.utils import get_exdraw_file_uuid
+from seahub.seadoc.sdoc_server_api import SdocServerAPI
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -528,6 +529,18 @@ class FileView(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            extension = Path(path).suffix
+            if extension == '.sdoc':
+                try:
+                    doc_uuid = get_seadoc_file_uuid(repo, path)
+                    filename = os.path.basename(path)
+                    sdoc_server_api = SdocServerAPI(doc_uuid, str(filename), username)
+                    sdoc_server_api.replace_doc()
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             return Response({'success': True})
 

@@ -1,3 +1,7 @@
 .sdoc-file-view .sdoc-editor-container {
   background: transparent;
 }
+
+.file-view-content .sdoc-editor-container .sdoc-editor-content .sdoc-article-container {
+  margin: auto !important;
+}
