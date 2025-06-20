@@ -34,6 +34,11 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           const err = gettext('Library does not exist');
           setRepoInfo(null);
           setLibErrorMessage(err);
+
+          const storeKey = 'sfVisitedSearchItems' + repoID;
+          const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+          const filteredItems = visitedItems.filter(item => item.repo_id !== repoID);
+          localStorage.setItem(storeKey, JSON.stringify(filteredItems));
         } else {
           const errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
@@ -46,7 +51,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
       controller.abort();
       clearTimeout(timer);
     };
-  }, [repoID]);
+  }, [repoID, path]);
 
   useEffect(() => {
     setDirentDetail(null);
