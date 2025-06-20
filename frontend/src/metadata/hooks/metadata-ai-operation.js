@@ -83,7 +83,11 @@ export const MetadataAIOperationsProvider = ({
       success_callback && success_callback({ parentDir, fileName, description });
     }).catch(error => {
       inProgressToaster.close();
-      const errorMessage = gettext('Failed to generate description');
+      let errorMessage = gettext('Failed to generate description');
+      if (error.status === 429) {
+        const err_data = error.response.data;
+        errorMessage = gettext(err_data.error_msg);
+      }
       toaster.danger(errorMessage);
       fail_callback && fail_callback();
     });
