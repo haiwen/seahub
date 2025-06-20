@@ -117,7 +117,6 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
           column={{ ...field, width: Math.max(width - 2, 400) }}
           onSelect={onSelectTag}
           onDeselect={onDeselectTag}
-          showTagsAsTree={true}
           canEditData={canEditData}
           canAddTag={context.canAddTag()}
         />

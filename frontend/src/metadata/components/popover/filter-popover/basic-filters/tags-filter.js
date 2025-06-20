@@ -93,8 +93,6 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
                 column={{ width: 400 }}
                 onSelect={handleSelect}
                 onDeselect={handleDeselect}
-                showTagsAsTree={true}
-                showDeletableTags={true}
                 showRecentlyUsed={false}
               />
             </div>
