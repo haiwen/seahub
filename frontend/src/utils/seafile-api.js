@@ -805,7 +805,7 @@ class SeafileAPI {
     if (searchParams.search_ftypes) {url = url + '&search_ftypes=' + searchParams.search_ftypes;}
     if (searchParams.page) {url = url + '&page=' + searchParams.page;}
     if (searchParams.per_page) {url = url + '&per_page=' + searchParams.per_page;}
-    if (searchParams.search_path) {url = url + '&search_path=' + searchParams.search_path;}
+    if (searchParams.search_path) {url = url + '&search_path=' + encodeURIComponent(searchParams.search_path);}
     if (searchParams.obj_type) {url = url + '&obj_type=' + searchParams.obj_type;}
     if (searchParams.input_fexts) {url = url + '&input_fexts=' + searchParams.input_fexts;}
     if (searchParams.with_permission) {url = url + '&with_permission=' + searchParams.with_permission;}
