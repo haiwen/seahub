@@ -59,14 +59,6 @@ class LibraryMoreOperations extends React.Component {
       case 'API Token':
         this.onAPITokenToggle();
         break;
-        /*
-      case 'Label Current State':
-        this.onLabelToggle();
-        break;
-      case 'Office Suite':
-        this.onOfficeSuiteToggle();
-        break;
-        */
       default:
         break;
     }
@@ -88,12 +80,6 @@ class LibraryMoreOperations extends React.Component {
     this.setState({ isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen });
   };
 
-  /*
-  onLabelToggle = () => {
-    this.setState({ isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen });
-  };
-  */
-
   onFolderPermissionToggle = () => {
     this.setState({ isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen });
   };
@@ -101,12 +87,6 @@ class LibraryMoreOperations extends React.Component {
   onAPITokenToggle = () => {
     this.setState({ isAPITokenDialogOpen: !this.state.isAPITokenDialogOpen });
   };
-
-  /*
-  onOfficeSuiteToggle = () => {
-    this.setState({ isOfficeSuiteDialogOpen: !this.state.isOfficeSuiteDialogOpen });
-  };
-  */
 
   toggleRepoShareAdminDialog = () => {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
