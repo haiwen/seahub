@@ -7,6 +7,8 @@ import MobileItemMenu from '../../components/mobile-item-menu';
 
 const propTypes = {
   isPC: PropTypes.bool,
+  isLibView: PropTypes.bool,
+  isDepartmentRepo: PropTypes.bool,
   repo: PropTypes.object.isRequired,
   isStarred: PropTypes.bool,
   onFreezedItem: PropTypes.func,
@@ -117,8 +119,13 @@ class MylibRepoMenu extends React.Component {
   };
 
   getAdvancedOperations = () => {
+    const { isDepartmentRepo } = this.props;
     const operations = [];
     operations.push('API Token');
+    if (isDepartmentRepo) {
+      return operations;
+    }
+
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }

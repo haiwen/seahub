@@ -1,22 +1,20 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { userAPI } from '../../../utils/user-api';
-import { gettext, siteRoot } from '../../../utils/constants';
-import ModalPortal from '../../../components/modal-portal';
-import toaster from '../../../components/toast';
-import RenameRepoDialog from '../../../components/dialog/rename-repo';
-import TransferDialog from '../../../components/dialog/transfer-dialog';
-import ChangeRepoPasswordDialog from '../../../components/dialog/change-repo-password-dialog';
-import ResetEncryptedRepoPasswordDialog from '../../../components/dialog/reset-encrypted-repo-password-dialog';
-import LabelRepoStateDialog from '../../../components/dialog/label-repo-state-dialog';
-import LibSubFolderPermissionDialog from '../../../components/dialog/lib-sub-folder-permission-dialog';
-import RepoAPITokenDialog from '../../../components/dialog/repo-api-token-dialog';
-import RepoShareAdminDialog from '../../../components/dialog/repo-share-admin-dialog';
-import OfficeSuiteDialog from '../../../components/dialog/repo-office-suite-dialog';
-import MylibRepoMenu from '../../../pages/my-libs/mylib-repo-menu';
+import { Utils } from '../../../../utils/utils';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { userAPI } from '../../../../utils/user-api';
+import { gettext, siteRoot } from '../../../../utils/constants';
+import ModalPortal from '../../../../components/modal-portal';
+import toaster from '../../../../components/toast';
+import RenameRepoDialog from '../../../../components/dialog/rename-repo';
+import TransferDialog from '../../../../components/dialog/transfer-dialog';
+import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
+import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
+import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
+import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
+import MylibRepoMenu from '../../../../pages/my-libs/mylib-repo-menu';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -32,11 +30,9 @@ class LibraryMoreOperations extends React.Component {
       isTransferDialogOpen: false,
       isChangePasswordDialogOpen: false,
       isResetPasswordDialogOpen: false,
-      isLabelRepoStateDialogOpen: false,
       isFolderPermissionDialogOpen: false,
       isAPITokenDialogOpen: false,
-      isRepoShareAdminDialogOpen: false,
-      isOfficeSuiteDialogOpen: false
+      isRepoShareAdminDialogOpen: false
     };
   }
 
@@ -60,21 +56,17 @@ class LibraryMoreOperations extends React.Component {
       case 'Reset Password':
         this.onResetPasswordToggle();
         break;
-      case 'Watch File Changes':
-        this.watchFileChanges();
-        break;
-      case 'Unwatch File Changes':
-        this.unwatchFileChanges();
-        break;
       case 'API Token':
         this.onAPITokenToggle();
         break;
+        /*
       case 'Label Current State':
         this.onLabelToggle();
         break;
       case 'Office Suite':
         this.onOfficeSuiteToggle();
         break;
+        */
       default:
         break;
     }
@@ -96,9 +88,11 @@ class LibraryMoreOperations extends React.Component {
     this.setState({ isResetPasswordDialogOpen: !this.state.isResetPasswordDialogOpen });
   };
 
+  /*
   onLabelToggle = () => {
     this.setState({ isLabelRepoStateDialogOpen: !this.state.isLabelRepoStateDialogOpen });
   };
+  */
 
   onFolderPermissionToggle = () => {
     this.setState({ isFolderPermissionDialogOpen: !this.state.isFolderPermissionDialogOpen });
@@ -108,9 +102,11 @@ class LibraryMoreOperations extends React.Component {
     this.setState({ isAPITokenDialogOpen: !this.state.isAPITokenDialogOpen });
   };
 
+  /*
   onOfficeSuiteToggle = () => {
     this.setState({ isOfficeSuiteDialogOpen: !this.state.isOfficeSuiteDialogOpen });
   };
+  */
 
   toggleRepoShareAdminDialog = () => {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
@@ -118,8 +114,9 @@ class LibraryMoreOperations extends React.Component {
 
   renameRepo = (newName) => {
     const { repo } = this.props;
-    const { repo_id: repoID } = repo;
-    seafileAPI.renameRepo(repoID, newName).then((res) => {
+    const { repo_id: repoID, owner_email } = repo;
+    const groupID = parseInt(owner_email);
+    seafileAPI.renameGroupOwnedLibrary(groupID, repoID, newName).then(res => {
       this.props.updateRepoInfo({ 'repo_name': newName });
       const message = gettext('Successfully renamed the library.');
       toaster.success(message);
@@ -131,8 +128,9 @@ class LibraryMoreOperations extends React.Component {
 
   onTransferRepo = (email, reshare) => {
     const { repo } = this.props;
-    const { repo_id: repoID } = repo;
-    userAPI.transferRepo(repoID, email, reshare).then(res => {
+    const { repo_id: repoID, owner_email } = repo;
+    const groupID = parseInt(owner_email);
+    userAPI.depAdminTransferRepo(repoID, groupID, email, reshare).then(res => {
       const message = gettext('Successfully transferred the library.');
       toaster.success(message);
       navigate(siteRoot);
@@ -152,6 +150,7 @@ class LibraryMoreOperations extends React.Component {
         <MylibRepoMenu
           isPC={true}
           isLibView={true}
+          isDepartmentRepo={true}
           repo={repo}
           onMenuItemClick={this.onMenuItemClick}
         >
@@ -175,6 +174,8 @@ class LibraryMoreOperations extends React.Component {
               itemName={repo.repo_name}
               onTransferRepo={this.onTransferRepo}
               toggleDialog={this.onTransferToggle}
+              canTransferToDept={true}
+              isDepAdminTransfer={true}
             />
           </ModalPortal>
         )}
@@ -196,22 +197,13 @@ class LibraryMoreOperations extends React.Component {
           </ModalPortal>
         )}
 
-        {this.state.isLabelRepoStateDialogOpen && (
-          <ModalPortal>
-            <LabelRepoStateDialog
-              repoID={repo.repo_id}
-              repoName={repo.repo_name}
-              toggleDialog={this.onLabelToggle}
-            />
-          </ModalPortal>
-        )}
-
         {this.state.isFolderPermissionDialogOpen && (
           <ModalPortal>
             <LibSubFolderPermissionDialog
               toggleDialog={this.onFolderPermissionToggle}
               repoID={repo.repo_id}
               repoName={repo.repo_name}
+              isDepartmentRepo={true}
             />
           </ModalPortal>
         )}
@@ -230,16 +222,6 @@ class LibraryMoreOperations extends React.Component {
             <RepoShareAdminDialog
               repo={repo}
               toggleDialog={this.toggleRepoShareAdminDialog}
-            />
-          </ModalPortal>
-        )}
-
-        {this.state.isOfficeSuiteDialogOpen && (
-          <ModalPortal>
-            <OfficeSuiteDialog
-              repoID={repo.repo_id}
-              repoName={repo.repo_name}
-              toggleDialog={this.onOfficeSuiteToggle}
             />
           </ModalPortal>
         )}
