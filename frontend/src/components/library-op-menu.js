@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import MobileItemMenu from '../../components/mobile-item-menu';
+import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../utils/constants';
+import { Utils } from '../utils/utils';
+import MobileItemMenu from '../components/mobile-item-menu';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -16,7 +16,7 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
 };
 
-class MylibRepoMenu extends React.Component {
+class LibraryOperationMenu extends React.Component {
 
   constructor(props) {
     super(props);
@@ -269,6 +269,6 @@ class MylibRepoMenu extends React.Component {
   }
 }
 
-MylibRepoMenu.propTypes = propTypes;
+LibraryOperationMenu.propTypes = propTypes;
 
-export default MylibRepoMenu;
+export default LibraryOperationMenu;

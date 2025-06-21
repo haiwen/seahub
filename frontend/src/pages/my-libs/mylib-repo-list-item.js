@@ -17,7 +17,7 @@ import ResetEncryptedRepoPasswordDialog from '../../components/dialog/reset-encr
 import LabelRepoStateDialog from '../../components/dialog/label-repo-state-dialog';
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
 import Rename from '../../components/rename';
-import MylibRepoMenu from './mylib-repo-menu';
+import LibraryOpMenu from '../../components/library-op-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
@@ -316,7 +316,7 @@ class MylibRepoListItem extends React.Component {
             <div className="d-flex align-items-center">
               <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
               <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
-              <MylibRepoMenu
+              <LibraryOpMenu
                 isPC={true}
                 repo={this.props.repo}
                 onMenuItemClick={this.onMenuItemClick}
@@ -370,7 +370,7 @@ class MylibRepoListItem extends React.Component {
           <div className="flex-shrink-0 d-flex align-items-center">
             <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
             <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
-            <MylibRepoMenu
+            <LibraryOpMenu
               isPC={true}
               repo={this.props.repo}
               onMenuItemClick={this.onMenuItemClick}
@@ -413,7 +413,7 @@ class MylibRepoListItem extends React.Component {
         </td>
         <td>
           {repo.repo_name && (
-            <MylibRepoMenu
+            <LibraryOpMenu
               repo={this.props.repo}
               isStarred={this.state.isStarred}
               onMenuItemClick={this.onMenuItemClick}

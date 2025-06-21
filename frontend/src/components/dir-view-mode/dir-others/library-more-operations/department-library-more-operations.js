@@ -14,7 +14,7 @@ import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/rese
 import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
 import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
-import MylibRepoMenu from '../../../../pages/my-libs/mylib-repo-menu';
+import LibraryOpMenu from '../../../../components/library-op-menu';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -147,7 +147,7 @@ class LibraryMoreOperations extends React.Component {
     } = this.state;
     return (
       <Fragment>
-        <MylibRepoMenu
+        <LibraryOpMenu
           isPC={true}
           isLibView={true}
           isDepartmentRepo={true}
@@ -158,7 +158,7 @@ class LibraryMoreOperations extends React.Component {
             <span className="sf3-font-more sf3-font"></span>
             <span className="dir-others-item-text">{gettext('More')}</span>
           </>
-        </MylibRepoMenu>
+        </LibraryOpMenu>
         {isRenameRepoDialogOpen && (
           <ModalPortal>
             <RenameRepoDialog
