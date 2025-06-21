@@ -69,6 +69,7 @@ class Search extends Component {
         },
         suffixes: '',
       },
+      visitedItems: [],
     };
     this.highlightRef = null;
     this.source = null; // used to cancel request;
@@ -86,12 +87,23 @@ class Search extends Component {
     document.addEventListener('compositionstart', this.onCompositionStart);
     document.addEventListener('compositionend', this.onCompositionEnd);
     const isFiltersShow = localStorage.getItem(SEARCH_FILTERS_SHOW_KEY) === 'true';
-    this.setState({ isFiltersShow });
+    const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
+
+    this.setState({ isFiltersShow, visitedItems });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.calculateStoreKey(nextProps);
     this.isChineseInput = false;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.isMaskShow && !prevState.isMaskShow) {
+      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
+      if (visitedItems !== prevState.visitedItems) {
+        this.setState({ visitedItems });
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -556,11 +568,10 @@ class Search extends Component {
   };
 
   renderSearchResult() {
-    const { resultItems, width, showRecent, isResultGotten, isLoading } = this.state;
+    const { resultItems, width, showRecent, isResultGotten, isLoading, visitedItems } = this.state;
     if (!width || width === 'default') return null;
 
     if (showRecent) {
-      const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
       if (visitedItems.length > 0) {
         return this.renderResults(visitedItems, true);
       }
@@ -734,6 +745,13 @@ class Search extends Component {
     this.setState({ highlightIndex: index });
   }, 200);
 
+  deleteItem = (item) => {
+    const { visitedItems } = this.state;
+    const update = visitedItems.filter(i => i.path !== item.path || i.repo_id !== item.repo_id);
+    this.setState({ visitedItems: update });
+    localStorage.setItem(this.storeKey, JSON.stringify(update));
+  };
+
   renderResults = (resultItems, isVisited) => {
     const { highlightIndex } = this.state;
 
@@ -758,6 +776,7 @@ class Search extends Component {
                 onHighlightIndex={this.debounceHighlight}
                 timer={this.timer}
                 onSetTimer={(timer) => {this.timer = timer;}}
+                onDeleteItem={this.deleteItem}
               />
             );
           })}

@@ -188,6 +188,16 @@
   overflow: hidden;
 }
 
+.search-result-item .search-icon-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-result-item .search-icon-right:hover {
+  background-color: #dbdbdb;
+}
+
 .item-content .item-name a {
   color: #EA8102 !important;
 }

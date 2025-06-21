@@ -34,6 +34,11 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           const err = gettext('Library does not exist');
           setRepoInfo(null);
           setLibErrorMessage(err);
+
+          const storeKey = 'sfVisitedSearchItems' + repoID;
+          const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+          const filteredItems = visitedItems.filter(item => item.repo_id !== repoID);
+          localStorage.setItem(storeKey, JSON.stringify(filteredItems));
         } else {
           const errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
@@ -46,7 +51,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
       controller.abort();
       clearTimeout(timer);
     };
-  }, [repoID]);
+  }, [repoID, path]);
 
   useEffect(() => {
     setDirentDetail(null);
@@ -73,6 +78,12 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           return; // Ignore abort errors
         }
         if (error.response && error.response.status === 404) {
+          const storeKey = 'sfVisitedSearchItems' + repoID;
+          const visitedItems = JSON.parse(localStorage.getItem(storeKey)) || [];
+          const filteredItems = visitedItems.filter(item =>
+            item.path !== path || item.repo_id !== repoID
+          );
+          localStorage.setItem(storeKey, JSON.stringify(filteredItems));
           const err = `${dirent.type === 'file' ? 'File' : 'Folder'} does not exist`;
           setErrMessage(err);
           return;
