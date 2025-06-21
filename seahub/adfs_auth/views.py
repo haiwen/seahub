@@ -324,8 +324,51 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
     if not uid:
         return render_error(request, login_failed_error_msg)
 
-    if not SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER,
-                                                          uid):
+    # user input email when multi saml login
+    login_email = request.session.get('multi_saml_login_email')
+    saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
+
+    if login_email and login_email != uid and not saml_user:
+        # 1, is multi saml login
+        # 2, email NOT match
+        # 3, NOT social bind
+        error_msg = _(
+            f'The email you entered ({login_email}) does not match the email provided by the SAML service ({uid}).'
+            'Please connect these two accounts on your personal settings page first.'
+        )
+        return render_error(request, error_msg)
+
+    if login_email and login_email == uid:
+        # 1, is multi saml login
+        # 2, email match
+
+        ccnet_email = Profile.objects.get_username_by_contact_email(uid) or uid
+        try:
+            user = User.objects.get(ccnet_email)
+            is_new_user = False
+        except User.DoesNotExist:
+            is_new_user = True
+
+        # if user ready exists, login
+        if not is_new_user:
+
+            user.backend = 'seahub.adfs_auth.backends.Saml2Backend'
+            auth_login(request, user)
+            _set_subject_id(request.saml_session, session_info['name_id'])
+
+            if not saml_user:
+                SocialAuthUser.objects.add(ccnet_email, SAML_PROVIDER_IDENTIFIER, uid)
+
+            # redirect the user to the view where he came from
+            default_relay_state = settings.LOGIN_REDIRECT_URL
+            relay_state = request.POST.get('RelayState', default_relay_state)
+            if not relay_state:
+                logger.warning('The RelayState parameter exists but is empty')
+                relay_state = default_relay_state
+            logger.debug('Redirecting to the RelayState: %s', relay_state)
+            return HttpResponseRedirect(relay_state)
+
+    if not saml_user:
         # check user number limit by license
         if user_number_over_limit():
             logger.error('The number of users exceeds the license limit.')

@@ -541,6 +541,7 @@ def multi_adfs_sso(request):
             render_data['error_msg'] = 'Error, please contact administrator.'
             return render(request, template_name, render_data)
 
+        request.session['multi_saml_login_email'] = login_email
         return HttpResponseRedirect(get_service_url().rstrip('/') + '/org/custom/%s/saml2/login/' % str(org_id))
 
     if request.method == "GET":
