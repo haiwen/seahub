@@ -28,6 +28,7 @@ const MetadataDetails = ({ readOnly, tagsData }) => {
   return (
     <>
       {displayColumns.map(field => {
+        if (field.key === PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) return null;
         if (isDir && FOLDER_NOT_DISPLAY_COLUMN_KEYS.includes(field.key)) return null;
         const value = getCellValueByColumn(record, field);
 
