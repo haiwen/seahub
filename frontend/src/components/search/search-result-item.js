@@ -13,7 +13,6 @@ const propTypes = {
   onHighlightIndex: PropTypes.func,
   timer: PropTypes.number,
   onSetTimer: PropTypes.func,
-  deletable: PropTypes.bool,
   onDeleteItem: PropTypes.func,
 };
 

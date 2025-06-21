@@ -776,7 +776,6 @@ class Search extends Component {
                 onHighlightIndex={this.debounceHighlight}
                 timer={this.timer}
                 onSetTimer={(timer) => {this.timer = timer;}}
-                deletable={isVisited}
                 onDeleteItem={this.deleteItem}
               />
             );
