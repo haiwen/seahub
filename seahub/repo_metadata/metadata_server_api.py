@@ -43,23 +43,50 @@ def list_metadata_records(repo_id, user, parent_dir=None, name=None, is_dir=None
     return response_results
 
 
+def collect_all_tag_ids(tag_ids, metadata_server_api):
+    """Recursively collect all tag ids including sub_links."""
+
+    from seafevents.repo_metadata.constants import TAGS_TABLE
+
+    all_ids = set(tag_ids)
+    to_check = set(tag_ids)
+    while to_check:
+        sql = f"SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}`, `{TAGS_TABLE.columns.sub_links.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({', '.join([f'\"{tid}\"' for tid in to_check])})"
+        tags = metadata_server_api.query_rows(sql).get('results', [])
+        next_ids = set()
+        for tag in tags:
+            sub_links = tag.get('_tag_sub_links', [])
+            for sub in sub_links:
+                sub_id = sub.get('row_id')
+                if sub_id and sub_id not in all_ids:
+                    next_ids.add(sub_id)
+        to_check = next_ids - all_ids
+        all_ids.update(next_ids)
+    return list(all_ids)
+
+
 def list_metadata_view_records(repo_id, user, view, tags_enabled, start=0, limit=1000):
     from seafevents.repo_metadata.constants import METADATA_TABLE, TAGS_TABLE, PrivatePropertyKeys
     from seafevents.repo_metadata.utils import gen_view_data_sql
     metadata_server_api = MetadataServerAPI(repo_id, user)
     columns = metadata_server_api.list_columns(METADATA_TABLE.id).get('columns')
 
-    basic_filters = view.get('basic_filters', [])
+    view_copy = view.copy()
+    basic_filters = view_copy.get('basic_filters', [])
     tags_data = {'metadata': [], 'results': []}
+
     for filter in basic_filters:
         filter_column_key = filter.get('column_key', '')
         if filter_column_key == PrivatePropertyKeys.TAGS and tags_enabled:
             filter_term = filter.get('filter_term', [])
             if filter_term:
-                tags_ids_str = ', '.join([f'"{tag_id}"' for tag_id in filter_term])
-                sql = f'SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({tags_ids_str})'
+                all_tag_ids = collect_all_tag_ids(filter_term, metadata_server_api)
+                tags_ids_str = ', '.join([f'"{tag_id}"' for tag_id in all_tag_ids])
+                sql = f'SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}`, `{TAGS_TABLE.columns.sub_links.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({tags_ids_str})'
                 tags_data = metadata_server_api.query_rows(sql)
-    sql = gen_view_data_sql(METADATA_TABLE, columns, view, start, limit, {'tags_data': tags_data, 'username': user})
+                # update tags filter term
+                filter['filter_term'] = all_tag_ids
+    sql = gen_view_data_sql(METADATA_TABLE, columns, view_copy, start, limit, {'tags_data': tags_data, 'username': user})
 
     # Remove face-vectors from the query SQL because they are too large
     query_fields_str = ''

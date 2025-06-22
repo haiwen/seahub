@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { UncontrolledTooltip } from 'reactstrap';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
@@ -9,7 +10,6 @@ import { getRowById } from '../../../../../components/sf-table/utils/table';
 import IconBtn from '../../../../../components/icon-btn';
 import ClickOutside from '../../../../../components/click-outside';
 import TagsEditor from '../../../cell-editors/tags-editor';
-import classNames from 'classnames';
 
 const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
   const [isOptionsVisible, setIsOptionsVisible] = useState(false);
