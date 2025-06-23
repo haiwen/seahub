@@ -16,6 +16,7 @@ const ExcaliEditor = () => {
 
   // saved file interval
   useEffect(() => {
+    updateAppIcon();
     const saveInterval = setInterval(() => {
       if (isChangedRef.current) {
         context.saveSceneContent(JSON.stringify(editorRef.current)).then(res => {
@@ -41,10 +42,6 @@ const ExcaliEditor = () => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, []);
-
-  useEffect(() => {
-    updateAppIcon();
   }, []);
 
   useEffect(() => {

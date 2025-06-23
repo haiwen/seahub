@@ -7,6 +7,7 @@ class Context {
   constructor() {
     this.docUuid = '';
     this.exdrawServer = '';
+    this.accessToken = '';
   }
 
   initSettings = async () => {
@@ -14,7 +15,16 @@ class Context {
     this.exdrawServer = excalidrawServerUrl;
     const resResult = await editorApi.getExdrawToken();
     const accessToken = resResult;
+    this.accessToken = accessToken;
     this.exdrawApi = new ExcalidrawServerApi({ exdrawUuid: docUuid, exdrawServer: excalidrawServerUrl, accessToken });
+  };
+
+  getSettings = () => {
+    return {
+      docUuid: this.docUuid,
+      exdrawServer: this.exdrawServer,
+      accessToken: this.accessToken,
+    };
   };
 
   getSceneContent = () => {
