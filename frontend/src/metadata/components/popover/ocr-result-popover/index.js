@@ -130,7 +130,11 @@ const OCRResultPopover = ({ repoID, target, record, onToggle, saveToDescription 
       setValue(value);
       setLoading(false);
     }).catch(error => {
-      const errorMessage = gettext('Failed to extract text');
+      let errorMessage = gettext('Failed to extract text');
+      if (error.status === 429) {
+        const err_data = error.response.data;
+        errorMessage = gettext(err_data.error_msg);
+      }
       setErrorMessage(errorMessage);
       setLoading(false);
     });
