@@ -1065,8 +1065,6 @@ Records.propTypes = {
   modifyColumnOrder: PropTypes.func,
   getUpdateDraggedRecords: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
-  moveRecord: PropTypes.func,
-  addFolder: PropTypes.func,
   moveRecords: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
 };

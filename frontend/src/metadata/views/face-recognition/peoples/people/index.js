@@ -61,12 +61,12 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
     setRenaming(false);
   }, [onUnFreezed]);
 
-  const handelUnFreezed = useCallback((keepActive) => {
+  const handleUnFreezed = useCallback((keepActive) => {
     onUnFreezed();
     !keepActive && setActive(false);
   }, [onUnFreezed]);
 
-  const handelClick = useCallback(() => {
+  const handleClick = useCallback(() => {
     if (renaming) return;
     setTimeout(() => onOpenPeople(people), 1);
   }, [renaming, people, onOpenPeople]);
@@ -78,7 +78,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
       })}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
-      onClick={handelClick}
+      onClick={handleClick}
     >
       <div className="sf-metadata-people-info-img">
         <img src={defaultURL || similarPhotoURL} alt={name} onError={onImgLoadError} height={60} width={60} />
@@ -98,7 +98,7 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
       {!readonly && people._is_someone && (
         <div className="sf-metadata-people-info-op">
           {active && !renaming && (
-            <OpMenu onRename={setRenamingState} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />
+            <OpMenu onRename={setRenamingState} onFreezed={onFreezed} onUnFreezed={handleUnFreezed} />
           )}
         </div>
       )}

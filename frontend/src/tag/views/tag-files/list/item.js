@@ -77,7 +77,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
     setIconLoadError(true);
   }, []);
 
-  const handelClickFileName = useCallback((event) => {
+  const handleClickFileName = useCallback((event) => {
     event.preventDefault();
     event.stopPropagation();
     const canPreview = window.sfTagsDataContext.canPreview();
@@ -87,7 +87,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
     });
   }, [repoID, file, openImagePreview, isRenaming]);
 
-  const handelClick = useCallback((event) => {
+  const handleClick = useCallback((event) => {
     event.stopPropagation();
     if (isRenaming) return;
     if (event.target.tagName === 'TD' && event.target.closest('td').querySelector('input[type="checkbox"]') === null) {
@@ -112,7 +112,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
         'tr-highlight': highlight,
         'tr-active': isSelected
       })}
-      onClick={handelClick}
+      onClick={handleClick}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onContextMenu={handleContextMenu}
@@ -130,7 +130,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
       </td>
       <td className="pl-2 pr-2">
         <div className="dir-icon" onDragStart={(e) => e.preventDefault()}>
-          <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" onClick={handelClickFileName} />
+          <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" onClick={handleClickFileName} />
         </div>
       </td>
       <td className="name">
@@ -142,7 +142,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
             onRenameCancel={onRenameCancel}
           />
         ) : (
-          <a href={path} onClick={handelClickFileName}>{name}</a>
+          <a href={path} onClick={handleClickFileName}>{name}</a>
         )}
       </td>
       <td className="tag-list-title">

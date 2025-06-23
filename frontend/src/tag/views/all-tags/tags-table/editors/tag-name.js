@@ -14,7 +14,7 @@ const TagNameEditor = forwardRef(({ record, updateTag, onCommitCancel, operation
     return tagsData?.rows || [];
   }, [tagsData]);
 
-  const handelUpdateTag = useCallback((updates, { success_callback, fail_callback } = {}) => {
+  const handleUpdateTag = useCallback((updates, { success_callback, fail_callback } = {}) => {
     const recordId = getRecordIdFromRecord(record);
     updateTag(recordId, updates, { success_callback, fail_callback });
   }, [record, updateTag]);
@@ -31,14 +31,7 @@ const TagNameEditor = forwardRef(({ record, updateTag, onCommitCancel, operation
   }
 
   return (
-    <EditTagDialog
-      {...editorProps}
-      tags={tags}
-      title={gettext('Edit tag')}
-      tag={record}
-      onToggle={onCommitCancel}
-      onSubmit={handelUpdateTag}
-    />
+    <EditTagDialog {...editorProps} tags={tags} title={gettext('Edit tag')} tag={record} onToggle={onCommitCancel} onSubmit={handleUpdateTag} />
   );
 });
 

@@ -41,7 +41,7 @@ const AllTagsOperationToolbar = ({ repoID }) => {
     setShowEditTagDialog(false);
   }, []);
 
-  const handelAddTags = useCallback((tag, callback) => {
+  const handleAddTags = useCallback((tag, callback) => {
     addTag(tag, callback);
   }, [addTag]);
 
@@ -96,7 +96,7 @@ const AllTagsOperationToolbar = ({ repoID }) => {
         </Dropdown>
       </div>
       {isShowEditTagDialog && (
-        <EditTagDialog tags={tags} title={gettext('New tag')} onToggle={closeAddTag} onSubmit={handelAddTags} />
+        <EditTagDialog tags={tags} title={gettext('New tag')} onToggle={closeAddTag} onSubmit={handleAddTags} />
       )}
       {isShowImportLoadingDialog && (
         <ImportTagsDialog toggleDialog={() => setShowImportLoadingDialog(false)} />

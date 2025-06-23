@@ -559,7 +559,6 @@ class RecordsBody extends Component {
             getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
             updateFileTags={this.props.updateFileTags}
             deleteRecords={this.props.deleteRecords}
-            moveRecord={this.props.moveRecord}
             generateFileTags={this.props.generateFileTags}
           />
           <div className="sf-metadata-result-table" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
@@ -628,8 +627,6 @@ RecordsBody.propTypes = {
   cacheDownloadFilesProps: PropTypes.func,
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
-  moveRecord: PropTypes.func,
-  addFolder: PropTypes.func,
 };
 
 export default RecordsBody;

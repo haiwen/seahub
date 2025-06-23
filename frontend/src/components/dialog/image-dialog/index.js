@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
 import Lightbox from '@seafile/react-image-lightbox';
-import { useMetadataAIOperations } from '../../../hooks/metadata-ai-operation';
+import { useMetadataAIOperations } from '../../../hooks';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { SYSTEM_FOLDERS } from '../../../constants';
 import Icon from '../../icon';

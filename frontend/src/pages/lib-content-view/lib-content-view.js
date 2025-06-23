@@ -23,7 +23,7 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
-import { MetadataStatusProvider, DownloadFileProvider, MetadataMiddlewareProvider } from '../../hooks';
+import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import { LIST_MODE, METADATA_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
@@ -2361,7 +2361,20 @@ class LibContentView extends React.Component {
 
     const detailDirent = currentDirent || currentNode?.object || null;
     return (
-      <DownloadFileProvider repoID={repoID} eventBus={this.props.eventBus}>
+      <FileOperationsProvider
+        repoID={repoID}
+        repoInfo={currentRepoInfo}
+        enableDirPrivateShare={enableDirPrivateShare}
+        isGroupOwnedRepo={this.state.isGroupOwnedRepo}
+        eventBus={this.props.eventBus}
+        onCreateFolder={this.onAddFolder}
+        onCreateFile={this.onAddFile}
+        onRename={this.onMainPanelItemRename}
+        onMove={this.onMoveItems}
+        onMoveItem={this.onMoveItem}
+        onCopy={this.onCopyItems}
+        onCopyItem={this.onCopyItem}
+      >
         <DndProvider backend={HTML5Backend}>
           <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} currentPath={path} hideMetadataView={this.hideMetadataView} statusCallback={this.metadataStatusCallback} >
             <MetadataMiddlewareProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} tagsChangedCallback={this.tagsChangedCallback}>
@@ -2392,10 +2405,7 @@ class LibContentView extends React.Component {
                               repoTags={this.state.repoTags}
                               selectedDirentList={this.state.selectedDirentList}
                               direntList={direntItemsList}
-                              onItemsMove={this.onMoveItems}
-                              onItemsCopy={this.onCopyItems}
                               onItemsDelete={this.onDeleteItems}
-                              onItemRename={this.onMainPanelItemRename}
                               isRepoOwner={isRepoOwner}
                               currentRepoInfo={this.state.currentRepoInfo}
                               enableDirPrivateShare={enableDirPrivateShare}
@@ -2407,7 +2417,6 @@ class LibContentView extends React.Component {
                               showDirentDetail={this.showDirentDetail}
                               currentMode={this.state.currentMode}
                               onItemConvert={this.onConvertItem}
-                              onAddFolder={this.onAddFolder}
                             />
                           )
                         ) : (
@@ -2430,8 +2439,6 @@ class LibContentView extends React.Component {
                             toggleTreePanel={this.toggleTreePanel}
                             enableDirPrivateShare={enableDirPrivateShare}
                             showShareBtn={showShareBtn}
-                            onAddFolder={this.onAddFolder}
-                            onAddFile={this.onAddFile}
                             onUploadFile={this.onUploadFile}
                             onUploadFolder={this.onUploadFolder}
                             fullDirentList={this.state.direntList}
@@ -2440,8 +2447,8 @@ class LibContentView extends React.Component {
                             repoTags={this.state.repoTags}
                             onItemMove={this.onMoveItem}
                             isDesktop={isDesktop}
+                            eventBus={this.props.eventBus}
                             loadDirentList={this.loadDirentList}
-                            onAddFolderNode={this.onAddFolder}
                           />
                         )}
                       </div>
@@ -2486,8 +2493,6 @@ class LibContentView extends React.Component {
                           onNodeClick={this.onTreeNodeClick}
                           onNodeCollapse={this.onTreeNodeCollapse}
                           onNodeExpanded={this.onTreeNodeExpanded}
-                          onAddFolderNode={this.onAddFolder}
-                          onAddFileNode={this.onAddFile}
                           onRenameNode={this.onRenameTreeNode}
                           onDeleteNode={this.onDeleteTreeNode}
                           isViewFile={this.state.isViewFile}
@@ -2509,8 +2514,6 @@ class LibContentView extends React.Component {
                           sortBy={this.state.sortBy}
                           sortOrder={this.state.sortOrder}
                           sortItems={this.sortItems}
-                          onAddFolder={this.onAddFolder}
-                          onAddFile={this.onAddFile}
                           onItemClick={this.onItemClick}
                           onItemSelected={this.onDirentSelected}
                           onItemDelete={this.onMainPanelItemDelete}
@@ -2519,7 +2522,6 @@ class LibContentView extends React.Component {
                           renameFileCallback={this.renameItemAjaxCallback}
                           onItemMove={this.onMoveItem}
                           moveFileCallback={this.moveItemsAjaxCallback}
-                          onItemCopy={this.onCopyItem}
                           copyFileCallback={this.copyItemsAjaxCallback}
                           convertFileCallback={this.convertFileAjaxCallback}
                           onItemConvert={this.onConvertItem}
@@ -2530,7 +2532,6 @@ class LibContentView extends React.Component {
                           selectedDirentList={this.state.selectedDirentList}
                           onSelectedDirentListUpdate={this.onSelectedDirentListUpdate}
                           onItemsMove={this.onMoveItems}
-                          onItemsCopy={this.onCopyItems}
                           onItemsDelete={this.onDeleteItems}
                           onFileTagChanged={this.onFileTagChanged}
                           showDirentDetail={this.showDirentDetail}
@@ -2594,7 +2595,7 @@ class LibContentView extends React.Component {
             </MetadataMiddlewareProvider>
           </MetadataStatusProvider>
         </DndProvider>
-      </DownloadFileProvider>
+      </FileOperationsProvider>
     );
   }
 }

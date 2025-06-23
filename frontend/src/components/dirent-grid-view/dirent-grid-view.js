@@ -11,16 +11,8 @@ import DirentGridItem from '../../components/dirent-grid-view/dirent-grid-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import TextTranslation from '../../utils/text-translation';
-import MoveDirentDialog from '../dialog/move-dirent-dialog';
-import CopyDirentDialog from '../dialog/copy-dirent-dialog';
-import ShareDialog from '../dialog/share-dialog';
-import Rename from '../../components/dialog/rename-dirent';
-import CreateFile from '../dialog/create-file-dialog';
-import CreateFolder from '../dialog/create-folder-dialog';
-import LibSubFolderPermissionDialog from '../dialog/lib-sub-folder-permission-dialog';
 import toaster from '../toast';
 import imageAPI from '../../utils/image-api';
-import FileAccessLog from '../dialog/file-access-log';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
@@ -35,26 +27,19 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   selectedDirentList: PropTypes.array.isRequired,
   onSelectedDirentListUpdate: PropTypes.func.isRequired,
-  onAddFile: PropTypes.func,
   onItemDelete: PropTypes.func,
-  onItemCopy: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
-  onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
-  onRenameNode: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
-  isGroupOwnedRepo: PropTypes.bool.isRequired,
   userPerm: PropTypes.string, // current path's user permission
   enableDirPrivateShare: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onGridItemClick: PropTypes.func,
   repoTags: PropTypes.array.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
   showDirentDetail: PropTypes.func.isRequired,
-  onItemRename: PropTypes.func.isRequired,
   posX: PropTypes.number,
   posY: PropTypes.number,
   dirent: PropTypes.object,
@@ -73,18 +58,6 @@ class DirentGridView extends React.Component {
       isImagePopupOpen: false,
       imageItems: [],
       imageIndex: 0,
-      // onmenuClick
-      isFileAccessLogDialogOpen: false,
-      isShareDialogShow: false,
-      isMoveDialogShow: false,
-      isCopyDialogShow: false,
-      isRenameDialogShow: false,
-      isCreateFolderDialogShow: false,
-      isCreateFileDialogShow: false,
-      fileType: '',
-      isPermissionDialogOpen: false,
-
-      isMultipleOperation: true,
       isGridItemFreezed: false,
       activeDirent: null,
       downloadItems: [],
@@ -256,41 +229,12 @@ class DirentGridView extends React.Component {
     }
   };
 
-  onCreateFileToggle = (fileType) => {
-    this.setState({
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-      fileType: fileType || ''
-    });
-  };
-
   onGridItemClick = (dirent, event) => {
     hideMenu();
     if (this.state.activeDirent !== dirent) {
       this.setState({ activeDirent: dirent });
     }
     this.props.onGridItemClick(dirent, event);
-  };
-
-  onMoveToggle = () => {
-    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
-  };
-
-  onCopyToggle = () => {
-    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
-  };
-
-  onAddFolder = (dirPath) => {
-    this.setState({ isCreateFolderDialogShow: false });
-    this.props.onAddFolder(dirPath);
-  };
-
-  onItemShare = (e) => {
-    e.nativeEvent.stopImmediatePropagation(); // for document event
-    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
-  };
-
-  closeSharedDialog = () => {
-    this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
 
   onItemDelete = (currentObject, e) => {
@@ -334,22 +278,22 @@ class DirentGridView extends React.Component {
     hideMenu();
     switch (operation) {
       case 'Download':
-        this.onItemsDownload();
+        this.onDownload();
         break;
       case 'Share':
-        this.onItemShare(event);
+        this.onShare(event);
         break;
       case 'Delete':
         this.onItemDelete(currentObject, event);
         break;
       case 'Rename':
-        this.onItemRenameToggle();
+        this.onRename();
         break;
       case 'Move':
-        this.onItemMoveToggle();
+        this.onMove();
         break;
       case 'Copy':
-        this.onItemCopyToggle();
+        this.onCopy();
         break;
       case 'Star':
         this.onToggleStarItem();
@@ -379,7 +323,7 @@ class DirentGridView extends React.Component {
         this.onItemConvert(currentObject, event, 'sdoc');
         break;
       case 'Permission':
-        this.onPermissionItem();
+        this.onPermission();
         break;
       case 'Unlock':
         this.onUnlockItem(currentObject);
@@ -391,34 +335,34 @@ class DirentGridView extends React.Component {
         this.onHistory(currentObject);
         break;
       case 'New Folder':
-        this.onCreateFolderToggle(currentObject);
+        this.onCreateFolder();
         break;
       case 'New File':
-        this.onCreateFileToggle('');
+        this.onCreateFile('');
         break;
       case 'New Markdown File':
-        this.onCreateFileToggle('.md');
+        this.onCreateFile('.md');
         break;
       case 'New Excel File':
-        this.onCreateFileToggle('.xlsx');
+        this.onCreateFile('.xlsx');
         break;
       case 'New PowerPoint File':
-        this.onCreateFileToggle('.pptx');
+        this.onCreateFile('.pptx');
         break;
       case 'New Word File':
-        this.onCreateFileToggle('.docx');
+        this.onCreateFile('.docx');
         break;
       case 'New Whiteboard File':
-        this.onCreateFileToggle('.draw');
+        this.onCreateFile('.draw');
         break;
       case 'New Excalidraw File':
-        this.onCreateFileToggle('.exdraw');
+        this.onCreateFile('.exdraw');
         break;
       case 'New SeaDoc File':
-        this.onCreateFileToggle('.sdoc');
+        this.onCreateFile('.sdoc');
         break;
       case 'Access Log':
-        this.toggleFileAccessLogDialog();
+        this.openFileAccessLog();
         break;
       case 'Properties':
         this.props.showDirentDetail('info');
@@ -434,13 +378,13 @@ class DirentGridView extends React.Component {
   onDirentsMenuItemClick = (operation) => {
     switch (operation) {
       case 'Move':
-        this.onMoveToggle();
+        this.onMove();
         break;
       case 'Copy':
-        this.onCopyToggle();
+        this.onCopy();
         break;
       case 'Download':
-        this.onItemsDownload();
+        this.onDownload();
         break;
       case 'Delete':
         this.props.onItemsDelete();
@@ -457,30 +401,63 @@ class DirentGridView extends React.Component {
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   };
 
-  onItemsDownload = () => {
+  onMove = () => {
+    const { path, selectedDirentList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.MOVE_FILE, path, selectedDirentList, true);
+  };
+
+  onCopy = () => {
+    const { path, selectedDirentList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.COPY_FILE, path, selectedDirentList, true);
+  };
+
+  onDownload = () => {
     const { path, selectedDirentList, eventBus } = this.props;
     const direntList = selectedDirentList.map(dirent => dirent instanceof Dirent ? dirent.toJson() : dirent);
     eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   };
 
-  onCreateFolderToggle = () => {
-    this.setState({
-      isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow,
-    });
+  onCreateFolder = () => {
+    const { path, direntList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FOLDER, path, direntList);
   };
 
-  onItemRenameToggle = () => {
-    this.setState({
-      isRenameDialogShow: !this.state.isRenameDialogShow,
-    });
+  onCreateFile = (fileType = '') => {
+    const { path, direntList, eventBus } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, fileType);
   };
 
-  onItemMoveToggle = () => {
-    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
+  onShare = (e) => {
+    e.nativeEvent.stopImmediatePropagation(); // for document event
+
+    const { path, eventBus } = this.props;
+    const { activeDirent } = this.state;
+    const dirent = activeDirent || '';
+    const direntPath = Utils.joinPath(path, dirent.name);
+    eventBus.dispatch(EVENT_BUS_TYPE.SHARE_FILE, direntPath, dirent);
   };
 
-  onItemCopyToggle = () => {
-    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
+  onRename = () => {
+    const { eventBus, direntList } = this.props;
+    const { activeDirent } = this.state;
+    const dirent = activeDirent || '';
+    eventBus.dispatch(EVENT_BUS_TYPE.RENAME_FILE, dirent, direntList);
+  };
+
+  onPermission = () => {
+    const { eventBus, path } = this.props;
+    const { activeDirent } = this.state;
+    const dirent = activeDirent || '';
+    const direntPath = Utils.joinPath(path, dirent?.name);
+    eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, dirent, direntPath);
+  };
+
+  openFileAccessLog = () => {
+    const { eventBus, path } = this.props;
+    const { activeDirent } = this.state;
+    const dirent = activeDirent || '';
+    const direntPath = Utils.joinPath(path, dirent?.name);
+    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, dirent, direntPath);
   };
 
   onToggleStarItem = () => {
@@ -510,10 +487,6 @@ class DirentGridView extends React.Component {
         toaster.danger(errMessage);
       });
     }
-  };
-
-  onPermissionItem = () => {
-    this.setState({ isPermissionDialogOpen: !this.state.isPermissionDialogOpen });
   };
 
   handleError = (error) => {
@@ -566,21 +539,11 @@ class DirentGridView extends React.Component {
     location.href = url;
   };
 
-  toggleFileAccessLogDialog = () => {
-    this.setState({
-      isFileAccessLogDialogOpen: !this.state.isFileAccessLogDialogOpen
-    });
-  };
-
   onOpenViaClient = (currentObject) => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(currentObject);
     let url = URLDecorator.getUrl({ type: 'open_via_client', repoID: repoID, filePath: filePath });
     location.href = url;
-  };
-
-  onItemRename = (newName) => {
-    this.props.onItemRename(this.state.activeDirent, newName);
   };
 
   prepareImageItem = (item) => {
@@ -851,10 +814,8 @@ class DirentGridView extends React.Component {
   };
 
   render() {
-    const { direntList, selectedDirentList, path, currentRepoInfo, userPerm } = this.props;
+    const { direntList, selectedDirentList, currentRepoInfo, userPerm } = this.props;
     const { encrypted: repoEncrypted } = currentRepoInfo;
-    let dirent = this.state.activeDirent ? this.state.activeDirent : '';
-    let direntPath = Utils.joinPath(path, dirent.name);
 
     let canModifyFile = false;
     let canDeleteFile = false;
@@ -934,89 +895,6 @@ class DirentGridView extends React.Component {
           onMenuItemClick={this.onDirentsMenuItemClick}
           getMenuContainerSize={this.props.getMenuContainerSize}
         />
-        {this.state.isCreateFolderDialogShow && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.props.path}
-              onAddFolder={this.onAddFolder}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onCreateFolderToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isCreateFileDialogShow && (
-          <ModalPortal>
-            <CreateFile
-              parentPath={this.props.path}
-              fileType={this.state.fileType}
-              onAddFile={this.props.onAddFile}
-              checkDuplicatedName={this.checkDuplicatedName}
-              toggleDialog={this.onCreateFileToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isMoveDialogShow &&
-          <MoveDirentDialog
-            path={this.props.path}
-            repoID={this.props.repoID}
-            repoEncrypted={repoEncrypted}
-            isMultipleOperation={this.state.isMultipleOperation}
-            selectedDirentList={selectedDirentList}
-            onItemMove={this.props.onItemMove}
-            onItemsMove={this.props.onItemsMove}
-            onCancelMove={this.onMoveToggle}
-            dirent={this.state.activeDirent}
-            onAddFolder={this.props.onAddFolder}
-          />
-        }
-        {this.state.isCopyDialogShow &&
-          <CopyDirentDialog
-            path={this.props.path}
-            repoID={this.props.repoID}
-            repoEncrypted={repoEncrypted}
-            isMultipleOperation={this.state.isMultipleOperation}
-            selectedDirentList={selectedDirentList}
-            onItemsCopy={this.props.onItemsCopy}
-            onCancelCopy={this.onCopyToggle}
-            onAddFolder={this.props.onAddFolder}
-          />
-        }
-        {this.state.isShareDialogShow &&
-          <ModalPortal>
-            <ShareDialog
-              itemType={dirent.type}
-              itemName={dirent.name}
-              itemPath={direntPath}
-              userPerm={dirent.permission}
-              repoID={this.props.repoID}
-              repoEncrypted={false}
-              enableDirPrivateShare={this.props.enableDirPrivateShare}
-              isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-              toggleDialog={this.closeSharedDialog}
-            />
-          </ModalPortal>
-        }
-        {this.state.isRenameDialogShow && (
-          <ModalPortal>
-            <Rename
-              dirent={selectedDirentList.length > 1 ? selectedDirentList[selectedDirentList.length - 1] : this.state.activeDirent}
-              onRename={this.onItemRename}
-              checkDuplicatedName={this.checkDuplicatedName}
-              toggleCancel={this.onItemRenameToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isPermissionDialogOpen &&
-          <ModalPortal>
-            <LibSubFolderPermissionDialog
-              toggleDialog={this.onPermissionItem}
-              repoID={this.props.repoID}
-              folderPath={direntPath}
-              folderName={dirent.name}
-              isDepartmentRepo={this.props.isGroupOwnedRepo}
-            />
-          </ModalPortal>
-        }
         {this.state.isImagePopupOpen && this.state.imageItems.length && (
           <ModalPortal>
             <ImageDialog
@@ -1034,16 +912,6 @@ class DirentGridView extends React.Component {
             />
           </ModalPortal>
         )}
-        {this.state.isFileAccessLogDialogOpen &&
-          <ModalPortal>
-            <FileAccessLog
-              repoID={this.props.repoID}
-              filePath={direntPath}
-              fileName={dirent.name}
-              toggleDialog={this.toggleFileAccessLogDialog}
-            />
-          </ModalPortal>
-        }
       </Fragment>
     );
   }

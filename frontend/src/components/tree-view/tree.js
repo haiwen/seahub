@@ -40,6 +40,7 @@ class Tree {
   }
 
   addNodeToParent(node, parentNode) {
+    if (!node || !parentNode) return;
     parentNode.addChild(node);
   }
 

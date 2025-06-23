@@ -9,7 +9,7 @@ import { gettext } from '../../../../utils/constants';
 import { openInNewTab, openParentFolder } from '../../../utils/file';
 import { useMetadataView } from '../../../hooks/metadata-view';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
-import { useDownloadFile } from '../../../../hooks/download-file';
+import { useFileOperations } from '../../../../hooks/file-operations';
 
 const CONTEXT_MENU_KEY = {
   OPEN_IN_NEW_TAB: 'open_in_new_tab',
@@ -23,7 +23,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
   const [isRenameDialogShow, setIsRenameDialogShow] = useState(false);
 
   const { metadata } = useMetadataView();
-  const { handleDownload: handleDownloadAPI } = useDownloadFile();
+  const { handleDownload: handleDownloadAPI } = useFileOperations();
 
   const selectedRecord = useMemo(() => getRowById(metadata, selectedCard), [metadata, selectedCard]);
   const isDir = useMemo(() => checkIsDir(selectedRecord), [selectedRecord]);

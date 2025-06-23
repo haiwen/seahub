@@ -22,8 +22,6 @@ const propTypes = {
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   showShareBtn: PropTypes.bool.isRequired,
-  onAddFile: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
   onUploadFile: PropTypes.func.isRequired,
   onUploadFolder: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array.isRequired,
@@ -67,14 +65,13 @@ class CurDirPath extends React.Component {
           toggleTreePanel={this.props.toggleTreePanel}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           showShareBtn={this.props.showShareBtn}
-          onAddFolder={this.props.onAddFolder}
-          onAddFile={this.props.onAddFile}
           onUploadFile={this.props.onUploadFile}
           onUploadFolder={this.props.onUploadFolder}
           direntList={this.props.fullDirentList}
           filePermission={this.props.filePermission}
           onFileTagChanged={this.props.onFileTagChanged}
           repoTags={this.props.repoTags}
+          eventBus={this.props.eventBus}
           onItemMove={this.props.onItemMove}
           loadDirentList={this.props.loadDirentList}
         />

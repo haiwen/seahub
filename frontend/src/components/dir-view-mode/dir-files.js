@@ -2,11 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import TreeView from '../tree-view/tree-view';
 import ModalPortal from '../modal-portal';
-import Rename from '../dialog/rename-dialog';
-import Copy from '../dialog/copy-dirent-dialog';
-import Move from '../dialog/move-dirent-dialog';
-import CreateFolder from '../dialog/create-folder-dialog';
-import CreateFile from '../dialog/create-file-dialog';
 import ImageDialog from '../dialog/image-dialog';
 import toaster from '../toast';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
@@ -16,6 +11,7 @@ import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../tree-section';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -24,17 +20,14 @@ const propTypes = {
   userPerm: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   direntList: PropTypes.array,
-  selectedDirentList: PropTypes.array.isRequired,
   currentNode: PropTypes.object,
+  eventBus: PropTypes.object,
   getMenuContainerSize: PropTypes.func,
   onNodeClick: PropTypes.func.isRequired,
   onNodeCollapse: PropTypes.func.isRequired,
   onNodeExpanded: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   onDeleteNode: PropTypes.func.isRequired,
-  onAddFileNode: PropTypes.func.isRequired,
-  onAddFolderNode: PropTypes.func.isRequired,
-  onItemCopy: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   updateDirent: PropTypes.func,
@@ -48,13 +41,9 @@ class DirFiles extends React.Component {
       opNode: null,
       isAddFileDialogShow: false,
       isAddFolderDialogShow: false,
-      isRenameDialogShow: false,
       isNodeImagePopupOpen: false,
       imageNodeItems: [],
       imageIndex: 0,
-      isCopyDialogShow: false,
-      isMoveDialogShow: false,
-      isMultipleOperation: false,
       operationList: [],
       isDisplayFiles: localStorage.getItem('sf_display_files') === 'true' || false,
     };
@@ -109,34 +98,44 @@ class DirFiles extends React.Component {
   };
 
   onMenuItemClick = (operation, node) => {
+    const { eventBus, treeData, onRenameNode } = this.props;
     this.setState({ opNode: node });
     switch (operation) {
-      case 'New Folder':
-        if (!node) {
-          this.onAddFolderToggle('root');
-        } else {
-          this.onAddFolderToggle();
-        }
+      case 'New Folder': {
+        const validNode = node || treeData.root;
+        const parentNode = validNode.parentNode ? validNode.parentNode : validNode;
+        const children = parentNode.children.map(item => item.object);
+        eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FOLDER, validNode.path, children);
         break;
-      case 'New File':
-        if (!node) {
-          this.onAddFileToggle('root');
-        } else {
-          this.onAddFileToggle();
-        }
+      }
+      case 'New File': {
+        const validNode = node || treeData.root;
+        const parentNode = validNode.parentNode ? validNode.parentNode : validNode;
+        const children = parentNode.children.map(item => item.object);
+        eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, validNode.path, children);
         break;
-      case 'Rename':
-        this.onRenameToggle();
+      }
+      case 'Rename': {
+        const parentNode = node.parentNode ? node.parentNode : node;
+        const children = parentNode.children.map(item => item.object);
+        eventBus.dispatch(EVENT_BUS_TYPE.RENAME_FILE, node.object, children, (newName) => onRenameNode(node, newName));
         break;
+      }
       case 'Delete':
         this.onDeleteNode(node);
         break;
-      case 'Copy':
-        this.onCopyToggle();
+      case 'Copy': {
+        const path = node.parentNode.path;
+        const dirent = node.object;
+        eventBus.dispatch(EVENT_BUS_TYPE.COPY_FILE, path, dirent, false);
         break;
-      case 'Move':
-        this.onMoveToggle();
+      }
+      case 'Move': {
+        const path = node.parentNode.path;
+        const dirent = node.object;
+        eventBus.dispatch(EVENT_BUS_TYPE.MOVE_FILE, path, dirent, false);
         break;
+      }
       case 'Open in New Tab':
         this.onOpenFile(node);
         break;
@@ -144,53 +143,6 @@ class DirFiles extends React.Component {
         this.onDisplayFilesToggle();
         break;
     }
-  };
-
-  onAddFileToggle = (type) => {
-    if (type === 'root') {
-      let root = this.props.treeData.root;
-      this.setState({
-        isAddFileDialogShow: !this.state.isAddFileDialogShow,
-        opNode: root,
-      });
-    } else {
-      this.setState({ isAddFileDialogShow: !this.state.isAddFileDialogShow });
-    }
-  };
-
-  onAddFolderToggle = (type) => {
-    if (type === 'root') {
-      let root = this.props.treeData.root;
-      this.setState({
-        isAddFolderDialogShow: !this.state.isAddFolderDialogShow,
-        opNode: root,
-      });
-    } else {
-      this.setState({ isAddFolderDialogShow: !this.state.isAddFolderDialogShow });
-    }
-  };
-
-  onRenameToggle = () => {
-    this.setState({ isRenameDialogShow: !this.state.isRenameDialogShow });
-  };
-
-  onCopyToggle = () => {
-    this.setState({ isCopyDialogShow: !this.state.isCopyDialogShow });
-  };
-
-  onMoveToggle = () => {
-    this.setState({ isMoveDialogShow: !this.state.isMoveDialogShow });
-  };
-
-  onAddFolderNode = (dirPath) => {
-    this.setState({ isAddFolderDialogShow: !this.state.isAddFolderDialogShow });
-    this.props.onAddFolderNode(dirPath);
-  };
-
-  onRenameNode = (newName) => {
-    this.setState({ isRenameDialogShow: !this.state.isRenameDialogShow });
-    let node = this.state.opNode;
-    this.props.onRenameNode(node, newName);
   };
 
   onDeleteNode = (node) => {
@@ -365,7 +317,6 @@ class DirFiles extends React.Component {
 
   render() {
     const { repoID, currentRepoInfo, userPerm } = this.props;
-    const { encrypted: repoEncrypted } = currentRepoInfo;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
     let canModifyFile = false;
     if (['rw', 'cloud-edit'].indexOf(userPerm) != -1) {
@@ -391,7 +342,6 @@ class DirFiles extends React.Component {
             treeData={this.props.treeData}
             currentPath={this.props.currentPath}
             currentRepoInfo={currentRepoInfo}
-            selectedDirentList={this.props.selectedDirentList}
             isDisplayFiles={this.state.isDisplayFiles}
             isNodeMenuShow={this.isNodeMenuShow}
             onNodeClick={this.onNodeClick}
@@ -403,62 +353,6 @@ class DirFiles extends React.Component {
             onItemsMove={this.props.onItemsMove}
           />
         </TreeSection>
-        {this.state.isAddFolderDialogShow && (
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.state.opNode.path}
-              onAddFolder={this.onAddFolderNode}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onAddFolderToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isAddFileDialogShow && (
-          <ModalPortal>
-            <CreateFile
-              parentPath={this.state.opNode.path}
-              onAddFile={this.props.onAddFileNode}
-              checkDuplicatedName={this.checkDuplicatedName}
-              toggleDialog={this.onAddFileToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isRenameDialogShow && (
-          <ModalPortal>
-            <Rename
-              currentNode={this.state.opNode}
-              onRename={this.onRenameNode}
-              checkDuplicatedName={this.checkDuplicatedName}
-              toggleCancel={this.onRenameToggle}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isCopyDialogShow && (
-          <ModalPortal>
-            <Copy
-              repoID={repoID}
-              path={this.state.opNode.parentNode.path}
-              dirent={this.state.opNode.object}
-              onItemCopy={this.props.onItemCopy}
-              repoEncrypted={repoEncrypted}
-              onCancelCopy={this.onCopyToggle}
-              isMultipleOperation={this.state.isMultipleOperation}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isMoveDialogShow && (
-          <ModalPortal>
-            <Move
-              repoID={repoID}
-              path={this.state.opNode.parentNode.path}
-              dirent={this.state.opNode.object}
-              onItemMove={this.props.onItemMove}
-              repoEncrypted={repoEncrypted}
-              onCancelMove={this.onMoveToggle}
-              isMultipleOperation={this.state.isMultipleOperation}
-            />
-          </ModalPortal>
-        )}
         {this.state.isNodeImagePopupOpen && (
           <ModalPortal>
             <ImageDialog

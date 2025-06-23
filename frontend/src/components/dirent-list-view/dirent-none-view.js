@@ -2,62 +2,33 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { enableSeadoc, gettext, enableWhiteboard, enableExcalidraw } from '../../utils/constants';
 import Loading from '../loading';
-import ModalPortal from '../modal-portal';
-import CreateFile from '../../components/dialog/create-file-dialog';
-import CreateFolder from '../dialog/create-folder-dialog';
 import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 
 import '../../css/tip-for-new-file.css';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
-  onAddFile: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
+  eventBus: PropTypes.object,
   getMenuContainerSize: PropTypes.func.isRequired,
   userPerm: PropTypes.string,
 };
 
 class DirentNoneView extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      fileType: '',
-      isCreateFileDialogShow: false,
-      isCreateFolderDialogShow: false,
-    };
-  }
-
-  onCreateFolderToggle = () => {
-    this.setState({ isCreateFolderDialogShow: !this.state.isCreateFolderDialogShow });
+  onCreateFile = (type) => {
+    const { eventBus, path } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, [], type);
   };
 
-  onAddFolder = (dirPath) => {
-    this.setState({ isCreateFolderDialogShow: false });
-    this.props.onAddFolder(dirPath);
-  };
-
-  onCreateNewFile = (type) => {
-    this.setState({
-      fileType: type,
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-    });
-  };
-
-  onCreateFileToggle = () => {
-    this.setState({
-      fileType: '',
-      isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
-    });
-  };
-
-  checkDuplicatedName = () => {
-    return false; // current repo is null, and unnecessary to check duplicated name
+  onCreateFolder = () => {
+    const { eventBus, path } = this.props;
+    eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FOLDER, path, []);
   };
 
   onContainerContextMenu = (event) => {
@@ -133,28 +104,28 @@ class DirentNoneView extends React.Component {
   onContainerMenuItemClick = (operation) => {
     switch (operation) {
       case 'New Folder':
-        this.onCreateFolderToggle();
+        this.onCreateFolder();
         break;
       case 'New File':
-        this.onCreateNewFile('');
+        this.onCreateFile('');
         break;
       case 'New Markdown File':
-        this.onCreateNewFile('.md');
+        this.onCreateFile('.md');
         break;
       case 'New Excel File':
-        this.onCreateNewFile('.xlsx');
+        this.onCreateFile('.xlsx');
         break;
       case 'New PowerPoint File':
-        this.onCreateNewFile('.pptx');
+        this.onCreateFile('.pptx');
         break;
       case 'New Word File':
-        this.onCreateNewFile('.docx');
+        this.onCreateFile('.docx');
         break;
       case 'New Whiteboard File':
-        this.onCreateNewFile('.draw');
+        this.onCreateFile('.draw');
         break;
       case 'New SeaDoc File':
-        this.onCreateNewFile('.sdoc');
+        this.onCreateFile('.sdoc');
         break;
       default:
         break;
@@ -185,39 +156,18 @@ class DirentNoneView extends React.Component {
           {canCreateFile && (
             <>
               <p className="text-secondary text-center">{gettext('You can create files quickly')}{' +'}</p>
-              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.md')}>{'+ Markdown'}</button>
-              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.pptx')}>{'+ PPT'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateFile.bind(this, '.md')}>{'+ Markdown'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateFile.bind(this, '.pptx')}>{'+ PPT'}</button>
               <br />
-              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.docx')}>{'+ Word'}</button>
-              <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.xlsx')}>{'+ Excel'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateFile.bind(this, '.docx')}>{'+ Word'}</button>
+              <button className="big-new-file-button" onClick={this.onCreateFile.bind(this, '.xlsx')}>{'+ Excel'}</button>
               <br />
               {enableSeadoc && !currentRepoInfo.encrypted &&
-                <button className="big-new-file-button" onClick={this.onCreateNewFile.bind(this, '.sdoc')}>{'+ SeaDoc'}</button>
+                <button className="big-new-file-button" onClick={this.onCreateFile.bind(this, '.sdoc')}>{'+ SeaDoc'}</button>
               }
             </>
           )}
         </div>
-        {this.state.isCreateFileDialogShow && (
-          <ModalPortal>
-            <CreateFile
-              parentPath={this.props.path}
-              fileType={this.state.fileType}
-              onAddFile={this.props.onAddFile}
-              toggleDialog={this.onCreateFileToggle}
-              checkDuplicatedName={this.checkDuplicatedName}
-            />
-          </ModalPortal>
-        )}
-        {this.state.isCreateFolderDialogShow &&
-          <ModalPortal>
-            <CreateFolder
-              parentPath={this.props.path}
-              onAddFolder={this.onAddFolder}
-              checkDuplicatedName={this.checkDuplicatedName}
-              addFolderCancel={this.onCreateFolderToggle}
-            />
-          </ModalPortal>
-        }
         <ContextMenu
           id={'dirent-container-menu'}
           onMenuItemClick={this.onContainerMenuItemClick}

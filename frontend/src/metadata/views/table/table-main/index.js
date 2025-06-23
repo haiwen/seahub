@@ -48,7 +48,7 @@ const TableMain = ({
     modifyRecord && modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
   }, [modifyRecord]);
 
-  const handelInsertColumn = useCallback((name, type, { key, data }) => {
+  const handleInsertColumn = useCallback((name, type, { key, data }) => {
     insertColumn && insertColumn(name, type, { key, data });
   }, [insertColumn]);
 
@@ -77,7 +77,7 @@ const TableMain = ({
         recordGetterById={recordGetterById}
         recordGetterByIndex={recordGetterByIndex}
         modifyColumnData={modifyColumnData}
-        insertColumn={handelInsertColumn}
+        insertColumn={handleInsertColumn}
         updateFileTags={updateFileTags}
         modifyRecords={modifyRecords}
         {...props}

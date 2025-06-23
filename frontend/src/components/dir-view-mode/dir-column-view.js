@@ -32,8 +32,6 @@ const propTypes = {
   onNodeExpanded: PropTypes.func.isRequired,
   onRenameNode: PropTypes.func.isRequired,
   onDeleteNode: PropTypes.func.isRequired,
-  onAddFileNode: PropTypes.func.isRequired,
-  onAddFolderNode: PropTypes.func.isRequired,
   // file
   isViewFile: PropTypes.bool.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
@@ -54,18 +52,14 @@ const propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
-  onAddFolder: PropTypes.func.isRequired,
-  onAddFile: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
-  onItemRename: PropTypes.func.isRequired,
   deleteFilesCallback: PropTypes.func,
   renameFileCallback: PropTypes.func,
   onItemMove: PropTypes.func.isRequired,
   moveFileCallback: PropTypes.func.isRequired,
-  onItemCopy: PropTypes.func.isRequired,
   copyFileCallback: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   onDirentClick: PropTypes.func.isRequired,
@@ -74,7 +68,6 @@ const propTypes = {
   selectedDirentList: PropTypes.array.isRequired,
   onSelectedDirentListUpdate: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
-  onItemsCopy: PropTypes.func.isRequired,
   onItemsDelete: PropTypes.func.isRequired,
   repoTags: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func,
@@ -170,18 +163,15 @@ class DirColumnView extends React.Component {
               onNodeClick={this.props.onNodeClick}
               onNodeCollapse={this.props.onNodeCollapse}
               onNodeExpanded={this.props.onNodeExpanded}
-              onAddFolderNode={this.props.onAddFolderNode}
-              onAddFileNode={this.props.onAddFileNode}
               onRenameNode={this.props.onRenameNode}
               onDeleteNode={this.props.onDeleteNode}
               repoID={this.props.repoID}
+              eventBus={this.props.eventBus}
               navRate={navRate}
               inResizing={inResizing}
               currentRepoInfo={this.props.currentRepoInfo}
               updateRepoInfo={this.props.updateRepoInfo}
               onItemMove={this.props.onItemMove}
-              onItemCopy={this.props.onItemCopy}
-              selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
               getMenuContainerSize={this.getMenuContainerSize}
               direntList={this.props.direntList}
@@ -214,7 +204,6 @@ class DirColumnView extends React.Component {
               renameFileCallback={this.props.renameFileCallback}
               moveFileCallback={this.props.moveFileCallback}
               copyFileCallback={this.props.copyFileCallback}
-              addFolder={this.props.onAddFolder}
               updateCurrentDirent={this.props.updateCurrentDirent}
               showDirentDetail={this.props.showDirentDetail}
               updateCurrentPath={this.props.updateCurrentPath}
@@ -234,7 +223,6 @@ class DirColumnView extends React.Component {
               moveFileCallback={this.props.moveFileCallback}
               copyFileCallback={this.props.copyFileCallback}
               convertFileCallback={this.props.convertFileCallback}
-              addFolderCallback={this.props.onAddFolder}
               toggleShowDirentToolbar={this.props.toggleShowDirentToolbar}
             />
           )}
@@ -255,14 +243,11 @@ class DirColumnView extends React.Component {
               sortBy={this.props.sortBy}
               sortOrder={this.props.sortOrder}
               sortItems={this.props.sortItems}
-              onAddFolder={this.props.onAddFolder}
-              onAddFile={this.props.onAddFile}
               onItemClick={this.props.onItemClick}
               onItemSelected={this.props.onItemSelected}
               onItemDelete={this.props.onItemDelete}
               onItemRename={this.props.onItemRename}
               onItemMove={this.props.onItemMove}
-              onItemCopy={this.props.onItemCopy}
               onItemConvert={this.props.onItemConvert}
               onDirentClick={this.props.onDirentClick}
               updateDirent={this.props.updateDirent}
@@ -270,7 +255,6 @@ class DirColumnView extends React.Component {
               onAllItemSelected={this.props.onAllItemSelected}
               selectedDirentList={this.props.selectedDirentList}
               onItemsMove={this.props.onItemsMove}
-              onItemsCopy={this.props.onItemsCopy}
               onItemsDelete={this.props.onItemsDelete}
               repoTags={this.props.repoTags}
               onFileTagChanged={this.props.onFileTagChanged}
@@ -288,7 +272,6 @@ class DirColumnView extends React.Component {
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               userPerm={this.props.userPerm}
               enableDirPrivateShare={this.props.enableDirPrivateShare}
-              onRenameNode={this.props.onRenameNode}
               isRepoInfoBarShow={this.props.isRepoInfoBarShow}
               repoTags={this.props.repoTags}
               usedRepoTags={this.props.usedRepoTags}
@@ -298,20 +281,15 @@ class DirColumnView extends React.Component {
               fullDirentList={this.props.fullDirentList}
               selectedDirentList={this.props.selectedDirentList}
               onSelectedDirentListUpdate={this.props.onSelectedDirentListUpdate}
-              onAddFile={this.props.onAddFile}
               onItemClick={this.props.onItemClick}
               onItemDelete={this.props.onItemDelete}
               onItemMove={this.props.onItemMove}
-              onItemCopy={this.props.onItemCopy}
               onItemConvert={this.props.onItemConvert}
               onItemsMove={this.props.onItemsMove}
-              onItemsCopy={this.props.onItemsCopy}
               onItemsDelete={this.props.onItemsDelete}
               updateDirent={this.props.updateDirent}
-              onAddFolder={this.props.onAddFolder}
               showDirentDetail={this.props.showDirentDetail}
               onGridItemClick={this.props.onDirentClick}
-              onItemRename={this.props.onItemRename}
               onFileTagChanged={this.props.onFileTagChanged}
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}

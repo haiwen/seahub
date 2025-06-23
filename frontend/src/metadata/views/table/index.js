@@ -26,8 +26,6 @@ const Table = () => {
     modifyColumnWidth,
     insertColumn,
     updateFileTags,
-    moveRecord,
-    addFolder,
     updateSelectedRecordIds,
     updateRecordDetails,
     updateFaceRecognition,
@@ -181,8 +179,6 @@ const Table = () => {
         generateFileTags={generateFileTags}
         onGridKeyDown={onHotKey}
         onGridKeyUp={onHotKeyUp}
-        moveRecord={moveRecord}
-        addFolder={addFolder}
         updateSelectedRecordIds={updateSelectedRecordIds}
         updateRecordDetails={updateRecordDetails}
         updateFaceRecognition={updateFaceRecognition}

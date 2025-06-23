@@ -28,7 +28,7 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, ta
     return event.target.className?.includes('kanban-header-op-btn') || event.target === headerRef.current;
   }, []);
 
-  const handelUnFreezed = useCallback((event) => {
+  const handleUnFreezed = useCallback((event) => {
     onUnFreezed();
     !keepActive(event) && setActive(false);
   }, [onUnFreezed, keepActive]);
@@ -55,7 +55,7 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, ta
         <span className="cards-quantity">{cardsQuantity}</span>
       </div>
       <div className="board-header-operation-btn">
-        {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handelUnFreezed} />}
+        {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handleUnFreezed} />}
         <i
           className={classNames('sf3-font sf3-font-down kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
           title={isCollapsed ? gettext('Expand') : gettext('Collapse')}

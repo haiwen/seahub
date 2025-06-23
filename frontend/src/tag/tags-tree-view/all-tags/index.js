@@ -12,7 +12,7 @@ const AllTags = ({ currentPath, selectAllTags }) => {
   const path = useMemo(() => '/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/' + ALL_TAGS_ID, []);
   const isSelected = useMemo(() => currentPath === path, [currentPath, path]);
 
-  const handelClick = useCallback(() => {
+  const handleClick = useCallback(() => {
     selectAllTags(isSelected);
 
   }, [isSelected, selectAllTags]);
@@ -20,7 +20,7 @@ const AllTags = ({ currentPath, selectAllTags }) => {
   return (
     <div
       className={classnames('tree-node-inner text-nowrap all-tags-tree-node-inner', { 'tree-node-hight-light': isSelected })}
-      onClick={handelClick}
+      onClick={handleClick}
     >
       <div className="tree-node-text">{gettext('All tags')}</div>
       <div className="left-icon">

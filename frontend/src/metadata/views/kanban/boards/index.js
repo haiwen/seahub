@@ -195,7 +195,7 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
     setImagePreviewerVisible(false);
   }, []);
 
-  const handelUpdateCurrentDirent = useCallback((record) => {
+  const handleUpdateCurrentDirent = useCallback((record) => {
     if (!record) return;
     const recordId = getRecordIdFromRecord(record);
     const name = getFileNameFromRecord(record);
@@ -215,10 +215,10 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
   const onSelectCard = useCallback((record) => {
     const recordId = getRecordIdFromRecord(record);
     if (selectedCard === recordId) return;
-    handelUpdateCurrentDirent(record);
+    handleUpdateCurrentDirent(record);
     onCloseSettings();
     showDirentDetail();
-  }, [selectedCard, onCloseSettings, showDirentDetail, handelUpdateCurrentDirent]);
+  }, [selectedCard, onCloseSettings, showDirentDetail, handleUpdateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
     if (isDragging) return;
@@ -234,8 +234,8 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
     event.preventDefault();
     if (selectedCard === recordId) return;
     const record = getRowById(metadata, recordId);
-    handelUpdateCurrentDirent(record);
-  }, [metadata, selectedCard, handelUpdateCurrentDirent]);
+    handleUpdateCurrentDirent(record);
+  }, [metadata, selectedCard, handleUpdateCurrentDirent]);
 
   const onDeleteRecords = useCallback((recordIds) => {
     deleteRecords(recordIds, {
@@ -251,10 +251,10 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
       success_callback: (operation) => {
         success_callback && success_callback(operation);
         const record = getRowById(metadata, rowId);
-        handelUpdateCurrentDirent(record);
+        handleUpdateCurrentDirent(record);
       }
     });
-  }, [metadata, modifyRecord, handelUpdateCurrentDirent]);
+  }, [metadata, modifyRecord, handleUpdateCurrentDirent]);
 
   useEffect(() => {
     if (!isDirentDetailShow) {

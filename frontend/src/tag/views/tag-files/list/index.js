@@ -9,7 +9,7 @@ import TagFile from './item';
 import { hideMenu } from '../../../../components/context-menu/actions';
 import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 
-const ListView = ({ repoID, openImagePreview, handleRenameTagFile, onTagFileContextMenu }) => {
+const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMenu }) => {
   const [renameTargetId, setRenameTargetId] = useState(null);
 
   const { tagsData } = useTags();
@@ -74,8 +74,8 @@ const ListView = ({ repoID, openImagePreview, handleRenameTagFile, onTagFileCont
 
   const onRenameConfirm = useCallback((newName) => {
     onRenameCancel();
-    handleRenameTagFile(newName);
-  }, [onRenameCancel, handleRenameTagFile]);
+    renameTagFile(newName);
+  }, [onRenameCancel, renameTagFile]);
 
   const onContainerClick = useCallback(() => {
     hideMenu();
@@ -84,7 +84,7 @@ const ListView = ({ repoID, openImagePreview, handleRenameTagFile, onTagFileCont
 
   useEffect(() => {
     if (!window.sfTagsDataContext) return;
-    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE, (id) => setRenameTargetId(id));
+    const unsubscribeRenameTagFile = window.sfTagsDataContext.eventBus.subscribe(EVENT_BUS_TYPE.RENAME_TAG_FILE_IN_SITU, (id) => setRenameTargetId(id));
 
     return () => {
       unsubscribeRenameTagFile && unsubscribeRenameTagFile();
