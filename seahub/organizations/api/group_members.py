@@ -133,7 +133,13 @@ class AdminGroupMembers(APIView):
                     'error_msg': 'User %s is already a group member.' % email2nickname(email)
                     })
                 continue
-
+            # Can only invite organization users to group
+            if not ccnet_api.org_user_exists(org_id, email):
+                result['failed'].append({
+                    'email': email,
+                    'error_msg': 'User %s not found in organization.' % email2nickname(email)
+                    })
+                continue
             emails_need_add.append(email)
         # Add user to group.
         for email in emails_need_add:
