@@ -8,12 +8,9 @@
   height: 28px;
 }
 
-.sf-metadata-basic-filters-select.seafile-customize-select:hover {
-  background: #efefef;
-}
-
+.sf-metadata-basic-filters-select.seafile-customize-select:hover,
 .sf-metadata-basic-filters-select.seafile-customize-select.highlighted:hover {
-  background-color: rgba(255, 152, 0, 0.2);
+  background: #efefef;
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select .selected-option {
@@ -28,11 +25,8 @@
 .sf-metadata-basic-filters-select.seafile-customize-select.focus {
   border-color: unset;
   box-shadow: none;
-  background-color: rgba(255, 152, 0, 0.2);
 }
 
-.sf-metadata-basic-filters-select.focus .selected-option .selected-option-show,
-.sf-metadata-basic-filters-select.focus .selected-option .sf3-font-down,
 .sf-metadata-basic-filters-select.highlighted .selected-option .selected-option-show,
 .sf-metadata-basic-filters-select.highlighted .selected-option .sf3-font-down {
   color: #ed7109;

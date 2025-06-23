@@ -81,7 +81,7 @@
 
 .lightbox-side-panel .dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty:empty::before,
 .lightbox-side-panel .sf-metadata-number-property-detail-editor::placeholder {
-  color: #666;
+  color: #868e96;
 }
 
 .lightbox-side-panel .dirent-detail-item-value.editable:hover .sf-metadata-property-detail-editor:empty::before {
