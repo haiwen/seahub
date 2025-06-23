@@ -16,7 +16,6 @@ from constance import config
 from urllib.parse import quote
 from bs4 import BeautifulSoup
 
-from html_to_markdown import convert_to_markdown
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
