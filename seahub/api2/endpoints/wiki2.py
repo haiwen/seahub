@@ -66,6 +66,7 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
 from seahub.share.utils import is_repo_admin
 from seahub.api2.endpoints.utils import confluence_to_wiki
+from seahub.group.utils import group_id_to_name
 
 
 HTTP_520_OPERATION_FAILED = 520
@@ -1658,7 +1659,15 @@ class ImportConfluenceView(APIView):
 
         if not request.user.permissions.can_create_wiki():
             return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create wiki.')
-        
+        group_id = request.data.get('group_id', None)
+        if not group_id:
+            wiki_owner = request.user.username
+        else:
+            try:
+                group_id = int(group_id)
+                wiki_owner = "%s@seafile_group" % group_id
+            except:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'group_id invalid')
         # create wiki
         org_id = -1
         if is_org_context(request):
@@ -1673,10 +1682,43 @@ class ImportConfluenceView(APIView):
             # The manually exported file name is Confluence-space-export-id.html.zip
             wiki_name = filename[:-len('.html.zip')]
             space_key = filename[len('Confluence-space-export-'):-len('.html.zip')]
-        if org_id and org_id > 0:
-            repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
+        
+        permission = PERMISSION_READ_WRITE
+        if group_id:
+            group_id = int(group_id)
+            # only group admin can create wiki
+            if not is_group_admin(group_id, request.user.username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            group_quota = seafile_api.get_group_quota(group_id)
+            group_quota = int(group_quota)
+            if group_quota <= 0 and group_quota != -2:
+                error_msg = 'No group quota.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # create group owned repo
+            password = None
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT', 'ROLE_BASED'):
+                    storage_id = None
+                    repo_id = seafile_api.add_group_owned_repo(group_id,
+                                                               wiki_name,
+                                                               permission,
+                                                               password,
+                                                               enc_version=ENCRYPTED_LIBRARY_VERSION,
+                                                               storage_id=storage_id)
+                else:
+                    repo_id = SeafileAPI.add_group_owned_repo(
+                        group_id, wiki_name, password, permission, org_id=org_id)
+            else:
+                repo_id = SeafileAPI.add_group_owned_repo(
+                    group_id, wiki_name, password, permission, org_id=org_id)
         else:
-            repo_id = seafile_api.create_repo(wiki_name, '', username)
+            if org_id and org_id > 0:
+                repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
+            else:
+                repo_id = seafile_api.create_repo(wiki_name, '', username)
 
         try:
             seafile_db_api = SeafileDB()
@@ -1710,14 +1752,15 @@ class ImportConfluenceView(APIView):
             if not os.path.exists(extract_dir):
                 extract_dir = self._extract_html_zip(file, space_key)
             sdoc_output_dir = self._download_sdoc_files(repo_id, space_key, username)
-            sdoc_files = list(Path(sdoc_output_dir).glob('*.sdoc'))
-            self._process_zip_file(wiki, extract_dir, sdoc_files, cf_id_to_cf_title_map, username)
-            # delete server tmp dir
-            seafile_api.del_file(repo_id, '/',
-                                 json.dumps(['tmp']), username)
-            # clean repo trash
-            seafile_api.clean_up_repo_history(repo_id, 0)
-            shutil.rmtree(extract_dir)
+            if sdoc_output_dir:
+                sdoc_files = list(Path(sdoc_output_dir).glob('*.sdoc'))
+                self._process_zip_file(wiki, extract_dir, sdoc_files, cf_id_to_cf_title_map, username)
+                # delete server tmp dir
+                seafile_api.del_file(repo_id, '/',
+                                    json.dumps(['tmp']), username)
+                # clean repo trash
+                seafile_api.clean_up_repo_history(repo_id, 0)
+                shutil.rmtree(extract_dir)
         except Exception as e:
             logger.error(e)
             if os.path.exists(extract_dir):
@@ -1725,10 +1768,11 @@ class ImportConfluenceView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         
         repo = seafile_api.get_repo(repo_id)
-        wiki = Wiki(repo, username)
+        wiki = Wiki(repo, wiki_owner)
         wiki_info = wiki.to_dict()
         wiki_info['owner_nickname'] = email2nickname(wiki.owner)
-
+        if group_id:    
+            wiki_info['group_name'] = group_id_to_name(group_id)
         return Response(wiki_info)
 
     def _upload_zip_file(self, repo_id, zip_file, username):
@@ -1792,6 +1836,8 @@ class ImportConfluenceView(APIView):
     def _download_sdoc_files(self, repo_id, space_key, username):
         server_wiki_tmp_sdoc_output_dir = 'tmp/sdoc_archive.zip'
         file_id = seafile_api.get_file_id_by_path(repo_id, server_wiki_tmp_sdoc_output_dir)
+        if not file_id:
+            return None
         download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
         download_url = gen_file_get_url(download_token, 'sdoc_archive.zip')
            

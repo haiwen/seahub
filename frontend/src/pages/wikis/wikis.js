@@ -102,53 +102,64 @@ class Wikis extends Component {
     }
   };
 
-  toggleImportConfluenceDialog = (value) => {
-    if (value == false) {
+  toggleImportConfluenceDialog = (currentDeptID) => {
+    if (this.state.isShowImportConfluenceDialog) {
       this.setState({
         isShowImportConfluenceDialog: false,
-      });
-    } else if (value == true) {
-      this.setState({
-        isShowImportConfluenceDialog: true,
+        currentDeptID: '',
       });
     } else {
       this.setState({
-        isShowImportConfluenceDialog: !this.state.isShowImportConfluenceDialog,
+        isShowImportConfluenceDialog: true,
+        currentDeptID
       });
     }
   };
 
-  importWikiFromConfluenceZip = () => {
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = '.zip';
-    fileInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      if (!file) return;
+  importConfluence = (file, currentDeptID) => {
+    if (!file) return;
+    if (!file.name.endsWith('.html.zip')) {
+      toaster.danger(gettext('Please select a valid Confluence HTML export file (.html.zip)'));
+      return;
+    }
 
-      if (file.type !== 'application/zip' && !file.name.endsWith('.zip')) {
-        toaster.danger(gettext('Please select a valid ZIP file'));
-        return;
-      }
-      this.toggleImportConfluenceDialog(true);
-      wikiAPI.importConfluence(file).then((res) => {
-        let wikis = this.state.wikis.slice(0);
-        let new_wiki = res.data;
-        new_wiki['version'] = 'v2';
-        new_wiki['admins'] = new_wiki.group_admins;
+    return wikiAPI.importConfluence(file, currentDeptID).then((res) => {
+      let wikis = this.state.wikis.slice(0);
+      let groupWikis = this.state.groupWikis;
+      let new_wiki = res.data;
+      new_wiki['version'] = 'v2';
+      new_wiki['admins'] = new_wiki.group_admins;
+      let findGroup = false;
+      if (currentDeptID) {
+        groupWikis.filter(group => {
+          if (group.group_id === currentDeptID) {
+            group.wiki_info.push(new_wiki);
+            findGroup = true;
+          }
+          return group;
+        });
+        if (findGroup) {
+          this.setState({
+            groupWikis: groupWikis,
+          });
+        } else {
+          groupWikis.push({
+            group_id: currentDeptID,
+            group_name: new_wiki.group_name,
+            wiki_info: [new_wiki],
+          });
+          this.setState({
+            groupWikis: groupWikis,
+          });
+        }
+      } else {
         wikis.unshift(new_wiki);
         this.setState({
-          wikis,
+          wikis: wikis,
         });
-        toaster.success(gettext('Successfully uploaded Confluence data'));
-      }).catch((error) => {
-        let errorMsg = Utils.getErrorMsg(error);
-        toaster.danger(errorMsg || gettext('Failed to upload Confluence data'));
-      }).finally(() => {
-        this.toggleImportConfluenceDialog(false);
-      });
+      }
+      return res;
     });
-    fileInput.click();
   };
 
   addWiki = (wikiName, currentDeptID) => {
@@ -165,14 +176,18 @@ class Wikis extends Component {
           }
           return group;
         });
+        this.setState({
+          currentDeptID: '',
+          groupWikis,
+        });
       } else {
         wikis.push(new_wiki);
+        wikis.unshift(new_wiki);
+        this.setState({
+          wikis,
+        });
       }
-      this.setState({
-        wikis,
-        currentDeptID: '',
-        groupWikis,
-      });
+
     }).catch((error) => {
       if (error.response) {
         let errMessage = Utils.getErrorMsg(error);
@@ -182,6 +197,11 @@ class Wikis extends Component {
   };
 
   deleteWiki = (wiki) => {
+    const owner = wiki.owner;
+    let isGroupWiki = false;
+    if (owner.includes('@seafile_group')) {
+      isGroupWiki = true;
+    }
     if (wiki.version === 'v1') {
       wikiAPI.deleteWiki(wiki.id).then(() => {
         let wikis = this.state.wikis.filter(item => {
@@ -203,17 +223,22 @@ class Wikis extends Component {
       });
     } else {
       wikiAPI.deleteWiki2(wiki.id).then(() => {
-        let wikis = this.state.wikis.filter(item => {
-          return item.id !== wiki.id;
-        });
-        let groupWikis = this.state.groupWikis.filter(group => {
-          group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
-          return group;
-        });
-        this.setState({
-          wikis: wikis,
-          groupWikis: groupWikis,
-        });
+        if (isGroupWiki) {
+          let groupWikis = this.state.groupWikis.filter(group => {
+            group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
+            return group;
+          });
+          this.setState({
+            groupWikis: groupWikis,
+          });
+        } else {
+          let wikis = this.state.wikis.filter(item => {
+            return item.id !== wiki.id;
+          });
+          this.setState({
+            wikis: wikis,
+          });
+        }
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -378,7 +403,9 @@ class Wikis extends Component {
         {this.state.isShowImportConfluenceDialog &&
           <ModalPortal>
             <ImportConfluenceDialog
-              toggleDialog={this.toggleImportConfluenceDialog}
+              toggleCancel={this.toggleImportConfluenceDialog}
+              importConfluence={this.importConfluence}
+              currentDeptID={this.state.currentDeptID}
             />
           </ModalPortal>
         }
@@ -392,7 +419,7 @@ class Wikis extends Component {
                     withPlusIcon={true}
                     opList={[
                       { 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() },
-                      { 'text': gettext('Import Confluence'), 'onClick': () => this.importWikiFromConfluenceZip() }
+                      { 'text': gettext('Import Confluence'), 'onClick': () => this.toggleImportConfluenceDialog() }
                     ]}
                   />
                 }

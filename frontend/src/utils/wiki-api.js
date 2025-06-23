@@ -302,10 +302,11 @@ class WikiAPI {
     return this._sendPostRequest(url, form);
   }
 
-  importConfluence(file) {
+  importConfluence(file, departmentID) {
     const url = this.server + '/api/v2.1/import-confluence/';
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('group_id', departmentID);
     return this._sendPostRequest(url, formData);
   }
 
