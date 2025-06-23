@@ -6,7 +6,7 @@ import TableFileTypeFilter from './table-file-type-filter';
 import GalleryFileTypeFilter from './gallery-file-type-filter';
 import TagsFilter from './tags-filter';
 import { gettext } from '../../../../../utils/constants';
-import { PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../../constants';
+import { FILTER_PREDICATE_TYPE, PRIVATE_COLUMN_KEY, VIEW_TYPE } from '../../../../constants';
 
 import './index.css';
 
@@ -32,7 +32,7 @@ const BasicFilters = ({ readOnly, filters = [], onChange, viewType }) => {
     const filterIndex = filters.findIndex(filter => filter.column_key === PRIVATE_COLUMN_KEY.TAGS);
     const filter = filters[filterIndex];
     const newFilters = filters.slice(0);
-    newFilters[filterIndex] = { ...filter, filter_term: newValue };
+    newFilters[filterIndex] = { ...filter, filter_predicate: FILTER_PREDICATE_TYPE.HAS_ANY_OF, filter_term: newValue };
     onChange(newFilters);
   }, [filters, onChange]);
 

@@ -50,7 +50,7 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
       filter_term: []
     }, {
       column_key: PRIVATE_COLUMN_KEY.TAGS,
-      filter_predicate: FILTER_PREDICATE_TYPE.HAS_ALL_OF,
+      filter_predicate: FILTER_PREDICATE_TYPE.HAS_ANY_OF,
       filter_term: []
     },
   ],
