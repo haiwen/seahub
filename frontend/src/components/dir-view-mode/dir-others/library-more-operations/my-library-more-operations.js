@@ -1,22 +1,22 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Utils } from '../../../utils/utils';
-import { seafileAPI } from '../../../utils/seafile-api';
-import { userAPI } from '../../../utils/user-api';
-import { gettext, siteRoot } from '../../../utils/constants';
-import ModalPortal from '../../../components/modal-portal';
-import toaster from '../../../components/toast';
-import RenameRepoDialog from '../../../components/dialog/rename-repo';
-import TransferDialog from '../../../components/dialog/transfer-dialog';
-import ChangeRepoPasswordDialog from '../../../components/dialog/change-repo-password-dialog';
-import ResetEncryptedRepoPasswordDialog from '../../../components/dialog/reset-encrypted-repo-password-dialog';
-import LabelRepoStateDialog from '../../../components/dialog/label-repo-state-dialog';
-import LibSubFolderPermissionDialog from '../../../components/dialog/lib-sub-folder-permission-dialog';
-import RepoAPITokenDialog from '../../../components/dialog/repo-api-token-dialog';
-import RepoShareAdminDialog from '../../../components/dialog/repo-share-admin-dialog';
-import OfficeSuiteDialog from '../../../components/dialog/repo-office-suite-dialog';
-import MylibRepoMenu from '../../../pages/my-libs/mylib-repo-menu';
+import { Utils } from '../../../../utils/utils';
+import { seafileAPI } from '../../../../utils/seafile-api';
+import { userAPI } from '../../../../utils/user-api';
+import { gettext, siteRoot } from '../../../../utils/constants';
+import ModalPortal from '../../../../components/modal-portal';
+import toaster from '../../../../components/toast';
+import RenameRepoDialog from '../../../../components/dialog/rename-repo';
+import TransferDialog from '../../../../components/dialog/transfer-dialog';
+import ChangeRepoPasswordDialog from '../../../../components/dialog/change-repo-password-dialog';
+import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/reset-encrypted-repo-password-dialog';
+import LabelRepoStateDialog from '../../../../components/dialog/label-repo-state-dialog';
+import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
+import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
+import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
+import OfficeSuiteDialog from '../../../../components/dialog/repo-office-suite-dialog';
+import LibraryOpMenu from '../../../../components/library-op-menu';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -59,12 +59,6 @@ class LibraryMoreOperations extends React.Component {
         break;
       case 'Reset Password':
         this.onResetPasswordToggle();
-        break;
-      case 'Watch File Changes':
-        this.watchFileChanges();
-        break;
-      case 'Unwatch File Changes':
-        this.unwatchFileChanges();
         break;
       case 'API Token':
         this.onAPITokenToggle();
@@ -149,7 +143,7 @@ class LibraryMoreOperations extends React.Component {
     } = this.state;
     return (
       <Fragment>
-        <MylibRepoMenu
+        <LibraryOpMenu
           isPC={true}
           isLibView={true}
           repo={repo}
@@ -159,7 +153,7 @@ class LibraryMoreOperations extends React.Component {
             <span className="sf3-font-more sf3-font"></span>
             <span className="dir-others-item-text">{gettext('More')}</span>
           </>
-        </MylibRepoMenu>
+        </LibraryOpMenu>
         {isRenameRepoDialogOpen && (
           <ModalPortal>
             <RenameRepoDialog

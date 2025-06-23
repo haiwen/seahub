@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
-import MobileItemMenu from '../../components/mobile-item-menu';
+import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../utils/constants';
+import { Utils } from '../utils/utils';
+import MobileItemMenu from '../components/mobile-item-menu';
 
 const propTypes = {
   isPC: PropTypes.bool,
+  isLibView: PropTypes.bool,
+  isDepartmentRepo: PropTypes.bool,
   repo: PropTypes.object.isRequired,
   isStarred: PropTypes.bool,
   onFreezedItem: PropTypes.func,
@@ -14,7 +16,7 @@ const propTypes = {
   onMenuItemClick: PropTypes.func.isRequired,
 };
 
-class MylibRepoMenu extends React.Component {
+class LibraryOperationMenu extends React.Component {
 
   constructor(props) {
     super(props);
@@ -117,8 +119,13 @@ class MylibRepoMenu extends React.Component {
   };
 
   getAdvancedOperations = () => {
+    const { isDepartmentRepo } = this.props;
     const operations = [];
     operations.push('API Token');
+    if (isDepartmentRepo) {
+      return operations;
+    }
+
     if (this.props.isPC && enableRepoSnapshotLabel) {
       operations.push('Label Current State');
     }
@@ -262,6 +269,6 @@ class MylibRepoMenu extends React.Component {
   }
 }
 
-MylibRepoMenu.propTypes = propTypes;
+LibraryOperationMenu.propTypes = propTypes;
 
-export default MylibRepoMenu;
+export default LibraryOperationMenu;

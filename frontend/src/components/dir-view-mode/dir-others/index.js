@@ -55,6 +55,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
 
   const isDesktop = Utils.isDesktop();
   const isRepoOwner = owner_email == username;
+  const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
 
   const enableMonitorRepo = isPro && (permission == 'r' || permission == 'rw');
 
@@ -84,7 +85,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
           <span className="dir-others-item-text">{gettext('History')}</span>
         </div>
       )}
-      {isDesktop && isRepoOwner && (
+      {isDesktop && (isRepoOwner || isDepartmentAdmin) && (
         <LibraryMoreOperations
           repo={currentRepoInfo}
           updateRepoInfo={updateRepoInfo}
