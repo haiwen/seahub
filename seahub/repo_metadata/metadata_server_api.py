@@ -51,7 +51,7 @@ def collect_all_tag_ids(tag_ids, metadata_server_api):
     all_ids = set(tag_ids)
     to_check = set(tag_ids)
     while to_check:
-        sql = f"SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}`, `{TAGS_TABLE.columns.sub_links.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({', '.join([f'\"{tid}\"' for tid in to_check])})"
+        sql = f"SELECT `{TAGS_TABLE.columns.id.name}`, `{TAGS_TABLE.columns.name.name}`, `{TAGS_TABLE.columns.sub_links.name}` FROM `{TAGS_TABLE.name}` WHERE `{TAGS_TABLE.columns.id.name}` IN ({', '.join([f'"{tid}"' for tid in to_check])})"
         tags = metadata_server_api.query_rows(sql).get('results', [])
         next_ids = set()
         for tag in tags:
