@@ -78,13 +78,6 @@ def writing_assistant(params):
     return resp
 
 
-def extract_text(params):
-    headers = gen_headers()
-    url = urljoin(SEAFILE_AI_SERVER_URL, '/api/v1/extract-text/')
-    resp = requests.post(url, json=params, headers=headers, timeout=30)
-    return resp
-
-
 # utils
 def get_ai_credit_by_user(user, org_id):
     user_role = get_user_role(user)
