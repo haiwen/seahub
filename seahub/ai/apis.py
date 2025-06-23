@@ -329,6 +329,9 @@ class Translate(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'text invalid')
         if not lang:
             return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
+        
+        if is_ai_usage_over_limit(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         params = {
             'text': text,
