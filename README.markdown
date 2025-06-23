@@ -8,7 +8,7 @@ Seahub is the web frontend for Seafile.
 Preparation
 ==========
 
-* Build and deploy Seafile server from source. See <https://manual.seafile.com/build_seafile/server/>
+* Build and deploy Seafile server from source. See <https://manual.seafile.com/latest/>
 
 Getting it
 ==========
