@@ -150,7 +150,7 @@ class WikiPageContentView(APIView):
 
         file_name = os.path.basename(path)
         token = seafile_api.get_fileserver_access_token(repo.repo_id,
-                file_id, 'download', request.user.username, 'False')
+                file_id, 'download', '', 'False')
 
         if not token:
             error_msg = 'Internal Server Error'

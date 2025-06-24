@@ -205,7 +205,7 @@ def slug(request, slug, file_path="home.md"):
 
         file_name = os.path.basename(file_path)
         token = seafile_api.get_fileserver_access_token(
-            repo.repo_id, file_id, 'download', request.user.username, 'False')
+            repo.repo_id, file_id, 'download', '', 'False')
         if not token:
             return render_error(request, _('Internal Server Error'))
 
