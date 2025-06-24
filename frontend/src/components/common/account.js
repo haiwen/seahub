@@ -163,7 +163,7 @@ class Account extends Component {
               <div className="txt">{this.state.userName}</div>
             </div>
             <div id="space-traffic">
-              <div className="item">
+              <div className="item" style={enableSeafileAI ? { borderBottom: 'none', paddingBottom: '0px' } : {}}>
                 <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
                 <div id="quota-bar"><span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}></span></div>
               </div>
