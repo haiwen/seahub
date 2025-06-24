@@ -214,6 +214,11 @@ class SdocJWTTokenAuthentication(BaseAuthentication):
             user = None
         if not user or not user.is_active:
             return None
+        
+        if MULTI_TENANCY:
+            orgs = ccnet_api.get_orgs_by_user(username)
+            if orgs:
+                user.org = orgs[0]
 
         return user, auth[1]
 

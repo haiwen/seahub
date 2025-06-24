@@ -50,6 +50,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'monthly_rate_limit': '',
         'monthly_rate_limit_per_user': '',
         'can_choose_office_suite': True,
+        'monthly_ai_credit_per_user': -1,
     },
     GUEST_USER: {
         'can_add_repo': False,

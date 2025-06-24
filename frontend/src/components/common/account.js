@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite } from '../../utils/constants';
+import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '../../utils/constants';
 import toaster from '../toast';
 
 const {
@@ -22,6 +22,9 @@ class Account extends Component {
       contactEmail: '',
       quotaUsage: '',
       quotaTotal: '',
+      aiCredit: '',
+      aiCost: '',
+      aiUsageRate: '',
       isStaff: false,
       isOrgStaff: false,
       usageRate: '',
@@ -80,6 +83,9 @@ class Account extends Component {
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
           showInfo: !this.state.showInfo,
           enableSubscription: resp.data.enable_subscription,
+          aiCredit: resp.data.ai_credit,
+          aiCost: resp.data.ai_cost,
+          aiUsageRate: resp.data.ai_usage_rate
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -157,11 +163,20 @@ class Account extends Component {
               <div className="txt">{this.state.userName}</div>
             </div>
             <div id="space-traffic">
-              <div className="item">
+              <div className="item" style={enableSeafileAI ? { borderBottom: 'none', paddingBottom: '0px' } : {}}>
                 <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
                 <div id="quota-bar"><span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}></span></div>
               </div>
             </div>
+            {enableSeafileAI &&
+              <div id="space-traffic">
+                <div className="item">
+                  <p>{gettext('AI credit used:')}{' '}{this.state.aiCost} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
+                  <div id="quota-bar"><span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}></span></div>
+                </div>
+              </div>
+            }
+
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
             {(this.state.enableSubscription && !isOrgContext) && <a href={siteRoot + 'subscription/'} className="item">{'付费管理'}</a>}
             {this.renderMenu()}

@@ -52,7 +52,11 @@ const FileTagsDialog = ({ record, onToggle, onSubmit }) => {
       setExitTags(exitTags);
       setLoading(false);
     }).catch(error => {
-      const errorMessage = gettext('Failed to generate file tags');
+      let errorMessage = gettext('Failed to generate file tags');
+      if (error.status === 429) {
+        const err_data = error.response.data;
+        errorMessage = gettext(err_data.error_msg);
+      }
       toaster.danger(errorMessage);
       setLoading(false);
     });
