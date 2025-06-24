@@ -112,7 +112,7 @@ def wiki_publish_view(request, publish_url, page_id=None):
     file_path = ''
 
     if page_id:
-        wiki_config = get_wiki_config(wiki.repo_id, request.user.username)
+        wiki_config = get_wiki_config(wiki.repo_id, '')
         pages = wiki_config.get('pages', [])
         page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
         file_path = page_info.get('path', '')
