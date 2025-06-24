@@ -19,6 +19,7 @@
   flex-direction: column;
   overflow: hidden;
   background: #fff;
+  transition: flex 0.3s ease-in-out;
 }
 
 .user-panel .side-panel-north {
