@@ -126,9 +126,13 @@
   max-height: 68px;
 }
 
+.sf-metadata-kanban-card .long-text-formatter,
 .sf-metadata-view-kanban-boards-text-wrap .sf-metadata-kanban-card-record .long-text-formatter {
-  display: block;
-  height: auto;
-  max-height: 68px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.5;
   white-space: normal;
 }
