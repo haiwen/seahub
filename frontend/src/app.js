@@ -270,12 +270,10 @@ class App extends Component {
       mainPanelStyle = {
         userSelect: inResizing ? 'none' : '',
         flex: sidePanelRate ? `1 0 ${(1 - sidePanelRate) * 100}%` : `0 0 ${100 - INIT_SIDE_PANEL_RATE * 100}%`,
-        transition: 'flex 0.3s ease-in-out'
       };
       sidePanelStyle = {
         userSelect: inResizing ? 'none' : '',
         flex: sidePanelRate ? `0 0 ${sidePanelRate * 100}%` : `0 0 ${INIT_SIDE_PANEL_RATE * 100}%`,
-        transition: 'flex 0.3s ease-in-out'
       };
     }
     return (

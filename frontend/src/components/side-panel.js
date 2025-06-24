@@ -22,10 +22,10 @@ const propTypes = {
 class SidePanel extends React.Component {
 
   render() {
-    const { children, isSidePanelFolded, style, eventBus } = this.props;
+    const { children, isSidePanelFolded, style, eventBus, isSidePanelClosed } = this.props;
     return (
       <div
-        className={classnames('side-panel', { 'side-panel-folded': isSidePanelFolded, 'left-zero': !this.props.isSidePanelClosed })}
+        className={classnames('side-panel', { 'side-panel-folded': isSidePanelFolded, 'left-zero': !isSidePanelClosed })}
         style={isSidePanelFolded ? { flexBasis: SIDE_PANEL_FOLDED_WIDTH } : style}
       >
         <MediaQuery query="(max-width: 767.8px)">
