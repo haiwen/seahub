@@ -19,6 +19,9 @@
   flex-direction: column;
   overflow: hidden;
   background: #fff;
+  transition: flex 0.3s ease-in-out;
+  -webkit-transition: flex 0.3s ease-in-out;
+  -moz-transition: flex 0.3s ease-in-out;
 }
 
 .user-panel .side-panel-north {
@@ -44,9 +47,12 @@
     width: 300px;
     max-width: calc(100% - 40px);
     height:100%;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    transition: all 0.3s ease;
+    -webkit-transition: left 0.3s ease, width 0.3s ease;
+    -moz-transition: left 0.3s ease, width 0.3s ease;
+    transition: left 0.3s ease, width 0.3s ease;
+  }
+  .side-panel.left-zero {
+    left: 0;
   }
 }
 
