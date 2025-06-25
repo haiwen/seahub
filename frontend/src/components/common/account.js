@@ -162,20 +162,24 @@ class Account extends Component {
               {this.renderAvatar()}
               <div className="txt">{this.state.userName}</div>
             </div>
-            <div id="space-traffic">
-              <div className="item" style={enableSeafileAI ? { borderBottom: 'none', paddingBottom: '0px' } : {}}>
+            <div className="item">
+              <div className="space-traffic">
                 <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
-                <div id="quota-bar"><span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}></span></div>
-              </div>
-            </div>
-            {enableSeafileAI &&
-              <div id="space-traffic">
-                <div className="item">
-                  <p>{gettext('AI credit used:')}{' '}{this.state.aiCost} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
-                  <div id="quota-bar"><span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}></span></div>
+                <div id="quota-bar">
+                  <span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}>
+                  </span>
                 </div>
               </div>
-            }
+              {enableSeafileAI &&
+                <div className="space-traffic">
+                  <p>{gettext('AI credit used:')}{' '}{this.state.aiCost} / {this.state.aiCredit > 0 ? this.state.aiCredit : '--'}</p>
+                  <div id="quota-bar">
+                    <span id="quota-usage" className="usage" style={{ width: this.state.aiUsageRate }}>
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
 
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
             {(this.state.enableSubscription && !isOrgContext) && <a href={siteRoot + 'subscription/'} className="item">{'付费管理'}</a>}

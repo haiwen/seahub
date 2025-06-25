@@ -292,7 +292,10 @@ class GroupView extends React.Component {
                         {currentGroup.group_quota > 0 &&
                           <div className="department-usage-container mr-3">
                             <div className="department-usage">
-                              <span id="quota-bar" className="department-quota-bar"><span id="quota-usage" className="usage" style={{ width: useRate }}></span></span>
+                              <span id="quota-bar" className="department-quota-bar">
+                                <span id="quota-usage" className="usage" style={{ width: useRate }}>
+                                </span>
+                              </span>
                               <span className="department-quota-info">{Utils.bytesToSize(currentGroup.group_quota_usage)} / {Utils.bytesToSize(currentGroup.group_quota)}</span>
                             </div>
                           </div>
