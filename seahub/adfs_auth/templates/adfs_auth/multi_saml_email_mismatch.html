@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block main_content %}
+<div class="w-100 h-100 d-flex flex-column align-items-center justify-content-center text-center">
+    <img src="{{MEDIA_URL}}img/multi-saml-email-mismatch.png" alt="" width="100" />
+    <p>
+        {% blocktrans trimmed with login_email=login_email uid=uid %}
+        The contact email you used ({{ login_email }}) does not match the email ({{ uid }}) returned by your single sign on (SSO) server.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% trans "Please either modify your contact email or modify the email in your SSO server." %}
+    </p>
+    <a href="/accounts/login/" class="btn btn-primary mt-3">
+        {% trans "Login again" %}
+    </a>
+</div>
+{% endblock %}
