@@ -76,5 +76,6 @@ ALTER TABLE organizations_orgsettings ADD COLUMN `is_active` tinyint(1) NOT NULL
 ALTER TABLE repo_metadata ADD COLUMN tags_enabled tinyint(1) NULL;
 ALTER TABLE repo_metadata ADD COLUMN tags_lang varchar(36) NULL;
 ALTER TABLE repo_metadata ADD COLUMN details_settings longtext NULL;
+ALTER TABLE repo_metadata ADD COLUMN ocr_enabled tinyint(1) NULL;
 ALTER TABLE repo_metadata ADD COLUMN global_hidden_columns longtext DEFAULT NULL;
 ALTER TABLE `repo_metadata` ADD KEY `key_last_face_cluster_time_face_recognition_enabled`(`face_recognition_enabled`, `last_face_cluster_time`);
