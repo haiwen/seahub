@@ -116,7 +116,9 @@ from seahub.api2.endpoints.recent_added_files import RecentAddedFilesView
 from seahub.api2.endpoints.repo_api_tokens import RepoAPITokensView, RepoAPITokenView, RepoNotificationJwtTokenView
 from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLinkView, RepoInfoView, \
     ViaRepoDownloadLinkView, ViaRepoBatchMove, ViaRepoBatchCopy, ViaRepoBatchDelete, ViaRepoTokenFile, \
-    ViaRepoMoveDir, ViaRepoShareLink, ViaRepoMetadataRecords
+    ViaRepoMoveDir, ViaRepoShareLink, ViaRepoMetadataRecords, \
+    ViaRepoMetadataViews, ViaRepoMetadataTags, ViaRepoMetadataViewsDuplicateView, ViaRepoMetadataViewsMoveView, \
+    ViaRepoMetadataTagsStatusManage, ViaRepoMetadataViewsDetailView
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotificationsView, \
     OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView
@@ -508,7 +510,17 @@ urlpatterns = [
     re_path(r'^api/v2.1/via-repo-token/move-dir/$', ViaRepoMoveDir.as_view(), name='via-repo-token-move-dir'),
     re_path(r'^api/v2.1/via-repo-token/share-links/$', ViaRepoShareLink.as_view(), name='via-repo-token-share-links'),
     re_path(r'^api/v2.1/via-repo-token/metadata/records/$', ViaRepoMetadataRecords.as_view(), name='via-repo-token-metadata-records'),
-
+    re_path(r'^api/v2.1/via-repo-token/metadata/views/$', ViaRepoMetadataViews.as_view(), name='via-repo-token-metadata-views'),
+    re_path(r'^api/v2.1/via-repo-token/metadata/views/(?P<view_id>.+)/$', ViaRepoMetadataViewsDetailView.as_view(),
+            name='via-repo-token-metadata-views-detail'),
+    re_path(r'^api/v2.1/via-repo-token/metadata/duplicate-view/$', ViaRepoMetadataViewsDuplicateView.as_view(),
+            name='via-repo-token-metadata-duplicate-views'),
+    re_path(r'^api/v2.1/via-repo-token/metadata/move-views/$', ViaRepoMetadataViewsMoveView.as_view(),
+            name='via-repo-token-metadata-move-views'),
+    re_path(r'^api/v2.1/via-repo-token/metadata/tags-status/$', ViaRepoMetadataTagsStatusManage.as_view(),
+            name='via-repo-token-metadata-tags-status'),
+    re_path(r'^api/v2.1/via-repo-token/metadata/tags/$', ViaRepoMetadataTags.as_view(),
+            name='via-repo-token-metadata-tags'),
 
     # user::related-files
     re_path(r'^api/v2.1/related-files/$', RelatedFilesView.as_view(), name='api-v2.1-related-files'),
