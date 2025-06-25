@@ -403,6 +403,8 @@ class SdocGeneralAssistant(APIView):
         repo_id = request.data.get('repo_id')
         file_path = request.data.get('file_path')
         custom_prompt = request.data.get('custom_prompt')
+        org_id =  request.user.org.org_id if request.user.org else None
+        username = request.user.username
 
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
@@ -420,6 +422,9 @@ class SdocGeneralAssistant(APIView):
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if is_ai_usage_over_limit(request.user, org_id):
+            return api_error(status.HTTP_429_TOO_MANY_REQUESTS, 'Credit not enough')
 
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
@@ -439,6 +444,8 @@ class SdocGeneralAssistant(APIView):
             'file_path': file_path,
             'download_token': token,
             'custom_prompt': custom_prompt,
+            'org_id': org_id,
+            'username': username
         }
 
         try:
