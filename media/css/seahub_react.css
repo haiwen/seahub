@@ -715,6 +715,15 @@ textarea::placeholder {
   text-decoration: none;
 }
 
+.account-popup .space-traffic {
+  padding: 7px 0;
+}
+
+.account-popup .space-traffic>p {
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+
 #account .manage {
   position: absolute;
   left: 60px;
@@ -728,18 +737,17 @@ textarea::placeholder {
 /** quota in account popover **/
 #quota-bar {
   display: block;
-  height: 1em;
-  border: 1px solid #ddd;
-  margin: 5px 0;
-  border-radius: 2px;
+  height: 6px;
+  border-radius: 5px;
   overflow: hidden;
-  /* for usage > 100% */
+  background-color: #eee;
 }
 
 #quota-bar .usage {
   display: inline-block;
   height: 100%;
   vertical-align: top;
+  background: #ED7109;
 }
 
 #quota-usage {
