@@ -13,7 +13,6 @@ const MetadataAIOperationsContext = React.createContext(null);
 export const MetadataAIOperationsProvider = ({
   repoID,
   enableMetadata = false,
-  enableOCR = false,
   enableTags = false,
   tagsLang,
   repoInfo,
@@ -140,7 +139,6 @@ export const MetadataAIOperationsProvider = ({
   return (
     <MetadataAIOperationsContext.Provider value={{
       enableMetadata,
-      enableOCR,
       enableTags,
       tagsLang,
       canModify,

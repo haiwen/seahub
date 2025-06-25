@@ -762,7 +762,7 @@ class SharedDirView extends React.Component {
     const isRepoInfoBarShown = isDesktop && path == '/' && usedRepoTags.length != 0;
 
     return (
-      <MetadataAIOperationsProvider repoID={repoID} enableMetadata={false} enableOCR={false} repoInfo={{ permission: 'r' }} >
+      <MetadataAIOperationsProvider repoID={repoID} enableMetadata={false} repoInfo={{ permission: 'r' }} >
         <div id="shared-dir-view" className="h-100 d-flex flex-column">
           <div className="top-header d-flex justify-content-between flex-shrink-0">
             <a href={siteRoot}>

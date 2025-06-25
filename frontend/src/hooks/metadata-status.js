@@ -22,7 +22,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
   const [enableMetadata, setEnableMetadata] = useState(false);
   const [enableTags, setEnableTags] = useState(false);
   const [tagsLang, setTagsLang] = useState('en');
-  const [enableOCR, setEnableOCR] = useState(false);
   const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
   const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
@@ -44,7 +43,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
     setLoading(true);
     setEnableMetadata(false);
     setEnableTags(false);
-    setEnableOCR(false);
     setEnableFaceRecognition(false);
     setDetailsSettings({});
     setIsBeingBuilt(false);
@@ -59,7 +57,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         tags_enabled: enableTags,
         tags_lang: tagsLang,
         details_settings: detailsSettings,
-        ocr_enabled: enableOCR,
         face_recognition_enabled: enableFaceRecognition,
         global_hidden_columns: globalHiddenColumns,
       } = res.data;
@@ -69,7 +66,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
       setEnableTags(enableTags);
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
-      setEnableOCR(enableSeafileAI && enableOCR);
       setEnableFaceRecognition(enableSeafileAI && enableFaceRecognition);
       setEnableMetadata(enableMetadata);
       const parsedGlobalHiddenColumns = typeof globalHiddenColumns === 'string'
@@ -96,7 +92,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
     if (!newValue) {
       cancelMetadataURL(true);
       setEnableTags(false);
-      setEnableOCR(false);
       setEnableFaceRecognition(false);
     }
     setDetailsSettings({});
@@ -115,10 +110,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
     setTagsLang(lang);
   }, [enableTags, tagsLang, cancelMetadataURL]);
 
-  const updateEnableOCR = useCallback((newValue) => {
-    if (newValue === enableOCR) return;
-    setEnableOCR(newValue);
-  }, [enableOCR]);
 
   const updateEnableFaceRecognition = useCallback((newValue) => {
     if (newValue === enableFaceRecognition) return;
@@ -169,8 +160,6 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         updateEnableTags,
         detailsSettings,
         modifyDetailsSettings,
-        enableOCR,
-        updateEnableOCR,
         enableFaceRecognition,
         updateEnableFaceRecognition,
         globalHiddenColumns,

@@ -16,7 +16,7 @@ const SIDE_PANEL_EXPANDED_WIDTH = 300;
 const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isCustomPermission }) => {
   const [expanded, setExpanded] = useState(false);
 
-  const { enableOCR, enableMetadata, canModify, onOCRByImageDialog } = useMetadataAIOperations();
+  const { enableMetadata, canModify, onOCRByImageDialog } = useMetadataAIOperations();
 
   const downloadImage = useCallback((url) => {
     location.href = url;
@@ -51,7 +51,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
 
   const isSystemFolder = SYSTEM_FOLDERS.find(folderPath => mainImg.parentDir.startsWith(folderPath));
   let onOCR = null;
-  if (enableOCR && enableMetadata && canModify && !isSystemFolder) {
+  if (enableMetadata && canModify && !isSystemFolder) {
     onOCR = () => onOCRByImageDialog({ parentDir: mainImg.parentDir, fileName: mainImg.name }, document.activeElement);
   }
 

@@ -1541,7 +1541,6 @@ CREATE TABLE `repo_metadata`  (
   `tags_enabled` tinyint(1) DEFAULT NULL,
   `tags_lang` varchar(36) DEFAULT NULL,
   `details_settings` longtext DEFAULT NULL,
-  `ocr_enabled` tinyint(1) DEFAULT NULL,
   `global_hidden_columns` longtext DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
