@@ -1,6 +1,5 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { useMetadataStatus } from '@/hooks';
 import { gettext, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
@@ -41,7 +40,6 @@ const ContextMenu = ({
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
 
   const { metadata } = useMetadataView();
-  const { enableOCR } = useMetadataStatus();
 
   const repoID = window.sfMetadataStore.repoId;
 
@@ -220,7 +218,7 @@ const ContextMenu = ({
         aiOptions.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
       }
 
-      if (enableSeafileAI && enableOCR && (isImage || isPdf)) {
+      if (enableSeafileAI && (isImage || isPdf)) {
         aiOptions.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
       }
 
@@ -231,7 +229,7 @@ const ContextMenu = ({
     }
 
     return list;
-  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, enableOCR, getAbleDeleteRecords]);
+  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, getAbleDeleteRecords]);
 
   const handleOptionClick = useCallback((option, event) => {
     switch (option.value) {

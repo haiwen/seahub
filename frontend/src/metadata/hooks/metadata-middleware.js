@@ -7,7 +7,7 @@ import { useMetadataStatus } from '../../hooks';
 const MetadataMiddlewareContext = React.createContext(null);
 
 export const MetadataMiddlewareProvider = ({ repoID, currentPath, repoInfo, selectTagsView, tagsChangedCallback, children }) => {
-  const { enableMetadata, enableOCR, enableTags, tagsLang } = useMetadataStatus();
+  const { enableMetadata, enableTags, tagsLang } = useMetadataStatus();
 
   return (
     <MetadataMiddlewareContext.Provider value={{}}>
@@ -16,7 +16,6 @@ export const MetadataMiddlewareProvider = ({ repoID, currentPath, repoInfo, sele
           <MetadataAIOperationsProvider
             repoID={repoID}
             enableMetadata={enableMetadata}
-            enableOCR={enableOCR}
             enableTags={enableTags}
             tagsLang={tagsLang}
             repoInfo={repoInfo}

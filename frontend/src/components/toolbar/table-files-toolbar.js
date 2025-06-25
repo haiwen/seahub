@@ -10,14 +10,12 @@ import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { getColumnByKey } from '../../metadata/utils/column';
-import { useMetadataStatus } from '../../hooks';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const metadataRef = useRef([]);
   const menuRef = useRef(null);
-  const { enableOCR } = useMetadataStatus();
 
   const canModify = window.sfMetadataContext && window.sfMetadataContext.canModify();
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
@@ -95,7 +93,7 @@ const TableFilesToolbar = ({ repoID }) => {
         aiOptions.push(GENERATE_DESCRIPTION);
       }
 
-      if (enableOCR && (isImage || isPDF)) {
+      if (isImage || isPDF) {
         aiOptions.push(OCR);
       }
 
@@ -105,7 +103,7 @@ const TableFilesToolbar = ({ repoID }) => {
       }
     }
     return list;
-  }, [selectedRecordIds, records, enableOCR]);
+  }, [selectedRecordIds, records]);
 
   const onMenuItemClick = useCallback((operation) => {
     const records = selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean);

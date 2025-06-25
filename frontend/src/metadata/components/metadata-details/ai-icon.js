@@ -22,7 +22,7 @@ const AIIcon = () => {
 
   const [isMenuShow, setMenuShow] = useState(false);
 
-  const { enableMetadata, enableTags, enableOCR } = useMetadataStatus();
+  const { enableMetadata, enableTags } = useMetadataStatus();
   const { canModifyRecord, columns, record, onChange, onLocalRecordChange, updateFileTags, updateDescription } = useMetadataDetails();
   const { generateDescription, extractFileDetails, onOCR, generateFileTags } = useMetadataAIOperations();
 
@@ -44,7 +44,7 @@ const AIIcon = () => {
       });
     }
 
-    if (enableOCR && (isImage || isPdf)) {
+    if (isImage || isPdf) {
       list.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
     }
 
@@ -57,7 +57,7 @@ const AIIcon = () => {
     }
 
     return list;
-  }, [enableOCR, enableTags, canModifyRecord, columns, record]);
+  }, [enableTags, canModifyRecord, columns, record]);
 
   const onToggle = useCallback((event) => {
     event && event.preventDefault();

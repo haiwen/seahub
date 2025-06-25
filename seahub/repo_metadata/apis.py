@@ -55,7 +55,6 @@ class MetadataManage(APIView):
         is_tags_enabled = False
         tags_lang = ''
         details_settings = '{}'
-        is_ocr_enabled = False
         face_recognition_enabled = False
         global_hidden_columns = []
 
@@ -70,8 +69,6 @@ class MetadataManage(APIView):
                 if record.tags_enabled:
                     is_tags_enabled = True
                     tags_lang = record.tags_lang
-                if record.ocr_enabled:
-                    is_ocr_enabled = True
                 if record.face_recognition_enabled:
                     face_recognition_enabled = True
                 if not global_hidden_columns:
@@ -84,7 +81,6 @@ class MetadataManage(APIView):
         return Response({
             'enabled': is_enabled,
             'tags_enabled': is_tags_enabled,
-            'ocr_enabled': is_ocr_enabled,
             'face_recognition_enabled': face_recognition_enabled,
             'tags_lang': tags_lang,
             'details_settings': details_settings,
@@ -173,7 +169,6 @@ class MetadataManage(APIView):
             record.face_recognition_enabled = False
             record.tags_enabled = False
             record.details_settings = '{}'
-            record.ocr_enabled = False
             record.save()
             RepoMetadataViews.objects.filter(repo_id=repo_id).delete()
         except Exception as e:
@@ -253,66 +248,6 @@ class MetadataGlobalHiddenColumnsView(APIView):
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        return Response({'success': True})
-
-
-class MetadataOCRManageView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def put(self, request, repo_id):
-
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = f'Library {repo_id} not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not is_repo_admin(request.user.username, repo_id):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not metadata or not metadata.enabled:
-            error_msg = f'The metadata module is not enabled for repo {repo_id}.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        try:
-            metadata.ocr_enabled = True
-            metadata.save()
-        except Exception as e:
-            logger.exception(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
-        return Response({'success': True})
-
-    def delete(self, request, repo_id):
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = f'Library {repo_id} not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        if not is_repo_admin(request.user.username, repo_id):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        # check dose the repo have opened metadata manage
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled or not record.ocr_enabled:
-            error_msg = f'The repo {repo_id} has disabled the OCR.'
-            return api_error(status.HTTP_409_CONFLICT, error_msg)
-
-        try:
-            record.ocr_enabled = False
-            record.save()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         return Response({'success': True})
 
 

@@ -9,7 +9,6 @@ import {
   MetadataStatusManagementDialog as LibExtendedPropertiesSettingPanel,
   MetadataFaceRecognitionDialog as LibFaceRecognitionSettingPanel,
   MetadataTagsStatusDialog as LibMetadataTagsStatusSettingPanel,
-  MetadataOCRStatusManagementDialog as LibMetadataOCRStatusSettingPanel,
   useMetadata
 } from '../../metadata';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
@@ -40,7 +39,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
   const { encrypted, is_admin } = currentRepoInfo;
   const { enableMetadataManagement } = window.app.pageOptions;
   const { updateEnableFaceRecognition } = useMetadata();
-  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags, enableOCR, updateEnableOCR, enableFaceRecognition, globalHiddenColumns, modifyGlobalHiddenColumns } = useMetadataStatus();
+  const { enableMetadata, updateEnableMetadata, enableTags, tagsLang, updateEnableTags, enableFaceRecognition, globalHiddenColumns, modifyGlobalHiddenColumns } = useMetadataStatus();
   const enableHistorySetting = is_admin; // repo owner, admin of the department which the repo belongs to, and ...
   const enableAutoDelSetting = is_admin && enableRepoAutoDel;
   const enableExtendedPropertiesSetting = !encrypted && is_admin && enableMetadataManagement;
@@ -162,22 +161,6 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                         {gettext('Tags')}
                       </NavLink>
                     </NavItem>
-                    {enableSeafileAI &&
-                      <NavItem
-                        role="tab"
-                        aria-selected={activeTab === TAB.OCR_SETTING}
-                        aria-controls="ocr-setting-panel"
-                      >
-                        <NavLink
-                          className={activeTab === TAB.OCR_SETTING ? 'active' : ''}
-                          onClick={toggleTab.bind(this, TAB.OCR_SETTING)}
-                          tabIndex="0"
-                          onKeyDown={onTabKeyDown}
-                        >
-                          {gettext('OCR')}
-                        </NavLink>
-                      </NavItem>
-                    }
                   </>
                 }
               </Nav>
@@ -235,18 +218,6 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                     onMigrateSuccess={handleMigrateEnd}
                     onMigrateError={handleMigrateError}
                     onMigrateStart={handleMigrateStart}
-                  />
-                </TabPane>
-              )}
-              {(enableExtendedPropertiesSetting && activeTab === TAB.OCR_SETTING) && (
-                <TabPane tabId={TAB.OCR_SETTING} role="tabpanel" id="ocr-setting-panel">
-                  <LibMetadataOCRStatusSettingPanel
-                    repoID={repoID}
-                    value={enableOCR}
-                    lang={tagsLang}
-                    submit={updateEnableOCR}
-                    toggleDialog={toggleDialog}
-                    enableMetadata={enableMetadata}
                   />
                 </TabPane>
               )}
