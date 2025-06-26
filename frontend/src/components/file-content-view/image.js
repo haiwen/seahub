@@ -61,16 +61,25 @@ class FileContent extends React.Component {
       thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}?mtime=${lastModificationTime}`;
     }
 
-    const { scale, angle } = this.props;
-    let style = {};
-    if (scale && angle != undefined) {
-      style = { transform: `scale(${scale}) rotate(${angle}deg)` };
-    } else if (scale) {
-      style = { transform: `scale(${scale})` };
-    } else if (angle != undefined) {
-      style = { transform: `rotate(${angle}deg)` };
+    const { scale, angle, offset } = this.props;
+    let transforms = [];
+
+    if (scale) {
+      transforms.push(`scale(${scale})`);
+    }
+    if (angle !== undefined) {
+      transforms.push(`rotate(${angle}deg)`);
     }
 
+    let style = {};
+    if (transforms.length > 0) {
+      style.transform = transforms.join(' ');
+    }
+    if (scale > 1 && offset && typeof offset === 'object') {
+      if (offset.x !== undefined) style.left = offset.x;
+      if (offset.y !== undefined) style.top = offset.y;
+      style.position = 'relative';
+    }
 
     return (
       <div className="file-view-content flex-1 image-file-view">
@@ -89,7 +98,8 @@ class FileContent extends React.Component {
 FileContent.propTypes = {
   tip: PropTypes.object.isRequired,
   scale: PropTypes.number,
-  angle: PropTypes.number
+  angle: PropTypes.number,
+  offset: PropTypes.object,
 };
 
 export default FileContent;
