@@ -11,4 +11,4 @@ class UtilsTest(BaseTestCase):
         assert DEFAULT_USER in get_available_roles()
 
     def test_get_enabled_role_permissions_by_role(self):
-        assert len(list(get_enabled_role_permissions_by_role(DEFAULT_USER).keys())) == 25
+        assert len(list(get_enabled_role_permissions_by_role(DEFAULT_USER).keys())) == 26
