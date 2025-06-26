@@ -39,7 +39,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   const prevImg = imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength];
 
   let enableRotate = oldEnableRotate;
-  if (enableRotate) {
+  if (enableRotate === true) {
     // The backend server does not support rotating HEIC, GIF, SVG images
     const urlParts = mainImg.src.split('?')[0].split('.');
     const suffix = urlParts[urlParts.length - 1].toLowerCase();
