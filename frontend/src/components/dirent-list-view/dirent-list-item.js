@@ -424,7 +424,7 @@ class DirentListItem extends React.Component {
     const { path, eventBus } = this.props;
     const { dirent } = this.state;
     const direntPath = Utils.joinPath(path, dirent.name);
-    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, dirent, direntPath);
+    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, direntPath, dirent.name);
   };
 
   onLockItem = () => {
