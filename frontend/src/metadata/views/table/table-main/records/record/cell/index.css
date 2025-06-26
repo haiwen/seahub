@@ -148,6 +148,7 @@
 
 .sf-metadata-result-table-cell .sf-metadata-long-text-formatter {
   width: 100%;
+  text-overflow: ellipsis;
 }
 
 .sf-metadata-result-table-cell .geolocation-formatter,
