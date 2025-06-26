@@ -1778,9 +1778,9 @@ class MetadataRecognizeFaces(APIView):
             error_msg = 'obj_ids is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        if not record or not record.enabled:
-            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled or not metadata.face_recognition_enabled:
+            error_msg = f'The face recognition is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
