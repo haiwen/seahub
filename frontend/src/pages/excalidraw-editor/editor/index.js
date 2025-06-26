@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Excalidraw, MainMenu, useHandleLibrary } from '@excalidraw/excalidraw';
-import isHotkey from 'is-hotkey';
 import Loading from '../../../components/loading';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
+import SocketManager from '../cllab/socket-manager';
+import context from '../context';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -18,46 +19,33 @@ const UIOptions = {
   tools: { image: false },
 };
 
-const hasChanged = (elements, oldElements) => {
-  if (elements.length !== oldElements.length) return true;
-
-  return elements.some((element, index) => {
-    return element.version !== oldElements[index]?.version;
-  });
-};
-
-const SimpleEditor = ({ sceneContent = null, onChangeContent, onSaveContent, isFetching }) => {
+const SimpleEditor = ({ sceneContent = null, isFetching }) => {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
-  const prevElementsRef = useRef();
+  const socketRef = useRef(null);
 
   useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
 
-  const handleChange = () => {
-    if (!prevElementsRef.current) {
-      prevElementsRef.current = sceneContent?.elements || [];
-    }
-
-    const elements = excalidrawAPI.getSceneElements();
-    if (hasChanged(elements, prevElementsRef.current)) {
-      onChangeContent(elements);
-      prevElementsRef.current = elements;
-    }
-
-  };
-
   useEffect(() => {
-    const handleHotkeySave = (event) => {
-      if (isHotkey('mod+s', event)) {
-        event.preventDefault();
-        onSaveContent(excalidrawAPI.getSceneElements());
-      }
-    };
+    if (!excalidrawAPI) return;
 
-    document.addEventListener('keydown', handleHotkeySave, true);
+    const config = context.getSettings();
+    const socketManager = SocketManager.getInstance(excalidrawAPI, sceneContent, config);
+    socketRef.current = socketManager;
+
     return () => {
-      document.removeEventListener('keydown', handleHotkeySave, true);
+      socketManager.closeSocketConnect();
     };
-  }, [excalidrawAPI, onSaveContent]);
+  }, [excalidrawAPI, sceneContent]);
+
+  const handleChange = useCallback((elements, appState, files) => {
+    if (!socketRef.current) return;
+    socketRef.current.syncElements(elements);
+  }, []);
+
+  const handlePointerUpdate = useCallback((payload) => {
+    if (!socketRef.current) return;
+    socketRef.current.syncPointer(payload);
+  }, []);
 
   if (isFetching) {
     return (
@@ -73,6 +61,7 @@ const SimpleEditor = ({ sceneContent = null, onChangeContent, onSaveContent, isF
         initialData={sceneContent}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
         onChange={handleChange}
+        onPointerUpdate={handlePointerUpdate}
         UIOptions={UIOptions}
         langCode={langList[window.app.config.lang] || 'en'}
       >

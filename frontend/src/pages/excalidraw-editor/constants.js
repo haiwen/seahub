@@ -15,8 +15,14 @@ export const langList = {
 };
 
 export const STORAGE_KEYS = {
+  LOCAL_STORAGE_ELEMENTS: 'excalidraw',
+  LOCAL_STORAGE_APP_STATE: 'excalidraw-state',
   IDB_LIBRARY: 'excalidraw-library',
+  VERSION_DATA_STATE: 'version-dataState',
+  VERSION_FILES: 'version-files',
 };
 
 export const DELETED_ELEMENT_TIMEOUT = 24 * 60 * 60 * 1000; // 1 day
+export const SYNC_FULL_SCENE_INTERVAL_MS = 20000;
+export const CURSOR_SYNC_TIMEOUT = 33; // ~30fps
 
