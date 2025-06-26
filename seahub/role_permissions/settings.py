@@ -51,7 +51,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'monthly_rate_limit_per_user': '',
         'can_choose_office_suite': True,
         'monthly_ai_credit_per_user': -1,
-        'can_multi_saml_sso': True,
+        'can_use_sso_in_multi_tenancy': True,
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -78,7 +78,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'monthly_rate_limit': '',
         'monthly_rate_limit_per_user': '',
         'can_choose_office_suite': False,
-        'can_multi_saml_sso': False,
+        'can_use_sso_in_multi_tenancy': False,
     },
 }
 

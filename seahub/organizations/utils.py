@@ -56,9 +56,8 @@ def generate_org_reactivate_link(org_id):
     return url
 
 
-def can_multi_saml_sso(org_id):
+def can_use_sso_in_multi_tenancy(org_id):
     org = ccnet_api.get_org_by_id(org_id)
     org_role = OrgSettings.objects.get_role_by_org(org)
     perm_dict = get_enabled_role_permissions_by_role(org_role)
-    can_multi_saml_sso = perm_dict.get('can_multi_saml_sso', True)
-    return can_multi_saml_sso
+    return perm_dict.get('can_use_sso_in_multi_tenancy', True)

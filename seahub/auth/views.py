@@ -41,7 +41,7 @@ from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_fac
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.auth import get_login_bg_image_path
 from seahub.organizations.models import OrgSAMLConfig
-from seahub.organizations.utils import can_multi_saml_sso
+from seahub.organizations.utils import can_use_sso_in_multi_tenancy
 
 from constance import config
 
@@ -536,7 +536,7 @@ def multi_adfs_sso(request):
                 render_data['error_msg'] = "Cannot find an ADFS/SAML config for the team related to domain %s." % domain
                 return render(request, template_name, render_data)
 
-            if not can_multi_saml_sso(org_id):
+            if not can_use_sso_in_multi_tenancy(org_id):
                 render_data['error_msg'] = _(f"Team {domain} does not have permission to use ADFS/SAML SSO.")
                 return render(request, template_name, render_data)
 
