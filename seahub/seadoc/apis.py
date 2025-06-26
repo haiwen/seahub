@@ -277,7 +277,7 @@ class SeadocImageDownloadLink(APIView):
             error_msg = 'image_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # recource check
+        # resource check
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid

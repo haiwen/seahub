@@ -29,6 +29,8 @@ export const createContextMenuOptions = ({
   const canDeleteTag = context.checkCanDeleteTag();
   const canExportTags = context.checkCanExportTags();
   const canAddTag = context.canAddTag();
+  const canModifyTag = context.canModifyTag();
+  const canMergeTags = context.canMergeTags();
   const eventBus = EventBus.getInstance();
 
   const onClickMenuItem = (event, option) => {
@@ -123,7 +125,7 @@ export const createContextMenuOptions = ({
         }
       });
 
-      if (tagsIds.length > 1) {
+      if (tagsIds.length > 1 && canMergeTags) {
         options.push({
           label: gettext('Merge tags'),
           value: OPERATION.MERGE_TAGS,
@@ -152,9 +154,11 @@ export const createContextMenuOptions = ({
     const { groupRecordIndex, rowIdx: recordIndex, idx } = selectedPosition;
     const tag = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex });
     const column = getColumnByIndex(idx, columns);
-    if (!tag || !tag._id || !column) return options;
+    if (!tag || !tag._id || !column) {
+      return options;
+    }
     const isNameColumn = checkIsNameColumn(column);
-    if (isNameColumn) {
+    if (isNameColumn && canModifyTag) {
       options.push({
         label: gettext('Edit tag'),
         value: OPERATION.EDIT_TAG,

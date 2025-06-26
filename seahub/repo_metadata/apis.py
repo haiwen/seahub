@@ -139,7 +139,7 @@ class MetadataManage(APIView):
             remove a repo's metadata manage
         """
 
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
