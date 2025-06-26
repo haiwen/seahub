@@ -548,7 +548,7 @@ class DirentGridView extends React.Component {
 
   prepareImageItem = (item) => {
     const { path: parentDir, repoID, currentRepoInfo } = this.props;
-    const { name, mtime, id } = item;
+    const { name, mtime, id, is_locked } = item;
     const repoEncrypted = currentRepoInfo.encrypted;
     const path = Utils.encodePath(Utils.joinPath(parentDir, name));
     const cacheBuster = new Date().getTime();
@@ -576,6 +576,7 @@ class DirentGridView extends React.Component {
       thumbnail,
       src,
       parentDir,
+      is_locked,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
       'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}?op=download`,
     };

@@ -38,15 +38,22 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   const nextImg = imageItems[(imageIndex + 1) % imageItemsLength];
   const prevImg = imageItems[(imageIndex + imageItemsLength - 1) % imageItemsLength];
 
-  // The backend server does not support rotating HEIC, GIF, SVG images
   let enableRotate = oldEnableRotate;
-  const urlParts = mainImg.src.split('?')[0].split('.');
-  const suffix = urlParts[urlParts.length - 1].toLowerCase();
-  if (suffix === 'heic' || suffix === 'svg' || suffix === 'gif') {
-    enableRotate = false;
-  }
-  if (repoInfo && (repoInfo.permission === 'r' || repoInfo.encrypted)) {
-    enableRotate = false;
+  if (enableRotate) {
+    // The backend server does not support rotating HEIC, GIF, SVG images
+    const urlParts = mainImg.src.split('?')[0].split('.');
+    const suffix = urlParts[urlParts.length - 1].toLowerCase();
+    if (suffix === 'heic' || suffix === 'svg' || suffix === 'gif') {
+      enableRotate = false;
+    }
+    // disable rotate when repo is read-only or encrypted
+    else if (repoInfo && (repoInfo.permission === 'r' || repoInfo.encrypted)) {
+      enableRotate = false;
+    }
+    // disable rotate when file is locked
+    else if (mainImg.is_locked) {
+      enableRotate = false;
+    }
   }
 
   const isSystemFolder = SYSTEM_FOLDERS.find(folderPath => mainImg.parentDir.startsWith(folderPath));

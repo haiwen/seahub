@@ -146,6 +146,7 @@ class FileToolbar extends React.Component {
                   icon="rotate"
                   text={gettext('Rotate')}
                   onClick={this.props.rotateImage}
+                  disabled={isLocked} // disable rotate when file is locked
                 />
               )}
             </>
