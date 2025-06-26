@@ -124,7 +124,7 @@ class ImportConfluenceDialog extends React.Component {
               type="file"
               ref={this.fileInputRef}
               style={{ display: 'none' }}
-              accept=".html.zip"
+              accept=".zip"
               onChange={this.handleFileChange}
             />
             <Button color="primary" onClick={this.triggerFileInput} disabled={isUploading}>

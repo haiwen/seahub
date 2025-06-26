@@ -1799,14 +1799,7 @@ class ImportConfluenceView(APIView):
         file_id = seafile_api.get_file_id_by_path(repo_id, new_file_path)
         download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
         download_url = gen_file_get_url(download_token, zip_file.name)
-        upload_token = seafile_api.get_fileserver_access_token(repo_id,
-                                                                json.dumps({'parent_dir': server_wiki_tmp_dir}),
-                                                                'upload-link',
-                                                                username,
-                                                                use_onetime=False)
-
-        upload_url = gen_file_upload_url(upload_token, 'upload-api')
-        return download_url, upload_url
+        return download_url, upload_link
 
 
     def _extract_html_zip(self, zip_file, space_key):

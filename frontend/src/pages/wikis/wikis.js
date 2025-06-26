@@ -116,13 +116,7 @@ class Wikis extends Component {
     }
   };
 
-  importConfluence = (file, currentDeptID) => {
-    if (!file) return;
-    if (!file.name.endsWith('.html.zip')) {
-      toaster.danger(gettext('Please select a valid Confluence HTML export file (.html.zip)'));
-      return;
-    }
-
+  importConfluence = async (file, currentDeptID) => {
     return wikiAPI.importConfluence(file, currentDeptID).then((res) => {
       let wikis = this.state.wikis.slice(0);
       let groupWikis = this.state.groupWikis;
