@@ -108,6 +108,11 @@ class Context {
     return true;
   };
 
+  canMergeTags = () => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
+
   // tags
   getTags = ({ start, limit }) => {
     return this.api.getTags(this.repoId, start, limit);
