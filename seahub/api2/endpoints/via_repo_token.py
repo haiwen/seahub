@@ -123,7 +123,7 @@ class ViaRepoDirView(APIView):
 
         with_parents = to_python_boolean(with_parents)
 
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id

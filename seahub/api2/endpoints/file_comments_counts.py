@@ -30,7 +30,7 @@ class FileCommentsCounts(APIView):
         """Get file comment count.
         """
 
-        # recource check
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
