@@ -19,11 +19,24 @@ const UIOptions = {
   tools: { image: false },
 };
 
-const SimpleEditor = ({ sceneContent = null, isFetching }) => {
-  const [excalidrawAPI, setExcalidrawAPI] = useState(null);
+const SimpleEditor = () => {
   const socketRef = useRef(null);
+  const [isFetching, setIsFetching] = useState(true);
+  const [sceneContent, setSceneContent] = useState(null);
+  const [excalidrawAPI, setExcalidrawAPI] = useState(null);
 
   useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
+
+  useEffect(() => {
+    async function loadFileContent() {
+      await context.initSettings();
+      context.getSceneContent().then(res => {
+        setSceneContent(res.data);
+        setIsFetching(false);
+      });
+    }
+    loadFileContent();
+  }, []);
 
   useEffect(() => {
     if (!excalidrawAPI) return;
