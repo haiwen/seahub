@@ -4,6 +4,7 @@ import { gettext, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
 import { useMetadataView } from '../../hooks/metadata-view';
+import { useMetadataStatus } from '../../../hooks/metadata-status';
 import RowUtils from './utils/row-utils';
 import { checkIsDir } from '../../utils/row';
 import { getColumnByKey, isNameColumn } from '../../utils/column';
@@ -40,6 +41,7 @@ const ContextMenu = ({
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
 
   const { metadata } = useMetadataView();
+  const { enableFaceRecognition } = useMetadataStatus();
 
   const repoID = window.sfMetadataStore.repoId;
 
@@ -116,7 +118,7 @@ const ContextMenu = ({
           const fileName = getFileNameFromRecord(record);
           return Utils.imageCheck(fileName);
         });
-        if (imageRecords.length > 0) {
+        if (enableFaceRecognition && imageRecords.length > 0) {
           list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
         }
       }
@@ -152,7 +154,7 @@ const ContextMenu = ({
           const fileName = getFileNameFromRecord(record);
           return Utils.imageCheck(fileName);
         });
-        if (imageRecords.length > 0) {
+        if (enableFaceRecognition && imageRecords.length > 0) {
           list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
         }
       }
@@ -202,7 +204,7 @@ const ContextMenu = ({
       if (isImage || isVideo) {
         aiOptions.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
       }
-      if (isImage) {
+      if (enableFaceRecognition && isImage) {
         aiOptions.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: [record] });
       }
 
@@ -229,7 +231,7 @@ const ContextMenu = ({
     }
 
     return list;
-  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, getAbleDeleteRecords]);
+  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, getAbleDeleteRecords, enableFaceRecognition]);
 
   const handleOptionClick = useCallback((option, event) => {
     switch (option.value) {
