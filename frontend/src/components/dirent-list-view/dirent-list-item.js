@@ -417,7 +417,8 @@ class DirentListItem extends React.Component {
     const { path, eventBus } = this.props;
     const { dirent } = this.state;
     const direntPath = Utils.joinPath(path, dirent.name);
-    eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, dirent, direntPath);
+    const name = Utils.getFileName(direntPath);
+    eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, direntPath, name);
   };
 
   openFileAccessLog = () => {
