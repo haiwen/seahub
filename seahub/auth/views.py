@@ -1,8 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import hashlib
 import logging
 import jwt
-from datetime import datetime
 from django.conf import settings
 # Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
@@ -10,7 +8,7 @@ from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect
 
 from urllib.parse import quote
 from django.utils.http import base36_to_int, url_has_allowed_host_and_scheme
@@ -43,6 +41,7 @@ from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_fac
 from seahub.utils.user_permissions import get_user_role
 from seahub.utils.auth import get_login_bg_image_path
 from seahub.organizations.models import OrgSAMLConfig
+from seahub.organizations.utils import can_use_sso_in_multi_tenancy
 
 from constance import config
 
@@ -536,6 +535,11 @@ def multi_adfs_sso(request):
             if not org:
                 render_data['error_msg'] = "Cannot find an ADFS/SAML config for the team related to domain %s." % domain
                 return render(request, template_name, render_data)
+
+            if not can_use_sso_in_multi_tenancy(org_id):
+                render_data['error_msg'] = _(f"Team {domain} does not have permission to use ADFS/SAML SSO.")
+                return render(request, template_name, render_data)
+
         except Exception as e:
             logger.error(e)
             render_data['error_msg'] = 'Error, please contact administrator.'

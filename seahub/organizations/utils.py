@@ -2,8 +2,12 @@
 from django.core.cache import cache
 from django.urls import reverse
 
+from seaserv import ccnet_api
+
 from seahub.invitations.models import Invitation
+from seahub.organizations.models import OrgSettings
 from seahub.utils import gen_token, get_service_url
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 
 
 def get_or_create_invitation_link(org_id):
@@ -50,3 +54,10 @@ def generate_org_reactivate_link(org_id):
     url = reverse('org_reactivate', args=[i.token])
     url = f'{service_url}{url}'
     return url
+
+
+def can_use_sso_in_multi_tenancy(org_id):
+    org = ccnet_api.get_org_by_id(org_id)
+    org_role = OrgSettings.objects.get_role_by_org(org)
+    perm_dict = get_enabled_role_permissions_by_role(org_role)
+    return perm_dict.get('can_use_sso_in_multi_tenancy', True)
