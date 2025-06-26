@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 16:53+0800\n"
+"POT-Creation-Date: 2025-06-26 10:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Ilo Kra, 2023\n"
 "Language-Team: Latvian (http://app.transifex.com/haiwen/seahub/language/lv/)\n"
@@ -72,12 +72,12 @@ msgid "Failed to unbind SAML, please set a contact email first."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:204
-#: seahub/api2/endpoints/user.py:100 seahub/api2/views.py:370
+#: seahub/api2/endpoints/user.py:100 seahub/api2/views.py:380
 msgid "Name is too long (maximum is 64 characters)"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:208
-#: seahub/api2/endpoints/user.py:104 seahub/api2/views.py:374
+#: seahub/api2/endpoints/user.py:104 seahub/api2/views.py:384
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr ""
@@ -114,7 +114,7 @@ msgstr ""
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:274
 #: seahub/api2/endpoints/groups.py:220 seahub/api2/endpoints/groups.py:293
-#: seahub/api2/views.py:4764 seahub/group/forms.py:36
+#: seahub/api2/views.py:4774 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -165,12 +165,12 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr "Sistēmas bibliotēku nevar dzēst."
 
-#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1933
+#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1943
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1938
+#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1948
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -436,7 +436,7 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
 #: seahub/api2/endpoints/wiki2.py:463 seahub/api2/endpoints/wiki2.py:491
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4098
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4108
 #: seahub/notifications/models.py:592 seahub/notifications/models.py:633
 #: seahub/notifications/models.py:675 seahub/notifications/models.py:726
 #: seahub/notifications/models.py:782 seahub/notifications/models.py:812
@@ -464,11 +464,11 @@ msgstr "Nederīgs mērķa ceļš"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:2026
-#: seahub/api2/views.py:2066 seahub/api2/views.py:2128
-#: seahub/api2/views.py:2172 seahub/api2/views.py:2218
-#: seahub/api2/views.py:2267 seahub/api2/views.py:2680
-#: seahub/api2/views.py:2788 seahub/seadoc/apis.py:381
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:2036
+#: seahub/api2/views.py:2076 seahub/api2/views.py:2138
+#: seahub/api2/views.py:2182 seahub/api2/views.py:2228
+#: seahub/api2/views.py:2277 seahub/api2/views.py:2690
+#: seahub/api2/views.py:2798 seahub/seadoc/apis.py:381
 #: seahub/seadoc/apis.py:502 seahub/seadoc/apis.py:596
 #: seahub/seadoc/apis.py:3103
 msgid "Out of quota."
@@ -480,9 +480,9 @@ msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr ""
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:321 seahub/api2/endpoints/file.py:401
-#: seahub/api2/endpoints/file.py:516 seahub/api2/endpoints/file.py:574
-#: seahub/api2/endpoints/file.py:725 seahub/api2/endpoints/file.py:838
+#: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
+#: seahub/api2/endpoints/file.py:517 seahub/api2/endpoints/file.py:587
+#: seahub/api2/endpoints/file.py:738 seahub/api2/endpoints/file.py:851
 #: seahub/api2/endpoints/via_repo_token.py:1010
 #: seahub/api2/endpoints/via_repo_token.py:1150
 #: seahub/api2/endpoints/wiki2.py:804
@@ -504,14 +504,14 @@ msgstr ""
 msgid "User %s not found."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:203 seahub/api2/endpoints/upload_links.py:530
+#: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
 #: seahub/api2/endpoints/via_repo_token.py:850
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:2074 seahub/seadoc/apis.py:3110
+#: seahub/api2/views.py:2084 seahub/seadoc/apis.py:3110
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:309
+#: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/share_links.py:570
@@ -531,16 +531,16 @@ msgstr ""
 msgid "Permission denied."
 msgstr "Pieeja liegta."
 
-#: seahub/api2/endpoints/file.py:332
+#: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:743 seahub/api2/endpoints/file.py:763
+#: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1167
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:790 seahub/api2/endpoints/share_links.py:878
+#: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:878
 msgid "You can not refresh this file's lock."
 msgstr ""
 
@@ -564,7 +564,7 @@ msgstr "Lietotājs %s jau ir grupas dalībnieks."
 
 #: seahub/api2/endpoints/group_members.py:115
 #: seahub/api2/endpoints/group_members.py:366
-#: seahub/api2/endpoints/group_members.py:523 seahub/api2/views.py:1928
+#: seahub/api2/endpoints/group_members.py:523 seahub/api2/views.py:1938
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
@@ -634,8 +634,8 @@ msgstr "Neizdevās nosūtīt e-pastu, iestatījumi nav korekti. Sazinieties ar a
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
 #: seahub/api2/endpoints/share_links.py:339
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4251
-#: seahub/api2/views.py:4371
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4261
+#: seahub/api2/views.py:4381
 msgid "Password is required."
 msgstr "Parole ir nepieciešama."
 
@@ -667,7 +667,7 @@ msgstr ""
 #: seahub/api2/endpoints/share_links.py:376
 #: seahub/api2/endpoints/share_links.py:714
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3659
+#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3669
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
@@ -677,7 +677,7 @@ msgstr ""
 #: seahub/api2/endpoints/share_links.py:382
 #: seahub/api2/endpoints/share_links.py:720
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3665
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3675
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
@@ -730,11 +730,11 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4095
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4105
 msgid "Wrong password"
 msgstr "Kļūdaina parole"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4101
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4111
 msgid "Decrypt library error"
 msgstr "Atkodēšanas kļūda"
 
@@ -814,7 +814,7 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
 #: seahub/api2/endpoints/subscription.py:108 seahub/oauth/views.py:277
-#: seahub/oauth/views.py:289 seahub/organizations/api/admin/info.py:143
+#: seahub/oauth/views.py:289 seahub/organizations/api/admin/info.py:150
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
 #: seahub/subscription/views.py:40 seahub/weixin/views.py:41
@@ -897,7 +897,7 @@ msgstr "Nepieciešams nosaukums."
 msgid "A share link for you"
 msgstr ""
 
-#: seahub/api2/views.py:1924
+#: seahub/api2/views.py:1934
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
 msgstr ""

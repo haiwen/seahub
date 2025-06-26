@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-17 16:53+0800\n"
+"POT-Creation-Date: 2025-06-26 10:25+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: malnaim <malnaim@safedecision.com.sa>, 2021,2023-2025\n"
 "Language-Team: Arabic (http://app.transifex.com/haiwen/seahub/language/ar/)\n"
@@ -73,12 +73,12 @@ msgid "Failed to unbind SAML, please set a contact email first."
 msgstr "فشل إلغاء ربط SAML، يرجى تعيين بريد إلكتروني للاتصال أولاً."
 
 #: seahub/api2/endpoints/admin/account.py:204
-#: seahub/api2/endpoints/user.py:100 seahub/api2/views.py:370
+#: seahub/api2/endpoints/user.py:100 seahub/api2/views.py:380
 msgid "Name is too long (maximum is 64 characters)"
 msgstr "الاسم طويل جدا (الحد الأقصى 64 حرف)"
 
 #: seahub/api2/endpoints/admin/account.py:208
-#: seahub/api2/endpoints/user.py:104 seahub/api2/views.py:374
+#: seahub/api2/endpoints/user.py:104 seahub/api2/views.py:384
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
 msgstr "الاسم لا يجب ان يحتوي على '/'."
@@ -115,7 +115,7 @@ msgstr "يجب أن يكون عدد صحيح أكبر من أو يساوي 0."
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:274
 #: seahub/api2/endpoints/groups.py:220 seahub/api2/endpoints/groups.py:293
-#: seahub/api2/views.py:4764 seahub/group/forms.py:36
+#: seahub/api2/views.py:4774 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -166,12 +166,12 @@ msgstr " فشل في إضافة %s إلى المنشأة: ينتمي المست�
 msgid "System library can not be deleted."
 msgstr "لا يمكن حذف مكتبة النظام"
 
-#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1933
+#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1943
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr " فشل النقل: دور %s , هو %s ، لا يمكن إضافة مكتبة."
 
-#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1938
+#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1948
 msgid "Library can not be transferred to owner."
 msgstr " لا يمكن نقل المكتبة إلى المالك."
 
@@ -179,7 +179,7 @@ msgstr " لا يمكن نقل المكتبة إلى المالك."
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "تم إلغاء تنشيط فريقك {org.org_name}"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
@@ -437,7 +437,7 @@ msgstr "ملف الفيروس لم يعثر عليه."
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
 #: seahub/api2/endpoints/wiki2.py:463 seahub/api2/endpoints/wiki2.py:491
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4098
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4108
 #: seahub/notifications/models.py:592 seahub/notifications/models.py:633
 #: seahub/notifications/models.py:675 seahub/notifications/models.py:726
 #: seahub/notifications/models.py:782 seahub/notifications/models.py:812
@@ -465,11 +465,11 @@ msgstr "مسار الوجهة غير صحيح"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
-#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:2026
-#: seahub/api2/views.py:2066 seahub/api2/views.py:2128
-#: seahub/api2/views.py:2172 seahub/api2/views.py:2218
-#: seahub/api2/views.py:2267 seahub/api2/views.py:2680
-#: seahub/api2/views.py:2788 seahub/seadoc/apis.py:381
+#: seahub/api2/endpoints/repos_batch.py:494 seahub/api2/views.py:2036
+#: seahub/api2/views.py:2076 seahub/api2/views.py:2138
+#: seahub/api2/views.py:2182 seahub/api2/views.py:2228
+#: seahub/api2/views.py:2277 seahub/api2/views.py:2690
+#: seahub/api2/views.py:2798 seahub/seadoc/apis.py:381
 #: seahub/seadoc/apis.py:502 seahub/seadoc/apis.py:596
 #: seahub/seadoc/apis.py:3103
 msgid "Out of quota."
@@ -481,9 +481,9 @@ msgid "Can not move folder %(src)s to its subfolder %(des)s"
 msgstr "لا يمكن نقل المجلد %(src)s إلى المجلدات المتفرعة منه %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:321 seahub/api2/endpoints/file.py:401
-#: seahub/api2/endpoints/file.py:516 seahub/api2/endpoints/file.py:574
-#: seahub/api2/endpoints/file.py:725 seahub/api2/endpoints/file.py:838
+#: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
+#: seahub/api2/endpoints/file.py:517 seahub/api2/endpoints/file.py:587
+#: seahub/api2/endpoints/file.py:738 seahub/api2/endpoints/file.py:851
 #: seahub/api2/endpoints/via_repo_token.py:1010
 #: seahub/api2/endpoints/via_repo_token.py:1150
 #: seahub/api2/endpoints/wiki2.py:804
@@ -505,14 +505,14 @@ msgstr "اسم المستخدم غير صحيح"
 msgid "User %s not found."
 msgstr " لم يتم العثور على المستخدم %s ."
 
-#: seahub/api2/endpoints/file.py:203 seahub/api2/endpoints/upload_links.py:530
+#: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
 #: seahub/api2/endpoints/via_repo_token.py:850
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:2074 seahub/seadoc/apis.py:3110
+#: seahub/api2/views.py:2084 seahub/seadoc/apis.py:3110
 msgid "The number of files in library exceeds the limit"
 msgstr "عدد الملفات في المكتبة يتجاوز الحد المسموح"
 
-#: seahub/api2/endpoints/file.py:309
+#: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
 #: seahub/api2/endpoints/share_links.py:570
@@ -532,16 +532,16 @@ msgstr "عدد الملفات في المكتبة يتجاوز الحد المس
 msgid "Permission denied."
 msgstr "الترخيص مرفوض."
 
-#: seahub/api2/endpoints/file.py:332
+#: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
 msgstr "صيغة الملف غير موجود في القائمة البيضاء"
 
-#: seahub/api2/endpoints/file.py:743 seahub/api2/endpoints/file.py:763
+#: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1167
 msgid "File is not locked."
 msgstr "الملف غير مقفل."
 
-#: seahub/api2/endpoints/file.py:790 seahub/api2/endpoints/share_links.py:878
+#: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:878
 msgid "You can not refresh this file's lock."
 msgstr "لا يمكنك تحديث قفل هذا الملف."
 
@@ -565,7 +565,7 @@ msgstr "المستخدم %s عضو في المجموعة بالفعل."
 
 #: seahub/api2/endpoints/group_members.py:115
 #: seahub/api2/endpoints/group_members.py:366
-#: seahub/api2/endpoints/group_members.py:523 seahub/api2/views.py:1928
+#: seahub/api2/endpoints/group_members.py:523 seahub/api2/views.py:1938
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
@@ -635,8 +635,8 @@ msgstr "فشل ارسال البريد، خدمة البريد الالكترو�
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
 #: seahub/api2/endpoints/share_links.py:339
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4251
-#: seahub/api2/views.py:4371
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4261
+#: seahub/api2/views.py:4381
 msgid "Password is required."
 msgstr "كلمة السر مطلوبة."
 
@@ -668,7 +668,7 @@ msgstr "كلمة السر يجب أن تحتوي على رقم و حرف كبي�
 #: seahub/api2/endpoints/share_links.py:376
 #: seahub/api2/endpoints/share_links.py:714
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3659
+#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3669
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr "يجب أن تكون أيام انتهاء الصلاحية أكبر من أو تساوي %s"
@@ -678,7 +678,7 @@ msgstr "يجب أن تكون أيام انتهاء الصلاحية أكبر م�
 #: seahub/api2/endpoints/share_links.py:382
 #: seahub/api2/endpoints/share_links.py:720
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3665
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3675
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr "يجب أن تكون أيام انتهاء الصلاحية أقل من أو تساوي %s"
@@ -731,11 +731,11 @@ msgstr "لا يمكن إعادة تعيين كلمة سر هذه المكتبة.
 msgid "New password of library %s"
 msgstr "كلمة سر جديدة للمكتبة %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4095
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4105
 msgid "Wrong password"
 msgstr "كلمة سر غير صحيحة"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4101
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4111
 msgid "Decrypt library error"
 msgstr "خطأ فك تشفير المكتبة"
 
@@ -815,7 +815,7 @@ msgstr "رابط المشاركة %sموجود بالفعل."
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
 #: seahub/api2/endpoints/subscription.py:108 seahub/oauth/views.py:277
-#: seahub/oauth/views.py:289 seahub/organizations/api/admin/info.py:143
+#: seahub/oauth/views.py:289 seahub/organizations/api/admin/info.py:150
 #: seahub/organizations/api/admin/logo.py:33
 #: seahub/organizations/api/admin/logo.py:42 seahub/subscription/views.py:24
 #: seahub/subscription/views.py:40 seahub/weixin/views.py:41
@@ -898,7 +898,7 @@ msgstr "الاسم مطلوب."
 msgid "A share link for you"
 msgstr "رابط مشاركة لك"
 
-#: seahub/api2/views.py:1924
+#: seahub/api2/views.py:1934
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
 msgstr "خطأ في الإذن: أنت لست مسؤول القسم"
@@ -1080,7 +1080,7 @@ msgstr "المساحة المخصصة واشكت على النفاذ بقي تق
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "حصة الفريق أصبحت ممتلئة تقريبًا %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1845,7 +1845,7 @@ msgstr "الضيف %(user)s قبل <a href=\"%(url_base)s%(inv_url)s\">دعوت�
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "لقد نقل %(user)s لك مكتبة باسم <a href=\"%(repo_url)s\">%(repo_name)s</a>."
 
 #: seahub/notifications/models.py:1002
 #, python-brace-format
@@ -2122,14 +2122,14 @@ msgstr "عنوان البريد غير صالح"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "لقد تلقيت هذا البريد الإلكتروني لأن فريقك %(org_name)s قد تم إلغاء تنشيطه"
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nإذا كنت ترغب في مواصلة استخدام موقعنا، انقر <a href=\"%(link)s\">هنا</a>. وإلا، فسيتم حذف حسابك خلال 60 يومًا.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2229,7 +2229,7 @@ msgstr "رمز غير صحيح."
 #: seahub/organizations/views.py:352
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "الرمز منتهي الصلاحية."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2495,7 +2495,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n         انقر <a href=\"%(link)s\">هنا</a> لإعادة تنشيط فريقك وإعادة تسجيل الدخول."
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2911,7 +2911,7 @@ msgstr "تم إعادة تعيين كلمة السر الخاصة بك على %(
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "حصة الفريق أصبحت ممتلئة تقريبًا في %(site_name)s."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
