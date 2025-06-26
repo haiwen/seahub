@@ -3,7 +3,7 @@ import { Excalidraw, MainMenu, useHandleLibrary } from '@excalidraw/excalidraw';
 import Loading from '../../../components/loading';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
-import SocketManager from '../cllab/socket-manager';
+import SocketManager from '../collaborator/socket-manager';
 import context from '../context';
 
 import '@excalidraw/excalidraw/index.css';
