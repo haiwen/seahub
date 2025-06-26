@@ -113,7 +113,8 @@ class SelectedDirentsToolbar extends React.Component {
   openFileAccessLog = (dirent) => {
     const { eventBus } = this.props;
     const direntPath = this.getDirentPath(dirent);
-    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, dirent, direntPath);
+    const name = Utils.getFileName(direntPath);
+    eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, direntPath, name);
   };
 
   onStartRevise = (dirent) => {
