@@ -97,7 +97,7 @@ class WikiTrashDialog extends React.Component {
                 {(isAdmin && enableUserCleanTrash) &&
                   <button className="btn btn-secondary clean" onClick={this.cleanTrash}>{gettext('Clean')}</button>
                 }
-                <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} onClick={toggleTrashDialog}>
+                <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleTrashDialog}>
                   <span className="seahub-modal-btn-inner">
                     <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
                   </span>

@@ -322,13 +322,13 @@ class CopyDirent extends React.Component {
         <ModalHeader toggle={this.toggle}
           close={
             <div className="header-buttons">
-              <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} onClick={this.toggle}>
+              <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
                 <span className="seahub-modal-btn-inner">
                   <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
                 </span>
               </button>
               {(isPro && !showSearchBar) &&
-                <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} onClick={this.onOpenSearchBar}>
+                <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} title={gettext('Search')} onClick={this.onOpenSearchBar}>
                   <span className="seahub-modal-btn-inner">
                     <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
                   </span>

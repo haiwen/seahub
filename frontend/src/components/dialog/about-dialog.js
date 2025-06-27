@@ -28,7 +28,7 @@ class AboutDialog extends React.Component {
       return (
         <Modal isOpen={true} toggle={toggleDialog}>
           <ModalBody>
-            <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} onClick={toggleDialog}>
+            <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleDialog}>
               <span className="seahub-modal-btn-inner">
                 <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
               </span>
@@ -41,7 +41,7 @@ class AboutDialog extends React.Component {
       return (
         <Modal isOpen={true} toggle={toggleDialog}>
           <ModalBody>
-            <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} onClick={toggleDialog}>
+            <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleDialog}>
               <span className="seahub-modal-btn-inner">
                 <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
               </span>
