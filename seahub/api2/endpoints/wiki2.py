@@ -9,6 +9,7 @@ import uuid
 import re
 import requests
 from zipfile import ZipFile
+from io import BytesIO
 import shutil
 from pathlib import Path
 from copy import deepcopy
@@ -1659,6 +1660,7 @@ class ImportConfluenceView(APIView):
 
         if not request.user.permissions.can_create_wiki():
             return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create wiki.')
+        
         group_id = request.data.get('group_id', None)
         if not group_id:
             wiki_owner = request.user.username
@@ -1668,26 +1670,87 @@ class ImportConfluenceView(APIView):
                 wiki_owner = "%s@seafile_group" % group_id
             except:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'group_id invalid')
-        # create wiki
-        org_id = -1
-        if is_org_context(request):
-            org_id = request.user.org.org_id
+        org_id = request.user.org.org_id if is_org_context(request) else -1
         
         underscore_index = filename.rfind('_')
         if underscore_index != -1:
             # The file name for exporting the script is spaceName_spaceId.html.zip
             wiki_name = filename[:underscore_index]
             space_key = filename[underscore_index + 1:-len('.html.zip')]
-        else:
+        elif 'Confluence-space-export-' in filename:
             # The manually exported file name is Confluence-space-export-id.html.zip
             wiki_name = filename[:-len('.html.zip')]
             space_key = filename[len('Confluence-space-export-'):-len('.html.zip')]
+        else:
+            wiki_name = filename[:-len('.html.zip')]
+            space_key = wiki_name
         
+        # create wiki
+        try:
+            repo_id = self._create_wiki(group_id, wiki_name, org_id, username)
+            seafile_db_api = SeafileDB()
+            seafile_db_api.set_repo_type(repo_id, 'wiki')
+        except Exception as e:
+            logger.error(e)
+            msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
+        seafile_server_url = f'{SERVICE_URL}/lib/{repo_id}/file/'
+        wiki = Wiki.objects.get(wiki_id=repo_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found')
+
+        try:
+            download_url, upload_url = self._upload_zip_file(repo_id, file, username)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        try:
+            # extract html zip
+            extract_dir = '/tmp/wiki'
+            if not os.path.exists(extract_dir):
+                os.mkdir(extract_dir)
+            space_dir = self._extract_html_zip(file, extract_dir, space_key)
+            result = json.loads(confluence_to_wiki(file.name, download_url, upload_url, username, seafile_server_url))
+            if result.get('error_msg'):
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, result.get('error'))
+            cf_id_to_cf_title_map = result.get('cf_id_to_cf_title_map')
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        try:
+            sdoc_output_dir = self._download_sdoc_files(repo_id, space_dir, username)
+            if sdoc_output_dir:
+                sdoc_files = list(Path(sdoc_output_dir).glob('*.sdoc'))
+                self._process_zip_file(wiki, space_dir, sdoc_files, cf_id_to_cf_title_map, username)
+                # delete server tmp dir
+                seafile_api.del_file(repo_id, '/',
+                                    json.dumps(['tmp']), username)
+                # clean repo trash
+                seafile_api.clean_up_repo_history(repo_id, 0)
+                shutil.rmtree(space_dir)
+        except Exception as e:
+            logger.error(e)
+            if os.path.exists(space_dir):
+                shutil.rmtree(space_dir)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        
+        repo = seafile_api.get_repo(repo_id)
+        wiki = Wiki(repo, wiki_owner)
+        wiki_info = wiki.to_dict()
+        wiki_info['owner_nickname'] = email2nickname(wiki.owner)
+        if group_id:    
+            wiki_info['group_name'] = group_id_to_name(group_id)
+        return Response(wiki_info)
+    
+    def _create_wiki(self, group_id, wiki_name, org_id, username):
         permission = PERMISSION_READ_WRITE
         if group_id:
             group_id = int(group_id)
             # only group admin can create wiki
-            if not is_group_admin(group_id, request.user.username):
+            if not is_group_admin(group_id, username):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1719,61 +1782,7 @@ class ImportConfluenceView(APIView):
                 repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
             else:
                 repo_id = seafile_api.create_repo(wiki_name, '', username)
-
-        try:
-            seafile_db_api = SeafileDB()
-            seafile_db_api.set_repo_type(repo_id, 'wiki')
-        except Exception as e:
-            logger.error(e)
-            msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
-
-        seafile_server_url = f'{SERVICE_URL}/lib/{repo_id}/file/'
-        wiki = Wiki.objects.get(wiki_id=repo_id)
-        if not wiki:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found')
-        repo_id = wiki.repo_id
-        try:
-            download_url, upload_url = self._upload_zip_file(repo_id, file, username)
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        try:
-            result = json.loads(confluence_to_wiki(file.name, download_url, upload_url, username, seafile_server_url))
-            if result.get('error_msg'):
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, result.get('error'))
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        cf_id_to_cf_title_map = result.get('cf_id_to_cf_title_map')
-        try:
-            # extract html zip
-            extract_dir = os.path.join('/tmp/wiki', space_key)
-            if not os.path.exists(extract_dir):
-                extract_dir = self._extract_html_zip(file, space_key)
-            sdoc_output_dir = self._download_sdoc_files(repo_id, space_key, username)
-            if sdoc_output_dir:
-                sdoc_files = list(Path(sdoc_output_dir).glob('*.sdoc'))
-                self._process_zip_file(wiki, extract_dir, sdoc_files, cf_id_to_cf_title_map, username)
-                # delete server tmp dir
-                seafile_api.del_file(repo_id, '/',
-                                    json.dumps(['tmp']), username)
-                # clean repo trash
-                seafile_api.clean_up_repo_history(repo_id, 0)
-                shutil.rmtree(extract_dir)
-        except Exception as e:
-            logger.error(e)
-            if os.path.exists(extract_dir):
-                shutil.rmtree(extract_dir)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-        
-        repo = seafile_api.get_repo(repo_id)
-        wiki = Wiki(repo, wiki_owner)
-        wiki_info = wiki.to_dict()
-        wiki_info['owner_nickname'] = email2nickname(wiki.owner)
-        if group_id:    
-            wiki_info['group_name'] = group_id_to_name(group_id)
-        return Response(wiki_info)
+        return repo_id
 
     def _upload_zip_file(self, repo_id, zip_file, username):
         server_wiki_tmp_dir = 'tmp/'
@@ -1787,8 +1796,7 @@ class ImportConfluenceView(APIView):
 
         upload_link = gen_file_upload_url(token, 'upload-api')
         upload_link += '?ret-json=1'
-        new_file_path = os.path.join(server_wiki_tmp_dir, zip_file.name)
-        new_file_path = os.path.normpath(new_file_path)
+        new_file_path = os.path.normpath(os.path.join(server_wiki_tmp_dir, zip_file.name))
         data = {'parent_dir': server_wiki_tmp_dir}
         files = {'file': zip_file}
         resp = requests.post(upload_link, files=files, data=data)
@@ -1802,10 +1810,8 @@ class ImportConfluenceView(APIView):
         return download_url, upload_link
 
 
-    def _extract_html_zip(self, zip_file, space_key):
-        extract_dir = '/tmp/wiki'
-        if not os.path.exists(extract_dir):
-            os.mkdir(extract_dir)
+    def _extract_html_zip(self, zip_file, extract_dir, space_key):
+        space_dir = os.path.join(extract_dir, space_key)
         try:
             with ZipFile(zip_file, 'r') as zip_ref:
                 all_entries = zip_ref.infolist()
@@ -1815,18 +1821,17 @@ class ImportConfluenceView(APIView):
                     top_dir = first_entry.split('/')[0] if '/' in first_entry else None
                     if top_dir and top_dir != space_key:
                         old_path = os.path.join(extract_dir, top_dir)
-                        new_path = os.path.join(extract_dir, space_key)
-                        if os.path.exists(new_path):
-                            shutil.rmtree(new_path)
+                        if os.path.exists(space_dir):
+                            shutil.rmtree(space_dir)
                         if os.path.exists(old_path):
-                            os.rename(old_path, new_path)
+                            os.rename(old_path, space_dir)
                 
-            return os.path.join(extract_dir, space_key)
+            return space_dir
         except Exception as e:
             logger.error(f"extract {zip_file} error: {e}")
             return False
     
-    def _download_sdoc_files(self, repo_id, space_key, username):
+    def _download_sdoc_files(self, repo_id, space_dir, username):
         server_wiki_tmp_sdoc_output_dir = 'tmp/sdoc_archive.zip'
         file_id = seafile_api.get_file_id_by_path(repo_id, server_wiki_tmp_sdoc_output_dir)
         if not file_id:
@@ -1837,35 +1842,21 @@ class ImportConfluenceView(APIView):
         response = requests.get(download_url)
         if response.status_code != 200:
             logger.error(f"Failed to download zip file: HTTP {response.status_code}")
-            return
-        
-        extract_dir = '/tmp/wiki'
-        if not os.path.exists(extract_dir):
-            os.makedirs(extract_dir)
-        
-        if not os.path.exists(os.path.join(extract_dir, space_key)):
-            os.makedirs(os.path.join(extract_dir, space_key))
-        
-        zip_file_path = os.path.join(extract_dir, space_key, 'sdoc_archive.zip')
-        if not os.path.exists(zip_file_path):
-            with open(zip_file_path, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk)
+            return None
 
-        output_dir = os.path.join(extract_dir, space_key, 'sdoc-output')
+        output_dir = os.path.join(space_dir, 'sdoc-output')
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-            
-        with ZipFile(zip_file_path, 'r') as zip_ref:
+
+        with ZipFile(BytesIO(response.content), 'r') as zip_ref:
             all_entries = zip_ref.infolist()
             logger.info(f"Zip file contains {len(all_entries)} entries")
             zip_ref.extractall(output_dir)
 
         return output_dir
     
-    def _process_zip_file(self, wiki, directory, sdoc_files, cf_id_to_cf_title_map, username):
-        dir_path = Path(directory).resolve()
+    def _process_zip_file(self, wiki, space_dir, sdoc_files, cf_id_to_cf_title_map, username):
+        dir_path = Path(space_dir).resolve()
         level_html = None
         for root, _, files in os.walk(dir_path):
             for file in files:
@@ -1876,8 +1867,27 @@ class ImportConfluenceView(APIView):
         wiki_config = get_wiki_config(wiki_id, username)
         cf_page_id_to_sf_page_id_map = {}
         cf_page_id_to_sf_obj_id_map = {}
+        file_uuid_map_data = {}
+        file_maps_to_create = []
         for sdoc_file in sdoc_files:
-            page_name_to_id_map, page_name_to_obj_id_map, wiki_config = self._process_page(wiki_id, wiki_config, sdoc_file, username, cf_id_to_cf_title_map)
+            filename = os.path.basename(sdoc_file)
+            sdoc_uuid = uuid.uuid4()
+            parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
+            file_uuid_map_data[sdoc_uuid] = (filename, sdoc_file, parent_dir)
+            file_maps_to_create.append(FileUUIDMap(
+                uuid=sdoc_uuid, 
+                repo_id=wiki_id, 
+                parent_path=f'{WIKI_PAGES_DIR}/{sdoc_uuid}', 
+                filename=filename, 
+                is_dir=False))
+        try:
+            FileUUIDMap.objects.bulk_create(file_maps_to_create)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        for sdoc_uuid, item in file_uuid_map_data.items():
+            page_name_to_id_map, page_name_to_obj_id_map, wiki_config = self._process_page(wiki_id, item, wiki_config, sdoc_uuid, username, cf_id_to_cf_title_map)
             if page_name_to_id_map:
                 cf_page_id_to_sf_page_id_map.update(page_name_to_id_map)
             if page_name_to_obj_id_map:
@@ -1891,8 +1901,8 @@ class ImportConfluenceView(APIView):
 
         # handle attachment
         exist_dir = []
-        attachment_dir = os.path.join(directory, 'attachments')
-        image_dir = os.path.join(directory, 'images/')
+        attachment_dir = os.path.join(space_dir, 'attachments')
+        image_dir = os.path.join(space_dir, 'images/')
         if os.path.exists(attachment_dir):
             self._upload_attachment(cf_page_id_to_sf_obj_id_map, attachment_dir, wiki_id, username, exist_dir)
         if os.path.exists(image_dir):
@@ -2040,8 +2050,10 @@ class ImportConfluenceView(APIView):
         
         return result
 
-    def _process_page(self, wiki_id, wiki_config, sdoc_file, username, cf_id_to_cf_title_map):
-        filename = os.path.basename(sdoc_file)
+    def _process_page(self, wiki_id, item, wiki_config, sdoc_uuid, username, cf_id_to_cf_title_map):
+        filename = item[0]
+        sdoc_file = item[1]
+        parent_dir = item[2]
         cf_page_id = filename.split('.')[0]
         cf_page_title = cf_id_to_cf_title_map.get(cf_page_id)
         if not cf_page_title:
@@ -2052,12 +2064,8 @@ class ImportConfluenceView(APIView):
         pages = wiki_config.get('pages', [])
         page_name = cf_page_title
 
-        sdoc_uuid = uuid.uuid4()
-        parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
-        file_path = os.path.join(parent_dir, os.path.basename(sdoc_file))
-
+        file_path = os.path.join(parent_dir, filename)
         try:
-            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, wiki_id, parent_dir, filename, is_dir=False)
             # update wiki_config
             id_set = get_all_wiki_ids(navigation)
             new_page_id = gen_unique_id(id_set)
