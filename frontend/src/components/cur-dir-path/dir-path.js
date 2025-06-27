@@ -202,7 +202,7 @@ class DirPath extends React.Component {
               onUploadFolder={this.props.onUploadFolder}
               loadDirentList={this.props.loadDirentList}
             >
-              <span className="path-file-name">{item}</span>
+              <span className="last-path-item" title={item}>{item}</span>
             </DirOperationToolbar>
           </Fragment>
         );
@@ -218,7 +218,9 @@ class DirPath extends React.Component {
               onDragLeave={this.onDragLeave}
               onDragOver={this.onDragOver}
               onDrop={this.onDrop}
-              role="button">
+              role="button"
+              title={item}
+            >
               {item}
             </span>
           </Fragment>
@@ -243,20 +245,20 @@ class DirPath extends React.Component {
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (
             <Fragment key={index}>
-              <Link to={item.url} className="path-item normal" onClick={(e) => this.onTabNavClick(e, item.name, item.id)}>{gettext(item.showName)}</Link>
+              <Link to={item.url} className="path-item normal" onClick={(e) => this.onTabNavClick(e, item.name, item.id)} title={gettext(item.showName)}>{gettext(item.showName)}</Link>
               <span className="path-split">/</span>
             </Fragment>
           );
         })}
         {this.props.pathPrefix && this.props.pathPrefix.length === 0 && (
           <>
-            <Link to={siteRoot + 'libraries/'} className="path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
+            <Link to={siteRoot + 'libraries/'} className="flex-shrink-0 path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
             <span className="path-split">/</span>
           </>
         )}
         {!this.props.pathPrefix && (
           <>
-            <Link to={siteRoot + 'libraries/'} className="path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
+            <Link to={siteRoot + 'libraries/'} className="flex-shrink-0 path-item normal" onClick={(e) => this.onTabNavClick(e, 'libraries')}>{gettext('Files')}</Link>
             <span className="path-split">/</span>
           </>
         )}
@@ -276,9 +278,9 @@ class DirPath extends React.Component {
             onUploadFolder={this.props.onUploadFolder}
             loadDirentList={this.props.loadDirentList}
           >
-            <span className="path-repo-name">{repoName}</span>
+            <span className="last-path-item" title={repoName}>{repoName}</span>
           </DirOperationToolbar> :
-          <span className="path-item" data-path="/" onClick={this.onPathClick} role="button">{repoName}</span>
+          <span className="path-item" data-path="/" onClick={this.onPathClick} role="button" title={repoName}>{repoName}</span>
         }
         {pathElem}
       </div>

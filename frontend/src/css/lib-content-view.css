@@ -261,12 +261,12 @@
 .dir-view-path .path-item,
 .dir-view-path .last-path-item {
   display: inline-block;
-  min-width: 0; /* overwrite some styles */
   padding: 0 6px;
   font-size: 1rem;
   color: inherit;
   border-radius: 3px;
   text-decoration: none;
+  min-width: 28px;
   max-width: 172px;
   overflow: hidden;
   text-overflow: ellipsis;
