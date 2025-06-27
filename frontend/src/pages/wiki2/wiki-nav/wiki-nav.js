@@ -78,15 +78,14 @@ class WikiNav extends Component {
     return this.folderClassNameCache;
   };
 
-  renderPage = (page, index, pagesLength, isOnlyOnePage, id_page_map) => {
+  renderPage = (page, index, canDeletePage, id_page_map) => {
     const { pages } = this.props;
     const id = page.id;
     if (!pages.find(item => item.id === id)) return;
     return (
       <PageItem
         key={id}
-        pagesLength={pagesLength}
-        isOnlyOnePage={isOnlyOnePage}
+        canDeletePage={canDeletePage}
         page={Object.assign({}, pages.find(item => item.id === id), page)}
         pages={pages}
         pageIndex={index}
@@ -114,7 +113,7 @@ class WikiNav extends Component {
   renderStructureBody = () => {
     const { navigation, pages } = this.props;
     const pagesLen = pages.length;
-    const isOnlyOnePage = pagesLen === 1;
+    const canDeletePage = navigation.length > 1;
     let id_page_map = {};
     pages.forEach(page => id_page_map[page.id] = page);
     const isDesktop = Utils.isDesktop();
@@ -137,7 +136,7 @@ class WikiNav extends Component {
           }
         </div>
         {navigation.map((item, index) => {
-          return this.renderPage(item, index, pages.length, isOnlyOnePage, id_page_map);
+          return this.renderPage(item, index, canDeletePage, id_page_map);
         })}
         {wikiPermission === 'rw' &&
         <>
