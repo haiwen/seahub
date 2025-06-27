@@ -12,6 +12,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
 import WikiConvertStatusDialog from '../../components/dialog/wiki-convert-status-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import ImportConfluenceDialog from '../../components/dialog/import-confluence-dialog';
 
 
 const propTypes = {
@@ -31,6 +32,7 @@ class Wikis extends Component {
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
       isShowConvertStatusDialog: false,
+      isShowImportConfluenceDialog: false,
     };
   }
 
@@ -100,6 +102,60 @@ class Wikis extends Component {
     }
   };
 
+  toggleImportConfluenceDialog = (currentDeptID) => {
+    if (this.state.isShowImportConfluenceDialog) {
+      this.setState({
+        isShowImportConfluenceDialog: false,
+        currentDeptID: '',
+      });
+    } else {
+      this.setState({
+        isShowImportConfluenceDialog: true,
+        currentDeptID
+      });
+    }
+  };
+
+  importConfluence = async (file, currentDeptID) => {
+    return wikiAPI.importConfluence(file, currentDeptID).then((res) => {
+      let wikis = this.state.wikis.slice(0);
+      let groupWikis = this.state.groupWikis;
+      let new_wiki = res.data;
+      new_wiki['version'] = 'v2';
+      new_wiki['admins'] = new_wiki.group_admins;
+      let findGroup = false;
+      if (currentDeptID) {
+        groupWikis.filter(group => {
+          if (group.group_id === currentDeptID) {
+            group.wiki_info.push(new_wiki);
+            findGroup = true;
+          }
+          return group;
+        });
+        if (findGroup) {
+          this.setState({
+            groupWikis: groupWikis,
+          });
+        } else {
+          groupWikis.push({
+            group_id: currentDeptID,
+            group_name: new_wiki.group_name,
+            wiki_info: [new_wiki],
+          });
+          this.setState({
+            groupWikis: groupWikis,
+          });
+        }
+      } else {
+        wikis.unshift(new_wiki);
+        this.setState({
+          wikis: wikis,
+        });
+      }
+      return res;
+    });
+  };
+
   addWiki = (wikiName, currentDeptID) => {
     wikiAPI.addWiki2(wikiName, currentDeptID).then((res) => {
       let wikis = this.state.wikis.slice(0);
@@ -114,14 +170,18 @@ class Wikis extends Component {
           }
           return group;
         });
+        this.setState({
+          currentDeptID: '',
+          groupWikis,
+        });
       } else {
         wikis.push(new_wiki);
+        wikis.unshift(new_wiki);
+        this.setState({
+          wikis,
+        });
       }
-      this.setState({
-        wikis,
-        currentDeptID: '',
-        groupWikis,
-      });
+
     }).catch((error) => {
       if (error.response) {
         let errMessage = Utils.getErrorMsg(error);
@@ -131,6 +191,11 @@ class Wikis extends Component {
   };
 
   deleteWiki = (wiki) => {
+    const owner = wiki.owner;
+    let isGroupWiki = false;
+    if (owner.includes('@seafile_group')) {
+      isGroupWiki = true;
+    }
     if (wiki.version === 'v1') {
       wikiAPI.deleteWiki(wiki.id).then(() => {
         let wikis = this.state.wikis.filter(item => {
@@ -152,17 +217,22 @@ class Wikis extends Component {
       });
     } else {
       wikiAPI.deleteWiki2(wiki.id).then(() => {
-        let wikis = this.state.wikis.filter(item => {
-          return item.id !== wiki.id;
-        });
-        let groupWikis = this.state.groupWikis.filter(group => {
-          group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
-          return group;
-        });
-        this.setState({
-          wikis: wikis,
-          groupWikis: groupWikis,
-        });
+        if (isGroupWiki) {
+          let groupWikis = this.state.groupWikis.filter(group => {
+            group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
+            return group;
+          });
+          this.setState({
+            groupWikis: groupWikis,
+          });
+        } else {
+          let wikis = this.state.wikis.filter(item => {
+            return item.id !== wiki.id;
+          });
+          this.setState({
+            wikis: wikis,
+          });
+        }
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -324,6 +394,15 @@ class Wikis extends Component {
             />
           </ModalPortal>
         }
+        {this.state.isShowImportConfluenceDialog &&
+          <ModalPortal>
+            <ImportConfluenceDialog
+              toggleCancel={this.toggleImportConfluenceDialog}
+              importConfluence={this.importConfluence}
+              currentDeptID={this.state.currentDeptID}
+            />
+          </ModalPortal>
+        }
         <div className="main-panel-center">
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
@@ -332,7 +411,10 @@ class Wikis extends Component {
                 {canCreateWiki &&
                   <SingleDropdownToolbar
                     withPlusIcon={true}
-                    opList={[{ 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() }]}
+                    opList={[
+                      { 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() },
+                      { 'text': gettext('Import Confluence'), 'onClick': () => this.toggleImportConfluenceDialog() }
+                    ]}
                   />
                 }
               </div>
