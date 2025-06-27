@@ -1811,7 +1811,9 @@ class ImportConfluenceView(APIView):
 
 
     def _extract_html_zip(self, zip_file, extract_dir, space_key):
-        space_dir = os.path.join(extract_dir, space_key)
+        space_dir = os.path.normpath(os.path.join(extract_dir, space_key))
+        if not space_dir.startswith(os.path.abspath(extract_dir)):
+            raise ValueError("Extraction path is outside the allowed directory")
         try:
             with ZipFile(zip_file, 'r') as zip_ref:
                 all_entries = zip_ref.infolist()
@@ -1820,7 +1822,9 @@ class ImportConfluenceView(APIView):
                     first_entry = all_entries[1].filename
                     top_dir = first_entry.split('/')[0] if '/' in first_entry else None
                     if top_dir and top_dir != space_key:
-                        old_path = os.path.join(extract_dir, top_dir)
+                        old_path = os.path.normpath(os.path.join(extract_dir, top_dir))
+                        if not old_path.startswith(extract_dir):
+                            raise ValueError("Extraction path is outside the allowed directory")
                         if os.path.exists(space_dir):
                             shutil.rmtree(space_dir)
                         if os.path.exists(old_path):
