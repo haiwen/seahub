@@ -18,7 +18,7 @@ class GuideForNewDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalBody>
-          <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} onClick={this.toggle}>
+          <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
             <span className="seahub-modal-btn-inner">
               <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
             </span>

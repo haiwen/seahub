@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { gettext } from '../../../../utils/constants';
 import Icon from '../../../icon';
 import Title from './title';
 
@@ -14,7 +15,7 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
         <div className="detail-control-container">
           {children}
           {onClose && (
-            <div className="detail-control" onClick={onClose}>
+            <div className="detail-control" onClick={onClose} title={gettext('Close')}>
               {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-icon" />}
             </div>
           )}

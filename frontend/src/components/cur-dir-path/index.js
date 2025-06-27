@@ -14,6 +14,7 @@ const propTypes = {
   pathPrefix: PropTypes.array,
   fileTags: PropTypes.array.isRequired,
   toggleTreePanel: PropTypes.func.isRequired,
+  isTreePanelShown: PropTypes.bool.isRequired,
   direntList: PropTypes.array,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
@@ -63,6 +64,7 @@ class CurDirPath extends React.Component {
           onTabNavClick={this.props.onTabNavClick}
           fileTags={this.props.fileTags}
           toggleTreePanel={this.props.toggleTreePanel}
+          isTreePanelShown={this.props.isTreePanelShown}
           enableDirPrivateShare={this.props.enableDirPrivateShare}
           showShareBtn={this.props.showShareBtn}
           onUploadFile={this.props.onUploadFile}

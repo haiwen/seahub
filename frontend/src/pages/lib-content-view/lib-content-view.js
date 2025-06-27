@@ -2442,6 +2442,7 @@ class LibContentView extends React.Component {
                             sortOrder={this.state.sortOrder}
                             sortItems={this.sortItems}
                             toggleTreePanel={this.toggleTreePanel}
+                            isTreePanelShown={this.state.isTreePanelShown}
                             enableDirPrivateShare={enableDirPrivateShare}
                             showShareBtn={showShareBtn}
                             onUploadFile={this.onUploadFile}

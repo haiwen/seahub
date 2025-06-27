@@ -806,6 +806,7 @@ class DirentListItem extends React.Component {
                 <i
                   role="button"
                   aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')}
+                  title={dirent.starred ? gettext('Unstar') : gettext('Star')}
                   onClick={this.onItemStarred}
                   className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}
                 >

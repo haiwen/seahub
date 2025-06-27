@@ -155,7 +155,7 @@ class LinkItem extends React.Component {
               onChange={this.toggleSelectLink}
             />
           </td>
-          <td>
+          <td title={link}>
             {this.cutLink(link)}
           </td>
           <td>
