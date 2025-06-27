@@ -11,13 +11,12 @@ export default class PageDropdownMenu extends Component {
   static propTypes = {
     page: PropTypes.object.isRequired,
     pages: PropTypes.array,
-    pagesLength: PropTypes.number,
     toggle: PropTypes.func,
     toggleNameEditor: PropTypes.func,
     toggleInsertSiblingPage: PropTypes.func,
     duplicatePage: PropTypes.func,
     onDeletePage: PropTypes.func,
-    isOnlyOnePage: PropTypes.bool,
+    canDeletePage: PropTypes.bool,
   };
 
   constructor(props) {
@@ -85,8 +84,7 @@ export default class PageDropdownMenu extends Component {
   };
 
   render() {
-    const { pagesLength, isOnlyOnePage } = this.props;
-
+    const { canDeletePage = true } = this.props;
     return (
       <Dropdown
         isOpen={true}
@@ -119,7 +117,7 @@ export default class PageDropdownMenu extends Component {
             <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
             <span className="item-text">{gettext('Duplicate page')}</span>
           </DropdownItem>
-          {(isOnlyOnePage || pagesLength === 1) ? '' : (
+          {canDeletePage && (
             <DropdownItem onClick={this.onDeletePage}>
               <i className="sf3-font sf3-font-delete1" aria-hidden="true" />
               <span className="item-text">{gettext('Delete page')}</span>

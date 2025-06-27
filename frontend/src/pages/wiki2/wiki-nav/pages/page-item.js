@@ -19,14 +19,13 @@ const PageItem = ({
   page,
   pageIndex,
   pages,
-  pagesLength,
   parentPageId,
   duplicatePage,
   setCurrentPage,
   onUpdatePage,
   onDeletePage,
   onMovePage,
-  isOnlyOnePage,
+  canDeletePage,
   pathStr,
   toggleExpand,
   getCurrentPageId,
@@ -205,7 +204,7 @@ const PageItem = ({
     }
   }, [isShowNameEditor, savePageProperties]);
 
-  const renderPage = (page, index, pagesLength, isOnlyOnePage) => {
+  const renderPage = (page, index) => {
     if (!page) return;
     if (!pages.find(item => item.id === page.id)) return;
     return (
@@ -214,9 +213,7 @@ const PageItem = ({
         page={Object.assign({}, pages.find(item => item.id === page.id), page)}
         pageIndex={index}
         pages={pages}
-        pagesLength={pagesLength}
         parentPageId={page.id}
-        isOblyOnePage={isOnlyOnePage}
         duplicatePage={duplicatePage}
         setCurrentPage={setCurrentPage}
         onUpdatePage={onUpdatePage}
@@ -231,6 +228,7 @@ const PageItem = ({
         toggleExpand={toggleExpand}
         setClassName={setClassName}
         getClassName={getClassName}
+        canDeletePage={true}
       />
     );
   };
@@ -300,8 +298,7 @@ const PageItem = ({
                 <PageDropdownMenu
                   page={page}
                   pages={pages}
-                  pagesLength={pagesLength}
-                  isOnlyOnePage={isOnlyOnePage}
+                  canDeletePage={canDeletePage}
                   toggle={toggleDropdown}
                   toggleNameEditor={toggleNameEditor}
                   duplicatePage={duplicatePage}
@@ -340,7 +337,7 @@ const PageItem = ({
             e.nativeEvent.stopImmediatePropagation();
           }}
         >
-          {page.children && page.children.map((item, index) => renderPage(item, index, pagesLength, isOnlyOnePage))}
+          {page.children && page.children.map((item, index) => renderPage(item, index))}
         </div>
       </>
     );
@@ -396,7 +393,7 @@ const PageItem = ({
           e.nativeEvent.stopImmediatePropagation();
         }}
       >
-        {page.children && page.children.map((item, index) => renderPage(item, index, pagesLength, isOnlyOnePage))}
+        {page.children && page.children.map((item, index) => renderPage(item, index))}
       </div>
     </>
   );
@@ -406,7 +403,6 @@ PageItem.propTypes = {
   page: PropTypes.object,
   pages: PropTypes.array,
   pageIndex: PropTypes.number,
-  pagesLength: PropTypes.number,
   parentPageId: PropTypes.string,
   addSiblingPage: PropTypes.func,
   duplicatePage: PropTypes.func,
@@ -414,7 +410,7 @@ PageItem.propTypes = {
   onUpdatePage: PropTypes.func,
   onDeletePage: PropTypes.func,
   onMovePage: PropTypes.func,
-  isOnlyOnePage: PropTypes.bool,
+  canDeletePage: PropTypes.bool,
   pathStr: PropTypes.string,
   getCurrentPageId: PropTypes.func,
   addPageInside: PropTypes.func,
