@@ -21,6 +21,7 @@ const propTypes = {
   pathPrefix: PropTypes.array,
   fileTags: PropTypes.array.isRequired,
   toggleTreePanel: PropTypes.func.isRequired,
+  isTreePanelShown: PropTypes.bool.isRequired,
   repoEncrypted: PropTypes.bool.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPerm: PropTypes.string.isRequired,
@@ -228,11 +229,15 @@ class DirPath extends React.Component {
   };
 
   render() {
-    const { currentPath, repoName } = this.props;
+    const { currentPath, repoName, isTreePanelShown } = this.props;
     const pathElem = this.turnPathToLink(currentPath);
     return (
       <div className="path-container dir-view-path">
-        <span className="cur-view-path-btn mr-1" onClick={this.props.toggleTreePanel}>
+        <span
+          className="cur-view-path-btn mr-1"
+          title={isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel')}
+          onClick={this.props.toggleTreePanel}
+        >
           <span className="sf3-font-side-bar sf3-font"></span>
         </span>
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
