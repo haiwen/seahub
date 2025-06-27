@@ -925,6 +925,7 @@ class Search extends Component {
                     className="search-icon-right sf3-font sf3-font-x-01"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
+                    title={gettext('Clear search')}
                   >
                   </button>
                 }
@@ -983,6 +984,7 @@ class Search extends Component {
                       className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
                       onClick={this.onClearSearch}
                       aria-label={gettext('Clear search')}
+                      title={gettext('Clear search')}
                     >
                     </button>
                   }
