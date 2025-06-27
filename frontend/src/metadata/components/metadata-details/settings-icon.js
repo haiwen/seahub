@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback, useState } from 'react';
+import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import HideColumnPopover from '../popover/hidden-column-popover';
 import { useMetadataDetails } from '../../hooks';
@@ -21,7 +22,7 @@ const SettingsIcon = () => {
 
   return (
     <>
-      <div className="detail-control mr-2" id={target} onClick={onSetterToggle}>
+      <div className="detail-control mr-2" id={target} onClick={onSetterToggle} title={gettext('Settings')}>
         <Icon symbol="set-up" className="detail-control-icon" />
       </div>
       {isShowSetter && (
