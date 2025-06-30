@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Excalidraw, MainMenu, useHandleLibrary } from '@excalidraw/excalidraw';
+import { Excalidraw, MainMenu, reconcileElements, restore, useHandleLibrary } from '@excalidraw/excalidraw';
 import Loading from '../../../components/loading';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import SocketManager from '../collaborator/socket-manager';
 import context from '../context';
+import { importFromLocalStorage, saveToLocalStorage } from '../data/local-storage';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -19,6 +20,50 @@ const UIOptions = {
   tools: { image: false },
 };
 
+const initializeScene = async (excalidrawAPI) => {
+  // load local data from localstorage
+  const localDataState = importFromLocalStorage(); // {appState, elements}
+
+  await context.initSettings();
+  let data = null;
+  let elements = [];
+  let version = 0;
+  let last_modifier = '';
+  // load remote data from server
+
+  try {
+    const response = await context.getSceneContent(); // { elements, version, last_modifier}
+    const remoteScene = response.data;
+    ({ elements, version, last_modifier } = remoteScene);
+    data = {
+      ...localDataState,
+      elements: reconcileElements(
+        elements || [],
+        excalidrawAPI.getSceneElementsIncludingDeleted(),
+        excalidrawAPI.getAppState(),
+      ),
+    };
+    data = restore(
+      { elements },
+      localDataState?.appState,
+      localDataState?.elements,
+      { repairBindings: true, refreshDimensions: false },
+    );
+
+  } catch {
+    data = restore(localDataState || null, null, null, {
+      repairBindings: true,
+    });
+  }
+
+  return {
+    elements: data.elements,
+    appState: data.appState,
+    version: version,
+    last_modifier,
+  };
+};
+
 const SimpleEditor = () => {
   const socketRef = useRef(null);
   const [isFetching, setIsFetching] = useState(true);
@@ -29,11 +74,9 @@ const SimpleEditor = () => {
 
   useEffect(() => {
     async function loadFileContent() {
-      await context.initSettings();
-      context.getSceneContent().then(res => {
-        setSceneContent(res.data);
-        setIsFetching(false);
-      });
+      const result = await initializeScene();
+      setSceneContent(result);
+      setIsFetching(false);
     }
     loadFileContent();
   }, []);
@@ -53,6 +96,8 @@ const SimpleEditor = () => {
   const handleChange = useCallback((elements, appState, files) => {
     if (!socketRef.current) return;
     socketRef.current.syncElements(elements);
+
+    saveToLocalStorage(elements, appState);
   }, []);
 
   const handlePointerUpdate = useCallback((payload) => {

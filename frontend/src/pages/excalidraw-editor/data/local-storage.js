@@ -1,8 +1,8 @@
-import { clearAppStateForLocalStorage, getDefaultAppState } from '@excalidraw/excalidraw/appState';
-import { CANVAS_SEARCH_TAB, DEFAULT_SIDEBAR } from '@excalidraw/excalidraw/constants';
-import { STORAGE_KEYS } from '../constants';
-import { clearElementsForLocalStorage } from '@excalidraw/excalidraw/element';
+import { clearAppStateForLocalStorage, getDefaultAppState } from '../utils/app-state-utils';
+import { SAVE_TO_LOCAL_STORAGE_TIMEOUT, STORAGE_KEYS, CANVAS_SEARCH_TAB, DEFAULT_SIDEBAR } from '../constants';
+import { clearElementsForLocalStorage } from '../utils/element-utils';
 import { updateBrowserStateVersion } from './tab-sync';
+import { debounce } from '../../../utils/utils';
 
 export const saveDataStateToLocalStorage = (elements, appState) => {
   try {
@@ -19,6 +19,10 @@ export const saveDataStateToLocalStorage = (elements, appState) => {
     console.error(error);
   }
 };
+
+export const saveToLocalStorage = debounce((elements, appState) => {
+  saveDataStateToLocalStorage(elements, appState);
+}, SAVE_TO_LOCAL_STORAGE_TIMEOUT);
 
 export const importFromLocalStorage = () => {
   let savedElements = null;

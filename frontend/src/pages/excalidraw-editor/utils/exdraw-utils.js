@@ -10,3 +10,9 @@ export const isSyncableElement = (element) => {
   }
   return !isInvisiblySmallElement(element);
 };
+
+export const preventUnload = (event) => {
+  event.preventDefault();
+  // NOTE: modern browsers no longer allow showing a custom message here
+  event.returnValue = '';
+};

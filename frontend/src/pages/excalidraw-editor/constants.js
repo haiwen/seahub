@@ -25,4 +25,13 @@ export const STORAGE_KEYS = {
 export const DELETED_ELEMENT_TIMEOUT = 24 * 60 * 60 * 1000; // 1 day
 export const SYNC_FULL_SCENE_INTERVAL_MS = 20000;
 export const CURSOR_SYNC_TIMEOUT = 33; // ~30fps
+export const SAVE_TO_LOCAL_STORAGE_TIMEOUT = 300;
+
+export const LIBRARY_SIDEBAR_TAB = 'library';
+export const CANVAS_SEARCH_TAB = 'search';
+
+export const DEFAULT_SIDEBAR = {
+  name: 'default',
+  defaultTab: LIBRARY_SIDEBAR_TAB,
+};
 

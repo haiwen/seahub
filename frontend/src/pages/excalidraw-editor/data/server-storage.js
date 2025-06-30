@@ -35,7 +35,7 @@ export const saveToBackend = async (content) => {
   return response.data;
 };
 
-const isSavedToServerStorage = (socketId, elements) => {
+export const isSavedToServerStorage = (socketId, elements) => {
   if (socketId && elements) {
     const prevVersion = ServerScreenCache.get(socketId);
     const currVersion = getSceneVersion(elements);

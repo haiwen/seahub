@@ -37,6 +37,10 @@ class SocketManager {
     return this.instance;
   };
 
+  getSocketId = () => {
+    return this.socketClient.socket?.id;
+  };
+
   getLastBroadcastedOrReceivedSceneVersion = () => {
     return this.lastBroadcastedOrReceivedSceneVersion;
   };
@@ -81,21 +85,25 @@ class SocketManager {
   }, SYNC_FULL_SCENE_INTERVAL_MS);
 
   queueSaveToServerStorage = throttle(
-    async () => {
+    () => {
       const elements = getSyncableElements(this.excalidrawAPI.getSceneElementsIncludingDeleted());
-      const version = this.getDocumentVersion();
-      const exdrawContent = { version, elements };
-      const socket = this.socketClient.socket;
-      const result = await saveToServerStorage(socket.id, exdrawContent, this.excalidrawAPI.getAppState());
-
-      if (!result) return;
-
-      this.updateDocumentVersion(result.version);
-      this.excalidrawAPI.updateScene({ elements: result.storedElements });
-
+      this.saveCollabRoomToServerStorage(elements);
     },
-    SYNC_FULL_SCENE_INTERVAL_MS);
+    SYNC_FULL_SCENE_INTERVAL_MS,
+    { leading: false }
+  );
 
+  saveCollabRoomToServerStorage = async (elements) => {
+    const version = this.getDocumentVersion();
+    const exdrawContent = { version, elements };
+    const socket = this.socketClient.socket;
+    const result = await saveToServerStorage(socket.id, exdrawContent, this.excalidrawAPI.getAppState());
+
+    if (!result) return;
+
+    this.updateDocumentVersion(result.version);
+    this.excalidrawAPI.updateScene({ elements: result.storedElements });
+  };
 
   onReceiveRemoteOperations = (params) => {
     const { elements: remoteElements } = params;
