@@ -46,9 +46,9 @@ const StatisticFile = (props) => {
 
   return (
     <Fragment>
-      <MainPanelTopbar {...props} />
+      {/* <MainPanelTopbar {...props} /> */}
       <div className="cur-view-container">
-        <StatisticNav currentItem="fileStatistic" />
+        {/* <StatisticNav currentItem="fileStatistic" /> */}
         <div className="cur-view-content">
           <StatisticCommonTool getActivesFiles={getActivesFiles} />
           {isLoading && <Loading />}

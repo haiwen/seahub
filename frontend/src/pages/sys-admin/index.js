@@ -19,6 +19,7 @@ import StatisticTraffic from './statistic/statistic-traffic';
 import StatisticUsers from './statistic/statistic-users';
 import StatisticReport from './statistic/statistic-reports';
 import StatisticMetrics from './statistic/statistic-metrics';
+import StatisticLayout from './statistic/layout';
 
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
@@ -218,12 +219,14 @@ class SysAdmin extends React.Component {
         <MainPanel>
           <Router className="reach-router">
             <Info path={siteRoot + 'sys/info'} {...commonProps} />
-            <StatisticFile path={siteRoot + 'sys/statistics/file'} {...commonProps} />
-            <StatisticStorage path={siteRoot + 'sys/statistics/storage'} {...commonProps} />
-            <StatisticUsers path={siteRoot + 'sys/statistics/user'} {...commonProps} />
-            <StatisticTraffic path={siteRoot + 'sys/statistics/traffic'} {...commonProps} />
-            <StatisticReport path={siteRoot + 'sys/statistics/reports'} {...commonProps} />
-            <StatisticMetrics path={siteRoot + 'sys/statistics/metrics'} {...commonProps} />
+            <StatisticLayout path={`${siteRoot}sys/statistics/`} {...commonProps}>
+              <StatisticFile path="file" />
+              <StatisticStorage path="storage" />
+              <StatisticUsers path="user" />
+              <StatisticTraffic path="traffic" />
+              <StatisticReport path="reports" />
+              <StatisticMetrics path="metrics" />
+            </StatisticLayout>
             <DesktopDevices path={siteRoot + 'sys/desktop-devices'} {...commonProps} />
             <MobileDevices path={siteRoot + 'sys/mobile-devices'} {...commonProps} />
             <DeviceErrors path={siteRoot + 'sys/device-errors'} {...commonProps} />

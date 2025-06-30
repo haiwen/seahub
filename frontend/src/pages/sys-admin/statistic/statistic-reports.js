@@ -61,9 +61,9 @@ class StatisticReports extends React.Component {
     let { errorMessage } = this.state;
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props} />
+        {/* <MainPanelTopbar {...this.props} /> */}
         <div className="cur-view-container">
-          <StatisticNav currentItem="reportsStatistic" />
+          {/* <StatisticNav currentItem="reportsStatistic" /> */}
           <div className="cur-view-content">
             <div className="statistic-reports">
               <div className="statistic-reports-title">{gettext('Monthly User Traffic')}</div>

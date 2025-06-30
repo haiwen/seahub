@@ -37,7 +37,6 @@ class FilesActivities extends Component {
   }
 
   componentDidMount() {
-    console.log('mount');
     let { currentPage, availableUsers } = this.state;
     seafileAPI.listActivities(currentPage, this.props.onlyMine ? username : '').then(res => {
       // {"events":[...]}
@@ -82,7 +81,6 @@ class FilesActivities extends Component {
   }
 
   componentWillUnmount() {
-    console.log('unmount');
     this.unlisten && this.unlisten();
   }
 

@@ -45,9 +45,9 @@ const StatisticStorage = (props) => {
 
   return (
     <>
-      <MainPanelTopbar {...props} />
+      {/* <MainPanelTopbar {...props} /> */}
       <div className="cur-view-container">
-        <StatisticNav currentItem="storageStatistic" />
+        {/* <StatisticNav currentItem="storageStatistic" /> */}
         <div className="cur-view-content">
           <StatisticCommonTool getActivesFiles={getActivesFiles} />
           {isLoading && <Loading />}

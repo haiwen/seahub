@@ -14,7 +14,7 @@ class Nav extends React.Component {
     this.navItems = [
       { name: 'fileStatistic', urlPart: 'statistics/file', text: gettext('File') },
       { name: 'storageStatistic', urlPart: 'statistics/storage', text: gettext('Storage') },
-      { name: 'usersStatistic', urlPart: 'statistics/user', text: gettext('Users') },
+      { name: 'userStatistic', urlPart: 'statistics/user', text: gettext('Users') },
       { name: 'trafficStatistic', urlPart: 'statistics/traffic', text: gettext('Traffic') },
       { name: 'reportsStatistic', urlPart: 'statistics/reports', text: gettext('Reports') },
       { name: 'metricsStatistic', urlPart: 'statistics/metrics', text: gettext('Metrics') },
@@ -25,7 +25,7 @@ class Nav extends React.Component {
     const { currentItem } = this.props;
     return (
       <div className="cur-view-path tab-nav-container">
-        <ul className="nav">
+        <ul className="nav statistic-nav-indicator-container position-relative">
           {this.navItems.map((item, index) => {
             return (
               <li className="nav-item" key={index}>

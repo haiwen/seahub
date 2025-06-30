@@ -159,9 +159,9 @@ class StatisticMetrics extends Component {
 
     return (
       <>
-        <MainPanelTopbar {...this.props} />
+        {/* <MainPanelTopbar {...this.props} /> */}
         <div className="">
-          <StatisticNav currentItem="metricsStatistic" />
+          {/* <StatisticNav currentItem="metricsStatistic" /> */}
           <div className="cur-metrics-content">
             {loading ? (
               <div className="loading-icon loading-tip"></div>
