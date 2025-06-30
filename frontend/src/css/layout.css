@@ -355,3 +355,19 @@ img[src=""],img:not([src]) { /* for first loading img*/
   font-size: 13px;
   color: #666;
 }
+
+.statistic-nav-indicator-container .nav-item .nav-link {
+  border: none;
+}
+
+.statistic-nav-indicator-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  width: var(--indicator-width);
+  background: #ED7109;
+  border-radius: 2px;
+  transition: transform 0.3s ease;
+  transform: translateX(var(--indicator-offset));
+}

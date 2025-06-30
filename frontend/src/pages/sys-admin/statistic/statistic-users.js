@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import StatisticCommonTool from './statistic-common-tool';
@@ -38,17 +38,15 @@ const StatisticUsers = (props) => {
   }, []);
 
   return (
-    <Fragment>
-      <div className="cur-view-container">
-        <div className="cur-view-content">
-          <StatisticCommonTool getActivesFiles={getActivesFiles} />
-          {isLoading && <Loading />}
-          {!isLoading && data.length > 0 && (
-            <Chart title={gettext('Active Users')} legends={legends} data={data} ySuggestedMax={yMax} />
-          )}
-        </div>
+    <div className="cur-view-container">
+      <div className="cur-view-content">
+        <StatisticCommonTool getActivesFiles={getActivesFiles} />
+        {isLoading && <Loading />}
+        {!isLoading && data.length > 0 && (
+          <Chart title={gettext('Active Users')} legends={legends} data={data} ySuggestedMax={yMax} />
+        )}
       </div>
-    </Fragment>
+    </div>
   );
 
 };

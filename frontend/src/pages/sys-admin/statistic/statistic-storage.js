@@ -1,7 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import dayjs from 'dayjs';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import Loading from '../../../components/loading';
@@ -44,26 +42,22 @@ const StatisticStorage = (props) => {
   }, []);
 
   return (
-    <>
-      {/* <MainPanelTopbar {...props} /> */}
-      <div className="cur-view-container">
-        {/* <StatisticNav currentItem="storageStatistic" /> */}
-        <div className="cur-view-content">
-          <StatisticCommonTool getActivesFiles={getActivesFiles} />
-          {isLoading && <Loading />}
-          {!isLoading && data.length > 0 && (
-            <Chart
-              title={gettext('Total Storage')}
-              legends={legends}
-              data={data}
-              margin={{ top: 60, right: 30, bottom: 30, left: 60 }}
-              ySuggestedMax={yMax}
-              getDisplayValue={getDisplayValue}
-            />
-          )}
-        </div>
+    <div className="cur-view-container">
+      <div className="cur-view-content">
+        <StatisticCommonTool getActivesFiles={getActivesFiles} />
+        {isLoading && <Loading />}
+        {!isLoading && data.length > 0 && (
+          <Chart
+            title={gettext('Total Storage')}
+            legends={legends}
+            data={data}
+            margin={{ top: 60, right: 30, bottom: 30, left: 60 }}
+            ySuggestedMax={yMax}
+            getDisplayValue={getDisplayValue}
+          />
+        )}
       </div>
-    </>
+    </div>
   );
 
 };

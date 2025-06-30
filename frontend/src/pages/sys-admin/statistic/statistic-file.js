@@ -1,7 +1,5 @@
 import React, { Fragment, useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import Loading from '../../../components/loading';
@@ -45,19 +43,15 @@ const StatisticFile = (props) => {
   }, []);
 
   return (
-    <Fragment>
-      {/* <MainPanelTopbar {...props} /> */}
-      <div className="cur-view-container">
-        {/* <StatisticNav currentItem="fileStatistic" /> */}
-        <div className="cur-view-content">
-          <StatisticCommonTool getActivesFiles={getActivesFiles} />
-          {isLoading && <Loading />}
-          {!isLoading && data.length > 0 &&
-            <Chart title={gettext('File Operations')} data={data} legends={legends} />
-          }
-        </div>
+    <div className="cur-view-container">
+      <div className="cur-view-content">
+        <StatisticCommonTool getActivesFiles={getActivesFiles} />
+        {isLoading && <Loading />}
+        {!isLoading && data.length > 0 &&
+        <Chart title={gettext('File Operations')} data={data} legends={legends} />
+        }
       </div>
-    </Fragment>
+    </div>
   );
 
 };
