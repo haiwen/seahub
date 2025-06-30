@@ -600,7 +600,7 @@
   "Translation_error_message": "翻译出错，请重试",
   "The_translation_content_cannot_be_empty": "翻译内容不能为空",
   "Processing_message": "正在处理，请稍侯...",
-  "AI_tip_content": "是否丢失当前内容?",
+  "AI_tip_content": "你想丢弃当前内容吗?",
   "Discard": "丢弃",
   "English": "英语",
   "Chinese": "中文",

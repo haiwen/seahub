@@ -599,7 +599,7 @@
   "Translation_error_message": "Translation error, please try again.",
   "The_translation_content_cannot_be_empty": "The translation content cannot be empty",
   "Processing_message": "Processing, please wait...",
-  "AI_tip_content": "Discard current content?",
+  "AI_tip_content": "Do you want to discard current content?",
   "Discard": "Descartar",
   "English": "English",
   "Chinese": "Chinese",
