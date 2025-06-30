@@ -1,8 +1,8 @@
 import React from 'react';
-import '../css/system-notification.css';
 import SystemUserNotificationItem from './system-user-notification-item';
 import { notificationAPI } from '../utils/notification-api';
 
+import '../css/system-notification.css';
 
 class SystemUserNotification extends React.Component {
 
