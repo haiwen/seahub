@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { Link } from '@gatsbyjs/reach-router';
+import { Link, globalHistory } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -14,14 +14,11 @@ import '../../css/files-activities.css';
 
 dayjs.locale(window.app.config.lang);
 
-const propTypes = {
-  onlyMine: PropTypes.bool
-};
-
 class FilesActivities extends Component {
 
   constructor(props) {
     super(props);
+    const isMyActivities = props.uri.includes('my-activities');
     this.state = {
       errorMsg: '',
       isFirstLoading: true,
@@ -31,7 +28,8 @@ class FilesActivities extends Component {
       allItems: [],
       items: [],
       availableUsers: [],
-      targetUsers: []
+      targetUsers: [],
+      onlyMine: isMyActivities
     };
     this.curPathList = [];
     this.oldPathList = [];
@@ -39,6 +37,7 @@ class FilesActivities extends Component {
   }
 
   componentDidMount() {
+    console.log('mount');
     let { currentPage, availableUsers } = this.state;
     seafileAPI.listActivities(currentPage, this.props.onlyMine ? username : '').then(res => {
       // {"events":[...]}
@@ -75,6 +74,16 @@ class FilesActivities extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+
+    this.unlisten = globalHistory.listen(({ location }) => {
+      const isMyActivities = location.pathname.includes('my-activities');
+      this.setState({ onlyMine: isMyActivities });
+    });
+  }
+
+  componentWillUnmount() {
+    console.log('unmount');
+    this.unlisten && this.unlisten();
   }
 
   mergePublishEvents = (events) => {
@@ -232,13 +241,12 @@ class FilesActivities extends Component {
   };
 
   render() {
-    const { onlyMine } = this.props;
-    const { targetUsers, availableUsers } = this.state;
+    const { targetUsers, availableUsers, onlyMine } = this.state;
     return (
       <div className="main-panel-center">
         <div className="cur-view-container" id="activities">
           <div className="cur-view-path">
-            <ul className="nav">
+            <ul className="nav nav-indicator-container position-relative" data-active={onlyMine ? 'mine' : 'all'}>
               <li className="nav-item">
                 <Link to={`${siteRoot}dashboard/`} className={`nav-link${onlyMine ? '' : ' active'}`}>{gettext('All Activities')}</Link>
               </li>
@@ -272,7 +280,5 @@ class FilesActivities extends Component {
     );
   }
 }
-
-FilesActivities.propTypes = propTypes;
 
 export default FilesActivities;

@@ -72,3 +72,26 @@
 .activity-user-name {
   font-size: 14px;
 }
+
+.nav.nav-indicator-container .nav-item .nav-link {
+  border: none;
+}
+
+.nav-indicator-container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  width: 80px;
+  background: #ED7109;
+  border-radius: 2px;
+  transition: transform 0.3s ease;
+}
+
+.nav-indicator-container[data-active="all"]::before {
+  transform: translateX(0%);
+}
+
+.nav-indicator-container[data-active="mine"]::before {
+  transform: translateX(108px);
+}

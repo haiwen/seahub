@@ -330,8 +330,10 @@ class App extends Component {
               />
               <Starred path={siteRoot + 'starred'} />
               <InvitationsView path={siteRoot + 'invitations/'} />
-              <FilesActivities path={siteRoot + 'dashboard'} />
-              <MyFileActivities path={siteRoot + 'my-activities'} />
+              <FilesActivities
+                path={`${siteRoot}(dashboard|my-activities)/*`}
+                default
+              />
               <GroupView path={siteRoot + 'group/:groupID'} />
               <LinkedDevices path={siteRoot + 'linked-devices'} />
               <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
