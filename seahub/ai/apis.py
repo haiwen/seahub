@@ -74,6 +74,7 @@ class ImageCaption(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         params = {
+            'username': request.user.username,
             'path': path,
             'download_token': token,
             'lang': lang,
