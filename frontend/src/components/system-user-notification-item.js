@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
 import { notificationAPI } from '../utils/notification-api';
+
 import '../css/system-notification.css';
-import PropTypes from 'prop-types';
 
 class SystemUserNotificationItem extends React.Component {
   constructor(props) {
@@ -23,9 +24,10 @@ class SystemUserNotificationItem extends React.Component {
     }
     return (
       <div id="info-bar" className="d-flex justify-content-between">
-        <span className="mr-3" aria-hidden="true"></span>
         <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{ __html: this.props.msg }}></p>
-        <button className="close sf2-icon-x1" title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close}></button>
+        <span title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close} role="button">
+          <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+        </span>
       </div>
     );
   }
@@ -35,4 +37,5 @@ SystemUserNotificationItem.propTypes = {
   msg: PropTypes.string.isRequired,
   notificationID: PropTypes.number.isRequired,
 };
+
 export default SystemUserNotificationItem;
