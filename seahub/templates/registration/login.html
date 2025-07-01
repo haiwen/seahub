@@ -200,7 +200,11 @@ $('#login-form').on('submit', function(){
 {% if enable_sso %}
 $(function() {
     $('#sso').on('click', function() {
-        window.location = "{% url 'sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+        let rememberMe = $("input[name='remember_me']").is(":checked") ? "true" : "false";
+        let baseUrl = "{% url 'sso' %}{% if next %}?next={{ next|escape }}{% endif %}";
+        let url = baseUrl + (baseUrl.includes('?') ? '&' : '?') + "remember_me=" + rememberMe;
+        url += encodeURIComponent(document.location.hash);
+        window.location = url;
         return false;
     });
 });
@@ -209,7 +213,11 @@ $(function() {
 {% if enable_multi_adfs %}
 $(function() {
     $('#multi_adfs_sso').on('click', function() {
-        window.location = "{% url 'multi_adfs_sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+        let rememberMe = $("input[name='remember_me']").is(":checked") ? "true" : "false";
+        let baseUrl = "{% url 'multi_adfs_sso' %}{% if next %}?next={{ next|escape }}{% endif %}";
+        let url = baseUrl + (baseUrl.includes('?') ? '&' : '?') + "remember_me=" + rememberMe;
+        url += encodeURIComponent(document.location.hash);
+        window.location = url;
         return false;
     });
 });

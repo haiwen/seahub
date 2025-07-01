@@ -509,6 +509,15 @@ def multi_adfs_sso(request):
     template_name = 'registration/multi_adfs_sso.html'
     render_data = {'login_bg_image_path': get_login_bg_image_path()}
 
+    remember_me = request.GET.get('remember_me', False)
+    if remember_me == 'true':
+        request.session['remember_me'] = True
+    else:
+        try:
+            del request.session['remember_me']
+        except KeyError:
+            pass
+            
     if request.method == "POST":
         request.session['is_sso_user'] = True
         login_email = request.POST.get('login', '')
