@@ -1,5 +1,5 @@
 import { userAPI } from './user-api';
-import { notificationServerUrl } from './constants';
+import { enableNotificationServer, notificationServerUrl } from './constants';
 
 
 class WebSocketClient {
@@ -11,7 +11,7 @@ class WebSocketClient {
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
     this.onMessageCallback = onMessageCallback;
-    if (notificationServerUrl !== '') {
+    if (enableNotificationServer) {
       this.connect();
     }
   }

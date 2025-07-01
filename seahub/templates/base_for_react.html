@@ -58,6 +58,7 @@
             avatarURL: '{{ avatar_url }}',
             cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
             isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
+            enableNotificationServer: {% if enable_notification_server %} true {% else %} false {% endif %},
             notificationServerUrl: '{{ notification_server_url }}'
         },
         pageOptions: {
