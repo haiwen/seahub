@@ -4,6 +4,7 @@ class Dirent {
     this.mtime = obj.last_update;
     this.size = obj.file_size;
     this.is_file = obj.is_file;
+    this.type = obj.type;
   }
 
   isDir() {

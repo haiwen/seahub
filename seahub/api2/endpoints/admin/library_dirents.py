@@ -61,6 +61,7 @@ def get_dirent_info(dirent):
 
     result = {}
     result['is_file'] = is_file
+    result['type'] = 'file' if is_file else 'folder'
     result['obj_name'] = dirent.obj_name
     result['file_size'] = filesizeformat(dirent.size) if is_file else ''
     result['last_update'] = timestamp_to_isoformat_timestr(dirent.mtime)
