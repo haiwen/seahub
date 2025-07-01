@@ -982,6 +982,7 @@ EXCALIDRAW_SERVER_URL = 'http://127.0.0.1:7070'
 # Settings for notification server   #
 ######################################
 
+ENABLE_NOTIFICATION_SERVER = os.environ.get('ENABLE_NOTIFICATION_SERVER', 'false') == 'true'
 NOTIFICATION_SERVER_URL = os.environ.get('NOTIFICATION_SERVER_URL', '')
 
 ############################

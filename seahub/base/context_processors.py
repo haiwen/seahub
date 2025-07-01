@@ -27,7 +27,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, ENABLE_EXCALIDRAW, NOTIFICATION_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
-    ENABLE_SEAFILE_AI
+    ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -187,6 +187,7 @@ def base(request):
         'enable_seafile_ai': ENABLE_SEAFILE_AI,
         'enable_whiteboard': ENABLE_WHITEBOARD,
         'enable_excalidraw': ENABLE_EXCALIDRAW,
+        'enable_notification_server': ENABLE_NOTIFICATION_SERVER,
         'notification_server_url': NOTIFICATION_SERVER_URL,
     }
 
