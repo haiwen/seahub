@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Excalidraw, MainMenu, reconcileElements, restore, useHandleLibrary } from '@excalidraw/excalidraw';
+import { Excalidraw, MainMenu, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import Loading from '../../../components/loading';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import SocketManager from '../collaborator/socket-manager';
 import context from '../context';
 import { importFromLocalStorage, saveToLocalStorage } from '../data/local-storage';
+import { saveInitDataToServer } from '../data/server-storage';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -35,20 +36,33 @@ const initializeScene = async (excalidrawAPI) => {
     const response = await context.getSceneContent(); // { elements, version, last_modifier}
     const remoteScene = response.data;
     ({ elements, version, last_modifier } = remoteScene);
-    data = {
-      ...localDataState,
-      elements: reconcileElements(
-        elements || [],
-        excalidrawAPI.getSceneElementsIncludingDeleted(),
-        excalidrawAPI.getAppState(),
-      ),
-    };
-    data = restore(
-      { elements },
-      localDataState?.appState,
-      localDataState?.elements,
-      { repairBindings: true, refreshDimensions: false },
+
+    const restoredRemoteElements = restoreElements(elements, null);
+    const reconciledElements = reconcileElements(
+      localDataState.elements,
+      restoredRemoteElements,
+      localDataState.appState,
     );
+    data = {
+      elements: reconciledElements,
+      appState: localDataState.appState,
+    };
+
+    /**
+     * Local AppState (`this.state` or initial state from localStorage) so that we
+     * don't overwrite local state with default values (when values not
+     * explicitly specified).
+     * Supply `null` if you can't get access to it.
+    */
+    // data = restore(
+    //   {
+    //     elements,
+    //     appState: null,
+    //   },
+    //   localDataState?.appState,
+    //   localDataState?.elements,
+    //   { repairBindings: true, refreshDimensions: false },
+    // );
 
   } catch {
     data = restore(localDataState || null, null, null, {
@@ -56,10 +70,12 @@ const initializeScene = async (excalidrawAPI) => {
     });
   }
 
+  const restoreContent = { elements: data.elements, version };
+  await saveInitDataToServer(restoreContent, localDataState);
+
   return {
-    elements: data.elements,
+    ...restoreContent,
     appState: data.appState,
-    version: version,
     last_modifier,
   };
 };

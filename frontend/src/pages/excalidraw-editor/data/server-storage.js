@@ -59,3 +59,10 @@ export const saveToServerStorage = async (socketId, exdrawContent, appState) => 
   return { ...saveResult, storedElements };
 };
 
+export const saveInitDataToServer = async (content, localData) => {
+  const currentVersion = getSceneVersion(content.elements);
+  const localVersion = getSceneVersion(localData?.elements || []);
+  if (currentVersion === localVersion) return;
+  await saveToBackend(JSON.stringify(content));
+};
+
