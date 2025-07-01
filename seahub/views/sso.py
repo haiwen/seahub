@@ -32,6 +32,15 @@ def sso(request):
 
     request.session['is_sso_user'] = True
 
+    remember_me  = request.GET.get('remember_me', False)
+    if remember_me == 'true':
+        request.session['remember_me'] = True
+    else:
+        try:
+            del request.session['remember_me']
+        except KeyError:
+            pass
+        
     # Ensure the user-originating redirection url is safe.
     if REDIRECT_FIELD_NAME in request.GET:
         next_page = request.GET[REDIRECT_FIELD_NAME]
