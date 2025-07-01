@@ -56,8 +56,10 @@ class DeleteFolderDialog extends Component {
       <Modal isOpen={true} toggle={toggleDialog}>
         <SeahubModalHeader toggle={toggleDialog}>{gettext('Delete Folder')}</SeahubModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{ __html: message }}></p>
-          {alert_message && <p className="error">{alert_message}</p>}
+          <div className="pb-6">
+            <p dangerouslySetInnerHTML={{ __html: message }}></p>
+            {alert_message && <p className="error">{alert_message}</p>}
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
