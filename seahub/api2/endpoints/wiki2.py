@@ -40,11 +40,12 @@ from seahub.wiki2.models import WikiPageTrash, Wiki2Publish
 from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
-    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task
+    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task, \
+    upload_conflunece_attachment
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
     get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, \
-    gen_file_upload_url, PREVIEW_FILEEXT, gen_dir_zip_download_url
+    gen_file_upload_url
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis
 
@@ -54,7 +55,7 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
-    ENCRYPTED_LIBRARY_VERSION, SERVICE_URL
+    ENCRYPTED_LIBRARY_VERSION, SERVICE_URL, MAX_CONFLUENCE_FILE_SIZE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
@@ -1652,7 +1653,9 @@ class ImportConfluenceView(APIView):
         filename = file.name
         if not filename.endswith('.html.zip'):
             return api_error(status.HTTP_400_BAD_REQUEST, 'File must be a zip file with .html.zip extension')
-        
+        file_size = file.size
+        if file_size > MAX_CONFLUENCE_FILE_SIZE:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File is too large')
         # permission check
         username = request.user.username
         if not request.user.permissions.can_add_repo():
@@ -1730,11 +1733,8 @@ class ImportConfluenceView(APIView):
                                     json.dumps(['tmp']), username)
                 # clean repo trash
                 seafile_api.clean_up_repo_history(repo_id, 0)
-                shutil.rmtree(space_dir)
         except Exception as e:
             logger.error(e)
-            if os.path.exists(space_dir):
-                shutil.rmtree(space_dir)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         
         repo = seafile_api.get_repo(repo_id)
@@ -1904,104 +1904,26 @@ class ImportConfluenceView(APIView):
         save_wiki_config(wiki, username, wiki_config)
 
         # handle attachment
-        exist_dir = []
         attachment_dir = os.path.join(space_dir, 'attachments')
         image_dir = os.path.join(space_dir, 'images/')
-        if os.path.exists(attachment_dir):
-            self._upload_attachment(cf_page_id_to_sf_obj_id_map, attachment_dir, wiki_id, username, exist_dir)
-        if os.path.exists(image_dir):
-            self._upload_cf_images(wiki_id, image_dir, username, exist_dir)
-
-    
-    def _upload_attachment(self, cf_page_id_to_sf_obj_id_map, attachment_dir, wiki_id, username, exist_dir):
-        # Image need to be uploaded to the appropriate sdoc directory in seafile
-        attachment_dir = Path(attachment_dir).resolve()
-        # Create the attachment directory in the wiki library
-        wiki_attachment_dir = 'attachments'
-        # Traverse all subdirectories and files in the attachment directory
-        for root, _, files in os.walk(attachment_dir):
-            # Get the relative path as the upload target path
-            rel_path = os.path.relpath(root, attachment_dir)
-            
-            # Process the files in the current directory
-            if files:
-                # Set the target directory
-                if rel_path == '.':
-                    target_dir = wiki_attachment_dir
-                else:
-                    target_dir = os.path.join(wiki_attachment_dir, rel_path)
-                
-                # Get the obj_id of the page corresponding to the current directory
-                page_name = os.path.basename(rel_path) if rel_path != '.' else None
-                obj_id = cf_page_id_to_sf_obj_id_map.get(page_name)
-                # Upload all files in the current directory
-                for file_name in files:
-                    file_path = os.path.join(root, file_name)
-                    if not os.path.isfile(file_path):
-                        continue
-                    is_image = self._is_image_file(file_name)
-                    if is_image and obj_id:
-                        wiki_page_images_dir = 'images/sdoc/'
-                        sdoc_image_dir = os.path.join(wiki_page_images_dir, obj_id)
-
-                        if sdoc_image_dir not in exist_dir:
-                            seafile_api.mkdir_with_parents(wiki_id, '/', sdoc_image_dir, username)
-                            exist_dir.append(sdoc_image_dir)
-                        self._upload_attachment_file(wiki_id, sdoc_image_dir, file_path, username)
-                    else:   
-                        # other files
-                        if target_dir not in exist_dir:
-                            seafile_api.mkdir_with_parents(wiki_id, '/', target_dir, username)
-                            exist_dir.append(target_dir)
-                        self._upload_attachment_file(wiki_id, target_dir, file_path, username)
-
-    def _upload_cf_images(self, wiki_id, image_dir, username, exist_dir):
-        wiki_images_dir = 'images/'
-        if os.path.exists(image_dir):
-            for root, _, files in os.walk(image_dir):
-                rel_path = os.path.relpath(root, image_dir)
-                if rel_path == '.':
-                    target_dir = wiki_images_dir
-                else:
-                    target_dir = os.path.join(wiki_images_dir, rel_path)
-                if target_dir not in exist_dir:
-                    seafile_api.mkdir_with_parents(wiki_id, '/', target_dir, username)
-                    exist_dir.append(target_dir)
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    self._upload_attachment_file(wiki_id, target_dir, file_path, username)
-
-    def _is_image_file(self, file_name):
-        file_ext = file_name.split('.')[-1]
-        return file_ext in PREVIEW_FILEEXT.get('Image')
-    
-    def _upload_attachment_file(self, repo_id, parent_dir, file_path, username):
-        try:
-            obj_id = json.dumps({'parent_dir': parent_dir})
-            token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'upload', username, use_onetime=False)
-            
-            if not token:
-                error_msg = 'Internal Server Error'
-                logger.error(error_msg)
-                return
-            upload_link = gen_file_upload_url(token, 'upload-api')
-            upload_link += '?ret-json=1'
-            
-            filename = os.path.basename(file_path)
-            new_file_path = os.path.join(parent_dir, filename)
-            new_file_path = os.path.normpath(new_file_path)
-            
-            data = {'parent_dir': parent_dir, 'target_file': new_file_path}
-            files = {'file': open(file_path, 'rb')}
-            
-            resp = requests.post(upload_link, files=files, data=data)
-            if not resp.ok:
-                logger.error(f"upload file {filename} failed: {resp.text}")
-        except Exception as e:
-            logger.error(f"upload file {file_path} failed: {e}")
-        finally:
-            if 'files' in locals() and files.get('file') and not files['file'].closed:
-                files['file'].close()
+        exist_attachment_dir = os.path.exists(attachment_dir)
+        exist_image_dir = os.path.exists(image_dir)
+        if exist_attachment_dir or exist_image_dir:
+            params = {
+                "exist_image_dir": exist_image_dir,
+                "exist_attachment_dir": exist_attachment_dir,
+                "wiki_id": wiki_id,
+                "username": username,
+                "space_dir": space_dir,
+                "is_image":{
+                    "image_dir": image_dir,
+                },
+                "is_attachment":{
+                    "cf_page_id_to_sf_obj_id_map": cf_page_id_to_sf_obj_id_map,
+                    "attachment_dir": attachment_dir,
+                }
+            }
+            upload_conflunece_attachment(params)
 
     def _handle_page_level(self, level_html, cf_page_id_to_sf_page_id_map):
         result = []
@@ -2094,6 +2016,9 @@ class ImportConfluenceView(APIView):
             page_name_to_id_map = {
                 page_name: new_page_id
             }
+            # The attachment directory only contains numbers
+            if '_' in cf_page_id:
+                cf_page_id = cf_page_id.split('_')[-1]
             page_name_to_obj_id_map = {
                 cf_page_id: str(sdoc_uuid)
             }

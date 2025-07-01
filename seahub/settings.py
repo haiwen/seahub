@@ -1001,6 +1001,7 @@ ENABLE_FORCE_2FA_TO_ALL_USERS = False
 
 # Enable wiki
 ENABLE_WIKI = True
+MAX_CONFLUENCE_FILE_SIZE = 100 * 1024 * 1024
 
 # Enable 'repo snapshot label' feature
 ENABLE_REPO_SNAPSHOT_LABEL = False

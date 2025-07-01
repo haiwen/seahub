@@ -353,3 +353,11 @@ def add_convert_wiki_task(params):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/add-convert-wiki-task')
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
+
+def upload_conflunece_attachment(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/upload-confluence-attachment')
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+    return json.loads(resp.content)['task_id']
