@@ -36,7 +36,7 @@ class SysAdminUserDeactivateDialog extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup tag="fieldset">
-              <p>{gettext('Do you want to keep the sharing relationships?')}</p>
+              <p>{gettext('Do you want to keep the library sharing relationships?')}</p>
               <FormGroup check>
                 <Label check>
                   <Input
