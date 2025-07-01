@@ -5,8 +5,6 @@ import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import Loading from '../../../components/loading';
-import MainPanelTopbar from '../main-panel-topbar';
-import ReposNav from './repos-nav';
 
 class Content extends Component {
   render() {
@@ -96,21 +94,17 @@ class SystemRepo extends Component {
 
   render() {
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <ReposNav currentItem="system" />
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.items}
-              />
-            </div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={this.state.items}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

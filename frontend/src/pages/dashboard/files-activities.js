@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Link, globalHistory } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';

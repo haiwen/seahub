@@ -21,10 +21,7 @@ import StatisticReport from './statistic/statistic-reports';
 import StatisticMetrics from './statistic/statistic-metrics';
 import StatisticLayout from './statistic/layout';
 
-import DesktopDevices from './devices/desktop-devices';
-import MobileDevices from './devices/mobile-devices';
-import DeviceErrors from './devices/devices-errors';
-import DevicesLayout from './devices/layout';
+import DevicesAndLibrariesLayout from './libraries-and-devices-layout';
 
 import Users from './users/users';
 import AdminUsers from './users/admin-users';
@@ -37,10 +34,6 @@ import UserSharedRepos from './users/user-shared-repos';
 import UserLinks from './users/user-links';
 import UserGroups from './users/user-groups';
 
-import AllRepos from './repos/all-repos';
-import AllWikis from './repos/all-wikis';
-import SystemRepo from './repos/system-repo';
-import TrashRepos from './repos/trash-repos';
 import SearchRepos from './repos/search-repos';
 import DirView from './repos/dir-view';
 
@@ -228,11 +221,7 @@ class SysAdmin extends React.Component {
               <StatisticReport path="reports" />
               <StatisticMetrics path="metrics" />
             </StatisticLayout>
-            <DevicesLayout path={`${siteRoot}sys/*`} {...commonProps} />
-            <AllRepos path={siteRoot + 'sys/all-libraries'} {...commonProps} />
-            <AllWikis path={siteRoot + 'sys/all-wikis'} {...commonProps} />
-            <SystemRepo path={siteRoot + 'sys/system-library'} {...commonProps} />
-            <TrashRepos path={siteRoot + 'sys/trash-libraries'} {...commonProps} />
+            <DevicesAndLibrariesLayout path={`${siteRoot}sys/*`} {...commonProps} />
             <SearchRepos path={siteRoot + 'sys/search-libraries'} {...commonProps} />
             <DirView path={siteRoot + 'sys/libraries/:repoID/*'} {...commonProps} />
             <WebSettings path={siteRoot + 'sys/web-settings'} {...commonProps} />

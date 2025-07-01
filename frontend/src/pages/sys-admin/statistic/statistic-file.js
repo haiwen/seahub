@@ -1,4 +1,4 @@
-import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import StatisticCommonTool from './statistic-common-tool';
 import { systemAdminAPI } from '../../../utils/system-admin-api';

@@ -357,12 +357,14 @@ img[src=""],img:not([src]) { /* for first loading img*/
 }
 
 .statistic-nav-indicator-container .nav-item .nav-link,
-.devices-nav-indicator-container .nav-item .nav-link {
+.devices-nav-indicator-container .nav-item .nav-link,
+.libraries-nav-indicator-container .nav-item .nav-link {
   border: none;
 }
 
 .statistic-nav-indicator-container::before,
-.devices-nav-indicator-container::before {
+.devices-nav-indicator-container::before,
+.libraries-nav-indicator-container::before {
   content: '';
   position: absolute;
   bottom: 0;
