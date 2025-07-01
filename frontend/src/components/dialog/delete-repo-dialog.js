@@ -48,7 +48,6 @@ class DeleteRepoDialog extends Component {
   };
 
   render() {
-
     const { isRequestSended } = this.state;
     const repo = this.props.repo;
     const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name || repo.name) + '</span>';
@@ -68,8 +67,10 @@ class DeleteRepoDialog extends Component {
       <Modal isOpen={true} toggle={toggleDialog}>
         <SeahubModalHeader toggle={toggleDialog}>{gettext('Delete Library')}</SeahubModalHeader>
         <ModalBody>
-          <p dangerouslySetInnerHTML={{ __html: message }}></p>
-          { alert_message != '' && <p className="error" dangerouslySetInnerHTML={{ __html: alert_message }}></p>}
+          <div className="pb-6">
+            <p dangerouslySetInnerHTML={{ __html: message }}></p>
+            {alert_message && <p className="error" dangerouslySetInnerHTML={{ __html: alert_message }}></p>}
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>

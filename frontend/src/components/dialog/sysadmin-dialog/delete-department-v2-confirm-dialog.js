@@ -19,7 +19,9 @@ class DeleteDepartmentV2ConfirmDialog extends React.Component {
           {gettext('Delete department')}
         </SeahubModalHeader>
         <ModalBody>
-          <p>{gettext('Are you sure to delete')}{' '}<b>{node.name}</b> ?</p>
+          <div className="pb-6">
+            {gettext('Are you sure to delete')}{' '}<b>{node.name}</b> ?
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onMouseDown={toggle}>{gettext('Cancel')}</Button>
