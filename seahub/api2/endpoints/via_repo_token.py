@@ -25,7 +25,6 @@ from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
 from seahub.repo_metadata.utils import get_update_record, get_unmodifiable_columns, can_read_metadata, \
     remove_tags_table, init_tags, get_table_by_name
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
-from seahub.share.utils import is_repo_admin
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
 from seahub.settings import MAX_PATH
