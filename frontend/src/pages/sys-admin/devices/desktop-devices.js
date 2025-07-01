@@ -1,7 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import DevicesNav from './devices-nav';
+import React, { Component } from 'react';
 import DevicesByPlatform from './devices-by-platform';
-import MainPanelTopbar from '../main-panel-topbar';
 
 class DesktopDevices extends Component {
 
@@ -11,17 +9,13 @@ class DesktopDevices extends Component {
 
   render() {
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <DevicesNav currentItem="desktop" />
-            <DevicesByPlatform
-              devicesPlatform={'desktop'}
-            />
-          </div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <DevicesByPlatform
+            devicesPlatform={'desktop'}
+          />
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

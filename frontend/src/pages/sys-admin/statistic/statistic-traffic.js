@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import Loading from '../../../components/loading';
 import OrgsTraffic from './statistic-traffic-orgs';

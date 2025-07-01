@@ -34,7 +34,7 @@ class Nav extends React.Component {
   render() {
     const { currentItem } = this.props;
     const activeIndex = this.navItems.findIndex(item => item.name === currentItem);
-    const indicatorWidth = this.itemWidths[activeIndex] || 0;
+    const indicatorWidth = this.itemWidths[activeIndex] || 56;
     const indicatorOffset = this.itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0);
 
     return (

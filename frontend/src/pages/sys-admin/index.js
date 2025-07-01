@@ -24,6 +24,7 @@ import StatisticLayout from './statistic/layout';
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
+import DevicesLayout from './devices/layout';
 
 import Users from './users/users';
 import AdminUsers from './users/admin-users';
@@ -227,9 +228,7 @@ class SysAdmin extends React.Component {
               <StatisticReport path="reports" />
               <StatisticMetrics path="metrics" />
             </StatisticLayout>
-            <DesktopDevices path={siteRoot + 'sys/desktop-devices'} {...commonProps} />
-            <MobileDevices path={siteRoot + 'sys/mobile-devices'} {...commonProps} />
-            <DeviceErrors path={siteRoot + 'sys/device-errors'} {...commonProps} />
+            <DevicesLayout path={`${siteRoot}sys/*`} {...commonProps} />
             <AllRepos path={siteRoot + 'sys/all-libraries'} {...commonProps} />
             <AllWikis path={siteRoot + 'sys/all-wikis'} {...commonProps} />
             <SystemRepo path={siteRoot + 'sys/system-library'} {...commonProps} />
