@@ -20,6 +20,7 @@ class WikiNav extends Component {
     onDeletePage: PropTypes.func,
     onMovePage: PropTypes.func,
     duplicatePage: PropTypes.func,
+    importPage: PropTypes.func,
     addSiblingPage: PropTypes.func,
     getCurrentPageId: PropTypes.func,
     addPageInside: PropTypes.func,
@@ -90,6 +91,7 @@ class WikiNav extends Component {
         pages={pages}
         pageIndex={index}
         duplicatePage={this.props.duplicatePage}
+        importPage={this.props.importPage}
         setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
         onDeletePage={this.props.onDeletePage}

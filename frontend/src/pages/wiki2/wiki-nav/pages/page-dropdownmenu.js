@@ -15,6 +15,7 @@ export default class PageDropdownMenu extends Component {
     toggleNameEditor: PropTypes.func,
     toggleInsertSiblingPage: PropTypes.func,
     duplicatePage: PropTypes.func,
+    importPage: PropTypes.func,
     onDeletePage: PropTypes.func,
     canDeletePage: PropTypes.bool,
   };
@@ -58,6 +59,36 @@ export default class PageDropdownMenu extends Component {
   duplicatePage = () => {
     const { page } = this.props;
     this.props.duplicatePage({ from_page_id: page.id }, () => {}, this.duplicatePageFailure);
+  };
+
+  importPage = () => {
+    const { page } = this.props;
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.sdoc,.sdoczip';
+    fileInput.style.display = 'none';
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const selectedFile = e.target.files[0];
+        this.props.importPage(
+          { from_page_id: page.id, file: selectedFile },
+          () => {},
+          this.importPageFailure
+        );
+      }
+    });
+
+    document.body.appendChild(fileInput);
+    fileInput.click();
+
+    setTimeout(() => {
+      document.body.removeChild(fileInput);
+    }, 1000);
+  };
+
+  importPageFailure = () => {
+    toaster.danger(gettext('Failed to import page'));
   };
 
   duplicatePageFailure = () => {
@@ -123,6 +154,10 @@ export default class PageDropdownMenu extends Component {
               <span className="item-text">{gettext('Delete page')}</span>
             </DropdownItem>
           )}
+          <DropdownItem onClick={this.importPage}>
+            <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
+            <span className="item-text">{gettext('Import page')}</span>
+          </DropdownItem>
           <hr className='divider' />
           <DropdownItem onClick={this.handleOpenInNewTab}>
             <i className='sf3-font sf3-font-open-in-new-tab' aria-hidden="true" />
