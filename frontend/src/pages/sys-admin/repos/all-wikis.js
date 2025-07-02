@@ -96,7 +96,8 @@ class AllWikis extends Component {
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <ReposNav currentItem="wikis"
+            <ReposNav
+              currentItem="wikis"
               sortBy={this.state.sortBy}
               sortItems={this.sortItems}
             />
