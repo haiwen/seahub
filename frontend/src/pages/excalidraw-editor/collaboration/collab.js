@@ -4,9 +4,9 @@ import io from 'socket.io-client';
 import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS } from '../constants';
 import { getSyncableElements } from '../data';
 import { loadFromServerStorage, saveToServerStorage } from '../data/server-storage';
-import Portal from './portal';
 import { resolvablePromise } from '../utils/exdraw-utils';
 import { serverDebug } from '../utils/debug';
+import Portal from './portal';
 
 class Collab {
 
@@ -28,22 +28,6 @@ class Collab {
     this.document = document;
   };
 
-  getSocketId = () => {
-    return this.portal.socket?.id;
-  };
-
-  getLastBroadcastedOrReceivedSceneVersion = () => {
-    return this.lastBroadcastedOrReceivedSceneVersion;
-  };
-
-  getSceneElementsIncludingDeleted = (elements) => {
-    return this.excalidrawAPI.getSceneElementsIncludingDeleted();
-  };
-
-  setLastBroadcastedOrReceivedSceneVersion = (version) => {
-    this.lastBroadcastedOrReceivedSceneVersion = version;
-  };
-
   getDocumentVersion = () => {
     const { version } = this.document;
     return version;
@@ -51,6 +35,18 @@ class Collab {
 
   updateDocumentVersion = (version) => {
     this.document['version'] = version;
+  };
+
+  getLastBroadcastedOrReceivedSceneVersion = () => {
+    return this.lastBroadcastedOrReceivedSceneVersion;
+  };
+
+  getSceneElementsIncludingDeleted = () => {
+    return this.excalidrawAPI.getSceneElementsIncludingDeleted();
+  };
+
+  setLastBroadcastedOrReceivedSceneVersion = (version) => {
+    this.lastBroadcastedOrReceivedSceneVersion = version;
   };
 
   initializeRoom = async (fetchScene) => {
@@ -256,17 +252,9 @@ class Collab {
     }
   };
 
-  dispatchConnectState = (type, message) => {
-    this.eventBus.dispatch(type, message);
-  };
-
   destroySocketClient = () => {
     this.lastBroadcastedOrReceivedSceneVersion = -1;
     this.portal.close();
-  };
-
-  static destroy = () => {
-    this.instance = null;
   };
 
 }
