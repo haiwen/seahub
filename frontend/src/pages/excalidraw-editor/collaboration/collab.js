@@ -1,7 +1,7 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import io from 'socket.io-client';
-import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS } from '../constants';
+import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS, WS_SUBTYPES } from '../constants';
 import { getSyncableElements } from '../data';
 import { loadFromServerStorage, saveToServerStorage } from '../data/server-storage';
 import { resolvablePromise } from '../utils/exdraw-utils';
@@ -123,13 +123,31 @@ class Collab {
       scenePromise.resolve(sceneData);
     });
 
-    this.portal.socket.on('sync-with-another', (params) => {
-      if (!this.portal.socketInitialized) {
-        this.initializeRoom({ fetchScene: false });
-        const { elements } = params;
-        this.onReceiveRemoteOperations(params);
-        this.setDocument(params);
-        scenePromise.resolve({ elements, scrollToContent: true });
+    this.portal.socket.on('client-broadcast', (params) => {
+      const { type, payload } = params;
+      switch (type) {
+        case WS_SUBTYPES.INIT:
+          if (!this.portal.socketInitialized) {
+            serverDebug('sync with elements from another');
+            this.initializeRoom({ fetchScene: false });
+            this.handleRemoteSceneUpdate(payload);
+            this.setDocument(payload);
+
+            const { elements } = payload;
+            scenePromise.resolve({ elements, scrollToContent: true });
+          }
+          break;
+        case WS_SUBTYPES.UPDATE:
+          serverDebug('sync elements by another updated');
+          this.handleRemoteSceneUpdate(payload);
+          break;
+        case WS_SUBTYPES.MOUSE_LOCATION:
+          serverDebug('sync another\'s mouse location');
+          this.handleRemoteMouseLocation(params);
+          break;
+        default:
+          // eslint-disable-next-line no-console
+          console.log('never execute to here');
       }
     });
 
@@ -193,7 +211,7 @@ class Collab {
     this.excalidrawAPI.updateScene({ elements: result.storedElements });
   };
 
-  onReceiveRemoteOperations = (params) => {
+  handleRemoteSceneUpdate = (params) => {
     const { elements: remoteElements } = params;
     const localElements = this.getSceneElementsIncludingDeleted();
     const appState = this.excalidrawAPI.getAppState();
@@ -219,7 +237,7 @@ class Collab {
     }
   }, CURSOR_SYNC_TIMEOUT);
 
-  receiveMouseLocation = (params) => {
+  handleRemoteMouseLocation = (params) => {
     const collaborators = new Map(this.collaborators);
     const { user, ...updates } = params;
     const newUser = Object.assign({}, collaborators.get(user._username), updates);
@@ -239,7 +257,9 @@ class Collab {
         }
       });
       this.collaborators = collaborators;
-      this.excalidrawAPI.updateScene({ collaborators });
+      setTimeout(() => {
+        this.excalidrawAPI.updateScene({ collaborators });
+      }, 100);
     }
   };
 

@@ -1,3 +1,4 @@
+import { WS_SUBTYPES } from '../constants';
 import { isSyncableElement } from '../data';
 import { serverDebug } from '../utils/debug';
 
@@ -31,22 +32,13 @@ class Portal {
     this.socket.on('new-user', async () => {
       serverDebug('sync with elements to another');
       const elements = this.collab.getSceneElementsIncludingDeleted();
-      this.broadcastSyncWithAnother(elements, true);
+      const isSyncAll = true;
+      this.broadcastScene(WS_SUBTYPES.INIT, elements, isSyncAll);
     });
 
     this.socket.on('room-user-change', (users) => {
       serverDebug('room users changed. all users count: %s', users.length);
       this.collab.receiveRoomUserChanged(users);
-    });
-
-    this.socket.on('client-broadcast', (params) => {
-      serverDebug('receive operations: %O', params);
-      this.collab.onReceiveRemoteOperations(params);
-    });
-
-    this.socket.on('mouse-location', (params) => {
-      serverDebug('mouse location changed');
-      this.collab.receiveMouseLocation(params);
     });
 
     this.socket.on('leave-room', (userInfo) => {
@@ -57,18 +49,12 @@ class Portal {
     return socket;
   };
 
-  broadcastSyncWithAnother = async (elements, isSyncAll) => {
-    const syncableElements = elements.reduce((acc, element) => {
-      const isAddedOrUpdated = !this.broadcastedElementVersions.has(element.id) || element.version > this.broadcastedElementVersions.get(element.id);
-      if (isSyncAll || (isAddedOrUpdated && isSyncableElement(element))) {
-        acc.push(element);
-      }
-      return acc;
-    }, []);
-    this.socket.emit('sync-with-another', this.getParams({ elements: syncableElements }));
+  _broadcastSocketData = (data) => {
+    const newData = this.getParams(data);
+    this.socket.emit('server-broadcast', newData);
   };
 
-  broadcastScene = async (elements, isSyncAll) => {
+  broadcastScene = async (updateType, elements, isSyncAll) => {
     const syncableElements = elements.reduce((acc, element) => {
       const isAddedOrUpdated = !this.broadcastedElementVersions.has(element.id) || element.version > this.broadcastedElementVersions.get(element.id);
       if (isSyncAll || (isAddedOrUpdated && isSyncableElement(element))) {
@@ -76,11 +62,13 @@ class Portal {
       }
       return acc;
     }, []);
-    this.socket.emit('server-broadcast', this.getParams({ elements: syncableElements }));
+    const payload = { elements, syncableElements };
+    this._broadcastSocketData({ type: updateType, payload });
   };
 
   broadcastMouseLocation = (payload) => {
-    this.socket.emit('mouse-location', this.getParams(payload));
+    const type = WS_SUBTYPES.MOUSE_LOCATION;
+    this._broadcastSocketData({ type, ...payload });
   };
 
   close = () => {
