@@ -109,7 +109,15 @@ class OrgInfo extends Component {
                   )}
                 </div>
                 <div className="info-content-item">
-                  <h4 className="info-content-item-heading">{gettext('Traffic this month')}</h4>
+                  <h4 className="info-content-item-heading d-inline-block m-0">{gettext('Traffic this month')}</h4>
+                  <span
+                    className="ms-2 d-inline-block"
+                    data-toggle="tooltip"
+                    style={{ cursor: 'pointer' }}
+                    title={gettext('After exceeding the traffic limit, file download speed will be restricted.')}
+                  >
+                    ?
+                  </span>
                   {traffic_limit > 0 ? (
                     <>
                       <p className="info-content-space-text">{`${(download_traffic / traffic_limit * 100).toFixed(2)}%`}</p>
