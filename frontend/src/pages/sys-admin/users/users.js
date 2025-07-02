@@ -430,38 +430,37 @@ class Users extends Component {
 
     return (
       <>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <div className="cur-view-content">
-              {curTab == 'database' &&
-                <UsersFilterBar
-                  isActive={is_active}
-                  role={role}
-                  onStatusChange={this.onStatusChange}
-                  onRoleChange={this.onRoleChange}
-                />
-              }
-              <Content
-                isAdmin={isAdmin}
-                isLDAPImported={isLDAPImported}
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.userList}
-                currentPage={this.props.currentPage}
-                hasNextPage={this.state.hasNextPage}
-                curPerPage={this.props.perPage}
-                resetPerPage={this.resetPerPage}
-                getListByPage={this.getUsersListByPage}
-                updateUser={this.updateUser}
-                deleteUser={this.deleteUser}
-                updateAdminRole={this.updateAdminRole}
-                revokeAdmin={this.revokeAdmin}
-                onUserSelected={this.onUserSelected}
-                isAllUsersSelected={this.isAllUsersSelected}
-                toggleSelectAllUsers={this.toggleSelectAllUsers}
-              />
-            </div>
-          </div>
+        <div className="cur-view-content">
+          {curTab == 'database' &&
+          <UsersFilterBar
+            isActive={is_active}
+            role={role}
+            onStatusChange={this.onStatusChange}
+            onRoleChange={this.onRoleChange}
+          />
+          }
+          <Content
+            isAdmin={isAdmin}
+            isLDAPImported={isLDAPImported}
+            loading={this.state.loading}
+            errorMsg={this.state.errorMsg}
+            items={this.state.userList}
+            sortBy={this.state.sortBy}
+            sortOrder={this.state.sortOrder}
+            sortByQuotaUsage={this.sortByQuotaUsage}
+            currentPage={this.state.currentPage}
+            hasNextPage={this.state.hasNextPage}
+            curPerPage={this.state.perPage}
+            resetPerPage={this.resetPerPage}
+            getListByPage={this.getUsersListByPage}
+            updateUser={this.updateUser}
+            deleteUser={this.deleteUser}
+            updateAdminRole={this.updateAdminRole}
+            revokeAdmin={this.revokeAdmin}
+            onUserSelected={this.onUserSelected}
+            isAllUsersSelected={this.isAllUsersSelected}
+            toggleSelectAllUsers={this.toggleSelectAllUsers}
+          />
         </div>
         {isImportUserDialogOpen &&
         <SysAdminImportUserDialog

@@ -13,13 +13,6 @@ import UserNav from './user-nav';
 import { eventBus } from '../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
-const USERS_PATH_KEYS = [
-  'users',
-  'ldap',
-  'ldap-imported',
-  'admins',
-];
-
 const UsersLayout = ({ ...commonProps }) => {
   const [sortBy, setSortBy] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -33,7 +26,7 @@ const UsersLayout = ({ ...commonProps }) => {
   const [isBatchAddAdminDialogOpen, setIsBatchAddAdminDialogOpen] = useState(false);
 
   const location = useLocation();
-  const { curTab, isAdmin, isLDAPImported, isSingleUser } = useMemo(() => {
+  const { curTab, isAdmin, isLDAPImported } = useMemo(() => {
     const path = location.pathname.split('/').filter(Boolean).pop();
     let curTab = path;
     if (path === 'users') {
@@ -43,8 +36,7 @@ const UsersLayout = ({ ...commonProps }) => {
     }
     const isAdmin = curTab === 'admin';
     const isLDAPImported = curTab === 'ldap-imported';
-    const isSingleUser = !USERS_PATH_KEYS.includes(path);
-    return { curTab, isAdmin, isLDAPImported, isSingleUser };
+    return { curTab, isAdmin, isLDAPImported };
   }, [location.pathname]);
 
   const onHasUserSelected = (hasSelected) => {
@@ -145,7 +137,7 @@ const UsersLayout = ({ ...commonProps }) => {
         }
       </MainPanelTopbar>
       <UsersNav currentItem={curTab} sortBy={sortBy} sortOrder={sortOrder} sortItems={sortByQuotaUsage} />
-      <Router primary={false}>
+      <Router className="d-flex overflow-hidden">
         <Users
           default
           sortBy={sortBy}
