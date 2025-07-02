@@ -40,7 +40,7 @@ class Nav extends React.Component {
     return (
       <div className="cur-view-path tab-nav-container">
         <ul
-          className="nav statistic-nav-indicator-container position-relative"
+          className="nav nav-indicator-container position-relative"
           style={{
             '--indicator-width': `${indicatorWidth}px`,
             '--indicator-offset': `${indicatorOffset}px`

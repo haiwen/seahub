@@ -45,13 +45,13 @@ class Nav extends React.Component {
     const { currentItem, sortBy, sortOrder = 'desc' } = this.props;
     const showSortIcon = currentItem == 'all' || currentItem == 'wikis';
     const activeIndex = this.navItems.findIndex(item => item.name === currentItem) || 0;
-    const indicatorWidth = this.itemWidths[activeIndex] || 77;
+    const indicatorWidth = this.itemWidths[activeIndex] || 56;
     const indicatorOffset = this.itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0);
 
     return (
       <div className="cur-view-path tab-nav-container">
         <ul
-          className="nav libraries-nav-indicator-container position-relative"
+          className="nav nav-indicator-container position-relative"
           style={{
             '--indicator-width': `${indicatorWidth}px`,
             '--indicator-offset': `${indicatorOffset}px`

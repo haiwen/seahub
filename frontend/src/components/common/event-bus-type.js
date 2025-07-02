@@ -32,4 +32,6 @@ export const EVENT_BUS_TYPE = {
   PERMISSION: 'permission',
   ACCESS_LOG: 'access_log',
   PREVIEW_IMAGE: 'preview_image',
+
+  SYNC_USERNAME: 'sync_username',
 };

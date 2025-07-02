@@ -60,22 +60,39 @@ const DevicesAndLibrariesLayout = ({ ...commonProps }) => {
     });
   }, []);
 
+  const getValueLength = (str) => {
+    let code; let len = 0;
+    for (let i = 0, length = str.length; i < length; i++) {
+      code = str.charCodeAt(i);
+      if (code === 10) { // solve enter problem
+        len += 2;
+      } else if (code < 0x007f) {
+        len += 1;
+      } else if (code >= 0x0080 && code <= 0x07ff) {
+        len += 2;
+      } else if (code >= 0x0800 && code <= 0xffff) {
+        len += 3;
+      }
+    }
+    return len;
+  };
+
   const searchRepos = (repoNameOrID) => {
-    if (this.getValueLength(repoNameOrID) < 3) {
+    if (getValueLength(repoNameOrID) < 3) {
       toaster.notify(gettext('Required at least three letters.'));
       return;
     }
     navigate(`${siteRoot}sys/search-libraries/?name_or_id=${encodeURIComponent(repoNameOrID)}`);
   };
 
-  const getSearch = useCallback(() => {
+  const getSearch = () => {
     return (
       <Search
         placeholder={gettext('Search libraries by name or ID')}
         submit={searchRepos}
       />
     );
-  }, []);
+  };
 
   const toggleCreateRepoDialog = useCallback(() => {
     setIsCreateRepoDialogOpen(!isCreateRepoDialogOpen);

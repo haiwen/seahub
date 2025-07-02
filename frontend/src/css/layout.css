@@ -356,15 +356,11 @@ img[src=""],img:not([src]) { /* for first loading img*/
   color: #666;
 }
 
-.statistic-nav-indicator-container .nav-item .nav-link,
-.devices-nav-indicator-container .nav-item .nav-link,
-.libraries-nav-indicator-container .nav-item .nav-link {
+.nav-indicator-container .nav-item .nav-link {
   border: none;
 }
 
-.statistic-nav-indicator-container::before,
-.devices-nav-indicator-container::before,
-.libraries-nav-indicator-container::before {
+.nav-indicator-container::before {
   content: '';
   position: absolute;
   bottom: 0;

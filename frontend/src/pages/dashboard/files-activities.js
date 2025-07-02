@@ -243,7 +243,7 @@ class FilesActivities extends Component {
       <div className="main-panel-center">
         <div className="cur-view-container" id="activities">
           <div className="cur-view-path">
-            <ul className="nav nav-indicator-container position-relative" data-active={onlyMine ? 'mine' : 'all'}>
+            <ul className="nav activities-nav-indicator-container position-relative" data-active={onlyMine ? 'mine' : 'all'}>
               <li className="nav-item">
                 <Link to={`${siteRoot}dashboard/`} className={`nav-link${onlyMine ? '' : ' active'}`}>{gettext('All Activities')}</Link>
               </li>

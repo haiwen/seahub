@@ -23,16 +23,13 @@ import StatisticLayout from './statistic/layout';
 
 import DevicesAndLibrariesLayout from './libraries-and-devices-layout';
 
-import Users from './users/users';
-import AdminUsers from './users/admin-users';
-import LDAPImportedUsers from './users/ldap-imported-users';
-import LDAPUsers from './users/ldap-users';
 import SearchUsers from './users/search-users';
 import User from './users/user-info';
 import UserOwnedRepos from './users/user-repos';
 import UserSharedRepos from './users/user-shared-repos';
 import UserLinks from './users/user-links';
 import UserGroups from './users/user-groups';
+import { UsersLayout, UserLayout } from './users/layout';
 
 import SearchRepos from './repos/search-repos';
 import DirView from './repos/dir-view';
@@ -83,6 +80,7 @@ import AbuseReports from './abuse-reports';
 
 import '../../css/layout.css';
 import '../../css/toolbar.css';
+import Links from './links';
 
 class SysAdmin extends React.Component {
   constructor(props) {
@@ -231,8 +229,7 @@ class SysAdmin extends React.Component {
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} {...commonProps} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} {...commonProps} />
             <Departments path={siteRoot + 'sys/departments/'} {...commonProps} />
-            <ShareLinks path={siteRoot + 'sys/share-links'} {...commonProps} />
-            <UploadLinks path={siteRoot + 'sys/upload-links'} {...commonProps} />
+            <Links path={`${siteRoot}sys/links/*`} {...commonProps} />
             <Orgs path={siteRoot + 'sys/organizations'} {...commonProps} />
             <SearchOrgs path={siteRoot + 'sys/search-organizations'} {...commonProps} />
             <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} {...commonProps} />
@@ -251,24 +248,19 @@ class SysAdmin extends React.Component {
             <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} {...commonProps} />
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />
             <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} {...commonProps} />
-
-            <Users path={siteRoot + 'sys/users'} {...commonProps} />
-            <AdminUsers path={siteRoot + 'sys/users/admins'} {...commonProps} />
-            <LDAPImportedUsers path={siteRoot + 'sys/users/ldap-imported'} {...commonProps} />
-            <LDAPUsers path={siteRoot + 'sys/users/ldap'} {...commonProps} />
+            <UsersLayout path={`${siteRoot}sys/users/*`} {...commonProps} />
             <SearchUsers path={siteRoot + 'sys/search-users'} {...commonProps} />
-            <User path={siteRoot + 'sys/users/:email'} {...commonProps} />
-            <UserOwnedRepos path={siteRoot + 'sys/users/:email/owned-libraries'} {...commonProps} />
-            <UserSharedRepos path={siteRoot + 'sys/users/:email/shared-libraries'} {...commonProps} />
-            <UserLinks path={siteRoot + 'sys/users/:email/shared-links'} {...commonProps} />
-            <UserGroups path={siteRoot + 'sys/users/:email/groups'} {...commonProps} />
-
+            <UserLayout path={`${siteRoot}sys/user/:email/`} {...commonProps} >
+              <User path="/" {...commonProps} />
+              <UserOwnedRepos path="owned-libraries" {...commonProps} />
+              <UserSharedRepos path="shared-libraries" {...commonProps} />
+              <UserLinks path="shared-links" {...commonProps} />
+              <UserGroups path="groups" {...commonProps} />
+            </UserLayout>
             <Invitations path={siteRoot + 'sys/invitations'} {...commonProps} />
             <TermsAndConditions path={siteRoot + 'sys/terms-and-conditions/'} {...commonProps} />
-
             <AllVirusFiles path={siteRoot + 'sys/virus-files/all'} {...commonProps} />
             <UnhandledVirusFiles path={siteRoot + 'sys/virus-files/unhandled'} {...commonProps} />
-
             <FileScanRecords path={siteRoot + 'sys/file-scan-records'} {...commonProps} />
             <WorkWeixinDepartments path={siteRoot + 'sys/work-weixin'} {...commonProps} />
             <DingtalkDepartments path={siteRoot + 'sys/dingtalk'} {...commonProps} />
