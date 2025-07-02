@@ -12,11 +12,11 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      { name: 'desktop', urlPart: 'desktop-devices', text: gettext('Desktop') },
-      { name: 'mobile', urlPart: 'mobile-devices', text: gettext('Mobile') }
+      { name: 'desktop', urlPart: 'desktop', text: gettext('Desktop') },
+      { name: 'mobile', urlPart: 'mobile', text: gettext('Mobile') }
     ];
     if (isPro) {
-      this.navItems.push({ name: 'errors', urlPart: 'device-errors', text: gettext('Errors') });
+      this.navItems.push({ name: 'errors', urlPart: 'errors', text: gettext('Errors') });
     }
     this.itemRefs = [];
     this.itemWidths = [];
@@ -52,7 +52,7 @@ class Nav extends React.Component {
                 key={index}
                 ref={el => this.itemRefs[index] = el}
               >
-                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+                <Link to={`${siteRoot}sys/devices/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}

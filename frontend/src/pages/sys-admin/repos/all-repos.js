@@ -15,6 +15,7 @@ class AllRepos extends Component {
       repos: [],
       pageInfo: {},
       perPage: 100,
+      sortBy: '',
     };
   }
 
@@ -25,6 +26,15 @@ class AllRepos extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.currentPage !== this.props.currentPage) {
       this.getReposByPage(this.props.currentPage);
+      let urlParams = (new URL(window.location)).searchParams;
+      const { currentPage = 1, perPage, sortBy } = this.state;
+      this.setState({
+        sortBy: urlParams.get('order_by') || sortBy,
+        perPage: parseInt(urlParams.get('per_page') || perPage),
+        currentPage: parseInt(urlParams.get('page') || currentPage)
+      }, () => {
+        this.getReposByPage(this.state.currentPage);
+      });
     }
   }
 

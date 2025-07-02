@@ -10,6 +10,8 @@ import Loading from '../../../components/loading';
 import { Link } from '@gatsbyjs/reach-router';
 import UserLink from '../user-link';
 import Paginator from '../../../components/paginator';
+import { eventBus } from '../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
 dayjs.extend(relativeTime);
 
@@ -132,7 +134,8 @@ class DeviceErrors extends Component {
       loading: true,
       errorMsg: '',
       pageInfo: {},
-      perPage: 100
+      perPage: 100,
+      deviceErrors: [],
     };
   }
 
@@ -145,6 +148,12 @@ class DeviceErrors extends Component {
     }, () => {
       this.getDeviceErrorsListByPage(this.state.currentPage);
     });
+
+    this.unsubscribeClearDeviceErrors = eventBus.subscribe(EVENT_BUS_TYPE.CLEAR_DEVICE_ERRORS, () => this.setState({ deviceErrors: [] }));
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeClearDeviceErrors();
   }
 
   getDeviceErrorsListByPage = (page) => {
@@ -155,7 +164,7 @@ class DeviceErrors extends Component {
         pageInfo: res.data.page_info,
       });
       if (res.data.device_errors.length > 0) {
-        this.props.onShowCleanBtn();
+        eventBus.dispatch(EVENT_BUS_TYPE.SHOW_CLEAN_BTN);
       }
     }).catch((error) => {
       this.setState({
@@ -180,7 +189,7 @@ class DeviceErrors extends Component {
             <Content
               loading={this.state.loading}
               errorMsg={this.state.errorMsg}
-              items={this.props.devicesErrors}
+              items={this.state.deviceErrors}
               getDeviceErrorsListByPage={this.getDeviceErrorsListByPage}
               curPerPage={this.state.perPage}
               resetPerPage={this.resetPerPage}

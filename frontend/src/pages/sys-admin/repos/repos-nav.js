@@ -15,10 +15,10 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      { name: 'all', urlPart: 'all-libraries', text: gettext('All') },
-      { name: 'wikis', urlPart: 'all-wikis', text: gettext('Wikis') },
-      { name: 'system', urlPart: 'system-library', text: gettext('System') },
-      { name: 'trash', urlPart: 'trash-libraries', text: gettext('Trash') }
+      { name: 'all', urlPart: 'all', text: gettext('All') },
+      { name: 'wikis', urlPart: 'wikis', text: gettext('Wikis') },
+      { name: 'system', urlPart: 'system', text: gettext('System') },
+      { name: 'trash', urlPart: 'trash', text: gettext('Trash') }
     ];
     this.sortOptions = [
       { value: 'file_count-desc', text: gettext('Descending by files') },
@@ -32,6 +32,12 @@ class Nav extends React.Component {
     this.measureItems();
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.currentItem !== prevProps.currentItem) {
+      this.measureItems();
+    }
+  }
+
   onSelectSortOption = (item) => {
     const [sortBy,] = item.value.split('-');
     this.props.sortItems(sortBy);
@@ -39,6 +45,7 @@ class Nav extends React.Component {
 
   measureItems = () => {
     this.itemWidths = this.itemRefs.map(ref => ref?.offsetWidth || 77);
+    this.forceUpdate();
   };
 
   render() {
@@ -64,7 +71,7 @@ class Nav extends React.Component {
                 key={index}
                 ref={el => this.itemRefs[index] = el}
               >
-                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+                <Link to={`${siteRoot}sys/libraries/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}

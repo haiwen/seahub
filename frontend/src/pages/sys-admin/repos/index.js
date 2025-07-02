@@ -1,64 +1,33 @@
-import React, { useCallback, useState } from 'react';
-import { Router, useLocation, navigate } from '@gatsbyjs/reach-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'reactstrap';
-import MainPanelTopbar from './main-panel-topbar';
-import { gettext, siteRoot } from '../../utils/constants';
-import AllRepos from './repos/all-repos';
-import AllWikis from './repos/all-wikis';
-import SystemRepo from './repos/system-repo';
-import TrashRepos from './repos/trash-repos';
-import ReposNav from './repos/repos-nav';
-import DevicesNav from './devices/devices-nav';
-import DesktopDevices from './devices/desktop-devices';
-import MobileDevices from './devices/mobile-devices';
-import DeviceErrors from './devices/devices-errors';
-import Search from './search';
-import toaster from '../../components/toast';
-import { systemAdminAPI } from '../../utils/system-admin-api';
-import { Utils } from '../../utils/utils';
-
-const DEVICES_PATH_KEYS = [
-  'desktop-devices',
-  'mobile-devices',
-  'device-errors'
-];
+import { useLocation, navigate, Router } from '@gatsbyjs/reach-router';
+import MainPanelTopbar from '../main-panel-topbar';
+import { gettext, siteRoot } from '../../../utils/constants';
+import ReposNav from './repos-nav';
+import Search from '../search';
+import toaster from '../../../components/toast';
+import AllRepos from './all-repos';
+import AllWikis from './all-wikis';
+import SystemRepo from './system-repo';
+import TrashRepos from './trash-repos';
 
 const PATH_NAME_MAP = {
-  'desktop-devices': 'desktop',
-  'mobile-devices': 'mobile',
-  'device-errors': 'errors',
   'all-libraries': 'all',
   'all-wikis': 'wikis',
   'system-library': 'system',
   'trash-libraries': 'trash'
 };
 
-const DevicesAndLibrariesLayout = ({ ...commonProps }) => {
+const Libraries = ({ children, ...commonProps }) => {
+  const [sortBy, setSortBy] = useState('');
+  const [perPage, setPerPage] = useState(100);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isCreateRepoDialogOpen, setIsCreateRepoDialogOpen] = useState(false);
   const [isCleanTrashDialogOpen, setIsCleanTrashDialogOpen] = useState(false);
-  const [isCleanBtnShown, setIsCleanBtnShown] = useState(false);
-  const [devicesErrors, setDevicesErrors] = useState([]);
 
   const location = useLocation();
   const path = location.pathname.split('/').filter(Boolean).pop();
-  const pathSegment = PATH_NAME_MAP[path];
-  const isDevices = DEVICES_PATH_KEYS.includes(path);
-
-  const onShowCleanBtn = useCallback(() => {
-    setIsCleanBtnShown(true);
-  }, []);
-
-  const onClean = useCallback(() => {
-    systemAdminAPI.sysAdminClearDeviceErrors().then((res) => {
-      setDevicesErrors([]);
-      setIsCleanBtnShown(false);
-      let message = gettext('Successfully cleaned all errors.');
-      toaster.success(message);
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  }, []);
+  const pathSegment = PATH_NAME_MAP[path] || 'all';
 
   const getValueLength = (str) => {
     let code; let len = 0;
@@ -102,7 +71,31 @@ const DevicesAndLibrariesLayout = ({ ...commonProps }) => {
     setIsCleanTrashDialogOpen(!isCleanTrashDialogOpen);
   }, [isCleanTrashDialogOpen]);
 
-  const showDefaultTopbar = pathSegment !== 'all' && pathSegment !== 'trash' && !(pathSegment === 'errors' && devicesErrors.length > 0);
+  const sortItems = (sortBy) => {
+    setSortBy(sortBy);
+    setCurrentPage(1);
+    const url = new URL(location.href);
+    const searchParams = new URLSearchParams(url.search);
+    searchParams.set('page', 1);
+    searchParams.set('order_by', sortBy);
+    url.search = searchParams.toString();
+    navigate(url.toString());
+  };
+
+  const onResetPerPage = (perPage) => {
+    setPerPage(perPage);
+    setCurrentPage(1);
+  };
+
+  useEffect(() => {
+    const urlParams = (new URL(window.location)).searchParams;
+    setSortBy(urlParams.get('order_by') || sortBy);
+    setPerPage(parseInt(urlParams.get('per_page') || perPage));
+    setCurrentPage(parseInt(urlParams.get('page') || currentPage));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const showReposNav = pathSegment === 'all' || pathSegment === 'trash' || pathSegment === 'wikis' || pathSegment === 'system';
   return (
     <>
       {pathSegment === 'all' && (
@@ -112,33 +105,32 @@ const DevicesAndLibrariesLayout = ({ ...commonProps }) => {
           </Button>
         </MainPanelTopbar>
       )}
-      {pathSegment === 'errors' && isCleanBtnShown && (
-        <MainPanelTopbar {...commonProps}>
-          <Button className="operation-item" onClick={onClean}>{gettext('Clean')}</Button>
-        </MainPanelTopbar>
-      )}
       {pathSegment === 'trash' && (
         <MainPanelTopbar {...commonProps}>
           <Button className="operation-item" onClick={toggleCleanTrashDialog}>{gettext('Clean')}</Button>
         </MainPanelTopbar>
       )}
-      {showDefaultTopbar && <MainPanelTopbar { ...commonProps } />}
-      {isDevices ? (
-        <DevicesNav currentItem={pathSegment} />
-      ) : (
-        <ReposNav currentItem={pathSegment} />
+      {(pathSegment === 'wikis' || pathSegment === 'system') && (
+        <MainPanelTopbar {...commonProps} />
       )}
+      {showReposNav && <ReposNav currentItem={path} sortBy={sortBy} sortItems={sortItems} />}
       <Router>
-        <DesktopDevices path="desktop-devices" />
-        <MobileDevices path="mobile-devices" />
-        <DeviceErrors path="device-errors" devicesErrors={devicesErrors} onShowCleanBtn={onShowCleanBtn} />
-
         <AllRepos
           path="all-libraries"
+          sortBy={sortBy}
+          perPage={perPage}
+          currentPage={currentPage}
+          onResetPerPage={onResetPerPage}
           isCreateRepoDialogOpen={isCreateRepoDialogOpen}
           toggleCreateRepoDialog={toggleCreateRepoDialog}
         />
-        <AllWikis path="all-wikis" />
+        <AllWikis
+          path="all-wikis"
+          sortBy={sortBy}
+          perPage={perPage}
+          currentPage={currentPage}
+          onResetPerPage={onResetPerPage}
+        />
         <SystemRepo path="system-library" />
         <TrashRepos
           path="trash-libraries"
@@ -150,4 +142,4 @@ const DevicesAndLibrariesLayout = ({ ...commonProps }) => {
   );
 };
 
-export default DevicesAndLibrariesLayout;
+export default Libraries;

@@ -21,15 +21,13 @@ import StatisticReport from './statistic/statistic-reports';
 import StatisticMetrics from './statistic/statistic-metrics';
 import StatisticLayout from './statistic/layout';
 
-import DevicesAndLibrariesLayout from './libraries-and-devices-layout';
-
 import SearchUsers from './users/search-users';
 import User from './users/user-info';
 import UserOwnedRepos from './users/user-repos';
 import UserSharedRepos from './users/user-shared-repos';
 import UserLinks from './users/user-links';
 import UserGroups from './users/user-groups';
-import { UsersLayout, UserLayout } from './users/layout';
+import { UsersLayout, UserLayout } from './users';
 
 import SearchRepos from './repos/search-repos';
 import DirView from './repos/dir-view';
@@ -81,6 +79,15 @@ import AbuseReports from './abuse-reports';
 import '../../css/layout.css';
 import '../../css/toolbar.css';
 import Links from './links';
+import Devices from './devices';
+import DesktopDevices from './devices/desktop-devices';
+import MobileDevices from './devices/mobile-devices';
+import DeviceErrors from './devices/devices-errors';
+import Libraries from './repos';
+import AllRepos from './repos/all-repos';
+import AllWikis from './repos/all-wikis';
+import SystemRepo from './repos/system-repo';
+import TrashRepos from './repos/trash-repos';
 
 class SysAdmin extends React.Component {
   constructor(props) {
@@ -219,9 +226,13 @@ class SysAdmin extends React.Component {
               <StatisticReport path="reports" />
               <StatisticMetrics path="metrics" />
             </StatisticLayout>
-            <DevicesAndLibrariesLayout path={`${siteRoot}sys/*`} {...commonProps} />
+            <Libraries path={`${siteRoot}sys/libraries/`} {...commonProps} />
+            <Devices path={`${siteRoot}sys/devices/`}>
+              <DesktopDevices path="desktop" {...commonProps} />
+              <MobileDevices path="mobile" {...commonProps} />
+              <DeviceErrors path="errors" {...commonProps} />
+            </Devices>
             <SearchRepos path={siteRoot + 'sys/search-libraries'} {...commonProps} />
-            <DirView path={siteRoot + 'sys/libraries/:repoID/*'} {...commonProps} />
             <WebSettings path={siteRoot + 'sys/web-settings'} {...commonProps} />
             <Notifications path={siteRoot + 'sys/notifications'} {...commonProps} />
             <Groups path={siteRoot + 'sys/groups'} {...commonProps} />

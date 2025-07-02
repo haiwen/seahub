@@ -53,7 +53,7 @@ class Item extends Component {
     const item = this.props.item;
     return (
       <tr>
-        <td><Link to={`${siteRoot}sys/libraries/${item.id}/`}>{item.name}</Link></td>
+        <td><a href={`${siteRoot}sys/libraries/${item.id}/`}>{item.name}</a></td>
         <td>{item.id}</td>
         <td>{item.description}</td>
       </tr>

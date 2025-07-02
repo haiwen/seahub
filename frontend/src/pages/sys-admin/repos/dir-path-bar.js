@@ -53,8 +53,8 @@ class DirPath extends React.Component {
     return (
       <div className="path-container">
         {isSystemRepo ?
-          <a href={`${siteRoot}sys/system-library/`}>{gettext('System')}</a> :
-          <a href={`${siteRoot}sys/all-libraries/`}>{gettext('All')}</a>
+          <a href={`${siteRoot}sys/libraries/system/`}>{gettext('System')}</a> :
+          <a href={`${siteRoot}sys/libraries/all/`}>{gettext('All')}</a>
         }
         <span className="path-split">/</span>
         {(currentPath === '/' || currentPath === '') ?

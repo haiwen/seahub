@@ -30,7 +30,7 @@ class Nav extends React.Component {
     this.itemWidths = [];
   }
 
-  componentDidMout() {
+  componentDidMount() {
     this.itemWidths = this.itemRefs.map(ref => ref?.offsetWidth || 98);
   }
 
