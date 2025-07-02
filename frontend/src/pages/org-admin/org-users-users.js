@@ -102,10 +102,10 @@ class OrgUsers extends Component {
     });
   }
 
-  sortByQuotaUsage = () => {
+  sortByQuotaUsage = (sortBy, sortOrder) => {
     this.setState({
-      sortBy: 'quota_usage',
-      sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc',
+      sortBy: sortBy,
+      sortOrder: sortOrder,
       page: 1
     }, () => {
       let url = new URL(location.href);
@@ -309,7 +309,12 @@ class OrgUsers extends Component {
         <MainPanelTopbar children={topbarChildren} search={this.getSearch()}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <Nav currentItem="all" />
+            <Nav
+              currentItem="all"
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortItems={this.sortByQuotaUsage}
+            />
             <OrgUsersList
               initOrgUsersData={this.initOrgUsersData}
               toggleDelete={this.toggleOrgUsersDelete}
@@ -317,9 +322,6 @@ class OrgUsers extends Component {
               orgUsers={this.state.orgUsers}
               page={this.state.page}
               pageNext={this.state.pageNext}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortByQuotaUsage={this.sortByQuotaUsage}
             />
           </div>
         </div>
