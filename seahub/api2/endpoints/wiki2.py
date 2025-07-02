@@ -1836,7 +1836,9 @@ class ImportConfluenceView(APIView):
         
         try:
             zip_file_name = zip_file.name
-            zip_file_path = os.path.join(space_dir, zip_file_name)
+            zip_file_path = os.path.normpath(os.path.join(space_dir, zip_file_name))
+            if not zip_file_path.startswith(os.path.abspath(space_dir)):
+                raise ValueError("File path is outside the allowed directory")
             with ZipFile(zip_file_path, 'w') as zip_ref:
                 for root, _, files in os.walk(space_dir):
                     for file in files:
@@ -1917,8 +1919,12 @@ class ImportConfluenceView(APIView):
         save_wiki_config(wiki, username, wiki_config)
 
         # handle attachment
-        attachment_dir = os.path.join(space_dir, 'attachments')
-        image_dir = os.path.join(space_dir, 'images/')
+        attachment_dir = os.path.normpath(os.path.join(space_dir, 'attachments'))
+        image_dir = os.path.normpath(os.path.join(space_dir, 'images/'))
+        if not attachment_dir.startswith(os.path.abspath(space_dir)):
+            raise ValueError("Attachment directory path is outside the allowed directory")
+        if not image_dir.startswith(os.path.abspath(space_dir)):
+            raise ValueError("Image directory path is outside the allowed directory")
         exist_attachment_dir = os.path.exists(attachment_dir)
         exist_image_dir = os.path.exists(image_dir)
         if exist_attachment_dir or exist_image_dir:
