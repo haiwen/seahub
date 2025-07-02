@@ -1,20 +1,16 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Button } from 'reactstrap';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import LogsNav from './logs-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import ModalPortal from '../../../components/modal-portal';
 import CommitDetails from '../../../components/dialog/commit-details';
-import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
 import LogUserSelector from '../../dashboard/log-user-selector';
 import LogRepoSelector from '../../dashboard/log-repo-selector';
 
@@ -42,7 +38,7 @@ class Content extends Component {
         </EmptyTip>
       );
       const table = (
-        <Fragment>
+        <>
           <table className="table-hover">
             <thead>
               <tr>
@@ -71,7 +67,7 @@ class Content extends Component {
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
-        </Fragment>
+        </>
       );
       return items.length ? table : emptyTip;
     }
@@ -130,7 +126,7 @@ class Item extends Component {
   render() {
     let { item } = this.props;
     return (
-      <Fragment>
+      <>
         <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
           <td><UserLink email={item.email} name={item.name} /></td>
           <td>{dayjs(item.time).fromNow()}</td>
@@ -152,7 +148,7 @@ class Item extends Component {
             />
           </ModalPortal>
         }
-      </Fragment>
+      </>
     );
   }
 }
@@ -297,60 +293,44 @@ class FileUpdateLogs extends Component {
   };
 
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers, availableRepos, selectedRepos } = this.state;
+    let { logList, currentPage, perPage, hasNextPage, availableUsers, selectedUsers, availableRepos, selectedRepos } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
-        </MainPanelTopbar>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <LogsNav currentItem="fileUpdateLogs" />
-            <div className="cur-view-content">
-              <Fragment>
-                <div className="d-flex align-items-center mb-2">
-                  <LogUserSelector
-                    componentName={gettext('Users')}
-                    items={availableUsers}
-                    selectedItems={selectedUsers}
-                    onSelect={this.handleUserFilter}
-                    isOpen={this.state.openSelector === 'user'}
-                    onToggle={() => this.handleSelectorToggle('user')}
-                    searchUsersFunc={this.searchUsers}
-                  />
-                  <div className="mx-3"></div>
-                  <LogRepoSelector
-                    items={availableRepos}
-                    selectedItems={selectedRepos}
-                    onSelect={this.handleRepoFilter}
-                    isOpen={this.state.openSelector === 'repo'}
-                    onToggle={() => this.handleSelectorToggle('repo')}
-                    searchReposFunc={this.searchRepos}
-                  />
-                </div>
-                <Content
-                  loading={this.state.loading}
-                  errorMsg={this.state.errorMsg}
-                  items={logList}
-                  currentPage={currentPage}
-                  perPage={perPage}
-                  hasNextPage={hasNextPage}
-                  getLogsByPage={this.getLogsByPage}
-                  resetPerPage={this.resetPerPage}
-                />
-              </Fragment>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <div className="d-flex align-items-center mb-2">
+              <LogUserSelector
+                componentName={gettext('Users')}
+                items={availableUsers}
+                selectedItems={selectedUsers}
+                onSelect={this.handleUserFilter}
+                isOpen={this.state.openSelector === 'user'}
+                onToggle={() => this.handleSelectorToggle('user')}
+                searchUsersFunc={this.searchUsers}
+              />
+              <div className="mx-3"></div>
+              <LogRepoSelector
+                items={availableRepos}
+                selectedItems={selectedRepos}
+                onSelect={this.handleRepoFilter}
+                isOpen={this.state.openSelector === 'repo'}
+                onToggle={() => this.handleSelectorToggle('repo')}
+                searchReposFunc={this.searchRepos}
+              />
             </div>
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={logList}
+              currentPage={currentPage}
+              perPage={perPage}
+              hasNextPage={hasNextPage}
+              getLogsByPage={this.getLogsByPage}
+              resetPerPage={this.resetPerPage}
+            />
           </div>
         </div>
-        {isExportExcelDialogOpen &&
-        <ModalPortal>
-          <LogsExportExcelDialog
-            logType={'fileUpdate'}
-            toggle={this.toggleExportExcelDialog}
-          />
-        </ModalPortal>
-        }
-      </Fragment>
+      </div>
     );
   }
 }

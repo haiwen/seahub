@@ -1,20 +1,15 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { Button } from 'reactstrap';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
-import ModalPortal from '../../../components/modal-portal';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import LogsNav from './logs-nav';
 import LogUserSelector from '../../dashboard/log-user-selector';
 import LogRepoSelector from '../../dashboard/log-repo-selector';
 
@@ -42,7 +37,7 @@ class Content extends Component {
         </EmptyTip>
       );
       const table = (
-        <Fragment>
+        <>
           <table className="table-hover">
             <thead>
               <tr>
@@ -74,7 +69,7 @@ class Content extends Component {
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
-        </Fragment>
+        </>
       );
       return items.length ? table : emptyTip;
     }
@@ -333,73 +328,57 @@ class SharePermissionLogs extends Component {
 
   render() {
     let {
-      logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen,
+      logList, currentPage, perPage, hasNextPage,
       availableUsers, selectedFromUsers, selectedToUsers,
       selectedToGroups, availableRepos, selectedRepos, openSelector
     } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
-        </MainPanelTopbar>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <LogsNav currentItem="sharePermissionLogs" />
-            <div className="cur-view-content">
-              <Fragment>
-                <div className="d-flex align-items-center mb-2">
-                  <LogUserSelector
-                    componentName={gettext('Share From')}
-                    items={availableUsers}
-                    selectedItems={selectedFromUsers}
-                    onSelect={this.handleFromUserFilter}
-                    isOpen={openSelector === 'fromUser'}
-                    onToggle={() => this.handleSelectorToggle('fromUser')}
-                    searchUsersFunc={this.searchUsers}
-                  />
-                  <LogUserSelector
-                    componentName={gettext('Share To')}
-                    items={availableUsers}
-                    selectedItems={[...selectedToUsers, ...selectedToGroups]}
-                    onSelect={this.handleToUserFilter}
-                    isOpen={openSelector === 'toUser'}
-                    onToggle={() => this.handleSelectorToggle('toUser')}
-                    searchUsersFunc={this.searchUsers}
-                    searchGroupsFunc={this.searchGroups}
-                  />
-                  <div className="mx-3"></div>
-                  <LogRepoSelector
-                    items={availableRepos}
-                    selectedItems={selectedRepos}
-                    onSelect={this.handleRepoFilter}
-                    isOpen={openSelector === 'repo'}
-                    onToggle={() => this.handleSelectorToggle('repo')}
-                    searchReposFunc={this.searchRepos}
-                  />
-                </div>
-                <Content
-                  loading={this.state.loading}
-                  errorMsg={this.state.errorMsg}
-                  items={logList}
-                  currentPage={currentPage}
-                  perPage={perPage}
-                  hasNextPage={hasNextPage}
-                  getLogsByPage={this.getLogsByPage}
-                  resetPerPage={this.resetPerPage}
-                />
-              </Fragment>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <div className="d-flex align-items-center mb-2">
+              <LogUserSelector
+                componentName={gettext('Share From')}
+                items={availableUsers}
+                selectedItems={selectedFromUsers}
+                onSelect={this.handleFromUserFilter}
+                isOpen={openSelector === 'fromUser'}
+                onToggle={() => this.handleSelectorToggle('fromUser')}
+                searchUsersFunc={this.searchUsers}
+              />
+              <LogUserSelector
+                componentName={gettext('Share To')}
+                items={availableUsers}
+                selectedItems={[...selectedToUsers, ...selectedToGroups]}
+                onSelect={this.handleToUserFilter}
+                isOpen={openSelector === 'toUser'}
+                onToggle={() => this.handleSelectorToggle('toUser')}
+                searchUsersFunc={this.searchUsers}
+                searchGroupsFunc={this.searchGroups}
+              />
+              <div className="mx-3"></div>
+              <LogRepoSelector
+                items={availableRepos}
+                selectedItems={selectedRepos}
+                onSelect={this.handleRepoFilter}
+                isOpen={openSelector === 'repo'}
+                onToggle={() => this.handleSelectorToggle('repo')}
+                searchReposFunc={this.searchRepos}
+              />
             </div>
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={logList}
+              currentPage={currentPage}
+              perPage={perPage}
+              hasNextPage={hasNextPage}
+              getLogsByPage={this.getLogsByPage}
+              resetPerPage={this.resetPerPage}
+            />
           </div>
         </div>
-        {isExportExcelDialogOpen &&
-        <ModalPortal>
-          <LogsExportExcelDialog
-            logType={'sharePermission'}
-            toggle={this.toggleExportExcelDialog}
-          />
-        </ModalPortal>
-        }
-      </Fragment>
+      </div>
     );
   }
 }

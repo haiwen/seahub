@@ -9,9 +9,7 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import LogsNav from './logs-nav';
 import LogUserSelector from '../../dashboard/log-user-selector';
 import LogRepoSelector from '../../dashboard/log-repo-selector';
 
@@ -422,68 +420,62 @@ class FIleTransferLogs extends Component {
     ];
 
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <LogsNav currentItem="fileTransfer" />
-            <div className="cur-view-content">
-              <Fragment>
-                <div className="d-flex align-items-center mb-2">
-                  <LogUserSelector
-                    componentName={gettext('Transfer From')}
-                    items={availableUsers}
-                    selectedItems={selectedFromUsers}
-                    onSelect={this.handleFromUserFilter}
-                    isOpen={openSelector === 'fromUser'}
-                    onToggle={() => this.handleSelectorToggle('fromUser')}
-                    searchUsersFunc={this.searchUsers}
-                    searchGroupsFunc={this.searchGroups}
-                  />
-                  <LogUserSelector
-                    componentName={gettext('Transfer To')}
-                    items={availableUsers}
-                    selectedItems={selectedToItems}
-                    onSelect={this.handleToUserFilter}
-                    isOpen={openSelector === 'toUser'}
-                    onToggle={() => this.handleSelectorToggle('toUser')}
-                    searchUsersFunc={this.searchUsers}
-                    searchGroupsFunc={this.searchGroups}
-                  />
-                  <LogUserSelector
-                    componentName={gettext('Operator')}
-                    items={availableUsers}
-                    selectedItems={selectedOperators}
-                    onSelect={this.handleOperatorFilter}
-                    isOpen={openSelector === 'operator'}
-                    onToggle={() => this.handleSelectorToggle('operator')}
-                    searchUsersFunc={this.searchUsers}
-                  />
-                  <div className="mx-3"></div>
-                  <LogRepoSelector
-                    items={availableRepos}
-                    selectedItems={selectedRepos}
-                    onSelect={this.handleRepoFilter}
-                    isOpen={openSelector === 'repo'}
-                    onToggle={() => this.handleSelectorToggle('repo')}
-                    searchReposFunc={this.searchRepos}
-                  />
-                </div>
-                <Content
-                  loading={this.state.loading}
-                  errorMsg={this.state.errorMsg}
-                  items={logList}
-                  currentPage={currentPage}
-                  perPage={perPage}
-                  hasNextPage={hasNextPage}
-                  getLogsByPage={this.getLogsByPage}
-                  resetPerPage={this.resetPerPage}
-                />
-              </Fragment>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <div className="d-flex align-items-center mb-2">
+              <LogUserSelector
+                componentName={gettext('Transfer From')}
+                items={availableUsers}
+                selectedItems={selectedFromUsers}
+                onSelect={this.handleFromUserFilter}
+                isOpen={openSelector === 'fromUser'}
+                onToggle={() => this.handleSelectorToggle('fromUser')}
+                searchUsersFunc={this.searchUsers}
+                searchGroupsFunc={this.searchGroups}
+              />
+              <LogUserSelector
+                componentName={gettext('Transfer To')}
+                items={availableUsers}
+                selectedItems={selectedToItems}
+                onSelect={this.handleToUserFilter}
+                isOpen={openSelector === 'toUser'}
+                onToggle={() => this.handleSelectorToggle('toUser')}
+                searchUsersFunc={this.searchUsers}
+                searchGroupsFunc={this.searchGroups}
+              />
+              <LogUserSelector
+                componentName={gettext('Operator')}
+                items={availableUsers}
+                selectedItems={selectedOperators}
+                onSelect={this.handleOperatorFilter}
+                isOpen={openSelector === 'operator'}
+                onToggle={() => this.handleSelectorToggle('operator')}
+                searchUsersFunc={this.searchUsers}
+              />
+              <div className="mx-3"></div>
+              <LogRepoSelector
+                items={availableRepos}
+                selectedItems={selectedRepos}
+                onSelect={this.handleRepoFilter}
+                isOpen={openSelector === 'repo'}
+                onToggle={() => this.handleSelectorToggle('repo')}
+                searchReposFunc={this.searchRepos}
+              />
             </div>
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={logList}
+              currentPage={currentPage}
+              perPage={perPage}
+              hasNextPage={hasNextPage}
+              getLogsByPage={this.getLogsByPage}
+              resetPerPage={this.resetPerPage}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

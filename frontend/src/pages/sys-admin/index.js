@@ -88,6 +88,7 @@ import AllRepos from './repos/all-repos';
 import AllWikis from './repos/all-wikis';
 import SystemRepo from './repos/system-repo';
 import TrashRepos from './repos/trash-repos';
+import Logs from './logs-page';
 
 class SysAdmin extends React.Component {
   constructor(props) {
@@ -251,12 +252,14 @@ class SysAdmin extends React.Component {
             <InstitutionInfo path={siteRoot + 'sys/institutions/:institutionID/info'} {...commonProps} />
             <InstitutionUsers path={siteRoot + 'sys/institutions/:institutionID/members'} {...commonProps} />
             <InstitutionAdmins path={siteRoot + 'sys/institutions/:institutionID/admins'} {...commonProps} />
-            <LoginLogs path={siteRoot + 'sys/logs/login'} {...commonProps} />
-            <FileAccessLogs path={siteRoot + 'sys/logs/file-access'} {...commonProps} />
-            <FIleTransferLogs path={siteRoot + 'sys/logs/repo-transfer'} {...commonProps} />
-            <GroupMemberAuditLogs path={siteRoot + 'sys/logs/group-member-audit'} {...commonProps} />
-            <FileUpdateLogs path={siteRoot + 'sys/logs/file-update'} {...commonProps} />
-            <SharePermissionLogs path={siteRoot + 'sys/logs/share-permission'} {...commonProps} />
+            <Logs path={`${siteRoot}sys/logs/`} {...commonProps}>
+              <LoginLogs path="login" {...commonProps} />
+              <FileAccessLogs path="file-access" {...commonProps} />
+              <FIleTransferLogs path="repo-transfer" {...commonProps} />
+              <GroupMemberAuditLogs path="group-member-audit" {...commonProps} />
+              <FileUpdateLogs path="file-update" {...commonProps} />
+              <SharePermissionLogs path="share-permission" {...commonProps} />
+            </Logs>
             <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />
             <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} {...commonProps} />
             <UsersLayout path={`${siteRoot}sys/users/*`} {...commonProps} />
