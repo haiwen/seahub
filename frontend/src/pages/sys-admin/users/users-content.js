@@ -57,8 +57,7 @@ class Content extends Component {
   render() {
     const {
       isAdmin, loading, errorMsg, items, isAllUsersSelected,
-      curPerPage, hasNextPage, currentPage,
-      sortBy, sortOrder
+      curPerPage, hasNextPage, currentPage
     } = this.props;
 
     if (loading) {
@@ -68,20 +67,7 @@ class Content extends Component {
     } else {
       let columns = [];
 
-      let sortIcon;
-      if (sortBy == '') {
-        // initial sort icon
-        sortIcon = <span className="sf3-font sf3-font-sort3"></span>;
-      } else {
-        sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
-      }
-      const spaceText = gettext('Space Used');
-      const spaceEl =
-        sortBy != undefined ? // only offer 'sort' for 'DB' & 'LDAPImported' users
-          <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{spaceText} {sortIcon}</a> :
-          spaceText;
-      const colSpaceText = <Fragment>{spaceEl}{` / ${gettext('Quota')}`}</Fragment>;
-
+      const colSpaceText = `${gettext('Space Used')} / ${gettext('Quota')}`;
       const colNameText = `${gettext('Name')} / ${gettext('Contact Email')}`;
       const colCreatedText = `${gettext('Created At')} / ${gettext('Last Login')} / ${gettext('Last Access')}`;
       if (isPro) {
