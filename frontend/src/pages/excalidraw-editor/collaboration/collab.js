@@ -1,44 +1,35 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
-import SocketClient from './socket-client';
-import EventBus from '../utils/event-bus';
-import { CURSOR_SYNC_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS } from '../constants';
+import io from 'socket.io-client';
+import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS } from '../constants';
 import { getSyncableElements } from '../data';
-import { saveToServerStorage } from '../data/server-storage';
+import { loadFromServerStorage, saveToServerStorage } from '../data/server-storage';
+import Portal from './portal';
+import { resolvablePromise } from '../utils/exdraw-utils';
+import { serverDebug } from '../utils/debug';
 
-class SocketManager {
+class Collab {
 
-  constructor(excalidrawAPI, document, config) {
+  constructor(excalidrawAPI, config) {
     this.excalidrawAPI = excalidrawAPI;
-    this.document = document;
-    this.eventBus = EventBus.getInstance();
+    this.config = config;
+    this.document = null;
 
-    this.socketClient = new SocketClient(config);
     this.collaborators = new Map();
     const { user } = config;
     this.collaborators.set(user._username, user, { isCurrentUser: true });
-    this.lastBroadcastedOrReceivedSceneVersion = 0;
-    if (document && document.elements) {
-      this.lastBroadcastedOrReceivedSceneVersion = getSceneVersion(document.elements);
-    }
     this.excalidrawAPI.updateScene({ collaborators: this.collaborators });
+
+    this.lastBroadcastedOrReceivedSceneVersion = 0;
+    this.portal = new Portal(this, config);
   }
 
-  static getInstance = (excalidrawAPI, document, socketConfig) => {
-    if (this.instance) {
-      return this.instance;
-    }
-
-    if (!document || !socketConfig) {
-      throw new Error('SocketManager init params is invalid. Place check your code to fix it.');
-    }
-
-    this.instance = new SocketManager(excalidrawAPI, document, socketConfig);
-    return this.instance;
+  setDocument = (document) => {
+    this.document = document;
   };
 
   getSocketId = () => {
-    return this.socketClient.socket?.id;
+    return this.portal.socket?.id;
   };
 
   getLastBroadcastedOrReceivedSceneVersion = () => {
@@ -62,6 +53,107 @@ class SocketManager {
     this.document['version'] = version;
   };
 
+  initializeRoom = async (fetchScene) => {
+    clearTimeout(this.socketInitializationTimer);
+    if (this.portal.socket && this.fallbackInitializationHandler) {
+      this.portal.socket.off('connect_error', this.fallbackInitializationHandler);
+    }
+    if (fetchScene && this.portal.socket) {
+      this.excalidrawAPI.resetScene();
+
+      try {
+        const document = await loadFromServerStorage();
+        const { elements } = document;
+        if (elements) {
+          const version = getSceneVersion(elements);
+          this.setLastBroadcastedOrReceivedSceneVersion(version);
+          this.setDocument(document);
+          return {
+            elements,
+            scrollToContent: true,
+          };
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      } finally {
+        this.portal.socketInitialized = true;
+      }
+    } else {
+      this.portal.socketInitialized = true;
+    }
+
+    return null;
+  };
+
+  startCollaboration = async () => {
+    if (this.portal.socket) return;
+
+    const scenePromise = resolvablePromise();
+    const fallbackInitializationHandler = () => {
+      this.initializeRoom(true).then(scene => {
+        scenePromise.resolve(scene);
+      });
+    };
+
+    this.fallbackInitializationHandler = fallbackInitializationHandler;
+
+    const config = this.config;
+    try {
+      const socket = io(`${config.exdrawServer}/exdraw`, {
+        auth: { token: config.accessToken },
+        query: {
+          'sdoc_uuid': config.docUuid,
+        }
+      });
+      this.portal.socket = this.portal.open(socket);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      return null;
+    }
+
+    this.socketInitializationTimer = window.setTimeout(
+      fallbackInitializationHandler,
+      INITIAL_SCENE_UPDATE_TIMEOUT,
+    );
+
+    this.portal.socket.on('first-in-room', async () => {
+      if (this.portal.socket) {
+        serverDebug('first in room message');
+        this.portal.socket.off('first-in-room');
+      }
+      const sceneData = await this.initializeRoom(true);
+      scenePromise.resolve(sceneData);
+    });
+
+    this.portal.socket.on('sync-with-another', (params) => {
+      if (!this.portal.socketInitialized) {
+        this.initializeRoom({ fetchScene: false });
+        const { elements } = params;
+        this.onReceiveRemoteOperations(params);
+        this.setDocument(params);
+        scenePromise.resolve({ elements, scrollToContent: true });
+      }
+    });
+
+    return scenePromise;
+  };
+
+  stopCollaboration = () => {
+    this.queueBroadcastAllElements.cancel();
+    this.queueSaveToServerStorage.cancel();
+
+    const elements = getSyncableElements(this.excalidrawAPI.getSceneElementsIncludingDeleted());
+    this.saveCollabRoomToServerStorage(elements);
+
+    if (this.portal.socket && this.fallbackInitializationHandler) {
+      this.portal.socket.off('connect_error', this.fallbackInitializationHandler);
+    }
+
+    this.destroySocketClient();
+  };
+
   syncElements = (elements) => {
     this.broadcastElements(elements);
     this.queueSaveToServerStorage();
@@ -69,7 +161,7 @@ class SocketManager {
 
   broadcastElements = (elements) => {
     if (getSceneVersion(elements) > this.getLastBroadcastedOrReceivedSceneVersion()) {
-      this.socketClient.broadcastElements(elements, false);
+      this.portal.broadcastScene(elements, false);
       this.lastBroadcastedOrReceivedSceneVersion = getSceneVersion(elements);
       this.queueBroadcastAllElements();
     }
@@ -77,7 +169,7 @@ class SocketManager {
 
   queueBroadcastAllElements = throttle(() => {
     const elements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
-    this.socketClient.broadcastElements(elements, true);
+    this.portal.broadcastScene(elements, true);
 
     const currentVersion = this.getLastBroadcastedOrReceivedSceneVersion();
     const newVersion = Math.max(currentVersion, getSceneVersion(elements));
@@ -96,7 +188,7 @@ class SocketManager {
   saveCollabRoomToServerStorage = async (elements) => {
     const version = this.getDocumentVersion();
     const exdrawContent = { version, elements };
-    const socket = this.socketClient.socket;
+    const socket = this.portal.socket;
     const result = await saveToServerStorage(socket.id, exdrawContent, this.excalidrawAPI.getAppState());
 
     if (!result) return;
@@ -127,7 +219,7 @@ class SocketManager {
   syncPointer = throttle((payload) => {
     if (payload.pointersMap.size < 2) {
       const { pointer, button } = payload;
-      this.socketClient.broadcastMouseLocation({ pointer, button });
+      this.portal.broadcastMouseLocation({ pointer, button });
     }
   }, CURSOR_SYNC_TIMEOUT);
 
@@ -165,15 +257,12 @@ class SocketManager {
   };
 
   dispatchConnectState = (type, message) => {
-    if (type === 'leave-room') {
-      this.editor.onCursor && this.editor.onCursor(this.editor.cursors);
-    }
-
     this.eventBus.dispatch(type, message);
   };
 
-  closeSocketConnect = () => {
-    this.socketClient.disconnectWithServer();
+  destroySocketClient = () => {
+    this.lastBroadcastedOrReceivedSceneVersion = -1;
+    this.portal.close();
   };
 
   static destroy = () => {
@@ -182,4 +271,4 @@ class SocketManager {
 
 }
 
-export default SocketManager;
+export default Collab;

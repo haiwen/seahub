@@ -16,3 +16,15 @@ export const preventUnload = (event) => {
   // NOTE: modern browsers no longer allow showing a custom message here
   event.returnValue = '';
 };
+
+export const resolvablePromise = () => {
+  let resolve = null;
+  let reject = null;
+  const promise = new Promise((_resolve, _reject) => {
+    resolve = _resolve;
+    reject = _reject;
+  });
+  promise.resolve = resolve;
+  promise.reject = reject;
+  return promise;
+};
