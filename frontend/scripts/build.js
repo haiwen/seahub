@@ -1,4 +1,4 @@
-'use strict';
+
 
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'production';
@@ -40,7 +40,7 @@ const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
-//! integrate to django, unneed this step
+// ! integrate to django, unneed this step
 // if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 //   process.exit(1);
 // }
@@ -65,7 +65,7 @@ checkBrowsers(paths.appPath, isInteractive)
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
     // Merge with the public folder
-    //! seafile: no need do this
+    // ! seafile: no need do this
     // copyPublicFolder();
     // Start the webpack build
     return build(previousFileSizes);
@@ -137,6 +137,9 @@ checkBrowsers(paths.appPath, isInteractive)
 // Create the production build and print the deployment instructions.
 function build(previousFileSizes) {
   console.log('Creating an optimized production build...');
+
+  const { publicPath, ...rest } = config.output;
+  config.output = rest;
 
   const compiler = webpack(config);
   return new Promise((resolve, reject) => {
