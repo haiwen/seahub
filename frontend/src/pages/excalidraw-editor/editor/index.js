@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Excalidraw, MainMenu, useHandleLibrary } from '@excalidraw/excalidraw';
-import isHotkey from 'is-hotkey';
-import Loading from '../../../components/loading';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Excalidraw, MainMenu, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
+import Collab from '../collaboration/collab';
+import context from '../context';
+import { importFromLocalStorage, saveToLocalStorage } from '../data/local-storage';
+import { resolvablePromise } from '../utils/exdraw-utils';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -18,61 +20,82 @@ const UIOptions = {
   tools: { image: false },
 };
 
-const hasChanged = (elements, oldElements) => {
-  if (elements.length !== oldElements.length) return true;
+const initializeScene = async (collabAPI) => {
+  // load local data from localstorage
+  const localDataState = importFromLocalStorage(); // {appState, elements}
 
-  return elements.some((element, index) => {
-    return element.version !== oldElements[index]?.version;
-  });
+  let data = null;
+  // load remote data from server
+  if (collabAPI) {
+    const screen = await collabAPI.startCollaboration();
+    const { elements } = screen;
+    const restoredRemoteElements = restoreElements(elements, null);
+
+    const reconciledElements = reconcileElements(
+      localDataState.elements,
+      restoredRemoteElements,
+      localDataState.appState,
+    );
+    data = {
+      elements: reconciledElements,
+      appState: localDataState.appState,
+    };
+  } else {
+    data = restore(localDataState || null, null, null, {
+      repairBindings: true,
+    });
+  }
+
+  return {
+    screen: data
+  };
 };
 
-const SimpleEditor = ({ sceneContent = null, onChangeContent, onSaveContent, isFetching }) => {
+const SimpleEditor = () => {
+  const collabAPIRef = useRef(null);
+  const initialStatePromiseRef = useRef({ promise: null });
+  if (!initialStatePromiseRef.current.promise) {
+    initialStatePromiseRef.current.promise = resolvablePromise();
+  }
+
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
-  const prevElementsRef = useRef();
 
   useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
 
-  const handleChange = () => {
-    if (!prevElementsRef.current) {
-      prevElementsRef.current = sceneContent?.elements || [];
-    }
-
-    const elements = excalidrawAPI.getSceneElements();
-    if (hasChanged(elements, prevElementsRef.current)) {
-      onChangeContent(elements);
-      prevElementsRef.current = elements;
-    }
-
-  };
-
   useEffect(() => {
-    const handleHotkeySave = (event) => {
-      if (isHotkey('mod+s', event)) {
-        event.preventDefault();
-        onSaveContent(excalidrawAPI.getSceneElements());
-      }
-    };
+    if (!excalidrawAPI) return;
 
-    document.addEventListener('keydown', handleHotkeySave, true);
-    return () => {
-      document.removeEventListener('keydown', handleHotkeySave, true);
-    };
-  }, [excalidrawAPI, onSaveContent]);
+    context.initSettings().then(() => {
+      const config = context.getSettings();
+      const collabAPI = new Collab(excalidrawAPI, config);
+      collabAPIRef.current = collabAPI;
 
-  if (isFetching) {
-    return (
-      <div className='excali-container'>
-        <Loading />
-      </div>
-    );
-  }
+      initializeScene(collabAPI).then(async (data) => {
+        initialStatePromiseRef.current.promise.resolve(data.screen);
+      });
+    });
+
+  }, [excalidrawAPI]);
+
+  const handleChange = useCallback((elements, appState, files) => {
+    if (!collabAPIRef.current) return;
+    collabAPIRef.current.syncElements(elements);
+
+    saveToLocalStorage(elements, appState);
+  }, []);
+
+  const handlePointerUpdate = useCallback((payload) => {
+    if (!collabAPIRef.current) return;
+    collabAPIRef.current.syncPointer(payload);
+  }, []);
 
   return (
     <div className='excali-container' style={{ height: '100%', width: '100%' }}>
       <Excalidraw
-        initialData={sceneContent}
+        initialData={initialStatePromiseRef.current.promise}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
         onChange={handleChange}
+        onPointerUpdate={handlePointerUpdate}
         UIOptions={UIOptions}
         langCode={langList[window.app.config.lang] || 'en'}
       >
