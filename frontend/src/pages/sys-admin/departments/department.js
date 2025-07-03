@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import SortMenu from '../../../components/sort-menu';
 import Paginator from '../../../components/paginator';
 import Loading from '../../../components/loading';
 import EmptyTip from '../../../components/empty-tip';
@@ -41,6 +42,13 @@ class Department extends React.Component {
       showDeleteRepoDialog: false,
       dropdownOpen: false,
     };
+
+    this.sortOptions = [
+      { value: 'name-asc', text: gettext('Ascending by name') },
+      { value: 'name-desc', text: gettext('Descending by name') },
+      { value: 'role-asc', text: gettext('Ascending by role') },
+      { value: 'role-desc', text: gettext('Descending by role') }
+    ];
   }
 
   componentDidMount() {
@@ -95,19 +103,8 @@ class Department extends React.Component {
     return currentDepartment;
   };
 
-  sortByName = (e) => {
-    e.preventDefault();
-    const sortBy = 'name';
-    let { sortOrder } = this.props;
-    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-    this.props.sortItems(sortBy, sortOrder);
-  };
-
-  sortByRole = (e) => {
-    e.preventDefault();
-    const sortBy = 'role';
-    let { sortOrder } = this.props;
-    sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+  onSelectSortOption = (item) => {
+    const [sortBy, sortOrder] = item.value.split('-');
     this.props.sortItems(sortBy, sortOrder);
   };
 
@@ -129,9 +126,7 @@ class Department extends React.Component {
   render() {
     const { activeNav, repos } = this.state;
     const { membersList, isMembersListLoading, sortBy, sortOrder } = this.props;
-    const sortByName = sortBy === 'name';
-    const sortByRole = sortBy === 'role';
-    const sortIcon = <span className={`sort-dirent sf3-font sf3-font-down ${sortOrder === 'asc' ? 'rotate-180' : ''}`}></span>;
+    const showSortIcon = activeNav == 'members';
     const currentDepartment = this.getCurrentDepartment();
 
     return (
@@ -173,6 +168,15 @@ class Department extends React.Component {
               <span className={`nav-link ${activeNav === 'repos' ? 'active' : ''}`} onClick={() => this.changeActiveNav('repos')}>{gettext('Libraries')}</span>
             </li>
           </ul>
+
+          {showSortIcon &&
+          <SortMenu
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            sortOptions={this.sortOptions}
+            onSelectSortOption={this.onSelectSortOption}
+          />
+          }
         </div>
 
         {activeNav === 'members' && (
@@ -187,8 +191,8 @@ class Department extends React.Component {
                       <thead>
                         <tr>
                           <th width="10%"></th>
-                          <th width="25%" onClick={this.sortByName}>{gettext('Name')}{' '}{sortByName && sortIcon}</th>
-                          <th width="25%" onClick={this.sortByRole}>{gettext('Role')}{' '}{sortByRole && sortIcon}</th>
+                          <th width="25%">{gettext('Name')}</th>
+                          <th width="25%">{gettext('Role')}</th>
                           <th width="30%">{gettext('Contact email')}</th>
                           <th width="10%">{/* Operations */}</th>
                         </tr>
