@@ -26,7 +26,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import sdoc_export_to_md
+from seahub.api2.endpoints.utils import sdoc_export_to_md, convert_file
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
 from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, get_service_url, gen_file_upload_url
@@ -1772,7 +1772,7 @@ class Wiki2ImportPageView(APIView):
         
         filename = file.name
         extension = filename.split('.')[-1].lower()
-        if extension not in  ['sdoc', 'sdoczip']:
+        if extension not in  ['sdoczip', 'docx', 'md']:
             error_msg = 'file invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -1780,9 +1780,8 @@ class Wiki2ImportPageView(APIView):
         if not wiki:
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        repo_owner = get_repo_owner(request, wiki_id)
-        wiki.owner = repo_owner
+        repo_id = wiki.repo_id
+        wiki.owner = get_repo_owner(request, wiki_id)
         username = request.user.username
         if not check_wiki_admin_permission(wiki, username):
             error_msg = 'Permission denied.'
@@ -1807,8 +1806,12 @@ class Wiki2ImportPageView(APIView):
            
         if extension == 'sdoczip':
             FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, filename[:-3], is_dir=False)
-        else:
-            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, filename, is_dir=False)
+        elif extension == 'docx':
+            uuid_filename = f'{filename.split(extension)[0]}sdoc'
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, uuid_filename, is_dir=False)
+        elif extension == 'md':
+            uuid_filename = f'{filename.split(extension)[0]}sdoc'
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, uuid_filename, is_dir=False)
         id_set = get_all_wiki_ids(navigation)
         new_page_id = gen_unique_id(id_set)
         dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
@@ -1833,7 +1836,21 @@ class Wiki2ImportPageView(APIView):
         
         upload_link = gen_file_upload_url(token, 'upload-api')
         upload_link += '?ret-json=1'
-        if extension == 'sdoczip':
+        if extension == 'md' or extension == 'docx':
+            src_type = 'docx' if extension == 'docx' else 'markdown'
+            files = {'file': file}
+            data = {'parent_dir': parent_dir, 'replace': 1}
+            resp = requests.post(upload_link, files=files, data=data)
+            if not resp.ok:
+                logger.error('save file: %s failed: %s' % (filename, resp.text))
+                return api_error(resp.status_code, resp.content)
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
+            download_url = gen_file_get_url(download_token, filename)
+            convert_file(file_path, username, str(sdoc_uuid), download_url, upload_link, src_type, 'sdoc')
+            file_path = os.path.join(parent_dir, uuid_filename)
+
+        elif extension == 'sdoczip':
             file_path = file_path[:-3]
             tmp_dir = str(uuid.uuid4())
             tmp_root_dir = os.path.join('/tmp/seahub', str(repo_id))
@@ -1869,16 +1886,6 @@ class Wiki2ImportPageView(APIView):
             # remove tmp dir
             if os.path.exists(tmp_root_dir):
                 shutil.rmtree(tmp_root_dir)
-        else: # sdoc
-            content_type = 'application/octet-stream'
-            # upload file
-            response = requests.post(upload_link, data={'parent_dir': parent_dir, 'replace': 1}, files={
-                'file': (filename, file, content_type)
-            })
-            if response.status_code != 200:
-                logger.error('upload: %s status code: %s', upload_link, response.status_code)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         new_page = {
             'id': new_page_id,
@@ -1897,11 +1904,18 @@ class Wiki2ImportPageView(APIView):
             'type': 'page',
         }
         navigation.append(new_nav)
-        print(navigation, '----navigation')
         wiki_config['navigation'] = navigation
         wiki_config['pages'] = pages
         wiki_config = json.dumps(wiki_config)
         save_wiki_config(wiki, request.user.username, wiki_config)
+
+        try:
+            # remove tmp md/docx
+            if extension in ['md', 'docx']:
+                seafile_api.del_file(repo_id, parent_dir,
+                            json.dumps([filename]), username)
+        except SearpcError as e:
+            logger.warning(e)
 
         return Response({
             'page_id': new_page_id,

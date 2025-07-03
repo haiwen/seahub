@@ -65,7 +65,7 @@ export default class PageDropdownMenu extends Component {
     const { page } = this.props;
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.sdoc,.sdoczip';
+    fileInput.accept = '.sdoczip,.docx,.md';
     fileInput.style.display = 'none';
 
     fileInput.addEventListener('change', (e) => {
@@ -155,7 +155,7 @@ export default class PageDropdownMenu extends Component {
             </DropdownItem>
           )}
           <DropdownItem onClick={this.importPage}>
-            <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
+            <i className="sf3-font sf3-font-import-sdoc" aria-hidden="true" />
             <span className="item-text">{gettext('Import page')}</span>
           </DropdownItem>
           <hr className='divider' />
