@@ -175,7 +175,7 @@ class Collab {
 
   broadcastElements = (elements) => {
     if (getSceneVersion(elements) > this.getLastBroadcastedOrReceivedSceneVersion()) {
-      this.portal.broadcastScene(elements, false);
+      this.portal.broadcastScene(WS_SUBTYPES.UPDATE, elements, false);
       this.lastBroadcastedOrReceivedSceneVersion = getSceneVersion(elements);
       this.queueBroadcastAllElements();
     }
@@ -183,7 +183,7 @@ class Collab {
 
   queueBroadcastAllElements = throttle(() => {
     const elements = this.excalidrawAPI.getSceneElementsIncludingDeleted();
-    this.portal.broadcastScene(elements, true);
+    this.portal.broadcastScene(WS_SUBTYPES.UPDATE, elements, true);
 
     const currentVersion = this.getLastBroadcastedOrReceivedSceneVersion();
     const newVersion = Math.max(currentVersion, getSceneVersion(elements));
