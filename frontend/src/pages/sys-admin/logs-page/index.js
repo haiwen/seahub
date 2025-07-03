@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import MainPanelTopbar from '../main-panel-topbar';
 import { Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
@@ -37,7 +37,7 @@ const Logs = ({ children, ...commonProps }) => {
         </MainPanelTopbar>
       )}
       <LogsNav currentItem={curTab} {...commonProps} />
-      {children}
+      <div className="h-100 d-flex overflow-auto">{children}</div>
       {isExportExcelDialogOpen &&
         <ModalPortal>
           <LogsExportExcelDialog

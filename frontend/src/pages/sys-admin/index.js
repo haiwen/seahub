@@ -89,6 +89,8 @@ import AllWikis from './repos/all-wikis';
 import SystemRepo from './repos/system-repo';
 import TrashRepos from './repos/trash-repos';
 import Logs from './logs-page';
+import VirusScan from './virus-scan';
+import AdminLogs from './admin-logs';
 
 class SysAdmin extends React.Component {
   constructor(props) {
@@ -260,21 +262,25 @@ class SysAdmin extends React.Component {
               <FileUpdateLogs path="file-update" {...commonProps} />
               <SharePermissionLogs path="share-permission" {...commonProps} />
             </Logs>
-            <AdminOperationLogs path={siteRoot + 'sys/admin-logs/operation'} {...commonProps} />
-            <AdminLoginLogs path={siteRoot + 'sys/admin-logs/login'} {...commonProps} />
+            <AdminLogs path={`${siteRoot}sys/admin-logs/`} {...commonProps}>
+              <AdminOperationLogs path="operation" />
+              <AdminLoginLogs path="login" />
+            </AdminLogs>
             <UsersLayout path={`${siteRoot}sys/users/*`} {...commonProps} />
             <SearchUsers path={siteRoot + 'sys/search-users'} {...commonProps} />
             <UserLayout path={`${siteRoot}sys/user/:email/`} {...commonProps} >
-              <User path="/" {...commonProps} />
-              <UserOwnedRepos path="owned-libraries" {...commonProps} />
-              <UserSharedRepos path="shared-libraries" {...commonProps} />
-              <UserLinks path="shared-links" {...commonProps} />
-              <UserGroups path="groups" {...commonProps} />
+              <User path="/" />
+              <UserOwnedRepos path="owned-libraries" />
+              <UserSharedRepos path="shared-libraries" />
+              <UserLinks path="shared-links" />
+              <UserGroups path="groups" />
             </UserLayout>
             <Invitations path={siteRoot + 'sys/invitations'} {...commonProps} />
             <TermsAndConditions path={siteRoot + 'sys/terms-and-conditions/'} {...commonProps} />
-            <AllVirusFiles path={siteRoot + 'sys/virus-files/all'} {...commonProps} />
-            <UnhandledVirusFiles path={siteRoot + 'sys/virus-files/unhandled'} {...commonProps} />
+            <VirusScan path={`${siteRoot}sys/virus-files/`} {...commonProps}>
+              <AllVirusFiles path="all" />
+              <UnhandledVirusFiles path="unhandled" />
+            </VirusScan>
             <FileScanRecords path={siteRoot + 'sys/file-scan-records'} {...commonProps} />
             <WorkWeixinDepartments path={siteRoot + 'sys/work-weixin'} {...commonProps} />
             <DingtalkDepartments path={siteRoot + 'sys/dingtalk'} {...commonProps} />

@@ -39,4 +39,5 @@ export const EVENT_BUS_TYPE = {
   SYNC_USERNAME: 'sync_username',
   OPEN_CREATE_REPO_DIALOG: 'open_create_repo_dialog',
   OPEN_CLEAN_TRASH_DIALOG: 'open_clean_trash_dialog',
+  HANDLE_SELECTED_OPERATIONS: 'handle_selected_operations',
 };

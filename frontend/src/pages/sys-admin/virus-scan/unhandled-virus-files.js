@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
@@ -8,8 +7,8 @@ import toaster from '../../../components/toast';
 import OpMenu from '../../../components/dialog/op-menu';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import MainPanelTopbar from '../main-panel-topbar';
-import Nav from './nav';
+import { eventBus } from '../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
 const virusFileItemPropTypes = {
   resetPerPage: PropTypes.func,
@@ -177,7 +176,7 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       return (
-        <Fragment>
+        <>
           <table>
             <thead>
               <tr>
@@ -217,7 +216,7 @@ class Content extends Component {
             resetPerPage={this.props.resetPerPage}
           />
           }
-        </Fragment>
+        </>
       );
     }
   }
@@ -255,6 +254,20 @@ class UnhandledVirusFiles extends Component {
     }, () => {
       this.getListByPage(this.state.currentPage);
     });
+    this.unsubscribeHandleSelectedOp = eventBus.subscribe(EVENT_BUS_TYPE.HANDLE_SELECTED_OPERATIONS, (op) => {
+      switch (op) {
+        case 'delete-virus':
+          this.deleteSelectedItems();
+          break;
+        case 'ignore-virus':
+          this.ignoreSelectedItems();
+          break;
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeHandleSelectedOp();
   }
 
   getListByPage = (page) => {
@@ -383,50 +396,28 @@ class UnhandledVirusFiles extends Component {
     });
   };
 
-  deleteSelectedItems = () => {
-    const op = 'delete-virus';
-    this.handleSelectedItems(op);
-  };
-
-  ignoreSelectedItems = () => {
-    const op = 'ignore-virus';
-    this.handleSelectedItems(op);
-  };
-
   render() {
     return (
-      <Fragment>
-        {this.state.virusFiles.some(item => item.isSelected) ? (
-          <MainPanelTopbar {...this.props}>
-            <Fragment>
-              <Button onClick={this.deleteSelectedItems} className="operation-item">{gettext('Delete')}</Button>
-              <Button onClick={this.ignoreSelectedItems} className="operation-item">{gettext('Ignore')}</Button>
-            </Fragment>
-          </MainPanelTopbar>
-        ) : <MainPanelTopbar {...this.props} />
-        }
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <Nav currentItem="unhandled" />
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                virusFiles={this.state.virusFiles}
-                currentPage={this.state.currentPage}
-                hasNextPage={this.state.hasNextPage}
-                curPerPage={this.state.perPage}
-                resetPerPage={this.resetPerPage}
-                getListByPage={this.getListByPage}
-                handleFile={this.handleFile}
-                isAllItemsSelected={this.state.isAllItemsSelected}
-                toggleAllSelected={this.toggleAllSelected}
-                toggleItemSelected={this.toggleItemSelected}
-              />
-            </div>
+      <div className="main-panel-center">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              virusFiles={this.state.virusFiles}
+              currentPage={this.state.currentPage}
+              hasNextPage={this.state.hasNextPage}
+              curPerPage={this.state.perPage}
+              resetPerPage={this.resetPerPage}
+              getListByPage={this.getListByPage}
+              handleFile={this.handleFile}
+              isAllItemsSelected={this.state.isAllItemsSelected}
+              toggleAllSelected={this.toggleAllSelected}
+              toggleItemSelected={this.toggleItemSelected}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
