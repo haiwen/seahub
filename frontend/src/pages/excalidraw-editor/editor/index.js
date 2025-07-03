@@ -22,7 +22,8 @@ const UIOptions = {
 
 const initializeScene = async (collabAPI) => {
   // load local data from localstorage
-  const localDataState = importFromLocalStorage(); // {appState, elements}
+  const docUuid = context.getDocUuid();
+  const localDataState = importFromLocalStorage(docUuid); // {appState, elements}
 
   let data = null;
   // load remote data from server
@@ -80,8 +81,9 @@ const SimpleEditor = () => {
   const handleChange = useCallback((elements, appState, files) => {
     if (!collabAPIRef.current) return;
     collabAPIRef.current.syncElements(elements);
+    const docUuid = context.getDocUuid();
 
-    saveToLocalStorage(elements, appState);
+    saveToLocalStorage(docUuid, elements, appState);
   }, []);
 
   const handlePointerUpdate = useCallback((payload) => {
