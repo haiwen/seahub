@@ -1,7 +1,9 @@
 import logging
 import os.path
-
+import json
 from pysearpc import SearpcError
+
+from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata
 from seaserv import seafile_api
 
@@ -80,6 +82,37 @@ class ImageCaption(APIView):
             'org_id': org_id,
             'username': username
         }
+
+        metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+        parent_dir = os.path.dirname(path)
+
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE \
+                        `{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?;'
+        file_name = os.path.basename(path)
+        parameters = [parent_dir, file_name]
+        try:
+            query_result = metadata_server_api.query_rows(sql, parameters)
+        except Exception as e:
+            query_result = None
+        if query_result:
+            rows = query_result.get('results')[0]
+            filedetails = rows['_file_details']
+            if filedetails is not None:
+                json_str = rows['_file_details'].split('```json\n')[1].split('\n```')[0]
+                capture_time = json.loads(json_str)['Capture time']
+
+            location_translated = rows['_location_translated']
+            if location_translated.get('address') is not None:
+                address = location_translated['address']
+            else:
+                address = None
+
+            if capture_time is not None:
+                params['capture_time'] = capture_time
+            if address is not None:
+                params['address'] = address
 
         try:
             resp = image_caption(params)
