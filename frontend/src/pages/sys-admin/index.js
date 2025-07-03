@@ -75,9 +75,6 @@ import AdminOperationLogs from './admin-logs/operation-logs';
 import AdminLoginLogs from './admin-logs/login-logs';
 
 import AbuseReports from './abuse-reports';
-
-import '../../css/layout.css';
-import '../../css/toolbar.css';
 import Links from './links';
 import Devices from './devices';
 import DesktopDevices from './devices/desktop-devices';
@@ -91,6 +88,9 @@ import TrashRepos from './repos/trash-repos';
 import Logs from './logs-page';
 import VirusScan from './virus-scan';
 import AdminLogs from './admin-logs';
+
+import '../../css/layout.css';
+import '../../css/toolbar.css';
 
 class SysAdmin extends React.Component {
   constructor(props) {

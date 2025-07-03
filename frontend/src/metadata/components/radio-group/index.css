@@ -30,10 +30,6 @@
   cursor: pointer;
 }
 
-/* .sf-metadata-radio-group .sf-metadata-radio-group-option.active {
-  background-color: #f5f5f5;
-} */
-
 .sf-metadata-radio-group .sf-metadata-radio-group-option:not(:first-child)::before {
   content: '';
   width: 1px;
