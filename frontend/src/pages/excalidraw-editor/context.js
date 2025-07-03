@@ -24,6 +24,10 @@ class Context {
     this.exdrawApi = new ExcalidrawServerApi({ exdrawUuid: docUuid, exdrawServer: excalidrawServerUrl, accessToken });
   };
 
+  getDocUuid = () => {
+    return this.docUuid;
+  };
+
   getSettings = () => {
     return {
       docUuid: this.docUuid,

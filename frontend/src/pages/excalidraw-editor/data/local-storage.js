@@ -4,14 +4,16 @@ import { SAVE_TO_LOCAL_STORAGE_TIMEOUT, STORAGE_KEYS, CANVAS_SEARCH_TAB, DEFAULT
 import { updateBrowserStateVersion } from './tab-sync';
 import { debounce } from '../../../utils/utils';
 
-export const saveDataStateToLocalStorage = (elements, appState) => {
+export const saveDataStateToLocalStorage = (docUuid, elements, appState) => {
   try {
     const _appState = clearAppStateForLocalStorage(appState);
     if (_appState.openSidebar?.name === DEFAULT_SIDEBAR.name && _appState.openSidebar.tab === CANVAS_SEARCH_TAB) {
       _appState.openSidebar = null;
     }
-    localStorage.setItem(STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS, JSON.stringify(elements));
-    localStorage.setItem(STORAGE_KEYS.LOCAL_STORAGE_APP_STATE, JSON.stringify(_appState));
+    const elementsKey = `${STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS}_${docUuid}`;
+    const stateKey = `${STORAGE_KEYS.LOCAL_STORAGE_APP_STATE}_${docUuid}`;
+    localStorage.setItem(elementsKey, JSON.stringify(elements));
+    localStorage.setItem(stateKey, JSON.stringify(_appState));
     updateBrowserStateVersion(STORAGE_KEYS.VERSION_DATA_STATE);
   }
   catch (error) {
@@ -20,16 +22,18 @@ export const saveDataStateToLocalStorage = (elements, appState) => {
   }
 };
 
-export const saveToLocalStorage = debounce((elements, appState) => {
-  saveDataStateToLocalStorage(elements, appState);
+export const saveToLocalStorage = debounce((docUuid, elements, appState) => {
+  saveDataStateToLocalStorage(docUuid, elements, appState);
 }, SAVE_TO_LOCAL_STORAGE_TIMEOUT);
 
-export const importFromLocalStorage = () => {
+export const importFromLocalStorage = (docUuid) => {
   let savedElements = null;
   let savedState = null;
+  const elementsKey = `${STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS}_${docUuid}`;
+  const stateKey = `${STORAGE_KEYS.LOCAL_STORAGE_APP_STATE}_${docUuid}`;
   try {
-    savedElements = localStorage.getItem(STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS);
-    savedState = localStorage.getItem(STORAGE_KEYS.LOCAL_STORAGE_APP_STATE);
+    savedElements = localStorage.getItem(elementsKey);
+    savedState = localStorage.getItem(stateKey);
   }
   catch (error) {
     // Unable to access localStorage
@@ -61,9 +65,10 @@ export const importFromLocalStorage = () => {
   return { elements, appState };
 };
 
-export const getElementsStorageSize = () => {
+export const getElementsStorageSize = (docUuid) => {
   try {
-    const elements = localStorage.getItem(STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS);
+    const elementsKey = `${STORAGE_KEYS.LOCAL_STORAGE_ELEMENTS}_${docUuid}`;
+    const elements = localStorage.getItem(elementsKey);
     const elementsSize = elements?.length || 0;
     return elementsSize;
   } catch (error) {
@@ -73,15 +78,16 @@ export const getElementsStorageSize = () => {
   }
 };
 
-export const getTotalStorageSize = () => {
+export const getTotalStorageSize = (docUuid) => {
   try {
-    const appState = localStorage.getItem(STORAGE_KEYS.LOCAL_STORAGE_APP_STATE);
+    const stateKey = `${STORAGE_KEYS.LOCAL_STORAGE_APP_STATE}_${docUuid}`;
+    const appState = localStorage.getItem(stateKey);
     // const collab = localStorage.getItem(STORAGE_KEYS.LOCAL_STORAGE_COLLAB);
 
     const appStateSize = appState?.length || 0;
     // const collabSize = collab?.length || 0;
 
-    return appStateSize + getElementsStorageSize();
+    return appStateSize + getElementsStorageSize(docUuid);
   }
   catch (error) {
     // eslint-disable-next-line no-console
