@@ -31,21 +31,10 @@ class Content extends Component {
     this.props.getShareLinksByPage(this.props.currentPage + 1);
   };
 
-  sortByTime = (e) => {
-    e.preventDefault();
-    this.props.sortItems('ctime');
-  };
-
-  sortByCount = (e) => {
-    e.preventDefault();
-    this.props.sortItems('view_cnt');
-  };
-
   render() {
     const {
       loading, errorMsg, items,
-      perPage, currentPage, hasNextPage,
-      sortBy, sortOrder
+      perPage, currentPage, hasNextPage
     } = this.props;
     if (loading) {
       return <Loading />;
@@ -57,8 +46,6 @@ class Content extends Component {
         </EmptyTip>
       );
 
-      const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
-      const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       const table = (
         <Fragment>
           <table className="table-hover">
@@ -67,12 +54,8 @@ class Content extends Component {
                 <th width="18%">{gettext('Name')}</th>
                 <th width="18%">{gettext('Token')}</th>
                 <th width="18%">{gettext('Owner')}</th>
-                <th width="15%">
-                  <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Created At')} {sortBy == 'ctime' ? sortIcon : initialSortIcon}</a>
-                </th>
-                <th width="10%">
-                  <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByCount}>{gettext('Visit count')} {sortBy == 'view_cnt' ? sortIcon : initialSortIcon}</a>
-                </th>
+                <th width="15%">{gettext('Created At')}</th>
+                <th width="10%">{gettext('Visit count')}</th>
                 <th width="11%">{gettext('Expiration')}</th>
                 <th width="10%">{/* Operations*/}</th>
               </tr>
@@ -115,9 +98,6 @@ Content.propTypes = {
   pageInfo: PropTypes.object,
   hasNextPage: PropTypes.bool,
   getShareLinksByPage: PropTypes.func.isRequired,
-  sortItems: PropTypes.func.isRequired,
-  sortBy: PropTypes.string.isRequired,
-  sortOrder: PropTypes.string.isRequired,
   deleteShareLink: PropTypes.func.isRequired,
 };
 
@@ -242,11 +222,11 @@ class ShareLinks extends Component {
     });
   };
 
-  sortItems = (sortBy) => {
+  sortItems = (sortBy, sortOrder) => {
     this.setState({
       currentPage: 1,
       sortBy: sortBy,
-      sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc'
+      sortOrder: sortOrder
     }, () => {
       let url = new URL(location.href);
       let searchParams = new URLSearchParams(url.search);
@@ -285,7 +265,12 @@ class ShareLinks extends Component {
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LinksNav currentItem="shareLinks" />
+            <LinksNav
+              currentItem="shareLinks"
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortItems={this.sortItems}
+            />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -296,9 +281,6 @@ class ShareLinks extends Component {
                 hasNextPage={hasNextPage}
                 getShareLinksByPage={this.getShareLinksByPage}
                 resetPerPage={this.resetPerPage}
-                sortBy={this.state.sortBy}
-                sortOrder={this.state.sortOrder}
-                sortItems={this.sortItems}
                 deleteShareLink={this.deleteShareLink}
               />
             </div>

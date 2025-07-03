@@ -2,9 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../../utils/constants';
+import SortMenu from '../../../components/sort-menu';
 
 const propTypes = {
-  currentItem: PropTypes.string.isRequired
+  currentItem: PropTypes.string.isRequired,
+  sortBy: PropTypes.string,
+  sortOrder: PropTypes.string,
+  sortItems: PropTypes.func
 };
 
 class Nav extends React.Component {
@@ -15,10 +19,23 @@ class Nav extends React.Component {
       { name: 'shareLinks', urlPart: 'share-links', text: gettext('Share Links') },
       { name: 'uploadLinks', urlPart: 'upload-links', text: gettext('Upload Links') },
     ];
+
+    this.sortOptions = [
+      { value: 'ctime-asc', text: gettext('Ascending by creation time') },
+      { value: 'ctime-desc', text: gettext('Descending by creation time') },
+      { value: 'view_cnt-asc', text: gettext('Ascending by visit count') },
+      { value: 'view_cnt-desc', text: gettext('Descending by visit count') }
+    ];
   }
 
+  onSelectSortOption = (item) => {
+    const [sortBy, sortOrder] = item.value.split('-');
+    this.props.sortItems(sortBy, sortOrder);
+  };
+
   render() {
-    const { currentItem } = this.props;
+    const { currentItem, sortBy, sortOrder } = this.props;
+    const showSortIcon = currentItem == 'shareLinks';
     return (
       <div className="cur-view-path tab-nav-container">
         <ul className="nav">
@@ -30,6 +47,14 @@ class Nav extends React.Component {
             );
           })}
         </ul>
+        {showSortIcon &&
+          <SortMenu
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            sortOptions={this.sortOptions}
+            onSelectSortOption={this.onSelectSortOption}
+          />
+        }
       </div>
     );
   }
