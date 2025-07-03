@@ -1,3 +1,4 @@
+import Url from 'url-parse';
 import ExcalidrawServerApi from './api';
 import editorApi from './api/editor-api';
 
@@ -31,7 +32,7 @@ class Context {
   getSettings = () => {
     return {
       docUuid: this.docUuid,
-      exdrawServer: this.exdrawServer,
+      exdrawServer: new Url(this.exdrawServer).origin,
       accessToken: this.accessToken,
       user: this.user,
     };
