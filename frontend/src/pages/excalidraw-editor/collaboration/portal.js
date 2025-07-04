@@ -62,7 +62,7 @@ class Portal {
       }
       return acc;
     }, []);
-    const payload = { elements, syncableElements };
+    const payload = { elements: syncableElements };
     this._broadcastSocketData({ type: updateType, payload });
   };
 

@@ -128,7 +128,7 @@ class Collab {
       switch (type) {
         case WS_SUBTYPES.INIT:
           if (!this.portal.socketInitialized) {
-            serverDebug('sync with elements from another');
+            serverDebug('sync with elements from another, %O', payload);
             this.initializeRoom({ fetchScene: false });
             this.handleRemoteSceneUpdate(payload);
             this.setDocument(payload);
@@ -138,7 +138,7 @@ class Collab {
           }
           break;
         case WS_SUBTYPES.UPDATE:
-          serverDebug('sync elements by another updated');
+          serverDebug('sync elements by another updated, %O', payload);
           this.handleRemoteSceneUpdate(payload);
           break;
         case WS_SUBTYPES.MOUSE_LOCATION:
