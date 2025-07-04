@@ -74,7 +74,7 @@ const AIIcon = () => {
 
     switch (opType) {
       case OPERATION.GENERATE_DESCRIPTION: {
-        generateDescription({ parentDir, fileName }, {
+        generateDescription({ parentDir, fileName, recordId }, {
           success_callback: ({ description }) => {
             if (!description) return;
             onChange && onChange(PRIVATE_COLUMN_KEY.FILE_DESCRIPTION, description);

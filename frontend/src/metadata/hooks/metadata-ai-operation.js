@@ -66,7 +66,7 @@ export const MetadataAIOperationsProvider = ({
     setOcrResultDialogShow(true);
   }, [repoID]);
 
-  const generateDescription = useCallback(({ parentDir, fileName }, { success_callback, fail_callback } = {}) => {
+  const generateDescription = useCallback(({ parentDir, fileName, recordId }, { success_callback, fail_callback } = {}) => {
     const filePath = Utils.joinPath(parentDir, fileName);
     const isImage = Utils.imageCheck(fileName);
     let APIName = '';
@@ -75,7 +75,7 @@ export const MetadataAIOperationsProvider = ({
     }
     if (!APIName) return;
     const inProgressToaster = toaster.notifyInProgress(gettext('Generating description by AI...'), { duration: null });
-    metadataAPI[APIName](repoID, filePath, lang).then(res => {
+    metadataAPI[APIName](repoID, filePath, lang, recordId).then(res => {
       const description = res?.data?.summary || res.data.desc || '';
       inProgressToaster.close();
       toaster.success(gettext('Description generated'));

@@ -37,12 +37,15 @@ class ImageCaption(APIView):
         lang = request.data.get('lang')
         org_id = request.user.org.org_id if request.user.org else None
         username = request.user.username
+        record_id = request.data.get('record_id')
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
         if not lang:
             return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
+        if not record_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'record_id invalid')
 
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
         if file_type != IMAGE:
@@ -86,19 +89,19 @@ class ImageCaption(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
-        parent_dir = os.path.dirname(path)
 
-        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE \
-                        `{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?;'
-        file_name = os.path.basename(path)
-        parameters = [parent_dir, file_name]
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}`=?;'
+        parameters = [record_id]
         try:
             query_result = metadata_server_api.query_rows(sql, parameters)
         except Exception as e:
             query_result = None
+            logger.error(e)
         if query_result:
             rows = query_result.get('results')[0]
             filedetails = rows['_file_details']
+            address, capture_time = None, None
+        
             if filedetails is not None:
                 json_str = rows['_file_details'].split('```json\n')[1].split('\n```')[0]
                 capture_time = json.loads(json_str)['Capture time']
@@ -106,9 +109,8 @@ class ImageCaption(APIView):
             location_translated = rows['_location_translated']
             if location_translated.get('address') is not None:
                 address = location_translated['address']
-            else:
-                address = None
-
+            
+                
             if capture_time is not None:
                 params['capture_time'] = capture_time
             if address is not None:
