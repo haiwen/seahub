@@ -1,15 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminCreateRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-create-repo-dialog';
-import MainPanelTopbar from '../main-panel-topbar';
-import Search from '../search';
-import ReposNav from './repos-nav';
 import Content from './repos';
+import { eventBus } from '../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
 class AllRepos extends Component {
 
@@ -22,7 +19,7 @@ class AllRepos extends Component {
       pageInfo: {},
       perPage: 100,
       sortBy: '',
-      isCreateRepoDialogOpen: false
+      isCreateRepoDialogOpen: false,
     };
   }
 
@@ -36,11 +33,14 @@ class AllRepos extends Component {
     }, () => {
       this.getReposByPage(this.state.currentPage);
     });
+    this.unsubscribeOpenCreateRepoDialog = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_CREATE_REPO_DIALOG, () => this.setState({ isCreateRepoDialogOpen: true }));
   }
 
-  toggleCreateRepoDialog = () => {
-    this.setState({ isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen });
-  };
+  componentWillUnmount() {
+    if (this.unsubscribeOpenCreateRepoDialog) {
+      this.unsubscribeOpenCreateRepoDialog();
+    }
+  }
 
   getReposByPage = (page) => {
     const { perPage, sortBy } = this.state;
@@ -112,50 +112,18 @@ class AllRepos extends Component {
     });
   };
 
-  getSearch = () => {
-    return <Search
-      placeholder={gettext('Search libraries by name or ID')}
-      submit={this.searchRepos}
-    />;
+  toggleDialog = () => {
+    this.setState({
+      isCreateRepoDialogOpen: !this.state.isCreateRepoDialogOpen
+    });
   };
-
-  searchRepos = (repoNameOrID) => {
-    if (this.getValueLength(repoNameOrID) < 3) {
-      toaster.notify(gettext('Required at least three letters.'));
-      return;
-    }
-    navigate(`${siteRoot}sys/search-libraries/?name_or_id=${encodeURIComponent(repoNameOrID)}`);
-  };
-
-  getValueLength(str) {
-    let code; let len = 0;
-    for (let i = 0, length = str.length; i < length; i++) {
-      code = str.charCodeAt(i);
-      if (code === 10) { // solve enter problem
-        len += 2;
-      } else if (code < 0x007f) {
-        len += 1;
-      } else if (code >= 0x0080 && code <= 0x07ff) {
-        len += 2;
-      } else if (code >= 0x0800 && code <= 0xffff) {
-        len += 3;
-      }
-    }
-    return len;
-  }
 
   render() {
-    let { isCreateRepoDialogOpen } = this.state;
+    const { isCreateRepoDialogOpen } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar search={this.getSearch()} {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleCreateRepoDialog}>
-            <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('New Library')}
-          </Button>
-        </MainPanelTopbar>
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <ReposNav currentItem="all" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -173,13 +141,13 @@ class AllRepos extends Component {
             </div>
           </div>
         </div>
-        {isCreateRepoDialogOpen &&
-        <SysAdminCreateRepoDialog
-          createRepo={this.createRepo}
-          toggleDialog={this.toggleCreateRepoDialog}
-        />
-        }
-      </Fragment>
+        {isCreateRepoDialogOpen && (
+          <SysAdminCreateRepoDialog
+            createRepo={this.createRepo}
+            toggleDialog={this.toggleDialog}
+          />
+        )}
+      </>
     );
   }
 }

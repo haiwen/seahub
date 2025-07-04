@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
@@ -11,8 +11,6 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import LinksNav from './links-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
@@ -60,7 +58,7 @@ class Content extends Component {
       const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
       const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
       const table = (
-        <Fragment>
+        <>
           <table className="table-hover">
             <thead>
               <tr>
@@ -97,7 +95,7 @@ class Content extends Component {
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
-        </Fragment>
+        </>
       );
       return items.length ? table : emptyTip;
     }
@@ -281,11 +279,9 @@ class ShareLinks extends Component {
   render() {
     let { shareLinkList, currentPage, perPage, hasNextPage } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LinksNav currentItem="shareLinks" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -304,7 +300,7 @@ class ShareLinks extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

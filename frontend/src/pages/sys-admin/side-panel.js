@@ -59,7 +59,7 @@ class SidePanel extends React.Component {
                   <li className={`nav-item ${this.getActiveClass('devices')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('devices')}`}
-                      to={siteRoot + 'sys/desktop-devices/'}
+                      to={siteRoot + 'sys/devices/desktop/'}
                       onClick={() => this.props.tabItemClick('devices')}
                     >
                       <span className="sf2-icon-monitor" aria-hidden="true"></span>
@@ -167,7 +167,7 @@ class SidePanel extends React.Component {
                   <li className={`nav-item ${this.getActiveClass('links')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('links')}`}
-                      to={siteRoot + 'sys/share-links/'}
+                      to={siteRoot + 'sys/links/share/'}
                       onClick={() => this.props.tabItemClick('links')}
                     >
                       <span className="sf2-icon-link" aria-hidden="true"></span>

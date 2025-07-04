@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -10,10 +9,6 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
-import ModalPortal from '../../../components/modal-portal';
-import LogsNav from './logs-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import LogUserSelector from '../../dashboard/log-user-selector';
 import LogRepoSelector from '../../dashboard/log-repo-selector';
@@ -194,10 +189,6 @@ class FileAccessLogs extends Component {
     this.initPage = 1;
   }
 
-  toggleExportExcelDialog = () => {
-    this.setState({ isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen });
-  };
-
   componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage } = this.state;
@@ -321,7 +312,6 @@ class FileAccessLogs extends Component {
     const {
       logList,
       currentPage, perPage, hasNextPage,
-      isExportExcelDialogOpen,
       availableUsers,
       selectedUsers,
       availableRepos,
@@ -329,58 +319,42 @@ class FileAccessLogs extends Component {
       openSelector
     } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
-        </MainPanelTopbar>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <LogsNav currentItem="fileAccessLogs" />
-            <div className="cur-view-content">
-              <Fragment>
-                <div className="d-flex align-items-center mb-2">
-                  <LogUserSelector
-                    componentName={gettext('Users')}
-                    items={availableUsers}
-                    selectedItems={selectedUsers}
-                    onSelect={this.handleUserFilter}
-                    isOpen={openSelector === 'user'}
-                    onToggle={() => this.handleSelectorToggle('user')}
-                    searchUsersFunc={this.searchUsers}
-                  />
-                  <div className="mx-3"></div>
-                  <LogRepoSelector
-                    items={availableRepos}
-                    selectedItems={selectedRepos}
-                    onSelect={this.handleRepoFilter}
-                    isOpen={openSelector === 'repo'}
-                    onToggle={() => this.handleSelectorToggle('repo')}
-                    searchReposFunc={this.searchRepos}
-                  />
-                </div>
-                <Content
-                  loading={this.state.loading}
-                  errorMsg={this.state.errorMsg}
-                  items={logList}
-                  currentPage={currentPage}
-                  perPage={perPage}
-                  hasNextPage={hasNextPage}
-                  getLogsByPage={this.getLogsByPage}
-                  resetPerPage={this.resetPerPage}
-                />
-              </Fragment>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <div className="d-flex align-items-center mb-2">
+              <LogUserSelector
+                componentName={gettext('Users')}
+                items={availableUsers}
+                selectedItems={selectedUsers}
+                onSelect={this.handleUserFilter}
+                isOpen={openSelector === 'user'}
+                onToggle={() => this.handleSelectorToggle('user')}
+                searchUsersFunc={this.searchUsers}
+              />
+              <div className="mx-3"></div>
+              <LogRepoSelector
+                items={availableRepos}
+                selectedItems={selectedRepos}
+                onSelect={this.handleRepoFilter}
+                isOpen={openSelector === 'repo'}
+                onToggle={() => this.handleSelectorToggle('repo')}
+                searchReposFunc={this.searchRepos}
+              />
             </div>
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={logList}
+              currentPage={currentPage}
+              perPage={perPage}
+              hasNextPage={hasNextPage}
+              getLogsByPage={this.getLogsByPage}
+              resetPerPage={this.resetPerPage}
+            />
           </div>
         </div>
-        {isExportExcelDialogOpen &&
-        <ModalPortal>
-          <LogsExportExcelDialog
-            logType={'fileAccess'}
-            toggle={this.toggleExportExcelDialog}
-          />
-        </ModalPortal>
-        }
-      </Fragment>
+      </div>
     );
   }
 }

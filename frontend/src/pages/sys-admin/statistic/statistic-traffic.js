@@ -2,8 +2,6 @@ import React, { Fragment } from 'react';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import Loading from '../../../components/loading';
 import OrgsTraffic from './statistic-traffic-orgs';
@@ -110,9 +108,9 @@ class StatisticTraffic extends React.Component {
 
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props} />
+        {/* <MainPanelTopbar {...this.props} /> */}
         <div className="cur-view-container">
-          <StatisticNav currentItem="trafficStatistic" />
+          {/* <StatisticNav currentItem="trafficStatistic" /> */}
           <div className="cur-view-content">
             {this.renderCommonTool()}
             {isLoading && <Loading />}

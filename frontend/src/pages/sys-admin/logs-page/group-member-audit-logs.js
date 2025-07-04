@@ -9,9 +9,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import LogsNav from './logs-nav';
 import LogUserSelector from '../../dashboard/log-user-selector';
 
 dayjs.extend(relativeTime);
@@ -309,57 +307,51 @@ class GroupMemberAuditLogs extends Component {
     } = this.state;
 
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <LogsNav currentItem="groupMember" />
-            <div className="cur-view-content">
-              <Fragment>
-                <div className="d-flex align-items-center mb-2">
-                  <LogUserSelector
-                    componentName={gettext('Member')}
-                    items={availableUsers}
-                    selectedItems={selectedUsers}
-                    onSelect={this.handleUserFilter}
-                    isOpen={openSelector === 'user'}
-                    onToggle={() => this.handleSelectorToggle('user')}
-                    searchUsersFunc={this.searchUsers}
-                  />
-                  <LogUserSelector
-                    componentName={gettext('Group')}
-                    items={availableUsers}
-                    selectedItems={selectedGroups}
-                    onSelect={this.handleGroupFilter}
-                    isOpen={openSelector === 'group'}
-                    onToggle={() => this.handleSelectorToggle('group')}
-                    searchGroupsFunc={this.searchGroups}
-                  />
-                  <LogUserSelector
-                    componentName={gettext('Operator')}
-                    items={availableUsers}
-                    selectedItems={selectedOperators}
-                    onSelect={this.handleOperatorFilter}
-                    isOpen={openSelector === 'operator'}
-                    onToggle={() => this.handleSelectorToggle('operator')}
-                    searchUsersFunc={this.searchUsers}
-                  />
-                </div>
-                <Content
-                  loading={this.state.loading}
-                  errorMsg={this.state.errorMsg}
-                  items={logList}
-                  currentPage={currentPage}
-                  perPage={perPage}
-                  hasNextPage={hasNextPage}
-                  getLogsByPage={this.getLogsByPage}
-                  resetPerPage={this.resetPerPage}
-                />
-              </Fragment>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <div className="d-flex align-items-center mb-2">
+              <LogUserSelector
+                componentName={gettext('Member')}
+                items={availableUsers}
+                selectedItems={selectedUsers}
+                onSelect={this.handleUserFilter}
+                isOpen={openSelector === 'user'}
+                onToggle={() => this.handleSelectorToggle('user')}
+                searchUsersFunc={this.searchUsers}
+              />
+              <LogUserSelector
+                componentName={gettext('Group')}
+                items={availableUsers}
+                selectedItems={selectedGroups}
+                onSelect={this.handleGroupFilter}
+                isOpen={openSelector === 'group'}
+                onToggle={() => this.handleSelectorToggle('group')}
+                searchGroupsFunc={this.searchGroups}
+              />
+              <LogUserSelector
+                componentName={gettext('Operator')}
+                items={availableUsers}
+                selectedItems={selectedOperators}
+                onSelect={this.handleOperatorFilter}
+                isOpen={openSelector === 'operator'}
+                onToggle={() => this.handleSelectorToggle('operator')}
+                searchUsersFunc={this.searchUsers}
+              />
             </div>
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={logList}
+              currentPage={currentPage}
+              perPage={perPage}
+              hasNextPage={hasNextPage}
+              getLogsByPage={this.getLogsByPage}
+              resetPerPage={this.resetPerPage}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

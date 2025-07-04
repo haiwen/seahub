@@ -7,8 +7,6 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import MainPanelTopbar from '../main-panel-topbar';
-import Nav from './user-nav';
 
 class Content extends Component {
 
@@ -182,10 +180,10 @@ class Groups extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props} />
+        {/* <MainPanelTopbar {...this.props} /> */}
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <Nav currentItem="groups" email={this.props.email} userName={this.state.userInfo.name} />
+            {/* <Nav currentItem="groups" email={this.props.email} userName={this.state.userInfo.name} /> */}
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}

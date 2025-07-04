@@ -1,9 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import MainPanelTopbar from '../main-panel-topbar';
-import ReposNav from './repos-nav';
 import Content from './repos';
 
 class AllWikis extends Component {
@@ -92,30 +90,26 @@ class AllWikis extends Component {
 
   render() {
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <ReposNav currentItem="wikis" />
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.wikis}
-                sortBy={this.state.sortBy}
-                sortItems={this.sortItems}
-                pageInfo={this.state.pageInfo}
-                curPerPage={this.state.perPage}
-                getListByPage={this.getWikisByPage}
-                resetPerPage={this.resetPerPage}
-                onDeleteRepo={this.onDeleteWiki}
-                onTransferRepo={this.onTransferWiki}
-                isWiki={true}
-              />
-            </div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={this.state.wikis}
+              sortBy={this.state.sortBy}
+              sortItems={this.sortItems}
+              pageInfo={this.state.pageInfo}
+              curPerPage={this.state.perPage}
+              getListByPage={this.getWikisByPage}
+              resetPerPage={this.resetPerPage}
+              onDeleteRepo={this.onDeleteWiki}
+              onTransferRepo={this.onTransferWiki}
+              isWiki={true}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

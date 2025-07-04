@@ -10,8 +10,6 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import LinksNav from './links-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
@@ -238,11 +236,9 @@ class UploadLinks extends Component {
   render() {
     let { uploadLinkList, currentPage, perPage, hasNextPage } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LinksNav currentItem="uploadLinks" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -258,7 +254,7 @@ class UploadLinks extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

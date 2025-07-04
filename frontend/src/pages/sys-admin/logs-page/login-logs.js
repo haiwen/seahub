@@ -5,15 +5,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
-import { Button } from 'reactstrap';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import LogsNav from './logs-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
-import ModalPortal from '../../../components/modal-portal';
 import LogUserSelector from '../../dashboard/log-user-selector';
 
 dayjs.extend(relativeTime);
@@ -146,10 +141,6 @@ class LoginLogs extends Component {
     this.initPage = 1;
   }
 
-  toggleExportExcelDialog = () => {
-    this.setState({ isExportExcelDialogOpen: !this.state.isExportExcelDialogOpen });
-  };
-
   componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
     const { currentPage, perPage } = this.state;
@@ -223,49 +214,33 @@ class LoginLogs extends Component {
   };
 
   render() {
-    let { logList, currentPage, perPage, hasNextPage, isExportExcelDialogOpen, availableUsers, selectedUsers } = this.state;
+    let { logList, currentPage, perPage, hasNextPage, availableUsers, selectedUsers } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleExportExcelDialog}>{gettext('Export Excel')}</Button>
-        </MainPanelTopbar>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <LogsNav currentItem="loginLogs" />
-            <div className="cur-view-content">
-              <Fragment>
-                <LogUserSelector
-                  componentName={gettext('Users')}
-                  items={availableUsers}
-                  selectedItems={selectedUsers}
-                  onSelect={this.handleUserFilter}
-                  isOpen={this.state.isUserSelectorOpen}
-                  onToggle={this.toggleUserSelector}
-                  searchUsersFunc={this.searchUsers}
-                />
-                <Content
-                  loading={this.state.loading}
-                  errorMsg={this.state.errorMsg}
-                  items={logList}
-                  currentPage={currentPage}
-                  perPage={perPage}
-                  hasNextPage={hasNextPage}
-                  getLogsByPage={this.getLogsByPage}
-                  resetPerPage={this.resetPerPage}
-                />
-              </Fragment>
-            </div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <LogUserSelector
+              componentName={gettext('Users')}
+              items={availableUsers}
+              selectedItems={selectedUsers}
+              onSelect={this.handleUserFilter}
+              isOpen={this.state.isUserSelectorOpen}
+              onToggle={this.toggleUserSelector}
+              searchUsersFunc={this.searchUsers}
+            />
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={logList}
+              currentPage={currentPage}
+              perPage={perPage}
+              hasNextPage={hasNextPage}
+              getLogsByPage={this.getLogsByPage}
+              resetPerPage={this.resetPerPage}
+            />
           </div>
         </div>
-        {isExportExcelDialogOpen &&
-        <ModalPortal>
-          <LogsExportExcelDialog
-            logType={'login'}
-            toggle={this.toggleExportExcelDialog}
-          />
-        </ModalPortal>
-        }
-      </Fragment>
+      </div>
     );
   }
 }

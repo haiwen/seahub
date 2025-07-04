@@ -23,7 +23,7 @@ const MapTypeSetter = ({ viewID }) => {
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_MAP_TYPE, type);
   }, [currentType]);
 
-  return (<RadioGroup options={MAP_TYPES} value={currentType} onChange={onChange} />);
+  return (<RadioGroup className="sf-metadata-map-type-setter" options={MAP_TYPES} value={currentType} onChange={onChange} />);
 };
 
 MapTypeSetter.propTypes = {

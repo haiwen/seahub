@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
@@ -7,8 +7,6 @@ import toaster from '../../../components/toast';
 import OpMenu from '../../../components/dialog/op-menu';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import MainPanelTopbar from '../main-panel-topbar';
-import Nav from './nav';
 
 const virusFileItemPropTypes = {
   virusFile: PropTypes.object.isRequired,
@@ -162,7 +160,7 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       return (
-        <Fragment>
+        <>
           <table>
             <thead>
               <tr>
@@ -198,7 +196,7 @@ class Content extends Component {
             resetPerPage={this.props.resetPerPage}
           />
           }
-        </Fragment>
+        </>
       );
     }
   }
@@ -292,27 +290,23 @@ class AllVirusFiles extends Component {
 
   render() {
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <Nav currentItem="all" />
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                virusFiles={this.state.virusFiles}
-                currentPage={this.state.currentPage}
-                hasNextPage={this.state.hasNextPage}
-                curPerPage={this.state.perPage}
-                resetPerPage={this.resetPerPage}
-                getListByPage={this.getListByPage}
-                handleFile={this.handleFile}
-              />
-            </div>
+      <div className="main-panel-center">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              virusFiles={this.state.virusFiles}
+              currentPage={this.state.currentPage}
+              hasNextPage={this.state.hasNextPage}
+              curPerPage={this.state.perPage}
+              resetPerPage={this.resetPerPage}
+              getListByPage={this.getListByPage}
+              handleFile={this.handleFile}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

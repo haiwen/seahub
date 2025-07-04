@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import dayjs from 'dayjs';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticNav from './statistic-nav';
 import { gettext } from '../../../utils/constants';
 import { Tooltip } from 'reactstrap';
 
@@ -158,45 +156,39 @@ class StatisticMetrics extends Component {
     const { groupedMetrics, loading, error } = this.state;
 
     return (
-      <>
-        <MainPanelTopbar {...this.props} />
-        <div className="">
-          <StatisticNav currentItem="metricsStatistic" />
-          <div className="cur-metrics-content">
-            {loading ? (
-              <div className="loading-icon loading-tip"></div>
-            ) : error ? (
-              <div className="error text-danger">{error}</div>
-            ) : (
-              <div className="metrics-container">
-                <div className="card">
-                  <div className="card-body">
-                    <table className="table table-striped mb-0">
-                      <thead>
-                        <tr>
-                          <th width="40%">{gettext('Metrics')}</th>
-                          <th width="20%">{gettext('Node')}</th>
-                          <th width="15%">{gettext('Value')}</th>
-                          <th width="25%">{gettext('Collected time')}</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {Object.entries(groupedMetrics).map(([component, metrics]) => (
-                          <ComponentMetricsTable
-                            key={component}
-                            componentName={component}
-                            metrics={metrics}
-                          />
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+      <div className="cur-metrics-content">
+        {loading ? (
+          <div className="loading-icon loading-tip"></div>
+        ) : error ? (
+          <div className="error text-danger">{error}</div>
+        ) : (
+          <div className="metrics-container">
+            <div className="card">
+              <div className="card-body">
+                <table className="table table-striped mb-0">
+                  <thead>
+                    <tr>
+                      <th width="40%">{gettext('Metrics')}</th>
+                      <th width="20%">{gettext('Node')}</th>
+                      <th width="15%">{gettext('Value')}</th>
+                      <th width="25%">{gettext('Collected time')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(groupedMetrics).map(([component, metrics]) => (
+                      <ComponentMetricsTable
+                        key={component}
+                        componentName={component}
+                        metrics={metrics}
+                      />
+                    ))}
+                  </tbody>
+                </table>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-      </>
+        )}
+      </div>
     );
   }
 }

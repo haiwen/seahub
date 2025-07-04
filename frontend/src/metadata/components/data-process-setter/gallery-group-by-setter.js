@@ -40,7 +40,7 @@ const GalleryGroupBySetter = ({ viewID }) => {
   return (
     <>
       {currentMode === GALLERY_DATE_MODE.ALL && <GallerySliderSetter viewID={viewID} />}
-      <RadioGroup value={currentMode} options={DATE_MODES} onChange={handleGroupByChange} />
+      <RadioGroup className="sf-metadata-gallery-groupby-setter" value={currentMode} options={DATE_MODES} onChange={handleGroupByChange} />
     </>
   );
 };

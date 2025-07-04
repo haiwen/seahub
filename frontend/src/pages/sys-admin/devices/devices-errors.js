@@ -1,19 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
-import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import { Link } from '@gatsbyjs/reach-router';
-import DevicesNav from './devices-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import Paginator from '../../../components/paginator';
+import { eventBus } from '../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
 dayjs.extend(relativeTime);
 
@@ -135,10 +133,9 @@ class DeviceErrors extends Component {
     this.state = {
       loading: true,
       errorMsg: '',
-      devicesErrors: [],
-      isCleanBtnShown: false,
       pageInfo: {},
-      perPage: 100
+      perPage: 100,
+      deviceErrors: [],
     };
   }
 
@@ -151,6 +148,12 @@ class DeviceErrors extends Component {
     }, () => {
       this.getDeviceErrorsListByPage(this.state.currentPage);
     });
+
+    this.unsubscribeClearDeviceErrors = eventBus.subscribe(EVENT_BUS_TYPE.CLEAR_DEVICE_ERRORS, () => this.setState({ deviceErrors: [] }));
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeClearDeviceErrors();
   }
 
   getDeviceErrorsListByPage = (page) => {
@@ -158,29 +161,16 @@ class DeviceErrors extends Component {
     systemAdminAPI.sysAdminListDeviceErrors(page, per_page).then((res) => {
       this.setState({
         loading: false,
-        devicesErrors: res.data.device_errors,
         pageInfo: res.data.page_info,
-        isCleanBtnShown: res.data.device_errors.length > 0
       });
+      if (res.data.device_errors.length > 0) {
+        eventBus.dispatch(EVENT_BUS_TYPE.SHOW_CLEAN_BTN);
+      }
     }).catch((error) => {
       this.setState({
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    });
-  };
-
-  clean = () => {
-    systemAdminAPI.sysAdminClearDeviceErrors().then((res) => {
-      this.setState({
-        devicesErrors: [],
-        isCleanBtnShown: false
-      });
-      let message = gettext('Successfully cleaned all errors.');
-      toaster.success(message);
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
     });
   };
 
@@ -193,31 +183,21 @@ class DeviceErrors extends Component {
   };
   render() {
     return (
-      <Fragment>
-        {this.state.isCleanBtnShown ? (
-          <MainPanelTopbar {...this.props}>
-            <Button className="operation-item" onClick={this.clean}>{gettext('Clean')}</Button>
-          </MainPanelTopbar>
-        ) : (
-          <MainPanelTopbar {...this.props} />
-        )}
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <DevicesNav currentItem="errors" />
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.devicesErrors}
-                getDeviceErrorsListByPage={this.getDeviceErrorsListByPage}
-                curPerPage={this.state.perPage}
-                resetPerPage={this.resetPerPage}
-                pageInfo={this.state.pageInfo}
-              />
-            </div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={this.state.deviceErrors}
+              getDeviceErrorsListByPage={this.getDeviceErrorsListByPage}
+              curPerPage={this.state.perPage}
+              resetPerPage={this.resetPerPage}
+              pageInfo={this.state.pageInfo}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
