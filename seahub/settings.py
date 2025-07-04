@@ -1274,7 +1274,7 @@ if os.environ.get('ENABLE_SEADOC', ''):
     ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'
 SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
-# FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
+FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
 
 if os.environ.get('ENABLE_EXCALIDRAW', ''):
     ENABLE_EXCALIDRAW = os.environ.get('ENABLE_EXCALIDRAW', '').lower() == 'true'

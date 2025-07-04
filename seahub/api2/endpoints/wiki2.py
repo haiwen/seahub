@@ -8,11 +8,9 @@ import datetime
 import uuid
 import re
 import requests
-import shutil
 from copy import deepcopy
 from constance import config
 from urllib.parse import quote
-from zipfile import ZipFile
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -29,9 +27,6 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md, convert_file
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-from seahub.utils import HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, get_service_url, gen_file_upload_url
-if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
-    from seahub.search.utils import search_wikis, ai_search_wikis
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
@@ -43,7 +38,8 @@ from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_D
     import_conflunece_to_wiki
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, \
+    gen_file_upload_url
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis
 
@@ -51,8 +47,7 @@ from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
-from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid, \
-                                ZSDOC
+from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
     ENCRYPTED_LIBRARY_VERSION, SERVICE_URL, MAX_CONFLUENCE_FILE_SIZE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -1772,7 +1767,7 @@ class Wiki2ImportPageView(APIView):
         
         filename = file.name
         extension = filename.split('.')[-1].lower()
-        if extension not in  ['sdoczip', 'docx', 'md']:
+        if extension not in  ['docx', 'md']:
             error_msg = 'file invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -1804,9 +1799,7 @@ class Wiki2ImportPageView(APIView):
         parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
         file_path = os.path.join(parent_dir, filename)
            
-        if extension == 'sdoczip':
-            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, filename[:-3], is_dir=False)
-        elif extension == 'docx':
+        if extension == 'docx':
             uuid_filename = f'{filename.split(extension)[0]}sdoc'
             FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, uuid_filename, is_dir=False)
         elif extension == 'md':
@@ -1849,43 +1842,6 @@ class Wiki2ImportPageView(APIView):
             download_url = gen_file_get_url(download_token, filename)
             convert_file(file_path, username, str(sdoc_uuid), download_url, upload_link, src_type, 'sdoc')
             file_path = os.path.join(parent_dir, uuid_filename)
-
-        elif extension == 'sdoczip':
-            file_path = file_path[:-3]
-            tmp_dir = str(uuid.uuid4())
-            tmp_root_dir = os.path.join('/tmp/seahub', str(repo_id))
-            tmp_extracted_path = os.path.join(tmp_root_dir, 'sdoc_zip_extracted/', tmp_dir)
-            tmp_extracted_path = os.path.normpath(tmp_extracted_path)
-            try:
-                with ZipFile(file) as zip_file:
-                    zip_file.extractall(tmp_extracted_path)
-            except Exception as e:
-                logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
-            sdoc_file_path = os.path.join(tmp_extracted_path, 'content.json')
-            sdoc_file_path = os.path.normpath(sdoc_file_path)
-            sdoc_file_name = filename.replace(ZSDOC, 'sdoc')
-            new_sdoc_file_path = os.path.join(tmp_extracted_path, sdoc_file_name)
-            new_sdoc_file_path = os.path.normpath(new_sdoc_file_path)
-            
-            os.rename(sdoc_file_path, new_sdoc_file_path)
-            print(new_sdoc_file_path)
-            files = {'file': open(new_sdoc_file_path, 'rb')}
-            data = {'parent_dir': parent_dir, 'replace': 1}
-            resp = requests.post(upload_link, files=files, data=data)
-            if not resp.ok:
-                logger.error('save file: %s failed: %s' % (filename, resp.text))
-                return api_error(resp.status_code, resp.content)
-            
-            # upload sdoc images
-            image_dir = os.path.join(tmp_extracted_path, 'images/')
-            image_dir = os.path.normpath(image_dir)
-            if os.path.exists(image_dir):
-                batch_upload_sdoc_images(str(sdoc_uuid), repo_id, username, image_dir)
-            # remove tmp dir
-            if os.path.exists(tmp_root_dir):
-                shutil.rmtree(tmp_root_dir)
 
         new_page = {
             'id': new_page_id,

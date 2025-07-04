@@ -65,7 +65,7 @@ export default class PageDropdownMenu extends Component {
     const { page } = this.props;
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.sdoczip,.docx,.md';
+    fileInput.accept = '.docx,.md';
     fileInput.style.display = 'none';
 
     fileInput.addEventListener('change', (e) => {
