@@ -67,7 +67,7 @@
 }
 
 .sf-metadata-rc-calendar .rdg-editor-container input.editor-main[readonly] {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sf-metadata-rc-calendar .rc-calendar-time-picker {

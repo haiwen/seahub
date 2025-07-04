@@ -23,7 +23,7 @@
   width: 100%;
   height: 60px;
   padding: 0 1rem;
-  background: #fff;
+  background: var(--bs-body-bg);
   margin: 0 auto;
   display: flex;
   align-items: center;

@@ -28,7 +28,7 @@
 
 .sf-metadata-view-kanban-board .card-drop-preview {
   position: relative;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   box-sizing: border-box;
 }
 

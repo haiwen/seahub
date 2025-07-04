@@ -205,7 +205,7 @@ const style = `
     }
 
     .component-metrics-card .card-header {
-      background-color: #fff;
+      background: var(--bs-body-bg);
       padding: 16px 20px;
     }
     
@@ -264,13 +264,13 @@ const style = `
 
     .metrics-container .table td {
       vertical-align: middle;
-      background-color: #fff;
+      background: var(--bs-body-bg);
       border-bottom: 1px solid #e8e8e8;
       padding-left: 8px;
     }
 
     .metrics-container .table th {
-      background-color: #fff;
+      background: var(--bs-body-bg);
       border-bottom: 1px solid #e8e8e8;
       color: #666;
       font-size: 14px;

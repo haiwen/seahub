@@ -32,7 +32,7 @@
   height: 14px;
   border: 2px solid #999;
   border-radius: 50%;
-  background: #fff;
+  background: var(--bs-body-bg);
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
@@ -42,7 +42,7 @@
   height: 14px;
   border: 2px solid #999;
   border-radius: 50%;
-  background: #fff;
+  background: var(--bs-body-bg);
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }

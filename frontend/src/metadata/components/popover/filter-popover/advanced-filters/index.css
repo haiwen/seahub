@@ -142,7 +142,7 @@
   display: flex;
   width: 100%;
   height: 38px;
-  background-color: #ffffff;
+  background: var(--bs-body-bg);
   padding-left: 8px;
   padding-right: 8px;
   outline: none;
@@ -164,7 +164,7 @@
 
 .sf-metadata-filters-list .filter-term input:focus {
   color: #495057;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   border-color: #1991eb;
   outline: 0;
   box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
@@ -172,7 +172,7 @@
 
 .sf-metadata-filters-list .filter-term .date-picker-container input:focus {
   color: #495057;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #fff;
   outline: 0;
 }

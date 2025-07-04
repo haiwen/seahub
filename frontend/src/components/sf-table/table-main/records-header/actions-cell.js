@@ -19,7 +19,7 @@ class ActionsCell extends Component {
     return (
       <div
         className={classnames(columnCellClass, { 'table-last--frozen': isLastFrozenCell })}
-        style={{ ...columnCellStyle, backgroundColor: '#f9f9f9' }}
+        style={{ ...columnCellStyle }}
       >
         <SelectAll
           isMobile={isMobile}

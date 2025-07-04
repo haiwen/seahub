@@ -1792,7 +1792,7 @@ a.sf-popover-item {
 
 /********** Container ***********/
 #header {
-  background-color: #f8fafd;
+  background-color: var(--bs-header-bg);
   border-bottom: 1px solid #eee;
   z-index: 100;
   width: 100%;

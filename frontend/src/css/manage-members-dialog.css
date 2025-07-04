@@ -43,7 +43,7 @@
 }
 
 .group-manage-members-dialog .search-group-members.active {
-  background: #fff;
+  background: var(--bs-body-bg);
   border-color: #ccc;
 }
 

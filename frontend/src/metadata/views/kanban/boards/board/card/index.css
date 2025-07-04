@@ -3,7 +3,7 @@
   box-shadow: 0 0 3px #0000001f;
   border: 1px solid #eee;
   border-radius: 6px;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   margin: 4px;
   transition: transform 0.3s ease, margin 0.3s ease;
   display: flex;

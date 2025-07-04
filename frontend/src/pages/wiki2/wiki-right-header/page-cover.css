@@ -34,7 +34,7 @@
 }
 
 .wiki-page-cover-panel__header {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   display: flex;
   justify-content: space-between;
   padding: 6px 14px;
@@ -44,7 +44,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   overflow-y: auto;
 }
 
@@ -62,7 +62,7 @@
 
 /* common */
 .wiki-page-panel .popover-header {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   display: flex;
   justify-content: space-between;
   padding: 6px 14px;

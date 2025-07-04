@@ -8,7 +8,7 @@
 
 .sf-single-selector .options-container {
   min-width: 165px;
-  background: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #eee;
   z-index: 2;
 }

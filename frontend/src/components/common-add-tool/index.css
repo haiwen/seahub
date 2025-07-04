@@ -5,7 +5,7 @@
   font-size: 14px;
   font-weight: 500;
   border-top: 1px solid #dedede;
-  background: #fff;
+  background: var(--bs-body-bg);
   padding: 0 1rem;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;

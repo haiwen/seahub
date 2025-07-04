@@ -60,7 +60,7 @@
 }
 
 .btn-active[data-active=false]#saveButton:hover {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   cursor: default;
 }
 

@@ -11,7 +11,7 @@
   overflow: hidden;
   bottom: 20px;
   border: 1px solid rgba(0, 40, 100, 0.12);
-  background-color: #ffffff; 
+  background: var(--bs-body-bg); 
   box-shadow: 0 0 5px #ccc;
   background-clip: padding-box;
   z-index: 100;

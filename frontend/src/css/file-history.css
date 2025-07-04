@@ -9,7 +9,7 @@
 }
 
 .file-history-header { /* for markdown file history */
-  background-color: #fff;
+  background: var(--bs-body-bg);
   height: 50px;
 }
 
@@ -103,7 +103,7 @@
   flex: 0 0 auto;
   user-select: none;
   border-left: 1px solid #eee;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   display: flex;
   flex-direction: column;
 }

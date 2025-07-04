@@ -113,7 +113,6 @@ const RecordsHeader = ({
           />
           {frozenColumns.map((column, columnIndex) => {
             const { key } = column;
-            const style = { backgroundColor: '#f9f9f9' };
             const isLastFrozenCell = key === lastFrozenColumnKey;
             return (
               <Cell
@@ -122,7 +121,6 @@ const RecordsHeader = ({
                 height={height}
                 column={column}
                 columnIndex={columnIndex}
-                style={style}
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
                 isHideTriangle={isHideTriangle}

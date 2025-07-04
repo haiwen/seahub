@@ -46,7 +46,7 @@
 
 .wiki-page-icon-panel__body {
   padding: 0;
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .wiki-page-icon-panel__body em-emoji-picker {

@@ -1,5 +1,5 @@
 .sf-metadata-tool {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   display: flex;
   flex-shrink: 0;
   flex-wrap: nowrap;

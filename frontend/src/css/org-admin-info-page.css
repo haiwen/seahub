@@ -4,7 +4,7 @@
 
 .org-admin-info-content .info-content-item {
   padding: 30px;
-  background: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #e4e4e4;
   border-radius: 5px;
   width: calc(50% - 5.5px);

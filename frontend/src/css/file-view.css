@@ -8,7 +8,7 @@ body {
 
 .file-view-header {
   padding: 4px 10px;
-  background: #fff;
+  background: var(--bs-body-bg);
   border-bottom: 1px solid #eee;
   flex-shrink: 0;
 }
@@ -71,7 +71,7 @@ body {
 }
 
 .file-view-header .file-toolbar-btn.disabled:hover {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .file-view-header .file-toolbar-btn#save-file {
@@ -123,7 +123,7 @@ body {
 .file-details-container {
   position: absolute;
   right: 0;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   width: 300px;
   height: 100%;
   box-shadow: -1px 0 3px 0 #ccc;

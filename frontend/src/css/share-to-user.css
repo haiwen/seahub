@@ -1,15 +1,16 @@
 .user-details-popover {
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-border-color);
   border-radius: 4px;
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.14);
-  background: #fff;
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
   z-index: 1000;
   left: 2px;
   top: 24px;
 }
 
 .user-details-main {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 .user-details-name {

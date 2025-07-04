@@ -15,7 +15,7 @@
 .sf-plain-editor-left-panel {
   height: 100%;
   width: 50%;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   border-right: 1px solid rgb(230, 230, 221);
   overflow-y: scroll;
   overflow-x: hidden;

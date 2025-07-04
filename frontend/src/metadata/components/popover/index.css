@@ -13,7 +13,7 @@
 
 .popover-add-tool.disabled:hover {
   cursor: not-allowed;
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
 .popover-add-tool.disabled .popover-add-icon {

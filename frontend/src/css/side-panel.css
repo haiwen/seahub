@@ -36,7 +36,7 @@
   width: 200px;
   height: 150px;
   position: absolute;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   z-index: 1004;
   box-shadow: 0 0 10px #aaa;
   border-radius: 3px;

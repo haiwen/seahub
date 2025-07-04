@@ -6,7 +6,7 @@
 .sdoc-revision .sdoc-revision-header {
   height: 50px;
   border-bottom: 1px solid #eee;
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sdoc-revision .sdoc-revision-header .sdoc-revision-header-left {
@@ -35,13 +35,13 @@
   width: 100%;
   min-height: 120px;
   flex: 1;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   word-break: break-word;
   border: 1px solid #e6e6dd;
 }
 
 .sdoc-revision .sdoc-revision-content .sdoc-editor-content {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sdoc-revision .sdoc-revision-content .article {

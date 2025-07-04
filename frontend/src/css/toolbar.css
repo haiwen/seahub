@@ -26,7 +26,7 @@
   margin-right: 0.25rem;
   height: 30px;
   min-width: 55px;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   line-height: 29px;
   font-weight: normal;
   border: 1px solid #ccc;

@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--bs-border-color);
   border-radius: 3px;
   padding: 0 3px;
   margin-left: 8px;
@@ -15,7 +15,8 @@
   min-width: 66px;
   width: fit-content;
   height: 28px;
-  color: #212529;
+  color: var(--bs-body-color);
+  background: var(--bs-body-bg);
   position: relative;
   display: flex;
   align-items: center;
@@ -26,15 +27,19 @@
 }
 
 .sf-metadata-radio-group .sf-metadata-radio-group-option:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-hover-bg);
   cursor: pointer;
+}
+
+.sf-metadata-radio-group .sf-metadata-radio-group-option.active {
+  background-color: var(--bs-nav-active-bg);
 }
 
 .sf-metadata-radio-group .sf-metadata-radio-group-option:not(:first-child)::before {
   content: '';
   width: 1px;
   height: 22px;
-  background-color: #e2e2e2;
+  background-color: var(--bs-border-color);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

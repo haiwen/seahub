@@ -18,7 +18,7 @@
   border: 1px solid #ddd;
   border-radius: 3px;
   box-shadow: 0 0 6px #ddd;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   z-index: 1050;
 }
 
@@ -54,7 +54,7 @@
 
 .uploader-list-content {
   padding: 0 1rem 1.25rem;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   overflow: auto;
 }
 

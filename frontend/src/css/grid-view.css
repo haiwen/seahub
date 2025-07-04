@@ -19,7 +19,7 @@
 }
 
 .grid-item:hover {
-  background: #f5f5f5;
+  background: var(--bs-nav-hover-bg);
   border-radius: 5px;
 }
 
@@ -38,8 +38,8 @@
   max-width: 88px;
   max-height: 88px;
   padding: 1px;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
   border-radius: 1px;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .grid-file-name-link {
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 0.875rem;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
@@ -68,7 +68,6 @@
 }
 
 .grid-file-name-link:hover {
-  color: #212529;
   text-decoration: none;
 }
 

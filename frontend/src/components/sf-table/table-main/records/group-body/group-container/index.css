@@ -4,7 +4,7 @@
 }
 
 .canvas-groups-rows .sf-table-cell {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .canvas-groups-rows .group-item {
@@ -108,7 +108,7 @@
 .canvas-groups-rows .group-item .group-backdrop {
   position: absolute;
   left: 0;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   opacity: 1;
 }
 

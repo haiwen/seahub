@@ -11,7 +11,7 @@
 .sdoc-file-history .sdoc-file-history-header {
   height: 50px;
   border-bottom: 1px solid #eee;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   flex-shrink: 0;
 }
 
@@ -160,7 +160,7 @@
   padding: 10px 18px;
   height: 50px;
   border-bottom: 1px solid #eee;
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range-title {
@@ -299,7 +299,7 @@
   flex: 0 0 auto;
   user-select: none;
   border-left: 1px solid #eee;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   display: flex;
   flex-direction: column;
 }

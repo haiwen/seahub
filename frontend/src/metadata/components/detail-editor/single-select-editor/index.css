@@ -33,7 +33,7 @@
   padding: 0;
   overflow: hidden;
   opacity: 1;
-  background-color: #ffffff;
+  background: var(--bs-body-bg);
   border: none;
   border-radius: none;
   box-shadow: none;

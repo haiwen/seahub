@@ -37,7 +37,7 @@
   top: -7px;
   right: 10px;
   inset-inline-start: auto;
-  background: #fff;
+  background: var(--bs-body-bg);
   padding: 8px;
   border: 1px solid rgba(0, 40, 100, 0.12);
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
@@ -175,7 +175,7 @@ input#findInput {
 
 .pdfViewer .page {
   position: relative;
-  background: #fff;
+  background: var(--bs-body-bg);
   border: none;
   box-shadow: 0 0 6px #ccc;
   margin: 0 auto 10px;
@@ -195,7 +195,7 @@ input#findInput {
 }
 
 select#scaleSelect {
-  background: #fff;
+  background: var(--bs-body-bg);
   height: 24px;
   font-size: 12px;
 }
@@ -260,12 +260,12 @@ input#pageNumber {
   top: 0;
   bottom: 0;
   border-top: none;
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
 #toolbarSidebar {
   height: auto;
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
 #thumbnailView {

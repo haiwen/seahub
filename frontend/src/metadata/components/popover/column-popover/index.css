@@ -19,7 +19,7 @@
 
 .sf-metadata-column-popover .sf-metadata-column-type {
   width: 100%;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
@@ -31,7 +31,7 @@
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type.sf-metadata-column-type-focus {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   border-color: #1991eb;
   box-shadow: 0 0 0 2px #467fcf40;
   color: #495057;
@@ -78,7 +78,7 @@
 }
 
 .sf-metadata-column-popover .sf-metadata-column-popover-footer {
-  background: #fff;
+  background: var(--bs-body-bg);
   padding: 1rem;
   position: relative;
   text-align: right;

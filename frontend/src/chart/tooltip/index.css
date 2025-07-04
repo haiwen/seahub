@@ -4,7 +4,7 @@
   min-width: 178px;
   border-radius: 3px;
   border: 1px solid #e2e2e2;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   padding: 8px 16px;
   margin-left: 10px;
   box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1);
