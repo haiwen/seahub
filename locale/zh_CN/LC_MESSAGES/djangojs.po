@@ -9903,7 +9903,7 @@ msgstr "标签"
 #: frontend/src/tag/views/all-tags/tags-table/columns-factory.js:15
 #| msgid "Import tags"
 msgid "Parent tags"
-msgstr "父标签"
+msgstr "上级标签"
 
 #: frontend/src/tag/views/all-tags/tags-table/columns-factory.js:16
 #| msgid "File name"
