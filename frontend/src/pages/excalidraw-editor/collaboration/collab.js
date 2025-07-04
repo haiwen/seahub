@@ -240,6 +240,8 @@ class Collab {
   handleRemoteMouseLocation = (params) => {
     const collaborators = new Map(this.collaborators);
     const { user, ...updates } = params;
+    if (!collaborators.get(user._username)) return;
+
     const newUser = Object.assign({}, collaborators.get(user._username), updates);
     collaborators.set(newUser._username, newUser);
     this.collaborators = collaborators;
