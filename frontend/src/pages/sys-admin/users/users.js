@@ -227,10 +227,10 @@ class Users extends Component {
     });
   };
 
-  sortByQuotaUsage = () => {
+  sortByQuotaUsage = (sortBy, sortOrder) => {
     this.setState({
-      sortBy: 'quota_usage',
-      sortOrder: this.state.sortOrder == 'asc' ? 'desc' : 'asc',
+      sortBy: sortBy,
+      sortOrder: sortOrder,
       currentPage: 1
     }, () => {
       const { currentPage, perPage, sortBy, sortOrder } = this.state;
@@ -504,7 +504,12 @@ class Users extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <UsersNav currentItem={curTab} />
+            <UsersNav
+              currentItem={curTab}
+              sortBy={this.state.sortBy}
+              sortOrder={this.state.sortOrder}
+              sortItems={this.sortByQuotaUsage}
+            />
             <div className="cur-view-content">
               {curTab == 'database' &&
               <UsersFilterBar
@@ -520,9 +525,6 @@ class Users extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.userList}
-                sortBy={this.state.sortBy}
-                sortOrder={this.state.sortOrder}
-                sortByQuotaUsage={this.sortByQuotaUsage}
                 currentPage={this.state.currentPage}
                 hasNextPage={this.state.hasNextPage}
                 curPerPage={this.state.perPage}

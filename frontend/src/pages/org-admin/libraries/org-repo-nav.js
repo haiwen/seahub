@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../../utils/constants';
+import SortMenu from '../../../components/sort-menu';
 
 const propTypes = {
-  currentItem: PropTypes.string.isRequired
+  currentItem: PropTypes.string.isRequired,
+  sortBy: PropTypes.string,
+  sortItems: PropTypes.func
 };
 
 class Nav extends React.Component {
@@ -15,10 +18,21 @@ class Nav extends React.Component {
       { name: 'all', urlPart: 'repoadmin', text: gettext('All') },
       { name: 'trash', urlPart: 'repoadmin-trash', text: gettext('Trash') }
     ];
+
+    this.sortOptions = [
+      { value: 'file_count-desc', text: gettext('Descending by files') },
+      { value: 'size-desc', text: gettext('Descending by size') }
+    ];
   }
 
+  onSelectSortOption = (item) => {
+    const [sortBy,] = item.value.split('-');
+    this.props.sortItems(sortBy);
+  };
+
   render() {
-    const { currentItem } = this.props;
+    const { currentItem, sortBy, sortOrder = 'desc' } = this.props;
+    const showSortIcon = currentItem == 'all';
     return (
       <div className="cur-view-path tab-nav-container">
         <ul className="nav">
@@ -30,6 +44,14 @@ class Nav extends React.Component {
             );
           })}
         </ul>
+        {showSortIcon &&
+          <SortMenu
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            sortOptions={this.sortOptions}
+            onSelectSortOption={this.onSelectSortOption}
+          />
+        }
       </div>
     );
   }

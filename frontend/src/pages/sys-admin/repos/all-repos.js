@@ -155,14 +155,16 @@ class AllRepos extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <ReposNav currentItem="all" />
+            <ReposNav
+              currentItem="all"
+              sortBy={this.state.sortBy}
+              sortItems={this.sortItems}
+            />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.repos}
-                sortBy={this.state.sortBy}
-                sortItems={this.sortItems}
                 pageInfo={this.state.pageInfo}
                 curPerPage={this.state.perPage}
                 getListByPage={this.getReposByPage}

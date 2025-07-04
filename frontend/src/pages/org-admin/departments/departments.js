@@ -35,8 +35,8 @@ class Departments extends React.Component {
       membersList: [],
       isTopDepartmentLoading: false,
       isMembersListLoading: false,
-      sortBy: 'name', // 'name' or 'role'
-      sortOrder: 'asc', // 'asc' or 'desc',
+      sortBy: '', // 'name' or 'role'
+      sortOrder: '', // 'asc' or 'desc',
     };
   }
 

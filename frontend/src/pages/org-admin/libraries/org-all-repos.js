@@ -52,8 +52,7 @@ class Content extends Component {
   };
 
   render() {
-    // offer 'sort' only for 'all repos'
-    const { loading, errorMsg, items, pageInfo, curPerPage, sortBy } = this.props;
+    const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -62,8 +61,6 @@ class Content extends Component {
       const emptyTip = (
         <EmptyTip text={gettext('No libraries')}/>
       );
-      const initialSortIcon = <span className="sf3-font sf3-font-sort3"></span>;
-      const sortIcon = <span className="sf3-font sf3-font-down"></span>;
       const table = (
         <Fragment>
           <table>
@@ -71,15 +68,7 @@ class Content extends Component {
               <tr>
                 <th width="5%">{/* icon*/}</th>
                 <th width="25%">{gettext('Name')}</th>
-                <th width="15%">
-                  {sortBy != undefined ?
-                    <Fragment>
-                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByFileCount}>{gettext('Files')} {sortBy == 'file_count' ? sortIcon : initialSortIcon}</a>{' / '}
-                      <a className="d-inline-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' ? sortIcon : initialSortIcon}</a>
-                    </Fragment> :
-                    gettext('Files') / gettext('Size')
-                  }
-                </th>
+                <th width="15%">{gettext('Files')} / {gettext('Size')}</th>
                 <th width="32%">ID</th>
                 <th width="18%">{gettext('Owner')}</th>
                 <th width="5%">{/* Operations*/}</th>
@@ -128,8 +117,6 @@ Content.propTypes = {
   resetPerPage: PropTypes.func,
   pageInfo: PropTypes.object,
   curPerPage: PropTypes.number,
-  sortItems: PropTypes.func,
-  sortBy: PropTypes.string,
   transferRepoItem: PropTypes.func.isRequired,
 };
 
@@ -389,14 +376,16 @@ class OrgAllRepos extends Component {
         <MainPanelTopbar />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <ReposNav currentItem="all" />
+            <ReposNav
+              currentItem="all"
+              sortBy={this.state.sortBy}
+              sortItems={this.sortItems}
+            />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.repos}
-                sortBy={this.state.sortBy}
-                sortItems={this.sortItems}
                 pageInfo={this.state.pageInfo}
                 curPerPage={this.state.perPage}
                 getListByPage={this.getReposByPage}

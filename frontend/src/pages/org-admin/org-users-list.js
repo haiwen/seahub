@@ -9,10 +9,7 @@ const propTypes = {
   changeStatus: PropTypes.func.isRequired,
   orgUsers: PropTypes.array.isRequired,
   page: PropTypes.number.isRequired,
-  pageNext: PropTypes.bool.isRequired,
-  sortByQuotaUsage: PropTypes.func.isRequired,
-  sortOrder: PropTypes.string.isRequired,
-  sortBy: PropTypes.string.isRequired,
+  pageNext: PropTypes.bool.isRequired
 };
 
 class OrgUsersList extends React.Component {
@@ -49,21 +46,8 @@ class OrgUsersList extends React.Component {
     this.props.initOrgUsersData(page);
   };
 
-  sortByQuotaUsage = (e) => {
-    e.preventDefault();
-    this.props.sortByQuotaUsage();
-  };
-
   render() {
-    const { sortBy, sortOrder } = this.props;
-    let sortIcon;
-    if (sortBy == '') {
-      // initial sort icon
-      sortIcon = <span className="sf3-font sf3-font-sort3"></span>;
-    } else {
-      sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
-    }
-    let { orgUsers, page, pageNext } = this.props;
+    const { orgUsers, page, pageNext } = this.props;
     return (
       <div className="cur-view-content">
         <table>
@@ -71,9 +55,7 @@ class OrgUsersList extends React.Component {
             <tr>
               <th width="30%">{gettext('Name')}</th>
               <th width="15%">{gettext('Status')}</th>
-              <th width="20%">
-                <a className="d-inline-block table-sort-op" href="#" onClick={this.sortByQuotaUsage}>{gettext('Space Used')} {sortIcon}</a> / {gettext('Quota')}
-              </th>
+              <th width="20%">{gettext('Space Used')} / {gettext('Quota')}</th>
               <th width="25%">{gettext('Created At')} / {gettext('Last Login')}</th>
               <th width="10%">{/* Operations*/}</th>
             </tr>

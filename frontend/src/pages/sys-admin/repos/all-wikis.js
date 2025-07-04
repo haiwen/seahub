@@ -96,14 +96,16 @@ class AllWikis extends Component {
         <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <ReposNav currentItem="wikis" />
+            <ReposNav
+              currentItem="wikis"
+              sortBy={this.state.sortBy}
+              sortItems={this.sortItems}
+            />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={this.state.wikis}
-                sortBy={this.state.sortBy}
-                sortItems={this.sortItems}
                 pageInfo={this.state.pageInfo}
                 curPerPage={this.state.perPage}
                 getListByPage={this.getWikisByPage}
