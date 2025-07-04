@@ -107,6 +107,20 @@ class SidePanel extends PureComponent {
     });
   };
 
+  importPage = async (fromPageConfig, successCallback, errorCallback, jumpToNewPage = true) => {
+    const { from_page_id, file } = fromPageConfig;
+    wikiAPI.importWiki2Page(wikiId, from_page_id, file).then(res => {
+      const { page_id, name, path, docUuid } = res.data;
+      const newPage = new Page({ id: page_id, name, icon: '', path, docUuid });
+      this.addPage(newPage, '', successCallback, errorCallback, jumpToNewPage);
+      successCallback && successCallback();
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+      errorCallback && errorCallback();
+    });
+  };
+
   addPage = (page, parent_id, successCallback, errorCallback, jumpToNewPage = true) => {
     const { config } = this.props;
     const navigation = config.navigation;
@@ -161,6 +175,7 @@ class SidePanel extends PureComponent {
             updateWikiConfig={this.props.updateWikiConfig}
             onAddNewPage={this.onAddNewPage}
             duplicatePage={this.duplicatePage}
+            importPage={this.importPage}
             getCurrentPageId={this.props.getCurrentPageId}
             addPageInside={this.addPageInside}
             toggleTrashDialog={this.toggleTrashDialog}

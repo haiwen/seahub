@@ -17,17 +17,16 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from seaserv import seafile_api
+from seaserv import seafile_api, check_quota
 from pysearpc import SearpcError
 from django.utils.translation import gettext as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import sdoc_export_to_md
+from seahub.api2.endpoints.utils import sdoc_export_to_md, convert_file
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo
-
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
@@ -38,7 +37,8 @@ from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_D
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
-    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
+    get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url, \
+    gen_file_upload_url
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_wikis, ai_search_wikis
 
@@ -1580,8 +1580,6 @@ class WikiPageExport(APIView):
         export_type = request.GET.get('export_type')
         if export_type not in WIKI_PAGE_EXPORT_TYPES:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid export type')
-
-        # resource check
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -1629,3 +1627,137 @@ class WikiPageExport(APIView):
         response['Content-Disposition'] = 'attachment;filename*=utf-8''%s;filename="%s"' % (encoded_filename, encoded_filename)
 
         return response
+
+class Wiki2ImportPageView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+
+    def post(self, request, wiki_id):
+        page_id = request.data.get('page_id', None)
+        file = request.data.get('file', None)
+
+        if not page_id:
+            error_msg = 'page_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not file:
+            error_msg = 'file invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        filename = file.name
+        extension = filename.split('.')[-1].lower()
+        if extension not in  ['docx', 'md']:
+            error_msg = 'file invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        repo_id = wiki.repo_id
+        wiki.owner = get_repo_owner(request, wiki_id)
+        username = request.user.username
+        if not check_wiki_admin_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki_id
+        if check_quota(repo_id) < 0:
+            return api_error(443, _("Out of quota."))
+
+        wiki_config = get_wiki_config(wiki_id, request.user.username)
+        navigation = wiki_config.get('navigation', [])
+        page_ids = []
+        get_current_level_page_ids(navigation, page_id, page_ids)
+        pages = wiki_config.get('pages', [])
+        exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
+
+        page_name = os.path.splitext(filename)[0]
+        page_name = get_no_duplicate_obj_name(page_name, exist_page_names)
+        sdoc_uuid = uuid.uuid4()
+        parent_dir = os.path.join(WIKI_PAGES_DIR, str(sdoc_uuid))
+        file_path = os.path.join(parent_dir, filename)
+           
+        if extension == 'docx':
+            uuid_filename = f'{filename.split(extension)[0]}sdoc'
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, uuid_filename, is_dir=False)
+        elif extension == 'md':
+            uuid_filename = f'{filename.split(extension)[0]}sdoc'
+            FileUUIDMap.objects.create_fileuuidmap_by_uuid(sdoc_uuid, repo_id, parent_dir, uuid_filename, is_dir=False)
+        id_set = get_all_wiki_ids(navigation)
+        new_page_id = gen_unique_id(id_set)
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            seafile_api.mkdir_with_parents(repo_id, '/', parent_dir.strip('/'), request.user.username)
+
+        obj_id = json.dumps({'parent_dir': parent_dir})
+        try:
+            token = seafile_api.get_fileserver_access_token(repo_id,
+                    obj_id, 'upload', request.user.username, use_onetime=False)
+        except Exception as e:
+            if str(e) == 'Too many files in library.':
+                error_msg = _("The number of files in library exceeds the limit")
+                return api_error(HTTP_447_TOO_MANY_FILES_IN_LIBRARY, error_msg)
+            else:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        upload_link = gen_file_upload_url(token, 'upload-api')
+        upload_link += '?ret-json=1'
+        if extension == 'md' or extension == 'docx':
+            src_type = 'docx' if extension == 'docx' else 'markdown'
+            files = {'file': file}
+            data = {'parent_dir': parent_dir, 'replace': 1}
+            resp = requests.post(upload_link, files=files, data=data)
+            if not resp.ok:
+                logger.error('save file: %s failed: %s' % (filename, resp.text))
+                return api_error(resp.status_code, resp.content)
+            file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+            download_token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'download', username)
+            download_url = gen_file_get_url(download_token, filename)
+            convert_file(file_path, username, str(sdoc_uuid), download_url, upload_link, src_type, 'sdoc')
+            file_path = os.path.join(parent_dir, uuid_filename)
+
+        new_page = {
+            'id': new_page_id,
+            'name': page_name,
+            'path': file_path,
+            'icon': '',
+            'docUuid': str(sdoc_uuid),
+            'locked': False
+        }
+        pages.append(new_page)
+        if len(wiki_config) == 0:
+            wiki_config['version'] = 1
+        
+        new_nav = {
+            'id': new_page_id,
+            'type': 'page',
+        }
+        navigation.append(new_nav)
+        wiki_config['navigation'] = navigation
+        wiki_config['pages'] = pages
+        wiki_config = json.dumps(wiki_config)
+        save_wiki_config(wiki, request.user.username, wiki_config)
+
+        try:
+            # remove tmp md/docx
+            if extension in ['md', 'docx']:
+                seafile_api.del_file(repo_id, parent_dir,
+                            json.dumps([filename]), username)
+        except SearpcError as e:
+            logger.warning(e)
+
+        return Response({
+            'page_id': new_page_id,
+            'path': file_path,
+            'name': page_name,
+            'icon': '',
+            'docUuid': str(sdoc_uuid),
+            'locked': False
+        })
