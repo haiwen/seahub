@@ -229,7 +229,8 @@ class SysAdmin extends React.Component {
               <StatisticReport path="reports" />
               <StatisticMetrics path="metrics" />
             </StatisticLayout>
-            <Libraries path={`${siteRoot}sys/libraries/`} {...commonProps} />
+            <Libraries path={`${siteRoot}sys/*`} {...commonProps} />
+            <DirView path={`${siteRoot}sys/libraries/:repoID`} {...commonProps} />
             <Devices path={`${siteRoot}sys/devices/`}>
               <DesktopDevices path="desktop" {...commonProps} />
               <MobileDevices path="mobile" {...commonProps} />

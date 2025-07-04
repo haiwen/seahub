@@ -11,13 +11,6 @@ import AllWikis from './all-wikis';
 import SystemRepo from './system-repo';
 import TrashRepos from './trash-repos';
 
-const PATH_NAME_MAP = {
-  'all-libraries': 'all',
-  'all-wikis': 'wikis',
-  'system-library': 'system',
-  'trash-libraries': 'trash'
-};
-
 const Libraries = ({ children, ...commonProps }) => {
   const [sortBy, setSortBy] = useState('');
   const [perPage, setPerPage] = useState(100);
@@ -27,7 +20,6 @@ const Libraries = ({ children, ...commonProps }) => {
 
   const location = useLocation();
   const path = location.pathname.split('/').filter(Boolean).pop();
-  const pathSegment = PATH_NAME_MAP[path] || 'all';
 
   const getValueLength = (str) => {
     let code; let len = 0;
@@ -95,25 +87,24 @@ const Libraries = ({ children, ...commonProps }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const showReposNav = pathSegment === 'all' || pathSegment === 'trash' || pathSegment === 'wikis' || pathSegment === 'system';
   return (
     <>
-      {pathSegment === 'all' && (
+      {path === 'all-libraries' && (
         <MainPanelTopbar search={getSearch()} { ...commonProps }>
           <Button className="btn btn-secondary operation-item" onClick={toggleCreateRepoDialog}>
             <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('New Library')}
           </Button>
         </MainPanelTopbar>
       )}
-      {pathSegment === 'trash' && (
+      {path === 'trash-libraries' && (
         <MainPanelTopbar {...commonProps}>
           <Button className="operation-item" onClick={toggleCleanTrashDialog}>{gettext('Clean')}</Button>
         </MainPanelTopbar>
       )}
-      {(pathSegment === 'wikis' || pathSegment === 'system') && (
+      {(path === 'all-wikis' || path === 'system-library') && (
         <MainPanelTopbar {...commonProps} />
       )}
-      {showReposNav && <ReposNav currentItem={path} sortBy={sortBy} sortItems={sortItems} />}
+      <ReposNav currentItem={path} sortBy={sortBy} sortItems={sortItems} />
       <Router>
         <AllRepos
           path="all-libraries"

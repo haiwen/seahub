@@ -83,7 +83,7 @@ class SidePanel extends React.Component {
                   <li className={`nav-item ${this.getActiveClass('libraries')}`}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
-                      to={siteRoot + 'sys/libraries/all'}
+                      to={siteRoot + 'sys/all-libraries/'}
                       onClick={() => this.props.tabItemClick('libraries')}
                     >
                       <span className="sf2-icon-library" aria-hidden="true"></span>
