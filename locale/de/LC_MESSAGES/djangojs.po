@@ -85,7 +85,7 @@ msgstr "Verwendet:"
 
 #: frontend/src/components/common/account.js:175
 msgid "AI credit used:"
-msgstr ""
+msgstr "Verbrauchte KI-Credits:"
 
 #: frontend/src/components/common/account.js:184
 #: frontend/src/components/dialog/lib-settings.js:80
@@ -4499,7 +4499,7 @@ msgstr "Mit dem Client öffnen"
 #: frontend/src/components/file-view/file-toolbar.js:316
 #: frontend/src/components/shared-file-view/shared-file-view.js:172
 msgid "Line wrapping"
-msgstr ""
+msgstr "Umbruch von Zeilen"
 
 #: frontend/src/components/file-view/file-view-tip.js:16
 #: frontend/src/components/history-trash-file-view/file-view-tip.js:17
@@ -4897,7 +4897,7 @@ msgstr "Dateiendung"
 
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:54
 msgid "Separate multiple suffixes by \",\"(like sdoc, pdf)"
-msgstr ""
+msgstr "Unterschiedliche Dateiendungen mit Komma trennen (z.B. \" sdoc, pdf\")"
 
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:65
 #: frontend/src/metadata/components/cell-editors/tags-editor/index.js:422
@@ -6424,17 +6424,17 @@ msgstr "OCR-Ergebnisse"
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:157
 #| msgid "Converting, please wait..."
 msgid "Extracting text, please wait..."
-msgstr ""
+msgstr "Text wird extrahiert, bitte warten …"
 
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:165
 #| msgid "File details"
 msgid "No text extracted"
-msgstr ""
+msgstr "Kein Text extrahiert"
 
 #: frontend/src/metadata/components/popover/ocr-result-popover/index.js:171
 #| msgid "Failed to delete property"
 msgid "Save to description field"
-msgstr ""
+msgstr "Im Feld Beschreibung speichern"
 
 #: frontend/src/metadata/components/popover/options-popover/confirm-delete-popover/index.js:28
 msgid "{name} rows use this option."
@@ -8088,7 +8088,7 @@ msgstr "Datenvolumen diesen Monat"
 #: frontend/src/pages/org-admin/org-info.js:129
 #| msgid "This month"
 msgid "AI credit used this month"
-msgstr ""
+msgstr "In diesem Monat verbrauchte KI-Credits"
 
 #: frontend/src/pages/org-admin/org-links.js:97
 msgid "All Public Links"
@@ -9830,7 +9830,7 @@ msgstr "Freigegeben von:"
 #: frontend/src/view-file-spreadsheet.js:53
 #: frontend/src/view-file-spreadsheet.js:66
 msgid "Document conversion failed."
-msgstr ""
+msgstr "Konvertierung der Datei fehlgeschlagen."
 
 #: frontend/src/tag/components/dialog/edit-tag-dialog/index.js:78
 #| msgid "Color space"
