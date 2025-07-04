@@ -48,3 +48,13 @@
   font-size: .8125rem;
   color: #666666;
 }
+
+#traffic-over-tip-icon {
+  color: #bdbdbd;
+  font-size: .875rem;
+  margin-left: 6px;
+}
+
+#traffic-over-tip-icon:hover {
+  color: #999999;
+}

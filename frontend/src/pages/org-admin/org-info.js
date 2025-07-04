@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { UncontrolledTooltip } from 'reactstrap';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { mediaUrl, gettext, orgMemberQuotaEnabled, enableSeafileAI } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -109,7 +110,16 @@ class OrgInfo extends Component {
                   )}
                 </div>
                 <div className="info-content-item">
-                  <h4 className="info-content-item-heading">{gettext('Traffic this month')}</h4>
+                  <h4 className="info-content-item-heading">
+                    {gettext('Traffic this month')}
+                    <i className="sf3-font-help sf3-font" id="traffic-over-tip-icon"></i>
+                    <UncontrolledTooltip
+                      placement="right"
+                      target={'#traffic-over-tip-icon'}
+                    >
+                      {gettext('After exceeding the traffic limit, the file download speed will be restricted.')}
+                    </UncontrolledTooltip>
+                  </h4>
                   {traffic_limit > 0 ? (
                     <>
                       <p className="info-content-space-text">{`${(download_traffic / traffic_limit * 100).toFixed(2)}%`}</p>
