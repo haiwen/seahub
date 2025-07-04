@@ -116,43 +116,57 @@ class Wikis extends Component {
     }
   };
 
-  importConfluence = async (file, currentDeptID) => {
-    return wikiAPI.importConfluence(file, currentDeptID).then((res) => {
-      let wikis = this.state.wikis.slice(0);
-      let groupWikis = this.state.groupWikis;
-      let new_wiki = res.data;
-      new_wiki['version'] = 'v2';
-      new_wiki['admins'] = new_wiki.group_admins;
-      let findGroup = false;
-      if (currentDeptID) {
-        groupWikis.filter(group => {
-          if (group.group_id === currentDeptID) {
-            group.wiki_info.push(new_wiki);
-            findGroup = true;
-          }
-          return group;
-        });
-        if (findGroup) {
-          this.setState({
-            groupWikis: groupWikis,
-          });
-        } else {
-          groupWikis.push({
-            group_id: currentDeptID,
-            group_name: new_wiki.group_name,
-            wiki_info: [new_wiki],
-          });
-          this.setState({
-            groupWikis: groupWikis,
-          });
+  queryImportConfluenceStatus = (task_id, task_type) => {
+    userAPI.queryIOStatus(task_id, task_type).then(res => {
+      if (res.data.is_finished === true) {
+        toaster.success('Import confluence success.');
+        var currentUrl = window.location.href;
+        if (currentUrl.includes('published')){
+          window.location.reload();
         }
       } else {
-        wikis.unshift(new_wiki);
-        this.setState({
-          wikis: wikis,
-        });
+        setTimeout(() => {
+          this.queryImportConfluenceStatus(task_id, task_type);
+        }, 1000);
       }
-      return res;
+    }).catch(err => {
+      this.setState({
+        isShowImportConfluenceDialog: false
+      });
+      toaster.danger(gettext('Failed to import confluence. '));
+    });
+  };
+
+  importConfluence = (file, currentDeptID) => {
+    let task_id = '';
+    wikiAPI.importConfluence(file, currentDeptID).then((res) => {
+      task_id = res.data.task_id;
+      this.setState({
+        taskId: task_id
+      });
+      return userAPI.queryIOStatus(task_id, 'import');
+    }).then(res => {
+      if (res.data.is_finished === true) {
+        var currentUrl = window.location.href;
+        if (currentUrl.includes('published')){
+          window.location.reload();
+        }
+      } else {
+        this.queryImportConfluenceStatus(task_id, 'import');
+      }
+    }).catch(error => {
+      if (error.response && error.response.status === 500) {
+        const error_msg = error.response.data ? error.response.data['error_msg'] : null;
+        if (error_msg && error_msg !== 'Internal Server Error') {
+          toaster.danger(error_msg);
+        } else {
+          toaster.danger(gettext('Internal Server Error'));
+        }
+      } else {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
+      this.toggleImportConfluenceDialog();
     });
   };
 

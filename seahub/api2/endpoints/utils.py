@@ -304,19 +304,6 @@ def sdoc_export_to_md(path, doc_uuid, download_url,
     return resp
 
 
-def confluence_to_wiki(filename, download_url, upload_url, username, seafile_server_url):
-    headers = convert_file_gen_headers()
-    params = {
-        'filename': filename,
-        'download_url': download_url,
-        'upload_url': upload_url,
-        'username': username,
-        'seafile_server_url': seafile_server_url
-    }
-    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/confluence-to-wiki/'
-    resp = requests.post(url, json=params, headers=headers, timeout=30)
-    return resp.content
-
 def format_date(start, end):
     start_struct_time = datetime.datetime.strptime(start, "%Y-%m-%d")
     start_timestamp = time.mktime(start_struct_time.timetuple())
@@ -346,6 +333,17 @@ def event_export_status(task_id):
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
     url = urljoin(SEAFEVENTS_SERVER_URL, '/query-export-status')
+    params = {'task_id': task_id}
+    resp = requests.get(url, params=params, headers=headers)
+
+    return resp
+
+
+def event_import_confluence_status(task_id):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-import-confluence-status')
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
 

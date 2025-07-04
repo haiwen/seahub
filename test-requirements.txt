@@ -7,4 +7,3 @@ splinter
 pytest==7.4.4
 pytest-django
 selenium
-beautifulsoup4==4.12.*
