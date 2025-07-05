@@ -1,7 +1,9 @@
 import logging
 import os.path
-
+import json
 from pysearpc import SearpcError
+
+from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
 from seahub.repo_metadata.models import RepoMetadata
 from seaserv import seafile_api
 
@@ -35,12 +37,15 @@ class ImageCaption(APIView):
         lang = request.data.get('lang')
         org_id = request.user.org.org_id if request.user.org else None
         username = request.user.username
+        record_id = request.data.get('record_id')
         if not repo_id:
             return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id invalid')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'path invalid')
         if not lang:
             return api_error(status.HTTP_400_BAD_REQUEST, 'lang invalid')
+        if not record_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'record_id invalid')
 
         file_type, _ = get_file_type_and_ext(os.path.basename(path))
         if file_type != IMAGE:
@@ -78,13 +83,41 @@ class ImageCaption(APIView):
             'download_token': token,
             'lang': lang,
             'org_id': org_id,
-            'username': username
+            'username': username,
+            'capture_time': None,
+            'address': None
         }
+        metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `{METADATA_TABLE.columns.id.name}`=?;'
+        parameters = [record_id]
+        try:
+            query_result = metadata_server_api.query_rows(sql, parameters)
+        except Exception as e:
+            query_result = None
+            logger.error(e)
+        if query_result:
+            rows = query_result.get('results')[0]
+            file_details = rows.get(METADATA_TABLE.columns.file_details.name, None)
+            
+            if file_details:
+                json_str = file_details.split('```json\n')[1].split('\n```')[0]
+                capture_time = json.loads(json_str).get('Capture time')
+                params['capture_time'] = capture_time
+                
+
+            location_translated = rows.get(METADATA_TABLE.columns.location_translated.name, None)
+            if location_translated:
+                address = location_translated.get('address')
+                params['address'] = address
 
         try:
             resp = image_caption(params)
             resp_json = resp.json()
         except Exception as e:
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
