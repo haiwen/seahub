@@ -207,8 +207,12 @@ class Collab {
 
     if (!result) return;
 
+    if (result.storedElements) {
+      // local current version is behind server storage version
+      this.excalidrawAPI.updateScene({ elements: result.storedElements });
+    }
+
     this.updateDocumentVersion(result.version);
-    this.excalidrawAPI.updateScene({ elements: result.storedElements });
   };
 
   handleRemoteSceneUpdate = (params) => {
