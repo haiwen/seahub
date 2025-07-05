@@ -7,7 +7,6 @@ import posixpath
 import datetime
 import uuid
 import re
-import requests
 from copy import deepcopy
 from constance import config
 from urllib.parse import quote
@@ -35,7 +34,8 @@ from seahub.wiki2.models import WikiPageTrash, Wiki2Publish
 from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
-    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task
+    delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task, \
+    import_conflunece_to_wiki
 
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
     get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
@@ -48,7 +48,7 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_repo_owner, is_valid_repo_id_format, is_group_repo_staff, is_repo_owner
 from seahub.seadoc.utils import get_seadoc_file_uuid, gen_seadoc_access_token, copy_sdoc_images_with_sdoc_uuid
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY, \
-    ENCRYPTED_LIBRARY_VERSION
+    ENCRYPTED_LIBRARY_VERSION, SERVICE_URL, MAX_CONFLUENCE_FILE_SIZE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.tags.models import FileUUIDMap
@@ -60,6 +60,7 @@ from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
 from seahub.share.utils import is_repo_admin
+from seahub.group.utils import group_id_to_name
 
 
 HTTP_520_OPERATION_FAILED = 520
@@ -1629,3 +1630,121 @@ class WikiPageExport(APIView):
         response['Content-Disposition'] = 'attachment;filename*=utf-8''%s;filename="%s"' % (encoded_filename, encoded_filename)
 
         return response
+
+
+class ImportConfluenceView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        # file check
+        file = request.FILES.get('file')
+        if not file:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File is required')
+        filename = file.name
+        if not filename.endswith('.html.zip'):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File must be a zip file with .html.zip extension')
+        file_size = file.size
+        if file_size > MAX_CONFLUENCE_FILE_SIZE:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File is too large')
+        # permission check
+        username = request.user.username
+        if not request.user.permissions.can_add_repo():
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create library.')
+
+        if not request.user.permissions.can_create_wiki():
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to create wiki.')
+        
+        group_id = request.data.get('group_id', None)
+        org_id = request.user.org.org_id if is_org_context(request) else -1
+        
+        underscore_index = filename.rfind('_')
+        if underscore_index != -1:
+            # The file name for exporting the script is spaceName_spaceId.html.zip
+            wiki_name = filename[:underscore_index]
+            space_key = filename[underscore_index + 1:-len('.html.zip')]
+        elif 'Confluence-space-export-' in filename:
+            # The manually exported file name is Confluence-space-export-id.html.zip
+            wiki_name = filename[:-len('.html.zip')]
+            space_key = filename[len('Confluence-space-export-'):-len('.html.zip')]
+        else:
+            wiki_name = filename[:-len('.html.zip')]
+            space_key = wiki_name
+        
+        # create wiki
+        try:
+            repo_id = self._create_wiki(group_id, wiki_name, org_id, username)
+            seafile_db_api = SeafileDB()
+            seafile_db_api.set_repo_type(repo_id, 'wiki')
+        except Exception as e:
+            logger.error(e)
+            msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+        seafile_server_url = f'{SERVICE_URL}/lib/{repo_id}/file/'
+        wiki = Wiki.objects.get(wiki_id=repo_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found')
+        extract_dir = '/tmp/wiki'
+        space_dir = os.path.join(extract_dir, space_key)
+        if not os.path.exists(space_dir):
+            os.makedirs(space_dir)
+        try:
+            tmp_zip_file = os.path.join(space_dir, filename)
+            with open(tmp_zip_file, 'wb') as f:
+                for chunk in file.chunks():
+                    f.write(chunk)
+        except Exception as e:
+            logger.error(e)
+            msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
+        task_id = import_conflunece_to_wiki({
+            'repo_id': repo_id,
+            'space_key': space_key,
+            'file_path': tmp_zip_file,
+            'tmp_zip_file': tmp_zip_file,
+            'username': username,
+            'seafile_server_url': seafile_server_url
+        })
+
+        return Response({'task_id': task_id})
+    
+    def _create_wiki(self, group_id, wiki_name, org_id, username):
+        permission = PERMISSION_READ_WRITE
+        if group_id:
+            group_id = int(group_id)
+            # only group admin can create wiki
+            if not is_group_admin(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            group_quota = seafile_api.get_group_quota(group_id)
+            group_quota = int(group_quota)
+            if group_quota <= 0 and group_quota != -2:
+                error_msg = 'No group quota.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # create group owned repo
+            password = None
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT', 'ROLE_BASED'):
+                    storage_id = None
+                    repo_id = seafile_api.add_group_owned_repo(group_id,
+                                                               wiki_name,
+                                                               permission,
+                                                               password,
+                                                               enc_version=ENCRYPTED_LIBRARY_VERSION,
+                                                               storage_id=storage_id)
+                else:
+                    repo_id = SeafileAPI.add_group_owned_repo(
+                        group_id, wiki_name, password, permission, org_id=org_id)
+            else:
+                repo_id = SeafileAPI.add_group_owned_repo(
+                    group_id, wiki_name, password, permission, org_id=org_id)
+        else:
+            if org_id and org_id > 0:
+                repo_id = seafile_api.create_org_repo(wiki_name, '', username, org_id)
+            else:
+                repo_id = seafile_api.create_repo(wiki_name, '', username)
+        return repo_id
