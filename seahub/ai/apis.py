@@ -83,9 +83,10 @@ class ImageCaption(APIView):
             'download_token': token,
             'lang': lang,
             'org_id': org_id,
-            'username': username
+            'username': username,
+            'capture_time': None,
+            'address': None
         }
-
         metadata_server_api = MetadataServerAPI(repo_id, user=request.user.username)
 
         from seafevents.repo_metadata.constants import METADATA_TABLE
@@ -99,27 +100,24 @@ class ImageCaption(APIView):
             logger.error(e)
         if query_result:
             rows = query_result.get('results')[0]
-            filedetails = rows['_file_details']
-            address, capture_time = None, None
-        
-            if filedetails is not None:
-                json_str = rows['_file_details'].split('```json\n')[1].split('\n```')[0]
-                capture_time = json.loads(json_str)['Capture time']
-
-            location_translated = rows['_location_translated']
-            if location_translated.get('address') is not None:
-                address = location_translated['address']
+            file_details = rows.get(METADATA_TABLE.columns.file_details.name, None)
             
-                
-            if capture_time is not None:
+            if file_details:
+                json_str = file_details.split('```json\n')[1].split('\n```')[0]
+                capture_time = json.loads(json_str).get('Capture time')
                 params['capture_time'] = capture_time
-            if address is not None:
+                
+
+            location_translated = rows.get(METADATA_TABLE.columns.location_translated.name, None)
+            if location_translated:
+                address = location_translated.get('address')
                 params['address'] = address
 
         try:
             resp = image_caption(params)
             resp_json = resp.json()
         except Exception as e:
+            logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
