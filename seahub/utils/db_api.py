@@ -703,8 +703,12 @@ class SeafileDB:
 
 
     def get_download_limit_org(self,start,per_page):
-        # sql = "SELECT * FROM seafile.OrgDownloadRateLimit;"
-        sql = "SELECT * FROM seafile.OrgDownloadRateLimit ORDER BY id LIMIT %s OFFSET %s"
+        sql = f"""
+                SELECT *
+                FROM `{self.db_name}`.`OrgDownloadRateLimit`
+                ORDER BY id
+                LIMIT %s OFFSET %s
+                """
         with connection.cursor() as cursor:
             cursor.execute(sql,[per_page,start])
             rows = cursor.fetchall()
