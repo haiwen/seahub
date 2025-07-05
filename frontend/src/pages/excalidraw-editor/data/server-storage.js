@@ -7,7 +7,7 @@ import { getSyncableElements } from '.';
 import context from '../context';
 
 class ServerScreenCache {
-  static cache = new WeakMap();
+  static cache = new Map();
 
   static get = (socket) => {
     return ServerScreenCache.cache.get(socket);
@@ -49,14 +49,25 @@ export const saveToServerStorage = async (socketId, exdrawContent, appState) => 
   if (!socketId || isSavedToServerStorage(socketId, elements)) {
     return null;
   }
-  const result = await loadFromServerStorage();
-  const { elements: prevStoredElements } = result;
 
-  const prevElements = getSyncableElements(restoreElements(prevStoredElements));
-  const storedElements = getSyncableElements(reconcileElements(elements, prevElements, appState));
+  // const result = await loadFromServerStorage();
+  // const { elements: prevStoredElements } = result;
 
-  const saveResult = await saveToBackend(JSON.stringify({ version, elements: storedElements }));
-  return { ...saveResult, storedElements };
+  // const prevElements = getSyncableElements(restoreElements(prevStoredElements));
+  // const storedElements = getSyncableElements(reconcileElements(elements, prevElements, appState));
+
+  const saveResult = await saveToBackend(JSON.stringify({ version, elements }));
+  if (!saveResult.success) return null;
+
+  ServerScreenCache.set(socketId, elements);
+  let storedElements = null;
+  if (!saveResult.updated) {
+    const { elements: prevStoredElements } = saveResult;
+    const prevElements = getSyncableElements(restoreElements(prevStoredElements));
+    storedElements = getSyncableElements(reconcileElements(elements, prevElements, appState));
+    return { ...saveResult, storedElements };
+  }
+  return { ...saveResult };
 };
 
 export const saveInitDataToServer = async (content, localData) => {
