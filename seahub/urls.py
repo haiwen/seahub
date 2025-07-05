@@ -176,7 +176,7 @@ from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminU
         AdminImportUsers
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganizations, \
-        AdminOrganization, AdminSearchOrganization, AdminOrganizationsBaseInfo
+    AdminOrganization, AdminSearchOrganization, AdminOrganizationsBaseInfo, TrafficExceededOrganizations
 from seahub.api2.endpoints.admin.institutions import AdminInstitutions, AdminInstitution
 from seahub.api2.endpoints.admin.institution_users import AdminInstitutionUsers, AdminInstitutionUser
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
@@ -776,6 +776,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/groups/$', AdminOrgGroups.as_view(),name='api-v2.1-admin-org-groups'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/repos/$', AdminOrgRepos.as_view(),name='api-v2.1-admin-org-repos'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/statistics/traffic/$', AdminOrgStatsTraffic.as_view(), name='api-v2.1-admin-org-stats-traffic'),
+    re_path(r'^api/v2.1/admin/organizations/trafficexceed/$', TrafficExceededOrganizations.as_view(), name='api-v2.1-admin-org-traffic-exceeded'),
 
     ## admin::institutions
     re_path(r'^api/v2.1/admin/institutions/$', AdminInstitutions.as_view(), name='api-v2.1-admin-institutions'),
