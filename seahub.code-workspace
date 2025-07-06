@@ -1,0 +1,71 @@
+{
+    "folders": [
+        {
+            "name": "Seahub",
+            "path": "."
+        },
+        {
+            "name": "Frontend",
+            "path": "./frontend"
+        },
+        {
+            "name": "Backend",
+            "path": "./seahub"
+        }
+    ],
+    "settings": {
+        "python.defaultInterpreterPath": "./venv/bin/python",
+        "python.terminal.activateEnvironment": true,
+        "eslint.workingDirectories": [
+            "frontend"
+        ],
+        "files.exclude": {
+            "**/__pycache__": true,
+            "**/*.pyc": true,
+            "**/node_modules": true,
+            "**/build": true,
+            "**/dist": true,
+            "**/.git": true,
+            "**/.DS_Store": true,
+            "**/assets": true,
+            "**/media": true,
+            "**/venv": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "batisteo.vscode-django",
+            "esbenp.prettier-vscode",
+            "dbaeumer.vscode-eslint"
+        ]
+    },
+    "launch": {
+        "version": "0.2.0",
+        "configurations": [
+            {
+                "name": "Django Server",
+                "type": "python",
+                "request": "launch",
+                "program": "${workspaceFolder}/manage.py",
+                "args": [
+                    "runserver",
+                    "0.0.0.0:8100"
+                ],
+                "django": true,
+                "console": "integratedTerminal",
+                "env": {
+                    "PYTHONUNBUFFERED": "1",
+                    "CCNET_CONF_DIR": "D:/mywork/seahub/dev/conf",
+                    "DJANGO_SETTINGS_MODULE": "seahub.settings",
+                    "PYTHONPATH": "D:/mywork/seahub/thirdpart;${env:PYTHONPATH}",
+                    "SEAFILE_CENTRAL_CONF_DIR": "D:/mywork/seahub/dev/conf",
+                    "SEAFILE_CONF_DIR": "D:/mywork/seahub/dev/runtime",
+                    "SEAHUB_DIR": "D:/mywork/seahub",
+                    "SEAHUB_LOG_DIR": "D:/mywork/seahub/dev/logs"
+                }
+            }
+        ]
+    }
+}

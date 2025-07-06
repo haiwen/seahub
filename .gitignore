@@ -63,6 +63,14 @@ frontend/build
 frontend/package-lock.json
 frontend/.eslintcache
 
+dev
+venv
+
+setup-dev.*
+start-dev.*
+python_ldap-3*
+dev-setup.md
+
 /.idea
 
 .vscode
