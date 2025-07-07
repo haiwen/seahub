@@ -1,6 +1,7 @@
 .sdoc-content-right-panel .cur-view-detail {
   border-left: none;
-  height: calc(100vh - 93px); /* 100vh - toolbar height*/
+  height: calc(100vh - 93px);
+  /* 100vh - toolbar height*/
 }
 
 .sdoc-content-right-panel .cur-view-detail .detail-header {
@@ -31,4 +32,10 @@
 
 .sdoc-content-right-panel .detail-header .detail-control:hover .sdoc-sm-close {
   color: #5a5a5a;
+}
+
+.sdoc-content-right-panel-wrapper .sf-metadata-ai-dropdown-menu .dropdown-menu .dropdown-item:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+  color: #212529;
 }
