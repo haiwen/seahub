@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import event_export_status
+from seahub.api2.endpoints.utils import event_export_status, event_import_status
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -25,13 +25,16 @@ class SeahubIOStatus(APIView):
         Get task status by task id
         """
         task_id = request.GET.get('task_id', '')
+        task_type = request.GET.get('task_type')
         if not task_id:
             error_msg = 'task_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        resp = event_export_status(task_id)
+        if task_type and task_type == 'import':
+            resp = event_import_status(task_id)
+        else:
+            resp = event_export_status(task_id)
         if resp.status_code == 500:
-            logger.error('query export status error: %s, %s' % (task_id, resp.content))
+            logger.error('query export or import status error: %s, %s' % (task_id, resp.content))
             return api_error(500, 'Internal Server Error')
         if not resp.status_code == 200:
             return api_error(resp.status_code, resp.content)

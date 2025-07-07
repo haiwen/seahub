@@ -12,6 +12,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
 import WikiConvertStatusDialog from '../../components/dialog/wiki-convert-status-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
+import ImportConfluenceDialog from '../../components/dialog/import-confluence-dialog';
 
 
 const propTypes = {
@@ -31,6 +32,7 @@ class Wikis extends Component {
       isShowAddWikiMenu: false,
       isShowAddDialog: false,
       isShowConvertStatusDialog: false,
+      isShowImportConfluenceDialog: false,
     };
   }
 
@@ -100,6 +102,75 @@ class Wikis extends Component {
     }
   };
 
+  toggleImportConfluenceDialog = (currentDeptID) => {
+    if (this.state.isShowImportConfluenceDialog) {
+      this.setState({
+        isShowImportConfluenceDialog: false,
+        currentDeptID: '',
+      });
+    } else {
+      this.setState({
+        isShowImportConfluenceDialog: true,
+        currentDeptID
+      });
+    }
+  };
+
+  queryImportConfluenceStatus = (task_id, task_type) => {
+    userAPI.queryIOStatus(task_id, task_type).then(res => {
+      if (res.data.is_finished === true) {
+        toaster.success('Import confluence success.');
+        this.setState({
+          isShowImportConfluenceDialog: false
+        });
+        this.getWikis();
+      } else {
+        setTimeout(() => {
+          this.queryImportConfluenceStatus(task_id, task_type);
+        }, 1000);
+      }
+    }).catch(err => {
+      this.setState({
+        isShowImportConfluenceDialog: false
+      });
+      toaster.danger(gettext('Failed to import confluence. '));
+    });
+  };
+
+  importConfluence = (file, currentDeptID) => {
+    let task_id = '';
+    wikiAPI.importConfluence(file, currentDeptID).then((res) => {
+      task_id = res.data.task_id;
+      this.setState({
+        taskId: task_id
+      });
+      return userAPI.queryIOStatus(task_id, 'import');
+    }).then(res => {
+      if (res.data.is_finished === true) {
+        this.setState({
+          isShowImportConfluenceDialog: false
+        });
+        this.getWikis();
+
+      } else {
+        this.queryImportConfluenceStatus(task_id, 'import');
+      }
+    }).catch(error => {
+      if (error.response && error.response.status === 500) {
+        const error_msg = error.response.data ? error.response.data['error_msg'] : null;
+        if (error_msg && error_msg !== 'Internal Server Error') {
+          toaster.danger(error_msg);
+        } else {
+          toaster.danger(gettext('Internal Server Error'));
+        }
+      } else {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      }
+      this.toggleImportConfluenceDialog();
+    });
+  };
+
   addWiki = (wikiName, currentDeptID) => {
     wikiAPI.addWiki2(wikiName, currentDeptID).then((res) => {
       let wikis = this.state.wikis.slice(0);
@@ -114,14 +185,18 @@ class Wikis extends Component {
           }
           return group;
         });
+        this.setState({
+          currentDeptID: '',
+          groupWikis,
+        });
       } else {
         wikis.push(new_wiki);
+        wikis.unshift(new_wiki);
+        this.setState({
+          wikis,
+        });
       }
-      this.setState({
-        wikis,
-        currentDeptID: '',
-        groupWikis,
-      });
+
     }).catch((error) => {
       if (error.response) {
         let errMessage = Utils.getErrorMsg(error);
@@ -131,6 +206,11 @@ class Wikis extends Component {
   };
 
   deleteWiki = (wiki) => {
+    const owner = wiki.owner;
+    let isGroupWiki = false;
+    if (owner.includes('@seafile_group')) {
+      isGroupWiki = true;
+    }
     if (wiki.version === 'v1') {
       wikiAPI.deleteWiki(wiki.id).then(() => {
         let wikis = this.state.wikis.filter(item => {
@@ -152,17 +232,22 @@ class Wikis extends Component {
       });
     } else {
       wikiAPI.deleteWiki2(wiki.id).then(() => {
-        let wikis = this.state.wikis.filter(item => {
-          return item.id !== wiki.id;
-        });
-        let groupWikis = this.state.groupWikis.filter(group => {
-          group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
-          return group;
-        });
-        this.setState({
-          wikis: wikis,
-          groupWikis: groupWikis,
-        });
+        if (isGroupWiki) {
+          let groupWikis = this.state.groupWikis.filter(group => {
+            group.wiki_info = group.wiki_info.filter(item => item.name !== wiki.name);
+            return group;
+          });
+          this.setState({
+            groupWikis: groupWikis,
+          });
+        } else {
+          let wikis = this.state.wikis.filter(item => {
+            return item.id !== wiki.id;
+          });
+          this.setState({
+            wikis: wikis,
+          });
+        }
       }).catch((error) => {
         if (error.response) {
           let errorMsg = error.response.data.error_msg;
@@ -324,6 +409,15 @@ class Wikis extends Component {
             />
           </ModalPortal>
         }
+        {this.state.isShowImportConfluenceDialog &&
+          <ModalPortal>
+            <ImportConfluenceDialog
+              toggleCancel={this.toggleImportConfluenceDialog}
+              importConfluence={this.importConfluence}
+              currentDeptID={this.state.currentDeptID}
+            />
+          </ModalPortal>
+        }
         <div className="main-panel-center">
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
@@ -332,7 +426,10 @@ class Wikis extends Component {
                 {canCreateWiki &&
                   <SingleDropdownToolbar
                     withPlusIcon={true}
-                    opList={[{ 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() }]}
+                    opList={[
+                      { 'text': gettext('Add Wiki'), 'onClick': () => this.toggleAddWikiDialog() },
+                      { 'text': gettext('Import Confluence'), 'onClick': () => this.toggleImportConfluenceDialog() }
+                    ]}
                   />
                 }
               </div>

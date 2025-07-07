@@ -43,8 +43,11 @@ class UserAPI {
     return this.req.post(url, data);
   }
 
-  queryIOStatus(task_id) {
-    const url = this.server + '/api/v2.1/query-io-status/?task_id=' + task_id;
+  queryIOStatus(task_id, task_type) {
+    let url = this.server + '/api/v2.1/query-io-status/?task_id=' + task_id;
+    if (task_type == 'import') {
+      url = url + '&task_type=import';
+    }
     return this.req.get(url);
   }
 
