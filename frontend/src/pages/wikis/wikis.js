@@ -120,10 +120,10 @@ class Wikis extends Component {
     userAPI.queryIOStatus(task_id, task_type).then(res => {
       if (res.data.is_finished === true) {
         toaster.success('Import confluence success.');
-        var currentUrl = window.location.href;
-        if (currentUrl.includes('published')) {
-          window.location.reload();
-        }
+        this.setState({
+          isShowImportConfluenceDialog: false
+        });
+        this.getWikis();
       } else {
         setTimeout(() => {
           this.queryImportConfluenceStatus(task_id, task_type);
@@ -147,10 +147,11 @@ class Wikis extends Component {
       return userAPI.queryIOStatus(task_id, 'import');
     }).then(res => {
       if (res.data.is_finished === true) {
-        var currentUrl = window.location.href;
-        if (currentUrl.includes('published')) {
-          window.location.reload();
-        }
+        this.setState({
+          isShowImportConfluenceDialog: false
+        });
+        this.getWikis();
+
       } else {
         this.queryImportConfluenceStatus(task_id, 'import');
       }
