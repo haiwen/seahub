@@ -1041,6 +1041,7 @@ if os.environ.get('SEAFILE_DOCS', None):
 ##############################
 ENABLE_METADATA_MANAGEMENT = False
 METADATA_SERVER_URL = ''
+MD_FILE_COUNT_LIMIT = os.getenv('MD_FILE_COUNT_LIMIT', 100000)
 
 #############################
 # multi office suite support

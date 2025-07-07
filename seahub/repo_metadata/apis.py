@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import HttpResponse
+from django.utils.translation import gettext as _
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -26,7 +27,7 @@ from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 from seahub.file_tags.models import FileTags
 from seahub.repo_tags.models import RepoTags
-
+from seahub.settings import MD_FILE_COUNT_LIMIT
 
 logger = logging.getLogger(__name__)
 
@@ -120,9 +121,23 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        init_metadata(metadata_server_api)
-        init_tags(metadata_server_api)
-
+        try:
+            init_metadata(metadata_server_api)
+            init_tags(metadata_server_api)
+        except Exception as e:
+            logger.error(e)
+            metadata.enabled = False
+            metadata.face_recognition_enabled = False
+            metadata.tags_enabled = False
+            metadata.details_settings = '{}'
+            metadata.save()
+            status_code = e.args[0] if e.args else 500
+            if status_code == 400:
+                error_msg = _('Metadata feature is not supported for libraries containing more than %s files') % MD_FILE_COUNT_LIMIT
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            else:
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         try:
             task_id = add_init_metadata_task(params=params)
             metadata_view = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
