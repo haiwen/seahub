@@ -149,7 +149,7 @@
     --bs-tr-hover-bg: #343a40;
     --bs-tr-active-bg: #495057;
     --bs-tr-active-secondary-bg: #495057;
-    --bs-icon-hover-bg:#adb5bd;
+    --bs-icon-hover-bg:#a7acb1;
     --bs-dropdown-link-color: #dee2e6;
     --bs-dropdown-link-bg: #343a40;
 }
@@ -5292,7 +5292,7 @@ fieldset:disabled .btn {
     --bs-popover-font-size: 0.8125rem;
     --bs-popover-bg: var(--bs-body-bg);
     --bs-popover-border-width: 1px;
-    --bs-popover-border-color: #dee3eb;
+    --bs-popover-border-color: var(--bs-border-color);
     --bs-popover-border-radius: 3px;
     --bs-popover-inner-border-radius: 2px;
     --bs-popover-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);

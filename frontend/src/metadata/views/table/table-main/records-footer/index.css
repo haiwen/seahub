@@ -5,8 +5,8 @@
   overflow: hidden;
   line-height: 32px;
   background: var(--bs-body-bg);
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  border-top: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-color);
   display: flex;
   flex-shrink: 0;
 }
