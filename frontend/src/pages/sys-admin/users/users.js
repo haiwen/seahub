@@ -81,7 +81,7 @@ class Users extends Component {
       is_active: urlParams.get('is_active') || is_active,
       role: urlParams.get('role') || role
     }, () => {
-      this.getUsersListByPage(this.state.currentPage);
+      this.getUsersListByPage(this.props.currentPage);
     });
   };
 
@@ -426,7 +426,7 @@ class Users extends Component {
       isBatchSetQuotaDialogOpen,
       isBatchAddAdminDialogOpen
     } = this.props;
-    const { is_active, role, } = this.state;
+    const { is_active, role } = this.state;
 
     return (
       <>
@@ -445,12 +445,12 @@ class Users extends Component {
             loading={this.state.loading}
             errorMsg={this.state.errorMsg}
             items={this.state.userList}
-            sortBy={this.state.sortBy}
-            sortOrder={this.state.sortOrder}
+            sortBy={this.props.sortBy}
+            sortOrder={this.props.sortOrder}
             sortByQuotaUsage={this.sortByQuotaUsage}
             currentPage={this.state.currentPage}
             hasNextPage={this.state.hasNextPage}
-            curPerPage={this.state.perPage}
+            curPerPage={this.props.perPage}
             resetPerPage={this.resetPerPage}
             getListByPage={this.getUsersListByPage}
             updateUser={this.updateUser}

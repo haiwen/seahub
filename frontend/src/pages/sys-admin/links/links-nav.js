@@ -16,8 +16,8 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      { name: 'share', urlPart: 'share', text: gettext('Share Links') },
-      { name: 'upload', urlPart: 'upload', text: gettext('Upload Links') },
+      { name: 'shareLinks', urlPart: 'share-links', text: gettext('Share Links') },
+      { name: 'uploadLinks', urlPart: 'upload-links', text: gettext('Upload Links') },
     ];
 
     this.sortOptions = [
@@ -61,7 +61,7 @@ class Nav extends React.Component {
                 key={index}
                 ref={el => this.itemRefs[index] = el}
               >
-                <Link to={`${siteRoot}sys/links/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}

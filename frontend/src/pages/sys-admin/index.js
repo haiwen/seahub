@@ -39,9 +39,6 @@ import GroupMembers from './groups/group-members';
 
 import Departments from './departments/departments';
 
-import ShareLinks from './links/share-links';
-import UploadLinks from './links/upload-links';
-
 import Orgs from './orgs/orgs';
 import SearchOrgs from './orgs/search-orgs';
 import OrgInfo from './orgs/org-info';
@@ -75,16 +72,11 @@ import AdminOperationLogs from './admin-logs/operation-logs';
 import AdminLoginLogs from './admin-logs/login-logs';
 
 import AbuseReports from './abuse-reports';
-import Links from './links';
 import Devices from './devices';
 import DesktopDevices from './devices/desktop-devices';
 import MobileDevices from './devices/mobile-devices';
 import DeviceErrors from './devices/devices-errors';
-import Libraries from './repos';
-import AllRepos from './repos/all-repos';
-import AllWikis from './repos/all-wikis';
-import SystemRepo from './repos/system-repo';
-import TrashRepos from './repos/trash-repos';
+import LibrariesAndLinks from './libraries-and-links';
 import Logs from './logs-page';
 import VirusScan from './virus-scan';
 import AdminLogs from './admin-logs';
@@ -229,12 +221,12 @@ class SysAdmin extends React.Component {
               <StatisticReport path="reports" />
               <StatisticMetrics path="metrics" />
             </StatisticLayout>
-            <Libraries path={`${siteRoot}sys/*`} {...commonProps} />
+            <LibrariesAndLinks path={`${siteRoot}sys/*`} {...commonProps} />
             <DirView path={`${siteRoot}sys/libraries/:repoID`} {...commonProps} />
-            <Devices path={`${siteRoot}sys/devices/`}>
-              <DesktopDevices path="desktop" {...commonProps} />
-              <MobileDevices path="mobile" {...commonProps} />
-              <DeviceErrors path="errors" {...commonProps} />
+            <Devices path={`${siteRoot}sys/devices/`} {...commonProps}>
+              <DesktopDevices path="desktop" />
+              <MobileDevices path="mobile" />
+              <DeviceErrors path="errors" />
             </Devices>
             <SearchRepos path={siteRoot + 'sys/search-libraries'} {...commonProps} />
             <WebSettings path={siteRoot + 'sys/web-settings'} {...commonProps} />
@@ -244,7 +236,6 @@ class SysAdmin extends React.Component {
             <GroupRepos path={siteRoot + 'sys/groups/:groupID/libraries'} {...commonProps} />
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} {...commonProps} />
             <Departments path={siteRoot + 'sys/departments/'} {...commonProps} />
-            <Links path={`${siteRoot}sys/links/*`} {...commonProps} />
             <Orgs path={siteRoot + 'sys/organizations'} {...commonProps} />
             <SearchOrgs path={siteRoot + 'sys/search-organizations'} {...commonProps} />
             <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} {...commonProps} />

@@ -15,7 +15,6 @@ class AllRepos extends Component {
       repos: [],
       pageInfo: {},
       perPage: 100,
-      sortBy: '',
     };
   }
 
@@ -24,22 +23,17 @@ class AllRepos extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.currentPage !== this.props.currentPage) {
+    if (prevProps.currentPage !== this.props.currentPage ||
+      prevProps.sortBy !== this.props.sortBy
+    ) {
       this.getReposByPage(this.props.currentPage);
-      let urlParams = (new URL(window.location)).searchParams;
-      const { currentPage = 1, perPage, sortBy } = this.state;
-      this.setState({
-        sortBy: urlParams.get('order_by') || sortBy,
-        perPage: parseInt(urlParams.get('per_page') || perPage),
-        currentPage: parseInt(urlParams.get('page') || currentPage)
-      }, () => {
-        this.getReposByPage(this.state.currentPage);
-      });
     }
   }
 
   getReposByPage = (page) => {
     const { perPage, sortBy } = this.props;
+    if (!this.isValidSortBy(sortBy)) return;
+
     systemAdminAPI.sysAdminListAllRepos(page, perPage, sortBy).then((res) => {
       this.setState({
         loading: false,
@@ -52,6 +46,10 @@ class AllRepos extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+  };
+
+  isValidSortBy = (sortBy) => {
+    return ['file_count-desc', 'size-desc', ''].includes(sortBy);
   };
 
   resetPerPage = (perPage) => {

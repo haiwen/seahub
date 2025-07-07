@@ -50,7 +50,7 @@ class Nav extends React.Component {
 
   render() {
     const { currentItem, sortBy, sortOrder = 'desc' } = this.props;
-    const showSortIcon = currentItem == 'all' || currentItem == 'wikis';
+    const showSortIcon = currentItem == 'all-libraries' || currentItem == 'all-wikis';
     const activeIndex = this.navItems.findIndex(item => item.name === currentItem) || 0;
     const indicatorWidth = this.itemWidths[activeIndex] || 56;
     const indicatorOffset = this.itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0);
