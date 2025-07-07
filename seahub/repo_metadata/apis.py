@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from django.http import HttpResponse
+from django.utils.translation import gettext as _
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -132,7 +133,7 @@ class MetadataManage(APIView):
             metadata.save()
             status_code = e.args[0] if e.args else 500
             if status_code == 400:
-                error_msg = f'Metadata feature is not supported for libraries containing more than {MD_FILE_COUNT_LIMIT} files'
+                error_msg = _('Metadata feature is not supported for libraries containing more than %s files') % MD_FILE_COUNT_LIMIT
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             else:
                 error_msg = 'Internal Server Error'
