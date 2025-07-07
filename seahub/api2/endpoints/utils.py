@@ -339,11 +339,11 @@ def event_export_status(task_id):
     return resp
 
 
-def event_import_confluence_status(task_id):
+def event_import_status(task_id):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
-    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-import-confluence-status')
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-import-status')
     params = {'task_id': task_id}
     resp = requests.get(url, params=params, headers=headers)
 

@@ -121,7 +121,7 @@ class Wikis extends Component {
       if (res.data.is_finished === true) {
         toaster.success('Import confluence success.');
         var currentUrl = window.location.href;
-        if (currentUrl.includes('published')){
+        if (currentUrl.includes('published')) {
           window.location.reload();
         }
       } else {
@@ -148,7 +148,7 @@ class Wikis extends Component {
     }).then(res => {
       if (res.data.is_finished === true) {
         var currentUrl = window.location.href;
-        if (currentUrl.includes('published')){
+        if (currentUrl.includes('published')) {
           window.location.reload();
         }
       } else {
