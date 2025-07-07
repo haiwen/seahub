@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import copy from 'copy-to-clipboard';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
+import { seafileAPI } from '../../utils/seafile-api';
 import { enableExcalidraw, enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
 import toaster from '../toast';
-import { seafileAPI } from '../../utils/seafile-api';
 import TipDialog from '../dialog/tip-dailog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
@@ -62,6 +63,15 @@ class DirOperationToolbar extends React.Component {
     let name = path == '/' ? repoName : Utils.getFolderName(path);
 
     eventBus.dispatch(EVENT_BUS_TYPE.SHARE_FILE, path, { type, name, permission: userPerm });
+  };
+
+  copyPath = () => {
+    const { path } = this.props;
+    copy(path);
+    const message = gettext('The path has been copied to the clipboard');
+    toaster.success((message), {
+      duration: 2
+    });
   };
 
   onCreateFolder = () => {
@@ -219,6 +229,12 @@ class DirOperationToolbar extends React.Component {
           'onClick': this.onShareClick
         });
       }
+
+      opList.push({
+        'icon': 'copy1',
+        'text': gettext('Copy path'),
+        'onClick': this.copyPath
+      });
 
       if (enableSeadoc && !repoEncrypted) {
         opList.push('Divider', {
