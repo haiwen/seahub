@@ -268,8 +268,15 @@ class SharedDirView extends React.Component {
         'icon': 'upload-files',
         'disabled': noQuota,
         'title': noQuota ? gettext('The owner of this library has run out of space.') : '',
-        'text': gettext('Upload'),
+        'text': gettext('Upload File'),
         'onClick': this.onUploadFile
+      });
+      opList.push({
+        'icon': 'upload-folder',
+        'disabled': noQuota,
+        'title': noQuota ? gettext('The owner of this library has run out of space.') : '',
+        'text': gettext('Upload Folder'),
+        'onClick': this.onUploadFolder
       });
     }
 
@@ -597,23 +604,57 @@ class SharedDirView extends React.Component {
     this.uploader.onFileUpload();
   };
 
+  onUploadFolder = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFolderUpload();
+  };
+
   onFileUploadSuccess = (direntObject) => {
-    const { path } = this.state;
-    const { name, size } = direntObject;
-    const newItem = {
-      isSelected: false,
-      file_name: name,
-      file_path: Utils.joinPath(path, name),
-      is_dir: false,
-      last_modified: dayjs().format(),
-      size: size
-    };
-    const folderItems = this.state.items.filter(item => { return item.is_dir; });
-    // put the new file as the first file
-    let items = Array.from(this.state.items);
-    items.splice(folderItems.length, 0, newItem);
-    this.setState({ items: items });
-    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name));
+    const { name, type, size, mtime } = direntObject;
+    const isExist = this.state.items.some(item =>
+      (type === 'dir' ? item.folder_name : item.file_name) === name &&
+      item.is_dir === (type === 'dir')
+    );
+    if (isExist) {
+      const items = this.state.items.map(item => {
+        if ((type === 'dir' ? item.folder_name : item.file_name) === name &&
+          item.is_dir === (type === 'dir')) {
+          return {
+            ...item,
+            last_modified: dayjs.unix(mtime).format()
+          };
+        }
+        return item;
+      });
+      this.setState({ items });
+    } else {
+      const newItem = type === 'dir' ? {
+        isSelected: false,
+        folder_name: name,
+        folder_path: Utils.joinPath(relativePath, name) + '/',
+        is_dir: true,
+        last_modified: dayjs.unix(mtime).format()
+      } : {
+        isSelected: false,
+        file_name: name,
+        file_path: Utils.joinPath(relativePath, name),
+        is_dir: false,
+        last_modified: dayjs.unix(mtime).format(),
+        size: size
+      };
+      this.setState(prevState => {
+        const items = Array.from(prevState.items);
+        if (type === 'dir') {
+          items.unshift(newItem);
+        } else {
+          const folderItems = items.filter(item => item.is_dir);
+          items.splice(folderItems.length, 0, newItem);
+        }
+        return { items };
+      });
+    }
+
+    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name), type === 'dir');
   };
 
   getShareLinkRepoTags = () => {

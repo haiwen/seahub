@@ -315,8 +315,6 @@ class FileUploader extends React.Component {
     let currentTime = new Date().getTime() / 1000;
     message = formData.replace ? message : JSON.parse(message)[0];
     if (formData.relative_path) { // upload folder
-      // 'upload folder' is not supported
-      /*
       let relative_path = formData.relative_path;
       let dir_name = relative_path.slice(0, relative_path.indexOf('/'));
       let dirent = {
@@ -341,10 +339,9 @@ class FileUploader extends React.Component {
         }
         return item;
       });
-      this.setState({uploadFileList: uploadFileList});
+      this.setState({ uploadFileList: uploadFileList });
 
       return;
-      */
     }
 
     // replacing file is not allowed in shared link with 'can_upload' permission
