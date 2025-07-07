@@ -1,10 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
-import { isPro, gettext, siteRoot } from '../../../utils/constants';
+import { isPro, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminImportUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-import-user-dialog';
@@ -13,9 +12,6 @@ import SysAdminBatchAddAdminDialog from '../../../components/dialog/sysadmin-dia
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import SysAdminUser from '../../../models/sysadmin-user';
 import SysAdminAdminUser from '../../../models/sysadmin-admin-user';
-import MainPanelTopbar from '../main-panel-topbar';
-import Search from '../search';
-import UsersNav from './users-nav';
 import UsersFilterBar from './users-filter-bar';
 import Content from './users-content';
 
@@ -35,60 +31,58 @@ class Users extends Component {
       errorMsg: '',
       userList: [],
       hasNextPage: false,
-      currentPage: 1,
-      perPage: 100,
-      hasUserSelected: false,
       selectedUserList: [],
       isAllUsersSelected: false,
-      isImportUserDialogOpen: false,
-      isAddUserDialogOpen: false,
-      isBatchSetQuotaDialogOpen: false,
-      isBatchDeleteUserDialogOpen: false,
-      isBatchAddAdminDialogOpen: false,
       is_active: '',
       role: ''
     };
   }
 
   componentDidMount() {
-    if (this.props.isAdmin) { // 'Admin' page
-      this.getUserList(); // no pagination
+    if (this.props.isAdmin) {
+      this.getUserList();
     } else {
-      let urlParams = (new URL(window.location)).searchParams;
-      const {
-        currentPage, perPage,
-        sortBy = '',
-        sortOrder = 'asc',
-        is_active,
-        role
-      } = this.state;
-      this.setState({
-        perPage: parseInt(urlParams.get('per_page') || perPage),
-        currentPage: parseInt(urlParams.get('page') || currentPage),
-        sortBy: urlParams.get('order_by') || sortBy,
-        sortOrder: urlParams.get('direction') || sortOrder,
-        is_active: urlParams.get('is_active') || is_active,
-        role: urlParams.get('role') || role
-      }, () => {
-        this.getUsersListByPage(this.state.currentPage);
-      });
+      this.initUserListFromURL();
     }
   }
 
-  toggleImportUserDialog = () => {
-    this.setState({ isImportUserDialogOpen: !this.state.isImportUserDialogOpen });
-  };
+  componentDidUpdate(prevProps) {
+    const { isAdmin, sortBy, sortOrder, currentPage, perPage } = this.props;
+    if (prevProps.isAdmin !== isAdmin) {
+      this.setState({ loading: true }, () => {
+        if (isAdmin) {
+          this.getUserList();
+        } else {
+          this.initUserListFromURL();
+        }
+      });
+    }
 
-  toggleAddUserDialog = () => {
-    this.setState({ isAddUserDialogOpen: !this.state.isAddUserDialogOpen });
-  };
+    if (prevProps.sortBy !== sortBy ||
+      prevProps.sortOrder !== sortOrder ||
+      prevProps.currentPage !== currentPage) {
+      this.updateURLSearchParams({
+        'page': currentPage,
+        'per_page': perPage,
+        'order_by': sortBy,
+        'direction': sortOrder
+      });
+      this.getUsersListByPage(currentPage);
+    }
+  }
 
-  toggleBatchSetQuotaDialog = () => {
-    this.setState({ isBatchSetQuotaDialogOpen: !this.state.isBatchSetQuotaDialogOpen });
-  };
-
-  toggleBatchDeleteUserDialog = () => {
-    this.setState({ isBatchDeleteUserDialogOpen: !this.state.isBatchDeleteUserDialogOpen });
+  initUserListFromURL = () => {
+    const urlParams = new URL(window.location).searchParams;
+    const {
+      is_active,
+      role
+    } = this.state;
+    this.setState({
+      is_active: urlParams.get('is_active') || is_active,
+      role: urlParams.get('role') || role
+    }, () => {
+      this.getUsersListByPage(this.props.currentPage);
+    });
   };
 
   onUserSelected = (item) => {
@@ -116,9 +110,9 @@ class Users extends Component {
     // finally update state
     this.setState({
       userList: users,
-      hasUserSelected: hasUserSelected,
       selectedUserList: selectedUserList,
     });
+    this.props.onHasUserSelected(hasUserSelected);
   };
 
   toggleSelectAllUsers = () => {
@@ -130,10 +124,10 @@ class Users extends Component {
       });
       this.setState({
         userList: users,
-        hasUserSelected: false,
         isAllUsersSelected: false,
         selectedUserList: [],
       });
+      this.props.onHasUserSelected(false);
     } else {
       // if previous state is not allSelected, toggle to selectAll
       let users = this.state.userList.map(user => {
@@ -142,10 +136,10 @@ class Users extends Component {
       });
       this.setState({
         userList: users,
-        hasUserSelected: true,
         isAllUsersSelected: true,
         selectedUserList: users
       });
+      this.props.onHasUserSelected(true);
     }
   };
 
@@ -168,8 +162,8 @@ class Users extends Component {
   };
 
   getUsersListByPage = (page) => {
-    const { perPage, sortBy, sortOrder, is_active, role } = this.state;
-    const { isLDAPImported } = this.props;
+    const { is_active, role } = this.state;
+    const { perPage, sortBy, sortOrder, isLDAPImported } = this.props;
     systemAdminAPI.sysAdminListUsers(page, perPage, isLDAPImported, sortBy, sortOrder, is_active, role).then(res => {
       let users = res.data.data.map(user => {return new SysAdminUser(user);});
       this.setState({
@@ -202,7 +196,7 @@ class Users extends Component {
       is_active: is_active,
       currentPage: 1
     }, () => {
-      const { currentPage, perPage } = this.state;
+      const { currentPage, perPage } = this.props;
       this.updateURLSearchParams({
         'page': currentPage,
         'per_page': perPage,
@@ -217,28 +211,11 @@ class Users extends Component {
       role: role,
       currentPage: 1
     }, () => {
-      const { currentPage, perPage } = this.state;
+      const { currentPage, perPage } = this.props;
       this.updateURLSearchParams({
         'page': currentPage,
         'per_page': perPage,
         'role': role
-      });
-      this.getUsersListByPage(currentPage);
-    });
-  };
-
-  sortByQuotaUsage = (sortBy, sortOrder) => {
-    this.setState({
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      currentPage: 1
-    }, () => {
-      const { currentPage, perPage, sortBy, sortOrder } = this.state;
-      this.updateURLSearchParams({
-        'page': currentPage,
-        'per_page': perPage,
-        'order_by': sortBy,
-        'direction': sortOrder
       });
       this.getUsersListByPage(currentPage);
     });
@@ -292,9 +269,9 @@ class Users extends Component {
           });
         });
         this.setState({
-          userList: newUserList,
-          hasUserSelected: emails.length != res.data.success.length
+          userList: newUserList
         });
+        this.props.onHasUserSelected(emails.length != res.data.success.length);
         const length = res.data.success.length;
         const msg = length == 1 ?
           gettext('Successfully deleted 1 user.') :
@@ -409,27 +386,6 @@ class Users extends Component {
     });
   };
 
-  getOperationsForAll = () => {
-    const { isAdmin, isLDAPImported } = this.props;
-
-    if (isAdmin) {
-      return <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchAddAdminDialog}>{gettext('Add Admin')}</Button>;
-    }
-
-    if (isLDAPImported) {
-      return <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>;
-    }
-
-    // 'database'
-    return (
-      <Fragment>
-        <Button className="btn btn-secondary operation-item" onClick={this.toggleImportUserDialog}>{gettext('Import Users')}</Button>
-        <Button className="btn btn-secondary operation-item" onClick={this.toggleAddUserDialog}>{gettext('Add User')}</Button>
-        <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>
-      </Fragment>
-    );
-  };
-
   getCurrentNavItem = () => {
     const { isAdmin, isLDAPImported } = this.props;
     let item = 'database';
@@ -439,10 +395,6 @@ class Users extends Component {
       item = 'ldap-imported';
     }
     return item;
-  };
-
-  toggleBatchAddAdminDialog = () => {
-    this.setState({ isBatchAddAdminDialogOpen: !this.state.isBatchAddAdminDialogOpen });
   };
 
   addAdminInBatch = (emails) => {
@@ -463,87 +415,56 @@ class Users extends Component {
     });
   };
 
-  getSearch = () => {
-    if (this.props.isAdmin) {
-      return null;
-    }
-    // offer 'Search' for 'DB' & 'LDAPImported' users
-    return <Search
-      placeholder={gettext('Search users')}
-      submit={this.searchItems}
-    />;
-  };
-
-  searchItems = (keyword) => {
-    navigate(`${siteRoot}sys/search-users/?query=${encodeURIComponent(keyword)}`);
-  };
-
   render() {
-    const { isAdmin, isLDAPImported } = this.props;
     const {
-      is_active,
-      role,
-      hasUserSelected,
+      curTab,
+      isAdmin,
+      isLDAPImported,
       isImportUserDialogOpen,
       isAddUserDialogOpen,
       isBatchDeleteUserDialogOpen,
       isBatchSetQuotaDialogOpen,
       isBatchAddAdminDialogOpen
-    } = this.state;
-    const curTab = this.getCurrentNavItem();
+    } = this.props;
+    const { is_active, role } = this.state;
+
     return (
-      <Fragment>
-        <MainPanelTopbar search={this.getSearch()} {...this.props}>
-          {hasUserSelected ?
-            <Fragment>
-              <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchSetQuotaDialog}>{gettext('Set Quota')}</Button>
-              <Button className="btn btn-secondary operation-item" onClick={this.toggleBatchDeleteUserDialog}>{gettext('Delete Users')}</Button>
-            </Fragment>
-            : this.getOperationsForAll()
+      <>
+        <div className="cur-view-content">
+          {curTab == 'database' &&
+          <UsersFilterBar
+            isActive={is_active}
+            role={role}
+            onStatusChange={this.onStatusChange}
+            onRoleChange={this.onRoleChange}
+          />
           }
-        </MainPanelTopbar>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <UsersNav
-              currentItem={curTab}
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortItems={this.sortByQuotaUsage}
-            />
-            <div className="cur-view-content">
-              {curTab == 'database' &&
-              <UsersFilterBar
-                isActive={is_active}
-                role={role}
-                onStatusChange={this.onStatusChange}
-                onRoleChange={this.onRoleChange}
-              />
-              }
-              <Content
-                isAdmin={isAdmin}
-                isLDAPImported={isLDAPImported}
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.userList}
-                currentPage={this.state.currentPage}
-                hasNextPage={this.state.hasNextPage}
-                curPerPage={this.state.perPage}
-                resetPerPage={this.resetPerPage}
-                getListByPage={this.getUsersListByPage}
-                updateUser={this.updateUser}
-                deleteUser={this.deleteUser}
-                updateAdminRole={this.updateAdminRole}
-                revokeAdmin={this.revokeAdmin}
-                onUserSelected={this.onUserSelected}
-                isAllUsersSelected={this.isAllUsersSelected}
-                toggleSelectAllUsers={this.toggleSelectAllUsers}
-              />
-            </div>
-          </div>
+          <Content
+            isAdmin={isAdmin}
+            isLDAPImported={isLDAPImported}
+            loading={this.state.loading}
+            errorMsg={this.state.errorMsg}
+            items={this.state.userList}
+            sortBy={this.props.sortBy}
+            sortOrder={this.props.sortOrder}
+            sortByQuotaUsage={this.sortByQuotaUsage}
+            currentPage={this.state.currentPage}
+            hasNextPage={this.state.hasNextPage}
+            curPerPage={this.props.perPage}
+            resetPerPage={this.resetPerPage}
+            getListByPage={this.getUsersListByPage}
+            updateUser={this.updateUser}
+            deleteUser={this.deleteUser}
+            updateAdminRole={this.updateAdminRole}
+            revokeAdmin={this.revokeAdmin}
+            onUserSelected={this.onUserSelected}
+            isAllUsersSelected={this.isAllUsersSelected}
+            toggleSelectAllUsers={this.toggleSelectAllUsers}
+          />
         </div>
         {isImportUserDialogOpen &&
         <SysAdminImportUserDialog
-          toggle={this.toggleImportUserDialog}
+          toggle={this.props.toggleImportUserDialog}
           importUserInBatch={this.importUserInBatch}
         />
         }
@@ -553,12 +474,12 @@ class Users extends Component {
             showRole={isPro}
             availableRoles={availableRoles}
             addUser={this.addUser}
-            toggleDialog={this.toggleAddUserDialog}
+            toggleDialog={this.props.toggleAddUserDialog}
           />
         }
         {isBatchSetQuotaDialogOpen &&
           <SysAdminUserSetQuotaDialog
-            toggle={this.toggleBatchSetQuotaDialog}
+            toggle={this.props.toggleBatchSetQuotaDialog}
             updateQuota={this.setUserQuotaInBatch}
           />
         }
@@ -568,7 +489,7 @@ class Users extends Component {
             message={gettext('Are you sure you want to delete the selected user(s) ?')}
             executeOperation={this.deleteUserInBatch}
             confirmBtnText={gettext('Delete')}
-            toggleDialog={this.toggleBatchDeleteUserDialog}
+            toggleDialog={this.props.toggleBatchDeleteUserDialog}
           />
         }
         {isBatchAddAdminDialogOpen &&
@@ -577,7 +498,7 @@ class Users extends Component {
             toggle={this.toggleBatchAddAdminDialog}
           />
         }
-      </Fragment>
+      </>
     );
   }
 }

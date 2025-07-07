@@ -1,8 +1,6 @@
-import React, { Fragment, useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
-import MainPanelTopbar from '../main-panel-topbar';
-import StatisticNav from './statistic-nav';
 import StatisticCommonTool from './statistic-common-tool';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import Loading from '../../../components/loading';
@@ -40,19 +38,15 @@ const StatisticUsers = (props) => {
   }, []);
 
   return (
-    <Fragment>
-      <MainPanelTopbar {...props} />
-      <div className="cur-view-container">
-        <StatisticNav currentItem="usersStatistic" />
-        <div className="cur-view-content">
-          <StatisticCommonTool getActivesFiles={getActivesFiles} />
-          {isLoading && <Loading />}
-          {!isLoading && data.length > 0 && (
-            <Chart title={gettext('Active Users')} legends={legends} data={data} ySuggestedMax={yMax} />
-          )}
-        </div>
+    <div className="cur-view-container">
+      <div className="cur-view-content">
+        <StatisticCommonTool getActivesFiles={getActivesFiles} />
+        {isLoading && <Loading />}
+        {!isLoading && data.length > 0 && (
+          <Chart title={gettext('Active Users')} legends={legends} data={data} ySuggestedMax={yMax} />
+        )}
       </div>
-    </Fragment>
+    </div>
   );
 
 };

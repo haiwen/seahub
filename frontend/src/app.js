@@ -18,7 +18,6 @@ import {
   MIN_SIDE_PANEL_RATE
 } from './components/resize-bar/constants';
 import FilesActivities from './pages/dashboard/files-activities';
-import MyFileActivities from './pages/dashboard/my-file-activities';
 import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
 import ShareAdminLibraries from './pages/share-admin/libraries';
@@ -330,8 +329,10 @@ class App extends Component {
               />
               <Starred path={siteRoot + 'starred'} />
               <InvitationsView path={siteRoot + 'invitations/'} />
-              <FilesActivities path={siteRoot + 'dashboard'} />
-              <MyFileActivities path={siteRoot + 'my-activities'} />
+              <FilesActivities
+                path={`${siteRoot}(dashboard|my-activities)/*`}
+                default
+              />
               <GroupView path={siteRoot + 'group/:groupID'} />
               <LinkedDevices path={siteRoot + 'linked-devices'} />
               <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />

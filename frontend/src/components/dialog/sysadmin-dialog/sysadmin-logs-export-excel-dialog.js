@@ -32,13 +32,13 @@ class LogsExportExcelDialog extends React.Component {
       case 'login':
         this.sysExportLogs('loginadmin');
         break;
-      case 'fileAccess':
+      case 'file-access':
         this.sysExportLogs('fileaudit');
         break;
-      case 'fileUpdate':
+      case 'file-update':
         this.sysExportLogs('fileupdate');
         break;
-      case 'sharePermission':
+      case 'share-permission':
         this.sysExportLogs('permaudit');
         break;
     }

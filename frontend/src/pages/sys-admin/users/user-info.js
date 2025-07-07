@@ -10,9 +10,9 @@ import EditIcon from '../../../components/edit-icon';
 import SysAdminSetQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
 import SysAdminSetUploadDownloadRateLimitDialog from '../../../components/dialog/sysadmin-dialog/set-upload-download-rate-limit';
 import SysAdminUpdateUserDialog from '../../../components/dialog/sysadmin-dialog/update-user';
-import MainPanelTopbar from '../main-panel-topbar';
-import Nav from './user-nav';
 import Selector from '../../../components/single-selector';
+import { eventBus } from '../../../components/common/event-bus';
+import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
 
 const { twoFactorAuthEnabled, availableRoles } = window.sysadmin.pageOptions;
 
@@ -224,8 +224,6 @@ class Content extends Component {
 Content.propTypes = {
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
-  items: PropTypes.array.isRequired,
-  deleteItem: PropTypes.func,
   updateUser: PropTypes.func.isRequired,
   userInfo: PropTypes.object.isRequired,
   disable2FA: PropTypes.func.isRequired,
@@ -252,6 +250,7 @@ class User extends Component {
         loading: false,
         userInfo: res.data
       });
+      eventBus.dispatch(EVENT_BUS_TYPE.SYNC_USERNAME, res.data.name);
     }).catch((error) => {
       this.setState({
         loading: false,
@@ -268,6 +267,7 @@ class User extends Component {
       this.setState({
         userInfo: userInfo
       });
+      eventBus.dispatch(EVENT_BUS_TYPE.SYNC_USERNAME, res.data.name);
       toaster.success(gettext('Edit succeeded'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -339,10 +339,8 @@ class User extends Component {
 
     return (
       <>
-        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <Nav currentItem="info" email={this.props.email} userName={userInfo.name} />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}

@@ -12,8 +12,6 @@ import Loading from '../../../components/loading';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import TransferDialog from '../../../components/dialog/transfer-dialog';
 import OpMenu from '../../../components/dialog/op-menu';
-import MainPanelTopbar from '../main-panel-topbar';
-import Nav from './user-nav';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);
@@ -303,10 +301,8 @@ class Repos extends Component {
   render() {
     return (
       <Fragment>
-        <MainPanelTopbar {...this.props} />
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <Nav currentItem="owned-repos" email={this.props.email} userName={this.state.userInfo.name} />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}

@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { navigate } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import classnames from 'classnames';
@@ -11,8 +10,6 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import LinksNav from './links-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
@@ -47,7 +44,7 @@ class Content extends Component {
       );
 
       const table = (
-        <Fragment>
+        <>
           <table className="table-hover">
             <thead>
               <tr>
@@ -80,7 +77,7 @@ class Content extends Component {
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
-        </Fragment>
+        </>
       );
       return items.length ? table : emptyTip;
     }
@@ -184,34 +181,30 @@ class ShareLinks extends Component {
       errorMsg: '',
       shareLinkList: [],
       perPage: 100,
-      currentPage: 1,
       hasNextPage: false,
-      sortBy: '',
-      sortOrder: 'asc'
     };
     this.initPage = 1;
   }
 
   componentDidMount() {
-    let urlParams = (new URL(window.location)).searchParams;
-    const { currentPage, perPage, sortBy, sortOrder } = this.state;
-    this.setState({
-      perPage: parseInt(urlParams.get('per_page') || perPage),
-      currentPage: parseInt(urlParams.get('page') || currentPage),
-      sortBy: urlParams.get('order_by') || sortBy,
-      sortOrder: urlParams.get('direction') || sortOrder
-    }, () => {
-      this.getShareLinksByPage(this.state.currentPage);
-    });
+    this.getShareLinksByPage(this.props.currentPage);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { currentPage, sortBy, sortOrder } = this.props;
+    if (currentPage !== prevProps.currentPage ||
+      sortBy !== prevProps.sortBy ||
+      sortOrder !== prevProps.sortOrder) {
+      this.getShareLinksByPage(currentPage);
+    }
   }
 
   getShareLinksByPage = (page) => {
-    const { perPage, sortBy, sortOrder } = this.state;
+    const { perPage, sortBy, sortOrder } = this.props;
     systemAdminAPI.sysAdminListShareLinks(page, perPage, sortBy, sortOrder).then((res) => {
       this.setState({
         shareLinkList: res.data.share_link_list,
         loading: false,
-        currentPage: page,
         hasNextPage: Utils.hasNextPage(page, perPage, res.data.count),
       });
     }).catch((error) => {
@@ -219,24 +212,6 @@ class ShareLinks extends Component {
         loading: false,
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
-    });
-  };
-
-  sortItems = (sortBy, sortOrder) => {
-    this.setState({
-      currentPage: 1,
-      sortBy: sortBy,
-      sortOrder: sortOrder
-    }, () => {
-      let url = new URL(location.href);
-      let searchParams = new URLSearchParams(url.search);
-      const { currentPage, sortBy, sortOrder } = this.state;
-      searchParams.set('page', currentPage);
-      searchParams.set('order_by', sortBy);
-      searchParams.set('direction', sortOrder);
-      url.search = searchParams.toString();
-      navigate(url.toString());
-      this.getShareLinksByPage(currentPage);
     });
   };
 
@@ -253,24 +228,16 @@ class ShareLinks extends Component {
   };
 
   resetPerPage = (newPerPage) => {
-    this.setState({
-      perPage: newPerPage,
-    }, () => this.getShareLinksByPage(this.initPage));
+    this.props.onResetPerPage(newPerPage);
+    this.getShareLinksByPage(this.initPage);
   };
 
   render() {
     let { shareLinkList, currentPage, perPage, hasNextPage } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LinksNav
-              currentItem="shareLinks"
-              sortBy={this.state.sortBy}
-              sortOrder={this.state.sortOrder}
-              sortItems={this.sortItems}
-            />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -286,7 +253,7 @@ class ShareLinks extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

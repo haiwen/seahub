@@ -29,11 +29,17 @@ class Nav extends React.Component {
         { name: 'admin', urlPart: 'users/admins', text: gettext('Admin') }
       );
     }
-
     this.sortOptions = [
       { value: 'quota_usage-asc', text: gettext('Ascending by space used') },
       { value: 'quota_usage-desc', text: gettext('Descending by space used') }
     ];
+
+    this.itemRefs = [];
+    this.itemWidths = [];
+  }
+
+  componentDidMount() {
+    this.measureItems();
   }
 
   onSelectSortOption = (item) => {
@@ -41,15 +47,33 @@ class Nav extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   };
 
+  measureItems = () => {
+    this.itemWidths = this.itemRefs.map(ref => ref?.offsetWidth || 77);
+  };
+
   render() {
     const { currentItem, sortBy, sortOrder } = this.props;
     const showSortIcon = currentItem == 'database' || currentItem == 'ldap-imported';
+    const activeIndex = this.navItems.findIndex(item => item.name === currentItem) || 0;
+    const indicatorWidth = this.itemWidths[activeIndex] || 85;
+    const indicatorOffset = this.itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0);
+
     return (
       <div className="cur-view-path tab-nav-container">
-        <ul className="nav">
+        <ul
+          className="nav nav-indicator-container position-relative"
+          style={{
+            '--indicator-width': `${indicatorWidth}px`,
+            '--indicator-offset': `${indicatorOffset}px`
+          }}
+        >
           {this.navItems.map((item, index) => {
             return (
-              <li className="nav-item" key={index}>
+              <li
+                className="nav-item"
+                key={index}
+                ref={el => this.itemRefs[index] = el}
+              >
                 <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );

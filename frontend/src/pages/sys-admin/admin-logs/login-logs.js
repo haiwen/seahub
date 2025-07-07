@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -8,8 +8,6 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import LogsNav from './logs-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
@@ -40,7 +38,7 @@ class Content extends Component {
         </EmptyTip>
       );
       const table = (
-        <Fragment>
+        <>
           <table className="table-hover">
             <thead>
               <tr>
@@ -69,7 +67,7 @@ class Content extends Component {
             curPerPage={perPage}
             resetPerPage={this.props.resetPerPage}
           />
-        </Fragment>
+        </>
       );
       return items.length ? table : emptyTip;
     }
@@ -163,26 +161,22 @@ class AdminLoginLogs extends Component {
   render() {
     let { logList, currentPage, perPage, hasNextPage } = this.state;
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <LogsNav currentItem="adminLoginLogs" />
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={logList}
-                currentPage={currentPage}
-                perPage={perPage}
-                hasNextPage={hasNextPage}
-                getLogsByPage={this.getLogsByPage}
-                resetPerPage={this.resetPerPage}
-              />
-            </div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={logList}
+              currentPage={currentPage}
+              perPage={perPage}
+              hasNextPage={hasNextPage}
+              getLogsByPage={this.getLogsByPage}
+              resetPerPage={this.resetPerPage}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

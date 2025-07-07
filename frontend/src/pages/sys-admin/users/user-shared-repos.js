@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import dayjs from 'dayjs';
@@ -9,9 +9,7 @@ import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { isPro, siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
-import Nav from './user-nav';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);
@@ -166,11 +164,9 @@ class Repos extends Component {
 
   render() {
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <Nav currentItem="shared-repos" email={this.props.email} userName={this.state.userInfo.name} />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -180,7 +176,7 @@ class Repos extends Component {
             </div>
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

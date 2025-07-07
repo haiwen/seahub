@@ -32,4 +32,13 @@ export const EVENT_BUS_TYPE = {
   PERMISSION: 'permission',
   ACCESS_LOG: 'access_log',
   PREVIEW_IMAGE: 'preview_image',
+
+  // sys-admin pages
+  CLEAR_DEVICE_ERRORS: 'clear_device_errors',
+  SHOW_CLEAN_BTN: 'show_clean_btn',
+  SYNC_USERNAME: 'sync_username',
+  OPEN_CREATE_REPO_DIALOG: 'open_create_repo_dialog',
+  OPEN_CLEAN_TRASH_DIALOG: 'open_clean_trash_dialog',
+  HANDLE_SELECTED_OPERATIONS: 'handle_selected_operations',
+  RESET_PER_PAGE: 'reset_per_page',
 };

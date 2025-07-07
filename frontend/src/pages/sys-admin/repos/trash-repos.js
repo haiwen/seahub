@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import classnames from 'classnames';
@@ -14,10 +13,8 @@ import Paginator from '../../../components/paginator';
 import ModalPortal from '../../../components/modal-portal';
 import OpMenu from '../../../components/dialog/op-menu';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
-import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import UserLink from '../user-link';
-import ReposNav from './repos-nav';
 
 const { trashReposExpireDays } = window.sysadmin.pageOptions;
 
@@ -304,7 +301,6 @@ class TrashRepos extends Component {
       repos: [],
       pageInfo: {},
       perPage: 100,
-      isCleanTrashDialogOpen: false
     };
   }
 
@@ -318,10 +314,6 @@ class TrashRepos extends Component {
       this.getReposByPage(this.state.currentPage);
     });
   }
-
-  toggleCleanTrashDialog = () => {
-    this.setState({ isCleanTrashDialogOpen: !this.state.isCleanTrashDialogOpen });
-  };
 
   getReposByPage = (page) => {
     let perPage = this.state.perPage;
@@ -399,20 +391,12 @@ class TrashRepos extends Component {
   };
 
   render() {
-    const { isCleanTrashDialogOpen } = this.state;
+    const { isCleanTrashDialogOpen } = this.props;
 
-    // enable 'search': <MainPanelTopbar search={this.getSearch()}>
     return (
-      <Fragment>
-        {this.state.repos.length ? (
-          <MainPanelTopbar {...this.props}>
-            <Button className="operation-item" onClick={this.toggleCleanTrashDialog}>{gettext('Clean')}</Button>
-          </MainPanelTopbar>
-        ) : <MainPanelTopbar {...this.props} />
-        }
+      <>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <ReposNav currentItem="trash" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -434,10 +418,10 @@ class TrashRepos extends Component {
             message={gettext('Are you sure you want to clear trash?')}
             executeOperation={this.cleanTrash}
             confirmBtnText={gettext('Clear')}
-            toggleDialog={this.toggleCleanTrashDialog}
+            toggleDialog={this.props.toggleCleanTrashDialog}
           />
         }
-      </Fragment>
+      </>
     );
   }
 }
