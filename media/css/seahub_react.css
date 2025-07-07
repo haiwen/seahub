@@ -1788,3 +1788,30 @@ a.table-sort-op:hover {
 .custom-switch-description {
   color: var(--bs-body-color);
 }
+
+.sdoc-editor-page-wrapper {
+  background-color: var(--bs-body-bg) !important;
+  color: var(--bs-body-color) !important;
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-scroll-container {
+  background-color: var(--bs-body-secondary-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header {
+  background-color: var(--bs-header-bg) !important;
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-name {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-editor-toolbar {
+  background-color: var(--bs-body-secondary-bg);
+  color: var(--bs-body-color);
+}
+
+/* set all child elements' border color as red */
+.sdoc-editor-page-wrapper.sdoc-editor-container.sdoc-editor-toolbar>* {
+  border-color: var(--bs-border-color);
+}

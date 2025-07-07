@@ -11,7 +11,7 @@
 }
 
 .file-chooser-item .item-active {
-  background: #f5f5f5;
+  background: var(--bs-nav-active-bg);
   border-radius: 3px;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .file-chooser-item .item-info:hover {
-  background: #f0f0f0;
+  background: var(--bs-nav-hover-bg);
   border-radius: 3px;
 }
 
@@ -88,7 +88,7 @@
 }
 
 .file-chooser-search-container .searched-list-item.tr-active {
-  background-color: #f5f5f5 !important;
+  background-color: var(--bs-nav-active-bg) !important;
 }
 
 .file-chooser-search-container .searched-item-icon {
@@ -109,7 +109,7 @@
 }
 
 .file-chooser-search-container .tr-highlight {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-hover-bg);
 }
 
 .file-chooser-search-input {
@@ -155,7 +155,7 @@
 }
 
 .file-chooser-list-view-header:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bs-nav-active-bg);
 }
 
 .file-chooser-list-view-header .name {

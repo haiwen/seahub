@@ -24,7 +24,7 @@
 }
 
 .history-info .time {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .history-info .owner {

@@ -53,7 +53,7 @@ body {
 }
 
 .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .main-panel-center .cur-view-content {
@@ -114,6 +114,8 @@ body {
   padding: 0 142px 60px;
   box-shadow: none;
   border: none;
+  background-color: var(--bs-body-secondary-bg);
+  color: var(--bs-body-color);
 }
 
 .sdoc-editor-container .sdoc-article-container .article>div {
@@ -138,7 +140,7 @@ body {
 
 .wiki2-file-history-button .freeze-document-switch .custom-switch-description {
   margin-left: 0;
-  color: #212529;
+  color: var(--bs-body-color);
   transition: none;
 }
 
@@ -157,4 +159,31 @@ body {
   height: 1rem;
   top: 60%;
   left: 50%;
+}
+
+
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-nav-active-bg);
+}
+
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-divider {
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover {
+  background-color: var(--bs-body-bg);
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .sdoc-dropdown-menu-container .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-tr-hover-bg);
+  color: var(--bs-body-color);
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover .sdoc-selected-table-size-custom:hover {
+  background-color: var(--bs-tr-hover-bg);
 }

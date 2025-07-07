@@ -32,7 +32,7 @@
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
 
-<body>
+<body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}" id="{% block body_id %}base{% endblock %}">
     <div id="wrapper" class="{{ LANGUAGE_CODE }}"></div>
     <div id="modal-wrapper" class="{{ LANGUAGE_CODE }}"></div>
     {% block wiki-v1-extra_content %}{% endblock %}
@@ -181,6 +181,18 @@
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
+<script>
+(function() {
+    const storedTheme = localStorage.getItem('sf_dark_mode');
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = storedTheme !== null ? 
+    (storedTheme === 'true' ? 'dark' : 'light') : 
+    (systemDark ? 'dark' : 'light');
+    
+    document.body.setAttribute('data-bs-theme', initialTheme);
+    document.body.classList.toggle('dark-theme', initialTheme === 'dark');
+})();
+</script>
 {% block extra_script %}{% endblock %}
 </body>
 </html>
