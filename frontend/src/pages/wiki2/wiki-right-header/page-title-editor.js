@@ -83,15 +83,24 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
     }
   }, [currentPageConfig, onUpdatePage, pageName]);
 
+  const handlePageNameUpdate = useCallback(() => {
+    setPageName(currentPageConfig.name);
+    const range = document.createRange();
+    const selection = window.getSelection();
+    range.selectNodeContents(contentEditableRef.current);
+    range.collapse(false);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }, [currentPageConfig.name]);
+
+  useEffect(() => {
+    handlePageNameUpdate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     if (pageName !== currentPageConfig.name && isUpdateBySide) {
-      setPageName(currentPageConfig.name);
-      const range = document.createRange();
-      const selection = window.getSelection();
-      range.selectNodeContents(contentEditableRef.current);
-      range.collapse(false);
-      selection.removeAllRanges();
-      selection.addRange(range);
+      handlePageNameUpdate();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPageConfig.name, isUpdateBySide]);
