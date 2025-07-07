@@ -73,25 +73,7 @@
   font-size: 14px;
 }
 
-.nav.activities-nav-indicator-container .nav-item .nav-link {
+.nav.nav-indicator-container .nav-item .nav-link {
   border: none;
-}
-
-.activities-nav-indicator-container::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  width: 80px;
-  background: #ED7109;
-  border-radius: 2px;
-  transition: transform 0.3s ease;
-}
-
-.activities-nav-indicator-container[data-active="all"]::before {
-  transform: translateX(0%);
-}
-
-.activities-nav-indicator-container[data-active="mine"]::before {
-  transform: translateX(108px);
+  margin: 0;
 }
