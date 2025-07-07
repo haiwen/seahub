@@ -120,9 +120,24 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-        init_metadata(metadata_server_api)
-        init_tags(metadata_server_api)
-
+        try:
+            init_metadata(metadata_server_api)
+            init_tags(metadata_server_api)
+        except Exception as e:
+            logger.error(e)
+            metadata.enabled = False
+            metadata.face_recognition_enabled = False
+            metadata.tags_enabled = False
+            metadata.details_settings = '{}'
+            metadata.save()
+            if len(e.args) > 1:
+                response_text = e.args[1]
+                error_data = json.loads(response_text)
+                extracted_error = error_data.get('error', 'Internal Server Error')
+                return api_error(status.HTTP_400_BAD_REQUEST, extracted_error)
+            else:
+                extracted_error = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, extracted_error)
         try:
             task_id = add_init_metadata_task(params=params)
             metadata_view = RepoMetadataViews.objects.filter(repo_id=repo_id).first()
