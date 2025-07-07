@@ -26,7 +26,7 @@ from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 from seahub.file_tags.models import FileTags
 from seahub.repo_tags.models import RepoTags
-
+from seahub.settings import MD_FILE_COUNT_LIMIT
 
 logger = logging.getLogger(__name__)
 
@@ -130,14 +130,13 @@ class MetadataManage(APIView):
             metadata.tags_enabled = False
             metadata.details_settings = '{}'
             metadata.save()
-            if len(e.args) > 1:
-                response_text = e.args[1]
-                error_data = json.loads(response_text)
-                extracted_error = error_data.get('error', 'Internal Server Error')
-                return api_error(status.HTTP_400_BAD_REQUEST, extracted_error)
+            status_code = e.args[0] if e.args else 500
+            if status_code == 400:
+                error_msg = f'Metadata feature is not supported for libraries containing more than {MD_FILE_COUNT_LIMIT} files'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             else:
-                extracted_error = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, extracted_error)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         try:
             task_id = add_init_metadata_task(params=params)
             metadata_view = RepoMetadataViews.objects.filter(repo_id=repo_id).first()

@@ -7,7 +7,7 @@ import toaster from '../../../../components/toast';
 import TurnOffConfirmDialog from '../turn-off-confirm-dialog';
 import metadataAPI from '../../../api';
 import { Utils } from '../../../../utils/utils';
-import { gettext } from '../../../../utils/constants';
+import { gettext, mdFileConutLimit } from '../../../../utils/constants';
 import Icon from '../../../../components/icon';
 import { HideColumnPopover } from '../../popover';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../../constants';
@@ -170,6 +170,10 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
             />
             <p className="tip m-0">
               {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
+            </p>
+            <br/>
+            <p className="tip m-0">
+              {gettext('Metadata feature is not supported for libraries containing more than {mdFileConutLimit} files.').replace('{mdFileConutLimit}', mdFileConutLimit)}
             </p>
             {value && (
               <div className="metadata-status-hide-columns-container mt-4">

@@ -27,7 +27,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, ENABLE_EXCALIDRAW, NOTIFICATION_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
-    ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER
+    ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER, MD_FILE_COUNT_LIMIT
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -183,6 +183,7 @@ def base(request):
         'about_dialog_custom_html': ABOUT_DIALOG_CUSTOM_HTML,
         'enable_repo_auto_del': ENABLE_REPO_AUTO_DEL,
         'enable_metadata_management': ENABLE_METADATA_MANAGEMENT,
+        'md_file_count_limit': MD_FILE_COUNT_LIMIT,
         'enable_seadoc': ENABLE_SEADOC,
         'enable_seafile_ai': ENABLE_SEAFILE_AI,
         'enable_whiteboard': ENABLE_WHITEBOARD,
