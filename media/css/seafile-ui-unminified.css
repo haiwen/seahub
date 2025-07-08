@@ -60,6 +60,7 @@
     --bs-body-color: #212529;
     --bs-body-bg: #fff;
     --bs-body-secondary-bg: #f7f7f5;
+    --bs-secondary-color: #444;
     --bs-border-width: 1px;
     --bs-border-style: solid;
     --bs-border-color: #eee;
@@ -78,6 +79,7 @@
     --bs-header-bg: #f8fafd;
     --bs-header-secondary-bg: #f6f6f6;
     --bs-header-tertiary-bg: #f2f2f2;
+    --bs-button-bg: #f0f0f0;
     --bs-nav-hover-bg: #f0f0f0;
     --bs-nav-active-bg: #f5f5f5;
     --bs-wiki-nav-hover-bg: #efefed;
@@ -86,8 +88,9 @@
     --bs-th-bg: #f9f9f9;
     --bs-tr-active-bg: #f2f4f6;
     --bs-tr-active-secondary-bg: #dbecfa;
-    --bs-icon-gray: #999;
-    --bs-icon-gray-dark: #666;
+    --bs-icon-color: #444;
+    --bs-icon-secondary-color: #666;
+    --bs-icon-tertiary-color: #999;
     --bs-icon-hover-bg: #efefef;
     --bs-dropdown-link-bg: #20a0ff;
 }
@@ -100,7 +103,7 @@
     --bs-body-bg-rgb: 33, 37, 41;
     --bs-emphasis-color: #fff;
     --bs-emphasis-color-rgb: 255, 255, 255;
-    --bs-secondary-color: rgba(222,  226,  230,  0.75);
+    --bs-secondary-color: #dbdbdb;
     --bs-secondary-color-rgb: 222, 226, 230;
     --bs-secondary-bg: #343a40;
     --bs-secondary-bg-rgb: 52, 58, 64;
@@ -150,6 +153,7 @@
     --bs-header-bg: #212529;
     --bs-header-secondary-bg: #343a40;
     --bs-header-tertiary-bg: #2b3035;
+    --bs-button-bg: #343a40;
     --bs-nav-hover-bg: #343a40;
     --bs-nav-active-bg: #495057;
     --bs-wiki-nav-hover-bg: #343a40;

@@ -43,7 +43,7 @@
   right: 4px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--bs-icon-gray-dark);
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-table-searcher-input-wrapper .btn-close-searcher {
@@ -84,7 +84,7 @@
 }
 
 .toolbar-search-btn i.sf3-font {
-  color: var(--bs-icon-gray-dark);
+  color: var(--bs-icon-secondary-color);
   font-size: 12px;
 }
 

@@ -563,7 +563,7 @@ textarea::placeholder {
 .op-icon {
   font-size: 1rem;
   line-height: 1;
-  color: var(--bs-icon-gray-dark);
+  color: var(--bs-icon-secondary-color);
   cursor: pointer;
   display: inline-flex;
   width: 24px;
@@ -576,7 +576,7 @@ textarea::placeholder {
 
 .op-icon:focus,
 .op-icon:hover {
-  color: var(--bs-icon-gray-dark); /* to overwrite the styles for `a:hover` */
+  color: var(--bs-icon-secondary-color); /* to overwrite the styles for `a:hover` */
   text-decoration: none;
   background: var(--bs-icon-hover-bg);
 }
@@ -1789,6 +1789,7 @@ a.table-sort-op:hover {
   color: var(--bs-body-color);
 }
 
+/* sdoc editor */
 .sdoc-editor-page-wrapper {
   background-color: var(--bs-body-bg) !important;
   color: var(--bs-body-color) !important;
@@ -1800,9 +1801,18 @@ a.table-sort-op:hover {
 
 .sdoc-editor-page-wrapper .sdoc-editor-page-header {
   background-color: var(--bs-header-bg) !important;
+  border-color: var(--bs-border-color) !important;
 }
 
 .sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-name {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .sdoc-more-revision-operations-dropdown .sdoc-more-revision-operations-toggle {
+  background-color: var(--bs-button-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .sdoc-more-revision-operations-dropdown .sdoc-more-revision-operation-title-name {
   color: var(--bs-body-color);
 }
 
@@ -1811,7 +1821,82 @@ a.table-sort-op:hover {
   color: var(--bs-body-color);
 }
 
-/* set all child elements' border color as red */
-.sdoc-editor-page-wrapper.sdoc-editor-container.sdoc-editor-toolbar>* {
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu {
   border-color: var(--bs-border-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu .header-toggle:not(.header-toggle-disabled):hover {
+  color: var(--bs-secondary-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item:hover,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu .header-toggle:not(.header-toggle-disabled):hover {
+  background-color: var(--bs-icon-hover-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item .sdoc-menu-with-dropdown-icon div {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-editor__article {
+  background-color: var(--bs-body-secondary-bg);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-dropdown-menu,
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+
+.sdoc-editor-page-wrapper .sdoc-dropdown-menu .sdoc-dropdown-menu-item {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover,
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-nav-active-bg);
+}
+
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-divider {
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-nav-active-bg) !important;
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover {
+  background-color: var(--bs-body-bg);
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .sdoc-dropdown-menu-container .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-tr-hover-bg);
+  color: var(--bs-body-color);
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover .sdoc-selected-table-size-custom:hover {
+  background-color: var(--bs-tr-hover-bg);
+}
+
+.sdoc-sub-dropdown-menu.sdoc-table-template-popover .popover {
+  max-width: fit-content;
+}
+
+.sdoc-sub-dropdown-menu.sdoc-table-template-popover .popover .sdoc-table-template-inner-popover {
+  background-color: var(--bs-body-bg);
+}
+
+.sdoc-search-replace-popover-container {
+  background-color: var(--bs-body-secondary-bg) !important;
+  border-color: var(--bs-border-color) !important;
+}
+
+.sdoc-search-replace-popover-container > * {
+  border-color: var(--bs-border-color) !important;
 }
