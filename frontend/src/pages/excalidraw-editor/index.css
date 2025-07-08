@@ -21,3 +21,10 @@
   filter: none;
   --bs-popover-border-color: transparent;
 }
+
+.excalidraw .dropdown-menu {
+  display: block;
+  border: unset;
+  --bs-dropdown-border-radius: 10px;
+  --bs-dropdown-padding-x: auto;
+}
