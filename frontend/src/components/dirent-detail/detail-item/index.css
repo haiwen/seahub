@@ -40,7 +40,7 @@
 }
 
 .dirent-detail-item .dirent-detail-item-value.editable:hover {
-  background-color: #F5F5F5;
+  background-color: var(--bs-body-tertiary-bg);
   border-radius: 3px;
   cursor: pointer;
 }

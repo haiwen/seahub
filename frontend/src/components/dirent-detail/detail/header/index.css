@@ -25,12 +25,18 @@
   cursor: pointer;
 }
 
-.detail-header .detail-control .detail-control-icon {
+.detail-header .detail-control .detail-control-icon,
+.detail-header .detail-control i {
   font-size: 16px;
   fill: #666;
+  color: #666;
 }
 
 .detail-header .detail-control:hover {
   background-color: var(--bs-icon-hover-bg);
   border-radius: 3px;
+}
+
+.detail-header .detail-control:hover i {
+  fill: var(--bs-icon-hover-color);
 }

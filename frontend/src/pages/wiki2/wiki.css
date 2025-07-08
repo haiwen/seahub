@@ -114,7 +114,7 @@ body {
   padding: 0 142px 60px;
   box-shadow: none;
   border: none;
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
 }
 

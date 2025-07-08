@@ -1342,7 +1342,7 @@ a.table-sort-op:hover {
   padding: 0.25rem 1rem;
   line-height: 1.5;
   cursor: pointer;
-  color: var(--bs-body-color);
+  color: var(--bs-body-color) !important;
   font-size: 14px;
 }
 
@@ -1368,7 +1368,7 @@ a.table-sort-op:hover {
 .dropdown-item:focus .btn .dropdown-item-icon,
 .dropdown-item:hover .sf2-icon-tick,
 .dropdown-item:focus .sf2-icon-tick {
-  color: var(--bs-body-color);
+  color: var(--bs-dropdown-link-hover-color);
 }
 
 .err-tip {
@@ -1694,7 +1694,7 @@ a.table-sort-op:hover {
 }
 
 .side-panel .nav-pills .nav-item .nav-link.active {
-  background-color: var(--bs-nav-active-color);
+  background-color: var(--bs-nav-active-bg);
   color: var(--bs-body-color);
   border: none;
 }
@@ -1796,16 +1796,20 @@ a.table-sort-op:hover {
 }
 
 .sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-scroll-container {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--bs-body-tertiary-bg);
 }
 
 .sdoc-editor-page-wrapper .sdoc-editor-page-header {
-  background-color: var(--bs-header-bg) !important;
+  background-color: var(--bs-body-bg) !important;
   border-color: var(--bs-border-color) !important;
 }
 
 .sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-name {
   color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-icon:hover {
+  color: var(--bs-icon-hover-color);
 }
 
 .sdoc-editor-page-wrapper .sdoc-editor-page-header .sdoc-more-revision-operations-dropdown .sdoc-more-revision-operations-toggle {
@@ -1817,7 +1821,7 @@ a.table-sort-op:hover {
 }
 
 .sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-editor-toolbar {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
 }
 
@@ -1842,8 +1846,20 @@ a.table-sort-op:hover {
 }
 
 .sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-editor__article {
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-outline-menu {
+  background-color: var(--bs-body-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-outline-menu:not(.disabled):hover {
+  color: var(--bs-button-hover-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-content-right-panel-wrapper .sdoc-content-right-panel {
   border-color: var(--bs-border-color);
 }
 
@@ -1893,10 +1909,101 @@ a.table-sort-op:hover {
 }
 
 .sdoc-search-replace-popover-container {
-  background-color: var(--bs-body-secondary-bg) !important;
+  background-color: var(--bs-body-bg) !important;
   border-color: var(--bs-border-color) !important;
 }
 
 .sdoc-search-replace-popover-container > * {
   border-color: var(--bs-border-color) !important;
+}
+
+/* markdown & long text editor */
+.longtext-modal-wrapper .longtext-dialog-container {
+  background-color: var(--bs-body-bg);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .longtext-header-tool-item {
+  color: var(--bs-icon-rgb);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .longtext-header-tool-item:hover {
+  color: var(--bs-icon-hover-rgb);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-editor-outline-menu {
+  background-color: var(--bs-body-bg);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-editor-outline-menu:not(.disabled):hover {
+  color: var(--bs-button-hover-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-toolbar,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar {
+  background-color: var(--bs-toolbar-secondary-bg) !important;
+  border-color: var(--bs-border-quartus-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group {
+  border-color: var(--bs-border-tertiary-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item {
+  background-color: var(--bs-toolbar-secondary-bg);
+  color: var(--bs-quartus-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item:hover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item:hover {
+  background-color: var(--bs-icon-hover-bg);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu {
+  color: var(--bs-quartus-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-toggle:not(.header-toogle-disabled):hover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-toggle:not(.header-toogle-disabled):hover {
+  background-color: var(--bs-icon-hover-bg);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-slate-help-info-control {
+  color: var(--bs-quartus-color);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-slate-help-info-control .icon-use-help:hover {
+  color: var(--bs-icon-hover-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .sf-slate-scroll-container {
+  background-color: var(--bs-body-tertiary-bg);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .article,
+.longtext-modal-wrapper .longtext-dialog-container .sf-simple-slate-editor-container .sf-slate-editor-content .article {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .article {
+  border-color: var(--bs-border-tertiary-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover {
+  background-color: var(--bs-body-bg);
+  border-color: var(--bs-border-tertiary-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover .sf-dropdown-menu-item:hover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover .sf-dropdown-menu-item:hover {
+  background-color: var(--bs-dropdown-secondary-bg);
+}
+
+.sf-slate-editor-container .sf-slate-editor-content .article h1, .sf-slate-editor-container .sf-slate-editor-content .article h2, .sf-slate-editor-container .sf-slate-editor-content .article h3, .sf-slate-editor-container .sf-slate-editor-content .article h4, .sf-slate-editor-container .sf-slate-editor-content .article h5, .sf-slate-editor-container .sf-slate-editor-content .article h6,
+.sf-simple-slate-editor-container .sf-slate-editor-content .article h1, .sf-simple-slate-editor-container .sf-slate-editor-content .article h2, .sf-simple-slate-editor-container .sf-slate-editor-content .article h3, .sf-simple-slate-editor-container .sf-slate-editor-content .article h4, .sf-simple-slate-editor-container .sf-slate-editor-content .article h5, .sf-simple-slate-editor-container .sf-slate-editor-content .article h6 {
+  color: var(--bs-body-color) !important;
 }
