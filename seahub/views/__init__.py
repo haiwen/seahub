@@ -1063,7 +1063,9 @@ def react_fake_view(request, **kwargs):
 
         if not check_folder_permission(request, repo_id, path):
 
-            converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
+            is_org = is_org_context(request)
+            converted_repo_path = seafile_api.convert_repo_path(repo_id, path,
+                                                                username, is_org)
             if not converted_repo_path:
                 error_msg = 'Permission denied.'
                 return render_error(request, error_msg)
