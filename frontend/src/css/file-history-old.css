@@ -35,14 +35,14 @@
 .old-history-main .get-more-btn {
   width: 100%;
   padding: .5em 0;
-  background: #efefef;
+  background: var(--bs-button-active-bg);
   border: 0;
   color: #666;
   border-radius: 2px;
 }
 
 .old-history-main .get-more-btn:hover {
-  color: #444;
+  color: var(--bs-secondary-color);
 }
 
 .old-history-main p {

@@ -23,7 +23,7 @@
 }
 
 .trash-dialog .modal-body .more {
-  background: #efefef;
+  background: var(--bs-button-active-bg);
   border: 0;
   color: #666;
 }

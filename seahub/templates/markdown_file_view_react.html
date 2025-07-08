@@ -14,9 +14,8 @@
         <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" id="favicon" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css" />
-        <!-- <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250619" /> -->
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui-unminified.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20250619" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250708" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20250708" />
         {% render_bundle 'markdownEditor' 'css' %}
         <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_md_file_view.css" />
         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
@@ -73,12 +72,8 @@
         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
         <script>
             (function() {
-                const storedTheme = localStorage.getItem('sf_dark_mode');
                 const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const initialTheme = storedTheme !== null ? 
-                (storedTheme === 'true' ? 'dark' : 'light') : 
-                (systemDark ? 'dark' : 'light');
-                
+                const initialTheme = (systemDark ? 'dark' : 'light');
                 document.body.setAttribute('data-bs-theme', initialTheme);
                 document.body.classList.toggle('dark-theme', initialTheme === 'dark');
             })();

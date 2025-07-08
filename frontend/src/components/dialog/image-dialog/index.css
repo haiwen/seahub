@@ -72,7 +72,7 @@
 .lightbox-side-panel .sf-metadata-ui.collaborator-item,
 .lightbox-side-panel .sf-metadata-text-property-detail-editor:not(.formatter),
 .lightbox-side-panel .sf-metadata-number-property-detail-editor:focus {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .lightbox-side-panel .sf-metadata-text-property-detail-editor:not(.formatter) {

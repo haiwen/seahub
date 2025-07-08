@@ -48,7 +48,7 @@
 
 #img-prev:hover,
 #img-next:hover {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .image-zoomer {

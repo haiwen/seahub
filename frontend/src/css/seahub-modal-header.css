@@ -8,8 +8,8 @@
   font-size: 1.40625rem;
   font-weight: 700;
   line-height: 1;
-  color: #000;
-  text-shadow: 0 1px 0 #fff;
+  color: var(--bs-icon-secondary-color);
+  text-shadow: 0 1px 0 var(--bs-body-bg);
 }
 
 .modal .seahub-modal-btn.close:not(:disabled):not(.disabled):hover {
@@ -24,7 +24,7 @@
 }
 
 .modal .seahub-modal-btn .seahub-modal-btn-inner:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .modal .seahub-modal-btn .seahub-modal-btn-inner .sf3-font {

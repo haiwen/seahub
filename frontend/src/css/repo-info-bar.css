@@ -48,7 +48,7 @@
 }
 
 .file-info a {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .info-icon {

@@ -49,11 +49,6 @@ class App extends Component {
     if (window.location.pathname === '/groups/') {
       window.location.href = window.location.origin + '/libraries/';
     }
-
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const storedTheme = localStorage.getItem('sf_dark_mode');
-    const initialDarkMode = storedTheme !== null ? storedTheme === 'true' : systemDark;
-
     this.state = {
       isSidePanelClosed: false,
       isSidePanelFolded: isMobile ? false : (localStorage.getItem('sf_user_side_nav_folded') == 'true' || false),
@@ -61,7 +56,6 @@ class App extends Component {
       pathPrefix: [],
       inResizing: false,
       sidePanelRate: parseFloat(localStorage.getItem('sf_side_panel_rate') || INIT_SIDE_PANEL_RATE),
-      isDarkMode: initialDarkMode,
     };
     this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org']; // and group
     window.onpopstate = this.onpopstate;
@@ -69,7 +63,6 @@ class App extends Component {
     this.eventBus = eventBus;
     this.resizeBarRef = React.createRef();
     this.dragHandlerRef = React.createRef();
-    this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
   }
 
   onpopstate = (event) => {
@@ -102,23 +95,7 @@ class App extends Component {
     this.navigateClientUrlToLib();
 
     this.initCurrentTabByLocation();
-
-    document.body.dataset.bsTheme = this.state.isDarkMode ? 'dark' : 'light';
-    document.body.classList.toggle('dark-theme', this.state.isDarkMode);
   }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.isDarkMode !== this.state.isDarkMode) {
-      document.body.dataset.bsTheme = this.state.isDarkMode ? 'dark' : 'light';
-      document.body.classList.toggle('dark-theme', this.state.isDarkMode);
-    }
-  }
-
-  handleSystemThemeChange = (e) => {
-    if (localStorage.getItem('sf_dark_mode') === null) {
-      this.setState({ isDarkMode: e.matches });
-    }
-  };
 
   initCurrentTabByLocation = () => {
     // when visit the siteRoot page, highlight the 'Files' tab in the side nav.
@@ -299,7 +276,7 @@ class App extends Component {
       };
     }
     return (
-      <>
+      <React.Fragment>
         <SystemNotification />
         <SystemUserNotification />
         <Header
@@ -382,7 +359,7 @@ class App extends Component {
             <Modal zIndex="1030" isOpen={!isSidePanelClosed} toggle={this.toggleSidePanel} contentClassName="d-none"></Modal>
           </MediaQuery>
         </div>
-      </>
+      </React.Fragment>
     );
   }
 }

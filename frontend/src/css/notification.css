@@ -17,7 +17,7 @@
 #notifications .title {
   line-height: 1.5;
   font-size: 1rem;
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
 }
 

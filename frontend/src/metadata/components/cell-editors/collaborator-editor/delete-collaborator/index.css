@@ -32,7 +32,7 @@
 }
 
 .collaborator .collaborator-name {
-  color: #212529;
+  color: var(--bs-body-color);
   margin-left: 5px;
   max-width: 200px;
   flex: 1 1;

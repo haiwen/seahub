@@ -30,7 +30,7 @@
 .sf-metadata-selector-single-select .seafile-select-option:hover,
 .sf-metadata-selector-multiple-select .seafile-select-option:hover {
   background-color: #f7f7f7;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sf-metadata-selector-multiple-select.seafile-customize-select .selected-option-show,

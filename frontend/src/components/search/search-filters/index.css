@@ -218,7 +218,7 @@
 
 .search-filters-container .search-filter-toggle.active:hover,
 .search-filters-container .search-filter-toggle.highlighted:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .search-filters-container .search-filter-toggle.highlighted,

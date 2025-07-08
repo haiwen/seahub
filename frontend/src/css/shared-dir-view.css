@@ -7,17 +7,17 @@ body {
 }
 
 #shared-dir-view .side-panel {
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
 }
 
 #shared-dir-view .meta-info {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 /* tree view */
 .tree-node-hight-light {
   border-radius: 4px;
-  background-color: #f5f5f5 !important;
+  background-color: var(--bs-nav-active-bg) !important;
 }
 
 .tree-node-hight-light::before {
@@ -42,7 +42,7 @@ body {
 }
 
 .tree-node-inner-hover {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-hover-bg);
   border-radius: 0.25rem;
 }
 
@@ -94,7 +94,7 @@ body {
 }
 
 #shared-dir-view .path-container .path-item:hover {
-  background: #efefef;
+  background: var(--bs-icon-hover-bg);
 }
 
 #shared-dir-view .path-container .path-split {
@@ -135,7 +135,7 @@ body {
   right: 24px;
   padding: 5px;
   background: var(--bs-body-bg);
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-border-color);
   border-radius: 3px;
   margin: 0;
 }

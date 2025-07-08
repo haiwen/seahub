@@ -1,7 +1,7 @@
 .sf-metadata-kanban-card {
   padding: 10px;
   box-shadow: 0 0 3px #0000001f;
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-border-color);
   border-radius: 6px;
   background: var(--bs-body-bg);
   margin: 4px;

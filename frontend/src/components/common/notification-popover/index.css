@@ -124,7 +124,7 @@
 }
 
 .notification-item .notification-header-info .notification-time {
-  color: #666;
+  color: #b4b4b4;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -191,7 +191,7 @@
   margin-right: 15px;
   margin-left: 15px;
   font-size: 14px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .notification-container .notification-body .nav .nav-item .nav-link.active {

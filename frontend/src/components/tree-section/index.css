@@ -51,7 +51,7 @@
 }
 
 .tree-section .tree-section-header .tree-section-header-operation:hover {
-  background-color: #DBDBDB;
+  background-color: var(--bs-icon-hover-secondary-bg);
   cursor: pointer;
   border-radius: 3px;
 }
@@ -109,7 +109,7 @@
 }
 
 .tree-section .tree-section-body .right-icon:hover {
-  background-color: #DBDBDB;
+  background-color: var(--bs-icon-hover-secondary-bg);
   cursor: pointer;
   border-radius: 3px;
 }

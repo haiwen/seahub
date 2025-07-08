@@ -5,7 +5,7 @@
 }
 
 .seafile-comment-title {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   background: var(--bs-body-bg);
   height: 46px;
   line-height: 46px;
@@ -35,7 +35,7 @@
 }
 
 .seafile-comment-title .sdoc-icon-btn:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .seafile-comment-item {
@@ -44,7 +44,7 @@
 }
 
 .seafile-comment-page .seafile-comment-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bs-body-tertiary-bg);
   cursor: pointer;
 }
 
@@ -98,7 +98,7 @@
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:focus,
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:hover {
   color: #999;
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .seafile-comment-item .seafile-comment-content {
@@ -108,7 +108,7 @@
 }
 
 .seafile-comment-item .seafile-comment-content a {
-  color: #212529;
+  color: var(--bs-body-color);
   cursor: default;
 }
 

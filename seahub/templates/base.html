@@ -18,7 +18,7 @@
 <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon">
 <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
 {% block extra_base_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/seafile-ui.css?t=20250619" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/seafile-ui.css?t=20250709" />
 {% endblock %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=20250625" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
@@ -90,12 +90,8 @@
 </div><!-- wrapper -->
 <script>
 (function() {
-    const storedTheme = localStorage.getItem('sf_dark_mode');
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = storedTheme !== null ? 
-    (storedTheme === 'true' ? 'dark' : 'light') : 
-    (systemDark ? 'dark' : 'light');
-    
+    const initialTheme = (systemDark ? 'dark' : 'light');
     document.body.setAttribute('data-bs-theme', initialTheme);
     document.body.classList.toggle('dark-theme', initialTheme === 'dark');
 })();

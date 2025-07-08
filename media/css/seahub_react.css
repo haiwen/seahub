@@ -614,7 +614,7 @@ textarea::placeholder {
 
 .action-icon.sf3-font-delete1:hover,
 .action-icon.sf3-font-copy1:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .action-icon:focus,
@@ -1342,7 +1342,7 @@ a.table-sort-op:hover {
   padding: 0.25rem 1rem;
   line-height: 1.5;
   cursor: pointer;
-  color: var(--bs-body-color) !important;
+  color: var(--bs-dropdown-link-color);
   font-size: 14px;
 }
 
@@ -1367,7 +1367,9 @@ a.table-sort-op:hover {
 .dropdown-item:focus .dropdown-item-icon,
 .dropdown-item:focus .btn .dropdown-item-icon,
 .dropdown-item:hover .sf2-icon-tick,
-.dropdown-item:focus .sf2-icon-tick {
+.dropdown-item:focus .sf2-icon-tick,
+.dropdown-item:hover .metadata-view-icon,
+.dropdown-item:focus .metadata-view-icon {
   color: var(--bs-dropdown-link-hover-color);
 }
 

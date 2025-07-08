@@ -89,7 +89,7 @@
 
 .load-all-tip .load-all:hover,
 .sf-table-footer .load-all:hover {
-  color: #212529;
+  color: var(--bs-body-color);
   border-bottom: 1px solid #212529;
 }
 

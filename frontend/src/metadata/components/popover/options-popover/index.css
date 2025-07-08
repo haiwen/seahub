@@ -15,7 +15,7 @@
 }
 
 .sf-metadata-edit-column-options-container .sf-metadata-option-search-control {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sf-metadata-edit-column-options-container .none-search-result {

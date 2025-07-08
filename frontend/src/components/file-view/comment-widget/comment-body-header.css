@@ -13,12 +13,12 @@
 }
 
 .comments-panel-body__header .comment-type {
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 12px;
 }
 
 .comments-panel-body__header .comment-type {
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 12px;
 }
 

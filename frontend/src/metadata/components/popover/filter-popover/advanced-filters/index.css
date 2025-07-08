@@ -101,7 +101,7 @@
 }
 
 .filter-term .selector-single-select .seafile-select-option:hover {
-  color: #212529;
+  color: var(--bs-body-color);
   background-color: #f7f7f7;
 }
 
@@ -119,13 +119,13 @@
 .sf-metadata-filters-list .selector-multiple-select .seafile-select-option.seafile-select-option-active,
 .sf-metadata-filters-list .selector-collaborator .seafile-select-option:hover,
 .sf-metadata-filters-list .selector-collaborator .seafile-select-option.seafile-select-option-active {
-  color: #212529;
+  color: var(--bs-body-color);
   background-color: #f7f7f7;
 }
 
 .sf-metadata-filters-list .selector-multiple-select .seafile-select-option.seafile-select-option-active .select-option-name,
 .sf-metadata-filters-list .selector-collaborator .seafile-select-option.seafile-select-option-active .select-option-name {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sf-metadata-filters-list .selected-option .multiple-select-option,
@@ -321,6 +321,10 @@
   font-size: 14px;
   fill: #aaa;
   cursor: default;
+}
+
+[data-bs-theme=dark] .sf-metadata-setting-selector__control {
+  background-color: field !important;
 }
 
 .seafile-select-option:hover .sf-metadata-filter-header-icon .seafile-multicolor-icon,

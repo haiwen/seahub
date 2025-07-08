@@ -5,7 +5,7 @@
 }
 
 .sf-dropdown-combined-toggle:hover {
-  background: #efefef;
+  background: var(--bs-icon-hover-bg);
 }
 
 .sf-dropdown-combined-toggle .main-icon {

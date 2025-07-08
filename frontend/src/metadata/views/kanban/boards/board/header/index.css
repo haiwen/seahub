@@ -8,7 +8,7 @@
   align-items: center;
   padding: 16px 8px 0 8px;
   margin-bottom: 4px;
-  background-color: white;
+  background-color: var(--bs-body-bg);
   z-index: 1;
 }
 
@@ -47,5 +47,5 @@
 
 .board-header-operation-btn .kanban-header-op-btn.kanban-header-collapse-btn:hover,
 .board-header-operation-btn .kanban-header-op-btn.kanban-more-operations-toggle:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
 }

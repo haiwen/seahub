@@ -23,10 +23,10 @@
 }
 
 .uploader-list-header {
-  background-color: #f0f0f0;
+  background-color: var(--bs-header-quartus-bg);
   padding: 0.625rem;
   font-size: 1rem;
-  color: #212529;
+  color: var(--bs-body-color);
   display: flex;
   justify-content: space-between;
   min-height: 2.25rem;

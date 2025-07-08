@@ -26,7 +26,7 @@
 }
 
 .sf-metadata-tool .sf-metadata-view-tool-operation-btn:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
   cursor: pointer;
 }
 

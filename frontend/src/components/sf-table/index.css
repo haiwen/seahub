@@ -283,7 +283,7 @@
   align-items: center;
   background: #eceff4;
   border-radius: 3px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .formula-formatter-content-item.simple-cell-text-formatter {

@@ -32,7 +32,7 @@
 .sf-metadata-merge-tags-selector .sf-metadata-tags-editor-tag-container {
   align-items: center;
   border-radius: 2px;
-  color: #212529;
+  color: var(--bs-body-color);
   display: flex;
   font-size: 13px;
   height: 32px;

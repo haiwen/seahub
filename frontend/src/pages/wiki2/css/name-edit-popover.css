@@ -27,5 +27,5 @@
 }
 
 .name-edit-popover-header .header-text {
-  color: #212529;
+  color: var(--bs-body-color);
 }

@@ -4,7 +4,7 @@
 }
 
 .activity-details:hover {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .mobile-activity-time {

@@ -34,11 +34,11 @@
 }
 
 .library-grid-item:hover {
-  background: #f5f5f5;
+  background: var(--bs-tr-hover-bg);
 }
 
 .library-grid-item .library-name {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .library-grid-item .library-grid-item-icon {
