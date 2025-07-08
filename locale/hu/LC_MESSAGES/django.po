@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 10:25+0800\n"
+"POT-Creation-Date: 2025-07-08 11:46+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018,2022-2023\n"
 "Language-Team: Hungarian (http://app.transifex.com/haiwen/seahub/language/hu/)\n"
@@ -373,7 +373,7 @@ msgid ""
 "configuration."
 msgstr "Szerkesztés sikeres de az e-mail küldés sikertelen. Ellenőrizze a levelezés beállításokat."
 
-#: seahub/api2/endpoints/admin/users.py:1501 seahub/auth/views.py:372
+#: seahub/api2/endpoints/admin/users.py:1501 seahub/auth/views.py:371
 msgid "Unable to reset password."
 msgstr ""
 
@@ -443,7 +443,7 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
-#: seahub/api2/endpoints/wiki2.py:463 seahub/api2/endpoints/wiki2.py:491
+#: seahub/api2/endpoints/wiki2.py:464 seahub/api2/endpoints/wiki2.py:492
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4108
 #: seahub/notifications/models.py:592 seahub/notifications/models.py:633
 #: seahub/notifications/models.py:675 seahub/notifications/models.py:726
@@ -452,7 +452,7 @@ msgstr ""
 #: seahub/notifications/models.py:877 seahub/notifications/models.py:894
 #: seahub/notifications/models.py:923 seahub/seadoc/apis.py:2752
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
-#: seahub/utils/__init__.py:175 seahub/views/__init__.py:834
+#: seahub/utils/__init__.py:172 seahub/views/__init__.py:834
 #: seahub/views/ajax.py:398 seahub/views/ajax.py:402 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -460,13 +460,13 @@ msgstr "Belső kiszolgálóhiba"
 
 #: seahub/api2/endpoints/copy_move_task.py:81
 #: seahub/api2/endpoints/move_folder_merge.py:137
-#: seahub/api2/endpoints/via_repo_token.py:1270
+#: seahub/api2/endpoints/via_repo_token.py:1272
 msgid "Destination path is too long."
 msgstr "A célútvonal túl hosszú"
 
 #: seahub/api2/endpoints/copy_move_task.py:91
 #: seahub/api2/endpoints/move_folder_merge.py:133
-#: seahub/api2/endpoints/via_repo_token.py:1266
+#: seahub/api2/endpoints/via_repo_token.py:1268
 msgid "Invalid destination path"
 msgstr "A cél útvonal érvénytelen"
 
@@ -491,9 +491,9 @@ msgstr ""
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
 #: seahub/api2/endpoints/file.py:517 seahub/api2/endpoints/file.py:587
 #: seahub/api2/endpoints/file.py:738 seahub/api2/endpoints/file.py:851
-#: seahub/api2/endpoints/via_repo_token.py:1010
-#: seahub/api2/endpoints/via_repo_token.py:1150
-#: seahub/api2/endpoints/wiki2.py:804
+#: seahub/api2/endpoints/via_repo_token.py:1012
+#: seahub/api2/endpoints/via_repo_token.py:1152
+#: seahub/api2/endpoints/wiki2.py:805
 msgid "File is locked"
 msgstr "A fájl zárolva van"
 
@@ -513,8 +513,8 @@ msgid "User %s not found."
 msgstr "%s felhasználó nem található."
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
-#: seahub/api2/endpoints/via_repo_token.py:850
-#: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/endpoints/via_repo_token.py:852
+#: seahub/api2/endpoints/wiki2.py:602 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2084 seahub/seadoc/apis.py:3110
 msgid "The number of files in library exceeds the limit"
 msgstr ""
@@ -527,7 +527,7 @@ msgstr ""
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1470 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1471 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
 #: seahub/profile/views.py:273 seahub/seadoc/apis.py:2736
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
@@ -535,7 +535,7 @@ msgstr ""
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
 #: seahub/thumbnail/views.py:172 seahub/views/__init__.py:638
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
-#: seahub/views/sso.py:241
+#: seahub/views/sso.py:250
 msgid "Permission denied."
 msgstr "Jogosultság megtagadva"
 
@@ -544,7 +544,7 @@ msgid "File extension is not in the whitelist"
 msgstr ""
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
-#: seahub/api2/endpoints/via_repo_token.py:1167
+#: seahub/api2/endpoints/via_repo_token.py:1169
 msgid "File is not locked."
 msgstr "A fájl nincs zárolva."
 
@@ -871,20 +871,20 @@ msgstr "Már van %(nb_avatars)d avatarja, a maximális engedélyezett szám %(nb
 msgid "Length of WebDAV password should be less than 30."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
+#: seahub/api2/endpoints/wiki2.py:221 seahub/api2/endpoints/wiki2.py:1486
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "A név kizárólag betűket, számokat szóközt,  kötőjelet vagy aláhúzást tartalmazhat."
 
-#: seahub/api2/endpoints/wiki2.py:1335
+#: seahub/api2/endpoints/wiki2.py:1336
 msgid "URL is invalid"
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1339
+#: seahub/api2/endpoints/wiki2.py:1340
 msgid "The custom part of URL should have 5-30 characters."
 msgstr ""
 
-#: seahub/api2/endpoints/wiki2.py:1361
+#: seahub/api2/endpoints/wiki2.py:1362
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr ""
 
@@ -1000,20 +1000,25 @@ msgstr "Jelszó (ismét)"
 msgid "A user with this email already exists."
 msgstr "Már van felhasználó ezzel az e-mail címmel"
 
-#: seahub/auth/views.py:158
+#: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "A fiók zárolva túl sok érvénytelen bejelentkezési kísérlet miatt,"
 
-#: seahub/auth/views.py:324
+#: seahub/auth/views.py:323
 msgid "Logged out"
 msgstr "Kijelentkezett"
 
-#: seahub/auth/views.py:393
+#: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
 msgstr "Az e-mail küldése sikertelen. Vegye fel a kapcsolatot a rendszergazdával."
 
-#: seahub/auth/views.py:467
+#: seahub/auth/views.py:466
 msgid "Unable to change password."
+msgstr ""
+
+#: seahub/auth/views.py:549
+#, python-brace-format
+msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
 msgstr ""
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
@@ -2200,12 +2205,12 @@ msgstr "Következő"
 msgid "Per page: "
 msgstr "Oldalanként: "
 
-#: seahub/organizations/views.py:319 seahub/organizations/views.py:349
+#: seahub/organizations/views.py:320 seahub/organizations/views.py:350
 #: seahub/thumbnail/views.py:160
 msgid "Invalid token."
 msgstr "Érvénytelen kulcs."
 
-#: seahub/organizations/views.py:352
+#: seahub/organizations/views.py:353
 #| msgid "Expiration"
 msgid "Expired token."
 msgstr ""
@@ -2261,6 +2266,13 @@ msgstr "Titkosított kötetet nem lehet alapértelmezettnek beállítani."
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Az alapértelmezett kötet mostantól a következő: \"%s\"."
+
+#: seahub/repo_metadata/apis.py:136
+#, python-format
+msgid ""
+"Metadata feature is not supported for libraries containing more than %s "
+"files"
+msgstr ""
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -3059,7 +3071,7 @@ msgstr ""
 msgid "Disable"
 msgstr "Letilt"
 
-#: seahub/utils/__init__.py:162
+#: seahub/utils/__init__.py:159
 msgid "permission error"
 msgstr "jogosultsághiba"
 
@@ -3208,17 +3220,17 @@ msgstr ""
 msgid "User {token.user} inactive"
 msgstr ""
 
-#: seahub/views/sso.py:170
+#: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
 msgstr ""
 
-#: seahub/views/sso.py:195
+#: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
 msgstr ""
 
-#: seahub/views/sso.py:200
+#: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
 msgstr ""
 

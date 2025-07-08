@@ -66,7 +66,7 @@ class ImportConfluenceDialog extends React.Component {
     if (!file) return;
 
     if (!file.name.endsWith('.html.zip')) {
-      toaster.danger(gettext('Please select a valid Confluence HTML export file (.html.zip)'));
+      toaster.danger(gettext('Select a Confluence HTML exported file (.html.zip)'));
       return;
     }
 
@@ -78,7 +78,7 @@ class ImportConfluenceDialog extends React.Component {
 
   handleSubmit = () => {
     if (!this.state.selectedFile) {
-      toaster.danger(gettext('Please select a Confluence export file'));
+      toaster.danger(gettext('Select a Confluence exported file'));
       return;
     }
 
@@ -87,12 +87,12 @@ class ImportConfluenceDialog extends React.Component {
 
     this.props.importConfluence(this.state.selectedFile, departmentID)
       .then((res) => {
-        toaster.success(gettext('Successfully imported Confluence data'));
+        toaster.success(gettext('Confluence file imported'));
         this.props.toggleCancel();
       })
       .catch((error) => {
         let errorMsg = Utils.getErrorMsg(error);
-        toaster.danger(errorMsg || gettext('Failed to import Confluence data'));
+        toaster.danger(errorMsg || gettext('Failed to import Confluence file'));
       })
       .finally(() => {
         this.setState({ isUploading: false });
@@ -118,7 +118,7 @@ class ImportConfluenceDialog extends React.Component {
       <Modal isOpen={true} autoFocus={false} toggle={this.toggle}>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Import Confluence Wiki')}</SeahubModalHeader>
         <ModalBody>
-          <Label>{gettext('Confluence Export File')}</Label>
+          <Label>{gettext('Confluence export file')}</Label>
           <div className="d-flex align-items-center">
             <input
               type="file"
@@ -130,13 +130,12 @@ class ImportConfluenceDialog extends React.Component {
             <Button color="primary" onClick={this.triggerFileInput} disabled={isUploading}>
               {gettext('Select File')}
             </Button>
-
             <span className="ml-2">
               {selectedFile ? selectedFile.name : gettext('No file selected')}
             </span>
           </div>
           <small className="form-text text-muted">
-            {gettext('Please select a Confluence HTML export file (.html.zip)')}
+            {gettext('Select a Confluence HTML export file (.html.zip)')}
           </small>
           <br />
           {isPro &&
@@ -153,7 +152,6 @@ class ImportConfluenceDialog extends React.Component {
               />
             </>
           }
-
           {selectedFile &&
             <Alert color="info" className="mt-3">
               {gettext('The import process may take several minutes depending on the size of your Confluence export.')}

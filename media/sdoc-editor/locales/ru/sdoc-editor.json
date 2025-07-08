@@ -599,7 +599,7 @@
   "Translation_error_message": "Ошибка перевода, попробуйте еще раз.",
   "The_translation_content_cannot_be_empty": "Содержание перевода не может быть пустым",
   "Processing_message": "Обработка, подождите...",
-  "AI_tip_content": "Удалить текущий контент?",
+  "AI_tip_content": "Do you want to discard current content?",
   "Discard": "Отменить",
   "English": "English",
   "Chinese": "Китайский",
@@ -634,5 +634,7 @@
   "More_operation": "Больше операций",
   "Property": "Свойство",
   "Comment_list": "Список комментариев",
-  "Add_Comment": "Добавить комментарий"
+  "Add_Comment": "Добавить комментарий",
+  "Finish": "Finish",
+  "More_fluent": "More fluent"
 }

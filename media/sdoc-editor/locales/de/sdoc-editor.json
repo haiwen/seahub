@@ -599,7 +599,7 @@
   "Translation_error_message": "Beim Übersetzen ist ein Fehler aufgetreten. Probieren Sie es erneut.",
   "The_translation_content_cannot_be_empty": "Der übersetzte Inhalt darf nicht leer sein.",
   "Processing_message": "Die Bearbeitung ist im Gang ...",
-  "AI_tip_content": "Aktuellen Inhalt verwerfen?",
+  "AI_tip_content": "Do you want to discard current content?",
   "Discard": "Verwerfen",
   "English": "Englisch",
   "Chinese": "Chinesisch",
@@ -634,5 +634,7 @@
   "More_operation": "Weitere Aktionen",
   "Property": "Einstellung",
   "Comment_list": "Liste der Kommentare",
-  "Add_Comment": "Kommentar hinzufügen"
+  "Add_Comment": "Kommentar hinzufügen",
+  "Finish": "Finish",
+  "More_fluent": "More fluent"
 }
