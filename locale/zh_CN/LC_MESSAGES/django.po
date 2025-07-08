@@ -27,7 +27,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 10:25+0800\n"
+"POT-Creation-Date: 2025-07-08 11:46+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2023-2025\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
@@ -382,7 +382,7 @@ msgid ""
 "configuration."
 msgstr "编辑成功, 但发送邮件失败，请检查你的邮件配置。"
 
-#: seahub/api2/endpoints/admin/users.py:1501 seahub/auth/views.py:372
+#: seahub/api2/endpoints/admin/users.py:1501 seahub/auth/views.py:371
 msgid "Unable to reset password."
 msgstr "无法重置密码。"
 
@@ -452,7 +452,7 @@ msgstr "病毒文件未找到。"
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
-#: seahub/api2/endpoints/wiki2.py:463 seahub/api2/endpoints/wiki2.py:491
+#: seahub/api2/endpoints/wiki2.py:464 seahub/api2/endpoints/wiki2.py:492
 #: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4108
 #: seahub/notifications/models.py:592 seahub/notifications/models.py:633
 #: seahub/notifications/models.py:675 seahub/notifications/models.py:726
@@ -461,7 +461,7 @@ msgstr "病毒文件未找到。"
 #: seahub/notifications/models.py:877 seahub/notifications/models.py:894
 #: seahub/notifications/models.py:923 seahub/seadoc/apis.py:2752
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
-#: seahub/utils/__init__.py:175 seahub/views/__init__.py:834
+#: seahub/utils/__init__.py:172 seahub/views/__init__.py:834
 #: seahub/views/ajax.py:398 seahub/views/ajax.py:402 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
@@ -469,13 +469,13 @@ msgstr "服务器内部错误"
 
 #: seahub/api2/endpoints/copy_move_task.py:81
 #: seahub/api2/endpoints/move_folder_merge.py:137
-#: seahub/api2/endpoints/via_repo_token.py:1270
+#: seahub/api2/endpoints/via_repo_token.py:1272
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
 #: seahub/api2/endpoints/copy_move_task.py:91
 #: seahub/api2/endpoints/move_folder_merge.py:133
-#: seahub/api2/endpoints/via_repo_token.py:1266
+#: seahub/api2/endpoints/via_repo_token.py:1268
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
@@ -500,9 +500,9 @@ msgstr "不能把目录 %(src)s 移动到它的子目录 %(des)s 中"
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
 #: seahub/api2/endpoints/file.py:517 seahub/api2/endpoints/file.py:587
 #: seahub/api2/endpoints/file.py:738 seahub/api2/endpoints/file.py:851
-#: seahub/api2/endpoints/via_repo_token.py:1010
-#: seahub/api2/endpoints/via_repo_token.py:1150
-#: seahub/api2/endpoints/wiki2.py:804
+#: seahub/api2/endpoints/via_repo_token.py:1012
+#: seahub/api2/endpoints/via_repo_token.py:1152
+#: seahub/api2/endpoints/wiki2.py:805
 msgid "File is locked"
 msgstr "文件已锁定"
 
@@ -522,8 +522,8 @@ msgid "User %s not found."
 msgstr "未找到用户 %s 。"
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
-#: seahub/api2/endpoints/via_repo_token.py:850
-#: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/endpoints/via_repo_token.py:852
+#: seahub/api2/endpoints/wiki2.py:602 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2084 seahub/seadoc/apis.py:3110
 msgid "The number of files in library exceeds the limit"
 msgstr "该资料库中的文件数量已超过限制"
@@ -536,7 +536,7 @@ msgstr "该资料库中的文件数量已超过限制"
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1470 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1471 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
 #: seahub/profile/views.py:273 seahub/seadoc/apis.py:2736
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
@@ -544,7 +544,7 @@ msgstr "该资料库中的文件数量已超过限制"
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
 #: seahub/thumbnail/views.py:172 seahub/views/__init__.py:638
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
-#: seahub/views/sso.py:241
+#: seahub/views/sso.py:250
 msgid "Permission denied."
 msgstr "没有权限"
 
@@ -553,7 +553,7 @@ msgid "File extension is not in the whitelist"
 msgstr "文件扩展名不在白名单中"
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
-#: seahub/api2/endpoints/via_repo_token.py:1167
+#: seahub/api2/endpoints/via_repo_token.py:1169
 msgid "File is not locked."
 msgstr "文件没有被锁定。"
 
@@ -880,20 +880,20 @@ msgstr "你已经有 %(nb_avatars)d 个头像, 最多允许拥有 %(nb_max_avata
 msgid "Length of WebDAV password should be less than 30."
 msgstr "WebDAV 的密码长度应该小于30"
 
-#: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
+#: seahub/api2/endpoints/wiki2.py:221 seahub/api2/endpoints/wiki2.py:1486
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "名称只能包含字母、数字、空格、中划线或下划线。"
 
-#: seahub/api2/endpoints/wiki2.py:1335
+#: seahub/api2/endpoints/wiki2.py:1336
 msgid "URL is invalid"
 msgstr "URL无效"
 
-#: seahub/api2/endpoints/wiki2.py:1339
+#: seahub/api2/endpoints/wiki2.py:1340
 msgid "The custom part of URL should have 5-30 characters."
 msgstr "URL 的自定义部分应包含 5-30 个字符。"
 
-#: seahub/api2/endpoints/wiki2.py:1361
+#: seahub/api2/endpoints/wiki2.py:1362
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr "此自定义域已在使用中，无法用于你的知识库"
 
@@ -1009,21 +1009,26 @@ msgstr "请再次输入密码"
 msgid "A user with this email already exists."
 msgstr "此用户已存在。"
 
-#: seahub/auth/views.py:158
+#: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "登录出错次数超过限制，该账号已被冻结。"
 
-#: seahub/auth/views.py:324
+#: seahub/auth/views.py:323
 msgid "Logged out"
 msgstr "退出"
 
-#: seahub/auth/views.py:393
+#: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
 msgstr "邮件发送失败，请联系管理员。"
 
-#: seahub/auth/views.py:467
+#: seahub/auth/views.py:466
 msgid "Unable to change password."
 msgstr "无法修改密码。"
+
+#: seahub/auth/views.py:549
+#, python-brace-format
+msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
+msgstr "团队  {domain}  没有使用 ADFS/SAML SSO的权限。"
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -2202,12 +2207,12 @@ msgstr "下一页"
 msgid "Per page: "
 msgstr "每页："
 
-#: seahub/organizations/views.py:319 seahub/organizations/views.py:349
+#: seahub/organizations/views.py:320 seahub/organizations/views.py:350
 #: seahub/thumbnail/views.py:160
 msgid "Invalid token."
 msgstr "非合法 token。"
 
-#: seahub/organizations/views.py:352
+#: seahub/organizations/views.py:353
 #| msgid "Expiration"
 msgid "Expired token."
 msgstr "令牌已过期。"
@@ -2263,6 +2268,13 @@ msgstr "无法把加密资料库设为默认资料库。"
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "成功设置 \"%s\"为你的默认资料库。"
+
+#: seahub/repo_metadata/apis.py:136
+#, python-format
+msgid ""
+"Metadata feature is not supported for libraries containing more than %s "
+"files"
+msgstr "超过 %s 个文件的资料库不支持元数据功能"
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -3061,7 +3073,7 @@ msgstr "你将要禁用两步验证。这会危及你的账号安全，你确定
 msgid "Disable"
 msgstr "禁用"
 
-#: seahub/utils/__init__.py:162
+#: seahub/utils/__init__.py:159
 msgid "permission error"
 msgstr "权限错误"
 
@@ -3210,17 +3222,17 @@ msgstr "未找到用户 {token.user} "
 msgid "User {token.user} inactive"
 msgstr "用户 {token.user} 未激活"
 
-#: seahub/views/sso.py:170
+#: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
 msgstr "该链接已被访问，请再次点击客户端上的登录按钮"
 
-#: seahub/views/sso.py:195
+#: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
 msgstr "链接无效，请再次点击客户端上的登录按钮"
 
-#: seahub/views/sso.py:200
+#: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
 msgstr "登录超时，请再次点击客户端上的登录按钮"
 

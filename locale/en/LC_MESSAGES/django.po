@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 10:25+0800\n"
+"POT-Creation-Date: 2025-07-08 11:46+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English (http://app.transifex.com/haiwen/seahub/language/"
@@ -375,7 +375,7 @@ msgstr ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 
-#: seahub/api2/endpoints/admin/users.py:1501 seahub/auth/views.py:372
+#: seahub/api2/endpoints/admin/users.py:1501 seahub/auth/views.py:371
 msgid "Unable to reset password."
 msgstr "Unable to reset password."
 
@@ -449,8 +449,8 @@ msgstr "Virus file is not found."
 #: seahub/api2/endpoints/subscription.py:52
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
-#: seahub/api2/endpoints/upload_links.py:329 seahub/api2/endpoints/wiki2.py:463
-#: seahub/api2/endpoints/wiki2.py:491 seahub/api2/endpoints/wiki_pages.py:135
+#: seahub/api2/endpoints/upload_links.py:329 seahub/api2/endpoints/wiki2.py:464
+#: seahub/api2/endpoints/wiki2.py:492 seahub/api2/endpoints/wiki_pages.py:135
 #: seahub/api2/views.py:4108 seahub/notifications/models.py:592
 #: seahub/notifications/models.py:633 seahub/notifications/models.py:675
 #: seahub/notifications/models.py:726 seahub/notifications/models.py:782
@@ -458,7 +458,7 @@ msgstr "Virus file is not found."
 #: seahub/notifications/models.py:860 seahub/notifications/models.py:877
 #: seahub/notifications/models.py:894 seahub/notifications/models.py:923
 #: seahub/seadoc/apis.py:2752 seahub/share/views.py:230
-#: seahub/subscription/views.py:90 seahub/utils/__init__.py:175
+#: seahub/subscription/views.py:90 seahub/utils/__init__.py:172
 #: seahub/views/__init__.py:834 seahub/views/ajax.py:398
 #: seahub/views/ajax.py:402 seahub/wiki/views.py:210 seahub/wiki/views.py:217
 #: seahub/wiki/views.py:226
@@ -467,13 +467,13 @@ msgstr "Internal Server Error"
 
 #: seahub/api2/endpoints/copy_move_task.py:81
 #: seahub/api2/endpoints/move_folder_merge.py:137
-#: seahub/api2/endpoints/via_repo_token.py:1270
+#: seahub/api2/endpoints/via_repo_token.py:1272
 msgid "Destination path is too long."
 msgstr "Destination path is too long."
 
 #: seahub/api2/endpoints/copy_move_task.py:91
 #: seahub/api2/endpoints/move_folder_merge.py:133
-#: seahub/api2/endpoints/via_repo_token.py:1266
+#: seahub/api2/endpoints/via_repo_token.py:1268
 msgid "Invalid destination path"
 msgstr "Invalid destination path"
 
@@ -498,9 +498,9 @@ msgstr "Can not move folder %(src)s to its subfolder %(des)s"
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
 #: seahub/api2/endpoints/file.py:517 seahub/api2/endpoints/file.py:587
 #: seahub/api2/endpoints/file.py:738 seahub/api2/endpoints/file.py:851
-#: seahub/api2/endpoints/via_repo_token.py:1010
-#: seahub/api2/endpoints/via_repo_token.py:1150
-#: seahub/api2/endpoints/wiki2.py:804
+#: seahub/api2/endpoints/via_repo_token.py:1012
+#: seahub/api2/endpoints/via_repo_token.py:1152
+#: seahub/api2/endpoints/wiki2.py:805
 msgid "File is locked"
 msgstr "File is locked"
 
@@ -520,8 +520,8 @@ msgid "User %s not found."
 msgstr "User %s not found."
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
-#: seahub/api2/endpoints/via_repo_token.py:850
-#: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
+#: seahub/api2/endpoints/via_repo_token.py:852
+#: seahub/api2/endpoints/wiki2.py:602 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2084 seahub/seadoc/apis.py:3110
 msgid "The number of files in library exceeds the limit"
 msgstr "The number of files in library exceeds the limit"
@@ -534,7 +534,7 @@ msgstr "The number of files in library exceeds the limit"
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
 #: seahub/api2/endpoints/upload_links.py:316
-#: seahub/api2/endpoints/wiki2.py:1470 seahub/api2/endpoints/wikis.py:115
+#: seahub/api2/endpoints/wiki2.py:1471 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
 #: seahub/profile/views.py:273 seahub/seadoc/apis.py:2736
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
@@ -542,7 +542,7 @@ msgstr "The number of files in library exceeds the limit"
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
 #: seahub/thumbnail/views.py:172 seahub/views/__init__.py:638
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
-#: seahub/views/sso.py:241
+#: seahub/views/sso.py:250
 msgid "Permission denied."
 msgstr "Permission denied."
 
@@ -551,7 +551,7 @@ msgid "File extension is not in the whitelist"
 msgstr ""
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
-#: seahub/api2/endpoints/via_repo_token.py:1167
+#: seahub/api2/endpoints/via_repo_token.py:1169
 msgid "File is not locked."
 msgstr "File is not locked."
 
@@ -889,20 +889,20 @@ msgstr ""
 msgid "Length of WebDAV password should be less than 30."
 msgstr "Length of WebDav password should be less than 30."
 
-#: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
+#: seahub/api2/endpoints/wiki2.py:221 seahub/api2/endpoints/wiki2.py:1486
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr "Name can only contain letters, numbers, blank, hyphen or underscore."
 
-#: seahub/api2/endpoints/wiki2.py:1335
+#: seahub/api2/endpoints/wiki2.py:1336
 msgid "URL is invalid"
 msgstr "URL is invalid"
 
-#: seahub/api2/endpoints/wiki2.py:1339
+#: seahub/api2/endpoints/wiki2.py:1340
 msgid "The custom part of URL should have 5-30 characters."
 msgstr "The custom part of URL should have 5-30 characters."
 
-#: seahub/api2/endpoints/wiki2.py:1361
+#: seahub/api2/endpoints/wiki2.py:1362
 msgid "This custom domain is already in use and cannot be used for your wiki"
 msgstr "This custom domain is already in use and cannot be used for your wiki"
 
@@ -1025,21 +1025,26 @@ msgstr "Password (again)"
 msgid "A user with this email already exists."
 msgstr "A user with this email already exists."
 
-#: seahub/auth/views.py:158
+#: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "This account has been frozen due to too many failed login attempts."
 
-#: seahub/auth/views.py:324
+#: seahub/auth/views.py:323
 msgid "Logged out"
 msgstr "Logged out"
 
-#: seahub/auth/views.py:393
+#: seahub/auth/views.py:392
 msgid "Failed to send email, please contact administrator."
 msgstr "Failed to send email, please contact administrator."
 
-#: seahub/auth/views.py:467
+#: seahub/auth/views.py:466
 msgid "Unable to change password."
 msgstr "Unable to change password."
+
+#: seahub/auth/views.py:549
+#, python-brace-format
+msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
+msgstr ""
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -2292,12 +2297,12 @@ msgstr "Next"
 msgid "Per page: "
 msgstr "Per page: "
 
-#: seahub/organizations/views.py:319 seahub/organizations/views.py:349
+#: seahub/organizations/views.py:320 seahub/organizations/views.py:350
 #: seahub/thumbnail/views.py:160
 msgid "Invalid token."
 msgstr "Invalid token."
 
-#: seahub/organizations/views.py:352
+#: seahub/organizations/views.py:353
 #, fuzzy
 #| msgid "Expiration"
 msgid "Expired token."
@@ -2354,6 +2359,12 @@ msgstr "Can not set encrypted library as default library."
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Successfully set \"%s\" as your default library."
+
+#: seahub/repo_metadata/apis.py:136
+#, python-format
+msgid ""
+"Metadata feature is not supported for libraries containing more than %s files"
+msgstr ""
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -3215,7 +3226,7 @@ msgstr ""
 msgid "Disable"
 msgstr "Disable"
 
-#: seahub/utils/__init__.py:162
+#: seahub/utils/__init__.py:159
 msgid "permission error"
 msgstr "permission error"
 
@@ -3362,7 +3373,7 @@ msgstr "User {token.user} not found"
 msgid "User {token.user} inactive"
 msgstr "User {token.user} inactive"
 
-#: seahub/views/sso.py:170
+#: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
@@ -3370,11 +3381,11 @@ msgstr ""
 "This link has already been visited, please click the login button on the "
 "client again"
 
-#: seahub/views/sso.py:195
+#: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
 msgstr "Invalid link, please click the login button on the client again"
 
-#: seahub/views/sso.py:200
+#: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
 msgstr "Login timeout, please click the login button on the client again"
 

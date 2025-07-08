@@ -599,7 +599,7 @@
   "Translation_error_message": "Erreur de traduction, veuillez réessayer.",
   "The_translation_content_cannot_be_empty": "Le contenu de la traduction ne doit pas être vide.",
   "Processing_message": "Traitement en cours, veuillez patienter.",
-  "AI_tip_content": "Rejeter le contenu actuel",
+  "AI_tip_content": "Do you want to discard current content?",
   "Discard": "Abandonner",
   "English": "Anglais",
   "Chinese": "Chinois",
@@ -634,5 +634,7 @@
   "More_operation": "More operation",
   "Property": "Property",
   "Comment_list": "Comment list",
-  "Add_Comment": "Add Comment"
+  "Add_Comment": "Add Comment",
+  "Finish": "Finish",
+  "More_fluent": "More fluent"
 }

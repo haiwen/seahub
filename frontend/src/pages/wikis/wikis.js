@@ -133,7 +133,7 @@ class Wikis extends Component {
       this.setState({
         isShowImportConfluenceDialog: false
       });
-      toaster.danger(gettext('Failed to import confluence. '));
+      toaster.danger(gettext('Failed to import Confluence.'));
     });
   };
 
