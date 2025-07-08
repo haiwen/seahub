@@ -105,16 +105,16 @@ class FileToolbar extends React.Component {
 
     const { isLocked, lockedByMe } = this.props;
     let showLockUnlockBtn = false;
-    let lockUnlockText; let lockUnlockIcon;
+    let lockUnlockText;
+    let lockUnlockIcon;
     if (canLockUnlockFile) {
+      showLockUnlockBtn = true;
       if (!isLocked) {
-        showLockUnlockBtn = true;
         lockUnlockText = gettext('Lock');
-        lockUnlockIcon = 'lock';
-      } else if (lockedByMe) {
-        showLockUnlockBtn = true;
-        lockUnlockText = gettext('Unlock');
         lockUnlockIcon = 'unlock';
+      } else if (lockedByMe) {
+        lockUnlockText = gettext('Unlock');
+        lockUnlockIcon = 'lock';
       }
     }
 

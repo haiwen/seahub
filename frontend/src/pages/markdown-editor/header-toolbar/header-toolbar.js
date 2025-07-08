@@ -137,7 +137,7 @@ class HeaderToolbar extends React.Component {
                 {(canLockUnlockFile && !isLocked) && (
                   <ButtonItem
                     id="lock-unlock-file"
-                    icon='lock'
+                    icon='unlock'
                     text={gettext('Lock')}
                     onMouseDown={this.props.toggleLockFile}
                   />
@@ -145,7 +145,7 @@ class HeaderToolbar extends React.Component {
                 {(canLockUnlockFile && lockedByMe) && (
                   <ButtonItem
                     id="lock-unlock-file"
-                    icon='unlock'
+                    icon='lock'
                     text={gettext('Unlock')}
                     onMouseDown={this.props.toggleLockFile}
                   />
