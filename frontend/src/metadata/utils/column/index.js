@@ -286,19 +286,19 @@ export const getFileTypeColumnOptions = () => {
       name: gettext('Document'), color: '#B7CEF9', textColor: '#212529'
     },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.VIDEO]: {
-      name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF', borderColor: '#844BD2'
+      name: gettext('Video'), color: '#9860E5', textColor: '#FFFFFF'
     },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.AUDIO]: {
-      name: gettext('Audio'), color: '#FBD44A', textColor: '#FFFFFF', borderColor: '#E5C142'
+      name: gettext('Audio'), color: '#4ECCCB', textColor: '#FFFFFF'
     },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: {
-      name: gettext('Code'), color: '#4ad8fb', textColor: '#FFFFFF', borderColor: '#4283e5'
+      name: gettext('Code'), color: '#DC82D2', textColor: '#FFFFFF'
     },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: {
-      name: gettext('Compressed'), color: '#4a9afb', textColor: '#FFFFFF', borderColor: '#da42e5'
+      name: gettext('Compressed'), color: '#46A1FD', textColor: '#FFFFFF'
     },
     [PREDEFINED_FILE_TYPE_OPTION_KEY.DIAGRAM]: {
-      name: gettext('Diagram'), color: '#4afbbd', textColor: '#FFFFFF', borderColor: '#e5428e'
+      name: gettext('Diagram'), color: '#59CB74', textColor: '#FFFFFF'
     },
   };
 };
