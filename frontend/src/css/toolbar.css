@@ -15,7 +15,7 @@
   width: 1px;
   height: 30px;
   content: '';
-  background-color: #ddd;
+  background-color: var(--bs-border-color);
 }
 
 /* end toolbar-container */
@@ -27,9 +27,10 @@
   height: 30px;
   min-width: 55px;
   background: var(--bs-body-bg);
+  color: var(--bs-body-color);
   line-height: 29px;
   font-weight: normal;
-  border: 1px solid #ccc;
+  border: 1px solid var(--bs-border-color);
   border-radius: 2px;
 }
 
@@ -57,7 +58,7 @@
   height: 32px;
   margin-left: 8px;
   text-decoration: none;
-  color: #ccc;
+  color: var(--bs-icon-color);
 }
 /* end common-toolbar */
 

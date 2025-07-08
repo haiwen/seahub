@@ -7,11 +7,11 @@
 
 .sys-stat-tool {
   font-size: 13px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sys-stat-tool .item-active {
-  background: #efefef;
+  background: var(--bs-nav-active-bg);
 }
 
 .system-statistic-input-container {
@@ -28,7 +28,7 @@
 .statistic-traffic-tab {
   display: flex;
   font-size: 13px;
-  color: #212529;
+  color: var(--bs-body-color);
   margin-top: 10px;
 }
 
@@ -51,9 +51,9 @@
 }
 
 .statistic-reports-title {
-  background: #f7f7f7;
+  background: var(--bs-th-bg);
   margin-top: 15px;
-  color: #222222;
+  color: var(--bs-body-color);
   padding: 3px 10px;
 }
 

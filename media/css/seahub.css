@@ -2084,6 +2084,10 @@ a.sf-popover-item {
   box-shadow: 0 0 8px #a7a6a9;
 }
 
+[data-bs-theme=dark] .login-panel {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
 #log-in-panel {
   padding: 30px 25px 12px;
   width: 336px;
