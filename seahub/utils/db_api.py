@@ -709,7 +709,14 @@ class SeafileDB:
                 ORDER BY id
                 LIMIT %s OFFSET %s
                 """
+        count_sql = f"""
+                SELECT COUNT(*) as total
+                FROM `{self.db_name}`.`OrgDownloadRateLimit`
+                """
         with connection.cursor() as cursor:
             cursor.execute(sql,[per_page,start])
             rows = cursor.fetchall()
-        return rows
+
+            cursor.execute(count_sql)
+            total_count = cursor.fetchone()
+        return rows,total_count[0]

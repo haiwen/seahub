@@ -590,7 +590,7 @@ class TrafficExceededOrganizations(APIView):
         start = (page - 1) * per_page
         seafile_db = SeafileDB()
         try:
-            orgs = seafile_db.get_download_limit_org(start, per_page)
+            orgs, total_count = seafile_db.get_download_limit_org(start, per_page)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -625,5 +625,4 @@ class TrafficExceededOrganizations(APIView):
 
                 org_info['download_limit'] = f"{org_limit_data}"
                 result.append(org_info)
-
-        return Response({'organizations': result})
+        return Response({'organizations': result, 'total_count': total_count})

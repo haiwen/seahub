@@ -580,6 +580,15 @@ class SystemAdminAPI {
     return this.req.get(url, { params: params });
   }
 
+  sysAdminListTrafficExceedOrgs(page, perPage) {
+    const url = this.server + '/api/v2.1/admin/organizations/trafficexceeded/';
+    let params = {
+      page: page,
+      per_page: perPage
+    };
+    return this.req.get(url, { params: params });
+  }
+
   sysAdminSearchOrgs(name) {
     let url = this.server + '/api/v2.1/admin/search-organization/';
     let params = {
