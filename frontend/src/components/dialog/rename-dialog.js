@@ -87,7 +87,7 @@ class Rename extends React.Component {
     let type = dirent.type;
     this.newInput.current.focus();
     if (type === 'file') {
-      var endIndex = dirent.name.lastIndexOf('.md');
+      var endIndex = dirent.name.lastIndexOf('.');
       this.newInput.current.setSelectionRange(0, endIndex, 'forward');
     } else {
       this.newInput.current.setSelectionRange(0, -1);
