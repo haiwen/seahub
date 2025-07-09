@@ -51,7 +51,20 @@ class GroupView extends React.Component {
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.groupID !== this.props.groupID) {
-      this.loadGroup(nextProps.groupID);
+      // reset state when groupID changes
+      this.setState({
+        isLoading: true,
+        isLoadingMore: false,
+        errMessage: '',
+        emptyTip: null,
+        currentGroup: null,
+        repoList: [],
+        currentPage: 1, // reset current page to 1
+        hasNextPage: false,
+        isDepartmentGroup: false,
+      }, () => {
+        this.loadGroup(nextProps.groupID);
+      });
     }
   }
 
