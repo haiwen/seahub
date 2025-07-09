@@ -1,9 +1,9 @@
 {
   "status": "done",
   "assets": {
-    "static/css/app.6927ec4a.css": {
-      "name": "static/css/app.6927ec4a.css",
-      "path": "D:\\mywork\\seahub\\frontend\\build\\frontend\\static\\css\\app.6927ec4a.css"
+    "static/css/app.34c8e68d.css": {
+      "name": "static/css/app.34c8e68d.css",
+      "path": "D:\\mywork\\seahub\\frontend\\build\\frontend\\static\\css\\app.34c8e68d.css"
     },
     "static/css/commons.ce04f0ed.css": {
       "name": "static/css/commons.ce04f0ed.css",
@@ -581,9 +581,9 @@
       "name": "static/js/9997.5762e075.chunk.js",
       "path": "D:\\mywork\\seahub\\frontend\\build\\frontend\\static\\js\\9997.5762e075.chunk.js"
     },
-    "static/js/app.8011b1c5.js": {
-      "name": "static/js/app.8011b1c5.js",
-      "path": "D:\\mywork\\seahub\\frontend\\build\\frontend\\static\\js\\app.8011b1c5.js"
+    "static/js/app.6b8febc5.js": {
+      "name": "static/js/app.6b8febc5.js",
+      "path": "D:\\mywork\\seahub\\frontend\\build\\frontend\\static\\js\\app.6b8febc5.js"
     },
     "static/js/commons.332af288.js": {
       "name": "static/js/commons.332af288.js",
@@ -839,8 +839,8 @@
       "static/js/runtime.28bfb918.js",
       "static/css/commons.ce04f0ed.css",
       "static/js/commons.332af288.js",
-      "static/css/app.6927ec4a.css",
-      "static/js/app.8011b1c5.js"
+      "static/css/app.34c8e68d.css",
+      "static/js/app.6b8febc5.js"
     ],
     "draft": [
       "static/js/runtime.28bfb918.js",

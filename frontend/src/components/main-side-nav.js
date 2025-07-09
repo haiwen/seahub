@@ -62,7 +62,7 @@ class MainSideNav extends React.Component {
         return group;
       });
 
-      this.filesNavHeight = (groupList.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
+      this.filesNavHeight = (groupList.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1 + 1) * SUB_NAV_ITEM_HEIGHT;
       this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
@@ -123,10 +123,10 @@ class MainSideNav extends React.Component {
               </span>
             </li>
             {this.state.isCreateGroupDialogOpen &&
-            <CreateGroupDialog
-              toggleDialog={this.toggleCreateGroupDialog}
-              onCreateGroup={this.onCreateGroup}
-            />
+              <CreateGroupDialog
+                toggleDialog={this.toggleCreateGroupDialog}
+                onCreateGroup={this.onCreateGroup}
+              />
             }
           </>
         )}
@@ -186,7 +186,7 @@ class MainSideNav extends React.Component {
             </Link>
           </li>
         )}
-        { height !== 0 && linksNavItem}
+        {height !== 0 && linksNavItem}
       </ul>
     );
   }
@@ -233,7 +233,7 @@ class MainSideNav extends React.Component {
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
               <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+                <Link to={siteRoot + 'libraries/'} className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                   <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Files')}</span>
                   <span className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
@@ -255,12 +255,12 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
               {showActivity &&
-              <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
-                  <span className="sf3-font-activities sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Activities')}</span>
-                </Link>
-              </li>
+                <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
+                    <span className="sf3-font-activities sf3-font" aria-hidden="true"></span>
+                    <span className="nav-text">{gettext('Activities')}</span>
+                  </Link>
+                </li>
               }
               <li className={`nav-item ${this.getActiveClass('published')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
@@ -269,12 +269,12 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
               {canInvitePeople &&
-              <li className={`nav-item ${this.getActiveClass('invitations')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
-                  <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Invite Guest')}</span>
-                </Link>
-              </li>
+                <li className={`nav-item ${this.getActiveClass('invitations')}`}>
+                  <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
+                    <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
+                    <span className="nav-text">{gettext('Invite Guest')}</span>
+                  </Link>
+                </li>
               }
               <li id="share-admin-nav" className='nav-item flex-column'>
                 <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
@@ -299,12 +299,12 @@ class MainSideNav extends React.Component {
                   </a>
                 </li>
                 {enableTC &&
-                <li className='nav-item'>
-                  <a href={`${siteRoot}terms/`} className="nav-link">
-                    <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
-                    <span className="nav-text">{gettext('Terms')}</span>
-                  </a>
-                </li>
+                  <li className='nav-item'>
+                    <a href={`${siteRoot}terms/`} className="nav-link">
+                      <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
+                      <span className="nav-text">{gettext('Terms')}</span>
+                    </a>
+                  </li>
                 }
                 <li className='nav-item'>
                   <a href={siteRoot + 'download_client_program/'} className="nav-link">
@@ -313,22 +313,22 @@ class MainSideNav extends React.Component {
                   </a>
                 </li>
                 {enableShowAbout &&
-                <li className='nav-item'>
-                  <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
-                    <span className="sf3-font-about sf3-font" aria-hidden="true"></span>
-                    <span className="nav-text">{gettext('About')}</span>
-                  </a>
-                </li>
+                  <li className='nav-item'>
+                    <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
+                      <span className="sf3-font-about sf3-font" aria-hidden="true"></span>
+                      <span className="nav-text">{gettext('About')}</span>
+                    </a>
+                  </li>
                 }
                 {showWechatSupportGroup &&
-                <li className='nav-item'>
-                  <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
-                    <span className="sf3-font-hi sf3-font" aria-hidden="true"></span>
-                    <span className="nav-text">
-                      {`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
-                    </span>
-                  </a>
-                </li>
+                  <li className='nav-item'>
+                    <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
+                      <span className="sf3-font-hi sf3-font" aria-hidden="true"></span>
+                      <span className="nav-text">
+                        {`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
+                      </span>
+                    </a>
+                  </li>
                 }
               </ul>
             )
@@ -346,7 +346,7 @@ class MainSideNav extends React.Component {
         )}
         {this.state.isShowWechatDialog &&
           <ModalPortal>
-            <WechatDialog toggleWechatDialog={this.toggleWechatDialog}/>
+            <WechatDialog toggleWechatDialog={this.toggleWechatDialog} />
           </ModalPortal>
         }
       </Fragment>

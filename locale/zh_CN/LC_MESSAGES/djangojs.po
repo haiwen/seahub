@@ -4253,6 +4253,19 @@ msgstr "共享给我的"
 msgid "Shared with all"
 msgstr "公共资料库"
 
+#: frontend/src/components/main-side-nav.js:XXX
+#: frontend/src/pages/network-libs/index.js:XXX
+msgid "Network Libraries"
+msgstr "网络库"
+
+#: frontend/src/pages/network-libs/index.js:XXX
+msgid "No network libraries"
+msgstr "没有网络库"
+
+#: frontend/src/pages/network-libs/index.js:XXX
+msgid "No network libraries have been created yet. A network library is accessible through network connections. You can create a network library by clicking the \"Add Library\" item in the dropdown menu."
+msgstr "尚未创建网络库。网络库可以通过网络连接访问。你可以通过单击下拉菜单中的\"添加资料库\"选项来创建网络库。"
+
 #: frontend/src/components/group-members.js:74
 #: frontend/src/components/group-members.js:119
 #: frontend/src/pages/institution-admin/user-content/user-group-item.js:22

@@ -36,6 +36,7 @@ import GroupView from './pages/groups/group-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import Libraries from './pages/libraries';
+import NetworkLibraries from './pages/network-libs';
 
 import './css/layout.css';
 import './css/toolbar.css';
@@ -57,7 +58,7 @@ class App extends Component {
       inResizing: false,
       sidePanelRate: parseFloat(localStorage.getItem('sf_side_panel_rate') || INIT_SIDE_PANEL_RATE),
     };
-    this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org']; // and group
+    this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org', 'network-libs']; // and group
     window.onpopstate = this.onpopstate;
     const eventBus = new EventBus();
     this.eventBus = eventBus;
@@ -211,6 +212,9 @@ class App extends Component {
       case 'org': {
         return 'Shared with all';
       }
+      case 'network-libs': {
+        return '我的网络库';
+      }
     }
   };
 
@@ -321,6 +325,7 @@ class App extends Component {
               <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
               <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
               <SharedWithAll path={siteRoot + 'org/'} />
+              <NetworkLibraries path={siteRoot + 'network-libs'} />
               <Wikis
                 path={siteRoot + 'published'}
                 sidePanelRate={sidePanelRate}

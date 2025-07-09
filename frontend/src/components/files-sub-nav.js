@@ -52,7 +52,7 @@ class FilesSubNav extends React.Component {
       <>
         {canAddRepo && (
           <li className={`nav-item ${this.getActiveClass('my-libs') || this.getActiveClass('deleted')}`}>
-            <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
+            <Link to={siteRoot + 'my-libs/'} className={`nav-link ellipsis ${this.getActiveClass('my-libs') || this.getActiveClass('deleted')}`} title={gettext('My Libraries')} onClick={(e) => this.tabItemClick(e, 'my-libs')}>
               <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
               <span className="nav-text">{gettext('My Libraries')}</span>
             </Link>
@@ -65,13 +65,19 @@ class FilesSubNav extends React.Component {
           </Link>
         </li>
         {canViewOrg &&
-        <li className={`nav-item ${this.getActiveClass('org')}`} onClick={(e) => this.tabItemClick(e, 'org')}>
-          <Link to={ siteRoot + 'org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
-            <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
-            <span className="nav-text">{gettext('Shared with all')}</span>
+          <li className={`nav-item ${this.getActiveClass('org')}`} onClick={(e) => this.tabItemClick(e, 'org')}>
+            <Link to={siteRoot + 'org/'} className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
+              <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
+              <span className="nav-text">{gettext('Shared with all')}</span>
+            </Link>
+          </li>
+        }
+        <li className={`nav-item ${this.getActiveClass('network-libs')}`}>
+          <Link to={siteRoot + 'network-libs/'} className={`nav-link ellipsis ${this.getActiveClass('network-libs')}`} title="我的网络库" onClick={(e) => this.tabItemClick(e, 'network-libs')}>
+            <span className="sf3-font-share-from-other-servers sf3-font nav-icon" aria-hidden="true"></span>
+            <span className="nav-text">我的网络库</span>
           </Link>
         </li>
-        }
         {this.renderSharedGroups()}
       </>
     );

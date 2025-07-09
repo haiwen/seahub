@@ -1,0 +1,52 @@
+.connect-network-library-dialog .modal-dialog {
+  max-width: 500px;
+}
+
+.network-library-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px 0;
+  justify-content: center;
+}
+
+.network-library-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.network-library-item:hover {
+  border-color: #007bff;
+  background-color: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.network-library-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.network-library-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.network-library-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+} 
