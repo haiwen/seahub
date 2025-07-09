@@ -3,13 +3,20 @@ import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import SeahubModalCloseIcon from '../seahub-modal-close';
+import { NAV_ITEM_MARGIN } from '../../../constants';
 
 import './index.css';
 
 class NotificationPopover extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.itemRefs = [];
+  }
+
   componentDidMount() {
     document.addEventListener('mousedown', this.handleOutsideClick, true);
+    this.forceUpdate();
   }
 
   componentWillUnmount() {
@@ -39,6 +46,11 @@ class NotificationPopover extends React.Component {
 
   render() {
     const { headerText = '', bodyText = '', footerText = '', currentTab, generalNoticeListUnseen, discussionNoticeListUnseen } = this.props;
+    const activeIndex = currentTab === 'general' ? 0 : 1;
+    const itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
+    const indicatorWidth = itemWidths[activeIndex];
+    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0) + (2 * activeIndex + 1) * NAV_ITEM_MARGIN;
+
     return (
       <Popover
         className="notification-wrapper"
@@ -55,15 +67,29 @@ class NotificationPopover extends React.Component {
           </div>
           <div className="notification-body">
             <div className="mark-notifications">
-              <ul className="nav">
-                <li className="nav-item" onClick={() => this.tabItemClick('general')}>
-                  <span className={`nav-link ${currentTab === 'general' ? 'active' : ''}`}>
+              <ul
+                className="nav nav-indicator-container position-relative"
+                style={{
+                  '--indicator-width': `${indicatorWidth}px`,
+                  '--indicator-offset': `${indicatorOffset}px`
+                }}
+              >
+                <li
+                  className="nav-item mx-3"
+                  ref={el => this.itemRefs[0] = el}
+                  onClick={() => this.tabItemClick('general')}
+                >
+                  <span className={`m-0 nav-link ${currentTab === 'general' ? 'active' : ''}`}>
                     {gettext('General')}
                     {generalNoticeListUnseen > 0 && <span>({generalNoticeListUnseen})</span>}
                   </span>
                 </li>
-                <li className="nav-item" onClick={() => this.tabItemClick('discussion')}>
-                  <span className={`nav-link ${currentTab === 'discussion' ? 'active' : ''}`}>
+                <li
+                  className="nav-item mx-3"
+                  ref={el => this.itemRefs[1] = el}
+                  onClick={() => this.tabItemClick('discussion')}
+                >
+                  <span className={`m-0 nav-link ${currentTab === 'discussion' ? 'active' : ''}`}>
                     {gettext('Discussion')}
                     {discussionNoticeListUnseen > 0 && <span>({discussionNoticeListUnseen})</span>}
                   </span>

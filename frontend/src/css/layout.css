@@ -356,14 +356,19 @@ img[src=""],img:not([src]) { /* for first loading img*/
   color: #666;
 }
 
+.nav-indicator-container .nav-item {
+  min-width: fit-content;
+}
+
 .nav-indicator-container .nav-item .nav-link {
   border: none;
+  min-width: fit-content;
 }
 
 .nav-indicator-container::before {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: -2px;
   height: 2px;
   width: var(--indicator-width);
   background: #ED7109;
