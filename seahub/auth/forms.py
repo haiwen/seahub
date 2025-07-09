@@ -96,9 +96,9 @@ class AuthenticationForm(forms.Form):
 
                     raise forms.ValidationError(err_msg)
 
+            username = self.user_cache.username
             # user found for login string but inactive
             if not self.user_cache.is_active:
-                username  = self.user_cache.username
                 if settings.ACTIVATE_AFTER_FIRST_LOGIN and \
                    not UserOptions.objects.is_user_logged_in(username):
                     """Activate user on first login."""
@@ -112,7 +112,6 @@ class AuthenticationForm(forms.Form):
 
             # Non administrators can only log in with single sign on
             org_id = -1
-            username = self.user_cache.username
             orgs = ccnet_api.get_orgs_by_user(username)
 
             # check if user is admin
