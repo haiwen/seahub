@@ -48,49 +48,55 @@ class AuthenticationForm(forms.Form):
         return self.cleaned_data['login'].strip()
 
     def clean(self):
-        username = self.cleaned_data.get('login')
+        login_str = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
 
-        if username and password:
+        if login_str and password:
             # First check the account length for validation.
-            if len(username) > 255:
-                self.errors['invalid_input'] = "The login name is too long."
+            if len(login_str) > 255:
+                self.errors['invalid_input'] = "The login string is too long."
                 self.db_record = False
-                raise forms.ValidationError("The login name is too long.")
+                raise forms.ValidationError("The login string is too long.")
 
-            # Check user account active or not
-            email = Profile.objects.convert_login_str_to_username(username)
+            # converted_login_str can be either the internal user ID or 
+            # the original login_str if there is no corresponding record in Profile
+            converted_login_str = Profile.objects.convert_login_str_to_username(login_str)
+            
+            # Step 1) Check user account active or not
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(email=converted_login_str)
                 if not user.is_active:
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
             except User.DoesNotExist:
                 pass
 
-            # Second check the password correct or not
-            self.user_cache = authenticate(username=username, password=password)
+            # Step 2) check the password correct or not using local account
+            # converted_login_str can be either like xxxxxxxx@auth.local for new users
+            # or a valid email address for old users created before v11.0
+            self.user_cache = authenticate(username=converted_login_str, password=password)
+
+            # Step 3) Check LDAP
             if self.user_cache is None:
                 """then try login id/contact email/primary id"""
                 # convert login id or contact email to username if any
-                username = Profile.objects.convert_login_str_to_username(username)
-                self.user_cache = authenticate(username=username, password=password)
                 # After local user authentication process is completed, authenticate LDAP user
-                if self.user_cache is None and settings.ENABLE_LDAP and not settings.USE_LDAP_SYNC_ONLY:
-                    self.user_cache = authenticate(ldap_user=username, password=password)
+                if settings.ENABLE_LDAP and not settings.USE_LDAP_SYNC_ONLY:
+                    self.user_cache = authenticate(ldap_user=converted_login_str, password=password)
 
                 if self.user_cache is None:
                     err_msg = _("Please enter a correct email/username and password. Note that both fields are case-sensitive.")
 
                     if settings.LOGIN_ERROR_DETAILS:
                         try:
-                            User.objects.get(email=username)
+                            User.objects.get(email=converted_login_str)
                         except User.DoesNotExist:
                             err_msg = _("That e-mail address doesn't have an associated user account. Are you sure you've registered?")
                             self.errors['not_found'] = err_msg
 
                     raise forms.ValidationError(err_msg)
 
+            username = self.user_cache.username
             # user found for login string but inactive
             if not self.user_cache.is_active:
                 if settings.ACTIVATE_AFTER_FIRST_LOGIN and \
@@ -106,7 +112,6 @@ class AuthenticationForm(forms.Form):
 
             # Non administrators can only log in with single sign on
             org_id = -1
-            username = self.user_cache.username
             orgs = ccnet_api.get_orgs_by_user(username)
 
             # check if user is admin
