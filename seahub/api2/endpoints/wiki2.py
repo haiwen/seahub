@@ -1808,11 +1808,11 @@ class Wiki2ImportPageView(APIView):
         id_set = get_all_wiki_ids(navigation)
         new_page_id = gen_unique_id(id_set)
         if extension == 'docx':
-            uuid_filename = f'{filename.split(extension)[0]}sdoc'
+            sdoc_filename = f'{filename.split(extension)[0]}sdoc'
         elif extension == 'md':
-            uuid_filename = f'{filename.split(extension)[0]}sdoc'
+            sdoc_filename = f'{filename.split(extension)[0]}sdoc'
         
-        sdoc_file_path = os.path.join(parent_dir, uuid_filename)
+        sdoc_file_path = os.path.join(parent_dir, sdoc_filename)
 
         task_id = import_wiki_page({
             'repo_id': repo_id,
