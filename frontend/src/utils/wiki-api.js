@@ -250,7 +250,7 @@ class WikiAPI {
   importWiki2Page(wikiId, pageId, file) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/import-page/';
     let form = new FormData();
-    form.append('page_id', pageId);
+    form.append('from_page_id', pageId);
     if (file) {
       form.append('file', file);
     }

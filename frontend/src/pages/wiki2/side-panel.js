@@ -17,7 +17,8 @@ import { DEFAULT_PAGE_NAME } from './constant';
 import Wiki2Search from '../../components/search/wiki2-search';
 import CommonUndoTool from '../../components/common/common-undo-tool';
 import PublishedWikiExtrance from '../../components/published-wiki-entrance';
-
+import { userAPI } from '../../utils/user-api';
+import ImportWikiPageDialog from '../../components/dialog/import-wiki-page-dialog';
 import './side-panel.css';
 
 const { repoName, publishUrl } = window.wiki.config;
@@ -107,13 +108,51 @@ class SidePanel extends PureComponent {
     });
   };
 
+  queryImportPageStatus = (task_id, task_type, new_page) => {
+    userAPI.queryIOStatus(task_id, task_type).then(res => {
+      if (res.data.is_finished === true) {
+        toaster.success('Import page success.');
+        this.setState({
+          isShowImportPageDialog: false
+        });
+        this.addPage(new_page, '', null, null, true);
+      } else {
+        setTimeout(() => {
+          this.queryImportPageStatus(task_id, task_type, new_page);
+        }, 1000);
+      }
+    }).catch(err => {
+      this.setState({
+        isShowImportPageDialog: false
+      });
+      toaster.danger(gettext('Failed to import page. '));
+    });
+  };
+
   importPage = async (fromPageConfig, successCallback, errorCallback, jumpToNewPage = true) => {
     const { from_page_id, file } = fromPageConfig;
+    let newPage;
+    let task_id = ''
+    this.setState({
+      isShowImportPageDialog: true
+    })
     wikiAPI.importWiki2Page(wikiId, from_page_id, file).then(res => {
       const { page_id, name, path, docUuid } = res.data;
-      const newPage = new Page({ id: page_id, name, icon: '', path, docUuid });
-      this.addPage(newPage, '', successCallback, errorCallback, jumpToNewPage);
-      successCallback && successCallback();
+      task_id = res.data.task_id;
+      newPage = new Page({ id: page_id, name, icon: '', path, docUuid });
+      this.setState({
+        taskId: task_id
+      });
+      return userAPI.queryIOStatus(task_id, 'import');
+    }).then(res => {
+      if (res.data.is_finished === true) {
+        this.setState({
+          isShowImportPageDialog: false
+        });
+        this.addPage(newPage, '', successCallback, errorCallback, jumpToNewPage);
+      } else {
+        this.queryImportPageStatus(task_id, 'import', newPage);
+      }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -158,6 +197,10 @@ class SidePanel extends PureComponent {
   toggleTrashDialog = () => {
     this.setState({ isShowTrashDialog: !this.state.isShowTrashDialog });
   };
+
+  toggleImportPageDialog = () => {
+    this.setState({ isShowImportPageDialog: !this.state.isShowImportPageDialog })
+  }
 
   renderWikiNav = () => {
     const { config, onUpdatePage } = this.props;
@@ -261,6 +304,11 @@ class SidePanel extends PureComponent {
             toggleTrashDialog={this.toggleTrashDialog}
             getWikiConfig={this.props.getWikiConfig}
           />
+        )}
+        {this.state.isShowImportPageDialog && (
+          <ImportWikiPageDialog
+           toggleDialog={this.toggleImportPageDialog}
+           />
         )}
         {wikiPermission === 'rw' &&
           <WikiExternalOperations onAddWikiPage={this.onAddWikiPage.bind(false)} />
