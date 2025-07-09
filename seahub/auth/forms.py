@@ -98,13 +98,14 @@ class AuthenticationForm(forms.Form):
 
             # user found for login string but inactive
             if not self.user_cache.is_active:
+                username  = self.user_cache.username
                 if settings.ACTIVATE_AFTER_FIRST_LOGIN and \
-                   not UserOptions.objects.is_user_logged_in(converted_login_str):
+                   not UserOptions.objects.is_user_logged_in(username):
                     """Activate user on first login."""
                     self.user_cache.is_active = True
                     self.user_cache.save()
 
-                    UserOptions.objects.set_user_logged_in(converted_login_str)
+                    UserOptions.objects.set_user_logged_in(username)
                 else:
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
