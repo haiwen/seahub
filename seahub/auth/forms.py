@@ -89,7 +89,7 @@ class AuthenticationForm(forms.Form):
 
                     if settings.LOGIN_ERROR_DETAILS:
                         try:
-                            User.objects.get(email=username)
+                            User.objects.get(email=converted_login_str)
                         except User.DoesNotExist:
                             err_msg = _("That e-mail address doesn't have an associated user account. Are you sure you've registered?")
                             self.errors['not_found'] = err_msg
@@ -99,12 +99,12 @@ class AuthenticationForm(forms.Form):
             # user found for login string but inactive
             if not self.user_cache.is_active:
                 if settings.ACTIVATE_AFTER_FIRST_LOGIN and \
-                   not UserOptions.objects.is_user_logged_in(username):
+                   not UserOptions.objects.is_user_logged_in(converted_login_str):
                     """Activate user on first login."""
                     self.user_cache.is_active = True
                     self.user_cache.save()
 
-                    UserOptions.objects.set_user_logged_in(username)
+                    UserOptions.objects.set_user_logged_in(converted_login_str)
                 else:
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
