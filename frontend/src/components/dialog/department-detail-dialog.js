@@ -149,7 +149,6 @@ class DepartmentDetailDialog extends React.Component {
     let emails = Object.keys(this.state.newMembersTempObj);
     seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
       this.toggle();
-      this.props.toggleManageMembersDialog();
     }).catch(error => {
       this.onError(error);
     });
