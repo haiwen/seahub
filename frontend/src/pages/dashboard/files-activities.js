@@ -13,6 +13,8 @@ import '../../css/files-activities.css';
 
 dayjs.locale(window.app.config.lang);
 
+const NAV_ITEM_MARGIN = 16;
+
 class FilesActivities extends Component {
 
   constructor(props) {
@@ -34,7 +36,6 @@ class FilesActivities extends Component {
     this.oldPathList = [];
     this.availableUserEmails = new Set();
     this.itemRefs = [];
-    this.itemWidths = [];
   }
 
   componentDidMount() {
@@ -80,23 +81,12 @@ class FilesActivities extends Component {
       this.setState({ onlyMine: isMyActivities });
     });
 
-    this.measureItems();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.onlyMine !== prevState.onlyMine) {
-      this.measureItems();
-    }
+    this.forceUpdate();
   }
 
   componentWillUnmount() {
     this.unlisten && this.unlisten();
   }
-
-  measureItems = () => {
-    this.itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
-    this.forceUpdate();
-  };
 
   mergePublishEvents = (events) => {
     events.forEach((item) => {
@@ -255,8 +245,9 @@ class FilesActivities extends Component {
   render() {
     const { targetUsers, availableUsers, onlyMine } = this.state;
     const activeIndex = onlyMine ? 1 : 0;
-    const indicatorWidth = this.itemWidths[activeIndex] || 78;
-    const indicatorOffset = this.itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0);
+    const itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
+    const indicatorWidth = itemWidths[activeIndex];
+    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((a, b) => a + b, 0) + (2 * activeIndex + 1) * NAV_ITEM_MARGIN;
     return (
       <div className="main-panel-center">
         <div className="cur-view-container" id="activities">
@@ -268,10 +259,10 @@ class FilesActivities extends Component {
                 '--indicator-offset': `${indicatorOffset}px`
               }}
             >
-              <li className="nav-item px-4" ref={el => this.itemRefs[0] = el}>
+              <li className="nav-item mx-4" ref={el => this.itemRefs[0] = el}>
                 <Link to={`${siteRoot}dashboard/`} className={`nav-link${onlyMine ? '' : ' active'}`}>{gettext('All Activities')}</Link>
               </li>
-              <li className="nav-item px-4" ref={el => this.itemRefs[1] = el}>
+              <li className="nav-item mx-4" ref={el => this.itemRefs[1] = el}>
                 <Link to={`${siteRoot}my-activities/`} className={`nav-link${onlyMine ? ' active' : ''}`}>{gettext('My Activities')}</Link>
               </li>
             </ul>

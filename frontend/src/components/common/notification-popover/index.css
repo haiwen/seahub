@@ -198,6 +198,10 @@
   color: #ED7109;
 }
 
+.notification-container .nav-indicator-container::before {
+  bottom: 0px;
+}
+
 @media (max-width: 768px) {
   .notification-container {
     right: -60px;

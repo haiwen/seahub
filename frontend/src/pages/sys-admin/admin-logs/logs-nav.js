@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../../utils/constants';
+import { NAV_ITEM_MARGIN } from '../../../constants';
 
 const propTypes = {
   currentItem: PropTypes.string.isRequired
@@ -16,18 +17,18 @@ class LogsNav extends React.Component {
       { name: 'login', urlPart: 'admin-logs/login', text: gettext('Admin Login Logs') },
     ];
     this.itemRefs = [];
-    this.itemWidths = [];
   }
 
   componentDidMount() {
-    this.itemWidths = this.itemRefs.map(ref => ref?.offsetWidth || 0);
+    this.forceUpdate();
   }
 
   render() {
     const { currentItem } = this.props;
     const activeIndex = this.navItems.findIndex(item => item.name === currentItem) || 0;
-    const indicatorWidth = this.itemWidths[activeIndex] || 167;
-    const indicatorOffset = this.itemWidths.slice(0, activeIndex).reduce((prev, cur) => prev + cur, 0);
+    const itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
+    const indicatorWidth = itemWidths[activeIndex];
+    const indicatorOffset = itemWidths.slice(0, activeIndex).reduce((prev, cur) => prev + cur, 0) + (2 * activeIndex + 1) * NAV_ITEM_MARGIN;
     return (
       <div className="cur-view-path tab-nav-container">
         <ul
@@ -40,11 +41,11 @@ class LogsNav extends React.Component {
           {this.navItems.map((item, index) => {
             return (
               <li
-                className="nav-item"
+                className="nav-item mx-3"
                 key={index}
                 ref={el => this.itemRefs[index] = el}
               >
-                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+                <Link to={`${siteRoot}sys/${item.urlPart}/`} className={`m-0 nav-link${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}

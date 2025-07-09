@@ -75,3 +75,5 @@ export const SEARCH_FILTER_BY_DATE_TYPE_KEY = {
 };
 
 export const SEARCH_FILTERS_SHOW_KEY = 'search_filters_show';
+
+export const NAV_ITEM_MARGIN = 12;
