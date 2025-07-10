@@ -9,7 +9,7 @@ import SysAdminAddOrgDialog from '../../../components/dialog/sysadmin-dialog/sys
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import Content from './orgs-content';
-import LinksNav from '../orgs/orgs-nav';
+import OrgsNav from '../orgs/orgs-nav';
 
 
 class Orgs extends Component {
@@ -148,7 +148,7 @@ class Orgs extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LinksNav currentItem="organizations" />
+            <OrgsNav currentItem="organizations" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}

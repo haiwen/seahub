@@ -7,7 +7,7 @@ const propTypes = {
   currentItem: PropTypes.string.isRequired
 };
 
-class Nav extends React.Component {
+class OrgsNav extends React.Component {
 
   constructor(props) {
     super(props);
@@ -35,6 +35,6 @@ class Nav extends React.Component {
   }
 }
 
-Nav.propTypes = propTypes;
+OrgsNav.propTypes = propTypes;
 
-export default Nav;
+export default OrgsNav;

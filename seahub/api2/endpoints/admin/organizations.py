@@ -169,10 +169,10 @@ class AdminOrganizations(APIView):
 
         try:
             page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '100'))
+            per_page = int(request.GET.get('per_page', '25'))
         except ValueError:
             page = 1
-            per_page = 100
+            per_page = 25
 
         start = (page - 1) * per_page
 
@@ -584,10 +584,10 @@ class TrafficExceededOrganizations(APIView):
 
         try:
             page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '25'))
+            per_page = int(request.GET.get('per_page', '100'))
         except ValueError:
             page = 1
-            per_page = 25
+            per_page = 100
 
         start = (page - 1) * per_page
         seafile_db = SeafileDB()

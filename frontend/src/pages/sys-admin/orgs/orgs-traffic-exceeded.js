@@ -7,7 +7,7 @@ import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import Content from './orgs-content';
-import LinksNav from '../orgs/orgs-nav';
+import OrgsNav from '../orgs/orgs-nav';
 
 
 class OrgsTrafficExceeded extends Component {
@@ -121,7 +121,7 @@ class OrgsTrafficExceeded extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LinksNav currentItem="traffic-exceeded" />
+            <OrgsNav currentItem="traffic-exceeded" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
