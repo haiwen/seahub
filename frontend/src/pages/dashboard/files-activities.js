@@ -39,8 +39,36 @@ class FilesActivities extends Component {
   }
 
   componentDidMount() {
-    let { currentPage, availableUsers } = this.state;
-    seafileAPI.listActivities(currentPage, this.props.onlyMine ? username : '').then(res => {
+    this.unlisten = globalHistory.listen(({ location }) => {
+      const isMyActivities = location.pathname.includes('my-activities');
+      this.setState({ onlyMine: isMyActivities });
+    });
+
+    this.loadActivities();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.onlyMine !== prevState.onlyMine) {
+      this.setState({
+        currentPage: 1,
+        hasMore: true,
+        allItems: [],
+        items: []
+      }, () => {
+        this.loadActivities();
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.unlisten && this.unlisten();
+  }
+
+  loadActivities = () => {
+    this.setState({ isFirstLoading: true });
+    const { currentPage, availableUsers, onlyMine } = this.state;
+
+    seafileAPI.listActivities(currentPage, onlyMine ? username : '').then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
@@ -72,21 +100,10 @@ class FilesActivities extends Component {
     }).catch(error => {
       this.setState({
         isFirstLoading: false,
-        errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
+        errorMsg: Utils.getErrorMsg(error, true)
       });
     });
-
-    this.unlisten = globalHistory.listen(({ location }) => {
-      const isMyActivities = location.pathname.includes('my-activities');
-      this.setState({ onlyMine: isMyActivities });
-    });
-
-    this.forceUpdate();
-  }
-
-  componentWillUnmount() {
-    this.unlisten && this.unlisten();
-  }
+  };
 
   mergePublishEvents = (events) => {
     events.forEach((item) => {
@@ -149,8 +166,8 @@ class FilesActivities extends Component {
   };
 
   getMore() {
-    const { currentPage, availableUsers, targetUsers } = this.state;
-    seafileAPI.listActivities(currentPage, this.props.onlyMine ? username : '').then(res => {
+    const { currentPage, availableUsers, targetUsers, onlyMine } = this.state;
+    seafileAPI.listActivities(currentPage, onlyMine ? username : '').then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
       events = this.mergeFileCreateEvents(events);
@@ -192,7 +209,7 @@ class FilesActivities extends Component {
   }
 
   filterEvents = (events) => {
-    const { onlyMine } = this.props;
+    const { onlyMine } = this.state;
     const { targetUsers } = this.state;
 
     if (!onlyMine && targetUsers.length) {
