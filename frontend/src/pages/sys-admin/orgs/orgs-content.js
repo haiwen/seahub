@@ -101,7 +101,7 @@ Content.propTypes = {
   items: PropTypes.array.isRequired,
   updateRole: PropTypes.func.isRequired,
   updateStatus: PropTypes.func.isRequired,
-  deleteOrg: PropTypes.func.isRequired,
+  deleteOrg: PropTypes.func,
   hasNextPage: PropTypes.bool,
   resetPerPage: PropTypes.func,
   curPerPage: PropTypes.number,
@@ -228,7 +228,22 @@ class Item extends Component {
     });
     const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
     const confirmSetUserInactiveMsg = gettext('Are you sure you want to set {user_placeholder} inactive?').replace('{user_placeholder}', Utils.HTMLescape(item.org_name));
-
+    let org_deleted = !item.org_id;
+    if (org_deleted) {
+      return (
+        <Fragment>
+          <tr className={highlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
+            <td>{gettext('Team deleted')}</td>
+            <td>{'--'}</td>
+            <td>{'--'}</td>
+            <td>{'--'}</td>
+            <td>{'--'}</td>
+            <td>{'--'}</td>
+            <td>{''}</td>
+          </tr>
+        </Fragment>
+      );
+    }
     return (
       <Fragment>
         <tr className={highlighted ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>

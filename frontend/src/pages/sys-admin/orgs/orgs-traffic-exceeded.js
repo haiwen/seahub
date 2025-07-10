@@ -121,7 +121,7 @@ class OrgsTrafficExceeded extends Component {
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <LinksNav currentItem="trafficexceeded" />
+            <LinksNav currentItem="traffic-exceeded" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}

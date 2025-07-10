@@ -55,6 +55,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_org_info(org):
+    if not org:
+        return {'org_id': None}
     org_id = org.org_id
 
     org_info = {}
@@ -167,10 +169,10 @@ class AdminOrganizations(APIView):
 
         try:
             page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '25'))
+            per_page = int(request.GET.get('per_page', '100'))
         except ValueError:
             page = 1
-            per_page = 25
+            per_page = 100
 
         start = (page - 1) * per_page
 
@@ -610,10 +612,6 @@ class TrafficExceededOrganizations(APIView):
 
             for org_id in org_ids:
                 org = ccnet_api.get_org_by_id(org_id)
-
-                if not org:
-                    error_msg = 'Organization %s not found.' % org_id
-                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
                 org_info = get_org_info(org)
                 org_id = org_info['org_id']
                 org_limit_data = limit_data.get(f"{org_id}")

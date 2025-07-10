@@ -126,7 +126,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'organizations',
-        urlPartList: ['organizations/', 'search-organizations/', 'organizations/trafficexceeded']
+        urlPartList: ['organizations/', 'search-organizations/', 'organizations/traffic-exceeded']
       },
       {
         tab: 'links',
@@ -244,7 +244,7 @@ class SysAdmin extends React.Component {
             <ShareLinks path={siteRoot + 'sys/share-links'} {...commonProps} />
             <UploadLinks path={siteRoot + 'sys/upload-links'} {...commonProps} />
             <Orgs path={siteRoot + 'sys/organizations'} {...commonProps} />
-            <OrgsTrafficExceeded path={siteRoot + 'sys/organizations/trafficexceeded'} {...commonProps} />
+            <OrgsTrafficExceeded path={siteRoot + 'sys/organizations/traffic-exceeded'} {...commonProps} />
             <SearchOrgs path={siteRoot + 'sys/search-organizations'} {...commonProps} />
             <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} {...commonProps} />
             <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} {...commonProps} />

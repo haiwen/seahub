@@ -581,7 +581,7 @@ class SystemAdminAPI {
   }
 
   sysAdminListTrafficExceedOrgs(page, perPage) {
-    const url = this.server + '/api/v2.1/admin/organizations/trafficexceeded/';
+    const url = this.server + '/api/v2.1/admin/organizations/traffic-exceeded/';
     let params = {
       page: page,
       per_page: perPage
