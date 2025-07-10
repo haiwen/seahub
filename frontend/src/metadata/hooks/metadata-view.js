@@ -363,6 +363,7 @@ export const MetadataViewProvider = ({
   const updateRecordDescription = useCallback((record) => {
     const parentDir = getParentDirFromRecord(record);
     const fileName = getFileNameFromRecord(record);
+    const recordId = getRecordIdFromRecord(record);
     if (!fileName || !parentDir) return;
     const checkIsDescribableFile = Utils.isDescriptionSupportedFile(fileName);
     if (!checkIsDescribableFile) return;
@@ -370,7 +371,7 @@ export const MetadataViewProvider = ({
     const descriptionColumnKey = PRIVATE_COLUMN_KEY.FILE_DESCRIPTION;
     let idOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
     let idOriginalOldRecordData = { [record[PRIVATE_COLUMN_KEY.ID]]: { [descriptionColumnKey]: record[descriptionColumnKey] } };
-    generateDescription({ parentDir, fileName }, {
+    generateDescription({ parentDir, fileName, recordId }, {
       success_callback: ({ description }) => {
         const updateRecordId = record[PRIVATE_COLUMN_KEY.ID];
         const recordIds = [updateRecordId];
