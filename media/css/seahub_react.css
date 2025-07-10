@@ -1866,6 +1866,7 @@ a.table-sort-op:hover {
 }
 
 .sdoc-editor-page-wrapper .sdoc-dropdown-menu,
+.sdoc-editor-page-wrapper .header-menu .header-popover,
 .sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu {
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
