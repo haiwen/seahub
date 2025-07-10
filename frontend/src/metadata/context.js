@@ -259,10 +259,10 @@ class Context {
     return this.metadataAPI.generateDescription(repoID, filePath);
   };
 
-  imageCaption = (filePath) => {
+  imageCaption = (filePath, recordId) => {
     const repoID = this.settings['repoID'];
     const lang = this.settings['lang'];
-    return this.metadataAPI.imageCaption(repoID, filePath, lang);
+    return this.metadataAPI.imageCaption(repoID, filePath, lang, recordId);
   };
 
   generateFileTags = (filePath) => {
