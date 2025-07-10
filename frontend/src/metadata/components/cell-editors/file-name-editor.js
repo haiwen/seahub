@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef } from 'react';
+import React, { useImperativeHandle, useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { EDITOR_TYPE } from '../../constants';
@@ -14,10 +14,19 @@ const FileNameEditor = React.forwardRef((props, ref) => {
     return textEditorRef.current;
   });
 
-  const getFileName = () => {
+  const getFileName = useCallback(() => {
     const { key } = column;
     return record[key];
-  };
+  }, [column, record]);
+
+  useEffect(() => {
+    if (mode === EDITOR_TYPE.PREVIEWER) {
+      return;
+    }
+    const fileName = getFileName();
+    const endIndex = fileName.lastIndexOf('.');
+    textEditorRef.current.input.setSelectionRange(0, endIndex, 'forward');
+  }, [mode, getFileName]);
 
   const getFileType = () => {
     if (checkIsDir(record)) {
