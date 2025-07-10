@@ -119,6 +119,10 @@ const TextTranslation = {
     key: 'Export docx',
     value: gettext('Export as docx')
   },
+  EXPORT_PDF: {
+    key: 'Export pdf',
+    value: gettext('Export as pdf')
+  },
   HISTORY: {
     key: 'History',
     value: gettext('History')

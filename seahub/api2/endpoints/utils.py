@@ -303,6 +303,20 @@ def sdoc_export_to_md(path, doc_uuid, download_url,
 
     return resp
 
+def sdoc_export_to_pdf(path, repo_id, username, doc_uuid):
+
+    headers = convert_file_gen_headers()
+    params = {
+        'path': path,
+        'repo_id': repo_id,
+        'username': username,
+        'doc_uuid': doc_uuid
+    }
+    url = FILE_CONVERTER_SERVER_URL.rstrip('/') + '/api/v1/sdoc-export-to-pdf/'
+    resp = requests.post(url, json=params, headers=headers, timeout=30)
+
+    return resp
+
 
 def format_date(start, end):
     start_struct_time = datetime.datetime.strptime(start, "%Y-%m-%d")

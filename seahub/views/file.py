@@ -17,6 +17,7 @@ import chardet
 import logging
 import posixpath
 import re
+import jwt
 
 from django.core.cache import cache
 from django.contrib.sites.shortcuts import get_current_site
@@ -972,6 +973,66 @@ def view_lib_file(request, repo_id, path):
         return_dict['err'] = "File preview unsupported"
         return render(request, template, return_dict)
 
+
+def view_lib_sdoc_pdf_file(request, repo_id, path):
+    # resource check
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    path = normalize_file_path(path)
+    file_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not file_id:
+        return render_error(request, _('File does not exist'))
+
+    # permission check
+    # access_token = request.GET.get('access-token')
+    # if not access_token:
+    #     return render_permission_error(request, _('Permission denied.'))
+    # try:
+    #     payload = jwt.decode(access_token, settings.SEADOC_PRIVATE_KEY, algorithms=['HS256'])
+    # except:
+    #     return render_permission_error(request, _('Permission denied.'))
+
+    # if not payload.get('is_internal'):
+    #     return render_permission_error(request, _('Permission denied.'))
+
+    # username = payload.get('username') or ''
+    username = 'e791356726a7491c87a1cfaaba6e8d63@auth.local'
+    parent_dir = os.path.dirname(path)
+    request.user.username = username
+    permission = check_folder_permission(request, repo_id, parent_dir)
+    if not permission:
+        return convert_repo_path_when_can_not_view_file(request, repo_id, path)
+
+    filename = os.path.basename(path)
+    # basic file info
+    return_dict = {
+        'is_pro': is_pro_version(),
+        'repo': repo,
+        'file_id': file_id,
+        'is_repo_owner': is_repo_owner(request, repo_id, username),
+        'path': path,
+        'filename': filename,
+        'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
+        'file_download_url': gen_file_get_url_new(repo_id, path)
+    }
+
+    file_uuid = get_seadoc_file_uuid(repo, path)
+    return_dict['file_uuid'] = file_uuid
+    return_dict['assets_url'] = '/api/v2.1/seadoc/pdf-download-image/' + file_uuid
+    return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+
+    seadoc_perm = 'r'
+    return_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+
+    # revision
+    revision_info = is_seadoc_revision(file_uuid)
+    return_dict.update(revision_info)
+
+    response = render(request, 'sdoc_page_view_react.html', return_dict)
+    # response.set_cookie('access-token', access_token)
+    return response
 
 def view_history_file_common(request, repo_id, ret_dict):
 

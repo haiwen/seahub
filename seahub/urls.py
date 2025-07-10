@@ -19,7 +19,7 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, download_file, view_lib_file, \
     view_lib_file_via_smart_link, view_media_file_via_share_link, \
-    view_media_file_via_public_wiki, view_sdoc_revision
+    view_media_file_via_public_wiki, view_sdoc_revision, view_lib_sdoc_pdf_file
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
 
@@ -212,7 +212,7 @@ from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusFilesView, 
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
-from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
+from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx, sdoc_to_pdf
 from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
@@ -253,6 +253,7 @@ urlpatterns = [
     re_path(r'^repo/sdoc_revision/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revision, name='sdoc_revision'),
     re_path(r'^repo/sdoc_revisions/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revisions, name='sdoc_revisions'),
     re_path(r'^repo/sdoc_export_to_docx/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_to_docx, name='sdoc_export_to_docx'),
+    re_path(r'^repo/sdoc_export_to_pdf/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_to_pdf, name='sdoc_export_to_pdf'),
     re_path(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     re_path(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
     re_path(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
@@ -268,6 +269,7 @@ urlpatterns = [
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/revisions/(?P<revision_id>\d+)/$', view_sdoc_revision, name='view_sdoc_revision'),
+    re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/sdoc-pdf-file/(?P<path>.*)$', view_lib_sdoc_pdf_file, name='view_lib_sdoc_pdf_file'),
     re_path(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
     re_path(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
 

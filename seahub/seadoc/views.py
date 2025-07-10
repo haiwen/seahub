@@ -1,3 +1,4 @@
+import base64
 import os
 import json
 from urllib.parse import quote
@@ -13,8 +14,9 @@ from seahub.views import check_folder_permission, validate_owner, get_seadoc_fil
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocRevision
 
-from seahub.api2.endpoints.utils import sdoc_export_to_docx
+from seahub.api2.endpoints.utils import sdoc_export_to_docx, sdoc_export_to_pdf
 from .utils import is_seadoc_revision, get_seadoc_download_link, gen_path_link
+from rest_framework.response import Response
 
 
 @login_required
@@ -186,3 +188,60 @@ def sdoc_to_docx(request, repo_id):
     response['Content-Disposition'] = f'attachment; filename={new_file_name}'
     response.write(resp_with_docx_file.content)
     return response
+
+
+
+@login_required
+def sdoc_to_pdf(request, repo_id):
+
+    # argument check
+    file_path = request.GET.get('file_path')
+    file_path = normalize_file_path(file_path)
+    if not file_path:
+        error_msg = _("File path invalid.")
+        return render_error(request, error_msg)
+
+    # resource check
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        error_msg = _("Library does not exist")
+        return render_error(request, error_msg)
+
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not file_id:
+        error_msg = 'File %s not found.' % file_path
+        return render_error(request, error_msg)
+
+    # permission check
+    if not check_folder_permission(request, repo_id, '/'):
+        error_msg = _("Permission denied.")
+        return render_error(request, error_msg)
+
+    username = request.user.username
+    filename = os.path.basename(file_path)
+    doc_uuid = get_seadoc_file_uuid(repo, file_path)
+    res = sdoc_export_to_pdf(file_path, repo_id, username, doc_uuid)
+
+    if res.status_code == 200:
+        pdf_mime_type = 'application/pdf'
+        response = HttpResponse(content_type=pdf_mime_type)
+        new_file_name = quote(f'{filename[:-5]}.pdf')
+        response['Content-Disposition'] = f'attachment; filename={new_file_name}'
+        pdf_dir = '/tmp/export-page-to-pdf'
+        pdf_path = os.path.join(pdf_dir, '%s.pdf' % (doc_uuid))
+        with open(pdf_path, 'rb') as pdf:
+            response.write(pdf.read())
+            os.remove(pdf_path)
+        return response
+    else:
+        error_msg = 'Export %s failed.' % file_path
+        return render_error(request, error_msg)
+
+    # res = sdoc_export_to_pdf(file_path, repo_id, username, doc_uuid,
+    #                                           download_url, src_type, dst_type)
+    # pdf_mime_type = 'application/pdf'
+    # response = HttpResponse(content_type=pdf_mime_type)
+    # new_file_name = quote(f'{filename[:-5]}.pdf')
+    # response['Content-Disposition'] = f'attachment; filename={new_file_name}'
+    # response.write(resp_with_pdf_file.content)
+    # return response

@@ -32,6 +32,7 @@ const entryFiles = {
   fileView: '/file-view.js',
   viewFileText: '/view-file-text.js',
   viewFileSdoc: '/view-file-sdoc.js',
+  viewFileSdocPage: '/view-file-sdoc-page.js',
   viewFileDocument: '/view-file-document.js',
   viewFileSpreadsheet: '/view-file-spreadsheet.js',
   viewFileOnlyoffice: '/view-file-onlyoffice.js',

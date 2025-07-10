@@ -1,5 +1,6 @@
 import os
 import re
+import jwt
 import json
 import uuid
 import stat
@@ -27,6 +28,7 @@ from django.urls import reverse
 from django.core.files.uploadhandler import TemporaryFileUploadHandler
 from django.utils.decorators import method_decorator
 from django.views.decorators.http import condition
+from django.conf import settings
 
 from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
@@ -548,6 +550,54 @@ class SeadocDownloadVideo(APIView):
             if not can_access_seadoc_asset(request, repo_id, file_path, file_uuid):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+         # main
+        parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
+        download_link = get_seadoc_asset_download_link(repo_id, parent_path, filename, username)
+        if not download_link:
+            error_msg = 'file %s not found.' % filename
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        resp = requests.get(download_link)
+        if not resp.ok:
+            logger.error(resp.text)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        filetype, fileext = get_file_type_and_ext(filename)
+        response = HttpResponse(
+            content=resp.content, content_type='video/' + fileext)
+        response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
+        return response
+
+
+class SeadocToPDFDownloadImage(APIView):
+    throttle_classes = (UserRateThrottle, )
+
+    @method_decorator(condition(last_modified_func=latest_entry))
+    def get(self, request, file_uuid, filename):
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+        # permission check
+        # access_token = request.COOKIES.get('access-token')
+        # try:
+        #     SEADOC_PRIVATE_KEY = getattr(settings, 'SEADOC_PRIVATE_KEY', '')
+        #     payload = jwt.decode(access_token, SEADOC_PRIVATE_KEY, algorithms=['HS256'])
+        # except Exception as e:
+        #     logger.error(e)
+        #     return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+        # if not payload.get('is_internal'):
+        #     return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+        # username = payload.get('username')
+        username = 'e791356726a7491c87a1cfaaba6e8d63@auth.local'
+        request.user.username = username
+        # #####
+        file_path = posixpath.join(uuid_map.parent_path, uuid_map.filename)
+        # if not (username and check_folder_permission(request, repo_id, file_path)):
+        #     error_msg = 'Permission denied.'
+        #     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # main
         parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
@@ -562,7 +612,7 @@ class SeadocDownloadVideo(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         filetype, fileext = get_file_type_and_ext(filename)
         response = HttpResponse(
-            content=resp.content, content_type='video/' + fileext)
+            content=resp.content, content_type='image/' + fileext)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
 

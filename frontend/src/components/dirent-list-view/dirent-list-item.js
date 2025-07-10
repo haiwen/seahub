@@ -296,6 +296,18 @@ class DirentListItem extends React.Component {
     window.location.href = exportToDocxUrl;
   };
 
+  exportPdf = () => {
+    const serviceUrl = window.app.config.serviceURL;
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.state.dirent);
+    let exportToPdfUrl = serviceUrl + '/repo/sdoc_export_to_pdf/' + repoID + '/?file_path=' + filePath;
+    window.location.href = exportToPdfUrl;
+    // this.setState({
+    //   isShowIODialog: true
+    // })
+
+  };
+
   exportSdoc = () => {
     const serviceUrl = window.app.config.serviceURL;
     let repoID = this.props.repoID;
@@ -355,6 +367,9 @@ class DirentListItem extends React.Component {
         break;
       case 'Export sdoc':
         this.exportSdoc();
+        break;
+      case 'Export pdf':
+        this.exportPdf();
         break;
       case 'Convert to sdoc':
         this.onItemConvert(event, 'sdoc');
@@ -653,6 +668,12 @@ class DirentListItem extends React.Component {
 
   onItemContextMenu = (event) => {
     this.props.onItemContextMenu(event, this.state.dirent);
+  };
+
+  onExportToggle = () => {
+    this.setState({
+      isShowIODialog: !this.state.isShowIODialog,
+    });
   };
 
   getDirentHref = () => {

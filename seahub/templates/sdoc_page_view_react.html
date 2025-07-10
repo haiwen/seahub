@@ -1,0 +1,33 @@
+{% extends 'base_for_react.html' %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags i18n static %}
+
+{% block sub_title %}{{filename}} - {% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-print.css" />
+{% render_bundle 'viewFileSdocPage' 'css' %}
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+  username: '{{ user.username|escapejs }}',
+  repoID: '{{ repo.id }}',
+  docPath: '{{ path|escapejs }}',
+  docName: '{{ filename|escapejs }}',
+  docUuid: '{{ file_uuid }}',
+  assetsUrl: '{{ assets_url }}',
+  seadocAccessToken: '{{ seadoc_access_token }}',
+  seadocServerUrl: '{{ seadoc_server_url }}',
+  lang: '{{ lang }}'
+};
+</script>
+<script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
+<script src="{{ MEDIA_URL }}js/init-scroll-bar.js" ></script>
+{% render_bundle 'viewFileSdocPage' 'js' %}
+{% endblock %}

@@ -5,7 +5,8 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
     SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, SeadocNotificationsView, SeadocNotificationView, \
     SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers, SeadocEditorCallBack, \
-    SeadocDailyHistoryDetail, SeadocSearchFilenameView, SeadocExportView, SdocImportView, SeadocUploadVideo, SeadocDownloadVideo
+    SeadocDailyHistoryDetail, SeadocSearchFilenameView, SeadocExportView, SdocImportView, SeadocUploadVideo, SeadocDownloadVideo, SeadocToPDFDownloadImage
+
 
 # api/v2.1/seadoc/
 urlpatterns = [
@@ -18,6 +19,7 @@ urlpatterns = [
     re_path(r'^upload-video/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadVideo.as_view(), name='seadoc_upload_video'),
     re_path(r'^download-image/(?P<file_uuid>[-0-9a-f]{36})/(?P<filename>.*)$', SeadocDownloadImage.as_view(), name='seadoc_download_image'),
     re_path(r'^download-video/(?P<file_uuid>[-0-9a-f]{36})/(?P<filename>.*)$', SeadocDownloadVideo.as_view(), name='seadoc_download_video'),
+    re_path(r'^pdf-download-image/(?P<file_uuid>[-0-9a-f]{36})/(?P<filename>.*)$', SeadocToPDFDownloadImage.as_view(), name='seadoc_to_pdf_download_image'),
     re_path(r'^async-copy-images/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocAsyncCopyImages.as_view(), name='seadoc_async_copy_images'),
     re_path(r'^query-copy-move-progress/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocQueryCopyMoveProgressView.as_view(), name='seadoc_query_copy_move_progress'),
     re_path(r'^copy-history-file/(?P<repo_id>[-0-9a-f]{36})/$', SeadocCopyHistoryFile.as_view(), name='seadoc_copy_history_file'),
