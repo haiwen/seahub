@@ -170,7 +170,6 @@ class Collab {
 
   syncElements = (elements) => {
     this.broadcastElements(elements);
-    this.queueSaveToServerStorage();
   };
 
   broadcastElements = (elements) => {
@@ -178,6 +177,7 @@ class Collab {
       this.portal.broadcastScene(WS_SUBTYPES.UPDATE, elements, false);
       this.lastBroadcastedOrReceivedSceneVersion = getSceneVersion(elements);
       this.queueBroadcastAllElements();
+      this.queueSaveToServerStorage();
     }
   };
 
