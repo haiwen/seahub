@@ -699,3 +699,24 @@ class SeafileDB:
                     repo_id_to_invisible_paths[repo_id] = {invisible_path}
 
             return repo_id_to_invisible_paths
+
+
+
+    def get_download_limit_org(self,start,per_page):
+        sql = f"""
+                SELECT *
+                FROM `{self.db_name}`.`OrgDownloadRateLimit`
+                ORDER BY id
+                LIMIT %s OFFSET %s
+                """
+        count_sql = f"""
+                SELECT COUNT(*) as total
+                FROM `{self.db_name}`.`OrgDownloadRateLimit`
+                """
+        with connection.cursor() as cursor:
+            cursor.execute(sql,[per_page,start])
+            rows = cursor.fetchall()
+
+            cursor.execute(count_sql)
+            total_count = cursor.fetchone()
+        return rows,total_count[0]

@@ -40,6 +40,7 @@ import GroupMembers from './groups/group-members';
 import Departments from './departments/departments';
 
 import Orgs from './orgs/orgs';
+import OrgsTrafficExceeded from './orgs/orgs-traffic-exceeded';
 import SearchOrgs from './orgs/search-orgs';
 import OrgInfo from './orgs/org-info';
 import OrgUsers from './orgs/org-users';
@@ -120,7 +121,7 @@ class SysAdmin extends React.Component {
       },
       {
         tab: 'organizations',
-        urlPartList: ['organizations/', 'search-organizations/']
+        urlPartList: ['organizations/', 'search-organizations/', 'organizations/traffic-exceeded']
       },
       {
         tab: 'links',
@@ -237,6 +238,7 @@ class SysAdmin extends React.Component {
             <GroupMembers path={siteRoot + 'sys/groups/:groupID/members'} {...commonProps} />
             <Departments path={siteRoot + 'sys/departments/'} {...commonProps} />
             <Orgs path={siteRoot + 'sys/organizations'} {...commonProps} />
+            <OrgsTrafficExceeded path={siteRoot + 'sys/organizations/traffic-exceeded'} {...commonProps} />
             <SearchOrgs path={siteRoot + 'sys/search-organizations'} {...commonProps} />
             <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} {...commonProps} />
             <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} {...commonProps} />

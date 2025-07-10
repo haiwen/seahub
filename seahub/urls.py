@@ -176,7 +176,7 @@ from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch, AdminAdminU
         AdminImportUsers
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganizations, \
-        AdminOrganization, AdminSearchOrganization, AdminOrganizationsBaseInfo
+    AdminOrganization, AdminSearchOrganization, AdminOrganizationsBaseInfo, TrafficExceededOrganizations
 from seahub.api2.endpoints.admin.institutions import AdminInstitutions, AdminInstitution
 from seahub.api2.endpoints.admin.institution_users import AdminInstitutionUsers, AdminInstitutionUser
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
@@ -777,6 +777,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/groups/$', AdminOrgGroups.as_view(),name='api-v2.1-admin-org-groups'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/repos/$', AdminOrgRepos.as_view(),name='api-v2.1-admin-org-repos'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/statistics/traffic/$', AdminOrgStatsTraffic.as_view(), name='api-v2.1-admin-org-stats-traffic'),
+    re_path(r'^api/v2.1/admin/organizations/traffic-exceeded/$', TrafficExceededOrganizations.as_view(), name='api-v2.1-admin-orgs-traffic-exceeded'),
 
     ## admin::institutions
     re_path(r'^api/v2.1/admin/institutions/$', AdminInstitutions.as_view(), name='api-v2.1-admin-institutions'),
@@ -923,6 +924,7 @@ urlpatterns = [
     path('sys/admin-logs/operation/', sysadmin_react_fake_view, name="sys_admin_logs_operation"),
     path('sys/admin-logs/login/', sysadmin_react_fake_view, name="sys_admin_logs_login"),
     path('sys/organizations/', sysadmin_react_fake_view, name="sys_organizations"),
+    path('sys/organizations/traffic-exceeded/', sysadmin_react_fake_view, name="sys_organizations_traffic_exceed"),
     path('sys/search-organizations/', sysadmin_react_fake_view, name="sys_search_organizations"),
     path('sys/organizations/<int:org_id>/info/', sysadmin_react_fake_view, name="sys_organization_info"),
     path('sys/organizations/<int:org_id>/users/', sysadmin_react_fake_view, name="sys_organization_users"),

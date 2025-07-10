@@ -30,7 +30,7 @@ from seahub.api2.permissions import IsProVersion
 from seahub.role_permissions.utils import get_available_roles
 from seahub.organizations.models import OrgSAMLConfig
 from seahub.utils.ccnet_db import CcnetDB
-
+from seahub.utils.db_api import SeafileDB
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -55,6 +55,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_org_info(org):
+    if not org:
+        return {'org_id': None}
     org_id = org.org_id
 
     org_info = {}
@@ -558,3 +560,67 @@ class AdminOrganizationsBaseInfo(APIView):
                 base_info['org_staffs'] = staffs
             orgs.append(base_info)
         return Response({'organization_list': orgs})
+
+
+class TrafficExceededOrganizations(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        """ Get all organizations
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not MULTI_TENANCY:
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            page = 1
+            per_page = 100
+
+        start = (page - 1) * per_page
+        seafile_db = SeafileDB()
+        try:
+            orgs, total_count = seafile_db.get_download_limit_org(start, per_page)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+
+        result = []
+        limit_data = {}
+        if orgs:
+            org_ids = []
+            for org in orgs:
+                org_id = org[1]
+                org_ids.append(org_id)
+                limit_data[f"{org_id}"] = org[2]
+            orgs_last_activity = OrgLastActivityTime.objects.filter(org_id__in=org_ids)
+            orgs_last_activity_dict = {org.org_id: org.timestamp for org in orgs_last_activity}
+
+            for org_id in org_ids:
+                org = ccnet_api.get_org_by_id(org_id)
+                org_info = get_org_info(org)
+                org_id = org_info['org_id']
+                org_limit_data = limit_data.get(f"{org_id}")
+
+                if org_id in orgs_last_activity_dict:
+                    org_info['last_activity_time'] = datetime_to_isoformat_timestr(orgs_last_activity_dict[org_id])
+                else:
+                    org_info['last_activity_time'] = None
+
+                org_info['download_limit'] = f"{org_limit_data}"
+                result.append(org_info)
+        return Response({'organizations': result, 'total_count': total_count})

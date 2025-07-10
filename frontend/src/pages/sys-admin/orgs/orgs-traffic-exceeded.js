@@ -1,18 +1,16 @@
 import React, { Component, Fragment } from 'react';
 import { navigate } from '@gatsbyjs/reach-router';
-import { Button } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import SysAdminAddOrgDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-org-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
 import Content from './orgs-content';
 import OrgsNav from '../orgs/orgs-nav';
 
 
-class Orgs extends Component {
+class OrgsTrafficExceeded extends Component {
 
   constructor(props) {
     super(props);
@@ -23,7 +21,6 @@ class Orgs extends Component {
       currentPage: 1,
       perPage: 100,
       hasNextPage: false,
-      isAddOrgDialogOpen: false
     };
   }
 
@@ -40,7 +37,7 @@ class Orgs extends Component {
 
   getItemsByPage = (page) => {
     const { perPage } = this.state;
-    systemAdminAPI.sysAdminListOrgs(page, perPage).then((res) => {
+    systemAdminAPI.sysAdminListTrafficExceedOrgs(page, perPage).then((res) => {
       this.setState({
         loading: false,
         orgList: res.data.organizations,
@@ -61,10 +58,6 @@ class Orgs extends Component {
     }, () => {
       this.getItemsByPage(1);
     });
-  };
-
-  toggleAddOrgDialog = () => {
-    this.setState({ isAddOrgDialogOpen: !this.state.isAddOrgDialogOpen });
   };
 
   updateStatus = (orgID, isActive) => {
@@ -103,31 +96,6 @@ class Orgs extends Component {
     });
   };
 
-  addOrg = (data) => {
-    const { orgName, ownerEmail, password } = data;
-    systemAdminAPI.sysAdminAddOrg(orgName, ownerEmail, password).then(res => {
-      let orgList = this.state.orgList;
-      orgList.unshift(res.data);
-      this.setState({ orgList: orgList });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
-  deleteOrg = (orgID) => {
-    systemAdminAPI.sysAdminDeleteOrg(orgID).then(res => {
-      let orgList = this.state.orgList.filter(org => {
-        return org.org_id != orgID;
-      });
-      this.setState({ orgList: orgList });
-      toaster.success(gettext('Successfully deleted 1 item.'));
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
-
   getSearch = () => {
     return <Search
       placeholder={gettext('Search organizations')}
@@ -140,15 +108,20 @@ class Orgs extends Component {
   };
 
   render() {
-    const { isAddOrgDialogOpen } = this.state;
     return (
       <Fragment>
+        <style>
+          {`
+            .sf3-font-delete1 {
+              display: none !important;
+            }
+          `}
+        </style>
         <MainPanelTopbar search={this.getSearch()} {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleAddOrgDialog}>{gettext('Add Organization')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
-            <OrgsNav currentItem="organizations" />
+            <OrgsNav currentItem="traffic-exceeded" />
             <div className="cur-view-content">
               <Content
                 loading={this.state.loading}
@@ -161,20 +134,14 @@ class Orgs extends Component {
                 getListByPage={this.getItemsByPage}
                 updateRole={this.updateRole}
                 updateStatus={this.updateStatus}
-                deleteOrg={this.deleteOrg}
+
               />
             </div>
           </div>
         </div>
-        {isAddOrgDialogOpen &&
-          <SysAdminAddOrgDialog
-            addOrg={this.addOrg}
-            toggleDialog={this.toggleAddOrgDialog}
-          />
-        }
       </Fragment>
     );
   }
 }
 
-export default Orgs;
+export default OrgsTrafficExceeded;
