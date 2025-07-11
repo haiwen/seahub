@@ -16,19 +16,22 @@ from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
 from seahub.auth.models import SocialAuthUser
 from seahub.auth.decorators import login_required
-from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User, UNUSABLE_PASSWORD
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError, DEFAULT_COLLABORATE_EMAIL_INTERVAL
-from seahub.utils import is_ldap_user, get_webdav_url
+from seahub.utils import is_org_context, is_pro_version, is_valid_username, \
+        is_ldap_user, get_webdav_url
 from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 from seahub.work_weixin.utils import work_weixin_oauth_check
-from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 from seahub.dingtalk.settings import ENABLE_DINGTALK
 from seahub.weixin.settings import ENABLE_WEIXIN
+from seahub.organizations.models import OrgSAMLConfig
+
 from constance import config
+from seahub.settings import ENABLE_DELETE_ACCOUNT, ENABLE_UPDATE_USER_INFO, \
+        ENABLE_ADFS_LOGIN, ENABLE_MULTI_ADFS
 try:
     from seahub.settings import SAML_PROVIDER_IDENTIFIER
 except ImportError:
@@ -125,13 +128,16 @@ def edit_profile(request):
         enable_adfs = False
         saml_connected = False
 
-    if ENABLE_MULTI_ADFS and is_org_context(request):
-        enable_multi_adfs = True
-        org_saml_connected = SocialAuthUser.objects.filter(
-            username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
-    else:
-        enable_multi_adfs = False
-        org_saml_connected = False
+    enable_multi_adfs = False
+    org_saml_connected = False
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
+        if ENABLE_MULTI_ADFS and  \
+                org_saml_config is not None and org_saml_config.domain_verified:
+            enable_multi_adfs = True
+            org_saml_connected = SocialAuthUser.objects.filter(
+                username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
 
     has_bind_social_auth = False
     if SocialAuthUser.objects.filter(username=request.user.username).exists():
