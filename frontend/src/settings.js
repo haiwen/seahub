@@ -61,7 +61,7 @@ class Settings extends React.Component {
       { show: true, href: '#lang-setting', text: gettext('Language') },
       { show: isPro, href: '#email-notice', text: gettext('Email Notification') },
       { show: twoFactorAuthEnabled, href: '#two-factor-auth', text: gettext('Two-Factor Authentication') },
-      { show: (enableWechatWork || enableDingtalk || enableWeixin || enableADFS || (enableMultiADFS || isOrgContext)), href: '#social-auth', text: gettext('Single Sign On (SSO)') },
+      { show: (enableWechatWork || enableDingtalk || enableWeixin || enableADFS || (enableMultiADFS && isOrgContext)), href: '#social-auth', text: gettext('Single Sign On (SSO123)') },
       { show: true, href: '#linked-devices', text: gettext('Linked Devices') },
       { show: enableDeleteAccount, href: '#del-account', text: gettext('Delete Account') },
     ];
