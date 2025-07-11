@@ -106,19 +106,20 @@ const ContextMenu = ({
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete selected'), records: ableDeleteRecords });
       }
 
-      if (enableSeafileAI) {
-        const imageOrVideoRecords = records.filter(record => {
-          const fileName = getFileNameFromRecord(record);
-          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-        });
-        if (imageOrVideoRecords.length > 0) {
-          list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-        }
+      const imageOrVideoRecords = records.filter(record => {
+        const fileName = getFileNameFromRecord(record);
+        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+      });
+      if (imageOrVideoRecords.length > 0) {
+        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+      }
+
+      if (enableFaceRecognition && enableSeafileAI) {
         const imageRecords = records.filter(record => {
           const fileName = getFileNameFromRecord(record);
           return Utils.imageCheck(fileName);
         });
-        if (enableFaceRecognition && imageRecords.length > 0) {
+        if (imageRecords.length > 0) {
           list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
         }
       }
@@ -140,21 +141,23 @@ const ContextMenu = ({
       if (ableDeleteRecords.length > 0) {
         list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
       }
-      if (enableSeafileAI) {
-        const imageOrVideoRecords = records.filter(record => {
-          if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
-          const fileName = getFileNameFromRecord(record);
-          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-        });
-        if (imageOrVideoRecords.length > 0) {
-          list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-        }
+
+      const imageOrVideoRecords = records.filter(record => {
+        if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
+        const fileName = getFileNameFromRecord(record);
+        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+      });
+      if (imageOrVideoRecords.length > 0) {
+        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
+      }
+
+      if (enableFaceRecognition && enableSeafileAI) {
         const imageRecords = records.filter(record => {
           if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
           const fileName = getFileNameFromRecord(record);
           return Utils.imageCheck(fileName);
         });
-        if (enableFaceRecognition && imageRecords.length > 0) {
+        if (imageRecords.length > 0) {
           list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
         }
       }
@@ -193,17 +196,18 @@ const ContextMenu = ({
       list.push(...modifyOptions);
     }
 
+    const fileName = getFileNameFromRecord(record);
+    const isImage = Utils.imageCheck(fileName);
+    const isVideo = Utils.videoCheck(fileName);
+    if (isImage || isVideo) {
+      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+    }
+
     if (enableSeafileAI && !isFolder && canModifyRow) {
-      const fileName = getFileNameFromRecord(record);
       const isDescribableFile = checkIsDescribableFile(record);
-      const isImage = Utils.imageCheck(fileName);
-      const isVideo = Utils.videoCheck(fileName);
       const isPdf = Utils.pdfCheck(fileName);
       const aiOptions = [];
 
-      if (isImage || isVideo) {
-        aiOptions.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
-      }
       if (enableFaceRecognition && isImage) {
         aiOptions.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: [record] });
       }
