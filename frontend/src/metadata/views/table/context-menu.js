@@ -103,6 +103,7 @@ const ContextMenu = ({
         return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
       });
       if (imageOrVideoRecords.length > 0) {
+        list.push('Divider');
         list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
       }
 
@@ -140,6 +141,7 @@ const ContextMenu = ({
         return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
       });
       if (imageOrVideoRecords.length > 0) {
+        list.push('Divider');
         list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
       }
 
@@ -187,6 +189,7 @@ const ContextMenu = ({
     const isImage = Utils.imageCheck(fileName);
     const isVideo = Utils.videoCheck(fileName);
     if (isImage || isVideo) {
+      list.push('Divider');
       list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record });
     }
 
@@ -208,7 +211,6 @@ const ContextMenu = ({
         aiOptions.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
       }
       if (aiOptions.length) {
-        list.push('Divider');
         list.push(...aiOptions);
       }
     }
