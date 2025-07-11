@@ -37,28 +37,21 @@ const ContextMenu = ({
   updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags
 }) => {
   const currentRecord = useRef(null);
-
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
-
   const { metadata } = useMetadataView();
   const { enableFaceRecognition } = useMetadataStatus();
-
   const repoID = window.sfMetadataStore.repoId;
 
-  const checkCanModifyRow = (row) => {
-    return window.sfMetadataContext.canModifyRow(row);
-  };
+  const checkCanModifyRow = (row) => window.sfMetadataContext.canModifyRow(row);
 
-  const checkIsDescribableFile = useCallback((record) => {
+  const checkIsDescribableFile = useCallback(record => {
     const fileName = getFileNameFromRecord(record);
     return checkCanModifyRow(record) && Utils.isDescriptionSupportedFile(fileName);
   }, []);
 
-  const getAbleDeleteRecords = useCallback((records) => {
-    return records.filter(record => window.sfMetadataContext.checkCanDeleteRow(record));
-  }, []);
+  const getAbleDeleteRecords = useCallback(records => records.filter(r => window.sfMetadataContext.checkCanDeleteRow(r)), []);
 
-  const toggleDeleteFolderDialog = useCallback((record) => {
+  const toggleDeleteFolderDialog = useCallback(record => {
     if (deletedFolderPath) {
       currentRecord.current = null;
       setDeletedFolderPath('');
@@ -89,7 +82,6 @@ const ContextMenu = ({
       if (!isReadonly) {
         list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
       }
-
       list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
 
       const { topLeft, bottomRight } = selectedRange;
@@ -154,8 +146,7 @@ const ContextMenu = ({
       if (enableFaceRecognition && enableSeafileAI) {
         const imageRecords = records.filter(record => {
           if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
-          const fileName = getFileNameFromRecord(record);
-          return Utils.imageCheck(fileName);
+          return Utils.imageCheck(getFileNameFromRecord(record));
         });
         if (imageRecords.length > 0) {
           list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
@@ -178,19 +169,15 @@ const ContextMenu = ({
     list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder'), record });
 
     const modifyOptions = [];
-
     if (canModifyRow && column && isNameColumn(column)) {
       modifyOptions.push({ value: OPERATION.RENAME_FILE, label: isFolder ? gettext('Rename folder') : gettext('Rename file'), record });
     }
-
     if (canModifyRow) {
       modifyOptions.push({ value: OPERATION.MOVE, label: isFolder ? gettext('Move folder') : gettext('Move file'), record });
     }
-
     if (canDeleteRow) {
       modifyOptions.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
     }
-
     if (modifyOptions.length > 0) {
       list.push('Divider');
       list.push(...modifyOptions);
@@ -200,7 +187,7 @@ const ContextMenu = ({
     const isImage = Utils.imageCheck(fileName);
     const isVideo = Utils.videoCheck(fileName);
     if (isImage || isVideo) {
-      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record: record });
+      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record });
     }
 
     if (enableSeafileAI && !isFolder && canModifyRow) {
@@ -211,24 +198,16 @@ const ContextMenu = ({
       if (enableFaceRecognition && isImage) {
         aiOptions.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: [record] });
       }
-
       if (descriptionColumn && isDescribableFile) {
-        aiOptions.push({
-          value: OPERATION.GENERATE_DESCRIPTION,
-          label: gettext('Generate description'),
-          record
-        });
+        aiOptions.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description'), record });
       }
-
-      if (enableSeafileAI && tagsColumn && isDescribableFile && !isVideo) {
-        aiOptions.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record: record });
+      if (tagsColumn && isDescribableFile && !isVideo) {
+        aiOptions.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record });
       }
-
-      if (enableSeafileAI && (isImage || isPdf)) {
+      if (isImage || isPdf) {
         aiOptions.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
       }
-
-      if (aiOptions.length > 0) {
+      if (aiOptions.length) {
         list.push('Divider');
         list.push(...aiOptions);
       }
