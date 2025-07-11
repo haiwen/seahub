@@ -80,12 +80,12 @@
 }
 
 .grid-selected-active {
-  background-color: #f2f4f6;
+  background-color: #f0f0f0;
   border-radius: 5px;
 }
 
 .grid-drop-show {
-  background: #f8f8f8;
+  background: #f7f7f7;
 }
 
 .selection-box {

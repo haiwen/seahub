@@ -13,7 +13,7 @@ const Image = ({
   onDoubleClick,
   onContextMenu,
 }) => {
-  const [background, setBackground] = useState('#f1f1f1');
+  const [background, setBackground] = useState('#f0f0f0');
   const [useFallback, setUseFallback] = useState(false);
 
   const onLoad = useCallback(() => {
