@@ -35,7 +35,7 @@ class SocialLogin extends React.Component {
     return (
       <React.Fragment>
         <div className="setting-item" id="social-auth">
-          <h3 className="setting-item-heading">{gettext('Social Login')}</h3>
+          <h3 className="setting-item-heading">{gettext('Single Sign On (SSO)')}</h3>
           <p className="mb-2">{langCode == 'zh-cn' ? '企业微信' : 'WeChat Work'}</p>
           {socialConnected ?
             <button className="btn btn-outline-primary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</button> :
