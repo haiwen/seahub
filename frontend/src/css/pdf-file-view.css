@@ -227,7 +227,7 @@ select#scaleSelect {
 
 #toolbarContainer {
   box-shadow: none;
-  border-top: 1px solid #c9c9c9;
+  border-top: 1px solid #eee;
   height: auto;
 }
 

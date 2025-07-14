@@ -149,7 +149,7 @@
 }
 
 .canvas-groups-rows .group-level-2 .group-header-cell {
-  border-right: 1px solid #e5e5e5;
+  border-right: 1px solid #eee;
 }
 
 .canvas-groups-rows .group-level-3 .group-header-cell {
@@ -282,7 +282,7 @@
 }
 
 .canvas-groups-rows:not(.single-column) .group-level-2 .group-header-right {
-  border-left: 1px solid #e5e5e5;
+  border-left: 1px solid #eee;
 }
 
 .canvas-groups-rows:not(.single-column) .group-level-3 .group-header-right {

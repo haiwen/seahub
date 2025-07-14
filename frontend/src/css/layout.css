@@ -218,7 +218,7 @@ div[tabindex="-1"][role="group"] {
   align-items: center;
   justify-content: space-between;
   background-color: #fff;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #eee;
   box-shadow: 0 3px 2px -2px rgba(200,200,200,.15);
 }
 

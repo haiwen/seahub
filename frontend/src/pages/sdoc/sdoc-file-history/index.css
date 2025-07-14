@@ -10,7 +10,7 @@
 
 .sdoc-file-history .sdoc-file-history-header {
   height: 50px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #eee;
   background-color: #fff;
   flex-shrink: 0;
 }
@@ -32,12 +32,12 @@
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-container {
   height: 32px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #eee;
   border-radius: 3px;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-divider {
-  border-right: 1px solid #e5e5e5;
+  border-right: 1px solid #eee;
   height: 100%;
   width: 1px;
 }
@@ -149,7 +149,7 @@
 /* panel */
 .sdoc-file-history .sdoc-file-history-panel {
   width: 260px;
-  border-left: 1px solid #e5e5e5;
+  border-left: 1px solid #eee;
   height: calc(100vh - 50px);
 }
 
@@ -159,7 +159,7 @@
   align-items: center;
   padding: 10px 18px;
   height: 50px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #eee;
   background-color: #fff;
 }
 
@@ -189,7 +189,7 @@
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-diff-switch {
   padding: 0 18px;
   height: 50px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid #eee;
 }
 
 .sdoc-file-history .sdoc-file-history-diff-switch .custom-switch {
@@ -219,7 +219,7 @@
   padding: 5px 10px;
   display: flex;
   flex: 1;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #eee;
 }
 
 .sdoc-file-history-versions .history-list-item.history-month-title {
@@ -298,7 +298,7 @@
 .history-content .history-side-panel {
   flex: 0 0 auto;
   user-select: none;
-  border-left: 1px solid #e5e5e5;
+  border-left: 1px solid #eee;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -306,7 +306,7 @@
 
 .history-content .history-side-panel .history-side-panel-title {
   height: 50px;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #eee;
   line-height: 50px;
   font-size: 1rem;
   padding: 0 10px;

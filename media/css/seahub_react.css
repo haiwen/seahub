@@ -357,7 +357,7 @@ textarea::placeholder {
 }
 
 .sf-border-bottom {
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #eee;
 }
 
 .vh {
@@ -1159,7 +1159,7 @@ a.sf-popover-item:hover {
 .panel-top {
   padding: .5rem 1rem;
   background: #f4f4f7;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #eee;
   display: flex;
   flex-shrink: 0;
   min-height: 49px;
@@ -1211,7 +1211,7 @@ table tbody tr {
 
 table th {
   padding: 0.3125rem 0.1875rem;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #eee;
   text-align: left;
   font-weight: normal;
   font-size: 0.875rem;
@@ -1221,7 +1221,7 @@ table th {
 
 table td {
   padding: 0.5rem 0.1875rem;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #eee;
   color: #212529;
   font-size: 0.875rem;
   word-break: break-all;

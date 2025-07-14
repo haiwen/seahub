@@ -9,7 +9,7 @@ body {
 .file-view-header {
   padding: 4px 10px;
   background: #fff;
-  border-bottom: 1px solid #c9c9c9;
+  border-bottom: 1px solid #eee;
   flex-shrink: 0;
 }
 
