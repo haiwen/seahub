@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { ModalBody, ModalFooter, Button } from 'reactstrap';
@@ -87,20 +87,27 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
   }, [submitting, toggle]);
 
   const onSubmit = useCallback(() => {
-    if (!value) {
-      setShowTurnOffConfirmDialog(true);
-      return;
+    if (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns)) {
+      modifyHiddenColumns(hiddenColumns);
     }
-    setSubmitting(true);
-    metadataAPI.createMetadata(repoID).then(res => {
-      submit(true);
-      toggle();
-    }).catch(error => {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-      setSubmitting(false);
-    });
-  }, [repoID, value, submit, toggle]);
+
+    // Only invoke metadataAPI when value changed
+    if (oldValue !== value) {
+      if (!value) {
+        setShowTurnOffConfirmDialog(true);
+        return;
+      }
+      setSubmitting(true);
+      metadataAPI.createMetadata(repoID).then(res => {
+        submit(true);
+      }).catch(error => {
+        const errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+        setSubmitting(false);
+      });
+    }
+    toggle();
+  }, [repoID, oldValue, value, isHiddenColumnsVisible, oldHiddenColumns, hiddenColumns, modifyHiddenColumns, submit, toggle]);
 
   const turnOffConfirmToggle = useCallback(() => {
     setShowTurnOffConfirmDialog(!showTurnOffConfirmDialog);
@@ -141,12 +148,6 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
     setHiddenColumns(columns);
   }, []);
 
-  useEffect(() => {
-    if (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns)) {
-      modifyHiddenColumns(hiddenColumns);
-    }
-  }, [isHiddenColumnsVisible, oldHiddenColumns, hiddenColumns, modifyHiddenColumns]);
-
   const count = hiddenColumns.length;
   let text = gettext('Hide properties');
   if (count === 1) {
@@ -154,6 +155,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
   } else if (count > 1) {
     text = `${count} ${gettext('Hidden properties')}`;
   }
+  const canSubmit = (!submitting && oldValue !== value) || (!isHiddenColumnsVisible && (oldHiddenColumns !== hiddenColumns));
   return (
     <>
       {!showTurnOffConfirmDialog && (
@@ -203,7 +205,7 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
           </ModalBody>
           <ModalFooter>
             <Button color="secondary" onClick={onToggle}>{gettext('Cancel')}</Button>
-            <Button color="primary" disabled={oldValue === value || submitting} onClick={onSubmit}>{gettext('Submit')}</Button>
+            <Button color="primary" disabled={!canSubmit} onClick={onSubmit}>{gettext('Submit')}</Button>
           </ModalFooter>
         </>
       )}
