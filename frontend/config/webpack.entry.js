@@ -14,7 +14,6 @@ const entryFiles = {
   sdocFileHistory: '/pages/sdoc/sdoc-file-history/index.js',
   sdocPublishedRevision: '/pages/sdoc/sdoc-published-revision/index.js',
   app: '/app.js',
-  draft: '/draft.js',
   sharedDirView: '/shared-dir-view.js',
   sharedFileViewMarkdown: '/shared-file-view-markdown.js',
   sharedFileViewText: '/shared-file-view-text.js',
