@@ -8,12 +8,12 @@ import './index.css';
 const RateFormatter = ({ value, data, className, children: emptyFormatter }) => {
   if (!value) return emptyFormatter || null;
 
-  const { max = 5, color = '#e5e5e5', type = 'rate' } = data || {};
+  const { max = 5, color = '#eee', type = 'rate' } = data || {};
   const validValue = Math.min(max, value);
   let rateList = [];
   for (let i = 0; i < validValue; i++) {
     rateList.push(
-      <div className="sf-metadata-rate-item" style={{ fill: color || '#e5e5e5' }} key={i}>
+      <div className="sf-metadata-rate-item" style={{ fill: color || '#eee' }} key={i}>
         <Icon symbol={type} />
       </div>
     );
