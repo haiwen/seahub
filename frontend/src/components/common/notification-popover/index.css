@@ -4,7 +4,7 @@
 
 .notification-container {
   position: absolute;
-  background: #fff;
+  background: var(--bs-body-bg);
   width: 400px;
   right: -16px;
   top: -1px;
@@ -23,7 +23,7 @@
   align-items: center;
   justify-content: center;
   height: 50px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--bs-border-color);
   font-size: 16px;
   font-weight: 600;
   position: relative;
@@ -41,7 +41,7 @@
 
 .notification-container .notification-body .show-weixin-qrcode {
   cursor: pointer;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--bs-border-color);
   height: 40px;
   display: flex;
   align-items: center;
@@ -71,7 +71,7 @@
 
 .notification-list-container .notification-item {
   padding: 14px 16px 14px 10px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--bs-border-color);
   position: relative;
   cursor: pointer;
 }
@@ -81,7 +81,7 @@
 }
 
 .notification-list-container .notification-item:hover {
-  background: #f5f5f5;
+  background: var(--bs-nav-hover-bg);
 }
 
 .notification-list-container .notification-item .notification-item-header {
@@ -164,7 +164,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f9f9f9;
+  background: var(--bs-body-bg);
   cursor: pointer;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -178,7 +178,7 @@
 .notification-container .notification-body .mark-notifications {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--bs-border-color);
   padding-left: 15px;
 }
 
@@ -191,7 +191,7 @@
   margin-right: 15px;
   margin-left: 15px;
   font-size: 14px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .notification-container .notification-body .nav .nav-item .nav-link.active {

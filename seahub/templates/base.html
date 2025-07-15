@@ -18,7 +18,7 @@
 <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon">
 <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
 {% block extra_base_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/seafile-ui.css?t=20250619" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/css/seafile-ui.css?t=20250715" />
 {% endblock %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=20250625" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
@@ -26,7 +26,7 @@
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %} 
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
-<body>
+<body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}" id="{% block body_id %}base{% endblock %}">
     <div id="wrapper" class="{{ LANGUAGE_CODE }} d-flex fd-col h100">
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
@@ -88,6 +88,14 @@
         {% block extra-hidden-dom %}
         {% endblock %}
 </div><!-- wrapper -->
+<script>
+(function() {
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = (systemDark ? 'dark' : 'light');
+    document.body.setAttribute('data-bs-theme', initialTheme);
+    document.body.classList.toggle('dark-theme', initialTheme === 'dark');
+})();
+</script>
 <script type="text/javascript">
 var SEAFILE_GLOBAL = {
     csrfCookieName: '{{ CSRF_COOKIE_NAME }}'

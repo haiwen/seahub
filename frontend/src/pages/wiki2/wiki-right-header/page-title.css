@@ -46,7 +46,7 @@
 
 .wiki-page-icon-panel__body {
   padding: 0;
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .wiki-page-icon-panel__body em-emoji-picker {
@@ -78,7 +78,7 @@
 }
 
 .wiki-page-controller-item:hover {
-  background-color: #efefef;
+  background-color: var(--bs-nav-hover-bg);
   border-radius: 4px;
 }
 
@@ -97,7 +97,7 @@
   font-size: 26pt;
   font-weight: bold;
   padding: 0 50px 0 0;
-  color: #212529;
+  color: var(--bs-body-color);
   margin-bottom: .4em;
 }
 

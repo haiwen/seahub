@@ -34,7 +34,7 @@
 }
 
 .notification-list-content .notification-modal-body .notice-dialog-side {
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
   display: flex;
   flex: 0 0 20%;
   padding: 12px 8px;
@@ -49,8 +49,8 @@
 }
 
 .notification-list-content .notification-modal-body .notice-dialog-side .nav-item .nav-link.active {
-  background-color: #F5F5F5;
-  color: #212529;
+  background-color: var(--bs-nav-active-bg);
+  color: var(--bs-body-color);
 }
 
 .notification-list-content .notification-modal-body .notice-dialog-side .nav-item .nav-link.active::before {
@@ -94,7 +94,7 @@
 
 .notification-dialog-body table th {
   padding: 0.3125rem 0.1875rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   text-align: left;
   font-weight: normal;
   line-height: 1.6;
@@ -102,14 +102,14 @@
 }
 
 .notification-dialog-body table tbody tr:hover {
-  background: #f5f5f5;
+  background: var(--bs-tr-hover-bg);
   cursor: pointer;
 }
 
 .notification-dialog-body table td {
   padding: 0.5rem 0.1875rem;
   border-bottom: none;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 14px;
   word-break: break-all;
 }

@@ -3,7 +3,7 @@
   height: 30px;
   line-height: 20px;
   padding: 0 10px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sf-metadata-edit-option-name .sf-metadata-edit-option-name-value {

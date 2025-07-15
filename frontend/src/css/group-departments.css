@@ -17,7 +17,7 @@
 .department-dialog-content .department-dialog-left-panel {
   flex: 0 0 30%;
   padding: 1rem;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
 }
 
 .department-dialog-content .department-dialog-left-panel .input-icon-addon {
@@ -32,19 +32,19 @@
 }
 
 .department-dialog-content .department-dialog-left-panel .clear-keyword-icon:hover {
-  background: #efefef;
+  background: var(--bs-icon-hover-bg);
 }
 
 .department-dialog-content .department-dialog-member {
   display: flex;
   flex: 0 0 35%;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
 }
 
 .department-dialog-content .department-dialog-member-selected {
   display: flex;
   flex: 0 0 35%;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
   flex-direction: column;
   justify-content: space-between;
 }
@@ -60,12 +60,12 @@
 }
 
 .department-dialog-content .department-dialog-group .group-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bs-nav-hover-bg);
 }
 
 .department-dialog-content .department-dialog-group .group-item.tr-highlight:hover,
 .department-dialog-content .department-dialog-group .tr-highlight {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-hover-bg);
   color: inherit;
   position: relative;
 }
@@ -172,8 +172,8 @@
   font-size: 13px;
   font-weight: lighter;
   text-align: justify;
-  color: #fff;
-  background-color: #303133;
+  color: var(--bs-body-color);
+  background-color: var(--bs-tooltip-bg);
 }
 
 .bs-tooltip-top .arrow::before,

@@ -4,7 +4,7 @@
   min-height: 160px;
   overflow: hidden;
   opacity: 1;
-  background-color: #ffffff;
+  background: var(--bs-body-bg);
   border: 1px solid #dedede;
   border-radius: 4px;
   box-shadow: 0px 2px 10px 0 #dedede;

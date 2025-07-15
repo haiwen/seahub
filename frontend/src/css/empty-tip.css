@@ -16,7 +16,7 @@
 .empty-tip .empty-tip-title {
   font-size: 18px;
   font-weight: 500;
-  color: #212529;
+  color: var(--bs-body-color);
   margin-bottom: 10px;
 }
 

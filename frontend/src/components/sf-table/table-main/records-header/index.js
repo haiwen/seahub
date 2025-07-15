@@ -124,7 +124,6 @@ const RecordsHeader = ({
           }
           {frozenColumns.map((column, columnIndex) => {
             const { key } = column;
-            const style = { backgroundColor: '#f9f9f9' };
             const isLastFrozenCell = key === lastFrozenColumnKey;
             return (
               <Cell
@@ -137,7 +136,6 @@ const RecordsHeader = ({
                 column={column}
                 columnIndex={columnIndex}
                 groupOffsetLeft={groupOffsetLeft}
-                style={style}
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
                 ColumnDropdownMenu={ColumnDropdownMenu}

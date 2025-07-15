@@ -1,5 +1,5 @@
 .wiki-side-panel .panel-top {
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
 .wiki-side-nav {
@@ -72,7 +72,7 @@ img[src=""] {
 }
 
 .wiki-main-panel .main-panel-north {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .cur-view-content .wiki-page-container {

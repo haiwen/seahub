@@ -205,7 +205,7 @@ const style = `
     }
 
     .component-metrics-card .card-header {
-      background-color: #fff;
+      background: var(--bs-body-bg);
       padding: 16px 20px;
     }
     
@@ -238,7 +238,7 @@ const style = `
     }
 
     .component-header {
-      background-color: #fafafa !important;
+      background-color: var(--bs-th-secondary-bg) !important;
     }
 
     .component-header td {
@@ -247,7 +247,7 @@ const style = `
       }
 
     .component-title {
-      color: #212529;
+      color: var(--bs-body-color);
       font-size: 16px;
       font-weight: 500;
     }
@@ -264,14 +264,14 @@ const style = `
 
     .metrics-container .table td {
       vertical-align: middle;
-      background-color: #fff;
-      border-bottom: 1px solid #e8e8e8;
+      background: var(--bs-body-bg);
+      border-bottom: 1px solid var(--bs-td-border-color);
       padding-left: 8px;
     }
 
     .metrics-container .table th {
-      background-color: #fff;
-      border-bottom: 1px solid #e8e8e8;
+      background: var(--bs-body-bg);
+      border-bottom: 1px solid var(--bs-td-border-color);
       color: #666;
       font-size: 14px;
     }

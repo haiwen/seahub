@@ -9,7 +9,7 @@
  } 
  
  .view-published-wiki:hover {
-   background: #efefef;
+   background: var(--bs-icon-hover-bg);
    text-decoration: none;
    color: #666;
  }

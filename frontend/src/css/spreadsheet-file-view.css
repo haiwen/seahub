@@ -8,7 +8,7 @@
   max-width: 950px;
   min-height: 100%;
   margin: 0 auto;
-  background: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #ccc;
   box-shadow: 0 0 6px #ccc;
 }

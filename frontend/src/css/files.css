@@ -15,7 +15,7 @@
   color: #666;
   text-align: center;
   padding: 4px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 #files-content-container .libraries-empty-tip-in-grid-mode {
@@ -23,7 +23,7 @@
   text-align: center;
   height: 56px;
   line-height: 52px;
-  border: 2px dashed #eeeeee;
+  border: 2px dashed var(--bs-border-color);
   border-radius: 4px;
 }
 
@@ -34,11 +34,11 @@
 }
 
 .library-grid-item:hover {
-  background: #f5f5f5;
+  background: var(--bs-tr-hover-bg);
 }
 
 .library-grid-item .library-name {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .library-grid-item .library-grid-item-icon {

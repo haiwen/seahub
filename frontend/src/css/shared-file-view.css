@@ -10,7 +10,7 @@
 .shared-file-view-md-header {
   background: #f5f5f5;
   height: 53px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   padding: 8px 16px 4px;
   justify-content: space-between;
 }
@@ -23,7 +23,7 @@
   width: 100%;
   height: 60px;
   padding: 0 1rem;
-  background: #fff;
+  background: var(--bs-body-bg);
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -44,8 +44,8 @@
 .shared-file-view-body {
   height: calc(100% - 60px);
   padding: 30px 0 15px;
-  background: #f5f5f5;
-  border: 1px solid #ededed;
+  background: var(--bs-body-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
   overflow: auto;
 }
 
@@ -78,7 +78,7 @@
 }
 
 .shared-file-view-head .file-toolbar-btn:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
   border-radius: 3px;
 }
 

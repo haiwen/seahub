@@ -13,7 +13,7 @@
 }
 
 .wiki2-top-nav .wiki2-top-nav-item:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-nav-hover-bg);
   border-radius: 3px;
   cursor: pointer;
 }

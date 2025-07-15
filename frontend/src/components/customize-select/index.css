@@ -11,7 +11,7 @@
   line-height: 1.5;
   background-image: none;
   font-size: 14px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .seafile-customize-select:focus,
@@ -44,7 +44,7 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
 .seafile-customize-select .selected-option .selected-option-show-container {

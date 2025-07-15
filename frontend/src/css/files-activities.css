@@ -3,7 +3,7 @@
   cursor: pointer;
 }
 .activity-details:hover {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 .mobile-activity-time {
   display: inline-block;
@@ -15,7 +15,7 @@
 }
 
 .cur-activity-modifiers:hover {
-  background: #f5f5f5;
+  background: var(--bs-icon-hover-bg);
   cursor: pointer;
 }
 
@@ -25,8 +25,8 @@
 
 .activity-modifier-selector-container {
   width: 320px;
-  background: #fff;
-  border: 1px solid #eee;
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
   margin-top: 2px;
   z-index: 2;
 }
@@ -34,7 +34,7 @@
 .activity-selected-modifiers {
   min-height: 2rem;
   background: #f5f5f5;
-  border-bottom: 1px solid #dde2ea;
+  border-bottom: 1px solid var(--bs-border-color);
   line-height: 1;
 }
 

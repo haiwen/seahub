@@ -276,7 +276,7 @@ dt {
 
 dd {
   margin-bottom: .8em;
-  color: #222;
+  color: var(--bs-body-color);
 }
 
 input::placeholder,
@@ -331,7 +331,7 @@ textarea::placeholder {
 
 .sf-heading {
   font-size: 1rem;
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
   line-height: 1.5;
 }
@@ -357,7 +357,7 @@ textarea::placeholder {
 }
 
 .sf-border-bottom {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 .vh {
@@ -395,7 +395,7 @@ textarea::placeholder {
 
 .sf-dropdown-toggle:focus,
 .sf-dropdown-toggle:hover {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .user-select-none {
@@ -473,13 +473,13 @@ textarea::placeholder {
   /* default: arrow to the bottom */
   border-style: dashed solid;
   /* 'dashed' for firefox */
-  border-color: #CBCBCB transparent;
+  border-color: #495057 transparent;
   z-index: 100;
   margin: 0 auto;
 }
 
 .inner-caret {
-  border-top-color: #fff;
+  border-top-color: var(--bs-border-color);
   position: relative;
   top: -15px;
   left: -14px;
@@ -491,7 +491,7 @@ textarea::placeholder {
 }
 
 .up-outer-caret .inner-caret {
-  border-bottom-color: #fff;
+  border-bottom-color: var(--bs-border-color);
   top: 1px;
   left: -10px;
 }
@@ -563,7 +563,7 @@ textarea::placeholder {
 .op-icon {
   font-size: 1rem;
   line-height: 1;
-  color: #666;
+  color: var(--bs-icon-secondary-color);
   cursor: pointer;
   display: inline-flex;
   width: 24px;
@@ -576,14 +576,14 @@ textarea::placeholder {
 
 .op-icon:focus,
 .op-icon:hover {
-  color: #666; /* to overwrite the styles for `a:hover` */
+  color: var(--bs-icon-secondary-color); /* to overwrite the styles for `a:hover` */
   text-decoration: none;
-  background: #e5e5e5;
+  background: var(--bs-icon-hover-bg);
 }
 
 .op-icon-bg-light:focus,
 .op-icon-bg-light:hover {
-  background: #efefef; /* for .op-icon shown in white containers */
+  background: var(--bs-icon-hover-bg); /* for .op-icon shown in white containers */
 }
 
 .action-icon,
@@ -614,14 +614,14 @@ textarea::placeholder {
 
 .action-icon.sf3-font-delete1:hover,
 .action-icon.sf3-font-copy1:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .action-icon:focus,
 .action-icon:hover,
 .attr-action-icon:focus,
 .attr-action-icon:hover {
-  color: #212529 !important;
+  color: var(--bs-body-color) !important;
   text-decoration: none;
 }
 
@@ -702,16 +702,16 @@ textarea::placeholder {
 .account-popup .item {
   display: block;
   padding: 8px 18px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 .account-popup a.item {
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
 }
 
 .account-popup a.item:hover {
-  background: #fafafa;
+  background: var(--bs-nav-hover-bg);
   text-decoration: none;
 }
 
@@ -795,7 +795,7 @@ textarea::placeholder {
 .nav .nav-item .nav-link {
   padding: 0.5rem 0;
   margin-right: 30px;
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
   transition: none;
   border-bottom: 0.125rem solid transparent;
@@ -814,17 +814,17 @@ textarea::placeholder {
 
 .nav-pills .nav-item .nav-link {
   padding: 0.25rem;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 15px;
 }
 
 .nav-pills .nav-item .nav-link:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bs-link-hover-color);
 }
 
 .nav-pills .nav-item .nav-link.active {
   background-color: #ff9800;
-  color: #fff;
+  color: var(--bs-highlight-color);
   border-bottom: 0.125rem solid transparent;
 }
 
@@ -917,10 +917,11 @@ textarea::placeholder {
 .side-nav-bottom-toolbar {
   height: 38px;
   cursor: pointer;
+  color: var(--bs-body-color);
 }
 
 .side-nav-bottom-toolbar:hover {
-  background: #f0f0f0;
+  background: var(--bs-nav-hover-bg);
 }
 
 /* folded 'side nav' ends */
@@ -1097,10 +1098,10 @@ textarea::placeholder {
 
 .sf-popover {
   width: 240px;
-  background: #fff;
-  border: 1px solid #c9c9c9;
+  background: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
   border-radius: 3px;
-  box-shadow: 0 0 4px #ccc;
+  box-shadow: 0 0 4px var(--bs-border-color);
   position: absolute;
   z-index: 20;
 }
@@ -1159,7 +1160,7 @@ a.sf-popover-item:hover {
 .panel-top {
   padding: .5rem 1rem;
   background: #f4f4f7;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   display: flex;
   flex-shrink: 0;
   min-height: 49px;
@@ -1211,7 +1212,7 @@ table tbody tr {
 
 table th {
   padding: 0.3125rem 0.1875rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   text-align: left;
   font-weight: normal;
   font-size: 0.875rem;
@@ -1221,8 +1222,8 @@ table th {
 
 table td {
   padding: 0.5rem 0.1875rem;
-  border-bottom: 1px solid #eee;
-  color: #212529;
+  border-bottom: 1px solid var(--bs-border-color);
+  color: var(--bs-body-color);
   font-size: 0.875rem;
   word-break: break-all;
 }
@@ -1249,11 +1250,11 @@ table td {
 }
 
 .tr-highlight {
-  background-color: #f8f8f8;
+  background-color: var(--bs-tr-hover-bg);
 }
 
 .tr-active {
-  background-color: #f2f4f6 !important;
+  background-color: var(--bs-tr-active-bg) !important;
 }
 
 /* table-item reanme-component */
@@ -1267,7 +1268,7 @@ table td {
   border-radius: 2px;
   word-wrap: break-word;
   vertical-align: middle;
-  border: 1px solid #ccc;
+  border: 1px solid var(--bs-border-color);
 }
 
 .rename-container input:focus {
@@ -1341,7 +1342,7 @@ a.table-sort-op:hover {
   padding: 0.25rem 1rem;
   line-height: 1.5;
   cursor: pointer;
-  color: #212529;
+  color: var(--bs-dropdown-link-color);
   font-size: 14px;
 }
 
@@ -1366,8 +1367,10 @@ a.table-sort-op:hover {
 .dropdown-item:focus .dropdown-item-icon,
 .dropdown-item:focus .btn .dropdown-item-icon,
 .dropdown-item:hover .sf2-icon-tick,
-.dropdown-item:focus .sf2-icon-tick {
-  color: #fff;
+.dropdown-item:focus .sf2-icon-tick,
+.dropdown-item:hover .metadata-view-icon,
+.dropdown-item:focus .metadata-view-icon {
+  color: var(--bs-dropdown-link-hover-color);
 }
 
 .err-tip {
@@ -1682,24 +1685,24 @@ a.table-sort-op:hover {
 }
 
 .side-panel .nav .nav-item .nav-link.active {
-  color: #212529;
+  color: var(--bs-body-color);
   text-decoration: none;
   border-bottom: none;
   z-index: 1;
 }
 
 .side-panel .nav-pills .nav-item .nav-link:hover {
-  background-color: #F0F0F0;
+  background-color: var(--bs-nav-hover-bg);
 }
 
 .side-panel .nav-pills .nav-item .nav-link.active {
-  background-color: #F5F5F5;
-  color: #212529;
+  background-color: var(--bs-nav-active-bg);
+  color: var(--bs-body-color);
   border: none;
 }
 
 .side-panel .nav-pills .nav-item .nav-link.active:hover {
-  background-color: #F0F0F0;
+  background-color: var(--bs-nav-hover-bg);
 }
 
 .side-panel .side-nav-con {
@@ -1721,7 +1724,7 @@ a.table-sort-op:hover {
 
 .side-panel .side-nav .side-nav-con .nav-item {
   position: relative;
-  background-color: #fff;
+  background-color: var(--bs-body-bg);
 }
 
 .side-panel .side-nav .side-nav-con .nav-item.active::before {
@@ -1785,5 +1788,225 @@ a.table-sort-op:hover {
 }
 
 .custom-switch-description {
-  color: #212529;
+  color: var(--bs-body-color);
+}
+
+/* sdoc editor */
+.sdoc-editor-page-wrapper {
+  background-color: var(--bs-body-bg) !important;
+  color: var(--bs-body-color) !important;
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-scroll-container {
+  background-color: var(--bs-body-tertiary-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header {
+  background-color: var(--bs-body-bg) !important;
+  border-color: var(--bs-border-color) !important;
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-name {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-icon:hover {
+  color: var(--bs-icon-hover-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .sdoc-more-revision-operations-dropdown .sdoc-more-revision-operations-toggle {
+  background-color: var(--bs-button-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-header .sdoc-more-revision-operations-dropdown .sdoc-more-revision-operation-title-name {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-editor-toolbar {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu {
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu .header-toggle:not(.header-toggle-disabled):hover {
+  color: var(--bs-secondary-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item:hover,
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu .header-toggle:not(.header-toggle-disabled):hover {
+  background-color: var(--bs-icon-hover-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item .sdoc-menu-with-dropdown-icon div {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-editor__article {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-outline-menu {
+  background-color: var(--bs-body-bg);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-outline-menu:not(.disabled):hover {
+  color: var(--bs-button-hover-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-content-right-panel-wrapper .sdoc-content-right-panel {
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-dropdown-menu,
+.sdoc-editor-page-wrapper .header-menu .header-popover,
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+
+.sdoc-editor-page-wrapper .sdoc-dropdown-menu .sdoc-dropdown-menu-item {
+  color: var(--bs-body-color);
+}
+
+.sdoc-editor-page-wrapper .sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover,
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-nav-active-bg);
+}
+
+.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-divider {
+  border-color: var(--bs-border-color);
+}
+
+.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-nav-active-bg) !important;
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover {
+  background-color: var(--bs-body-bg);
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .sdoc-dropdown-menu-container .sdoc-dropdown-menu-item:hover {
+  background-color: var(--bs-tr-hover-bg);
+  color: var(--bs-body-color);
+}
+
+.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover .sdoc-selected-table-size-custom:hover {
+  background-color: var(--bs-tr-hover-bg);
+}
+
+.sdoc-sub-dropdown-menu.sdoc-table-template-popover .popover {
+  max-width: fit-content;
+}
+
+.sdoc-sub-dropdown-menu.sdoc-table-template-popover .popover .sdoc-table-template-inner-popover {
+  background-color: var(--bs-body-bg);
+}
+
+.sdoc-search-replace-popover-container {
+  background-color: var(--bs-body-bg) !important;
+  border-color: var(--bs-border-color) !important;
+}
+
+.sdoc-search-replace-popover-container > * {
+  border-color: var(--bs-border-color) !important;
+}
+
+/* markdown & long text editor */
+.longtext-modal-wrapper .longtext-dialog-container {
+  background-color: var(--bs-body-bg);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .longtext-header-tool-item {
+  color: var(--bs-icon-rgb);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .longtext-header-tool-item:hover {
+  color: var(--bs-icon-hover-rgb);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-editor-outline-menu {
+  background-color: var(--bs-body-bg);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-editor-outline-menu:not(.disabled):hover {
+  color: var(--bs-button-hover-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-toolbar,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar {
+  background-color: var(--bs-toolbar-secondary-bg) !important;
+  border-color: var(--bs-border-quartus-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group {
+  border-color: var(--bs-border-tertiary-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item {
+  background-color: var(--bs-toolbar-secondary-bg);
+  color: var(--bs-quartus-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item:hover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item:hover {
+  background-color: var(--bs-icon-hover-bg);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu {
+  color: var(--bs-quartus-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-toggle:not(.header-toogle-disabled):hover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-toggle:not(.header-toogle-disabled):hover {
+  background-color: var(--bs-icon-hover-bg);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-slate-help-info-control {
+  color: var(--bs-quartus-color);
+}
+
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-slate-help-info-control .icon-use-help:hover {
+  color: var(--bs-icon-hover-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .sf-slate-scroll-container {
+  background-color: var(--bs-body-tertiary-bg);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .article,
+.longtext-modal-wrapper .longtext-dialog-container .sf-simple-slate-editor-container .sf-slate-editor-content .article {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .article {
+  border-color: var(--bs-border-tertiary-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover {
+  background-color: var(--bs-body-bg);
+  border-color: var(--bs-border-tertiary-color);
+}
+
+.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover .sf-dropdown-menu-item:hover,
+.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover .sf-dropdown-menu-item:hover {
+  background-color: var(--bs-dropdown-secondary-bg);
+}
+
+.sf-slate-editor-container .sf-slate-editor-content .article h1, .sf-slate-editor-container .sf-slate-editor-content .article h2, .sf-slate-editor-container .sf-slate-editor-content .article h3, .sf-slate-editor-container .sf-slate-editor-content .article h4, .sf-slate-editor-container .sf-slate-editor-content .article h5, .sf-slate-editor-container .sf-slate-editor-content .article h6,
+.sf-simple-slate-editor-container .sf-slate-editor-content .article h1, .sf-simple-slate-editor-container .sf-slate-editor-content .article h2, .sf-simple-slate-editor-container .sf-slate-editor-content .article h3, .sf-simple-slate-editor-container .sf-slate-editor-content .article h4, .sf-simple-slate-editor-container .sf-slate-editor-content .article h5, .sf-simple-slate-editor-container .sf-slate-editor-content .article h6 {
+  color: var(--bs-body-color) !important;
 }

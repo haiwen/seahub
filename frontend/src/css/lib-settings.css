@@ -27,8 +27,12 @@
   flex: 1 1 auto;
 }
 
+.lib-setting-nav .nav-pills .nav-item .nav-link:hover {
+  background: var(--bs-nav-hover-bg);
+}
+
 .lib-setting-nav .nav-pills .nav-item .nav-link.active {
-  background: #f5f5f5;
+  background: var(--bs-nav-active-bg);
   color: inherit;
   position: relative;
 }

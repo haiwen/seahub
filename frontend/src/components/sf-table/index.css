@@ -12,7 +12,7 @@
 }
 
 .sf-table-searcher-btn:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
   cursor: pointer;
 }
 
@@ -43,7 +43,7 @@
   right: 4px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-table-searcher-input-wrapper .btn-close-searcher {
@@ -51,7 +51,7 @@
 }
 
 .sf-table-searcher-input-wrapper .btn-close-searcher-wrapper:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
   cursor: pointer;
 }
 
@@ -80,11 +80,11 @@
 }
 
 .toolbar-search-btn:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .toolbar-search-btn i.sf3-font {
-  color: #666;
+  color: var(--bs-icon-secondary-color);
   font-size: 12px;
 }
 
@@ -122,15 +122,15 @@
 .sf-table-result-content .static-sf-table-result-content {
   width: 100%;
   position: relative;
-  background: #f9f9f9;
-  border-bottom: 1px solid #ddd;
+  background: var(--bs-header-secondary-bg);
+  border-bottom: 1px solid var(--bs-border-color);
   z-index: 3;
 }
 
 .sf-table-result-content .static-sf-table-result-content .sf-table-row {
   position: relative;
   width: fit-content;
-  background-color: #f9f9f9;
+  background-color: var(--bs-tr-bg);
 }
 
 .record-HeaderCell__draggable {
@@ -155,7 +155,7 @@
 
 .sf-table-row {
   width: 100%;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--bs-border-color);
   display: inline-flex;
   margin-top: 0;
   margin-bottom: 0;
@@ -166,8 +166,12 @@
   border-bottom: none;
 }
 
+.static-sf-table-result-content.grid-header .sf-table-row .frozen-columns {
+  background-color: var(--bs-header-secondary-bg);
+}
+
 .sf-table-result-content .sf-table-row {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sf-table-result-content .frozen-columns .sf-table-cell {
@@ -232,11 +236,6 @@
   align-items: flex-start;
 }
 
-.draging-file-to-cell .cell-file-add {
-  border: 1px dashed #f09f3f;
-  background-color: #fdf5eb !important;
-}
-
 .table-main-interval {
   height: 20px;
   position: relative;
@@ -284,7 +283,7 @@
   align-items: center;
   background: #eceff4;
   border-radius: 3px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .formula-formatter-content-item.simple-cell-text-formatter {
@@ -318,7 +317,7 @@
 }
 
 .table-last--frozen {
-  border-right: 1px solid #cacaca !important;
+  border-right: 1px solid var(--bs-border-color) !important;
 }
 
 .row-locked .actions-cell::after {
@@ -362,7 +361,7 @@
 }
 
 .geolocation-editor-container {
-  background-color: #ffffff;
+  background: var(--bs-body-bg);
   box-shadow: 0 0 5px #ccc;
   border-radius: 4px;
   position: relative;
@@ -376,7 +375,7 @@
   min-width: 400px;
   top: 100%;
   left: 0;
-  background-color: #ffffff;
+  background: var(--bs-body-bg);
   box-shadow: 0 0 5px #ccc;
   min-height: 165px;
 }
@@ -384,13 +383,13 @@
 .geolocation-editor-container .geolocation-selector-header {
   height: 45px;
   display: flex;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--bs-border-color);
   padding: 5px 20px 0 20px;
   align-items: flex-end;
 }
 
 .geolocation-editor-container .geolocation-selector-header-item {
-  border: 1px solid #ccc;
+  border: 1px solid var(--bs-border-color);
   height: 35px;
   margin-right: 10px;
   display: flex;
@@ -404,7 +403,7 @@
 }
 
 .geolocation-editor-container .selected-geolocation-selector-header-item {
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 .geolocation-editor-container .geolocation-map-editor {

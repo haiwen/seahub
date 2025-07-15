@@ -5,7 +5,7 @@
   font-size: 16px;
   color: #373a3c;
   text-align: left;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   background-clip: padding-box;
   border: 1px solid rgba(0, 0, 0, .15);
   border-radius: .25rem;

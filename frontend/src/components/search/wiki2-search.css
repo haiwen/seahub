@@ -9,7 +9,7 @@
 
 .wiki2-search:hover {
   cursor: pointer;
-  background-color: #EDEDEA;
+  background-color: var(--bs-wiki-nav-active-bg);
 }
 
 .wiki2-search .sf3-font-search {

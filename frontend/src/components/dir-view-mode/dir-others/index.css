@@ -9,7 +9,7 @@
 
 .dir-others .dir-others-item[aria-expanded="true"], /* for 'More' */
 .dir-others .dir-others-item:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-hover-bg);
   border-radius: 0.25rem;
 }
 

@@ -13,12 +13,12 @@
 
 .wiki-cover-controller-btn {
   padding: 0 .5rem;
-  background: rgba(0,0,0, 0.5);
+  background: var(--bs-icon-rgb);
   height: 28px;
   line-height: 28px;
   border-radius: 4px;
   font-size: 14px;
-  color: #fff;
+  color: var(--bs-body-color);
   cursor: pointer;
   position: absolute;
   top: 16px;
@@ -26,7 +26,7 @@
 }
 
 .wiki-cover-controller-btn:hover {
-  background: rgba(0,0,0, 0.7);
+  background: var(--bs-icon-hover-rgb);
 }
 
 .wiki-page-cover-popover {
@@ -34,7 +34,7 @@
 }
 
 .wiki-page-cover-panel__header {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   display: flex;
   justify-content: space-between;
   padding: 6px 14px;
@@ -44,7 +44,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   overflow-y: auto;
 }
 
@@ -62,7 +62,7 @@
 
 /* common */
 .wiki-page-panel .popover-header {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   display: flex;
   justify-content: space-between;
   padding: 6px 14px;
@@ -75,6 +75,6 @@
 }
 
 .wiki-page-panel .popover-header>span:last-child:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
   cursor: pointer;
 }

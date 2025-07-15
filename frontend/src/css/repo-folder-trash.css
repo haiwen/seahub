@@ -7,8 +7,8 @@ body {
 }
 
 .top-header {
-  background-color: #f8fafd;
-  border-bottom: 1px solid #eee;
+  background-color: var(--bs-header-bg);
+  border-bottom: 1px solid var(--bs-border-color);
   padding: .5rem 1rem;
   flex-shrink: 0;
 }
@@ -27,23 +27,23 @@ body {
 
 .op-bar {
   padding: 9px 10px;
-  background: #f0f0f0;
+  background: var(--bs-button-bg);
   border-radius: 2px;
 }
 
 .more {
-  background: #efefef;
+  background: var(--bs-button-bg);
   border: 0;
   color: #666;
 }
 
 .more:hover {
-  color: #000;
-  background: #dfdfdf;
+  color: var(--bs-body-color);
+  background: var(--bs-button-hover-bg);
 }
 
 .clean {
-  border-color: #ccc;
+  border-color: var(--bs-border-color);
   border-radius: 2px;
   height: 30px;
   line-height: 28px;

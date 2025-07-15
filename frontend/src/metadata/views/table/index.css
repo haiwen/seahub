@@ -83,14 +83,17 @@
   width: 100%;
   position: relative;
   background: #f9f9f9;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--bs-border-color);
   z-index: 3;
 }
 
 .static-sf-metadata-result-content .sf-metadata-result-table-row {
   position: relative;
   width: fit-content;
-  background-color: #f9f9f9;
+}
+
+.static-sf-metadata-result-content .sf-metadata-result-table-row .frozen-columns {
+  background-color: var(--bs-th-bg);
 }
 
 .record-HeaderCell__draggable {
@@ -115,7 +118,7 @@
 
 .sf-metadata-result-table-row {
   width: 100%;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--bs-border-color);
   display: inline-flex;
   margin-top: 0;
   margin-bottom: 0;
@@ -124,10 +127,11 @@
 
 .static-sf-metadata-result-content.grid-header .sf-metadata-result-table-row {
   border-bottom: none;
+  background-color: var(--bs-th-bg);
 }
 
 .sf-metadata-result-table-content .sf-metadata-result-table-row {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sf-metadata-result-content .frozen-columns .sf-metadata-result-table-cell {
@@ -190,11 +194,6 @@
   align-items: flex-start;
 }
 
-.draging-file-to-cell .cell-file-add {
-  border: 1px dashed #f09f3f;
-  background-color: #fdf5eb !important;
-}
-
 .table-main-interval {
   height: 20px;
   position: relative;
@@ -206,27 +205,28 @@
   max-width: 242px;
   font-weight: lighter;
   text-align: start;
-  background-color: #303133;
+  background-color: var(--bs-emphasis-color);
+  color: var(--bs-body-bg);
 }
 
 .sf-metadata-tooltip .bs-tooltip-right .arrow::before,
 .sf-metadata-tooltip .bs-tooltip-auto[x-placement^="right"] .arrow::before {
-  border-right-color: #303133;
+  border-right-color: var(--bs-emphasis-color);
 }
 
 .sf-metadata-tooltip .bs-tooltip-top .arrow::before,
 .sf-metadata-tooltip .bs-tooltip-auto[x-placement^="top"] .arrow::before {
-  border-top-color: #303133;
+  border-top-color: var(--bs-emphasis-color);
 }
 
 .sf-metadata-tooltip .bs-tooltip-bottom .arrow::before,
 .sf-metadata-tooltip .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
-  border-bottom-color: #303133;
+  border-bottom-color: var(--bs-emphasis-color);
 }
 
 .sf-metadata-tooltip .bs-tooltip-left .arrow::before,
 .sf-metadata-tooltip .bs-tooltip-auto[x-placement^="left"] .arrow::before {
-  border-left-color: #303133;
+  border-left-color: var(--bs-emphasis-color);
 }
 
 /* records count */
@@ -257,7 +257,7 @@
   align-items: center;
   background: #eceff4;
   border-radius: 3px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .formula-formatter-content-item.simple-cell-text-formatter {
@@ -325,7 +325,7 @@
   border: 2px solid #66afe9;
   border-right: none;
   border-bottom: none;
-  /* background-color: #fff; */
+  /* background: var(--bs-body-bg); */
   box-sizing: border-box;
   padding: 0 8px 2px 6px;
   align-items: center;
@@ -336,7 +336,7 @@
 }
 
 .geolocation-editor-container {
-  background-color: #ffffff;
+  background: var(--bs-body-bg);
   box-shadow: 0 0 5px #ccc;
   border-radius: 4px;
   position: relative;
@@ -350,7 +350,7 @@
   min-width: 400px;
   top: 100%;
   left: 0;
-  background-color: #ffffff;
+  background: var(--bs-body-bg);
   box-shadow: 0 0 5px #ccc;
   min-height: 165px;
 }

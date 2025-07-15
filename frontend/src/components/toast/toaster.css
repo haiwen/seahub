@@ -56,7 +56,7 @@
   border-radius: 3px;
   box-shadow: rgba(67, 90, 111, 0.3) 0px 0px 1px, rgba(67, 90, 111, 0.47) 0px 8px 10px -4px;
   padding: 10px 16px;
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .seahub-toast-alert-container.success {

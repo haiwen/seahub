@@ -10,7 +10,9 @@
 }
 
 .sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-header .sf-metadata-filed-display-toggle-btn:hover {
-  color: #3a2121;
+  border-radius: 3px;
+  background-color: var(--bs-icon-hover-bg);
+  color: var(--bs-icon-secondary-color);
   cursor: pointer;
 }
 
@@ -30,7 +32,7 @@
 }
 
 .sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-item-container:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-hover-bg);
 }
 
 .sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-dragbar {
@@ -63,7 +65,6 @@
   margin-left: 0;
   padding-right: 5px;
   flex: 1;
-  color: #212529;
   transition: .3s color;
 }
 

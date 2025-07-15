@@ -17,7 +17,7 @@
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sf-metadata-tags-main .table-container td.name a {

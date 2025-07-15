@@ -20,7 +20,8 @@
   min-height: 200px;
   border-radius: 3px;
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
-  background-color: #fff;
+  background: var(--bs-tertiary-bg);
+  color: var(--bs-body-color);
   cursor: default;
   width: 700px;
   padding: 16px 0;
@@ -54,7 +55,7 @@
 }
 
 .search-container.show .input-icon .search-icon-right.search-filter-controller.active:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .search-icon-left {
@@ -75,7 +76,7 @@
 }
 
 .search-icon-right:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
   border-radius: 3px;
 }
 
@@ -97,6 +98,7 @@
 
 .search-container.show .search-input {
   height: 38px;
+  background-color: field;
 }
 
 .search-result-container {
@@ -104,7 +106,7 @@
   top: 2rem;
   left: 0;
   width: 100%;
-  background-color: #fff;
+  background: var(--bs-tertiary-bg);
   border-radius: 0 0 3px 3px;
   box-shadow: 0 3px 8px 0 rgba(116, 129, 141, 0.1);
   top: 60px;
@@ -151,7 +153,7 @@
 }
 
 .search-result-container .search-result-item.search-result-item-highlight {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-active-bg);
 }
 
 .search-result-container .search-result-container-sidepanel {

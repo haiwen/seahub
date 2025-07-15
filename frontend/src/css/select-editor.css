@@ -44,7 +44,7 @@
 }
 
 .permission-editor__menu .permission-editor__option--is-disabled:hover {
-  background-color: #f0f0f0 !important;
+  background-color: var(--bs-nav-hover-bg) !important;
   color: #9c9c9c !important;
 }
 
@@ -55,7 +55,7 @@
   font-size: 12px;
   line-height: 13px;
   cursor: pointer;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .permission-editor-btn-add-custom-permission .sf3-font {
@@ -69,4 +69,8 @@
 .share-dialog-main .true__placeholder,
 .permission-editor .btn-add-custom-permission span {
   word-break: keep-all;
+}
+
+.permission-editor__control {
+  background-color: field !important;
 }

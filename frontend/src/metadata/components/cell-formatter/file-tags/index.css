@@ -37,7 +37,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   font-size: 13px;
   border: 1px solid #dbdbdb;
   border-radius: 10px;

@@ -5,7 +5,7 @@
 
 .paginator .paginator-dropdown .btn:active,
 .paginator .paginator-dropdown .btn:focus {
-  background-color: #fff;
+  background: var(--bs-button-active-bg);
   border-color: #1991eb;
   outline: 0;
   box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);

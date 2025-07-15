@@ -5,7 +5,7 @@ const DEFAULT_CONTROL_STYLE = {
 
 const FOCUS_CONTROL_STYLE = {
   fontSize: '14px',
-  backgroundColor: '#ffffff',
+  backgroundColor: 'var(--bs-body-color)',
   borderColor: '#1991eb',
   outline: '0',
   boxShadow: '0 0 0 2px rgba(70, 127, 207, 0.25)',
@@ -45,7 +45,7 @@ const MenuSelectStyle = {
     return ({
       ...provided,
       cursor: isDisabled ? 'default' : 'pointer',
-      backgroundColor: isSelected ? '#20a0ff' : (isFocused ? '#f5f5f5' : '#fff'),
+      backgroundColor: isSelected ? 'var(--bs-dropdown-link-bg)' : (isFocused ? 'var(--bs-dropdown-tertiary-bg)' : 'var(--bs-body-bg)'),
       '.header-icon .dtable-font': {
         color: isSelected ? '#fff' : '#aaa',
       },
@@ -57,13 +57,13 @@ const MenuSelectStyle = {
   singleValue: (provided) => {
     return {
       ...provided,
-      color: '#212529',
+      color: 'var(--bs-body-color)',
     };
   },
   multiValue: (provided) => {
     return {
       ...provided,
-      color: '#212529',
+      color: 'var(--bs-body-color)',
     };
   },
 };

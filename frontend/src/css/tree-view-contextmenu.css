@@ -8,10 +8,10 @@
   padding: 0.5rem 0;
   margin: 0.125rem 0 0;
   font-size: 0.9375rem;
-  color: #212529;
+  color: var(--bs-body-color);
   text-align: left;
   list-style: none;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   background-clip: padding-box;
   border: 1px solid rgba(0, 40, 100, 0.12);
   border-radius: 3px;

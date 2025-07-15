@@ -61,20 +61,20 @@
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  background-color: #F7F7F5;
+  background-color: var(--bs-body-secondary-bg);
 }
 
 .wiki-nav .wiki-page-item.selected-page {
-  background-color: #EDEDEA;
+  background-color: var(--bs-wiki-nav-active-bg);
   font-weight: 500;
 }
 
 .wiki-nav .wiki-page-item:hover {
-  background-color: #EFEFED;
+  background-color: var(--bs-wiki-nav-hover-bg);
 }
 
 .wiki-nav .wiki-page-item.selected-page:hover {
-  background-color: #E6E6E4;
+  background-color: var(--bs-wiki-nav-active-bg);
 }
 
 .wiki-nav .wiki-page-item-main {
@@ -260,7 +260,7 @@
 .wiki-nav,
 .wiki-nav .wiki-page-item .wiki-add-page-btn .sf3-font.sf3-font-enlarge:hover,
 .wiki-nav .wiki-page-item .seafile-multicolor-icon-more-level:hover {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .wiki-nav .wiki2-trash .sf3-font,
@@ -284,5 +284,5 @@
 }
 
 .wiki-nav .wiki2-trash:hover {
-  background-color: #EFEFED;
+  background-color: var(--bs-wiki-nav-hover-bg);
 }

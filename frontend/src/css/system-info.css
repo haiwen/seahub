@@ -7,7 +7,7 @@
   font-size: 1rem;
   font-weight: normal;
   padding-bottom: 0.2em;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--bs-border-color);
   margin-bottom: 0.7em;
 }
 

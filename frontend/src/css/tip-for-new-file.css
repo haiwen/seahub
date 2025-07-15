@@ -23,7 +23,7 @@
   margin: 0 0.75em 1.5em;
   cursor: pointer;
   width: 160px;
-  background: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #d1d1d1;
 }
 

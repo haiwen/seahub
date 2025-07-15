@@ -8,8 +8,8 @@ body {
 
 .file-view-header {
   padding: 4px 10px;
-  background: #fff;
-  border-bottom: 1px solid #eee;
+  background: var(--bs-body-bg);
+  border-bottom: 1px solid var(--bs-border-color);
   flex-shrink: 0;
 }
 
@@ -61,7 +61,7 @@ body {
 }
 
 .file-view-header .file-toolbar-btn:hover {
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
   border-radius: 3px;
 }
 
@@ -71,7 +71,7 @@ body {
 }
 
 .file-view-header .file-toolbar-btn.disabled:hover {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .file-view-header .file-toolbar-btn#save-file {
@@ -112,7 +112,7 @@ body {
 
 .file-view-body .file-view-content {
   padding: 30px 0;
-  background: #f5f5f5;
+  background: var(--bs-body-tertiary-bg);
   border-right: 4px solid transparent;
 }
 
@@ -123,7 +123,7 @@ body {
 .file-details-container {
   position: absolute;
   right: 0;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   width: 300px;
   height: 100%;
   box-shadow: -1px 0 3px 0 #ccc;

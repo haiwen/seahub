@@ -4,7 +4,7 @@
 }
 
 .canvas-groups-rows .sf-table-cell {
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .canvas-groups-rows .group-item {
@@ -32,17 +32,17 @@
 /* background of group container */
 .canvas-groups-rows .group-level-1 .group-container-left,
 .canvas-groups-rows .group-level-1 .group-container-right {
-  background-color: #f7f7f7;
+  background-color: var(--bs-th-tertiary-bg);
 }
 
 .canvas-groups-rows .group-level-2 .group-container-left,
 .canvas-groups-rows .group-level-2 .group-container-right {
-  background-color: #ededed;
+  background-color: var(--bs-th-quartus-bg);
 }
 
 .canvas-groups-rows .group-level-3 .group-container-left,
 .canvas-groups-rows .group-level-3 .group-container-right {
-  background-color: #e3e3e3;
+  background-color: var(--bs-th-fifth-bg);
 }
 
 /* border-color of group container */
@@ -108,7 +108,7 @@
 .canvas-groups-rows .group-item .group-backdrop {
   position: absolute;
   left: 0;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   opacity: 1;
 }
 
@@ -154,6 +154,12 @@
 
 .canvas-groups-rows .group-level-3 .group-header-cell {
   border-right: 1px solid #dadada;
+}
+
+[data-bs-theme=dark] .canvas-groups-rows .group-level-1 .group-header-cell,
+[data-bs-theme=dark] .canvas-groups-rows .group-level-2 .group-header-cell,
+[data-bs-theme=dark] .canvas-groups-rows .group-level-3 .group-header-cell {
+  border-right: 1px solid var(--bs-border-color);
 }
 
 .canvas-groups-rows .group-container-right .group-header-cell:last-child {
@@ -234,6 +240,12 @@
 
 .canvas-groups-rows .group-item.group-level-3 .group-rows-count {
   background: linear-gradient(to right, hsla(0, 0%, 89%, 0), hsl(0, 0%, 89%) 18%);
+}
+
+[data-bs-theme=dark] .canvas-groups-rows .group-item.group-level-1 .group-rows-count,
+[data-bs-theme=dark] .canvas-groups-rows .group-item.group-level-2 .group-rows-count,
+[data-bs-theme=dark] .canvas-groups-rows .group-item.group-level-3 .group-rows-count {
+  background: var(--bs-th-tertiary-bg);
 }
 
 .canvas-groups-rows .group-rows-count .count-title {

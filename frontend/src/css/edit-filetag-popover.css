@@ -1,7 +1,7 @@
 .edit-filetag-popover .edit-filetag-popover-input {
   max-height: 30px;
   font-size: 14px;
-  color: #212529;
+  color: var(--bs-body-color);
   height: 30px;
 }
 

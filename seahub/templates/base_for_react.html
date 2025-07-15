@@ -17,11 +17,13 @@
 {% endblock %}
 {% block extra_ogp_tags %}{% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
+<meta name="color-scheme" content="dark light" />
 <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" type="image/x-icon" id="favicon">
 <link rel="apple-touch-icon" href="{{ MEDIA_URL }}{{ apple_touch_icon_path }}">
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250619" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20250619" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250715" />
+
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20250708" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
 {% block extra_style %}{% endblock %}
@@ -29,7 +31,7 @@
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
 
-<body>
+<body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}" id="{% block body_id %}base{% endblock %}">
     <div id="wrapper" class="{{ LANGUAGE_CODE }}"></div>
     <div id="modal-wrapper" class="{{ LANGUAGE_CODE }}"></div>
     {% block wiki-v1-extra_content %}{% endblock %}
@@ -178,6 +180,14 @@
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
+<script>
+(function() {
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = (systemDark ? 'dark' : 'light');
+    document.body.setAttribute('data-bs-theme', initialTheme);
+    document.body.classList.toggle('dark-theme', initialTheme === 'dark');
+})();
+</script>
 {% block extra_script %}{% endblock %}
 </body>
 </html>

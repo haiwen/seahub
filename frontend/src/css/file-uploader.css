@@ -18,15 +18,15 @@
   border: 1px solid #ddd;
   border-radius: 3px;
   box-shadow: 0 0 6px #ddd;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   z-index: 1050;
 }
 
 .uploader-list-header {
-  background-color: #f0f0f0;
+  background-color: var(--bs-header-quartus-bg);
   padding: 0.625rem;
   font-size: 1rem;
-  color: #212529;
+  color: var(--bs-body-color);
   display: flex;
   justify-content: space-between;
   min-height: 2.25rem;
@@ -54,7 +54,7 @@
 
 .uploader-list-content {
   padding: 0 1rem 1.25rem;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   overflow: auto;
 }
 

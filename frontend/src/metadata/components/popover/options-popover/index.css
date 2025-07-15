@@ -7,7 +7,7 @@
 .sf-metadata-edit-column-options-container {
   min-width: 400px;
   height: auto;
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sf-metadata-edit-column-options-container .sf-metadata-edit-column-options-search-container {
@@ -15,7 +15,7 @@
 }
 
 .sf-metadata-edit-column-options-container .sf-metadata-option-search-control {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sf-metadata-edit-column-options-container .none-search-result {

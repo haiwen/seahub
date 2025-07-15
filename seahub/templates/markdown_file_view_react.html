@@ -14,63 +14,71 @@
         <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" id="favicon" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/sf_font3/iconfont.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250619" />
-        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20250619" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250715" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20250708" />
         {% render_bundle 'markdownEditor' 'css' %}
         <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_md_file_view.css" />
         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
         {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
     </head>
-    <body>
-         <div id="root"></div>
-         <div id="modal-wrapper"></div>
-         <script type="text/javascript">
-           window.app = {
-              config: {
-                  mediaUrl: '{{ MEDIA_URL }}',
-                  siteRoot: '{{ SITE_ROOT }}',
-                  serviceUrl: '{{ serviceUrl }}',
-                  isPro: '{{ is_pro }}',
-                  lang: '{{ LANGUAGE_CODE }}',
-              },
-              pageOptions: {
-                  repoID: '{{ repo.id }}',
-                  repoName: '{{ repo.name|escapejs }}',
-                  repoEncrypted: {% if repo.encrypted %}true{% else %}false{% endif %},
-                  isRepoAdmin: {% if is_repo_admin %}true{% else %}false{% endif %},
-                  filePath: '{{ path|escapejs }}',
-                  fileName: '{{ filename|escapejs }}',
-                  filePerm: '{{ file_perm }}',
-                  rawPath: '{{ raw_path|escapejs }}',
-                  domain: '{{ domain }}',
-                  protocol: '{{ protocol }}',
-                  lang: '{{ language_code }}',
-                  mode: '{{ mode }}',
-                  shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
-                  shareLinkPasswordMinLength: {{ share_link_password_min_length }},
-                  shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
-                  shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
-                  shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
-                  shareLinkExpireDaysMax: {{ share_link_expire_days_max }},
-                  canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
-                  canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},
-                  isLocked: {% if file_locked %}true{% else %}false{% endif %},
-                  lockedByMe: {% if locked_by_me %}true{% else %}false{% endif %},
-                  canLockUnlockFile: {% if can_lock_unlock_file %}true{% else %}false{% endif %},
-                  canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
-                  fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
-                  enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
-                  enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
-              },
-             userInfo: {
-               username: '{{ user.username }}',
-               name: '{{ user.username|email2nickname|escapejs }}',
-               contact_email: '{{ user.username|email2contact_email }}',
-             }
-          }
-         </script>
-         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
+    <body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}" id="{% block body_id %}base{% endblock %}">
+        <div id="root"></div>
+        <div id="modal-wrapper"></div>
+        <script type="text/javascript">
+        window.app = {
+            config: {
+                mediaUrl: '{{ MEDIA_URL }}',
+                siteRoot: '{{ SITE_ROOT }}',
+                serviceUrl: '{{ serviceUrl }}',
+                isPro: '{{ is_pro }}',
+                lang: '{{ LANGUAGE_CODE }}',
+            },
+            pageOptions: {
+                repoID: '{{ repo.id }}',
+                repoName: '{{ repo.name|escapejs }}',
+                repoEncrypted: {% if repo.encrypted %}true{% else %}false{% endif %},
+                isRepoAdmin: {% if is_repo_admin %}true{% else %}false{% endif %},
+                filePath: '{{ path|escapejs }}',
+                fileName: '{{ filename|escapejs }}',
+                filePerm: '{{ file_perm }}',
+                rawPath: '{{ raw_path|escapejs }}',
+                domain: '{{ domain }}',
+                protocol: '{{ protocol }}',
+                lang: '{{ language_code }}',
+                mode: '{{ mode }}',
+                shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
+                shareLinkPasswordMinLength: {{ share_link_password_min_length }},
+                shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
+                shareLinkExpireDaysDefault: {{ share_link_expire_days_default }},
+                shareLinkExpireDaysMin: {{ share_link_expire_days_min }},
+                shareLinkExpireDaysMax: {{ share_link_expire_days_max }},
+                canGenerateShareLink: {% if user.permissions.can_generate_share_link %} true {% else %} false {% endif %},
+                canSendShareLinkEmail: {% if user.permissions.can_send_share_link_mail %} true {% else %} false {% endif %},
+                isLocked: {% if file_locked %}true{% else %}false{% endif %},
+                lockedByMe: {% if locked_by_me %}true{% else %}false{% endif %},
+                canLockUnlockFile: {% if can_lock_unlock_file %}true{% else %}false{% endif %},
+                canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
+                fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
+                enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
+                enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+            },
+            userInfo: {
+            username: '{{ user.username }}',
+            name: '{{ user.username|email2nickname|escapejs }}',
+            contact_email: '{{ user.username|email2contact_email }}',
+            }
+        }
+        </script>
+        <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
+        <script>
+            (function() {
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const initialTheme = (systemDark ? 'dark' : 'light');
+                document.body.setAttribute('data-bs-theme', initialTheme);
+                document.body.classList.toggle('dark-theme', initialTheme === 'dark');
+            })();
+        </script>
 
-         {% render_bundle 'markdownEditor' 'js' %}
+        {% render_bundle 'markdownEditor' 'js' %}
     </body>
 </html>

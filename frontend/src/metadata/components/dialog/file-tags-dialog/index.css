@@ -1,6 +1,6 @@
 .sf-file-tags-backdrop.show {
   opacity: 0;
-  background-color: #fff;
+  background: var(--bs-body-bg);
 }
 
 .sf-file-tags {
@@ -44,7 +44,7 @@
   font-size: 13px;
   border-radius: 10px;
   border: 1px solid #dbdbdb;
-  background: #fff;
+  background: var(--bs-body-bg);
   margin-top: 5px;
   margin-bottom: 5px;
   cursor: pointer;
@@ -61,7 +61,7 @@
   display: inline-block;
   height: 20px;
   line-height: 20px;
-  color: #212529;
+  color: var(--bs-body-color);
   margin-left: 8px;
   max-width: 200px;
   flex: 1 1;

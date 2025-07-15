@@ -10,8 +10,8 @@
 
 .sdoc-file-history .sdoc-file-history-header {
   height: 50px;
-  border-bottom: 1px solid #eee;
-  background-color: #fff;
+  border-bottom: 1px solid var(--bs-boder-color);
+  background: var(--bs-body-bg);
   flex-shrink: 0;
 }
 
@@ -32,12 +32,12 @@
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-container {
   height: 32px;
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-border-color);
   border-radius: 3px;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-divider {
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
   height: 100%;
   width: 1px;
 }
@@ -63,7 +63,7 @@
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch:hover {
   cursor: pointer;
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last .fas,
@@ -76,7 +76,7 @@
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover {
   cursor: pointer;
   opacity: .75;
-  background-color: #F5F5F5;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover .fas,
@@ -121,6 +121,7 @@
 .sdoc-file-history .sdoc-file-history-content .sdoc-scroll-container {
   position: relative !important;
   width: 100%;
+  background-color: var(--bs-body-bg);
 }
 
 .sdoc-file-history .sdoc-file-history-content .sdoc-editor-container {
@@ -144,12 +145,14 @@
 
 .sdoc-file-history .sdoc-file-history-content .article {
   width: 100%;
+  background-color: var(--bs-body-secondary-bg);
+  border-color: var(--bs-border-color);
 }
 
 /* panel */
 .sdoc-file-history .sdoc-file-history-panel {
   width: 260px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid var(--bs-border-color);
   height: calc(100vh - 50px);
 }
 
@@ -159,8 +162,8 @@
   align-items: center;
   padding: 10px 18px;
   height: 50px;
-  border-bottom: 1px solid #eee;
-  background-color: #fff;
+  border-bottom: 1px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
 }
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range-title {
@@ -183,13 +186,13 @@
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range .sdoc-side-panel-close:hover {
   opacity: 1;
   cursor: pointer;
-  background-color: #EFEFEF;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-diff-switch {
   padding: 0 18px;
   height: 50px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--bs-border-color);
 }
 
 .sdoc-file-history .sdoc-file-history-diff-switch .custom-switch {
@@ -219,7 +222,7 @@
   padding: 5px 10px;
   display: flex;
   flex: 1;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 .sdoc-file-history-versions .history-list-item.history-month-title {
@@ -231,7 +234,7 @@
 }
 
 .sdoc-file-history-versions .history-list-item:not(.item-active):hover {
-  background-color: #F5F5F5;
+  background-color: var(--bs-tr-hover-bg);
   cursor: pointer;
 }
 
@@ -263,7 +266,7 @@
 
 .sdoc-mobile-history-options-modal .sdoc-operation-mobile-modal-body .option-item a,
 .sdoc-mobile-history-options-modal .sdoc-operation-mobile-modal-body .option-item a:hover {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sdoc-file-history-versions .history-list-item .history-operation:hover {
@@ -275,7 +278,7 @@
 }
 
 .sdoc-file-history-versions .history-list-item .history-operation:hover a.fas {
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .sdoc-file-history-versions .history-list-item.item-active {
@@ -298,15 +301,15 @@
 .history-content .history-side-panel {
   flex: 0 0 auto;
   user-select: none;
-  border-left: 1px solid #eee;
-  background-color: #fff;
+  border-left: 1px solid var(--bs-border-color);
+  background: var(--bs-body-bg);
   display: flex;
   flex-direction: column;
 }
 
 .history-content .history-side-panel .history-side-panel-title {
   height: 50px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   line-height: 50px;
   font-size: 1rem;
   padding: 0 10px;
@@ -361,7 +364,7 @@
 }
 
 .sdoc-file-history-versions .daily-history-detail-toggle .direction-icon:hover {
-  color: #212529;
+  color: var(--bs-body-color);
   cursor: pointer;
 }
 

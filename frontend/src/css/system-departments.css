@@ -4,7 +4,7 @@
 
 .departments-tree-panel {
   width: 25%;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
   height: 100%;
   overflow: auto;
 }
@@ -26,7 +26,7 @@
 
 .departments-tree-panel .tree-node.active {
   border-radius: 4px;
-  background-color: #f5f5f5 !important;
+  background-color: var(--bs-nav-active-bg) !important;
 }
 
 .departments-tree-panel .tree-node.active::before {
@@ -43,7 +43,7 @@
 }
 
 .tree-node:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bs-nav-hover-bg);
 }
 
 .tree-node .sf3-font {
@@ -75,7 +75,7 @@
 }
 
 .tree-node .right-icon:hover {
-  background-color: #dbdbdb;
+  background-color: var(--bs-icon-hover-secondary-bg);
 }
 
 .departments-tree-panel .tree-node-children {
@@ -86,6 +86,8 @@
 .departments-tree-panel .new-dept-btn {
   padding: 0 6px;
   margin-top: 10px;
+  background-color: var(--bs-button-bg);
+  color: var(--bs-button-color);
 }
 
 .departments-tree-panel .new-dept-btn-icon {

@@ -1,5 +1,5 @@
 .sf-metadata-confirm-delete-option-popover .popover {
-  background: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 8px 1px #0003;

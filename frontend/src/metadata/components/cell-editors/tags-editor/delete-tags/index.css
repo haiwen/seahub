@@ -1,6 +1,6 @@
 .sf-metadata-delete-select-tags {
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #dde2ea;
+  background-color: var(--bs-body-tertiary-bg);
+  border-bottom: 1px solid var(--bs-border-color);
   border-radius: 3px 3px 0 0;
   min-height: 28px;
   padding: 8px 16px;
@@ -18,7 +18,7 @@
   padding: 0 8px 0 2px;
   font-size: 13px;
   border-radius: 10px;
-  border: 1px solid #dbdbdb;
+  border: 1px solid var(--bs-border-color);
   background: #fff;
   margin-top: 2px;
   margin-bottom: 2px;

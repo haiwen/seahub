@@ -7,7 +7,7 @@ body {
 }
 
 .top-header {
-  background-color: #f8fafd;
+  background-color: var(--bs-header-bg);
   border-bottom: 1px solid #eee;
   padding: .5rem 1rem;
   flex-shrink: 0;

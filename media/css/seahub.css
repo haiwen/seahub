@@ -342,7 +342,7 @@ button,
 select {
   font-size: 13px;
   line-height: 1.5;
-  color: #212529;
+  color: var(--bs-body-color);
   word-wrap: break-word;
 }
 
@@ -374,7 +374,7 @@ h2 {
 
 h3 {
   font-size: 16px;
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
 }
 
@@ -474,7 +474,7 @@ select {
 
 .sf-btn-link {
   display: inline-block;
-  color: #212529;
+  color: var(--bs-body-color);
   line-height: 19px;
   text-decoration: none;
   font-weight: normal;
@@ -488,7 +488,7 @@ select {
 }
 
 .sf-btn-link:hover {
-  color: #212529;
+  color: var(--bs-body-color);
   text-decoration: none;
 }
 
@@ -589,7 +589,7 @@ td {
 }
 
 td {
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 14px;
   word-break: break-all;
   /* mainly for lib/folder/file name */
@@ -733,7 +733,7 @@ table img {
 }
 
 .label {
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 12px;
   font-style: normal;
 }
@@ -1139,7 +1139,7 @@ textarea:-moz-placeholder {
 .logo-container {
   padding: .5rem 1rem;
   background: #f4f4f7;
-  border-bottom: 1px solid #ee;
+  border-bottom: 1px solid #e8e8e8;
 }
 
 .side-textnav .hd {
@@ -1150,7 +1150,7 @@ textarea:-moz-placeholder {
 
 @media (max-width: 767px) {
   .side-nav {
-    background: #fff;
+    background: var(--bs-body-bg);
     display: flex;
     flex-direction: column;
     width: 300px;
@@ -1174,7 +1174,7 @@ textarea:-moz-placeholder {
 .side-nav {
   padding: 0;
   overflow: hidden;
-  border-right: 1px solid #eee;
+  border-right: 1px solid var(--bs-border-color);
 }
 
 .side-nav:hover {
@@ -1266,7 +1266,7 @@ textarea:-moz-placeholder {
   display: block;
   font-size: 15px;
   padding: 4px 4px 4px 0;
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
 }
 
@@ -1343,7 +1343,7 @@ textarea:-moz-placeholder {
   padding: 10px 0;
   font-weight: normal;
   color: #666;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   margin-bottom: 3px;
 }
 
@@ -1405,7 +1405,7 @@ textarea:-moz-placeholder {
   padding: 5px;
   background: #FDF;
   margin: 0;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 /**** narrow-panel ****/
@@ -1632,7 +1632,7 @@ textarea:-moz-placeholder {
   padding: 40px 200px 40px 60px;
   font-size: 14px;
   line-height: 1.6;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .article h2,
@@ -1641,7 +1641,7 @@ textarea:-moz-placeholder {
 .article h5,
 .article h6 {
   margin: 1.2em 0 0.4em;
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: bold;
 }
 
@@ -1792,8 +1792,8 @@ a.sf-popover-item {
 
 /********** Container ***********/
 #header {
-  background-color: #f8fafd;
-  border-bottom: 1px solid #eee;
+  background-color: var(--bs-header-bg);
+  border-bottom: 1px solid var(--bs-border-color);
   z-index: 100;
   width: 100%;
   height: 49px;
@@ -1823,7 +1823,7 @@ a.sf-popover-item {
 .file-audit-list-topbar,
 .wiki-top {
   padding: 9px 10px;
-  background: #f2f2f2;
+  background: var(--bs-header-tertiary-bg);
   margin-bottom: .5em;
   border-radius: 2px;
 }
@@ -1858,7 +1858,7 @@ a.sf-popover-item {
 .wiki-nav .link {
   display: inline-block;
   font-size: 15px;
-  color: #212529;
+  color: var(--bs-body-color);
   line-height: 1.5;
   font-weight: normal;
   padding: 4px 10px 9px;
@@ -1985,7 +1985,7 @@ a.sf-popover-item {
 }
 
 .account-popup a.item {
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
 }
 
@@ -2082,6 +2082,10 @@ a.sf-popover-item {
   width: 390px;
   margin: 0 auto;
   box-shadow: 0 0 8px #a7a6a9;
+}
+
+[data-bs-theme=dark] .login-panel {
+  background-color: rgba(0, 0, 0, 0.75);
 }
 
 #log-in-panel {
@@ -2268,7 +2272,7 @@ a.sf-popover-item {
 }
 
 #traffic-stat {
-  color: #212529;
+  color: var(--bs-body-color);
   font-weight: normal;
 }
 
@@ -2332,7 +2336,7 @@ a.sf-popover-item {
 }
 
 .commit-time {
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 13px;
   font-weight: normal;
   margin-top: 0em;
@@ -2356,7 +2360,7 @@ a.sf-popover-item {
 
 .fileinput-button .icon-plus {
   font-size: 13px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .fileinput-button input {
@@ -2497,7 +2501,7 @@ a.sf-popover-item {
   padding: 0 4px;
   color: #000;
   font-weight: bold;
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-border-color);
 }
 
 #upload-file-form .MultiFile-remove:hover {
@@ -2836,7 +2840,7 @@ a.sf-popover-item {
 /* user profile */
 #user-profile {
   width: 290px;
-  border: 1px solid #eee;
+  border: 1px solid var(--bs-border-color);
   border-radius: 5px;
   margin: 50px auto 0;
 }
@@ -2924,7 +2928,7 @@ a.sf-popover-item {
   padding: 12px;
   width: 250px;
   filter: none;
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 14px;
 }
 

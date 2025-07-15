@@ -5,7 +5,7 @@
 }
 
 .searched-list-item:hover {
-  background-color: #f5f5f5;
+  background-color: var(--bs-nav-hover-bg);
 }
 
 .searched-list-item.searched-dir td {

@@ -15,8 +15,8 @@
 }
 
 .column-type-item:not(.active):hover {
-  color: #212529;
-  background-color: #f5f5f5;
+  color: var(--bs-body-color);
+  background-color: var(--bs-dropdown-link-bg);
 }
 
 .column-type-item:hover .sf3-font-down {

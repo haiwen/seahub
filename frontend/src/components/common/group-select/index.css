@@ -50,7 +50,7 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  background: #fff;
+  background: var(--bs-body-bg);
 }
 
 .group-select.selector-collaborator .option-group .option-group-content {
@@ -87,7 +87,7 @@
 
 .group-select .selected-option-show .selected-option-item .selected-option-item-name {
   font-size: 13px;
-  color: #212529;
+  color: var(--bs-body-color);
 }
 
 .group-select .selected-option-show .selected-option-item .sf2-icon-close {

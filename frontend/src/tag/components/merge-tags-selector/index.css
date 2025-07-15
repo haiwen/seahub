@@ -6,7 +6,7 @@
   opacity: 1;
   overflow: hidden;
   position: fixed;
-  background-color: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #dedede;
   border-radius: 4px;
   box-shadow: 0 2px 10px 0 #dedede;
@@ -32,7 +32,7 @@
 .sf-metadata-merge-tags-selector .sf-metadata-tags-editor-tag-container {
   align-items: center;
   border-radius: 2px;
-  color: #212529;
+  color: var(--bs-body-color);
   display: flex;
   font-size: 13px;
   height: 32px;
@@ -40,7 +40,7 @@
 }
 
 .sf-metadata-merge-tags-selector .sf-metadata-tags-editor-tag-container-highlight {
-  background: #f5f5f5;
+  background: var(--bs-nav-hover-bg);
   cursor: pointer;
 }
 

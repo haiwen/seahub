@@ -8,7 +8,7 @@
   padding: 0 16px 10px;
   overflow: auto hidden;
   scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 
 .search-filters-container .search-filter {
@@ -29,7 +29,7 @@
 
 .search-filters-container .search-filter .search-filter-toggle:hover,
 .search-filter-menu .search-filter-toggle:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .search-filter-toggle .sf3-font-down {
@@ -78,7 +78,7 @@
 }
 
 .search-filter-menu.filter-by-suffix-menu .clear-icon-right:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .search-filters-container .search-filters-dropdown-item {
@@ -101,7 +101,7 @@
 
 .search-filter-menu .input-container {
   position: relative;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--bs-border-color);
   border-radius: 4px;
   padding: 4px 6px;
   margin: 8px 16px;
@@ -112,7 +112,7 @@
 }
 
 .search-filter-menu .input-container.focus {
-  background-color: #fff;
+  background: var(--bs-body-bg);
   border-color: #1991eb;
   box-shadow: 0 0 0 2px rgba(70, 127, 207, .25);
   color: #495057;
@@ -218,7 +218,7 @@
 
 .search-filters-container .search-filter-toggle.active:hover,
 .search-filters-container .search-filter-toggle.highlighted:hover {
-  background-color: #efefef;
+  background-color: var(--bs-icon-hover-bg);
 }
 
 .search-filters-container .search-filter-toggle.highlighted,
