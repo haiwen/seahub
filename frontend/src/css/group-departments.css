@@ -172,7 +172,7 @@
   font-size: 13px;
   font-weight: lighter;
   text-align: justify;
-  color: var(--bs-body-color);
+  color: var(--bs-body-bg);
   background-color: var(--bs-tooltip-bg);
 }
 

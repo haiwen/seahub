@@ -174,7 +174,7 @@
 
 .tree-node-hight-light {
   border-radius: 4px;
-  background-color: var(--bs-nav-active-color) !important;
+  background-color: var(--bs-nav-active-bg) !important;
 }
 
 .tree-node-hight-light::before {

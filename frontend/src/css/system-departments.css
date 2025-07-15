@@ -75,7 +75,7 @@
 }
 
 .tree-node .right-icon:hover {
-  background-color: var(--bs-icon-hover-secondary-bg);
+  background-color: var(--bs-icon-hover-tertiary-bg);
 }
 
 .departments-tree-panel .tree-node-children {

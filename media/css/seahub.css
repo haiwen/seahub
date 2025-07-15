@@ -1029,44 +1029,8 @@ textarea:-moz-placeholder {
 }
 
 /**** caret ****/
-.outer-caret,
-.inner-caret {
-  height: 0;
-  width: 0;
-  border-width: 14px 14px 0;
-  /* default: arrow to the bottom */
-  border-style: dashed solid;
-  /* 'dashed' for firefox */
-  border-color: #CBCBCB transparent;
-  z-index: 100;
-  margin: 0 auto;
-}
 
-.inner-caret {
-  border-top-color: #fff;
-  position: relative;
-  top: -15px;
-  left: -14px;
-}
-
-.up-outer-caret,
-.up-outer-caret .inner-caret {
-  border-width: 0 10px 10px;
-}
-
-.up-outer-caret .inner-caret {
-  border-bottom-color: #fff;
-  top: 1px;
-  left: -10px;
-}
-
-.up-outer-caret {
-  position: absolute;
-  top: -11px;
-}
-
-.right-outer-caret,
-.right-outer-caret .inner-caret {
+.right-outer-caret {
   border-width: 10px 0 10px 10px;
   border-color: transparent transparent transparent #CBCBCB;
 }
@@ -1076,26 +1040,13 @@ textarea:-moz-placeholder {
   right: -11px;
 }
 
-.right-outer-caret .inner-caret {
-  border-left-color: #fff;
-  top: -10px;
-  left: -11px;
-}
-
-.bottom-outer-caret,
-.bottom-outer-caret .inner-caret {
+.bottom-outer-caret {
   border-width: 10px 10px 0;
 }
 
 .bottom-outer-caret {
   position: absolute;
   bottom: -11px;
-}
-
-.bottom-outer-caret .inner-caret {
-  border-top-color: #fff;
-  top: -11px;
-  left: -10px;
 }
 
 /**** tabnav *****/
