@@ -1003,7 +1003,7 @@ class ShareLinkDirents(APIView):
 
         return Response({
             'dirent_list': result,
-            'dir_path': request_path,
+            'dir_path': path,
         })
 
 

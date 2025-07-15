@@ -649,6 +649,7 @@ class SharedDirView extends React.Component {
         const items = Array.from(prevState.items);
         if (type === 'dir') {
           items.unshift(newItem);
+          this.listItems();
           this.loadTreePanel();
         } else {
           const folderItems = items.filter(item => item.is_dir);
