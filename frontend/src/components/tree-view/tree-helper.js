@@ -137,6 +137,19 @@ class TreeHelper {
     return treeCopy;
   }
 
+  sortTreeNodes(tree, sortBy, sortOrder) {
+    const treeCopy = tree.clone();
+    const sortChildren = (node) => {
+      if (!node.children.length) return;
+      const dirents = node.children.map(child => child.object);
+      const sortedDirents = Utils.sortDirents(dirents, sortBy, sortOrder);
+      node.children = sortedDirents.map(dirent => node.children.find(c => c.object.name === dirent.name));
+      node.children.forEach(child => sortChildren(child));
+    };
+    sortChildren(treeCopy.root);
+    return treeCopy;
+  }
+
   buildTree() {
     let tree = new Tree();
     let object = new Dirent({ name: '/' });

@@ -2095,7 +2095,7 @@ class LibContentView extends React.Component {
     let direntList = list.map(item => {
       return new Dirent(item);
     });
-    direntList = Utils.sortDirents(direntList, 'name', 'asc');
+    direntList = Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder);
 
     let nodeList = direntList.map(object => {
       return new TreeNode({ object });
@@ -2184,10 +2184,14 @@ class LibContentView extends React.Component {
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
+
+    const sortedDirentList = Utils.sortDirents(this.state.direntList, sortBy, sortOrder);
+    const sortedTreeData = treeHelper.sortTreeNodes(this.state.treeData, sortBy, sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
-      items: Utils.sortDirents(this.state.direntList, sortBy, sortOrder)
+      direntList: sortedDirentList,
+      treeData: sortedTreeData,
     });
   };
 
