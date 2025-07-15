@@ -268,7 +268,7 @@ class SharedDirView extends React.Component {
         'icon': 'upload-files',
         'disabled': noQuota,
         'title': noQuota ? gettext('The owner of this library has run out of space.') : '',
-        'text': gettext('Upload File'),
+        'text': gettext('Upload Files'),
         'onClick': this.onUploadFile
       });
       opList.push({
@@ -646,6 +646,7 @@ class SharedDirView extends React.Component {
         const items = Array.from(prevState.items);
         if (type === 'dir') {
           items.unshift(newItem);
+          this.loadTreePanel();
         } else {
           const folderItems = items.filter(item => item.is_dir);
           items.splice(folderItems.length, 0, newItem);
