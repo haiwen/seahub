@@ -19,7 +19,7 @@
   flex-direction: column;
   overflow: hidden;
   background-color: var(--bs-body-secondary-bg);
-  border-right: 1px solid var(--bs-border-fifth-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
 }
 
 .wiki2-side-panel .wiki2-side-panel-top {

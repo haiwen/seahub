@@ -1370,7 +1370,7 @@ a.table-sort-op:hover {
 .dropdown-item:focus .sf2-icon-tick,
 .dropdown-item:hover .metadata-view-icon,
 .dropdown-item:focus .metadata-view-icon {
-  color: var(--bs-dropdown-link-hover-color);
+  color: #fff;
 }
 
 .err-tip {

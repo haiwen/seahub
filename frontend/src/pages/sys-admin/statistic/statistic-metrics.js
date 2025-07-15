@@ -265,13 +265,13 @@ const style = `
     .metrics-container .table td {
       vertical-align: middle;
       background: var(--bs-body-bg);
-      border-bottom: 1px solid var(--bs-td-border-color);
+      border-bottom: 1px solid var(--bs-border-color);
       padding-left: 8px;
     }
 
     .metrics-container .table th {
       background: var(--bs-body-bg);
-      border-bottom: 1px solid var(--bs-td-border-color);
+      border-bottom: 1px solid var(--bs-border-color);
       color: #666;
       font-size: 14px;
     }
