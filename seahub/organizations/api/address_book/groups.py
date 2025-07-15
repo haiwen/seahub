@@ -22,6 +22,7 @@ from seahub.utils import is_pro_version
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, set_group_name_cache
+from seahub.utils.ccnet_db import CcnetDB
 
 
 logger = logging.getLogger(__name__)
@@ -136,3 +137,49 @@ class AdminAddressBookGroup(APIView):
         }
 
         return Response(group_info)
+    
+    @check_org_admin
+    def post(self, request, org_id, group_id):
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        group_id = int(group_id)
+        if get_org_id_by_group(group_id) != org_id:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        target_department_id = request.data.get('target_department_id')
+
+        try:
+            target_department_id = int(target_department_id)
+            if get_org_id_by_group(target_department_id) != org_id:
+                error_msg = 'Group %s not found.' % target_department_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        except Exception as e:
+            error_msg = 'Group %s not found.' % target_department_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        department = ccnet_api.get_group(group_id)
+        if department.parent_group_id == target_department_id:
+            return Response({'success': True})
+        try:
+            # group to department
+            ccnet_db = CcnetDB()
+            sub_groups = ccnet_db.get_all_sub_groups(group_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        if target_department_id in sub_groups:
+            error_msg = 'Cannot move to its own sub department.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            ccnet_db.update_group_structure(group_id, target_department_id, sub_groups)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

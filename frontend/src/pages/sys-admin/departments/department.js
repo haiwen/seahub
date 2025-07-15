@@ -153,6 +153,7 @@ class Department extends React.Component {
               toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
               toggleAddLibrary={this.props.toggleAddLibrary}
               toggleAddMembers={this.props.toggleAddMembers}
+              toggleMoveDepartment={this.props.toggleMoveDepartment}
               toggleRename={this.props.toggleRename}
               toggleDelete={this.props.toggleDelete}
             />

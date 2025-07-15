@@ -132,6 +132,7 @@ class Department extends React.Component {
               toggleAddMembers={this.props.toggleAddMembers}
               toggleRename={this.props.toggleRename}
               toggleDelete={this.props.toggleDelete}
+              toggleMoveDepartment={this.props.toggleMoveDepartment}
             />
           </Dropdown>
         </div>

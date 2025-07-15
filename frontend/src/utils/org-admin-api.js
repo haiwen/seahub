@@ -425,6 +425,13 @@ class OrgAdminAPI {
     return this.req.put(url, form);
   }
 
+  orgAdminMoveDepartment(orgID, groupID, targetDepartmentId) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/address-book/groups/' + groupID + '/';
+    const form = new FormData();
+    form.append('target_department_id', targetDepartmentId);
+    return this.req.post(url, form);
+  }
+
   orgAdminDeleteDepartGroup(orgID, groupID) {
     const url = this.server + '/api/v2.1/org/' + orgID + '/admin/address-book/groups/' + groupID + '/';
     return this.req.delete(url);

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from django.db import connection
+from django.db import connection, transaction
 
 
 def get_ccnet_db_name():
@@ -256,3 +256,65 @@ class CcnetDB:
             staffs = cursor.fetchall()
 
         return [s[0] for s in staffs]
+
+    
+    def get_all_sub_groups(self, group_id):
+        sql = f"""
+        SELECT group_id
+        FROM `{self.db_name}`.`GroupStructure`
+        WHERE path LIKE %s
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql, [f'%{group_id}%'])
+            sub_groups = cursor.fetchall()
+        return [s[0] for s in sub_groups]
+    
+    def update_group_structure(self, group_id, target_department_id):
+        # Get current path of the department being moved
+        get_current_path_sql = f"""
+        SELECT path
+        FROM `{self.db_name}`.`GroupStructure`
+        WHERE group_id = %s
+        """
+
+        # Update the parent_group_id in Group table
+        update_group_sql = f"""
+        UPDATE `{self.db_name}`.`Group`
+        SET parent_group_id = %s
+        WHERE group_id = %s
+        """
+
+        # Update the path in GroupStructure table for the department and its children
+        update_structure_sql = f"""
+        UPDATE `{self.db_name}`.`GroupStructure`
+        SET path = CONCAT(%s, SUBSTRING(path, LENGTH(%s) + 1))
+        WHERE path LIKE %s
+        """
+
+        with transaction.atomic():
+            with connection.cursor() as cursor:
+                # Get target department's path
+                cursor.execute(get_current_path_sql, [target_department_id])
+                target_path_result = cursor.fetchone()
+                target_path = target_path_result[0] if target_path_result else str(target_department_id)
+
+                # Get current department's path
+                cursor.execute(get_current_path_sql, [group_id])
+                current_path_result = cursor.fetchone()
+                current_path = current_path_result[0] if current_path_result else str(group_id)
+
+                # Update parent in Group table
+                cursor.execute(update_group_sql, [target_department_id, group_id])
+                # Create new path prefix
+                new_path_prefix = f"{target_path}, {group_id}" if target_path else str(group_id)
+                old_path_prefix = current_path
+
+                # Update paths in GroupStructure table
+                cursor.execute(
+                    update_structure_sql,
+                    [
+                        new_path_prefix,  # New path prefix
+                        old_path_prefix,  # Old path prefix to remove
+                        f"{old_path_prefix}%"  # Pattern to match all children
+                    ]
+                )
