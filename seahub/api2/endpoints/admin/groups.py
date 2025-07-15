@@ -293,25 +293,31 @@ class AdminGroup(APIView):
             try:
                 target_group_id = int(target_group_id)
             except ValueError:
-                error_msg = 'target_group_id is invalid.'
+                error_msg = 'target_group_id invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             
-            if target_group_id == group_id:
+            group = ccnet_api.get_group(group_id)
+            if group.parent_group_id == target_group_id or group_id == target_group_id:
                 return Response({'success': True})
             
+            org_id = ccnet_api.get_org_id_by_group(target_group_id)
+            if org_id >= 0:
+                error_msg = 'Target group %d invalid.' % target_group_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
             target_group = ccnet_api.get_group(target_group_id)
             if not target_group:
                 error_msg = 'Target group %d not found.' % target_group_id
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
             
             try:
-                # group to department
                 ccnet_db = CcnetDB()
                 sub_groups = ccnet_db.get_all_sub_groups(group_id)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            
             if target_group_id in sub_groups:
                 error_msg = 'Cannot move to its own sub department.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

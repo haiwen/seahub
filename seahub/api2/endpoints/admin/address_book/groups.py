@@ -268,27 +268,3 @@ class AdminAddressBookGroup(APIView):
                              operation=GROUP_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})
-    
-    def put(self, request, group_id):
-        """Move a group to another group."""
-        target_group_id = request.data.get('target_group_id')
-        if not target_group_id:
-            error_msg = 'target_group_id is required.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        try:
-            target_group_id = int(target_group_id)
-        except ValueError:
-            error_msg = 'target_group_id is invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        if target_group_id == group_id:
-            error_msg = 'target_group_id is the same as group_id.'
-        group_id = int(group_id)
-        group = ccnet_api.get_group(group_id)
-        if not group:
-            error_msg = 'Group %d not found.' % group_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
-        pass
-

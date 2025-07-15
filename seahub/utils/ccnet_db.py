@@ -270,21 +270,18 @@ class CcnetDB:
         return [s[0] for s in sub_groups]
     
     def update_group_structure(self, group_id, target_department_id):
-        # Get current path of the department being moved
         get_current_path_sql = f"""
         SELECT path
         FROM `{self.db_name}`.`GroupStructure`
         WHERE group_id = %s
         """
 
-        # Update the parent_group_id in Group table
         update_group_sql = f"""
         UPDATE `{self.db_name}`.`Group`
         SET parent_group_id = %s
         WHERE group_id = %s
         """
 
-        # Update the path in GroupStructure table for the department and its children
         update_structure_sql = f"""
         UPDATE `{self.db_name}`.`GroupStructure`
         SET path = CONCAT(%s, SUBSTRING(path, LENGTH(%s) + 1))

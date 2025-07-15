@@ -226,33 +226,21 @@ class Departments extends React.Component {
   onDepartmentChanged = (targetDepartment) => {
     const { operateNode, rootNodes } = this.state;
 
-    // Remove from original parent
+    let nodeToMove = operateNode;
     if (operateNode.parentNode) {
       operateNode.parentNode.deleteChildById(operateNode.id);
     } else {
-      rootNodes.splice(rootNodes.indexOf(operateNode), 1);
+      const index = rootNodes.indexOf(operateNode);
+      if (index !== -1) {
+        rootNodes.splice(index, 1);
+      }
     }
 
-    // Convert target department to DepartmentNode instance
-    const targetNode = targetDepartment ? new DepartmentNode({
-      id: targetDepartment.id,
-      name: targetDepartment.name,
-    }) : null;
-
-    // Create moved node
-    const movedNode = new DepartmentNode({
-      id: operateNode.id,
-      name: operateNode.name,
-      parentNode: targetNode,
-      orgId: operateNode.orgId,
-    });
-
-    if (targetNode) {
-      // Find existing target node in tree if it exists
+    if (targetDepartment) {
       let existingTargetNode = null;
       const findTargetNode = (nodes) => {
         for (let n of nodes) {
-          if (n.id === targetNode.id) {
+          if (n.id === targetDepartment.id) {
             existingTargetNode = n;
             return;
           }
@@ -264,19 +252,25 @@ class Departments extends React.Component {
       findTargetNode(rootNodes);
 
       if (existingTargetNode) {
-        existingTargetNode.addChildren([movedNode]);
+        nodeToMove.parentNode = existingTargetNode;
+        const isAlreadyChild = existingTargetNode.children.some(child => child.id === nodeToMove.id);
+        if (!isAlreadyChild) {
+          existingTargetNode.addChildren([nodeToMove]);
+        }
       }
     } else {
-      // If targetNode is null, it becomes a root node
-      this.setState({
-        rootNodes: [...rootNodes, movedNode]
-      });
+      nodeToMove.parentNode = null;
+      const isAlreadyRoot = rootNodes.some(node => node.id === nodeToMove.id);
+      if (!isAlreadyRoot) {
+        this.setState({
+          rootNodes: [...rootNodes, nodeToMove]
+        });
+      }
     }
 
-    // Update checked department if needed
     const { checkedDepartmentId } = this.state;
-    if (checkedDepartmentId === operateNode.id) {
-      this.onChangeDepartment(movedNode.id);
+    if (checkedDepartmentId === nodeToMove.id) {
+      this.onChangeDepartment(nodeToMove.id);
     }
   };
 
