@@ -1001,7 +1001,10 @@ class ShareLinkDirents(APIView):
 
             result.append(dirent_info)
 
-        return Response({'dirent_list': result})
+        return Response({
+            'dirent_list': result,
+            'dir_path': path,
+        })
 
 
 class ShareLinkUpload(APIView):

@@ -1732,7 +1732,7 @@ class LibContentView extends React.Component {
       }));
     }
 
-    if (this.state.isTreePanelShown) {
+    if (this.state.isTreePanelShown && !isExist) {
       this.addNodeToTree(dirent.name, this.state.path, dirent.type);
     }
   };
