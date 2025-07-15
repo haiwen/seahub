@@ -13,7 +13,8 @@ const DepartmentsTreePanelPropTypes = {
   toggleAddLibrary: PropTypes.func,
   toggleAddMembers: PropTypes.func,
   toggleRename: PropTypes.func,
-  toggleDelete: PropTypes.func
+  toggleDelete: PropTypes.func,
+  toggleMoveDepartment: PropTypes.func,
 };
 
 class DepartmentsTreePanel extends Component {
@@ -35,6 +36,7 @@ class DepartmentsTreePanel extends Component {
               toggleAddMembers={this.props.toggleAddMembers}
               toggleRename={this.props.toggleRename}
               toggleDelete={this.props.toggleDelete}
+              toggleMoveDepartment={this.props.toggleMoveDepartment}
             />
           );
         })}
