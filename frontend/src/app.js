@@ -95,7 +95,19 @@ class App extends Component {
     this.navigateClientUrlToLib();
 
     this.initCurrentTabByLocation();
+    this.colorSchemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    this.colorSchemeQuery.addEventListener('change', this.handleColorSchemeChange);
   }
+
+  componentWillUnmount() {
+    this.colorSchemeQuery.removeEventListener('change', this.handleColorSchemeChange);
+  }
+
+  handleColorSchemeChange = (e) => {
+    const isDark = e.matches;
+    document.body.setAttribute('data-bs-theme', isDark ? 'dark' : 'light');
+    this.forceUpdate();
+  };
 
   initCurrentTabByLocation = () => {
     // when visit the siteRoot page, highlight the 'Files' tab in the side nav.
