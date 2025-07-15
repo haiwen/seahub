@@ -41,7 +41,7 @@ dayjs.extend(relativeTime);
 
 let loginUser = window.app.pageOptions.name;
 let {
-  token, dirName, dirPath, sharedBy,
+  token, dirName, sharedBy,
   repoID, relativePath,
   mode, thumbnailSize,
   trafficOverLimit, canDownload,
@@ -66,6 +66,7 @@ class SharedDirView extends React.Component {
       errorMsg: '',
       items: [],
       path: relativePath,
+      dirPath: '',
 
       isDropdownMenuOpen: false,
       currentMode: mode,
@@ -146,10 +147,12 @@ class SharedDirView extends React.Component {
         item.isSelected = false;
         return item;
       });
+      const { dir_path } = res.data;
       this.setState({
         isLoading: false,
         errorMsg: '',
-        items: Utils.sortDirentsInSharedDir(items, this.state.sortBy, this.state.sortOrder)
+        items: Utils.sortDirentsInSharedDir(items, this.state.sortBy, this.state.sortOrder),
+        dirPath: dir_path,
       }, () => {
         this.getThumbnails(thumbnailSize);
       });
@@ -655,7 +658,7 @@ class SharedDirView extends React.Component {
       });
     }
 
-    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(dirPath, name), type === 'dir');
+    seafileAPI.shareLinksUploadDone(token, Utils.joinPath(this.state.dirPath, name), type === 'dir');
   };
 
   getShareLinkRepoTags = () => {
@@ -787,7 +790,7 @@ class SharedDirView extends React.Component {
     const {
       usedRepoTags, currentMode: mode,
       sortBy, sortOrder, isTreeDataLoading, treeData, path,
-      sidePanelRate, inResizing
+      sidePanelRate, inResizing, dirPath
     } = this.state;
 
     const mainPanelStyle = {
