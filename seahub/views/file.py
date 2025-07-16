@@ -1330,7 +1330,8 @@ def view_shared_file(request, fileshare):
             name = username
             username = str(time.time())
             ret_dict['seadoc_access_token'] = gen_share_seadoc_access_token(file_uuid, filename, username, name, permission=seadoc_perm)
-            ret_dict['share_link_username'] = username
+
+        ret_dict['share_link_username'] = username
 
         send_file_access_msg(request, repo, path, 'web')
         request.session['seadoc_share_session'] = {
