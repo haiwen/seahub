@@ -318,7 +318,7 @@
 }
 
 .dir-view-path .path-item-refresh:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
 }
 
 .dir-view-path .sf3-font-refresh {

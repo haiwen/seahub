@@ -12,7 +12,7 @@
 }
 
 .sf-table-searcher-btn:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   cursor: pointer;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .sf-table-searcher-input-wrapper .btn-close-searcher-wrapper:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   cursor: pointer;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .toolbar-search-btn:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .toolbar-search-btn i.sf3-font {

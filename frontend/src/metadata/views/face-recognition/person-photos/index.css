@@ -9,6 +9,6 @@
 }
 
 .sf-metadata-people-photos-container .seafile-multicolor-icon-btn:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   cursor: pointer;
 }

@@ -75,7 +75,7 @@
 }
 
 .tree-node .right-icon:hover {
-  background-color: var(--bs-icon-hover-tertiary-bg);
+  background-color: var(--bs-hover-tertiary-bg);
 }
 
 .departments-tree-panel .tree-node-children {
@@ -86,8 +86,6 @@
 .departments-tree-panel .new-dept-btn {
   padding: 0 6px;
   margin-top: 10px;
-  background-color: var(--bs-button-bg);
-  color: var(--bs-button-color);
 }
 
 .departments-tree-panel .new-dept-btn-icon {

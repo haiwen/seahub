@@ -94,7 +94,7 @@ body {
 }
 
 #shared-dir-view .path-container .path-item:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
 }
 
 #shared-dir-view .path-container .path-split {

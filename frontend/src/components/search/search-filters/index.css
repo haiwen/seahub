@@ -29,7 +29,7 @@
 
 .search-filters-container .search-filter .search-filter-toggle:hover,
 .search-filter-menu .search-filter-toggle:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .search-filter-toggle .sf3-font-down {
@@ -78,7 +78,7 @@
 }
 
 .search-filter-menu.filter-by-suffix-menu .clear-icon-right:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .search-filters-container .search-filters-dropdown-item {
@@ -218,7 +218,7 @@
 
 .search-filters-container .search-filter-toggle.active:hover,
 .search-filters-container .search-filter-toggle.highlighted:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .search-filters-container .search-filter-toggle.highlighted,

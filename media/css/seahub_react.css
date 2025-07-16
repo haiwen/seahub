@@ -539,12 +539,12 @@ textarea::placeholder {
 .op-icon:hover {
   color: var(--bs-icon-secondary-color); /* to overwrite the styles for `a:hover` */
   text-decoration: none;
-  background: var(--bs-icon-hover-secondary-bg);
+  background: var(--bs-hover-secondary-bg);
 }
 
 .op-icon-bg-light:focus,
 .op-icon-bg-light:hover {
-  background: var(--bs-icon-hover-bg); /* for .op-icon shown in white containers */
+  background: var(--bs-hover-bg); /* for .op-icon shown in white containers */
 }
 
 .action-icon,
@@ -575,7 +575,7 @@ textarea::placeholder {
 
 .action-icon.sf3-font-delete1:hover,
 .action-icon.sf3-font-copy1:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .action-icon:focus,

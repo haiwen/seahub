@@ -127,7 +127,7 @@
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations .sf-metadata-hide-columns-operation:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
   color: var(--bs-body-color);
   cursor: pointer;
 }

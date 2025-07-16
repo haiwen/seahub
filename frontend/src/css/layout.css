@@ -139,7 +139,7 @@
 }
 
 .cur-view-path .cur-view-path-btn:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   border-radius: 3px;
 }
 

@@ -47,5 +47,5 @@
 
 .board-header-operation-btn .kanban-header-op-btn.kanban-header-collapse-btn:hover,
 .board-header-operation-btn .kanban-header-op-btn.kanban-more-operations-toggle:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }

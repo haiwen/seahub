@@ -35,7 +35,7 @@
 }
 
 .seafile-comment-title .sdoc-icon-btn:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .seafile-comment-item {
@@ -98,7 +98,7 @@
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:focus,
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:hover {
   color: #999;
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .seafile-comment-item .seafile-comment-content {

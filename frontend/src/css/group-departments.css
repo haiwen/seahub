@@ -32,7 +32,7 @@
 }
 
 .department-dialog-content .department-dialog-left-panel .clear-keyword-icon:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
 }
 
 .department-dialog-content .department-dialog-member {

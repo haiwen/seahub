@@ -27,19 +27,19 @@ body {
 
 .op-bar {
   padding: 9px 10px;
-  background: var(--bs-button-bg);
+  background: var(--bs-bg-color);
   border-radius: 2px;
 }
 
 .more {
-  background: var(--bs-button-bg);
+  background: var(--bs-bg-color);
   border: 0;
   color: #666;
 }
 
 .more:hover {
   color: var(--bs-body-color);
-  background: var(--bs-button-hover-bg);
+  background: var(--bs-bg-secondary-color);
 }
 
 .clean {
