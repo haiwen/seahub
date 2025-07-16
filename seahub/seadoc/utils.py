@@ -48,6 +48,25 @@ def gen_seadoc_access_token(file_uuid, filename, username, permission='rw', defa
     )
     return access_token
 
+def gen_share_seadoc_access_token(file_uuid, filename, username, name, permission='rw', default_title=None,):
+    url, is_default, date_uploaded = api_avatar_url(username)
+    if default_title is None:
+        default_title = filename
+    access_token = jwt.encode({
+        'file_uuid': file_uuid,
+        'filename': filename,
+        'username': username,
+        'name': name,
+        'avatar_url': url,
+        'permission': permission,
+        'default_title': default_title,
+        'exp': int(time.time()) + 86400 * 3,  # 3 days
+    },
+        SEADOC_PRIVATE_KEY,
+        algorithm='HS256'
+    )
+    return access_token
+
 
 def is_valid_seadoc_access_token(auth, file_uuid, return_payload=False):
     """
