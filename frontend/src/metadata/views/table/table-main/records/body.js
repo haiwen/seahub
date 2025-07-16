@@ -10,6 +10,7 @@ import { isColumnSupportDirectEdit, isColumnSupportEdit } from '../../../../util
 import { isSelectedCellSupportOpenEditor } from '../../utils/selected-cell-utils';
 import RecordMetrics from '../../utils/record-metrics';
 import { getColumnScrollPosition, getColVisibleStartIdx, getColVisibleEndIdx } from '../../utils/records-body-utils';
+import ExpandedPropertiesDialog from '../../../../components/dialog/expanded-properties';
 
 const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
@@ -26,6 +27,8 @@ class RecordsBody extends Component {
       activeRecords: [],
       selectedPosition: null,
       isScrollingRightScrollbar: false,
+      showExpandedPropsDialog: false,
+      expandedRecord: null,
     };
     this.resultContentRef = null;
     this.resultRef = null;
@@ -445,6 +448,15 @@ class RecordsBody extends Component {
     this.resultContentRef = ref;
   };
 
+  toggleExpandedPropsDialog = (recordId = null) => {
+    const { recordGetterById } = this.props;
+    const record = recordId ? recordGetterById(recordId) : this.state.expandedRecord;
+    this.setState({
+      showExpandedPropsDialog: !this.state.showExpandedPropsDialog,
+      expandedRecord: record
+    });
+  };
+
   renderRecords = () => {
     this.recordFrozenRefs = [];
     const {
@@ -488,6 +500,7 @@ class RecordsBody extends Component {
           modifyRecord={this.props.modifyRecord}
           searchResult={this.props.searchResult}
           columnColor={columnColor}
+          onShowExpandedPropsDialog={this.toggleExpandedPropsDialog}
         />
       );
     });
@@ -564,6 +577,13 @@ class RecordsBody extends Component {
           <div className="sf-metadata-result-table" style={{ width: this.props.totalWidth + SEQUENCE_COLUMN_WIDTH }} ref={this.setResultRef}>
             {this.renderRecords()}
           </div>
+          {this.state.showExpandedPropsDialog && (
+            <ExpandedPropertiesDialog
+              record={this.state.expandedRecord}
+              columns={this.props.columns}
+              toggle={this.toggleExpandedPropsDialog}
+            />
+          )}
         </div>
         <RightScrollbar
           table={this.props.table}
