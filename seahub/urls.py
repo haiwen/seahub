@@ -74,7 +74,7 @@ from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryVi
 from seahub.api2.endpoints.dir import DirView, DirDetailView
 from seahub.api2.endpoints.file_tag import FileTagView
 from seahub.api2.endpoints.file_tag import FileTagsView
-from seahub.api2.endpoints.repo_trash import RepoTrash, RepoTrashRevertDirents, RepoTrash2
+from seahub.api2.endpoints.repo_trash import RepoTrash, RepoTrashRevertDirents, RepoTrash2, SearchRepoTrash2
 from seahub.api2.endpoints.repo_commit import RepoCommitView
 from seahub.api2.endpoints.repo_commit_dir import RepoCommitDirView
 from seahub.api2.endpoints.repo_commit_revert import RepoCommitRevertView
@@ -461,6 +461,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/detail/$', DirDetailView.as_view(), name='api-v2.1-dir-detail-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/$', RepoTrash.as_view(), name='api-v2.1-repo-trash'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash2/$', RepoTrash2.as_view(), name='api-v2.1-repo-trash2'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash2/search/$', SearchRepoTrash2.as_view(), name='api-v2.1-repo-trash2-search'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/revert-dirents/$', RepoTrashRevertDirents.as_view(), name='api-v2.1-repo-trash-revert-dirents'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/history/$', RepoHistory.as_view(), name='api-v2.1-repo-history'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),

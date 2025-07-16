@@ -17,6 +17,7 @@ import EmptyTip from '../../empty-tip';
 import '../../../css/toolbar.css';
 import '../../../css/search.css';
 import './index.css';
+import SearchTrash from "./trash-search/search_trash";
 
 class TrashDialog extends React.Component {
 
@@ -33,13 +34,30 @@ class TrashDialog extends React.Component {
       isOldTrashDialogOpen: false,
       currentPage: 1,
       perPage: 100,
-      hasNextPage: false
+      hasNextPage: false,
+      searchKeyword: '',
+      filteredItems: [],
     };
   }
 
   componentDidMount() {
     this.getFolderTrash();
   }
+
+  handleSearchResults = (result) => {
+    if (result?.reset) {
+      // 回退显示全部内容
+      this.getFolderTrash(1);
+      return;
+    }
+
+    const items = result?.items || [];
+
+    this.setState({
+      items,
+      hasNextPage: result?.hasMore || false
+    });
+  };
 
   getFolderTrash = (page) => {
     repoTrashAPI.getRepoFolderTrash(this.props.repoID, page, this.state.perPage).then((res) => {
@@ -66,6 +84,42 @@ class TrashDialog extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
+  };
+
+
+  handleSearchChange = (e) => {
+    this.setState({ searchQuery: e.target.value });
+  };
+
+  handleSearchSubmit = (e) => {
+    e.preventDefault();
+    const { searchQuery } = this.state;
+    if (searchQuery.trim()) {
+      this.searchTrash(searchQuery);
+    } else {
+      // 如果搜索词为空，恢复显示所有项目
+      this.getFolderTrash();
+    }
+  };
+
+  searchTrash = (query) => {
+  this.setState({ isSearching: true });
+
+  repoTrashAPI.searchRepoFolderTrash(this.props.repoID, query)
+    .then((res) => {
+      this.setState({
+        isSearching: false,
+        items: res.data,
+        currentPage: 1,
+        hasNextPage: false
+      });
+    })
+    .catch((error) => {
+      this.setState({
+        isSearching: false,
+        errorMsg: gettext('Search failed')
+      });
+    });
   };
 
   getPreviousPage = () => {
@@ -217,6 +271,15 @@ class TrashDialog extends React.Component {
           </ModalHeader>
           <ModalBody>
             {isLoading && <Loading />}
+            {!isLoading &&
+              <div className="search-container-trash">
+                <SearchTrash
+                  repoID={this.props.repoID}
+                  onSearchResults={this.handleSearchResults}
+                  placeholder={gettext('Search in trash')}
+                />
+              </div>
+            }
             {!isLoading && items.length === 0 &&
               <EmptyTip text={gettext('No file')} className="m-0" />
             }
@@ -229,7 +292,7 @@ class TrashDialog extends React.Component {
                     <span className="last-path-item" title={repoFolderName}>{repoFolderName}</span>
                   }
                 </div>
-                <Table repoID={repoID} data={this.state} renderFolder={this.renderFolder} isDesktop={isDesktop} />
+                <Table repoID={repoID} data={{items: items, showFolder: showFolder, commitID: this.state.commitID, baseDir: this.state.baseDir, folderPath: this.state.folderPath, folderItems: this.state.folderItems}} renderFolder={this.renderFolder} isDesktop={isDesktop} />
                 <Paginator
                   gotoPreviousPage={this.getPreviousPage}
                   gotoNextPage={this.getNextPage}

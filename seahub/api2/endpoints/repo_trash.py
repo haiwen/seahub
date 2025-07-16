@@ -348,6 +348,7 @@ class RepoTrash2(APIView):
         Permission checking:
         1. all authenticated user can perform this action.
         """
+        keywords = time_from = time_to = op_users = suffixes = None
 
         path = '/'
         # resource check
@@ -381,7 +382,113 @@ class RepoTrash2(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit)
+            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit,keywords, time_from, time_to, op_users, suffixes)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        items = []
+        if len(deleted_entries) >= 1:
+            for item in deleted_entries:
+                item_info = self.get_item_info(item)
+                items.append(item_info)
+
+        result = {
+            'items': items,
+            'total_count': total_count
+        }
+
+        return Response(result)
+
+class SearchRepoTrash2(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get_item_info(self, trash_item):
+
+        item_info = {
+            'parent_dir': '/' if trash_item.path == '/' else trash_item.path,
+            'obj_name': trash_item.obj_name,
+            'deleted_time': timestamp_to_isoformat_timestr(int(trash_item.delete_time.timestamp())),
+            'commit_id': trash_item.commit_id,
+        }
+
+        if trash_item.obj_type == 'dir':
+            is_dir = True
+        else:
+            is_dir = False
+
+        item_info['is_dir'] = is_dir
+        item_info['size'] = trash_item.size if not is_dir else ''
+        item_info['obj_id'] = trash_item.obj_id if not is_dir else ''
+
+        return item_info
+
+    def get(self, request, repo_id):
+        """ Return deleted files/dirs of a repo/folder
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+        """
+
+        path = '/'
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        q = request.GET.get('q', None)
+        if not q:
+            q = None
+
+        op_users = request.GET.get('op_user', '').split(',') if request.GET.get('op_user') else None
+        op_users = [u for u in op_users if u] if op_users else None
+
+        time_from = request.GET.get('time_from')
+        time_to = request.GET.get('time_to')
+        try:
+            time_from = int(time_from) if time_from else None
+            time_to = int(time_to) if time_to else None
+        except (TypeError, ValueError):
+            time_from = None
+            time_to = None
+
+        input_fexts = request.GET.get('input_fexts', None)
+        if input_fexts:
+            suffixes = input_fexts.split(',')
+        else:
+            suffixes = None
+        suffixes = [s for s in suffixes if s] if suffixes else None
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+        start = (current_page - 1) * per_page
+        limit = per_page
+        try:
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit, q, time_from, time_to, op_users,suffixes)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

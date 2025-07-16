@@ -42,6 +42,38 @@ class RepotrashAPI {
     };
     return this.req.get(url, { params: params });
   }
+
+  searchRepoFolderTrash(repoID, page, per_page, searchQuery = '', filters = {}) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/trash2/search/';
+    let params = {
+      page: page || 1,
+      per_page: per_page
+    };
+
+    if (searchQuery && searchQuery.trim() !== '') {
+      params.q = searchQuery.trim();
+    }
+
+    if (filters.suffixes) {
+      params.input_fexts = filters.suffixes;
+    }
+
+    if (
+      // filters.date?.value === 'custom' &&
+      filters.date.from != null &&
+      filters.date.to != null
+    ) {
+      params.time_from = filters.date.from;
+      params.time_to = filters.date.to;
+    }
+
+    if (filters.creators != null) {
+      params.op_user = filters.creators;
+    }
+
+    return this.req.get(url, { params: params });
+  }
+
 }
 
 let repoTrashAPI = new RepotrashAPI();
