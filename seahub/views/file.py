@@ -68,7 +68,7 @@ from seahub.views import check_folder_permission, \
 from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
 from seahub.group.utils import is_group_member
 from seahub.seadoc.utils import get_seadoc_file_uuid, \
-        gen_seadoc_access_token, is_seadoc_revision
+        gen_seadoc_access_token, is_seadoc_revision, gen_share_seadoc_access_token
 from seahub.exdraw.utils import get_exdraw_file_uuid
 from seahub.seadoc.models import SeadocRevision
 
@@ -78,7 +78,7 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL, \
-    ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, EXCALIDRAW_SERVER_URL
+    ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, EXCALIDRAW_SERVER_URL, ENABLE_SEADOC
 from seahub.constants import PERMISSION_INVISIBLE
 
 # wopi
@@ -381,6 +381,10 @@ def can_preview_file(file_name, file_size, repo):
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
             return False, error_msg
 
+    elif filetype in (SEADOC) and not ENABLE_SEADOC:
+        error_msg = "File preview unsupported"
+        return False, error_msg
+
     elif fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
             fileext in ONLYOFFICE_FILE_EXTENSION:
 
@@ -425,6 +429,9 @@ def can_edit_file(file_name, file_size, repo):
     file_type, file_ext = get_file_type_and_ext(file_name)
 
     if file_type in (TEXT, MARKDOWN) or file_ext in get_conf_text_ext():
+        return True, ''
+
+    if file_type in (SEADOC) and ENABLE_SEADOC:
         return True, ''
 
     if ENABLE_OFFICE_WEB_APP_EDIT and \
@@ -691,6 +698,7 @@ def view_lib_file(request, repo_id, path):
     if filetype == SEADOC:
         return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
         return_dict['seadoc_server_url'] = SEADOC_SERVER_URL
+        return_dict['enable_seadoc'] = ENABLE_SEADOC
 
         can_edit_file = True
         if parse_repo_perm(permission).can_edit_on_web is False:
@@ -1315,7 +1323,14 @@ def view_shared_file(request, fileshare):
         ret_dict['can_edit_file'] = can_edit
         seadoc_perm = 'rw' if can_edit else 'r'
         ret_dict['file_perm'] = seadoc_perm
-        ret_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+
+        if not can_edit:
+            ret_dict['seadoc_access_token'] = gen_seadoc_access_token(file_uuid, filename, username, permission=seadoc_perm)
+        else:
+            name = username
+            username = str(time.time())
+            ret_dict['seadoc_access_token'] = gen_share_seadoc_access_token(file_uuid, filename, username, name, permission=seadoc_perm)
+            ret_dict['share_link_username'] = username
 
         send_file_access_msg(request, repo, path, 'web')
         request.session['seadoc_share_session'] = {
@@ -1439,6 +1454,7 @@ def view_shared_file(request, fileshare):
         data['seadoc_access_token'] = ret_dict['seadoc_access_token']
         data['can_edit_file'] = ret_dict['can_edit_file']
         data['file_perm'] = ret_dict['file_perm']
+        data['share_link_username'] = ret_dict['share_link_username']
 
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user

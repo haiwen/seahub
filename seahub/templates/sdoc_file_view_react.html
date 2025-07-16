@@ -30,6 +30,7 @@ revisionCreatedAt: '{{ revision_created_at }}',
 revisionUpdatedAt: '{{ revision_updated_at }}',
 isFreezed: {% if is_freezed %}true{% else %}false{% endif %},
 lang: '{{ LANGUAGE_CODE }}',
+enableSeadoc: {% if enable_seadoc %} true {% else %} false {% endif %},
 {% endblock %}
 
 {% block render_bundle %}
