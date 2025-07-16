@@ -33,7 +33,6 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  flex: 1;
 }
 
 .sf-metadata-result-table-cell .select-cell-checkbox-container:hover,

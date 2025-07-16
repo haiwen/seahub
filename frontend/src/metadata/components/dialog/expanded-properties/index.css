@@ -1,0 +1,3 @@
+.form-control.disabled {
+  background-color: var(--bs-bg-color);
+}

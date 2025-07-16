@@ -5,6 +5,7 @@ import { Tooltip } from 'reactstrap';
 import { gettext } from '../../../../../../../utils/constants';
 import { isMobile } from '../../../../../../../utils/utils';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
+import IconButton from '../../../../../../../components/icon-button';
 
 import './index.css';
 
@@ -51,6 +52,10 @@ class ActionsCell extends Component {
     );
   };
 
+  handleShowExpandedProps = () => {
+    this.props.onShowExpandedPropsDialog(this.props.recordId);
+  };
+
   render() {
     const { isSelected, isLastFrozenCell, index, height, recordId } = this.props;
     const cellStyle = {
@@ -86,7 +91,7 @@ class ActionsCell extends Component {
             </label>
           </div>
         </div>
-        {/* {this.getLockedRowTooltip()} */}
+        <IconButton id="expand" icon="expand" text={gettext('Expand')} onClick={this.handleShowExpandedProps} />
       </div>
     );
   }
@@ -100,6 +105,7 @@ ActionsCell.propTypes = {
   index: PropTypes.number,
   height: PropTypes.number,
   onSelectRecord: PropTypes.func,
+  onShowExpandedPropsDialog: PropTypes.func,
 };
 
 export default ActionsCell;
