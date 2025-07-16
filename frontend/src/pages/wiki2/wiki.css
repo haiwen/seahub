@@ -53,7 +53,7 @@ body {
 }
 
 .wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .main-panel-center .cur-view-content {

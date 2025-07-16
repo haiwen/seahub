@@ -462,45 +462,6 @@ textarea::placeholder {
   }
 }
 
-/* UI Widget */
-
-/**** caret ****/
-.outer-caret,
-.inner-caret {
-  height: 0;
-  width: 0;
-  border-width: 14px 14px 0;
-  /* default: arrow to the bottom */
-  border-style: dashed solid;
-  /* 'dashed' for firefox */
-  border-color: #495057 transparent;
-  z-index: 100;
-  margin: 0 auto;
-}
-
-.inner-caret {
-  border-top-color: var(--bs-border-color);
-  position: relative;
-  top: -15px;
-  left: -14px;
-}
-
-.up-outer-caret,
-.up-outer-caret .inner-caret {
-  border-width: 0 10px 10px;
-}
-
-.up-outer-caret .inner-caret {
-  border-bottom-color: var(--bs-border-color);
-  top: 1px;
-  left: -10px;
-}
-
-.up-outer-caret {
-  position: absolute;
-  top: -11px;
-}
-
 /** loading **/
 @-moz-keyframes loading {
   0% {
@@ -578,12 +539,12 @@ textarea::placeholder {
 .op-icon:hover {
   color: var(--bs-icon-secondary-color); /* to overwrite the styles for `a:hover` */
   text-decoration: none;
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-secondary-bg);
 }
 
 .op-icon-bg-light:focus,
 .op-icon-bg-light:hover {
-  background: var(--bs-icon-hover-bg); /* for .op-icon shown in white containers */
+  background: var(--bs-hover-bg); /* for .op-icon shown in white containers */
 }
 
 .action-icon,
@@ -614,7 +575,7 @@ textarea::placeholder {
 
 .action-icon.sf3-font-delete1:hover,
 .action-icon.sf3-font-copy1:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .action-icon:focus,
@@ -690,11 +651,6 @@ textarea::placeholder {
   font-size: 13px;
 }
 
-.account-popup .outer-caret {
-  top: -10px;
-  right: 8px;
-}
-
 .account-popup .sf-popover-con {
   padding: 0;
 }
@@ -703,6 +659,10 @@ textarea::placeholder {
   display: block;
   padding: 8px 18px;
   border-bottom: 1px solid var(--bs-border-color);
+}
+
+.account-popup .item:last-child {
+  border-bottom: none;
 }
 
 .account-popup a.item {
@@ -1098,10 +1058,10 @@ textarea::placeholder {
 
 .sf-popover {
   width: 240px;
-  background: var(--bs-tertiary-bg);
+  background: var(--bs-body-bg);
   border: 1px solid var(--bs-border-color);
   border-radius: 3px;
-  box-shadow: 0 0 4px var(--bs-border-color);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
   position: absolute;
   z-index: 20;
 }
@@ -1789,224 +1749,4 @@ a.table-sort-op:hover {
 
 .custom-switch-description {
   color: var(--bs-body-color);
-}
-
-/* sdoc editor */
-.sdoc-editor-page-wrapper {
-  background-color: var(--bs-body-bg) !important;
-  color: var(--bs-body-color) !important;
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-scroll-container {
-  background-color: var(--bs-body-tertiary-bg);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-header {
-  background-color: var(--bs-body-bg) !important;
-  border-color: var(--bs-border-color) !important;
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-name {
-  color: var(--bs-body-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-header .doc-info .doc-icon:hover {
-  color: var(--bs-icon-hover-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-header .sdoc-more-revision-operations-dropdown .sdoc-more-revision-operations-toggle {
-  background-color: var(--bs-button-bg);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-header .sdoc-more-revision-operations-dropdown .sdoc-more-revision-operation-title-name {
-  color: var(--bs-body-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-container .sdoc-editor-toolbar {
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar,
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group,
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu {
-  border-color: var(--bs-border-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item,
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu .header-toggle:not(.header-toggle-disabled):hover {
-  color: var(--bs-secondary-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item:hover,
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .header-menu .header-toggle:not(.header-toggle-disabled):hover {
-  background-color: var(--bs-icon-hover-bg);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-editor-toolbar .menu-group .menu-group-item .sdoc-menu-with-dropdown-icon div {
-  color: var(--bs-body-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-editor__article {
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-  border-color: var(--bs-border-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-outline-menu {
-  background-color: var(--bs-body-bg);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-outline-menu:not(.disabled):hover {
-  color: var(--bs-button-hover-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-editor-page-content .sdoc-content-wrapper .sdoc-content-right-panel-wrapper .sdoc-content-right-panel {
-  border-color: var(--bs-border-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-dropdown-menu,
-.sdoc-editor-page-wrapper .header-menu .header-popover,
-.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu {
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-}
-
-
-.sdoc-editor-page-wrapper .sdoc-dropdown-menu .sdoc-dropdown-menu-item {
-  color: var(--bs-body-color);
-}
-
-.sdoc-editor-page-wrapper .sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover,
-.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
-  background-color: var(--bs-nav-active-bg);
-}
-
-.sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-divider {
-  border-color: var(--bs-border-color);
-}
-
-.sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
-  background-color: var(--bs-nav-active-bg) !important;
-}
-
-.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover {
-  background-color: var(--bs-body-bg);
-}
-
-.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .sdoc-dropdown-menu-container .sdoc-dropdown-menu-item:hover {
-  background-color: var(--bs-tr-hover-bg);
-  color: var(--bs-body-color);
-}
-
-.sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover .sdoc-selected-table-size-custom:hover {
-  background-color: var(--bs-tr-hover-bg);
-}
-
-.sdoc-sub-dropdown-menu.sdoc-table-template-popover .popover {
-  max-width: fit-content;
-}
-
-.sdoc-sub-dropdown-menu.sdoc-table-template-popover .popover .sdoc-table-template-inner-popover {
-  background-color: var(--bs-body-bg);
-}
-
-.sdoc-search-replace-popover-container {
-  background-color: var(--bs-body-bg) !important;
-  border-color: var(--bs-border-color) !important;
-}
-
-.sdoc-search-replace-popover-container > * {
-  border-color: var(--bs-border-color) !important;
-}
-
-/* markdown & long text editor */
-.longtext-modal-wrapper .longtext-dialog-container {
-  background-color: var(--bs-body-bg);
-}
-
-.longtext-modal-wrapper .longtext-dialog-container .longtext-header-tool-item {
-  color: var(--bs-icon-rgb);
-}
-
-.longtext-modal-wrapper .longtext-dialog-container .longtext-header-tool-item:hover {
-  color: var(--bs-icon-hover-rgb);
-}
-
-.sf-md-viewer-content .sf-slate-editor-container .sf-editor-outline-menu {
-  background-color: var(--bs-body-bg);
-}
-
-.sf-md-viewer-content .sf-slate-editor-container .sf-editor-outline-menu:not(.disabled):hover {
-  color: var(--bs-button-hover-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-toolbar,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar {
-  background-color: var(--bs-toolbar-secondary-bg) !important;
-  border-color: var(--bs-border-quartus-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group {
-  border-color: var(--bs-border-tertiary-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item {
-  background-color: var(--bs-toolbar-secondary-bg);
-  color: var(--bs-quartus-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item:hover,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-menu-group .sf-menu-group-item:hover {
-  background-color: var(--bs-icon-hover-bg);
-}
-
-.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu {
-  color: var(--bs-quartus-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-toggle:not(.header-toogle-disabled):hover,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-toggle:not(.header-toogle-disabled):hover {
-  background-color: var(--bs-icon-hover-bg);
-}
-
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-slate-help-info-control {
-  color: var(--bs-quartus-color);
-}
-
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-slate-help-info-control .icon-use-help:hover {
-  color: var(--bs-icon-hover-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .sf-slate-scroll-container {
-  background-color: var(--bs-body-tertiary-bg);
-}
-
-.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .article,
-.longtext-modal-wrapper .longtext-dialog-container .sf-simple-slate-editor-container .sf-slate-editor-content .article {
-  background-color: var(--bs-body-bg);
-  color: var(--bs-body-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-container .sf-slate-editor-content .article {
-  border-color: var(--bs-border-tertiary-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover {
-  background-color: var(--bs-body-bg);
-  border-color: var(--bs-border-tertiary-color);
-}
-
-.sf-md-viewer-content .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover .sf-dropdown-menu-item:hover,
-.longtext-modal-wrapper .longtext-dialog-container .sf-slate-editor-toolbar .sf-header-menu .sf-header-popover .sf-dropdown-menu-item:hover {
-  background-color: var(--bs-dropdown-secondary-bg);
-}
-
-.sf-slate-editor-container .sf-slate-editor-content .article h1, .sf-slate-editor-container .sf-slate-editor-content .article h2, .sf-slate-editor-container .sf-slate-editor-content .article h3, .sf-slate-editor-container .sf-slate-editor-content .article h4, .sf-slate-editor-container .sf-slate-editor-content .article h5, .sf-slate-editor-container .sf-slate-editor-content .article h6,
-.sf-simple-slate-editor-container .sf-slate-editor-content .article h1, .sf-simple-slate-editor-container .sf-slate-editor-content .article h2, .sf-simple-slate-editor-container .sf-slate-editor-content .article h3, .sf-simple-slate-editor-container .sf-slate-editor-content .article h4, .sf-simple-slate-editor-container .sf-slate-editor-content .article h5, .sf-simple-slate-editor-container .sf-slate-editor-content .article h6 {
-  color: var(--bs-body-color) !important;
 }

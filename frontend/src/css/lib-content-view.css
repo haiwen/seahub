@@ -174,7 +174,7 @@
 
 .tree-node-hight-light {
   border-radius: 4px;
-  background-color: var(--bs-nav-active-color) !important;
+  background-color: var(--bs-nav-active-bg) !important;
 }
 
 .tree-node-hight-light::before {
@@ -318,7 +318,7 @@
 }
 
 .dir-view-path .path-item-refresh:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
 }
 
 .dir-view-path .sf3-font-refresh {

@@ -33,7 +33,7 @@
 }
 
 .detail-header .detail-control:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   border-radius: 3px;
 }
 

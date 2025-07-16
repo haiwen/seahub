@@ -11,7 +11,7 @@
 
 .sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-header .sf-metadata-filed-display-toggle-btn:hover {
   border-radius: 3px;
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   color: var(--bs-icon-secondary-color);
   cursor: pointer;
 }

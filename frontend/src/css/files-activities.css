@@ -15,7 +15,7 @@
 }
 
 .cur-activity-modifiers:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
   cursor: pointer;
 }
 

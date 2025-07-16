@@ -75,6 +75,6 @@
 }
 
 .wiki-page-panel .popover-header>span:last-child:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   cursor: pointer;
 }

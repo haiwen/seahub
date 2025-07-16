@@ -62,7 +62,7 @@
 
 .trash-dialog .modal-body .more:hover {
   color: #000;
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
 }
 
 .trash-dialog .path-container {

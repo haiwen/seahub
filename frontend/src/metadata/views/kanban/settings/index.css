@@ -21,7 +21,7 @@
 
 .sf-metadata-view-kanban-setting-panel .kanban-setting-close-icon:hover {
   border-radius: 3px;
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .sf-metadata-view-kanban-setting-panel .kanban-setting-close-icon:hover .seafile-multicolor-icon {

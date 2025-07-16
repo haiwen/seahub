@@ -18,10 +18,6 @@
   margin-right: 20px;
 }
 
-.cur-view-path .selected-dirents-toolbar .cur-view-path-btn:first-child {
-  margin-left: -10px;
-}
-
 .cur-view-path .selected-dirents-toolbar .dropdown {
   vertical-align: unset;
   height: 24px;

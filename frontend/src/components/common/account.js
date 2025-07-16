@@ -154,9 +154,6 @@ class Account extends Component {
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}></span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo ? '' : 'hide'}`}>
-          <div className="outer-caret up-outer-caret">
-            <div className="inner-caret"></div>
-          </div>
           <div className="sf-popover-con">
             <div className="item o-hidden">
               {this.renderAvatar()}

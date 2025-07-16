@@ -5,7 +5,7 @@
 
 .seafile-btn-view-review .tag:hover {
   cursor: pointer;
-  background-color: var(--bg-icon-hover-bg);
+  background-color: #EFEFEF;
 }
 
 .topbar-btn-container {
@@ -33,7 +33,6 @@
   padding-top: 0;
   border-radius: 3px !important;
   margin-right: 10px;
-  background-color: transparent;
 }
 
 .collab-users-dropdown.dropdown {
@@ -47,21 +46,21 @@
 .sf-md-viewer-topbar .btn:focus,
 .sf-md-viewer-topbar .btn:active {
   box-shadow: none !important;
-  background-color: var(--bs-button-active-bg);
+  background-color: #EFEFEF;
 }
 
 .sf-md-viewer-topbar .btn:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: #EFEFEF;
 }
 
 .btn-secondary:focus,
 .btn-secondary:active,
 .btn-secondary:not(:disabled):not(.disabled):active {
-  background-color: var(--bs-button-active-bg);
+  background-color: #EFEFEF;
 }
 
 .btn-active[data-active=false]#saveButton:hover {
-  background: var(--bs-body-bg);
+  background-color: #fff;
   cursor: default;
 }
 
@@ -76,5 +75,5 @@
 }
 
 .sf-md-viewer-topbar .sf-md-header-more-tool:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: #EFEFEF;
 }

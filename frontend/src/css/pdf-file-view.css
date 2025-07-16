@@ -119,7 +119,7 @@ input#findInput {
 #findPrevious:hover,
 #findNext:hover,
 #findClearQuery:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
 }
 
 #findPrevious::before,

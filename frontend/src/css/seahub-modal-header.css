@@ -24,7 +24,7 @@
 }
 
 .modal .seahub-modal-btn .seahub-modal-btn-inner:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
 }
 
 .modal .seahub-modal-btn .seahub-modal-btn-inner .sf3-font {

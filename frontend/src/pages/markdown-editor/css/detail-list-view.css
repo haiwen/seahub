@@ -17,7 +17,7 @@
 
 .dirent-table-container td {
   font-size: 14px;
-  color: var(--bs-body-color);
+  color: #212529;
   word-break: break-all;
 }
 
@@ -54,7 +54,7 @@
 
 .file-related-files ul li a,
 .list-related-file-table tr td a {
-  color: var(--bs-body-color);
+  color: #212529;
 }
 
 .list-related-file-body {

@@ -21,7 +21,7 @@
 }
 
 .sf-metadata-view-kanban .sf-metadata-kanban-add-board-button:hover {
-  background-color: var(--bs-icon-hover-bg);
+  background-color: var(--bs-hover-bg);
   border-radius: 4px;
 }
 

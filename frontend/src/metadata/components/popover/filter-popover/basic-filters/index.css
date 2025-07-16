@@ -10,7 +10,7 @@
 
 .sf-metadata-basic-filters-select.seafile-customize-select:hover,
 .sf-metadata-basic-filters-select.seafile-customize-select.highlighted:hover {
-  background: var(--bs-icon-hover-bg);
+  background: var(--bs-hover-bg);
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select .selected-option {
