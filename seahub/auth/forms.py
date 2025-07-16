@@ -195,6 +195,17 @@ class PasswordResetForm(forms.Form):
 
         if is_ldap_user(self.users_cache):
             raise forms.ValidationError(_("Can not reset password, please contact LDAP admin."))
+        
+        username = self.users_cache.username
+        has_bind_social_auth = False
+        if SocialAuthUser.objects.filter(username=username).exists():
+            has_bind_social_auth = True
+
+        can_reset_password = True
+        if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
+            can_reset_password = False
+        if not can_reset_password:
+            raise forms.ValidationError(_('Unable to reset password.'))
 
         return email
 

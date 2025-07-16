@@ -63,7 +63,8 @@ class Command(BaseCommand):
             user_language = self.get_user_language(u.email)
             translation.activate(user_language)
 
-            send_html_email_with_dj_template(u.email,
+            contact_email = Profile.objects.get_contact_email_by_user(u.email)
+            send_html_email_with_dj_template(contact_email,
                                              subject=_('Virus detected on %s') % get_site_name(),
                                              dj_template='notifications/notify_virus.html',
                                              context={'repo_name_file_list': repo_name_file_list})
