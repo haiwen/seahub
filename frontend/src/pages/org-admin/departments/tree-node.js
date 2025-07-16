@@ -87,6 +87,7 @@ class DepartmentsV2TreeNode extends Component {
             toggleDelete={this.props.toggleDelete}
             toggleAddLibrary={this.props.toggleAddLibrary}
             toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
+            toggleMoveDepartment={this.props.toggleMoveDepartment}
           />
         );
       });
@@ -156,6 +157,7 @@ class DepartmentsV2TreeNode extends Component {
                 toggleSetQuotaDialog={this.props.toggleSetQuotaDialog}
                 toggleRename={this.props.toggleRename}
                 toggleDelete={this.props.toggleDelete}
+                toggleMoveDepartment={this.props.toggleMoveDepartment}
               />
             </Dropdown>
           }

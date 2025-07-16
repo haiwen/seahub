@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DropdownItem, DropdownMenu } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 
-function DepartmentNodeMenu({ node, toggleDelete, toggleRename, toggleAddMembers, toggleAddDepartment, toggleAddLibrary, toggleSetQuotaDialog }) {
+function DepartmentNodeMenu({ node, toggleDelete, toggleRename, toggleAddMembers, toggleAddDepartment, toggleAddLibrary, toggleSetQuotaDialog, toggleMoveDepartment }) {
   return (
     <DropdownMenu
       modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
@@ -24,6 +24,9 @@ function DepartmentNodeMenu({ node, toggleDelete, toggleRename, toggleAddMembers
       <DropdownItem key={`${node.id}-delete`} onClick={() => toggleDelete(node)}>
         {gettext('Delete')}
       </DropdownItem>
+      <DropdownItem key={`${node.id}-move`} onClick={() => toggleMoveDepartment(node)}>
+        {gettext('Move department')}
+      </DropdownItem>
       <DropdownItem key={`${node.id}-set-quota`} onClick={() => toggleSetQuotaDialog(node)}>
         {gettext('Set quota')}
       </DropdownItem>
@@ -42,6 +45,7 @@ DepartmentNodeMenu.propTypes = {
   toggleAddDepartment: PropTypes.func.isRequired,
   toggleAddLibrary: PropTypes.func.isRequired,
   toggleSetQuotaDialog: PropTypes.func.isRequired,
+  toggleMoveDepartment: PropTypes.func.isRequired
 };
 
 export default DepartmentNodeMenu;
