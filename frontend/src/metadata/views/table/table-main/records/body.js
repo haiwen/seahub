@@ -28,7 +28,7 @@ class RecordsBody extends Component {
       selectedPosition: null,
       isScrollingRightScrollbar: false,
       showExpandedPropsDialog: false,
-      expandedRecord: null,
+      expandedRecordId: null,
     };
     this.resultContentRef = null;
     this.resultRef = null;
@@ -449,11 +449,9 @@ class RecordsBody extends Component {
   };
 
   toggleExpandedPropsDialog = (recordId = null) => {
-    const { recordGetterById } = this.props;
-    const record = recordId ? recordGetterById(recordId) : this.state.expandedRecord;
     this.setState({
       showExpandedPropsDialog: !this.state.showExpandedPropsDialog,
-      expandedRecord: record
+      expandedRecordId: recordId
     });
   };
 
@@ -579,7 +577,7 @@ class RecordsBody extends Component {
           </div>
           {this.state.showExpandedPropsDialog && (
             <ExpandedPropertiesDialog
-              record={this.state.expandedRecord}
+              recordId={this.state.expandedRecordId}
               columns={this.props.columns}
               toggle={this.toggleExpandedPropsDialog}
             />
