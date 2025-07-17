@@ -52,10 +52,6 @@ class HistoryVersion extends React.Component {
     this.props.onRestore(historyVersion);
   };
 
-  onItemDownload = () => {
-    // nothing todo
-  };
-
   onItemCopy = () => {
     const { historyVersion } = this.props;
     historyVersion.ctime_format = dayjs(historyVersion.ctime).format('YYYY-MM-DD HH:mm');
@@ -121,58 +117,56 @@ class HistoryVersion extends React.Component {
           </div>
         </div>
         <div className="history-operation">
-          {this.isMobile
-            ? (
-              <>
-                <a
-                  className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                  aria-expanded={this.state.isMenuShow}
-                  onClick={this.onToggleClick}
-                />
-                <Modal
-                  className='sdoc-mobile-history-options-modal'
-                  isOpen={this.state.isMenuShow}
-                  toggle={this.onToggleClick}
-                >
-                  <ModalBody className='sdoc-operation-mobile-modal-body'>
+          {this.isMobile ?
+            <>
+              <a
+                className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+                aria-expanded={this.state.isMenuShow}
+                onClick={this.onToggleClick}
+              />
+              <Modal
+                className='sdoc-mobile-history-options-modal'
+                isOpen={this.state.isMenuShow}
+                toggle={this.onToggleClick}
+              >
+                <ModalBody className='sdoc-operation-mobile-modal-body'>
+                  <div className='option-item'>
+                    <i className='mr-3 sf3-font sf3-font-download1'></i>
+                    <a href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</a>
+                  </div>
+                  {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && (
                     <div className='option-item'>
-                      <i className='mr-3 sf3-font sf3-font-download1'></i>
-                      <a href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</a>
+                      <i className='mr-3 sf3-font sf3-font-copy1'></i>
+                      <span href={url} onClick={this.onItemCopy}>{gettext('Copy')}</span>
                     </div>
-                    {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && (
-                      <div className='option-item'>
-                        <i className='mr-3 sf3-font sf3-font-copy1'></i>
-                        <span href={url} onClick={this.onItemCopy}>{gettext('Copy')}</span>
-                      </div>
-                    )}
-                    <div className='option-item' onClick={this.toggleRename}>
-                      <i className='mr-3 sf3-font sf3-font-rename'></i>
-                      <span>{gettext('Rename')}</span>
-                    </div>
-                  </ModalBody>
-                </Modal>
-              </>
-            )
-            : (
-              <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
-                <DropdownToggle
-                  tag='a'
-                  className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isMenuShow}
-                  title={gettext('More operations')}
-                  aria-label={gettext('More operations')}
-                />
-                <DropdownMenu>
-                  {(path[0] + path[1] + path[2] !== 0) && <DropdownItem onClick={this.onRestore}>{gettext('Restore')}</DropdownItem>}
-                  <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
-                  {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
-                  <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            )}
+                  )}
+                  <div className='option-item' onClick={this.toggleRename}>
+                    <i className='mr-3 sf3-font sf3-font-rename'></i>
+                    <span>{gettext('Rename')}</span>
+                  </div>
+                </ModalBody>
+              </Modal>
+            </>
+            :
+            <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
+              <DropdownToggle
+                tag='a'
+                className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isMenuShow}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+              />
+              <DropdownMenu>
+                {(path[0] + path[1] + path[2] !== 0) && <DropdownItem onClick={this.onRestore}>{gettext('Restore')}</DropdownItem>}
+                <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>
+                {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && <DropdownItem onClick={this.onItemCopy}>{gettext('Copy')}</DropdownItem>}
+                <DropdownItem onClick={this.toggleRename}>{gettext('Rename')}</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          }
         </div>
       </li>
     );

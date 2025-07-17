@@ -45,6 +45,7 @@
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last,
@@ -66,9 +67,9 @@
   background-color: #EFEFEF;
 }
 
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last .fas,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next .fas {
-  color: #000;
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last .sf3-font,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next .sf3-font {
+  color: #212529;
   opacity: .5;
 }
 
@@ -79,14 +80,9 @@
   background-color: #F5F5F5;
 }
 
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover .fas,
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .fas {
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-last:hover .sf3-font,
+.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-next:hover .sf3-font {
   opacity: .75;
-}
-
-.sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch .sf3-font-history:hover {
-  cursor: pointer;
-  color: #000;
 }
 
 .sdoc-file-history .sdoc-file-history-header .sdoc-file-changes-switch .sf3-font-history {
@@ -171,7 +167,7 @@
 }
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range .sdoc-side-panel-close {
-  opacity: 0.7;
+  color: #666;
   cursor: pointer;
   width: 24px;
   align-items: center;
@@ -181,8 +177,6 @@
 }
 
 .sdoc-file-history .sdoc-file-history-panel .sdoc-file-history-select-range .sdoc-side-panel-close:hover {
-  opacity: 1;
-  cursor: pointer;
   background-color: #EFEFEF;
 }
 
@@ -270,11 +264,11 @@
   cursor: pointer;
 }
 
-.sdoc-file-history-versions .history-list-item .history-operation a.fas {
+.sdoc-file-history-versions .history-list-item .history-operation a.sf3-font {
   color: #666;
 }
 
-.sdoc-file-history-versions .history-list-item .history-operation:hover a.fas {
+.sdoc-file-history-versions .history-list-item .history-operation:hover a.sf3-font {
   color: #212529;
 }
 

@@ -251,7 +251,9 @@ class SidePanel extends Component {
       const month = momentDate.format('YYYY-MM');
       const day = momentDate.format('YYYY-MM-DD');
       const monthIndex = historyGroups.findIndex(item => item.month === month);
+      if (!historyGroups[monthIndex]) return;
       const dayIndex = historyGroups[monthIndex].children.findIndex(item => item.day === day);
+      if (!historyGroups[monthIndex].children[dayIndex]) return;
       const dailyIndex = historyGroups[monthIndex].children[dayIndex].children.findIndex(item => item.date === date);
       const path = [monthIndex, dayIndex, dailyIndex];
       lastVersion = getLastVersion(path, nextShowChanges, this.state.historyGroups);
