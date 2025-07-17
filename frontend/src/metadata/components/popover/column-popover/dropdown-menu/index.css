@@ -6,17 +6,9 @@
   height: 2rem;
 }
 
-.column-type-item.active {
-  background: #20a0ff;
-}
-
-.column-type-item.active .sf-metadata-icon {
-  fill: #fff;
-}
-
-.column-type-item:not(.active):hover {
+.column-type-item:hover {
   color: var(--bs-body-color);
-  background-color: var(--bs-dropdown-link-bg);
+  background-color: var(--bs-dropdown-tertiary-bg);
 }
 
 .column-type-item:hover .sf3-font-down {
