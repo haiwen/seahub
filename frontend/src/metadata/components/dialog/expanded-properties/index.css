@@ -1,3 +1,33 @@
-.form-control.disabled {
-  background-color: var(--bs-bg-color);
+.expanded-properties-dialog-container {
+  width: 800px;
+  max-width: 800px;
+  height: calc(100vh - 56px);
+  max-height: calc(100vh - 56px);
+  overflow: hidden;
+}
+
+.expanded-properties-content-container {
+  height: calc(100% - 57px);
+  padding: 30px;
+  overflow: auto;
+}
+
+.expanded-properties-content-container .icon-name-wrapper {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  color: #666;
+}
+
+.expanded-properties-content-container .creator-container {
+  display: flex;
+  align-items: center;
+}
+
+.expanded-properties-content-container .form-control {
+  height: 38px;
+}
+
+.expanded-properties-content-container .form-control.disabled {
+  background-color: #f8f9fa;
 }

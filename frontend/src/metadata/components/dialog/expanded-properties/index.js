@@ -3,7 +3,6 @@ import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { getFileNameFromRecord } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
 import { CellType, COLUMNS_ICON_CONFIG } from '../../../constants';
-import FileName from './filename';
 import Text from './text';
 import LongText from './long-text';
 import CTime from './ctime';
@@ -15,14 +14,13 @@ import SingleSelect from './single-select';
 import MultipleSelect from './multiple-select';
 import Checkbox from './checkbox';
 import Rate from './rate';
-import Link from './link';
 import Tags from './tags';
 import Geolocation from './geolocation';
 
 import './index.css';
 
 const COLUMN_TYPE_ITEM_MAP = {
-  [CellType.FILE_NAME]: FileName,
+  [CellType.FILE_NAME]: Text,
   [CellType.TEXT]: Text,
   [CellType.LONG_TEXT]: LongText,
   [CellType.CTIME]: CTime,
@@ -36,7 +34,6 @@ const COLUMN_TYPE_ITEM_MAP = {
   [CellType.MULTIPLE_SELECT]: MultipleSelect,
   [CellType.CHECKBOX]: Checkbox,
   [CellType.RATE]: Rate,
-  [CellType.LINK]: Link,
   [CellType.TAGS]: Tags,
   [CellType.GEOLOCATION]: Geolocation,
 };
@@ -44,16 +41,16 @@ const COLUMN_TYPE_ITEM_MAP = {
 const ExpandedPropertiesDialog = ({ record, columns, toggle }) => {
   const filename = useMemo(() => getFileNameFromRecord(record), [record]);
   return (
-    <Modal isOpen={true} toggle={toggle}>
+    <Modal isOpen={true} toggle={toggle} className="expanded-properties-dialog-container" contentClassName="h-100">
       <ModalHeader>{filename}</ModalHeader>
-      <ModalBody>
-        <ul>
+      <ModalBody className="expanded-properties-content-container">
+        <>
           {columns.map((column, idx) => {
-            const { key, name, type } = column;
+            const { name, type } = column;
             const Component = COLUMN_TYPE_ITEM_MAP[type];
             return (
-              <li key={idx} className="d-flex w-100 mb-2">
-                <div className="col-3 h-6 d-flex align-items-center">
+              <div key={idx} className="d-flex w-100 mb-4">
+                <div className="col-3 icon-name-wrapper">
                   <span className="d-flex text-align-center">
                     <Icon symbol={COLUMNS_ICON_CONFIG[type]} className="mr-2" />
                   </span>
@@ -62,10 +59,10 @@ const ExpandedPropertiesDialog = ({ record, columns, toggle }) => {
                 <div className="col-9">
                   {Component && <Component record={record} column={column} />}
                 </div>
-              </li>
+              </div>
             );
           })}
-        </ul>
+        </>
       </ModalBody>
     </Modal>
   );
