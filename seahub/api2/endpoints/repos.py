@@ -401,12 +401,17 @@ class RepoView(APIView):
         if monitored_repos:
             monitored = True
 
+        owner_name = email2nickname(repo_owner)
+        if '@seafile_group' in repo_owner:
+            group_id = get_group_id_by_repo_owner(repo_owner)
+            owner_name = group_id_to_name(group_id)
+
         result = {
             "repo_id": repo.id,
             "repo_name": repo.name,
             "repo_type": repo.repo_type,
             "owner_email": repo_owner,
-            "owner_name": email2nickname(repo_owner),
+            "owner_name": owner_name,
             "owner_contact_email": email2contact_email(repo_owner),
             "owner_avatar": url,
 
