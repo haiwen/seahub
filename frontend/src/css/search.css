@@ -156,12 +156,12 @@
   background-color: var(--bs-bg-secondary-color);
 }
 
-.search-result-container .search-result-container-sidepanel {
+.search-result-container .search-result-container-side-panel {
   max-width: 300px;
   max-height: 400px;
 }
 
-.search-result-container .search-result-container-sidepanel .searched-item-details {
+.search-result-container .search-result-container-side-panel .searched-item-details {
   height: 100%;
   overflow: auto;
 }
