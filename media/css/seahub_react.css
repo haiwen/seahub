@@ -942,11 +942,9 @@ textarea::placeholder {
   color: #fff;
 }
 
-.side-nav-con .fas,
 .side-nav-con .seafile-multicolor-icon,
 .side-nav-con [class^="sf2-icon-"],
-.side-nav-con [class^="sf3-font-"],
-.side-nav-con [class^="fas"] {
+.side-nav-con [class^="sf3-font-"] {
   font-size: 1.25rem;
   line-height: 1;
   color: #999;
