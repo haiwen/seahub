@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Input } from 'reactstrap';
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
@@ -142,7 +141,7 @@ const COLUMNS = [
   },
 ];
 
-const CustomDropdownMenu = ({ column, modifiers, onSelect }) => {
+const CustomDropdownMenu = ({ modifiers, onSelect }) => {
   const [searchValue, setSearchValue] = useState('');
   const [isCustomPropertiesOpen, setCustomPropertiesOpen] = useState(false);
   const inputRef = useRef(null);
@@ -194,7 +193,7 @@ const CustomDropdownMenu = ({ column, modifiers, onSelect }) => {
           {predefinedColumns.map(item => (
             <DropdownItem
               key={item.key}
-              className={classnames('column-type-item text-truncate', { 'active': item.key === column?.key })}
+              className="column-type-item text-truncate"
               onMouseEnter={() => setCustomPropertiesOpen(false)}
               onClick={() => handleSelect(item)}
             >
@@ -225,7 +224,7 @@ const CustomDropdownMenu = ({ column, modifiers, onSelect }) => {
                   {basicsColumns.map((item, index) => (
                     <DropdownItem
                       key={index}
-                      className={classnames('column-type-item text-truncate', { 'active': item.key === column?.key })}
+                      className="column-type-item text-truncate"
                       onClick={() => handleSelect(item)}
                     >
                       <Icon symbol={item.icon} className="sf-metadata-icon" />
