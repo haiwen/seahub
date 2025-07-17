@@ -745,11 +745,11 @@ class Search extends Component {
     this.setState({ highlightIndex: index });
   }, 200);
 
-  deleteItem = (item) => {
+  deleteVisitedResult = (item) => {
     const { visitedItems } = this.state;
-    const update = visitedItems.filter(i => i.path !== item.path || i.repo_id !== item.repo_id);
-    this.setState({ visitedItems: update });
-    localStorage.setItem(this.storeKey, JSON.stringify(update));
+    const newVisitedItems = visitedItems.filter(i => i.path !== item.path || i.repo_id !== item.repo_id);
+    this.setState({ visitedItems: newVisitedItems });
+    localStorage.setItem(this.storeKey, JSON.stringify(newVisitedItems));
   };
 
   renderResults = (resultItems, isVisited) => {
@@ -757,11 +757,11 @@ class Search extends Component {
 
     const results = (
       <>
-        {isVisited ? (
+        {isVisited ?
           <h4 className="visited-search-results-title">{gettext('Search results visited recently')}</h4>
-        ) : (
+          :
           <h4 className="search-results-title">{gettext('Files')}</h4>
-        )}
+        }
         <ul className="search-result-list" ref={this.searchResultListRef}>
           {resultItems.map((item, index) => {
             const isHighlight = index === highlightIndex;
@@ -776,7 +776,7 @@ class Search extends Component {
                 onHighlightIndex={this.debounceHighlight}
                 timer={this.timer}
                 onSetTimer={(timer) => {this.timer = timer;}}
-                onDeleteItem={this.deleteItem}
+                onDeleteItem={isVisited ? this.deleteVisitedResult : null}
               />
             );
           })}
@@ -787,9 +787,9 @@ class Search extends Component {
     return (
       <>
         <MediaQuery query="(min-width: 768px)">
-          <div className="search-result-sidepanel-wrapper d-flex">
+          <div className="search-result-side-panel-wrapper d-flex">
             <div className="search-result-list-container" ref={this.searchResultListContainerRef}>{results}</div>
-            <div className="search-result-container-sidepanel d-flex flex-column flex-grow-1">
+            <div className="search-result-container-side-panel d-flex flex-column flex-grow-1">
               {this.renderDetails(resultItems)}
             </div>
           </div>

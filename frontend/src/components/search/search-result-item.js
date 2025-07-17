@@ -41,13 +41,11 @@ class SearchResultItem extends React.Component {
 
   deleteItem = (e) => {
     e.stopPropagation();
-    if (this.props.onDeleteItem) {
-      this.props.onDeleteItem(this.props.item);
-    }
+    this.props.onDeleteItem(this.props.item);
   };
 
   render() {
-    const { item, setRef = (() => {}) } = this.props;
+    const { item, onDeleteItem, isHighlight, setRef = (() => {}) } = this.props;
     let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl();
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name);
     let showName = item.repo_name + '/' + item.link_content;
@@ -59,7 +57,7 @@ class SearchResultItem extends React.Component {
 
     return (
       <li
-        className={classnames('search-result-item', { 'search-result-item-highlight': this.props.isHighlight })}
+        className={classnames('search-result-item', { 'search-result-item-highlight': isHighlight })}
         onClick={this.onClickHandler}
         ref={ref => setRef(ref)}
         onMouseEnter={this.onMouseEnter}
@@ -70,7 +68,7 @@ class SearchResultItem extends React.Component {
           <div className="item-link ellipsis">{showName}</div>
           <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content }}></div>
         </div>
-        {this.props.isHighlight && (
+        {isHighlight && onDeleteItem && (
           <button
             type="button"
             className="search-icon-right sf3-font sf3-font-x-01"
