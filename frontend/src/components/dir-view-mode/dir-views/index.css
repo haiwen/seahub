@@ -24,6 +24,6 @@
 .metadata-views-dropdown-menu .dropdown-item:hover .metadata-view-icon,
 .metadata-views-dropdown-menu .dropdown-item:focus .metadata-view-icon,
 .metadata-views-dropdown-menu .dropdown-item:focus .sf3-font {
-  color: var(--bs-dropdown-link-hover-color);
-  fill: var(--bs-dropdown-link-hover-color);
+  color: #fff;
+  fill: #fff;
 }
