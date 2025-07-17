@@ -9,7 +9,6 @@
   font-weight: 700;
   line-height: 1;
   color: var(--bs-icon-secondary-color);
-  text-shadow: 0 1px 0 var(--bs-body-bg);
 }
 
 .modal .seahub-modal-btn.close:not(:disabled):not(.disabled):hover {
