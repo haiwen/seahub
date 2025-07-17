@@ -1295,6 +1295,7 @@ a.table-sort-op:hover {
 
 .dropdown-menu {
   min-width: 200px;
+  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-item {
