@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
-import { getFileNameFromRecord } from '../../../utils/cell';
+import { getCellValueByColumn, getFileNameFromRecord, getRecordIdFromRecord, isCellValueChanged } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
-import { CellType, COLUMNS_ICON_CONFIG } from '../../../constants';
+import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEYS } from '../../../constants';
 import Text from './text';
 import LongText from './long-text';
 import CTime from './ctime';
@@ -18,6 +18,7 @@ import Tags from './tags';
 import Geolocation from './geolocation';
 
 import './index.css';
+import { useMetadataView } from '../../../hooks/metadata-view';
 
 const COLUMN_TYPE_ITEM_MAP = {
   [CellType.FILE_NAME]: Text,
@@ -38,8 +39,25 @@ const COLUMN_TYPE_ITEM_MAP = {
   [CellType.GEOLOCATION]: Geolocation,
 };
 
-const ExpandedPropertiesDialog = ({ record, columns, toggle }) => {
+const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
+  const { metadata, modifyRecord } = useMetadataView();
+  const record = useMemo(() => metadata.id_row_map[recordId], [metadata, recordId]);
   const filename = useMemo(() => getFileNameFromRecord(record), [record]);
+
+  const onCommit = useCallback((column, value) => {
+    const rowId = recordId;
+    const columnKey = column.key;
+    const columnName = column.name;
+    const isPrivateKey = PRIVATE_COLUMN_KEYS.includes(columnKey);
+    const updates = isPrivateKey ? { [columnKey]: value } : { [columnName]: value };
+    const originalOldCellValue = getCellValueByColumn(record, column);
+    if (!isCellValueChanged(originalOldCellValue, value, column.type)) return;
+    const oldRowData = isPrivateKey ? { [columnKey]: originalOldCellValue } : { [columnName]: originalOldCellValue };
+    const originalOldRowData = { [columnKey]: originalOldCellValue };
+    const originalUpdates = { [columnKey]: value };
+    modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
+  }, [recordId, record, modifyRecord]);
+
   return (
     <Modal isOpen={true} toggle={toggle} className="expanded-properties-dialog-container" contentClassName="h-100">
       <ModalHeader>{filename}</ModalHeader>
@@ -57,7 +75,7 @@ const ExpandedPropertiesDialog = ({ record, columns, toggle }) => {
                   <span className="text-center">{name}</span>
                 </div>
                 <div className="col-9">
-                  {Component && <Component record={record} column={column} />}
+                  {Component && <Component record={record} column={column} onCommit={onCommit} />}
                 </div>
               </div>
             );

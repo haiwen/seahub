@@ -31,3 +31,30 @@
 .expanded-properties-content-container .form-control.disabled {
   background-color: #f8f9fa;
 }
+
+.expanded-properties-content-container .long-text-container {
+  border: 1px solid #eee;
+  cursor: pointer;
+}
+
+.expanded-properties-content-container .long-text-container .sf-metadata-long-text-preview {
+  width: 100%;
+  position: relative;
+  border: none;
+  box-shadow: none;
+}
+
+.expanded-properties-content-container .long-text-container .sf-metadata-long-text-preview .sf-slate-viewer-scroll-container .sf-slate-article-content {
+  width: 100%;
+}
+
+.expanded-properties-content-container .long-text-container .sf-long-text-inline-editor-container:not(.preview) {
+  border-color: #1991eb;
+  box-shadow: 0 0 0 2px #467fcf40;
+  cursor: text;
+}
+
+.expanded-properties-content-container .long-text-container.editing .sf-long-text-inline-editor-container .sf-slate-editor-content {
+  max-height: 300px;
+  overflow: auto;
+}
