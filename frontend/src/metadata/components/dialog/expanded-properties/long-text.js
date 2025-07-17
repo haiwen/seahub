@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LongText = () => {
+const LongText = ({ record, column }) => {
   return (
     <div>LongText</div>
   );
