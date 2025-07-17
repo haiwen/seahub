@@ -982,12 +982,10 @@ def view_lib_file(request, repo_id, path):
 
         if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
 
-            can_edit = False
             if parse_repo_perm(permission).can_edit_on_web and \
                     ((not is_locked) or (is_locked and locked_by_online_office)):
                 can_edit = True
 
-            can_edit = False
             wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
                                                                     repo_id,
                                                                     path,
