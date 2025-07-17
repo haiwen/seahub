@@ -17,7 +17,7 @@ import EmptyTip from '../../empty-tip';
 import '../../../css/toolbar.css';
 import '../../../css/search.css';
 import './index.css';
-import SearchTrash from "./trash-search/search_trash";
+import SearchTrash from './trash-search/search_trash';
 
 class TrashDialog extends React.Component {
 
@@ -37,6 +37,7 @@ class TrashDialog extends React.Component {
       hasNextPage: false,
       searchKeyword: '',
       filteredItems: [],
+      canSearch: true,
     };
   }
 
@@ -46,7 +47,6 @@ class TrashDialog extends React.Component {
 
   handleSearchResults = (result) => {
     if (result?.reset) {
-      // 回退显示全部内容
       this.getFolderTrash(1);
       return;
     }
@@ -61,7 +61,7 @@ class TrashDialog extends React.Component {
 
   getFolderTrash = (page) => {
     repoTrashAPI.getRepoFolderTrash(this.props.repoID, page, this.state.perPage).then((res) => {
-      const { items, total_count } = res.data;
+      const { items, total_count, can_search } = res.data;
       if (!page) {
         page = 1;
       }
@@ -70,7 +70,8 @@ class TrashDialog extends React.Component {
         hasNextPage: total_count - page * this.state.perPage > 0,
         isLoading: false,
         items: items,
-        more: false
+        more: false,
+        canSearch: can_search
       });
     });
   };
@@ -86,40 +87,24 @@ class TrashDialog extends React.Component {
     }
   };
 
-
-  handleSearchChange = (e) => {
-    this.setState({ searchQuery: e.target.value });
-  };
-
-  handleSearchSubmit = (e) => {
-    e.preventDefault();
-    const { searchQuery } = this.state;
-    if (searchQuery.trim()) {
-      this.searchTrash(searchQuery);
-    } else {
-      // 如果搜索词为空，恢复显示所有项目
-      this.getFolderTrash();
-    }
-  };
-
   searchTrash = (query) => {
-  this.setState({ isSearching: true });
+    this.setState({ isSearching: true });
 
-  repoTrashAPI.searchRepoFolderTrash(this.props.repoID, query)
-    .then((res) => {
-      this.setState({
-        isSearching: false,
-        items: res.data,
-        currentPage: 1,
-        hasNextPage: false
+    repoTrashAPI.searchRepoFolderTrash(this.props.repoID, query)
+      .then((res) => {
+        this.setState({
+          isSearching: false,
+          items: res.data,
+          currentPage: 1,
+          hasNextPage: false
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isSearching: false,
+          errorMsg: gettext('Search failed')
+        });
       });
-    })
-    .catch((error) => {
-      this.setState({
-        isSearching: false,
-        errorMsg: gettext('Search failed')
-      });
-    });
   };
 
   getPreviousPage = () => {
@@ -173,7 +158,8 @@ class TrashDialog extends React.Component {
     seafileAPI.listCommitDir(this.props.repoID, commitID, `${baseDir.substr(0, baseDir.length - 1)}${folderPath}`).then((res) => {
       this.setState({
         isLoading: false,
-        folderItems: res.data.dirent_list
+        folderItems: res.data.dirent_list,
+        canSearch: false,
       });
     }).catch((error) => {
       if (error.response) {
@@ -236,7 +222,7 @@ class TrashDialog extends React.Component {
 
   render() {
     const { showTrashDialog, toggleTrashDialog, repoID } = this.props;
-    const { isCleanTrashDialogOpen, showFolder, isLoading, items, perPage, currentPage, hasNextPage } = this.state;
+    const { isCleanTrashDialogOpen, showFolder, isLoading, items, perPage, currentPage, hasNextPage, canSearch } = this.state;
     const isRepoAdmin = this.props.currentRepoInfo.owner_email === username || this.props.currentRepoInfo.is_admin;
     const repoFolderName = this.props.currentRepoInfo.repo_name;
     const oldTrashUrl = siteRoot + 'repo/' + this.props.repoID + '/trash/';
@@ -271,7 +257,7 @@ class TrashDialog extends React.Component {
           </ModalHeader>
           <ModalBody>
             {isLoading && <Loading />}
-            {!isLoading &&
+            {!isLoading && canSearch &&
               <div className="search-container-trash">
                 <SearchTrash
                   repoID={this.props.repoID}

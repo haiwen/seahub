@@ -8,11 +8,9 @@ import toaster from '../../../toast';
 import Loading from '../../../loading';
 import IconBtn from '../../../icon-button';
 import './search_trash.css';
-import {
-  SEARCH_FILTER_BY_DATE_TYPE_KEY, SEARCH_FILTERS_SHOW_KEY,
-} from '../../../../constants';
+import { SEARCH_FILTERS_SHOW_KEY } from '../../../../constants';
 import { repoTrashAPI } from '../../../../utils/repo-trash-api';
-import TrashFilters from "./search-filters";
+import TrashFilters from './search-filters';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -32,7 +30,6 @@ class SearchTrash extends Component {
       isFilterControllerActive: false,
       filters: {
         date: {
-          // type: SEARCH_FILTER_BY_DATE_TYPE_KEY.CREATE_TIME,
           value: '',
           from: null,
           to: null,
@@ -46,15 +43,6 @@ class SearchTrash extends Component {
     this.debouncedSearch = debounce(this.searchTrash, 300);
   }
 
-  componentDidMount() {
-    this.searchTrash('');
-  }
-
-  componentWillUnmount() {
-    if (this.source) {
-      this.source.cancel('Component unmounted');
-    }
-  }
 
   handleError = (e) => {
     if (!axios.isCancel(e)) {
@@ -87,7 +75,7 @@ class SearchTrash extends Component {
     const { repoID } = this.props;
     const page = 1;
     const per_page = PER_PAGE;
-    const { suffixes, date, creator_list} = this.state.filters;
+    const { suffixes, date, creator_list } = this.state.filters;
     const creators = creator_list.map(user => user.email).join(',');
 
     repoTrashAPI.searchRepoFolderTrash(repoID, page, per_page, query.trim(), { suffixes, date, creators })
@@ -104,7 +92,6 @@ class SearchTrash extends Component {
           isLoading: false
         });
       }).catch(error => {
-        console.error('Search error:', error);
         this.setState({ isLoading: false });
         toaster.danger(gettext('Search failed. Please try again.'));
       });
@@ -125,8 +112,8 @@ class SearchTrash extends Component {
 
 
   onClearSearch = () => {
-  this.setState({ value: '' });
-  this.props.onSearchResults({ reset: true });
+    this.setState({ value: '' });
+    this.props.onSearchResults({ reset: true });
   };
 
   render() {

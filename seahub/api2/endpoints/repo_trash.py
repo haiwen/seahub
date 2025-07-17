@@ -13,6 +13,7 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
+from seahub.base.models import FileTrash
 
 from seahub.signals import clean_up_repo_trash
 from seahub.utils import get_trash_records, is_org_context
@@ -348,7 +349,6 @@ class RepoTrash2(APIView):
         Permission checking:
         1. all authenticated user can perform this action.
         """
-        keywords = time_from = time_to = op_users = suffixes = None
 
         path = '/'
         # resource check
@@ -363,8 +363,9 @@ class RepoTrash2(APIView):
         except ValueError:
             current_page = 1
             per_page = 100
+
         start = (current_page - 1) * per_page
-        limit = per_page
+        end = start + per_page
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         except SearpcError as e:
@@ -380,13 +381,32 @@ class RepoTrash2(APIView):
         if check_folder_permission(request, repo_id, path) is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit,keywords, time_from, time_to, op_users, suffixes)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        # keep_days
+        # -1 all history
+        # 0 no history
+        # n n-days history
+        keep_days = seafile_api.get_repo_history_limit(repo_id)
+        
+        if keep_days == 0:
+            result = {
+                'items': [],
+                'total_count': 0,
+                'can_search': False
+            }
+            return Response(result)
+        
+        # pre-filter by repo history
+        
+        elif keep_days == -1:
+            qset = FileTrash.objects.by_repo_id(repo_id)
+            
+        else:
+            qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
+        
+        deleted_entries = qset[start:end]
+        total_count = qset.count()
+            
         
         items = []
         if len(deleted_entries) >= 1:
@@ -396,7 +416,8 @@ class RepoTrash2(APIView):
 
         result = {
             'items': items,
-            'total_count': total_count
+            'total_count': total_count,
+            'can_search': True
         }
 
         return Response(result)
@@ -441,9 +462,7 @@ class SearchRepoTrash2(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         q = request.GET.get('q', None)
-        if not q:
-            q = None
-
+        
         op_users = request.GET.get('op_user', '').split(',') if request.GET.get('op_user') else None
         op_users = [u for u in op_users if u] if op_users else None
 
@@ -465,12 +484,13 @@ class SearchRepoTrash2(APIView):
 
         try:
             current_page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '100'))
+            per_page = int(request.GET.get('per_page', '20'))
         except ValueError:
             current_page = 1
-            per_page = 100
+            per_page = 20
+        
         start = (current_page - 1) * per_page
-        limit = per_page
+        end = start + per_page
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         except SearpcError as e:
@@ -487,12 +507,33 @@ class SearchRepoTrash2(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit, q, time_from, time_to, op_users,suffixes)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        keep_days = seafile_api.get_repo_history_limit(repo_id)
+
+        if keep_days == 0:
+            result = {
+                'items': [],
+                'total_count': 0
+            }
+            return Response(result)
+        
+        # pre-filter by repo history
+        elif keep_days == -1:
+            qset = FileTrash.objects.by_repo_id(repo_id)
+        
+        else:
+            qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
+        
+        if q:
+            qset = qset.by_keywords(q)
+        if op_users:
+            qset = qset.by_users(op_users)
+        if time_from and time_to:
+            qset = qset.by_time_range(time_from, time_to)
+        if suffixes:
+            qset = qset.by_suffixes(suffixes)
+            
+        deleted_entries = qset[start:end]
+        total_count = qset.count()
         
         items = []
         if len(deleted_entries) >= 1:
