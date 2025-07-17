@@ -8,6 +8,7 @@ import { getCellValueByColumn, getFileNameFromRecord } from '../../utils/cell';
 import { gettext } from '../../../utils/constants';
 import { PRIVATE_COLUMN_KEY, IMAGE_PRIVATE_COLUMN_KEYS } from '../../constants';
 import { useMetadataDetails } from '../../hooks';
+import { useMetadataStatus } from '../../../hooks';
 import { checkIsDir } from '../../utils/row';
 import { FOLDER_NOT_DISPLAY_COLUMN_KEYS } from './constants';
 import Location from './location';
@@ -15,9 +16,10 @@ import Location from './location';
 import './index.css';
 
 const MetadataDetails = ({ readOnly, tagsData }) => {
+  const { globalHiddenColumns } = useMetadataStatus();
   const { canModifyRecord, record, columns, onChange, modifyColumnData, updateFileTags } = useMetadataDetails();
 
-  const displayColumns = useMemo(() => columns.filter(c => c.shown), [columns]);
+  const displayColumns = useMemo(() => columns.filter(c => c.shown && !globalHiddenColumns.includes(c.key)), [columns, globalHiddenColumns]);
 
   if (!record || !record._id) return null;
 
