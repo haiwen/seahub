@@ -183,7 +183,7 @@ const UserLayout = ({ email, children, ...commonProps }) => {
     <>
       <MainPanelTopbar {...commonProps} />
       <UserNav currentItem={curTab} email={email} userName={username} />
-      {children}
+      <div className="w-100 h-100 d-flex overflow-auto">{children}</div>
     </>
   );
 };

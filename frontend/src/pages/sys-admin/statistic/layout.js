@@ -11,7 +11,7 @@ const StatisticLayout = ({ children, ...commonProps }) => {
     <>
       <MainPanelTopbar {...commonProps} />
       <StatisticNav currentItem={currentItem} />
-      {children}
+      <div className="w-100 h-100 d-flex overflow-auto">{children}</div>
     </>
   );
 };
