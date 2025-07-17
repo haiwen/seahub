@@ -48,7 +48,7 @@ const Devices = ({ children, ...commonProps }) => {
         <MainPanelTopbar { ...commonProps } />
       )}
       <DevicesNav currentItem={path} />
-      {children}
+      <div className="w-100 h-100 d-flex overflow-auto justify-content-center">{children}</div>
     </>
   );
 };
