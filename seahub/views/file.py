@@ -135,6 +135,9 @@ from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
 from seahub.settings import ROLES_DEFAULT_OFFCICE_SUITE
 
+from seahub.weboffice.settings import ENABLE_WPS_WEBOFFICE, WPS_WEBOFFICE_FILE_EXTENSION
+from seahub.weboffice.utils import wps_weboffice_get_editor_url
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -976,6 +979,23 @@ def view_lib_file(request, repo_id, path):
                 return render(request, 'onlyoffice_file_view_react.html', {**return_dict, **onlyoffice_dict})
             else:
                 return_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
+
+        if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+            can_edit = False
+            if parse_repo_perm(permission).can_edit_on_web and \
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
+                can_edit = True
+
+            can_edit = False
+            wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
+                                                                    repo_id,
+                                                                    path,
+                                                                    can_edit)
+            weboffice_dict = {
+                "wps_weboffice_editor_url": wps_weboffice_editor_url,
+            }
+            return render(request, 'view_file_weboffice.html', weboffice_dict)
 
         if not HAS_OFFICE_CONVERTER:
             return_dict['err'] = "File preview unsupported"
