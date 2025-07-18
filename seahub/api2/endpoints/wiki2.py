@@ -1758,9 +1758,6 @@ class Wiki2ImportPageView(APIView):
         from_page_id = request.data.get('from_page_id', None)
         file = request.data.get('file', None)
 
-        if not from_page_id:
-            error_msg = 'from_page_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         if not file:
             error_msg = 'file invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1796,8 +1793,11 @@ class Wiki2ImportPageView(APIView):
 
         wiki_config = get_wiki_config(repo_id, username)
         navigation = wiki_config.get('navigation', [])
-        page_ids = []
-        get_current_level_page_ids(navigation, from_page_id, page_ids)
+        if not from_page_id:
+            page_ids = {element.get('id') for element in navigation if element.get('type') != 'folder'}
+        else:
+            page_ids = []
+            get_current_level_page_ids(navigation, from_page_id, page_ids)
         pages = wiki_config.get('pages', [])
         exist_page_names = [page.get('name') for page in pages if page.get('id') in page_ids]
 
@@ -1822,6 +1822,7 @@ class Wiki2ImportPageView(APIView):
             'page_name': page_name,
             'sdoc_uuid_str': sdoc_uuid_str,
             'parent_dir': parent_dir,
+            'from_page_id': from_page_id,
         })
 
         return Response({

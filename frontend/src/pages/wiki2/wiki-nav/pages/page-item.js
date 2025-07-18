@@ -229,6 +229,7 @@ const PageItem = ({
         toggleExpand={toggleExpand}
         setClassName={setClassName}
         getClassName={getClassName}
+        importPage={importPage}
         canDeletePage={true}
       />
     );

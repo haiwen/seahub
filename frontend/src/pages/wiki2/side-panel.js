@@ -108,17 +108,17 @@ class SidePanel extends PureComponent {
     });
   };
 
-  queryImportPageStatus = (task_id, task_type, new_page) => {
+  queryImportPageStatus = (task_id, task_type, new_page, from_page_id) => {
     userAPI.queryIOStatus(task_id, task_type).then(res => {
       if (res.data.is_finished === true) {
         toaster.success('Import page success.');
         this.setState({
           isShowImportPageDialog: false
         });
-        this.addPage(new_page, '', null, null, true);
+        this.addPage(new_page, from_page_id, null, null, true);
       } else {
         setTimeout(() => {
-          this.queryImportPageStatus(task_id, task_type, new_page);
+          this.queryImportPageStatus(task_id, task_type, new_page, from_page_id);
         }, 1000);
       }
     }).catch(err => {
@@ -132,10 +132,10 @@ class SidePanel extends PureComponent {
   importPage = async (fromPageConfig, successCallback, errorCallback, jumpToNewPage = true) => {
     const { from_page_id, file } = fromPageConfig;
     let newPage;
-    let task_id = ''
+    let task_id = '';
     this.setState({
       isShowImportPageDialog: true
-    })
+    });
     wikiAPI.importWiki2Page(wikiId, from_page_id, file).then(res => {
       const { page_id, name, path, docUuid } = res.data;
       task_id = res.data.task_id;
@@ -149,9 +149,9 @@ class SidePanel extends PureComponent {
         this.setState({
           isShowImportPageDialog: false
         });
-        this.addPage(newPage, '', successCallback, errorCallback, jumpToNewPage);
+        this.addPage(newPage, from_page_id, successCallback, errorCallback, jumpToNewPage);
       } else {
-        this.queryImportPageStatus(task_id, 'import', newPage);
+        this.queryImportPageStatus(task_id, 'import', newPage, from_page_id);
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -199,8 +199,8 @@ class SidePanel extends PureComponent {
   };
 
   toggleImportPageDialog = () => {
-    this.setState({ isShowImportPageDialog: !this.state.isShowImportPageDialog })
-  }
+    this.setState({ isShowImportPageDialog: !this.state.isShowImportPageDialog });
+  };
 
   renderWikiNav = () => {
     const { config, onUpdatePage } = this.props;
@@ -307,8 +307,8 @@ class SidePanel extends PureComponent {
         )}
         {this.state.isShowImportPageDialog && (
           <ImportWikiPageDialog
-           toggleDialog={this.toggleImportPageDialog}
-           />
+            toggleDialog={this.toggleImportPageDialog}
+          />
         )}
         {wikiPermission === 'rw' &&
           <WikiExternalOperations onAddWikiPage={this.onAddWikiPage.bind(false)} />
