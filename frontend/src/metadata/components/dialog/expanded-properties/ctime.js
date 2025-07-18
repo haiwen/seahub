@@ -6,7 +6,7 @@ const CTime = ({ record, column }) => {
   const value = getCellValueByColumn(record, column);
   const formatedValue = value ? dayjs(value).format('YYYY-MM-DD HH:mm:ss') : '';
   return (
-    <div className="form-control disabled" style={{ width: 320 }} title={formatedValue}>
+    <div className="form-control disabled shrink" title={formatedValue}>
       {formatedValue}
     </div>
   );

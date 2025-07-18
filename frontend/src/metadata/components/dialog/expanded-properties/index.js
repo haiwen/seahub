@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
-import { getCellValueByColumn, getFileNameFromRecord, getRecordIdFromRecord, isCellValueChanged } from '../../../utils/cell';
+import { gettext } from '../../../../utils/constants';
+import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
 import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEYS } from '../../../constants';
 import Text from './text';
@@ -16,9 +17,9 @@ import Checkbox from './checkbox';
 import Rate from './rate';
 import Tags from './tags';
 import Geolocation from './geolocation';
+import { useMetadataView } from '../../../hooks/metadata-view';
 
 import './index.css';
-import { useMetadataView } from '../../../hooks/metadata-view';
 
 const COLUMN_TYPE_ITEM_MAP = {
   [CellType.FILE_NAME]: Text,
@@ -40,7 +41,7 @@ const COLUMN_TYPE_ITEM_MAP = {
 };
 
 const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
-  const { metadata, modifyRecord } = useMetadataView();
+  const { metadata, modifyRecord, modifyColumnData } = useMetadataView();
   const record = useMemo(() => metadata.id_row_map[recordId], [metadata, recordId]);
   const filename = useMemo(() => getFileNameFromRecord(record), [record]);
 
@@ -58,9 +59,16 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData);
   }, [recordId, record, modifyRecord]);
 
+  const closeBtn = (
+    <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggle}>
+      <span className="seahub-modal-btn-inner">
+        <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+      </span>
+    </button>
+  );
   return (
     <Modal isOpen={true} toggle={toggle} className="expanded-properties-dialog-container" contentClassName="h-100">
-      <ModalHeader>{filename}</ModalHeader>
+      <ModalHeader toggle={toggle} close={closeBtn}>{filename}</ModalHeader>
       <ModalBody className="expanded-properties-content-container">
         <>
           {columns.map((column, idx) => {
@@ -75,7 +83,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
                   <span className="text-center">{name}</span>
                 </div>
                 <div className="col-9">
-                  {Component && <Component record={record} column={column} onCommit={onCommit} />}
+                  {Component && <Component record={record} column={column} columns={columns} onCommit={onCommit} modifyColumnData={modifyColumnData} />}
                 </div>
               </div>
             );
