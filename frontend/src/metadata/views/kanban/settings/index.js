@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../../../../components/icon';
-import IconBtn from '../../../../components/icon-btn';
+import OpIcon from '../../../../components/op-icon';
 import Switch from '../../../../components/switch';
 import Selector from '../../../components/selector';
 import FieldDisplaySettings from '../../../components/data-process-setter/field-display-settings';
@@ -96,15 +96,7 @@ const Settings = ({
     <div className="sf-metadata-view-kanban-setting-panel">
       <div className="setting-panel-header">
         <h5 className="m-0">{gettext('Settings')}</h5>
-        <IconBtn
-          className="kanban-setting-close-icon"
-          symbol="close"
-          size={24}
-          role="button"
-          aria-label="close"
-          tabIndex={0}
-          onClick={onClose}
-        />
+        <OpIcon className='sf3-font sf3-font-x-01 op-icon' op={onClose} title={gettext('Close')} />
       </div>
       <div className="setting-panel-body">
         <div className="setting-item">
