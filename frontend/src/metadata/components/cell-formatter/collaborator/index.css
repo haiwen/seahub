@@ -58,3 +58,9 @@
   color: #666666;
   cursor: pointer;
 }
+
+.sf-metadata-ui.collaborator-item .sf3-font-department {
+  font-size: 12px;
+  color: #666;
+  margin: 0 4px;
+}
