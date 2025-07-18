@@ -26,10 +26,16 @@
 
 .expanded-properties-content-container .form-control {
   height: 38px;
+  display: flex;
+  align-items: center;
 }
 
 .expanded-properties-content-container .form-control.disabled {
   background-color: #f8f9fa;
+}
+
+.expanded-properties-content-container .form-control.shrink {
+  width: 320px;
 }
 
 .expanded-properties-content-container .long-text-container {
@@ -57,4 +63,25 @@
 .expanded-properties-content-container .long-text-container.editing .sf-long-text-inline-editor-container .sf-slate-editor-content {
   max-height: 300px;
   overflow: auto;
+}
+
+.expanded-properties-single-option {
+  height: 20px;
+  max-width: 250px;
+  display: inline-flex;
+  padding: 0 10px;
+  font-size: 13px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.expanded-properties-content-container .select-option-container i {
+  position: absolute;
+  right: 12px;
+}
+
+.expanded-properties-content-container .select-option-container .sf-metadata-single-select-editor,
+.expanded-properties-content-container .select-option-container .sf-metadata-collaborator-editor {
+  bottom: 40px;
+  z-index: 1;
 }

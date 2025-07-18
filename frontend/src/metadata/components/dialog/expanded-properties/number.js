@@ -5,7 +5,7 @@ const Number = ({ record, column }) => {
   const value = getCellValueByColumn(record, column);
   const displayValue = getNumberDisplayString(value, column.data);
   return (
-    <div className="form-control disabled">
+    <div className="form-control disabled shrink">
       {displayValue}
     </div>
   );
