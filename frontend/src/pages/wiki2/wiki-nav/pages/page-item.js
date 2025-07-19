@@ -21,6 +21,7 @@ const PageItem = ({
   pages,
   parentPageId,
   duplicatePage,
+  importPage,
   setCurrentPage,
   onUpdatePage,
   onDeletePage,
@@ -228,6 +229,7 @@ const PageItem = ({
         toggleExpand={toggleExpand}
         setClassName={setClassName}
         getClassName={getClassName}
+        importPage={importPage}
         canDeletePage={true}
       />
     );
@@ -304,6 +306,7 @@ const PageItem = ({
                   duplicatePage={duplicatePage}
                   onDeletePage={() => onDeletePage(page.id)}
                   toggleInsertSiblingPage={toggleInsertSiblingPage}
+                  importPage={importPage}
                 />
               )}
             </div>
@@ -406,6 +409,7 @@ PageItem.propTypes = {
   parentPageId: PropTypes.string,
   addSiblingPage: PropTypes.func,
   duplicatePage: PropTypes.func,
+  importPage: PropTypes.func,
   setCurrentPage: PropTypes.func,
   onUpdatePage: PropTypes.func,
   onDeletePage: PropTypes.func,

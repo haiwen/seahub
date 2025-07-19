@@ -247,6 +247,18 @@ class WikiAPI {
     return this._sendPostRequest(url, form);
   }
 
+  importWiki2Page(wikiId, pageId, file) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/import-page/';
+    let form = new FormData();
+    if (pageId) {
+      form.append('from_page_id', pageId);
+    }
+    if (file) {
+      form.append('file', file);
+    }
+    return this._sendPostRequest(url, form);
+  }
+
   getWikiTrash(wikiId, page, per_page) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/trash/';
     let params = {

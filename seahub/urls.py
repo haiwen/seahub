@@ -217,7 +217,7 @@ from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
-    WikiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView
+    WikiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
@@ -606,6 +606,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/page/(?P<page_id>[-0-9a-zA-Z]{4})/export/$', WikiPageExport.as_view(), name='api-v2.1-wiki2-page-export'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/page/(?P<page_id>[-0-9a-zA-Z]{4})/$', Wiki2PublishPageView.as_view(), name='api-v2.1-wiki2-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/duplicate-page/$', Wiki2DuplicatePageView.as_view(), name='api-v2.1-wiki2-duplicate-page'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/import-page/$', Wiki2ImportPageView.as_view(), name='api-v2.1-wiki2-import-page'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/trash/', WikiPageTrashView.as_view(), name='api-v2.1-wiki2-trash'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/$', Wiki2PublishView.as_view(), name='api-v2.1-wiki2-publish'),
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),

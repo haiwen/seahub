@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { UncontrolledTooltip } from 'reactstrap';
+import { UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PageItem from './pages/page-item';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import toaster from '../../../components/toast';
+import Icon from '../../../components/icon';
 
 import '../css/wiki-nav.css';
 
@@ -20,6 +22,7 @@ class WikiNav extends Component {
     onDeletePage: PropTypes.func,
     onMovePage: PropTypes.func,
     duplicatePage: PropTypes.func,
+    importPage: PropTypes.func,
     addSiblingPage: PropTypes.func,
     getCurrentPageId: PropTypes.func,
     addPageInside: PropTypes.func,
@@ -32,6 +35,7 @@ class WikiNav extends Component {
     super(props);
     this.state = {
       idFoldedStatusMap: {}, // Move idFoldedStatusMap to state
+      isShowOperationDropdown: false,
     };
     this.folderClassNameCache = '';
     this.lastScrollTop = 0;
@@ -58,6 +62,33 @@ class WikiNav extends Component {
       }
       return { idFoldedStatusMap };
     });
+  };
+
+  toggleDropdown = () => {
+    const isShow = !this.state.isShowOperationDropdown;
+    this.setState({ isShowOperationDropdown: isShow });
+  };
+
+  handleImportPage = () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.docx,.md';
+    fileInput.style.display = 'none';
+
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        const selectedFile = e.target.files[0];
+        this.props.importPage(
+          { file: selectedFile },
+          () => {},
+          () => {
+            toaster.danger(gettext('Failed to import page'));
+          }
+        );
+      }
+    });
+    document.body.appendChild(fileInput);
+    fileInput.click();
   };
 
   componentDidUpdate(prevProps) {
@@ -90,6 +121,7 @@ class WikiNav extends Component {
         pages={pages}
         pageIndex={index}
         duplicatePage={this.props.duplicatePage}
+        importPage={this.props.importPage}
         setCurrentPage={this.props.setCurrentPage}
         onUpdatePage={this.props.onUpdatePage}
         onDeletePage={this.props.onDeletePage}
@@ -122,16 +154,41 @@ class WikiNav extends Component {
         <div className="wiki-nav-group-header d-flex justify-content-between align-items-center px-2">
           <h2 className="h6 font-weight-normal m-0">{gettext('Pages')}</h2>
           {isDesktop && wikiPermission === 'rw' &&
-          <div>
-            <i
-              id='wiki-add-new-page'
-              onClick={this.props.handleAddNewPage}
-              className='sf3-font sf3-font-enlarge add-new-page'
-            >
-            </i>
-            <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
-              {gettext('New page')}
-            </UncontrolledTooltip>
+          <div className='d-none d-md-flex'>
+            <div className="more-wiki-page-operation" onClick={this.toggleDropdown}>
+              <Icon symbol="more-level" />
+              <Dropdown
+                isOpen={this.state.isShowOperationDropdown}
+                toggle={this.toggleDropdown}
+                className="page-operation-dropdown"
+              >
+                <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown">
+                  <i className="page-operation-dropdown-toggle"></i>
+                </DropdownToggle>
+                <DropdownMenu
+                  className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
+                  flip={false}
+                  modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
+                >
+                  <DropdownItem onClick={this.handleImportPage}>
+                    <i className="sf3-font sf3-font-import-sdoc" aria-hidden="true" />
+                    <span className="item-text">{gettext('Import page')}</span>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </div>
+            <div className="wiki-add-page-btn" role='button'>
+              <i
+                id='wiki-add-new-page'
+                onClick={this.props.handleAddNewPage}
+                className='sf3-font sf3-font-enlarge add-new-page'
+              >
+              </i>
+              <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
+                {gettext('New page')}
+              </UncontrolledTooltip>
+            </div>
+
           </div>
           }
         </div>
