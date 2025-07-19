@@ -619,12 +619,12 @@ class FileTrashQuerySet(models.QuerySet):
     
 
 class FileTrash(models.Model):
-    user = models.CharField(max_length=255, db_index=True)
+    user = models.CharField(max_length=255)
     obj_type = models.CharField(max_length=128)
     obj_id = models.CharField(max_length=40)
-    obj_name = models.CharField(max_length=255, db_index=True)
-    delete_time = models.DateTimeField(db_index=True)
-    repo_id = models.CharField(max_length=36)
+    obj_name = models.CharField(max_length=255)
+    delete_time = models.DateTimeField()
+    repo_id = models.CharField(max_length=36, db_index=True)
     commit_id = models.CharField(max_length=40)
     path = models.TextField()
     size = models.BigIntegerField()
