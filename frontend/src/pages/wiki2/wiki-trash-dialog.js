@@ -141,7 +141,7 @@ class Content extends React.Component {
       this.theadData = [
         { width: '30%', text: gettext('Name') },
         { width: '20%', text: gettext('Size') },
-        { width: '30%', text: gettext('Delete time') },
+        { width: '30%', text: gettext('Deleted time') },
         { width: '20%', text: '' }
       ];
     } else {
@@ -149,7 +149,7 @@ class Content extends React.Component {
         { width: '5%', text: gettext('Name') },
         { width: '20%', text: '' },
         { width: '30%', text: gettext('Size') },
-        { width: '35%', text: gettext('Delete time') },
+        { width: '35%', text: gettext('Deleted time') },
         { width: '10%', text: '' }
       ];
     }
