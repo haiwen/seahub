@@ -16,7 +16,7 @@ from seahub.api2.utils import api_error
 from seahub.base.models import FileTrash
 
 from seahub.signals import clean_up_repo_trash
-from seahub.utils import get_trash_records, is_org_context
+from seahub.utils import is_org_context
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin
 from seahub.views import check_folder_permission

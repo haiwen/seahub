@@ -603,13 +603,9 @@ class FileTrashQuerySet(models.QuerySet):
         if end_timestamp is not None:
             end_datetime = datetime.datetime.fromtimestamp(end_timestamp)
             queryset = queryset.filter(delete_time__lte=end_datetime)
-        print(start_datetime, end_datetime)
         return queryset
 
     def by_suffixes(self, suffixes):
-        if not suffixes:
-            return self.none()
-    
         queries = Q()
         for ext in suffixes:
             queries |= Q(obj_name__iendswith=ext)
