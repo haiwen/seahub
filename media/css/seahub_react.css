@@ -357,7 +357,7 @@ textarea::placeholder {
 }
 
 .sf-border-bottom {
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .vh {
@@ -658,7 +658,7 @@ textarea::placeholder {
 .account-popup .item {
   display: block;
   padding: 8px 18px;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid #ddd;
 }
 
 .account-popup .item:last-child {
@@ -1057,7 +1057,7 @@ textarea::placeholder {
 .sf-popover {
   width: 240px;
   background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid #c9c9c9;
   border-radius: 3px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
   position: absolute;
@@ -1118,7 +1118,7 @@ a.sf-popover-item:hover {
 .panel-top {
   padding: .5rem 1rem;
   background: #f4f4f7;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   display: flex;
   flex-shrink: 0;
   min-height: 49px;
@@ -1170,7 +1170,7 @@ table tbody tr {
 
 table th {
   padding: 0.3125rem 0.1875rem;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   text-align: left;
   font-weight: normal;
   font-size: 0.875rem;
@@ -1180,7 +1180,7 @@ table th {
 
 table td {
   padding: 0.5rem 0.1875rem;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   color: var(--bs-body-color);
   font-size: 0.875rem;
   word-break: break-all;
@@ -1226,7 +1226,7 @@ table td {
   border-radius: 2px;
   word-wrap: break-word;
   vertical-align: middle;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid #ccc;
 }
 
 .rename-container input:focus {

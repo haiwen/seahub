@@ -1125,7 +1125,7 @@ textarea:-moz-placeholder {
 .side-nav {
   padding: 0;
   overflow: hidden;
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
 }
 
 .side-nav:hover {
@@ -1294,7 +1294,7 @@ textarea:-moz-placeholder {
   padding: 10px 0;
   font-weight: normal;
   color: #666;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   margin-bottom: 3px;
 }
 
@@ -1744,7 +1744,7 @@ a.sf-popover-item {
 /********** Container ***********/
 #header {
   background-color: var(--bs-header-bg);
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   z-index: 100;
   width: 100%;
   height: 49px;
@@ -2452,7 +2452,7 @@ a.sf-popover-item {
   padding: 0 4px;
   color: #000;
   font-weight: bold;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
 }
 
 #upload-file-form .MultiFile-remove:hover {
@@ -2791,7 +2791,7 @@ a.sf-popover-item {
 /* user profile */
 #user-profile {
   width: 290px;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 5px;
   margin: 50px auto 0;
 }
