@@ -13,9 +13,10 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
+from seahub.base.models import FileTrash
 
 from seahub.signals import clean_up_repo_trash
-from seahub.utils import get_trash_records, is_org_context
+from seahub.utils import is_org_context
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin
 from seahub.views import check_folder_permission
@@ -362,8 +363,134 @@ class RepoTrash2(APIView):
         except ValueError:
             current_page = 1
             per_page = 100
+
         start = (current_page - 1) * per_page
-        limit = per_page
+        end = start + per_page
+        try:
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        # keep_days
+        # -1 all history
+        # 0 no history
+        # n n-days history
+        keep_days = seafile_api.get_repo_history_limit(repo_id)
+        
+        if keep_days == 0:
+            result = {
+                'items': [],
+                'total_count': 0,
+                'can_search': False
+            }
+            return Response(result)
+        
+        # pre-filter by repo history
+        
+        elif keep_days == -1:
+            qset = FileTrash.objects.by_repo_id(repo_id)
+            
+        else:
+            qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
+        
+        deleted_entries = qset[start:end]
+        total_count = qset.count()
+            
+        
+        items = []
+        if len(deleted_entries) >= 1:
+            for item in deleted_entries:
+                item_info = self.get_item_info(item)
+                items.append(item_info)
+
+        result = {
+            'items': items,
+            'total_count': total_count,
+            'can_search': True
+        }
+
+        return Response(result)
+
+class SearchRepoTrash2(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get_item_info(self, trash_item):
+
+        item_info = {
+            'parent_dir': '/' if trash_item.path == '/' else trash_item.path,
+            'obj_name': trash_item.obj_name,
+            'deleted_time': timestamp_to_isoformat_timestr(int(trash_item.delete_time.timestamp())),
+            'commit_id': trash_item.commit_id,
+        }
+
+        if trash_item.obj_type == 'dir':
+            is_dir = True
+        else:
+            is_dir = False
+
+        item_info['is_dir'] = is_dir
+        item_info['size'] = trash_item.size if not is_dir else ''
+        item_info['obj_id'] = trash_item.obj_id if not is_dir else ''
+
+        return item_info
+
+    def get(self, request, repo_id):
+        """ Return deleted files/dirs of a repo/folder
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+        """
+
+        path = '/'
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        q = request.GET.get('q', None)
+        
+        op_users = request.GET.get('op_users', '').split(',') if request.GET.get('op_users') else None
+        op_users = [u for u in op_users if u] if op_users else None
+
+        time_from = request.GET.get('time_from')
+        time_to = request.GET.get('time_to')
+        try:
+            time_from = int(time_from) if time_from else None
+            time_to = int(time_to) if time_to else None
+        except (TypeError, ValueError):
+            time_from = None
+            time_to = None
+
+        suffixes = request.GET.get('suffixes', None)
+        if suffixes:
+            suffixes = suffixes.split(',')
+        else:
+            suffixes = None
+        suffixes = [s for s in suffixes if s] if suffixes else None
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '20'))
+        except ValueError:
+            current_page = 1
+            per_page = 20
+        
+        start = (current_page - 1) * per_page
+        end = start + per_page
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         except SearpcError as e:
@@ -380,12 +507,33 @@ class RepoTrash2(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            deleted_entries, total_count = get_trash_records(repo_id, SHOW_REPO_TRASH_DAYS, start, limit)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        keep_days = seafile_api.get_repo_history_limit(repo_id)
+
+        if keep_days == 0:
+            result = {
+                'items': [],
+                'total_count': 0
+            }
+            return Response(result)
+        
+        # pre-filter by repo history
+        elif keep_days == -1:
+            qset = FileTrash.objects.by_repo_id(repo_id)
+        
+        else:
+            qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
+        
+        if q:
+            qset = qset.by_keywords(q)
+        if op_users:
+            qset = qset.by_users(op_users)
+        if time_from and time_to:
+            qset = qset.by_time_range(time_from, time_to)
+        if suffixes:
+            qset = qset.by_suffixes(suffixes)
+            
+        deleted_entries = qset[start:end]
+        total_count = qset.count()
         
         items = []
         if len(deleted_entries) >= 1:

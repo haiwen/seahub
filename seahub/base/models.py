@@ -585,6 +585,59 @@ class OrgQuotaUsage(models.Model):
         
 
 
+class FileTrashQuerySet(models.QuerySet):
+    
+    def by_repo_id(self, repo_id):
+        return self.filter(repo_id=repo_id)
+    
+    def by_history_limit(self, keep_days):
+        _timestamp = datetime.datetime.now() - datetime.timedelta(days=keep_days)
+        return self.filter(delete_time__gte=_timestamp)
+
+    def by_time_range(self, start_timestamp=None, end_timestamp=None):
+        queryset = self
+        if start_timestamp is not None:
+            start_datetime = datetime.datetime.fromtimestamp(start_timestamp)
+            queryset = queryset.filter(delete_time__gte=start_datetime)
+    
+        if end_timestamp is not None:
+            end_datetime = datetime.datetime.fromtimestamp(end_timestamp)
+            queryset = queryset.filter(delete_time__lte=end_datetime)
+        return queryset
+
+    def by_suffixes(self, suffixes):
+        queries = Q()
+        for ext in suffixes:
+            queries |= Q(obj_name__iendswith=ext)
+        return self.filter(queries)
+
+    def by_users(self, users):
+        return self.filter(user__in=users)
+    
+    def by_keywords(self, keywords):
+        return self.filter(obj_name__icontains=keywords)
+    
+
+class FileTrash(models.Model):
+    user = models.CharField(max_length=255)
+    obj_type = models.CharField(max_length=128)
+    obj_id = models.CharField(max_length=40)
+    obj_name = models.CharField(max_length=255)
+    delete_time = models.DateTimeField()
+    repo_id = models.CharField(max_length=36, db_index=True)
+    commit_id = models.CharField(max_length=40)
+    path = models.TextField()
+    size = models.BigIntegerField()
+    objects = FileTrashQuerySet.as_manager()
+    
+    
+    class Meta:
+        db_table = 'FileTrash'
+        ordering = ["-delete_time"]
+        
+        
+
+
 ###### signal handler ###############
         
 from django.dispatch import receiver
