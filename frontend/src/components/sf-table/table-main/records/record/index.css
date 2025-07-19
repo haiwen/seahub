@@ -4,7 +4,7 @@
   height: 20px;
   line-height: 20px;
   margin-left: 8px;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
   padding: 0 2px;
   color: #666666;
   border-radius: 2px;
@@ -67,13 +67,13 @@
   min-height: 32px;
   height: auto;
   padding: 0 1rem;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
   border-top: none;
   background: var(--bs-body-bg);
 }
 
 .sf-table-record-drag-layer .rdg-dragged-record:first-child {
-  border-top: 1px solid var(--bs-border-color);
+  border-top: 1px solid var(--bs-border-secondary-color);
 }
 
 .sf-table-record-drag-layer .rdg-dragged-record .rdg-dragged-record-cell {

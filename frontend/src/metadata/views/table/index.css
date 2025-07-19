@@ -83,7 +83,7 @@
   width: 100%;
   position: relative;
   background: #f9f9f9;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   z-index: 3;
 }
 
@@ -118,7 +118,7 @@
 
 .sf-metadata-result-table-row {
   width: 100%;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   display: inline-flex;
   margin-top: 0;
   margin-bottom: 0;

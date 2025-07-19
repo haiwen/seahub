@@ -316,7 +316,7 @@ input#pageNumber {
 }
 
 #thumbnailView .thumbnail .thumbnailImage {
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid #ddd;
   border-radius: 3px;
 }
 

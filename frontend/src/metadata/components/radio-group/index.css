@@ -5,7 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 3px;
   padding: 0 3px;
   margin-left: 8px;
@@ -39,7 +39,7 @@
   content: '';
   width: 1px;
   height: 22px;
-  background-color: var(--bs-border-color);
+  background-color: var(--bs-border-secondary-color);
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

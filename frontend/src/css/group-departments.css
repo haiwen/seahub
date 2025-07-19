@@ -17,7 +17,7 @@
 .department-dialog-content .department-dialog-left-panel {
   flex: 0 0 30%;
   padding: 1rem;
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
 }
 
 .department-dialog-content .department-dialog-left-panel .input-icon-addon {
@@ -38,13 +38,13 @@
 .department-dialog-content .department-dialog-member {
   display: flex;
   flex: 0 0 35%;
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
 }
 
 .department-dialog-content .department-dialog-member-selected {
   display: flex;
   flex: 0 0 35%;
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
   flex-direction: column;
   justify-content: space-between;
 }

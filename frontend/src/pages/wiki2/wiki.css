@@ -171,7 +171,7 @@ body {
 }
 
 .sdoc-side-menu-popover .sdoc-side-menu.sdoc-dropdown-menu .sdoc-dropdown-menu-divider {
-  border-color: var(--bs-border-color);
+  border-color: var(--bs-border-secondary-color);
 }
 
 .sdoc-dropdown-menu.sdoc-sub-dropdown-menu .popover {

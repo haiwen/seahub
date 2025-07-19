@@ -66,7 +66,7 @@
 }
 
 .trash-dialog .path-container {
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   height: 40px;
   padding: 0 .5rem 1rem;
 }

@@ -15,7 +15,7 @@
   width: 1px;
   height: 30px;
   content: '';
-  background-color: var(--bs-border-color);
+  background-color: #ddd;
 }
 
 /* end toolbar-container */
@@ -30,7 +30,7 @@
   color: var(--bs-body-color);
   line-height: 29px;
   font-weight: normal;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid #ccc;
   border-radius: 2px;
 }
 

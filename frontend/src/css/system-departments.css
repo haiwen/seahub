@@ -4,7 +4,7 @@
 
 .departments-tree-panel {
   width: 25%;
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
   height: 100%;
   overflow: auto;
 }

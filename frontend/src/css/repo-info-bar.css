@@ -1,7 +1,7 @@
 .repo-info-bar {
   padding: 10px;
   margin: 10px 16px 0;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid #e6e6dd;
   border-radius: 5px;
   color: var(--bs-body-color);
 }

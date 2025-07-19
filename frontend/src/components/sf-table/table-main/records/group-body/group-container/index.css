@@ -159,7 +159,7 @@
 [data-bs-theme=dark] .canvas-groups-rows .group-level-1 .group-header-cell,
 [data-bs-theme=dark] .canvas-groups-rows .group-level-2 .group-header-cell,
 [data-bs-theme=dark] .canvas-groups-rows .group-level-3 .group-header-cell {
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
 }
 
 .canvas-groups-rows .group-container-right .group-header-cell:last-child {
