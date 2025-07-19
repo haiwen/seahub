@@ -11,7 +11,7 @@ const Table = ({ repoID, renderFolder, data, isDesktop }) => {
     { isFixed: true, width: 40, className: 'pl-2 pr-2' },
     { isFixed: false, width: 0.25, children: gettext('Name') },
     { isFixed: false, width: 0.4, children: gettext('Original path') },
-    { isFixed: false, width: 0.12, children: gettext('Delete Time') },
+    { isFixed: false, width: 0.12, children: gettext('Delete time') },
     { isFixed: false, width: 0.13, children: gettext('Size') },
     { isFixed: false, width: 0.1, children: '' },
   ], []);

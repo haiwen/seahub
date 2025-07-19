@@ -94,7 +94,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
           'active': isOpen && selectedOptions.length > 0,
           'highlighted': selectedOptions.length > 0,
         })}>
-          <div className="filter-label" title={gettext('Delete operator')}>{gettext('Delete operator')}</div>
+          <div className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</div>
           <i className="sf3-font sf3-font-down sf3-font pl-1" />
         </DropdownToggle>
         <ModalPortal>

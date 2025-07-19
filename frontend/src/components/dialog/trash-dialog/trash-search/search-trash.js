@@ -136,7 +136,7 @@ class SearchTrash extends Component {
             )}
             <IconBtn
               icon="filter-circled"
-              text={isFilterControllerActive ? gettext('Hide filters') : gettext('Show filters')}
+              text={isFiltersShow ? gettext('Hide filters') : gettext('Show filters')}
               aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
               size={20}
               className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}

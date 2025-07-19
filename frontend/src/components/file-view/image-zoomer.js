@@ -8,8 +8,8 @@ const SCALE_OPTIONS = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4];
 const SCALE_MIN = SCALE_OPTIONS[0];
 const SCALE_MAX = SCALE_OPTIONS[SCALE_OPTIONS.length - 1];
 const SCALE_OPTIONS_2 = [
-  { value: 'page-fit', text: gettext('Page Fit') },
-  { value: 'actual-size', text: gettext('Actual Size') }
+  { value: 'page-fit', text: gettext('Page fit') },
+  { value: 'actual-size', text: gettext('Actual size') }
 ];
 
 const ImageZoomer = ({ setImageScale }) => {

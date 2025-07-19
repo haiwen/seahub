@@ -21,8 +21,8 @@ const FilterByDate = ({ date, onChange }) => {
   });
 
   const label = useMemo(() => {
-    if (!value || value.length === 0) return gettext('Delete Time');
-    return gettext('Delete Time');
+    if (!value || value.length === 0) return gettext('Delete time');
+    return gettext('Delete time');
   }, [value]);
 
   const options = useMemo(() => {

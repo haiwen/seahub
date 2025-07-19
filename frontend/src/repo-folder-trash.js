@@ -239,7 +239,7 @@ class Content extends React.Component {
       { width: '5%', text: '' },
       { width: '20%', text: gettext('Name') },
       { width: '40%', text: gettext('Original path') },
-      { width: '12%', text: gettext('Delete Time') },
+      { width: '12%', text: gettext('Delete time') },
       { width: '13%', text: gettext('Size') },
       { width: '10%', text: '' }
     ];
