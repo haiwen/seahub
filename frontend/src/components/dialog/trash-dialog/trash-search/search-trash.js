@@ -7,10 +7,11 @@ import { debounce, Utils } from '../../../../utils/utils';
 import toaster from '../../../toast';
 import Loading from '../../../loading';
 import IconBtn from '../../../icon-button';
-import './search_trash.css';
 import { SEARCH_FILTERS_SHOW_KEY } from '../../../../constants';
 import { repoTrashAPI } from '../../../../utils/repo-trash-api';
 import TrashFilters from './search-filters';
+
+import './search-trash.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -42,7 +43,6 @@ class SearchTrash extends Component {
     this.inputRef = React.createRef();
     this.debouncedSearch = debounce(this.searchTrash, 300);
   }
-
 
   handleError = (e) => {
     if (!axios.isCancel(e)) {
@@ -78,30 +78,22 @@ class SearchTrash extends Component {
     const { suffixes, date, creator_list } = this.state.filters;
     const creators = creator_list.map(user => user.email).join(',');
 
-    repoTrashAPI.searchRepoFolderTrash(repoID, page, per_page, query.trim(), { suffixes, date, creators })
-      .then(res => {
-        const items = Array.isArray(res.data.items) ? res.data.items : [];
-        const hasMore = Boolean(res.data.has_more);
-
-        this.props.onSearchResults({
-          items,
-          hasMore
-        });
-
-        this.setState({
-          isLoading: false
-        });
-      }).catch(error => {
-        this.setState({ isLoading: false });
-        toaster.danger(gettext('Search failed. Please try again.'));
+    repoTrashAPI.searchRepoFolderTrash(repoID, page, per_page, query.trim(), { suffixes, date, creators }).then(res => {
+      const items = Array.isArray(res.data.items) ? res.data.items : [];
+      const hasMore = Boolean(res.data.has_more);
+      this.props.onSearchResults({ items, hasMore });
+      this.setState({
+        isLoading: false
       });
+    }).catch(error => {
+      this.setState({ isLoading: false });
+      toaster.danger(gettext('Search failed. Please try again.'));
+    });
   };
-
 
   handleFiltersChange = (key, value) => {
     const newFilters = { ...this.state.filters, [key]: value };
     const hasActiveFilter = newFilters.suffixes || newFilters.date.value;
-
     this.setState({
       filters: newFilters,
       isFilterControllerActive: hasActiveFilter
@@ -109,7 +101,6 @@ class SearchTrash extends Component {
       this.searchTrash(this.state.value);
     });
   };
-
 
   onClearSearch = () => {
     this.setState({ value: '' });
@@ -119,9 +110,8 @@ class SearchTrash extends Component {
   render() {
     const { placeholder } = this.props;
     const { value, isLoading, isFilterControllerActive, filters, isFiltersShow } = this.state;
-
     return (
-      <div className="search-container">
+      <div className="search-container search-trash">
         <div className="search-controls">
           <div className="input-icon">
             <i className="search-icon-left trash-input-icon-addon sf3-font sf3-font-search"></i>
@@ -154,12 +144,8 @@ class SearchTrash extends Component {
               id="search-filter-controller"
             />
           </div>
-          {isFiltersShow && <TrashFilters filters={filters} onChange={this.handleFiltersChange}
-          />
-          }
-
+          {isFiltersShow && <TrashFilters filters={filters} onChange={this.handleFiltersChange} />}
         </div>
-
         {isLoading && (
           <div className="search-loading-indicator">
             <Loading />

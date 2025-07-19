@@ -13,11 +13,11 @@ import Paginator from '../../paginator';
 import Loading from '../../loading';
 import BackIcon from '../../back-icon';
 import EmptyTip from '../../empty-tip';
+import SearchTrash from './trash-search/search-trash';
 
 import '../../../css/toolbar.css';
 import '../../../css/search.css';
 import './index.css';
-import SearchTrash from './trash-search/search_trash';
 
 class TrashDialog extends React.Component {
 
@@ -258,27 +258,37 @@ class TrashDialog extends React.Component {
           <ModalBody>
             {isLoading && <Loading />}
             {!isLoading && canSearch &&
-              <div className="search-container-trash">
-                <SearchTrash
-                  repoID={this.props.repoID}
-                  onSearchResults={this.handleSearchResults}
-                  placeholder={gettext('Search in trash')}
-                />
-              </div>
+              <SearchTrash
+                repoID={this.props.repoID}
+                onSearchResults={this.handleSearchResults}
+                placeholder={gettext('Search in trash')}
+              />
             }
             {!isLoading && items.length === 0 &&
               <EmptyTip text={gettext('No file')} className="m-0" />
             }
             {!isLoading && items.length > 0 &&
               <>
-                <div className="path-container dir-view-path mw-100 pb-2">
+                <div className="path-container dir-view-path mw-100 pb-2 mt-1">
                   <span className="path-label mr-1">{gettext('Current path: ')}</span>
                   {showFolder ?
                     this.renderFolderPath() :
                     <span className="last-path-item" title={repoFolderName}>{repoFolderName}</span>
                   }
                 </div>
-                <Table repoID={repoID} data={{items: items, showFolder: showFolder, commitID: this.state.commitID, baseDir: this.state.baseDir, folderPath: this.state.folderPath, folderItems: this.state.folderItems}} renderFolder={this.renderFolder} isDesktop={isDesktop} />
+                <Table
+                  repoID={repoID}
+                  data={{
+                    items: items,
+                    showFolder: showFolder,
+                    commitID: this.state.commitID,
+                    baseDir: this.state.baseDir,
+                    folderPath: this.state.folderPath,
+                    folderItems: this.state.folderItems
+                  }}
+                  renderFolder={this.renderFolder}
+                  isDesktop={isDesktop}
+                />
                 <Paginator
                   gotoPreviousPage={this.getPreviousPage}
                   gotoNextPage={this.getNextPage}

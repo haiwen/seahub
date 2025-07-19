@@ -24,6 +24,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
       setIsOpen(false);
       onChange(SEARCH_FILTERS_KEY.SUFFIXES, inputValue.replace(/\./g, ''));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClearInput = useCallback(() => {

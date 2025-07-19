@@ -8,7 +8,7 @@ import './index.css';
 
 const TrashFilters = ({ filters, onChange }) => {
   return (
-    <div className="search-filters-container">
+    <div className="search-filters-container px-0">
       <FilterBySuffix suffixes={filters.suffixes} onChange={onChange} />
       <FilterByCreator creatorList={filters.creator_list} onChange={onChange} />
       <FilterByDate date={filters.date} onChange={onChange} />
