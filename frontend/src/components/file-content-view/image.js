@@ -82,7 +82,7 @@ class FileContent extends React.Component {
     }
 
     return (
-      <div className="file-view-content flex-1 image-file-view">
+      <div className="file-view-content flex-1 image-file-view d-flex align-items-center justify-content-center">
         {previousImage && (
           <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}><span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span></a>
         )}

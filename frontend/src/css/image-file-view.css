@@ -18,8 +18,6 @@
   border: 1px solid #eee;
   width: auto;
   height: auto;
-  max-width: calc(100% - 4px);
-  max-height: calc(100% - 4px);
   font-size: 0;
   line-height: 0;
 }
@@ -51,6 +49,32 @@
   color: #212529;
 }
 
-.image-zoomer {
-  height: 24px;
+.image-zoomer #zoom-out-image {
+  margin-right: 2px;
+  font-size: 18px; /* the actual icon is smaller than the others */
+}
+
+.image-zoomer #zoom-in-image {
+  margin-left: 2px;
+  font-size: 18px; /* the actual icon is smaller than the others */
+}
+
+.image-zoomer #cur-scale-input {
+  height: 28px;
+  width: 120px;
+  user-select: none;
+}
+
+.image-zoomer #scale-menu {
+  min-width: 120px; /* overwrite css from seahub_react.css */
+  width: 120px;
+}
+
+.image-zoomer #scale-menu-caret {
+  position: absolute;
+  right: 12px;
+  top: 9px;
+  font-size: 9px;
+  line-height: 1;
+  color: #666;
 }
