@@ -633,6 +633,8 @@ class FileTrash(models.Model):
     
     class Meta:
         db_table = 'FileTrash'
+        ordering = ["-delete_time"]
+        
         
 
 
