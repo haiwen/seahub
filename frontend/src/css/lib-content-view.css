@@ -43,7 +43,7 @@
   overflow: hidden;
   background: var(--bs-body-bg);
   color: var(--bs-body-color);
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
 }
 
 .dir-content-nav:hover {
@@ -237,7 +237,7 @@
 
 .op-btn {
   background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid #dbdbdb;
   border-radius: 3px;
   height: 32px;
   padding: 0 .5rem;
@@ -369,7 +369,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   position: relative;
   font-size: 1rem;
 }

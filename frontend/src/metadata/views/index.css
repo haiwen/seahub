@@ -2,7 +2,7 @@
   width: 100%;
   height: 1px;
   margin-bottom: 14px;
-  background-color: var(--bs-border-color);
+  background-color: var(--bs-border-secondary-color);
 }
 
 .sf-metadata-ui.file-name-formatter.sf-metadata-image-file-formatter .sf-metadata-file-icon {

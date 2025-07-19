@@ -5,7 +5,7 @@ const DEFAULT_CONTROL_STYLE = {
 
 const FOCUS_CONTROL_STYLE = {
   fontSize: '14px',
-  backgroundColor: 'var(--bs-body-color)',
+  backgroundColor: '#fff',
   borderColor: '#1991eb',
   outline: '0',
   boxShadow: '0 0 0 2px rgba(70, 127, 207, 0.25)',
@@ -45,7 +45,7 @@ const MenuSelectStyle = {
     return ({
       ...provided,
       cursor: isDisabled ? 'default' : 'pointer',
-      backgroundColor: isSelected ? 'var(--bs-dropdown-link-bg)' : (isFocused ? 'var(--bs-dropdown-tertiary-bg)' : 'var(--bs-body-bg)'),
+      backgroundColor: isSelected ? '#20a0ff' : (isFocused ? '#f5f5f5' : '#fff'),
       '.header-icon .dtable-font': {
         color: isSelected ? '#fff' : '#aaa',
       },

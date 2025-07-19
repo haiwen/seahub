@@ -1,5 +1,5 @@
 .user-details-popover {
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 4px;
   box-shadow: 0 0 14px rgba(0, 0, 0, 0.14);
   background: var(--bs-body-bg);
@@ -10,7 +10,7 @@
 }
 
 .user-details-main {
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .user-details-name {

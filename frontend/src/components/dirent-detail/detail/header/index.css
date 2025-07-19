@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   line-height: 2.5rem;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   height: 48px;
   padding: 8px 16px;
 }

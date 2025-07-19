@@ -4,7 +4,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
   padding: 6px 8px;
   display: flex;
   justify-content: flex-start;
@@ -95,7 +95,7 @@
 .sf-table-cell .mobile-select-all-container .select-all-checkbox-show {
   height: 14px;
   width: 14px;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 2px;
 }
 

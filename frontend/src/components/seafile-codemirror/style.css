@@ -1,6 +1,6 @@
 .text-file-view .cm-editor {
   margin: 0 auto;
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid #ccc;
   box-shadow: 0 0 6px #ccc;
   background-color: var(--bs-body-bg);
 }
@@ -23,7 +23,7 @@
 .text-file-view .cm-gutters {
   min-height: 300px;
   background-color: var(--bs-body-bg);
-  border-color: var(--bs-border-color);
+  border-color: var(--bs-border-secondary-color);
 }
 
 .text-file-view .cm-content .cm-line {

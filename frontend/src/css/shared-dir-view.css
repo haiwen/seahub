@@ -7,11 +7,11 @@ body {
 }
 
 #shared-dir-view .side-panel {
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid var(--bs-border-secondary-color);
 }
 
 #shared-dir-view .meta-info {
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 /* tree view */
@@ -135,7 +135,7 @@ body {
   right: 24px;
   padding: 5px;
   background: var(--bs-body-bg);
-  border: 1px solid var(--bs-border-color);
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 3px;
   margin: 0;
 }

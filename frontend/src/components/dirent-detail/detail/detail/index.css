@@ -3,6 +3,6 @@
   flex-direction: column;
   background: var(--bs-body-bg);
   height: 100%;
-  border-left: 1px solid var(--bs-border-color);
+  border-left: 1px solid var(--bs-border-secondary-color);
   position: relative;
 }
