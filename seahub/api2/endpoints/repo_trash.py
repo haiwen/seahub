@@ -463,7 +463,7 @@ class SearchRepoTrash2(APIView):
 
         q = request.GET.get('q', None)
         
-        op_users = request.GET.get('op_user', '').split(',') if request.GET.get('op_user') else None
+        op_users = request.GET.get('op_users', '').split(',') if request.GET.get('op_users') else None
         op_users = [u for u in op_users if u] if op_users else None
 
         time_from = request.GET.get('time_from')
@@ -475,9 +475,9 @@ class SearchRepoTrash2(APIView):
             time_from = None
             time_to = None
 
-        input_fexts = request.GET.get('input_fexts', None)
-        if input_fexts:
-            suffixes = input_fexts.split(',')
+        suffixes = request.GET.get('suffixes', None)
+        if suffixes:
+            suffixes = suffixes.split(',')
         else:
             suffixes = None
         suffixes = [s for s in suffixes if s] if suffixes else None

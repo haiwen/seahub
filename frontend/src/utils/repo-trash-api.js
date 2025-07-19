@@ -55,7 +55,7 @@ class RepotrashAPI {
     }
 
     if (filters.suffixes) {
-      params.input_fexts = filters.suffixes;
+      params.suffixes = filters.suffixes;
     }
 
     if (filters.date.from != null && filters.date.to != null) {
@@ -64,7 +64,7 @@ class RepotrashAPI {
     }
 
     if (filters.creators != null) {
-      params.op_user = filters.creators;
+      params.op_users = filters.creators;
     }
 
     return this.req.get(url, { params: params });
