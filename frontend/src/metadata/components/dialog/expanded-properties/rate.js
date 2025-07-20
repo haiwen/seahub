@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
+import { getCellValueByColumn } from '../../../utils/cell';
+import RateEditor from '../../cell-editors/rate-editor';
 
-const Rate = () => {
+const Rate = ({ record, column, onCommit }) => {
+  const value = useMemo(() => getCellValueByColumn(record, column), [record, column]);
+
+  const onChange = useCallback((update) => {
+    onCommit(column, update[column.key]);
+  }, [column, onCommit]);
+
   return (
-    <div>Rate</div>
+    <div className="form-control shrink">
+      <RateEditor isCellSelected={true} value={value} field={column} onChange={onChange} />
+    </div>
   );
 };
 

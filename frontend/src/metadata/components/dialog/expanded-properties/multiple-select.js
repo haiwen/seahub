@@ -36,7 +36,7 @@ const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
   return (
     <ClickOutside onClickOutside={onClickOutside}>
       <div ref={ref} className="form-control position-relative select-option-container" onClick={onEdit}>
-        <div className="options-wrapper">
+        <div className="options-wrapper d-flex align-center gap-1">
           {value.map((optionId) => {
             const option = options.find(item => item.id === optionId || item.name === optionId);
             return option ? <SelectOption option={option} /> : null;

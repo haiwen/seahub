@@ -85,3 +85,29 @@
   bottom: 40px;
   z-index: 1;
 }
+
+.expanded-properties-content-container .sf-metadata-checkbox-editor {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0;
+  cursor: pointer;
+  border: none;
+}
+
+.expanded-properties-content-container .sf-metadata-checkbox-editor .sf-metadata-checkbox-editor-content {
+  height: 22px;
+  width: 22px;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 2px solid #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expanded-properties-content-container .sf-metadata-checkbox-editor .sf-metadata-checkbox-editor-content .seafile-multicolor-icon-check-mark {
+  fill: #20c933;
+}
