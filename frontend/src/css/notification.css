@@ -21,11 +21,16 @@
   font-weight: normal;
 }
 
-#notifications .sf2-icon-bell {
-  font-size: 24px;
+#notifications .sf-icon-bell {
+  font-size: 16px;
   line-height: 1;
-  color: #999;
+  color: #666;
   vertical-align: middle;
+  border-radius: 4px;
+}
+
+#notifications .sf-icon-bell:hover {
+  background-color: var(--bs-hover-bg);
 }
 
 #notifications .num {

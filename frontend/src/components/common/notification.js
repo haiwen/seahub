@@ -5,6 +5,8 @@ import { gettext } from '../../utils/constants';
 import NoticeItem from './notice-item';
 import UserNotificationsDialog from '../../user-notifications';
 import { Utils } from '../../utils/utils';
+import IconBtn from '../icon-btn';
+
 import '../../css/notification.css';
 
 class Notification extends React.Component {
@@ -176,7 +178,7 @@ class Notification extends React.Component {
     return (
       <div id="notifications">
         <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title={gettext('Notifications')} aria-label={gettext('Notifications')}>
-          <span className="sf2-icon-bell" id="notification-popover"></span>
+          <IconBtn id="notification-popover" symbol="notification" size={32} className="sf-icon-bell" />
           <span className={`num ${totalUnseenCount ? '' : 'hide'}`}>{totalUnseenCount}</span>
         </a>
         {this.state.showNotice &&

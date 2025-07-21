@@ -60,6 +60,16 @@
   text-decoration: none;
   color: var(--bs-icon-color);
 }
+
+.common-toolbar .sf-icon-color-mode {
+  font-size: 16px;
+  color: #666;
+  border-radius: 4px;
+}
+
+.common-toolbar .sf-icon-color-mode:hover {
+  background-color: var(--bs-hover-bg);
+}
 /* end common-toolbar */
 
 /* begin path toolbar  */
