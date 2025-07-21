@@ -5,10 +5,9 @@ from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PER
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
 from seahub.utils import is_valid_org_id
 from seahub.utils.db_api import SeafileDB
-from seahub.search.utils import get_user_group_ids
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 logger = logging.getLogger(__name__)
 
@@ -295,7 +294,11 @@ def check_invisible_folder(repo_id, username, org_id=None):
     if 'invisible' in user_perms:
         exist_invisible_folder = True
     else:
-        group_ids = get_user_group_ids(username, org_id)
+        if org_id:
+            user_groups = ccnet_api.get_org_groups_by_user(org_id, username, return_ancestors=True)
+        else:
+            user_groups = ccnet_api.get_groups(username, return_ancestors=True)
+        group_ids = [group.id for group in user_groups]
         group_perms = seafile_db_api.get_share_to_group_folder_permission_by_group_ids_and_repo_id(group_ids, repo_id)
         
         if 'invisible' in group_perms:
