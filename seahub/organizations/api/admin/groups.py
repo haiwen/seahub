@@ -287,8 +287,7 @@ class OrgAdminGroupToDeptView(APIView):
         return Response(group_info)
 
 
-class OrgAdminMoveGroup(APIView):
-    """update group structure"""
+class OrgAdminMoveDepartment(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsProVersion, IsOrgAdminUser)
     throttle_classes = (UserRateThrottle,)
@@ -301,28 +300,38 @@ class OrgAdminMoveGroup(APIView):
 
         # permission check
         group_id = int(group_id)
-        if get_org_id_by_group(group_id) != org_id:
+        group = ccnet_api.get_group(group_id)
+        if not group:
             error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        target_group_id = request.data.get('target_group_id')
-        try:
-            target_group_id = int(target_group_id)
-            if get_org_id_by_group(target_group_id) != org_id:
-                error_msg = 'Group %s not found.' % target_group_id
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        except Exception as e:
-            error_msg = 'Group %s not found.' % target_group_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
-        group = ccnet_api.get_group(group_id)
         if group.creator_name != 'system admin':
             error_msg = 'Group %s is not a department' % group_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if get_org_id_by_group(group_id) != org_id:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        target_group_id = request.data.get('target_group_id')
+        try:
+            target_group_id = int(target_group_id)
+        except:
+            error_msg = 'target_group_id %s invalid' % target_group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         target_group = ccnet_api.get_group(target_group_id)
+        if not target_group:
+            error_msg = 'Group %s not found.' % target_group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
         if target_group.creator_name != 'system admin':
             error_msg = 'Group %s is not a department' % target_group_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if get_org_id_by_group(target_group_id) != org_id:
+            error_msg = 'Group %s not found.' % target_group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         if group.parent_group_id == target_group_id or group_id == target_group_id:
             return Response({'success': True})

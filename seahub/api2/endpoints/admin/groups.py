@@ -311,11 +311,11 @@ class AdminGroup(APIView):
 
             if group.parent_group_id == target_group_id or group_id == target_group_id:
                 return Response({'success': True})
-            
-            org_id = ccnet_api.get_org_id_by_group(target_group_id)
-            if org_id >= 0:
-                error_msg = 'Target group %d invalid.' % target_group_id
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            is_org = ccnet_api.is_org_group(group_id)
+            if is_org:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             
             try:
                 ccnet_db = CcnetDB()
