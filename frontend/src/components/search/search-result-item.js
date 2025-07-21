@@ -64,8 +64,8 @@ class SearchResultItem extends React.Component {
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">
-          <div className="item-name ellipsis">{item.name}</div>
-          <div className="item-link ellipsis">{showName}</div>
+          <div className="item-name ellipsis" title={item.name}>{item.name}</div>
+          <div className="item-link ellipsis" title={showName}>{showName}</div>
           <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content }}></div>
         </div>
         {isHighlight && onDeleteItem && (
