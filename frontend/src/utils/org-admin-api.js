@@ -426,7 +426,7 @@ class OrgAdminAPI {
   }
 
   orgAdminMoveDepartment(orgID, groupID, targetDepartmentId) {
-    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/groups/' + groupID + '/move-group/';
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/groups/' + groupID + '/move-department/';
     const form = new FormData();
     form.append('target_group_id', targetDepartmentId);
     return this.req.put(url, form);

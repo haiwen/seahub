@@ -77,7 +77,7 @@ urlpatterns = [
     path('<int:org_id>/admin/groups/<int:group_id>/', OrgAdminGroup.as_view(), name='api-admin-group'),
     path('<int:org_id>/admin/groups/<int:group_id>/libraries/', AdminGroupLibraries.as_view(), name='api-admin-group-libraries'),
     path('<int:org_id>/admin/groups/<int:group_id>/group-to-department/', OrgAdminGroupToDeptView.as_view(), name='api-admin-group-to-department'),
-    path('<int:org_id>/admin/groups/<int:group_id>/move-group/', OrgAdminMoveGroup.as_view(), name='api-admin-move-group'),
+    path('<int:org_id>/admin/groups/<int:group_id>/move-department/', OrgAdminMoveGroup.as_view(), name='api-admin-move-group'),
     re_path(r'^(?P<org_id>\d+)/admin/groups/(?P<group_id>\d+)/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupLibrary.as_view(), name='api-admin-group-library'),
 
     path('<int:org_id>/admin/groups/<int:group_id>/group-owned-libraries/', AdminGroupOwnedLibraries.as_view(), name='api-admin-group-owned-libraries'),

@@ -296,7 +296,14 @@ class AdminGroup(APIView):
                 error_msg = 'target_group_id invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             
-            group = ccnet_api.get_group(group_id)
+            if group.creator_name != 'system admin':
+                error_msg = 'Group %s is not a department' % group_id
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            
+            target_group = ccnet_api.get_group(target_group_id)
+            if target_group.creator_name != 'system admin':
+                error_msg = 'Group %s is not a department' % target_group_id
+
             if group.parent_group_id == target_group_id or group_id == target_group_id:
                 return Response({'success': True})
             
@@ -323,7 +330,7 @@ class AdminGroup(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             
             try:
-                ccnet_db.update_group_structure(group_id, target_group_id)
+                ccnet_db.move_department(group_id, target_group_id)
                 return Response({'success': True})
             except Exception as e:
                 logger.error(e)

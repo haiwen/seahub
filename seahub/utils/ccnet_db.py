@@ -269,7 +269,7 @@ class CcnetDB:
             sub_groups = cursor.fetchall()
         return [s[0] for s in sub_groups]
     
-    def update_group_structure(self, group_id, target_department_id):
+    def move_department(self, department_id, target_department_id):
         get_current_path_sql = f"""
         SELECT path
         FROM `{self.db_name}`.`GroupStructure`
@@ -296,14 +296,14 @@ class CcnetDB:
                 target_path = target_path_result[0] if target_path_result else str(target_department_id)
 
                 # Get current department's path
-                cursor.execute(get_current_path_sql, [group_id])
+                cursor.execute(get_current_path_sql, [department_id])
                 current_path_result = cursor.fetchone()
-                current_path = current_path_result[0] if current_path_result else str(group_id)
+                current_path = current_path_result[0] if current_path_result else str(department_id)
 
                 # Update parent in Group table
-                cursor.execute(update_group_sql, [target_department_id, group_id])
+                cursor.execute(update_group_sql, [target_department_id, department_id])
                 # Create new path prefix
-                new_path_prefix = f"{target_path}, {group_id}" if target_path else str(group_id)
+                new_path_prefix = f"{target_path}, {department_id}" if target_path else str(department_id)
                 old_path_prefix = current_path
 
                 # Update paths in GroupStructure table
