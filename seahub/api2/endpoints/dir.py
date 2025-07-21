@@ -28,8 +28,7 @@ from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.repo import parse_repo_perm, is_repo_owner
-from seahub.utils.db_api import SeafileDB
-from seahub.search.utils import get_user_group_ids
+from seahub.share.utils import check_invisible_folder
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
@@ -326,34 +325,8 @@ class DirView(APIView):
         exist_invisible_folder = False
         if not is_repo_owner(request, repo_id, username):
             try:
-                seafile_db_api = SeafileDB()
-                permission_to_folder_path = seafile_db_api.get_share_to_user_folder_permission_by_username_and_repo_id(username, repo_id)
-                if 'invisible' in permission_to_folder_path.keys():
-                    exist_invisible_folder = True
-                else:
-                    org_id = request.user.org.org_id if request.user.org else None
-                    group_ids = get_user_group_ids(username, org_id)
-                    group_permission_to_folder_path = seafile_db_api.get_share_to_group_folder_permission_by_group_ids_and_repo_id(group_ids, repo_id)
-                    if 'invisible' in group_permission_to_folder_path.keys():
-                        other_permission_paths = []
-                        path_to_permission = {}
-                        invisible_paths = group_permission_to_folder_path.get('invisible')
-                        
-                        for folder_path in permission_to_folder_path.values():
-                            other_permission_paths.extend(folder_path)
-                        for perm, paths in group_permission_to_folder_path.items():
-                            for path in paths:
-                                if path not in path_to_permission:
-                                    path_to_permission[path] = [perm]
-                                else:
-                                    path_to_permission[path].append(perm)
-                        for invisible_path in invisible_paths:
-                            if invisible_path in other_permission_paths:
-                                continue
-                            if len(path_to_permission.get(invisible_path)) == 1:
-                                exist_invisible_folder = True
-                                
-                                
+                org_id = request.user.org.org_id if request.user.org else None
+                exist_invisible_folder = check_invisible_folder(repo_id, username, org_id)
             except Exception as e:
                 logger.error(e)
 
