@@ -649,6 +649,11 @@ class SystemAdminAPI {
     return this.req.get(url);
   }
 
+  sysAdminListOrgStaff(orgID) {
+    const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/staff/';
+    return this.req.get(url);
+  }
+
   sysAdminAddOrgUser(orgID, email, name, password) {
     const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/users/';
     let formData = new FormData();

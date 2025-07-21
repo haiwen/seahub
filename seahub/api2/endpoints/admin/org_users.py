@@ -3,6 +3,7 @@ import logging
 from types import FunctionType
 
 from django.utils.translation import gettext as _
+from seahub.utils.ccnet_db import CcnetDB
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -423,3 +424,38 @@ class AdminOrgUser(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class AdminOrgStaff(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser, IsProVersion)
+
+    def get(self, request, org_id):
+
+        if not request.user.admin_permissions.other_permission():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        # argument check
+        org_id = int(org_id)
+        if org_id == 0:
+            error_msg = 'org_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            error_msg = 'Organization %d not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        ccnet_db = CcnetDB()
+        staff = ccnet_db.get_org_staffs(int(org_id))
+
+        result = []
+        for email in staff:
+            org_user = User.objects.get(email=email)
+            user_info = get_org_user_info(org_id, org_user)
+            user_info['active'] = org_user.is_active
+            result.append(user_info)
+
+        return Response({'users': result})
