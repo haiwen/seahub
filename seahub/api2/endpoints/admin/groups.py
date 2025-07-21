@@ -301,8 +301,13 @@ class AdminGroup(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             
             target_group = ccnet_api.get_group(target_group_id)
+            if not target_group:
+                error_msg = 'Target group %d not found.' % target_group_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            
             if target_group.creator_name != 'system admin':
                 error_msg = 'Group %s is not a department' % target_group_id
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if group.parent_group_id == target_group_id or group_id == target_group_id:
                 return Response({'success': True})
@@ -310,11 +315,6 @@ class AdminGroup(APIView):
             org_id = ccnet_api.get_org_id_by_group(target_group_id)
             if org_id >= 0:
                 error_msg = 'Target group %d invalid.' % target_group_id
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-            target_group = ccnet_api.get_group(target_group_id)
-            if not target_group:
-                error_msg = 'Target group %d not found.' % target_group_id
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
             
             try:
