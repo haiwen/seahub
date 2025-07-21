@@ -1995,3 +1995,9 @@ export const throttle = (func, delay) => {
 export const getType = (value) => {
   return Object.prototype.toString.call(value).slice(8, -1);
 };
+
+export const getColorScheme = () => {
+  const manualMode = localStorage.getItem('sf_color_mode');
+  if (manualMode) return manualMode;
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+};

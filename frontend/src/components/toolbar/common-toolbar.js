@@ -8,6 +8,8 @@ import Account from '../common/account';
 import Logout from '../common/logout';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import tagsAPI from '../../tag/api';
+import IconBtn from '../icon-btn';
+import { getColorScheme } from '../../utils/utils';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -35,6 +37,7 @@ class CommonToolbar extends React.Component {
       currentRepoInfo: props.currentRepoInfo,
       isTagEnabled: false,
       tagsData: [],
+      colorMode: getColorScheme(),
     };
   }
 
@@ -79,6 +82,13 @@ class CommonToolbar extends React.Component {
     }
   };
 
+  onColorModeChange = () => {
+    const colorMode = this.state.colorMode === 'light' ? 'dark' : 'light';
+    this.setState({ colorMode });
+    localStorage.setItem('sf_color_mode', colorMode);
+    document.body.setAttribute('data-bs-theme', colorMode);
+  };
+
   renderSearch = () => {
     const { repoID, repoName, isLibView, path, isViewFile, isTagEnabled, tagsData } = this.state;
     const { searchPlaceholder } = this.props;
@@ -110,9 +120,13 @@ class CommonToolbar extends React.Component {
 
   render() {
     const { showSearch = true } = this.props;
+    const { colorMode } = this.state;
+    const symbol = colorMode === 'light' ? 'dark-mode' : 'light-mode';
+    const title = colorMode === 'light' ? gettext('Dark mode') : gettext('Light mode');
     return (
       <div className="common-toolbar">
         {showSearch && this.renderSearch()}
+        <IconBtn symbol={symbol} size={32} className="sf-icon-color-mode" title={title} onClick={this.onColorModeChange} />
         <Notification />
         <Account />
         {showLogoutIcon && (<Logout />)}
