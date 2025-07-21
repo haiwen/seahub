@@ -12,13 +12,6 @@ import SidePanel from './side-panel';
 import MainPanel from './main-panel';
 
 import Info from './info';
-
-import StatisticFile from './statistic/statistic-file';
-import StatisticStorage from './statistic/statistic-storage';
-import StatisticTraffic from './statistic/statistic-traffic';
-import StatisticUsers from './statistic/statistic-users';
-import StatisticReport from './statistic/statistic-reports';
-import StatisticMetrics from './statistic/statistic-metrics';
 import StatisticLayout from './statistic/layout';
 
 import SearchUsers from './users/search-users';
@@ -214,14 +207,7 @@ class SysAdmin extends React.Component {
         <MainPanel>
           <Router className="reach-router">
             <Info path={siteRoot + 'sys/info'} {...commonProps} />
-            <StatisticLayout path={`${siteRoot}sys/statistics/`} {...commonProps}>
-              <StatisticFile path="file" />
-              <StatisticStorage path="storage" />
-              <StatisticUsers path="user" />
-              <StatisticTraffic path="traffic" />
-              <StatisticReport path="reports" />
-              <StatisticMetrics path="metrics" />
-            </StatisticLayout>
+            <StatisticLayout path={`${siteRoot}sys/statistics/*`} {...commonProps} />
             <LibrariesAndLinks path={`${siteRoot}sys/*`} {...commonProps} />
             <DirView path={`${siteRoot}sys/libraries/:repoID`} {...commonProps} />
             <Devices path={`${siteRoot}sys/devices/`} {...commonProps}>
