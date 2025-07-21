@@ -188,6 +188,7 @@ class AdminGroup(APIView):
         1. transfer a group.
         2. set group quota.
         3. rename group.
+        4. move a group to another group.
 
         Permission checking:
         1. Admin user;
@@ -286,6 +287,56 @@ class AdminGroup(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # move a group to another group
+        target_group_id = request.data.get('target_group_id')
+        if target_group_id:
+            try:
+                target_group_id = int(target_group_id)
+            except ValueError:
+                error_msg = 'target_group_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            
+            if group.creator_name != 'system admin':
+                error_msg = 'Group %s is not a department' % group_id
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            
+            target_group = ccnet_api.get_group(target_group_id)
+            if not target_group:
+                error_msg = 'Target group %d not found.' % target_group_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            
+            if target_group.creator_name != 'system admin':
+                error_msg = 'Group %s is not a department' % target_group_id
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if group.parent_group_id == target_group_id or group_id == target_group_id:
+                return Response({'success': True})
+
+            is_org = ccnet_api.is_org_group(group_id)
+            if is_org:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            
+            try:
+                ccnet_db = CcnetDB()
+                sub_groups = ccnet_db.get_all_sub_groups(group_id)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            
+            if target_group_id in sub_groups:
+                error_msg = 'Cannot move to its own sub department.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            
+            try:
+                ccnet_db.move_department(group_id, target_group_id)
+                return Response({'success': True})
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            
         group_info = get_group_info(group_id)
         return Response(group_info)
 
@@ -368,18 +419,15 @@ class AdminDepartments(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
+        if not request.user.admin_permissions.can_manage_group():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         try:
             all_groups = ccnet_api.list_all_departments()
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        try:
-            avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = GROUP_AVATAR_DEFAULT_SIZE
-
         
         result = []
         for group in all_groups:

@@ -226,10 +226,6 @@ class OrgAdminDepartments(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        try:
-            avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            avatar_size = GROUP_AVATAR_DEFAULT_SIZE
         result = []
         for group in departments:
             created_at = timestamp_to_isoformat_timestr(group.timestamp)
@@ -289,3 +285,74 @@ class OrgAdminGroupToDeptView(APIView):
             'creator_contact_email': email2contact_email(group.creator_name),
         }
         return Response(group_info)
+
+
+class OrgAdminMoveDepartment(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsProVersion, IsOrgAdminUser)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, org_id, group_id):
+        org_id = int(org_id)
+        if not ccnet_api.get_org_by_id(org_id):
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        group_id = int(group_id)
+        group = ccnet_api.get_group(group_id)
+        if not group:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if group.creator_name != 'system admin':
+            error_msg = 'Group %s is not a department' % group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if get_org_id_by_group(group_id) != org_id:
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        target_group_id = request.data.get('target_group_id')
+        try:
+            target_group_id = int(target_group_id)
+        except:
+            error_msg = 'target_group_id %s invalid' % target_group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        target_group = ccnet_api.get_group(target_group_id)
+        if not target_group:
+            error_msg = 'Group %s not found.' % target_group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if target_group.creator_name != 'system admin':
+            error_msg = 'Group %s is not a department' % target_group_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if get_org_id_by_group(target_group_id) != org_id:
+            error_msg = 'Group %s not found.' % target_group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if group.parent_group_id == target_group_id or group_id == target_group_id:
+            return Response({'success': True})
+        
+        try:
+            ccnet_db = CcnetDB()
+            sub_groups = ccnet_db.get_all_sub_groups(group_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        if target_group_id in sub_groups:
+            error_msg = 'Cannot move to its own sub department.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            ccnet_db.move_department(group_id, target_group_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

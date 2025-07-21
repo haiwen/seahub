@@ -10,6 +10,7 @@ import AddDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/ad
 import AddDepartMemberV2Dialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-depart-member-v2-dialog';
 import RenameDepartmentV2Dialog from '../../../components/dialog/sysadmin-dialog/rename-department-v2-dialog';
 import DeleteDepartmentV2ConfirmDialog from '../../../components/dialog/sysadmin-dialog/delete-department-v2-confirm-dialog';
+import MoveDepartmentDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-move-group-dialog';
 import AddRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-repo-dialog';
 import DepartmentNode from './department-node';
 import DepartmentsTreePanel from './departments-tree-panel';
@@ -32,6 +33,7 @@ class Departments extends React.Component {
       isRenameDepartmentDialogShow: false,
       isDeleteDepartmentDialogShow: false,
       isShowAddRepoDialog: false,
+      isMoveDeparmentDialogShow: false,
       membersList: [],
       isTopDepartmentLoading: false,
       isMembersListLoading: false,
@@ -188,6 +190,10 @@ class Departments extends React.Component {
     this.setState({ operateNode: node, isDeleteDepartmentDialogShow: !this.state.isDeleteDepartmentDialogShow });
   };
 
+  toggleMoveDepartment = (node) => {
+    this.setState({ operateNode: node, isMoveDeparmentDialogShow: !this.state.isMoveDeparmentDialogShow });
+  };
+
   addDepartment = (parentNode, department) => {
     parentNode.addChildren([new DepartmentNode({
       id: department.id,
@@ -215,6 +221,57 @@ class Departments extends React.Component {
   renameDepartment = (node, department) => {
     node.id = department.id;
     node.name = department.name;
+  };
+
+  onDepartmentChanged = (targetDepartment) => {
+    const { operateNode, rootNodes } = this.state;
+
+    let nodeToMove = operateNode;
+    if (operateNode.parentNode) {
+      operateNode.parentNode.deleteChildById(operateNode.id);
+    } else {
+      const index = rootNodes.indexOf(operateNode);
+      if (index !== -1) {
+        rootNodes.splice(index, 1);
+      }
+    }
+
+    if (targetDepartment) {
+      let existingTargetNode = null;
+      const findTargetNode = (nodes) => {
+        for (let n of nodes) {
+          if (n.id === targetDepartment.id) {
+            existingTargetNode = n;
+            return;
+          }
+          if (n.children.length > 0) {
+            findTargetNode(n.children);
+          }
+        }
+      };
+      findTargetNode(rootNodes);
+
+      if (existingTargetNode) {
+        nodeToMove.parentNode = existingTargetNode;
+        const isAlreadyChild = existingTargetNode.children.some(child => child.id === nodeToMove.id);
+        if (!isAlreadyChild) {
+          existingTargetNode.addChildren([nodeToMove]);
+        }
+      }
+    } else {
+      nodeToMove.parentNode = null;
+      const isAlreadyRoot = rootNodes.some(node => node.id === nodeToMove.id);
+      if (!isAlreadyRoot) {
+        this.setState({
+          rootNodes: [...rootNodes, nodeToMove]
+        });
+      }
+    }
+
+    const { checkedDepartmentId } = this.state;
+    if (checkedDepartmentId === nodeToMove.id) {
+      this.onChangeDepartment(nodeToMove.id);
+    }
   };
 
   onDelete = () => {
@@ -348,7 +405,7 @@ class Departments extends React.Component {
   render() {
     const { rootNodes, operateNode, checkedDepartmentId, isAddDepartmentDialogShow, isAddMembersDialogShow,
       membersList, isMembersListLoading, isTopDepartmentLoading, isRenameDepartmentDialogShow,
-      isDeleteDepartmentDialogShow, sortBy, sortOrder } = this.state;
+      isDeleteDepartmentDialogShow, sortBy, sortOrder, isMoveDeparmentDialogShow } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props} />
@@ -372,6 +429,7 @@ class Departments extends React.Component {
                     toggleAddMembers={this.toggleAddMembers}
                     toggleRename={this.toggleRename}
                     toggleDelete={this.toggleDelete}
+                    toggleMoveDepartment={this.toggleMoveDepartment}
                   />
                   <Department
                     rootNodes={rootNodes}
@@ -398,6 +456,7 @@ class Departments extends React.Component {
                     resetPerPage={this.resetPerPage}
                     currentPageInfo={this.state.currentPageInfo}
                     perPage={this.state.perPage}
+                    toggleMoveDepartment={this.toggleMoveDepartment}
                   />
                 </>
               }
@@ -416,6 +475,13 @@ class Departments extends React.Component {
             toggle={this.toggleAddMembers}
             nodeId={operateNode.id}
             onMemberChanged={this.onMemberChanged}
+          />
+        }
+        {isMoveDeparmentDialogShow &&
+          <MoveDepartmentDialog
+            toggle={this.toggleMoveDepartment}
+            nodeId={operateNode.id}
+            onDepartmentChanged={this.onDepartmentChanged}
           />
         }
         {isRenameDepartmentDialogShow &&

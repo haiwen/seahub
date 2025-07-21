@@ -522,6 +522,13 @@ class SystemAdminAPI {
     return this.req.put(url, formData);
   }
 
+  sysAdminMoveDepartment(groupID, targetGroupID) {
+    const url = this.server + '/api/v2.1/admin/groups/' + groupID + '/';
+    let formData = new FormData();
+    formData.append('target_group_id', targetGroupID);
+    return this.req.put(url, formData);
+  }
+
   sysAdminDeleteDepartment(groupID) {
     const url = this.server + '/api/v2.1/admin/address-book/groups/' + groupID + '/';
     return this.req.delete(url);
