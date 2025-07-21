@@ -230,6 +230,7 @@ urlpatterns = [
     path('thirdparty-editor/', include('seahub.thirdparty_editor.urls')),
     path('ocm-via-webdav/', include('seahub.ocm_via_webdav.urls')),
     path('cad/', include('seahub.cad.urls')),
+    path('wps/callback/', include('seahub.weboffice.urls')),
 
     path('sso-to-thirdpart/', sso_to_thirdpart, name='sso-to-thirdpart'),
 
