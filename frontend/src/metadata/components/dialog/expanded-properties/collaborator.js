@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import { getCellValueByColumn } from '../../../utils/cell';
 import AsyncCollaborator from '../../cell-formatter/async-collaborator';
 import { useCollaborators } from '../../../hooks';
@@ -46,6 +47,13 @@ const Collaborator = ({ record, column, columns, onCommit }) => {
       </div>
     </ClickOutside>
   );
+};
+
+Collaborator.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
+  columns: PropTypes.array.isRequired,
+  onCommit: PropTypes.func.isRequired,
 };
 
 export default Collaborator;

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import ClickOutside from '../../../../components/click-outside';
 import { getCellValueByColumn } from '../../metadata-details/utils';
 import SelectOption from '../../cell-formatter/select-option';
@@ -57,6 +58,13 @@ const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
       </div>
     </ClickOutside>
   );
+};
+
+MultipleSelect.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
+  onCommit: PropTypes.func.isRequired,
+  modifyColumnData: PropTypes.func.isRequired,
 };
 
 export default MultipleSelect;

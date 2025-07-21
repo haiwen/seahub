@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
@@ -93,6 +94,12 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
       </ModalBody>
     </Modal>
   );
+};
+
+ExpandedPropertiesDialog.propTypes = {
+  recordId: PropTypes.string.isRequired,
+  columns: PropTypes.array.isRequired,
+  toggle: PropTypes.func.isRequired,
 };
 
 export default ExpandedPropertiesDialog;

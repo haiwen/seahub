@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import { getCellValueByColumn } from '../../../utils/cell';
 import Icon from '../../../../components/icon';
 
@@ -17,6 +18,12 @@ const CheckBox = ({ record, column, onCommit }) => {
       </div>
     </div>
   );
+};
+
+CheckBox.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
+  onCommit: PropTypes.func.isRequired,
 };
 
 export default CheckBox;

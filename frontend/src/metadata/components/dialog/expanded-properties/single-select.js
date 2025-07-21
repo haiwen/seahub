@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getCellValueByColumn, getColumnOptionNameById } from '../../../utils/cell';
 import SingleSelectEditor from '../../cell-editors/single-select-editor';
@@ -66,6 +67,14 @@ const SingleSelect = ({ record, column, columns, onCommit, modifyColumnData }) =
       </div>
     </ClickOutside>
   );
+};
+
+SingleSelect.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
+  columns: PropTypes.array.isRequired,
+  onCommit: PropTypes.func.isRequired,
+  modifyColumnData: PropTypes.func.isRequired,
 };
 
 export default SingleSelect;

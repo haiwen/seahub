@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { getCellValueByColumn, getFileMTimeFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { checkIsDir } from '../../../utils/row';
 import { Utils } from '../../../../utils/utils';
@@ -91,6 +92,12 @@ const Text = ({ record, column, onCommit }) => {
       <span>{value}</span>
     </div>
   );
+};
+
+Text.propTypes = {
+  record: PropTypes.object,
+  column: PropTypes.object,
+  onCommit: PropTypes.func,
 };
 
 export default Text;
