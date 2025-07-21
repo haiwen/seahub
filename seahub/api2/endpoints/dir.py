@@ -324,20 +324,36 @@ class DirView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         exist_invisible_folder = False
-        org_id = request.user.org.org_id if request.user.org else None
         if not is_repo_owner(request, repo_id, username):
             try:
                 seafile_db_api = SeafileDB()
                 permission_to_folder_path = seafile_db_api.get_share_to_user_folder_permission_by_username_and_repo_id(username, repo_id)
                 if 'invisible' in permission_to_folder_path.keys():
                     exist_invisible_folder = True
-                elif len(permission_to_folder_path.keys()) > 0:
-                    exist_invisible_folder = False
                 else:
+                    org_id = request.user.org.org_id if request.user.org else None
                     group_ids = get_user_group_ids(username, org_id)
-                    invisible_paths = seafile_db_api.get_share_to_group_folder_permission_by_group_ids_and_repo_id(group_ids, repo_id)
-                    if invisible_paths:
-                        exist_invisible_folder = True
+                    group_permission_to_folder_path = seafile_db_api.get_share_to_group_folder_permission_by_group_ids_and_repo_id(group_ids, repo_id)
+                    if 'invisible' in group_permission_to_folder_path.keys():
+                        other_permission_paths = []
+                        path_to_permission = {}
+                        invisible_paths = group_permission_to_folder_path.get('invisible')
+                        
+                        for folder_path in permission_to_folder_path.values():
+                            other_permission_paths.extend(folder_path)
+                        for perm, paths in group_permission_to_folder_path.items():
+                            for path in paths:
+                                if path not in path_to_permission:
+                                    path_to_permission[path] = [perm]
+                                else:
+                                    path_to_permission[path].append(perm)
+                        for invisible_path in invisible_paths:
+                            if invisible_path in other_permission_paths:
+                                continue
+                            if len(path_to_permission.get(invisible_path)) == 1:
+                                exist_invisible_folder = True
+                                
+                                
             except Exception as e:
                 logger.error(e)
 
