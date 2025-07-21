@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Tooltip } from 'reactstrap';
 import Icon from './icon';
-import { downloadFile, Utils } from "../utils/utils";
+import { downloadFile } from '../utils/utils';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
