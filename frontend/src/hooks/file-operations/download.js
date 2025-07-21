@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { useGoFileserver, fileServerRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, downloadFile } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import ModalPortal from '../../components/modal-portal';
@@ -23,7 +23,7 @@ export const DownloadFileProvider = forwardRef(({ repoID, eventBus, children }, 
     if (direntCount === 1 && !direntList[0].is_dir) {
       const direntPath = Utils.joinPath(path, direntList[0].name);
       const url = URLDecorator.getUrl({ type: 'download_file_url', repoID: repoID, filePath: direntPath });
-      location.href = url;
+      downloadFile(url);
       return;
     }
     direntListRef.current = direntList.map(dirent => dirent.name);
