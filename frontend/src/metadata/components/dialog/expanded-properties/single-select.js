@@ -7,7 +7,6 @@ import ClickOutside from '../../../../components/click-outside';
 
 const SingleSelect = ({ record, column, columns, onCommit, modifyColumnData }) => {
   const [isEditorShow, setIsEditorShow] = useState(false);
-  const ref = useRef(null);
   const editorRef = useRef(null);
   const columnRef = useRef(column);
   const value = useMemo(() => getCellValueByColumn(record, column), [record, column]);
@@ -50,9 +49,9 @@ const SingleSelect = ({ record, column, columns, onCommit, modifyColumnData }) =
 
   return (
     <ClickOutside onClickOutside={onClickOutside}>
-      <div ref={ref} className="form-control position-relative select-option-container" onClick={onEdit}>
+      <div className="form-control position-relative select-option-container" onClick={onEdit}>
         {option ? <SelectOption option={option} /> : null}
-        <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
+        <i className="sf3-font sf3-font-down dropdown-indicator" aria-hidden="true"></i>
         {isEditorShow && (
           <SingleSelectEditor
             ref={editorRef}

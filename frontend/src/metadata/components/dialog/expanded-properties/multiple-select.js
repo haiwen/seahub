@@ -39,10 +39,10 @@ const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
         <div className="options-wrapper d-flex align-center gap-1">
           {value.map((optionId) => {
             const option = options.find(item => item.id === optionId || item.name === optionId);
-            return option ? <SelectOption option={option} /> : null;
+            return option ? <SelectOption key={optionId} option={option} /> : null;
           })}
         </div>
-        <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
+        <i className="sf3-font sf3-font-down dropdown-indicator" aria-hidden="true"></i>
         {isEditorShow && (
           <MultipleSelectEditor
             ref={editorRef}

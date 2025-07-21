@@ -28,6 +28,7 @@
   height: 38px;
   display: flex;
   align-items: center;
+  text-overflow: ellipsis;
 }
 
 .expanded-properties-content-container .form-control.disabled {
@@ -75,13 +76,25 @@
   text-align: center;
 }
 
-.expanded-properties-content-container .select-option-container i {
+.expanded-properties-content-container .select-option-container {
+  padding-right: 28px;
+  cursor: pointer;
+}
+
+.expanded-properties-content-container .select-option-container .cell-formatter-container {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expanded-properties-content-container .select-option-container .dropdown-indicator {
   position: absolute;
   right: 12px;
 }
 
 .expanded-properties-content-container .select-option-container .sf-metadata-single-select-editor,
-.expanded-properties-content-container .select-option-container .sf-metadata-collaborator-editor {
+.expanded-properties-content-container .select-option-container .sf-metadata-collaborator-editor,
+.expanded-properties-content-container .select-option-container .sf-metadata-tags-editor {
+  top: auto;
   bottom: 40px;
   z-index: 1;
 }
