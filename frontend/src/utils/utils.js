@@ -1995,3 +1995,22 @@ export const throttle = (func, delay) => {
 export const getType = (value) => {
   return Object.prototype.toString.call(value).slice(8, -1);
 };
+
+export const downloadFile = async (downloadUrl) => {
+
+  // Get filename from download url
+  const url = new URL(downloadUrl);
+  const isChrome = navigator.userAgent.indexOf('Chrome') > -1;
+  const pathname = url.pathname.replace(/\/+$/, '');
+  const fileName = pathname.split('/').pop();
+  if (Utils.pdfCheck(fileName) && isChrome) {
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } else {
+    location.href = downloadUrl;
+  }
+};

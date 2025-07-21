@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Tooltip } from 'reactstrap';
 import Icon from './icon';
+import { downloadFile } from '../utils/utils';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -48,7 +49,7 @@ class IconButton extends React.Component {
           id={this.props.id}
           className={classNames('file-toolbar-btn', { 'disabled': this.props.disabled })}
           aria-label={this.props.text}
-          onClick={() => window.open(this.props.href, '_parent')}
+          onClick={() => downloadFile(this.props.href)}
         >
           {btnContent}
         </div>
