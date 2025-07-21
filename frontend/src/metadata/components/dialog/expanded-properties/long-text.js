@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { getPreviewContent, LongTextInlineEditor } from '@seafile/seafile-editor';
 import { getCellValueByColumn } from '../../../utils/cell';
 import { lang } from '../../../../utils/constants';
@@ -38,6 +39,12 @@ const LongText = ({ record, column, onCommit }) => {
       />
     </div>
   );
+};
+
+LongText.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
+  onCommit: PropTypes.func.isRequired,
 };
 
 export default LongText;

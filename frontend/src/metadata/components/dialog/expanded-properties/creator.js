@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { getCellValueByColumn } from '../../../utils/cell';
 import Collaborator from '../../cell-formatter/collaborator';
 import { useCollaborators } from '../../../hooks';
@@ -53,6 +54,11 @@ const Creator = ({ record, column }) => {
       {collaborator && <Collaborator collaborator={collaborator} />}
     </div>
   );
+};
+
+Creator.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
 };
 
 export default Creator;

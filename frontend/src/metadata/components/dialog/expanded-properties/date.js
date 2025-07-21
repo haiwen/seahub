@@ -1,7 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { getCellValueByColumn, getDateDisplayString } from '../../../utils/cell';
 import DateEditor from '../../cell-editors/date-editor';
 import ClickOutside from '../../../../components/click-outside';
+
 const Date = ({ record, column, onCommit }) => {
   const [isEditorShown, setIsEditorShown] = useState(false);
   const ref = useRef(null);
@@ -35,6 +37,12 @@ const Date = ({ record, column, onCommit }) => {
       </div>
     </ClickOutside>
   );
+};
+
+Date.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
+  onCommit: PropTypes.func.isRequired,
 };
 
 export default Date;

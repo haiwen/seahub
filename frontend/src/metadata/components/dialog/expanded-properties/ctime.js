@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { getCellValueByColumn } from '../../../utils/cell';
 import dayjs from 'dayjs';
 
@@ -10,6 +11,11 @@ const CTime = ({ record, column }) => {
       {formatedValue}
     </div>
   );
+};
+
+CTime.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
 };
 
 export default CTime;

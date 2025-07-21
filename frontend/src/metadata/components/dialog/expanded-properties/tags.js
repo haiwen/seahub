@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import { getCellValueByColumn, getRecordIdFromRecord } from '../../../utils/cell';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { useTags } from '../../../../tag/hooks';
@@ -61,6 +62,12 @@ const Tags = ({ record, column, containerRef }) => {
       </div>
     </ClickOutside>
   );
+};
+
+Tags.propTypes = {
+  record: PropTypes.object.isRequired,
+  column: PropTypes.object.isRequired,
+  containerRef: PropTypes.object.isRequired,
 };
 
 export default Tags;
