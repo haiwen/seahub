@@ -711,7 +711,10 @@ class SeafileDB:
         with connection.cursor() as cursor:
             cursor.execute(sql, [username, repo_id])
             for path, permission in cursor.fetchall():
-                permission_to_folder_path[permission] = path
+                if permission not in permission_to_folder_path:
+                    permission_to_folder_path[permission] = [path]
+                else:
+                    permission_to_folder_path[permission].append(path)
             return permission_to_folder_path
     
     def get_share_to_group_folder_permission_by_group_ids_and_repo_id(self, group_ids, repo_id):
@@ -719,16 +722,19 @@ class SeafileDB:
             return {}
         placeholders = ','.join(['%s'] * len(group_ids))
         sql = f"""
-            SELECT `path`
+            SELECT `path`, `permission`
             FROM `{self.db_name}`.`FolderGroupPerm`
-            WHERE group_id in ({placeholders}) AND repo_id = %s AND permission='invisible';
+            WHERE group_id in ({placeholders}) AND repo_id = %s;
         """
-        invisible_paths = []
+        permission_to_folder_path = {}
         with connection.cursor() as cursor:
             cursor.execute(sql, tuple(group_ids) + (repo_id,))
-            for path in cursor.fetchall():
-                invisible_paths.append(path[0])
-            return invisible_paths
+            for path, permission in cursor.fetchall():
+                if permission not in permission_to_folder_path:
+                    permission_to_folder_path[permission] = [path]
+                else:
+                    permission_to_folder_path[permission].append(path)
+            return permission_to_folder_path
 
     def get_download_limit_org(self,start,per_page):
         sql = f"""
