@@ -658,7 +658,7 @@ textarea::placeholder {
 .account-popup .item {
   display: block;
   padding: 8px 18px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 }
 
 .account-popup .item:last-child {
@@ -1057,9 +1057,9 @@ textarea::placeholder {
 .sf-popover {
   width: 240px;
   background: var(--bs-body-bg);
-  border: 1px solid #c9c9c9;
+  border: 1px solid var(--bs-border-color);
   border-radius: 3px;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05);
+  box-shadow: 0px 1px 8px rgba(0, 0, 0, 0.1);
   position: absolute;
   z-index: 20;
 }
