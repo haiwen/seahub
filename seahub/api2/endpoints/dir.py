@@ -27,7 +27,9 @@ from seahub.utils.file_types import IMAGE, VIDEO, PDF
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils.repo import parse_repo_perm
+from seahub.utils.repo import parse_repo_perm, is_repo_owner
+from seahub.utils.db_api import SeafileDB
+from seahub.search.utils import get_user_group_ids
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
@@ -321,9 +323,27 @@ class DirView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        exist_invisible_folder = False
+        org_id = request.user.org.org_id if request.user.org else None
+        if not is_repo_owner(request, repo_id, username):
+            try:
+                seafile_db_api = SeafileDB()
+                permission_to_folder_path = seafile_db_api.get_share_to_user_folder_permission_by_username_and_repo_id(username, repo_id)
+                if 'invisible' in permission_to_folder_path.keys():
+                    exist_invisible_folder = True
+                elif len(permission_to_folder_path.keys()) > 0:
+                    exist_invisible_folder = False
+                else:
+                    group_ids = get_user_group_ids(username, org_id)
+                    invisible_paths = seafile_db_api.get_share_to_group_folder_permission_by_group_ids_and_repo_id(group_ids, repo_id)
+                    if invisible_paths:
+                        exist_invisible_folder = True
+            except Exception as e:
+                logger.error(e)
 
         response_dict = {}
         response_dict["user_perm"] = permission
+        response_dict["exist_invisible_folder"] = exist_invisible_folder
         response_dict["dir_id"] = dir_id
 
         if request_type == 'f':

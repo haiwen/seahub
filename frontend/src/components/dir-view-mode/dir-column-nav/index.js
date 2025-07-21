@@ -11,6 +11,7 @@ import './index.css';
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
   userPerm: PropTypes.string.isRequired,
+  existInvisibleFolder: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
@@ -41,7 +42,7 @@ class DirColumnNav extends React.Component {
 
   render() {
     const {
-      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25
+      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25, existInvisibleFolder
     } = this.props;
     const flex = navRate ? '0 0 ' + navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
@@ -70,8 +71,12 @@ class DirColumnNav extends React.Component {
               updateTreeNode={this.props.updateTreeNode}
               sortTreeNode={this.props.sortTreeNode}
             />
-            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+            {!existInvisibleFolder &&
+              <>
+                <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+                <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+              </>
+            }
             <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} updateRepoInfo={this.props.updateRepoInfo} />
           </>
         )}

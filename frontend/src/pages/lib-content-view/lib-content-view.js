@@ -73,6 +73,7 @@ class LibContentView extends React.Component {
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
       userPerm: '',
+      existInvisibleFolder: false,
       selectedDirentList: [],
       lastSelectedIndex: null,
       fileTags: [],
@@ -207,11 +208,12 @@ class LibContentView extends React.Component {
       }
     } else if (noticeData.type === 'repo-update') {
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
-        const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
+        const { dirent_list, user_perm: userPerm, dir_id: dirID, exist_invisible_folder: existInvisibleFolder } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
         this.setState({
           pathExist: true,
           userPerm,
+          existInvisibleFolder,
           isDirentListLoading: false,
           direntList,
           dirID,
@@ -474,13 +476,14 @@ class LibContentView extends React.Component {
     let repoID = this.props.repoID;
     if (path === '/' || path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) || path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
       seafileAPI.listDir(repoID, '/').then(res => {
-        const { dirent_list, user_perm } = res.data;
+        const { dirent_list, user_perm, exist_invisible_folder } = res.data;
         let tree = this.state.treeData;
         this.addResponseListToNode(dirent_list, tree.root);
         this.setState({
           isTreeDataLoading: false,
           treeData: tree,
           userPerm: user_perm,
+          existInvisibleFolder: exist_invisible_folder,
         });
       }).catch(() => {
         this.setState({ isTreeDataLoading: false });
@@ -619,11 +622,12 @@ class LibContentView extends React.Component {
       path,
     });
     seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
-      const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
+      const { dirent_list, user_perm: userPerm, dir_id: dirID, exist_invisible_folder: existInvisibleFolder } = res.data;
       const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), sortBy, sortOrder);
       this.setState({
         pathExist: true,
         userPerm,
+        existInvisibleFolder,
         isDirentListLoading: false,
         direntList,
         dirID,
@@ -1911,7 +1915,7 @@ class LibContentView extends React.Component {
       path = Utils.getDirName(path);
     }
     seafileAPI.listDir(repoID, path, { with_parents: true }).then(res => {
-      const { dirent_list: direntList, user_perm } = res.data;
+      const { dirent_list: direntList, user_perm, exist_invisible_folder: existInvisibleFolder } = res.data;
       let results = {};
       for (let i = 0; i < direntList.length; i++) {
         let object = direntList[i];
@@ -1933,6 +1937,7 @@ class LibContentView extends React.Component {
         treeData: tree,
         currentNode: tree.getNodeByPath(path),
         userPerm: user_perm,
+        existInvisibleFolder: existInvisibleFolder,
       });
     }).catch(() => {
       this.setState({ isLoadFailed: true });
@@ -2505,6 +2510,7 @@ class LibContentView extends React.Component {
                           updateRepoInfo={this.updateRepoInfo}
                           isGroupOwnedRepo={this.state.isGroupOwnedRepo}
                           userPerm={userPerm}
+                          existInvisibleFolder={this.state.existInvisibleFolder}
                           enableDirPrivateShare={enableDirPrivateShare}
                           isTreeDataLoading={this.state.isTreeDataLoading}
                           treeData={this.state.treeData}

@@ -22,6 +22,7 @@ const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
   enableDirPrivateShare: PropTypes.bool.isRequired,
   userPerm: PropTypes.string,
+  existInvisibleFolder: PropTypes.bool,
   isGroupOwnedRepo: PropTypes.bool.isRequired,
   // tree
   isTreeDataLoading: PropTypes.bool.isRequired,
@@ -158,6 +159,7 @@ class DirColumnView extends React.Component {
             <DirColumnNav
               currentPath={this.props.path}
               userPerm={this.props.userPerm}
+              existInvisibleFolder={this.props.existInvisibleFolder}
               isTreeDataLoading={this.props.isTreeDataLoading}
               treeData={this.props.treeData}
               currentNode={this.props.currentNode}
