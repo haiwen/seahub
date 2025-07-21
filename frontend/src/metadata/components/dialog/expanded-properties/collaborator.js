@@ -34,7 +34,7 @@ const Collaborator = ({ record, column, columns, onCommit }) => {
         {Array.isArray(value) && value.length > 0 && (
           value.map(email => <AsyncCollaborator key={email} value={email} {...props} />)
         )}
-        <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
+        <i className="sf3-font sf3-font-down dropdown-indicator" aria-hidden="true"></i>
         {isEditorShow && (
           <CollaboratorEditor
             value={value}

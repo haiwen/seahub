@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import { gettext } from '../../../../utils/constants';
 import { getCellValueByColumn, getFileNameFromRecord, isCellValueChanged } from '../../../utils/cell';
@@ -41,6 +41,7 @@ const COLUMN_TYPE_ITEM_MAP = {
 };
 
 const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
+  const containerRef = useRef(null);
   const { metadata, modifyRecord, modifyColumnData } = useMetadataView();
   const record = useMemo(() => metadata.id_row_map[recordId], [metadata, recordId]);
   const filename = useMemo(() => getFileNameFromRecord(record), [record]);
@@ -67,9 +68,9 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
     </button>
   );
   return (
-    <Modal isOpen={true} toggle={toggle} className="expanded-properties-dialog-container" contentClassName="h-100">
+    <Modal innerRef={containerRef} isOpen={true} toggle={toggle} className="expanded-properties-dialog-container" contentClassName="h-100">
       <ModalHeader toggle={toggle} close={closeBtn}>{filename}</ModalHeader>
-      <ModalBody className="expanded-properties-content-container">
+      <ModalBody className="expanded-properties-content-container" >
         <>
           {columns.map((column, idx) => {
             const { name, type } = column;
@@ -83,7 +84,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
                   <span className="text-center">{name}</span>
                 </div>
                 <div className="col-9">
-                  {Component && <Component record={record} column={column} columns={columns} onCommit={onCommit} modifyColumnData={modifyColumnData} />}
+                  {Component && <Component record={record} column={column} columns={columns} containerRef={containerRef} onCommit={onCommit} modifyColumnData={modifyColumnData} />}
                 </div>
               </div>
             );
