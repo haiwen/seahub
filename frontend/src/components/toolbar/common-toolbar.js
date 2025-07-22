@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon, SF_COLOR_MODE } from '../../utils/constants';
 import Search from '../search/search';
 import SearchByName from '../search/search-by-name';
 import Notification from '../common/notification';
@@ -47,12 +47,21 @@ class CommonToolbar extends React.Component {
       this.unsubscribeTagStatus = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAG_STATUS, (status) => this.onTagStatus(status));
       this.unsubscribeTagsChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAGS_CHANGED, (tags) => this.setState({ tagsData: tags }));
     }
+    this.initializeColorMode();
   }
 
   componentWillUnmount() {
     this.unsubscribeLibChange && this.unsubscribeLibChange();
     this.unsubscribeMetadataStatus && this.unsubscribeMetadataStatus();
     this.unsubscribeTagsChanged && this.unsubscribeTagsChanged();
+  }
+
+  initializeColorMode() {
+    const colorMode = localStorage.getItem(SF_COLOR_MODE);
+    if (colorMode) {
+      this.setState({ colorMode });
+      document.body.setAttribute('data-bs-theme', colorMode);
+    }
   }
 
   onTagStatus = (status) => {
@@ -85,7 +94,7 @@ class CommonToolbar extends React.Component {
   onColorModeChange = () => {
     const colorMode = this.state.colorMode === 'light' ? 'dark' : 'light';
     this.setState({ colorMode });
-    localStorage.setItem('sf_color_mode', colorMode);
+    localStorage.setItem(SF_COLOR_MODE, colorMode);
     document.body.setAttribute('data-bs-theme', colorMode);
   };
 

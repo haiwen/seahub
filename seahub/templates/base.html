@@ -88,14 +88,6 @@
         {% block extra-hidden-dom %}
         {% endblock %}
 </div><!-- wrapper -->
-<script>
-(function() {
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = (systemDark ? 'dark' : 'light');
-    document.body.setAttribute('data-bs-theme', initialTheme);
-    document.body.classList.toggle('dark-theme', initialTheme === 'dark');
-})();
-</script>
 <script type="text/javascript">
 var SEAFILE_GLOBAL = {
     csrfCookieName: '{{ CSRF_COOKIE_NAME }}'

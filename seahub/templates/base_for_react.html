@@ -180,14 +180,6 @@
      };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
-<script>
-(function() {
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = (systemDark ? 'dark' : 'light');
-    document.body.setAttribute('data-bs-theme', initialTheme);
-    document.body.classList.toggle('dark-theme', initialTheme === 'dark');
-})();
-</script>
 {% block extra_script %}{% endblock %}
 </body>
 </html>
