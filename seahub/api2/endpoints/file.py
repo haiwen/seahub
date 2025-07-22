@@ -30,7 +30,7 @@ from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
 from seahub.utils.file_types import SEADOC, \
         MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES, \
-        DOCX_SUPPORT_CONVERT_TYPES
+        DOCX_SUPPORT_CONVERT_TYPES, EXCALIDRAW
 from seahub.tags.models import FileUUIDMap
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.base.models import FileComment
@@ -872,6 +872,11 @@ class FileView(APIView):
                     repo_id, parent_dir, file_name, is_dir=False)
                 SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
                 SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
+            if filetype == EXCALIDRAW:
+                from seahub.exdraw.utils import get_exdraw_file_uuid
+                file_uuid = get_exdraw_file_uuid(repo, path)
+                FileUUIDMap.objects.delete_fileuuidmap_by_path(
+                    repo_id, parent_dir, file_name, is_dir=False)
         except Exception as e:
             logger.error(e)
 
