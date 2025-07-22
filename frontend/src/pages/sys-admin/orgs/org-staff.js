@@ -10,7 +10,6 @@ import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Selector from '../../../components/single-selector';
-import SysAdminAddUserDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-user-dialog';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -350,7 +349,6 @@ class OrgStaff extends Component {
       errorMsg: '',
       orgName: '',
       userList: [],
-      isAddUserDialogOpen: false
     };
   }
 
@@ -372,22 +370,6 @@ class OrgStaff extends Component {
       });
     });
   }
-
-  toggleAddUserDialog = () => {
-    this.setState({ isAddUserDialogOpen: !this.state.isAddUserDialogOpen });
-  };
-
-  addUser = (newUserInfo) => {
-    const { email, name, password } = newUserInfo;
-    systemAdminAPI.sysAdminAddOrgUser(this.props.orgID, email, name, password).then(res => {
-      let userList = this.state.userList;
-      userList.unshift(res.data);
-      this.setState({ userList: userList });
-    }).catch((error) => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
-  };
 
   deleteUser = (orgID, email) => {
     systemAdminAPI.sysAdminDeleteOrgUser(orgID, email).then(res => {
@@ -429,11 +411,10 @@ class OrgStaff extends Component {
   };
 
   render() {
-    const { isAddUserDialogOpen, orgName } = this.state;
+    const { orgName } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar {...this.props}>
-          <Button className="btn btn-secondary operation-item" onClick={this.toggleAddUserDialog}>{gettext('Add Member')}</Button>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -454,12 +435,6 @@ class OrgStaff extends Component {
             </div>
           </div>
         </div>
-        {isAddUserDialogOpen &&
-          <SysAdminAddUserDialog
-            addUser={this.addUser}
-            toggleDialog={this.toggleAddUserDialog}
-          />
-        }
       </Fragment>
     );
   }
