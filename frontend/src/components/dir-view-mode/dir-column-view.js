@@ -79,7 +79,8 @@ const propTypes = {
   updateCurrentPath: PropTypes.func,
   toggleShowDirentToolbar: PropTypes.func,
   updateTreeNode: PropTypes.func,
-  updateRepoInfo: PropTypes.func
+  updateRepoInfo: PropTypes.func,
+  sortTreeNode: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {
@@ -177,6 +178,7 @@ class DirColumnView extends React.Component {
               direntList={this.props.direntList}
               updateDirent={this.props.updateDirent}
               updateTreeNode={this.props.updateTreeNode}
+              sortTreeNode={this.props.sortTreeNode}
             />
             <ResizeBar
               resizeBarRef={this.resizeBarRef}

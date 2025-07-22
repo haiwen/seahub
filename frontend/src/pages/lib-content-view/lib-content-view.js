@@ -9,7 +9,7 @@ import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { gettext, siteRoot, username } from '../../utils/constants';
+import { gettext, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY, siteRoot, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '../../models';
@@ -2095,7 +2095,9 @@ class LibContentView extends React.Component {
     let direntList = list.map(item => {
       return new Dirent(item);
     });
-    direntList = Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder);
+    const sortBy = cookie.load(SF_DIRECTORY_TREE_SORT_BY_KEY) || 'name';
+    const sortOrder = cookie.load(SF_DIRECTORY_TREE_SORT_ORDER_KEY) || 'asc';
+    direntList = Utils.sortDirents(direntList, sortBy, sortOrder);
 
     let nodeList = direntList.map(object => {
       return new TreeNode({ object });
@@ -2186,11 +2188,18 @@ class LibContentView extends React.Component {
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
 
     const sortedDirentList = Utils.sortDirents(this.state.direntList, sortBy, sortOrder);
-    const sortedTreeData = treeHelper.sortTreeNodes(this.state.treeData, sortBy, sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
       direntList: sortedDirentList,
+    });
+  };
+
+  sortTreeNode = (sortBy, sortOrder) => {
+    cookie.save(SF_DIRECTORY_TREE_SORT_BY_KEY, sortBy);
+    cookie.save(SF_DIRECTORY_TREE_SORT_ORDER_KEY, sortOrder);
+    const sortedTreeData = treeHelper.sortTreeNodes(this.state.treeData, sortBy, sortOrder);
+    this.setState({
       treeData: sortedTreeData,
     });
   };
@@ -2551,6 +2560,7 @@ class LibContentView extends React.Component {
                           updateCurrentPath={this.updatePath}
                           toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                           updateTreeNode={this.updateTreeNode}
+                          sortTreeNode={this.sortTreeNode}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>

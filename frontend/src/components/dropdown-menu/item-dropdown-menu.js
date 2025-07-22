@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import listener from '../context-menu/globalEventListener';
 import { gettext } from '../../utils/constants';
@@ -20,7 +19,6 @@ const propTypes = {
   freezeItem: PropTypes.func,
   unfreezeItem: PropTypes.func,
   menuStyle: PropTypes.object,
-  isDisplayFiles: PropTypes.bool,
 };
 
 class ItemDropdownMenu extends React.Component {
@@ -279,16 +277,13 @@ class ItemDropdownMenu extends React.Component {
                 return (
                   <DropdownItem
                     key={index}
-                    className={classnames({
-                      'pl-5': this.props.isDisplayFiles != undefined,
-                      'position-relative': this.props.isDisplayFiles
-                    })}
+                    className="position-relative pl-5"
                     data-toggle={menuItem.key}
                     onClick={this.onMenuItemClick}
                     onKeyDown={this.onMenuItemKeyDown}
                     onMouseMove={this.onDropDownMouseMove}
                   >
-                    {menuItem.key === 'Display files' && this.props.isDisplayFiles && (
+                    {menuItem.tick && (
                       <i className="dropdown-item-tick sf2-icon-tick"></i>
                     )}
                     {menuItem.icon_dom || null}
