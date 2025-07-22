@@ -19,6 +19,7 @@ class FilesActivities extends Component {
 
   constructor(props) {
     super(props);
+    const isMyActivities = location.pathname.includes('activities/mine');
     this.state = {
       errorMsg: '',
       isFirstLoading: true,
@@ -29,7 +30,7 @@ class FilesActivities extends Component {
       items: [],
       availableUsers: [],
       targetUsers: [],
-      onlyMine: false,
+      onlyMine: isMyActivities,
     };
     this.curPathList = [];
     this.oldPathList = [];
@@ -92,10 +93,11 @@ class FilesActivities extends Component {
         currentPage: currentPage + 1,
         isFirstLoading: curItems.length == 0,
         hasMore: true,
+      }, () => {
+        if (this.state.items.length < 25) {
+          this.getMore();
+        }
       });
-      if (this.state.items.length < 25) {
-        this.getMore();
-      }
     }).catch(error => {
       this.setState({
         isFirstLoading: false,
@@ -192,12 +194,13 @@ class FilesActivities extends Component {
         isFirstLoading: curItems.length == 0,
         isLoadingMore: false,
         hasMore: res.data.events.length === 0 ? false : true
-      });
-      if (this.state.items.length < 25 && this.state.hasMore) {
-        if (!(targetUsers.length && currentPage == 100)) {
-          this.getMore();
+      }, () => {
+        if (this.state.items.length < 25 && this.state.hasMore) {
+          if (!(targetUsers.length && currentPage == 100)) {
+            this.getMore();
+          }
         }
-      }
+      });
     }).catch(error => {
       this.setState({
         isFirstLoading: false,
