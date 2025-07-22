@@ -55,6 +55,13 @@ const ImageZoomer = ({ setImageScale }) => {
 
   const scaleImageToPageFit = useCallback(() => {
     const imageElement = document.getElementById('image-view');
+    // make sure real dom is rendered before calculating the scale
+    if (!imageElement || (imageElement.clientWidth === 2 && imageElement.clientHeight === 2)) {
+      setTimeout(() => {
+        scaleImageToPageFit();
+      }, 100);
+      return;
+    }
     const borderWidth = 1;
     const width = imageElement.clientWidth + borderWidth * 2;
     const height = imageElement.clientHeight + borderWidth * 2;
@@ -100,10 +107,7 @@ const ImageZoomer = ({ setImageScale }) => {
   }, [onMenuItemClick]);
 
   useEffect(() => {
-    // make sure real dom is rendered before calculating the scale
-    setTimeout(() => {
-      scaleImageToPageFit();
-    }, 100);
+    scaleImageToPageFit();
   }, [scaleImageToPageFit]);
 
   return (
