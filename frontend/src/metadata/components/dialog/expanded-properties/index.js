@@ -84,7 +84,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
                   </span>
                   <span className="text-center">{name}</span>
                 </div>
-                <div className="col-9">
+                <div className="col-9 content-wrapper">
                   {Component && <Component record={record} column={column} columns={columns} containerRef={containerRef} onCommit={onCommit} modifyColumnData={modifyColumnData} />}
                 </div>
               </div>
