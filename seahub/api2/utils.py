@@ -292,9 +292,12 @@ def is_web_request(request):
 def is_wiki_repo(repo):
     return repo.repo_type == REPO_TYPE_WIKI
 
-def get_search_repos(username, org_id):
+def get_search_repos(username, org_id, repo_type='all'):
     owned_repos, shared_repos, group_repos, public_repos = get_user_repos(username, org_id=org_id)
-    repo_list = owned_repos + public_repos + shared_repos + group_repos
+    if repo_type == 'all':
+        repo_list = owned_repos + public_repos + shared_repos + group_repos
+    elif repo_type == 'group':
+        repo_list = group_repos
 
     # filter duplicate repo search scopes
     # for example, repo1 and a subfolder in repo1 are both shared with a user,

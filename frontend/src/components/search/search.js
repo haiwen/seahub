@@ -603,45 +603,86 @@ class Search extends Component {
   renderSearchTypes = (inputValue) => {
     const highlightIndex = this.state.highlightSearchTypesIndex;
     const { resultItems } = this.state;
+    const currentUrl = window.location.href;
     if (!this.props.repoID) {
-      return (
-        <div className="search-result-list-container" ref={this.searchResultListContainerRef}>
+      if (currentUrl.includes('group')) {
+        return (
           <div className="search-types">
-            <div
-              className={classnames('search-types-repos', { 'search-types-highlight': highlightIndex === 0 })}
-              onClick={this.searchAllRepos}
-              tabIndex={0}
-            >
+            <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllGroupRepos} tabIndex={0}>
+              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              {inputValue}
+              <span className="search-types-text">{gettext('in all group libraries')}</span>
+              {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
+            </div>
+            <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
-              <i className="sf3-font sf3-font-enter"></i>
+              {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
+            {resultItems.length > 0 && (
+              <div className="library-result-container">
+                <hr className="library-result-divider" />
+                <div className="library-result-header">{gettext('Libraries')}</div>
+                <ul
+                  className="library-result-list"
+                  ref={this.searchResultListRef}
+                >
+                  {resultItems.map((item, index) => {
+                    return (
+                      <SearchResultLibrary
+                        key={index}
+                        item={item}
+                        onClick={this.onItemClickHandler}
+                        isHighlight={highlightIndex === index + 1}
+                        setRef={highlightIndex === index + 1 ? (ref) => {this.highlightRef = ref;} : () => {}}
+                      />
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
           </div>
-          {resultItems.length > 0 && (
-            <div className="library-result-container">
-              <hr className="library-result-divider" />
-              <div className="library-result-header">{gettext('Libraries')}</div>
-              <ul
-                className="library-result-list"
-                ref={this.searchResultListRef}
+        );
+      } else {
+        return (
+          <div className="search-result-list-container" ref={this.searchResultListContainerRef}>
+            <div className="search-types">
+              <div
+                className={classnames('search-types-repos', { 'search-types-highlight': highlightIndex === 0 })}
+                onClick={this.searchAllRepos}
+                tabIndex={0}
               >
-                {resultItems.map((item, index) => {
-                  return (
-                    <SearchResultLibrary
-                      key={index}
-                      item={item}
-                      onClick={this.onItemClickHandler}
-                      isHighlight={highlightIndex === index + 1}
-                      setRef={highlightIndex === index + 1 ? (ref) => {this.highlightRef = ref;} : () => {}}
-                    />
-                  );
-                })}
-              </ul>
+                <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+                {inputValue}
+                <span className="search-types-text">{gettext('in all libraries')}</span>
+                <i className="sf3-font sf3-font-enter"></i>
+              </div>
             </div>
-          )}
-        </div>
-      );
+            {resultItems.length > 0 && (
+              <div className="library-result-container">
+                <hr className="library-result-divider" />
+                <div className="library-result-header">{gettext('Libraries')}</div>
+                <ul
+                  className="library-result-list"
+                  ref={this.searchResultListRef}
+                >
+                  {resultItems.map((item, index) => {
+                    return (
+                      <SearchResultLibrary
+                        key={index}
+                        item={item}
+                        onClick={this.onItemClickHandler}
+                        isHighlight={highlightIndex === index + 1}
+                        setRef={highlightIndex === index + 1 ? (ref) => {this.highlightRef = ref;} : () => {}}
+                      />
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+          </div>
+        );}
     }
     if (this.props.repoID) {
       const { path } = this.props;
@@ -721,6 +762,16 @@ class Search extends Component {
     };
     this.getSearchResult(this.buildSearchParams(queryData));
   };
+
+  searchAllGroupRepos = () => {
+    const { value } = this.state;
+    const queryData = {
+      q: value,
+      search_repo: 'group',
+      search_ftypes: 'all',
+    };
+    this.getSearchResult(this.buildSearchParams(queryData));
+  }
 
   renderDetails = (results) => {
     const { highlightIndex } = this.state;

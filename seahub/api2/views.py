@@ -686,6 +686,10 @@ class Search(APIView):
                     repos = get_search_repos(username, org_id)
                     cache.set(key, repos, RELATED_REPOS_CACHE_TIMEOUT)
                 repos = repos[: SEARCH_REPOS_LIMIT]
+            elif search_repo == 'group':
+                org_id = request.user.org.org_id if is_org_context(request) else None
+                repos = get_search_repos(username, org_id, search_repo)
+                repos = repos[: SEARCH_REPOS_LIMIT]
             else:
                 try:
                     repo = seafile_api.get_repo(search_repo)
