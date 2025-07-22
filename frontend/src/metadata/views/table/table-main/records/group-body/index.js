@@ -833,6 +833,7 @@ class GroupBody extends Component {
             modifyRecordViaButton={this.props.modifyRecordViaButton}
             reloadRecords={this.props.reloadRecords}
             columnColor={columnColor}
+            onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
           />
         );
       }

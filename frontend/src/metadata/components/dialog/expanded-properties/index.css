@@ -19,6 +19,11 @@
   color: #666;
 }
 
+.expanded-properties-content-container .content-wrapper {
+  color: var(--bs-body-color);
+  background-color: var(--bs-body-bg);
+}
+
 .expanded-properties-content-container .creator-container {
   display: flex;
   align-items: center;
@@ -29,10 +34,15 @@
   display: flex;
   align-items: center;
   text-overflow: ellipsis;
+  background-color: var(--bs-body-bg);
+  border-color: var(--bs-border-color);
 }
 
 .expanded-properties-content-container .form-control.disabled {
   background-color: #f8f9fa;
+}
+[data-bs-theme=dark] .expanded-properties-content-container .form-control.disabled {
+  background-color: rgba(0, 0, 0, 0.25);
 }
 
 .expanded-properties-content-container .form-control.shrink {
@@ -40,30 +50,27 @@
 }
 
 .expanded-properties-content-container .long-text-container {
-  border: 1px solid #eee;
   cursor: pointer;
 }
 
-.expanded-properties-content-container .long-text-container .sf-metadata-long-text-preview {
-  width: 100%;
-  position: relative;
-  border: none;
-  box-shadow: none;
-}
-
-.expanded-properties-content-container .long-text-container .sf-metadata-long-text-preview .sf-slate-viewer-scroll-container .sf-slate-article-content {
-  width: 100%;
+.expanded-properties-content-container .long-text-container .sf-long-text-inline-editor-container {
+  border-color: var(--bs-border-color);
 }
 
 .expanded-properties-content-container .long-text-container .sf-long-text-inline-editor-container:not(.preview) {
+  height: 300px;
   border-color: #1991eb;
   box-shadow: 0 0 0 2px #467fcf40;
   cursor: text;
 }
 
-.expanded-properties-content-container .long-text-container.editing .sf-long-text-inline-editor-container .sf-slate-editor-content {
+.expanded-properties-content-container .long-text-container .sf-long-text-inline-editor-container:not(.preview) .sf-slate-editor-content {
   max-height: 300px;
   overflow: auto;
+}
+[data-bs-theme=dark] .expanded-properties-content-container .long-text-container .sf-long-text-inline-editor-container.preview .article {
+  background-color: var(--bs-body-bg);
+  color: #fff;
 }
 
 .expanded-properties-single-option {
@@ -76,7 +83,7 @@
   text-align: center;
 }
 
-.expanded-properties-content-container .select-option-container {
+.expanded-properties-content-container .select-option-container:not(.disabled) {
   padding-right: 28px;
   cursor: pointer;
 }

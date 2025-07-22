@@ -23,7 +23,6 @@ const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
     const currentColumn = columnRef.current;
     const newValue = getColumnOptionNamesByIds(currentColumn, optionIds);
     onCommit(currentColumn, newValue);
-    setIsEditorShow(false);
   }, [onCommit]);
 
   const onClickOutside = useCallback(() => {

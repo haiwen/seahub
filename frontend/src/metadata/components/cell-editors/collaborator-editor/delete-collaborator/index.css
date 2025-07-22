@@ -1,5 +1,5 @@
 .sf-metadata-delete-collaborator {
-  background-color: #f5f5f5;
+  background-color: var(--bs-body-tertiary-bg);
   border-bottom: 1px solid #dde2ea;
   border-radius: 3px 3px 0 0;
   min-height: 35px;

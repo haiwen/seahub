@@ -79,7 +79,7 @@ const Text = ({ record, column, onCommit }) => {
   if (type == CellType.FILE_NAME) {
     return (
       <div className="form-control disabled">
-        <span className="w-6 h-6 overflow-hidden d-flex align-items-center">
+        <span className="w-6 h-6 overflow-hidden d-flex align-items-center mr-2">
           <img src={iconUrl} height={24} alt='' />
         </span>
         <span>{filename}</span>
