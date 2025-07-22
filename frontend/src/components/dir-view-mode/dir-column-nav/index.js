@@ -29,7 +29,8 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
   updateDirent: PropTypes.func,
   updateTreeNode: PropTypes.func,
-  updateRepoInfo: PropTypes.func
+  updateRepoInfo: PropTypes.func,
+  sortTreeNode: PropTypes.func,
 };
 
 class DirColumnNav extends React.Component {
@@ -67,6 +68,7 @@ class DirColumnNav extends React.Component {
               onItemsMove={this.props.onItemsMove}
               updateDirent={this.props.updateDirent}
               updateTreeNode={this.props.updateTreeNode}
+              sortTreeNode={this.props.sortTreeNode}
             />
             <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />

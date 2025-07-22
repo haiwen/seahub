@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cookie from 'react-cookies';
 import TreeView from '../tree-view/tree-view';
 import ModalPortal from '../modal-portal';
 import ImageDialog from '../dialog/image-dialog';
 import toaster from '../toast';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
-import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize } from '../../utils/constants';
+import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY } from '../../utils/constants';
 import { isMobile, Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../tree-section';
@@ -31,6 +32,12 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   updateDirent: PropTypes.func,
+  sortTreeNode: PropTypes.func,
+};
+
+const SORT_KEY_MAP = {
+  'name-asc': TextTranslation.ASCENDING_BY_NAME.key,
+  'name-desc': TextTranslation.DESCENDING_BY_NAME.key,
 };
 
 class DirFiles extends React.Component {
@@ -46,10 +53,18 @@ class DirFiles extends React.Component {
       imageIndex: 0,
       operationList: [],
       isDisplayFiles: localStorage.getItem('sf_display_files') === 'true' || false,
+      sortKey: TextTranslation.ASCENDING_BY_NAME.key,
     };
     this.isNodeMenuShow = true;
     this.imageItemsSnapshot = [];
     this.imageIndexSnapshot = 0;
+  }
+
+  componentDidMount() {
+    const sortBy = cookie.load(SF_DIRECTORY_TREE_SORT_BY_KEY) || 'name';
+    const sortOrder = cookie.load(SF_DIRECTORY_TREE_SORT_ORDER_KEY) || 'asc';
+    const sortKey = SORT_KEY_MAP[`${sortBy}-${sortOrder}`];
+    this.setState({ sortKey });
   }
 
   componentDidUpdate(prevProps) {
@@ -73,6 +88,7 @@ class DirFiles extends React.Component {
 
   getMenuList = () => {
     const { userPerm } = this.props;
+    const { sortKey } = this.state;
     const list = [];
     if (userPerm == 'rw') {
       list.push(
@@ -80,7 +96,10 @@ class DirFiles extends React.Component {
         TextTranslation.NEW_FILE
       );
     }
-    list.push(TextTranslation.DISPLAY_FILES);
+    list.push({ ...TextTranslation.DISPLAY_FILES, tick: this.state.isDisplayFiles });
+    list.push('Divider');
+    list.push({ ...TextTranslation.ASCENDING_BY_NAME, tick: sortKey === TextTranslation.ASCENDING_BY_NAME.key });
+    list.push({ ...TextTranslation.DESCENDING_BY_NAME, tick: sortKey === TextTranslation.DESCENDING_BY_NAME.key });
     return list;
   };
 
@@ -142,6 +161,16 @@ class DirFiles extends React.Component {
       case 'Display files':
         this.onDisplayFilesToggle();
         break;
+      case 'Ascending by name': {
+        this.props.sortTreeNode('name', 'asc');
+        this.setState({ sortKey: TextTranslation.ASCENDING_BY_NAME.key });
+        break;
+      }
+      case 'Descending by name': {
+        this.props.sortTreeNode('name', 'desc');
+        this.setState({ sortKey: TextTranslation.DESCENDING_BY_NAME.key });
+        break;
+      }
     }
   };
 
@@ -306,7 +335,6 @@ class DirFiles extends React.Component {
           item={{ name: 'files' }}
           toggleClass="sf3-font sf3-font-more"
           menuStyle={isMobile ? { zIndex: 1050 } : {}}
-          isDisplayFiles={this.state.isDisplayFiles}
           getMenuList={this.getMenuList}
           onMenuItemClick={this.onMoreOperationClick}
         />

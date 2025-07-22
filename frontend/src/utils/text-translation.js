@@ -278,6 +278,16 @@ const TextTranslation = {
     key: 'New child tag',
     value: gettext('New child tag'),
   },
+
+  // directory op
+  ASCENDING_BY_NAME: {
+    key: 'Ascending by name',
+    value: gettext('Ascending by name'),
+  },
+  DESCENDING_BY_NAME: {
+    key: 'Descending by name',
+    value: gettext('Descending by name'),
+  },
 };
 
 export default TextTranslation;
