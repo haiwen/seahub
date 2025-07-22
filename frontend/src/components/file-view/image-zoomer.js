@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import IconButton from '../../components/icon-button';
@@ -8,15 +8,16 @@ const SCALE_OPTIONS = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4];
 const SCALE_MIN = SCALE_OPTIONS[0];
 const SCALE_MAX = SCALE_OPTIONS[SCALE_OPTIONS.length - 1];
 const SCALE_OPTIONS_2 = [
-  { value: 'page-fit', text: gettext('Page Fit') },
-  { value: 'actual-size', text: gettext('Actual Size') }
+  { value: 'page-fit', text: gettext('Page fit') },
+  { value: 'actual-size', text: gettext('Actual size') }
 ];
+const DEFAULT_SCALE = SCALE_OPTIONS_2[0];
 
 const ImageZoomer = ({ setImageScale }) => {
 
   const [curScale, setScale] = useState(1);
-  const [curScaleText, setScaleText] = useState(`${curScale * 100}%`); // for the text shown in the input
-  const [selectedScale, setSelectedScale] = useState(1); // for the scale menu
+  const [curScaleText, setScaleText] = useState(DEFAULT_SCALE.text); // for the text shown in the input
+  const [selectedScale, setSelectedScale] = useState(DEFAULT_SCALE.value); // for the scale menu
   const [isScaleMenuOpen, setScaleMenuOpen] = useState(false);
 
   const toggleMenu = useCallback(() => {
@@ -97,6 +98,13 @@ const ImageZoomer = ({ setImageScale }) => {
       onMenuItemClick(value);
     }
   }, [onMenuItemClick]);
+
+  useEffect(() => {
+    // make sure real dom is rendered before calculating the scale
+    setTimeout(() => {
+      scaleImageToPageFit();
+    }, 100);
+  }, [scaleImageToPageFit]);
 
   return (
     <div className='d-flex align-items-center image-zoomer'>
