@@ -230,5 +230,10 @@
   "Insert_on_the_right": "Insert on the right",
   "Insert_on_the_left": "Insert on the left",
   "Row(s)": "row(s)",
-  "Column(s)": "column(s)"
+  "Column(s)": "column(s)",
+  "Insert": "Insert",
+  "Horizontal_align": "Horizontal align",
+  "Underline": "Underline",
+  "Row_number": "Row number",
+  "Column_number": "Column number"
 }

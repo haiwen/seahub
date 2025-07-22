@@ -230,5 +230,10 @@
   "Insert_on_the_right": "在右侧插入",
   "Insert_on_the_left": "在左侧插入",
   "Row(s)": "行",
-  "Column(s)": "列"
+  "Column(s)": "列",
+  "Insert": "插入",
+  "Horizontal_align": "水平对齐",
+  "Underline": "下划线",
+  "Row_number": "行数",
+  "Column_number": "列数"
 }
