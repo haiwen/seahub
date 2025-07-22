@@ -166,7 +166,7 @@ class MainSideNavFolded extends React.Component {
                   <li className={`nav-item ${this.getActiveClass('dashboard')}`} onMouseEnter={this.closeSubNav}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`}
-                      to={siteRoot + 'dashboard/'}
+                      to={siteRoot + 'activities/all/'}
                       onClick={(e) => this.tabItemClick(e, 'dashboard')}
                     >
                       <span className="sf3-font-activities sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-dashboard"></span>

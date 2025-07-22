@@ -19,7 +19,6 @@ class FilesActivities extends Component {
 
   constructor(props) {
     super(props);
-    const isMyActivities = props.uri.includes('my-activities');
     this.state = {
       errorMsg: '',
       isFirstLoading: true,
@@ -30,7 +29,7 @@ class FilesActivities extends Component {
       items: [],
       availableUsers: [],
       targetUsers: [],
-      onlyMine: isMyActivities
+      onlyMine: false,
     };
     this.curPathList = [];
     this.oldPathList = [];
@@ -40,7 +39,7 @@ class FilesActivities extends Component {
 
   componentDidMount() {
     this.unlisten = globalHistory.listen(({ location }) => {
-      const isMyActivities = location.pathname.includes('my-activities');
+      const isMyActivities = location.pathname.includes('activities/mine');
       this.setState({ onlyMine: isMyActivities });
     });
 
@@ -277,10 +276,10 @@ class FilesActivities extends Component {
               }}
             >
               <li className="nav-item mx-4" ref={el => this.itemRefs[0] = el}>
-                <Link to={`${siteRoot}dashboard/`} className={`nav-link${onlyMine ? '' : ' active'}`}>{gettext('All Activities')}</Link>
+                <Link to={`${siteRoot}activities/all/`} className={`nav-link${onlyMine ? '' : ' active'}`}>{gettext('All Activities')}</Link>
               </li>
               <li className="nav-item mx-4" ref={el => this.itemRefs[1] = el}>
-                <Link to={`${siteRoot}my-activities/`} className={`nav-link${onlyMine ? ' active' : ''}`}>{gettext('My Activities')}</Link>
+                <Link to={`${siteRoot}activities/mine/`} className={`nav-link${onlyMine ? ' active' : ''}`}>{gettext('My Activities')}</Link>
               </li>
             </ul>
           </div>
