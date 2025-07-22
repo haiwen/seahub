@@ -13,6 +13,7 @@ import Paginator from '../../paginator';
 import Loading from '../../loading';
 import BackIcon from '../../back-icon';
 import EmptyTip from '../../empty-tip';
+import SearchTrash from './trash-search/search-trash';
 
 import '../../../css/toolbar.css';
 import '../../../css/search.css';
@@ -33,7 +34,10 @@ class TrashDialog extends React.Component {
       isOldTrashDialogOpen: false,
       currentPage: 1,
       perPage: 100,
-      hasNextPage: false
+      hasNextPage: false,
+      searchKeyword: '',
+      filteredItems: [],
+      canSearch: true,
     };
   }
 
@@ -41,9 +45,23 @@ class TrashDialog extends React.Component {
     this.getFolderTrash();
   }
 
+  handleSearchResults = (result) => {
+    if (result?.reset) {
+      this.getFolderTrash(1);
+      return;
+    }
+
+    const items = result?.items || [];
+
+    this.setState({
+      items,
+      hasNextPage: result?.hasMore || false
+    });
+  };
+
   getFolderTrash = (page) => {
     repoTrashAPI.getRepoFolderTrash(this.props.repoID, page, this.state.perPage).then((res) => {
-      const { items, total_count } = res.data;
+      const { items, total_count, can_search } = res.data;
       if (!page) {
         page = 1;
       }
@@ -52,7 +70,8 @@ class TrashDialog extends React.Component {
         hasNextPage: total_count - page * this.state.perPage > 0,
         isLoading: false,
         items: items,
-        more: false
+        more: false,
+        canSearch: can_search
       });
     });
   };
@@ -66,6 +85,26 @@ class TrashDialog extends React.Component {
       let newWindow = window.open('about:blank');
       newWindow.location.href = url;
     }
+  };
+
+  searchTrash = (query) => {
+    this.setState({ isSearching: true });
+
+    repoTrashAPI.searchRepoFolderTrash(this.props.repoID, query)
+      .then((res) => {
+        this.setState({
+          isSearching: false,
+          items: res.data,
+          currentPage: 1,
+          hasNextPage: false
+        });
+      })
+      .catch((error) => {
+        this.setState({
+          isSearching: false,
+          errorMsg: gettext('Search failed')
+        });
+      });
   };
 
   getPreviousPage = () => {
@@ -119,7 +158,8 @@ class TrashDialog extends React.Component {
     seafileAPI.listCommitDir(this.props.repoID, commitID, `${baseDir.substr(0, baseDir.length - 1)}${folderPath}`).then((res) => {
       this.setState({
         isLoading: false,
-        folderItems: res.data.dirent_list
+        folderItems: res.data.dirent_list,
+        canSearch: false,
       });
     }).catch((error) => {
       if (error.response) {
@@ -182,7 +222,7 @@ class TrashDialog extends React.Component {
 
   render() {
     const { showTrashDialog, toggleTrashDialog, repoID } = this.props;
-    const { isCleanTrashDialogOpen, showFolder, isLoading, items, perPage, currentPage, hasNextPage } = this.state;
+    const { isCleanTrashDialogOpen, showFolder, isLoading, items, perPage, currentPage, hasNextPage, canSearch } = this.state;
     const isRepoAdmin = this.props.currentRepoInfo.owner_email === username || this.props.currentRepoInfo.is_admin;
     const repoFolderName = this.props.currentRepoInfo.repo_name;
     const oldTrashUrl = siteRoot + 'repo/' + this.props.repoID + '/trash/';
@@ -217,19 +257,38 @@ class TrashDialog extends React.Component {
           </ModalHeader>
           <ModalBody>
             {isLoading && <Loading />}
+            {!isLoading && canSearch &&
+              <SearchTrash
+                repoID={this.props.repoID}
+                onSearchResults={this.handleSearchResults}
+                placeholder={gettext('Search in trash')}
+              />
+            }
             {!isLoading && items.length === 0 &&
               <EmptyTip text={gettext('No file')} className="m-0" />
             }
             {!isLoading && items.length > 0 &&
               <>
-                <div className="path-container dir-view-path mw-100 pb-2">
+                <div className="path-container dir-view-path mw-100 pb-2 mt-1">
                   <span className="path-label mr-1">{gettext('Current path: ')}</span>
                   {showFolder ?
                     this.renderFolderPath() :
                     <span className="last-path-item" title={repoFolderName}>{repoFolderName}</span>
                   }
                 </div>
-                <Table repoID={repoID} data={this.state} renderFolder={this.renderFolder} isDesktop={isDesktop} />
+                <Table
+                  repoID={repoID}
+                  data={{
+                    items: items,
+                    showFolder: showFolder,
+                    commitID: this.state.commitID,
+                    baseDir: this.state.baseDir,
+                    folderPath: this.state.folderPath,
+                    folderItems: this.state.folderItems
+                  }}
+                  renderFolder={this.renderFolder}
+                  isDesktop={isDesktop}
+                />
                 <Paginator
                   gotoPreviousPage={this.getPreviousPage}
                   gotoNextPage={this.getNextPage}
