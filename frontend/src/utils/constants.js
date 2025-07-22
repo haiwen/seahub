@@ -231,3 +231,5 @@ export const MimetypesKind = {
 };
 
 export const LARGE_DIALOG_STYLE = { maxWidth: '980px' };
+
+export const SF_COLOR_MODE = 'sf_color_mode';
