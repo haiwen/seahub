@@ -34,7 +34,7 @@ const MetadataDetails = ({ readOnly, tagsData }) => {
         const value = getCellValueByColumn(record, field);
 
         if (field.key === PRIVATE_COLUMN_KEY.LOCATION && Utils.imageCheck(fileName) && value) {
-          return <Location key={field.key} position={value} record={record} />;
+          return <Location key={field.key} position={value} record={record} onChange={onChange} />;
         }
 
         let canEdit = canModifyRecord && field.editable && !readOnly;

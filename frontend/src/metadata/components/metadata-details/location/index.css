@@ -32,3 +32,8 @@
   right: 10px !important;
   bottom: 16px !important;
 }
+
+.dirent-detail-item-value-map .sf-metadata-ui.sf-metadata-geolocation-formatter {
+  width: 100%;
+  cursor: pointer;
+}

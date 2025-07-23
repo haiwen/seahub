@@ -1,0 +1,180 @@
+.sf-geolocation-editor-container {
+  width: 500px;
+  height: 434px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.sf-geolocation-editor-container .editor-header {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background-color: #fff;
+  color: var(--bs-body-color);
+}
+
+.sf-geolocation-editor-container .editor-header .title {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sf-geolocation-editor-container .search-container {
+  width: 90%;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 16px;
+  left: 5%;
+  z-index: 10;
+}
+
+.sf-geolocation-editor-container .search-container .search-input {
+  flex: 1;
+  height: 100%;
+  border-radius: 3px 0 0 3px;
+  border-right: none;
+  box-shadow: 0 0 2px #0000004d;
+  cursor: text;
+}
+
+.sf-geolocation-editor-container .search-container .clean-btn {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  font-size: 16px;
+  color: #666;
+  top: 7px;
+  right: 12px;
+  cursor: pointer;
+}
+
+.sf-geolocation-editor-container .search-container .clean-btn:hover {
+  background-color: var(--bs-hover-bg);
+}
+
+.sf-geolocation-editor-container .search-container .search-btn {
+  width: 12%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bs-body-tertiary-bg);
+  color: #666;
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 2px #0000004d;
+  cursor: pointer;
+}
+
+.sf-geolocation-editor-container .selection-label-content {
+  width: 225px;
+  height: 130px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: default;
+  padding: 2px 0;
+}
+
+.sf-geolocation-editor-container .selection-label-content .close-btn {
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: -5px;
+  top: 2px;
+  color: #666;
+  cursor: pointer;
+  text-align: center;
+}
+
+.sf-geolocation-editor-container .selection-label-content .close-btn:hover {
+  background-color: var(--bs-hover-bg);
+}
+
+.sf-geolocation-editor-container .selection-label-content .label-title {
+  width: 90%;
+  color: #212529;
+  font-size: 18px;
+  text-overflow: ellipsis;
+}
+
+.sf-geolocation-editor-container .selection-label-content .label-tag {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.sf-geolocation-editor-container .selection-label-content .label-address-tip {
+  font-size: 12px;
+  font-weight: 400;
+  color: #666;
+}
+
+.sf-geolocation-editor-container .selection-label-content .label-address {
+  width: 100%;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: text;
+}
+
+.sf-geolocation-editor-container .selection-label-content .label-submit {
+  width: 50px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 5px;
+  right: 0px;
+  font-size: 12px;
+}
+
+.sf-geolocation-editor-container .selection-label-content seafile-multicolor-icon-drop-down {
+  position: absolute;
+  transform: rotate(180deg);
+  top: -16px;
+  left: 47%;
+  color: #fff;
+}
+
+.sf-geolocation-editor-container .selection-label-content.simple {
+  height: 90px;
+}
+
+.sf-geolocation-editor-container .selection-label-content.simple .label-address {
+  position: absolute;
+  top: 30%;
+  font-size: 14px;
+  cursor: text;
+}
+
+.sf-geolocation-editor-container .sf-map-control-container {
+  width: 30px;
+  height: fit-content;
+  flex-direction: column;
+  right: 30px;
+}
+
+.sf-geolocation-editor-container .sf-map-control-container .sf-map-control-divider {
+  width: 100%;
+  height: 1px;
+}
+
+.sf-geolocation-editor-container .sf-map-control-container .sf-map-control-divider::before {
+  width: 22px;
+  height: 1px;
+  left: 4px;
+  top: 0;
+}

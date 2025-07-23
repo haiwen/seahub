@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Popover } from 'reactstrap';
 import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
 import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../../utils/coord-transform';
 import { MAP_TYPE } from '../../../../constants';
@@ -15,6 +16,8 @@ import { createBMapZoomControl } from '../../map-controller';
 import { Utils } from '../../../../utils/utils';
 import { eventBus } from '../../../../components/common/event-bus';
 import { createZoomControl } from '../../map-controller/zoom';
+import ClickOutside from '../../../../components/click-outside';
+import GeolocationEditor from '../../cell-editors/geolocation-editor';
 
 import './index.css';
 
@@ -23,6 +26,7 @@ class Location extends React.Component {
   static propTypes = {
     position: PropTypes.object,
     record: PropTypes.object,
+    onChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -34,6 +38,7 @@ class Location extends React.Component {
     this.state = {
       address: '',
       isLoading: false,
+      isEditorShown: false,
     };
   }
 
@@ -170,8 +175,16 @@ class Location extends React.Component {
     });
   };
 
+  openEditor = () => {
+    this.setState({ isEditorShown: true });
+  };
+
+  closeEditor = () => {
+    this.setState({ isEditorShown: false });
+  };
+
   render() {
-    const { isLoading, address } = this.state;
+    const { isLoading, address, isEditorShown } = this.state;
     const { position } = this.props;
     const isValid = isValidPosition(position?.lng, position?.lat);
     return (
@@ -182,10 +195,10 @@ class Location extends React.Component {
             type: CellType.GEOLOCATION,
             name: getColumnDisplayName(PRIVATE_COLUMN_KEY.LOCATION)
           }}
-          readonly={true}
+          readonly={false}
         >
           {isValid ? (
-            <div className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter">
+            <div className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter w-100 cursor-pointer" onClick={this.openEditor}>
               {!isLoading && this.mapType && address ? (
                 <span>{address}</span>
               ) : (
@@ -193,13 +206,28 @@ class Location extends React.Component {
               )}
             </div>
           ) : (
-            <div className="sf-metadata-record-cell-empty" placeholder={gettext('Empty')}></div>
+            <div className="sf-metadata-record-cell-empty cursor-pointer" placeholder={gettext('Empty')} onClick={this.openEditor}></div>
           )}
         </DetailItem>
         {isLoading ? (<Loading />) : this.mapType && (
           <div className={classnames('dirent-detail-item dirent-detail-item-value-map', { 'd-none': !isValid })}>
             <div className="w-100 h-100" ref={ref => this.ref = ref} id="sf-geolocation-map-container"></div>
           </div>
+        )}
+        {isEditorShown && (
+          <ClickOutside onClickOutside={this.closeEditor}>
+            <Popover
+              target={this.ref}
+              isOpen={true}
+              placement="left-start"
+              hideArrow={true}
+              fade={false}
+              className="sf-metadata-property-detail-editor-popover sf-metadata-geolocation-property-detail-editor-popover"
+              boundariesElement="viewport"
+            >
+              <GeolocationEditor position={position} onChange={this.props.onChange} />
+            </Popover>
+          </ClickOutside>
         )}
       </>
     );

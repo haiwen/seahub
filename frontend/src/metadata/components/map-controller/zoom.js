@@ -60,7 +60,7 @@ export const createZoomControl = (map) => {
   return container;
 };
 
-export function createBMapZoomControl(anchor, offset) {
+export function createBMapZoomControl({ anchor, offset }) {
   function ZoomControl() {
     this.defaultAnchor = anchor || window.BMAP_ANCHOR_BOTTOM_RIGHT;
     this.defaultOffset = new window.BMapGL.Size(offset?.x || 66, offset?.y || 30);
