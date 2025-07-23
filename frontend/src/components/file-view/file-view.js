@@ -158,6 +158,7 @@ class FileView extends React.Component {
                   rotateImage={this.props.rotateImage}
                   lineWrapping={this.props.lineWrapping}
                   updateLineWrapping={this.props.updateLineWrapping}
+                  setDefaultPageFitScale={this.props.setDefaultPageFitScale}
                 />
               }
             </div>

@@ -139,7 +139,10 @@ class FileToolbar extends React.Component {
         <div className="d-none d-md-flex justify-content-between align-items-center flex-shrink-0 ml-4">
           {(fileType == 'Image' && !err) && (
             <>
-              <ImageZoomer setImageScale={this.props.setImageScale} />
+              <ImageZoomer
+                setImageScale={this.props.setImageScale}
+                setDefaultPageFitScale={this.props.setDefaultPageFitScale}
+              />
               {['psd', 'heic'].indexOf(fileExt) == -1 && (
                 <IconButton
                   id="rotate-image"

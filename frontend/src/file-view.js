@@ -29,6 +29,7 @@ class InnerFileView extends React.Component {
       dragOrigin: null,
     };
     this.imageContainerRef = React.createRef();
+    this.defaultPageFitScale = 1;
   }
 
   setImageScale = (scale) => {
@@ -36,6 +37,10 @@ class InnerFileView extends React.Component {
       imageScale: scale,
       imageOffset: scale === 1 ? { x: 0, y: 0 } : prevState.imageOffset,
     }));
+  };
+
+  setDefaultPageFitScale = (scale) => {
+    this.defaultPageFitScale = scale;
   };
 
   rotateImage = () => {
@@ -53,7 +58,7 @@ class InnerFileView extends React.Component {
   };
 
   handleImageMouseDown = (e) => {
-    if (this.state.imageScale <= 1) return;
+    if (this.state.imageScale < this.defaultPageFitScale) return;
     e.preventDefault();
     this.setState({
       isDragging: true,
@@ -97,7 +102,7 @@ class InnerFileView extends React.Component {
           <div
             ref={this.imageContainerRef}
             className="d-flex w-100 h-100"
-            style={{ cursor: imageScale > 1 ? 'move' : 'default' }}
+            style={{ cursor: imageScale >= this.defaultPageFitScale ? 'move' : 'default' }}
             onMouseDown={this.handleImageMouseDown}
             onMouseMove={this.handleImageMouseMove}
             onMouseUp={this.handleImageMouseUp}
@@ -131,6 +136,7 @@ class InnerFileView extends React.Component {
       <FileView
         content={content}
         setImageScale={this.setImageScale}
+        setDefaultPageFitScale={this.setDefaultPageFitScale}
         rotateImage={this.rotateImage}
       />
     );
