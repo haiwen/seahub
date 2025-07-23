@@ -13,7 +13,7 @@ const SCALE_OPTIONS_2 = [
 ];
 const DEFAULT_SCALE = SCALE_OPTIONS_2[0];
 
-const ImageZoomer = ({ setImageScale }) => {
+const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
 
   const [curScale, setScale] = useState(1);
   const [curScaleText, setScaleText] = useState(DEFAULT_SCALE.text); // for the text shown in the input
@@ -59,7 +59,7 @@ const ImageZoomer = ({ setImageScale }) => {
     if (!imageElement || (imageElement.clientWidth === 2 && imageElement.clientHeight === 2)) {
       setTimeout(() => {
         scaleImageToPageFit();
-      }, 100);
+      }, 1);
       return;
     }
     const borderWidth = 1;
@@ -77,7 +77,8 @@ const ImageZoomer = ({ setImageScale }) => {
     const scale = Math.min(hScale, vScale);
     setScale(scale);
     scaleImage(scale);
-  }, [setScale, scaleImage]);
+    setDefaultPageFitScale(scale);
+  }, [setScale, scaleImage, setDefaultPageFitScale]);
 
   const onMenuItemClick = useCallback((value) => {
     setSelectedScale(value);

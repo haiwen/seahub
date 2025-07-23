@@ -75,21 +75,29 @@ class FileContent extends React.Component {
     if (transforms.length > 0) {
       style.transform = transforms.join(' ');
     }
-    if (scale > 1 && offset && typeof offset === 'object') {
-      if (offset.x !== undefined) style.left = offset.x;
-      if (offset.y !== undefined) style.top = offset.y;
+    if (offset && typeof offset === 'object') {
+      if (offset.x !== undefined) {
+        style.left = offset.x;
+      }
+      if (offset.y !== undefined) {
+        style.top = offset.y;
+      }
       style.position = 'relative';
     }
 
     return (
       <div className="file-view-content flex-1 image-file-view d-flex align-items-center justify-content-center">
         {previousImage && (
-          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}><span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span></a>
+          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}>
+            <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
+          </a>
         )}
         {nextImage && (
-          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}><span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span></a>
+          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}>
+            <span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span>
+          </a>
         )}
-        <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={ style } />
+        <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={style} />
       </div>
     );
   }
