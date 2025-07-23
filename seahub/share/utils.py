@@ -3,11 +3,13 @@ import json
 from seahub.group.utils import is_group_admin
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PERMISSION_PREFIX
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
-from seahub.utils import is_valid_org_id
+from seahub.utils import is_valid_org_id, normalize_cache_key
 from seahub.utils.db_api import SeafileDB
 
 import seaserv
 from seaserv import seafile_api, ccnet_api
+
+from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +17,8 @@ logger = logging.getLogger(__name__)
 SCOPE_ALL_USERS = 'all_users'
 SCOPE_SPECIFIC_USERS = 'specific_users'
 SCOPE_SPECIFIC_EMAILS = 'specific_emails'
+USER_REPO_EXIST_INVISIBLE_FOLDER_PREFIX = 'user_repo_exist_invisible_folder_'
+USER_REPO_INVISIBLE_FOLDER_CACHE_TIMEOUT = 5 * 60
 
 VALID_SHARE_LINK_SCOPE = [
     SCOPE_ALL_USERS,
@@ -288,6 +292,10 @@ def check_share_link_user_access(share, username):
 
 
 def check_invisible_folder(repo_id, username, org_id=None):
+    user_invisible_folder_cache_key = normalize_cache_key(username, USER_REPO_EXIST_INVISIBLE_FOLDER_PREFIX, repo_id)
+    cached_result = cache.get(user_invisible_folder_cache_key)
+    if cached_result is not None:
+        return cached_result
     seafile_db_api = SeafileDB()
     user_perms = seafile_db_api.get_share_to_user_folder_permission_by_username_and_repo_id(username, repo_id)
     exist_invisible_folder = False
@@ -316,4 +324,6 @@ def check_invisible_folder(repo_id, username, org_id=None):
                     if path_perm_count == 1:  # Only has invisible permission
                         exist_invisible_folder = True
                         break
+
+    cache.set(user_invisible_folder_cache_key, exist_invisible_folder, USER_REPO_INVISIBLE_FOLDER_CACHE_TIMEOUT)
     return exist_invisible_folder
