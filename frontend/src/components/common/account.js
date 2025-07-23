@@ -148,7 +148,7 @@ class Account extends Component {
 
   render() {
     return (
-      <div id="account" ref={ref => this.accountDOM = ref}>
+      <div id="account" ref={ref => this.accountDOM = ref} className="ml-4">
         <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')}>
           {this.renderAvatar()}
         </a>
