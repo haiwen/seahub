@@ -27,8 +27,7 @@ from seahub.utils.file_types import IMAGE, VIDEO, PDF
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils.repo import parse_repo_perm, is_repo_owner
-from seahub.share.utils import check_invisible_folder
+from seahub.utils.repo import parse_repo_perm
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
@@ -322,17 +321,9 @@ class DirView(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        exist_invisible_folder = False
-        if not is_repo_owner(request, repo_id, username):
-            try:
-                org_id = request.user.org.org_id if request.user.org else None
-                exist_invisible_folder = check_invisible_folder(repo_id, username, org_id)
-            except Exception as e:
-                logger.error(e)
 
         response_dict = {}
         response_dict["user_perm"] = permission
-        response_dict["exist_invisible_folder"] = exist_invisible_folder
         response_dict["dir_id"] = dir_id
 
         if request_type == 'f':
