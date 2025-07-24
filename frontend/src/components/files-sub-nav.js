@@ -73,16 +73,26 @@ class FilesSubNav extends React.Component {
         </li>
         }
         {enableOCM &&
-        <li className="nav-item">
-          <Link to={siteRoot + 'shared-with-ocm/'} className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}>
+        <li className={`nav-item ${this.getActiveClass('shared-with-ocm')}`}>
+          <Link
+            to={siteRoot + 'shared-with-ocm/'}
+            className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`}
+            title={gettext('Shared from other servers')}
+            onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}
+          >
             <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
             <span className="nav-text">{gettext('Shared from other servers')}</span>
           </Link>
         </li>
         }
         {enableOCMViaWebdav &&
-        <li className="nav-item">
-          <Link to={siteRoot + 'ocm-via-webdav/'} className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`} title={gettext('Shared from other servers')} onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}>
+        <li className={`nav-item ${this.getActiveClass('ocm-via-webdav')}`}>
+          <Link
+            to={siteRoot + 'ocm-via-webdav/'}
+            className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`}
+            title={gettext('Shared from other servers')}
+            onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}
+          >
             <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
             <span className="nav-text">{gettext('Shared from other servers')}</span>
           </Link>
