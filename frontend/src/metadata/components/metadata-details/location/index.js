@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Popover } from 'reactstrap';
+import { Modal, Popover } from 'reactstrap';
 import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
-import { wgs84_to_gcj02, gcj02_to_bd09 } from '../../../../utils/coord-transform';
 import { MAP_TYPE } from '../../../../constants';
 import Loading from '../../../../components/loading';
 import { gettext, baiduMapKey, googleMapKey, googleMapId } from '../../../../utils/constants';
@@ -39,6 +38,7 @@ class Location extends React.Component {
       address: '',
       isLoading: false,
       isEditorShown: false,
+      isFullScreen: false,
     };
   }
 
@@ -53,17 +53,12 @@ class Location extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { position, record } = this.props;
-    if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
-    if (prevProps.position?.lng === position?.lng && prevProps.position?.lat === position?.lat) return;
-    let transformedPos = wgs84_to_gcj02(position.lng, position.lat);
-    if (this.mapType === MAP_TYPE.B_MAP) {
-      transformedPos = gcj02_to_bd09(transformedPos.lng, transformedPos.lat);
+    if (prevProps.position !== position || prevProps.record !== record) {
+      this.setState({ address: record._location_translated?.address }, () => {
+        this.addMarkerByPosition(position?.lng, position?.lat);});
     }
-    this.addMarkerByPosition(transformedPos.lng, transformedPos.lat);
-
-    this.setState({ address: record._location_translated?.address });
   }
 
   componentWillUnmount() {
@@ -131,10 +126,7 @@ class Location extends React.Component {
 
       window.mapInstance = new window.BMapGL.Map('sf-geolocation-map-container', { enableMapClick: false });
       this.map = window.mapInstance;
-
-      const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
-      const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
-      const { lng, lat } = bdPosition;
+      const { lng, lat } = position;
       const point = new window.BMapGL.Point(lng, lat);
       this.map.centerAndZoom(point, 16);
       this.map.disableScrollWheelZoom(true);
@@ -151,11 +143,10 @@ class Location extends React.Component {
     this.setState({ isLoading: false }, () => {
       if (!window.google.maps.Map) return;
 
-      const gcPosition = wgs84_to_gcj02(position.lng, position.lat);
-      const { lng, lat } = gcPosition || {};
+      const { lng, lat } = position;
       window.mapInstance = new window.google.maps.Map(this.ref, {
         zoom: 16,
-        center: gcPosition,
+        center: position,
         mapId: googleMapId,
         zoomControl: false,
         mapTypeControl: false,
@@ -171,7 +162,7 @@ class Location extends React.Component {
       this.addMarkerByPosition(lng, lat);
       const zoomControl = createZoomControl(this.map);
       this.map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
-      this.map.setCenter(gcPosition);
+      this.map.setCenter(position);
     });
   };
 
@@ -179,17 +170,34 @@ class Location extends React.Component {
     this.setState({ isEditorShown: true });
   };
 
+  onFullScreen = () => {
+    this.setState({ isFullScreen: !this.state.isFullScreen });
+  };
+
   closeEditor = () => {
     this.setState({ isEditorShown: false });
   };
 
+  onSubmit = (value) => {
+    const { position, location_translated } = value;
+    this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, location_translated);
+    this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, position);
+    this.closeEditor();
+    this.setState({
+      address: location_translated?.address,
+      isFullScreen: false,
+    });
+    this.addMarkerByPosition(position.lng, position.lat);
+  };
+
   render() {
-    const { isLoading, address, isEditorShown } = this.state;
+    const { isLoading, address, isEditorShown, isFullScreen } = this.state;
     const { position } = this.props;
     const isValid = isValidPosition(position?.lng, position?.lat);
     return (
       <>
         <DetailItem
+          id="location-item"
           field={{
             key: PRIVATE_COLUMN_KEY.LOCATION,
             type: CellType.GEOLOCATION,
@@ -198,7 +206,7 @@ class Location extends React.Component {
           readonly={false}
         >
           {isValid ? (
-            <div className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter w-100 cursor-pointer" onClick={this.openEditor}>
+            <div ref={ref => this.editorRef = ref} className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter w-100 cursor-pointer" onClick={this.openEditor}>
               {!isLoading && this.mapType && address ? (
                 <span>{address}</span>
               ) : (
@@ -206,7 +214,7 @@ class Location extends React.Component {
               )}
             </div>
           ) : (
-            <div className="sf-metadata-record-cell-empty cursor-pointer" placeholder={gettext('Empty')} onClick={this.openEditor}></div>
+            <div ref={ref => this.editorRef = ref} className="sf-metadata-record-cell-empty cursor-pointer" placeholder={gettext('Empty')} onClick={this.openEditor}></div>
           )}
         </DetailItem>
         {isLoading ? (<Loading />) : this.mapType && (
@@ -215,19 +223,34 @@ class Location extends React.Component {
           </div>
         )}
         {isEditorShown && (
-          <ClickOutside onClickOutside={this.closeEditor}>
-            <Popover
-              target={this.ref}
+          !isFullScreen ? (
+            <ClickOutside onClickOutside={this.closeEditor}>
+              <Popover
+                target="location-item"
+                isOpen={true}
+                hideArrow={true}
+                fade={false}
+                placement="left"
+                className="sf-metadata-property-detail-editor-popover sf-metadata-geolocation-property-detail-editor-popover"
+                boundariesElement="viewport"
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  background: 'transparent',
+                }}
+              >
+                <GeolocationEditor position={position} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} />
+              </Popover>
+            </ClickOutside>
+          ) : (
+            <Modal
+              size='lg'
               isOpen={true}
-              placement="left-start"
-              hideArrow={true}
-              fade={false}
-              className="sf-metadata-property-detail-editor-popover sf-metadata-geolocation-property-detail-editor-popover"
-              boundariesElement="viewport"
+              toggle={this.onFullScreen}
             >
-              <GeolocationEditor position={position} onChange={this.props.onChange} />
-            </Popover>
-          </ClickOutside>
+              <GeolocationEditor position={position} isFullScreen={isFullScreen} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} />
+            </Modal>
+          )
         )}
       </>
     );

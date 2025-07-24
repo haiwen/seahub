@@ -39,7 +39,7 @@ export function createBMapGeolocationControl({ anchor, offset, callback }) {
   GeolocationControl.prototype.initialize = function (map) {
     const div = document.createElement('div');
     let className = classnames('sf-map-control-container sf-map-geolocation-control-container d-flex align-items-center justify-content-center', {
-      'sf-map-geolocation-control-mobile': !Utils.isDesktop()
+      'sf-map-control-container-mobile': !Utils.isDesktop()
     });
 
     const locationButton = document.createElement('div');

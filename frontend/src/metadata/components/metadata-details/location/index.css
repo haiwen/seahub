@@ -37,3 +37,22 @@
   width: 100%;
   cursor: pointer;
 }
+
+.sf-metadata-record-cell-empty {
+  position: relative;
+  width: 100%;
+  padding: 7px 6px 0 6px;
+}
+
+.sf-metadata-record-cell-empty:empty::before {
+  content: attr(placeholder);
+  color: #666;
+}
+
+.sf-metadata-geolocation-property-detail-editor-popover .popover.show {
+  width: 500px;
+  max-width: 500px;
+  border: none;
+  background-color: transparent;
+  transform: translateX(-140px);
+}
