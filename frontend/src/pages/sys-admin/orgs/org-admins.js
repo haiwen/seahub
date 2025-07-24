@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -18,7 +18,7 @@ import SysAdminUserDeactivateDialog from '../../../components/dialog/sysadmin-di
 
 dayjs.extend(relativeTime);
 
-class Content extends Component {
+class Content extends React.Component {
 
   constructor(props) {
     super(props);
@@ -47,7 +47,7 @@ class Content extends Component {
       return <p className="error text-center mt-4">{errorMsg}</p>;
     } else {
       const emptyTip = (
-        <EmptyTip text={gettext('No members')}>
+        <EmptyTip text={gettext('No admins')}>
         </EmptyTip>
       );
       const table = (
@@ -93,7 +93,8 @@ Content.propTypes = {
   updateMembership: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
 };
-class Item extends Component {
+
+class Item extends React.Component {
 
   constructor(props) {
     super(props);
@@ -139,7 +140,7 @@ class Item extends Component {
       case 'Reset Password':
         this.toggleResetPasswordDialog();
         break;
-      case 'Revoke admin':
+      case 'Revoke Admin':
         this.props.updateMembership(this.props.item.email, 'Member');
         break;
       default:
@@ -309,7 +310,7 @@ Item.propTypes = {
   deleteUser: PropTypes.func.isRequired,
 };
 
-class OrgAdmins extends Component {
+class OrgAdmins extends React.Component {
 
   constructor(props) {
     super(props);

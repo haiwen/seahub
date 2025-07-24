@@ -386,17 +386,6 @@ class Users extends Component {
     });
   };
 
-  getCurrentNavItem = () => {
-    const { isAdmin, isLDAPImported } = this.props;
-    let item = 'database';
-    if (isAdmin) {
-      item = 'admin';
-    } else if (isLDAPImported) {
-      item = 'ldap-imported';
-    }
-    return item;
-  };
-
   addAdminInBatch = (emails) => {
     systemAdminAPI.sysAdminAddAdminInBatch(emails).then(res => {
       let users = res.data.success.map(user => {
@@ -424,7 +413,7 @@ class Users extends Component {
       isAddUserDialogOpen,
       isBatchDeleteUserDialogOpen,
       isBatchSetQuotaDialogOpen,
-      isBatchAddAdminDialogOpen
+      isBatchAddAdminDialogOpen,
     } = this.props;
     const { is_active, role } = this.state;
 
@@ -495,7 +484,7 @@ class Users extends Component {
         {isBatchAddAdminDialogOpen &&
           <SysAdminBatchAddAdminDialog
             addAdminInBatch={this.addAdminInBatch}
-            toggle={this.toggleBatchAddAdminDialog}
+            toggle={this.props.toggleBatchAddAdminDialog}
           />
         }
       </>
