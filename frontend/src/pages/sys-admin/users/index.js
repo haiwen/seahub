@@ -146,7 +146,7 @@ const UsersLayout = ({ ...commonProps }) => {
           currentPage={currentPage}
           {...usersProps}
         />
-        <AdminUsers path="admins" {...usersProps} />
+        <AdminUsers path="admins" perPage={perPage} {...usersProps} />
         <LDAPImportedUsers path="ldap-imported" {...usersProps} />
         <LDAPUsers path="ldap" {...usersProps} />
       </Router>
