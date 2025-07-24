@@ -179,7 +179,7 @@ from seahub.api2.endpoints.admin.organizations import AdminOrganizations, \
     AdminOrganization, AdminSearchOrganization, AdminOrganizationsBaseInfo, TrafficExceededOrganizations
 from seahub.api2.endpoints.admin.institutions import AdminInstitutions, AdminInstitution
 from seahub.api2.endpoints.admin.institution_users import AdminInstitutionUsers, AdminInstitutionUser
-from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
+from seahub.api2.endpoints.admin.org_users import AdminOrgAdminUsers, AdminOrgUsers, AdminOrgUser
 from seahub.api2.endpoints.admin.org_groups import AdminOrgGroups
 from seahub.api2.endpoints.admin.org_repos import AdminOrgRepos
 from seahub.api2.endpoints.admin.org_stats import AdminOrgStatsTraffic
@@ -776,6 +776,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/$', AdminOrganization.as_view(), name='api-v2.1-admin-organization'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/(?P<email>[^/]+)/$', AdminOrgUser.as_view(), name='api-v2.1-admin-org-user'),
+    re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/admin-users/$', AdminOrgAdminUsers.as_view(), name='api-v2.1-admin-org-staff'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/groups/$', AdminOrgGroups.as_view(),name='api-v2.1-admin-org-groups'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/repos/$', AdminOrgRepos.as_view(),name='api-v2.1-admin-org-repos'),
     re_path(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/statistics/traffic/$', AdminOrgStatsTraffic.as_view(), name='api-v2.1-admin-org-stats-traffic'),
@@ -930,6 +931,7 @@ urlpatterns = [
     path('sys/search-organizations/', sysadmin_react_fake_view, name="sys_search_organizations"),
     path('sys/organizations/<int:org_id>/info/', sysadmin_react_fake_view, name="sys_organization_info"),
     path('sys/organizations/<int:org_id>/users/', sysadmin_react_fake_view, name="sys_organization_users"),
+    path('sys/organizations/<int:org_id>/admin-users/', sysadmin_react_fake_view, name="sys_organization_staff"),
     path('sys/organizations/<int:org_id>/groups/', sysadmin_react_fake_view, name="sys_organization_groups"),
     path('sys/organizations/<int:org_id>/libraries/', sysadmin_react_fake_view, name="sys_organization_repos"),
     path('sys/institutions/', sysadmin_react_fake_view, name="sys_institutions"),
