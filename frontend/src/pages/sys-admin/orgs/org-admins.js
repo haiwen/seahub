@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Utils } from '../../../utils/utils';
@@ -58,9 +57,8 @@ class Content extends Component {
               <tr>
                 <th width="25%">{gettext('Name')}</th>
                 <th width="15%">{gettext('Status')}</th>
-                <th width="15%">{gettext('Role')}</th>
-                <th width="15%">{gettext('Space Used')}</th>
-                <th width="25%">{gettext('Created At')}{' / '}{gettext('Last Login')}</th>
+                <th width="25%">{gettext('Space Used')}</th>
+                <th width="30%">{gettext('Created At')}{' / '}{gettext('Last Login')}</th>
                 <th width="5%">{/* Operations */}</th>
               </tr>
             </thead>
@@ -141,7 +139,7 @@ class Item extends Component {
       case 'Reset Password':
         this.toggleResetPasswordDialog();
         break;
-      case 'Unset as Administrator':
+      case 'Revoke admin':
         this.props.updateMembership(this.props.item.email, 'Member');
         break;
       default:
@@ -205,8 +203,8 @@ class Item extends Component {
       case 'Reset Password':
         translateResult = gettext('Reset Password');
         break;
-      case 'Unset as Administrator':
-        translateResult = gettext('Unset as Administrator');
+      case 'Revoke admin':
+        translateResult = gettext('Revoke admin');
         break;
     }
 
@@ -222,14 +220,6 @@ class Item extends Component {
     }
   };
 
-  translateMembership = (membership) => {
-    switch (membership) {
-      case 'Admin':
-        return gettext('Admin');
-      case 'Member':
-        return gettext('Member');
-    }
-  };
 
   render() {
     const { item } = this.props;
@@ -245,22 +235,10 @@ class Item extends Component {
       return {
         value: item,
         text: this.translateStatus(item),
-        isSelected: item == curStatus
+        isSelected: item === curStatus
       };
     });
     const currentSelectedStatusOption = this.statusOptions.filter(item => item.isSelected)[0];
-
-    // for 'user membership'
-    const curMembership = item.is_org_staff ? 'Admin' : 'Member';
-    this.membershipOptions = ['Admin', 'Member'].map(item => {
-      return {
-        value: item,
-        text: this.translateMembership(item),
-        isSelected: item == curMembership
-      };
-    });
-    const currentSelectedMembershipOption = this.membershipOptions.filter(item => item.isSelected)[0];
-
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
@@ -275,23 +253,14 @@ class Item extends Component {
               operationBeforeSelect={item.active ? this.toggleConfirmInactiveDialog : undefined}
             />
           </td>
-          <td>
-            <Selector
-              isDropdownToggleShown={highlight}
-              currentSelectedOption={currentSelectedMembershipOption}
-              options={this.membershipOptions}
-              selectOption={this.updateMembership}
-              toggleItemFreezed={this.props.toggleItemFreezed}
-            />
-          </td>
           <td>{`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}</td>
           <td>
             {dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}{' / '}{item.last_login ? dayjs(item.last_login).fromNow() : '--'}
           </td>
           <td>
-            {(isOpIconShown && item.email != username) &&
+            {(isOpIconShown && item.email !== username) &&
             <OpMenu
-              operations={['Delete', 'Reset Password', 'Unset as Administrator']}
+              operations={['Delete', 'Reset Password', 'Revoke admin']}
               translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
@@ -340,7 +309,7 @@ Item.propTypes = {
   deleteUser: PropTypes.func.isRequired,
 };
 
-class OrgStaff extends Component {
+class OrgAdmins extends Component {
 
   constructor(props) {
     super(props);
@@ -358,7 +327,7 @@ class OrgStaff extends Component {
         orgName: res.data.org_name
       });
     });
-    systemAdminAPI.sysAdminListOrgStaff(this.props.orgID).then((res) => {
+    systemAdminAPI.sysAdminListOrgAdminUsers(this.props.orgID).then((res) => {
       this.setState({
         loading: false,
         userList: res.data.users
@@ -374,7 +343,7 @@ class OrgStaff extends Component {
   deleteUser = (orgID, email) => {
     systemAdminAPI.sysAdminDeleteOrgUser(orgID, email).then(res => {
       let newUserList = this.state.userList.filter(item => {
-        return item.email != email;
+        return item.email !== email;
       });
       this.setState({ userList: newUserList });
       toaster.success(gettext('Successfully deleted 1 item.'));
@@ -385,10 +354,10 @@ class OrgStaff extends Component {
   };
 
   updateStatus = (email, statusValue, options = {}) => {
-    const isActive = statusValue == 'active';
+    const isActive = statusValue === 'active';
     systemAdminAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'active', isActive, options).then(res => {
       let newUserList = this.state.userList.map(item => {
-        if (item.email == email) {
+        if (item.email === email) {
           item.active = res.data.active;
         }
         return item;
@@ -401,9 +370,12 @@ class OrgStaff extends Component {
   };
 
   updateMembership = (email, membershipValue) => {
-    const isOrgStaff = membershipValue == 'Admin';
+    const isOrgStaff = membershipValue === 'Admin';
     systemAdminAPI.sysAdminUpdateOrgUser(this.props.orgID, email, 'is_org_staff', isOrgStaff).then(res => {
-      this.componentDidMount();
+      let newUserList = this.state.userList.filter(item => {
+        return item.email !== email;
+      });
+      this.setState({ userList: newUserList });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -419,7 +391,7 @@ class OrgStaff extends Component {
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <OrgNav
-              currentItem="staff"
+              currentItem="admin-users"
               orgID={this.props.orgID}
               orgName={orgName}
             />
@@ -440,8 +412,8 @@ class OrgStaff extends Component {
   }
 }
 
-OrgStaff.propTypes = {
+OrgAdmins.propTypes = {
   orgID: PropTypes.string,
 };
 
-export default OrgStaff;
+export default OrgAdmins;

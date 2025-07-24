@@ -426,7 +426,7 @@ class AdminOrgUser(APIView):
         return Response({'success': True})
 
 
-class AdminOrgStaff(APIView):
+class AdminOrgAdminUsers(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)

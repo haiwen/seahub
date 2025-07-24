@@ -649,8 +649,8 @@ class SystemAdminAPI {
     return this.req.get(url);
   }
 
-  sysAdminListOrgStaff(orgID) {
-    const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/staff/';
+  sysAdminListOrgAdminUsers(orgID) {
+    const url = this.server + '/api/v2.1/admin/organizations/' + orgID + '/admin-users/';
     return this.req.get(url);
   }
 

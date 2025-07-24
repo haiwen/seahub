@@ -37,7 +37,7 @@ import OrgsTrafficExceeded from './orgs/orgs-traffic-exceeded';
 import SearchOrgs from './orgs/search-orgs';
 import OrgInfo from './orgs/org-info';
 import OrgUsers from './orgs/org-users';
-import OrgStaff from './orgs/org-staff';
+import OrgAdmins from './orgs/org-admins';
 import OrgGroups from './orgs/org-groups';
 import OrgRepos from './orgs/org-repos';
 
@@ -229,7 +229,7 @@ class SysAdmin extends React.Component {
             <SearchOrgs path={siteRoot + 'sys/search-organizations'} {...commonProps} />
             <OrgInfo path={siteRoot + 'sys/organizations/:orgID/info'} {...commonProps} />
             <OrgUsers path={siteRoot + 'sys/organizations/:orgID/users'} {...commonProps} />
-            <OrgStaff path={siteRoot + 'sys/organizations/:orgID/staff'} {...commonProps} />
+            <OrgAdmins path={siteRoot + 'sys/organizations/:orgID/admin-users'} {...commonProps} />
             <OrgGroups path={siteRoot + 'sys/organizations/:orgID/groups'} {...commonProps} />
             <OrgRepos path={siteRoot + 'sys/organizations/:orgID/libraries'} {...commonProps} />
             <Institutions path={siteRoot + 'sys/institutions'} {...commonProps} />
