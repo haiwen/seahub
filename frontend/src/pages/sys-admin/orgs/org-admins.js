@@ -204,8 +204,8 @@ class Item extends React.Component {
       case 'Reset Password':
         translateResult = gettext('Reset Password');
         break;
-      case 'Revoke admin':
-        translateResult = gettext('Revoke admin');
+      case 'Revoke Admin':
+        translateResult = gettext('Revoke Admin');
         break;
     }
 
@@ -261,7 +261,7 @@ class Item extends React.Component {
           <td>
             {(isOpIconShown && item.email !== username) &&
             <OpMenu
-              operations={['Delete', 'Reset Password', 'Revoke admin']}
+              operations={['Delete', 'Reset Password', 'Revoke Admin']}
               translateOperations={this.translateOperations}
               onMenuItemClick={this.onMenuItemClick}
               onFreezedItem={this.props.onFreezedItem}
