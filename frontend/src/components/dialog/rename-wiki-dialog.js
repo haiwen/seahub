@@ -67,7 +67,7 @@ class RenameWikiDialog extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Rename Wiki')}</SeahubModalHeader>
         <ModalBody>
           <p>{gettext('New Wiki name')}</p>
@@ -79,6 +79,7 @@ class RenameWikiDialog extends React.Component {
             id="new-wiki-name"
             value={this.state.newName}
             onChange={this.handleChange}
+            autoFocus={true}
           />
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>

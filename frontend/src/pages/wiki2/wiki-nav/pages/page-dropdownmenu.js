@@ -114,6 +114,15 @@ export default class PageDropdownMenu extends Component {
     window.open(wikiLink);
   };
 
+  renderItem = (onClick, icon, text) => {
+    return (
+      <DropdownItem onClick={onClick}>
+        <i className={`sf3-font sf3-font-${icon}`} aria-hidden="true" />
+        <span className="item-text">{text}</span>
+      </DropdownItem>
+    );
+  };
+
   render() {
     const { canDeletePage = true } = this.props;
     return (
@@ -125,44 +134,23 @@ export default class PageDropdownMenu extends Component {
         <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
         <DropdownMenu
           className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
-          flip={false}
-          modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
+          flip={true}
+          direction="down"
+          style={{ maxHeight: '80vh', overflowY: 'auto' }}
+          modifiers={[
+            { name: 'preventOverflow', options: { boundary: 'window', padding: 8 } },
+            { name: 'flip', enabled: true, options: { fallbackPlacements: ['top'] } }
+          ]}
         >
-          <DropdownItem onClick={this.handleCopyLink}>
-            <i className="sf3-font sf3-font-link" aria-hidden="true" />
-            <span className="item-text">{gettext('Copy link')}</span>
-          </DropdownItem>
-          <DropdownItem onClick={this.onRename}>
-            <i className="sf3-font sf3-font-rename" aria-hidden="true" />
-            <span className="item-text">{gettext('Modify name')}</span>
-          </DropdownItem>
-          <DropdownItem onClick={this.addPageAbove}>
-            <i className="sf3-font sf3-font-enlarge" aria-hidden="true" />
-            <span className="item-text">{gettext('Add page above')}</span>
-          </DropdownItem>
-          <DropdownItem onClick={this.addPageBelow}>
-            <i className="sf3-font sf3-font-enlarge" aria-hidden="true" />
-            <span className="item-text">{gettext('Add page below')}</span>
-          </DropdownItem>
-          <DropdownItem onClick={this.duplicatePage}>
-            <i className="sf3-font sf3-font-copy1" aria-hidden="true" />
-            <span className="item-text">{gettext('Duplicate page')}</span>
-          </DropdownItem>
-          {canDeletePage && (
-            <DropdownItem onClick={this.onDeletePage}>
-              <i className="sf3-font sf3-font-delete1" aria-hidden="true" />
-              <span className="item-text">{gettext('Delete page')}</span>
-            </DropdownItem>
-          )}
-          <DropdownItem onClick={this.importPage}>
-            <i className="sf3-font sf3-font-import-sdoc" aria-hidden="true" />
-            <span className="item-text">{gettext('Import page')}</span>
-          </DropdownItem>
+          {this.renderItem(this.handleCopyLink, 'link', gettext('Copy link'))}
+          {this.renderItem(this.onRename, 'rename', gettext('Modify name'))}
+          {this.renderItem(this.addPageAbove, 'enlarge', gettext('Add page above'))}
+          {this.renderItem(this.addPageBelow, 'enlarge', gettext('Add page below'))}
+          {this.renderItem(this.duplicatePage, 'copy1', gettext('Duplicate page'))}
+          {canDeletePage && this.renderItem(this.onDeletePage, 'delete1', gettext('Delete page'))}
+          {this.renderItem(this.importPage, 'import-sdoc', gettext('Import page'))}
           <hr className='divider' />
-          <DropdownItem onClick={this.handleOpenInNewTab}>
-            <i className='sf3-font sf3-font-open-in-new-tab' aria-hidden="true" />
-            <span className="item-text">{gettext('Open in new tab')}</span>
-          </DropdownItem>
+          {this.renderItem(this.handleOpenInNewTab, 'open-in-new-tab', gettext('Open in new tab'))}
         </DropdownMenu>
       </Dropdown>
     );
