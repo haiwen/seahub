@@ -41,7 +41,7 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset, is_seadoc_revision, ZSDOC, export_sdoc
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
-from seahub.utils.file_types import SEADOC, IMAGE, VIDEO, TLDRAW
+from seahub.utils.file_types import SEADOC, IMAGE, VIDEO, EXCALIDRAW
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, \

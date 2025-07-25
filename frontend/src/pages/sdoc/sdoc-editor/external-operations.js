@@ -9,6 +9,8 @@ import InternalLinkDialog from '../../../components/dialog/internal-link-dialog'
 import ShareDialog from '../../../components/dialog/share-dialog';
 import CreateFile from '../../../components/dialog/create-file-dialog';
 import TldrawEditor from '../../tldraw-editor';
+import { shareLinkAPI } from '../../../utils/share-link-api';
+import ShareLink from '../../../models/share-link';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -50,7 +52,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onClearNotification);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
     this.unsubscribeCreateWhiteboardFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_WHITEBOARD_FILE, this.onCreateWhiteboardFile);
-    this.unsubscribeWhiteboardEditor = eventBus.subscribe(EXTERNAL_EVENT.TLDRAW_EDITOR, this.renderWhiteboard);
+    this.unsubscribeGenerateExdrawReadOnlyLink = eventBus.subscribe(EXTERNAL_EVENT.GENERATE_EXDRAW_READ_ONLY_LINK, this.generateExdrawReadOnlyLink);
   }
 
   componentWillUnmount() {
@@ -64,7 +66,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeCreateSdocFile();
     this.unsubscribeClearNotification();
     this.unsubscribeCreateWhiteboardFile();
-    this.unsubscribeWhiteboardEditor();
+    this.unsubscribeGenerateExdrawReadOnlyLink();
   }
 
   renderWhiteboard = ({ containerId, props }) => {
@@ -166,6 +168,21 @@ class ExternalOperations extends React.Component {
     }
     this.setState({
       isShowCreateFileDialog: !this.state.isShowCreateFileDialog
+    });
+  };
+
+  generateExdrawReadOnlyLink = (params) => {
+    if (!params?.repoID || !params?.filePath) return;
+
+    const permissions = { 'can_edit': false, 'can_download': false, 'can_upload': false };
+    const currentScope = 'all_users';
+    const request = shareLinkAPI.createMultiShareLink(params.repoID, params.filePath, '', '', permissions, currentScope);
+
+    request.then((res) => {
+      const newLink = new ShareLink(res.data);
+      if (params?.onSuccess) {
+        params?.onSuccess(newLink.link);
+      }
     });
   };
 
