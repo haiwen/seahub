@@ -1,4 +1,4 @@
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 import axios from 'axios';
 
@@ -125,6 +125,6 @@ class ShareLinkAPI {
 }
 
 let shareLinkAPI = new ShareLinkAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 shareLinkAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 export { shareLinkAPI };

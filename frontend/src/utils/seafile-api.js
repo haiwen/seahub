@@ -1,6 +1,6 @@
 import axios from 'axios';
 import FormData from 'form-data';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 
 class SeafileAPI {
@@ -2211,7 +2211,7 @@ class SeafileAPI {
 }
 
 let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export { seafileAPI };

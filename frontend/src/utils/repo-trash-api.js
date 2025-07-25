@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 
 class RepotrashAPI {
@@ -73,7 +73,7 @@ class RepotrashAPI {
 }
 
 let repoTrashAPI = new RepotrashAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 repoTrashAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export { repoTrashAPI };

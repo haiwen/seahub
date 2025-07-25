@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, canAddRepo, canViewOrg } from '../../utils/constants';
@@ -167,8 +167,8 @@ class Libraries extends Component {
   };
 
   sortRepoList = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-dir-sort-by', sortBy);
-    cookie.save('seafile-repo-dir-sort-order', sortOrder);
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,

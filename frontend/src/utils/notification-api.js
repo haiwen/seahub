@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 
 class NotificationAPI {
@@ -59,7 +59,7 @@ class NotificationAPI {
 }
 
 let notificationAPI = new NotificationAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 notificationAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export { notificationAPI };

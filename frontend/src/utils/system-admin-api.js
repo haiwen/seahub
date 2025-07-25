@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 
 class SystemAdminAPI {
@@ -1334,7 +1334,7 @@ class SystemAdminAPI {
 }
 
 let systemAdminAPI = new SystemAdminAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 systemAdminAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export { systemAdminAPI };
