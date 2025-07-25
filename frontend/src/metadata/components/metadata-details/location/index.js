@@ -35,10 +35,12 @@ class Location extends React.Component {
     this.mapKey = key;
     this.map = null;
     this.state = {
-      address: '',
+      position: this.props.position,
+      address: this.props.record?._location_translated?.address || '',
       isLoading: false,
       isEditorShown: false,
       isFullScreen: false,
+      isReadyToEraseLocation: false,
     };
   }
 
@@ -53,56 +55,48 @@ class Location extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { position, record } = this.props;
-    if (prevProps.position !== position || prevProps.record !== record) {
-      this.setState({ address: record._location_translated?.address }, () => {
-        this.addMarkerByPosition(position?.lng, position?.lat);});
-    }
-  }
-
   componentWillUnmount() {
     this.unsubscribeClearMapInstance();
+    this.map = null;
   }
 
   initMap = () => {
-    if (this.map) return;
-
-    const { position, record } = this.props;
+    const { record } = this.props;
+    const { position } = this.state;
     if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
 
-    this.setState({ isLoading: true, address: record._location_translated?.address });
-    if (this.mapType === MAP_TYPE.B_MAP) {
-      if (!window.BMapGL) {
-        window.renderBaiduMap = () => this.renderBaiduMap(position);
-        loadMapSource(this.mapType, this.mapKey);
-      } else {
-        this.renderBaiduMap(position);
+    this.setState({ isLoading: true }, () => {
+      if (this.mapType === MAP_TYPE.B_MAP) {
+        if (!window.BMapGL) {
+          window.renderBaiduMap = () => this.renderBaiduMap();
+          loadMapSource(this.mapType, this.mapKey);
+        } else {
+          this.renderBaiduMap();
+        }
+      } else if (this.mapType === MAP_TYPE.G_MAP) {
+        if (!window.google?.maps.Map) {
+          window.renderGoogleMap = () => this.renderGoogleMap(position);
+          loadMapSource(this.mapType, this.mapKey);
+        } else {
+          this.renderGoogleMap(position);
+        }
       }
-    } else if (this.mapType === MAP_TYPE.G_MAP) {
-      if (!window.google?.maps.Map) {
-        window.renderGoogleMap = () => this.renderGoogleMap(position);
-        loadMapSource(this.mapType, this.mapKey);
-      } else {
-        this.renderGoogleMap(position);
-      }
-    }
+    });
   };
 
   addMarkerByPosition = (lng, lat) => {
     if (!this.map) {
-      this.initMap(this.props.position);
+      this.initMap({ lng, lat });
       return;
     }
     if (this.mapType === MAP_TYPE.B_MAP) {
-      if (this.lastLng === lng && this.lastLat === lat) return;
       this.lastLng = lng;
       this.lastLat = lat;
 
       const point = new window.BMapGL.Point(lng, lat);
-      const marker = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
+      this.marker = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
       this.map.clearOverlays();
-      this.map.addOverlay(marker);
+      this.map.addOverlay(this.marker);
       this.map.setCenter(point);
     }
     if (this.mapType === MAP_TYPE.G_MAP) {
@@ -120,13 +114,13 @@ class Location extends React.Component {
     }
   };
 
-  renderBaiduMap = (position = {}) => {
+  renderBaiduMap = () => {
     this.setState({ isLoading: false }, () => {
       if (!window.BMapGL.Map) return;
 
       window.mapInstance = new window.BMapGL.Map('sf-geolocation-map-container', { enableMapClick: false });
       this.map = window.mapInstance;
-      const { lng, lat } = position;
+      const { lng, lat } = this.state.position;
       const point = new window.BMapGL.Point(lng, lat);
       this.map.centerAndZoom(point, 16);
       this.map.disableScrollWheelZoom(true);
@@ -176,18 +170,33 @@ class Location extends React.Component {
 
   closeEditor = () => {
     this.setState({ isEditorShown: false });
+    if (this.state.isReadyToEraseLocation) {
+      this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, null);
+      this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, null);
+      this.setState({ address: '', isReadyToEraseLocation: false });
+      this.map = null;
+    }
   };
 
   onSubmit = (value) => {
     const { position, location_translated } = value;
     this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, location_translated);
     this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, position);
-    this.closeEditor();
     this.setState({
+      position,
       address: location_translated?.address,
+      isEditorShown: false,
       isFullScreen: false,
     });
-    this.addMarkerByPosition(position.lng, position.lat);
+    if (!this.marker) {
+      this.addMarkerByPosition(position.lng, position.lat);
+    } else {
+      this.marker.setPosition(new window.BMapGL.Point(position.lng, position.lat));
+    }
+  };
+
+  onReadyToEraseLocation = () => {
+    this.setState({ isReadyToEraseLocation: true });
   };
 
   render() {
@@ -239,7 +248,7 @@ class Location extends React.Component {
                   background: 'transparent',
                 }}
               >
-                <GeolocationEditor position={position} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} />
+                <GeolocationEditor position={position} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
               </Popover>
             </ClickOutside>
           ) : (
@@ -248,7 +257,7 @@ class Location extends React.Component {
               isOpen={true}
               toggle={this.onFullScreen}
             >
-              <GeolocationEditor position={position} isFullScreen={isFullScreen} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} />
+              <GeolocationEditor position={position} isFullScreen={isFullScreen} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
             </Modal>
           )
         )}

@@ -11,7 +11,7 @@ import { DEFAULT_POSITION } from '../../../constants';
 
 import './index.css';
 
-const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit, onFullScreen }) => {
+const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onReadyToEraseLocation }) => {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -67,7 +67,9 @@ const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit
   const onClean = useCallback(() => {
     setInputValue('');
     setSearchResults([]);
-  }, []);
+    mapRef.current.clearOverlays();
+    onReadyToEraseLocation();
+  }, [onReadyToEraseLocation]);
 
   const getInfo = (result) => {
     let value = {};
@@ -174,10 +176,8 @@ const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit
         submitBtn.addEventListener('click', (e) => {
           e.stopPropagation();
           const { position, location_translated } = info;
-          // const gcPosition = bd09_to_gcj02(position.lng, position.lat);
-          // const wgsPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);
           const value = {
-            position: { lng: position.lng, lat: position.lat },
+            position,
             location_translated,
           };
           onSubmit(value);
@@ -202,7 +202,8 @@ const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit
     if (!window.BMapGL.Map) return;
 
     mapRef.current = new window.BMapGL.Map(ref.current);
-    const point = new window.BMapGL.Point(position.lng, position.lat);
+    const initPos = position || DEFAULT_POSITION;
+    const point = new window.BMapGL.Point(initPos.lng, initPos.lat);
     mapRef.current.centerAndZoom(point, 16);
     mapRef.current.enableScrollWheelZoom();
     mapRef.current.clearOverlays();
@@ -218,6 +219,9 @@ const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit
       anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
       offset: { x: 16, y: 96 },
       callback: (point) => {
+        if (mapRef.current.getOverlays().length === 0) {
+          mapRef.current.addOverlay(markerRef.current);
+        }
         mapRef.current.setCenter(point);
         markerRef.current.setPosition(point);
         addLabel(point);
@@ -227,10 +231,11 @@ const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit
     mapRef.current.addControl(geolocationControl);
 
     markerRef.current = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
-    mapRef.current.addOverlay(markerRef.current);
-
     geocRef.current = new window.BMapGL.Geocoder();
-    addLabel(point);
+    if (position) {
+      mapRef.current.addOverlay(markerRef.current);
+      addLabel(point);
+    }
 
     mapRef.current.addEventListener('click', (e) => {
       if (searchResults.length > 0) {
@@ -239,13 +244,16 @@ const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit
       }
       const { lng, lat } = e.latlng;
       const point = new window.BMapGL.Point(lng, lat);
+      if (mapRef.current.getOverlays().length === 0) {
+        mapRef.current.addOverlay(markerRef.current);
+      }
       markerRef.current.setPosition(point);
       mapRef.current.setCenter(point);
       addLabel(point);
     });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [position.lng, position.lat]);
+  }, [position?.lng, position?.lat]);
 
   const toggleFullScreen = useCallback((e) => {
     e.stopPropagation();
@@ -257,6 +265,9 @@ const GeolocationEditor = ({ position = DEFAULT_POSITION, isFullScreen, onSubmit
     const { lngLat, title, address } = result;
     const { lng, lat } = lngLat;
     const point = new window.BMapGL.Point(lng, lat);
+    if (mapRef.current.getOverlays().length === 0) {
+      mapRef.current.addOverlay(markerRef.current);
+    }
     markerRef.current.setPosition(point);
     mapRef.current.setCenter(point);
     addLabel(point);
