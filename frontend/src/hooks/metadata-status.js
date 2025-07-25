@@ -21,6 +21,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
   const [isLoading, setLoading] = useState(true);
   const [enableMetadata, setEnableMetadata] = useState(false);
   const [enableTags, setEnableTags] = useState(false);
+  const [showView, setShowView] = useState(false);
   const [tagsLang, setTagsLang] = useState('en');
   const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
@@ -55,6 +56,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
       const {
         enabled: enableMetadata,
         tags_enabled: enableTags,
+        show_view: showView,
         tags_lang: tagsLang,
         details_settings: detailsSettings,
         face_recognition_enabled: enableFaceRecognition,
@@ -64,6 +66,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         cancelMetadataURL();
       }
       setEnableTags(enableTags);
+      setShowView(showView);
       setTagsLang(tagsLang || 'en');
       setDetailsSettings(JSON.parse(detailsSettings));
       setEnableFaceRecognition(enableSeafileAI && enableFaceRecognition);
@@ -83,9 +86,9 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
   }, [repoID, enableMetadataManagement]);
 
   useEffect(() => {
-    statusCallback && statusCallback({ enableTags });
+    statusCallback && statusCallback({ enableTags, showView });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enableTags]);
+  }, [enableTags, showView]);
 
   const updateEnableMetadata = useCallback((newValue) => {
     if (newValue === enableMetadata) return;
@@ -156,6 +159,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         updateEnableMetadata,
         setIsBeingBuilt,
         enableTags,
+        showView,
         tagsLang,
         updateEnableTags,
         detailsSettings,
