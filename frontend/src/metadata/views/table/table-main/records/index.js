@@ -17,6 +17,7 @@ import { recalculate } from '../../../../utils/column';
 import RecordMetrics from '../../utils/record-metrics';
 import { isWindowsBrowser, isWebkitBrowser } from '../../utils';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, GROUP_ROW_TYPE, EVENT_BUS_TYPE } from '../../../../constants';
+import ExpandedPropertiesDialog from '../../../../components/dialog/expanded-properties';
 
 class Records extends Component {
 
@@ -42,6 +43,8 @@ class Records extends Component {
       },
       selectedPosition: this.initPosition,
       ...initHorizontalScrollState,
+      showExpandedPropsDialog: false,
+      expandedRecordId: null,
     };
     this.isWindows = isWindowsBrowser();
     this.isWebkit = isWebkitBrowser();
@@ -629,6 +632,13 @@ class Records extends Component {
     return this.resultContainerRef?.getBoundingClientRect() || { top: 0, left: 0 };
   };
 
+  toggleExpandedPropsDialog = (recordId = null) => {
+    this.setState({
+      showExpandedPropsDialog: !this.state.showExpandedPropsDialog,
+      expandedRecordId: recordId
+    });
+  };
+
   renderRecordsBody = ({ containerWidth }) => {
     const { isGroupView } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
@@ -661,6 +671,7 @@ class Records extends Component {
       cacheScrollTop: this.storeScrollTop,
       onCellContextMenu: this.onCellContextMenu,
       getTableCanvasContainerRect: this.getTableCanvasContainerRect,
+      onShowExpandedPropsDialog: this.toggleExpandedPropsDialog,
     };
     if (this.props.isGroupView) {
       return (
@@ -737,6 +748,13 @@ class Records extends Component {
             innerWidth={totalWidth + CANVAS_RIGHT_INTERVAL + SEQUENCE_COLUMN_WIDTH}
             onScrollbarScroll={this.onHorizontalScrollbarScroll}
             onScrollbarMouseUp={this.onHorizontalScrollbarMouseUp}
+          />
+        )}
+        {this.state.showExpandedPropsDialog && (
+          <ExpandedPropertiesDialog
+            recordId={this.state.expandedRecordId}
+            columns={this.props.columns}
+            toggle={this.toggleExpandedPropsDialog}
           />
         )}
         <RecordsFooter

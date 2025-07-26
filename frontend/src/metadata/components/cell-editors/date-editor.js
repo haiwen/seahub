@@ -240,8 +240,8 @@ DateEditor.propTypes = {
   isReadOnly: PropTypes.bool,
   format: PropTypes.string,
   lang: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default DateEditor;
