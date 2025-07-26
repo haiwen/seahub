@@ -53,7 +53,8 @@ class FilesActivities extends Component {
         currentPage: 1,
         hasMore: true,
         allItems: [],
-        items: []
+        items: [],
+        isFirstLoading: true,
       }, () => {
         this.loadActivities();
       });
@@ -248,7 +249,7 @@ class FilesActivities extends Component {
   };
 
   handleScroll = (event) => {
-    if (!this.state.isLoadingMore && this.state.hasMore) {
+    if (!this.state.isLoadingMore && this.state.hasMore && !this.state.isFirstLoading) {
       const clientHeight = event.target.clientHeight;
       const scrollHeight = event.target.scrollHeight;
       const scrollTop = event.target.scrollTop;
