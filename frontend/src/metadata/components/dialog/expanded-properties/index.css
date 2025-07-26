@@ -19,6 +19,11 @@
   color: #666;
 }
 
+.expanded-properties-content-container .icon-name-wrapper .column-type-icon {
+  margin-right: 8px;
+  fill: #aaa;
+}
+
 .expanded-properties-content-container .content-wrapper {
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg);

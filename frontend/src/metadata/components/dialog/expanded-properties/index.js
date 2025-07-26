@@ -80,7 +80,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
               <div key={idx} className="d-flex w-100 mb-4">
                 <div className="col-3 icon-name-wrapper">
                   <span className="d-flex text-align-center">
-                    <Icon symbol={COLUMNS_ICON_CONFIG[type]} className="mr-2" />
+                    <Icon symbol={COLUMNS_ICON_CONFIG[type]} className="column-type-icon" />
                   </span>
                   <span className="text-center">{name}</span>
                 </div>

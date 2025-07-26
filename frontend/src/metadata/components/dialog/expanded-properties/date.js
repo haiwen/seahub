@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { getCellValueByColumn, getDateDisplayString } from '../../../utils/cell';
 import DateEditor from '../../cell-editors/date-editor';
 import ClickOutside from '../../../../components/click-outside';
+import { lang } from '../../../../utils/constants';
 
 const Date = ({ record, column, onCommit }) => {
   const [isEditorShown, setIsEditorShown] = useState(false);
@@ -32,7 +33,7 @@ const Date = ({ record, column, onCommit }) => {
       <div tabIndex={0} ref={ref} className="form-control shrink text-nowrap select-option-container" onClick={onEdit}>
         {displayValue}
         {isEditorShown && (
-          <DateEditor format="YYYY-MM-DD HH:mm:ss" value={value} onChange={onChange} onClear={onClear} />
+          <DateEditor format="YYYY-MM-DD HH:mm:ss" value={value} lang={lang} onChange={onChange} onClear={onClear} />
         )}
       </div>
     </ClickOutside>
