@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import classnames from 'classnames';
 import Repo from '../../models/repo';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -29,8 +29,8 @@ class MyLibraries extends Component {
       isCreateRepoDialogOpen: false,
       isSortOptionsDialogOpen: false,
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
-      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      sortBy: Cookies.get('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
+      sortOrder: Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
     };
 
     this.emptyTip = (
@@ -87,8 +87,8 @@ class MyLibraries extends Component {
   };
 
   sortRepoList = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-dir-sort-by', sortBy);
-    cookie.save('seafile-repo-dir-sort-order', sortOrder);
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,

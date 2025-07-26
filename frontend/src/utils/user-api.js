@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 
 class UserAPI {
@@ -87,7 +87,7 @@ class UserAPI {
 }
 
 let userAPI = new UserAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 userAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export { userAPI };

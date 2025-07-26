@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import Repo from '../../models/repo';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -20,8 +20,8 @@ class SharedLibraries extends Component {
       errorMsg: '',
       items: [],
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
-      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      sortBy: Cookies.get('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
+      sortOrder: Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false
     };
   }
@@ -51,8 +51,8 @@ class SharedLibraries extends Component {
   }
 
   sortItems = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-dir-sort-by', sortBy);
-    cookie.save('seafile-repo-dir-sort-order', sortOrder);
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,

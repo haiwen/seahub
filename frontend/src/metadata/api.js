@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from '../utils/constants';
 import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './constants';
 
@@ -406,7 +406,7 @@ class MetadataManagerAPI {
 }
 
 const metadataAPI = new MetadataManagerAPI();
-const xcsrfHeaders = cookie.load('sfcsrftoken');
+const xcsrfHeaders = Cookies.get('sfcsrftoken');
 metadataAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export default metadataAPI;

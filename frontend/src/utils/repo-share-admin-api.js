@@ -1,4 +1,4 @@
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 import axios from 'axios';
 
@@ -69,6 +69,6 @@ class RepoShareAdminAPI {
 }
 
 let repoShareAdminAPI = new RepoShareAdminAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 repoShareAdminAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 export { repoShareAdminAPI };

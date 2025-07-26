@@ -1,4 +1,4 @@
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 import { siteRoot } from './constants';
 
@@ -55,7 +55,7 @@ class ImageAPI {
 }
 
 let imageAPI = new ImageAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 imageAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export default imageAPI;

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from '../utils/constants';
 
 class TagsManagerAPI {
@@ -160,7 +160,7 @@ class TagsManagerAPI {
 }
 
 const tagsAPI = new TagsManagerAPI();
-const xcsrfHeaders = cookie.load('sfcsrftoken');
+const xcsrfHeaders = Cookies.get('sfcsrftoken');
 tagsAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export default tagsAPI;

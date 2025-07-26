@@ -1,4 +1,4 @@
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 import FormData from 'form-data';
 import { siteRoot } from './constants';
@@ -325,7 +325,7 @@ class WikiAPI {
 }
 
 let wikiAPI = new WikiAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 wikiAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export default wikiAPI;

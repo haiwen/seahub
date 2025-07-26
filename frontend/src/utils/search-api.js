@@ -1,4 +1,4 @@
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 import { siteRoot } from './constants';
 
@@ -60,7 +60,7 @@ class SearchAPI {
 }
 
 let searchAPI = new SearchAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 searchAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export default searchAPI;

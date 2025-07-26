@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from '../../../utils/constants';
 
 class InstAdminAPI {
@@ -116,7 +116,7 @@ class InstAdminAPI {
 
 
 const instAdminAPI = new InstAdminAPI();
-const xcsrfHeaders = cookie.load('sfcsrftoken');
+const xcsrfHeaders = Cookies.get('sfcsrftoken');
 instAdminAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export default instAdminAPI;

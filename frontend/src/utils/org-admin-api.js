@@ -1,5 +1,5 @@
 import axios from 'axios';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import FormData from 'form-data';
 import { siteRoot } from './constants';
 
@@ -569,7 +569,7 @@ class OrgAdminAPI {
 }
 
 let orgAdminAPI = new OrgAdminAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 orgAdminAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 export { orgAdminAPI };

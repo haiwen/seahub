@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import classnames from 'classnames';
@@ -62,7 +62,7 @@ class LibContentView extends React.Component {
 
     this.socket = new WebSocketClient(this.onMessageCallback, this.props.repoID);
     this.state = {
-      currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
+      currentMode: Cookies.get('seafile_view_mode') || LIST_MODE,
       isTreePanelShown: isTreePanelShown, // display the 'dirent tree' side panel
       path: '',
       pathExist: true,
@@ -89,8 +89,8 @@ class LibContentView extends React.Component {
       isDirentListLoading: true,
       direntList: [],
       isDirentSelected: false,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
-      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      sortBy: Cookies.get('seafile-repo-dir-sort-by') || 'name', // 'name' or 'time' or 'size'
+      sortOrder: Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isAllDirentSelected: false,
       dirID: '', // for update dir list
       errorMsg: '',
@@ -233,7 +233,7 @@ class LibContentView extends React.Component {
     } else if (viewId) {
       currentMode = METADATA_MODE;
     } else {
-      currentMode = cookie.load('seafile_view_mode') || LIST_MODE;
+      currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
     }
 
     try {
@@ -587,7 +587,7 @@ class LibContentView extends React.Component {
     const { repoID } = this.props;
     const { path } = this.getInfoFromLocation(repoID);
     this.setState({
-      currentMode: cookie.load('seafile_view_mode') || LIST_MODE,
+      currentMode: Cookies.get('seafile_view_mode') || LIST_MODE,
       path: isSetRoot ? '/' : path,
       viewId: '',
       tagId: '',
@@ -1074,7 +1074,7 @@ class LibContentView extends React.Component {
       return;
     }
 
-    cookie.save('seafile_view_mode', mode);
+    Cookies.set('seafile_view_mode', mode);
     let path = this.state.path;
     if (this.state.isTreePanelShown && this.state.isViewFile) {
       path = Utils.getDirName(path);
@@ -1125,7 +1125,7 @@ class LibContentView extends React.Component {
     }
 
     if (item.is_dir) {
-      this.setState({ currentMode: cookie.load('seafile_view_mode') || LIST_MODE });
+      this.setState({ currentMode: Cookies.get('seafile_view_mode') || LIST_MODE });
       this.showDir(path);
     } else {
       this.openSearchedNewTab(item);
@@ -2095,8 +2095,8 @@ class LibContentView extends React.Component {
     let direntList = list.map(item => {
       return new Dirent(item);
     });
-    const sortBy = cookie.load(SF_DIRECTORY_TREE_SORT_BY_KEY) || 'name';
-    const sortOrder = cookie.load(SF_DIRECTORY_TREE_SORT_ORDER_KEY) || 'asc';
+    const sortBy = Cookies.get(SF_DIRECTORY_TREE_SORT_BY_KEY) || 'name';
+    const sortOrder = Cookies.get(SF_DIRECTORY_TREE_SORT_ORDER_KEY) || 'asc';
     direntList = Utils.sortDirents(direntList, sortBy, sortOrder);
 
     let nodeList = direntList.map(object => {
@@ -2123,7 +2123,7 @@ class LibContentView extends React.Component {
     } else if (currentMode === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
       nextMode = METADATA_MODE;
     } else {
-      nextMode = cookie.load('seafile_view_mode') || LIST_MODE;
+      nextMode = Cookies.get('seafile_view_mode') || LIST_MODE;
     }
 
     this.setState({
@@ -2184,8 +2184,8 @@ class LibContentView extends React.Component {
   };
 
   sortItems = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-dir-sort-by', sortBy);
-    cookie.save('seafile-repo-dir-sort-order', sortOrder);
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
 
     const sortedDirentList = Utils.sortDirents(this.state.direntList, sortBy, sortOrder);
     this.setState({
@@ -2196,8 +2196,8 @@ class LibContentView extends React.Component {
   };
 
   sortTreeNode = (sortBy, sortOrder) => {
-    cookie.save(SF_DIRECTORY_TREE_SORT_BY_KEY, sortBy);
-    cookie.save(SF_DIRECTORY_TREE_SORT_ORDER_KEY, sortOrder);
+    Cookies.set(SF_DIRECTORY_TREE_SORT_BY_KEY, sortBy);
+    Cookies.set(SF_DIRECTORY_TREE_SORT_ORDER_KEY, sortOrder);
     const sortedTreeData = treeHelper.sortTreeNodes(this.state.treeData, sortBy, sortOrder);
     this.setState({
       treeData: sortedTreeData,

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import TreeView from '../tree-view/tree-view';
 import ModalPortal from '../modal-portal';
 import ImageDialog from '../dialog/image-dialog';
@@ -61,8 +61,8 @@ class DirFiles extends React.Component {
   }
 
   componentDidMount() {
-    const sortBy = cookie.load(SF_DIRECTORY_TREE_SORT_BY_KEY) || 'name';
-    const sortOrder = cookie.load(SF_DIRECTORY_TREE_SORT_ORDER_KEY) || 'asc';
+    const sortBy = Cookies.get(SF_DIRECTORY_TREE_SORT_BY_KEY) || 'name';
+    const sortOrder = Cookies.get(SF_DIRECTORY_TREE_SORT_ORDER_KEY) || 'asc';
     const sortKey = SORT_KEY_MAP[`${sortBy}-${sortOrder}`];
     this.setState({ sortKey });
   }

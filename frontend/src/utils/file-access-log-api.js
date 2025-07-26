@@ -1,4 +1,4 @@
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import { siteRoot } from './constants';
 import axios from 'axios';
 
@@ -45,6 +45,6 @@ class FileAccessLogAPI {
 }
 
 let fileAccessLogAPI = new FileAccessLogAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
+let xcsrfHeaders = Cookies.get('sfcsrftoken');
 fileAccessLogAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 export { fileAccessLogAPI };
