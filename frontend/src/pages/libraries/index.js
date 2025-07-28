@@ -64,7 +64,6 @@ class Libraries extends Component {
     this.unsubscribeUnsharedRepoToGroup();
   }
 
-
   initLibraries = () => {
     const promiseListRepos = seafileAPI.listRepos({ 'type': ['mine', 'shared', 'public'] });
     const promiseListGroups = seafileAPI.listGroups(true);
@@ -522,6 +521,8 @@ class Libraries extends Component {
                     <ShareWithOCM
                       inAllLibs={true}
                       currentViewMode={currentViewMode}
+                      sortBy={this.state.sortBy}
+                      sortOrder={this.state.sortOrder}
                     />
                   </div>
                   }

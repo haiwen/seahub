@@ -27,6 +27,13 @@ dayjs.extend(relativeTime);
 
 class Content extends Component {
 
+  sortByName = (e) => {
+    e.preventDefault();
+    const sortBy = 'name';
+    const sortOrder = this.props.sortOrder == 'asc' ? 'desc' : 'asc';
+    this.props.sortItems(sortBy, sortOrder);
+  };
+
   renderItems = () => {
     const { items, currentViewMode, inAllLibs } = this.props;
     const isDesktop = Utils.isDesktop();
@@ -49,7 +56,7 @@ class Content extends Component {
   };
 
   render() {
-    const { loading, errorMsg, items, currentViewMode, inAllLibs } = this.props;
+    const { loading, errorMsg, items, sortOrder, currentViewMode, inAllLibs } = this.props;
 
     if (loading) {
       return <Loading />;
@@ -72,7 +79,6 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       if (isDesktop) {
-        const { inAllLibs, currentViewMode = LIST_MODE, sortOrder } = this.props;
         const sortIcon = sortOrder === 'asc'
           ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
           : <span className="sf3-font sf3-font-down"></span>;
@@ -139,6 +145,7 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isStarred: this.props.item.starred,
       isHighlighted: false,
       isOpIconShown: false,
       isItemMenuShow: false // for mobile
@@ -170,6 +177,32 @@ class Item extends Component {
 
   visitRepo = () => {
     navigate(this.repoURL);
+  };
+
+  onToggleStarRepo = () => {
+    const { item } = this.props;
+    const { repo_id, repo_name: repoName } = item;
+    if (this.state.isStarred) {
+      seafileAPI.unstarItem(repo_id, '/').then(() => {
+        this.setState({ isStarred: !this.state.isStarred });
+        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    } else {
+      seafileAPI.starItem(repo_id, '/').then(() => {
+        this.setState({ isStarred: !this.state.isStarred });
+        const msg = gettext('Successfully starred {library_name_placeholder}.')
+          .replace('{library_name_placeholder}', repoName);
+        toaster.success(msg);
+      }).catch(error => {
+        let errMessage = Utils.getErrorMsg(error);
+        toaster.danger(errMessage);
+      });
+    }
   };
 
   render() {
@@ -281,6 +314,9 @@ class Item extends Component {
               <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
+                  <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>
+                    {this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                  </DropdownItem>
                   <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
                 </div>
               </div>
@@ -301,22 +337,30 @@ Item.propTypes = {
 class SharedWithOCM extends Component {
   constructor(props) {
     super(props);
+    this.sortOptions = [
+      { value: 'name-asc', text: gettext('Ascending by name') },
+      { value: 'name-desc', text: gettext('Descending by name') },
+    ];
     this.state = {
       loading: true,
       errorMsg: '',
       items: [],
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
-      sortBy: cookie.load('seafile-repo-dir-sort-by') || 'name', // 'name'
-      sortOrder: cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
-      isSortOptionsDialogOpen: false,
+      sortBy: 'name',
+      sortOrder: this.props.sortOrder || cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      isSortOptionsDialogOpen: false
     };
   }
 
   componentDidMount() {
     seafileAPI.listOCMSharesReceived().then((res) => {
+      const { ocm_share_received_list } = res.data;
       this.setState({
         loading: false,
-        items: res.data.ocm_share_received_list
+        items: ocm_share_received_list
+      }, () => {
+        const { sortBy, sortOrder } = this.state;
+        this.sortItems(sortBy, sortOrder);
       });
     }).catch((error) => {
       this.setState({
@@ -324,6 +368,18 @@ class SharedWithOCM extends Component {
         errorMsg: Utils.getErrorMsg(error, true) // true: show login tip if 403
       });
     });
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.sortBy == 'name' && props.sortOrder != state.sortOrder) {
+      cookie.save('seafile-repo-dir-sort-order', props.sortOrder);
+      return {
+        ...state,
+        sortOrder: props.sortOrder,
+        items: Utils.sortRepos(state.items, props.sortBy, props.sortOrder)
+      };
+    }
+    return null;
   }
 
   leaveShare = (item) => {
@@ -388,12 +444,15 @@ class SharedWithOCM extends Component {
   renderContent = (currentViewMode) => {
     return (
       <Content
+        inAllLibs={this.props.inAllLibs}
+        currentViewMode={currentViewMode}
         loading={this.state.loading}
         errorMsg={this.state.errorMsg}
         items={this.state.items}
+        sortBy={this.state.sortBy}
+        sortOrder={this.state.sortOrder}
+        sortItems={this.sortItems}
         leaveShare={this.leaveShare}
-        currentViewMode={currentViewMode}
-        inAllLibs={this.props.inAllLibs}
       />
     );
   };
@@ -427,9 +486,17 @@ class SharedWithOCM extends Component {
               {Utils.isDesktop() && (
                 <div className="d-flex align-items-center">
                   <div className="mr-2">
-                    <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                    <ViewModes
+                      currentViewMode={currentViewMode}
+                      switchViewMode={this.switchViewMode}
+                    />
                   </div>
-                  <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+                  <ReposSortMenu
+                    sortOptions={this.sortOptions}
+                    sortBy={sortBy}
+                    sortOrder={sortOrder}
+                    onSelectSortOption={this.onSelectSortOption}
+                  />
                 </div>
               )}
               {this.renderSortIconInMobile()}
@@ -442,6 +509,7 @@ class SharedWithOCM extends Component {
         {this.state.isSortOptionsDialogOpen &&
         <SortOptionsDialog
           toggleDialog={this.toggleSortOptionsDialog}
+          sortOptions={this.sortOptions}
           sortBy={this.state.sortBy}
           sortOrder={this.state.sortOrder}
           sortItems={this.sortItems}
