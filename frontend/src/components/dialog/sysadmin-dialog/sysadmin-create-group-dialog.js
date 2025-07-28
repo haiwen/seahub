@@ -34,7 +34,11 @@ class SysAdminCreateGroupDialog extends React.Component {
 
   handleSubmit = () => {
     let groupName = this.state.groupName.trim();
-    this.props.createGroup(groupName, this.state.selectedUsers[0].email);
+    let ownerEmail = '';
+    if (this.state.selectedUsers.length > 0) {
+      ownerEmail = this.state.selectedUsers[0].email;
+    }
+    this.props.createGroup(groupName, ownerEmail);
   };
 
   handleSelectChange = (selectedUsers) => {
