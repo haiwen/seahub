@@ -295,8 +295,8 @@ urlpatterns = [
     path('choose_register/', choose_register, name="choose_register"),
 
     ### React ###
-    path('activities/all/', react_fake_view, name="dashboard"),
-    path('activities/mine/', react_fake_view, name="my_activities"),
+    path('activities/all/', react_fake_view, name="activities_all"),
+    path('activities/mine/', react_fake_view, name="activities_mine"),
     path('starred/', react_fake_view, name="starred"),
     path('linked-devices/', react_fake_view, name="linked_devices"),
     path('share-admin-libs/', react_fake_view, name="share_admin_libs"),
