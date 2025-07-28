@@ -74,6 +74,10 @@
   fill: #aaa;
 }
 
+.seafile-select-option:not(.seafile-select-option-active):hover .header-icon .sf2-icon-tick {
+  color: #aaa;
+}
+
 .seafile-select-option .select-option-name .single-select-option {
   margin: 0 0 0 12px;
 }

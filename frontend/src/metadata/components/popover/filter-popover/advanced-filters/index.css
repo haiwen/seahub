@@ -333,6 +333,10 @@
   fill: #fff;
 }
 
+.seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .sf2-icon-tick {
+  color: #aaa;
+}
+
 .seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .seafile-multicolor-icon {
   fill: #aaa;
 }
