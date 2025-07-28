@@ -256,7 +256,7 @@ class MainSideNav extends React.Component {
               </li>
               {showActivity &&
               <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'activities/all'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
                   <span className="sf3-font-activities sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Activities')}</span>
                 </Link>
