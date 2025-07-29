@@ -54,6 +54,15 @@
   width: 320px;
 }
 
+.expanded-properties-content-container .form-control .file-icon-wrapper {
+  width: auto;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+  overflow: hidden;
+}
+
 .expanded-properties-content-container .long-text-container {
   cursor: pointer;
 }

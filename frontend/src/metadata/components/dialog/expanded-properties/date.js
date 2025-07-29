@@ -9,7 +9,7 @@ const Date = ({ record, column, onCommit }) => {
   const [isEditorShown, setIsEditorShown] = useState(false);
   const ref = useRef(null);
   const value = useMemo(() => getCellValueByColumn(record, column), [record, column]);
-  const displayValue = useMemo(() => getDateDisplayString(value, 'YYYY-MM-DD HH:mm:ss'), [value]);
+  const displayValue = useMemo(() => getDateDisplayString(value, 'YYYY-MM-DD'), [value]);
 
   const onEdit = useCallback(() => {
     setIsEditorShown(true);
@@ -33,7 +33,7 @@ const Date = ({ record, column, onCommit }) => {
       <div tabIndex={0} ref={ref} className="form-control shrink text-nowrap select-option-container" onClick={onEdit}>
         {displayValue}
         {isEditorShown && (
-          <DateEditor format="YYYY-MM-DD HH:mm:ss" value={value} lang={lang} onChange={onChange} onClear={onClear} />
+          <DateEditor format="YYYY-MM-DD" value={value} lang={lang} onChange={onChange} onClear={onClear} />
         )}
       </div>
     </ClickOutside>

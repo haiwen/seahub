@@ -79,7 +79,7 @@ const Text = ({ record, column, onCommit }) => {
   if (type == CellType.FILE_NAME) {
     return (
       <div className="form-control disabled">
-        <span className="w-auto h-6 overflow-hidden d-flex align-items-center mr-2">
+        <span className="file-icon-wrapper">
           <img src={iconUrl} height={24} alt='' />
         </span>
         <span className="text-truncate">{filename}</span>
