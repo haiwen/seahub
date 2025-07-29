@@ -1,77 +1,154 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { createBMapGeolocationControl, createBMapZoomControl } from '../../map-controller';
 import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
-import { baiduMapKey, gettext, googleMapKey } from '../../../../utils/constants';
+import { baiduMapKey, gettext, googleMapId, googleMapKey, lang } from '../../../../utils/constants';
 import { KeyCodes, MAP_TYPE } from '../../../../constants';
 import Icon from '../../../../components/icon';
 import IconBtn from '../../../../components/icon-btn';
 import toaster from '../../../../components/toast';
 import { DEFAULT_POSITION } from '../../../constants';
+import { createZoomControl } from '../../map-controller/zoom';
+import { createGeolocationControl } from '../../map-controller/geolocation';
+import { customBMapLabel, customGMapLabel } from './custom-label';
 
 import './index.css';
 
 const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onReadyToEraseLocation }) => {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [isLabelShown, setLabelShown] = useState(true);
+  const [labelInfo, setLableInfo] = useState({
+    title: '',
+    tags: [],
+    location_translated: {
+      address: '',
+      country: '',
+      province: '',
+      city: '',
+      district: '',
+      street: '',
+    },
+    position: {
+      lng: 0,
+      lat: 0,
+    }
+  });
+
+  const type = useMemo(() => {
+    const { type } = initMapInfo({ baiduMapKey, googleMapKey });
+    return type;
+  }, []);
+  const title = useMemo(() => labelInfo.title || '', [labelInfo]);
+  const address = useMemo(() => labelInfo.location_translated.address || '', [labelInfo]);
+  const tagContent = useMemo(() => Array.isArray(labelInfo.tags) && labelInfo.tags.length > 0 ? labelInfo.tags[0] : '', [labelInfo]);
 
   const ref = useRef(null);
   const mapRef = useRef(null);
   const geocRef = useRef(null);
   const markerRef = useRef(null);
+  const labelRef = useRef(null);
+  const googlePlacesRef = useRef(null);
 
   const onChange = useCallback((e) => {
     setInputValue(e.target.value);
   }, []);
 
-  const onSearch = useCallback(() => {
-    const options = {
-      onSearchComplete: (results) => {
-        const status = local.getStatus();
-        if (status !== window.BMAP_STATUS_SUCCESS) {
-          toaster.danger(gettext('Search failed, please enter detailed address.'));
-          return;
+  const search = useCallback(() => {
+    if (type === MAP_TYPE.B_MAP) {
+      const options = {
+        onSearchComplete: (results) => {
+          const status = local.getStatus();
+          if (status !== window.BMAP_STATUS_SUCCESS) {
+            toaster.danger(gettext('Search failed, please enter detailed address.'));
+            return;
+          }
+          let searchResults = [];
+          for (let i = 0; i < results.getCurrentNumPois(); i++) {
+            const value = results.getPoi(i);
+            const position = {
+              address: value.address || '',
+              title: value.title || '',
+              tag: value.tags || [],
+              lngLat: {
+                lng: value.point.lng,
+                lat: value.point.lat,
+              }
+            };
+            searchResults.push(position);
+          }
+          setSearchResults(searchResults);
         }
-        let searchResults = [];
-        for (let i = 0; i < results.getCurrentNumPois(); i++) {
-          const value = results.getPoi(i);
-          const position = {
-            address: value.address || '',
-            title: value.title || '',
-            tag: value.tags || [],
-            lngLat: {
-              lng: value.point.lng,
-              lat: value.point.lat,
-            }
-          };
-          searchResults.push(position);
-        }
-        setSearchResults(searchResults);
-      }
-    };
+      };
 
-    const local = new window.BMapGL.LocalSearch(mapRef.current, options);
-    local.search(inputValue);
-  }, [inputValue]);
+      const local = new window.BMapGL.LocalSearch(mapRef.current, options);
+      local.search(inputValue);
+    } else if (type === MAP_TYPE.G_MAP) {
+      const request = {
+        query: inputValue,
+        language: lang,
+      };
+      googlePlacesRef.current.textSearch(request, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          let searchResults = [];
+          for (let i = 0; i < results.length; i++) {
+            const value = {
+              address: results[i].formatted_address || '',
+              title: results[i].name || '',
+              tag: results[i].types || [],
+              lngLat: {
+                lng: results[i].geometry.location.lng(),
+                lat: results[i].geometry.location.lat(),
+              }
+            };
+            searchResults.push(value);
+          }
+          setSearchResults(searchResults);
+        }
+      });
+    }
+  }, [type, inputValue]);
 
   const onKeyDown = useCallback((e) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     if (e.keyCode === KeyCodes.Enter) {
-      onSearch();
+      search();
     } else if (e.keyCode === KeyCodes.Backspace) {
       setSearchResults([]);
     }
-  }, [onSearch]);
+  }, [search]);
 
-  const onClean = useCallback(() => {
+  const clear = useCallback(() => {
     setInputValue('');
     setSearchResults([]);
-    mapRef.current.clearOverlays();
+    if (type === MAP_TYPE.B_MAP) {
+      mapRef.current.clearOverlays();
+    } else {
+      setLabelShown(false);
+    }
     onReadyToEraseLocation();
-  }, [onReadyToEraseLocation]);
+  }, [type, onReadyToEraseLocation]);
 
-  const getInfo = (result) => {
+  const close = useCallback((e) => {
+    e.stopPropagation();
+    if (type === MAP_TYPE.B_MAP) {
+      markerRef.current.getLabel()?.remove();
+    } else {
+      setLabelShown(false);
+    }
+  }, [type]);
+
+  const submit = useCallback((value) => {
+    const { position, location_translated } = value;
+    const location = {
+      position,
+      location_translated,
+    };
+    onSubmit(location);
+  }, [onSubmit]);
+
+  const parseBMapAddress = useCallback((result) => {
     let value = {};
     const { surroundingPois, address, addressComponents, point } = result;
     if (surroundingPois.length === 0) {
@@ -103,57 +180,38 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
       value.tags = tags || [];
     }
     return value;
-  };
+  }, []);
 
-  const createLabel = useCallback((info) => {
-    const { location_translated, title, tag } = info;
-    const { address } = location_translated;
-    const tagContent = Array.isArray(tag) && tag.length > 0 ? tag[0] : '';
-    let content = '';
-    if (title) {
-      content = `
-        <div class='selection-label-content' id='selection-label-content'>
-          <div class='w-100 d-flex align-items-center'>
-            <span class='label-title text-truncate' title=${title}>${title}</span>
-            <span class='close-btn' id='selection-label-close'>
-              <i class='sf3-font sf3-font-x-01'></i>
-            </span>
-          </div>
-          ${tagContent && `<span class='label-tag'>${tagContent}</span>`}
-          <span class='label-address-tip'>${gettext('Address')}</span>
-          <span class='label-address text-truncate' title=${address}>${address}</span>
-          <div class='label-submit btn btn-primary' id='selection-label-submit'>${gettext('Fill in')}</div>
-        </div>
-      `;
-    } else {
-      content = `
-      <div class='selection-label-content simple' id='selection-label-content'>
-        <div class='w-100 d-flex align-items-center'>
-          <span class='label-address text-truncate simple' title=${address}>${address}</span>
-          <span class='close-btn' id='selection-label-close'>
-            <i class='sf3-font sf3-font-x-01'></i>
-          </span>
-        </div>
-        <div class='label-submit btn btn-primary' id='selection-label-submit'>${gettext('Fill in')}</div>
-      </div>
-    `;
-    }
+  const parseGMapAddress = useCallback((result) => {
+    const location_translated = {
+      country: '',
+      province: '',
+      city: '',
+      district: '',
+      street: ''
+    };
 
-    const translateY = title ? '10%' : '15%';
-    const label = new window.BMapGL.Label(content, { offset: new window.BMapGL.Size(9, -5) });
-    label.setStyle({
-      display: 'block',
-      border: 'none',
-      backgroundColor: '#ffffff',
-      boxShadow: '1px 2px 1px rgba(0,0,0,.15)',
-      padding: '3px 10px',
-      transform: `translate(-50%, ${translateY})`,
-      borderRadius: '3px',
-      fontWeight: '500',
-      left: '7px'
+    result.address_components.forEach(component => {
+      if (component.types.includes('country')) {
+        location_translated.country = component.long_name;
+      } else if (component.types.includes('administrative_area_level_1')) {
+        location_translated.province = component.long_name;
+      } else if (component.types.includes('locality')) {
+        location_translated.city = component.long_name;
+      } else if (component.types.includes('sublocality')) {
+        location_translated.district = component.long_name;
+      } else if (component.types.includes('route')) {
+        location_translated.street = component.long_name;
+      }
     });
+    location_translated.address = result.formatted_address;
 
-    return label;
+    const position = {
+      lng: result.geometry.location.lng(),
+      lat: result.geometry.location.lat()
+    };
+
+    return { position, location_translated };
   }, []);
 
   const addLabelEventListener = useCallback((info) => {
@@ -165,38 +223,40 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
 
       const closeBtn = document.getElementById('selection-label-close');
       if (closeBtn) {
-        closeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          markerRef.current.getLabel().remove();
-        });
+        closeBtn.addEventListener('click', close);
       }
 
       const submitBtn = document.getElementById('selection-label-submit');
       if (submitBtn) {
-        submitBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const { position, location_translated } = info;
-          const value = {
-            position,
-            location_translated,
-          };
-          onSubmit(value);
-        });
+        submitBtn.addEventListener('click', () => submit(info));
       }
-    });
-  }, [onSubmit]);
+    }, 100);
+  }, [close, submit]);
 
   const addLabel = useCallback((point) => {
-    markerRef.current.getLabel()?.remove();
-    geocRef.current.getLocation(point, (result) => {
-      const info = getInfo(result);
-      const { title, location_translated } = info;
-      setInputValue(title || location_translated.address);
-      const label = createLabel(info);
-      markerRef.current.setLabel(label);
-      addLabelEventListener(info);
-    });
-  }, [createLabel, addLabelEventListener]);
+    if (type === MAP_TYPE.B_MAP) {
+      markerRef.current.getLabel()?.remove();
+      geocRef.current.getLocation(point, (result) => {
+        const info = parseBMapAddress(result);
+        setLableInfo(info);
+        const { title, location_translated } = info;
+        setInputValue(title || location_translated.address);
+        const label = customBMapLabel(info);
+        markerRef.current.setLabel(label);
+        addLabelEventListener(info);
+      });
+    } else {
+      geocRef.current.geocode({ location: point, language: lang }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          const info = parseGMapAddress(results[0]);
+          setLableInfo(info);
+          setInputValue(info.location_translated.address);
+          labelRef.current = customGMapLabel(info);
+          labelRef.current.setMap(mapRef.current);
+        }
+      });
+    }
+  }, [type, addLabelEventListener, parseBMapAddress, parseGMapAddress]);
 
   const renderBaiduMap = useCallback(() => {
     if (!window.BMapGL.Map) return;
@@ -222,7 +282,7 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
         if (mapRef.current.getOverlays().length === 0) {
           mapRef.current.addOverlay(markerRef.current);
         }
-        mapRef.current.setCenter(point);
+        mapRef.current.centerAndZoom(point, 16);
         markerRef.current.setPosition(point);
         addLabel(point);
       }
@@ -255,6 +315,84 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [position?.lng, position?.lat]);
 
+  const renderGoogleMap = useCallback(() => {
+    const initPos = position || DEFAULT_POSITION;
+    mapRef.current = new window.google.maps.Map(ref.current, {
+      center: { lat: initPos.lat, lng: initPos.lng },
+      zoom: 16,
+      mapId: googleMapId,
+      zoomControl: false,
+      mapTypeControl: false,
+      scaleControl: false,
+      streetViewControl: false,
+      rotateControl: false,
+      fullscreenControl: false,
+      disableDefaultUI: true,
+      gestrueHandling: 'cooperative',
+      clickableIcons: false,
+    });
+
+    // control
+    const zoomControl = createZoomControl({ map: mapRef.current });
+    const geolocationControl = createGeolocationControl({
+      map: mapRef.current,
+      callback: (lngLat) => {
+        geocRef.current.geocode({ location: lngLat, language: lang }, (results, status) => {
+          if (status === 'OK' && results[0]) {
+            const info = parseGMapAddress(results[0]);
+            setLableInfo(info);
+            setInputValue(info.location_translated.address);
+            markerRef.current.position = lngLat;
+            labelRef.current.setPosition(lngLat);
+          }
+        });
+      }
+    });
+    mapRef.current.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
+    mapRef.current.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControl);
+
+    // marker
+    markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+      position: { lat: initPos.lat, lng: initPos.lng },
+      map: mapRef.current,
+    });
+
+    // geocoder
+    geocRef.current = new window.google.maps.Geocoder();
+    addLabel(initPos);
+
+    googlePlacesRef.current = new window.google.maps.places.PlacesService(mapRef.current);
+
+    // click event
+    window.google.maps.event.addListener(mapRef.current, 'click', (e) => {
+      if (searchResults.length > 0) {
+        setSearchResults([]);
+        return;
+      }
+      const latLng = e.latLng;
+      const point = { lat: latLng.lat(), lng: latLng.lng() };
+
+      if (!markerRef.current) {
+        markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+          position: point,
+          map: mapRef.current,
+        });
+      } else {
+        markerRef.current.position = latLng;
+      }
+      mapRef.current.panTo(latLng);
+      labelRef.current.setPosition(latLng);
+      setLabelShown(true);
+      geocRef.current.geocode({ location: point, language: lang }, (results, status) => {
+        if (status === 'OK' && results[0]) {
+          const info = parseGMapAddress(results[0]);
+          setLableInfo(info);
+          setInputValue(info.location_translated.address);
+        }
+      });
+    });
+  }, [searchResults, position, addLabel, parseGMapAddress]);
+
   const toggleFullScreen = useCallback((e) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
@@ -263,17 +401,35 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
 
   const onSelect = useCallback((result) => {
     const { lngLat, title, address } = result;
-    const { lng, lat } = lngLat;
-    const point = new window.BMapGL.Point(lng, lat);
-    if (mapRef.current.getOverlays().length === 0) {
-      mapRef.current.addOverlay(markerRef.current);
+    let point = lngLat;
+    if (type === MAP_TYPE.B_MAP) {
+      const { lng, lat } = lngLat;
+      point = new window.BMapGL.Point(lng, lat);
+      if (mapRef.current.getOverlays().length === 0) {
+        mapRef.current.addOverlay(markerRef.current);
+      }
+      markerRef.current.setPosition(point);
+      mapRef.current.setCenter(point);
+      addLabel(point);
+    } else {
+      const point = { lat: lngLat.lat, lng: lngLat.lng };
+      markerRef.current.position = point;
+      labelRef.current.setPosition(point);
+      mapRef.current.panTo(point);
+      setLabelShown(true);
+      setLableInfo({
+        ...labelInfo,
+        title,
+        position: point,
+        location_translated: {
+          ...labelInfo.location_translated,
+          address,
+        }
+      });
     }
-    markerRef.current.setPosition(point);
-    mapRef.current.setCenter(point);
-    addLabel(point);
     setSearchResults([]);
     setInputValue(title || address);
-  }, [addLabel]);
+  }, [type, labelInfo, addLabel]);
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -284,6 +440,13 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
         loadMapSource(type, key);
       } else {
         renderBaiduMap();
+      }
+    } else if (type === MAP_TYPE.G_MAP) {
+      if (!window.google?.maps.Map) {
+        window.renderGoogleMap = () => renderGoogleMap();
+        loadMapSource(type, key);
+      } else {
+        renderGoogleMap();
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -312,13 +475,29 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
               onKeyDown={onKeyDown}
               autoFocus
             />
-            {inputValue && <IconBtn symbol="close" className="clean-btn" size={24} onClick={onClean} />}
+            {inputValue && <IconBtn symbol="close" className="clean-btn" size={24} onClick={clear} />}
           </div>
-          <span className="search-btn" onClick={onSearch}>
+          <span className="search-btn" onClick={search}>
             <i className="sf3-font sf3-font-search"></i>
           </span>
         </div>
         <div ref={ref} className="w-100 h-100 sf-metadata-geolocation-editor-container"></div>
+        {type === MAP_TYPE.G_MAP && (
+          <div
+            id="selection-label-content"
+            className={classNames('selection-label-content', { 'simple': !title })}
+            style={{ display: isLabelShown ? 'flex' : 'none' }}
+          >
+            {title && <span className="label-title text-truncate" title={title}>{title}</span>}
+            {title && tagContent && <span className="label-tag">{tagContent}</span>}
+            <span className="close-btn" id="selection-label-close" onClick={close}>
+              <i className="sf3-font sf3-font-x-01"></i>
+            </span>
+            {title && <span className="label-address-tip">{gettext('Address')}</span>}
+            <span className="label-address text-truncate" title={address}>{address}</span>
+            <div className="label-submit btn btn-primary" id="selection-label-submit" onClick={() => submit(labelInfo)}>{gettext('Fill in')}</div>
+          </div>
+        )}
         {searchResults.length > 0 && (
           <div className="search-results-container">
             {searchResults.map((result, index) => (

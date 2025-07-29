@@ -32,7 +32,7 @@ const updateButtonStates = (map, zoomIn, zoomOut) => {
   zoomOut.className = classnames(buttonClassName, { 'disabled': zoomLevel <= MIN_ZOOM });
 };
 
-export const createZoomControl = (map) => {
+export const createZoomControl = ({ map }) => {
   const container = createZoomContainer();
 
   const zoomInButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>');

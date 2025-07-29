@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { Utils } from '../../../utils/utils';
 import { wgs84_to_gcj02 } from '../../../utils/coord-transform';
 
-export const createGeolocationControl = (map) => {
+export const createGeolocationControl = ({ map, callback }) => {
   const container = document.createElement('div');
   container.className = classnames(
     'sf-map-control-container sf-map-geolocation-control-container d-flex align-items-center justify-content-center',
@@ -23,6 +23,7 @@ export const createGeolocationControl = (map) => {
       navigator.geolocation.getCurrentPosition((userInfo) => {
         const gcPosition = wgs84_to_gcj02(userInfo.coords.longitude, userInfo.coords.latitude);
         map.setCenter(gcPosition);
+        callback(gcPosition);
       });
     }
   });

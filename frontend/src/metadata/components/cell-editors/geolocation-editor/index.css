@@ -54,13 +54,14 @@
   justify-content: center;
   position: absolute;
   top: 16px;
-  left: 5%;
+  left: 24px;
   z-index: 10;
 }
 
 .sf-geolocation-editor-container .search-container .search-input {
   flex: 1;
   height: 100%;
+  padding-right: 38px;
   border-radius: 3px 0 0 3px;
   border-right: none;
   box-shadow: 0 0 2px #0000004d;
@@ -74,7 +75,7 @@
   font-size: 16px;
   color: #666;
   top: 7px;
-  right: 12px;
+  right: 8px;
   cursor: pointer;
 }
 
@@ -99,21 +100,26 @@
 .sf-geolocation-editor-container .selection-label-content {
   width: 225px;
   height: 130px;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  position: absolute;
+  background-color: #fff;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 1px 2px 1px rgba(0, 0, 0, .15);
+  padding: 10px;
+  font-weight: 500;
   cursor: default;
-  padding: 2px 0;
+  transform: translate(-50%, 10%);
 }
 
 .sf-geolocation-editor-container .selection-label-content .close-btn {
   width: 24px;
   height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
-  right: -5px;
-  top: 2px;
+  right: 4px;
+  top: 4px;
   color: #666;
   cursor: pointer;
   text-align: center;
@@ -136,6 +142,9 @@
 }
 
 .sf-geolocation-editor-container .selection-label-content .label-address-tip {
+  position: absolute;
+  top: 58px;
+  left: 10px;
   font-size: 12px;
   font-weight: 400;
   color: #666;
@@ -143,20 +152,24 @@
 
 .sf-geolocation-editor-container .selection-label-content .label-address {
   width: 100%;
+  position: absolute;
+  top: 74px;
+  left: 10px;
   font-size: 12px;
   font-weight: 400;
   cursor: text;
 }
 
 .sf-geolocation-editor-container .selection-label-content .label-submit {
-  width: 50px;
+  width: fit-content;
+  min-width: 50px;
   height: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  bottom: 5px;
-  right: 0px;
+  bottom: 4px;
+  right: 4px;
   font-size: 12px;
 }
 
@@ -173,8 +186,9 @@
 }
 
 .sf-geolocation-editor-container .selection-label-content.simple .label-address {
+  width: 205px;
   position: absolute;
-  top: 30%;
+  top: 32px;
   font-size: 14px;
   cursor: text;
 }
@@ -184,6 +198,16 @@
   height: fit-content;
   flex-direction: column;
   right: 30px;
+}
+
+.sf-geolocation-editor-container .sf-map-control-container.sf-map-geolocation-control-container {
+  right: 16px !important;
+  bottom: 96px !important;
+}
+
+.sf-geolocation-editor-container .sf-map-control-container.sf-map-zoom-control-container {
+  right: 16px !important;
+  bottom: 30px !important;
 }
 
 .sf-geolocation-editor-container .sf-map-control-container .sf-map-control-divider {
@@ -217,7 +241,10 @@
 .sf-geolocation-editor-container .search-result-item {
   height: 56px;
   position: relative;
-  padding: 10px 10px 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 8px;
   border-bottom: 1px solid var(--bs-border-color);
   cursor: pointer;
 }
@@ -227,14 +254,26 @@
 }
 
 .sf-geolocation-editor-container .search-result-item .search-result-item-title {
+  position: relative;
+  height: 16px;
   color: #212529;
   font-size: 14px;
+  line-height: 14px;
 }
 
 .sf-geolocation-editor-container .search-result-item .search-result-item-address {
-  position: absolute;
-  left: 0px;
-  bottom: 5px;
+  position: relative;
   color: #666;
   font-size: 12px;
+  line-height: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.popup-label-container {
+  cursor: auto;
+  height: 0;
+  position: absolute;
+  width: 200px;
 }

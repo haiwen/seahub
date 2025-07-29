@@ -34,8 +34,9 @@ class Location extends React.Component {
     this.mapType = type;
     this.mapKey = key;
     this.map = null;
+    this.marker = null;
     this.state = {
-      position: this.props.position,
+      latLng: this.props.position || null,
       address: this.props.record?._location_translated?.address || '',
       isLoading: false,
       isEditorShown: false,
@@ -55,6 +56,22 @@ class Location extends React.Component {
     });
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const { latLng } = this.state;
+    if (!this.map) return;
+    if (!isValidPosition(latLng?.lng, latLng?.lat)) return;
+
+    if (prevState.latLng?.lat !== latLng.lat || prevState.latLng?.lng !== latLng.lng) {
+      if (this.mapType === MAP_TYPE.B_MAP) {
+        this.marker.setPosition(latLng);
+        this.map.panTo(latLng);
+      } else if (this.mapType === MAP_TYPE.G_MAP) {
+        this.marker.position = latLng;
+        this.map.panTo(latLng);
+      }
+    }
+  }
+
   componentWillUnmount() {
     this.unsubscribeClearMapInstance();
     this.map = null;
@@ -62,8 +79,8 @@ class Location extends React.Component {
 
   initMap = () => {
     const { record } = this.props;
-    const { position } = this.state;
-    if (!isValidPosition(position?.lng, position?.lat) || typeof record !== 'object') return;
+    const { latLng } = this.state;
+    if (!isValidPosition(latLng?.lng, latLng?.lat) || typeof record !== 'object') return;
 
     this.setState({ isLoading: true }, () => {
       if (this.mapType === MAP_TYPE.B_MAP) {
@@ -75,42 +92,25 @@ class Location extends React.Component {
         }
       } else if (this.mapType === MAP_TYPE.G_MAP) {
         if (!window.google?.maps.Map) {
-          window.renderGoogleMap = () => this.renderGoogleMap(position);
+          window.renderGoogleMap = () => this.renderGoogleMap();
           loadMapSource(this.mapType, this.mapKey);
         } else {
-          this.renderGoogleMap(position);
+          this.renderGoogleMap();
         }
       }
     });
   };
 
-  addMarkerByPosition = (lng, lat) => {
-    if (!this.map) {
-      this.initMap({ lng, lat });
-      return;
-    }
+  addMarker = () => {
+    const { latLng } = this.state;
     if (this.mapType === MAP_TYPE.B_MAP) {
-      this.lastLng = lng;
-      this.lastLat = lat;
-
-      const point = new window.BMapGL.Point(lng, lat);
-      this.marker = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
-      this.map.clearOverlays();
+      this.marker = new window.BMapGL.Marker(latLng);
       this.map.addOverlay(this.marker);
-      this.map.setCenter(point);
-    }
-    if (this.mapType === MAP_TYPE.G_MAP) {
-      if (!this.googleMarker) {
-        this.googleMarker = new window.google.maps.marker.AdvancedMarkerElement({
-          position: { lat, lng },
-          map: this.map,
-        });
-        return;
-      }
-
-      this.googleMarker.position = { lat, lng };
-      this.map.setCenter({ lat, lng });
-      return;
+    } else if (this.mapType === MAP_TYPE.G_MAP) {
+      this.marker = new window.google.maps.marker.AdvancedMarkerElement({
+        position: latLng,
+        map: this.map,
+      });
     }
   };
 
@@ -118,29 +118,27 @@ class Location extends React.Component {
     this.setState({ isLoading: false }, () => {
       if (!window.BMapGL.Map) return;
 
-      window.mapInstance = new window.BMapGL.Map('sf-geolocation-map-container', { enableMapClick: false });
-      this.map = window.mapInstance;
-      const { lng, lat } = this.state.position;
-      const point = new window.BMapGL.Point(lng, lat);
-      this.map.centerAndZoom(point, 16);
+      const { latLng } = this.state;
+      this.map = new window.BMapGL.Map('sf-geolocation-map-container');
       this.map.disableScrollWheelZoom(true);
+      this.map.centerAndZoom(latLng, 16);
 
       const offset = { x: 10, y: Utils.isDesktop() ? 16 : 40 };
       const ZoomControl = createBMapZoomControl(window.BMapGL, { maxZoom: 21, minZoom: 3, offset });
       const zoomControl = new ZoomControl();
       this.map.addControl(zoomControl);
-      this.addMarkerByPosition(lng, lat);
+      this.addMarker();
     });
   };
 
-  renderGoogleMap = (position) => {
+  renderGoogleMap = () => {
+    const { latLng } = this.state;
     this.setState({ isLoading: false }, () => {
       if (!window.google.maps.Map) return;
 
-      const { lng, lat } = position;
-      window.mapInstance = new window.google.maps.Map(this.ref, {
+      this.map = new window.google.maps.Map(this.ref, {
         zoom: 16,
-        center: position,
+        center: latLng,
         mapId: googleMapId,
         zoomControl: false,
         mapTypeControl: false,
@@ -151,12 +149,11 @@ class Location extends React.Component {
         disableDefaultUI: true,
         gestureHandling: 'cooperative',
       });
-      this.map = window.mapInstance;
 
-      this.addMarkerByPosition(lng, lat);
-      const zoomControl = createZoomControl(this.map);
+      this.addMarker();
+      const zoomControl = createZoomControl({ map: this.map });
       this.map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
-      this.map.setCenter(position);
+      this.map.panTo(latLng);
     });
   };
 
@@ -173,7 +170,8 @@ class Location extends React.Component {
     if (this.state.isReadyToEraseLocation) {
       this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, null);
       this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, null);
-      this.setState({ address: '', isReadyToEraseLocation: false });
+      this.setState({ latLng: null, address: '', isReadyToEraseLocation: false });
+      this.mapType === MAP_TYPE.B_MAP && this.map.destroy();
       this.map = null;
     }
   };
@@ -183,16 +181,15 @@ class Location extends React.Component {
     this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, location_translated);
     this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, position);
     this.setState({
-      position,
+      latLng: position,
       address: location_translated?.address,
       isEditorShown: false,
       isFullScreen: false,
+    }, () => {
+      if (!this.map) {
+        this.initMap();
+      }
     });
-    if (!this.marker) {
-      this.addMarkerByPosition(position.lng, position.lat);
-    } else {
-      this.marker.setPosition(new window.BMapGL.Point(position.lng, position.lat));
-    }
   };
 
   onReadyToEraseLocation = () => {
@@ -200,9 +197,8 @@ class Location extends React.Component {
   };
 
   render() {
-    const { isLoading, address, isEditorShown, isFullScreen } = this.state;
-    const { position } = this.props;
-    const isValid = isValidPosition(position?.lng, position?.lat);
+    const { isLoading, latLng, address, isEditorShown, isFullScreen } = this.state;
+    const isValid = isValidPosition(latLng?.lng, latLng?.lat);
     return (
       <>
         <DetailItem
@@ -219,7 +215,7 @@ class Location extends React.Component {
               {!isLoading && this.mapType && address ? (
                 <span>{address}</span>
               ) : (
-                <span>{getGeolocationDisplayString(position, { geo_format: GEOLOCATION_FORMAT.LNG_LAT })}</span>
+                <span>{getGeolocationDisplayString(latLng, { geo_format: GEOLOCATION_FORMAT.LNG_LAT })}</span>
               )}
             </div>
           ) : (
@@ -248,7 +244,7 @@ class Location extends React.Component {
                   background: 'transparent',
                 }}
               >
-                <GeolocationEditor position={position} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
+                <GeolocationEditor position={latLng} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
               </Popover>
             </ClickOutside>
           ) : (
@@ -257,7 +253,7 @@ class Location extends React.Component {
               isOpen={true}
               toggle={this.onFullScreen}
             >
-              <GeolocationEditor position={position} isFullScreen={isFullScreen} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
+              <GeolocationEditor position={latLng} isFullScreen={isFullScreen} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
             </Modal>
           )
         )}
