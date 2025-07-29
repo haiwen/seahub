@@ -6,7 +6,8 @@ import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
-  canViewOrg, isPro, isDBSqlite3, customNavItems, mediaUrl
+  canViewOrg, enableOCM, enableOCMViaWebdav,
+  isPro, isDBSqlite3, customNavItems, mediaUrl
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
@@ -62,7 +63,7 @@ class MainSideNav extends React.Component {
         return group;
       });
 
-      this.filesNavHeight = (groupList.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
+      this.filesNavHeight = (groupList.length + (canAddGroup ? 1 : 0) + (canAddRepo ? 1 : 0) + (canViewOrg ? 1 : 0) + (enableOCM ? 1 : 0) + (enableOCMViaWebdav ? 1 : 0) + 1) * SUB_NAV_ITEM_HEIGHT;
       this.setState({
         groupItems: groupList.sort((a, b) => {
           return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;

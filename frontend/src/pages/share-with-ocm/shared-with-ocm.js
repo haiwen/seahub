@@ -379,6 +379,7 @@ class SharedWithOCM extends Component {
   sortItems = (sortBy, sortOrder) => {
     cookie.save('seafile-repo-dir-sort-by', sortBy);
     cookie.save('seafile-repo-dir-sort-order', sortOrder);
+
     this.setState({
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -413,50 +414,50 @@ class SharedWithOCM extends Component {
     const { sortBy, sortOrder, currentViewMode: stateCurrentViewMode } = this.state;
     const currentViewMode = inAllLibs ? propCurrentViewMode : stateCurrentViewMode;
 
-    if (inAllLibs) {
-      return (
-        <>
-          <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-            <h4 className="sf-heading m-0">
-              <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
-              {gettext('Shared from other servers')}
-            </h4>
-            {this.renderSortIconInMobile()}
-          </div>
-          {this.renderContent(currentViewMode)}
-        </>
-      );
-    }
-
     return (
       <Fragment>
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <div className="cur-view-path">
-              <h3 className="sf-heading m-0">{gettext('Shared from other servers')}</h3>
-              {Utils.isDesktop() && (
-                <div className="d-flex align-items-center">
-                  <div className="mr-2">
-                    <ViewModes
-                      currentViewMode={currentViewMode}
-                      switchViewMode={this.switchViewMode}
-                    />
-                  </div>
-                  <ReposSortMenu
-                    sortOptions={this.sortOptions}
-                    sortBy={sortBy}
-                    sortOrder={sortOrder}
-                    onSelectSortOption={this.onSelectSortOption}
-                  />
-                </div>
-              )}
-              {this.renderSortIconInMobile()}
-            </div>
-            <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
+        {inAllLibs
+          ? (
+            <>
+              <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
+                <h4 className="sf-heading m-0">
+                  <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+                  {gettext('Shared from other servers')}
+                </h4>
+                {this.renderSortIconInMobile()}
+              </div>
               {this.renderContent(currentViewMode)}
+            </>
+          )
+          : (
+            <div className="main-panel-center">
+              <div className="cur-view-container">
+                <div className="cur-view-path">
+                  <h3 className="sf-heading m-0">{gettext('Shared from other servers')}</h3>
+                  {Utils.isDesktop() && (
+                    <div className="d-flex align-items-center">
+                      <div className="mr-2">
+                        <ViewModes
+                          currentViewMode={currentViewMode}
+                          switchViewMode={this.switchViewMode}
+                        />
+                      </div>
+                      <ReposSortMenu
+                        sortOptions={this.sortOptions}
+                        sortBy={sortBy}
+                        sortOrder={sortOrder}
+                        onSelectSortOption={this.onSelectSortOption}
+                      />
+                    </div>
+                  )}
+                  {this.renderSortIconInMobile()}
+                </div>
+                <div className={classnames('cur-view-content', 'repos-container', { 'pt-3': currentViewMode != LIST_MODE })}>
+                  {this.renderContent(currentViewMode)}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          )}
         {this.state.isSortOptionsDialogOpen &&
         <SortOptionsDialog
           toggleDialog={this.toggleSortOptionsDialog}
