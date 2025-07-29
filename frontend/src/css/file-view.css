@@ -110,6 +110,10 @@ body {
   font-size: .8125rem;
 }
 
+.file-view-body {
+  overflow-y: auto;
+}
+
 .file-view-body .file-view-content {
   padding: 30px 0;
   background: var(--bs-body-tertiary-bg);
