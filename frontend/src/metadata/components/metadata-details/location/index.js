@@ -58,6 +58,13 @@ class Location extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { latLng } = this.state;
+    if (prevProps.record !== this.props.record) {
+      this.setState({
+        latLng: this.props.position || null,
+        address: this.props.record?._location_translated?.address || '',
+        isReadyToEraseLocation: false,
+      });
+    }
     if (!this.map) return;
     if (!isValidPosition(latLng?.lng, latLng?.lat)) return;
 

@@ -17,31 +17,11 @@ import './index.css';
 const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onReadyToEraseLocation }) => {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const [isLabelShown, setLabelShown] = useState(true);
-  const [labelInfo, setLableInfo] = useState({
-    title: '',
-    tags: [],
-    location_translated: {
-      address: '',
-      country: '',
-      province: '',
-      city: '',
-      district: '',
-      street: '',
-    },
-    position: {
-      lng: 0,
-      lat: 0,
-    }
-  });
 
   const type = useMemo(() => {
     const { type } = initMapInfo({ baiduMapKey, googleMapKey });
     return type;
   }, []);
-  const title = useMemo(() => labelInfo.title || '', [labelInfo]);
-  const address = useMemo(() => labelInfo.location_translated.address || '', [labelInfo]);
-  const tagContent = useMemo(() => Array.isArray(labelInfo.tags) && labelInfo.tags.length > 0 ? labelInfo.tags[0] : '', [labelInfo]);
 
   const ref = useRef(null);
   const mapRef = useRef(null);
@@ -125,7 +105,8 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     if (type === MAP_TYPE.B_MAP) {
       mapRef.current.clearOverlays();
     } else {
-      setLabelShown(false);
+      labelRef.current.setMap(null);
+      labelRef.current = null;
     }
     onReadyToEraseLocation();
   }, [type, onReadyToEraseLocation]);
@@ -135,7 +116,8 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     if (type === MAP_TYPE.B_MAP) {
       markerRef.current.getLabel()?.remove();
     } else {
-      setLabelShown(false);
+      labelRef.current.setMap(null);
+      labelRef.current = null;
     }
   }, [type]);
 
@@ -214,49 +196,44 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     return { position, location_translated };
   }, []);
 
-  const addLabelEventListener = useCallback((info) => {
-    setTimeout(() => {
-      const label = document.getElementById('selection-label-content');
-      if (label) {
-        label.addEventListener('click', (e) => e.stopPropagation());
-      }
-
-      const closeBtn = document.getElementById('selection-label-close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', close);
-      }
-
-      const submitBtn = document.getElementById('selection-label-submit');
-      if (submitBtn) {
-        submitBtn.addEventListener('click', () => submit(info));
-      }
-    }, 100);
-  }, [close, submit]);
-
   const addLabel = useCallback((point) => {
     if (type === MAP_TYPE.B_MAP) {
       markerRef.current.getLabel()?.remove();
       geocRef.current.getLocation(point, (result) => {
         const info = parseBMapAddress(result);
-        setLableInfo(info);
         const { title, location_translated } = info;
         setInputValue(title || location_translated.address);
         const label = customBMapLabel(info);
         markerRef.current.setLabel(label);
-        addLabelEventListener(info);
+
+        setTimeout(() => {
+          const label = document.getElementById('selection-label-content');
+          if (label) {
+            label.addEventListener('click', (e) => e.stopPropagation());
+          }
+
+          const closeBtn = document.getElementById('selection-label-close');
+          if (closeBtn) {
+            closeBtn.addEventListener('click', close);
+          }
+
+          const submitBtn = document.getElementById('selection-label-submit');
+          if (submitBtn) {
+            submitBtn.addEventListener('click', () => submit(info));
+          }
+        }, 100);
       });
     } else {
       geocRef.current.geocode({ location: point, language: lang }, (results, status) => {
         if (status === 'OK' && results[0]) {
           const info = parseGMapAddress(results[0]);
-          setLableInfo(info);
-          setInputValue(info.location_translated.address);
-          labelRef.current = customGMapLabel(info);
+          labelRef.current = customGMapLabel(info, submit);
           labelRef.current.setMap(mapRef.current);
+          setInputValue(info.location_translated.address);
         }
       });
     }
-  }, [type, addLabelEventListener, parseBMapAddress, parseGMapAddress]);
+  }, [type, close, submit, parseBMapAddress, parseGMapAddress]);
 
   const renderBaiduMap = useCallback(() => {
     if (!window.BMapGL.Map) return;
@@ -316,9 +293,8 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   }, [position?.lng, position?.lat]);
 
   const renderGoogleMap = useCallback(() => {
-    const initPos = position || DEFAULT_POSITION;
     mapRef.current = new window.google.maps.Map(ref.current, {
-      center: { lat: initPos.lat, lng: initPos.lng },
+      center: position || DEFAULT_POSITION,
       zoom: 16,
       mapId: googleMapId,
       zoomControl: false,
@@ -340,10 +316,14 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
         geocRef.current.geocode({ location: lngLat, language: lang }, (results, status) => {
           if (status === 'OK' && results[0]) {
             const info = parseGMapAddress(results[0]);
-            setLableInfo(info);
             setInputValue(info.location_translated.address);
             markerRef.current.position = lngLat;
-            labelRef.current.setPosition(lngLat);
+            if (!labelRef.current) {
+              addLabel(lngLat);
+            } else {
+              labelRef.current.setPosition(lngLat);
+              labelRef.current.setInfo(info);
+            }
           }
         });
       }
@@ -353,17 +333,17 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
 
     // marker
     markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
-      position: { lat: initPos.lat, lng: initPos.lng },
+      position,
       map: mapRef.current,
     });
 
     // geocoder
     geocRef.current = new window.google.maps.Geocoder();
-    addLabel(initPos);
+    addLabel(position);
 
     googlePlacesRef.current = new window.google.maps.places.PlacesService(mapRef.current);
 
-    // click event
+    // map click event
     window.google.maps.event.addListener(mapRef.current, 'click', (e) => {
       if (searchResults.length > 0) {
         setSearchResults([]);
@@ -381,12 +361,16 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
         markerRef.current.position = latLng;
       }
       mapRef.current.panTo(latLng);
-      labelRef.current.setPosition(latLng);
-      setLabelShown(true);
+
       geocRef.current.geocode({ location: point, language: lang }, (results, status) => {
         if (status === 'OK' && results[0]) {
           const info = parseGMapAddress(results[0]);
-          setLableInfo(info);
+          if (!labelRef.current) {
+            addLabel(point);
+          } else {
+            labelRef.current.setPosition(latLng);
+            labelRef.current.setInfo(info);
+          }
           setInputValue(info.location_translated.address);
         }
       });
@@ -414,22 +398,29 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     } else {
       const point = { lat: lngLat.lat, lng: lngLat.lng };
       markerRef.current.position = point;
-      labelRef.current.setPosition(point);
+      if (!labelRef.current) {
+        addLabel(point);
+      } else {
+        labelRef.current.setPosition(point);
+        labelRef.current.setInfo({
+          title,
+          tag: [],
+          position: point,
+          location_translated: {
+            address,
+            country: '',
+            province: '',
+            city: '',
+            district: '',
+            street: '',
+          }
+        });
+      }
       mapRef.current.panTo(point);
-      setLabelShown(true);
-      setLableInfo({
-        ...labelInfo,
-        title,
-        position: point,
-        location_translated: {
-          ...labelInfo.location_translated,
-          address,
-        }
-      });
     }
     setSearchResults([]);
     setInputValue(title || address);
-  }, [type, labelInfo, addLabel]);
+  }, [type, addLabel]);
 
   useEffect(() => {
     if (mapRef.current) return;
@@ -482,22 +473,6 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
           </span>
         </div>
         <div ref={ref} className="w-100 h-100 sf-metadata-geolocation-editor-container"></div>
-        {type === MAP_TYPE.G_MAP && (
-          <div
-            id="selection-label-content"
-            className={classNames('selection-label-content', { 'simple': !title })}
-            style={{ display: isLabelShown ? 'flex' : 'none' }}
-          >
-            {title && <span className="label-title text-truncate" title={title}>{title}</span>}
-            {title && tagContent && <span className="label-tag">{tagContent}</span>}
-            <span className="close-btn" id="selection-label-close" onClick={close}>
-              <i className="sf3-font sf3-font-x-01"></i>
-            </span>
-            {title && <span className="label-address-tip">{gettext('Address')}</span>}
-            <span className="label-address text-truncate" title={address}>{address}</span>
-            <div className="label-submit btn btn-primary" id="selection-label-submit" onClick={() => submit(labelInfo)}>{gettext('Fill in')}</div>
-          </div>
-        )}
         {searchResults.length > 0 && (
           <div className="search-results-container">
             {searchResults.map((result, index) => (
