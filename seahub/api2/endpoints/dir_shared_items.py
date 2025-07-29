@@ -31,7 +31,7 @@ from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         update_group_dir_permission, check_user_share_out_permission, \
         check_group_share_out_permission, normalize_custom_permission_name
 from seahub.utils import (is_org_context, is_valid_username,
-                          send_perm_audit_msg)
+                          send_perm_audit_msg, SeafileDB)
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful, \
     change_repo_perm_successful, delete_repo_perm_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
@@ -524,6 +524,10 @@ class DirSharedItemsEndpoint(APIView):
                         'error_msg': 'Internal Server Error'
                         })
                     continue
+                    
+        seafile_db = SeafileDB()
+        virtual_repo_id = seafile_db.get_virtual_repo_id(repo_id, path)
+        result['virtual_repo_id'] = virtual_repo_id
 
         return HttpResponse(json.dumps(result),
                             status=200,
