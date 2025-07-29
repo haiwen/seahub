@@ -145,7 +145,6 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isStarred: this.props.item.starred,
       isHighlighted: false,
       isOpIconShown: false,
       isItemMenuShow: false // for mobile
@@ -179,32 +178,6 @@ class Item extends Component {
     navigate(this.repoURL);
   };
 
-  onToggleStarRepo = () => {
-    const { item } = this.props;
-    const { repo_id, repo_name: repoName } = item;
-    if (this.state.isStarred) {
-      seafileAPI.unstarItem(repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
-        const msg = gettext('Successfully unstarred {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    } else {
-      seafileAPI.starItem(repo_id, '/').then(() => {
-        this.setState({ isStarred: !this.state.isStarred });
-        const msg = gettext('Successfully starred {library_name_placeholder}.')
-          .replace('{library_name_placeholder}', repoName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
-  };
-
   render() {
     const { item, isDesktop, currentViewMode, inAllLibs } = this.props;
     const { isHighlighted, isOpIconShown } = this.state;
@@ -224,16 +197,7 @@ class Item extends Component {
             onMouseOut={this.handleMouseOut}
             onFocus={this.handleMouseOver}
           >
-            <td className="text-center">
-              <i
-                role="button"
-                title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                onClick={this.onToggleStarRepo}
-                className={`op-icon m-0 ${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-              >
-              </i>
-            </td>
+            <td></td>
             <td><img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" /></td>
             <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
             <td>
@@ -264,16 +228,6 @@ class Item extends Component {
             <div className="d-flex align-items-center text-truncate">
               <img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="36" className="mr-2" />
               <Link to={shareRepoUrl} className="library-name text-truncate" title={item.repo_name}>{item.repo_name}</Link>
-              {this.state.isStarred &&
-              <i
-                role="button"
-                title={gettext('Unstar')}
-                aria-label={gettext('Unstar')}
-                className='op-icon library-grid-item-icon sf3-font-star sf3-font'
-                onClick={this.onToggleStarRepo}
-              >
-              </i>
-              }
             </div>
             <div className="flex-shrink-0">
               <i role="button" className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} aria-label={gettext('Leave Share')} onClick={this.leaveShare}></i>
@@ -314,9 +268,6 @@ class Item extends Component {
               <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
                 <div className="mobile-operation-menu-bg-layer"></div>
                 <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.onToggleStarRepo}>
-                    {this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                  </DropdownItem>
                   <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
                 </div>
               </div>
@@ -339,7 +290,7 @@ class SharedWithOCM extends Component {
     super(props);
     this.sortOptions = [
       { value: 'name-asc', text: gettext('Ascending by name') },
-      { value: 'name-desc', text: gettext('Descending by name') },
+      { value: 'name-desc', text: gettext('Descending by name') }
     ];
     this.state = {
       loading: true,
