@@ -957,6 +957,8 @@ class Repos(APIView):
                     "version": r.version,
                     "group_name": library_group_name,
                     "salt": r.salt if r.enc_version >= 3 else '',
+                    "is_virtual": r.is_virtual,
+                    "origin_repo_id": r.origin_repo_id
                 }
 
                 if r.repo_id in repos_with_admin_share_to:
