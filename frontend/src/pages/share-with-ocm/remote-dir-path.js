@@ -53,7 +53,7 @@ class DirPath extends React.Component {
 
     return (
       <div className="path-container">
-        <Link to={siteRoot + 'shared-with-ocm/'} className="normal" onClick={(e) => this.props.onTabNavClick('shared-with-ocm')}>{gettext('All')}</Link>
+        <Link to={siteRoot + 'shared-with-ocm/'} className="normal" onClick={(e) => this.props.onTabNavClick('shared-with-ocm')}>{gettext('Shared from other servers')}</Link>
         <span className="path-split">/</span>
         {(currentPath === '/' || currentPath === '') ?
           <span className="path-repo-name">{repoName}</span> :
