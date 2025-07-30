@@ -87,7 +87,7 @@ const SimpleEditor = () => {
 
     const loadImages = (data, isInitialLoad) => {
       if (!data.scene) return;
-      if (collabAPIRef.current.getIsCollaborating()) {
+      if (collabAPIRef.current && collabAPIRef.current.getIsCollaborating()) {
         if (data.scene.elements) {
           collabAPIRef.current.fetchImageFilesFromServer({
             elements: data.scene.elements,
@@ -142,16 +142,49 @@ const SimpleEditor = () => {
   }, [excalidrawAPI]);
 
   const handleChange = useCallback((elements, appState, files) => {
-    if (!collabAPIRef.current) return;
-    collabAPIRef.current.syncElements(elements);
-    const docUuid = context.getDocUuid();
+    if (collabAPIRef.current) {
+      collabAPIRef.current.syncElements(elements);
+    }
 
-    saveToLocalStorage(docUuid, elements, appState);
-  }, []);
+    const docUuid = context.getDocUuid();
+    LocalData.save(docUuid, elements, appState, files, () => {
+      if (excalidrawAPI) {
+        let didChange = false;
+        const oldElements = excalidrawAPI.getSceneElementsIncludingDeleted();
+        const newElements = oldElements.map(element => {
+          if (LocalData.fileStorage.shouldUpdateImageElementStatus(element)) {
+            const newElement = newElementWith(element, { status: 'saved' });
+            if (newElement !== element) {
+              didChange = true;
+            }
+            return newElement;
+          }
+          return element;
+        });
+        if (didChange) {
+          excalidrawAPI.updateScene({
+            elements: newElements,
+            captureUpdate: CaptureUpdateAction.NEVER,
+          });
+        }
+      }
+    });
+  }, [excalidrawAPI]);
 
   const handlePointerUpdate = useCallback((payload) => {
     if (!collabAPIRef.current) return;
     collabAPIRef.current.syncPointer(payload);
+  }, []);
+
+  useEffect(() => {
+    const beforeUnload = (event) => {
+      // event.preventDefault();
+      LocalData.flushSave();
+    };
+    window.addEventListener('beforeunload', beforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+    };
   }, []);
 
   return (
