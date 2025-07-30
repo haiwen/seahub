@@ -6,7 +6,6 @@ import {
   getMany,
   set,
   setMany,
-  get,
 } from 'idb-keyval';
 import Locker from './locker';
 import FileManager from './file-manager';
@@ -34,8 +33,8 @@ class LocalFileManager extends FileManager {
 
 class LocalData {
   static _save = debounce(
-    async (elements, appState, files, onFilesSaved) => {
-      saveDataStateToLocalStorage(elements, appState);
+    async (docUuid, elements, appState, files, onFilesSaved) => {
+      saveDataStateToLocalStorage(docUuid, elements, appState);
 
       await this.fileStorage.saveFiles({ elements, files });
 
@@ -44,10 +43,10 @@ class LocalData {
     SAVE_TO_LOCAL_STORAGE_TIMEOUT,
   );
 
-  static save = (elements, appState, files, onFilesSaved = defaultOnFilesSaved) => {
-    if (!this.isSavePaused()) {
-      this._save(elements, appState, files, onFilesSaved);
-    }
+  static save = (docUuid, elements, appState, files, onFilesSaved = defaultOnFilesSaved) => {
+    // if (!this.isSavePaused()) {
+    this._save(docUuid, elements, appState, files, onFilesSaved);
+    // }
   };
 
 
