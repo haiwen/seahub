@@ -154,7 +154,6 @@ class DirView extends Component {
                 errorMsg={errorMsg}
                 direntList={direntList}
                 openFolder={this.openFolder}
-                deleteDirent={this.deleteDirent}
                 downloadDirent={this.downloadDirent}
               />
             </div>
