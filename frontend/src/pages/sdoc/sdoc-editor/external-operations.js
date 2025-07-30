@@ -43,7 +43,6 @@ class ExternalOperations extends React.Component {
     this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.SHARE_SDOC, this.onShareToggle);
     this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
     this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
-    this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
     this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onClearNotification);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
   }
@@ -55,7 +54,6 @@ class ExternalOperations extends React.Component {
     this.unsubscribeShare();
     this.unsubscribeFreezeDocument();
     this.unsubscribeUnfreeze();
-    this.unsubscribeNewNotification();
     this.unsubscribeCreateSdocFile();
     this.unsubscribeClearNotification();
   }
