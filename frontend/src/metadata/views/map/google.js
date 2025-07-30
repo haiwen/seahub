@@ -3,6 +3,7 @@ import { createGeolocationControl } from '../../components/map-controller/geoloc
 import { createZoomControl } from '../../components/map-controller/zoom';
 import { MIN_ZOOM, MAX_ZOOM } from '../../constants';
 import { customImageOverlay, googleCustomAvatarOverlay } from './overlay';
+import { wgs84_to_gcj02 } from '../../../utils/coord-transform';
 
 let clickTimeout = null;
 
@@ -92,7 +93,9 @@ export const createGoogleMap = ({ center, zoom, onMapState }) => {
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((userInfo) => {
-      const userPosition = { lat: userInfo.coords.latitude, lng: userInfo.coords.longitude };
+      let lat = userInfo.coords.latitude;
+      let lng = userInfo.coords.longitude;
+      const userPosition = wgs84_to_gcj02(lng, lat);
       const imageUrl = `${mediaUrl}img/marker.png`;
       googleCustomAvatarOverlay(map, userPosition, appAvatarURL, imageUrl);
       onMapState();

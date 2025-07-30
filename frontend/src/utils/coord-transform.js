@@ -67,11 +67,12 @@ export const bd09_to_gcj02 = (bd_lng, bd_lat) => {
 export const gcj02_to_bd09 = (lng, lat) => {
   const _lat = +lat;
   const _lng = +lng;
+  const digits = 6;
   const z = Math.sqrt(_lng * _lng + _lat * _lat) + 0.00002 * Math.sin(_lat * x_PI);
   const theta = Math.atan2(_lat, _lng) + 0.000003 * Math.cos(_lng * x_PI);
   const bd_lng = z * Math.cos(theta) + 0.0065;
   const bd_lat = z * Math.sin(theta) + 0.006;
-  return { lng: bd_lng, lat: bd_lat };
+  return { lng: Number(bd_lng.toFixed(digits)), lat: Number(bd_lat.toFixed(digits)) };
 };
 
 /**
@@ -83,6 +84,7 @@ export const gcj02_to_bd09 = (lng, lat) => {
 export const wgs84_to_gcj02 = (lng, lat) => {
   const _lat = +lat;
   const _lng = +lng;
+  const digits = 6;
   if (out_of_china(_lng, _lat)) return { lng: _lng, lat: _lat };
   let dLat = transformLat(_lng - 105.0, _lat - 35.0);
   let dLng = transformLng(_lng - 105.0, _lat - 35.0);
@@ -92,7 +94,7 @@ export const wgs84_to_gcj02 = (lng, lat) => {
   const sqrtMagic = Math.sqrt(magic);
   dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI);
   dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
-  return { lat: _lat + dLat, lng: _lng + dLng };
+  return { lat: Number((_lat + dLat).toFixed(digits)), lng: Number((_lng + dLng).toFixed(digits)) };
 };
 
 /**
@@ -104,6 +106,7 @@ export const wgs84_to_gcj02 = (lng, lat) => {
 export const gcj02_to_wgs84 = (lng, lat) => {
   const _lat = +lat;
   const _lng = +lng;
+  const digits = 6;
   if (out_of_china(_lng, _lat)) return { lng: _lng, lat: _lat };
   let dLat = transformLat(_lng - 105.0, _lat - 35.0);
   let dLng = transformLng(_lng - 105.0, _lat - 35.0);
@@ -113,5 +116,5 @@ export const gcj02_to_wgs84 = (lng, lat) => {
   const sqrtMagic = Math.sqrt(magic);
   dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI);
   dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
-  return { lat: _lat - dLat, lng: _lng - dLng };
+  return { lat: Number((_lat - dLat).toFixed(digits)), lng: Number((_lng - dLng).toFixed(digits)) };
 };
