@@ -44,9 +44,9 @@ class LocalData {
   );
 
   static save = (docUuid, elements, appState, files, onFilesSaved = defaultOnFilesSaved) => {
-    // if (!this.isSavePaused()) {
-    this._save(docUuid, elements, appState, files, onFilesSaved);
-    // }
+    if (!this.isSavePaused()) {
+      this._save(docUuid, elements, appState, files, onFilesSaved);
+    }
   };
 
 

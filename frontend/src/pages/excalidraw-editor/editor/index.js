@@ -4,9 +4,9 @@ import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import Collab from '../collaboration/collab';
 import context from '../context';
-import { importFromLocalStorage, saveToLocalStorage } from '../data/local-storage';
+import { importFromLocalStorage } from '../data/local-storage';
 import { resolvablePromise } from '../utils/exdraw-utils';
-import { isInitializedImageElement } from '../utils/element-utils';
+import { getFilename, isInitializedImageElement } from '../utils/element-utils';
 import LocalData from '../data/local-data';
 
 import '@excalidraw/excalidraw/index.css';
@@ -147,28 +147,31 @@ const SimpleEditor = () => {
     }
 
     const docUuid = context.getDocUuid();
-    LocalData.save(docUuid, elements, appState, files, () => {
-      if (excalidrawAPI) {
-        let didChange = false;
-        const oldElements = excalidrawAPI.getSceneElementsIncludingDeleted();
-        const newElements = oldElements.map(element => {
-          if (LocalData.fileStorage.shouldUpdateImageElementStatus(element)) {
-            const newElement = newElementWith(element, { status: 'saved' });
-            if (newElement !== element) {
-              didChange = true;
+    if (!LocalData.isSavePaused()) {
+      LocalData.save(docUuid, elements, appState, files, () => {
+        if (excalidrawAPI) {
+          let didChange = false;
+          const oldElements = excalidrawAPI.getSceneElementsIncludingDeleted();
+          const newElements = oldElements.map(element => {
+            if (LocalData.fileStorage.shouldUpdateImageElementStatus(element)) {
+              const filename = getFilename(element.fileId, files[element.fileId]);
+              const newElement = newElementWith(element, { status: 'saved', filename });
+              if (newElement !== element) {
+                didChange = true;
+              }
+              return newElement;
             }
-            return newElement;
-          }
-          return element;
-        });
-        if (didChange) {
-          excalidrawAPI.updateScene({
-            elements: newElements,
-            captureUpdate: CaptureUpdateAction.NEVER,
+            return element;
           });
+          if (didChange) {
+            excalidrawAPI.updateScene({
+              elements: newElements,
+              captureUpdate: CaptureUpdateAction.NEVER,
+            });
+          }
         }
-      }
-    });
+      });
+    }
   }, [excalidrawAPI]);
 
   const handlePointerUpdate = useCallback((payload) => {
