@@ -259,6 +259,7 @@ class Record extends React.Component {
             onSelectRecord={this.onSelectRecord}
             isLastFrozenCell={!lastFrozenColumnKey}
             height={cellHeight}
+            onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
           />
           {frozenCells}
         </div>
@@ -295,6 +296,7 @@ Record.propTypes = {
   reloadRecords: PropTypes.func,
   searchResult: PropTypes.object,
   columnColor: PropTypes.object,
+  onShowExpandedPropsDialog: PropTypes.func
 };
 
 export default Record;
