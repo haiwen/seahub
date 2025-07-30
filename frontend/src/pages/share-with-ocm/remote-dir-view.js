@@ -13,6 +13,7 @@ class Dirent {
     this.name = obj.name;
     this.mtime = obj.mtime;
     this.size = obj.size;
+    this.type = obj.type;
     this.is_file = obj.type === 'file';
   }
 
