@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button, FormGroup, Label } from 'reactstrap';
-import Icon from '../../../../components/icon';
 import CustomizeSelect from '../../../../components/customize-select';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import People from './people';
@@ -25,7 +24,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
           <div className="select-option-people">
             <People people={people} />
             <div className="people-check-icon">
-              {isSelected && (<Icon symbol="check-mark" />)}
+              {isSelected && <i className="sf2-icon-tick"></i>}
             </div>
           </div>
         ),
