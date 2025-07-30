@@ -1,6 +1,9 @@
-import { WS_SUBTYPES } from '../constants';
+import throttle from 'lodash.throttle';
+import { FILE_UPLOAD_TIMEOUT, WS_SUBTYPES } from '../constants';
 import { isSyncableElement } from '../data';
 import { serverDebug } from '../utils/debug';
+import { CaptureUpdateAction, newElementWith } from '@excalidraw/excalidraw';
+import { getFilename } from '../utils/element-utils';
 
 class Portal {
   constructor(collab, settings) {
@@ -49,12 +52,57 @@ class Portal {
     return socket;
   };
 
+  queueFileUpload = throttle(async () => {
+    let savedFiles = new Map();
+    let erroredFiles = new Map();
+    try {
+      ({ savedFiles, erroredFiles } = await this.collab.fileManager.saveFiles({
+        elements: this.collab.excalidrawAPI.getSceneElementsIncludingDeleted(),
+        files: this.collab.excalidrawAPI.getFiles()
+      }));
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        this.collab.excalidrawAPI.updateScene({
+          appState: {
+            errorMessage: error.message,
+          },
+        });
+      }
+    }
+
+    let isChanged = false;
+    const oldElements = this.collab.getSceneElementsIncludingDeleted();
+    const newElements = oldElements.map(element => {
+      if (this.collab.fileManager.shouldUpdateImageElementStatus(element)) {
+        isChanged = true;
+        const fileData = savedFiles.get(element.fileId);
+        if (fileData) {
+          const filename = getFilename(element.fileId, fileData);
+          return newElementWith(element, { status: 'saved', filename });
+        }
+        return element;
+      }
+      return element;
+    });
+
+    if (isChanged) {
+      this.collab.excalidrawAPI.updateScene({
+        elements: newElements,
+        captureUpdate: CaptureUpdateAction.NEVER,
+      });
+    }
+  }, FILE_UPLOAD_TIMEOUT);
+
   _broadcastSocketData = (data) => {
     const newData = this.getParams(data);
     this.socket.emit('server-broadcast', newData);
   };
 
   broadcastScene = async (updateType, elements, isSyncAll) => {
+    if (updateType === WS_SUBTYPES.INIT && !isSyncAll) {
+      throw new Error('syncAll must be true when sending SCENE.INIT');
+    }
+
     const syncableElements = elements.reduce((acc, element) => {
       const isAddedOrUpdated = !this.broadcastedElementVersions.has(element.id) || element.version > this.broadcastedElementVersions.get(element.id);
       if (isSyncAll || (isAddedOrUpdated && isSyncableElement(element))) {
@@ -62,6 +110,16 @@ class Portal {
       }
       return acc;
     }, []);
+
+    for (const syncableElement of syncableElements) {
+      this.broadcastedElementVersions.set(
+        syncableElement.id,
+        syncableElement.version,
+      );
+    }
+
+    this.queueFileUpload();
+
     const payload = { elements: syncableElements };
     this._broadcastSocketData({ type: updateType, payload });
   };

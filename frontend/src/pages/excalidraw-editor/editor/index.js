@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Excalidraw, MainMenu, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
+import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import Collab from '../collaboration/collab';
 import context from '../context';
 import { importFromLocalStorage, saveToLocalStorage } from '../data/local-storage';
 import { resolvablePromise } from '../utils/exdraw-utils';
+import { isInitializedImageElement } from '../utils/element-utils';
+import LocalData from '../data/local-data';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -17,7 +19,7 @@ const UIOptions = {
     saveToActiveFile: false,
     LoadScene: false
   },
-  tools: { image: false },
+  tools: { image: true },
 };
 
 const initializeScene = async (collabAPI) => {
@@ -28,8 +30,8 @@ const initializeScene = async (collabAPI) => {
   let data = null;
   // load remote data from server
   if (collabAPI) {
-    const screen = await collabAPI.startCollaboration();
-    const { elements } = screen;
+    const scene = await collabAPI.startCollaboration();
+    const { elements } = scene;
     const restoredRemoteElements = restoreElements(elements, null);
 
     const reconciledElements = reconcileElements(
@@ -48,8 +50,25 @@ const initializeScene = async (collabAPI) => {
   }
 
   return {
-    screen: data
+    scene: data
   };
+};
+
+const updateStateImageStatuses = (params) => {
+  const { excalidrawAPI, erroredFiles, elements } = params;
+  if (!erroredFiles.size) return;
+
+  const newElements = elements.map(element => {
+    if (isInitializedImageElement(element) && erroredFiles.has(element.fileId)) {
+      return newElementWith(element, { status: 'error' });
+    }
+    return element;
+  });
+
+  excalidrawAPI.updateScene({
+    elements: newElements,
+    captureUpdate: CaptureUpdateAction.NEVER
+  });
 };
 
 const SimpleEditor = () => {
@@ -66,13 +85,57 @@ const SimpleEditor = () => {
   useEffect(() => {
     if (!excalidrawAPI) return;
 
+    const loadImages = (data, isInitialLoad) => {
+      if (!data.scene) return;
+      if (collabAPIRef.current.getIsCollaborating()) {
+        if (data.scene.elements) {
+          collabAPIRef.current.fetchImageFilesFromServer({
+            elements: data.scene.elements,
+            forceFetchFiles: true,
+          }).then(({ loadedFiles, erroredFiles }) => {
+            excalidrawAPI.addFiles(loadedFiles);
+            updateStateImageStatuses({
+              excalidrawAPI,
+              erroredFiles,
+              elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+            });
+          });
+        }
+      } else {
+        const fileIds =
+          data.scene.elements?.reduce((acc, element) => {
+            if (isInitializedImageElement(element)) {
+              return acc.concat(element.fileId);
+            }
+            return acc;
+          }, []) || [];
+        if (isInitialLoad && fileIds.length) {
+          LocalData.fileStorage
+            .getFiles(fileIds)
+            .then(({ loadedFiles, erroredFiles }) => {
+              if (loadedFiles.length) {
+                excalidrawAPI.addFiles(loadedFiles);
+              }
+              updateStateImageStatuses({
+                excalidrawAPI,
+                erroredFiles,
+                elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+              });
+            });
+
+          LocalData.fileStorage.clearObsoleteFiles({ currentFileIds: fileIds });
+        }
+      }
+    };
+
     context.initSettings().then(() => {
       const config = context.getSettings();
       const collabAPI = new Collab(excalidrawAPI, config);
       collabAPIRef.current = collabAPI;
 
       initializeScene(collabAPI).then(async (data) => {
-        initialStatePromiseRef.current.promise.resolve(data.screen);
+        loadImages(data, /* isInitialLoad */true);
+        initialStatePromiseRef.current.promise.resolve(data.scene);
       });
     });
 

@@ -14,3 +14,13 @@ const _clearElements = (elements) => {
 
 export const clearElementsForLocalStorage = (elements) => _clearElements(elements);
 
+export const isInitializedImageElement = (element) => {
+  return !!element && element.type === 'image' && !!element.fileId;
+};
+
+export const getFilename = (fileUuid, fileData) => {
+  const { mimeType } = fileData;
+  const fileExt = mimeType.split('/')[1];
+  return `${fileUuid}.${fileExt}`;
+};
+

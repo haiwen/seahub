@@ -3,10 +3,12 @@ import throttle from 'lodash.throttle';
 import io from 'socket.io-client';
 import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS, WS_SUBTYPES } from '../constants';
 import { getSyncableElements } from '../data';
-import { loadFromServerStorage, saveToServerStorage } from '../data/server-storage';
+import { loadFilesFromServer, loadFromServerStorage, saveFilesToServer, saveToServerStorage } from '../data/server-storage';
 import { resolvablePromise } from '../utils/exdraw-utils';
 import { serverDebug } from '../utils/debug';
 import Portal from './portal';
+import FileManager from '../data/file-manager';
+import { isInitializedImageElement } from '../utils/element-utils';
 
 class Collab {
 
@@ -14,6 +16,7 @@ class Collab {
     this.excalidrawAPI = excalidrawAPI;
     this.config = config;
     this.document = null;
+    this.isCollaborating = false;
 
     this.collaborators = new Map();
     const { user } = config;
@@ -22,7 +25,55 @@ class Collab {
 
     this.lastBroadcastedOrReceivedSceneVersion = 0;
     this.portal = new Portal(this, config);
+    this.fileManager = new FileManager({
+      getFiles: async (ids) => {
+        return loadFilesFromServer(ids);
+      },
+      saveFiles: async ({ addedFiles }) => {
+        const { savedFiles, erroredFiles } = await saveFilesToServer(addedFiles);
+        return {
+          savedFiles: savedFiles.reduce((acc, id) => {
+            const fileData = addedFiles.get(id);
+            if (fileData) {
+              acc.set(id, fileData);
+            }
+            return acc;
+          }, new Map()),
+          erroredFiles: erroredFiles.reduce((acc, id) => {
+            const fileData = addedFiles.get(id);
+            if (fileData) {
+              acc.set(id, fileData);
+            }
+            return acc;
+          }, new Map())
+        };
+      }
+    });
   }
+
+  setIsCollaborating = (flag) => {
+    this.isCollaborating = flag;
+  };
+
+  getIsCollaborating = () => {
+    return this.isCollaborating;
+  };
+
+  fetchImageFilesFromServer = async (opts) => {
+    const fileIds = opts.elements.filter(element => {
+      return (
+        isInitializedImageElement(element) &&
+        !this.fileManager.isFileTracked(element.fileId) &&
+        !element.isDeleted &&
+        (opts.forceFetchFiles ? element.status !== 'pending' || Date.now() - element.updated > 10000 : element.status === 'saved')
+      );
+    }).map(element => {
+      return element.filename || element.fileId;
+    });
+
+    return await this.fileManager.getFiles(fileIds);
+
+  };
 
   setDocument = (document) => {
     this.document = document;
@@ -91,6 +142,8 @@ class Collab {
         scenePromise.resolve(scene);
       });
     };
+
+    this.setIsCollaborating(true);
 
     this.fallbackInitializationHandler = fallbackInitializationHandler;
 
@@ -281,6 +334,8 @@ class Collab {
   destroySocketClient = () => {
     this.lastBroadcastedOrReceivedSceneVersion = -1;
     this.portal.close();
+    this.fileManager.reset();
+    this.setIsCollaborating(false);
   };
 
 }
