@@ -701,6 +701,40 @@ class SeafileDB:
             return repo_id_to_invisible_paths
 
 
+    def get_share_to_user_folder_permission_by_username_and_repo_id(self, username, repo_id):
+        sql = f"""
+            SELECT `path`, `permission`
+            FROM `{self.db_name}`.`FolderUserPerm`
+            WHERE user = %s AND repo_id = %s;
+        """
+        permission_to_folder_path = {}
+        with connection.cursor() as cursor:
+            cursor.execute(sql, [username, repo_id])
+            for path, permission in cursor.fetchall():
+                if permission not in permission_to_folder_path:
+                    permission_to_folder_path[permission] = [path]
+                else:
+                    permission_to_folder_path[permission].append(path)
+            return permission_to_folder_path
+    
+    def get_share_to_group_folder_permission_by_group_ids_and_repo_id(self, group_ids, repo_id):
+        if not group_ids:
+            return {}
+        placeholders = ','.join(['%s'] * len(group_ids))
+        sql = f"""
+            SELECT `path`, `permission`
+            FROM `{self.db_name}`.`FolderGroupPerm`
+            WHERE group_id in ({placeholders}) AND repo_id = %s;
+        """
+        permission_to_folder_path = {}
+        with connection.cursor() as cursor:
+            cursor.execute(sql, tuple(group_ids) + (repo_id,))
+            for path, permission in cursor.fetchall():
+                if permission not in permission_to_folder_path:
+                    permission_to_folder_path[permission] = [path]
+                else:
+                    permission_to_folder_path[permission].append(path)
+            return permission_to_folder_path
 
     def get_download_limit_org(self,start,per_page):
         sql = f"""
