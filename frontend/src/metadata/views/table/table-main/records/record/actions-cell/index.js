@@ -91,7 +91,7 @@ class ActionsCell extends Component {
             </label>
           </div>
         </div>
-        <IconBtn symbol="expand" size={20} className="row-expand-icon" onClick={this.handleShowExpandedProps} />
+        <IconBtn symbol="expand" className="row-expand" iconClassName="row-expand-icon" onClick={this.handleShowExpandedProps} />
       </div>
     );
   }
