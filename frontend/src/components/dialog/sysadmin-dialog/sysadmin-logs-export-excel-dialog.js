@@ -29,16 +29,16 @@ class LogsExportExcelDialog extends React.Component {
       return;
     }
     switch (this.props.logType) {
-      case 'login':
+      case 'loginLogs':
         this.sysExportLogs('loginadmin');
         break;
-      case 'file-access':
+      case 'fileAccessLogs':
         this.sysExportLogs('fileaudit');
         break;
-      case 'file-update':
+      case 'fileUpdateLogs':
         this.sysExportLogs('fileupdate');
         break;
-      case 'share-permission':
+      case 'sharePermissionLogs':
         this.sysExportLogs('permaudit');
         break;
     }
@@ -52,7 +52,6 @@ class LogsExportExcelDialog extends React.Component {
         });
         this.props.toggle();
         location.href = siteRoot + 'sys/log/export-excel/?task_id=' + task_id + '&log_type=' + logType;
-
       } else {
         setTimeout(() => {
           this.queryIOStatus(task_id, logType);
@@ -109,18 +108,16 @@ class LogsExportExcelDialog extends React.Component {
   };
 
   isValidDateStr = () => {
-    let { startDateStr, endDateStr } = this.state;
-    if (dayjs(startDateStr, 'YYYY-MM-DD', true).isValid() &&
-      dayjs(endDateStr, 'YYYY-MM-DD', true).isValid() &&
-      dayjs(startDateStr).isBefore(endDateStr)
-    ) {
-      return true;
-    } else {
+    const { startDateStr, endDateStr } = this.state;
+    const startDate = dayjs(startDateStr, 'YYYY-MM-DD', true);
+    const endDate = dayjs(endDateStr, 'YYYY-MM-DD', true);
+    if (!startDate.isValid() || !endDate.isValid() || !startDate.isBefore(endDate)) {
       this.setState({
         errMsg: gettext('Date Invalid.')
       });
       return false;
     }
+    return true;
   };
 
   handleStartChange = (e) => {
@@ -180,7 +177,6 @@ class LogsExportExcelDialog extends React.Component {
             <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
             <Button color="primary" onClick={this.downloadExcel}>{gettext('Submit')}</Button>
           </ModalFooter>
-
         </Modal>
         }
         {this.state.isShowIODialog &&

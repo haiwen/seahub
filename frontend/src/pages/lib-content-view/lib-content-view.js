@@ -109,7 +109,7 @@ class LibContentView extends React.Component {
       currentDirent: null,
     };
 
-    this.oldonpopstate = window.onpopstate;
+    this.oldOnpopstate = window.onpopstate;
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
     this.isNeedUpdateHistoryState = true; // Load, refresh page, switch mode for the first time, no need to set historyState
@@ -169,7 +169,7 @@ class LibContentView extends React.Component {
     /**
      * noticeData structure:
      * {
-     *  type: 'file-lock-changed', // opertaion type
+     *  type: 'file-lock-changed', // operation type
      *  content: {}
      * }
      */
@@ -323,7 +323,7 @@ class LibContentView extends React.Component {
   };
 
   componentWillUnmount() {
-    window.onpopstate = this.oldonpopstate;
+    window.onpopstate = this.oldOnpopstate;
     this.unsubscribeEvent();
     this.unsubscribeOpenTreePanel();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
@@ -993,7 +993,7 @@ class LibContentView extends React.Component {
     let dirNames = this.getSelectedDirentNames();
 
     this.setState({ currentDirent: null });
-    seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
+    seafileAPI.deleteMultipleDirents(repoID, this.state.path, dirNames).then(res => {
       this.deleteItemsAjaxCallback(direntPaths, dirNames);
 
       let msg = '';
@@ -1812,14 +1812,14 @@ class LibContentView extends React.Component {
       this.recalculateSelectedDirents([name], direntList);
       this.setState({ direntList: direntList });
     } else if (Utils.isAncestorPath(direntPath, this.state.path)) {
-      // the deleted item is ancester of the current item
+      // the deleted item is ancestor of the current item
       let parentPath = Utils.getDirName(direntPath);
       this.showDir(parentPath);
     }
     // else do nothing
   }
 
-  // only one scence: The deleted items are inside current path
+  // only one scene: The deleted items are inside current path
   deleteDirents = (direntNames) => {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
@@ -1841,7 +1841,7 @@ class LibContentView extends React.Component {
     this.setState({ direntList: direntList });
   };
 
-  // only one scence: The moved items are inside current path
+  // only one scene: The moved items are inside current path
   moveDirents = (direntNames) => {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
