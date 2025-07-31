@@ -190,7 +190,6 @@ class Wikis extends Component {
           groupWikis,
         });
       } else {
-        wikis.push(new_wiki);
         wikis.unshift(new_wiki);
         this.setState({
           wikis,
