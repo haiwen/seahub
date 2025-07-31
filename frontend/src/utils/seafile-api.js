@@ -986,7 +986,7 @@ class SeafileAPI {
     return this.req.delete(url, { data: params });
   }
 
-  deleteMutipleDirents(repoID, parentDir, direntNames) {
+  deleteMultipleDirents(repoID, parentDir, direntNames) {
     const url = this.server + '/api/v2.1/repos/batch-delete-item/';
     let operation = {
       'repo_id': repoID,
