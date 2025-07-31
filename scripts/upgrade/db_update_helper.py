@@ -135,97 +135,35 @@ class DBUpdater(object):
 
     @staticmethod
     def get_ccnet_mysql_info(version):
-        config_path = env_mgr.central_config_dir
-        seafile_conf = os.path.join(config_path, 'seafile.conf')
-        defaults = {
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'UNIX_SOCKET': '',
-        }
-
-        config = Utils.read_config(seafile_conf, defaults)
-        db_section = 'database'
-
-        if not config.has_section(db_section):
-            return None
-
-        type = config.get(db_section, 'type')
-        if type != 'mysql':
-            return None
-
-        try:
-            host = config.get(db_section, 'host')
-            port = config.getint(db_section, 'port')
-            username = config.get(db_section, 'user')
-            password = config.get(db_section, 'password')
-            db = os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'ccnet_db'
-            unix_socket = config.get(db_section, 'UNIX_SOCKET')
-        except configparser.NoOptionError as e:
-            Utils.error('Database config in seafile.conf is invalid: %s' % e)
-
-        info = MySQLDBInfo(host, port, username, password, db, unix_socket)
+        host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
+        port = os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306)
+        username = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
+        password = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
+        db = os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', 'ccnet_db')
+    
+        info = MySQLDBInfo(host, int(port), username, password, db)
         return info
 
     @staticmethod
     def get_seafile_mysql_info(version):
-        config_path = env_mgr.central_config_dir
-        seafile_conf = os.path.join(config_path, 'seafile.conf')
-        defaults = {
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
-            'UNIX_SOCKET': '',
-        }
-        config = Utils.read_config(seafile_conf, defaults)
-        db_section = 'database'
+        host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
+        port = os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306)
+        username = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
+        password = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
+        db = os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', 'seafile_db')
 
-        if not config.has_section(db_section):
-            return None
-
-        type = config.get(db_section, 'type')
-        if type != 'mysql':
-            return None
-
-        try:
-            host = config.get(db_section, 'host')
-            port = config.getint(db_section, 'port')
-            username = config.get(db_section, 'user')
-            password = config.get(db_section, 'password')
-            db = config.get(db_section, 'db_name')
-            unix_socket = config.get(db_section, 'unix_socket')
-        except configparser.NoOptionError as e:
-            Utils.error('Database config in seafile.conf is invalid: %s' % e)
-
-        info = MySQLDBInfo(host, port, username, password, db, unix_socket)
+        info = MySQLDBInfo(host, int(port), username, password, db)
         return info
 
     @staticmethod
     def get_seahub_mysql_info():
-        sys.path.insert(0, env_mgr.top_dir)
-        if env_mgr.central_config_dir:
-            sys.path.insert(0, env_mgr.central_config_dir)
-        try:
-            import seahub_settings # pylint: disable=F0401
-        except ImportError as e:
-            Utils.error('Failed to import seahub_settings.py: %s' % e)
+        host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
+        port = os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306)
+        username = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
+        password = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
+        db = os.environ.get('SEAFILE_MYSQL_DB_SEAHUB_DB_NAME', 'seahub_db')
 
-        if not hasattr(seahub_settings, 'DATABASES'):
-            return None
-
-        try:
-            d = seahub_settings.DATABASES['default']
-            if d['ENGINE'] != 'django.db.backends.mysql':
-                return None
-
-            host = d.get('HOST', '127.0.0.1')
-            port = int(d.get('PORT', 3306))
-            username = d['USER']
-            password = d['PASSWORD']
-            db = d['NAME']
-            unix_socket = host if host.startswith('/') else None
-        except KeyError:
-            Utils.error('Database config in seahub_settings.py is invalid: %s' % e)
-
-        info = MySQLDBInfo(host, port, username, password, db, unix_socket)
+        info = MySQLDBInfo(host, int(port), username, password, db)
         return info
 
     def update_ccnet_sql(self, ccnet_sql):
