@@ -447,12 +447,10 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     <div className={classNames('sf-geolocation-editor-container', { 'full-screen': isFullScreen })}>
       <div className="editor-header">
         <div className="title">
-          <Icon symbol="location" size={24} />
+          <Icon symbol="location" size={24} className="location-icon" />
           <span className="ml-2">{gettext('Address')}</span>
         </div>
-        <div className="full-screen">
-          <IconBtn symbol="full-screen" size={24} onClick={toggleFullScreen} />
-        </div>
+        <IconBtn className="full-screen" symbol="full-screen" size={24} onClick={toggleFullScreen} />
       </div>
       <div className="w-100 h-100 position-relative">
         <div className="search-container">

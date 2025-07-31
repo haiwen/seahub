@@ -110,7 +110,6 @@ export const customGMapLabel = (info, submit) => {
     }
     onRemove() {
       if (this.containerDiv.parentElement) {
-        // this.containerDiv.parentElement.setAttribute('display', 'none');
         this.containerDiv.parentElement.removeChild(this.containerDiv);
       }
     }

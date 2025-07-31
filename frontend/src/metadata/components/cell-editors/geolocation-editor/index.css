@@ -36,6 +36,10 @@
   font-weight: 500;
 }
 
+.sf-geolocation-editor-container .editor-header .title .location-icon {
+  color: #999;
+}
+
 .sf-geolocation-editor-container .editor-header .full-screen {
   width: 24px;
   height: 24px;
@@ -108,7 +112,6 @@
   padding: 10px;
   font-weight: 500;
   cursor: default;
-  /* transform: translate(-50%, 10%); */
   left: -115px;
   top: 16px;
 }
