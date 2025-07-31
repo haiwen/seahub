@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
+import { Excalidraw, MainMenu, newElementWith, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import Collab from '../collaboration/collab';
 import context from '../context';
 import { importFromLocalStorage } from '../data/local-storage';
-import { resolvablePromise } from '../utils/exdraw-utils';
+import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { getFilename, isInitializedImageElement } from '../utils/element-utils';
 import LocalData from '../data/local-data';
 
@@ -54,23 +54,6 @@ const initializeScene = async (collabAPI) => {
   };
 };
 
-const updateStateImageStatuses = (params) => {
-  const { excalidrawAPI, erroredFiles, elements } = params;
-  if (!erroredFiles.size) return;
-
-  const newElements = elements.map(element => {
-    if (isInitializedImageElement(element) && erroredFiles.has(element.fileId)) {
-      return newElementWith(element, { status: 'error' });
-    }
-    return element;
-  });
-
-  excalidrawAPI.updateScene({
-    elements: newElements,
-    captureUpdate: CaptureUpdateAction.NEVER
-  });
-};
-
 const SimpleEditor = () => {
   const collabAPIRef = useRef(null);
   const initialStatePromiseRef = useRef({ promise: null });
@@ -94,7 +77,7 @@ const SimpleEditor = () => {
             forceFetchFiles: true,
           }).then(({ loadedFiles, erroredFiles }) => {
             excalidrawAPI.addFiles(loadedFiles);
-            updateStateImageStatuses({
+            updateStaleImageStatuses({
               excalidrawAPI,
               erroredFiles,
               elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
@@ -116,7 +99,7 @@ const SimpleEditor = () => {
               if (loadedFiles.length) {
                 excalidrawAPI.addFiles(loadedFiles);
               }
-              updateStateImageStatuses({
+              updateStaleImageStatuses({
                 excalidrawAPI,
                 erroredFiles,
                 elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
