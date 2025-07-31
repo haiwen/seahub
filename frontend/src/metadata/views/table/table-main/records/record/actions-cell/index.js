@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { Tooltip } from 'reactstrap';
+import { Tooltip, UncontrolledTooltip } from 'reactstrap';
 import { gettext } from '../../../../../../../utils/constants';
 import { isMobile } from '../../../../../../../utils/utils';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../../../constants';
-import IconButton from '../../../../../../../components/icon-button';
+import Icon from '../../../../../../../components/icon';
 
 import './index.css';
 
@@ -91,7 +91,10 @@ class ActionsCell extends Component {
             </label>
           </div>
         </div>
-        <IconButton id="expand" icon="expand" text={gettext('Expand')} onClick={this.handleShowExpandedProps} />
+        <span id={`expand-row-${index}`} className="row-expand" onClick={this.handleShowExpandedProps}>
+          <Icon symbol="expand" className="row-expand-icon" />
+        </span>
+        <UncontrolledTooltip placement='bottom' target={`expand-row-${index}`} fade={false} trigger="hover">{gettext('Expand')}</UncontrolledTooltip>
       </div>
     );
   }
