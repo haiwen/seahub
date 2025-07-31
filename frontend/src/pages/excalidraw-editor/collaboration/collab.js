@@ -1,10 +1,10 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import io from 'socket.io-client';
-import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS, WS_SUBTYPES } from '../constants';
+import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, LOAD_IMAGES_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS, WS_SUBTYPES } from '../constants';
 import { getSyncableElements } from '../data';
 import { loadFilesFromServer, loadFromServerStorage, saveFilesToServer, saveToServerStorage } from '../data/server-storage';
-import { resolvablePromise } from '../utils/exdraw-utils';
+import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { serverDebug } from '../utils/debug';
 import Portal from './portal';
 import FileManager from '../data/file-manager';
@@ -268,6 +268,21 @@ class Collab {
     this.updateDocumentVersion(result.version);
   };
 
+  loadImageFiles = throttle(async () => {
+    const { loadedFiles, erroredFiles } =
+      await this.fetchImageFilesFromServer({
+        elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+      });
+
+    this.excalidrawAPI.addFiles(loadedFiles);
+
+    updateStaleImageStatuses({
+      excalidrawAPI: this.excalidrawAPI,
+      erroredFiles,
+      elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+    });
+  }, LOAD_IMAGES_TIMEOUT);
+
   handleRemoteSceneUpdate = (params) => {
     const { elements: remoteElements } = params;
     const localElements = this.getSceneElementsIncludingDeleted();
@@ -285,6 +300,8 @@ class Collab {
       elements: reconciledElements,
       captureUpdate: CaptureUpdateAction.NEVER,
     });
+
+    this.loadImageFiles();
   };
 
   syncPointer = throttle((payload) => {
