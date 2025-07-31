@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Excalidraw, MainMenu } from '@excalidraw/excalidraw';
+import classNames from 'classnames';
 import CodeMirrorLoading from '../../components/code-mirror-loading';
 import { langList } from './constants';
 
 import '@excalidraw/excalidraw/index.css';
 
-const SimpleViewer = ({ sceneContent = null, isFetching }) => {
+const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocPageWidth }) => {
   // eslint-disable-next-line
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
+
   const UIOptions = {
     canvasActions: {
       saveToActiveFile: false,
@@ -16,9 +18,18 @@ const SimpleViewer = ({ sceneContent = null, isFetching }) => {
     tools: { image: false },
   };
 
+  // Fit iframe inner element size within sdoc-editor
+  useEffect(() => {
+    if (excalidrawAPI && isInSdoc) {
+      setTimeout(() => {
+        excalidrawAPI.scrollToContent(sceneContent.elements, { fitToViewport: true, viewportZoomFactor: 1 });
+      }, 100);
+    }
+  }, [excalidrawAPI, isResizeSdocPageWidth, isInSdoc]);
+
   if (isFetching) {
     return (
-      <div className='excali-container'>
+      <div className={'excali-container'}>
         <CodeMirrorLoading />
       </div>
     );
@@ -26,7 +37,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching }) => {
 
   return (
     <>
-      <div className='excali-container' style={{ height: '100vh', width: '100vw' }}>
+      <div className={classNames('excali-container', { inSdoc: isInSdoc })} style={{ height: '100vh', width: '100vw' }}>
         <Excalidraw
           initialData={sceneContent}
           excalidrawAPI={(api) => setExcalidrawAPI(api)}
