@@ -65,6 +65,7 @@ class MetadataManage(APIView):
             show_view = False
             if record and record.enabled:
                 is_enabled = True
+                show_view = True
                 details_settings = record.details_settings
                 global_hidden_columns = json.loads(record.global_hidden_columns) if record.global_hidden_columns else []
                 if not details_settings:

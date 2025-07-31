@@ -1,7 +1,7 @@
 import logging
 import json
 from seahub.group.utils import is_group_admin
-from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PERMISSION_PREFIX
+from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE, CUSTOM_PERMISSION_PREFIX, PERMISSION_INVISIBLE
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission, CustomSharePermissions
 from seahub.utils import is_valid_org_id, normalize_cache_key
 from seahub.utils.db_api import SeafileDB
@@ -293,7 +293,7 @@ def check_invisible_folder(repo_id, username, org_id=None):
     seafile_db_api = SeafileDB()
     user_perms = seafile_db_api.get_share_to_user_folder_permission_by_username_and_repo_id(username, repo_id)
     exist_invisible_folder = False
-    if 'invisible' in user_perms:
+    if PERMISSION_INVISIBLE in user_perms:
         exist_invisible_folder = True
     else:
         if org_id:
@@ -303,14 +303,14 @@ def check_invisible_folder(repo_id, username, org_id=None):
         group_ids = [group.id for group in user_groups]
         group_perms = seafile_db_api.get_share_to_group_folder_permission_by_group_ids_and_repo_id(group_ids, repo_id)
         
-        if 'invisible' in group_perms:
+        if PERMISSION_INVISIBLE in group_perms:
             # Create a set of paths that have other permissions
             paths_with_other_perms = set()
             for perm, paths in user_perms.items():
                 paths_with_other_perms.update(paths)
             
             # Check each invisible path from group permissions
-            invisible_paths = group_perms['invisible']
+            invisible_paths = group_perms[PERMISSION_INVISIBLE]
             for path in invisible_paths:
                 if path not in paths_with_other_perms:
                     # Count permissions for this path
