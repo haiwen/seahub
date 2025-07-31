@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { siteRoot } from '../../utils/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import DirPathBar from './remote-dir-path';
 import DirContent from './remote-dir-content';
+
+import '../../css/lib-content-view.css';
 
 class Dirent {
   constructor(obj) {
@@ -120,6 +122,9 @@ class DirView extends Component {
         this.setState({
           direntList: direntList
         });
+
+        const msg = gettext('Successfully added the file.');
+        toaster.success(msg);
       });
     }).catch((err) => {
       let errMessage = Utils.getErrorMsg(err);
@@ -128,15 +133,11 @@ class DirView extends Component {
   };
 
   render() {
-    const { loading, errorMsg, repoName, direntList, path } = this.state;
+    const { loading, errorMsg, repoName, direntList, path, userPerm } = this.state;
     const { repoID } = this.props;
 
     return (
       <Fragment>
-        {/*
-          <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
-          {userPerm === 'rw' && <Button className="operation-item" onClick={this.openFileInput}>{gettext('Upload')}</Button>}
-        */}
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">
@@ -146,7 +147,10 @@ class DirView extends Component {
                 currentPath={path}
                 onPathClick={this.onPathClick}
                 onTabNavClick={this.props.onTabNavClick}
+                userPerm={userPerm}
+                openFileInput={this.openFileInput}
               />
+              <input className="d-none" type="file" onChange={this.onFileInputChange} ref={this.fileInput} />
             </div>
             <div className="cur-view-content">
               <DirContent
