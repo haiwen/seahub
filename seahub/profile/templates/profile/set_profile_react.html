@@ -100,7 +100,7 @@ window.app.pageOptions = {
 
   cloudMode: {% if cloud_mode %} true {% else %} false {% endif %},
   isOrgContext: {% if org is not None %} true {% else %} false {% endif %},
-
+  enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
   enableDeleteAccount: {% if ENABLE_DELETE_ACCOUNT %} true {% else %} false {% endif %}
 };
 </script>
