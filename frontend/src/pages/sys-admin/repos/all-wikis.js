@@ -42,8 +42,7 @@ class AllWikis extends Component {
   };
 
   resetPerPage = (perPage) => {
-    this.props.onResetPerPage(perPage);
-    this.getWikisByPage(1);
+    this.props.onResetPerPage(perPage, () => { this.getWikisByPage(1); });
   };
 
   onDeleteWiki = (targetRepo) => {
