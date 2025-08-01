@@ -14,7 +14,7 @@
 }
 
 .resize-bar .resize-bar-line {
-  background-color: #aaa;
+  background-color: var(--bs-border-secondary-color);
   height: 100%;
   width: 2px;
   display: none;

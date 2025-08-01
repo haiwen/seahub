@@ -23,7 +23,7 @@
 }
 
 .uploader-list-header {
-  background-color: var(--bs-header-quartus-bg);
+  background-color: var(--bs-header-tertiary-bg);
   padding: 0.625rem;
   font-size: 1rem;
   color: var(--bs-body-color);

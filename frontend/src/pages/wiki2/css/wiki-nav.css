@@ -61,7 +61,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  background-color: var(--bs-body-secondary-bg);
+  background-color: var(--bs-body-bg);
 }
 
 .wiki-nav .wiki-page-item.selected-page {

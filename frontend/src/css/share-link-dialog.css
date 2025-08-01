@@ -120,7 +120,7 @@
 }
 
 .tip {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 13px;
   margin-bottom: 1rem;
 }
@@ -183,7 +183,7 @@ input.expire-input {
 }
 
 .custom-permission .permission-header .back-icon {
-  color: #999;
+  color: var(--bs-icon-tertiary-color);
   margin-right: 10px;
   cursor: pointer;
 }
@@ -194,7 +194,7 @@ input.expire-input {
 
 .custom-permission .permission-name-desc label {
   font-size: 14px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .custom-permission .permission-name-desc .permission-name,
@@ -216,5 +216,5 @@ input.expire-input {
   margin-top: 0.25rem;
   text-align: center;
   max-width: 128px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }

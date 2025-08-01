@@ -29,7 +29,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: default;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .tree-section .tree-section-header .tree-section-header-operations {
@@ -58,7 +58,7 @@
 
 .tree-section .tree-section-header .sf3-font-down,
 .tree-section .tree-section-header .sf3-font-new {
-  color: #666666;
+  color: var(--bs-body-secondary-color);
 }
 
 .tree-section .tree-section-header-operation .dropdown {
@@ -74,7 +74,7 @@
   margin-left: 0;
   line-height: 1.5;
   font-size: 16px;
-  color: #666 !important;
+  color: var(--bs-body-secondary-color) !important;
 }
 
 .tree-section .tree-section-more-operation .dropdown .sf-dropdown-toggle.sf3-font-new,

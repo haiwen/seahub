@@ -40,7 +40,7 @@
 }
 
 .search-tags-container .tags-content .tag-item:hover {
-  background-color: #f0f0f0;
+  background-color: var(--bs-bg-secondary-color);
   cursor: pointer;
 }
 
@@ -53,6 +53,6 @@
 
 .search-tags-container .search-tags-divider {
   height: 0;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--bs-border-secondary-color);
   margin: 0 16px;
 }

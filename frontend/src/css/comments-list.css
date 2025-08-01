@@ -44,7 +44,7 @@
 }
 
 .seafile-comment-page .seafile-comment-item:hover {
-  background-color: var(--bs-body-tertiary-bg);
+  background-color: var(--bs-body-secondary-bg);
   cursor: pointer;
 }
 
