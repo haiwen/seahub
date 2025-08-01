@@ -226,7 +226,7 @@ class Location extends React.Component {
               )}
             </div>
           ) : (
-            <div ref={ref => this.editorRef = ref} className="sf-metadata-record-cell-empty cursor-pointer" placeholder={gettext('Empty')} onClick={this.openEditor}></div>
+            <div ref={ref => this.editorRef = ref} className="sf-metadata-property-detail-editor sf-metadata-record-cell-empty cursor-pointer" placeholder={gettext('Empty')} onClick={this.openEditor}></div>
           )}
         </DetailItem>
         {isLoading ? (<Loading />) : this.mapType && (
@@ -259,6 +259,7 @@ class Location extends React.Component {
               size='lg'
               isOpen={true}
               toggle={this.onFullScreen}
+              zIndex={1052}
             >
               <GeolocationEditor position={latLng} isFullScreen={isFullScreen} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
             </Modal>
