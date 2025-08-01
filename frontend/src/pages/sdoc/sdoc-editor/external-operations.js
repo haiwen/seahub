@@ -9,8 +9,6 @@ import InternalLinkDialog from '../../../components/dialog/internal-link-dialog'
 import ShareDialog from '../../../components/dialog/share-dialog';
 import CreateFile from '../../../components/dialog/create-file-dialog';
 import TldrawEditor from '../../tldraw-editor';
-import { shareLinkAPI } from '../../../utils/share-link-api';
-import ShareLink from '../../../models/share-link';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -174,14 +172,13 @@ class ExternalOperations extends React.Component {
   generateExdrawReadOnlyLink = (params) => {
     if (!params?.repoID || !params?.filePath) return;
 
-    const permissions = { 'can_edit': false, 'can_download': false, 'can_upload': false };
-    const currentScope = 'all_users';
-    const request = shareLinkAPI.createMultiShareLink(params.repoID, params.filePath, '', '', permissions, currentScope);
-
-    request.then((res) => {
-      const newLink = new ShareLink(res.data);
+    seafileAPI.getInternalLink(params.repoID, params?.filePath).then((res) => {
+      const url = new URL(res.data.smart_link);
+      url.searchParams.set('readonly', 'true');
+      url.searchParams.set('filetype', 'Excalidraw');
+      const link = url.toString();
       if (params?.onSuccess) {
-        params?.onSuccess(newLink.link);
+        params?.onSuccess(link);
       }
     });
   };
