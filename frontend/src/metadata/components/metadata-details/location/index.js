@@ -36,7 +36,7 @@ class Location extends React.Component {
     this.map = null;
     this.marker = null;
     this.state = {
-      latLng: this.props.position || null,
+      latLng: this.props.position,
       address: this.props.record?._location_translated?.address || '',
       isLoading: false,
       isEditorShown: false,
@@ -58,9 +58,9 @@ class Location extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { latLng } = this.state;
-    if (prevProps.record !== this.props.record) {
+    if (prevProps.record._id !== this.props.record._id) {
       this.setState({
-        latLng: this.props.position || null,
+        latLng: this.props.position,
         address: this.props.record?._location_translated?.address || '',
         isReadyToEraseLocation: false,
       });

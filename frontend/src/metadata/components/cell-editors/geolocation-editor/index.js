@@ -7,10 +7,11 @@ import { KeyCodes, MAP_TYPE } from '../../../../constants';
 import Icon from '../../../../components/icon';
 import IconBtn from '../../../../components/icon-btn';
 import toaster from '../../../../components/toast';
-import { DEFAULT_POSITION } from '../../../constants';
 import { createZoomControl } from '../../map-controller/zoom';
 import { createGeolocationControl } from '../../map-controller/geolocation';
 import { customBMapLabel, customGMapLabel } from './custom-label';
+import { isValidPosition } from '../../../utils/validate';
+import { DEFAULT_POSITION } from '../../../constants';
 
 import './index.css';
 
@@ -239,7 +240,7 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     if (!window.BMapGL.Map) return;
 
     mapRef.current = new window.BMapGL.Map(ref.current);
-    const initPos = position || DEFAULT_POSITION;
+    const initPos = isValidPosition(position?.lng, position?.lat) ? position : DEFAULT_POSITION;
     const point = new window.BMapGL.Point(initPos.lng, initPos.lat);
     mapRef.current.centerAndZoom(point, 16);
     mapRef.current.enableScrollWheelZoom();
@@ -269,7 +270,7 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
 
     markerRef.current = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
     geocRef.current = new window.BMapGL.Geocoder();
-    if (position) {
+    if (isValidPosition(position?.lng, position?.lat)) {
       mapRef.current.addOverlay(markerRef.current);
       addLabel(point);
     }
@@ -293,8 +294,10 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   }, [position?.lng, position?.lat]);
 
   const renderGoogleMap = useCallback(() => {
+    const isValid = isValidPosition(position?.lng, position?.lat);
+    const initPos = isValid ? position : DEFAULT_POSITION;
     mapRef.current = new window.google.maps.Map(ref.current, {
-      center: position || DEFAULT_POSITION,
+      center: initPos,
       zoom: 16,
       mapId: googleMapId,
       zoomControl: false,
@@ -317,7 +320,14 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
           if (status === 'OK' && results[0]) {
             const info = parseGMapAddress(results[0]);
             setInputValue(info.location_translated.address);
-            markerRef.current.position = lngLat;
+            if (!markerRef.current) {
+              markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+                position: lngLat,
+                map: mapRef.current,
+              });
+            } else {
+              markerRef.current.position = lngLat;
+            }
             if (!labelRef.current) {
               addLabel(lngLat);
             } else {
@@ -332,14 +342,16 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     mapRef.current.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControl);
 
     // marker
-    markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
-      position,
-      map: mapRef.current,
-    });
+    if (isValid) {
+      markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+        position,
+        map: mapRef.current,
+      });
+    }
 
     // geocoder
     geocRef.current = new window.google.maps.Geocoder();
-    addLabel(position);
+    isValid && addLabel(position);
 
     googlePlacesRef.current = new window.google.maps.places.PlacesService(mapRef.current);
 
