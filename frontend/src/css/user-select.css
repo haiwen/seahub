@@ -4,7 +4,7 @@
 }
 
 .selected-user-item-container .user-select-placeholder {
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .user-select-container {
@@ -37,12 +37,12 @@
 
 .user-select-container .user-list-container .user-item-container:hover,
 .user-select-container .user-list-container .user-item-container-highlight {
-  background: #f5f5f5;
+  background: var(--bs-bg-color);
   cursor: pointer;
 }
 
 .no-search-result {
-  color: #666666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
   padding-left: 10px;
   padding: 10px;

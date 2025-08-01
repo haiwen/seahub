@@ -15,7 +15,7 @@
   padding: 6.5px 0px;
   min-height: 34px;
   height: fit-content;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
   cursor: default;
 }
@@ -23,7 +23,7 @@
 .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon {
   margin-right: 6px;
   font-size: 14px;
-  fill: #999;
+  fill: var(--bs-icon-tertiary-color);
   flex-shrink: 0;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .dirent-detail-item .dirent-detail-item-value.editable:hover {
-  background-color: var(--bs-body-tertiary-bg);
+  background-color: var(--bs-body-secondary-bg);
   border-radius: 3px;
   cursor: pointer;
 }
@@ -77,7 +77,7 @@
 
 .dirent-detail-item .dirent-detail-item-value:not(.editable) .sf-metadata-record-cell-empty:empty::before {
   content: attr(placeholder);
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
 }
 

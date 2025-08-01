@@ -33,7 +33,7 @@
   padding: 0;
   overflow: hidden;
   opacity: 1;
-  background: var(--bs-body-bg);
+  background: var(--bs-popover-bg);
   border: none;
   border-radius: none;
   box-shadow: none;
