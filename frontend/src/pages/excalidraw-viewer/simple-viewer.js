@@ -22,7 +22,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocP
   useEffect(() => {
     if (excalidrawAPI && isInSdoc) {
       setTimeout(() => {
-        excalidrawAPI.scrollToContent(sceneContent.elements, { fitToViewport: true, viewportZoomFactor: 1 });
+        excalidrawAPI.scrollToContent(sceneContent.elements, { fitToViewport: true, viewportZoomFactor: 0.9 });
       }, 100);
     }
   }, [excalidrawAPI, isResizeSdocPageWidth, isInSdoc]);
