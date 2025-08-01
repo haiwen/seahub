@@ -26,6 +26,7 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateRepoDialogOpen, setIsCreateRepoDialogOpen] = useState(false);
   const [isCleanTrashDialogOpen, setIsCleanTrashDialogOpen] = useState(false);
+  const callbackRef = React.useRef(null);
 
   const location = useLocation();
   const path = location.pathname.split('/').filter(Boolean).pop();
@@ -92,10 +93,18 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     navigate(url.toString());
   };
 
-  const onResetPerPage = (perPage) => {
+  const onResetPerPage = (perPage, callBack) => {
     setPerPage(perPage);
     setCurrentPage(1);
+    callbackRef.current = callBack;
   };
+
+  useEffect(() => {
+    if (callbackRef.current) {
+      callbackRef.current();
+      callbackRef.current = null;
+    }
+  }, [perPage, currentPage]);
 
   const resetAllStates = useCallback(() => {
     setSortBy('');
