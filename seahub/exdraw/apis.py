@@ -260,8 +260,8 @@ class ExdrawUploadImage(APIView):
             decoded_data = base64.b64decode(encoded_data)
     
             file_ext = mime_type.split('/')[-1]
-            if file_ext == 'svg':
-                file_ext = 'svg+xml'
+            if file_ext == 'svg+xml':
+                file_ext = 'svg'
             filename = f"{image_id}.{file_ext}"
     
             file_path = posixpath.join(parent_path, filename)
@@ -312,10 +312,7 @@ class ExdrawDownloadImage(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
         filetype, fileext = get_file_type_and_ext(filename)
-        mimetype = fileext
-        if fileext == 'svg':
-            mimetype = 'svg+xml'
         response = HttpResponse(
-            content=resp.content, content_type='image/' + mimetype)
+            content=resp.content, content_type='image/' + fileext)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
