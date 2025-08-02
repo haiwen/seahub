@@ -284,18 +284,11 @@ class ExdrawUploadImage(APIView):
     
 class ExdrawDownloadImage(APIView):
 
-    authentication_classes = ()
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = ()
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, file_uuid, filename):
-    
-        # jwt permission check
-        auth = request.headers.get('authorization', '').split()
-        is_valid, payload = is_valid_exdraw_access_token(auth, file_uuid, return_payload=True)
-        if not is_valid:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
@@ -303,7 +296,7 @@ class ExdrawDownloadImage(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_id = uuid_map.repo_id
-        username = payload.get('username')
+        username = request.user.username
         
         parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
         download_link = get_exdraw_asset_download_link(repo_id, parent_path, filename, username)
