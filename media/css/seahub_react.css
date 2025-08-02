@@ -1738,6 +1738,9 @@ a.table-sort-op:hover {
 .sf3-font-down {
   font-size: 12px !important;
 }
+[data-bs-theme=dark] .sf3-font-down {
+  color: var(--bs-icon-tertiary-color) !important;
+}
 
 .visually-hidden {
   display: none !important;

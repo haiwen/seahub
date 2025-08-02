@@ -13,11 +13,20 @@ class Logo extends React.Component {
     this.props.onCloseSidePanel();
   };
 
+  getLogoSrc = () => {
+    let isDark = false;
+    if (typeof document !== 'undefined') {
+      isDark = document.body.getAttribute('data-bs-theme') === 'dark';
+    }
+    const path = isDark ? logoPath.replace('.png', '-dark.png') : logoPath;
+    return path.indexOf('image-view') != -1 ? path : mediaUrl + path;
+  };
+
   render() {
     return (
       <div className='top-logo'>
         <a href={siteRoot} id="logo">
-          <img src={logoPath.indexOf('image-view') != -1 ? logoPath : mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
+          <img src={this.getLogoSrc()} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
         </a>
         {this.props.showCloseSidePanelIcon &&
           <a

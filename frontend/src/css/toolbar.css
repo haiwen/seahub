@@ -63,7 +63,7 @@
 
 .common-toolbar .sf-icon-color-mode {
   font-size: 16px;
-  color: #666;
+  color: var(--bs-icon-secondary-color);
   border-radius: 4px;
 }
 

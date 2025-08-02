@@ -1,5 +1,5 @@
 .sf-dropdown-combined-toggle {
-  color: #666;
+  color: var(--bs-icon-secondary-color);
   padding: 2px 4px;
   border-radius: 3px;
 }
