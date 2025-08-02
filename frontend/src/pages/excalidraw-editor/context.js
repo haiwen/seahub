@@ -63,7 +63,7 @@ class Context {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
 
-    const url = `/api/v2.1/exdraw/download-image/${docUuid}/${fileUuid}`;
+    const url = `${server}/api/v2.1/exdraw/download-image/${docUuid}/${fileUuid}`;
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   };
 

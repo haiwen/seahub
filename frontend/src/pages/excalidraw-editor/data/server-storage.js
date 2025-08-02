@@ -100,18 +100,23 @@ export const saveFilesToServer = async (addedFiles) => {
 
 };
 
+const getImageUrl = (fileName) => {
+  const docUuid = context.getDocUuid();
+  const { server } = window.app.pageOptions;
+  const url = `${server}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
+  return url;
+};
+
 export const loadFilesFromServer = async (fileIds) => {
   const loadedFiles = [];
   const erroredFiles = new Map();
   await Promise.all([...new Set(fileIds)].map(async (id) => {
     try {
-      const response = await context.downloadExdrawImage(id);
-      const { data_url } = response.data;
-
+      const imageUrl = getImageUrl(id);
       loadedFiles.push({
         mimeType: 'image/jpeg',
         id: id.split('.')[0],
-        dataURL: data_url,
+        dataURL: imageUrl,
         created: Date.now(),
         lastRetrieved: Date.now(),
       });
