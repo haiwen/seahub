@@ -6,7 +6,7 @@ import { gettext } from '../../../../utils/constants';
 
 import './index.css';
 
-const LongTextEditor = ({ field, value: oldValue, onChange }) => {
+const LongTextEditor = ({ field, value: oldValue, placeholder, textNeedSlice, onChange }) => {
   const [value, setValue] = useState(oldValue);
   const [showEditor, setShowEditor] = useState(false);
 
@@ -32,16 +32,16 @@ const LongTextEditor = ({ field, value: oldValue, onChange }) => {
     valueRef.current = oldValue;
   }, [showEditor, oldValue]);
 
-  const isEmpty = !value || !value.trim();
+  const isEmpty = !value || value.replace(/[\u200B-\u200D\uFEFF]/g, '').trim().length === 0;
 
   return (
     <>
       <div
         className="sf-metadata-property-detail-editor sf-metadata-long-text-property-detail-editor"
-        placeholder={gettext('Empty')}
+        placeholder={placeholder ? placeholder : gettext('Empty')}
         onClick={openEditor}
       >
-        {!isEmpty && (<LongTextFormatter value={value} className="sf-metadata-property-detail-formatter" />)}
+        {!isEmpty ? (<LongTextFormatter value={value} className="sf-metadata-property-detail-formatter" textNeedSlice={textNeedSlice} />) : null}
       </div>
       {showEditor && (
         <Editor
