@@ -30,7 +30,7 @@
 
 .seafile-customize-select:hover {
   cursor: pointer;
-  border-color: rgb(179, 179, 179);
+  border-color: var(--bs-border-color);
 }
 
 .seafile-customize-select .sf3-font-down {
@@ -44,7 +44,7 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  background: var(--bs-body-bg);
+  background: inherit;
 }
 
 .seafile-customize-select .selected-option .selected-option-show-container {
@@ -110,5 +110,5 @@
   line-height: 1;
   font-size: 14px;
   white-space: nowrap;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }

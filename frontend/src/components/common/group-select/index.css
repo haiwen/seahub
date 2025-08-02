@@ -50,7 +50,7 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  background: var(--bs-body-bg);
+  background: var(--bs-popover-bg);
 }
 
 .group-select.selector-collaborator .option-group .option-group-content {

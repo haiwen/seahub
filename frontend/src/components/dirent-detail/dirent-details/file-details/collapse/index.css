@@ -21,7 +21,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: default;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
 }
 

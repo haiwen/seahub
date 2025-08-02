@@ -54,7 +54,7 @@
 }
 
 .sf-metadata-single-select-editor .single-select-container-highlight {
-  background: var(--bs-body-tertiary-bg);
+  background: var(--bs-body-secondary-bg);
   cursor: pointer;
 }
 
@@ -117,7 +117,7 @@
 
 .sf-metadata-single-select-editor .add-search-result:hover{
   cursor: pointer;
-  background-color: var(--bs-body-tertiary-bg);
+  background-color: var(--bs-body-secondary-bg);
 }
 
 .sf-metadata-single-select-editor .add-search-result .add-new-option {

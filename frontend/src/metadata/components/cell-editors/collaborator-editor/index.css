@@ -54,7 +54,7 @@
 }
 
 .sf-metadata-collaborator-editor .collaborator-container-highlight {
-  background: var(--bs-body-tertiary-bg);
+  background: var(--bs-body-secondary-bg);
   cursor: pointer;
 }
 

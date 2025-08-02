@@ -116,7 +116,7 @@ body {
 
 .file-view-body .file-view-content {
   padding: 30px 0;
-  background: var(--bs-body-tertiary-bg);
+  background: var(--bs-body-secondary-bg);
   border-right: 4px solid transparent;
 }
 
