@@ -32,7 +32,7 @@ const updateButtonStates = (map, zoomIn, zoomOut) => {
   zoomOut.className = classnames(buttonClassName, { 'disabled': zoomLevel <= MIN_ZOOM });
 };
 
-export const createZoomControl = (map) => {
+export const createZoomControl = ({ map }) => {
   const container = createZoomContainer();
 
   const zoomInButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>');
@@ -60,7 +60,7 @@ export const createZoomControl = (map) => {
   return container;
 };
 
-export function createBMapZoomControl(anchor, offset) {
+export function createBMapZoomControl({ anchor, offset }) {
   function ZoomControl() {
     this.defaultAnchor = anchor || window.BMAP_ANCHOR_BOTTOM_RIGHT;
     this.defaultOffset = new window.BMapGL.Size(offset?.x || 66, offset?.y || 30);

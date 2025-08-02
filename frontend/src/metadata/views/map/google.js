@@ -82,8 +82,8 @@ export const createGoogleMap = ({ center, zoom, onMapState }) => {
     maxZoom: MAX_ZOOM,
   });
 
-  const zoomControl = createZoomControl(map);
-  const geolocationControl = createGeolocationControl(map);
+  const zoomControl = createZoomControl({ map });
+  const geolocationControl = createGeolocationControl({ map });
 
   map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
   map.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControl);

@@ -33,8 +33,8 @@ const MetadataDetails = ({ readOnly, tagsData }) => {
         if (isDir && FOLDER_NOT_DISPLAY_COLUMN_KEYS.includes(field.key)) return null;
         const value = getCellValueByColumn(record, field);
 
-        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && Utils.imageCheck(fileName) && value) {
-          return <Location key={field.key} position={value} record={record} />;
+        if (field.key === PRIVATE_COLUMN_KEY.LOCATION && Utils.imageCheck(fileName)) {
+          return <Location key={field.key} position={value} record={record} onChange={onChange} />;
         }
 
         let canEdit = canModifyRecord && field.editable && !readOnly;
