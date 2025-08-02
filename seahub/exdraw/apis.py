@@ -260,6 +260,8 @@ class ExdrawUploadImage(APIView):
             decoded_data = base64.b64decode(encoded_data)
     
             file_ext = mime_type.split('/')[-1]
+            if file_ext == 'svg':
+                file_ext = 'svg+xml'
             filename = f"{image_id}.{file_ext}"
     
             file_path = posixpath.join(parent_path, filename)
