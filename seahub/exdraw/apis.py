@@ -207,7 +207,7 @@ class ExdrawEditorCallBack(APIView):
 class ExdrawUploadImage(APIView):
     authentication_classes = ()
     throttle_classes = (UserRateThrottle,)
-    
+
     def post(self, request, file_uuid):
         """image path: /images/exdraw/${sdocUuid}/${filename}
         """
@@ -217,32 +217,32 @@ class ExdrawUploadImage(APIView):
         if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         # file info check
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'exdraw uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         filetype, fileext = get_file_type_and_ext(uuid_map.filename)
         if filetype != EXCALIDRAW:
             error_msg = 'exdraw file type %s invalid.' % filetype
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         base64_data = request.data.get('image_data')
         image_id = request.data.get('image_id')
         if not base64_data:
             error_msg = 'Base64 image data is required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         if not image_id:
             error_msg = 'image_id is required'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         repo_id = uuid_map.repo_id
         username = payload.get('username', '')
         parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
-        
+
         upload_link = get_exdraw_asset_upload_link(repo_id, parent_path, username)
 
         try:
@@ -256,34 +256,34 @@ class ExdrawUploadImage(APIView):
             else:
                 encoded_data = base64_data
                 mime_type = 'image/jpeg'
-    
+
             decoded_data = base64.b64decode(encoded_data)
-    
+
             file_ext = mime_type.split('/')[-1]
             if file_ext == 'svg+xml':
                 file_ext = 'svg'
             filename = f"{image_id}.{file_ext}"
-    
+
             file_path = posixpath.join(parent_path, filename)
             file_path = os.path.normpath(file_path)
             import io
             files = {'file': (filename, io.BytesIO(decoded_data), mime_type)}
             data = {'parent_dir': parent_path, 'filename': filename, 'target_file': file_path}
-    
+
             resp = requests.post(upload_link, files=files, data=data)
             if not resp.ok:
                 logger.error(resp.text)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-    
+
             image_url = '/' + filename
             return Response({'relative_path': image_url})
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-    
+
+
 class ExdrawDownloadImage(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -291,7 +291,7 @@ class ExdrawDownloadImage(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, file_uuid, filename):
-        
+
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'exdraw uuid %s not found.' % file_uuid
@@ -299,7 +299,7 @@ class ExdrawDownloadImage(APIView):
 
         repo_id = uuid_map.repo_id
         username = request.user.username
-        
+
         parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
         download_link = get_exdraw_asset_download_link(repo_id, parent_path, filename, username)
         if not download_link:
@@ -310,8 +310,10 @@ class ExdrawDownloadImage(APIView):
             logger.error(resp.text)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
+
         filetype, fileext = get_file_type_and_ext(filename)
+        if fileext == 'svg':
+            fileext = 'svg+xml'
         response = HttpResponse(
             content=resp.content, content_type='image/' + fileext)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
