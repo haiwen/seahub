@@ -6,12 +6,15 @@ import Collab from '../collaboration/collab';
 import context from '../context';
 import { importFromLocalStorage, saveToLocalStorage } from '../data/local-storage';
 import { resolvablePromise } from '../utils/exdraw-utils';
+import TipMessage from './tip-message';
+import EventBus from '../../../components/common/event-bus';
+import isHotkey from 'is-hotkey';
 
 import '@excalidraw/excalidraw/index.css';
 
 const { docUuid } = window.app.pageOptions;
 window.name = `${docUuid}`;
-
+const eventBus = EventBus.getInstance();
 const UIOptions = {
   canvasActions: {
     saveToActiveFile: false,
@@ -22,6 +25,7 @@ const UIOptions = {
 
 const initializeScene = async (collabAPI) => {
   // load local data from localstorage
+  eventBus.dispatch('is-saving');
   const docUuid = context.getDocUuid();
   const localDataState = importFromLocalStorage(docUuid); // {appState, elements}
 
@@ -78,6 +82,19 @@ const SimpleEditor = () => {
 
   }, [excalidrawAPI]);
 
+  useEffect(() => {
+    const handleHotkeySave = (event) => {
+      if (isHotkey('mod+s', event)) {
+        event.preventDefault();
+        handleChange(excalidrawAPI.getSceneElements(), excalidrawAPI.getAppState());
+      }
+    };
+    document.addEventListener('keydown', handleHotkeySave, true);
+    return () => {
+      document.removeEventListener('keydown', handleHotkeySave, true);
+    };
+  }, [excalidrawAPI]);
+
   const handleChange = useCallback((elements, appState, files) => {
     if (!collabAPIRef.current) return;
     collabAPIRef.current.syncElements(elements);
@@ -92,7 +109,10 @@ const SimpleEditor = () => {
   }, []);
 
   return (
-    <div className='excali-container' style={{ height: '100%', width: '100%' }}>
+    <div className='excali-container'>
+      <div className='excali-tip-message'>
+        <TipMessage />
+      </div>
       <Excalidraw
         initialData={initialStatePromiseRef.current.promise}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
@@ -102,7 +122,6 @@ const SimpleEditor = () => {
         langCode={langList[window.app.config.lang] || 'en'}
       >
         <MainMenu>
-          <MainMenu.DefaultItems.Export />
           <MainMenu.DefaultItems.SaveAsImage />
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />

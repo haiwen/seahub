@@ -7,6 +7,7 @@ import { loadFromServerStorage, saveToServerStorage } from '../data/server-stora
 import { resolvablePromise } from '../utils/exdraw-utils';
 import { serverDebug } from '../utils/debug';
 import Portal from './portal';
+import EventBus from '../../../components/common/event-bus';
 
 class Collab {
 
@@ -22,6 +23,8 @@ class Collab {
 
     this.lastBroadcastedOrReceivedSceneVersion = 0;
     this.portal = new Portal(this, config);
+
+    this.eventBus = EventBus.getInstance();
   }
 
   setDocument = (document) => {
@@ -47,6 +50,8 @@ class Collab {
 
   setLastBroadcastedOrReceivedSceneVersion = (version) => {
     this.lastBroadcastedOrReceivedSceneVersion = version;
+    const lastSavedAt = new Date().getTime();
+    this.eventBus.dispatch('saved', lastSavedAt);
   };
 
   initializeRoom = async (fetchScene) => {
@@ -130,6 +135,7 @@ class Collab {
           if (!this.portal.socketInitialized) {
             serverDebug('sync with elements from another, %O', payload);
             this.initializeRoom({ fetchScene: false });
+            this.eventBus.dispatch('is-saving');
             this.handleRemoteSceneUpdate(payload);
             this.setDocument(payload);
 
@@ -139,6 +145,7 @@ class Collab {
           break;
         case WS_SUBTYPES.UPDATE:
           serverDebug('sync elements by another updated, %O', payload);
+          this.eventBus.dispatch('is-saving');
           this.handleRemoteSceneUpdate(payload);
           break;
         case WS_SUBTYPES.MOUSE_LOCATION:
