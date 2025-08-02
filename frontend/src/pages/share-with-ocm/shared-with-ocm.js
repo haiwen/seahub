@@ -424,7 +424,7 @@ class SharedWithOCM extends Component {
                   <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
                   {gettext('Shared from other servers')}
                 </h4>
-                {this.renderSortIconInMobile()}
+                {/* this.renderSortIconInMobile() */}
               </div>
               {this.renderContent(currentViewMode)}
             </>
