@@ -93,8 +93,7 @@ class Item extends Component {
     this.setState({ isShowSharedDialog: false });
   };
 
-  onToggleStarRepo = (e) => {
-    e.preventDefault();
+  onToggleStarRepo = () => {
     const repoName = this.props.data.repo_name;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.data.repo_id, '/').then(() => {

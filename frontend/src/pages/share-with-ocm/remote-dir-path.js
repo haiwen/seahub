@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import LastPathItemWrapper from './last-path-item-wrapper';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
   onTabNavClick: PropTypes.func.isRequired,
-  repoID: PropTypes.string.isRequired,
+  userPerm: PropTypes.string.isRequired,
+  openFileInput: PropTypes.func.isRequired
 };
 
 class DirPath extends React.Component {
@@ -31,7 +34,12 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <span className="path-file-name">{item}</span>
+            <LastPathItemWrapper
+              userPerm={this.props.userPerm}
+              openFileInput={this.props.openFileInput}
+            >
+              <span className="last-path-item" title={item}>{item}</span>
+            </LastPathItemWrapper>
           </Fragment>
         );
       } else {
@@ -39,7 +47,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
-            <a className="path-link" data-path={nodePath} onClick={this.onPathClick}>{item}</a>
+            <span className="path-item" role="button" data-path={nodePath} onClick={this.onPathClick} title={item}>{item}</span>
           </Fragment>
         );
       }
@@ -48,16 +56,23 @@ class DirPath extends React.Component {
   };
 
   render() {
-    let { currentPath, repoName } = this.props;
-    let pathElem = this.turnPathToLink(currentPath);
+    const { currentPath, repoName } = this.props;
+    const pathElem = this.turnPathToLink(currentPath);
 
     return (
-      <div className="path-container">
-        <Link to={siteRoot + 'shared-with-ocm/'} className="normal" onClick={(e) => this.props.onTabNavClick('shared-with-ocm')}>{gettext('All')}</Link>
+      <div className="path-container dir-view-path">
+        <Link to={siteRoot + 'shared-with-ocm/'} className="path-item normal mw-100" onClick={(e) => this.props.onTabNavClick('shared-with-ocm')} title={gettext('Shared from other servers')}>{gettext('Shared from other servers')}</Link>
         <span className="path-split">/</span>
-        {(currentPath === '/' || currentPath === '') ?
-          <span className="path-repo-name">{repoName}</span> :
-          <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>
+        {(currentPath === '/' || currentPath === '')
+          ? (
+            <LastPathItemWrapper
+              userPerm={this.props.userPerm}
+              openFileInput={this.props.openFileInput}
+            >
+              <span className="last-path-item" title={repoName}>{repoName}</span>
+            </LastPathItemWrapper>
+          )
+          : <span role="button" className="path-item" data-path="/" onClick={this.onPathClick} title={repoName}>{repoName}</span>
         }
         {pathElem}
       </div>

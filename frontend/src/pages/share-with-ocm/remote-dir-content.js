@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
+import classnames from 'classnames';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext } from '../../utils/constants';
@@ -14,18 +15,21 @@ class DirentItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false
     };
   }
 
   handleMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       isOpIconShown: true
     });
   };
 
   handleMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       isOpIconShown: false
     });
   };
@@ -34,19 +38,22 @@ class DirentItem extends React.Component {
     this.props.openFolder(this.props.dirent);
   };
 
-  downloadDirent = (e) => {
-    e.preventDefault();
+  downloadDirent = () => {
     this.props.downloadDirent(this.props.dirent);
   };
 
   render() {
-    let { isOpIconShown } = this.state;
+    let { isHighlighted, isOpIconShown } = this.state;
     let { dirent } = this.props;
     let iconUrl = Utils.getDirentIcon(dirent);
 
     return (
       <Fragment>
-        <tr onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <tr
+          className={classnames({ 'tr-highlight': isHighlighted })}
+          onMouseEnter={this.handleMouseOver}
+          onMouseLeave={this.handleMouseOut}
+        >
           <td className="text-center"><img src={iconUrl} width="24" alt='' /></td>
           <td>
             {dirent.is_file ?
@@ -56,7 +63,7 @@ class DirentItem extends React.Component {
           </td>
           <td>
             {isOpIconShown && dirent.is_file &&
-            <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} onClick={this.downloadDirent}></a>
+            <i role="button" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} onClick={this.downloadDirent}></i>
             }
           </td>
           <td>{Utils.bytesToSize(dirent.size)}</td>
@@ -70,7 +77,6 @@ class DirentItem extends React.Component {
 DirentItem.propTypes = {
   dirent: PropTypes.object.isRequired,
   openFolder: PropTypes.func.isRequired,
-  deleteDirent: PropTypes.func.isRequired,
   downloadDirent: PropTypes.func.isRequired,
 };
 
@@ -93,7 +99,7 @@ class DirContent extends React.Component {
 
     return (
       <Fragment>
-        <table className="table-hover">
+        <table>
           <thead>
             <tr>
               <th width="5%">{/* icon*/}</th>
@@ -109,7 +115,6 @@ class DirContent extends React.Component {
                 key={index}
                 dirent={dirent}
                 openFolder={this.props.openFolder}
-                deleteDirent={this.props.deleteDirent}
                 downloadDirent={this.props.downloadDirent}
               />;
             })}
@@ -125,7 +130,6 @@ DirContent.propTypes = {
   errorMsg: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   openFolder: PropTypes.func.isRequired,
-  deleteDirent: PropTypes.func.isRequired,
   downloadDirent: PropTypes.func.isRequired,
 };
 
