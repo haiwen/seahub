@@ -308,9 +308,12 @@ class ExdrawDownloadImage(APIView):
             logger.error(resp.text)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
+        
         filetype, fileext = get_file_type_and_ext(filename)
+        mimetype = fileext
+        if fileext == 'svg':
+            mimetype = 'svg+xml'
         response = HttpResponse(
-            content=resp.content, content_type='image/' + fileext)
+            content=resp.content, content_type='image/' + mimetype)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
