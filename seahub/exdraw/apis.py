@@ -3,6 +3,8 @@ import logging
 import requests
 import posixpath
 import base64
+
+from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -313,15 +315,9 @@ class ExdrawDownloadImage(APIView):
             logger.error(resp.text)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        
-        try:
-            image_base64 = base64.b64encode(resp.content).decode('utf-8')
-        except Exception as e:
-            logger.exception(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        response = Response({
-            'data_url': f'data:image/jpeg;base64,{image_base64}'
-        }, status=status.HTTP_200_OK)
-        
+
+        filetype, fileext = get_file_type_and_ext(filename)
+        response = HttpResponse(
+            content=resp.content, content_type='image/' + fileext)
+        response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
