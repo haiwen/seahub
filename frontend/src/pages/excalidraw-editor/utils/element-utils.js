@@ -20,7 +20,8 @@ export const isInitializedImageElement = (element) => {
 
 export const getFilename = (fileUuid, fileData) => {
   const { mimeType } = fileData;
-  const fileExt = mimeType.split('/')[1];
+  let fileExt = mimeType.split('/')[1];
+  fileExt = fileExt === 'svg+xml' ? 'svg' : fileExt;
   return `${fileUuid}.${fileExt}`;
 };
 
