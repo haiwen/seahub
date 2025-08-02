@@ -3,6 +3,7 @@ import { SAVE_TO_LOCAL_STORAGE_TIMEOUT, STORAGE_KEYS, CANVAS_SEARCH_TAB, DEFAULT
 // import { clearElementsForLocalStorage } from '../utils/element-utils';
 import { updateBrowserStateVersion } from './tab-sync';
 import { debounce } from '../../../utils/utils';
+import EventBus from '../../../components/common/event-bus';
 
 export const saveDataStateToLocalStorage = (docUuid, elements, appState) => {
   try {
@@ -24,6 +25,9 @@ export const saveDataStateToLocalStorage = (docUuid, elements, appState) => {
 
 export const saveToLocalStorage = debounce((docUuid, elements, appState) => {
   saveDataStateToLocalStorage(docUuid, elements, appState);
+  const eventBus = EventBus.getInstance();
+  const lastSavedAt = new Date().getTime();
+  eventBus.dispatch('saved', lastSavedAt);
 }, SAVE_TO_LOCAL_STORAGE_TIMEOUT);
 
 export const importFromLocalStorage = (docUuid) => {

@@ -28,3 +28,20 @@
   --bs-dropdown-border-radius: 10px;
   --bs-dropdown-padding-x: auto;
 }
+
+.excali-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.excali-container .excali-tip-message {
+  position: absolute;
+  top: 16px;
+  left: 60px;
+  z-index: 2;
+  color: #999;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
