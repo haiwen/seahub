@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import cookie from 'react-cookies';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, canAddRepo, canViewOrg, enableOCM, enableOCMViaWebdav } from '../../utils/constants';
+import { gettext, canAddRepo, canViewOrg, enableOCM } from '../../utils/constants';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import toaster from '../../components/toast';
@@ -16,8 +16,7 @@ import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibraries from '../../pages/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
-import ShareWithOCM from '../../pages/share-with-ocm/shared-with-ocm';
-import OCMViaWebdav from '../../pages/ocm-via-webdav/ocm-via-webdav';
+import SharedWithOCM from '../../pages/share-with-ocm/shared-with-ocm';
 import GroupItem from '../../pages/groups/group-item';
 import { GroupsReposManager } from './groups-repos-manager';
 import EventBus from '../../components/common/event-bus';
@@ -518,20 +517,11 @@ class Libraries extends Component {
 
                   {enableOCM &&
                   <div className="pb-3">
-                    <ShareWithOCM
+                    <SharedWithOCM
                       inAllLibs={true}
                       currentViewMode={currentViewMode}
                       sortBy={this.state.sortBy}
                       sortOrder={this.state.sortOrder}
-                    />
-                  </div>
-                  }
-
-                  {enableOCMViaWebdav &&
-                  <div className="pb-3">
-                    <OCMViaWebdav
-                      inAllLibs={true}
-                      currentViewMode={currentViewMode}
                     />
                   </div>
                   }
