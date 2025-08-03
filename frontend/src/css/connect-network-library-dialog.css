@@ -49,4 +49,61 @@
   font-weight: 500;
   color: #333;
   text-align: center;
+}
+
+/* 加载状态样式 */
+.network-library-item.loading {
+  opacity: 0.7;
+  cursor: default;
+  pointer-events: none;
+}
+
+.network-library-item.loading:hover {
+  border-color: #e9ecef;
+  background-color: transparent;
+  transform: none;
+  box-shadow: none;
+}
+
+.network-library-icon {
+  position: relative;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 4px;
+}
+
+.loading-overlay i {
+  font-size: 20px;
+  color: #007bff;
+}
+
+.loading-text {
+  color: #007bff;
+  font-size: 12px;
+}
+
+/* 授权提示样式 */
+.auth-tips {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-top: 15px;
+}
+
+.auth-tips p {
+  margin: 0;
+  font-size: 13px;
+  color: #666;
+  text-align: center;
 } 

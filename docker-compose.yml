@@ -1,0 +1,86 @@
+version: "3.8"
+
+services:
+  # Seahub服务
+  seahub:
+    image: seafileltd/seafile-mc:latest
+    container_name: seahub
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./seahub-data:/shared
+      - ./seahub:/opt/seafile/seahub
+    environment:
+      - DB_HOST=mysql
+      - DB_ROOT_PASSWD=your_mysql_root_password
+      - SEAHUB_DB_HOST=mysql
+      - SEAHUB_DB_USER=seahub
+      - SEAHUB_DB_PASSWD=your_seahub_password
+    depends_on:
+      - mysql
+    networks:
+      - seafile-net
+
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: seafile-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=your_mysql_root_password
+      - MYSQL_DATABASE=seahub_db
+      - MYSQL_USER=seahub
+      - MYSQL_PASSWORD=your_seahub_password
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - seafile-net
+
+  # 百度网盘Go模块
+  baidu-module:
+    build:
+      context: .
+      dockerfile: Dockerfile.baidu-module
+    container_name: baidu-netdisk-module
+    ports:
+      - "9000:9000"
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=seahub_db
+      - DB_USER=seahub
+      - DB_PASSWORD=your_seahub_password
+      - JWT_PRIVATE_KEY=your_jwt_private_key
+      - SEAHUB_URL=http://seahub:8000
+      - GIN_MODE=release
+    depends_on:
+      - mysql
+      - seahub
+    networks:
+      - seafile-net
+    restart: unless-stopped
+
+  # Nginx反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: seafile-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - seahub
+      - baidu-module
+    networks:
+      - seafile-net
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
+
+networks:
+  seafile-net:
+    driver: bridge

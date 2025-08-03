@@ -2169,6 +2169,44 @@ class SeafileAPI {
     return this._sendPostRequest(url, formData);
   }
 
+  // ---- Baidu Netdisk Auth API
+
+  getBaiduNetdiskAuthUrl() {
+    const url = this.server + '/api/v2.1/baidu/netdisk/auth/';
+    return this.req.get(url);
+  }
+
+  processBaiduNetdiskAuthCode(code, state) {
+    const url = this.server + '/api/v2.1/baidu/netdisk/auth/';
+    return this.req.post(url, {
+      code: code,
+      state: state
+    });
+  }
+
+  refreshBaiduNetdiskToken(refreshToken) {
+    const url = this.server + '/api/v2.1/baidu/netdisk/refresh/';
+    return this.req.post(url, {
+      refresh_token: refreshToken
+    });
+  }
+
+  // ---- Network Libraries API
+  getNetworkLibraries() {
+    const url = this.server + '/api/v2.1/network-libs/';
+    return this.req.get(url);
+  }
+
+  // ---- Baidu Netdisk Files API
+  getBaiduNetdiskFiles(path = '/', start = 0, limit = 1000) {
+    const url = this.server + '/api/v2.1/baidu/netdisk/files/';
+    const params = {
+      path: path,
+      start: start,
+      limit: limit
+    };
+    return this.req.get(url, { params: params });
+  }
 }
 
 let seafileAPI = new SeafileAPI();

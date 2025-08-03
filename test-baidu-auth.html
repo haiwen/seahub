@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>百度网盘授权测试</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        line-height: 1.6;
+      }
+      .container {
+        background: #f5f5f5;
+        padding: 20px;
+        border-radius: 8px;
+        margin: 20px 0;
+      }
+      .step {
+        background: white;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border-left: 4px solid #007bff;
+      }
+      .code-input {
+        width: 100%;
+        padding: 10px;
+        font-family: monospace;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin: 10px 0;
+      }
+      .btn {
+        background: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .btn:hover {
+        background: #0056b3;
+      }
+      .btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      .result {
+        background: #e8f5e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+        border-left: 4px solid #28a745;
+      }
+      .error {
+        background: #f8e8e8;
+        padding: 15px;
+        border-radius: 5px;
+        margin: 10px 0;
+        border-left: 4px solid #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>百度网盘授权测试</h1>
+
+    <div class="container">
+      <h2>手工授权码输入流程</h2>
+
+      <div class="step">
+        <h3>步骤 1: 获取授权URL</h3>
+        <button class="btn" onclick="getAuthUrl()">获取授权URL</button>
+        <div id="authUrlResult"></div>
+      </div>
+
+      <div class="step">
+        <h3>步骤 2: 打开授权页面</h3>
+        <p>点击下方按钮打开授权页面（需要先获取授权URL）</p>
+        <button class="btn" id="openAuthBtn" onclick="openAuthPage()" disabled>
+          打开授权页面
+        </button>
+      </div>
+
+      <div class="step">
+        <h3>步骤 3: 输入授权码</h3>
+        <p>在授权页面完成授权后，复制授权码并粘贴到下方输入框：</p>
+        <input
+          type="text"
+          class="code-input"
+          id="authCodeInput"
+          placeholder="请输入授权码"
+        />
+        <br />
+        <button class="btn" onclick="submitAuthCode()">提交授权码</button>
+      </div>
+
+      <div id="result"></div>
+    </div>
+
+    <script>
+      let authUrl = "";
+
+      function getAuthUrl() {
+        const resultDiv = document.getElementById("authUrlResult");
+        resultDiv.innerHTML = "<p>正在获取授权URL...</p>";
+
+        fetch("/api2/baidu-netdisk-auth/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.auth_url) {
+              authUrl = data.auth_url;
+              resultDiv.innerHTML = `
+                        <div class="result">
+                            <p><strong>授权URL获取成功！</strong></p>
+                            <p><a href="${authUrl}" target="_blank">${authUrl}</a></p>
+                        </div>
+                    `;
+              document.getElementById("openAuthBtn").disabled = false;
+            } else {
+              resultDiv.innerHTML = `
+                        <div class="error">
+                            <p><strong>获取授权URL失败</strong></p>
+                            <p>${data.error_msg || "未知错误"}</p>
+                        </div>
+                    `;
+            }
+          })
+          .catch((error) => {
+            resultDiv.innerHTML = `
+                    <div class="error">
+                        <p><strong>请求失败</strong></p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+          });
+      }
+
+      function openAuthPage() {
+        if (authUrl) {
+          window.open(authUrl, "_blank");
+        }
+      }
+
+      function submitAuthCode() {
+        const authCode = document.getElementById("authCodeInput").value.trim();
+        const resultDiv = document.getElementById("result");
+
+        if (!authCode) {
+          resultDiv.innerHTML = `
+                    <div class="error">
+                        <p><strong>请输入授权码</strong></p>
+                    </div>
+                `;
+          return;
+        }
+
+        resultDiv.innerHTML = "<p>正在处理授权码...</p>";
+
+        fetch("/api2/baidu-netdisk-auth/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            code: authCode,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.access_token) {
+              resultDiv.innerHTML = `
+                        <div class="result">
+                            <p><strong>授权成功！</strong></p>
+                            <p>Access Token: ${data.access_token}</p>
+                            <p>用户信息: ${JSON.stringify(
+                              data.user_info,
+                              null,
+                              2
+                            )}</p>
+                        </div>
+                    `;
+            } else {
+              resultDiv.innerHTML = `
+                        <div class="error">
+                            <p><strong>授权失败</strong></p>
+                            <p>${data.error_msg || "未知错误"}</p>
+                        </div>
+                    `;
+            }
+          })
+          .catch((error) => {
+            resultDiv.innerHTML = `
+                    <div class="error">
+                        <p><strong>请求失败</strong></p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+          });
+      }
+    </script>
+  </body>
+</html>

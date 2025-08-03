@@ -15,6 +15,7 @@ from seahub.repo_api_tokens.models import RepoAPITokens
 from seahub.ocm.models import OCMShare
 from seahub.utils import within_time_range
 from seahub.utils.auth import AUTHORIZATION_PREFIX
+
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -23,18 +24,21 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-HEADER_CLIENT_VERSION = 'HTTP_X_SEAFILE_CLIENT_VERSION'
-HEADER_PLATFORM_VERSION = 'HTTP_X_SEAFILE_PLATFORM_VERSION'
+HEADER_CLIENT_VERSION = "HTTP_X_SEAFILE_CLIENT_VERSION"
+HEADER_PLATFORM_VERSION = "HTTP_X_SEAFILE_PLATFORM_VERSION"
+
 
 class AuthenticationFailed(APIException):
     status_code = status.HTTP_401_UNAUTHORIZED
-    default_detail = 'Incorrect authentication credentials.'
+    default_detail = "Incorrect authentication credentials."
 
     def __init__(self, detail=None):
         self.detail = detail or self.default_detail
 
+
 class DeviceRemoteWipedException(AuthenticationFailed):
     pass
+
 
 class TokenAuthentication(BaseAuthentication):
     """
@@ -52,15 +56,15 @@ class TokenAuthentication(BaseAuthentication):
     """
 
     def authenticate(self, request):
-        auth = request.headers.get('authorization', '').split()
+        auth = request.headers.get("authorization", "").split()
         if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX:
             return None
 
         if len(auth) == 1:
-            msg = 'Invalid token header. No credentials provided.'
+            msg = "Invalid token header. No credentials provided."
             raise AuthenticationFailed(msg)
         elif len(auth) > 2:
-            msg = 'Invalid token header. Token string should not contain spaces.'
+            msg = "Invalid token header. Token string should not contain spaces."
             raise AuthenticationFailed(msg)
 
         key = auth[1]
@@ -74,12 +78,12 @@ class TokenAuthentication(BaseAuthentication):
         try:
             token = Token.objects.get(key=key)
         except Token.DoesNotExist:
-            raise AuthenticationFailed('Invalid token')
+            raise AuthenticationFailed("Invalid token")
 
         try:
             user = User.objects.get(email=token.user)
         except User.DoesNotExist:
-            raise AuthenticationFailed('User inactive or deleted')
+            raise AuthenticationFailed("User inactive or deleted")
 
         if MULTI_TENANCY:
             orgs = ccnet_api.get_orgs_by_user(token.user)
@@ -97,12 +101,12 @@ class TokenAuthentication(BaseAuthentication):
             return None
 
         if token.wiped_at:
-            raise DeviceRemoteWipedException('Device set to be remote wiped')
+            raise DeviceRemoteWipedException("Device set to be remote wiped")
 
         try:
             user = User.objects.get(email=token.user)
         except User.DoesNotExist:
-            raise AuthenticationFailed('User inactive or deleted')
+            raise AuthenticationFailed("User inactive or deleted")
 
         if MULTI_TENANCY:
             orgs = ccnet_api.get_orgs_by_user(token.user)
@@ -118,17 +122,19 @@ class TokenAuthentication(BaseAuthentication):
                 token.last_login_ip = ip
                 need_save = True
 
-            client_version = request.META.get(HEADER_CLIENT_VERSION, '')
+            client_version = request.META.get(HEADER_CLIENT_VERSION, "")
             if client_version and client_version != token.client_version:
                 token.client_version = client_version
                 need_save = True
 
-            platform_version = request.META.get(HEADER_PLATFORM_VERSION, '')
+            platform_version = request.META.get(HEADER_PLATFORM_VERSION, "")
             if platform_version and platform_version != token.platform_version:
                 token.platform_version = platform_version
                 need_save = True
 
-            if not within_time_range(token.last_accessed, datetime.datetime.now(), 10 * 60):
+            if not within_time_range(
+                token.last_accessed, datetime.datetime.now(), 10 * 60
+            ):
                 # We only need 10min precision for the last_accessed field
                 need_save = True
 
@@ -136,7 +142,7 @@ class TokenAuthentication(BaseAuthentication):
                 try:
                     token.save()
                 except:
-                    logger.exception('error when save token v2:')
+                    logger.exception("error when save token v2:")
 
             return (user, token)
 
@@ -165,22 +171,22 @@ class RepoAPITokenAuthentication(BaseAuthentication):
         :param request: request
         :return: AnonymousUser, repo_api_token
         """
-        auth = request.headers.get('authorization', '').split()
+        auth = request.headers.get("authorization", "").split()
         if not auth or auth[0].lower() not in AUTHORIZATION_PREFIX:
             return None
 
         if len(auth) == 1:
-            msg = 'Invalid token header. No credentials provided.'
+            msg = "Invalid token header. No credentials provided."
             raise AuthenticationFailed(msg)
         elif len(auth) > 2:
-            msg = 'Invalid token header. Token string should not contain spaces.'
+            msg = "Invalid token header. Token string should not contain spaces."
             raise AuthenticationFailed(msg)
 
         rat = RepoAPITokens.objects.filter(token=auth[1]).first()
         if not rat:
             rat = OCMShare.objects.filter(shared_secret=auth[1]).first()
             if not rat:
-                raise AuthenticationFailed('Token inactive or deleted')
+                raise AuthenticationFailed("Token inactive or deleted")
             # if is request by remote server through ocm, use from_user instead of app_name
             rat.app_name = rat.from_user
         request.repo_api_token_obj = rat
@@ -191,21 +197,23 @@ class RepoAPITokenAuthentication(BaseAuthentication):
 class SdocJWTTokenAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
-        """ sdoc jwt token
-        """
+        """sdoc jwt token"""
         from seahub.seadoc.utils import is_valid_seadoc_access_token
-        file_uuid = request.parser_context['kwargs'].get('file_uuid')
+
+        file_uuid = request.parser_context["kwargs"].get("file_uuid")
         if not file_uuid:
-            if request._request.method == 'POST':
-                file_uuid = request._request.POST.get('file_uuid')
-            elif request._request.method == 'GET':
-                file_uuid = request._request.GET.get('file_uuid')
-        auth = request.headers.get('authorization', '').split()
-        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+            if request._request.method == "POST":
+                file_uuid = request._request.POST.get("file_uuid")
+            elif request._request.method == "GET":
+                file_uuid = request._request.GET.get("file_uuid")
+        auth = request.headers.get("authorization", "").split()
+        is_valid, payload = is_valid_seadoc_access_token(
+            auth, file_uuid, return_payload=True
+        )
         if not is_valid:
             return None
 
-        username = payload.get('username')
+        username = payload.get("username")
         if not username:
             return None
         try:
@@ -230,11 +238,10 @@ class SessionCRSFCheckFreeAuthentication(BaseAuthentication):
         """
 
         # Get the session-based user from the underlying HttpRequest object
-        user = getattr(request._request, 'user', None)
+        user = getattr(request._request, "user", None)
 
         if not user or not user.is_active:
             return None
-
 
         return (user, None)
 
