@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from seahub.api2.authentication import SessionCRSFCheckFreeAuthentication
+from seahub.api2.authentication import SessionCRSFCheckFreeAuthentication, TokenAuthentication
 from seahub.api2.models import Token
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_valid_internal_jwt, get_user_common_info
@@ -210,15 +210,16 @@ class InternalCheckFileOperationAccess(APIView):
         return Response({'user': rat.app_name})
 
 class CheckThumbnailAccess(APIView):
-    authentication_classes = (SessionCRSFCheckFreeAuthentication, )
+    authentication_classes = (SessionCRSFCheckFreeAuthentication, TokenAuthentication)
 
     def post(self, request, repo_id):
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
         path = request.data.get('path')
         is_valid = is_valid_internal_jwt(auth)
         if not is_valid:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            if not auth or auth[0].lower() != 'bearer':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         if not path:
             error_msg = 'path invalid'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
