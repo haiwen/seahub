@@ -461,6 +461,46 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
         raise Http404
 
     dirent_path = posixpath.join(parent_path, dirent_name_from_uuid_map.strip('/'))
+
+    readonly = request.GET.get('readonly', 'false')
+    filetype = request.GET.get('filetype', 'Excalidraw')
+    if readonly.lower() == 'true' and filetype == 'Excalidraw':
+
+        template = 'shared_file_view_react.html'
+
+        req_path = os.path.join(parent_path, uuid_map.filename)
+        filename = dirent_name_from_uuid_map
+        redirect_to = reverse('view_lib_file', args=[repo_id, dirent_path])
+        fileext = 'exdraw'
+        filetype = 'Excalidraw'
+        file_id = seafile_api.get_file_id_by_path(repo_id, req_path)
+        username = request.user.username
+        use_onetime = False if filetype in (VIDEO, AUDIO) else True
+        token = seafile_api.get_fileserver_access_token(repo_id, file_id,
+                                                    'view', username,
+                                                    use_onetime=use_onetime)
+        if token:
+            raw_path = gen_file_get_url(token, filename)
+
+        obj_id = get_file_id_by_path(repo_id, req_path)
+        file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
+        shared_by = username
+        data = {
+            'repo': repo,
+            'obj_id': obj_id,
+            'from_shared_dir': True,
+            'path': req_path,
+            'file_name': filename,
+            'file_size': file_size,
+            'fileext': fileext,
+            'raw_path': raw_path,
+            'encoding': '',
+            'file_encoding_list': [],
+            'filetype': filetype,
+            'traffic_over_limit': False,
+        }
+        return render(request, template, data)
+
     if not is_dir:
         redirect_to = reverse('view_lib_file', args=[repo_id, dirent_path])
         if request.GET.get('dl', '') == '1':
