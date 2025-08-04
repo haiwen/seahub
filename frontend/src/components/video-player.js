@@ -25,7 +25,10 @@ class VideoPlayer extends React.Component {
 
   componentDidUpdate(prevProps) {
     // Update poster if changed
-    if (this.props.poster !== prevProps.poster) {
+    if (!this.props.poster) {
+      this.player.poster('');
+    }
+    if (this.props.poster && this.props.poster !== prevProps.poster) {
       this.player.poster(this.props.poster);
     }
     // Update sources if changed

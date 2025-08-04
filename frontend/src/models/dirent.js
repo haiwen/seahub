@@ -60,7 +60,7 @@ class Dirent {
   }
 
   toJson() {
-    return {
+    const json = {
       id: this.id,
       name: this.name,
       mtime: this.mtime,
@@ -71,6 +71,10 @@ class Dirent {
       modifier_email: this.modifier_email,
       modifier_contact_email: this.modifier_contact_email,
     };
+    if (this.encoded_thumbnail_src) {
+      json.encoded_thumbnail_src = this.encoded_thumbnail_src;
+    }
+    return json;
   }
 
 }

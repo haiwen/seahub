@@ -99,11 +99,10 @@ class DirentDetails extends React.Component {
     const videoSrc = this.getVideoSrc();
     const mimetype = MimetypesKind[dirent.name.split('.').pop().toLowerCase()] || 'video/mp4';
 
-    const options = {
+    let options = {
       autoplay: false,
       preload: 'auto',
       muted: true,
-      poster: src,
       sources: [{
         src: videoSrc,
         type: mimetype
@@ -118,6 +117,12 @@ class DirentDetails extends React.Component {
         children: ['progressControl', 'remainingTimeDisplay']
       }
     };
+    if (dirent.encoded_thumbnail_src) {
+      options = {
+        ...options,
+        poster: `${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`
+      };
+    }
     return (
       <div
         className="detail-image"
@@ -126,6 +131,7 @@ class DirentDetails extends React.Component {
       >
         {isVideo ? (
           <VideoPlayer
+            id={`video-player-${dirent.id}`}
             ref={this.videoPlayerRef}
             {...options}
           />
