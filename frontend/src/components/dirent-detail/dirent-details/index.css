@@ -1,6 +1,7 @@
 .detail-body .detail-image {
   height: 144px;
   width: 100%;
+  position: relative;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -53,4 +54,9 @@
 .detail-body .dirent-detail-people {
   position: absolute;
   transform: translateY(-50px);
+}
+
+.detail-body .video-js {
+  width: 100%;
+  height: 100%;
 }

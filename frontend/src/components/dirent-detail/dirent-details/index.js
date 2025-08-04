@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, thumbnailSizeForGrid, enableSeafileAI } from '../../../utils/constants';
+import { siteRoot, thumbnailSizeForGrid, enableSeafileAI, fileServerRoot, MimetypesKind } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -13,6 +13,7 @@ import AIIcon from '../../../metadata/components/metadata-details/ai-icon';
 import SettingsIcon from '../../../metadata/components/metadata-details/settings-icon';
 import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import VideoPlayer from '../../video-player';
 
 import './index.css';
 
@@ -22,7 +23,9 @@ class DirentDetails extends React.Component {
     super(props);
     this.state = {
       direntDetail: '',
+      isHovering: false,
     };
+    this.videoPlayerRef = React.createRef();
   }
 
   updateDetail = (repoID, dirent, direntPath) => {
@@ -57,21 +60,78 @@ class DirentDetails extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.CLEAR_MAP_INSTANCE);
   }
 
-  renderImage = () => {
+  handleVideoHover = (isHover) => {
+    this.setState({ isHovering: isHover }, () => {
+      if (this.videoPlayerRef.current) {
+        const player = this.videoPlayerRef.current.player;
+        if (isHover) {
+          player.play();
+          player.hasStarted(true);
+        } else {
+          player.hasStarted(false);
+        }
+      }
+    });
+  };
+
+  getImageSrc = () => {
+    const { repoID, path, dirent, currentRepoInfo } = this.props;
+    return currentRepoInfo.encrypted
+      ? `${siteRoot}repo/${repoID}/raw${Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`)}`
+      : `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}${Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`)}?mtime=${this.state.direntDetail.mtime}`;
+  };
+
+  getVideoSrc = () => {
+    const { repoID, path, dirent } = this.props;
+    const encodedPath = Utils.encodePath(Utils.joinPath(path, dirent.name));
+    return `${fileServerRoot}repos/${repoID}/files${encodedPath}?op=download`;
+  };
+
+  renderMedia = () => {
     const { dirent } = this.props;
     if (!dirent) return null;
-    const isImg = Utils.imageCheck(dirent.name);
-    if (!isImg) return null;
-    const { repoID, path, currentRepoInfo } = this.props;
-    let src = '';
-    if (currentRepoInfo.encrypted) {
-      src = `${siteRoot}repo/${repoID}/raw` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
-    } else {
-      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`) + '?mtime=' + this.state.direntDetail.mtime;
-    }
+
+    const isImage = Utils.imageCheck(dirent.name);
+    const isVideo = Utils.videoCheck(dirent.name);
+    if (!isImage && !isVideo) return null;
+
+    const src = this.getImageSrc();
+    const videoSrc = this.getVideoSrc();
+    const mimetype = MimetypesKind[dirent.name.split('.').pop().toLowerCase()] || 'video/mp4';
+
+    const options = {
+      autoplay: false,
+      preload: 'auto',
+      muted: true,
+      poster: src,
+      sources: [{
+        src: videoSrc,
+        type: mimetype
+      }],
+      controls: true,
+      bigPlayButton: false,
+      controlBar: {
+        playToggle: false,
+        volumnPanel: false,
+        fullscreenToggle: false,
+        pictureInPictureToggle: false,
+        children: ['progressControl', 'remainingTimeDisplay']
+      }
+    };
     return (
-      <div className="detail-image">
-        <img src={src} alt="" />
+      <div
+        className="detail-image"
+        onMouseEnter={() => this.handleVideoHover(true)}
+        onMouseLeave={() => this.handleVideoHover(false)}
+      >
+        {isVideo ? (
+          <VideoPlayer
+            ref={this.videoPlayerRef}
+            {...options}
+          />
+        ) : (
+          <img src={src} alt="" />
+        )}
       </div>
     );
   };
@@ -84,7 +144,7 @@ class DirentDetails extends React.Component {
         <Detail>
           <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={this.props.onClose} />
           <Body>
-            {this.renderImage()}
+            {this.renderMedia()}
           </Body>
         </Detail>
       );
@@ -106,7 +166,7 @@ class DirentDetails extends React.Component {
             <SettingsIcon />
           </Header>
           <Body>
-            {this.renderImage()}
+            {this.renderMedia()}
             {dirent && direntDetail && (
               <div className="detail-content">
                 {dirent.type !== 'file' ? (

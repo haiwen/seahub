@@ -278,6 +278,7 @@ class DirentListItem extends React.Component {
     if (Utils.imageCheck(dirent.name)) {
       this.props.showImagePopup(dirent);
     } else {
+      console.log('click');
       this.props.onItemClick(dirent);
     }
   };
