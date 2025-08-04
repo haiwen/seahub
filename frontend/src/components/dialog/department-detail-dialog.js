@@ -7,11 +7,13 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
+import { eventBus } from '../common/event-bus';
 import Department from '../../models/department';
 import SeahubModalHeader from '../common/seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';
 import DepartmentGroupMembers from './department-detail-widget/department-group-members';
 import DepartmentGroupMemberSelected from './department-detail-widget/department-group-member-selected';
+
 import '../../css/manage-members-dialog.css';
 import '../../css/group-departments.css';
 
@@ -149,6 +151,7 @@ class DepartmentDetailDialog extends React.Component {
     let emails = Object.keys(this.state.newMembersTempObj);
     seafileAPI.addGroupMembers(this.props.groupID, emails).then((res) => {
       this.toggle();
+      eventBus.dispatch('updateGroupList');
     }).catch(error => {
       this.onError(error);
     });

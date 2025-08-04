@@ -9,6 +9,7 @@ import toaster from './toast';
 import Loading from './loading';
 import GroupMembers from './group-members';
 import SelectUsersIcon from './select-members-to-share-with';
+import { eventBus } from './common/event-bus';
 
 const propTypes = {
   toggleManageMembersDialog: PropTypes.func,
@@ -39,11 +40,12 @@ class ManageMembersDialog extends React.Component {
 
   componentDidMount() {
     this.listGroupMembers(this.state.page);
+    eventBus.subscribe('updateGroupList', this.listGroupMembers);
   }
 
-  listGroupMembers = (page) => {
+  listGroupMembers = (page = 1, initGroupMembers = []) => {
     const { groupID } = this.props;
-    const { perPage, groupMembers } = this.state;
+    const { perPage } = this.state;
     seafileAPI.listGroupMembers(groupID, page, perPage).then((res) => {
       const members = res.data;
       this.setState({
@@ -51,7 +53,7 @@ class ManageMembersDialog extends React.Component {
         isLoadingMore: false,
         page: page,
         hasNextPage: members.length < perPage ? false : true,
-        groupMembers: groupMembers.concat(members)
+        groupMembers: initGroupMembers.concat(members)
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -109,7 +111,7 @@ class ManageMembersDialog extends React.Component {
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
         this.setState({ isLoadingMore: true }, () => {
-          this.listGroupMembers(page + 1);
+          this.listGroupMembers(page + 1, this.state.groupMembers);
         });
       }
     }
