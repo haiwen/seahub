@@ -16,12 +16,12 @@ class SortOptions extends React.Component {
   constructor(props) {
     super(props);
     this.sortOptions = this.props.sortOptions || [
-      { value: 'name-asc', text: gettext('Ascending by name') },
-      { value: 'name-desc', text: gettext('Descending by name') },
-      { value: 'size-asc', text: gettext('Ascending by size') },
-      { value: 'size-desc', text: gettext('Descending by size') },
-      { value: 'time-asc', text: gettext('Ascending by time') },
-      { value: 'time-desc', text: gettext('Descending by time') }
+      { value: 'name-asc', text: gettext('By name ascending') },
+      { value: 'name-desc', text: gettext('By name descending') },
+      { value: 'size-asc', text: gettext('By size ascending') },
+      { value: 'size-desc', text: gettext('By size descending') },
+      { value: 'time-asc', text: gettext('By time ascending') },
+      { value: 'time-desc', text: gettext('By time descending') }
     ];
     const { sortBy, sortOrder } = this.props;
     this.state = {

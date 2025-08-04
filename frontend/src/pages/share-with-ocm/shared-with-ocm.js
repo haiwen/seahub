@@ -289,8 +289,8 @@ class SharedWithOCM extends Component {
   constructor(props) {
     super(props);
     this.sortOptions = [
-      { value: 'name-asc', text: gettext('Ascending by name') },
-      { value: 'name-desc', text: gettext('Descending by name') }
+      { value: 'name-asc', text: gettext('By name ascending') },
+      { value: 'name-desc', text: gettext('By name descending') }
     ];
     this.state = {
       loading: true,

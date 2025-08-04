@@ -40,7 +40,7 @@ class LastPathItemWrapper extends React.Component {
       const opList = [
         {
           'icon': 'upload-files',
-          'text': gettext('Upload File'),
+          'text': gettext('Upload'),
           'onClick': this.props.openFileInput
         }
       ];
