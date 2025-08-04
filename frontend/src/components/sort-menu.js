@@ -13,7 +13,7 @@ class SortMenu extends React.Component {
 
   constructor(props) {
     super(props);
-    this.sortOptions = [
+    this.sortOptions = this.props.sortOptions || [
       { value: 'name-asc', text: gettext('By name ascending') },
       { value: 'name-desc', text: gettext('By name descending') },
       { value: 'size-asc', text: gettext('By size ascending') },
