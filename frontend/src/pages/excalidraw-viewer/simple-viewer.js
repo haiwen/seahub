@@ -29,7 +29,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocP
 
   if (isFetching) {
     return (
-      <div className={'excali-container'}>
+      <div className='excali-container'>
         <CodeMirrorLoading />
       </div>
     );
