@@ -9,8 +9,7 @@ import { Utils } from '../../utils/utils';
 
 import './index.css';
 
-const TldrawEditor = (props) => {
-  const { repoID, filePath, readOnly } = props;
+const TldrawEditor = () => {
   const editorRef = useRef(null);
   const isChangedRef = useRef(false);
   const [fileContent, setFileContent] = useState({});
@@ -23,12 +22,13 @@ const TldrawEditor = (props) => {
   }, []);
 
   useEffect(() => {
-    editorApi.getFileContent(repoID, filePath).then(res => {
+    editorApi.getFileContent().then(res => {
       setFileContent(res.data);
       setIsFetching(false);
     });
     onSetFavicon();
-  }, [repoID, filePath]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const saveDocument = useCallback(async () => {
     if (isChangedRef.current) {
@@ -43,7 +43,6 @@ const TldrawEditor = (props) => {
   }, []);
 
   useEffect(() => {
-    if (readOnly) return;
     const handleHotkeySave = (event) => {
       if (isHotkey('mod+s')(event)) {
         event.preventDefault();
@@ -54,10 +53,9 @@ const TldrawEditor = (props) => {
     return () => {
       document.removeEventListener('keydown', handleHotkeySave);
     };
-  }, [saveDocument, readOnly]);
+  }, [saveDocument]);
 
   useEffect(() => {
-    if (readOnly) return;
     const saveInterval = setInterval(() => {
       if (isChangedRef.current) {
         editorApi.saveContent(JSON.stringify(editorRef.current)).then(res => {
@@ -78,7 +76,7 @@ const TldrawEditor = (props) => {
       clearInterval(saveInterval);
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [saveDocument, readOnly]);
+  }, [saveDocument]);
 
   const onContentChanged = useCallback((docContent) => {
     editorRef.current = docContent;
@@ -92,7 +90,6 @@ const TldrawEditor = (props) => {
   return (
     <SimpleEditor
       isFetching={isFetching}
-      readOnly={readOnly}
       document={fileContent || { document: null }}
       onContentChanged={onContentChanged}
       onSave={onSave}

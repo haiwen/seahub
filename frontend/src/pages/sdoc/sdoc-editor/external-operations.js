@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
-import ReactDom from 'react-dom';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
 import CreateFile from '../../../components/dialog/create-file-dialog';
-import TldrawEditor from '../../tldraw-editor';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -66,13 +64,6 @@ class ExternalOperations extends React.Component {
     this.unsubscribeCreateWhiteboardFile();
     this.unsubscribeGenerateExdrawReadOnlyLink();
   }
-
-  renderWhiteboard = ({ containerId, props }) => {
-    const container = containerId && document.getElementById(containerId);
-    if (container) {
-      ReactDom.render(<TldrawEditor {...props} />, container);
-    }
-  };
 
   onInternalLinkToggle = (options) => {
     if (options && options.internalLink) {

@@ -37,7 +37,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocP
 
   return (
     <>
-      <div className={classNames('excali-container', { inSdoc: isInSdoc })} style={{ height: '100vh', width: '100vw' }}>
+      <div className={classNames('excali-container', { 'in-sdoc': isInSdoc })} style={{ height: '100vh', width: '100vw' }}>
         <Excalidraw
           initialData={sceneContent}
           excalidrawAPI={(api) => setExcalidrawAPI(api)}

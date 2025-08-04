@@ -1,8 +1,8 @@
-.excali-container.inSdoc {
+.excali-container.in-sdoc {
   pointer-events: none;
 }
 
-.excali-container.inSdoc .App-menu,
-.excali-container.inSdoc .App-bottom-bar {
+.excali-container.in-sdoc .App-menu,
+.excali-container.in-sdoc .App-bottom-bar {
   display: none !important;
 }
