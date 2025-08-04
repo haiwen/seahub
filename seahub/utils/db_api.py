@@ -716,7 +716,7 @@ class SeafileDB:
                 else:
                     permission_to_folder_path[permission].append(path)
             return permission_to_folder_path
-    
+
     def get_share_to_group_folder_permission_by_group_ids_and_repo_id(self, group_ids, repo_id):
         if not group_ids:
             return {}
@@ -754,3 +754,16 @@ class SeafileDB:
             cursor.execute(count_sql)
             total_count = cursor.fetchone()
         return rows,total_count[0]
+
+    def get_virtual_repo_id(self, original_repo_id, path):
+        from seahub.utils import normalize_file_path
+
+        path = normalize_file_path(path)
+        sql = f"""
+        select repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo="{original_repo_id}" AND path="{path}"
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            res = cursor.fetchone()
+
+        return res and res[0] or None

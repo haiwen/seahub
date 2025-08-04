@@ -9,6 +9,8 @@ import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 
+import '../../css/lib-content-view.css';
+
 dayjs.extend(relativeTime);
 
 class OCMViaWebdav extends Component {
@@ -31,11 +33,12 @@ class OCMViaWebdav extends Component {
   getAllReceivedShares = () => {
     const url = seafileAPI.server + '/ocm-via-webdav/received-shares/';
     seafileAPI.req.get(url).then((res) => {
+      const { received_share_list } = res.data;
       this.setState({
         loading: false,
         shareID: '',
         path: '',
-        items: res.data.received_share_list,
+        items: this.sortItems(received_share_list)
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -59,18 +62,18 @@ class OCMViaWebdav extends Component {
   };
 
   openFolder = (item) => {
-
     this.setState({
       loading: true,
     });
 
     const url = seafileAPI.server + '/ocm-via-webdav/received-shares/' + item.id + '/?path=' + item.path;
     seafileAPI.req.get(url).then((res) => {
+      const { received_share_list, parent_dir } = res.data;
       this.setState({
         loading: false,
         shareID: item.id,
-        path: res.data.parent_dir,
-        items: res.data.received_share_list,
+        path: parent_dir,
+        items: this.sortItems(received_share_list)
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -79,17 +82,17 @@ class OCMViaWebdav extends Component {
   };
 
   onPathClick = (path) => {
-
     this.setState({
-      loading: true,
+      loading: true
     });
 
     const url = seafileAPI.server + '/ocm-via-webdav/received-shares/' + this.state.shareID + '/?path=' + path;
     seafileAPI.req.get(url).then((res) => {
+      const { received_share_list, parent_dir } = res.data;
       this.setState({
         loading: false,
-        items: res.data.received_share_list,
-        path: res.data.parent_dir,
+        path: parent_dir,
+        items: this.sortItems(received_share_list)
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -97,25 +100,33 @@ class OCMViaWebdav extends Component {
     });
   };
 
+  sortItems = (items) => {
+    return items.sort((a, b) => {
+      return a.is_dir ? -1 : 1;
+    });
+  };
+
   render() {
+    const { loading, errorMsg, items, shareID, path } = this.state;
+
     return (
       <Fragment>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path align-items-center">
               <DirPath
-                shareID={this.state.shareID}
-                currentPath={this.state.path}
+                shareID={shareID}
+                currentPath={path}
                 onPathClick={this.onPathClick}
                 getAllReceivedShares={this.getAllReceivedShares}
               />
             </div>
             <div className="cur-view-content">
               <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.items}
-                path={this.state.path}
+                loading={loading}
+                errorMsg={errorMsg}
+                items={items}
+                path={path}
                 leaveShare={this.leaveShare}
                 openFolder={this.openFolder}
               />
@@ -143,29 +154,29 @@ class Content extends Component {
 
   render() {
     const { loading, errorMsg, items, path } = this.props;
-    const emptyTip = (
-      <EmptyTip
-        title={gettext('No libraries have been shared with you')}
-        text={gettext('No libraries have been shared with you from other servers.')}
-      >
-      </EmptyTip>
-    );
 
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
+      const emptyTip = (
+        <EmptyTip
+          title={gettext('No files or folders have been shared with you')}
+          text={gettext('No files or folders have been shared with you from other servers.')}
+        >
+        </EmptyTip>
+      );
+
       const table = (
         <table>
           <thead>
             <tr>
               <th width="5%"></th>
-              <th width="30%">{gettext('Name')}</th>
-              <th width="35%">{gettext('Shared By')}</th>
-              <th width="20%">{gettext('Time')}</th>
-              <th width="5%">{/* operations */}</th>
-              <th width="5%">{/* operations */}</th>
+              <th width="40%">{gettext('Name')}</th>
+              <th width="10%">{/* operations */}</th>
+              <th width="30%">{gettext('Shared By')}</th>
+              <th width="15%">{gettext('Sharing Time')}</th>
             </tr>
           </thead>
           <tbody>
@@ -188,7 +199,6 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-  data: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   errorMsg: PropTypes.string.isRequired,
   items: PropTypes.array.isRequired,
@@ -206,18 +216,21 @@ class Item extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isHighlighted: false,
       isOpIconShown: false
     };
   }
 
   handleMouseOver = () => {
     this.setState({
+      isHighlighted: true,
       isOpIconShown: true
     });
   };
 
   handleMouseOut = () => {
     this.setState({
+      isHighlighted: false,
       isOpIconShown: false
     });
   };
@@ -227,8 +240,7 @@ class Item extends Component {
     window.location.href = downloadUrl;
   };
 
-  leaveShare = (e) => {
-    e.preventDefault();
+  leaveShare = () => {
     this.props.leaveShare(this.props.item);
   };
 
@@ -238,8 +250,8 @@ class Item extends Component {
   };
 
   render() {
-    const item = this.props.item;
-    const { isOpIconShown } = this.state;
+    const { item, path } = this.props;
+    const { isHighlighted, isOpIconShown } = this.state;
 
     if (item.is_dir) {
       item.icon_url = Utils.getFolderIconUrl();
@@ -247,17 +259,27 @@ class Item extends Component {
       item.icon_url = Utils.getFileIconUrl(item.name);
     }
     return (
-      <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
-        <td><img src={item.icon_url} width="24" alt="" /></td>
+      <tr
+        className={isHighlighted ? 'tr-highlight' : ''}
+        onMouseOver={this.handleMouseOver}
+        onMouseOut={this.handleMouseOut}
+        onFocus={this.handleMouseOver}
+      >
+        <td className="text-center">
+          <img src={item.icon_url} width="24" alt="" />
+        </td>
         <td>
-          {item.is_dir ? <a href="#" onClick={this.openFolder}>{item.name}</a> : item.name}
+          {item.is_dir
+            ? <a href="#" onClick={this.openFolder}>{item.name}</a>
+            : item.name
+          }
+        </td>
+        <td>
+          {item.is_dir ? '' : <i className={`op-icon sf3-font sf3-font-download1 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></i>}
+          {path ? '' : <i className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></i>}
         </td>
         <td>{item.shared_by}</td>
-        <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.ctime).fromNow()}</td>
-        <td>{item.is_dir ? '' : <a href="#" className={`action-icon sf2-icon-download ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></a>}
-        </td>
-        <td>{this.props.path ? '' : <a href="#" className={`action-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></a>}
-        </td>
+        <td title={dayjs(item.ctime).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.ctime).fromNow()}</td>
       </tr>
     );
   }
@@ -298,7 +320,7 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index}>
             <span className="path-split">/</span>
-            <span className="path-file-name">{item}</span>
+            <span className="last-path-item" title={item}>{item}</span>
           </Fragment>
         );
       } else {
@@ -310,7 +332,14 @@ class DirPath extends React.Component {
         return (
           <Fragment key={index} >
             <span className="path-split">/</span>
-            <a className="path-link" data-path={nodePath} onClick={this.onPathClick}>{item}</a>
+            <span
+              className="path-item"
+              data-path={nodePath}
+              onClick={this.onPathClick}
+              title={item}
+            >
+              {item}
+            </span>
           </Fragment>
         );
       }
@@ -319,11 +348,17 @@ class DirPath extends React.Component {
   };
 
   render() {
-    let pathElem = this.turnPathToLink(this.props.currentPath);
+    const { currentPath } = this.props;
     return (
-      <div className="path-container">
-        <a href="#" onClick={this.props.getAllReceivedShares}>{gettext('All')}</a>
-        {pathElem}
+      <div className="path-container dir-view-path">
+        <span
+          className="path-item mw-100"
+          onClick={this.props.getAllReceivedShares}
+          title={gettext('Shared from other servers')}
+        >
+          {gettext('Shared from other servers')}
+        </span>
+        {currentPath && this.turnPathToLink(currentPath)}
       </div>
     );
   }
