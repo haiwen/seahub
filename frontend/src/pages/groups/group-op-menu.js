@@ -11,7 +11,7 @@ import DismissGroupDialog from '../../components/dialog/dismiss-group-dialog';
 import RenameGroupDialog from '../../components/dialog/rename-group-dialog';
 import TransferGroupDialog from '../../components/dialog/transfer-group-dialog';
 import ImportMembersDialog from '../../components/dialog/import-members-dialog';
-import ManageMembersDialog from '../../components/dialog/manage-members-dialog';
+import ManageMembersDialog from '../../components/manage-members-dialog';
 import DepartmentDetailDialog from '../../components/dialog/department-detail-dialog';
 import LeaveGroupDialog from '../../components/dialog/leave-group-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
