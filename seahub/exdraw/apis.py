@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from seaserv import seafile_api
 
+from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
@@ -259,9 +260,11 @@ class ExdrawUploadImage(APIView):
 
             decoded_data = base64.b64decode(encoded_data)
 
-            file_ext = mime_type.split('/')[-1]
-            if file_ext == 'svg+xml':
-                file_ext = 'svg'
+            file_ext = MIMETYPE_FILE_TYPE_MAPPING.get(mime_type)
+            if not file_ext:
+                error_msg = 'Image type not supported'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            
             filename = f"{image_id}.{file_ext}"
 
             file_path = posixpath.join(parent_path, filename)
