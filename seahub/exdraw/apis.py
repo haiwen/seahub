@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from seaserv import seafile_api
 
-from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING
+from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING, FILE_TYPE_MIMETYPE_MAPPING
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
@@ -300,6 +300,12 @@ class ExdrawDownloadImage(APIView):
             error_msg = 'exdraw uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        filetype, fileext = get_file_type_and_ext(filename)
+        content_type = FILE_TYPE_MIMETYPE_MAPPING.get(fileext)
+        if not content_type:
+            error_msg = 'Image type not supported'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         repo_id = uuid_map.repo_id
         username = request.user.username
 
@@ -313,11 +319,8 @@ class ExdrawDownloadImage(APIView):
             logger.error(resp.text)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        filetype, fileext = get_file_type_and_ext(filename)
-        if fileext == 'svg':
-            fileext = 'svg+xml'
+        
         response = HttpResponse(
-            content=resp.content, content_type='image/' + fileext)
+            content=resp.content, content_type=content_type)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
