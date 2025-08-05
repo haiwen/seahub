@@ -16,7 +16,7 @@ class Collab {
     this.excalidrawAPI = excalidrawAPI;
     this.config = config;
     this.document = null;
-    this.isCollaborating = false;
+    this.isServerConnected = false;
 
     this.collaborators = new Map();
     const { user } = config;
@@ -51,12 +51,12 @@ class Collab {
     });
   }
 
-  setIsCollaborating = (flag) => {
-    this.isCollaborating = flag;
+  setIsServerConnected = (flag) => {
+    this.isServerConnected = flag;
   };
 
-  getIsCollaborating = () => {
-    return this.isCollaborating;
+  getIsServerConnected = () => {
+    return this.isServerConnected;
   };
 
   fetchImageFilesFromServer = async (opts) => {
@@ -143,7 +143,7 @@ class Collab {
       });
     };
 
-    this.setIsCollaborating(true);
+    this.setIsServerConnected(true);
 
     this.fallbackInitializationHandler = fallbackInitializationHandler;
 
@@ -352,7 +352,7 @@ class Collab {
     this.lastBroadcastedOrReceivedSceneVersion = -1;
     this.portal.close();
     this.fileManager.reset();
-    this.setIsCollaborating(false);
+    this.setIsServerConnected(false);
   };
 
 }

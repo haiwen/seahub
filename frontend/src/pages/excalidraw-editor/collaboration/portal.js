@@ -54,9 +54,8 @@ class Portal {
 
   queueFileUpload = throttle(async () => {
     let savedFiles = new Map();
-    let erroredFiles = new Map();
     try {
-      ({ savedFiles, erroredFiles } = await this.collab.fileManager.saveFiles({
+      ({ savedFiles } = await this.collab.fileManager.saveFiles({
         elements: this.collab.excalidrawAPI.getSceneElementsIncludingDeleted(),
         files: this.collab.excalidrawAPI.getFiles()
       }));

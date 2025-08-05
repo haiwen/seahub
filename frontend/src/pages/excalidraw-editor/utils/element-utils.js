@@ -1,3 +1,4 @@
+import { MIMETYPE_TO_FILE_SUFFIX } from '../constants';
 
 export const isLinearElementType = (elementType) => {
   return (elementType === 'arrow' || elementType === 'line' // || elementType === "freedraw"
@@ -20,8 +21,7 @@ export const isInitializedImageElement = (element) => {
 
 export const getFilename = (fileUuid, fileData) => {
   const { mimeType } = fileData;
-  let fileExt = mimeType.split('/')[1];
-  fileExt = fileExt === 'svg+xml' ? 'svg' : fileExt;
+  const fileExt = MIMETYPE_TO_FILE_SUFFIX[mimeType];
   return `${fileUuid}.${fileExt}`;
 };
 

@@ -47,3 +47,15 @@ export const WS_SUBTYPES = {
   USER_VISIBLE_SCENE_BOUNDS: 'USER_VISIBLE_SCENE_BOUNDS',
 };
 
+export const MIMETYPE_TO_FILE_SUFFIX = {
+  'image/svg+xml': 'svg',
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/gif': 'gif',
+  'image/webp': 'webp',
+  'image/bmp': 'bmp',
+  'image/x-icon': 'ico',
+  'image/avif': 'avif',
+  'image/jfif': 'jfif'
+};
+

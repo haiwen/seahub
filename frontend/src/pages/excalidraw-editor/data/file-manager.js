@@ -3,13 +3,13 @@ import { isInitializedImageElement } from '../utils/element-utils';
 class FileManager {
 
   constructor({ getFiles, saveFiles }) {
-    this.fetchingFiles = new Map();
-    this.erroredFiles_fetch = new Map();
-    this.savingFiles = new Map();
-    this.savedFiles = new Map();
-    this.erroredFiles_save = new Map();
-    this._getFiles = getFiles;
-    this._saveFiles = saveFiles;
+    this.fetchingFiles = new Map(); // List of images being requested
+    this.erroredFiles_fetch = new Map(); // List of images with request errors
+    this.savingFiles = new Map(); // List of pictures being saved
+    this.savedFiles = new Map(); // List of saved pictures
+    this.erroredFiles_save = new Map(); // Save error image list
+    this._getFiles = getFiles; // Function used to load images in elements
+    this._saveFiles = saveFiles; // Function used to save the image in the element
   }
 
   isFileTracked = (id) => {

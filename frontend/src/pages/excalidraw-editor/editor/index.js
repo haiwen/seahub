@@ -70,7 +70,7 @@ const SimpleEditor = () => {
 
     const loadImages = (data, isInitialLoad) => {
       if (!data.scene) return;
-      if (collabAPIRef.current && collabAPIRef.current.getIsCollaborating()) {
+      if (collabAPIRef.current && collabAPIRef.current.getIsServerConnected()) {
         if (data.scene.elements) {
           collabAPIRef.current.fetchImageFilesFromServer({
             elements: data.scene.elements,
