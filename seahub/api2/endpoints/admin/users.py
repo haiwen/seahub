@@ -593,6 +593,11 @@ class AdminUsers(APIView):
             if MULTI_INSTITUTION:
                 info['institution'] = profile.institution if profile else ''
 
+            orgs = ccnet_api.get_orgs_by_user(user.email)
+            if orgs:
+                info['org_id'] = orgs[0].org_id
+                info['org_name'] = orgs[0].org_name
+
             data.append(info)
 
         return data
