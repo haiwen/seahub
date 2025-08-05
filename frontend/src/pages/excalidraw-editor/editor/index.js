@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Excalidraw, MainMenu, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
+import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import Collab from '../collaboration/collab';
 import context from '../context';
-import { importFromLocalStorage, saveToLocalStorage } from '../data/local-storage';
-import { resolvablePromise } from '../utils/exdraw-utils';
+import { importFromLocalStorage } from '../data/local-storage';
+import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
+import { getFilename, isInitializedImageElement } from '../utils/element-utils';
+import LocalData from '../data/local-data';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -17,7 +19,7 @@ const UIOptions = {
     saveToActiveFile: false,
     LoadScene: false
   },
-  tools: { image: false },
+  tools: { image: true },
 };
 
 const initializeScene = async (collabAPI) => {
@@ -28,8 +30,8 @@ const initializeScene = async (collabAPI) => {
   let data = null;
   // load remote data from server
   if (collabAPI) {
-    const screen = await collabAPI.startCollaboration();
-    const { elements } = screen;
+    const scene = await collabAPI.startCollaboration();
+    const { elements } = scene;
     const restoredRemoteElements = restoreElements(elements, null);
 
     const reconciledElements = reconcileElements(
@@ -48,7 +50,7 @@ const initializeScene = async (collabAPI) => {
   }
 
   return {
-    screen: data
+    scene: data
   };
 };
 
@@ -66,29 +68,109 @@ const SimpleEditor = () => {
   useEffect(() => {
     if (!excalidrawAPI) return;
 
+    const loadImages = (data, isInitialLoad) => {
+      if (!data.scene) return;
+      if (collabAPIRef.current && collabAPIRef.current.getIsServerConnected()) {
+        if (data.scene.elements) {
+          collabAPIRef.current.fetchImageFilesFromServer({
+            elements: data.scene.elements,
+            forceFetchFiles: true,
+          }).then(({ loadedFiles, erroredFiles }) => {
+            excalidrawAPI.addFiles(loadedFiles);
+            updateStaleImageStatuses({
+              excalidrawAPI,
+              erroredFiles,
+              elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+            });
+          });
+        }
+      } else {
+        const fileIds =
+          data.scene.elements?.reduce((acc, element) => {
+            if (isInitializedImageElement(element)) {
+              return acc.concat(element.fileId);
+            }
+            return acc;
+          }, []) || [];
+        if (isInitialLoad && fileIds.length) {
+          LocalData.fileStorage
+            .getFiles(fileIds)
+            .then(({ loadedFiles, erroredFiles }) => {
+              if (loadedFiles.length) {
+                excalidrawAPI.addFiles(loadedFiles);
+              }
+              updateStaleImageStatuses({
+                excalidrawAPI,
+                erroredFiles,
+                elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+              });
+            });
+
+          LocalData.fileStorage.clearObsoleteFiles({ currentFileIds: fileIds });
+        }
+      }
+    };
+
     context.initSettings().then(() => {
       const config = context.getSettings();
       const collabAPI = new Collab(excalidrawAPI, config);
       collabAPIRef.current = collabAPI;
 
       initializeScene(collabAPI).then(async (data) => {
-        initialStatePromiseRef.current.promise.resolve(data.screen);
+        loadImages(data, /* isInitialLoad */true);
+        initialStatePromiseRef.current.promise.resolve(data.scene);
       });
     });
 
   }, [excalidrawAPI]);
 
   const handleChange = useCallback((elements, appState, files) => {
-    if (!collabAPIRef.current) return;
-    collabAPIRef.current.syncElements(elements);
-    const docUuid = context.getDocUuid();
+    if (collabAPIRef.current) {
+      collabAPIRef.current.syncElements(elements);
+    }
 
-    saveToLocalStorage(docUuid, elements, appState);
-  }, []);
+    const docUuid = context.getDocUuid();
+    if (!LocalData.isSavePaused()) {
+      LocalData.save(docUuid, elements, appState, files, () => {
+        if (excalidrawAPI) {
+          let didChange = false;
+          const oldElements = excalidrawAPI.getSceneElementsIncludingDeleted();
+          const newElements = oldElements.map(element => {
+            if (LocalData.fileStorage.shouldUpdateImageElementStatus(element)) {
+              const filename = getFilename(element.fileId, files[element.fileId]);
+              const newElement = newElementWith(element, { status: 'saved', filename });
+              if (newElement !== element) {
+                didChange = true;
+              }
+              return newElement;
+            }
+            return element;
+          });
+          if (didChange) {
+            excalidrawAPI.updateScene({
+              elements: newElements,
+              captureUpdate: CaptureUpdateAction.NEVER,
+            });
+          }
+        }
+      });
+    }
+  }, [excalidrawAPI]);
 
   const handlePointerUpdate = useCallback((payload) => {
     if (!collabAPIRef.current) return;
     collabAPIRef.current.syncPointer(payload);
+  }, []);
+
+  useEffect(() => {
+    const beforeUnload = (event) => {
+      // event.preventDefault();
+      LocalData.flushSave();
+    };
+    window.addEventListener('beforeunload', beforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+    };
   }, []);
 
   return (
