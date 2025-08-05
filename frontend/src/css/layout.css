@@ -135,7 +135,7 @@
 .cur-view-path .cur-view-path-btn.sf3-font,
 .cur-view-path .cur-view-path-btn .sf3-font {
   font-size: 16px;
-  color: #666;
+  color: var(--bs-icon-secondary-color);
 }
 
 .cur-view-path .cur-view-path-btn:hover {
@@ -243,7 +243,7 @@ div[tabindex="-1"][role="group"] {
   margin-left: 0.5rem;
   font-size: 1rem;
   font-weight: normal;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .header .file-feature {
@@ -307,7 +307,7 @@ img[src=""],img:not([src]) { /* for first loading img*/
 
 .cur-view-container .sf3-font-star-empty.sf3-font,
 .cur-view-container .sf3-font-star.sf3-font {
-  color: #999;
+  color: var(--bs-icon-tertiary-color);
 }
 
 .path-container {
@@ -356,7 +356,7 @@ img[src=""],img:not([src]) { /* for first loading img*/
 
 .sf-tip-default {
   font-size: 13px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .nav-indicator-container .nav-item {

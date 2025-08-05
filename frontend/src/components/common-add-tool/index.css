@@ -14,7 +14,7 @@
 
 .add-item-btn:hover {
   cursor: pointer;
-  background: #f5f5f5;
+  background: var(--bs-bg-color);
 }
 
 .add-item-btn .seafile-multicolor-icon-add-table {

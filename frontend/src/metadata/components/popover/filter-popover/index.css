@@ -31,7 +31,7 @@
 .sf-metadata-filter-popover .sf-metadata-filter-popover-add-btns {
   display: flex;
   align-items: center;
-  background: var(--bs-body-bg);
+  background: inherit;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   height: 40px;

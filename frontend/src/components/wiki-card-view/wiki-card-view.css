@@ -3,7 +3,7 @@
 }
 
 .wiki-card-group .wiki-card-group-no-tip {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   text-align: center;
 }
 
@@ -20,9 +20,17 @@
   border-radius: 6px;
   cursor: pointer;
 }
+[data-bs-theme=dark] .wiki-card-item {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
 
 .wiki-card-item:hover {
   box-shadow: 0 0 6px #0000002e;
+}
+[data-bs-theme=dark] .wiki-card-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: none;
 }
 
 /* wiki-card-item-top */
@@ -46,7 +54,7 @@
   padding: 2px 4px;
   border-radius: 3px;
   opacity: 0;
-  color: #999;
+  color: var(--bs-icon-tertiary-color);
 }
 
 .wiki-card-item.wiki-card-item-menu-open .wiki-card-item-top .dropdown .sf-dropdown-toggle,
@@ -106,12 +114,12 @@
 .wiki-card-item .wiki-item-bottom {
   height: 20px;
   font-size: 12px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   padding-top: 6px;
 }
 
 .wiki-card-item-add span:first-child {
-  color: #999;
+  color: var(--bs-icon-tertiary-color);
   line-height: 24px;
   height: 24px;
   font-size: 40px;

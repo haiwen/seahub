@@ -44,7 +44,7 @@
 .shared-file-view-body {
   height: calc(100% - 60px);
   padding: 30px 0 15px;
-  background: var(--bs-body-tertiary-bg);
+  background: var(--bs-body-secondary-bg);
   border: 1px solid var(--bs-border-secondary-color);
   overflow: auto;
 }
