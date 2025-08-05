@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import classnames from 'classnames';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
@@ -298,7 +298,7 @@ class SharedWithOCM extends Component {
       items: [],
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: 'name',
-      sortOrder: this.props.sortOrder || cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      sortOrder: this.props.sortOrder || Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false
     };
   }
@@ -323,7 +323,7 @@ class SharedWithOCM extends Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.sortBy == 'name' && props.sortOrder != state.sortOrder) {
-      cookie.save('seafile-repo-dir-sort-order', props.sortOrder);
+      Cookies.set('seafile-repo-dir-sort-order', props.sortOrder);
       return {
         ...state,
         sortOrder: props.sortOrder,
@@ -377,8 +377,8 @@ class SharedWithOCM extends Component {
   };
 
   sortItems = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-dir-sort-by', sortBy);
-    cookie.save('seafile-repo-dir-sort-order', sortOrder);
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
 
     this.setState({
       sortBy: sortBy,
