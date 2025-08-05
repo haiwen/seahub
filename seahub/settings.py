@@ -7,8 +7,7 @@ import os
 import re
 import copy
 
-from seaserv import FILE_SERVER_PORT
-
+FILE_SERVER_PORT = '8082'
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
@@ -104,12 +103,14 @@ WEBPACK_LOADER = {
     }
 }
 
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-# STORAGES = {
-#     "staticfiles": {
-#         "BACKEND": 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage',
-#     },
-# }
+STORAGES = {
+    "default": {
+        "BACKEND":  'django.core.files.storage.FileSystemStorage'
+    },
+    "staticfiles": {
+       "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
 
 # StaticI18N config
 STATICI18N_ROOT = '%s/static/scripts' % PROJECT_ROOT
@@ -158,6 +159,7 @@ CSRF_COOKIE_NAME = 'sfcsrftoken'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -177,7 +179,7 @@ TEMPLATES = [
                 'seahub.auth.context_processors.auth',
                 'seahub.base.context_processors.base',
                 'seahub.base.context_processors.debug',
-            ],
+            ]
         },
     },
 ]
@@ -1133,7 +1135,7 @@ def load_local_settings(module):
             module.FILE_SERVER_ROOT = module.HTTP_SERVER_ROOT
         del module.HTTP_SERVER_ROOT
     for attr in dir(module):
-        match = re.search('^EXTRA_(\w+)', attr)
+        match = re.search(r'^EXTRA_(\w+)', attr)
         if match:
             name = match.group(1)
             value = getattr(module, attr)
@@ -1380,5 +1382,3 @@ if ENABLE_LDAP:
 # ]
 
 # settings.py
-
-

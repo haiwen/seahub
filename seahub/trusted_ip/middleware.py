@@ -11,6 +11,7 @@ from seahub.settings import ENABLE_LIMIT_IPADDRESS, TRUSTED_IP_LIST
 
 
 class LimitIpMiddleware(MiddlewareMixin):
+    async_mode = False
     def process_request(self, request):
         if not ENABLE_LIMIT_IPADDRESS:
             return None

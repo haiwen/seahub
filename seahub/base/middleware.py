@@ -34,7 +34,7 @@ class BaseMiddleware(MiddlewareMixin):
     """
     Middleware that add organization, group info to user.
     """
-
+    async_mode = False
     def process_request(self, request):
 
         username = request.user.username
@@ -84,7 +84,7 @@ class BaseMiddleware(MiddlewareMixin):
 
 class InfobarMiddleware(MiddlewareMixin):
     """Query info bar close status, and store into request."""
-
+    async_mode = False
     def get_from_db(self):
         ret = Notification.objects.all().filter(primary=1)
         refresh_cache()
@@ -119,6 +119,7 @@ class InfobarMiddleware(MiddlewareMixin):
 
 
 class ForcePasswdChangeMiddleware(MiddlewareMixin):
+    async_mode = False
     def _request_in_black_list(self, request):
         path = request.path
         black_list = (r'^%s$' % SITE_ROOT, r'home/.+', r'repo/.+',
@@ -164,6 +165,7 @@ class UserAgentMiddleWare(MiddlewareMixin):
     user_agents_android_search = u"(?:android)"
     user_agents_mobile_search = u"(?:mobile)"
     user_agents_tablets_search = u"(?:%s)" % u'|'.join(('ipad', 'tablet', ))
+    async_mode = False
 
     def __init__(self, get_response=None):
         self.get_response = get_response
