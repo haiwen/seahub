@@ -2,10 +2,10 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import cookie from 'react-cookies';
+import Cookies from 'js-cookie';
 import classnames from 'classnames';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -17,6 +17,7 @@ import ReposSortMenu from '../../components/sort-menu';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import MobileItemMenu from '../../components/mobile-item-menu';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -256,22 +257,9 @@ class Item extends Component {
             <span className="item-meta-info">{item.from_server_url}</span>
           </td>
           <td>
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-              />
-              <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
-                </div>
-              </div>
-            </Dropdown>
+            <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+              <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+            </MobileItemMenu>
           </td>
         </tr>
       );
@@ -289,8 +277,8 @@ class SharedWithOCM extends Component {
   constructor(props) {
     super(props);
     this.sortOptions = [
-      { value: 'name-asc', text: gettext('By name ascending') },
-      { value: 'name-desc', text: gettext('By name descending') }
+      { value: 'name-asc', text: gettext('Ascending by name') },
+      { value: 'name-desc', text: gettext('Descending by name') }
     ];
     this.state = {
       loading: true,
@@ -298,7 +286,7 @@ class SharedWithOCM extends Component {
       items: [],
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: 'name',
-      sortOrder: this.props.sortOrder || cookie.load('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
+      sortOrder: this.props.sortOrder || Cookies.get('seafile-repo-dir-sort-order') || 'asc', // 'asc' or 'desc'
       isSortOptionsDialogOpen: false
     };
   }
@@ -323,7 +311,7 @@ class SharedWithOCM extends Component {
 
   static getDerivedStateFromProps(props, state) {
     if (props.sortBy == 'name' && props.sortOrder != state.sortOrder) {
-      cookie.save('seafile-repo-dir-sort-order', props.sortOrder);
+      Cookies.set('seafile-repo-dir-sort-order', props.sortOrder);
       return {
         ...state,
         sortOrder: props.sortOrder,
@@ -377,8 +365,8 @@ class SharedWithOCM extends Component {
   };
 
   sortItems = (sortBy, sortOrder) => {
-    cookie.save('seafile-repo-dir-sort-by', sortBy);
-    cookie.save('seafile-repo-dir-sort-order', sortOrder);
+    Cookies.set('seafile-repo-dir-sort-by', sortBy);
+    Cookies.set('seafile-repo-dir-sort-order', sortOrder);
 
     this.setState({
       sortBy: sortBy,
