@@ -58,7 +58,7 @@ class LastPathItemWrapper extends React.Component {
             <i className="sf3-font-new sf3-font"></i>
             <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
-          <DropdownMenu positionFixed={true}>
+          <DropdownMenu className='position-fixed'>
             {opList.map((item, index) => {
               return (
                 <DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>

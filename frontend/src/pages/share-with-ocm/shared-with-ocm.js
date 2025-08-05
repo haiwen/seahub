@@ -5,7 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import Cookies from 'js-cookie';
 import classnames from 'classnames';
 import { Link, navigate } from '@gatsbyjs/reach-router';
-import { Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -17,6 +17,7 @@ import ReposSortMenu from '../../components/sort-menu';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import MobileItemMenu from '../../components/mobile-item-menu';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -256,22 +257,9 @@ class Item extends Component {
             <span className="item-meta-info">{item.from_server_url}</span>
           </td>
           <td>
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="i"
-                className="sf-dropdown-toggle sf3-font sf3-font-more-vertical ml-0"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-              />
-              <div className={`${this.state.isItemMenuShow ? '' : 'd-none'}`} onClick={this.toggleOperationMenu}>
-                <div className="mobile-operation-menu-bg-layer"></div>
-                <div className="mobile-operation-menu">
-                  <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
-                </div>
-              </div>
-            </Dropdown>
+            <MobileItemMenu isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+              <DropdownItem className="mobile-menu-item" onClick={this.leaveShare}>{gettext('Leave Share')}</DropdownItem>
+            </MobileItemMenu>
           </td>
         </tr>
       );
@@ -289,8 +277,8 @@ class SharedWithOCM extends Component {
   constructor(props) {
     super(props);
     this.sortOptions = [
-      { value: 'name-asc', text: gettext('By name ascending') },
-      { value: 'name-desc', text: gettext('By name descending') }
+      { value: 'name-asc', text: gettext('Ascending by name') },
+      { value: 'name-desc', text: gettext('Descending by name') }
     ];
     this.state = {
       loading: true,
