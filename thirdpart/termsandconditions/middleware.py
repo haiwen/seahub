@@ -19,7 +19,7 @@ class TermsAndConditionsRedirectMiddleware(MiddlewareMixin):
     This middleware checks to see if the user is logged in, and if so,
     if they have accepted the site terms.
     """
-
+    async_mode = False
     def process_request(self, request):
         """Process each request to app to ensure terms have been accepted"""
         if not config.ENABLE_TERMS_AND_CONDITIONS:

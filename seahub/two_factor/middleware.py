@@ -33,6 +33,7 @@ class OTPMiddleware(MiddlewareMixin):
     verified.  As a convenience, this also installs ``user.is_verified()``,
     which returns ``True`` if ``user.otp_device`` is not ``None``.
     """
+    async_mode = False
     def process_request(self, request):
         if not config.ENABLE_TWO_FACTOR_AUTH:
             return None
