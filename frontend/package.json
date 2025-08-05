@@ -12,7 +12,7 @@
     "@gatsbyjs/reach-router": "2.0.1",
     "@seafile/react-image-lightbox": "4.0.2",
     "@seafile/resumablejs": "1.1.16",
-    "@seafile/seafile-calendar": "0.0.28",
+    "@seafile/seafile-calendar": "0.0.32",
     "@seafile/seafile-editor": "2.0.25",
     "@seafile/seafile-sdoc-editor": "2.0.48",
     "@seafile/stldraw-editor": "1.0.1",
