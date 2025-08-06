@@ -337,6 +337,7 @@ class DirFiles extends React.Component {
           menuStyle={isMobile ? { zIndex: 1050 } : {}}
           getMenuList={this.getMenuList}
           onMenuItemClick={this.onMoreOperationClick}
+          tickable={true}
         />
       </div>
     );

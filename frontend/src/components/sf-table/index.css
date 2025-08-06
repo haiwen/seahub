@@ -18,7 +18,7 @@
 
 .sf-table-searcher-btn .sf3-font-search {
   display: inline-block;
-  color: #666;
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-table-searcher-input-wrapper {
@@ -130,7 +130,7 @@
 .sf-table-result-content .static-sf-table-result-content .sf-table-row {
   position: relative;
   width: fit-content;
-  background-color: var(--bs-tr-bg);
+  background-color: var(--bs-th-bg);
 }
 
 .record-HeaderCell__draggable {
@@ -167,7 +167,7 @@
 }
 
 .static-sf-table-result-content.grid-header .sf-table-row .frozen-columns {
-  background-color: var(--bs-header-secondary-bg);
+  background-color: var(--bs-th-bg);
 }
 
 .sf-table-result-content .sf-table-row {

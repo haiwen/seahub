@@ -87,6 +87,10 @@
   z-index: 3;
 }
 
+[data-bs-theme=dark] .static-sf-metadata-result-content {
+  background: var(--bs-body-bg);
+}
+
 .static-sf-metadata-result-content .sf-metadata-result-table-row {
   position: relative;
   width: fit-content;

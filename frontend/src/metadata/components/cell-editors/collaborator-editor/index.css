@@ -12,6 +12,12 @@
   left: 0;
 }
 
+[data-bs-theme=dark] .sf-metadata-collaborator-editor {
+  background-color: var(--bs-popover-bg);
+  border-color: var(--bs-border-secondary-color);
+  box-shadow: none;
+}
+
 .sf-metadata-collaborator-editor .sf-metadata-collaborator-editor-container {
   max-height: 200px;
   min-height: 100px;
@@ -63,7 +69,7 @@
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-  background-color: inherit;
+  background-color: transparent;
 }
 
 .sf-metadata-collaborator-editor .collaborator-avatar {
@@ -76,6 +82,13 @@
   display: inline-block;
   height: 20px;
   line-height: 20px;
+  color: var(--bs-body-color);
+  margin-left: 5px;
+  max-width: 200px;
+}
+
+.sf-metadata-collaborator-editor .sf-metadata-delete-collaborator .collaborator-name {
+  color: #212529;
 }
 
 .sf-metadata-collaborator-editor .collaborator-check-icon {

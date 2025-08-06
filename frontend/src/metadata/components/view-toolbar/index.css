@@ -19,6 +19,7 @@
   align-items: center;
   justify-content: center;
   margin-left: .5rem;
+  color: var(--bs-icon-color);
 }
 
 .sf-metadata-tool .sf-metadata-tool-left-operations .sf-metadata-view-tool-operation-btn:first-child {
@@ -53,7 +54,11 @@
   background-color: #d7e8ff;
 }
 
+.sf-metadata-tool .sf-metadata-tool-left-operations .sf-metadata-view-tool-operation-btn{
+  color: #666;
+}
+
 .sf-metadata-tool .sf-metadata-view-tool-operation-btn .seafile-multicolor-icon {
-  fill: #666;
+  color: inherit;
   font-size: 16px;
 }

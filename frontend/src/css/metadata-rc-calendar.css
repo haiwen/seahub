@@ -94,3 +94,16 @@
   fill: gray;
   font-size: 12px;
 }
+
+[data-bs-theme=dark] .sf-metadata-rc-calendar.rc-calendar {
+  background-color: var(--bs-popover-bg);
+  border: 1px solid var(--bs-border-secondary-color);
+  box-shadow: none;
+}
+
+[data-bs-theme=dark] .sf-metadata-rc-calendar.rc-calendar .rc-calendar-input-wrap,
+[data-bs-theme=dark] .sf-metadata-rc-calendar.rc-calendar .rc-calendar-header,
+[data-bs-theme=dark] .sf-metadata-rc-calendar.rc-calendar .rc-calendar-body,
+[data-bs-theme=dark] .sf-metadata-rc-calendar.rc-calendar .rc-calendar-footer {
+  border-color: var(--bs-border-secondary-color);
+}

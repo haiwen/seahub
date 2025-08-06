@@ -12,14 +12,18 @@ class Logo extends React.Component {
   closeSide = () => {
     this.props.onCloseSidePanel();
   };
-
   getLogoSrc = () => {
     let isDark = false;
     if (typeof document !== 'undefined') {
       isDark = document.body.getAttribute('data-bs-theme') === 'dark';
     }
-    const path = isDark ? logoPath.replace('.png', '-dark.png') : logoPath;
-    return path.indexOf('image-view') != -1 ? path : mediaUrl + path;
+    // Check if logoPath is a custom path (not default logo)
+    const isCustomLogo = logoPath.startsWith('custom/');
+    let path = logoPath;
+    if (isDark && !isCustomLogo) {
+      path = logoPath.replace('.png', '-dark.png');
+    }
+    return path.indexOf('image-view') !== -1 ? path : mediaUrl + path;
   };
 
   render() {
