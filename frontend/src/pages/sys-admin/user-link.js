@@ -11,7 +11,7 @@ const propTypes = {
 class UserLink extends Component {
 
   render() {
-    return <Link to={`${siteRoot}sys/user/${encodeURIComponent(this.props.email)}/`}>{this.props.name}</Link>;
+    return <Link to={`${siteRoot}sys/users/${encodeURIComponent(this.props.email)}/`}>{this.props.name}</Link>;
   }
 }
 
