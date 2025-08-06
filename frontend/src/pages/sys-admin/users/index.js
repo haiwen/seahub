@@ -34,9 +34,7 @@ const UsersLayout = ({ ...commonProps }) => {
   const { curTab, isAdmin, isLDAPImported } = useMemo(() => {
     const path = location.pathname.split('/').filter(Boolean).pop();
     let curTab = path;
-    if (path === 'users') {
-      curTab = 'database';
-    } else if (path === 'admins') {
+    if (path === 'admins') {
       curTab = 'admin';
     }
     const isAdmin = curTab === 'admin';
@@ -83,7 +81,7 @@ const UsersLayout = ({ ...commonProps }) => {
       return <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>;
     }
 
-    // 'database'
+    // 'users'
     return (
       <>
         <Button className="btn btn-secondary operation-item" onClick={toggleImportUserDialog}>{gettext('Import Users')}</Button>
