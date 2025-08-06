@@ -53,7 +53,7 @@ class Nav extends React.Component {
                 key={index}
                 ref={el => this.itemRefs[index] = el}
               >
-                <Link to={`${siteRoot}sys/user/${encodeURIComponent(email)}/${item.urlPart}`} className={`nav-link m-0 ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
+                <Link to={`${siteRoot}sys/users/${encodeURIComponent(email)}/${item.urlPart}`} className={`nav-link m-0 ${currentItem == item.name ? ' active' : ''}`}>{item.text}</Link>
               </li>
             );
           })}
