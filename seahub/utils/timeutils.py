@@ -2,10 +2,11 @@
 import logging
 import pytz
 import datetime
+from zoneinfo import ZoneInfo
 from django.conf import settings
 import six
 from django.utils import timezone
-from django.utils.timezone import get_current_timezone
+from django.utils.timezone import get_current_timezone, make_aware, localtime
 
 logger = logging.getLogger(__name__)
 
@@ -56,10 +57,10 @@ def timestamp_to_isoformat_timestr(timestamp):
             dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
 
         dt_obj = dt_obj.replace(microsecond=0)
+        if not timezone.is_naive(dt_obj):
+            dt_obj = timezone.make_naive(dt_obj)
         aware_datetime = dt_obj.replace(tzinfo=current_timezone)
-        target_timezone = pytz.timezone(str(current_timezone))
-        localized_datetime = target_timezone.normalize(aware_datetime.astimezone(pytz.UTC))
-        isoformat_timestr = localized_datetime.isoformat()
+        isoformat_timestr = aware_datetime.isoformat()
         return isoformat_timestr
     except Exception as e:
         logger.error(e)
@@ -97,7 +98,7 @@ def utc_datetime_to_isoformat_timestr(utc_datetime):
         # The second way of building a localized time is by converting an existing
         # localized time using the standard astimezone() method:
         utc_datetime = utc_datetime.replace(microsecond=0)
-        utc_datetime = pytz.utc.localize(utc_datetime)
+        utc_datetime = timezone.make_aware(utc_datetime, timezone=datetime.timezone.utc)
         isoformat_timestr = utc_datetime.astimezone(current_timezone).isoformat()
         return isoformat_timestr
     except Exception as e:

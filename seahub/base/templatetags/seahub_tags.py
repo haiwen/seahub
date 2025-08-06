@@ -4,7 +4,7 @@ import datetime as dt
 from datetime import datetime
 import re
 
-import pytz
+from zoneinfo import ZoneInfo
 from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
@@ -12,7 +12,7 @@ from django.utils import translation, formats
 from django.utils.dateformat import DateFormat
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext, ngettext
-from django.utils.timezone import get_current_timezone
+from django.utils.timezone import get_current_timezone, make_aware
 from django.utils.html import escape
 
 from seahub.base.accounts import User
@@ -310,8 +310,8 @@ def translate_seahub_time(value, autoescape=None):
 
     timestring = val.isoformat()
     if val.tzinfo is None:
-        tzinfo = pytz.timezone(TIME_ZONE)
-        val = tzinfo.localize(val)
+        tzinfo = ZoneInfo(TIME_ZONE)
+        val = make_aware(val, timezone=tzinfo)
     titletime = DateFormat(val).format('r')
 
     time_with_tag = '<time datetime="'+timestring+'" is="relative-time" title="'+titletime+'" >'+translated_time+'</time>'

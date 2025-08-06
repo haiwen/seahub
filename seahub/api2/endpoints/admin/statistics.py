@@ -1,8 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
-import pytz
 import logging
-
+from zoneinfo import ZoneInfo
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -207,7 +206,9 @@ def get_init_data(start_time, end_time, init_data=0):
 
 def get_time_offset():
     timezone_name = timezone.get_current_timezone_name()
-    offset = pytz.timezone(timezone_name).localize(datetime.datetime.now()).strftime('%z')
+    tz = ZoneInfo(timezone_name)
+    now_in_tz = datetime.datetime.now(tz)
+    offset = now_in_tz.strftime('%z')
     return offset[:3] + ':' + offset[3:]
 
 
