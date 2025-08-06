@@ -69,6 +69,10 @@
   padding: 0 16px 8px;
 }
 
+.lightbox-side-panel .dirent-detail-item-value .sf-metadata-ui.collaborator-item {
+  color: #212529;
+}
+
 .lightbox-side-panel .sf-metadata-ui.collaborator-item,
 .lightbox-side-panel .sf-metadata-text-property-detail-editor:not(.formatter),
 .lightbox-side-panel .sf-metadata-number-property-detail-editor:focus {

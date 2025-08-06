@@ -1,5 +1,5 @@
 .tr-drop-effect {
-  background-color: #f7f7f7;
+  background-color: var(--bs-tr-hover-bg);
 }
 
 .star-empty {
@@ -28,16 +28,4 @@
 
 .tag-list-title {
   overflow: hidden;
-}
-
-.dirent-sdoc-draft-identifier {
-  display: inline-block;
-  font-size: 14px;
-  color: #666;
-  background: #eee;
-  padding: 0 8px;
-  height: 20px;
-  line-height: 20px;
-  border-radius: 10px;
-  margin-left: 6px;
 }

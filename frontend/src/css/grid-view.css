@@ -84,7 +84,7 @@
 }
 
 .grid-drop-show {
-  background: #f7f7f7;
+  background: var(--bs-tr-hover-bg);
 }
 
 .selection-box {

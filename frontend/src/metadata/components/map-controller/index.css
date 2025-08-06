@@ -58,7 +58,7 @@
 
 .sf-map-control-container .sf-map-control:not(.disabled):hover {
   cursor: pointer;
-  color: var(--bs-body-color);
+  color: #212529;
 }
 
 .sf-map-control-container .sf-map-control.disabled {
