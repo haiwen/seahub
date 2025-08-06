@@ -6,5 +6,5 @@
 }
 
 .sf-metadata-record-header-cell .sf-metadata-result-table-cell.insert-column:hover .seafile-multicolor-icon {
-  fill: #666;
+  fill: var(--bs-icon-color);
 }

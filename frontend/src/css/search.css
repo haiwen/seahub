@@ -71,7 +71,7 @@
   pointer-events: all;
   font-style: normal;
   min-width: 20px;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   height: 20px;
   margin: 9px;
   border: 0;

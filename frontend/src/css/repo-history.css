@@ -15,7 +15,7 @@ body {
 
 .details {
   font-size: 12px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   text-decoration: underline;
   margin-left: .25rem;
 }
@@ -43,7 +43,7 @@ body {
 /* for the dialog */
 .repo-snapshot-tip {
   font-size: .875rem;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 #repo-history-dialog.modal-dialog {

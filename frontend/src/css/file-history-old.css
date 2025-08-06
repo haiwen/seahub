@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eee;
-  background-color: #f5f5f5;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+  background-color: var(--bs-header-bg);
   font-size: 1rem;
   padding: 0.5rem 1rem;
 }
@@ -37,8 +37,12 @@
   padding: .5em 0;
   background: #efefef;
   border: 0;
-  color: #666;
+  color: var(--bs-icon-color);
   border-radius: 2px;
+}
+
+[data-bs-theme=dark] .old-history-main .get-more-btn {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .old-history-main .get-more-btn:hover {
@@ -57,6 +61,10 @@
   color: #222;
   font-weight: bold;
   line-height: 1.5;
+}
+
+[data-bs-theme=dark] .old-history-main h2 {
+  color: var(--bs-body-secondary-color);
 }
 
 .old-history-main .file-name {
@@ -84,7 +92,7 @@
 }
 
 .old-history-more-operation i {
-  color: #999;
+  color: var(--bs-icon-secondary-color);
   cursor: pointer;
 }
 

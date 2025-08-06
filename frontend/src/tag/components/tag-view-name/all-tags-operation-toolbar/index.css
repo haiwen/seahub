@@ -1,4 +1,4 @@
 .all-tags-operation-toggle .path-item-new-toggle {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   margin-right: 2px;
 }

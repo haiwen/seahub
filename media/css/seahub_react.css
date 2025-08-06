@@ -344,7 +344,7 @@ textarea::placeholder {
   font-size: 1rem;
   margin-right: 6px;
   line-height: 1;
-  color: var(--bs-icon-tertiary-color);
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-heading .sf-dropdown-toggle {
@@ -524,7 +524,7 @@ textarea::placeholder {
 .op-icon {
   font-size: 1rem;
   line-height: 1;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   cursor: pointer;
   display: inline-flex;
   width: 24px;
@@ -537,7 +537,7 @@ textarea::placeholder {
 
 .op-icon:focus,
 .op-icon:hover {
-  color: var(--bs-icon-secondary-color); /* to overwrite the styles for `a:hover` */
+  color: var(--bs-icon-color); /* to overwrite the styles for `a:hover` */
   text-decoration: none;
   background: var(--bs-hover-secondary-bg);
 }
@@ -911,7 +911,7 @@ textarea::placeholder {
 
 .side-nav-con .heading {
   font-size: .9375rem;
-  color: #666666;
+  color: var(--bs-body-secondary-color);
 }
 
 .side-nav-con>.nav {
@@ -947,7 +947,7 @@ textarea::placeholder {
 .side-nav-con [class^="sf3-font-"] {
   font-size: 1.25rem;
   line-height: 1;
-  color: #999;
+  color: var(--bs-icon-secondary-color);
   margin-right: 0.5rem;
 }
 
@@ -1141,7 +1141,7 @@ a.sf-popover-item:hover {
 .path-split {
   display: inline-block;
   padding: 0 5px;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .path-link {
@@ -1686,7 +1686,7 @@ a.table-sort-op:hover {
 .side-panel .side-nav-con .active [class^="sf3-font-"],
 .side-panel .side-nav-con .active .nav-icon,
 .side-panel .side-nav-con .active .sharp {
-  color: var(--bs-icon-tertiary-color);
+  color: var(--bs-icon-secondary-color);
 }
 
 .side-panel .side-nav .side-nav-con .nav-item {
@@ -1739,7 +1739,7 @@ a.table-sort-op:hover {
   font-size: 12px !important;
 }
 [data-bs-theme=dark] .sf3-font-down {
-  color: var(--bs-icon-tertiary-color) !important;
+  color: rgba(255, 255, 255, .5) !important;
 }
 
 .visually-hidden {
@@ -1756,12 +1756,16 @@ a.table-sort-op:hover {
 .form-control {
   background-color: var(--bs-body-bg);
   border: 1px solid var(--bs-border-color);
-  color: var(--bs-placeholder-color);
+  color: var(--bs-body-color);
 }
 
 .form-control:focus {
   background-color: var(--bs-body-bg);
-  color: var(--bs-placeholder-color);
+  color: var(--bs-body-color);
+}
+
+.form-control:disabled {
+  background-color: rgba(255, 255, 255, .02);
 }
 
 .input-group .input-group-text:not(:first-child) {
@@ -1812,4 +1816,8 @@ a.table-sort-op:hover {
 
 [data-bs-theme=dark] .custom-select {
   border: 1px solid var(--bs-border-color);
+}
+
+[data-bs-theme=dark] .sf2-icon-plus {
+  color: var(--bs-icon-secondary-color);
 }

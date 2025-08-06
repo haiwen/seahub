@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../utils/constants';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import { MenuSelectStyle } from '../common/select';
 import '../../css/select-editor.css';
 
@@ -20,6 +20,16 @@ const propTypes = {
   toggleItemFreezed: PropTypes.func,
   enableAddCustomPermission: PropTypes.bool,
   onAddCustomPermissionToggle: PropTypes.func,
+};
+
+const DropdownIndicator = props => {
+  return (
+    components.DropdownIndicator && (
+      <components.DropdownIndicator {...props}>
+        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+      </components.DropdownIndicator>
+    )
+  );
 };
 
 class SelectEditor extends React.Component {
@@ -124,6 +134,7 @@ class SelectEditor extends React.Component {
             menuPosition={'fixed'}
             menuPortalTarget={document.querySelector('#wrapper')}
             styles={MenuSelectStyle}
+            components={{ DropdownIndicator }}
             onMenuClose={this.onMenuClose}
             autoFocus={autoFocus}
             menuShouldScrollIntoView

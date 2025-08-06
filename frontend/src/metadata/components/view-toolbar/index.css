@@ -40,22 +40,22 @@
 
 .sf-metadata-tool .sf-metadata-tool-left-operations .sf-metadata-view-tool-filter.active {
   background-color: #d1f7c4;
+  color: #666;
 }
 
 .sf-metadata-tool .sf-metadata-tool-left-operations .sf-metadata-view-tool-sort.active {
   background-color: #f5d9bc;
+    color: #666;
 }
 
 .sf-metadata-tool .sf-metadata-tool-left-operations .sf-metadata-view-tool-groupby.active {
   background-color: #dad7ff;
+    color: #666;
 }
 
 .sf-metadata-tool .sf-metadata-tool-left-operations .sf-metadata-view-tool-hide-column.active {
   background-color: #d7e8ff;
-}
-
-.sf-metadata-tool .sf-metadata-tool-left-operations .sf-metadata-view-tool-operation-btn{
-  color: #666;
+    color: #666;
 }
 
 .sf-metadata-tool .sf-metadata-view-tool-operation-btn .seafile-multicolor-icon {

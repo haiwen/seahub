@@ -57,7 +57,7 @@
 }
 
 .notification-item .notification-header-info .notification-time {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

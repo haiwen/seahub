@@ -25,7 +25,7 @@
 
 .user-item .user-name {
   margin-left: 5px;
-  color: var(--bs-body-color);
+  color: #212529;
 }
 
 .user-item .user-avatar img {

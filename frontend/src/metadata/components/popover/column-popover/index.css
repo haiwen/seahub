@@ -4,7 +4,7 @@
 }
 
 .sf-metadata-column-popover label {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 13px;
 }
 
@@ -20,7 +20,7 @@
 .sf-metadata-column-popover .sf-metadata-column-type {
   width: 100%;
   background: var(--bs-popover-bg);
-  border: 1px solid #ccc;
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 4px;
   font-size: 14px;
   display: flex;

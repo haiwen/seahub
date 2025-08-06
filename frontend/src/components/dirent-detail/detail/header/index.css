@@ -28,8 +28,8 @@
 .detail-header .detail-control .detail-control-icon,
 .detail-header .detail-control i {
   font-size: 16px;
-  fill: var(--bs-icon-secondary-color);
-  color: var(--bs-icon-secondary-color);
+  fill: var(--bs-icon-color);
+  color: var(--bs-icon-color);
 }
 
 .detail-header .detail-control:hover {

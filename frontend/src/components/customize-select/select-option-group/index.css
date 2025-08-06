@@ -27,7 +27,7 @@
   height: 100px;
   width: 100%;
   padding: 10px;
-  color: #666666;
+  color: var(--bs-body-secondary-color);
 }
 
 .seafile-option-group .seafile-option-group-content {

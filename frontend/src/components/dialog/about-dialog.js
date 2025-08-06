@@ -9,6 +9,42 @@ const propTypes = {
 };
 
 class AboutDialog extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      colorMode: typeof document !== 'undefined' ? document.body.getAttribute('data-bs-theme') : 'light'
+    };
+  }
+
+  componentDidMount() {
+    this.observer = new MutationObserver(this.handleThemeChange);
+    if (typeof document !== 'undefined') {
+      this.observer.observe(document.body, { attributes: true, attributeFilter: ['data-bs-theme'] });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  handleThemeChange = () => {
+    if (typeof document !== 'undefined') {
+      const colorMode = document.body.getAttribute('data-bs-theme');
+      this.setState({ colorMode });
+    }
+  };
+
+  getLogoSrc = () => {
+    const { colorMode } = this.state;
+    const isCustomLogo = logoPath.startsWith('custom/');
+    let path = logoPath;
+    if (colorMode === 'dark' && !isCustomLogo) {
+      path = logoPath.replace('.png', '-dark.png');
+    }
+    return path.indexOf('image-view') !== -1 ? path : mediaUrl + path;
+  };
 
   renderExternalAboutLinks = () => {
     if (additionalAboutDialogLinks && (typeof additionalAboutDialogLinks) === 'object') {
@@ -47,7 +83,7 @@ class AboutDialog extends React.Component {
               </span>
             </button>
             <div className="about-content">
-              <p><img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" /></p>
+              <p><img src={this.getLogoSrc()} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" /></p>
               <p>{gettext('Server Version: ')}{seafileVersion}<br />© {(new Date()).getFullYear()} {gettext('Seafile')}</p>
               <p>{this.renderExternalAboutLinks()}</p>
               <p><a href={href} target="_blank" rel="noreferrer">{gettext('About Us')}</a></p>

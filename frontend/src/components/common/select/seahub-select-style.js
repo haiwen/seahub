@@ -45,7 +45,7 @@ const MenuSelectStyle = {
     return ({
       ...base,
       backgroundColor: 'var(--bs-popover-bg)',
-      borderColor: 'var(--bs-border-secondary-color)',
+      border: '1px solid var(--bs-border-secondary-color)',
     });
   },
   option: (provided, state) => {

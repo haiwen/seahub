@@ -24,7 +24,7 @@
 #notifications .sf-icon-bell {
   font-size: 16px;
   line-height: 1;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   vertical-align: middle;
   border-radius: 4px;
 }

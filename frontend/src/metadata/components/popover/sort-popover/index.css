@@ -51,7 +51,7 @@
 }
 
 .sorts-list .empty-sorts-list {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
   padding: 0.25rem 0.25rem 0.25rem 0;
 }
@@ -59,10 +59,10 @@
 .delete-sort .seafile-multicolor-icon-fork-number {
   display: inline-block;
   font-size: 12px;
-  fill: #999;
+  fill: var(--bs-icon-secondary-color);
   cursor: pointer;
 }
 
 .sorts-list .delete-sort .seafile-multicolor-icon-fork-number:hover {
-  fill: #666666;
+  fill: var(--bs-icon-color);
 }

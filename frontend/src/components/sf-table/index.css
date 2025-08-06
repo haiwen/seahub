@@ -18,7 +18,7 @@
 
 .sf-table-searcher-btn .sf3-font-search {
   display: inline-block;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .sf-table-searcher-input-wrapper {
@@ -43,7 +43,7 @@
   right: 4px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .sf-table-searcher-input-wrapper .btn-close-searcher {
@@ -84,7 +84,7 @@
 }
 
 .toolbar-search-btn i.sf3-font {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   font-size: 12px;
 }
 

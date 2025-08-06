@@ -15,3 +15,11 @@
   top: 0;
   left: 0;
 }
+
+.view-modes-dropdown-shortcut {
+  color: var(--bs-body-secondary-color);
+}
+
+.dropdown-item:hover .view-modes-dropdown-shortcut {
+  color: #fff;
+}

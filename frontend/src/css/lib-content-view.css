@@ -115,7 +115,7 @@
 .folder-toggle-icon {
   position: absolute;
   left: 0;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   line-height: 1.625;
   width: 1.5rem;
   display: flex;
@@ -148,7 +148,7 @@
   display: inline-block;
   width: 1rem;
   text-align: center;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .tree-node-inner .right-icon {
@@ -157,7 +157,7 @@
   right: 0.5rem;
   bottom: 0;
   width: 1rem;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   z-index: 2;
   font-size: 0.8125rem;
   text-align: center;
@@ -169,7 +169,7 @@
   vertical-align: middle;
   font-size: 0.8125rem;
   line-height: 1.625rem !important;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .tree-node-hight-light {
@@ -323,7 +323,7 @@
 
 .dir-view-path .sf3-font-refresh {
   transform: rotateY(180deg);
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   cursor: pointer;
   font-size: 14px;
   display: inline-block;
@@ -331,7 +331,7 @@
 
 .dir-view-path .sf3-font-new,
 .dir-view-path .path-item-dropdown-toggle {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .dir-view-path .path-item-dropdown-toggle {
@@ -500,6 +500,7 @@
 .cur-view-container .cur-view-path {
   display: flex;
   align-items: center;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .cur-view-container .cur-view-path .cur-view-path-left {

@@ -7,3 +7,7 @@
 .sf-metadata-long-text-property-detail-editor .sf-metadata-property-detail-formatter {
   line-height: 1.5;
 }
+
+.longtext-dialog-container {
+  color: #212529;
+}

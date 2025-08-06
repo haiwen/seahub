@@ -3,6 +3,10 @@
   margin: 0 -1rem -1rem;
 }
 
+[data-bs-theme=dark] .sf-metadata-column-popover .sf-metadata-column-data-settings {
+  background-color: var(--bs-popover-bg);
+}
+
 .sf-metadata-column-popover .sf-metadata-column-data-settings .selected-option {
   background: transparent;
 }

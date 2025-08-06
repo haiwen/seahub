@@ -69,7 +69,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #666;
+  color: var(--bs-icon-color);
   margin: 9px;
   border: 0;
   border-radius: 3px;
@@ -181,7 +181,7 @@
 }
 
 .filter-by-date-menu .filter-by-date-menu-toolbar .filter-by-date-type-toggle .filter-label {
-  color: #7d7d7d;
+  color: var(--bs-body-secondary-color);
 }
 
 .filter-by-date-menu .filter-by-date-menu-toolbar .delete-btn {
@@ -220,12 +220,12 @@
 
 .search-filters-container .search-filter-toggle.active:hover,
 .search-filters-container .search-filter-toggle.highlighted:hover {
-  background-color: #efefef;
+  background-color: var(--bs-hover-bg);
 }
 
 .search-filters-container .search-filter-toggle.highlighted,
 .search-filter-toggle.highlighted .sf3-font-down {
-  color: #ed7109;
+  color: #ed7109 !important;
 }
 
 .search-filter-menu {

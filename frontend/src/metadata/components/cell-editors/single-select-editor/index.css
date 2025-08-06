@@ -112,7 +112,7 @@
   height: 30px;
   padding: 0 10px;
   overflow: hidden;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .sf-metadata-single-select-editor .add-search-result:hover{

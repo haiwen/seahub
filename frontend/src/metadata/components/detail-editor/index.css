@@ -17,12 +17,12 @@
   height: 30px;
   padding: 0 10px;
   overflow: hidden;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .sf-metadata-property-editor-popover .add-search-result:hover{
   cursor: pointer;
-  background-color: #f5f5f5;
+  background-color: var(--bs-bg-color);
 }
 
 .sf-metadata-property-editor-popover .add-search-result .add-new-option {
@@ -38,6 +38,6 @@
 
 .sf-metadata-property-detail-editor:empty::before {
   content: attr(placeholder);
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
 }

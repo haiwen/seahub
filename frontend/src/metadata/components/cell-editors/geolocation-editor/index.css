@@ -37,13 +37,13 @@
 }
 
 .sf-geolocation-editor-container .editor-header .title .location-icon {
-  color: var(--bs-icon-tertiary-color);
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-geolocation-editor-container .editor-header .full-screen {
   width: 24px;
   height: 24px;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .sf-geolocation-editor-container .editor-header .full-screen:hover {
@@ -77,7 +77,7 @@
   height: 24px;
   position: absolute;
   font-size: 16px;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   top: 7px;
   right: 8px;
   cursor: pointer;

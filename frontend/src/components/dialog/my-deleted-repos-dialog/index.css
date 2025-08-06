@@ -29,5 +29,5 @@
 
 .my-deleted-repos-tip {
   font-size: .8125rem;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }

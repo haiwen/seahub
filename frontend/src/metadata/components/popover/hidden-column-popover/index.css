@@ -11,7 +11,7 @@
 .sf-metadata-hide-columns-popover .empty-hide-columns-container .empty-hide-columns-list {
   padding: 0.25rem 10px;
   font-size: 14px;
-  color: #666666;
+  color: var(--bs-body-secondary-color);
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-container {
@@ -107,6 +107,10 @@
   font-size: 12px;
   margin-right: 10px;
   fill: #aaa;
+}
+
+[data-bs-theme=dark] .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
+  fill: rgba(255, 255, 255, 0.7);
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations {
