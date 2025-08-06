@@ -7,7 +7,8 @@ import os
 import re
 import copy
 
-FILE_SERVER_PORT = '8082'
+from seaserv import FILE_SERVER_PORT
+
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
@@ -108,7 +109,7 @@ STORAGES = {
         "BACKEND":  'django.core.files.storage.FileSystemStorage'
     },
     "staticfiles": {
-       "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+       "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
     },
 }
 
