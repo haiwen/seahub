@@ -26,6 +26,7 @@ const Content = ({
 
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectionStart, setSelectionStart] = useState(null);
+  const [selectionEnd, setSelectionEnd] = useState(null);
 
   const selectedImageIds = useMemo(() => selectedImages.map(img => img.id), [selectedImages]);
 
@@ -50,6 +51,7 @@ const Content = ({
 
       const selectionEnd = { x: e.clientX, y: e.clientY };
       const selected = [];
+      setSelectionEnd(selectionEnd);
 
       groups.forEach(group => {
         group.children.forEach((row) => {
@@ -185,12 +187,30 @@ const Content = ({
     );
   }, [overScan, mode, columns, rowHeight, onImageClick, onImageDoubleClick, onContextMenu, size, selectedImageIds, onDateTagClick]);
 
+  const renderSelectionBox = useCallback(() => {
+    if (!isSelecting) return null;
+    if (!selectionEnd) return null;
+
+    const containerBounds = containerRef.current.getBoundingClientRect();
+    const left = Math.min(selectionStart.x, selectionEnd.x) - containerBounds.left;
+    const top = Math.min(selectionStart.y, selectionEnd.y) - containerBounds.top;
+    const width = Math.abs(selectionStart.x - selectionEnd.x);
+    const height = Math.abs(selectionStart.y - selectionEnd.y);
+    return (
+      <div
+        className="selection-box"
+        style={{ left, top, width, height }}
+      >
+      </div>
+    );
+  }, [isSelecting, selectionStart, selectionEnd]);
+
   if (!Array.isArray(groups) || groups.length === 0) return (<EmptyTip text={gettext('No record')}/>);
 
   return (
     <div
       ref={containerRef}
-      className="metadata-gallery-main"
+      className="metadata-gallery-main position-relative"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
@@ -198,6 +218,7 @@ const Content = ({
       {groups.map((group) => {
         return renderDisplayGroup(group);
       })}
+      {renderSelectionBox()}
     </div>
   );
 };
