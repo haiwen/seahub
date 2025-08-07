@@ -5,7 +5,6 @@ import { LibraryIndexedDBAdapter } from './library-adapter';
 import Collab from '../collaboration/collab';
 import context from '../context';
 import TipMessage from './tip-message';
-import EventBus from '../../../components/common/event-bus';
 import isHotkey from 'is-hotkey';
 import { importFromLocalStorage } from '../data/local-storage';
 import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
@@ -16,7 +15,6 @@ import '@excalidraw/excalidraw/index.css';
 
 const { docUuid } = window.app.pageOptions;
 window.name = `${docUuid}`;
-const eventBus = EventBus.getInstance();
 const UIOptions = {
   canvasActions: {
     saveToActiveFile: false,
@@ -27,7 +25,6 @@ const UIOptions = {
 
 const initializeScene = async (collabAPI) => {
   // load local data from localstorage
-  eventBus.dispatch('is-saving');
   const docUuid = context.getDocUuid();
   const localDataState = importFromLocalStorage(docUuid); // {appState, elements}
 
@@ -128,19 +125,6 @@ const SimpleEditor = () => {
 
   }, [excalidrawAPI]);
 
-  useEffect(() => {
-    const handleHotkeySave = (event) => {
-      if (isHotkey('mod+s', event)) {
-        event.preventDefault();
-        handleChange(excalidrawAPI.getSceneElements(), excalidrawAPI.getAppState());
-      }
-    };
-    document.addEventListener('keydown', handleHotkeySave, true);
-    return () => {
-      document.removeEventListener('keydown', handleHotkeySave, true);
-    };
-  }, [excalidrawAPI]);
-
   const handleChange = useCallback((elements, appState, files) => {
     if (collabAPIRef.current) {
       collabAPIRef.current.syncElements(elements);
@@ -173,6 +157,19 @@ const SimpleEditor = () => {
       });
     }
   }, [excalidrawAPI]);
+
+  useEffect(() => {
+    const handleHotkeySave = (event) => {
+      if (isHotkey('mod+s', event)) {
+        event.preventDefault();
+        handleChange(excalidrawAPI.getSceneElements(), excalidrawAPI.getAppState());
+      }
+    };
+    document.addEventListener('keydown', handleHotkeySave, true);
+    return () => {
+      document.removeEventListener('keydown', handleHotkeySave, true);
+    };
+  }, [excalidrawAPI, handleChange]);
 
   const handlePointerUpdate = useCallback((payload) => {
     if (!collabAPIRef.current) return;
