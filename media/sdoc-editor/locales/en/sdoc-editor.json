@@ -640,7 +640,7 @@
   "Add_Comment": "Add Comment",
   "Finish": "Finish",
   "More_fluent": "More fluent",
-  "Select_Excalidraw_document": "Select Excalidraw document",
-  "Create_new_excalidraw": "Create new Excalidraw",
+  "Select_Excalidraw_file": "Select Excalidraw file",
+  "New_Excalidraw_file": "New Excalidraw file",
   "Whiteboard": "Whiteboard"
 }
