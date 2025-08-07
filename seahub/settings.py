@@ -161,7 +161,6 @@ CSRF_COOKIE_NAME = 'sfcsrftoken'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -181,7 +180,7 @@ TEMPLATES = [
                 'seahub.auth.context_processors.auth',
                 'seahub.base.context_processors.base',
                 'seahub.base.context_processors.debug',
-            ]
+            ],
         },
     },
 ]
@@ -1384,3 +1383,5 @@ if ENABLE_LDAP:
 # ]
 
 # settings.py
+
+
