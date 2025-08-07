@@ -1,9 +1,10 @@
 import Url from 'url-parse';
 import ExcalidrawServerApi from './api';
 import editorApi from './api/editor-api';
+import axios from 'axios';
 
 const { avatarURL } = window.app.config;
-const { docUuid, excalidrawServerUrl } = window.app.pageOptions;
+const { docUuid, excalidrawServerUrl, server } = window.app.pageOptions;
 const userInfo = window.app.userInfo;
 
 
@@ -44,6 +45,26 @@ class Context {
 
   saveSceneContent = (content) => {
     return this.exdrawApi.saveSceneContent(content);
+  };
+
+  uploadExdrawImage = (fileUuid, fileItem) => {
+    const docUuid = this.getDocUuid();
+    const accessToken = this.accessToken;
+
+    const url = `${server}/api/v2.1/exdraw/upload-image/${docUuid}/`;
+    const form = new FormData();
+    form.append('image_data', fileItem.dataURL);
+    form.append('image_id', fileUuid);
+
+    return axios.post(url, form, { headers: { Authorization: `Token ${accessToken}` } });
+  };
+
+  downloadExdrawImage = (fileUuid) => {
+    const docUuid = this.getDocUuid();
+    const accessToken = this.accessToken;
+
+    const url = `${server}/api/v2.1/exdraw/download-image/${docUuid}/${fileUuid}`;
+    return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   };
 
 }

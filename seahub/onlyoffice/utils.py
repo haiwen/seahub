@@ -3,7 +3,6 @@ import hashlib
 import logging
 import urllib.parse
 import posixpath
-import json
 import time
 from django.urls import reverse
 from django.utils.encoding import force_bytes
@@ -19,7 +18,10 @@ from seahub.onlyoffice.models import OnlyOfficeDocKey
 
 from seahub.settings import ENABLE_WATERMARK
 from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
-        ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET, ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT
+        ONLYOFFICE_FORCE_SAVE, ONLYOFFICE_JWT_SECRET, \
+        ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT, \
+        ONLYOFFICE_EXT_WORD, ONLYOFFICE_EXT_CELL, \
+        ONLYOFFICE_EXT_SLIDE, ONLYOFFICE_EXT_PDF, ONLYOFFICE_EXT_DIAGRAM
 
 # Get an instance of a logger
 logger = logging.getLogger('onlyoffice')
@@ -115,12 +117,19 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         return None
 
     filetype, fileext = get_file_type_and_ext(file_path)
-    if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
-        document_type = 'cell'
-    elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
-        document_type = 'slide'
-    else:
+
+    if fileext in ONLYOFFICE_EXT_WORD:
         document_type = 'word'
+    elif fileext in ONLYOFFICE_EXT_CELL:
+        document_type = 'cell'
+    elif fileext in ONLYOFFICE_EXT_SLIDE:
+        document_type = 'slide'
+    elif fileext in ONLYOFFICE_EXT_PDF:
+        document_type = 'pdf'
+    elif fileext in ONLYOFFICE_EXT_DIAGRAM:
+        document_type = 'diagram'
+    else:
+        document_type = 'unknown'
 
     if not can_edit:
         doc_key = generate_onlyoffice_doc_key(origin_repo_id, origin_file_path, file_id)
@@ -142,7 +151,6 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
     base_url = get_site_scheme_and_netloc()
     onlyoffice_editor_callback_url = reverse('onlyoffice_editor_callback')
     callback_url = urllib.parse.urljoin(base_url, onlyoffice_editor_callback_url)
-    obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     avatar_url, _, _ = api_avatar_url(username)
     import jwt
 
@@ -163,7 +171,7 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
         'can_copy': can_copy,
         'username': username,
         'avatar_url': avatar_url,
-        'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
+        'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE and can_edit,
         'enable_watermark': ENABLE_WATERMARK,
         'request_from_onlyoffice_desktop_editor': ONLYOFFICE_DESKTOP_EDITOR_HTTP_USER_AGENT in http_user_agent,
         'file_key': jwt.encode({
@@ -185,9 +193,10 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                 "permissions": {
                     "download": can_download,
                     "edit": can_edit,
+                    "fillForms": can_edit,
                     "copy": can_copy,
                     "print": can_download,
-                    "review": True
+                    "review": can_edit
                 }
             },
             "documentType": document_type,
@@ -196,7 +205,8 @@ def get_onlyoffice_dict(request, username, repo_id, file_path, file_id='',
                 "lang": request.LANGUAGE_CODE,
                 "mode": 'edit' if can_edit else 'view',
                 "customization": {
-                    "forcesave": ONLYOFFICE_FORCE_SAVE,
+                    "forcesave": ONLYOFFICE_FORCE_SAVE and can_edit,
+                    "submitForm": can_edit
                 },
             },
             'exp': int(time.time()) + 3 * 24 * 3600

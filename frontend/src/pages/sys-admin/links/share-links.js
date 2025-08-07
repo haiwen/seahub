@@ -228,8 +228,7 @@ class ShareLinks extends Component {
   };
 
   resetPerPage = (newPerPage) => {
-    this.props.onResetPerPage(newPerPage);
-    this.getShareLinksByPage(this.initPage);
+    this.props.onResetPerPage(newPerPage, () => { this.getShareLinksByPage(this.initPage); });
   };
 
   render() {

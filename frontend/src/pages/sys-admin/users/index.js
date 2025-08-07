@@ -10,8 +10,13 @@ import AdminUsers from './admin-users';
 import LDAPImportedUsers from './ldap-imported-users';
 import LDAPUsers from './ldap-users';
 import UserNav from './user-nav';
+import toaster from '../../../components/toast';
+import { Utils } from '../../../utils/utils';
+import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { eventBus } from '../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+
+import './index.css';
 
 const UsersLayout = ({ ...commonProps }) => {
   const [sortBy, setSortBy] = useState('');
@@ -29,9 +34,7 @@ const UsersLayout = ({ ...commonProps }) => {
   const { curTab, isAdmin, isLDAPImported } = useMemo(() => {
     const path = location.pathname.split('/').filter(Boolean).pop();
     let curTab = path;
-    if (path === 'users') {
-      curTab = 'database';
-    } else if (path === 'admins') {
+    if (path === 'admins') {
       curTab = 'admin';
     }
     const isAdmin = curTab === 'admin';
@@ -78,7 +81,7 @@ const UsersLayout = ({ ...commonProps }) => {
       return <a className="btn btn-secondary operation-item" href={`${siteRoot}sys/useradmin/export-excel/`}>{gettext('Export Excel')}</a>;
     }
 
-    // 'database'
+    // 'users'
     return (
       <>
         <Button className="btn btn-secondary operation-item" onClick={toggleImportUserDialog}>{gettext('Import Users')}</Button>
@@ -170,6 +173,17 @@ const UserLayout = ({ email, children, ...commonProps }) => {
   }
 
   useEffect(() => {
+    if (curTab !== 'info' && username === '') {
+      systemAdminAPI.sysAdminGetUser(decodeURIComponent(email)).then((res) => {
+        setUsername(res.data.name);
+      }).catch((error) => {
+        toaster.danger(Utils.getErrorMsg(error, true));
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     const unsubscribeUsername = eventBus.subscribe(EVENT_BUS_TYPE.SYNC_USERNAME, (username) => {
       setUsername(username);
     });
@@ -183,7 +197,7 @@ const UserLayout = ({ email, children, ...commonProps }) => {
     <>
       <MainPanelTopbar {...commonProps} />
       <UserNav currentItem={curTab} email={email} userName={username} />
-      <div className="w-100 h-100 d-flex overflow-auto">{children}</div>
+      <div className="sys-admin-user-layout w-100 h-100 d-flex overflow-auto">{children}</div>
     </>
   );
 };

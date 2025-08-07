@@ -7,6 +7,8 @@ import posixpath
 
 from seaserv import seafile_api
 
+from seahub.constants import PERMISSION_INVISIBLE
+from seahub.exdraw.settings import EXDRAW_IMAGES_DIR
 from seahub.tags.models import FileUUIDMap
 from seahub.settings import EXCALIDRAW_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url
@@ -14,6 +16,7 @@ from seahub.utils.auth import AUTHORIZATION_PREFIX
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.utils import uuid_str_to_36_chars
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -117,4 +120,33 @@ def get_exdraw_download_link(uuid_map, is_inner=False):
     else:
         download_link = gen_file_get_url(token, filename)
 
+    return download_link
+
+def gen_exdraw_image_parent_path(file_uuid, repo_id, username):
+    parent_path = EXDRAW_IMAGES_DIR + file_uuid + '/'
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_path)
+    if not dir_id:
+        seafile_api.mkdir_with_parents(repo_id, '/', parent_path[1:], username)
+    return parent_path
+
+def get_exdraw_asset_upload_link(repo_id, parent_path, username):
+    obj_id = json.dumps({'parent_dir': parent_path})
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, obj_id, 'upload-link', username, use_onetime=False)
+    if not token:
+        return None
+    upload_link = gen_file_upload_url(token, 'upload-api')
+    upload_link = upload_link + '?replace=1'
+    return upload_link
+
+def get_exdraw_asset_download_link(repo_id, parent_path, filename, username):
+    file_path = posixpath.join(parent_path, filename)
+    obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not obj_id:
+        return None
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, obj_id, 'view', username, use_onetime=False)
+    if not token:
+        return None
+    download_link = gen_file_get_url(token, filename)
     return download_link

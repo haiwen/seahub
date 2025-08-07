@@ -22,7 +22,8 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, \
     get_update_record, update_people_cover_photo
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
-from seahub.utils.repo import is_repo_admin
+from seahub.utils.repo import is_repo_admin, is_repo_owner
+from seahub.share.utils import check_invisible_folder
 from seaserv import seafile_api
 from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RECORD_UPDATE_LIMIT
 from seahub.file_tags.models import FileTags
@@ -61,8 +62,10 @@ class MetadataManage(APIView):
 
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            show_view = False
             if record and record.enabled:
                 is_enabled = True
+                show_view = True
                 details_settings = record.details_settings
                 global_hidden_columns = json.loads(record.global_hidden_columns) if record.global_hidden_columns else []
                 if not details_settings:
@@ -74,6 +77,12 @@ class MetadataManage(APIView):
                     face_recognition_enabled = True
                 if not global_hidden_columns:
                     global_hidden_columns = []
+                if not is_repo_owner(request, repo_id, request.user.username):
+                    try:
+                        org_id = request.user.org.org_id if request.user.org else None
+                        show_view = not check_invisible_folder(repo_id, request.user.username, org_id)
+                    except Exception as e:
+                        logger.error(e)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -86,6 +95,7 @@ class MetadataManage(APIView):
             'tags_lang': tags_lang,
             'details_settings': details_settings,
             'global_hidden_columns': global_hidden_columns,
+            'show_view': show_view,
         })
 
     def put(self, request, repo_id):

@@ -323,7 +323,7 @@
 
 .dir-view-path .sf3-font-refresh {
   transform: rotateY(180deg);
-  color: #666;
+  color: var(--bs-icon-secondary-color);
   cursor: pointer;
   font-size: 14px;
   display: inline-block;
@@ -331,7 +331,7 @@
 
 .dir-view-path .sf3-font-new,
 .dir-view-path .path-item-dropdown-toggle {
-  color: #666;
+  color: var(--bs-icon-secondary-color);
 }
 
 .dir-view-path .path-item-dropdown-toggle {

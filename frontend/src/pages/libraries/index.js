@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Cookies from 'js-cookie';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, canAddRepo, canViewOrg } from '../../utils/constants';
+import { gettext, canAddRepo, canViewOrg, enableOCM } from '../../utils/constants';
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import toaster from '../../components/toast';
@@ -16,6 +16,7 @@ import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibraries from '../../pages/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
+import SharedWithOCM from '../../pages/share-with-ocm/shared-with-ocm';
 import GroupItem from '../../pages/groups/group-item';
 import { GroupsReposManager } from './groups-repos-manager';
 import EventBus from '../../components/common/event-bus';
@@ -61,7 +62,6 @@ class Libraries extends Component {
     this.unsubscribeAddSharedRepoIntoGroup();
     this.unsubscribeUnsharedRepoToGroup();
   }
-
 
   initLibraries = () => {
     const promiseListRepos = seafileAPI.listRepos({ 'type': ['mine', 'shared', 'public'] });
@@ -473,6 +473,17 @@ class Libraries extends Component {
                       repoList={this.state.publicRepoList}
                       inAllLibs={true}
                       currentViewMode={currentViewMode}
+                    />
+                  </div>
+                  }
+
+                  {enableOCM &&
+                  <div className="pb-3">
+                    <SharedWithOCM
+                      inAllLibs={true}
+                      currentViewMode={currentViewMode}
+                      sortBy={this.state.sortBy}
+                      sortOrder={this.state.sortOrder}
                     />
                   </div>
                   }

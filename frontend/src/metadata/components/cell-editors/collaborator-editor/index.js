@@ -2,7 +2,6 @@ import React, { forwardRef, useMemo, useImperativeHandle, useCallback, useState,
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import SearchInput from '../../../../components/search-input';
-import Icon from '../../../../components/icon';
 import DeleteCollaborator from './delete-collaborator';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
@@ -233,7 +232,7 @@ const CollaboratorEditor = forwardRef(({
               </span>
             </div>
             <div className="collaborator-check-icon">
-              {isSelected && (<Icon className="sf-metadata-icon" symbol="check-mark" />)}
+              {isSelected && <i className="sf2-icon-tick"></i>}
             </div>
           </div>
         </div>

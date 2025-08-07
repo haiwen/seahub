@@ -1,5 +1,5 @@
-from seahub.onlyoffice.settings import EXT_DOCUMENT, \
-        EXT_SPREADSHEET, EXT_PRESENTATION
+from seahub.onlyoffice.settings import ONLYOFFICE_EXT_WORD, \
+        ONLYOFFICE_EXT_CELL, ONLYOFFICE_EXT_SLIDE
 
 
 def get_file_name(file_path):
@@ -21,11 +21,11 @@ def get_file_ext(file_path):
 
 def get_file_type(file_path):
     ext = get_file_ext(file_path)
-    if ext in EXT_DOCUMENT:
+    if ext in ONLYOFFICE_EXT_WORD:
         return 'word'
-    if ext in EXT_SPREADSHEET:
+    if ext in ONLYOFFICE_EXT_CELL:
         return 'cell'
-    if ext in EXT_PRESENTATION:
+    if ext in ONLYOFFICE_EXT_SLIDE:
         return 'slide'
 
     return 'word'

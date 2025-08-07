@@ -33,6 +33,7 @@ class ExternalOperations extends React.Component {
       fileType: '.sdoc',
       editor: null,
       insertSdocFileLink: null,
+      insertWhiteboard: null,
     };
   }
 
@@ -43,9 +44,10 @@ class ExternalOperations extends React.Component {
     this.unsubscribeShare = eventBus.subscribe(EXTERNAL_EVENT.SHARE_SDOC, this.onShareToggle);
     this.unsubscribeFreezeDocument = eventBus.subscribe(EXTERNAL_EVENT.FREEZE_DOCUMENT, this.onFreezeDocument);
     this.unsubscribeUnfreeze = eventBus.subscribe(EXTERNAL_EVENT.UNFREEZE, this.unFreeze);
-    this.unsubscribeNewNotification = eventBus.subscribe(EXTERNAL_EVENT.NEW_NOTIFICATION, this.onNewNotification);
     this.unsubscribeClearNotification = eventBus.subscribe(EXTERNAL_EVENT.CLEAR_NOTIFICATION, this.onClearNotification);
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
+    this.unsubscribeCreateWhiteboardFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_WHITEBOARD_FILE, this.onCreateWhiteboardFile);
+    this.unsubscribeGenerateExdrawReadOnlyLink = eventBus.subscribe(EXTERNAL_EVENT.GENERATE_EXDRAW_READ_ONLY_LINK, this.generateExdrawReadOnlyLink);
   }
 
   componentWillUnmount() {
@@ -55,9 +57,10 @@ class ExternalOperations extends React.Component {
     this.unsubscribeShare();
     this.unsubscribeFreezeDocument();
     this.unsubscribeUnfreeze();
-    this.unsubscribeNewNotification();
     this.unsubscribeCreateSdocFile();
     this.unsubscribeClearNotification();
+    this.unsubscribeCreateWhiteboardFile();
+    this.unsubscribeGenerateExdrawReadOnlyLink();
   }
 
   onInternalLinkToggle = (options) => {
@@ -143,6 +146,32 @@ class ExternalOperations extends React.Component {
     });
   };
 
+  onCreateWhiteboardFile = (params) => {
+    if (params?.editor && params?.insertWhiteboard) {
+      this.setState({ editor: params.editor, insertWhiteboard: params.insertWhiteboard });
+    }
+    if (params?.fileType) {
+      this.setState({ fileType: '.exdraw' });
+    }
+    this.setState({
+      isShowCreateFileDialog: !this.state.isShowCreateFileDialog
+    });
+  };
+
+  generateExdrawReadOnlyLink = (params) => {
+    if (!params?.repoID || !params?.filePath) return;
+
+    seafileAPI.getInternalLink(params.repoID, params?.filePath).then((res) => {
+      const url = new URL(res.data.smart_link);
+      url.searchParams.set('readonly', 'true');
+      url.searchParams.set('filetype', 'Excalidraw');
+      const link = url.toString();
+      if (params?.onSuccess) {
+        params?.onSuccess(link);
+      }
+    });
+  };
+
   checkDuplicatedName = (newName) => {
     let direntList = this.props.direntList;
     let isDuplicated = direntList.some(object => {
@@ -153,10 +182,14 @@ class ExternalOperations extends React.Component {
 
   onAddFile = (filePath) => {
     let repoID = this.props.repoID;
-    const { insertSdocFileLink, editor } = this.state;
+    const { insertWhiteboard, insertSdocFileLink, editor } = this.state;
     seafileAPI.createFile(repoID, filePath).then((res) => {
       if (insertSdocFileLink && editor) {
         insertSdocFileLink(editor, res.data.obj_name, res.data.doc_uuid);
+      }
+      if (insertWhiteboard && editor) {
+        const whiteboardFilePath = '/' + res.data.obj_name;
+        insertWhiteboard(editor, res.data.obj_name, whiteboardFilePath);
       }
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
@@ -193,7 +226,7 @@ class ExternalOperations extends React.Component {
             fileType={fileType}
             onAddFile={this.onAddFile}
             checkDuplicatedName={this.checkDuplicatedName}
-            toggleDialog={this.onCreateSdocFile}
+            toggleDialog={this.onCreateSdocFile || this.onCreateWhiteboardFile}
           />
         )}
       </>

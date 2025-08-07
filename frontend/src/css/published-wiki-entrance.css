@@ -1,15 +1,18 @@
 .view-published-wiki {
-   font-size: .75rem;
-   color: #666;
-   background: transparent;
-   height: 20px; 
-   padding: 0 .5rem;
-   border: 1px solid #dbdbdb;
-   border-radius: 10px;
- } 
- 
- .view-published-wiki:hover {
-   background: var(--bs-hover-bg);
-   text-decoration: none;
-   color: #666;
- }
+  font-size: .75rem;
+  color: #666;
+  background: transparent;
+  height: 20px; 
+  padding: 0 .5rem;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+}
+[data-bs-theme=dark] .view-published-wiki {
+  border-color: rgba(255, 255, 255, 0.2)
+}
+
+.view-published-wiki:hover {
+  background: var(--bs-hover-bg);
+  text-decoration: none;
+  color: #666;
+}

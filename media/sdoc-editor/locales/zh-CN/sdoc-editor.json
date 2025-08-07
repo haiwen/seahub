@@ -562,10 +562,10 @@
   "the_past_year": "去年",
   "the_next_numbers_of_days": "今天之后的指定天数",
   "the_past_numbers_of_days": "今天之前的指定天数",
-  "Double_click_to_enter_edit_mode_and_adjust_field_width" : "双击可进入编辑模式并调整字段宽度",
+  "Double_click_to_enter_edit_mode_and_adjust_field_width": "双击可进入编辑模式并调整字段宽度",
   "Enter_comment_Enter_for_new_line_shift_enter_to_send": "输入评论，Enter 换行，Shift + Enter 发送",
   "Sub_table": "子表",
-  "Search_action": "搜索操作...",
+  "Search_1": "搜索...",
   "Comment_details": "评论详情",
   "Two_column": "2 列",
   "Three_column": "3 列",
@@ -604,6 +604,9 @@
   "Discard": "丢弃",
   "English": "英语",
   "Chinese": "中文",
+  "French": "法语",
+  "German": "德语",
+  "Italian": "意大利语",
   "Ask_AI": "询问 AI",
   "Enter_reply": "输入回复",
   "Processing_content_cannot_be_empty": "处理内容不能为空",
@@ -636,5 +639,8 @@
   "Property": "属性",
   "Comment_list": "评论列表",
   "Add_Comment": "添加评论",
-  "Finish": "完成"
+  "Finish": "完成",
+  "Select_Excalidraw_document": "选择 Excalidraw 文件",
+  "Create_new_excalidraw": "新建 Excalidraw 文件",
+  "Whiteboard": "白板"
 }

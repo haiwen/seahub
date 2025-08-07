@@ -1,7 +1,7 @@
 .repo-info-bar {
   padding: 10px;
   margin: 10px 16px 0;
-  border: 1px solid #e6e6dd;
+  border: 1px solid var(--bs-border-color);
   border-radius: 5px;
   color: var(--bs-body-color);
 }
@@ -32,7 +32,7 @@
 }
 
 .used-tag-files {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .info-icon {
-  color: #666;
+  color: var(--bs-icon-secondary-color);
   vertical-align: -3px;
 }
 

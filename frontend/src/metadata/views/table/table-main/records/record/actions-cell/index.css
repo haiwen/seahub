@@ -14,6 +14,7 @@
 }
 
 .sf-metadata-result-table-row .sf-metadata-result-column-content.actions-checkbox {
+  width: 40px;
   text-align: center;
   display: none;
 }
@@ -32,4 +33,27 @@
 
 .sf-metadata-result-table-row.row-selected .sf-metadata-result-column-content.row-index {
   display: none !important;
+}
+
+.sf-metadata-result-table-row:hover .sf-metadata-result-table-cell.actions-cell .row-expand {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.sf-metadata-result-table-row:hover .sf-metadata-result-table-cell.actions-cell .row-expand .row-expand-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+  transform: scale(.8);
+}
+
+.sf-metadata-result-table-row .sf-metadata-result-table-cell.actions-cell .row-expand-icon {
+  display: none;
+  color: #467fcf;
+}
+
+.sf-metadata-result-table-row .sf-metadata-result-table-cell.actions-cell .row-expand:hover {
+  background-color: #c2f5e9;
 }

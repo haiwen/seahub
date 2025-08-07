@@ -6,7 +6,7 @@ import { CellType, COLUMNS_ICON_CONFIG } from '../../../metadata/constants';
 
 import './index.css';
 
-const DetailItem = ({ readonly = true, field, className, children }) => {
+const DetailItem = ({ id, readonly = true, field, className, children }) => {
   const icon = useMemo(() => {
     if (field.type === 'size') {
       return COLUMNS_ICON_CONFIG[CellType.NUMBER];
@@ -15,7 +15,7 @@ const DetailItem = ({ readonly = true, field, className, children }) => {
   }, [field]);
 
   return (
-    <div className={classnames('dirent-detail-item', className)}>
+    <div id={id} className={classnames('dirent-detail-item', className)}>
       <div className="dirent-detail-item-name d-flex">
         <div><Icon className="sf-metadata-icon" symbol={icon} /></div>
         <span className="dirent-detail-item-name-value">{field.name}</span>

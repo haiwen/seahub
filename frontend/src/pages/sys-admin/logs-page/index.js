@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import MainPanelTopbar from '../main-panel-topbar';
 import { Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
@@ -6,6 +6,7 @@ import LogsNav from '../logs-page/logs-nav';
 import { useLocation } from '@gatsbyjs/reach-router';
 import ModalPortal from '../../../components/modal-portal';
 import LogsExportExcelDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-logs-export-excel-dialog';
+import './logs.css';
 
 const LOG_PATH_NAME_MAP = {
   'login': 'loginLogs',
@@ -37,7 +38,7 @@ const Logs = ({ children, ...commonProps }) => {
         </MainPanelTopbar>
       )}
       <LogsNav currentItem={curTab} {...commonProps} />
-      <div className="h-100 d-flex overflow-auto">{children}</div>
+      <div className="system-admin-logs h-100 w-100 d-flex overflow-auto">{children}</div>
       {isExportExcelDialogOpen &&
         <ModalPortal>
           <LogsExportExcelDialog

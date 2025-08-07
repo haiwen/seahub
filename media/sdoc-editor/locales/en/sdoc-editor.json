@@ -562,10 +562,10 @@
   "the_past_year": "last year",
   "the_next_numbers_of_days": "the next numbers of days",
   "the_past_numbers_of_days": "the past numbers of days",
-  "Double_click_to_enter_edit_mode_and_adjust_field_width" : "Double click to enter edit mode and adjust field width",
+  "Double_click_to_enter_edit_mode_and_adjust_field_width": "Double click to enter edit mode and adjust field width",
   "Enter_comment_Enter_for_new_line_shift_enter_to_send": "Enter comment, Enter for new line, Shift + Enter to send",
   "Sub_table": "Table",
-  "Search_action": "Search action...",
+  "Search_1": "Search...",
   "Comment_details": "Comment details",
   "Two_column": "2 columns",
   "Three_column": "3 columns",
@@ -603,6 +603,9 @@
   "Discard": "Discard",
   "English": "English",
   "Chinese": "Chinese",
+  "French": "French",
+  "German": "German",
+  "Italian": "Italian",
   "Ask_AI": "Ask AI",
   "Enter_reply": "Enter reply",
   "Processing_content_cannot_be_empty": "Processing content cannot be empty",
@@ -636,5 +639,8 @@
   "Comment_list": "Comment list",
   "Add_Comment": "Add Comment",
   "Finish": "Finish",
-  "More_fluent": "More fluent"
+  "More_fluent": "More fluent",
+  "Select_Excalidraw_document": "Select Excalidraw document",
+  "Create_new_excalidraw": "Create new Excalidraw",
+  "Whiteboard": "Whiteboard"
 }

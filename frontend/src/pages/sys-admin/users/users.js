@@ -420,7 +420,7 @@ class Users extends Component {
     return (
       <>
         <div className="cur-view-content">
-          {curTab == 'database' &&
+          {curTab == 'users' &&
           <UsersFilterBar
             isActive={is_active}
             role={role}

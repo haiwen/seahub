@@ -41,7 +41,7 @@ from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
     can_access_seadoc_asset, is_seadoc_revision, ZSDOC, export_sdoc
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
-from seahub.utils.file_types import SEADOC, IMAGE, VIDEO
+from seahub.utils.file_types import SEADOC, IMAGE, VIDEO, EXCALIDRAW
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils import get_file_type_and_ext, normalize_file_path, \
         normalize_dir_path, PREVIEW_FILEEXT, \
@@ -2515,6 +2515,8 @@ class SeadocDirView(APIView):
                 dirent_file_uuid = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
                 if file_type == 'sdoc' and filetype == SEADOC:
                     entry["file_uuid"] = dirent_file_uuid
+                elif file_type == 'exdraw' and filetype == EXCALIDRAW:
+                    entry["file_uuid"] = dirent_file_uuid
                 elif filetype == 'image' and filetype == IMAGE:
                     entry["file_uuid"] = dirent_file_uuid
                 elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
@@ -2919,6 +2921,8 @@ class SeadocSearchFilenameView(APIView):
             suffixes = get_non_sdoc_file_exts()
         if search_type == 'video':
             suffixes = ['mp4', 'ogv', 'webm', 'mov',]
+        if search_type == 'draw':
+            suffixes = ['draw',]
         if not suffixes:
             error_msg = 'search_type is not valid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

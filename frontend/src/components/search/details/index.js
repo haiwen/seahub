@@ -151,10 +151,12 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   parentDir = Utils.getDirName(parentDir);
 
   let src = '';
-  if (repoInfo.encrypted) {
-    src = `${siteRoot}repo/${repoID}/raw` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`);
-  } else {
-    src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}/${dirent.name}`) + '?mtime=' + direntDetail.mtime;
+  if (Utils.imageCheck(dirent.name)) {
+    if (repoInfo.encrypted) {
+      src = `${siteRoot}repo/${repoID}/raw` + Utils.encodePath(`${path === '/' ? '' : path}`);
+    } else {
+      src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForGrid}` + Utils.encodePath(`${path === '/' ? '' : path}`) + '?mtime=' + direntDetail.mtime;
+    }
   }
 
   return (
@@ -162,7 +164,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
       <div className="cur-view-detail" style={{ width: 300 }}>
         <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)}></Header>
         <Body>
-          {Utils.imageCheck(dirent.name) && <div className="detail-image"><img src={src} alt="" /></div>}
+          {src && <div className="detail-image"><img src={src} alt="" /></div>}
           <MetadataStatusProvider key={repoID} repoID={repoID} repoInfo={repoInfo}>
             <MetadataDetailsProvider
               repoID={repoID}

@@ -13,3 +13,7 @@
   white-space: nowrap;
   width: min-content;
 }
+
+.sf-metadata-result-table-row .sf-metadata-result-table-cell .select-all-checkbox-container {
+  width: 40px;
+}

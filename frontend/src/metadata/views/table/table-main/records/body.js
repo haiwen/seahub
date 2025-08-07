@@ -488,6 +488,7 @@ class RecordsBody extends Component {
           modifyRecord={this.props.modifyRecord}
           searchResult={this.props.searchResult}
           columnColor={columnColor}
+          onShowExpandedPropsDialog={this.props.onShowExpandedPropsDialog}
         />
       );
     });

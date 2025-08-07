@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, InputGroup, InputGroupText, Input } from 'reactstrap';
+import { Button, InputGroup, InputGroupText, Input, Modal, ModalBody } from 'reactstrap';
+import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
@@ -9,6 +10,9 @@ import toaster from './toast';
 import Loading from './loading';
 import GroupMembers from './group-members';
 import SelectUsersIcon from './select-members-to-share-with';
+import { eventBus } from './common/event-bus';
+
+import '../css/manage-members-dialog.css';
 
 const propTypes = {
   toggleManageMembersDialog: PropTypes.func,
@@ -39,11 +43,12 @@ class ManageMembersDialog extends React.Component {
 
   componentDidMount() {
     this.listGroupMembers(this.state.page);
+    eventBus.subscribe('updateGroupList', this.listGroupMembers);
   }
 
-  listGroupMembers = (page) => {
+  listGroupMembers = (page = 1, initGroupMembers = []) => {
     const { groupID } = this.props;
-    const { perPage, groupMembers } = this.state;
+    const { perPage } = this.state;
     seafileAPI.listGroupMembers(groupID, page, perPage).then((res) => {
       const members = res.data;
       this.setState({
@@ -51,7 +56,7 @@ class ManageMembersDialog extends React.Component {
         isLoadingMore: false,
         page: page,
         hasNextPage: members.length < perPage ? false : true,
-        groupMembers: groupMembers.concat(members)
+        groupMembers: initGroupMembers.concat(members)
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -109,7 +114,7 @@ class ManageMembersDialog extends React.Component {
       const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
       if (isBottom) { // scroll to the bottom
         this.setState({ isLoadingMore: true }, () => {
-          this.listGroupMembers(page + 1);
+          this.listGroupMembers(page + 1, this.state.groupMembers);
         });
       }
     }
@@ -164,75 +169,72 @@ class ManageMembersDialog extends React.Component {
   render() {
     const {
       isLoading, hasNextPage, groupMembers,
-      keyword, membersFound,
-      searchActive
+      keyword, membersFound, errMessage, searchActive
     } = this.state;
 
     return (
-      <Fragment>
-        <p className="mb-2">{gettext('Add group member')}</p>
-        <div className='add-members'>
-          <div className="position-relative">
-            <UserSelect
-              placeholder={gettext('Search users')}
-              onSelectChange={this.onSelectChange}
-              selectedUsers={this.state.selectedUsers}
-              isMulti={true}
-              className="add-members-select"
-            />
-            <SelectUsersIcon onClick={this.props.toggleDepartmentDetailDialog} />
-          </div>
-          {this.state.selectedUsers.length > 0 ?
-            <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
-            <Button color="primary" disabled>{gettext('Submit')}</Button>
-          }
-        </div>
-        {
-          this.state.errMessage.length > 0 &&
-            this.state.errMessage.map((item, index = 0) => {
-              return (
-                <div className="group-error error" key={index}>{item.error_msg}</div>
-              );
-            })
-        }
-        {groupMembers.length > 10 &&
-          <InputGroup className={`search-group-members rounded ${searchActive ? 'active' : ''}`}>
-            <InputGroupText>
-              <i className="sf3-font sf3-font-search" aria-hidden={true}></i>
-            </InputGroupText>
-            <Input
-              type="text"
-              className="input-group-input px-0"
-              placeholder={gettext('Search group members')}
-              value={keyword}
-              onChange={this.searchMembers}
-              onFocus={this.onSearchInputFocus}
-              onBlur={this.onSearchInputBlur}
-            />
-            {keyword && (
-              <InputGroupText>
-                <i className="sf2-icon-x1" aria-hidden={true} onClick={this.clearSearch}></i>
-              </InputGroupText>
-            )}
-          </InputGroup>
-        }
-        <div className="manage-members" onScroll={keyword.trim() ? () => {} : this.handleScroll}>
-          {isLoading ? <Loading /> : (
-            <Fragment>
-              <GroupMembers
-                groupMembers={keyword.trim() ? membersFound : groupMembers}
-                changeMember={this.changeMember}
-                deleteMember={this.deleteMember}
-                groupID={this.props.groupID}
-                isOwner={this.props.isOwner}
-                isItemFreezed={this.state.isItemFreezed}
-                toggleItemFreezed={this.toggleItemFreezed}
+      <Modal isOpen={true} toggle={this.props.toggleManageMembersDialog} className="group-manage-members-dialog">
+        <SeahubModalHeader toggle={this.props.toggleManageMembersDialog}>{gettext('Manage group members')}</SeahubModalHeader>
+        <ModalBody className="pb-0">
+          <p className="mb-2">{gettext('Add group member')}</p>
+          <div className='add-members'>
+            <div className="position-relative">
+              <UserSelect
+                placeholder={gettext('Search users')}
+                onSelectChange={this.onSelectChange}
+                selectedUsers={this.state.selectedUsers}
+                isMulti={true}
+                className="add-members-select"
               />
-              {(!keyword.trim() && hasNextPage) && <Loading />}
-            </Fragment>
-          )}
-        </div>
-      </Fragment>
+              <SelectUsersIcon onClick={this.props.toggleDepartmentDetailDialog} />
+            </div>
+            {this.state.selectedUsers.length > 0 ?
+              <Button color="primary" onClick={this.addGroupMember}>{gettext('Submit')}</Button> :
+              <Button color="primary" disabled>{gettext('Submit')}</Button>
+            }
+          </div>
+          {errMessage.length > 0 &&
+            errMessage.map((item, index = 0) => <div className="group-error error" key={index}>{item.error_msg}</div>)
+          }
+          {groupMembers.length > 10 &&
+            <InputGroup className={`search-group-members rounded ${searchActive ? 'active' : ''}`}>
+              <InputGroupText>
+                <i className="sf3-font sf3-font-search" aria-hidden={true}></i>
+              </InputGroupText>
+              <Input
+                type="text"
+                className="input-group-input px-0"
+                placeholder={gettext('Search group members')}
+                value={keyword}
+                onChange={this.searchMembers}
+                onFocus={this.onSearchInputFocus}
+                onBlur={this.onSearchInputBlur}
+              />
+              {keyword && (
+                <InputGroupText>
+                  <i className="sf2-icon-x1" aria-hidden={true} onClick={this.clearSearch}></i>
+                </InputGroupText>
+              )}
+            </InputGroup>
+          }
+          <div className="manage-members" onScroll={keyword.trim() ? () => {} : this.handleScroll}>
+            {isLoading ? <Loading /> : (
+              <Fragment>
+                <GroupMembers
+                  groupMembers={keyword.trim() ? membersFound : groupMembers}
+                  changeMember={this.changeMember}
+                  deleteMember={this.deleteMember}
+                  groupID={this.props.groupID}
+                  isOwner={this.props.isOwner}
+                  isItemFreezed={this.state.isItemFreezed}
+                  toggleItemFreezed={this.toggleItemFreezed}
+                />
+                {(!keyword.trim() && hasNextPage) && <Loading />}
+              </Fragment>
+            )}
+          </div>
+        </ModalBody>
+      </Modal>
     );
   }
 }

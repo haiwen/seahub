@@ -1,13 +1,15 @@
 import { CaptureUpdateAction, getSceneVersion, reconcileElements, restoreElements } from '@excalidraw/excalidraw';
 import throttle from 'lodash.throttle';
 import io from 'socket.io-client';
-import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS, WS_SUBTYPES } from '../constants';
+import { CURSOR_SYNC_TIMEOUT, INITIAL_SCENE_UPDATE_TIMEOUT, LOAD_IMAGES_TIMEOUT, SYNC_FULL_SCENE_INTERVAL_MS, WS_SUBTYPES } from '../constants';
 import { getSyncableElements } from '../data';
-import { loadFromServerStorage, saveToServerStorage } from '../data/server-storage';
-import { resolvablePromise } from '../utils/exdraw-utils';
+import { loadFilesFromServer, loadFromServerStorage, saveFilesToServer, saveToServerStorage } from '../data/server-storage';
+import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { serverDebug } from '../utils/debug';
 import Portal from './portal';
 import EventBus from '../../../components/common/event-bus';
+import FileManager from '../data/file-manager';
+import { isInitializedImageElement } from '../utils/element-utils';
 
 class Collab {
 
@@ -15,6 +17,7 @@ class Collab {
     this.excalidrawAPI = excalidrawAPI;
     this.config = config;
     this.document = null;
+    this.isServerConnected = false;
 
     this.collaborators = new Map();
     const { user } = config;
@@ -25,7 +28,55 @@ class Collab {
     this.portal = new Portal(this, config);
 
     this.eventBus = EventBus.getInstance();
+    this.fileManager = new FileManager({
+      getFiles: async (ids) => {
+        return loadFilesFromServer(ids);
+      },
+      saveFiles: async ({ addedFiles }) => {
+        const { savedFiles, erroredFiles } = await saveFilesToServer(addedFiles);
+        return {
+          savedFiles: savedFiles.reduce((acc, id) => {
+            const fileData = addedFiles.get(id);
+            if (fileData) {
+              acc.set(id, fileData);
+            }
+            return acc;
+          }, new Map()),
+          erroredFiles: erroredFiles.reduce((acc, id) => {
+            const fileData = addedFiles.get(id);
+            if (fileData) {
+              acc.set(id, fileData);
+            }
+            return acc;
+          }, new Map())
+        };
+      }
+    });
   }
+
+  setIsServerConnected = (flag) => {
+    this.isServerConnected = flag;
+  };
+
+  getIsServerConnected = () => {
+    return this.isServerConnected;
+  };
+
+  fetchImageFilesFromServer = async (opts) => {
+    const fileIds = opts.elements.filter(element => {
+      return (
+        isInitializedImageElement(element) &&
+        !this.fileManager.isFileTracked(element.fileId) &&
+        !element.isDeleted &&
+        (opts.forceFetchFiles ? element.status !== 'pending' || Date.now() - element.updated > 10000 : element.status === 'saved')
+      );
+    }).map(element => {
+      return element.filename || element.fileId;
+    });
+
+    return await this.fileManager.getFiles(fileIds);
+
+  };
 
   setDocument = (document) => {
     this.document = document;
@@ -96,6 +147,8 @@ class Collab {
         scenePromise.resolve(scene);
       });
     };
+
+    this.setIsServerConnected(true);
 
     this.fallbackInitializationHandler = fallbackInitializationHandler;
 
@@ -222,6 +275,21 @@ class Collab {
     this.updateDocumentVersion(result.version);
   };
 
+  loadImageFiles = throttle(async () => {
+    const { loadedFiles, erroredFiles } =
+      await this.fetchImageFilesFromServer({
+        elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+      });
+
+    this.excalidrawAPI.addFiles(loadedFiles);
+
+    updateStaleImageStatuses({
+      excalidrawAPI: this.excalidrawAPI,
+      erroredFiles,
+      elements: this.excalidrawAPI.getSceneElementsIncludingDeleted(),
+    });
+  }, LOAD_IMAGES_TIMEOUT);
+
   handleRemoteSceneUpdate = (params) => {
     const { elements: remoteElements } = params;
     const localElements = this.getSceneElementsIncludingDeleted();
@@ -239,6 +307,8 @@ class Collab {
       elements: reconciledElements,
       captureUpdate: CaptureUpdateAction.NEVER,
     });
+
+    this.loadImageFiles();
   };
 
   syncPointer = throttle((payload) => {
@@ -288,6 +358,8 @@ class Collab {
   destroySocketClient = () => {
     this.lastBroadcastedOrReceivedSceneVersion = -1;
     this.portal.close();
+    this.fileManager.reset();
+    this.setIsServerConnected(false);
   };
 
 }

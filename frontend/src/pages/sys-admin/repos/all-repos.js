@@ -53,8 +53,7 @@ class AllRepos extends Component {
   };
 
   resetPerPage = (perPage) => {
-    this.props.onResetPerPage(perPage);
-    this.getReposByPage(1);
+    this.props.onResetPerPage(perPage, () => { this.getReposByPage(1); });
   };
 
   createRepo = (repoName, Owner) => {

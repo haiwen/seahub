@@ -49,12 +49,12 @@
   height: 30px;
   border-radius: 2px;
   font-size: 13px;
-  color: #212529;
+  color: var(--bs-body-color);
   padding-left: 12px;
 }
 
 .sf-metadata-single-select-editor .single-select-container-highlight {
-  background: #f5f5f5;
+  background: var(--bs-body-secondary-bg);
   cursor: pointer;
 }
 
@@ -117,7 +117,7 @@
 
 .sf-metadata-single-select-editor .add-search-result:hover{
   cursor: pointer;
-  background-color: #f5f5f5;
+  background-color: var(--bs-body-secondary-bg);
 }
 
 .sf-metadata-single-select-editor .add-search-result .add-new-option {

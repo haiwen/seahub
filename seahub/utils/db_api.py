@@ -701,6 +701,40 @@ class SeafileDB:
             return repo_id_to_invisible_paths
 
 
+    def get_share_to_user_folder_permission_by_username_and_repo_id(self, username, repo_id):
+        sql = f"""
+            SELECT `path`, `permission`
+            FROM `{self.db_name}`.`FolderUserPerm`
+            WHERE user = %s AND repo_id = %s;
+        """
+        permission_to_folder_path = {}
+        with connection.cursor() as cursor:
+            cursor.execute(sql, [username, repo_id])
+            for path, permission in cursor.fetchall():
+                if permission not in permission_to_folder_path:
+                    permission_to_folder_path[permission] = [path]
+                else:
+                    permission_to_folder_path[permission].append(path)
+            return permission_to_folder_path
+
+    def get_share_to_group_folder_permission_by_group_ids_and_repo_id(self, group_ids, repo_id):
+        if not group_ids:
+            return {}
+        placeholders = ','.join(['%s'] * len(group_ids))
+        sql = f"""
+            SELECT `path`, `permission`
+            FROM `{self.db_name}`.`FolderGroupPerm`
+            WHERE group_id in ({placeholders}) AND repo_id = %s;
+        """
+        permission_to_folder_path = {}
+        with connection.cursor() as cursor:
+            cursor.execute(sql, tuple(group_ids) + (repo_id,))
+            for path, permission in cursor.fetchall():
+                if permission not in permission_to_folder_path:
+                    permission_to_folder_path[permission] = [path]
+                else:
+                    permission_to_folder_path[permission].append(path)
+            return permission_to_folder_path
 
     def get_download_limit_org(self,start,per_page):
         sql = f"""
@@ -720,3 +754,16 @@ class SeafileDB:
             cursor.execute(count_sql)
             total_count = cursor.fetchone()
         return rows,total_count[0]
+
+    def get_virtual_repo_id(self, original_repo_id, path):
+        from seahub.utils import normalize_file_path
+
+        path = normalize_file_path(path)
+        sql = f"""
+        select repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo="{original_repo_id}" AND path="{path}"
+        """
+        with connection.cursor() as cursor:
+            cursor.execute(sql)
+            res = cursor.fetchone()
+
+        return res and res[0] or None

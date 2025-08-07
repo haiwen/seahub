@@ -77,3 +77,55 @@ export const saveInitDataToServer = async (content, localData) => {
   await saveToBackend(JSON.stringify(content));
 };
 
+/**
+ *
+ * @param {*} addedFiles Map
+ */
+export const saveFilesToServer = async (addedFiles) => {
+  const savedFiles = [];
+  const erroredFiles = [];
+
+  await Promise.all([...addedFiles].map(async ([id, file]) => {
+    try {
+      await context.uploadExdrawImage(id, file);
+      savedFiles.push(id);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      erroredFiles.push(id);
+    }
+  }));
+
+  return { savedFiles, erroredFiles };
+
+};
+
+const getImageUrl = (fileName) => {
+  const docUuid = context.getDocUuid();
+  const { server } = window.app.pageOptions;
+  const url = `${server}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
+  return url;
+};
+
+export const loadFilesFromServer = async (fileIds) => {
+  const loadedFiles = [];
+  const erroredFiles = new Map();
+  await Promise.all([...new Set(fileIds)].map(async (id) => {
+    try {
+      const imageUrl = getImageUrl(id);
+      loadedFiles.push({
+        mimeType: 'image/jpeg',
+        id: id.split('.')[0],
+        dataURL: imageUrl,
+        created: Date.now(),
+        lastRetrieved: Date.now(),
+      });
+    } catch (error) {
+      erroredFiles.set(id, true);
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  }));
+
+  return { loadedFiles, erroredFiles };
+};

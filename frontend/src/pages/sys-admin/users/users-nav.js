@@ -17,7 +17,7 @@ class Nav extends React.Component {
   constructor(props) {
     super(props);
     this.navItems = [
-      { name: 'database', urlPart: 'users', text: gettext('Database') }
+      { name: 'users', urlPart: 'users', text: gettext('All') }
     ];
     if (haveLDAP) {
       this.navItems.push(
@@ -49,7 +49,7 @@ class Nav extends React.Component {
 
   render() {
     const { currentItem, sortBy, sortOrder } = this.props;
-    const showSortIcon = currentItem == 'database' || currentItem == 'ldap-imported';
+    const showSortIcon = currentItem == 'users' || currentItem == 'ldap-imported';
     const activeIndex = this.navItems.findIndex(item => item.name === currentItem) || 0;
     const itemWidths = this.itemRefs.map(ref => ref?.offsetWidth);
     const indicatorWidth = itemWidths[activeIndex];

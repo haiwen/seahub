@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import {
-  gettext, siteRoot, canAddRepo, canViewOrg
+  gettext, siteRoot, canAddRepo, canViewOrg, enableOCM, enableOCMViaWebdav
 } from '../utils/constants';
 
 const propTypes = {
@@ -81,6 +81,32 @@ class FilesSubNav extends React.Component {
           >
             <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
             <span className="nav-text ellipsis" title={gettext('Shared with all')}>{gettext('Shared with all')}</span>
+          </Link>
+        </li>
+        }
+        {enableOCM &&
+        <li className={`nav-item ${this.getActiveClass('shared-with-ocm')}`}>
+          <Link
+            to={siteRoot + 'shared-with-ocm/'}
+            className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`}
+            title={gettext('Shared from other servers')}
+            onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}
+          >
+            <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+            <span className="nav-text">{gettext('Shared from other servers')}</span>
+          </Link>
+        </li>
+        }
+        {enableOCMViaWebdav &&
+        <li className={`nav-item ${this.getActiveClass('ocm-via-webdav')}`}>
+          <Link
+            to={siteRoot + 'ocm-via-webdav/'}
+            className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`}
+            title={gettext('Shared from other servers')}
+            onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}
+          >
+            <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+            <span className="nav-text">{gettext('Shared from other servers')}</span>
           </Link>
         </li>
         }

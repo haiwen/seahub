@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import CommonAddTool from '../../../../components/common-add-tool';
 import SearchInput from '../../../../components/search-input';
-import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
@@ -169,7 +168,8 @@ const SingleSelectEditor = forwardRef(({
       event.keyCode === KeyCodes.ChineseInputMethod ||
       event.keyCode === KeyCodes.Enter ||
       event.keyCode === KeyCodes.LeftArrow ||
-      event.keyCode === KeyCodes.RightArrow
+      event.keyCode === KeyCodes.RightArrow ||
+      event.keyCode === KeyCodes.Space
     ) {
       event.stopPropagation();
     }
@@ -234,7 +234,7 @@ const SingleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && (<Icon className="sf-metadata-icon" symbol="check-mark" />)}
+              {isSelected && <i className="sf2-icon-tick"></i>}
             </div>
           </div>
         </div>

@@ -76,13 +76,13 @@ export const createBaiduMap = ({ type, center, zoom, onMapState }) => {
   // add controls
   const ZoomControl = createBMapZoomControl({
     anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
-    offset: new window.BMapGL.Size(66, Utils.isDesktop() ? 30 : 90),
+    offset: { x: 66, y: Utils.isDesktop() ? 30 : 90 },
   });
   const zoomControl = new ZoomControl();
 
   const GeolocationControl = createBMapGeolocationControl({
     anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
-    offset: new window.BMapGL.Size(30, Utils.isDesktop() ? 30 : 90),
+    offset: { x: 30, y: Utils.isDesktop() ? 30 : 90 },
     callback: (point) => {
       const gcPosition = wgs84_to_gcj02(point.lng, point.lat);
       const bdPosition = gcj02_to_bd09(gcPosition.lng, gcPosition.lat);

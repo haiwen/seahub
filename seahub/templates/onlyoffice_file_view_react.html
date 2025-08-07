@@ -110,9 +110,10 @@
       "permissions": {
         "download": {% if can_download %}true{% else %}false{% endif %},
         "edit": {% if can_edit %}true{% else %}false{% endif %},
+        "fillForms": {% if can_edit %}true{% else %}false{% endif %},
         "copy": {% if can_copy %}true{% else %}false{% endif %},
         "print": {% if can_download %}true{% else %}false{% endif %},
-        "review": true
+        "review": {% if can_edit %}true{% else %}false{% endif %},
       },
       "referenceData": {
         "fileKey": '{{ file_key }}',
@@ -129,6 +130,7 @@
       "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
       "customization": {
         "forcesave": {% if onlyoffice_force_save %}true{% else %}false{% endif %},
+        "submitForm": {% if can_edit %}true{% else %}false{% endif %},
         {% if not request.user.is_authenticated %}
         "anonymous": {
           "request": true,
