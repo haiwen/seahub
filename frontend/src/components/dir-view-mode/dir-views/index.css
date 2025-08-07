@@ -1,7 +1,7 @@
 .metadata-views-dropdown-menu .dropdown-header {
   padding: 0 1rem;
   font-weight: normal;
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 
 .metadata-views-dropdown-menu .dropdown-header,

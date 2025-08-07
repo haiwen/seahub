@@ -43,9 +43,9 @@ class Logo extends React.Component {
   getLogoSrc = () => {
     const { colorMode } = this.state;
     // Check if logoPath is a custom path (not default logo)
-    const isCustomLogo = logoPath.startsWith('custom/');
+    const isDefaultLogo = logoPath === 'img/seafile-logo.png';
     let path = logoPath;
-    if (colorMode === 'dark' && !isCustomLogo) {
+    if (colorMode === 'dark' && isDefaultLogo) {
       path = logoPath.replace('.png', '-dark.png');
     }
     return path.indexOf('image-view') !== -1 ? path : mediaUrl + path;

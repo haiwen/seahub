@@ -484,7 +484,7 @@
   border: 0;
   cursor: pointer;
   box-shadow: none;
-  background: var(--bs-body-bg);
+  background: transparent;
   color: var(--bs-body-color);
 }
 
@@ -493,7 +493,7 @@
 }
 
 .custom-modal .modal-footer .footer-left-btn:not(.disabled):hover {
-  background-color: var(--bs-nav-hover-bg);
+  background-color: var(--bs-bg-secondary-color);
   border-radius: 3px;
 }
 

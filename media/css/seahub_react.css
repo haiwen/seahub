@@ -1754,7 +1754,7 @@ a.table-sort-op:hover {
 }
 
 .form-control {
-  background-color: var(--bs-body-bg);
+  background-color: transparent;
   border: 1px solid var(--bs-border-color);
   color: var(--bs-body-color);
 }

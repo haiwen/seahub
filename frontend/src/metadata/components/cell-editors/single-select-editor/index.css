@@ -4,12 +4,17 @@
   min-height: 160px;
   overflow: hidden;
   opacity: 1;
-  background: var(--bs-body-bg);
+  background: var(--bs-popover-bg);
   border: 1px solid #dedede;
   border-radius: 4px;
   box-shadow: 0px 2px 10px 0 #dedede;
   position: absolute;
   left: 0;
+}
+
+[data-bs-theme=dark] .sf-metadata-single-select-editor {
+  box-shadow: none;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .sf-metadata-single-select-editor .sf-metadata-single-select-editor-container {

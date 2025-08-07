@@ -59,6 +59,11 @@
   background: var(--bs-body-bg);
 }
 
+[data-bs-theme=dark] .seahub-toast-alert-container {
+  box-shadow: none;
+  background-color: #292929;
+}
+
 .seahub-toast-alert-container.success {
   border-left: 3px solid rgb(71, 184, 129);
   color: rgb(71, 184, 129);
@@ -105,9 +110,13 @@
   color: #435a6f;
 }
 
+[data-bs-theme=dark] .seahub-toast-alert-container .toast-text-title {
+  color: rgba(255, 255, 255, .9);
+}
+
 .seahub-toast-alert-container .toast-text-child {
   font-size: 14px;
-  color: #666;
+  color: var(--bs-body-secondary-color);
   margin: 0;
 }
 
@@ -122,6 +131,10 @@
   font-size: 20px;
   color: #000;
   opacity: 0.5;
+}
+
+[data-bs-theme=dark] .seahub-toast-alert-container .toast-close {
+  color: rgba(255, 255, 255, .7);
 }
 
 .seahub-toast-alert-container .toast-close:hover { 

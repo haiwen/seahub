@@ -98,6 +98,7 @@
   height: 1.875rem;
   width: 15rem;
   font-size: .875rem;
+  background-color: var(--bs-body-bg);
 }
 
 .search-container.show .search-input {
@@ -207,6 +208,10 @@
 
 .search-result-item .search-icon-right:hover {
   background-color: #dbdbdb;
+}
+
+[data-bs-theme=dark] .search-result-item .search-icon-right:hover {
+  background-color: rgba(255, 255, 255, .1);
 }
 
 .item-content .item-name a {
