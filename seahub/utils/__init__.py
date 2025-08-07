@@ -21,7 +21,6 @@ import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from django.urls import reverse
-from django.core.mail import EmailMessage
 from django.shortcuts import render
 from django.template import loader
 from django.utils.translation import gettext as _
