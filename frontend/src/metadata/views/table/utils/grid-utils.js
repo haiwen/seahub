@@ -285,7 +285,7 @@ class GridUtils {
             if (type === CellType.TAGS) {
               tagsUpdate.push({
                 record_id: dragRowId,
-                tags: fillingValue || [],
+                tags: fillingValue.map(value => value.row_id) || [],
                 old_tags: Array.isArray(oldValue) ? oldValue.map(i => i.row_id) : [],
               });
             } else {
