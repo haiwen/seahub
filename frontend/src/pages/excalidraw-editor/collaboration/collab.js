@@ -7,6 +7,7 @@ import { loadFilesFromServer, loadFromServerStorage, saveFilesToServer, saveToSe
 import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { serverDebug } from '../utils/debug';
 import Portal from './portal';
+import EventBus from '../../../components/common/event-bus';
 import FileManager from '../data/file-manager';
 import { isInitializedImageElement } from '../utils/element-utils';
 
@@ -25,6 +26,7 @@ class Collab {
 
     this.lastBroadcastedOrReceivedSceneVersion = 0;
     this.portal = new Portal(this, config);
+    this.eventBus = EventBus.getInstance();
     this.fileManager = new FileManager({
       getFiles: async (ids) => {
         return loadFilesFromServer(ids);
@@ -227,6 +229,7 @@ class Collab {
 
   broadcastElements = (elements) => {
     if (getSceneVersion(elements) > this.getLastBroadcastedOrReceivedSceneVersion()) {
+      this.eventBus.dispatch('is-saving');
       this.portal.broadcastScene(WS_SUBTYPES.UPDATE, elements, false);
       this.lastBroadcastedOrReceivedSceneVersion = getSceneVersion(elements);
       this.queueBroadcastAllElements();
@@ -257,7 +260,8 @@ class Collab {
     const exdrawContent = { version, elements };
     const socket = this.portal.socket;
     const result = await saveToServerStorage(socket.id, exdrawContent, this.excalidrawAPI.getAppState());
-
+    const lastSavedAt = new Date().getTime();
+    this.eventBus.dispatch('saved', lastSavedAt);
     if (!result) return;
 
     if (result.storedElements) {
