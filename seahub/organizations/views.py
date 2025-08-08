@@ -28,7 +28,7 @@ from seahub.utils import get_service_url, render_error
 from seahub.utils.auth import get_login_bg_image_path
 
 from seahub.organizations.models import OrgSettings
-from seahub.organizations.signals import org_created, org_reactivated
+from seahub.organizations.signals import org_operation_signal
 from seahub.organizations.decorators import org_staff_required
 from seahub.organizations.forms import OrgRegistrationForm
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
@@ -253,7 +253,10 @@ def org_register(request):
 
             create_org(org_name, url_prefix, new_user.username)
             new_org = get_org_by_url_prefix(url_prefix)
-            org_created.send(sender=None, email=email, org=new_org)
+            try:
+                org_operation_signal.send(sender=None, org=new_org, operation='create')
+            except Exception as e:
+                logger.error(e)
 
             if name:
                 Profile.objects.add_or_update(new_user.username, name)
@@ -360,5 +363,4 @@ def org_reactivate(request, token):
 
     invite.accept()
     OrgSettings.objects.add_or_update(org, is_active=True)
-    org_reactivated.send(sender=None, email=None, org=org)
     return HttpResponseRedirect(settings.SITE_ROOT)

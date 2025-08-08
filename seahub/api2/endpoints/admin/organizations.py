@@ -15,6 +15,7 @@ from seaserv import ccnet_api, seafile_api
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT, \
         ORG_ENABLE_REACTIVATE
+from seahub.organizations.signals import org_operation_signal
 from seahub.organizations.utils import generate_org_reactivate_link
 from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email
 from seahub.utils.file_size import get_file_size_unit
@@ -483,6 +484,11 @@ class AdminOrganization(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        try:
+            org_operation_signal.send(sender=None, org=org, operation='delete')
+        except Exception as e:
+            logger.error(e)
+
         return Response({'success': True})
 
 
@@ -597,7 +603,6 @@ class TrafficExceededOrganizations(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
 
         result = []
         limit_data = {}
