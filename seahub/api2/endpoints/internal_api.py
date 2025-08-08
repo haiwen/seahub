@@ -210,16 +210,29 @@ class InternalCheckFileOperationAccess(APIView):
         return Response({'user': rat.app_name})
 
 class CheckThumbnailAccess(APIView):
-    authentication_classes = (SessionCRSFCheckFreeAuthentication, TokenAuthentication)
+    authentication_classes = (SessionCRSFCheckFreeAuthentication, )
 
     def post(self, request, repo_id):
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
         path = request.data.get('path')
         is_valid = is_valid_internal_jwt(auth)
         if not is_valid:
-            if not auth or auth[0].lower() != 'bearer':
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if not path:
+            error_msg = 'path invalid'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        return Response({'success': True})
+    
+class CheckThumbnailAccessByUserToken(APIView):
+    authentication_classes = (TokenAuthentication, )
+    
+    def post(self, request, repo_id):
+        path = request.data.get('path')
         if not path:
             error_msg = 'path invalid'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
