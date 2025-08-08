@@ -234,8 +234,6 @@ class Collab {
       this.lastBroadcastedOrReceivedSceneVersion = getSceneVersion(elements);
       this.queueBroadcastAllElements();
       this.queueSaveToServerStorage();
-      const lastSavedAt = new Date().getTime();
-      this.eventBus.dispatch('saved', lastSavedAt);
     }
   };
 
@@ -262,7 +260,8 @@ class Collab {
     const exdrawContent = { version, elements };
     const socket = this.portal.socket;
     const result = await saveToServerStorage(socket.id, exdrawContent, this.excalidrawAPI.getAppState());
-
+    const lastSavedAt = new Date().getTime();
+    this.eventBus.dispatch('saved', lastSavedAt);
     if (!result) return;
 
     if (result.storedElements) {

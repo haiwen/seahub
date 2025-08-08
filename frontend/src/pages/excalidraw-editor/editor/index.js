@@ -5,7 +5,6 @@ import { LibraryIndexedDBAdapter } from './library-adapter';
 import Collab from '../collaboration/collab';
 import context from '../context';
 import TipMessage from './tip-message';
-import isHotkey from 'is-hotkey';
 import { importFromLocalStorage } from '../data/local-storage';
 import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { getFilename, isInitializedImageElement } from '../utils/element-utils';
@@ -157,19 +156,6 @@ const SimpleEditor = () => {
       });
     }
   }, [excalidrawAPI]);
-
-  useEffect(() => {
-    const handleHotkeySave = (event) => {
-      if (isHotkey('mod+s', event)) {
-        event.preventDefault();
-        handleChange(excalidrawAPI.getSceneElements(), excalidrawAPI.getAppState());
-      }
-    };
-    document.addEventListener('keydown', handleHotkeySave, true);
-    return () => {
-      document.removeEventListener('keydown', handleHotkeySave, true);
-    };
-  }, [excalidrawAPI, handleChange]);
 
   const handlePointerUpdate = useCallback((payload) => {
     if (!collabAPIRef.current) return;
