@@ -60,15 +60,14 @@ class DirentDetails extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.CLEAR_MAP_INSTANCE);
   }
 
-  handleVideoHover = (isHover) => {
-    this.setState({ isHovering: isHover }, () => {
+  handleVideoHover = (isHovering) => {
+    this.setState({ isHovering }, () => {
       if (this.videoPlayerRef.current) {
         const player = this.videoPlayerRef.current.player;
-        if (isHover) {
+        if (isHovering) {
           player.play();
-          player.hasStarted(true);
         } else {
-          player.hasStarted(false);
+          player.pause();
         }
       }
     });
@@ -117,12 +116,7 @@ class DirentDetails extends React.Component {
         children: ['progressControl', 'remainingTimeDisplay']
       }
     };
-    if (dirent.encoded_thumbnail_src) {
-      options = {
-        ...options,
-        poster: `${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`
-      };
-    }
+
     return (
       <div
         className="detail-image"
