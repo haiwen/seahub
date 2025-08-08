@@ -23,6 +23,13 @@ class VideoPlayer extends React.Component {
     this.player.el().focus();
   }
 
+  componentDidUpdate(prevProps) {
+    // Update sources if changed
+    if (JSON.stringify(this.props.sources) !== JSON.stringify(prevProps.sources)) {
+      this.player.src(this.props.sources[0]);
+    }
+  }
+
   // destroy player on unmount
   componentWillUnmount() {
     if (this.player) {
