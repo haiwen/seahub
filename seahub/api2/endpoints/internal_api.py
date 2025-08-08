@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from seahub.api2.authentication import SessionCRSFCheckFreeAuthentication
+from seahub.api2.authentication import SessionCRSFCheckFreeAuthentication, TokenAuthentication
 from seahub.api2.models import Token
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_valid_internal_jwt, get_user_common_info
@@ -219,6 +219,20 @@ class CheckThumbnailAccess(APIView):
         if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if not path:
+            error_msg = 'path invalid'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        return Response({'success': True})
+    
+class CheckThumbnailAccessByUserToken(APIView):
+    authentication_classes = (TokenAuthentication, )
+    
+    def post(self, request, repo_id):
+        path = request.data.get('path')
         if not path:
             error_msg = 'path invalid'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
