@@ -46,7 +46,7 @@
 
 .sf-metadata-record-cell-empty:empty::before {
   content: attr(placeholder);
-  color: rgba(255, 255, 255, .7);
+  color: var(--bs-body-secondary-color);
 }
 
 .sf-metadata-geolocation-property-detail-editor-popover .popover.show {

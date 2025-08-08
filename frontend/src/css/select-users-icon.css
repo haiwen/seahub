@@ -2,11 +2,11 @@
   position: absolute;
   top: 6px;
   right: 12px;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--bs-border-secondary-color);
   padding-left: 9px;
   font-size: 18px;
   cursor: pointer;
-  color: #999;
+  color: var(--bs-icon-secondary-color);
 }
 
 .add-members .toggle-detail-btn:hover {

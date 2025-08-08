@@ -58,7 +58,7 @@ class ActivityItem extends Component {
 
     let libURL = siteRoot + 'library/' + item.repo_id + '/' + encodeURIComponent(item.repo_name) + '/';
     let libLink = <a href={libURL}>{item.repo_name}</a>;
-    let smallLibLink = <a className="small text-secondary" href={libURL}>{item.repo_name}</a>;
+    let smallLibLink = <a className="small-lib-link" href={libURL}>{item.repo_name}</a>;
 
     if (item.obj_type == 'repo') {
       switch (item.op_type) {
@@ -99,7 +99,7 @@ class ActivityItem extends Component {
       details = (
         <Fragment>
           <p className="m-0 d-inline" dangerouslySetInnerHTML={{ __html: firstLine }}></p>
-          {isDesktop && <button type="button" onClick={this.onListCreatedFilesToggle} className="activity-details text-secondary ml-2 border-0 p-0 bg-transparent">{gettext('details')}</button>}
+          {isDesktop && <button type="button" onClick={this.onListCreatedFilesToggle} className="activity-details ml-2 border-0 p-0 bg-transparent">{gettext('details')}</button>}
         </Fragment>
       );
       moreDetails = true;
@@ -206,7 +206,7 @@ class ActivityItem extends Component {
               {moreDetails && <br /> }
               {moreDetails && smallLibLink}
             </td>
-            <td className="text-secondary">
+            <td className="relative-time">
               <time datetime={item.time} is="relative-time" title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).fromNow()}</time>
             </td>
           </tr>

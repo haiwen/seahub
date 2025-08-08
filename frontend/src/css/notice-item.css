@@ -1,6 +1,6 @@
 .notification-item {
   padding: 14px 16px 14px 10px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   position: relative;
   cursor: pointer;
 }
@@ -10,7 +10,7 @@
 }
 
 .notification-item:hover {
-  background: #f5f5f5;
+  background: var(--bs-tr-hover-bg);
 }
 
 .notification-item .notification-item-header {
@@ -57,7 +57,7 @@
 }
 
 .notification-item .notification-header-info .notification-time {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

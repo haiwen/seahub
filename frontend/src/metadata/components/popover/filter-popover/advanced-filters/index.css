@@ -15,7 +15,7 @@
 .sf-metadata-filters-list .empty-filters-list {
   padding: 0.25rem;
   font-size: 14px;
-  color: #666666;
+  color: var(--bs-body-secondary-color);
 }
 
 .sf-metadata-filters-list .filter-item {
@@ -44,7 +44,7 @@
 }
 
 .sf-metadata-filters-list .filter-item .filter-term .seafile-option-group-content .option.option-active .seafile-multicolor-icon {
-  color: #666;
+  color: var(--bs-icon-color);
 }
 
 .sf-metadata-filters-list .filter-conjunction {
@@ -142,12 +142,13 @@
   display: flex;
   width: 100%;
   height: 38px;
-  background: field;
+  background: inherit;
   padding-left: 8px;
   padding-right: 8px;
   outline: none;
   border-radius: 3px;
   font-size: 0.875rem;
+  color: var(--bs-body-color);
 }
 
 .sf-metadata-filters-list .filter-term input:hover {
@@ -193,7 +194,7 @@
 .filter-term .filter-rate-list {
   display: flex;
   padding: 0 5px;
-  border: 1px solid rgba(0, 40, 100, 0.12);
+  border: 1px solid var(--bs-border-color);
 }
 
 .sf-metadata-filters-list .delete-filter {
@@ -210,11 +211,11 @@
 .delete-filter .seafile-multicolor-icon-fork-number {
   display: inline-block;
   font-size: 12px;
-  fill: #999;
+  fill: var(--bs-icon-secondary-color);
 }
 
 .delete-filter .seafile-multicolor-icon-fork-number:hover {
-  fill: #666;
+  fill: var(--bs-icon-color);
 }
 
 .sf-metadata-filters-list .multiple-option-name {
@@ -266,9 +267,10 @@
   border-radius: 50%;
 }
 
-.sf-metadata-filters-list .collaborator-name {
+.sf-metadata-filters-list .collaborator .collaborator-name {
   margin-left: 5px;
   max-width: 200px;
+  color: #212529;
 }
 
 .sf-metadata-filters-list .option-collaborator {

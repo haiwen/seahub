@@ -7,6 +7,7 @@ import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 
 import '../../css/item-dropdown-menu.css';
+import classNames from 'classnames';
 
 const propTypes = {
   tagName: PropTypes.string,
@@ -19,6 +20,7 @@ const propTypes = {
   freezeItem: PropTypes.func,
   unfreezeItem: PropTypes.func,
   menuStyle: PropTypes.object,
+  tickable: PropTypes.bool,
 };
 
 class ItemDropdownMenu extends React.Component {
@@ -277,7 +279,7 @@ class ItemDropdownMenu extends React.Component {
                 return (
                   <DropdownItem
                     key={index}
-                    className="position-relative pl-5"
+                    className={classNames({ 'position-relative pl-5': this.props.tickable })}
                     data-toggle={menuItem.key}
                     onClick={this.onMenuItemClick}
                     onKeyDown={this.onMenuItemKeyDown}

@@ -21,7 +21,7 @@ body {
   font-size: 0.9375rem;
   font-weight: normal;
   padding-bottom: 0.3rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--bs-border-color);
   margin-bottom: 0.7rem;
 }
 .user-avatar {
@@ -42,11 +42,11 @@ body {
   cursor: pointer;
 }
 .eye-icon {
-  color: #666;
+  color: var(--bs-icon-color);
 }
 .input-tip {
   padding-top: calc(0.375rem + 1px);
-  color: #666;
+  color: var(--bs-body-secondary-color);
 }
 @media (min-width: 768px) {
   .input-tip {

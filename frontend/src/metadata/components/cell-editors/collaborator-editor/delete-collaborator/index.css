@@ -1,13 +1,13 @@
 .sf-metadata-delete-collaborator {
   background-color: var(--bs-body-secondary-bg);
-  border-bottom: 1px solid #dde2ea;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   border-radius: 3px 3px 0 0;
   min-height: 35px;
   padding: 5px 10px;
   line-height: 1;
 }
 
-.collaborator {
+.sf-metadata-delete-collaborator .collaborator {
   background: #eaeaea;
   border-radius: 10px;
   display: inline-flex;
@@ -32,7 +32,7 @@
 }
 
 .collaborator .collaborator-name {
-  color: var(--bs-body-color);
+  color: #212529;
   margin-left: 5px;
   max-width: 200px;
   flex: 1 1;

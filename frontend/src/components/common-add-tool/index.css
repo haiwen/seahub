@@ -4,8 +4,8 @@
   height: 40px;
   font-size: 14px;
   font-weight: 500;
-  border-top: 1px solid #dedede;
-  background: var(--bs-body-bg);
+  border-top: 1px solid var(--bs-border-secondary-color);
+  background: var(--bs-popover-bg);
   padding: 0 1rem;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
@@ -23,6 +23,10 @@
   font-weight: 600;
   transform: none;
   fill: #666;
+}
+
+[data-bs-theme=dark] .add-item-btn .seafile-multicolor-icon-add-table {
+  fill: rgba(255, 255, 255, .5);
 }
 
 .add-item-btn .description {

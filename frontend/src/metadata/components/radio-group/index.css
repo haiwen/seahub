@@ -60,7 +60,7 @@
   left: 4px;
   width: 66px;
   height: 28px;
-  background-color: #f5f5f5;
+  background-color: var(--bs-nav-active-bg);
   border-radius: 2px;
   transition: transform 0.3s ease;
   z-index: 0;

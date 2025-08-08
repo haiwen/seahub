@@ -2,7 +2,8 @@
   height: 1rem;
   width: 1rem;
   line-height: 1.5;
-  color: #666;
+  color: var(--bs-icon-color);
+  fill: var(--bs-icon-color);
 }
 
 .metadata-tree-view .sf-metadata-view-input {
@@ -13,8 +14,4 @@
 
 .metadata-tree-view .sf-metadata-view-input.rename {
   width: 95%;
-}
-
-.metadata-tree-view .metadata-views-icon {
-  fill: #666;
 }

@@ -57,6 +57,7 @@
   padding: 0;
   box-shadow: none;
   background: transparent;
+  color: var(--bs-icon-color);
 }
 
 .metadata-slider-container .metadata-slider-icon-button:hover {

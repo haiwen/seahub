@@ -263,7 +263,7 @@
 
 .canvas-groups-rows .group-rows-count .count-title {
   margin-right: 4px;
-  color: #666666;
+  color: var(--bs-body-secondary-color);
 }
 
 /* group-header-right */
@@ -417,4 +417,25 @@
 .canvas-groups-rows .group-title .group-cell-value .sf-metadata-group-title-rate-item .seafile-multicolor-icon {
   font-size: 16px;
   fill: inherit;
+}
+
+/* dark mode group border color */
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-1 .group-header-left,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-1 .group-header-right,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-2 .group-header-left,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-2 .group-header-right,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-3 .group-header-left,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-3 .group-header-right,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-2 .group-container-left,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-2 .group-container-right,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-3 .group-container-left,
+body[data-bs-theme="dark"] .canvas-groups-rows .group-level-3 .group-container-right,
+body[data-bs-theme="dark"] .canvas-groups-rows .expanded-group.group-level-2 .group-container-left,
+body[data-bs-theme="dark"] .canvas-groups-rows .expanded-group.group-level-2 .group-container-right,
+body[data-bs-theme="dark"] .canvas-groups-rows .expanded-group.group-level-3 .group-container-left,
+body[data-bs-theme="dark"] .canvas-groups-rows .expanded-group.group-level-3 .group-container-right,
+body[data-bs-theme="dark"] .canvas-groups-rows .sf-metadata-result-table-row .sf-metadata-result-table-cell,
+body[data-bs-theme="dark"] .canvas-groups-rows .sf-metadata-result-table-row .last-cell,
+body[data-bs-theme="dark"] .canvas-groups-rows .actions-cell {
+  border-color: var(--bs-border-secondary-color) !important;
 }

@@ -43,7 +43,7 @@ body {
 }
 
 .clean {
-  border-color: #ccc;
+  border-color: var(--bs-border-secondary-color);
   border-radius: 2px;
   height: 30px;
   line-height: 28px;

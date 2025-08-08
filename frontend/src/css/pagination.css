@@ -3,6 +3,11 @@
   font-weight: normal;
 }
 
+[data-bs-theme=dark] .paginator .btn:disabled {
+  background-color: rgba(255, 255, 255, .02);
+  border-color: rgba(255, 255, 255, .1);
+}
+
 .paginator .paginator-dropdown .btn:active,
 .paginator .paginator-dropdown .btn:focus {
   background: var(--bs-body-bg);

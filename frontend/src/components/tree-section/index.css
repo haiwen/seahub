@@ -56,11 +56,6 @@
   border-radius: 3px;
 }
 
-.tree-section .tree-section-header .sf3-font-down,
-.tree-section .tree-section-header .sf3-font-new {
-  color: var(--bs-icon-secondary-color);
-}
-
 .tree-section .tree-section-header-operation .dropdown {
   height: 100%;
   width: 100%;

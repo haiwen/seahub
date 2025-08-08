@@ -1,6 +1,7 @@
 // Seahub select is based on seafile-ui.css, so use the following content to override the default react-select style
 const DEFAULT_CONTROL_STYLE = {
   border: '1px solid var(--bs-border-color) !important',
+  backgroundColor: 'var(--bs-popover-bg)',
 };
 
 const FOCUS_CONTROL_STYLE = {
@@ -44,6 +45,7 @@ const MenuSelectStyle = {
     return ({
       ...base,
       backgroundColor: 'var(--bs-popover-bg)',
+      border: '1px solid var(--bs-border-secondary-color)',
     });
   },
   option: (provided, state) => {
@@ -58,7 +60,13 @@ const MenuSelectStyle = {
     });
   },
   control: controlCallback,
-  menuPortal: base => ({ ...base, zIndex: 9999, backgroundColor: 'var(--bs-popover-bg)', color: 'var(--bs-body-color)' }),
+  menuPortal: base => ({
+    ...base,
+    zIndex: 9999,
+    backgroundColor: 'var(--bs-popover-bg)',
+    color: 'var(--bs-body-color)',
+    borderColor: 'var(--bs-border-secondary-color)',
+  }),
   indicatorSeparator: noneCallback,
   singleValue: (provided) => {
     return {

@@ -48,6 +48,10 @@
   border: none;
 }
 
+.notification-list-content .notification-modal-body .notice-dialog-side .nav-item .nav-link:hover {
+  background-color: var(--bs-nav-hover-bg);
+}
+
 .notification-list-content .notification-modal-body .notice-dialog-side .nav-item .nav-link.active {
   background-color: var(--bs-nav-active-bg);
   color: var(--bs-body-color);

@@ -183,7 +183,7 @@ input.expire-input {
 }
 
 .custom-permission .permission-header .back-icon {
-  color: var(--bs-icon-tertiary-color);
+  color: var(--bs-icon-secondary-color);
   margin-right: 10px;
   cursor: pointer;
 }

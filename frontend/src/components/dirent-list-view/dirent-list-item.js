@@ -848,7 +848,7 @@ class DirentListItem extends React.Component {
                 </>
               )}
             </td>
-            <td className="tag-list-title">
+            <td className="tag-list-title">&nbsp;
             </td>
             <td className="operation">{this.renderItemOperation()}</td>
             <td className="file-size">{dirent.size || ''}</td>

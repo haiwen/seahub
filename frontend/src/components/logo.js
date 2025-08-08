@@ -8,18 +8,47 @@ const propTypes = {
 };
 
 class Logo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      colorMode: typeof document !== 'undefined' ? document.body.getAttribute('data-bs-theme') : 'light'
+    };
+  }
+
+  componentDidMount() {
+    // Listen for color mode changes
+    this.observer = new MutationObserver(this.handleThemeChange);
+    if (typeof document !== 'undefined') {
+      this.observer.observe(document.body, { attributes: true, attributeFilter: ['data-bs-theme'] });
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
+  }
+
+  handleThemeChange = () => {
+    if (typeof document !== 'undefined') {
+      const colorMode = document.body.getAttribute('data-bs-theme');
+      this.setState({ colorMode });
+    }
+  };
 
   closeSide = () => {
     this.props.onCloseSidePanel();
   };
 
   getLogoSrc = () => {
-    let isDark = false;
-    if (typeof document !== 'undefined') {
-      isDark = document.body.getAttribute('data-bs-theme') === 'dark';
+    const { colorMode } = this.state;
+    // Check if logoPath is a custom path (not default logo)
+    const isDefaultLogo = logoPath === 'img/seafile-logo.png';
+    let path = logoPath;
+    if (colorMode === 'dark' && isDefaultLogo) {
+      path = logoPath.replace('.png', '-dark.png');
     }
-    const path = isDark ? logoPath.replace('.png', '-dark.png') : logoPath;
-    return path.indexOf('image-view') != -1 ? path : mediaUrl + path;
+    return path.indexOf('image-view') !== -1 ? path : mediaUrl + path;
   };
 
   render() {

@@ -24,7 +24,7 @@
 
 .sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title .cards-quantity {
   font-size: 14px;
-  color: #666666;
+  color: var(--bs-body-secondary-color);
   margin-left: 12px;
 }
 
@@ -40,7 +40,7 @@
   justify-content: center;
   align-items: center;
   margin-left: 0.5rem;
-  color: #666666;
+  color: var(--bs-icon-color);
   cursor: pointer;
   border-radius: 3px;
 }

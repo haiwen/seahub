@@ -15,7 +15,7 @@
 }
 
 .sf-metadata-groupbys-popover .empty-groupbys-container .empty-groupbys-list {
-  color: #666;
+  color: var(--bs-body-secondary-color);
   font-size: 14px;
   padding: 0.25rem 0.25rem 0.25rem 0;
 }

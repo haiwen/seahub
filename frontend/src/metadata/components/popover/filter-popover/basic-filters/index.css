@@ -29,7 +29,7 @@
 
 .sf-metadata-basic-filters-select.highlighted .selected-option .selected-option-show,
 .sf-metadata-basic-filters-select.highlighted .selected-option .sf3-font-down {
-  color: #ed7109;
+  color: #ed7109 !important;
 }
 
 .sf-metadata-basic-filters-select.seafile-customize-select .selected-option .selected-option-show {

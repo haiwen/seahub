@@ -9,14 +9,14 @@
 }
 
 .lib-setting-nav {
-  border-bottom: 1px solid rgba(0,40,100,0.12) !important;
+  border-bottom: 1px solid var(--bs-border-color) !important;
 }
 
 @media (min-width: 768px) {
   .lib-setting-nav {
     min-width: 240px;
     border-bottom: none;
-    border-right: 1px solid rgba(0,40,100,0.12) !important;
+    border-right: 1px solid var(--bs-border-color) !important;
   }
 }
 

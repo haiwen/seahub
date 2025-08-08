@@ -1,6 +1,6 @@
 .sf-metadata-tags-editor {
-  background: var(--bs-body-bg);
-  border: 1px solid #dedede;
+  background: var(--bs-popover-bg);
+  border: 1px solid var(--bs-secondary-color);
   border-radius: 4px;
   box-shadow: 0 2px 10px 0 #dedede;
   left: 0;
@@ -10,6 +10,10 @@
   overflow: hidden;
   padding: 0;
   position: absolute;
+}
+
+[data-bs-theme=dark] .sf-metadata-tags-editor {
+  box-shadow: none;
 }
 
 .sf-metadata-tags-editor .sf-metadata-search-tags-container {
@@ -74,7 +78,7 @@
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-divider {
-  border-top: 1px solid rgba(0, 40, 100, .12);
+  border-top: 1px solid var(--bs-border-color);
   height: 0;
   margin: 12px 0 8px;
   opacity: 1;

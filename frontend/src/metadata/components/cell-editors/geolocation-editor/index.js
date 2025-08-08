@@ -296,6 +296,7 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   const renderGoogleMap = useCallback(() => {
     const isValid = isValidPosition(position?.lng, position?.lat);
     const initPos = isValid ? position : DEFAULT_POSITION;
+    const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
     mapRef.current = new window.google.maps.Map(ref.current, {
       center: initPos,
       zoom: 16,
@@ -309,6 +310,7 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
       disableDefaultUI: true,
       gestrueHandling: 'cooperative',
       clickableIcons: false,
+      colorScheme: isDark ? window.google.maps.ColorScheme.DARK : window.google.maps.ColorScheme.LIGHT,
     });
 
     // control
