@@ -1227,10 +1227,12 @@ table td {
   word-wrap: break-word;
   vertical-align: middle;
   border: 1px solid #ccc;
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
 }
 
 .rename-container input:focus {
-  background-color: #fff;
+  background-color: var(--bs-body-bg);
   border-color: #1991eb;
   outline: 0;
   box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
