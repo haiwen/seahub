@@ -4,6 +4,7 @@ import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import Collab from '../collaboration/collab';
 import context from '../context';
+import TipMessage from './tip-message';
 import { importFromLocalStorage } from '../data/local-storage';
 import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { getFilename, isInitializedImageElement } from '../utils/element-utils';
@@ -13,7 +14,6 @@ import '@excalidraw/excalidraw/index.css';
 
 const { docUuid } = window.app.pageOptions;
 window.name = `${docUuid}`;
-
 const UIOptions = {
   canvasActions: {
     saveToActiveFile: false,
@@ -174,7 +174,10 @@ const SimpleEditor = () => {
   }, []);
 
   return (
-    <div className='excali-container' style={{ height: '100%', width: '100%' }}>
+    <div className='excali-container'>
+      <div className='excali-tip-message'>
+        <TipMessage />
+      </div>
       <Excalidraw
         initialData={initialStatePromiseRef.current.promise}
         excalidrawAPI={(api) => setExcalidrawAPI(api)}
@@ -184,7 +187,6 @@ const SimpleEditor = () => {
         langCode={langList[window.app.config.lang] || 'en'}
       >
         <MainMenu>
-          <MainMenu.DefaultItems.Export />
           <MainMenu.DefaultItems.SaveAsImage />
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
