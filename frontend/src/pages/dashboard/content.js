@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { gettext } from '../../utils/constants';
@@ -15,61 +15,53 @@ const contentPropTypes = {
   items: PropTypes.array.isRequired,
 };
 
-class FileActivitiesContent extends Component {
+const FileActivitiesContent = ({ items, isLoadingMore }) => {
+  const isDesktop = Utils.isDesktop();
 
-  render() {
-    const isDesktop = Utils.isDesktop();
-    let { items, isLoadingMore } = this.props;
-
-    if (!items.length) {
-      return <EmptyTip text={gettext('No more activities')}/>;
-    }
-
-    const desktopThead = (
-      <thead>
-        <tr>
-          <th width="8%">{/* avatar */}</th>
-          <th width="15%">{gettext('User')}</th>
-          <th width="20%">{gettext('Operation')}</th>
-          <th width="37%">{gettext('File')} / {gettext('Library')}</th>
-          <th width="20%">{gettext('Time')}</th>
-        </tr>
-      </thead>
-    );
-
-    const mobileThead = (
-      <thead>
-        <tr>
-          <th width="15%"></th>
-          <th width="53%"></th>
-          <th width="32%"></th>
-        </tr>
-      </thead>
-    );
-
-    return (
-      <Fragment>
-        <table className="table-thead-hidden">
-          {isDesktop ? desktopThead : mobileThead}
-          <tbody>
-            {items.map((item, index) => {
-              return (
-                <ActivityItem
-                  key={index}
-                  isDesktop={isDesktop}
-                  item={item}
-                  index={index}
-                  items={items}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-        {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
-      </Fragment>
-    );
+  if (!items.length) {
+    return <EmptyTip text={gettext('No more activities')}/>;
   }
-}
+
+  return (
+    <Fragment>
+      <table className="table-thead-hidden">
+        {isDesktop ?
+          <thead>
+            <tr>
+              <th width="8%">{/* avatar */}</th>
+              <th width="15%">{gettext('User')}</th>
+              <th width="20%">{gettext('Operation')}</th>
+              <th width="37%">{gettext('File')} / {gettext('Library')}</th>
+              <th width="20%">{gettext('Time')}</th>
+            </tr>
+          </thead>
+          :
+          <thead>
+            <tr>
+              <th width="15%"></th>
+              <th width="53%"></th>
+              <th width="32%"></th>
+            </tr>
+          </thead>
+        }
+        <tbody>
+          {items.map((item, index) => {
+            return (
+              <ActivityItem
+                key={index}
+                isDesktop={isDesktop}
+                item={item}
+                index={index}
+                items={items}
+              />
+            );
+          })}
+        </tbody>
+      </table>
+      {isLoadingMore ? <span className="loading-icon loading-tip"></span> : ''}
+    </Fragment>
+  );
+};
 
 FileActivitiesContent.propTypes = contentPropTypes;
 
