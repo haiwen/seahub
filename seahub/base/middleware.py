@@ -164,9 +164,7 @@ class UserAgentMiddleWare(MiddlewareMixin):
     user_agents_tablets_search = u"(?:%s)" % u'|'.join(('ipad', 'tablet', ))
 
     def __init__(self, get_response=None):
-        super().__init__(UserAgentMiddleWare)
-        self.get_response = get_response
-
+        super().__init__(get_response)
         # these for detect mobile
         user_agents_test_match = r'^(?:%s)' % '|'.join(self.user_agents_test_match)
         self.user_agents_test_match_regex = re.compile(user_agents_test_match, re.IGNORECASE)
