@@ -25,6 +25,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocP
         excalidrawAPI.scrollToContent(sceneContent.elements, { fitToViewport: true, viewportZoomFactor: 0.9 });
       }, 100);
     }
+    // eslint-disable-next-line
   }, [excalidrawAPI, isResizeSdocPageWidth, isInSdoc]);
 
   if (isFetching) {

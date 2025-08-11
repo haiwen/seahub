@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import dayjs from 'dayjs';
 import { Link, globalHistory } from '@gatsbyjs/reach-router';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -92,7 +92,7 @@ class FilesActivities extends Component {
         items: curItems,
         availableUsers: availableUsers,
         currentPage: currentPage + 1,
-        isFirstLoading: curItems.length == 0,
+        isFirstLoading: false,
         hasMore: true,
       }, () => {
         if (this.state.items.length < 25) {
@@ -192,7 +192,7 @@ class FilesActivities extends Component {
         items: curItems,
         availableUsers: availableUsers,
         currentPage: currentPage + 1,
-        isFirstLoading: curItems.length == 0,
+        isFirstLoading: false,
         isLoadingMore: false,
         hasMore: res.data.events.length === 0 ? false : true
       }, () => {
@@ -293,7 +293,7 @@ class FilesActivities extends Component {
               <p className="error text-center">{this.state.errorMsg}</p>
             }
             {!this.state.isFirstLoading && (
-              <Fragment>
+              <>
                 {!onlyMine && (
                   <UserSelector
                     availableUsers={availableUsers}
@@ -303,9 +303,8 @@ class FilesActivities extends Component {
                   />
                 )}
                 <FileActivitiesContent items={this.state.items} isLoadingMore={this.state.isLoadingMore} />
-              </Fragment>
-            )
-            }
+              </>
+            )}
           </div>
         </div>
       </div>
