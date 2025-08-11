@@ -80,7 +80,7 @@ class AuthTest(ApiTestBase):
 
     def test_client_login_token_wont_enter_sudo_mode(self):
         url = self._get_client_login_url(admin=True)
-        url += '&next=/sys/info'
+        url += '&next=/sys/info/'
         r = requests.get(url)
         assert r.url == urljoin(BASE_URL, '/sys/sudo/?next=/sys/info/')
 
