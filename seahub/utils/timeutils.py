@@ -2,11 +2,10 @@
 import logging
 import pytz
 import datetime
-from zoneinfo import ZoneInfo
 from django.conf import settings
 import six
 from django.utils import timezone
-from django.utils.timezone import get_current_timezone, make_aware, localtime
+from django.utils.timezone import get_current_timezone
 
 logger = logging.getLogger(__name__)
 
@@ -57,8 +56,6 @@ def timestamp_to_isoformat_timestr(timestamp):
             dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
 
         dt_obj = dt_obj.replace(microsecond=0)
-        if not timezone.is_naive(dt_obj):
-            dt_obj = timezone.make_naive(dt_obj)
         aware_datetime = dt_obj.replace(tzinfo=current_timezone)
         isoformat_timestr = aware_datetime.isoformat()
         return isoformat_timestr
