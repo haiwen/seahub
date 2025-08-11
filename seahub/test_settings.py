@@ -121,4 +121,10 @@ ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'other_permission': False,
     },
 }
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+STORAGES = {
+    "default": {
+        "BACKEND": 'django.core.files.storage.FileSystemStorage'
+    },
+    
+}
