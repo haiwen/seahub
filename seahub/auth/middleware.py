@@ -25,7 +25,6 @@ class LazyUser(object):
 
 
 class AuthenticationMiddleware(MiddlewareMixin):
-    async_mode = False
     def process_request(self, request):
         assert hasattr(
             request, 'session'
