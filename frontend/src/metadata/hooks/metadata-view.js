@@ -4,17 +4,18 @@ import { Dirent } from '@/models';
 import toaster from '../../components/toast';
 import Context from '../context';
 import Store from '../store';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY } from '../constants';
+import { CellType, EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, SUPPORT_SEARCH_COLUMN_LIST, TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../constants';
 import { Utils, validateName } from '../../utils/utils';
 import { useMetadata } from './metadata';
 import { useCollaborators } from './collaborators';
 import { getRowById } from '../../components/sf-table/utils/table';
-import { getFileNameFromRecord, getFileObjIdFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
+import { getCellValueByColumn, getCollaboratorsName, getFileNameFromRecord, getFileObjIdFromRecord, getNumberDisplayString, getParentDirFromRecord, getRecordIdFromRecord, getUniqueFileName } from '../utils/cell';
 import { gettext } from '../../utils/constants';
 import { checkIsDir } from '../utils/row';
 import { useTags } from '../../tag/hooks';
-import { useFileOperations, useMetadataAIOperations } from '../../hooks';
+import { useFileOperations, useMetadataAIOperations, useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../utils/column';
+import { getSearchRule } from '../../components/sf-table/utils/search';
 
 const MetadataViewContext = React.createContext(null);
 
@@ -34,16 +35,19 @@ export const MetadataViewProvider = ({
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const storeRef = useRef(null);
-  const delayReloadDataTimer = useRef(null);
-
-  const { collaborators } = useCollaborators();
+  const { collaborators, collaboratorsCache } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
   const { onOCR: OCRAPI, generateDescription, extractFilesDetails, faceRecognition, generateFileTags: generateFileTagsAPI } = useMetadataAIOperations();
   const { handleMove } = useFileOperations();
+  const { globalHiddenColumns } = useMetadataStatus();
+
+  const storeRef = useRef(null);
+  const delayReloadDataTimer = useRef(null);
+  const collaboratorsRef = useRef(collaborators);
 
   const tableChanged = useCallback(() => {
     setMetadata(storeRef.current.data);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
   }, []);
 
   const handleTableError = useCallback((error) => {
@@ -426,6 +430,103 @@ export const MetadataViewProvider = ({
     handleMove(path, dirent, false, callback);
   };
 
+  const handleSearchRows = useCallback((searchVal, callback) => {
+    const metadata = storeRef.current.data;
+    const tagsData = window.sfTagsDataStore?.data;
+
+    if (!searchVal) {
+      callback && callback(null);
+      setMetadata(metadata);
+      return;
+    }
+
+    const searchRegRule = getSearchRule(searchVal);
+    if (!searchRegRule) {
+      callback && callback(null);
+      setMetadata(metadata);
+      return;
+    }
+
+    // Search across searchable columns
+    const { columns, hidden_columns } = storeRef.current.data.view;
+    const collaborators = collaboratorsRef.current;
+    const searchableColumns = columns.filter(column => !globalHiddenColumns.includes(column.key) && !hidden_columns.includes(column.key) && !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key) && SUPPORT_SEARCH_COLUMN_LIST.includes(column.type));
+
+    let searchResult = { matchedCells: [], matchedRows: {}, currentSelectIndex: 0 };
+    storeRef.current.data.rows.forEach((row, rowIndex) => {
+      searchableColumns.forEach(column => {
+        const { type: columnType } = column;
+        let cellValue = getCellValueByColumn(row, column);
+        if (!cellValue) return;
+        if (columnType === CellType.GEOLOCATION) {
+          const translated_location = row._location_translated;
+          if (translated_location && translated_location.address) {
+            cellValue = translated_location.address;
+          }
+        } else if (columnType === CellType.COLLABORATOR) {
+          cellValue = getCollaboratorsName(collaborators, cellValue);
+        } else if (columnType === CellType.LAST_MODIFIER || columnType === CellType.CREATOR) {
+          let collaborator = collaborators.find(user => user.email === cellValue);
+          if (!collaborator) {
+            collaborator = collaboratorsCache[cellValue];
+          }
+          if (collaborator) {
+            cellValue = collaborator.name;
+          }
+        } else if (columnType === CellType.NUMBER) {
+          cellValue = getNumberDisplayString(cellValue, column.data);
+        } else if (columnType === CellType.TAGS) {
+          cellValue = cellValue?.map(tag => {
+            const foundTag = tagsData?.rows.find(t => t._id === tag.row_id);
+            return foundTag?._tag_name;
+          }).join(', ') || '';
+        }
+        const cellValueStr = (cellValue === undefined || cellValue === null) ? '' : String(cellValue);
+        if (searchRegRule.test(cellValueStr)) {
+          if (!searchResult.matchedRows[row._id]) {
+            searchResult.matchedRows[row._id] = [];
+            searchResult.matchedRows[row._id].push(column.key);
+            searchResult.matchedCells.push({
+              rowId: row._id,
+              columnKey: column.key,
+              value: cellValueStr,
+              rowIndex,
+            });
+          }
+        }
+      });
+    });
+
+    // Update metadata to only include matched rows
+    const matchedRowIds = Object.keys(searchResult.matchedRows);
+    if (matchedRowIds.length > 0) {
+      const newMetadata = {
+        ...metadata,
+        row_ids: matchedRowIds,
+        rows: matchedRowIds.map(id => metadata.id_row_map[id]).filter(Boolean),
+        view: {
+          ...metadata.view,
+          rows: matchedRowIds,
+        }
+      };
+      setMetadata(newMetadata);
+    } else {
+    // No matches, show empty table
+      const emptyMetadata = {
+        ...metadata,
+        row_ids: [],
+        rows: [],
+        view: {
+          ...metadata.view,
+          rows: [],
+        }
+      };
+      setMetadata(emptyMetadata);
+    }
+
+    callback && callback(searchResult);
+  }, [globalHiddenColumns, collaboratorsCache]);
+
   // init
   useEffect(() => {
     setLoading(true);
@@ -466,6 +567,7 @@ export const MetadataViewProvider = ({
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
     const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, onOCR);
     const unsubscribeToggleMoveDialog = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, handleMoveRecord);
+    const unsubscribeSearchRows = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_ROWS, handleSearchRows);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -493,10 +595,15 @@ export const MetadataViewProvider = ({
       unsubscribeUpdateDescription();
       unsubscribeOCR();
       unsubscribeToggleMoveDialog();
+      unsubscribeSearchRows();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, viewID]);
+
+  useEffect(() => {
+    collaboratorsRef.current && (collaboratorsRef.current = collaborators);
+  }, [collaborators]);
 
   return (
     <MetadataViewContext.Provider

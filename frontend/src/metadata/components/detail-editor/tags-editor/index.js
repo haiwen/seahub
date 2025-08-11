@@ -76,6 +76,7 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
     if (!newValue.includes(tagId)) {
       newValue.push(tagId);
     }
+    console.log('details tags:', newValue);
     updateFileTags([{ record_id: recordId, tags: newValue, old_tags: Array.isArray(value) ? value.map(i => i.row_id) : [] }]);
   }, [record, value, validValue, updateFileTags]);
 

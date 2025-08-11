@@ -47,6 +47,9 @@ export const EVENT_BUS_TYPE = {
   UPDATE_FACE_RECOGNITION: 'update_face_recognition',
   GENERATE_DESCRIPTION: 'generate_description',
   OCR: 'ocr',
+  SEARCH_ROWS: 'search_rows',
+  CLOSE_SEARCHER: 'close_searcher',
+  RESET_SEARCH_BAR: 'reset_search_bar',
 
   // metadata
   RELOAD_DATA: 'reload_data',
