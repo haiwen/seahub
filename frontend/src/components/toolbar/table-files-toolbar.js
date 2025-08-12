@@ -11,6 +11,7 @@ import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { getColumnByKey } from '../../metadata/utils/column';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
+import MetadataTableSearcher from '../../metadata/views/table/table-searcher';
 
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -159,6 +160,16 @@ const TableFilesToolbar = ({ repoID }) => {
   }, []);
 
   const length = selectedRecordIds.length;
+  
+  // Show searcher when no records are selected
+  if (length === 0) {
+    return (
+      <div className="cur-view-toolbar">
+        <MetadataTableSearcher />
+      </div>
+    );
+  }
+
   return (
     <div className="selected-dirents-toolbar">
       <span className="cur-view-path-btn px-2" onClick={unSelect}>

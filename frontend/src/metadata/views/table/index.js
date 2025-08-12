@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import { toKeyCode } from 'is-hotkey';
 import toaster from '../../../components/toast';
 import TableMain from './table-main';
@@ -7,11 +7,13 @@ import { Utils } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
+import EventBus from '../../../components/common/event-bus';
 
 import './index.css';
 
 const Table = () => {
   const [isLoadingMore, setLoadingMore] = useState(false);
+  const [searchResult, setSearchResult] = useState(null);
   const {
     isLoading,
     metadata,
@@ -34,6 +36,25 @@ const Table = () => {
     generateFileTags,
   } = useMetadataView();
   const containerRef = useRef(null);
+
+  const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
+
+  // Handle search result updates from the searcher
+  useEffect(() => {
+    const eventBus = EventBus.getInstance();
+    const unsubscribeSearchResult = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, (searchResult) => {
+      setSearchResult(searchResult);
+    });
+
+    return () => {
+      unsubscribeSearchResult && unsubscribeSearchResult();
+    };
+  }, []);
+
+  // Reset search when view changes
+  useEffect(() => {
+    setSearchResult(null);
+  }, [metadata?.view?.groupbys, metadata?.view?.filters, metadata?.view?.sorts, metadata?.view?.hidden_columns]);
 
   const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
 
@@ -184,6 +205,7 @@ const Table = () => {
         updateFaceRecognition={updateFaceRecognition}
         updateRecordDescription={updateRecordDescription}
         onOCR={onOCR}
+        searchResult={searchResult}
       />
     </div>
   );
