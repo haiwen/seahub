@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-import pytz
 import datetime
 from django.conf import settings
 import six
@@ -64,7 +63,6 @@ def timestamp_to_isoformat_timestr(timestamp):
         return ''
 
 
-# https://pypi.org/project/pytz/
 def datetime_to_isoformat_timestr(datetime):
 
     if not datetime:
@@ -75,15 +73,9 @@ def datetime_to_isoformat_timestr(datetime):
         datetime = make_naive(datetime)
 
     try:
-        # This library only supports two ways of building a localized time.
-        # The first is to use the localize() method provided by the pytz library.
-        # This is used to localize a naive datetime (datetime with no timezone information):
-
         datetime = datetime.replace(microsecond=0)
         aware_datetime = datetime.replace(tzinfo=current_timezone)
-        target_timezone = pytz.timezone(str(current_timezone))
-        localized_datetime = target_timezone.normalize(aware_datetime.astimezone(pytz.UTC))
-        isoformat_timestr = localized_datetime.isoformat()
+        isoformat_timestr = aware_datetime.isoformat()
         return isoformat_timestr
     except Exception as e:
         logger.error(e)
