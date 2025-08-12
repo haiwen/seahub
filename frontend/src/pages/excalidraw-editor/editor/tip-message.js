@@ -1,7 +1,7 @@
 import React from 'react';
 import { withTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
-import EventBus from '../../../components/common/event-bus';
+import EventBus from '../utils/event-bus';
 
 class TipMessage extends React.Component {
   constructor(props) {
