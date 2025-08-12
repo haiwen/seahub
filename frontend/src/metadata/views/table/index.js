@@ -7,7 +7,6 @@ import { Utils } from '../../../utils/utils';
 import { isModZ, isModShiftZ } from '../../../utils/hotkey';
 import { getValidGroupbys } from '../../utils/group';
 import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, MAX_LOAD_NUMBER } from '../../constants';
-import EventBus from '../../../components/common/event-bus';
 
 import './index.css';
 
@@ -41,7 +40,7 @@ const Table = () => {
 
   // Handle search result updates from the searcher
   useEffect(() => {
-    const eventBus = EventBus.getInstance();
+    const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
     const unsubscribeSearchResult = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, (searchResult) => {
       setSearchResult(searchResult);
     });
@@ -55,8 +54,6 @@ const Table = () => {
   useEffect(() => {
     setSearchResult(null);
   }, [metadata?.view?.groupbys, metadata?.view?.filters, metadata?.view?.sorts, metadata?.view?.hidden_columns]);
-
-  const canModify = useMemo(() => window.sfMetadataContext.canModify(), []);
 
   const focusDataGrid = useCallback(() => {
     setTimeout(() => window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.FOCUS_CANVAS), 0);

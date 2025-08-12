@@ -4,7 +4,6 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { getSearchRule } from '../../../components/sf-table/utils/search';
 import { getFileNameFromRecord } from '../../utils/cell';
 import { PRIVATE_COLUMN_KEY } from '../../constants';
-import EventBus from '../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../constants';
 
 // Define which columns are searchable for metadata tables
@@ -12,6 +11,7 @@ const SUPPORT_SEARCH_COLUMNS_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
   PRIVATE_COLUMN_KEY.FILE_DESCRIPTION,
   PRIVATE_COLUMN_KEY.TAGS,
+  PRIVATE_COLUMN_KEY.FILE_KEYWORDS,
 ];
 
 const MetadataTableSearcher = () => {
@@ -38,6 +38,10 @@ const MetadataTableSearcher = () => {
           break;
         }
         case PRIVATE_COLUMN_KEY.FILE_DESCRIPTION: {
+          strContent[columnKey] = record[columnKey] || '';
+          break;
+        }
+        case PRIVATE_COLUMN_KEY.FILE_KEYWORDS: {
           strContent[columnKey] = record[columnKey] || '';
           break;
         }
@@ -69,8 +73,8 @@ const MetadataTableSearcher = () => {
   const handleUpdateSearchResult = useCallback((searchResult) => {
     setSearchResult(searchResult);
 
-    const eventBus = EventBus.getInstance();
-    eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, searchResult);
+    const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SEARCH_RESULT, searchResult);
   }, []);
 
   const searchCells = useCallback((searchRegRule) => {
