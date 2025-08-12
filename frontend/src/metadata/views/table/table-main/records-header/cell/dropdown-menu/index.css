@@ -24,6 +24,12 @@
 .sf-metadata-column-dropdown-menu .dropdown-item.disabled,
 .sf-metadata-column-dropdown-menu .dropdown-item:disabled {
   pointer-events: unset !important;
+  color: #c2c2c2;
+}
+
+[data-bs-theme=dark] .sf-metadata-column-dropdown-menu .dropdown-item.disabled,
+[data-bs-theme=dark] .sf-metadata-column-dropdown-menu dropdown-item:disabled {
+  color: rgba(255, 255, 255, .3);
 }
 
 .sf-metadata-column-dropdown-menu .disabled.dropdown-item:hover {

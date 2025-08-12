@@ -234,6 +234,10 @@
   border-left-color: var(--bs-emphasis-color);
 }
 
+.sf-metadata-tooltip .bs-tooltip-auto[data-popper-placement^=left] .tooltip-arrow:before {
+  border-left-color: var(--bs-emphasis-color);
+}
+
 /* records count */
 .sf-metadata-result.success .sf-metadata-result-footer {
   height: 32px;
