@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { gettext, isPro, siteRoot } from '../../utils/constants';
+import { gettext, isPro, isSeafilePlus, siteRoot } from '../../utils/constants';
 import { Button, Input, InputGroup } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -129,7 +129,10 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
     if (!isPro) {
       this.permissions = ['r', 'rw'];
     } else {
-      this.permissions = ['r', 'rw', 'cloud-edit', 'preview', 'invisible'];
+      this.permissions = ['r', 'rw', 'cloud-edit', 'preview'];
+      if (!isSeafilePlus) {
+        this.permissions.push('invisible');
+      }
     }
   }
 

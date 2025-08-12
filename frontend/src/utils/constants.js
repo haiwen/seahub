@@ -83,6 +83,7 @@ export const enableEncryptedLibrary = window.app.pageOptions.enableEncryptedLibr
 export const enableRepoHistorySetting = window.app.pageOptions.enableRepoHistorySetting;
 export const enableUserCleanTrash = window.app.pageOptions.enableUserCleanTrash;
 export const isSystemStaff = window.app.pageOptions.isSystemStaff;
+export const isSeafilePlus = window.app.pageOptions.isSeafilePlus;
 export const thumbnailSizeForOriginal = window.app.pageOptions.thumbnailSizeForOriginal;
 export const thumbnailDefaultSize = window.app.pageOptions.thumbnailDefaultSize;
 export const thumbnailSizeForGrid = window.app.pageOptions.thumbnailSizeForGrid;

@@ -20,6 +20,8 @@ CLOUD_MODE = False
 
 MULTI_TENANCY = False
 
+IS_SEAFILE_PLUS = False
+
 ADMINS = [
     # ('Your Name', 'your_email@domain.com'),
 ]

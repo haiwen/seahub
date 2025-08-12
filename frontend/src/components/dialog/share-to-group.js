@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import classnames from 'classnames';
-import { gettext, isPro, enableShareToDepartment } from '../../utils/constants';
+import { gettext, isPro, isSeafilePlus, enableShareToDepartment } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils, isMobile } from '../../utils/utils';
 import toaster from '../toast';
@@ -406,6 +406,7 @@ class ShareToGroup extends React.Component {
   };
 
   render() {
+    const enableAddCustomPermission = isPro && !isSeafilePlus;
     let thead = (
       <thead>
         <tr>
@@ -451,7 +452,7 @@ class ShareToGroup extends React.Component {
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
-                  enableAddCustomPermission={isPro}
+                  enableAddCustomPermission={enableAddCustomPermission}
                   isWiki={this.state.isWiki}
                   onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                 />

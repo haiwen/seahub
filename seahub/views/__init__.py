@@ -1171,6 +1171,7 @@ def react_fake_view(request, **kwargs):
         'enable_file_tags': settings.ENABLE_FILE_TAGS,
         'enable_show_about': settings.ENABLE_SHOW_ABOUT,
         'multi_tenancy': MULTI_TENANCY,
+        'is_seafile_plus': settings.IS_SEAFILE_PLUS
     }
 
     return render(request, "react_app.html", return_dict)
