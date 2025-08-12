@@ -58,6 +58,15 @@ body {
 
 .main-panel-center .cur-view-content {
   padding: 0;
+  min-width: 500px;
+}
+
+.main-panel-center .sdoc-content-right-panel-wrapper .comments-panel-header {
+  border-top: 1px solid #EAECEF;
+}
+
+.main-panel-center .sdoc-content-right-panel-wrapper .comments-panel-wrapper {
+  height: calc(100vh - 43px);
 }
 
 /* scroll container */
@@ -116,6 +125,10 @@ body {
   border: none;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
+}
+
+.sdoc-editor-container .sdoc-article-container .article.show-comment-in-wiki {
+  padding-left: 50px;
 }
 
 .sdoc-editor-container .sdoc-article-container .article>div {

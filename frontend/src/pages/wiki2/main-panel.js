@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { SdocWikiEditor, DocInfo } from '@seafile/seafile-sdoc-editor';
+import { SdocWikiEditor, DocInfo, ErrorBoundary, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
+import { CollaboratorsProvider, CommentContextProvider, EventBus, PluginsProvider, RightPanel } from '@seafile/sdoc-editor';
 import { gettext, username, wikiPermission, wikiId, siteRoot, isPro } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import Switch from '../../components/switch';
@@ -11,7 +12,9 @@ import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
 import RightHeader from './wiki-right-header';
-
+import CommentPlugin from './wiki-comment/plugin-item';
+import User from '../../metadata/model/user';
+import { metadataAPI } from '../../metadata';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -42,6 +45,10 @@ class MainPanel extends Component {
       currentPageConfig: {},
       isDropdownMenuOpen: false,
       showExportSubmenu: false,
+      isShowRightPanel: false,
+      collaborators: [],
+      editor: {},
+      unseenNotificationsCount: 0,
     };
     this.scrollRef = React.createRef();
     this.exportDropdownRef = React.createRef();
@@ -68,6 +75,36 @@ class MainPanel extends Component {
     const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
+
+  componentDidMount() {
+    if (!wikiId) return;
+    this.fetchCollaborators(wikiId);
+    const eventBus = EventBus.getInstance();
+    this.unsubscribeUnseenNotificationsCount = eventBus.subscribe(EXTERNAL_EVENT.UNSEEN_NOTIFICATIONS_COUNT, this.updateUnseenNotificationsCount);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeUnseenNotificationsCount();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.docUuid !== this.state.docUuid) {
+      this.setState({ isShowRightPanel: false });
+    }
+  }
+
+  fetchCollaborators(wikiId) {
+    metadataAPI.getCollaborators(wikiId).then(res => {
+      const collaborators = Array.isArray(res?.data?.user_list)
+        ? res.data.user_list.map(user => new User(user))
+        : [];
+      this.setState({ collaborators });
+    });
+  }
+
+  updateUnseenNotificationsCount = (count) => {
+    this.setState({ unseenNotificationsCount: count });
+  };
 
   handleEditorStateChange = ({ pageId, locked }) => {
     this.forceUpdate();
@@ -145,6 +182,16 @@ class MainPanel extends Component {
     this.setState({ showExportSubmenu: false });
   };
 
+  setIsShowRightPanel = () => {
+    this.setState(prevState => ({
+      isShowRightPanel: !prevState.isShowRightPanel
+    }));
+  };
+
+  setEditor = (editor) => {
+    this.setState({ editor: editor });
+  };
+
   render() {
     const menuItems = this.getMenu();
     const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked } = this.props;
@@ -176,6 +223,7 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className='d-flex align-items-center'>
+            <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />
             {menuItems.length > 0 &&
             <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
               <DropdownToggle
@@ -262,17 +310,32 @@ class MainPanel extends Component {
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <div className='sdoc-scroll-container' id='sdoc-scroll-container' ref={this.scrollRef}>
                 <div className='wiki-editor-container'>
-                  <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
+                  <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} isShowRightPanel={this.state.isShowRightPanel} />
                   <SdocWikiEditor
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}
                     isWikiReadOnly={isReadOnly}
                     scrollRef={this.scrollRef}
+                    collaborators={this.state.collaborators}
+                    showComment={true}
+                    isShowRightPanel={this.state.isShowRightPanel}
+                    setEditor={this.setEditor}
                   />
                 </div>
               </div>
             )}
           </div>
+          {this.state.isShowRightPanel && (
+            <ErrorBoundary>
+              <CollaboratorsProvider collaborators={this.state.collaborators}>
+                <PluginsProvider plugins={[]} showComment={true} setIsShowRightPanel={this.setIsShowRightPanel}>
+                  <CommentContextProvider {... { editor: this.state.editor }}>
+                    <RightPanel classname='in-wiki-editor' editor={this.state.editor} />
+                  </CommentContextProvider>
+                </PluginsProvider>
+              </CollaboratorsProvider>
+            </ErrorBoundary>
+          )}
         </div>
       </div>
     );

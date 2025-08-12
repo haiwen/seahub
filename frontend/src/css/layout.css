@@ -78,6 +78,10 @@
   position: relative;
 }
 
+.main-panel-center {
+  flex-direction: row;
+}
+
 .side-panel-center,
 .side-panel-footer {
   min-height: 0;
