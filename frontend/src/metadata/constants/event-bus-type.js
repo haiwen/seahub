@@ -48,7 +48,6 @@ export const EVENT_BUS_TYPE = {
   GENERATE_DESCRIPTION: 'generate_description',
   OCR: 'ocr',
   SEARCH_ROWS: 'search_rows',
-  CLOSE_SEARCHER: 'close_searcher',
   RESET_SEARCH_BAR: 'reset_search_bar',
 
   // metadata
