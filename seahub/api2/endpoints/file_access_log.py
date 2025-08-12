@@ -16,7 +16,7 @@ from seahub.views import check_folder_permission
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
 from seahub.utils import is_org_context, is_pro_version, \
         FILE_AUDIT_ENABLED, get_file_audit_events_by_path, \
         generate_file_audit_event_type
@@ -89,7 +89,7 @@ class FileAccessLogView(APIView):
             info['contact_email'] = email2contact_email(username)
 
             info['ip'] = event.ip
-            info['time'] = datetime_to_isoformat_timestr(event.timestamp)
+            info['time'] = utc_datetime_to_isoformat_timestr(event.timestamp)
 
             # type could be: 'web', 'share-link', 'API', 'download-sync',
             # 'upload-sync', 'seadrive-download'
