@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { SeafileCommentEditor } from '@seafile/comment-editor';
 import dayjs from 'dayjs';
-import deepCopy from 'deep-copy';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
-import { MentionsInput, Mention } from 'react-mentions';
-import { defaultStyle } from '../../../css/react-mentions-default-style';
 import CommentItem from './comment-item';
 import ReplyItem from './reply-item';
 
-const { username, repoID, filePath } = window.app.pageOptions;
+const { repoID, filePath } = window.app.pageOptions;
 
 const ReplyListPropTypes = {
   toggleCommentList: PropTypes.func.isRequired,
@@ -29,7 +27,6 @@ class ReplyList extends React.Component {
     this.state = {
       comment: '',
       isInputFocus: false,
-      defaultStyle: defaultStyle,
     };
     this.toBeAddedParticipant = [];
     this.commentListScrollRef = React.createRef();
@@ -44,28 +41,18 @@ class ReplyList extends React.Component {
     }
   }
 
-  onKeyDown = (e) => {
-    if (e.key == 'Enter') {
-      e.preventDefault();
-      this.onSubmit();
+  onSubmit = (commentData) => {
+    if (!commentData.trim()) {
+      return;
     }
-  };
-
-  handleCommentChange = (event) => {
-    this.setState({ comment: event.target.value });
-  };
-
-  onSubmit = () => {
-    if (!this.state.comment.trim()) return;
-    this.addParticipant(username);
     if (this.toBeAddedParticipant.length === 0) {
-      this.props.addReply(this.state.comment.trim());
+      this.props.addReply(commentData.trim());
       this.setState({ comment: '' });
     } else {
       seafileAPI.addFileParticipants(repoID, filePath, this.toBeAddedParticipant).then((res) => {
         this.onParticipantsChange(repoID, filePath);
         this.toBeAddedParticipant = [];
-        this.props.addReply(this.state.comment.trim());
+        this.props.addReply(commentData.trim());
         this.setState({ comment: '' });
       }).catch((err) => {
         toaster.danger(Utils.getErrorMsg(err));
@@ -88,45 +75,6 @@ class ReplyList extends React.Component {
   addParticipant = (email) => {
     if (this.checkParticipant(email)) return;
     this.toBeAddedParticipant.push(email);
-  };
-
-  renderUserSuggestion = (entry, search, highlightedDisplay, index, focused) => {
-    return (
-      <div className={`comment-participant-item user ${focused ? 'active' : ''}`}>
-        <div className="comment-participant-container">
-          <img className="comment-participant-avatar" alt={highlightedDisplay} src={entry.avatar_url}/>
-          <div className="comment-participant-name">{highlightedDisplay}</div>
-        </div>
-      </div>
-    );
-  };
-
-  onInputFocus = () => {
-    if (this.inputBlurTimer) {
-      clearTimeout(this.inputBlurTimer);
-      this.inputBlurTimer = null;
-    }
-    if (this.state.isInputFocus === false) {
-      let defaultStyle = this.state.defaultStyle;
-      defaultStyle['&multiLine']['input'].border = '1px solid #ff8e03';
-      this.setState({
-        isInputFocus: true,
-        defaultStyle: deepCopy(defaultStyle),
-      });
-    }
-  };
-
-  onInputBlur = () => {
-    if (this.state.isInputFocus === true) {
-      this.inputBlurTimer = setTimeout(() => {
-        let defaultStyle = this.state.defaultStyle;
-        defaultStyle['&multiLine']['input'].border = '1px solid #e6e6dd';
-        this.setState({
-          isInputFocus: false,
-          defaultStyle: deepCopy(defaultStyle),
-        });
-      }, 100);
-    }
   };
 
   render() {
@@ -178,29 +126,16 @@ class ReplyList extends React.Component {
           </ul>
         </div>
         <div className='seafile-comment-footer flex-shrink-0'>
-          <MentionsInput
-            value={this.state.comment}
-            onChange={this.handleCommentChange}
-            placeholder={gettext('Enter reply, Shift + Enter for new line, Enter to send')}
-            onKeyDown={this.onKeyDown}
-            style={this.state.defaultStyle}
-            onFocus={this.onInputFocus}
-            onBlur={this.onInputBlur}
-          >
-            <Mention
-              trigger="@"
-              displayTransform={(username, display) => `@${display}`}
-              data={this.state.relatedUsers}
-              renderSuggestion={this.renderUserSuggestion}
-              onAdd={(id, display) => {this.addParticipant(id);}}
-              appendSpaceOnAdd={true}
-            />
-          </MentionsInput>
-          <div className="comment-submit-container">
-            <div onClick={this.onSubmit}>
-              <i className="sdocfont sdoc-save sdoc-comment-btn"></i>
-            </div>
-          </div>
+          <SeafileCommentEditor
+            type="reply"
+            settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
+            hiddenUserInfo={true}
+            hiddenToolMenu={true}
+            insertContent={this.onSubmit}
+            collaborators={this.props.relatedUsers ? this.props.relatedUsers : []}
+            participants={this.props.participants ? this.props.participants : []}
+            addParticipants={(email) => {this.addParticipant(email);}}
+          />
         </div>
       </div>
     );

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { SeafileCommentEditor } from '@seafile/comment-editor';
 import { processor } from '@seafile/seafile-editor';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
 
@@ -55,8 +56,9 @@ class ReplyItem extends React.Component {
     });
   };
 
-  updateComment = () => {
-    const newReply = this.state.newReply.trim();
+  updateComment = (replayData) => {
+    const newReply = replayData.trim();
+    this.setState({ newReply, });
     if (this.props.item.reply !== newReply) {
       this.props.updateReply(newReply);
     }
@@ -97,11 +99,14 @@ class ReplyItem extends React.Component {
               <div className="comment-author-time">{this.props.time}</div>
             </div>
           </div>
-          <div className="seafile-edit-comment">
-            <textarea className="edit-comment-input" value={this.state.newReply} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
-            <Button className="comment-btn" color="primary" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
-            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}>{gettext('Cancel')}</Button>
-          </div>
+          <SeafileCommentEditor
+            type="reply"
+            content={this.state.newReply}
+            settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
+            hiddenUserInfo={true}
+            hiddenToolMenu={true}
+            insertContent={this.updateComment}
+          />
         </li>
       );
     }

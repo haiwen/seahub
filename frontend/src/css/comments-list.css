@@ -137,25 +137,6 @@
   position: relative;
 }
 
-.seafile-comment-footer .add-comment-input,
-.seafile-edit-comment .edit-comment-input {
-  border: 1px solid #e6e6dd;
-  padding: 5px;
-  width: 100%;
-  min-height: 90px;
-  border-radius: 5px;
-  background: var(--bs-body-bg);
-}
-
-.seafile-comment-footer .add-comment-input {
-  border-bottom: none;
-  border-radius: 5px 5px 0 0;
-}
-
-.seafile-comment-footer .add-comment-input:focus {
-  outline: none;
-}
-
 .seafile-comment-footer .comment-submit-container {
   padding: 0px 5px;
   text-align: right;
@@ -174,11 +155,6 @@
 
 .seafile-comment-footer .sdoc-comment-btn:hover {
   color: #d47604;
-}
-
-.seafile-edit-comment .comment-btn {
-  height: 28px;
-  line-height: 20px;
 }
 
 .seafile-comment-item .comment-footer {

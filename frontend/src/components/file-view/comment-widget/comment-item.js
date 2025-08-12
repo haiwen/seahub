@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { processor } from '@seafile/seafile-editor';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { SeafileCommentEditor } from '@seafile/comment-editor';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
 
@@ -48,18 +49,13 @@ class CommentItem extends React.Component {
     });
   };
 
-  updateComment = (event) => {
-    const newComment = this.state.newComment.trim();
+  updateComment = (commentData) => {
+    const newComment = commentData.trim();
+    this.setState({ newComment });
     if (this.props.item.comment !== newComment) {
       this.props.editComment(this.props.item, newComment);
     }
     this.toggleEditComment();
-  };
-
-  handleCommentChange = (event) => {
-    this.setState({
-      newComment: event.target.value,
-    });
   };
 
   onCommentContentClick = (e) => {
@@ -109,11 +105,14 @@ class CommentItem extends React.Component {
               <div className="comment-author-time">{time}</div>
             </div>
           </div>
-          <div className="seafile-edit-comment">
-            <textarea className="edit-comment-input" value={this.state.newComment} onChange={this.handleCommentChange} clos="100" rows="3" warp="virtual"></textarea>
-            <Button className="comment-btn" color="primary" size="sm" onClick={this.updateComment} id={item.id}>{gettext('Update')}</Button>{' '}
-            <Button className="comment-btn" color="secondary" size="sm" onClick={this.toggleEditComment}>{gettext('Cancel')}</Button>
-          </div>
+          <SeafileCommentEditor
+            type="reply"
+            content={this.state.newComment}
+            settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
+            hiddenUserInfo={true}
+            hiddenToolMenu={true}
+            insertContent={this.updateComment}
+          />
         </li>
       );
     }

@@ -54,10 +54,7 @@ class CommentPanel extends React.Component {
 
   listRepoRelatedUsers = () => {
     seafileAPI.listRepoRelatedUsers(repoID).then((res) => {
-      let users = res.data.user_list.map((item) => {
-        return { id: item.email, display: item.name, avatar_url: item.avatar_url, contact_email: item.contact_email };
-      });
-      this.setState({ relatedUsers: users });
+      this.setState({ relatedUsers: res.data.user_list });
     });
   };
 
