@@ -34,6 +34,7 @@ class BaseMiddleware(MiddlewareMixin):
     """
     Middleware that add organization, group info to user.
     """
+
     def process_request(self, request):
 
         username = request.user.username
@@ -83,6 +84,7 @@ class BaseMiddleware(MiddlewareMixin):
 
 class InfobarMiddleware(MiddlewareMixin):
     """Query info bar close status, and store into request."""
+
     def get_from_db(self):
         ret = Notification.objects.all().filter(primary=1)
         refresh_cache()
@@ -165,6 +167,7 @@ class UserAgentMiddleWare(MiddlewareMixin):
 
     def __init__(self, get_response=None):
         super().__init__(get_response)
+        self.get_response = get_response
         # these for detect mobile
         user_agents_test_match = r'^(?:%s)' % '|'.join(self.user_agents_test_match)
         self.user_agents_test_match_regex = re.compile(user_agents_test_match, re.IGNORECASE)
