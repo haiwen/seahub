@@ -61,12 +61,14 @@ body {
   min-width: 500px;
 }
 
-.main-panel-center .sdoc-content-right-panel-wrapper .comments-panel-header {
-  border-top: 1px solid #EAECEF;
+.main-panel-center .sdoc-content-right-panel-wrapper {
+  margin-top: -44px;
+  height: calc(100vh + 44px);
+  z-index: 103 !important;
 }
 
 .main-panel-center .sdoc-content-right-panel-wrapper .comments-panel-wrapper {
-  height: calc(100vh - 43px);
+  height: calc(100vh - 16px);
 }
 
 /* scroll container */
