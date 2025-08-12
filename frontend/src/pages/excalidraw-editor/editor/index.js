@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
+import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import context from '../context';

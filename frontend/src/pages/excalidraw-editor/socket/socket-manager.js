@@ -212,7 +212,6 @@ class SocketManager {
     const { elements, version } = result;
 
     this.updateLocalDataByRemoteData(elements, version);
-    this.setLastBroadcastedOrReceivedSceneVersion(elements);
 
     this.pendingOperationBeginTimeList.shift();
     this._sendingOperation = null;
