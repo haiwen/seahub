@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { gettext, isPro } from '../../utils/constants';
+import { gettext, isPro, isSeafilePlus } from '../../utils/constants';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils, isMobile } from '../../utils/utils';
@@ -511,6 +511,8 @@ class ShareToUser extends React.Component {
 
   render() {
     const { sharedItems } = this.state;
+    const enableAddCustomPermission = isPro && !isSeafilePlus;
+
     let thead = (
       <thead>
         <tr>
@@ -557,7 +559,7 @@ class ShareToUser extends React.Component {
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
-                  enableAddCustomPermission={isPro}
+                  enableAddCustomPermission={enableAddCustomPermission}
                   isWiki={this.state.isWiki}
                   onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                 />

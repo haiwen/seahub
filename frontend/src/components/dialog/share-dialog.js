@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro, canShareRepo, LARGE_DIALOG_STYLE } from '../../utils/constants';
+import { gettext, username, canGenerateShareLink, canGenerateUploadLink, canInvitePeople, additionalShareDialogNote, enableOCM, isPro, isSeafilePlus, canShareRepo, LARGE_DIALOG_STYLE } from '../../utils/constants';
 import ShareLinkPanel from '../share-link-panel';
 import GenerateUploadLink from './generate-upload-link';
 import ShareToUser from './share-to-user';
@@ -104,7 +104,6 @@ class ShareDialog extends React.Component {
     }
 
     const { isCustomPermission } = Utils.getUserPermission(userPerm);
-
     return (
       <Fragment>
         <div className="share-dialog-side">
@@ -146,7 +145,7 @@ class ShareDialog extends React.Component {
                     </NavLink>
                   </NavItem>
                 )}
-                {isPro && !isCustomPermission && canShareRepo && (
+                {isPro && !isSeafilePlus && !isCustomPermission && canShareRepo && (
                   <NavItem role="tab" aria-selected={activeTab === 'customSharePermission'} aria-controls="custom-share-perm-panel">
                     <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                       {gettext('Custom sharing permissions')}
