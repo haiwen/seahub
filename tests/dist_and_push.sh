@@ -10,7 +10,7 @@ set -x
 SEAHUB_TESTSDIR=$(python -c "import os; print(os.path.dirname(os.path.realpath('$0')))")
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
 
-export PYTHONPATH="${PYTHONPATH}:/opt/hostedtoolcache/Python/3.8.16/x64/lib/python3.8/site-packages/:/usr/local/lib/python3/site-packages:/usr/lib/python3/dist-packages:/usr/local/lib/python3/dist-packages:/usr/lib/python3/site-packages:${SEAHUB_SRCDIR}/thirdpart"
+export PYTHONPATH="${PYTHONPATH}:/opt/hostedtoolcache/Python/3.12.11/x64/lib/python3.12/site-packages/:/usr/local/lib/python3/site-packages:/usr/lib/python3/dist-packages:/usr/local/lib/python3/dist-packages:/usr/lib/python3/site-packages:${SEAHUB_SRCDIR}/thirdpart"
 cd "$SEAHUB_SRCDIR"
 set +x
 
