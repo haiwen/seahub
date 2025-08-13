@@ -13,6 +13,7 @@ const POPUP_EDITOR_COLUMN_TYPES = [
   CellType.LONG_TEXT,
   CellType.LINK,
   CellType.TAGS,
+  CellType.GEOLOCATION,
 ];
 
 const PREVIEW_EDITOR_COLUMN_TYPES = [
