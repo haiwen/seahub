@@ -201,6 +201,7 @@ class SocketManager {
       this._sendingOperation = null;
     } else if (error_type === 'version_behind_server') {
       // Put the failed operation into the pending list and re-execute it
+      this.pendingOperationList.unshift(this._sendingOperation);
 
       stateDebug(`State Changed: ${this.state} -> ${STATE.CONFLICT}`);
       this.state = STATE.CONFLICT;
