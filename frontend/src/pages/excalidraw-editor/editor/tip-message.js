@@ -1,7 +1,8 @@
 import React from 'react';
-import { withTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
-import EventBus from '../../../components/common/event-bus';
+import EventBus from '../utils/event-bus';
+import { gettext } from '../../../utils/constants';
+import toaster from '../../../components/toast';
 
 class TipMessage extends React.Component {
   constructor(props) {
@@ -18,12 +19,94 @@ class TipMessage extends React.Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeSavingEvent = eventBus.subscribe('is-saving', this.onDocumentSaving);
     this.unsubscribeSavedEvent = eventBus.subscribe('saved', this.onDocumentSaved);
+
+    // offline reconnect
+    this.unsubscribeDisconnectEvent = eventBus.subscribe('disconnect', this.onDisconnect);
+    this.unsubscribeReconnectErrorEvent = eventBus.subscribe('reconnect_error', this.onReconnectError);
+    this.unsubscribeReconnectEvent = eventBus.subscribe('reconnect', this.onReconnect);
+
+    // server return error
+    this.unsubscribeOpExecError = eventBus.subscribe('execute_client_operations_error', this.onOperationExecuteError);
+    this.unsubscribeSyncServerOpError = eventBus.subscribe('sync_server_operations_error', this.onSyncServerOperationError);
+    this.unsubscribeDocumentLoadError = eventBus.subscribe('load_document_content_error', this.onInternalServerExecError);
+    this.unsubscribeOperationsSaveError = eventBus.subscribe('token_expired', this.onTokenExpiredError);
+
+    // local error
+    this.unsubscribePendingOpExceedLimit = eventBus.subscribe('pending_operations_exceed_limit', this.onPendingOpExceedLimit);
   }
 
   componentWillUnmount() {
     this.unsubscribeSavingEvent();
     this.unsubscribeSavedEvent();
+
+    this.unsubscribeDisconnectEvent();
+    this.unsubscribeReconnectErrorEvent();
+    this.unsubscribeReconnectEvent();
+
+    this.unsubscribeOpExecError();
+    this.unsubscribeSyncServerOpError();
+    this.unsubscribePendingOpExceedLimit();
+    this.unsubscribeDocumentLoadError();
+    this.unsubscribeOperationsSaveError();
+
+    clearTimeout(this.saveTimer);
   }
+
+  onOperationExecuteError = () => {
+    const copyright = 'Failed to execute operation on server, the current operation has been withdrawn';
+    const message = gettext(copyright);
+    toaster.warning(message, { hasCloseButton: true });
+  };
+
+  onSyncServerOperationError = () => {
+    const copyright = 'Synchronization with the server failed, please refresh the page';
+    const message = gettext(copyright);
+    toaster.danger(message, { hasCloseButton: false, duration: null });
+  };
+
+  onInternalServerExecError = () => {
+    const copyright = 'An exception occurred on the server, please refresh the page and try again';
+    const message = gettext(copyright);
+    toaster.danger(message, { hasCloseButton: false, duration: null });
+  };
+
+  onTokenExpiredError = (msg) => {
+    const copyright = 'Token expired. Please refresh the page.';
+    const message = gettext(copyright);
+    toaster.closeAll();
+    toaster.danger(message, { duration: null });
+  };
+
+  onPendingOpExceedLimit = () => {
+    toaster.closeAll();
+    const copyright = 'There are multiple operations not synced to the server. Please check your network.';
+    const message = gettext(copyright);
+    toaster.warning(message, { duration: 5 });
+  };
+
+  onDisconnect = () => {
+    const copyright = 'Server is not connected. Operation will be sent to server later.';
+    const message = gettext(copyright);
+    toaster.warning(message, { hasCloseButton: true, duration: null });
+  };
+
+  onReconnectError = () => {
+    if (!this.isConnectError) {
+      this.isConnectError = true;
+      const copyright = 'Server is disconnected. Reconnecting...';
+      const message = gettext(copyright);
+      toaster.closeAll();
+      toaster.warning(message, { hasCloseButton: true, duration: null });
+    }
+  };
+
+  onReconnect = () => {
+    this.isConnectError = false;
+    const copyright = 'Server is reconnected.';
+    const message = gettext(copyright);
+    toaster.closeAll();
+    toaster.success(message); // close after serval seconds
+  };
 
   onDocumentSaving = () => {
     this.setState({
@@ -51,15 +134,14 @@ class TipMessage extends React.Component {
   };
 
   render = () => {
-    const { t } = this.props;
     const { isSaved, isSaving, lastSavedAt } = this.state;
 
     if (isSaving && !isSaved) {
-      return <span className="tip-message">{t('Saving')}</span>;
+      return <span className="tip-message">{gettext('Saving...')}</span>;
     }
 
     if (!isSaving && isSaved) {
-      return <span className="tip-message">{t('All_changes_saved')}</span>;
+      return <span className="tip-message">{gettext('All changes saved')}</span>;
     }
     if (lastSavedAt) {
       return (
@@ -74,4 +156,4 @@ class TipMessage extends React.Component {
   };
 }
 
-export default withTranslation('sdoc-editor')(TipMessage);
+export default TipMessage;

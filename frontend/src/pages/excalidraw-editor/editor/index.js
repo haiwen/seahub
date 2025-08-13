@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restore, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
+import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
-import Collab from '../collaboration/collab';
 import context from '../context';
 import TipMessage from './tip-message';
 import { importFromLocalStorage } from '../data/local-storage';
 import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { getFilename, isInitializedImageElement } from '../utils/element-utils';
 import LocalData from '../data/local-data';
+import SocketManager from '../socket/socket-manager';
+import { loadFromServerStorage } from '../data/server-storage';
+import { getSyncableElements } from '../data';
+import { gettext } from '../../../utils/constants';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -22,32 +25,26 @@ const UIOptions = {
   tools: { image: true },
 };
 
-const initializeScene = async (collabAPI) => {
+const initializeScene = async () => {
   // load local data from localstorage
   const docUuid = context.getDocUuid();
   const localDataState = importFromLocalStorage(docUuid); // {appState, elements}
 
   let data = null;
   // load remote data from server
-  if (collabAPI) {
-    const scene = await collabAPI.startCollaboration();
-    const { elements } = scene;
-    const restoredRemoteElements = restoreElements(elements, null);
-
-    const reconciledElements = reconcileElements(
-      localDataState.elements,
-      restoredRemoteElements,
-      localDataState.appState,
-    );
-    data = {
-      elements: reconciledElements,
-      appState: localDataState.appState,
-    };
-  } else {
-    data = restore(localDataState || null, null, null, {
-      repairBindings: true,
-    });
-  }
+  const scene = await loadFromServerStorage();
+  const { elements } = scene;
+  const restoredRemoteElements = restoreElements(elements, null);
+  const reconciledElements = reconcileElements(
+    localDataState.elements,
+    restoredRemoteElements,
+    localDataState.appState,
+  );
+  data = {
+    elements: reconciledElements,
+    appState: null,
+    version: scene.version,
+  };
 
   return {
     scene: data
@@ -55,7 +52,7 @@ const initializeScene = async (collabAPI) => {
 };
 
 const SimpleEditor = () => {
-  const collabAPIRef = useRef(null);
+
   const initialStatePromiseRef = useRef({ promise: null });
   if (!initialStatePromiseRef.current.promise) {
     initialStatePromiseRef.current.promise = resolvablePromise();
@@ -70,9 +67,10 @@ const SimpleEditor = () => {
 
     const loadImages = (data, isInitialLoad) => {
       if (!data.scene) return;
-      if (collabAPIRef.current && collabAPIRef.current.getIsServerConnected()) {
+      const socketManager = SocketManager.getInstance();
+      if (socketManager) {
         if (data.scene.elements) {
-          collabAPIRef.current.fetchImageFilesFromServer({
+          socketManager.fetchImageFilesFromServer({
             elements: data.scene.elements,
             forceFetchFiles: true,
           }).then(({ loadedFiles, erroredFiles }) => {
@@ -113,10 +111,9 @@ const SimpleEditor = () => {
 
     context.initSettings().then(() => {
       const config = context.getSettings();
-      const collabAPI = new Collab(excalidrawAPI, config);
-      collabAPIRef.current = collabAPI;
-
-      initializeScene(collabAPI).then(async (data) => {
+      initializeScene().then(async (data) => {
+        // init socket
+        SocketManager.getInstance(excalidrawAPI, data.scene, config);
         loadImages(data, /* isInitialLoad */true);
         initialStatePromiseRef.current.promise.resolve(data.scene);
       });
@@ -125,9 +122,8 @@ const SimpleEditor = () => {
   }, [excalidrawAPI]);
 
   const handleChange = useCallback((elements, appState, files) => {
-    if (collabAPIRef.current) {
-      collabAPIRef.current.syncElements(elements);
-    }
+    const socketManager = SocketManager.getInstance();
+    socketManager.syncLocalElementsToOthers(elements);
 
     const docUuid = context.getDocUuid();
     if (!LocalData.isSavePaused()) {
@@ -158,20 +154,30 @@ const SimpleEditor = () => {
   }, [excalidrawAPI]);
 
   const handlePointerUpdate = useCallback((payload) => {
-    if (!collabAPIRef.current) return;
-    collabAPIRef.current.syncPointer(payload);
+    const socketManager = SocketManager.getInstance();
+    socketManager.syncMouseLocationToOthers(payload);
   }, []);
 
+  const beforeUnload = useCallback((event) => {
+    const socketManager = SocketManager.getInstance();
+    const fileManager = socketManager.fileManager;
+    const elements = excalidrawAPI.getSceneElementsIncludingDeleted();
+    const syncableElements = getSyncableElements(elements);
+    if (fileManager.shouldPreventUnload(syncableElements)) {
+      // eslint-disable-next-line no-console
+      console.warn('The uploaded image has not been saved yet. Please close this page later.');
+      event.preventDefault();
+      event.returnValue = gettext('The uploaded image has not been saved yet. Please close this page later.');
+    }
+    return;
+  }, [excalidrawAPI]);
+
   useEffect(() => {
-    const beforeUnload = (event) => {
-      // event.preventDefault();
-      LocalData.flushSave();
-    };
     window.addEventListener('beforeunload', beforeUnload);
     return () => {
       window.removeEventListener('beforeunload', beforeUnload);
     };
-  }, []);
+  }, [beforeUnload]);
 
   return (
     <div className='excali-container'>
