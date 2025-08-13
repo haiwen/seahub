@@ -64,6 +64,7 @@
   justify-content: center;
 }
 
+.tree-section .tree-section-header .tree-section-header-operation .sf3-font,
 .tree-section .tree-section-header-operation .dropdown .sf-dropdown-toggle,
 .tree-section .tree-section-header-operation.tree-section-create-operation {
   margin-left: 0;
@@ -72,6 +73,7 @@
   color: #666;
 }
 
+[data-bs-theme=dark] .tree-section .tree-section-header .tree-section-header-operation .sf3-font,
 [data-bs-theme=dark] .tree-section .tree-section-header-operation .dropdown .sf-dropdown-toggle,
 [data-bs-theme=dark] .tree-section .tree-section-header-operation.tree-section-create-operation {
   color: rgba(255, 255, 255, 0.5);
