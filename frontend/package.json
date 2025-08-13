@@ -52,6 +52,7 @@
     "react-responsive": "10.0.0",
     "react-select": "5.9.0",
     "react-transition-group": "4.4.5",
+    "reactflow": "^11.11.4",
     "reactstrap": "9.2.3",
     "socket.io-client": "^4.8.1",
     "svgo-loader": "^3.0.1",
