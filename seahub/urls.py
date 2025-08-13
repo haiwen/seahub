@@ -225,6 +225,7 @@ from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 from seahub.api2.endpoints.repo_office_suite import OfficeSuiteConfig
 
+from seahub.workflow.views import WorkflowsView, WorkflowDetailView
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -617,7 +618,9 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     re_path(r'^api/v2.1/import-confluence/$', ImportConfluenceView.as_view(), name='api-v2.1-import-confluence'),
-    ## user::drafts
+    ## user::workflow
+    re_path(r'^api/v2.1/workflows/(?P<repo_id>[-0-9a-f]{36})/$', WorkflowsView.as_view(), name='api-v2.1-workflows'),
+    re_path(r'^api/v2.1/workflows/(?P<repo_id>[-0-9a-f]{36})/(?P<workflow_id>\d+)/$', WorkflowDetailView.as_view(), name='api-v2.1-workflow-detail'),
 
 
     ## user::activities

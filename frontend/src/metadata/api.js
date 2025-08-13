@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { siteRoot } from '../utils/constants';
+import { repoID, siteRoot } from '../utils/constants';
 import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './constants';
 
 class MetadataManagerAPI {
@@ -241,6 +241,11 @@ class MetadataManagerAPI {
       params['column_data'] = data;
     }
     return this.req.post(url, params);
+  };
+
+  getColumnInfo = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    return this.req.get(url);
   };
 
   deleteColumn = (repoID, columnKey) => {

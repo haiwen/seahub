@@ -12,6 +12,7 @@ import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
 import Item from './item';
+import SimpleWorkflowEditor from './workflow';
 
 import './index.css';
 
@@ -54,6 +55,10 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
     setRepoHistoryDialogOpen(!isRepoHistoryDialogOpen);
   };
 
+  let [isWorkflowOpen, setWorkflowOpen] = useState(false);
+  const openWorkflow = () => setWorkflowOpen(true);
+  const closeWorkflow = () => setWorkflowOpen(false);
+
   const isDesktop = Utils.isDesktop();
   const isRepoOwner = owner_email == username;
   const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
@@ -62,6 +67,11 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
 
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
+      <div className="dir-others-item text-nowrap" title="Workflow" onClick={openWorkflow}>
+        <span className="sf3-font-trash sf3-font"></span>
+        <span className="dir-others-item-text">Workflow</span>
+      </div>
+      <SimpleWorkflowEditor open={isWorkflowOpen} onClose={closeWorkflow} repoId={repoID} />
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
           repo={currentRepoInfo}
