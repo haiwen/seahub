@@ -1,7 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
 from django.core.cache import cache
-from django.core.files.storage import default_storage, get_storage_class
+from django.core.files.storage import default_storage
+from django.utils.module_loading import import_string
 from urllib.parse import quote
 
 from seahub.base.accounts import User
@@ -111,6 +112,9 @@ def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
         if not avatar.thumbnail_exists(size):
             avatar.create_thumbnail(size)
     return avatar
+
+def get_storage_class(import_path=None):
+    return import_string(import_path or settings.STORAGES['default'])
 
 def get_avatar_file_storage():
     """Get avatar file storage, defaults to file system storage.

@@ -104,12 +104,14 @@ WEBPACK_LOADER = {
     }
 }
 
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-# STORAGES = {
-#     "staticfiles": {
-#         "BACKEND": 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage',
-#     },
-# }
+STORAGES = {
+    "default": {
+        "BACKEND":  'django.core.files.storage.FileSystemStorage'
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
 
 # StaticI18N config
 STATICI18N_ROOT = '%s/static/scripts' % PROJECT_ROOT
@@ -1133,7 +1135,7 @@ def load_local_settings(module):
             module.FILE_SERVER_ROOT = module.HTTP_SERVER_ROOT
         del module.HTTP_SERVER_ROOT
     for attr in dir(module):
-        match = re.search('^EXTRA_(\w+)', attr)
+        match = re.search(r'^EXTRA_(\w+)', attr)
         if match:
             name = match.group(1)
             value = getattr(module, attr)
