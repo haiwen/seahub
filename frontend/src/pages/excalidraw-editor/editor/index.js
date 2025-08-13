@@ -10,6 +10,8 @@ import { getFilename, isInitializedImageElement } from '../utils/element-utils';
 import LocalData from '../data/local-data';
 import SocketManager from '../socket/socket-manager';
 import { loadFromServerStorage } from '../data/server-storage';
+import { getSyncableElements } from '../data';
+import { gettext } from '../../../utils/constants';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -156,16 +158,26 @@ const SimpleEditor = () => {
     socketManager.syncMouseLocationToOthers(payload);
   }, []);
 
+  const beforeUnload = useCallback((event) => {
+    const socketManager = SocketManager.getInstance();
+    const fileManager = socketManager.fileManager;
+    const elements = excalidrawAPI.getSceneElementsIncludingDeleted();
+    const syncableElements = getSyncableElements(elements);
+    if (fileManager.shouldPreventUnload(syncableElements)) {
+      // eslint-disable-next-line no-console
+      console.warn('The uploaded image has not been saved yet. Please close this page later.');
+      event.preventDefault();
+      event.returnValue = gettext('The uploaded image has not been saved yet. Please close this page later.');
+    }
+    return;
+  }, [excalidrawAPI]);
+
   useEffect(() => {
-    const beforeUnload = (event) => {
-      // event.preventDefault();
-      LocalData.flushSave();
-    };
     window.addEventListener('beforeunload', beforeUnload);
     return () => {
       window.removeEventListener('beforeunload', beforeUnload);
     };
-  }, []);
+  }, [beforeUnload]);
 
   return (
     <div className='excali-container'>

@@ -41,7 +41,7 @@ class FileManager {
 
       if (fileData && !this.isFileSavedOrBeingSaved(fileData)) {
         addedFiles.set(element.fileId, files[element.fileId]);
-        this.savedFiles.set(element.fileId, this.getFileVersion(fileData));
+        this.savingFiles.set(element.fileId, this.getFileVersion(fileData));
       }
     }
 
@@ -98,9 +98,10 @@ class FileManager {
   };
 
   shouldPreventUnload = (elements) => {
-    return elements.some(element => {
+    const hasUnsavedImage = elements.some(element => {
       return isInitializedImageElement(element) && !element.isDeleted && this.savingFiles.has(element.fileId);
     });
+    return hasUnsavedImage;
   };
 
   shouldUpdateImageElementStatus = (element) => {
