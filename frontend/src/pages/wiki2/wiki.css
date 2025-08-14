@@ -10,6 +10,15 @@ body {
   overflow: hidden;
 }
 
+.wiki2-main-panel.show-comment-panel .wiki-page-title-wrapper,
+.wiki2-main-panel.show-comment-panel .sdoc-editor-container .sdoc-article-container .article.sdoc-editor__article {
+  padding-left: 50px;
+}
+
+.wiki2-main-panel .sdoc-comment-container .comment-container-right .element-comments-count {
+  left: -100px;
+}
+
 .wiki2-main-panel .wiki2-main-panel-north {
   height: 44px;
   position: relative;
@@ -58,6 +67,17 @@ body {
 
 .main-panel-center .cur-view-content {
   padding: 0;
+  min-width: 500px;
+}
+
+.main-panel-center .sdoc-content-right-panel-wrapper {
+  margin-top: -44px;
+  height: calc(100vh + 44px);
+  z-index: 103 !important;
+}
+
+.main-panel-center .sdoc-content-right-panel-wrapper .comments-panel-wrapper {
+  height: 100vh;
 }
 
 /* scroll container */
