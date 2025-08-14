@@ -2293,8 +2293,6 @@ class AdminUserSharedRepos(APIView):
 
         returned_result = []
         shared_repos.sort(key=lambda x: x.repo_name)
-        usernames = []
-        gids = []
 
         for repo in shared_repos:
             if repo.is_virtual:
@@ -2317,13 +2315,11 @@ class AdminUserSharedRepos(APIView):
                 result['user_name'] = email2nickname(repo.user)
                 result['user_email'] = repo.user
                 result['contact_email'] = Profile.objects.get_contact_email_by_user(repo.user)
-                usernames.append((repo.repo_id, repo.user))
     
             if repo.share_type == 'group':
                 group = ccnet_api.get_group(repo.group_id)
                 result['group_id'] = repo.group_id
                 result['group_name'] = group.group_name if group else ''
-                gids.append(repo.group_id)
     
             returned_result.append(result)
 
