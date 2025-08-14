@@ -16,7 +16,7 @@ const propTypes = {
   onUpdatePage: PropTypes.func.isRequired,
 };
 
-const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage, isShowRightPanel }) => {
+const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
   const [isShowController, setIsShowController] = useState(false);
   const isDesktop = Utils.isDesktop();
 
@@ -52,7 +52,7 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage, isShowRigh
   }, [currentPageConfig.icon]);
 
   return (
-    <div id="wiki-page-title" className={classnames('wiki-page-title-wrapper', { 'show-comment-panel': isShowRightPanel })} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+    <div id="wiki-page-title" className='wiki-page-title-wrapper' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {currentPageConfig.icon && (
         <PageIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
       )}

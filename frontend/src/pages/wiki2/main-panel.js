@@ -15,6 +15,7 @@ import RightHeader from './wiki-right-header';
 import CommentPlugin from './wiki-comment/plugin-item';
 import User from '../../metadata/model/user';
 import { metadataAPI } from '../../metadata';
+import classnames from 'classnames';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -199,7 +200,7 @@ class MainPanel extends Component {
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = currentPageLocked || !(permission === 'rw');
     return (
-      <div className="wiki2-main-panel" style={style}>
+      <div className={classnames('wiki2-main-panel', { 'show-comment-panel': this.state.isShowRightPanel })} style={style}>
         <div className='wiki2-main-panel-north'>
           <div className="d-flex align-items-center flex-fill o-hidden">
             <div className='wiki2-main-panel-north-content'>
@@ -310,7 +311,7 @@ class MainPanel extends Component {
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <div className='sdoc-scroll-container' id='sdoc-scroll-container' ref={this.scrollRef}>
                 <div className='wiki-editor-container'>
-                  <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} isShowRightPanel={this.state.isShowRightPanel} />
+                  <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
                   <SdocWikiEditor
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}
