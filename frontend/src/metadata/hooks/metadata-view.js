@@ -460,6 +460,7 @@ export const MetadataViewProvider = ({
     const unsubscribeLocalColumnChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, updateLocalColumnData);
     const unsubscribeUpdateSelectedRecordIds = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, updateSelectedRecordIds);
     const unsubscribeMoveRecord = eventBus.subscribe(EVENT_BUS_TYPE.MOVE_RECORD, moveRecord);
+    const unsubscribeDuplicateRecord = eventBus.subscribe(EVENT_BUS_TYPE.DUPLICATE_RECORD, duplicateRecord);
     const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
@@ -487,6 +488,7 @@ export const MetadataViewProvider = ({
       unsubscribeLocalColumnChanged();
       unsubscribeUpdateSelectedRecordIds();
       unsubscribeMoveRecord();
+      unsubscribeDuplicateRecord();
       unsubscribeDeleteRecords();
       unsubscribeUpdateDetails();
       unsubscribeUpdateFaceRecognition();

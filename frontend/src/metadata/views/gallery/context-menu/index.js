@@ -6,15 +6,7 @@ import PeoplesDialog from '../../../components/dialog/peoples-dialog';
 import { gettext } from '../../../../utils/constants';
 import { Dirent } from '../../../../models';
 import { useFileOperations } from '../../../../hooks/file-operations';
-
-const CONTEXT_MENU_KEY = {
-  DOWNLOAD: 'download',
-  DELETE: 'delete',
-  DUPLICATE: 'duplicate',
-  REMOVE: 'remove',
-  SET_PEOPLE_PHOTO: 'set_people_photo',
-  ADD_PHOTO_TO_GROUPS: 'add_photo_to_groups',
-};
+import { GALLERY_OPERATION_KEYS } from '../../../constants';
 
 const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
   const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
@@ -28,21 +20,21 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveIma
   const canSetPeoplePhoto = window.sfMetadataContext.canSetPeoplePhoto();
 
   const options = useMemo(() => {
-    let validOptions = [{ value: CONTEXT_MENU_KEY.DOWNLOAD, label: gettext('Download') }];
+    let validOptions = [{ value: GALLERY_OPERATION_KEYS.DOWNLOAD, label: gettext('Download') }];
     if (onDelete && checkCanDeleteRow) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.DELETE, label: selectedImages.length > 1 ? gettext('Delete') : gettext('Delete file') });
+      validOptions.push({ value: GALLERY_OPERATION_KEYS.DELETE, label: gettext('Delete') });
     }
     if (onDuplicate && canDuplicateRow && selectedImages.length === 1) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.DUPLICATE, label: gettext('Duplicate') });
+      validOptions.push({ value: GALLERY_OPERATION_KEYS.DUPLICATE, label: gettext('Copy') });
     }
     if (onRemoveImage && canRemovePhotoFromPeople) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.REMOVE, label: gettext('Remove from this group') });
+      validOptions.push({ value: GALLERY_OPERATION_KEYS.REMOVE, label: gettext('Remove from this group') });
     }
     if (onAddImage && canAddPhotoToPeople) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUPS, label: gettext('Add to groups') });
+      validOptions.push({ value: GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS, label: gettext('Add to groups') });
     }
     if (onSetPeoplePhoto && canSetPeoplePhoto) {
-      validOptions.push({ value: CONTEXT_MENU_KEY.SET_PEOPLE_PHOTO, label: gettext('Set as cover photo') });
+      validOptions.push({ value: GALLERY_OPERATION_KEYS.SET_PEOPLE_PHOTO, label: gettext('Set as cover photo') });
     }
     return validOptions;
   }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, canAddPhotoToPeople, selectedImages, onDuplicate, onDelete, onRemoveImage, onAddImage, canSetPeoplePhoto, onSetPeoplePhoto]);
@@ -70,22 +62,22 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveIma
 
   const handleOptionClick = useCallback(option => {
     switch (option.value) {
-      case CONTEXT_MENU_KEY.DOWNLOAD:
+      case GALLERY_OPERATION_KEYS.DOWNLOAD:
         handleDownload();
         break;
-      case CONTEXT_MENU_KEY.DELETE:
+      case GALLERY_OPERATION_KEYS.DELETE:
         onDelete(selectedImages);
         break;
-      case CONTEXT_MENU_KEY.DUPLICATE:
+      case GALLERY_OPERATION_KEYS.DUPLICATE:
         handleCopy();
         break;
-      case CONTEXT_MENU_KEY.REMOVE:
+      case GALLERY_OPERATION_KEYS.REMOVE:
         onRemoveImage(selectedImages);
         break;
-      case CONTEXT_MENU_KEY.ADD_PHOTO_TO_GROUPS:
+      case GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS:
         setPeoplesDialogShow(true);
         break;
-      case CONTEXT_MENU_KEY.SET_PEOPLE_PHOTO:
+      case GALLERY_OPERATION_KEYS.SET_PEOPLE_PHOTO:
         onSetPeoplePhoto(selectedImages[0]);
         break;
       default:
