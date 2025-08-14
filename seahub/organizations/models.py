@@ -10,6 +10,7 @@ from seahub.constants import DEFAULT_ORG
 from seahub.role_permissions.utils import get_available_roles
 from seahub.avatar.util import get_avatar_file_storage
 from seahub.avatar.settings import AVATAR_STORAGE_DIR
+from seahub.organizations.signals import org_operation_signal
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +89,11 @@ class OrgSettingsManager(models.Manager):
 
         if is_active is not None:
             settings.is_active = is_active
+            try:
+                org_operation_signal.send(sender=None, org=org,
+                                          operation='active' if is_active else 'inactive')
+            except Exception as e:
+                logger.error(e)
 
         settings.save(using=self._db)
         return settings
