@@ -15,22 +15,23 @@ import 'reactflow/dist/style.css';
 import workflowAPI from '../../../utils/workflow-api';
 import { metadataAPI } from '../../../metadata';
 import Icon from '../../icon';
+import toaster from '../../toast';
 
-// 简化的节点配置
+// Simplified node configuration
 const nodeConfigs = {
   trigger: [
     {
       id: 'file_upload',
       name: 'file upload',
-      description: '当有相应动作时执行',
+      description: 'Execute when the corresponding action occurs',
       icon: <Icon symbol="file" style={{ width: 16, height: 16 }} />
     }
   ],
   condition: [
     {
       id: 'if_else',
-      name: 'If-Else条件',
-      description: '根据条件进行分支判断',
+      name: 'If-Else condition',
+      description: 'Branch based on condition',
       icon: <Icon symbol="more-level" style={{ width: 16, height: 16 }} />,
       params: [
         {
@@ -58,14 +59,14 @@ const nodeConfigs = {
   action: [
     {
       id: 'set_status',
-      name: '设置文件状态',
-      description: '更改文件的状态标签',
+      name: 'Set file status',
+      description: 'Change the file status tag',
       icon: <Icon symbol="send" style={{ width: 16, height: 16 }} />,
       params: [
         {
           id: 'status',
           name: 'status',
-          label: '文件状态',
+          label: 'File status',
           type: 'select',
         }
       ]
@@ -73,14 +74,14 @@ const nodeConfigs = {
   ]
 };
 
-// 节点类型列表
+// Node types list
 const nodeTypesList = [
-  { type: 'trigger', label: '触发器', color: '#4f8cff', icon: <Icon symbol="monitor" style={{ width: 16, height: 16 }} />, description: '工作流开始点' },
-  { type: 'condition', label: '条件判断', color: '#f7b924', icon: <Icon symbol="more-level" style={{ width: 16, height: 16 }} />, description: 'If-Else分支' },
-  { type: 'action', label: '执行动作', color: '#43d675', icon: <Icon symbol="send" style={{ width: 16, height: 16 }} />, description: '设置文件状态' },
+  { type: 'trigger', label: 'Trigger', color: '#4f8cff', icon: <Icon symbol="monitor" style={{ width: 16, height: 16 }} />, description: 'Workflow start' },
+  { type: 'condition', label: 'Condition', color: '#f7b924', icon: <Icon symbol="more-level" style={{ width: 16, height: 16 }} />, description: 'If-Else branch' },
+  { type: 'action', label: 'Action', color: '#43d675', icon: <Icon symbol="send" style={{ width: 16, height: 16 }} />, description: 'Set file status' },
 ];
 
-// 节点样式
+// Node styles
 const nodeTypeStyles = {
   trigger: {
     background: 'linear-gradient(135deg, #eaf3ff 0%, #d6e7ff 100%)',
@@ -99,7 +100,7 @@ const nodeTypeStyles = {
   },
 };
 
-// 节点配置面板
+// Node configuration panel
 function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddElseBranch, statusOptions }) {
   const [selectedConfigId, setSelectedConfigId] = useState(node?.data?.configId || '');
   const [configParams, setConfigParams] = useState(node?.data?.params || {});
@@ -204,9 +205,9 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
         color: '#9ca3af'
       }}>
         <Icon symbol="set-up" style={{ width: 32, height: 32, marginBottom: 16, opacity: 0.5 }} />
-        <div style={{ fontSize: 16, marginBottom: 8 }}>选择一个节点进行配置</div>
+        <div style={{ fontSize: 16, marginBottom: 8 }}>Select a node to configure</div>
         <div style={{ fontSize: 14, lineHeight: 1.4 }}>
-          拖拽左侧节点到画布开始构建工作流
+          Drag a node from the left onto the canvas to start building the workflow
         </div>
       </div>
     );
@@ -214,7 +215,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
 
   return (
     <div style={{ background: 'white', padding: 20, borderRadius: 8, border: '1px solid #e5e7eb' }}>
-      {/* 节点基本信息 */}
+      {/* Node basic info */}
       <div style={{ marginBottom: 20 }}>
         <div style={{
           fontSize: 18,
@@ -226,14 +227,14 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
           marginBottom: 8
         }}>
           {nodeTypesList.find(n => n.type === node.type)?.icon}
-          {node.data.label || '未命名节点'}
+          {node.data.label || 'Unnamed node'}
         </div>
         <div style={{ fontSize: 14, color: '#6b7280' }}>
           {nodeTypesList.find(n => n.type === node.type)?.description}
         </div>
       </div>
 
-      {/* 配置选择 */}
+      {/* Configuration selection */}
       <div style={{ marginBottom: 20 }}>
         <label style={{
           display: 'block',
@@ -242,7 +243,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
           color: '#374151',
           marginBottom: 8
         }}>
-          {node?.type === 'trigger' ? '触发条件' : '配置类型'}
+          {node?.type === 'trigger' ? 'Trigger condition' : 'Configuration type'}
         </label>
         <select
           value={selectedConfigId}
@@ -256,7 +257,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
             background: 'white'
           }}
         >
-          <option value="">选择配置...</option>
+          <option value="">Select configuration...</option>
           {availableConfigs.map(config => (
             <option key={config.id} value={config.id}>{config.name}</option>
           ))}
@@ -281,7 +282,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
         )}
       </div>
 
-      {/* 参数配置（触发器不显示参数设置） */}
+      {/* Parameter configuration (not shown for trigger) */}
       {selectedConfig && node?.type !== 'trigger' && selectedConfig.params && selectedConfig.params.length > 0 && (
         <div style={{ marginBottom: 16 }}>
           <label style={{
@@ -291,7 +292,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
             color: '#374151',
             marginBottom: 12
           }}>
-            参数设置
+            Parameter settings
           </label>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {selectedConfig.params.map(param => (
@@ -312,7 +313,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
         </div>
       )}
 
-      {/* 条件分支快捷添加 */}
+      {/* Quick add condition branches */}
       {node?.type === 'condition' && (
         <div style={{
           marginBottom: 16,
@@ -321,7 +322,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
           borderRadius: 6,
           border: '1px solid #bae6fd'
         }}>
-          <div style={{ fontSize: 13, fontWeight: 'bold', color: '#0369a1', marginBottom: 8 }}>条件分支</div>
+          <div style={{ fontSize: 13, fontWeight: 'bold', color: '#0369a1', marginBottom: 8 }}>Condition branches</div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button
               onClick={() => onAddIfBranch && onAddIfBranch(node)}
@@ -336,7 +337,7 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
                 fontSize: 13
               }}
             >
-              添加 If 分支
+              Add If branch
             </button>
             <button
               onClick={() => onAddElseBranch && onAddElseBranch(node)}
@@ -351,13 +352,12 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
                 fontSize: 13
               }}
             >
-              添加 Else 分支
+              Add Else branch
             </button>
           </div>
         </div>
       )}
 
-      {/* 删除按钮 */}
       <button
         onClick={onDelete}
         style={{
@@ -380,13 +380,13 @@ function NodeConfigPanel({ node, onConfigChange, onDelete, onAddIfBranch, onAddE
         onMouseLeave={e => e.target.style.background = '#ef4444'}
       >
         <Icon symbol="delete" style={{ width: 16, height: 16 }} />
-        删除节点
+        Delete Node
       </button>
     </div>
   );
 }
 
-// 自定义节点组件
+// Custom node component
 function CustomNode({ data, type, selected }) {
   const [isEditing, setIsEditing] = useState(false);
   const [label, setLabel] = useState(data.label || '');
@@ -449,7 +449,7 @@ function CustomNode({ data, type, selected }) {
         }}
       />
 
-      {/* 配置状态指示器 */}
+      {/* Configuration state indicator */}
       {isConfigured && (
         <div style={{
           position: 'absolute',
@@ -510,7 +510,7 @@ function CustomNode({ data, type, selected }) {
           fontWeight: '500',
           textAlign: 'center'
         }}>
-          点击配置 →
+          Click to configure →
         </div>
       )}
 
@@ -555,14 +555,13 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [reactFlowInstance, setReactFlowInstance] = useState(null);
-  const [workflowName, setWorkflowName] = useState('我的工作流');
+  const [workflowName, setWorkflowName] = useState('My Workflow');
   const [currentWorkflowId, setCurrentWorkflowId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [workflows, setWorkflows] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
 
-  // 允许按 Esc 关闭弹窗
   useEffect(() => {
     if (!open) return;
     const handler = (e) => {
@@ -621,7 +620,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
         setEdges([]);
       }
     } catch (err) {
-      console.log(111)
+      toaster.warning(err);
     } finally {
       setIsLoading(false);
     }
@@ -647,7 +646,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
 
   const handleCreateWorkflow = useCallback(async () => {
     if (!repoId) return;
-    const name = window.prompt('输入新工作流名称', '新工作流');
+    const name = window.prompt('Enter new workflow name', 'New workflow');
     if (!name) return;
     try {
       const res = await workflowAPI.createWorkflow(repoId, {
@@ -660,7 +659,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
         const nextList = [...workflows, newWf];
         setWorkflows(nextList);
         setCurrentWorkflowId(newWf.id);
-        setWorkflowName(newWf.name || '我的工作流');
+        setWorkflowName(newWf.name || 'My Workflow');
         setNodes([]);
         setEdges([]);
       }
@@ -668,11 +667,11 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
 
       alert('Failed');
     }
-  }, [repoId, workflows]);
+  }, [repoId, workflows, setNodes, setEdges]);
 
   const handleDeleteWorkflow = useCallback(async () => {
     if (!repoId || !currentWorkflowId) return;
-    if (!window.confirm('确认删除当前工作流？')) return;
+    if (!window.confirm('Delete the current workflow?')) return;
     try {
       await workflowAPI.deleteWorkflow(repoId, currentWorkflowId);
       const remaining = workflows.filter(w => w.id !== currentWorkflowId);
@@ -680,32 +679,23 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
       if (remaining.length > 0) {
         const wf = remaining[0];
         setCurrentWorkflowId(wf.id);
-        setWorkflowName(wf.name || '我的工作流');
+        setWorkflowName(wf.name || 'My workflow');
         const { nodes: nextNodes, edges: nextEdges } = parseGraphNodesEdges(wf);
         setNodes(nextNodes);
         setEdges(nextEdges);
       } else {
         setCurrentWorkflowId(null);
-        setWorkflowName('我的工作流');
+        setWorkflowName('My workflow');
         setNodes([]);
         setEdges([]);
       }
     } catch (err) {
 
-      alert('删除失败');
+      alert('Failed delete');
     }
   }, [repoId, currentWorkflowId, workflows, setNodes, setEdges]);
 
-  // 节点标签更改处理
-  const handleNodeLabelChange = useCallback((nodeId, newLabel) => {
-    setNodes(nds => nds.map(n =>
-      n.id === nodeId
-        ? { ...n, data: { ...n.data, label: newLabel } }
-        : n
-    ));
-  }, [setNodes]);
 
-  // 节点配置更新
   const updateNodeConfig = useCallback((nodeId, configId, params = {}) => {
     setNodes(nds => nds.map(n =>
       n.id === nodeId
@@ -721,13 +711,11 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
     ));
   }, [setNodes]);
 
-  // 为条件节点添加分支并自动连线
   const addConditionBranch = useCallback((conditionNode, branch) => {
     if (!conditionNode) return;
-    // 防止重复添加相同分支
     const hasBranch = edges.some(e => e.source === conditionNode.id && (branch === 'if' ? e.label === 'True' : e.label === 'False'));
     if (hasBranch) {
-      alert(`${branch === 'if' ? 'If' : 'Else'} 分支已存在`);
+      alert(`${branch === 'if' ? 'If' : 'Else'} branch already exists`);
       return;
     }
 
@@ -759,7 +747,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
     }, eds));
   }, [edges, setNodes, setEdges]);
 
-  // 拖拽处理
   const onDragStart = useCallback((event, nodeType) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
     event.dataTransfer.effectAllowed = 'move';
@@ -780,7 +767,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
 
     const id = `${Date.now()}`;
     const nodeType = nodeTypesList.find(n => n.type === type);
-    const label = `${nodeType?.label || '节点'}`;
+    const label = `${nodeType?.label || 'Node'}`;
 
     setNodes(nds => [...nds, {
       id,
@@ -803,7 +790,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
     setEdges(eds => addEdge(newEdge, eds));
   }, [setEdges]);
 
-  // 节点操作
   const onNodeClick = useCallback((event, node) => {
     setSelectedNode(node);
   }, []);
@@ -840,10 +826,9 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
         const newId = res?.data?.id;
         if (newId) setCurrentWorkflowId(newId);
       }
-      alert('工作流已保存！');
+      toaster.success('Workflow saved');
     } catch (err) {
-
-      alert('保存失败');
+      toaster.warning('Failed');
     } finally {
       setIsSaving(false);
     }
@@ -881,7 +866,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
           flexDirection: 'column',
           background: '#f8fafc'
         }}>
-          {/* 头部工具栏 */}
+          {/* Header toolbar */}
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -895,7 +880,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
               <h1 style={{ margin: 0, fontSize: 24, fontWeight: 'bold' }}>
                 🔄 Workflow
               </h1>
-              {/* 多工作流选择/管理 */}
               <select
                 value={currentWorkflowId || ''}
                 onChange={(e) => handleWorkflowSelect(e.target.value)}
@@ -910,7 +894,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                   minWidth: 160
                 }}
               >
-                {workflows.length === 0 && <option value="">无工作流</option>}
+                {workflows.length === 0 && <option value="">No Workflow</option>}
                 {workflows.map(w => (
                   <option key={w.id} value={w.id}>{w.name}</option>
                 ))}
@@ -923,9 +907,9 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                   color: 'white', border: '1px solid rgba(255,255,255,0.3)',
                   borderRadius: 6, cursor: 'pointer', fontSize: 14
                 }}
-                title="新建工作流"
+                title="New workflow"
               >
-                <Icon symbol="plus_sign" style={{ width: 16, height: 16 }} /> 新建
+                <Icon symbol="plus_sign" style={{ width: 16, height: 16 }} /> New
               </button>
               {currentWorkflowId && (
                 <button
@@ -936,9 +920,9 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                     color: 'white', border: '1px solid rgba(255,255,255,0.3)',
                     borderRadius: 6, cursor: 'pointer', fontSize: 14
                   }}
-                  title="删除当前工作流"
+                  title="Delete current workflow"
                 >
-                  <Icon symbol="delete" style={{ width: 16, height: 16 }} /> 删除
+                  <Icon symbol="delete" style={{ width: 16, height: 16 }} /> Delete
                 </button>
               )}
             </div>
@@ -977,17 +961,15 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                   cursor: 'pointer',
                   fontSize: 14
                 }}
-                title="关闭"
+                title="Cancel"
               >
                 <Icon symbol="close" style={{ width: 16, height: 16 }} />
-                关闭
+                Cancel
               </button>
             </div>
           </div>
 
-          {/* 主体区域 */}
           <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-            {/* 左侧节点库 */}
             <div style={{
               width: 280,
               borderRight: '1px solid #e5e7eb',
@@ -1001,7 +983,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                 fontWeight: 'bold',
                 color: '#374151'
               }}>
-                节点库
               </h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {nodeTypesList.map(node => (
@@ -1036,7 +1017,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
               </div>
             </div>
 
-            {/* 主画布 */}
             <div ref={reactFlowWrapper} style={{ flex: 1, height: '100%', position: 'relative' }}>
               <ReactFlowProvider>
                 <ReactFlow
@@ -1093,8 +1073,8 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                       border: '1px solid #e5e7eb',
                       boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                     }}>
-                      {nodes.length} 个节点 • {edges.length} 个连接 •
-                      {nodes.filter(n => n.data.configId).length} 个已配置
+                      {nodes.length} Nodes • {edges.length} Edges •
+                      {nodes.filter(n => n.data.configId).length} configured
                     </div>
                   </Panel>
 
@@ -1123,7 +1103,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
               </ReactFlowProvider>
             </div>
 
-            {/* 右侧配置面板 */}
             <div style={{
               width: 350,
               borderLeft: '1px solid #e5e7eb',
@@ -1137,7 +1116,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                 fontWeight: 'bold',
                 color: '#374151'
               }}>
-                节点配置
+                Node configuration
               </h3>
 
               <NodeConfigPanel
@@ -1149,7 +1128,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                 statusOptions={statusOptions}
               />
 
-              {/* 工作流统计 */}
               <div style={{
                 marginTop: 24,
                 background: '#f9fafb',
@@ -1158,7 +1136,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                 border: '1px solid #e5e7eb'
               }}>
                 <h4 style={{ margin: '0 0 12px 0', fontSize: 14, fontWeight: 'bold', color: '#374151' }}>
-                  工作流统计
+                  Workflow statistics
                 </h4>
                 <div style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -1180,7 +1158,7 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
                     paddingTop: 8,
                     borderTop: '1px solid #e5e7eb'
                   }}>
-                    <span>配置完成:</span>
+                    <span>Configuration complete:</span>
                     <span style={{
                       color: nodes.length > 0 && nodes.every(n => n.data.configId) ? '#10b981' : '#ef4444'
                     }}>

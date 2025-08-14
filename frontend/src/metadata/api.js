@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { repoID, siteRoot } from '../utils/constants';
+import { siteRoot } from '../utils/constants';
 import { VIEW_TYPE_DEFAULT_BASIC_FILTER, VIEW_TYPE_DEFAULT_SORTS } from './constants';
 
 class MetadataManagerAPI {
