@@ -10,7 +10,7 @@ import Loading from '../../loading';
 import CommentItemReadOnly from './comment-item-readonly';
 import CommentBodyHeader from './comment-body-header';
 
-const { repoID, filePath } = window.app.pageOptions;
+const { username, repoID, filePath } = window.app.pageOptions;
 
 const CommentListPropTypes = {
   toggleCommentList: PropTypes.func.isRequired,
@@ -44,6 +44,7 @@ class CommentList extends React.Component {
     if (!commentData.trim()) {
       return;
     }
+    this.addParticipant(username);
     if (this.toBeAddedParticipant.length === 0) {
       this.props.addComment(commentData.trim());
       this.setState({ comment: '' });
@@ -145,7 +146,7 @@ class CommentList extends React.Component {
             type="comment"
             settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
             hiddenUserInfo={true}
-            hiddenToolMenu={true}
+            toolMenus={[]}
             insertContent={this.onSubmit}
             collaborators={this.props.relatedUsers ? this.props.relatedUsers : []}
             participants={this.props.participants ? this.props.participants : []}

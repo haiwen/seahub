@@ -104,7 +104,7 @@ class ReplyItem extends React.Component {
             content={this.state.newReply}
             settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
             hiddenUserInfo={true}
-            hiddenToolMenu={true}
+            toolMenus={[]}
             insertContent={this.updateComment}
           />
         </li>
