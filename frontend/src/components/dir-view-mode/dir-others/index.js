@@ -15,7 +15,7 @@ import SimpleWorkflowEditor from './workflow';
 
 import './index.css';
 
-const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
+const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo, showMdView }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
 
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
@@ -63,14 +63,18 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
 
   const enableMonitorRepo = isPro && (permission == 'r' || permission == 'rw');
-
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
-      <div className="dir-others-item text-nowrap" title="Workflow" onClick={openWorkflow}>
-        <span className="sf3-font-trash sf3-font"></span>
-        <span className="dir-others-item-text">Workflow</span>
-      </div>
-      <SimpleWorkflowEditor open={isWorkflowOpen} onClose={closeWorkflow} repoId={repoID} />
+      {showMdView && (
+        <>
+          <div className="dir-others-item text-nowrap" title="Workflow" onClick={openWorkflow}>
+            <span className="sf3-font-trash sf3-font"></span>
+            <span className="dir-others-item-text">Workflow</span>
+          </div>
+          <SimpleWorkflowEditor open={isWorkflowOpen} onClose={closeWorkflow} repoId={repoID} />
+        </>
+      )
+      }
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
           repo={currentRepoInfo}
