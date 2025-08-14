@@ -38,7 +38,7 @@ class SocketClient {
   getParams = (payload = {}) => {
     const { docUuid, user } = this.config;
     return {
-      docUuid,
+      doc_uuid: docUuid,
       user,
       ...payload,
     };
