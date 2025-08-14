@@ -11,7 +11,7 @@ body {
 }
 
 .wiki2-main-panel.show-comment-panel .wiki-page-title-wrapper,
-.wiki2-main-panel.show-comment-panel .sdoc-editor-container .sdoc-article-container .article {
+.wiki2-main-panel.show-comment-panel .sdoc-editor-container .sdoc-article-container .article.sdoc-editor__article {
   padding-left: 50px;
 }
 
