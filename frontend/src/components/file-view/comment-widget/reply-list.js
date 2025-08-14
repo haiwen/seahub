@@ -9,7 +9,7 @@ import toaster from '../../toast';
 import CommentItem from './comment-item';
 import ReplyItem from './reply-item';
 
-const { repoID, filePath } = window.app.pageOptions;
+const { username, repoID, filePath } = window.app.pageOptions;
 
 const ReplyListPropTypes = {
   toggleCommentList: PropTypes.func.isRequired,
@@ -45,6 +45,7 @@ class ReplyList extends React.Component {
     if (!commentData.trim()) {
       return;
     }
+    this.addParticipant(username);
     if (this.toBeAddedParticipant.length === 0) {
       this.props.addReply(commentData.trim());
       this.setState({ comment: '' });
@@ -130,7 +131,7 @@ class ReplyList extends React.Component {
             type="reply"
             settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
             hiddenUserInfo={true}
-            hiddenToolMenu={true}
+            toolMenus={[]}
             insertContent={this.onSubmit}
             collaborators={this.props.relatedUsers ? this.props.relatedUsers : []}
             participants={this.props.participants ? this.props.participants : []}
