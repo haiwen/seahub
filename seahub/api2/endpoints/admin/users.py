@@ -66,7 +66,7 @@ from seahub.auth.utils import get_virtual_id_by_email
 from seahub.auth.models import SocialAuthUser
 
 from seahub.options.models import UserOptions
-from seahub.share.models import FileShare, UploadLinkShare, ExtraSharePermission
+from seahub.share.models import FileShare, UploadLinkShare, ExtraSharePermission, CustomSharePermissions
 from seahub.utils.ldap import ENABLE_LDAP, LDAP_FILTER, ENABLE_SASL, SASL_MECHANISM, ENABLE_SSO_USER_CHANGE_PASSWORD, \
     LDAP_PROVIDER, LDAP_SERVER_URL, LDAP_BASE_DN, LDAP_ADMIN_DN, LDAP_ADMIN_PASSWORD, LDAP_LOGIN_ATTR, LDAP_USER_OBJECT_CLASS, \
     ENABLE_MULTI_LDAP, MULTI_LDAP_1_SERVER_URL, MULTI_LDAP_1_BASE_DN, MULTI_LDAP_1_ADMIN_DN, \
@@ -2163,3 +2163,184 @@ class AdminUserConvertToTeamView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+    
+
+class AdminUserSharedFolders(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request, email):
+        """ List 'all' folders a user share out
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        shared_repos = []
+        username = email
+
+        try:
+            if is_org_user(username):
+                orgs = ccnet_api.get_orgs_by_user(username)
+                org = orgs[0]
+                org_id = org.org_id
+                shared_repos += seafile_api.get_org_share_out_repo_list(org_id, username, -1, -1)
+                shared_repos += seafile_api.get_org_group_repos_by_owner(org_id, username)
+            else:
+                shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
+                shared_repos += seafile_api.get_group_repos_by_owner(username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        repo_id_list = []
+        for repo in shared_repos:
+    
+            if repo.is_virtual:
+                continue
+    
+            repo_id = repo.repo_id
+            repo_id_list.append(repo_id)
+
+        custom_permission_dict = {}
+        custom_permissions = CustomSharePermissions.objects.filter(repo_id__in=repo_id_list)
+        for custom_permission in custom_permissions:
+            custom_id = f'custom-{custom_permission.id}'
+            custom_permission_dict[custom_id] = custom_permission.name
+
+        returned_result = []
+        shared_repos.sort(key=lambda x: x.repo_name)
+        for repo in shared_repos:
+            if not repo.is_virtual:
+                continue
+    
+            result = {}
+            result['repo_id'] = repo.origin_repo_id
+            result['repo_name'] = repo.origin_repo_name
+            result['path'] = repo.origin_path
+            result['folder_name'] = repo.name
+            result['share_type'] = repo.share_type
+            result['share_permission'] = repo.permission
+            result['share_permission_name'] = custom_permission_dict.get(repo.permission, '')
+            result['share_from']  = username
+            result['share_from_user_name']  = email2nickname(username)
+    
+            if repo.share_type == 'personal':
+                result['user_name'] = email2nickname(repo.user)
+                result['user_email'] = repo.user
+                result['contact_email'] = Profile.objects.get_contact_email_by_user(repo.user)
+    
+            if repo.share_type == 'group':
+                group = ccnet_api.get_group(repo.group_id)
+        
+                if not group:
+                    if is_org_user(username):
+                        seafile_api.org_unshare_subdir_for_group(org_id,
+                                                                 repo.repo_id,
+                                                                 repo.origin_path,
+                                                                 username,
+                                                                 repo.group_id)
+                    else:
+                        seafile_api.unshare_subdir_for_group(repo.repo_id,
+                                                             repo.origin_path,
+                                                             username,
+                                                             repo.group_id)
+                    continue
+        
+                result['group_id'] = repo.group_id
+                result['group_name'] = group.group_name
+    
+            returned_result.append(result)
+
+        return Response(returned_result)
+
+
+class AdminUserSharedRepos(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+    
+    def get(self, request, email):
+        """ List 'all' repos a user share out
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        
+        if not request.user.admin_permissions.can_manage_user():
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        shared_repos = []
+        username = email
+        try:
+            if is_org_user(username):
+                orgs = ccnet_api.get_orgs_by_user(username)
+                org = orgs[0]
+                org_id = org.org_id
+                shared_repos += seafile_api.get_org_share_out_repo_list(org_id, username, -1, -1)
+                shared_repos += seafile_api.get_org_group_repos_by_owner(org_id, username)
+                shared_repos += seafile_api.list_org_inner_pub_repos_by_owner(org_id, username)
+            else:
+                shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
+                shared_repos += seafile_api.get_group_repos_by_owner(username)
+                if not request.cloud_mode:
+                    shared_repos += seafile_api.list_inner_pub_repos_by_owner(username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        repo_id_list = []
+        for repo in shared_repos:
+    
+            if repo.is_virtual:
+                continue
+    
+            repo_id = repo.repo_id
+            repo_id_list.append(repo_id)
+
+        custom_permission_dict = {}
+        custom_permissions = CustomSharePermissions.objects.filter(repo_id__in=repo_id_list)
+        for custom_permission in custom_permissions:
+            custom_id = f'custom-{custom_permission.id}'
+            custom_permission_dict[custom_id] = custom_permission.name
+
+        returned_result = []
+        shared_repos.sort(key=lambda x: x.repo_name)
+
+        for repo in shared_repos:
+            if repo.is_virtual:
+                continue
+    
+            result = {}
+            result['repo_id'] = repo.repo_id
+            result['repo_name'] = repo.repo_name
+            result['encrypted'] = repo.encrypted
+            result['share_type'] = repo.share_type
+            result['share_permission'] = repo.permission
+            result['share_permission_name'] = custom_permission_dict.get(repo.permission, '')
+            result['modifier_email'] = repo.last_modifier
+            result['modifier_name'] = email2nickname(repo.last_modifier)
+            result['modifier_contact_email'] = email2contact_email(repo.last_modifier)
+            result['share_from'] = username
+            result['share_from_user_name'] = email2nickname(username)
+    
+            if repo.share_type == 'personal':
+                result['user_name'] = email2nickname(repo.user)
+                result['user_email'] = repo.user
+                result['contact_email'] = Profile.objects.get_contact_email_by_user(repo.user)
+    
+            if repo.share_type == 'group':
+                group = ccnet_api.get_group(repo.group_id)
+                result['group_id'] = repo.group_id
+                result['group_name'] = group.group_name if group else ''
+    
+            returned_result.append(result)
+
+        return Response(returned_result)

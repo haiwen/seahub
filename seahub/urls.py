@@ -153,7 +153,8 @@ from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser, AdminUserResetPassword, AdminAdminUsers, \
     AdminUserGroups, AdminUserShareLinks, AdminUserUploadLinks, AdminUserBeSharedRepos, \
-    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList, AdminUserConvertToTeamView
+    AdminLDAPUsers, AdminSearchUser, AdminUpdateUserCcnetEmail, AdminUserList, AdminUserConvertToTeamView, \
+    AdminUserSharedFolders, AdminUserSharedRepos
 from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary, \
         AdminSearchLibrary
@@ -687,6 +688,8 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/share-links/$', AdminUserShareLinks.as_view(), name='api-v2.1-admin-user-share-links'),
     re_path(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/upload-links/$', AdminUserUploadLinks.as_view(), name='api-v2.1-admin-user-upload-links'),
     re_path(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/beshared-repos/$', AdminUserBeSharedRepos.as_view(), name='api-v2.1-admin-user-beshared-repos'),
+    re_path(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/shared-folders/$', AdminUserSharedFolders.as_view(), name='api-v2.1-admin-user-shared-folders'),
+    re_path(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/shared-repos/$', AdminUserSharedRepos.as_view(), name='api-v2.1-admin-user-shared-repos'),
 
     re_path(r'^api/v2.1/admin/admin-users/$', AdminAdminUsers.as_view(), name='api-v2.1-admin-admin-users'),
 
