@@ -125,6 +125,7 @@ const SimpleEditor = () => {
   useEffect(() => {
     const handleHotkeySave = (event) => {
       if (isHotkey('mod+s', event)) {
+        // delete cmd+s
         event.preventDefault();
       }
     };
