@@ -64,6 +64,19 @@ const SimpleEditor = () => {
   useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
 
   useEffect(() => {
+    const handleHotkeySave = (event) => {
+      if (isHotkey('mod+s', event)) {
+        // delete cmd+s
+        event.preventDefault();
+      }
+    };
+    document.addEventListener('keydown', handleHotkeySave, true);
+    return () => {
+      document.removeEventListener('keydown', handleHotkeySave, true);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!excalidrawAPI) return;
 
     const loadImages = (data, isInitialLoad) => {
@@ -121,19 +134,6 @@ const SimpleEditor = () => {
     });
 
   }, [excalidrawAPI]);
-
-  useEffect(() => {
-    const handleHotkeySave = (event) => {
-      if (isHotkey('mod+s', event)) {
-        // delete cmd+s
-        event.preventDefault();
-      }
-    };
-    document.addEventListener('keydown', handleHotkeySave, true);
-    return () => {
-      document.removeEventListener('keydown', handleHotkeySave, true);
-    };
-  }, []);
 
   const handleChange = useCallback((elements, appState, files) => {
     const socketManager = SocketManager.getInstance();
