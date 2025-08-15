@@ -25,7 +25,6 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.base.accounts import User
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_ENCRYPTED_LIBRARY
-from seahub.organizations.views import org_user_exists
 from seahub.signals import repo_created
 from seahub.group.utils import is_group_admin, is_group_member
 from seahub.utils import is_valid_dirent_name, is_org_context, \
@@ -109,7 +108,9 @@ class GroupOwnedLibraries(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if org_id and org_id > 0:
-            disable_encrypted_library = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
+            disable_encrypted_library = OrgAdminSettings.objects.filter(
+                                            org_id=org_id,
+                                            key=DISABLE_ORG_ENCRYPTED_LIBRARY).first()
             if (disable_encrypted_library is not None) and int(disable_encrypted_library.value):
                 return None, api_error(status.HTTP_403_FORBIDDEN,
                                        'NOT allow to create encrypted library.')
@@ -1426,67 +1427,75 @@ class GroupOwnedLibraryTransferView(APIView):
         Permission checking:
         1. is group admin;
         """
+
+        current_group_id = int(group_id)
+        username = request.user.username
+
         # argument check
         new_owner = request.data.get('email', None)
         is_share = request.data.get('reshare', False)
         if not new_owner:
-            error_msg = 'Email invalid.'
+            error_msg = 'Email invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if '@seafile_group' not in new_owner:
-            error_msg = 'Email invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        new_group_id = int(new_owner.split('@')[0])
-        if new_group_id == int(group_id):
-            error_msg = 'Cannot transfer to its owner'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        try:
-            new_group = ccnet_api.get_group(new_group_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        if not new_group:
-            error_msg = 'Group %d not found.' % group_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
-        if new_group.creator_name != 'system admin':
-            error_msg = 'Group %d invalid' % group_id
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        username = request.user.username
-        if not is_group_member(new_group_id, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            
-        if org_id:
-            org_id = int(org_id)
-            if not ccnet_api.get_org_by_id(org_id):
-                error_msg = 'Organization %s not found.' % org_id
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        if org_id:
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            repo_owner = seafile_api.get_repo_owner(repo_id)
-        cur_group_id = int(group_id)
-        
-        if not is_group_admin(cur_group_id, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)        
 
         # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
+        if not ccnet_api.get_group(current_group_id):
+            error_msg = f'Group {group_id} not found'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
+        if not seafile_api.get_repo(repo_id):
+            error_msg = f'Library {repo_id} not found'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_group_shared_repo_by_path(repo_id, None,
+                                                         group_id,
+                                                         org_id is not None):
+            error_msg = f'Library {repo_id} not belongs to group {group_id}'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if org_id and not ccnet_api.get_org_by_id(org_id):
+            error_msg = f'Organization {org_id} not found'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not is_group_admin(current_group_id, username):
+            error_msg = 'Permission denied'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # transfer to department
+        if '@seafile_group' in new_owner:
+            new_group_id = int(new_owner.split('@')[0])
+            if new_group_id == current_group_id:
+                error_msg = 'Cannot transfer to its owner'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            new_group = ccnet_api.get_group(new_group_id)
+            if not new_group:
+                error_msg = f'Group {group_id} not found'
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            if new_group.creator_name != 'system admin':
+                error_msg = f'Group {group_id} invalid'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_group_member(new_group_id, username):
+                error_msg = 'Permission denied'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        else:
+            # transfer to user
+            try:
+                User.objects.get(email=new_owner)
+            except User.DoesNotExist:
+                error_msg = f'User {new_owner} not found'
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            if org_id and not ccnet_api.org_user_exists(org_id, new_owner):
+                error_msg = f'User {new_owner} not found in organization {org_id}'
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # preparation before transfer repo
         pub_repos = []
+        repo_owner = get_repo_owner(request, repo_id)
         if org_id:
             # get all org pub repos
             pub_repos = seafile_api.list_org_inner_pub_repos_by_owner(
@@ -1495,6 +1504,7 @@ class GroupOwnedLibraryTransferView(APIView):
             # get all pub repos
             if not request.cloud_mode:
                 pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
+
         # transfer repo
         try:
             transfer_repo(repo_id, new_owner, is_share, org_id)
@@ -1526,7 +1536,7 @@ class GroupOwnedLibraryTransferView(APIView):
 
             if org_id:
                 seafile_api.set_org_inner_pub_repo(org_id, repo_id,
-                        pub_repo.permission)
+                                                   pub_repo.permission)
             else:
                 seafile_api.add_inner_pub_repo(
                         repo_id, pub_repo.permission)
@@ -1534,4 +1544,3 @@ class GroupOwnedLibraryTransferView(APIView):
             break
 
         return Response({'success': True})
-    
