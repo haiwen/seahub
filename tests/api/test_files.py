@@ -8,7 +8,6 @@ import pytest
 import urllib.request, urllib.parse, urllib.error
 from urllib.parse import urlencode, quote
 import urllib.parse
-from nose.tools import assert_in
 
 from tests.common.utils import randstring, urljoin
 from tests.api.apitestbase import ApiTestBase
@@ -54,7 +53,7 @@ class FilesApiTest(ApiTestBase):
             u = urllib.parse.urlparse(furl)
             parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            assert_in(tmp_file, res.text)
+            assert tmp_file in res.text
 
             # get info of copied file in dst dir('/')
             fdurl = repo.file_url + 'detail/?p=/%s' % quote(tmp_file)
@@ -72,7 +71,7 @@ class FilesApiTest(ApiTestBase):
             u = urllib.parse.urlparse(furl)
             parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            assert_in('tmp_file (1).txt', res.text)
+            assert  'tmp_file (1).txt' in res.text
 
             # copy tmp file from sub folder(dpath) to dst dir('/') again
             # for test can rename file if a file with the same name is dst dir
@@ -84,7 +83,7 @@ class FilesApiTest(ApiTestBase):
             u = urllib.parse.urlparse(furl)
             parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            assert_in('tmp_file (2).txt', res.text)
+            assert 'tmp_file (2).txt' in res.text
 
             # then move file to dst dir
             data = {
@@ -95,7 +94,7 @@ class FilesApiTest(ApiTestBase):
             u = urllib.parse.urlparse(furl)
             parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            assert_in('tmp_file%20%283%29.txt', res.text)
+            assert 'tmp_file%20%283%29.txt' in res.text
 
 
     def test_copy_file(self):
@@ -121,7 +120,7 @@ class FilesApiTest(ApiTestBase):
             u = urllib.parse.urlparse(furl)
             parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            assert_in(tmp_file, res.text)
+            assert tmp_file in res.text
 
             # get info of copied file in dst dir('/')
             fdurl = repo.file_url + 'detail/?p=/%s' % quote(tmp_file)
@@ -139,7 +138,7 @@ class FilesApiTest(ApiTestBase):
             u = urllib.parse.urlparse(furl)
             parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            assert_in('tmp_file (1).txt', res.text)
+            assert 'tmp_file (1).txt' in res.text
 
             # copy tmp file from sub folder(dpath) to dst dir('/') again
             # for test can rename file if a file with the same name is dst dir
@@ -151,7 +150,7 @@ class FilesApiTest(ApiTestBase):
             u = urllib.parse.urlparse(furl)
             parsed_furl = urllib.parse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            assert_in('tmp_file (2).txt', res.text)
+            assert 'tmp_file (2).txt' in res.text
 
     def test_download_file(self):
         with self.get_tmp_repo() as repo:

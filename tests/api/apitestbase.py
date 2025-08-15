@@ -3,7 +3,6 @@
 import requests
 import unittest
 from contextlib import contextmanager
-from nose.tools import assert_equal, assert_in # pylint: disable=E0611
 from urllib.parse import quote
 
 from tests.common.common import USERNAME, PASSWORD, \
@@ -83,13 +82,13 @@ class ApiTestBase(unittest.TestCase):
         resp = requests.request(method, *args, **kwargs)
         if expected is not None:
             if hasattr(expected, '__iter__'):
-                assert_in(resp.status_code, expected,
+                assert resp.status_code in expected, \
                     "Expected http status in %s, received %s" % (expected,
-                        resp.status_code))
+                        resp.status_code)
             else:
-                assert_equal(resp.status_code, expected,
-                    "Expected http status %s, received %s" % (expected,
-                        resp.status_code))
+                assert resp.status_code == expected, \
+                    "Expected http status in %s, received %s" % (expected,
+                                                                 resp.status_code)
         return resp
 
     def assertHasLen(self, lst, length):
@@ -215,9 +214,9 @@ def get_auth_token(username, password):
         'device_name': 'test',
     }
     res = requests.post(TOKEN_URL, data=data)
-    assert_equal(res.status_code, 200)
+    assert res.status_code == 200
     token = res.json()['token']
-    assert_equal(len(token), 40)
+    assert len(token) == 40
     return token
 
 class _Repo(object):
