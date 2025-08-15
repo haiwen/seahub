@@ -48,6 +48,13 @@ class OnlyofficeFileToolbar extends React.Component {
             text={gettext('Details')}
             onClick={this.props.toggleDetailsPanel}
           />
+          <div
+            className='file-toolbar-btn'
+            onClick={this.props.toggleCommentPanel}
+            aria-label={gettext('Comment')}
+          >
+            <i className="sdocfont sdoc-comments"></i>
+          </div>
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
               tag="span"
@@ -82,6 +89,9 @@ class OnlyofficeFileToolbar extends React.Component {
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
                 {gettext('Open parent folder')}
               </a>
+            </DropdownItem>
+            <DropdownItem onClick={this.props.toggleCommentPanel}>
+              {gettext('Comment')}
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
