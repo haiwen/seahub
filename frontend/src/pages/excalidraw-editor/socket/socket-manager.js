@@ -144,7 +144,7 @@ class SocketManager {
     const firstOpBeginTime = this.pendingOperationBeginTimeList[0];
 
     const isExceedExecuteTime = (lastOpBeginTime - firstOpBeginTime) / 1000 > 30 ? true : false;
-    if (isExceedExecuteTime || this.pendingOperationList.length > 50) {
+    if (isExceedExecuteTime || this.pendingOperationList.length > 200) {
       this.dispatchConnectState('pending_operations_exceed_limit');
     }
 
