@@ -5,7 +5,6 @@ import time
 import logging
 import requests
 import json
-import os
 import datetime
 import urllib.request
 import urllib.parse
@@ -57,7 +56,7 @@ def api_check_group(func):
 def add_org_context(func):
     def _decorated(view, request, *args, **kwargs):
         if is_org_context(request):
-            org_id = request.user.org.org_id
+            org_id = int(request.user.org.org_id)
         else:
             org_id = None
         return func(view, request, org_id=org_id, *args, **kwargs)
@@ -349,6 +348,7 @@ def event_import_status(task_id):
 
     return resp
 
+
 def delete_user_monitored_cache(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -356,6 +356,7 @@ def delete_user_monitored_cache(params):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/delete-repo-monitored-user-cache')
     resp = requests.post(url, json=params, headers=headers)
     return resp
+
 
 def get_seafevents_metrics():
     payload = {'exp': int(time.time()) + 300, }
