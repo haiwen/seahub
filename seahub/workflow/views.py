@@ -59,14 +59,9 @@ class WorkflowsView(APIView):
         data = request.data
         workflow_name = data.get('name')
         graph = data.get('graph')
-        trigger_from = data.get('trigger_from')
 
         if not workflow_name:
             error_msg = 'Invalid workflow_name.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        if not trigger_from:
-            error_msg = 'Invalid trigger_from.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         if not graph:
@@ -92,13 +87,14 @@ class WorkflowsView(APIView):
         try:
             json_graph = json.loads(graph)
             is_valid, _ = check_graph(json_graph)
+            trigger_from = data.get('trigger_from')
             workflow = Workflow.objects.create(
                 name = workflow_name,
                 repo_id = repo_id,
                 graph = graph,
-                trigger_from = trigger_from,
                 created_by = username,
-                is_valid = is_valid
+                is_valid = is_valid,
+                trigger_from = trigger_from
             )
             return Response(workflow.to_dict())
         except Exception as e:
@@ -138,12 +134,9 @@ class WorkflowDetailView(APIView):
         data = request.data
         graph = data.get('graph')
         workflow_name = data.get('name')
-        if not workflow_name:
-            error_msg = 'Invalid workflow_name.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
-        if not graph:
-            error_msg = 'Invalid graph.'
+        trigger_from = data.get('trigger_from')
+        if not graph and not workflow_name and not trigger_from:
+            error_msg = "Missing parameters 'graph', 'name', or 'trigger_from'"
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
@@ -166,17 +159,20 @@ class WorkflowDetailView(APIView):
         except Workflow.DoesNotExist:
             error_msg = "Workflow not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
+        
         try:
-            json_graph = json.loads(graph)
-            is_valid, _ = check_graph(json_graph)
+            if workflow_name:
+                workflow.name = workflow_name
+            if graph:
+                workflow.graph = graph
+                json_graph = json.loads(graph)
+                is_valid, _ = check_graph(json_graph)
+                workflow.is_valid = is_valid
+            if trigger_from:
+                workflow.trigger_from = trigger_from
             workflow.updated_by = username
-            workflow.graph = graph
-            workflow.name = workflow_name
-            workflow.trigger_from = data.get('trigger_from')
-            workflow.is_valid = is_valid
             workflow.save()
-            return Response(workflow.to_dict())
+            return Response({'success': True})
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, str(e))
