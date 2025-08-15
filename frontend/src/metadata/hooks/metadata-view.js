@@ -431,79 +431,77 @@ export const MetadataViewProvider = ({
     handleMove(path, dirent, false, callback);
   };
 
-  const handleSearchRows = useCallback((searchVal, callback) => {
-    const metadata = storeRef.current.data;
-    const tagsData = window.sfTagsDataStore?.data;
+  const getSearchableValue = useCallback((row, column, collaborators, tagsData, collaboratorsCache) => {
+    const { type: columnType } = column;
+    let cellValue = getCellValueByColumn(row, column);
 
-    if (!searchVal || !metadata?.rows?.length) {
-      callback && callback(null);
-      setMetadata(storeRef.current.data);
-      return;
-    }
+    if (!cellValue) return '';
 
-    const searchRegRule = getSearchRule(searchVal);
-    if (!searchRegRule) {
-      callback && callback(null);
-      setMetadata(storeRef.current.data);
-      return;
-    }
+    switch (columnType) {
+      case CellType.GEOLOCATION:
+        return row._location_translated?.address || '';
 
-    // Search across searchable columns
-    const { columns, hidden_columns } = storeRef.current.data.view;
-    const searchableColumns = columns.filter(column =>
-      !globalHiddenColumns.includes(column.key) &&
-      !hidden_columns.includes(column.key) &&
-      !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key) &&
-      SUPPORT_SEARCH_COLUMN_LIST.includes(column.type)
-    );
+      case CellType.COLLABORATOR:
+        return getCollaboratorsName(collaborators, cellValue);
 
-    if (!searchableColumns.length) {
-      callback && callback(null);
-      setMetadata(metadata);
-      return;
-    }
-
-    const collaborators = collaboratorsRef.current;
-
-    const getSearchableValue = (row, column) => {
-      const { type: columnType } = column;
-      let cellValue = getCellValueByColumn(row, column);
-
-      if (!cellValue) return '';
-
-      switch (columnType) {
-        case CellType.GEOLOCATION:
-          return row._location_translated?.address || '';
-
-        case CellType.COLLABORATOR:
-          return getCollaboratorsName(collaborators, cellValue);
-
-        case CellType.LAST_MODIFIER:
-        case CellType.CREATOR: {
-          const collaborator = collaborators.find(user => user.email === cellValue)
-          || collaboratorsCache[cellValue];
-          return collaborator?.name || cellValue;
-        }
-
-        case CellType.NUMBER:
-          return getNumberDisplayString(cellValue, column.data);
-
-        case CellType.TAGS:
-          return cellValue?.map(tag => {
-            const foundTag = tagsData?.rows.find(t => t._id === tag.row_id);
-            return foundTag?._tag_name;
-          }).filter(Boolean).join(', ') || '';
-
-        default:
-          return String(cellValue);
+      case CellType.LAST_MODIFIER:
+      case CellType.CREATOR: {
+        const collaborator = collaborators.find(user => user.email === cellValue)
+        || collaboratorsCache[cellValue];
+        return collaborator?.name || cellValue;
       }
-    };
 
+      case CellType.NUMBER:
+        return getNumberDisplayString(cellValue, column.data);
+
+      case CellType.TAGS:
+        return cellValue?.map(tag => {
+          const foundTag = tagsData?.rows.find(t => t._id === tag.row_id);
+          return foundTag?._tag_name;
+        }).filter(Boolean).join(', ') || '';
+
+      default:
+        return String(cellValue);
+    }
+  }, []);
+
+  const filterGroups = useCallback((groups, matchedRowIds) => {
+    if (!Array.isArray(groups)) return groups;
+
+    return groups.map(group => {
+      const { subgroups, row_ids, ...groupData } = group;
+
+      if (subgroups && subgroups.length > 0) {
+        const filteredSubgroups = filterGroups(subgroups, matchedRowIds);
+        return {
+          ...groupData,
+          subgroups: filteredSubgroups.filter(subgroup =>
+            (subgroup.subgroups && subgroup.subgroups.length > 0) ||
+            (subgroup.row_ids && subgroup.row_ids.length > 0)
+          )
+        };
+      } else if (row_ids && row_ids.length > 0) {
+        const filteredRowIds = row_ids.filter(rowId => matchedRowIds.includes(rowId));
+        return {
+          ...groupData,
+          row_ids: filteredRowIds
+        };
+      }
+
+      return group;
+    }).filter(group =>
+      (group.subgroups && group.subgroups.length > 0) ||
+      (group.row_ids && group.row_ids.length > 0)
+    );
+  }, []);
+
+  const performSearch = useCallback((metadata, searchableColumns, searchRegRule, collaborators, tagsData, collaboratorsCache) => {
     let searchResult = { matchedCells: [], matchedRows: {}, currentSelectIndex: 0 };
     let hasMatches = false;
+
     metadata.rows.forEach((row, rowIndex) => {
       for (const column of searchableColumns) {
-        const searchableValue = getSearchableValue(row, column);
+        const searchableValue = getSearchableValue(row, column, collaborators, tagsData, collaboratorsCache);
 
         if (searchRegRule.test(searchableValue)) {
           hasMatches = true;
@@ -522,21 +520,84 @@ export const MetadataViewProvider = ({
       }
     });
 
-    // Update metadata to only include matched rows
-    const matchedRowIds = Object.keys(searchResult.matchedRows);
-    const newMetadata = {
+    return { searchResult, hasMatches };
+  }, [getSearchableValue]);
+
+  const createFilteredMetadata = useCallback((metadata, matchedRowIds, hasMatches) => {
+    if (!hasMatches) {
+      return {
+        ...metadata,
+        row_ids: [],
+        rows: [],
+        view: {
+          ...metadata.view,
+          rows: [],
+          ...(metadata.view.groups && { groups: [] })
+        }
+      };
+    }
+
+    return {
       ...metadata,
       row_ids: matchedRowIds,
       rows: matchedRowIds.map(id => metadata.id_row_map[id]).filter(Boolean),
       view: {
         ...metadata.view,
         rows: matchedRowIds,
+        ...(metadata.view.groups && {
+          groups: filterGroups(metadata.view.groups, matchedRowIds)
+        })
       }
     };
-    setMetadata(hasMatches ? newMetadata : { ...metadata, row_ids: [], rows: [], view: { ...metadata.view, rows: [] } });
+  }, [filterGroups]);
 
+  const handleSearchRows = useCallback((searchVal, callback) => {
+    const metadata = storeRef.current.data;
+    const tagsData = window.sfTagsDataStore?.data;
+
+    if (!searchVal || !metadata?.rows?.length) {
+      callback && callback(null);
+      setMetadata(storeRef.current.data);
+      return;
+    }
+
+    const searchRegRule = getSearchRule(searchVal);
+    if (!searchRegRule) {
+      callback && callback(null);
+      setMetadata(storeRef.current.data);
+      return;
+    }
+
+    const { columns, hidden_columns } = storeRef.current.data.view;
+    const searchableColumns = columns.filter(column =>
+      !globalHiddenColumns.includes(column.key) &&
+      !hidden_columns.includes(column.key) &&
+      !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key) &&
+      SUPPORT_SEARCH_COLUMN_LIST.includes(column.type)
+    );
+
+    if (!searchableColumns.length) {
+      callback && callback(null);
+      setMetadata(metadata);
+      return;
+    }
+
+    const collaborators = collaboratorsRef.current;
+    const { searchResult, hasMatches } = performSearch(
+      metadata,
+      searchableColumns,
+      searchRegRule,
+      collaborators,
+      tagsData,
+      collaboratorsCache
+    );
+
+    const matchedRowIds = Object.keys(searchResult.matchedRows);
+    const newMetadata = createFilteredMetadata(metadata, matchedRowIds, hasMatches);
+
+    setMetadata(newMetadata);
     callback && callback(searchResult);
-  }, [globalHiddenColumns, collaboratorsCache]);
+  }, [globalHiddenColumns, collaboratorsCache, createFilteredMetadata, performSearch]);
 
   // init
   useEffect(() => {
