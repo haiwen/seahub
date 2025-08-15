@@ -102,3 +102,20 @@ export const PASTE_SOURCE = {
   COPY: 'copy',
   CUT: 'cut',
 };
+
+export const SUPPORT_SEARCH_COLUMN_LIST = [
+  CellType.FILE_NAME,
+  CellType.DATE,
+  CellType.TEXT,
+  CellType.LONG_TEXT,
+  CellType.NUMBER,
+  CellType.SINGLE_SELECT,
+  CellType.CTIME,
+  CellType.MTIME,
+  CellType.MULTIPLE_SELECT,
+  CellType.LAST_MODIFIER,
+  CellType.CREATOR,
+  CellType.COLLABORATOR,
+  CellType.GEOLOCATION,
+  CellType.TAGS,
+];

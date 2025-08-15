@@ -6,6 +6,7 @@ import GroupbySetter from './groupby-setter';
 import PreHideColumnSetter from './pre-hide-column-setter';
 import HideColumnSetter from './hide-column-setter';
 import MapTypeSetter from './map-type-setter';
+import Search from './search';
 
 export {
   GalleryGroupBySetter,
@@ -16,4 +17,5 @@ export {
   PreHideColumnSetter,
   HideColumnSetter,
   MapTypeSetter,
+  Search,
 };

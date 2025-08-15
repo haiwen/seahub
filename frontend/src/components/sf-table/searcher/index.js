@@ -1,11 +1,12 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
 import { isModG, isModShiftG } from '../../../utils/hotkey';
 import SFTableSearcherInput from './searcher-input';
 import { checkHasSearchResult } from '../utils/search';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
-const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells, closeSearcher, focusNextMatchedCell, focusPreviousMatchedCell }) => {
+const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells, closeSearcher, focusNextMatchedCell, focusPreviousMatchedCell, showResultNavigation = true }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [hasSearchValue, setHasSearchValue] = useState(false);
 
@@ -17,10 +18,10 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
     setIsSearchActive(!isSearchActive);
   };
 
-  const handleCloseSearcher = () => {
+  const handleCloseSearcher = useCallback(() => {
     setIsSearchActive(false);
     closeSearcher && closeSearcher();
-  };
+  }, [closeSearcher]);
 
   const onKeyDown = (e) => {
     const isEmptySearchResult = !hasSearchResult;
@@ -39,6 +40,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
   };
 
   const renderSearchButtons = () => {
+    if (!showResultNavigation) return null;
     return (
       <span className="input-icon-addon search-poll-button">
         {hasSearchValue &&
@@ -69,6 +71,15 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
       </span>
     );
   };
+
+  useEffect(() => {
+    const eventBus = window.sfMetadataContext.eventBus;
+    const unsubscribeResetSearchBar = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.RESET_SEARCH_BAR, handleCloseSearcher);
+
+    return () => {
+      unsubscribeResetSearchBar && unsubscribeResetSearchBar();
+    };
+  }, [handleCloseSearcher]);
 
   return (
     <div className="sf-table-searcher-container">

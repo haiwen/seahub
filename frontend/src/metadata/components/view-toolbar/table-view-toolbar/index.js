@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter } from '../../data-process-setter';
+import { FilterSetter, GroupbySetter, SortSetter, HideColumnSetter, Search } from '../../data-process-setter';
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { useMetadataStatus } from '../../../../hooks';
 
@@ -22,6 +22,7 @@ const TableViewToolbar = ({
   return (
     <>
       <div className="sf-metadata-tool-left-operations">
+        <Search viewId={view._id} columns={viewColumns} />
         <FilterSetter
           wrapperClass="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-filter"
           filtersClassName="sf-metadata-filters"
