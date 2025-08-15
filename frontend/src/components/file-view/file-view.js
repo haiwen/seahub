@@ -144,6 +144,7 @@ class FileView extends React.Component {
                 <OnlyofficeFileToolbar
                   toggleDetailsPanel={this.toggleDetailsPanel}
                   toggleHeader={this.toggleHeader}
+                  toggleCommentPanel={this.toggleCommentPanel}
                 /> :
                 <FileToolbar
                   isLocked={this.state.isLocked}
