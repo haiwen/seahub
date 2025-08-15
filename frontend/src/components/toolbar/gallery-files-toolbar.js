@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { Dirent } from '../../models';
 import { useFileOperations } from '../../hooks/file-operations';
 
-const GalleryFilesToolbar = ({ repoID }) => {
+const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const metadataRef = useRef([]);
   const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
@@ -36,9 +35,7 @@ const GalleryFilesToolbar = ({ repoID }) => {
   }, [eventBus]);
 
   const handleDownload = useCallback(() => {
-    const selectedImages = records;
-    if (!selectedImages.length) return;
-    const list = selectedImages.map(record => {
+    const list = records.map(record => {
       const { _parent_dir: parentDir, _name: fileName } = record || {};
       const name = parentDir === '/' ? fileName : `${parentDir}/${fileName}`;
       return { name };
@@ -87,10 +84,6 @@ const GalleryFilesToolbar = ({ repoID }) => {
       }
     </div>
   );
-};
-
-GalleryFilesToolbar.propTypes = {
-  repoID: PropTypes.string.isRequired,
 };
 
 export default GalleryFilesToolbar;

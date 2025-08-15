@@ -16,7 +16,7 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
 
   if (type === VIEW_TYPE.GALLERY) {
     return (
-      <GalleryFilesToolbar repoID={repoID} />
+      <GalleryFilesToolbar />
     );
   }
 
