@@ -17,7 +17,7 @@ import { eventBus } from '../../components/common/event-bus';
 import { throttle, getNamePaths } from './utils';
 import ResizeBar from '../../components/resize-bar';
 import {
-  DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
+  DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE_IN_WIKI, MIN_SIDE_PANEL_RATE
 } from '../../components/resize-bar/constants';
 
 import '../../css/layout.css';
@@ -376,7 +376,7 @@ class Wiki extends Component {
   onResizeMouseMove = (e) => {
     let rate = e.nativeEvent.clientX / window.innerWidth;
     this.setState({
-      sidePanelRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE), MIN_SIDE_PANEL_RATE),
+      sidePanelRate: Math.max(Math.min(rate, MAX_SIDE_PANEL_RATE_IN_WIKI), MIN_SIDE_PANEL_RATE),
     });
   };
 
