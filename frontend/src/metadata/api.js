@@ -107,6 +107,11 @@ class MetadataManagerAPI {
     return this.req.get(url, { params: params });
   }
 
+  getRecords(repoID, files) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/batch-records/';
+    return this.req.post(url, { files: files });
+  }
+
   modifyRecord(repoID, { recordId, parentDir, fileName }, updateData) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
     let data = {
