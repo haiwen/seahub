@@ -140,9 +140,10 @@ class TipMessage extends React.Component {
       return <span className="tip-message">{gettext('Saving...')}</span>;
     }
 
-    if (!isSaving && isSaved) {
-      return <span className="tip-message">{gettext('All changes saved')}</span>;
-    }
+    // if (!isSaving && isSaved) {
+    //   return <span className="tip-message">{gettext('All changes saved')}</span>;
+    // }
+
     if (lastSavedAt) {
       return (
         <span className='tip-message'>
