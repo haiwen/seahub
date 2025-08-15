@@ -12,6 +12,7 @@ import SocketManager from '../socket/socket-manager';
 import { loadFromServerStorage } from '../data/server-storage';
 import { getSyncableElements } from '../data';
 import { gettext } from '../../../utils/constants';
+import isHotkey from 'is-hotkey';
 
 import '@excalidraw/excalidraw/index.css';
 
@@ -120,6 +121,19 @@ const SimpleEditor = () => {
     });
 
   }, [excalidrawAPI]);
+
+  useEffect(() => {
+    const handleHotkeySave = (event) => {
+      if (isHotkey('mod+s', event)) {
+        // delete cmd+s
+        event.preventDefault();
+      }
+    };
+    document.addEventListener('keydown', handleHotkeySave, true);
+    return () => {
+      document.removeEventListener('keydown', handleHotkeySave, true);
+    };
+  }, []);
 
   const handleChange = useCallback((elements, appState, files) => {
     const socketManager = SocketManager.getInstance();
