@@ -82,6 +82,7 @@ const Content = ({
     e.preventDefault();
     e.stopPropagation();
     setIsSelecting(false);
+    setSelectionEnd(null);
   }, []);
 
   const renderDisplayGroup = useCallback((group) => {
