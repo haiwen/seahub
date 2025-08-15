@@ -487,6 +487,10 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/image-rotate/$', RepoImageRotateView.as_view(), name='api-v2.1-repo-image-rotate-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
+    
+    ## user::workflow
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/workflows/$',  WorkflowsView.as_view(), name='api-v2.1-repo-workflows'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/workflows/(?P<workflow_id>\d+)/$',  WorkflowDetailView.as_view(), name='api-v2.1-repo-workflows'),
 
 
     ## user: repo file comments
@@ -618,10 +622,6 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     re_path(r'^api/v2.1/import-confluence/$', ImportConfluenceView.as_view(), name='api-v2.1-import-confluence'),
-    ## user::workflow
-    re_path(r'^api/v2.1/workflows/(?P<repo_id>[-0-9a-f]{36})/$', WorkflowsView.as_view(), name='api-v2.1-workflows'),
-    re_path(r'^api/v2.1/workflows/(?P<repo_id>[-0-9a-f]{36})/(?P<workflow_id>\d+)/$', WorkflowDetailView.as_view(), name='api-v2.1-workflow-detail'),
-
 
     ## user::activities
     re_path(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),

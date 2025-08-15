@@ -45,30 +45,30 @@ class WorkflowAPI {
   }
 
   listWorkflows(repoId) {
-    const url = this.server + '/api/v2.1/workflows/' + repoId + '/';
+    const url = this.server + '/api/v2.1/repos/' + repoId + '/workflows/';
 
     return this.req.get(url);
   }
 
   getWorkflow(repoId, workflowId) {
-    const url = this.server + '/api/v2.1/workflows/' + repoId + '/' + workflowId + '/';
+    const url = this.server + '/api/v2.1/repos/' + repoId + '/workflows/' + workflowId + '/';
     return this.req.get(url);
   }
 
   createWorkflow(repoId, data) {
-    const url = this.server + '/api/v2.1/workflows/' + repoId + '/';
+    const url = this.server + '/api/v2.1/repos/' + repoId + '/workflows/';
     return this.req.post(url, data);
   }
 
   // Update an existing workflow
   updateWorkflow(repoId, workflowId, data) {
-    const url = this.server + '/api/v2.1/workflows/' + repoId + '/' + workflowId + '/';
+    const url = this.server + '/api/v2.1/repos/' + repoId + '/workflows/' + workflowId + '/';
     return this.req.put(url, data);
   }
 
   // Delete a workflow
   deleteWorkflow(repoId, workflowId) {
-    const url = this.server + '/api/v2.1/workflows/' + repoId + '/' + workflowId + '/';
+    const url = this.server + '/api/v2.1/repos/' + repoId + '/workflows/' + workflowId + '/';
     return this.req.delete(url);
   }
 

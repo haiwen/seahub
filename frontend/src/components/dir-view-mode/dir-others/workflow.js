@@ -652,7 +652,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
       const res = await workflowAPI.createWorkflow(repoId, {
         name,
         graph: JSON.stringify({ nodes: [], edges: [] }),
-        is_valid: true
       });
       const newWf = res?.data;
       if (newWf?.id) {
@@ -815,7 +814,6 @@ function SimpleWorkflowEditor({ open = true, onClose, repoId }) {
       name: workflowName,
       graph: JSON.stringify({ nodes, edges }),
       trigger_from: triggerFrom,
-      is_valid: true
     };
 
     try {
