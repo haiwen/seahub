@@ -1569,6 +1569,8 @@ class LibContentView extends React.Component {
   };
 
   onSelectedDirentListUpdate = (newSelectedDirentList, lastSelectedIndex = null) => {
+    const shouldShowDetail = newSelectedDirentList.length > 1;
+
     this.setState({
       direntList: this.state.direntList.map(dirent => {
         return new Dirent({
@@ -1582,6 +1584,11 @@ class LibContentView extends React.Component {
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,
       isAllDirentSelected: newSelectedDirentList.length === this.state.direntList.length,
+      isDirentDetailShow: shouldShowDetail ? true : this.state.isDirentDetailShow,
+    }, () => {
+      if (shouldShowDetail) {
+        localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, 'true');
+      }
     });
   };
 
@@ -2378,7 +2385,7 @@ class LibContentView extends React.Component {
     }
 
     let detailPath = this.state.path;
-    if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE) {
+    if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE && this.state.selectedDirentList.length === 0) {
       detailPath = Utils.getDirName(this.state.path);
     }
 
@@ -2577,6 +2584,7 @@ class LibContentView extends React.Component {
                           repoID={this.props.repoID}
                           currentRepoInfo={{ ...this.state.currentRepoInfo }}
                           dirent={detailDirent}
+                          selectedDirents={this.state.selectedDirentList}
                           repoTags={this.state.repoTags}
                           fileTags={this.state.isViewFile ? this.state.fileTags : []}
                           onFileTagChanged={this.onFileTagChanged}

@@ -3,12 +3,14 @@ from .apis import MetadataRecognizeFaces, MetadataRecords, MetadataManage, Metad
     MetadataFolders, MetadataViews, MetadataViewsMoveView, MetadataViewsDetailView, MetadataViewsDuplicateView, FacesRecords, \
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
-    PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView
+    PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView, \
+    MetadataBatchRecords
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
     re_path(r'^records/$', MetadataRecords.as_view(), name='api-v2.1-metadata-records'),
     re_path(r'^record/$', MetadataRecord.as_view(), name='api-v2.1-metadata-record-info'),
+    re_path(r'^batch-records/$', MetadataBatchRecords.as_view(), name='api-v2.1-metadata-batch-records'),
     re_path(r'^columns/$', MetadataColumns.as_view(), name='api-v2.1-metadata-columns'),
 
     # view
