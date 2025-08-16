@@ -9,6 +9,7 @@ import MultipleSelectEditor from './multiple-select-editor';
 import CollaboratorEditor from './collaborator-editor';
 import LongTextEditor from './long-text-editor';
 import TagsEditor from './tags-editor';
+import TableGeolocationEditor from './geolocation-editor/table-geolocation-editor';
 import { lang } from '../../../utils/constants';
 import { CellType } from '../../constants';
 
@@ -42,6 +43,9 @@ const Editor = React.forwardRef((props, ref) => {
     }
     case CellType.TAGS: {
       return (<TagsEditor ref={ref} { ...props } />);
+    }
+    case CellType.GEOLOCATION: {
+      return (<TableGeolocationEditor ref={ref} { ...props } />);
     }
     case CellType.LINK: {
       return null;

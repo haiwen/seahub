@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import ClickOutside from '../../../../components/click-outside';
 import Editor from '../editor';
 import { Utils } from '../../../../utils/utils';
-import { isCellValueChanged, getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds } from '../../../utils/cell';
+import { isCellValueChanged, getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds, getFileNameFromRecord } from '../../../utils/cell';
 import { canEditCell, getColumnOriginName } from '../../../utils/column';
 import { CellType, metadataZIndexes, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS } from '../../../constants';
 
@@ -65,6 +65,14 @@ class PopupEditorContainer extends React.Component {
   createEditor = () => {
     const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, onSelectTag, onDeselectTag } = this.props;
     const readOnly = !canEditCell(column, record, true) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
+
+    if (column.type === CellType.GEOLOCATION) {
+      const fileName = getFileNameFromRecord(record);
+      if (!Utils.imageCheck(fileName)) {
+        return null;
+      }
+    }
+
     const value = this.getInitialValue(readOnly);
 
     let editorProps = {
@@ -146,10 +154,12 @@ class PopupEditorContainer extends React.Component {
     const columnName = getColumnOriginName(column);
     const { key: columnKey } = column;
     let oldValue = originalOldCellValue;
-    if (this.getEditor().getOldValue) {
+
+    if (this.getEditor() && this.getEditor().getOldValue) {
       const original = this.getEditor().getOldValue();
       oldValue = original[Object.keys(original)[0]];
     }
+
     const oldRowData = { [columnName]: oldValue };
     const originalOldRowData = { [columnKey]: originalOldCellValue }; // { [column.key]: cellValue }
     return { oldRowData, originalOldRowData };
@@ -161,6 +171,16 @@ class PopupEditorContainer extends React.Component {
     if (!record._id) return;
     const { key: columnKey, type: columnType } = column;
     if (columnType === CellType.TAGS) return;
+    if (columnType === CellType.GEOLOCATION) {
+      // For non-image files, there might be no editor, so check before calling onClose
+      if (this.getEditor() && this.getEditor().onClose) {
+        this.getEditor().onClose();
+      }
+      return;
+    }
+
+    if (!this.getEditor()) return;
+
     const newValue = this.getEditor().getValue();
     let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
     if (columnType === CellType.SINGLE_SELECT) {
@@ -203,6 +223,8 @@ class PopupEditorContainer extends React.Component {
   };
 
   isNewValueValid = (value) => {
+    if (!this.getEditor()) return true;
+
     if (Utils.isFunction(this.getEditor().validate)) {
       const isValid = this.getEditor().validate(value);
       this.setState({ isInvalid: !isValid });
@@ -229,6 +251,12 @@ class PopupEditorContainer extends React.Component {
   };
 
   render() {
+    const editor = this.createEditor();
+
+    if (!editor) {
+      return null;
+    }
+
     return (
       <ClickOutside onClickOutside={this.onClickOutside}>
         <div
@@ -237,7 +265,7 @@ class PopupEditorContainer extends React.Component {
           onContextMenu={this.handleRightClick}
           ref={this.props.innerRef}
         >
-          {this.createEditor()}
+          {editor}
         </div>
       </ClickOutside>
     );
