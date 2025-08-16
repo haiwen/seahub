@@ -35,7 +35,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const scrollContainer = useRef(null);
   const lastState = useRef({ scrollPos: 0 });
 
-  const { repoID, updateCurrentDirent } = useMetadataView();
+  const { repoID, updateCurrentDirent, updateSelectedRecordIds } = useMetadataView();
   const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
   const canPreview = window.sfMetadataContext.canPreview();
 
@@ -191,12 +191,19 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
   }, [metadata, updateCurrentDirent]);
 
+  const updateSelectedImages = useCallback((selectedImages) => {
+    const ids = selectedImages.map(item => item.id);
+    updateSelectedRecordIds(ids);
+  }, [updateSelectedRecordIds]);
+
   const handleClick = useCallback((event, image) => {
     if (event.metaKey || event.ctrlKey) {
-      setSelectedImages(prev =>
-        prev.includes(image) ? prev.filter(img => img !== image) : [...prev, image]
-      );
+      const updatedSelectedImages = selectedImages.includes(image)
+        ? selectedImages.filter(img => img !== image)
+        : [...selectedImages, image];
+      setSelectedImages(updatedSelectedImages);
       updateSelectedImage(image);
+      updateSelectedImages(updatedSelectedImages);
       return;
     }
     if (event.shiftKey && lastSelectedImage) {
@@ -205,14 +212,18 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       const start = Math.min(lastSelectedIndex, currentIndex);
       const end = Math.max(lastSelectedIndex, currentIndex);
       const range = images.slice(start, end + 1);
-      setSelectedImages(prev => Array.from(new Set([...prev, ...range])));
+      const updatedSelectedImages = Array.from(new Set([...selectedImages, ...range]));
+      setSelectedImages(updatedSelectedImages);
       updateSelectedImage(null);
+      updateSelectedImages(updatedSelectedImages);
       return;
     }
-    setSelectedImages([image]);
+    const updatedSelectedImages = [image];
+    setSelectedImages(updatedSelectedImages);
     updateSelectedImage(image);
     setLastSelectedImage(image);
-  }, [images, updateSelectedImage, lastSelectedImage]);
+    updateSelectedImages(updatedSelectedImages);
+  }, [images, selectedImages, updateSelectedImage, lastSelectedImage, updateSelectedImages]);
 
   const handleDoubleClick = useCallback((event, image) => {
     event.preventDefault();
@@ -231,28 +242,40 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     const index = images.findIndex(item => item.id === image.id);
     if (isNaN(index) || index === -1) return;
 
-    setSelectedImages(prev => prev.length < 2 ? [image] : [...prev]);
-  }, [images]);
+    const updatedSelectedImages = selectedImages.length < 2 ? [image] : [...selectedImages];
+    setSelectedImages(updatedSelectedImages);
+    updateSelectedImages(updatedSelectedImages);
+  }, [images, selectedImages, updateSelectedImages]);
 
   const moveToPrevImage = useCallback(() => {
     const imageItemsLength = images.length;
     const selectedImage = images[(imageIndex + imageItemsLength - 1) % imageItemsLength];
     setImageIndex((prevState) => (prevState + imageItemsLength - 1) % imageItemsLength);
-    setSelectedImages([selectedImage]);
+    const updatedSelectedImages = [selectedImage];
+    setSelectedImages(updatedSelectedImages);
     updateSelectedImage(selectedImage);
-  }, [images, imageIndex, updateSelectedImage]);
+    updateSelectedImages(updatedSelectedImages);
+  }, [images, imageIndex, updateSelectedImage, updateSelectedImages]);
 
   const moveToNextImage = useCallback(() => {
     const imageItemsLength = images.length;
     const selectedImage = images[(imageIndex + 1) % imageItemsLength];
     setImageIndex((prevState) => (prevState + 1) % imageItemsLength);
-    setSelectedImages([selectedImage]);
+    const updatedSelectedImages = [selectedImage];
+    setSelectedImages(updatedSelectedImages);
     updateSelectedImage(selectedImage);
-  }, [images, imageIndex, updateSelectedImage]);
+    updateSelectedImages(updatedSelectedImages);
+  }, [images, imageIndex, updateSelectedImage, updateSelectedImages]);
 
   const handleImageSelection = useCallback((selectedImages) => {
     setSelectedImages(selectedImages);
-  }, []);
+    updateSelectedImages(selectedImages);
+  }, [updateSelectedImages]);
+
+  const selectNone = useCallback(() => {
+    setSelectedImages([]);
+    updateSelectedImages([]);
+  }, [updateSelectedImages]);
 
   const closeImagePopup = useCallback(() => {
     setIsImagePopupOpen(false);
@@ -264,26 +287,29 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       success_callback: () => {
         updateCurrentDirent();
         setSelectedImages([]);
+        updateSelectedImages([]);
       }
     });
-  }, [onDelete, updateCurrentDirent]);
+  }, [onDelete, updateCurrentDirent, updateSelectedImages]);
 
   const handleRemoveSelectedImages = useCallback((selectedImages) => {
     if (!selectedImages.length) return;
     onRemoveImage && onRemoveImage(selectedImages, () => {
       updateCurrentDirent();
       setSelectedImages([]);
+      updateSelectedImages([]);
     });
-  }, [onRemoveImage, updateCurrentDirent]);
+  }, [onRemoveImage, updateCurrentDirent, updateSelectedImages]);
 
   const handleMakeSelectedAsCoverPhoto = useCallback((selectedImage) => {
     onSetPeoplePhoto(selectedImage, {
       success_callback: () => {
         updateCurrentDirent();
         setSelectedImages([]);
+        updateSelectedImages([]);
       }
     });
-  }, [onSetPeoplePhoto, updateCurrentDirent]);
+  }, [onSetPeoplePhoto, updateCurrentDirent, updateSelectedImages]);
 
   const handleClickOutside = useCallback((event) => {
     const className = getEventClassName(event);
@@ -306,6 +332,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
     if (newImageItems.length === 0) {
       setSelectedImages([]);
+      updateSelectedImages([]);
       setIsImagePopupOpen(false);
       setImageIndex(0);
     } else {
@@ -314,9 +341,11 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       setImageIndex(newIndex);
     }
 
-    setSelectedImages(newSelectedImage ? [newSelectedImage] : []);
+    const updatedSelectedImages = newSelectedImage ? [newSelectedImage] : [];
+    setSelectedImages(updatedSelectedImages);
     updateSelectedImage(newSelectedImage);
-  }, [selectedImages, images, onDelete, updateSelectedImage]);
+    updateSelectedImages(updatedSelectedImages);
+  }, [selectedImages, images, onDelete, updateSelectedImage, updateSelectedImages]);
 
   const handleDateTagClick = useCallback((event, groupName) => {
     event.preventDefault();
@@ -348,6 +377,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       EVENT_BUS_TYPE.SWITCH_GALLERY_GROUP_BY,
       (mode) => {
         setSelectedImages([]);
+        updateSelectedImages([]);
         setMode(mode);
         lastState.current = { ...lastState.current, mode };
         window.sfMetadataContext.localStorage.setItem(STORAGE_GALLERY_DATE_MODE_KEY, mode);
@@ -378,9 +408,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       setZoomGear(zoomGear);
     });
 
+    const unsubscribeSelectNone = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, selectNone);
+
     return () => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
+      unsubscribeSelectNone();
       switchGalleryModeSubscribe();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps

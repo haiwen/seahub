@@ -2311,7 +2311,7 @@ class LibContentView extends React.Component {
   render() {
     const { repoID } = this.props;
     let { currentRepoInfo, userPerm, isCopyMoveProgressDialogShow, isDeleteFolderDialogOpen, errorMsg,
-      path, usedRepoTags, isDirentSelected, currentMode, currentNode } = this.state;
+      path, usedRepoTags, isDirentSelected, currentMode, currentNode, viewId } = this.state;
 
     if (this.state.libNeedDecrypt) {
       return (
@@ -2417,7 +2417,7 @@ class LibContentView extends React.Component {
                         })}>
                         {isDirentSelected ? (
                           currentMode === TAGS_MODE || currentMode === METADATA_MODE ? (
-                            <MetadataPathToolbar repoID={repoID} repoInfo={currentRepoInfo} mode={currentMode} path={path} />
+                            <MetadataPathToolbar repoID={repoID} repoInfo={currentRepoInfo} mode={currentMode} path={path} viewId={viewId} />
                           ) : (
                             <SelectedDirentsToolbar
                               repoID={this.props.repoID}

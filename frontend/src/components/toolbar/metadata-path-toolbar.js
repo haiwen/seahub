@@ -1,21 +1,38 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { TAGS_MODE } from '../dir-view-mode/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
+import { useMetadata } from '../../metadata/hooks';
+import { VIEW_TYPE } from '../../metadata/constants';
 import AllTagsToolbar from './all-tags-toolbar';
 import TagFilesToolbar from './tag-files-toolbar';
 import TableFilesToolbar from './table-files-toolbar';
+import GalleryFilesToolbar from './gallery-files-toolbar';
 
-const MetadataPathToolbar = ({ repoID, repoInfo, mode, path }) => {
+const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
+  const { idViewMap } = useMetadata();
+  const view = useMemo(() => idViewMap[viewId], [viewId, idViewMap]);
+  const type = view?.type;
+
+  if (type === VIEW_TYPE.GALLERY) {
+    return (
+      <GalleryFilesToolbar />
+    );
+  }
+
+  if (type === VIEW_TYPE.TABLE) {
+    return (
+      <TableFilesToolbar repoID={repoID} />
+    );
+  }
+
   if (mode === TAGS_MODE) {
     const isAllTagsView = path.split('/').pop() === ALL_TAGS_ID;
     if (isAllTagsView) return <AllTagsToolbar />;
 
     return <TagFilesToolbar currentRepoInfo={repoInfo} />;
   }
-  return (
-    <TableFilesToolbar repoID={repoID} />
-  );
+
 };
 
 MetadataPathToolbar.propTypes = {

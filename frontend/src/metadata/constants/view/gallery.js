@@ -18,3 +18,12 @@ export const GALLERY_DATE_MODE = {
 export const STORAGE_GALLERY_DATE_MODE_KEY = 'gallery_date_mode';
 
 export const STORAGE_GALLERY_ZOOM_GEAR_KEY = 'gallery_zoom_gear';
+
+export const GALLERY_OPERATION_KEYS = {
+  DOWNLOAD: 'download',
+  DELETE: 'delete',
+  DUPLICATE: 'duplicate',
+  REMOVE: 'remove',
+  SET_PEOPLE_PHOTO: 'set_people_photo',
+  ADD_PHOTO_TO_GROUPS: 'add_photo_to_groups'
+};
