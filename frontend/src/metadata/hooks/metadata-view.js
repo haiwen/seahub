@@ -38,7 +38,7 @@ export const MetadataViewProvider = ({
   const { collaborators, collaboratorsCache } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
   const { onOCR: OCRAPI, generateDescription, extractFilesDetails, faceRecognition, generateFileTags: generateFileTagsAPI } = useMetadataAIOperations();
-  const { handleMove } = useFileOperations();
+  const { handleMove, handleCopy, handleDownload } = useFileOperations();
   const { globalHiddenColumns } = useMetadataStatus();
 
   const storeRef = useRef(null);
@@ -419,16 +419,211 @@ export const MetadataViewProvider = ({
     });
   }, [updateFileTags, generateFileTagsAPI]);
 
-  const handleMoveRecord = (record) => {
-    const path = getParentDirFromRecord(record);
-    const currentRecordId = getRecordIdFromRecord(record);
-    const fileName = getFileNameFromRecord(record);
-    const dirent = new Dirent({ name: fileName });
-    const callback = (...params) => {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-      moveRecord && moveRecord(currentRecordId, ...params);
+  // Helper function to check if all records are in the same folder
+  const areRecordsInSameFolder = useCallback((records) => {
+    if (!records || records.length <= 1) return true;
+    const firstPath = getParentDirFromRecord(records[0]);
+    return records.every(record => getParentDirFromRecord(record) === firstPath);
+  }, []);
+
+  // Helper function to calculate update data for batch move operations
+  const calculateBatchMoveUpdateData = useCallback((records, targetRepoId, targetParentPath, sourceParentPath) => {
+    const { rows } = storeRef.current.data || metadata;
+    let needDeletedRowIds = [];
+    let updateRowIds = [];
+    let idRowUpdates = {};
+    let idOldRowData = {};
+
+    records.forEach(record => {
+      const rowId = getRecordIdFromRecord(record);
+      const isDir = checkIsDir(record);
+      const oldName = getFileNameFromRecord(record);
+      const oldParentPath = Utils.joinPath(sourceParentPath, oldName);
+
+      if (repoID === targetRepoId) {
+        // Same repo - update parent directory
+        const newName = getUniqueFileName(rows, targetParentPath, oldName);
+        updateRowIds.push(rowId);
+        idRowUpdates[rowId] = {
+          [PRIVATE_COLUMN_KEY.PARENT_DIR]: targetParentPath,
+          [PRIVATE_COLUMN_KEY.FILE_NAME]: newName
+        };
+        idOldRowData[rowId] = {
+          [PRIVATE_COLUMN_KEY.PARENT_DIR]: sourceParentPath,
+          [PRIVATE_COLUMN_KEY.FILE_NAME]: oldName
+        };
+
+        // Handle subdirectories if moving a folder
+        if (isDir) {
+          const newPath = Utils.joinPath(targetParentPath, newName);
+          rows.forEach((row) => {
+            const parentDir = getParentDirFromRecord(row);
+            if (row && parentDir.startsWith(oldParentPath)) {
+              const updateRowId = getRecordIdFromRecord(row);
+              updateRowIds.push(updateRowId);
+              idRowUpdates[updateRowId] = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir.replace(oldParentPath, newPath) };
+              idOldRowData[updateRowId] = { [PRIVATE_COLUMN_KEY.PARENT_DIR]: parentDir };
+            }
+          });
+        }
+      } else {
+        // Different repo - delete records
+        needDeletedRowIds.push(rowId);
+        if (isDir) {
+          rows.forEach((row) => {
+            const parentDir = getParentDirFromRecord(row);
+            if (row && parentDir.startsWith(oldParentPath)) {
+              const id = getRecordIdFromRecord(row);
+              needDeletedRowIds.push(id);
+            }
+          });
+        }
+      }
+    });
+
+    return {
+      modify_row_ids: updateRowIds,
+      modify_id_row_updates: idRowUpdates,
+      modify_id_old_row_data: idOldRowData,
+      delete_row_ids: needDeletedRowIds,
     };
-    handleMove(path, dirent, false, callback);
+  }, [metadata, repoID]);
+
+  const handleMoveRecords = (records) => {
+    if (records.length > 1) {
+      if (!areRecordsInSameFolder(records)) {
+        toaster.danger(gettext('Can only move files that are in the same folder'));
+        return;
+      }
+
+      const path = getParentDirFromRecord(records[0]);
+      const recordIds = records.map(r => getRecordIdFromRecord(r));
+      const dirents = records.map(r => getFileNameFromRecord(r));
+      const selectedDirentList = records.map(r => {
+        const fileName = getFileNameFromRecord(r);
+        return new Dirent({ name: fileName, is_dir: checkIsDir(r) });
+      });
+
+      const callback = (destRepo, destDirentPath, isByDialog = false) => {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        const updateData = calculateBatchMoveUpdateData(records, destRepo.repo_id, destDirentPath, path);
+
+        storeRef.current.batchMoveRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, updateData, {
+          success_callback: (operation) => {
+            if (selectedDirentList.length > 0) {
+              moveFileCallback && moveFileCallback(
+                repoID,
+                destRepo,
+                selectedDirentList[0],
+                destDirentPath,
+                path,
+                operation.task_id,
+                isByDialog,
+                {
+                  isBatchOperation: true,
+                  batchFileNames: dirents,
+                }
+              );
+            }
+          },
+          fail_callback: (error) => {
+            error && toaster.danger(error);
+          }
+        });
+      };
+      handleMove(path, selectedDirentList, true, callback);
+    } else {
+      // Single record
+      const path = getParentDirFromRecord(records[0]);
+      const currentRecordId = getRecordIdFromRecord(records[0]);
+      const fileName = getFileNameFromRecord(records[0]);
+      const dirent = new Dirent({ name: fileName, is_dir: checkIsDir(records[0]) });
+      const callback = (...params) => {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        moveRecord && moveRecord(currentRecordId, ...params);
+      };
+      handleMove(path, dirent, false, callback);
+    }
+  };
+
+  const handleCopyRecords = (records) => {
+    if (records.length > 1) {
+      if (!areRecordsInSameFolder(records)) {
+        toaster.danger(gettext('Can only copy files that are in the same folder'));
+        return;
+      }
+
+      const path = getParentDirFromRecord(records[0]);
+      const recordIds = records.map(r => getRecordIdFromRecord(r));
+      const dirents = records.map(r => getFileNameFromRecord(r));
+      const selectedDirentList = records.map(r => {
+        const fileName = getFileNameFromRecord(r);
+        return new Dirent({ name: fileName, is_dir: checkIsDir(r) });
+      });
+
+      const callback = (destRepo, destDirentPath, isByDialog = false) => {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        storeRef.current.batchDuplicateRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, {
+          success_callback: (operation) => {
+            if (selectedDirentList.length > 0) {
+              copyFileCallback && copyFileCallback(
+                repoID,
+                destRepo,
+                selectedDirentList[0],
+                destDirentPath,
+                path,
+                operation.task_id,
+                isByDialog,
+                {
+                  isBatchOperation: true,
+                  batchFileNames: dirents,
+                }
+              );
+            }
+
+            if (repoID === destRepo.repo_id) {
+              delayReloadMetadata();
+            }
+          },
+          fail_callback: (error) => {
+            error && toaster.danger(error);
+          }
+        });
+      };
+      handleCopy(path, selectedDirentList, true, callback);
+    } else {
+      // Single record
+      const path = getParentDirFromRecord(records[0]);
+      const currentRecordId = getRecordIdFromRecord(records[0]);
+      const fileName = getFileNameFromRecord(records[0]);
+      const dirent = new Dirent({ name: fileName, is_dir: checkIsDir(records[0]) });
+      const callback = (...params) => {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        duplicateRecord && duplicateRecord(currentRecordId, ...params);
+      };
+      handleCopy(path, dirent, false, callback);
+    }
+  };
+
+  const handleDownloadRecords = (recordIds) => {
+    if (recordIds.length === 0) return;
+
+    const records = recordIds.map(id => storeRef.current?.data?.id_row_map?.[id]).filter(Boolean);
+    if (records.length === 0) return;
+
+    if (!areRecordsInSameFolder(records)) {
+      toaster.danger(gettext('Can only download files that are in the same folder'));
+      return;
+    }
+
+    const path = getParentDirFromRecord(records[0]);
+    const direntList = records.map(record => {
+      const fileName = getFileNameFromRecord(record);
+      return { name: fileName, is_dir: checkIsDir(record) };
+    });
+
+    handleDownload(path, direntList);
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   };
 
   const getSearchableValue = useCallback((row, column, collaborators, tagsData, collaboratorsCache) => {
@@ -639,7 +834,9 @@ export const MetadataViewProvider = ({
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
     const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, onOCR);
-    const unsubscribeToggleMoveDialog = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, handleMoveRecord);
+    const unsubscribeToggleMoveDialog = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, handleMoveRecords);
+    const unsubscribeToggleCopyDialog = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, handleCopyRecords);
+    const unsubscribeDownloadRecords = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, handleDownloadRecords);
     const unsubscribeSearchRows = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_ROWS, handleSearchRows);
 
     return () => {
@@ -669,6 +866,8 @@ export const MetadataViewProvider = ({
       unsubscribeUpdateDescription();
       unsubscribeOCR();
       unsubscribeToggleMoveDialog();
+      unsubscribeToggleCopyDialog();
+      unsubscribeDownloadRecords();
       unsubscribeSearchRows();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
