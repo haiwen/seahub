@@ -78,7 +78,7 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_PASSWORD_MIN_LENGTH, \
     SHARE_LINK_FORCE_USE_PASSWORD, SHARE_LINK_PASSWORD_STRENGTH_LEVEL, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL, \
-    ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, EXCALIDRAW_SERVER_URL, ENABLE_SEADOC
+    ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, ENABLE_SEADOC
 from seahub.constants import PERMISSION_INVISIBLE
 
 
@@ -910,7 +910,6 @@ def view_lib_file(request, repo_id, path):
         return_dict['domain'] = get_current_site(request).domain
         return_dict['serviceUrl'] = get_service_url().rstrip('/')
         return_dict['language_code'] = get_language()
-        return_dict['excalidraw_server_url'] = EXCALIDRAW_SERVER_URL
         return_dict['share_link_expire_days_Default'] = SHARE_LINK_EXPIRE_DAYS_DEFAULT
         return_dict['share_link_expire_days_min'] = SHARE_LINK_EXPIRE_DAYS_MIN
         return_dict['share_link_expire_days_max'] = SHARE_LINK_EXPIRE_DAYS_MAX
