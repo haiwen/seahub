@@ -81,6 +81,7 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     ENABLE_MULTIPLE_OFFICE_SUITE, OFFICE_SUITE_LIST, EXCALIDRAW_SERVER_URL, ENABLE_SEADOC
 from seahub.constants import PERMISSION_INVISIBLE
 
+
 # wopi
 try:
     from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
