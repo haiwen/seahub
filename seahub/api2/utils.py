@@ -8,7 +8,7 @@ import json
 import re
 import logging
 import jwt
-
+import requests
 from collections import defaultdict
 from functools import wraps
 from django.core.cache import cache
@@ -34,8 +34,11 @@ from seahub.utils import get_user_repos
 from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
 import seahub.settings as settings
+from seahub.tags.models import FileUUIDMap
 
 JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
+NOTIFICATION_SERVER_URL = getattr(settings, 'NOTIFICATION_SERVER_URL', '')
+ENABLE_NOTIFICATION_SERVER = getattr(settings, 'ENABLE_NOTIFICATION_SERVER', '')
 
 logger = logging.getLogger(__name__)
 
@@ -364,11 +367,9 @@ def is_valid_internal_jwt(auth):
 
 
 def send_comment_update_event(file_uuid):
-    import requests
-    from seahub.tags.models import FileUUIDMap
-    if not settings.ENABLE_NOTIFICATION_SERVER:
+    if not ENABLE_NOTIFICATION_SERVER:
         return
-    if not settings.NOTIFICATION_SERVER_URL:
+    if not NOTIFICATION_SERVER_URL:
         return
     uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
     if not uuid_map:
