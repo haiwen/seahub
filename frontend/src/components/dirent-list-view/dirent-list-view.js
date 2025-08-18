@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard, enableExcalidraw } from '../../utils/constants';
+import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
@@ -385,6 +385,7 @@ class DirentListView extends React.Component {
     const { currentRepoInfo } = this.props;
     if (enableSeadoc && !currentRepoInfo.encrypted) {
       direntsContainerMenuList.push(NEW_SEADOC_FILE);
+      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
     direntsContainerMenuList.push(
       NEW_MARKDOWN_FILE,
@@ -395,10 +396,6 @@ class DirentListView extends React.Component {
 
     if (enableWhiteboard) {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
-    }
-
-    if (enableExcalidraw) {
-      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
 
     if (this.props.selectedDirentList.length === 0) {

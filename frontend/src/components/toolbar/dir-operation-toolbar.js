@@ -4,7 +4,7 @@ import copy from 'copy-to-clipboard';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { enableExcalidraw, enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
+import { enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
 import toaster from '../toast';
 import TipDialog from '../dialog/tip-dailog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
@@ -202,6 +202,7 @@ class DirOperationToolbar extends React.Component {
         ];
         if (enableSeadoc && !repoEncrypted) {
           newSubOpList.push({ 'text': gettext('New SeaDoc File'), 'onClick': () => this.onCreateFile('.sdoc') });
+          newSubOpList.push({ 'text': gettext('New Excalidraw File'), 'onClick': () => this.onCreateFile('.exdraw') });
         }
         newSubOpList.push(
           { 'text': gettext('New Markdown File'), 'onClick': () => this.onCreateFile('.md') },
@@ -211,9 +212,6 @@ class DirOperationToolbar extends React.Component {
         );
         if (enableWhiteboard) {
           newSubOpList.push({ 'text': gettext('New Whiteboard File'), 'onClick': () => this.onCreateFile('.draw') });
-        }
-        if (enableExcalidraw) {
-          newSubOpList.push({ 'text': gettext('New Excalidraw File'), 'onClick': () => this.onCreateFile('.exdraw') });
         }
         opList.push({
           'icon': 'new',

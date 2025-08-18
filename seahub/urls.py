@@ -1084,10 +1084,6 @@ if getattr(settings, 'ENABLE_CAS', False):
 if getattr(settings, 'ENABLE_SEADOC', False):
     urlpatterns += [
         re_path(r'^api/v2.1/seadoc/', include('seahub.seadoc.urls')),
-    ]
-
-if getattr(settings, 'ENABLE_EXCALIDRAW', False):
-    urlpatterns += [
         re_path(r'^api/v2.1/exdraw/', include('seahub.exdraw.urls')),
     ]
 

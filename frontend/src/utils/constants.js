@@ -104,7 +104,6 @@ export const enableSeadoc = window.app.pageOptions.enableSeadoc;
 export const enableMetadataManagement = window.app.pageOptions.enableMetadataManagement;
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI;
 export const enableWhiteboard = window.app.pageOptions.enableWhiteboard;
-export const enableExcalidraw = window.app.pageOptions.enableExcalidraw;
 export const enableMultipleOfficeSuite = window.app.pageOptions.enableMultipleOfficeSuite;
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
