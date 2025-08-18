@@ -30,6 +30,7 @@ from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.tags.models import FileUUIDMap
 from seahub.utils import get_user_repos
 from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
@@ -361,3 +362,39 @@ def is_valid_internal_jwt(auth):
             return True
 
     return False
+
+
+def send_comment_update_event(file_uuid):
+    import requests
+    if not settings.ENABLE_NOTIFICATION_SERVER:
+        return
+    if not settings.NOTIFICATION_SERVER_URL:
+        return
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+    if not uuid_map:
+        return
+    repo_id = uuid_map.repo_id
+    event_data = {
+        "type": "comment-update",
+        "content": {
+            "repo_id": repo_id,
+            "type": "comment_updated",
+            "file_uuid": file_uuid,
+            "file_path": ""
+        }
+    }
+    notification_server_event_url = "%s/events" % settings.NOTIFICATION_SERVER_URL
+    payload = {
+        'exp': int(time.time()) + 500
+    }
+    jwt_token = jwt.encode(payload, JWT_PRIVATE_KEY, algorithm='HS256')
+    headers = {
+        'Authorization': 'Token %s' % jwt_token,
+        
+    }
+    try:
+        resp = requests.post(notification_server_event_url, json=event_data, headers=headers)
+        if not resp.ok:
+            logger.error(f'Send comment update event failed: {resp.content}')
+    except Exception as e:
+        logger.error(f'Send comment update event error. ERROR: {e}')

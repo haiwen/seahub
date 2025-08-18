@@ -12,7 +12,7 @@ from zipfile import ZipFile, is_zipfile
 from seaserv import seafile_api, USE_GO_FILESERVER
 
 from seahub.tags.models import FileUUIDMap
-from seahub.settings import SEADOC_PRIVATE_KEY, NOTIFICATION_SERVER_URL, JWT_PRIVATE_KEY, ENABLE_NOTIFICATION_SERVER
+from seahub.settings import SEADOC_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url, \
     get_inner_fileserver_root
 from seahub.utils.auth import AUTHORIZATION_PREFIX
@@ -424,40 +424,3 @@ def export_sdoc(uuid_map, username):
         raise Exception('make zip failed. ERROR: {}'.format(e))
     logger.info('Create /tmp/sdoc/{}/zip_file.zip success!'.format(doc_uuid))
     return tmp_zip_path
-
-
-def send_comment_update_event(file_uuid):
-    if not ENABLE_NOTIFICATION_SERVER:
-        return
-    if not NOTIFICATION_SERVER_URL:
-        return
-    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
-    if not uuid_map:
-        return
-    repo_id = uuid_map.repo_id
-    event_data = {
-        "type": "comment-update",
-        "content": {
-            "repo_id": repo_id,
-            "type": "comment_updated",
-            "file_uuid": file_uuid,
-            "file_path": ""
-        }
-    }
-    notification_server_event_url = "%s/events" % NOTIFICATION_SERVER_URL
-    payload = {
-        'exp': int(time.time()) + 500
-    }
-    jwt_token = jwt.encode(payload, JWT_PRIVATE_KEY, algorithm='HS256')
-    headers = {
-        'Authorization': 'Token %s' % jwt_token,
-        
-    }
-    try:
-        requests.post(notification_server_event_url, json=event_data, headers=headers)
-    except Exception as e:
-        logger.error(f'Send comment update event failed. ERROR: {e}')
-        
-    
-    
-

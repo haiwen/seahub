@@ -39,7 +39,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.seadoc.utils import is_valid_seadoc_access_token, get_seadoc_upload_link, \
     get_seadoc_download_link, get_seadoc_file_uuid, gen_seadoc_access_token, \
     gen_seadoc_image_parent_path, get_seadoc_asset_upload_link, get_seadoc_asset_download_link, \
-    can_access_seadoc_asset, is_seadoc_revision, ZSDOC, export_sdoc, send_comment_update_event
+    can_access_seadoc_asset, is_seadoc_revision, ZSDOC, export_sdoc
 from seahub.seadoc.settings import SDOC_REVISIONS_DIR, SDOC_IMAGES_DIR
 from seahub.utils.file_types import SEADOC, IMAGE, VIDEO, EXCALIDRAW
 from seahub.utils.file_op import if_locked_by_online_office
@@ -1158,7 +1158,6 @@ class SeadocCommentsView(APIView):
         notification = detail
         notification['to_users'] = to_users
         comment['notification'] = notification
-        send_comment_update_event(file_uuid)
         return Response(comment)
 
 
@@ -1205,7 +1204,6 @@ class SeadocCommentView(APIView):
 
         file_comment.delete()
         SeadocCommentReply.objects.filter(comment_id=comment_id).delete()
-        send_comment_update_event(file_uuid)
         return Response({'success': True})
 
     def put(self, request, file_uuid, comment_id):
@@ -1250,7 +1248,6 @@ class SeadocCommentView(APIView):
 
         comment = file_comment.to_dict()
         comment.update(user_to_dict(file_comment.author, request=request))
-        send_comment_update_event(file_uuid)
         return Response(comment)
 
 
@@ -1372,7 +1369,6 @@ class SeadocCommentRepliesView(APIView):
         notification = detail
         notification['to_users'] = to_users
         data['notification'] = notification
-        send_comment_update_event(file_uuid)
         return Response(data)
 
 
@@ -1423,7 +1419,6 @@ class SeadocCommentReplyView(APIView):
         if not reply:
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
         reply.delete()
-        send_comment_update_event(file_uuid)
         return Response({'success': True})
 
     def put(self, request, file_uuid, comment_id, reply_id):
@@ -1458,7 +1453,6 @@ class SeadocCommentReplyView(APIView):
         data = reply.to_dict()
         data.update(
             user_to_dict(reply.author, request=request))
-        send_comment_update_event(file_uuid)
         return Response(data)
 
 
