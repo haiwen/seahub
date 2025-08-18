@@ -10,8 +10,8 @@ import RateEditor from '../../../metadata/components/detail-editor/rate-editor';
 import metadataAPI from '../../../metadata/api';
 import Loading from '../../loading';
 import { getColumnDisplayName } from '../../../metadata/utils/column';
-import DirentsTagsEditor from './direntsTagsEditor';
-import { getFileObjIdFromRecord, getRecordIdFromRecord } from '../../../metadata/utils/cell';
+import DirentsTagsEditor from './dirents-tags-editor';
+import { getCellValueByColumn, getFileObjIdFromRecord, getRecordIdFromRecord } from '../../../metadata/utils/cell';
 
 import './index.css';
 
@@ -33,7 +33,6 @@ const MultiSelectionDetails = ({
   const onlyFiles = folderCount === 0;
   const hasFiles = fileCount > 0;
 
-  // Memoized filtered arrays to avoid repeated filtering
   const { imageDirents, fileDirents } = useMemo(() => ({
     imageDirents: selectedDirents.filter(dirent =>
       dirent.type === 'file' && Utils.imageCheck(dirent.name)
@@ -41,7 +40,6 @@ const MultiSelectionDetails = ({
     fileDirents: selectedDirents.filter(dirent => dirent.type === 'file')
   }), [selectedDirents]);
 
-  // Get rate and tag columns from metadata
   const { rateField, tagField } = useMemo(() => {
     const rateColumn = { key: PRIVATE_COLUMN_KEY.FILE_RATE, type: CellType.RATE, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.FILE_RATE) };
     const tagColumn = { key: PRIVATE_COLUMN_KEY.TAGS, type: CellType.TAGS, name: getColumnDisplayName(PRIVATE_COLUMN_KEY.TAGS) };
@@ -72,11 +70,20 @@ const MultiSelectionDetails = ({
     metadataAPI.getRecords(repoID, files)
       .then(res => {
         const { results } = res.data;
-        setRecords(results);
+        const orderedRecords = fileDirents.map(dirent => {
+          return results.find(record => {
+            const recordPath = record[PRIVATE_COLUMN_KEY.PARENT_DIR] || '';
+            const recordName = record[PRIVATE_COLUMN_KEY.FILE_NAME] || '';
+            return recordPath === path && recordName === dirent.name;
+          });
+        }).filter(Boolean);
+
+        setRecords(orderedRecords);
         setIsLoading(false);
       })
       .catch (err => {
         setRecords([]);
+        setIsLoading(false);
       });
   }, [enableMetadata, onlyFiles, hasFiles, fileDirents, repoID, path]);
 
@@ -101,18 +108,10 @@ const MultiSelectionDetails = ({
     getRecords();
   }, [getRecords]);
 
-  const commonRating = useMemo(() => {
+  const rate = useMemo(() => {
     if (!records || records.length === 0) return null;
 
-    const ratings = records
-      .map(record => record && rateField ? record[rateField.key] : null)
-      .filter(rating => rating !== null && rating !== undefined);
-
-    if (ratings.length === 0) return null;
-
-    const firstRating = ratings[0];
-    const allSameRating = ratings.every(rating => rating === firstRating);
-    return allSameRating ? firstRating : null;
+    return getCellValueByColumn(records[0], rateField);
   }, [records, rateField]);
 
   const getThumbnailSrc = (dirent) => {
@@ -224,7 +223,7 @@ const MultiSelectionDetails = ({
           {!isLoading && onlyFiles && hasFiles && enableMetadata && (
             <DetailItem field={rateField} className="sf-metadata-property-detail-editor sf-metadata-rate-property-detail-editor">
               <RateEditor
-                value={commonRating}
+                value={rate}
                 field={rateField}
                 onChange={(value) => onChange(PRIVATE_COLUMN_KEY.FILE_RATE, value)}
               />

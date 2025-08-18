@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
 import Editor from '../../../metadata/components/cell-editors/tags-editor';
 import DeleteTag from '../../../metadata/components/cell-editors/tags-editor/delete-tags';
-import { getRowById } from '../../../components/sf-table/utils/table';
+import { getRowById } from '../../sf-table/utils/table';
 import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
 import { getEventClassName } from '../../../utils/dom';
@@ -28,33 +28,17 @@ const DirentsTagsEditor = ({
   const { tagsData, context } = useTags();
   const canEditData = useMemo(() => window.sfMetadataContext && window.sfMetadataContext.canModifyRow() || false, []);
 
-  const commonTags = useMemo(() => {
+  const displayTags = useMemo(() => {
     if (!records || records.length === 0) return [];
 
-    const allFileTags = records.map(record => {
-      const tags = getCellValueByColumn(record, field);
-      return Array.isArray(tags) ? tags : [];
-    });
-
-    if (allFileTags.length === 0) return [];
-
-    let commonTagsArray = allFileTags[0] || [];
-
-    for (let i = 1; i < allFileTags.length; i++) {
-      const currentFileTags = allFileTags[i];
-      commonTagsArray = commonTagsArray.filter(tag => {
-        const tagId = tag.row_id;
-        return currentFileTags.some(fileTag => fileTag.row_id === tagId);
-      });
-    }
-
-    return commonTagsArray;
+    return getCellValueByColumn(records[0], field) || [];
   }, [records, field]);
 
-  const commonTagIds = useMemo(() => {
-    if (!Array.isArray(commonTags) || commonTags.length === 0) return [];
-    return commonTags.filter(item => getRowById(tagsData, item.row_id)).map(item => item.row_id);
-  }, [commonTags, tagsData]);
+  const displayTagIds = useMemo(() => {
+    if (!Array.isArray(displayTags) || displayTags.length === 0) return [];
+
+    return displayTags.filter(tag => getRowById(tagsData, tag.row_id)).map(tag => tag.row_id);
+  }, [displayTags, tagsData]);
 
   const onClick = useCallback((event) => {
     if (!event.target) return;
@@ -128,31 +112,31 @@ const DirentsTagsEditor = ({
   const onDeleteTag = useCallback((tagId, event) => {
     event && event.stopPropagation();
     event && event.nativeEvent && event.nativeEvent.stopImmediatePropagation();
-    const newValue = commonTagIds.slice(0);
-    let optionIdx = commonTagIds.indexOf(tagId);
+    const newValue = displayTagIds.slice(0);
+    let optionIdx = displayTagIds.indexOf(tagId);
     if (optionIdx > -1) {
       newValue.splice(optionIdx, 1);
     }
-    updateBatchTags(newValue, commonTagIds);
+    updateBatchTags(newValue, displayTagIds);
     setShowEditor(false);
-  }, [commonTagIds, updateBatchTags]);
+  }, [displayTagIds, updateBatchTags]);
 
   const onSelectTag = useCallback((tagId) => {
-    const newValue = commonTagIds.slice(0);
+    const newValue = displayTagIds.slice(0);
     if (!newValue.includes(tagId)) {
       newValue.push(tagId);
     }
-    updateBatchTags(newValue, commonTagIds);
-  }, [commonTagIds, updateBatchTags]);
+    updateBatchTags(newValue, displayTagIds);
+  }, [displayTagIds, updateBatchTags]);
 
   const onDeselectTag = useCallback((tagId) => {
-    const newValue = commonTagIds.slice(0);
-    let optionIdx = commonTagIds.indexOf(tagId);
+    const newValue = displayTagIds.slice(0);
+    let optionIdx = displayTagIds.indexOf(tagId);
     if (optionIdx > -1) {
       newValue.splice(optionIdx, 1);
     }
-    updateBatchTags(newValue, commonTagIds);
-  }, [commonTagIds, updateBatchTags]);
+    updateBatchTags(newValue, displayTagIds);
+  }, [displayTagIds, updateBatchTags]);
 
   const renderEditor = useCallback(() => {
     if (!showEditor) return null;
@@ -178,7 +162,7 @@ const DirentsTagsEditor = ({
       >
         <Editor
           saveImmediately={true}
-          value={commonTags}
+          value={displayTags}
           column={{ ...field, width: Math.max(width - 2, 400) }}
           onSelect={onSelectTag}
           onDeselect={onDeselectTag}
@@ -187,7 +171,7 @@ const DirentsTagsEditor = ({
         />
       </Popover>
     );
-  }, [showEditor, field, commonTags, context, canEditData, onSelectTag, onDeselectTag]);
+  }, [showEditor, field, displayTags, context, canEditData, onSelectTag, onDeselectTag]);
 
   return (
     <div
@@ -196,7 +180,7 @@ const DirentsTagsEditor = ({
       ref={ref}
       onClick={openEditor}
     >
-      {commonTagIds.length > 0 && (<DeleteTag value={commonTagIds} tags={tagsData} onDelete={onDeleteTag} />)}
+      {displayTagIds.length > 0 && (<DeleteTag value={displayTagIds} tags={tagsData} onDelete={onDeleteTag} />)}
       {renderEditor()}
     </div>
   );

@@ -1845,7 +1845,7 @@ class LibContentView extends React.Component {
       return item.name !== name;
     });
     this.recalculateSelectedDirents([name], direntList);
-    this.setState({ direntList: direntList });
+    this.setState({ direntList: direntList, currentDirent: null });
   };
 
   // only one scene: The moved items are inside current path
@@ -1859,6 +1859,7 @@ class LibContentView extends React.Component {
       selectedDirentList: [],
       isDirentSelected: false,
       isAllDirentSelected: false,
+      currentDirent: null,
     });
   };
 
