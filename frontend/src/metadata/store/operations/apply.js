@@ -145,6 +145,28 @@ export default function apply(data, operation) {
       }
       return data;
     }
+    case OPERATION_TYPE.BATCH_MOVE_RECORDS: {
+      const { update_data } = operation;
+      const {
+        modify_row_ids: updateRowIds,
+        modify_id_row_updates: idRowUpdates,
+        delete_row_ids: deletedRowIds,
+      } = update_data;
+
+      if (Array.isArray(updateRowIds) && updateRowIds.length > 0) {
+        updateDataByModifyRecords({ id_row_updates: idRowUpdates });
+      }
+
+      if (Array.isArray(deletedRowIds) && deletedRowIds.length > 0) {
+        updateDataByDeleteRecords(deletedRowIds);
+      }
+      return data;
+    }
+    case OPERATION_TYPE.DUPLICATE_RECORD:
+    case OPERATION_TYPE.BATCH_DUPLICATE_RECORDS: {
+      // Duplicate operations don't modify local data immediately
+      return data;
+    }
     case OPERATION_TYPE.MODIFY_FILTERS: {
       const { filter_conjunction, filters, basic_filters } = operation;
       data.view.filter_conjunction = filter_conjunction;

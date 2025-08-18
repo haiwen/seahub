@@ -98,6 +98,20 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.BATCH_MOVE_RECORDS: {
+        const { repo_id, target_repo_id, dirents, target_parent_path, source_parent_path } = operation;
+        seafileAPI.moveDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirents).then(res => {
+          operation.task_id = res.data.task_id || null;
+          callback({ operation });
+        }).catch(error => {
+          const count = dirents.length;
+          const errorMsg = count > 1
+            ? gettext('Failed to move {n} items').replace('{n}', count)
+            : gettext('Failed to move file');
+          callback({ error: errorMsg });
+        });
+        break;
+      }
       case OPERATION_TYPE.DUPLICATE_RECORD: {
         const { row_id, repo_id, target_repo_id, dirent, target_parent_path, source_parent_path } = operation;
         seafileAPI.copyDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirent.name).then(res => {
@@ -107,6 +121,20 @@ class ServerOperator {
           const row = getRowById(data, row_id);
           const isDir = checkIsDir(row);
           callback({ error: isDir ? gettext('Failed to duplicate folder') : gettext('Failed to duplicate file') });
+        });
+        break;
+      }
+      case OPERATION_TYPE.BATCH_DUPLICATE_RECORDS: {
+        const { repo_id, target_repo_id, dirents, target_parent_path, source_parent_path } = operation;
+        seafileAPI.copyDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirents).then(res => {
+          operation.task_id = res.data.task_id || null;
+          callback({ operation });
+        }).catch(error => {
+          const count = dirents.length;
+          const errorMsg = count > 1
+            ? gettext('Failed to copy {n} items').replace('{n}', count)
+            : gettext('Failed to copy file');
+          callback({ error: errorMsg });
         });
         break;
       }
