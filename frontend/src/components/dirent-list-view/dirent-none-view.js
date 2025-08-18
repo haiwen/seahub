@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableSeadoc, gettext, enableWhiteboard, enableExcalidraw } from '../../utils/constants';
+import { enableSeadoc, gettext, enableWhiteboard } from '../../utils/constants';
 import Loading from '../loading';
 import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
@@ -54,6 +54,7 @@ class DirentNoneView extends React.Component {
     const { currentRepoInfo } = this.props;
     if (enableSeadoc && !currentRepoInfo.encrypted) {
       direntsContainerMenuList.push(NEW_SEADOC_FILE);
+      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
     direntsContainerMenuList.push(
       NEW_MARKDOWN_FILE,
@@ -63,9 +64,6 @@ class DirentNoneView extends React.Component {
     );
     if (enableWhiteboard) {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
-    }
-    if (enableExcalidraw) {
-      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
     let id = 'dirent-container-menu';
     if (isCustomPermission) {

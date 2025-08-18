@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard, enableExcalidraw } from '../../utils/constants';
+import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -708,6 +708,7 @@ class DirentGridView extends React.Component {
 
     if (enableSeadoc && !currentRepoInfo.encrypted) {
       direntsContainerMenuList.push(NEW_SEADOC_FILE);
+      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
 
     direntsContainerMenuList.push(
@@ -719,10 +720,6 @@ class DirentGridView extends React.Component {
 
     if (enableWhiteboard) {
       direntsContainerMenuList.push(NEW_TLDRAW_FILE);
-    }
-
-    if (enableExcalidraw) {
-      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
     }
 
     if (selectedDirentList.length === 0) {

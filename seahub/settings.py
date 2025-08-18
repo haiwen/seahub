@@ -975,13 +975,6 @@ FILE_CONVERTER_SERVER_URL = 'http://127.0.0.1:8888'
 
 ENABLE_WHITEBOARD = False
 
-##########################
-# Settings for excalidraw    #
-##########################
-
-ENABLE_EXCALIDRAW = False
-EXCALIDRAW_SERVER_URL = 'http://127.0.0.1:7070'
-
 ######################################
 # Settings for notification server   #
 ######################################
@@ -1200,7 +1193,7 @@ JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 _tmp_db_cfg = copy.deepcopy(_preset_db_cfg)
 _tmp_db_cfg.update(DATABASES)
 DATABASES = _tmp_db_cfg
-    
+
 if 'mysql' in DATABASES['default'].get('ENGINE', ''):
 
     ## For dtable_db
@@ -1277,12 +1270,9 @@ else:
 if os.environ.get('ENABLE_SEADOC', ''):
     ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'
 SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
+EXCALIDRAW_PRIVATE_KEY = JWT_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
 FILE_CONVERTER_SERVER_URL = SEADOC_SERVER_URL.rstrip('/') + '/converter'
-
-if os.environ.get('ENABLE_EXCALIDRAW', ''):
-    ENABLE_EXCALIDRAW = os.environ.get('ENABLE_EXCALIDRAW', '').lower() == 'true'
-EXCALIDRAW_PRIVATE_KEY = JWT_PRIVATE_KEY
 
 if os.environ.get('SITE_ROOT', ''):
     SITE_ROOT = os.environ.get('SITE_ROOT', '')
