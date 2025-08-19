@@ -37,8 +37,7 @@ import seahub.settings as settings
 from seahub.tags.models import FileUUIDMap
 
 JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
-NOTIFICATION_SERVER_URL = getattr(settings, 'NOTIFICATION_SERVER_URL', '')
-ENABLE_NOTIFICATION_SERVER = getattr(settings, 'ENABLE_NOTIFICATION_SERVER', '')
+
 
 logger = logging.getLogger(__name__)
 
@@ -367,10 +366,9 @@ def is_valid_internal_jwt(auth):
 
 
 def send_comment_update_event(file_uuid):
-    if not ENABLE_NOTIFICATION_SERVER:
+    if not settings.ENABLE_NOTIFICATION_SERVER:
         return
-    if not NOTIFICATION_SERVER_URL:
-        return
+    
     uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
     if not uuid_map:
         return
