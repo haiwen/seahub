@@ -419,14 +419,12 @@ export const MetadataViewProvider = ({
     });
   }, [updateFileTags, generateFileTagsAPI]);
 
-  // Helper function to check if all records are in the same folder
   const areRecordsInSameFolder = useCallback((records) => {
     if (!records || records.length <= 1) return true;
     const firstPath = getParentDirFromRecord(records[0]);
     return records.every(record => getParentDirFromRecord(record) === firstPath);
   }, []);
 
-  // Helper function to calculate update data for batch move operations
   const calculateBatchMoveUpdateData = useCallback((records, targetRepoId, targetParentPath, sourceParentPath) => {
     const { rows } = storeRef.current.data || metadata;
     let needDeletedRowIds = [];
@@ -441,7 +439,6 @@ export const MetadataViewProvider = ({
       const oldParentPath = Utils.joinPath(sourceParentPath, oldName);
 
       if (repoID === targetRepoId) {
-        // Same repo - update parent directory
         const newName = getUniqueFileName(rows, targetParentPath, oldName);
         updateRowIds.push(rowId);
         idRowUpdates[rowId] = {
@@ -453,7 +450,6 @@ export const MetadataViewProvider = ({
           [PRIVATE_COLUMN_KEY.FILE_NAME]: oldName
         };
 
-        // Handle subdirectories if moving a folder
         if (isDir) {
           const newPath = Utils.joinPath(targetParentPath, newName);
           rows.forEach((row) => {
@@ -467,7 +463,6 @@ export const MetadataViewProvider = ({
           });
         }
       } else {
-        // Different repo - delete records
         needDeletedRowIds.push(rowId);
         if (isDir) {
           rows.forEach((row) => {
@@ -508,7 +503,7 @@ export const MetadataViewProvider = ({
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
         const updateData = calculateBatchMoveUpdateData(records, destRepo.repo_id, destDirentPath, path);
 
-        storeRef.current.batchMoveRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, updateData, {
+        storeRef.current.moveRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, updateData, {
           success_callback: (operation) => {
             if (selectedDirentList.length > 0) {
               moveFileCallback && moveFileCallback(
@@ -563,7 +558,7 @@ export const MetadataViewProvider = ({
 
       const callback = (destRepo, destDirentPath, isByDialog = false) => {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-        storeRef.current.batchDuplicateRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, {
+        storeRef.current.duplicateRecords(recordIds, destRepo.repo_id, dirents, destDirentPath, path, {
           success_callback: (operation) => {
             if (selectedDirentList.length > 0) {
               copyFileCallback && copyFileCallback(

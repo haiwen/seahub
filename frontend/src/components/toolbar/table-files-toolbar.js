@@ -22,7 +22,6 @@ const TableFilesToolbar = ({ repoID }) => {
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
-  // Helper function to check if all records are in the same folder
   const areRecordsInSameFolder = useMemo(() => {
     if (records.length <= 1) return true;
     const firstPath = records[0] ? getParentDirFromRecord(records[0]) : null;
@@ -62,7 +61,6 @@ const TableFilesToolbar = ({ repoID }) => {
     const length = selectedRecordIds.length;
     const list = [];
     if (length > 1) {
-      // Only show operations if all files are in the same folder
       if (areRecordsInSameFolder) {
         if (canModify) {
           list.push(MOVE);

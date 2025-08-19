@@ -121,7 +121,6 @@ const ContextMenu = ({
       return list;
     }
 
-    // handle selected records
     const selectedRecordsIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
     if (selectedRecordsIds.length > 1) {
       let records = [];
@@ -132,14 +131,12 @@ const ContextMenu = ({
         }
       });
 
-      // Check if all records are in the same folder
       const areRecordsInSameFolder = (() => {
         if (records.length <= 1) return true;
         const firstPath = getParentDirFromRecord(records[0]);
         return records.every(record => getParentDirFromRecord(record) === firstPath);
       })();
 
-      // Add move, copy, download operations for multiple selections only if they're in the same folder
       if (areRecordsInSameFolder) {
         if (!isReadonly) {
           list.push({ value: OPERATION.MOVE, label: gettext('Move'), records });

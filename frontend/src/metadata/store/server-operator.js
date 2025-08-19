@@ -98,7 +98,7 @@ class ServerOperator {
         });
         break;
       }
-      case OPERATION_TYPE.BATCH_MOVE_RECORDS: {
+      case OPERATION_TYPE.MOVE_RECORDS: {
         const { repo_id, target_repo_id, dirents, target_parent_path, source_parent_path } = operation;
         seafileAPI.moveDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirents).then(res => {
           operation.task_id = res.data.task_id || null;
@@ -124,7 +124,7 @@ class ServerOperator {
         });
         break;
       }
-      case OPERATION_TYPE.BATCH_DUPLICATE_RECORDS: {
+      case OPERATION_TYPE.DUPLICATE_RECORDS: {
         const { repo_id, target_repo_id, dirents, target_parent_path, source_parent_path } = operation;
         seafileAPI.copyDir(repo_id, target_repo_id, target_parent_path, source_parent_path, dirents).then(res => {
           operation.task_id = res.data.task_id || null;
