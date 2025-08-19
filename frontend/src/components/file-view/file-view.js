@@ -15,6 +15,7 @@ import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import { MetadataMiddlewareProvider, MetadataStatusProvider } from '../../hooks';
 import Loading from '../loading';
+import WebSocketClient from '../../utils/websocket-service';
 
 import '../../css/file-view.css';
 
@@ -29,7 +30,7 @@ const propTypes = {
 };
 
 const { isStarred, isLocked, lockedByMe,
-  repoID, filePath, filePerm, enableWatermark, userNickName,
+  repoID, fileUuid, filePath, filePerm, enableWatermark, userNickName,
   fileName, repoEncrypted, isRepoAdmin, fileType
 } = window.app.pageOptions;
 
@@ -44,8 +45,11 @@ class FileView extends React.Component {
       lockedByMe: lockedByMe,
       isCommentPanelOpen: false,
       isHeaderShown: (storedIsHeaderShown === null) || (storedIsHeaderShown == 'true'),
-      isDetailsPanelOpen: false
+      isDetailsPanelOpen: false,
+      isCommentUpdated: false,
     };
+
+    this.socketManager = new WebSocketClient(this.onMessageCallback, repoID);
   }
 
   componentDidMount() {
@@ -53,10 +57,25 @@ class FileView extends React.Component {
     document.getElementById('favicon').href = fileIcon;
   }
 
+  onMessageCallback = (data) => {
+    const { type, content } = data;
+    if (type === 'comment-update') {
+      const { repo_id, file_uuid } = content;
+      if (repoID === repo_id && file_uuid === fileUuid) {
+        if (!this.state.isCommentPanelOpen) {
+          this.setState({ isCommentUpdated: true });
+        } else {
+          this.commentPanelRef.forceUpdate();
+        }
+      }
+    }
+  };
+
   toggleCommentPanel = () => {
     this.setState({
       isCommentPanelOpen: !this.state.isCommentPanelOpen,
       isDetailsPanelOpen: false,
+      isCommentUpdated: false,
     });
   };
 
@@ -121,6 +140,10 @@ class FileView extends React.Component {
     });
   };
 
+  setCommentPanelRef = (ref) => {
+    this.commentPanelRef = ref;
+  };
+
   render() {
     const { isOnlyofficeFile = false } = this.props;
     const { isDetailsPanelOpen, isHeaderShown } = this.state;
@@ -142,6 +165,7 @@ class FileView extends React.Component {
               />
               {isOnlyofficeFile ?
                 <OnlyofficeFileToolbar
+                  isCommentUpdated={this.state.isCommentUpdated}
                   toggleDetailsPanel={this.toggleDetailsPanel}
                   toggleHeader={this.toggleHeader}
                   toggleCommentPanel={this.toggleCommentPanel}
@@ -149,6 +173,7 @@ class FileView extends React.Component {
                 <FileToolbar
                   isLocked={this.state.isLocked}
                   lockedByMe={this.state.lockedByMe}
+                  isCommentUpdated={this.state.isCommentUpdated}
                   onSave={this.props.onSave}
                   isSaving={this.props.isSaving}
                   needSave={this.props.needSave}
@@ -175,6 +200,7 @@ class FileView extends React.Component {
               {this.props.content}
               {this.state.isCommentPanelOpen &&
                 <CommentPanel
+                  ref={this.setCommentPanelRef}
                   toggleCommentPanel={this.toggleCommentPanel}
                   participants={this.props.participants}
                   onParticipantsChange={this.props.onParticipantsChange}

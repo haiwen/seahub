@@ -22,7 +22,8 @@ const propTypes = {
   toggleCommentPanel: PropTypes.func.isRequired,
   toggleDetailsPanel: PropTypes.func.isRequired,
   setImageScale: PropTypes.func,
-  rotateImage: PropTypes.func
+  rotateImage: PropTypes.func,
+  isCommentUpdated: PropTypes.bool,
 };
 
 const {
@@ -103,7 +104,7 @@ class FileToolbar extends React.Component {
 
     const { moreDropdownOpen } = this.state;
 
-    const { isLocked, lockedByMe } = this.props;
+    const { isLocked, lockedByMe, isCommentUpdated } = this.props;
     let showLockUnlockBtn = false;
     let lockUnlockText; let lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -214,6 +215,7 @@ class FileToolbar extends React.Component {
             aria-label={gettext('Comment')}
           >
             <i className="sdocfont sdoc-comments"></i>
+            {isCommentUpdated && <span className='comment-tip'></span>}
           </div>
           {showShareBtn && (
             <IconButton

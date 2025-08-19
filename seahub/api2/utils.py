@@ -384,14 +384,14 @@ def send_comment_update_event(file_uuid):
             "file_path": ""
         }
     }
-    notification_server_event_url = "%s/events" % settings.NOTIFICATION_SERVER_URL
+    notification_server_event_url = "%s/events" % settings.INNER_NOTIFICATION_SERVER_URL
     payload = {
         'exp': int(time.time()) + 500
     }
     jwt_token = jwt.encode(payload, JWT_PRIVATE_KEY, algorithm='HS256')
     headers = {
         'Authorization': 'Token %s' % jwt_token,
-        
+
     }
     try:
         resp = requests.post(notification_server_event_url, json=event_data, headers=headers)

@@ -981,6 +981,7 @@ ENABLE_WHITEBOARD = False
 
 ENABLE_NOTIFICATION_SERVER = os.environ.get('ENABLE_NOTIFICATION_SERVER', 'false') == 'true'
 NOTIFICATION_SERVER_URL = os.environ.get('NOTIFICATION_SERVER_URL', '')
+INNER_NOTIFICATION_SERVER_URL = 'http://127.0.0.1:8083'
 
 ############################
 # Settings for Seahub Priv #
