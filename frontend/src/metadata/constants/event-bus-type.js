@@ -42,6 +42,7 @@ export const EVENT_BUS_TYPE = {
   SELECT_RECORDS: 'select_records',
   TOGGLE_MOVE_DIALOG: 'toggle_move_dialog',
   MOVE_RECORD: 'move_record',
+  DUPLICATE_RECORD: 'duplicate_record',
   DELETE_RECORDS: 'delete_records',
   UPDATE_RECORD_DETAILS: 'update_record_details',
   UPDATE_FACE_RECOGNITION: 'update_face_recognition',
