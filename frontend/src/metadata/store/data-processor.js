@@ -256,9 +256,8 @@ class DataProcessor {
         break;
       }
       case OPERATION_TYPE.MOVE_RECORD:
-      case OPERATION_TYPE.BATCH_MOVE_RECORDS:
       case OPERATION_TYPE.DUPLICATE_RECORD:
-      case OPERATION_TYPE.BATCH_DUPLICATE_RECORDS: {
+      case OPERATION_TYPE.DUPLICATE_RECORDS: {
         this.run(table, { collaborators });
         break;
       }

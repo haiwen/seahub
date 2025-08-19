@@ -436,8 +436,8 @@ class Store {
     this.applyOperation(operation);
   }
 
-  batchMoveRecords(row_ids, target_repo_id, dirents, target_parent_path, source_parent_path, update_data, { success_callback, fail_callback }) {
-    const type = OPERATION_TYPE.BATCH_MOVE_RECORDS;
+  moveRecords(row_ids, target_repo_id, dirents, target_parent_path, source_parent_path, update_data, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.MOVE_RECORDS;
     const operation = this.createOperation({
       type,
       repo_id: this.repoId,
@@ -469,8 +469,8 @@ class Store {
     this.applyOperation(operation);
   }
 
-  batchDuplicateRecords(row_ids, target_repo_id, dirents, target_parent_path, source_parent_path, { success_callback, fail_callback }) {
-    const type = OPERATION_TYPE.BATCH_DUPLICATE_RECORDS;
+  duplicateRecords(row_ids, target_repo_id, dirents, target_parent_path, source_parent_path, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.DUPLICATE_RECORDS;
     const operation = this.createOperation({
       type,
       repo_id: this.repoId,
