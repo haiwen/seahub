@@ -7,8 +7,8 @@ const CommentPlugin = ({ setIsShowRightPanel, unseenNotificationsCount }) => {
   const handleOnClick = useCallback((event) => {
     event.stopPropagation();
     setIsShowRightPanel(prev => !prev);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   return (
     <span className="op-item wiki-plugin-operation-btn-container" onClick={handleOnClick}>
