@@ -7,9 +7,11 @@ const Title = ({ icon, iconSize, title }) => {
 
   return (
     <div className="detail-title dirent-title">
-      <div className="detail-header-icon-container">
-        <img src={icon} width={iconSize} height={iconSize} alt="" />
-      </div>
+      {icon && (
+        <div className="detail-header-icon-container">
+          <img src={icon} width={iconSize} height={iconSize} alt="" />
+        </div>
+      )}
       <span className="name ellipsis" title={title}>{title}</span>
     </div>
   );

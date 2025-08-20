@@ -33,6 +33,7 @@ from seahub.settings import MD_FILE_COUNT_LIMIT
 logger = logging.getLogger(__name__)
 
 
+
 class MetadataManage(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -747,6 +748,98 @@ class MetadataColumns(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class MetadataBatchRecords(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request, repo_id):
+        """
+        Get metadata records for multiple files in batch
+        Request body:
+            files: list of {parent_dir, file_name} objects
+        """
+        files = request.data.get('files', [])
+        if not files or not isinstance(files, list):
+            error_msg = 'files parameter is required and must be a list'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if len(files) > METADATA_RECORD_UPDATE_LIMIT:
+            error_msg = 'Number of records exceeds the limit of %s.' % METADATA_RECORD_UPDATE_LIMIT
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = f'Library {repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+        try:
+            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+            all_columns = columns_data.get('columns', [])
+            metadata_columns = []
+            for column in all_columns:
+                if column.get('key') in ['_rate', '_tags']:
+                    metadata_columns.append({
+                        'key': column.get('key'),
+                        'name': column.get('name'),
+                        'type': column.get('type'),
+                        'data': column.get('data', {})
+                    })
+            
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        where_conditions = []
+        parameters = []
+        
+        for file_info in files:
+            parent_dir = file_info.get('parent_dir')
+            file_name = file_info.get('file_name')
+            
+            if not parent_dir or not file_name:
+                continue
+                
+            where_conditions.append(f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?)')
+            parameters.extend([parent_dir, file_name])
+
+        if not where_conditions:
+            return Response({
+                'results': [],
+                'metadata': {'columns': metadata_columns}
+            })
+
+        where_clause = ' OR '.join(where_conditions)
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
+        try:
+            query_result = metadata_server_api.query_rows(sql, parameters)
+            results = query_result.get('results', [])
+
+            return Response({
+                'results': results,
+                'metadata': {'columns': metadata_columns}
+            })
+
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 
 class MetadataFolders(APIView):
@@ -2422,21 +2515,26 @@ class MetadataFileTags(APIView):
         from seafevents.repo_metadata.constants import TAGS_TABLE, METADATA_TABLE
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
-        success_records = []
-        failed_records = []
+        row_id_map = {}
+        
         for file_tags in file_tags_data:
             record_id = file_tags.get('record_id', '')
             tags = file_tags.get('tags', [])
             if not record_id:
                 continue
-            try:
+            
+            row_id_map[record_id] = tags
 
-                metadata_server_api.update_link(TAGS_TABLE.file_link_id, METADATA_TABLE.id, { record_id: tags })
-                success_records.append(record_id)
-            except Exception as e:
-                failed_records.append(record_id)
+        if not row_id_map:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'No valid file_tags_data provided')
 
-        return Response({'success': success_records, 'fail': failed_records})
+        try:
+            metadata_server_api.update_link(TAGS_TABLE.file_link_id, METADATA_TABLE.id, row_id_map)
+        except Exception as e:
+            logger.exception(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        return Response({'success': True })
 
 
 class MetadataTagFiles(APIView):

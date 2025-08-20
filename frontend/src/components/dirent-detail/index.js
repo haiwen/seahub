@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import LibDetail from './lib-details';
 import DirentDetail from './dirent-details';
+import MultiSelectionDetails from './multi-selection-details';
 import ViewDetails from '../../metadata/components/view-details';
 import ObjectUtils from '../../utils/object';
 import { MetadataContext } from '../../metadata';
@@ -11,7 +12,18 @@ import { FACE_RECOGNITION_VIEW_ID } from '../../metadata/constants';
 import { useTags } from '../../tag/hooks';
 import { useMetadataStatus } from '../../hooks';
 
-const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo, repoTags, fileTags, onClose, onFileTagChanged }) => {
+const Detail = React.memo(({
+  repoID,
+  path,
+  currentMode,
+  dirent,
+  selectedDirents,
+  currentRepoInfo,
+  repoTags,
+  fileTags,
+  onClose,
+  onFileTagChanged
+}) => {
   const { enableMetadata, enableFaceRecognition, detailsSettings, modifyDetailsSettings } = useMetadataStatus();
   const { tagsData, addTag, modifyLocalFileTags } = useTags();
 
@@ -36,6 +48,20 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
 
   if (isTag) return null;
 
+  // Handle multi-selection case
+  if (selectedDirents && selectedDirents.length > 1) {
+    return (
+      <MultiSelectionDetails
+        repoID={repoID}
+        path={path}
+        selectedDirents={selectedDirents}
+        currentRepoInfo={currentRepoInfo}
+        modifyLocalFileTags={modifyLocalFileTags}
+        onClose={onClose}
+      />
+    );
+  }
+
   if (isView && !dirent) {
     const pathParts = path.split('/');
     const [, , viewId, children] = pathParts;
@@ -54,7 +80,7 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
     <DirentDetail
       repoID={repoID}
       path={isView ? dirent.path : path}
-      dirent={dirent}
+      dirent={selectedDirents[0] || dirent}
       currentRepoInfo={currentRepoInfo}
       repoTags={repoTags}
       fileTags={fileTags}
@@ -74,6 +100,7 @@ const Detail = React.memo(({ repoID, path, currentMode, dirent, currentRepoInfo,
     props.repoID !== nextProps.repoID ||
     props.path !== nextProps.path ||
     !ObjectUtils.isSameObject(props.dirent, nextProps.dirent) ||
+    !ObjectUtils.isSameObject(props.selectedDirents, nextProps.selectedDirents) ||
     !ObjectUtils.isSameObject(props.currentRepoInfo, nextProps.currentRepoInfo) ||
     JSON.stringify(props.repoTags || []) !== JSON.stringify(nextProps.repoTags || []) ||
     JSON.stringify(props.fileTags || []) !== JSON.stringify(nextProps.fileTags || []);
@@ -85,6 +112,7 @@ Detail.propTypes = {
   path: PropTypes.string,
   currentMode: PropTypes.string,
   dirent: PropTypes.object,
+  selectedDirents: PropTypes.array,
   currentRepoInfo: PropTypes.object,
   repoTags: PropTypes.array,
   fileTags: PropTypes.array,

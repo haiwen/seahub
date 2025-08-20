@@ -1838,7 +1838,7 @@ class LibContentView extends React.Component {
       return item.name !== name;
     });
     this.recalculateSelectedDirents([name], direntList);
-    this.setState({ direntList: direntList });
+    this.setState({ direntList: direntList, currentDirent: null });
   };
 
   // only one scene: The moved items are inside current path
@@ -1852,6 +1852,7 @@ class LibContentView extends React.Component {
       selectedDirentList: [],
       isDirentSelected: false,
       isAllDirentSelected: false,
+      currentDirent: null,
     });
   };
 
@@ -2378,7 +2379,7 @@ class LibContentView extends React.Component {
     }
 
     let detailPath = this.state.path;
-    if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE) {
+    if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE && this.state.selectedDirentList.length === 0) {
       detailPath = Utils.getDirName(this.state.path);
     }
 
@@ -2577,6 +2578,7 @@ class LibContentView extends React.Component {
                           repoID={this.props.repoID}
                           currentRepoInfo={{ ...this.state.currentRepoInfo }}
                           dirent={detailDirent}
+                          selectedDirents={this.state.selectedDirentList}
                           repoTags={this.state.repoTags}
                           fileTags={this.state.isViewFile ? this.state.fileTags : []}
                           onFileTagChanged={this.onFileTagChanged}
