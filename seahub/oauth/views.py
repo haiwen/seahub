@@ -85,13 +85,14 @@ def oauth_check(func):
                     or not REDIRECT_URL or not TOKEN_URL or not USER_INFO_URL \
                     or not SCOPE or not OAUTH_PROVIDER:
                 logger.error('OAuth relevant settings invalid.')
-                logger.error('CLIENT_ID: %s' % CLIENT_ID)
-                logger.error('AUTHORIZATION_URL: %s' % AUTHORIZATION_URL)
-                logger.error('REDIRECT_URL: %s' % REDIRECT_URL)
-                logger.error('TOKEN_URL: %s' % TOKEN_URL)
-                logger.error('USER_INFO_URL: %s' % USER_INFO_URL)
-                logger.error('SCOPE: %s' % SCOPE)
-                logger.error('OAUTH_PROVIDER: %s' % OAUTH_PROVIDER)
+                logger.error('CLIENT_ID_ASSIGNED: %s' % bool(CLIENT_ID))
+                logger.error('AUTHORIZATION_URL_ASSIGNED: %s' % bool(AUTHORIZATION_URL))
+                logger.error('REDIRECT_URL_ASSIGNED: %s' % bool(REDIRECT_URL))
+                logger.error('TOKEN_URL_ASSIGNED: %s' % bool(TOKEN_URL))
+                logger.error('USER_INFO_URL_ASSIGNED: %s' % bool(USER_INFO_URL))
+                logger.error('SCOPE_ASSIGNED: %s' % bool(SCOPE))
+                logger.error('OAUTH_PROVIDER_ASSIGNED: %s' % bool(OAUTH_PROVIDER))
+                logger.error('CLIENT_SECRET_ASSIGNED: %s' % bool(CLIENT_SECRET))
                 error = True
 
         if error:

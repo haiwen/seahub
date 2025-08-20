@@ -760,10 +760,10 @@ class SeafileDB:
 
         path = normalize_file_path(path)
         sql = f"""
-        select repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo="{original_repo_id}" AND path="{path}"
+        select repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo=%s AND path=%s
         """
         with connection.cursor() as cursor:
-            cursor.execute(sql)
+            cursor.execute(sql, [original_repo_id, path])
             res = cursor.fetchone()
 
         return res and res[0] or None
