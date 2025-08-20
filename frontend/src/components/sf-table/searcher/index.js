@@ -73,7 +73,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
   };
 
   useEffect(() => {
-    const eventBus = window.sfMetadataContext.eventBus;
+    const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
     const unsubscribeResetSearchBar = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.RESET_SEARCH_BAR, handleCloseSearcher);
 
     return () => {
