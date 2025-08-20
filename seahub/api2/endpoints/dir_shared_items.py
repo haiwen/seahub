@@ -491,13 +491,25 @@ class DirSharedItemsEndpoint(APIView):
                     if is_org_context(request):
                         # when calling seafile API to share authority related functions,
                         # change the uesrname to repo owner.
-                        repo_owner = seafile_api.get_org_repo_owner(repo_id)
                         org_id = request.user.org.org_id
+                        if org_id != ccnet_api.get_org_id_by_group(gid):
+                            result['failed'].append({
+                                'group_name': group.group_name,
+                                'error_msg': "Current user's ornganization is not the same as the group's"
+                                })
+                            continue
 
+                        repo_owner = seafile_api.get_org_repo_owner(repo_id)
                         share_dir_to_group(repo, path, repo_owner, username, gid, permission, org_id)
                     else:
-                        repo_owner = seafile_api.get_repo_owner(repo_id)
+                        if ccnet_api.get_org_id_by_group(gid) > 0:
+                            result['failed'].append({
+                                'group_name': group.group_name,
+                                'error_msg': "The group is an organization group"
+                                })
+                            continue
 
+                        repo_owner = seafile_api.get_repo_owner(repo_id)
                         share_dir_to_group(repo, path, repo_owner, username, gid, permission, None)
 
                     result['success'].append({
