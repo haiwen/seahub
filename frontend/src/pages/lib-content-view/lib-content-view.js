@@ -1569,8 +1569,6 @@ class LibContentView extends React.Component {
   };
 
   onSelectedDirentListUpdate = (newSelectedDirentList, lastSelectedIndex = null) => {
-    const shouldShowDetail = newSelectedDirentList.length > 1;
-
     this.setState({
       direntList: this.state.direntList.map(dirent => {
         return new Dirent({
@@ -1584,11 +1582,6 @@ class LibContentView extends React.Component {
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,
       isAllDirentSelected: newSelectedDirentList.length === this.state.direntList.length,
-      isDirentDetailShow: shouldShowDetail ? true : this.state.isDirentDetailShow,
-    }, () => {
-      if (shouldShowDetail) {
-        localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, 'true');
-      }
     });
   };
 
