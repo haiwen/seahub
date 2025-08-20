@@ -375,6 +375,12 @@ class DirentListItem extends React.Component {
       case 'Convert with ONLYOFFICE':
         this.onConvertWithONLYOFFICE();
         break;
+      case 'Star':
+        this.onItemStarred();
+        break;
+      case 'Unstar':
+        this.onItemStarred();
+        break;
       default:
         break;
     }
