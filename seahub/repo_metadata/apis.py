@@ -33,6 +33,7 @@ from seahub.settings import MD_FILE_COUNT_LIMIT
 logger = logging.getLogger(__name__)
 
 
+
 class MetadataManage(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -765,8 +766,8 @@ class MetadataBatchRecords(APIView):
             error_msg = 'files parameter is required and must be a list'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        if len(files) > 100:  # Limit batch size
-            error_msg = 'Maximum 100 files allowed per batch request'
+        if len(files) > METADATA_RECORD_UPDATE_LIMIT:
+            error_msg = 'Number of records exceeds the limit of %s.' % METADATA_RECORD_UPDATE_LIMIT
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
@@ -802,7 +803,7 @@ class MetadataBatchRecords(APIView):
             
         except Exception as e:
             logger.exception(e)
-            error_msg = 'Failed to get columns'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         where_conditions = []
