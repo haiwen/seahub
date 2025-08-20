@@ -790,8 +790,6 @@ class MetadataBatchRecords(APIView):
         try:
             columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
             all_columns = columns_data.get('columns', [])
-            print(columns_data)
-
             metadata_columns = []
             for column in all_columns:
                 if column.get('key') in ['_rate', '_tags']:
@@ -828,7 +826,6 @@ class MetadataBatchRecords(APIView):
 
         where_clause = ' OR '.join(where_conditions)
         sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
-        print(sql)
         try:
             query_result = metadata_server_api.query_rows(sql, parameters)
             results = query_result.get('results', [])
@@ -2518,8 +2515,6 @@ class MetadataFileTags(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         row_id_map = {}
-        success_records = []
-        failed_records = []
         
         for file_tags in file_tags_data:
             record_id = file_tags.get('record_id', '')
@@ -2527,23 +2522,18 @@ class MetadataFileTags(APIView):
             if not record_id:
                 continue
             
-            # Keep tags as array of IDs (same format as original single-call version)
             row_id_map[record_id] = tags
-            success_records.append(record_id)
 
         if not row_id_map:
             return api_error(status.HTTP_400_BAD_REQUEST, 'No valid file_tags_data provided')
 
         try:
-            # Single batch operation instead of multiple individual calls
             metadata_server_api.update_link(TAGS_TABLE.file_link_id, METADATA_TABLE.id, row_id_map)
         except Exception as e:
             logger.exception(e)
-            # If batch fails, mark all as failed
-            failed_records = success_records
-            success_records = []
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
-        return Response({'success': success_records, 'fail': failed_records})
+        return Response({'success': True })
 
 
 class MetadataTagFiles(APIView):
