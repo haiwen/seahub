@@ -116,6 +116,10 @@ class LibContentView extends React.Component {
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
     this.unsubscribeEventBus = null;
+    if (process.env.NODE_ENV === 'development') {
+      window.debugLibContentView = this;
+      window.treeHelper = treeHelper;
+    }
   }
 
   updateCurrentDirent = (dirent = null) => {
@@ -2032,7 +2036,22 @@ class LibContentView extends React.Component {
     }
   };
 
+  isTreeReady = (path = null) => {
+    const { treeData, isTreeDataLoading } = this.state;
+
+    if (isTreeDataLoading || !treeData || !treeData.root) return false;
+
+    if (path) {
+      const node = treeData.getNodeByPath(path);
+      return node !== null;
+    }
+
+    return true;
+  };
+
   addNodeToTree = (name, parentPath, type) => {
+    if (!this.isTreeReady(parentPath)) return;
+
     let node = this.createTreeNode(name, type);
     let tree = treeHelper.addNodeToParentByPath(this.state.treeData, node, parentPath);
     this.setState({ treeData: tree });
