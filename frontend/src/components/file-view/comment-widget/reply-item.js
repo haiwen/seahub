@@ -102,7 +102,11 @@ class ReplyItem extends React.Component {
           <SeafileCommentEditor
             type="reply"
             content={this.state.newReply}
-            settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
+            settings={{
+              ...window.app.config,
+              name: window.app.pageOptions.userNickName,
+              mediaUrl: window.app.config.mediaUrl + 'comment-editor/'
+            }}
             hiddenUserInfo={true}
             toolMenus={[]}
             insertContent={this.updateComment}

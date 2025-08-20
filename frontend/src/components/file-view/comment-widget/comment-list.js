@@ -144,7 +144,11 @@ class CommentList extends React.Component {
         <div className='seafile-comment-footer flex-shrink-0'>
           <SeafileCommentEditor
             type="comment"
-            settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
+            settings={{
+              ...window.app.config,
+              name: window.app.pageOptions.userNickName,
+              mediaUrl: window.app.config.mediaUrl + 'comment-editor/'
+            }}
             hiddenUserInfo={true}
             toolMenus={[]}
             insertContent={this.onSubmit}

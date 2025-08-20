@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SeafileCommentEditor } from '@seafile/comment-editor';
 import dayjs from 'dayjs';
-import { gettext } from '../../../utils/constants';
+import { gettext, mediaUrl } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
@@ -129,7 +129,11 @@ class ReplyList extends React.Component {
         <div className='seafile-comment-footer flex-shrink-0'>
           <SeafileCommentEditor
             type="reply"
-            settings={{ ...window.app.pageOptions, name: window.app.pageOptions.userNickName }}
+            settings={{
+              ...window.app.config,
+              name: window.app.pageOptions.userNickName,
+              mediaUrl: window.app.config.mediaUrl + 'comment-editor/'
+            }}
             hiddenUserInfo={true}
             toolMenus={[]}
             insertContent={this.onSubmit}
