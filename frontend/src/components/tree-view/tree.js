@@ -47,7 +47,7 @@ class Tree {
   }
 
   addNodeListToParent(nodeList, parentNode) {
-    if (!nodeList || !Array.isArray(nodeList) || !parentNode) return false;
+    if (!parentNode || !Array.isArray(nodeList)) return false;
     nodeList.forEach(node => {
       parentNode.addChild(node);
     });
@@ -60,7 +60,7 @@ class Tree {
   }
 
   deleteNodeList(nodeList) {
-    if (!nodeList || !Array.isArray(nodeList)) return false;
+    if (!Array.isArray(nodeList)) return false;
     nodeList.forEach(node => {
       this.deleteNode(node);
     });
@@ -72,15 +72,12 @@ class Tree {
   }
 
   updateNode(node, keys, newValues) {
-    if (!node || !keys || !newValues) return false;
-    if (!Array.isArray(keys) || !Array.isArray(newValues)) return false;
-    if (keys.length !== newValues.length) return false;
+    if (!node || !Array.isArray(keys) || !Array.isArray(newValues) || keys.length !== newValues.length) return false;
     node.updateObjectProperties(keys, newValues);
   }
 
   moveNode(node, destNode) {
-    if (!node || !destNode) return false;
-    if (node === destNode) return false;
+    if (!node || !destNode || node === destNode) return false;
     this.deleteNode(node);
     destNode.addChild(node);
   }
