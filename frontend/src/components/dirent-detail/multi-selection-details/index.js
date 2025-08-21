@@ -23,12 +23,13 @@ const MultiSelectionDetails = ({
   modifyLocalFileTags,
   onClose
 }) => {
-  const { enableMetadata, enableTags } = useMetadataStatus();
+  const { enableMetadata, enableTags, globalHiddenColumns } = useMetadataStatus();
   const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fileCount = useMemo(() => selectedDirents.filter(dirent => dirent.type === 'file').length, [selectedDirents]);
   const folderCount = useMemo(() => selectedDirents.filter(dirent => dirent.type === 'dir').length, [selectedDirents]);
+  const isRateHidden = useMemo(() => globalHiddenColumns.includes(PRIVATE_COLUMN_KEY.FILE_RATE), [globalHiddenColumns]);
 
   const onlyFiles = folderCount === 0;
   const hasFiles = fileCount > 0;
@@ -209,7 +210,7 @@ const MultiSelectionDetails = ({
             </div>
           )}
 
-          {!isLoading && onlyFiles && hasFiles && window.app.pageOptions.enableFileTags && enableTags && (
+          {!isLoading && onlyFiles && hasFiles && enableTags && (
             <DetailItem field={tagField} readonly={false} className="sf-metadata-property-detail-editor sf-metadata-tags-property-detail-editor">
               <DirentsTagsEditor
                 records={records}
@@ -220,7 +221,7 @@ const MultiSelectionDetails = ({
               />
             </DetailItem>
           )}
-          {!isLoading && onlyFiles && hasFiles && enableMetadata && (
+          {!isLoading && onlyFiles && hasFiles && enableMetadata && !isRateHidden && (
             <DetailItem field={rateField} className="sf-metadata-property-detail-editor sf-metadata-rate-property-detail-editor">
               <RateEditor
                 value={rate}
