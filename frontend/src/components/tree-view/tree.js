@@ -19,6 +19,7 @@ class Tree {
   }
 
   getNodeByPath(path) {
+    if (!path || !this.root) return null;
     let findNode = null;
     function callback(currentNode) {
       if (currentNode.path === path) {
@@ -32,6 +33,7 @@ class Tree {
   }
 
   getNodeChildrenObject(node) {
+    if (!node || !node.children) return [];
     let objects = node.children.map(item => {
       let object = item.object;
       return object;
@@ -45,36 +47,43 @@ class Tree {
   }
 
   addNodeListToParent(nodeList, parentNode) {
+    if (!parentNode || !Array.isArray(nodeList)) return false;
     nodeList.forEach(node => {
       parentNode.addChild(node);
     });
   }
 
   deleteNode(node) {
+    if (!node || !node.parentNode) return false;
     let parentNode = this.getNodeByPath(node.parentNode.path);
     parentNode.deleteChild(node);
   }
 
   deleteNodeList(nodeList) {
+    if (!Array.isArray(nodeList)) return false;
     nodeList.forEach(node => {
       this.deleteNode(node);
     });
   }
 
   renameNode(node, newName) {
+    if (!node || !newName || typeof newName !== 'string') return false;
     node.rename(newName);
   }
 
   updateNode(node, keys, newValues) {
+    if (!node || !Array.isArray(keys) || !Array.isArray(newValues) || keys.length !== newValues.length) return false;
     node.updateObjectProperties(keys, newValues);
   }
 
   moveNode(node, destNode) {
+    if (!node || !destNode || node === destNode) return false;
     this.deleteNode(node);
     destNode.addChild(node);
   }
 
   copyNode(node, destNode) {
+    if (!node || !destNode) return false;
     destNode.addChild(node);
   }
 
@@ -107,6 +116,7 @@ class Tree {
   }
 
   expandNode(node) {
+    if (!node) return false;
     node.isExpanded = true;
     while (node.parentNode) {
       node.parentNode.isExpanded = true;
@@ -115,10 +125,12 @@ class Tree {
   }
 
   collapseNode(node) {
+    if (!node) return false;
     node.isExpanded = false;
   }
 
   isNodeChild(node, parentNode) {
+    if (!node || !parentNode || !parentNode.children) return false;
     return parentNode.children.some(item => {
       return item.path === node.path;
     });
