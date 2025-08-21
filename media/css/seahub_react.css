@@ -260,7 +260,6 @@ body {
 }
 
 ul, ol, li {
-  padding: 0;
   margin: 0;
 }
 
@@ -537,14 +536,16 @@ textarea::placeholder {
 
 .op-icon:focus,
 .op-icon:hover {
-  color: var(--bs-icon-color); /* to overwrite the styles for `a:hover` */
+  color: var(--bs-icon-color);
+  /* to overwrite the styles for `a:hover` */
   text-decoration: none;
   background: var(--bs-hover-secondary-bg);
 }
 
 .op-icon-bg-light:focus,
 .op-icon-bg-light:hover {
-  background: var(--bs-hover-bg); /* for .op-icon shown in white containers */
+  background: var(--bs-hover-bg);
+  /* for .op-icon shown in white containers */
 }
 
 .action-icon,
@@ -1316,6 +1317,7 @@ a.table-sort-op:hover {
 [data-bs-theme="dark"] .dropdown-item .sf2-icon-tick {
   color: var(--bs-icon-color);
 }
+
 [data-bs-theme="dark"] .dropdown-item .sf3-font-down {
   color: var(--bs-body-secondary-color);
 }
@@ -1431,8 +1433,8 @@ a.table-sort-op:hover {
   }
 
   .mobile-dropdown-menu {
-    position: static!important;
-    transform: none!important;
+    position: static !important;
+    transform: none !important;
   }
 
   .mobile-operation-menu-bg-layer {
@@ -1443,7 +1445,8 @@ a.table-sort-op:hover {
     bottom: 0;
     background: #000;
     opacity: 0.4;
-    z-index: 1051; /* higher than 1050 which was set for .modal */
+    z-index: 1051;
+    /* higher than 1050 which was set for .modal */
   }
 
   .mobile-operation-menu {
@@ -1740,6 +1743,7 @@ a.table-sort-op:hover {
 .sf3-font-down {
   font-size: 12px !important;
 }
+
 [data-bs-theme=dark] .sf3-font-down {
   color: rgba(255, 255, 255, .5) !important;
 }
@@ -1778,7 +1782,7 @@ a.table-sort-op:hover {
   color: var(--bs-body-color);
 }
 
-.custom-switch-input:checked ~ .custom-switch-description {
+.custom-switch-input:checked~.custom-switch-description {
   color: var(--bs-body-color);
 }
 
@@ -1788,10 +1792,10 @@ a.table-sort-op:hover {
 }
 
 [data-bs-theme=dark] .dropdown-menu {
-	--bs-dropdown-divider-bg: rgba(51, 52, 53, 1);
-	color: rgba(255, 255, 255, .9);
-	background-color: rgba(28, 29, 31, 1);
-	border: 1px solid rgba(51, 52, 53, 1);
+  --bs-dropdown-divider-bg: rgba(51, 52, 53, 1);
+  color: rgba(255, 255, 255, .9);
+  background-color: rgba(28, 29, 31, 1);
+  border: 1px solid rgba(51, 52, 53, 1);
   box-shadow: none;
 }
 
