@@ -116,10 +116,6 @@ class LibContentView extends React.Component {
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
     this.unsubscribeEventBus = null;
-    if (process.env.NODE_ENV === 'development') {
-      window.debugLibContentView = this;
-      window.treeHelper = treeHelper;
-    }
   }
 
   updateCurrentDirent = (dirent = null) => {
