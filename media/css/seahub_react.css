@@ -260,6 +260,7 @@ body {
 }
 
 ul, ol, li {
+  padding: 0;
   margin: 0;
 }
 
