@@ -382,7 +382,7 @@ def send_comment_update_event(file_uuid):
             "file_path": ""
         }
     }
-    notification_server_event_url = "%s/events" % settings.INNER_NOTIFICATION_SERVER_URL
+    notification_server_event_url = "%s/events" % settings.INNER_NOTIFICATION_SERVER_URL.rstrip('/')
     payload = {
         'exp': int(time.time()) + 500
     }
