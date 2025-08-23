@@ -32,6 +32,12 @@ class CommentPanel extends React.Component {
     this.toBeAddedParticipant = [];
   }
 
+  forceUpdate = () => {
+    this.listComments();
+    this.getParticipants();
+    this.listRepoRelatedUsers();
+  };
+
   listComments = () => {
     seafileAPI.listComments(repoID, fileUuid).then((res) => {
       this.setState({

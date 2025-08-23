@@ -14,7 +14,7 @@ from django.utils import timezone
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
+from seahub.api2.utils import api_error, user_to_dict, to_python_boolean, send_comment_update_event
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
 from seahub.utils.repo import get_repo_owner
@@ -132,6 +132,7 @@ class FileCommentsView(APIView):
         notification = detail
         notification['to_users'] = to_users
         comment['notification'] = notification
+        send_comment_update_event(file_uuid)
         return Response(comment)
 
 
@@ -166,6 +167,7 @@ class FileCommentView(APIView):
 
         file_comment.delete()
         SeadocCommentReply.objects.filter(comment_id=comment_id).delete()
+        send_comment_update_event(file_uuid)
         return Response({'success': True})
 
     def put(self, request, repo_id, file_uuid, comment_id):
@@ -204,6 +206,7 @@ class FileCommentView(APIView):
 
         comment = file_comment.to_dict()
         comment.update(user_to_dict(file_comment.author, request=request))
+        send_comment_update_event(file_uuid)
         return Response(comment)
 
 
@@ -313,6 +316,7 @@ class FileCommentRepliesView(APIView):
         notification = detail
         notification['to_users'] = to_users
         data['notification'] = notification
+        send_comment_update_event(file_uuid)
         return Response(data)
 
 
@@ -353,6 +357,7 @@ class FileCommentReplyView(APIView):
         if not reply:
             return api_error(status.HTTP_404_NOT_FOUND, 'reply not found.')
         reply.delete()
+        send_comment_update_event(file_uuid)
         return Response({'success': True})
 
     def put(self, request, repo_id, file_uuid, comment_id, reply_id):
@@ -380,4 +385,5 @@ class FileCommentReplyView(APIView):
         data = reply.to_dict()
         data.update(
             user_to_dict(reply.author, request=request))
+        send_comment_update_event(file_uuid)
         return Response(data)

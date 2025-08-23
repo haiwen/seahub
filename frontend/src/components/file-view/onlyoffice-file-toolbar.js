@@ -7,8 +7,9 @@ import Icon from '../../components/icon';
 import IconButton from '../icon-button';
 
 const propTypes = {
+  isCommentUpdated: PropTypes.bool,
   toggleDetailsPanel: PropTypes.func.isRequired,
-  toggleHeader: PropTypes.func.isRequired
+  toggleHeader: PropTypes.func.isRequired,
 };
 
 const {
@@ -38,6 +39,7 @@ class OnlyofficeFileToolbar extends React.Component {
   };
 
   render() {
+    const { isCommentUpdated } = this.props;
     const { moreDropdownOpen } = this.state;
     return (
       <Fragment>
@@ -54,6 +56,7 @@ class OnlyofficeFileToolbar extends React.Component {
             aria-label={gettext('Comment')}
           >
             <i className="sdocfont sdoc-comments"></i>
+            {isCommentUpdated && <span className='comment-tip'></span>}
           </div>
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
