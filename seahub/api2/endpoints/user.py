@@ -16,7 +16,7 @@ from seahub.organizations.models import OrgSettings
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX
 from seahub.organizations.views import gen_org_url_prefix
 from seahub.password_session import update_session_auth_hash
-from seahub.utils import is_valid_email
+from seahub.utils import is_valid_email, send_html_email, get_site_name, IS_EMAIL_CONFIGURED
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -25,6 +25,8 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.settings import ENABLE_UPDATE_USER_INFO, ENABLE_USER_SET_CONTACT_EMAIL, ENABLE_CONVERT_TO_TEAM_ACCOUNT, \
     ENABLE_USER_SET_NAME
+from seahub.options.models import UserOptions
+
 
 import seaserv
 from seaserv import ccnet_api, seafile_api
@@ -250,6 +252,22 @@ class ResetPasswordView(APIView):
 
         user.set_password(new_password)
         user.save()
+        enable_pwd_email = bool(UserOptions.objects.get_password_update_email_enable_status(user.username))
+        
+        if IS_EMAIL_CONFIGURED and enable_pwd_email:
+            email_template_name = 'registration/password_change_email.html'
+            send_to = email2contact_email(request.user.username)
+            site_name = get_site_name()
+            c = {
+                'email': send_to,
+                'name': email2nickname(user.username)
+            }
+            try:
+                send_html_email(_("[%s]Your Password Has Been Successfully Updated") % site_name,
+                                email_template_name, c, None,
+                                [send_to])
+            except Exception as e:
+                logger.error('Failed to send notification to %s' % send_to)
 
         if not request.session.is_empty():
             # invalidate all active sessions after change password.
