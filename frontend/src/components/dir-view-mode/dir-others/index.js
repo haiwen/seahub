@@ -11,10 +11,11 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
+import SimpleWorkflowEditor from './workflow';
 
 import './index.css';
 
-const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
+const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo, showMdView }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
 
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
@@ -53,14 +54,27 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
     setRepoHistoryDialogOpen(!isRepoHistoryDialogOpen);
   };
 
+  let [isWorkflowOpen, setWorkflowOpen] = useState(false);
+  const openWorkflow = () => setWorkflowOpen(true);
+  const closeWorkflow = () => setWorkflowOpen(false);
+
   const isDesktop = Utils.isDesktop();
   const isRepoOwner = owner_email == username;
   const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
 
   const enableMonitorRepo = isPro && (permission == 'r' || permission == 'rw');
-
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
+      {showMdView && (
+        <>
+          <div className="dir-others-item text-nowrap" title="Workflow" onClick={openWorkflow}>
+            <span className="sf3-font-trash sf3-font"></span>
+            <span className="dir-others-item-text">Workflow</span>
+          </div>
+          <SimpleWorkflowEditor open={isWorkflowOpen} onClose={closeWorkflow} repoId={repoID} />
+        </>
+      )
+      }
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
           repo={currentRepoInfo}
