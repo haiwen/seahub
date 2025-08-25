@@ -408,6 +408,12 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  // statistics
+  getStatistics = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/statistics/';
+    return this.req.get(url);
+  };
+
 }
 
 const metadataAPI = new MetadataManagerAPI();

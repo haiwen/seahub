@@ -25,6 +25,7 @@ export const VIEW_TYPE = {
   FACE_RECOGNITION: 'face_recognition',
   KANBAN: 'kanban',
   MAP: 'map',
+  STATISTICS: 'statistics',
 };
 
 export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
@@ -35,6 +36,7 @@ export const VIEW_TYPE_ICON = {
   [VIEW_TYPE.FACE_RECOGNITION]: 'face-recognition-view',
   [VIEW_TYPE.KANBAN]: 'kanban',
   [VIEW_TYPE.MAP]: 'map',
+  [VIEW_TYPE.STATISTICS]: 'statistics',
   'image': 'image'
 };
 
@@ -92,6 +94,13 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
       filter_term: []
     },
   ],
+  [VIEW_TYPE.STATISTICS]: [
+    {
+      column_key: PRIVATE_COLUMN_KEY.IS_DIR,
+      filter_predicate: FILTER_PREDICATE_TYPE.IS,
+      filter_term: 'file'
+    },
+  ],
 };
 
 export const VIEW_TYPE_DEFAULT_SORTS = {
@@ -100,6 +109,7 @@ export const VIEW_TYPE_DEFAULT_SORTS = {
   [VIEW_TYPE.FACE_RECOGNITION]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
   [VIEW_TYPE.KANBAN]: [],
   [VIEW_TYPE.MAP]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
+  [VIEW_TYPE.STATISTICS]: [],
 };
 
 export const VIEW_SORT_COLUMN_RULES = {
