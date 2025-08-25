@@ -436,6 +436,23 @@ class Store {
     this.applyOperation(operation);
   }
 
+  moveRecords(row_ids, target_repo_id, dirents, target_parent_path, source_parent_path, update_data, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.MOVE_RECORDS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      row_ids,
+      target_repo_id,
+      dirents,
+      target_parent_path,
+      source_parent_path,
+      update_data,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
   duplicateRecord(row_id, target_repo_id, dirent, target_parent_path, source_parent_path, { success_callback, fail_callback }) {
     const type = OPERATION_TYPE.DUPLICATE_RECORD;
     const operation = this.createOperation({
@@ -444,6 +461,22 @@ class Store {
       row_id,
       target_repo_id,
       dirent,
+      target_parent_path,
+      source_parent_path,
+      success_callback,
+      fail_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  duplicateRecords(row_ids, target_repo_id, dirents, target_parent_path, source_parent_path, { success_callback, fail_callback }) {
+    const type = OPERATION_TYPE.DUPLICATE_RECORDS;
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      row_ids,
+      target_repo_id,
+      dirents,
       target_parent_path,
       source_parent_path,
       success_callback,

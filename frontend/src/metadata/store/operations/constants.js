@@ -26,7 +26,9 @@ export const OPERATION_TYPE = {
   MODIFY_RECORD_VIA_BUTTON: 'modify_record_via_button',
   MODIFY_LOCAL_RECORD: 'modify_local_record',
   MOVE_RECORD: 'move_record',
+  MOVE_RECORDS: 'move_records',
   DUPLICATE_RECORD: 'duplicate_record',
+  DUPLICATE_RECORDS: 'duplicate_records',
 
   // face table
   RENAME_PEOPLE_NAME: 'rename_people_name',
@@ -54,6 +56,8 @@ export const OPERATION_ATTRIBUTES = {
   [OPERATION_TYPE.RELOAD_RECORDS]: ['repo_id', 'row_ids'],
   [OPERATION_TYPE.MOVE_RECORD]: ['repo_id', 'row_id', 'target_repo_id', 'dirent', 'target_parent_path', 'source_parent_path', 'update_data'],
   [OPERATION_TYPE.DUPLICATE_RECORD]: ['repo_id', 'row_id', 'target_repo_id', 'dirent', 'target_parent_path', 'source_parent_path'],
+  [OPERATION_TYPE.MOVE_RECORDS]: ['repo_id', 'row_ids', 'target_repo_id', 'dirents', 'target_parent_path', 'source_parent_path', 'update_data'],
+  [OPERATION_TYPE.DUPLICATE_RECORDS]: ['repo_id', 'row_ids', 'target_repo_id', 'dirents', 'target_parent_path', 'source_parent_path'],
   [OPERATION_TYPE.MODIFY_LOCAL_RECORD]: ['repo_id', 'row_id', 'parent_dir', 'file_name', 'updates'],
 
   [OPERATION_TYPE.MODIFY_FILTERS]: ['repo_id', 'view_id', 'filter_conjunction', 'filters', 'basic_filters'],
@@ -109,6 +113,8 @@ export const NEED_APPLY_AFTER_SERVER_OPERATION = [
   OPERATION_TYPE.MODIFY_SORTS,
   OPERATION_TYPE.MOVE_RECORD,
   OPERATION_TYPE.DUPLICATE_RECORD,
+  OPERATION_TYPE.MOVE_RECORDS,
+  OPERATION_TYPE.DUPLICATE_RECORDS,
 ];
 
 export const VIEW_OPERATION = [
