@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import * as d3 from 'd3';
 import { Button, Col, Row } from 'reactstrap';
-import { gettext } from '../../../utils/constants';
+import { gettext, mediaUrl } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
+import SortMenu from '../../../components/sort-menu';
 import { PREDEFINED_FILE_TYPE_OPTION_KEY } from '../../constants/column/predefined';
 import { useMetadataView } from '../../hooks/metadata-view';
+import { useCollaborators } from '../../hooks/collaborators';
+import { getCollaborator } from '../../utils/cell/column/collaborator';
 import metadataAPI from '../../api';
 
 import './index.css';
@@ -33,18 +36,15 @@ const FILE_TYPE_COLORS = {
   other: '#636e72',
 };
 
-// Helper function to get display name for file type
-const getFileTypeDisplayName = (type) => {
-  return FILE_TYPE_NAMES[type] || FILE_TYPE_NAMES.other;
-};
-
 const Statistics = () => {
   const { repoID } = useMetadataView();
+  const { collaborators, getCollaborator: getCollaboratorFromHook } = useCollaborators();
   const [isLoading, setIsLoading] = useState(true);
   const [statisticsData, setStatisticsData] = useState(null);
-  const [timeGrouping, setTimeGrouping] = useState('modified'); // 'modified' or 'created'
+  const [timeGrouping, setTimeGrouping] = useState('modified');
+  const [creatorSortBy, setCreatorSortBy] = useState('count');
+  const [creatorSortOrder, setCreatorSortOrder] = useState('desc');
 
-  // Fetch statistics data from metadata API
   const fetchStatisticsData = useCallback(async () => {
     if (!repoID) {
       setIsLoading(false);
@@ -54,11 +54,9 @@ const Statistics = () => {
     try {
       setIsLoading(true);
 
-      // Use the metadata statistics API
       const response = await metadataAPI.getStatistics(repoID);
 
       if (response.data) {
-        // Transform API response to component format
         const transformedData = {
           fileTypeStats: response.data.file_type_stats.map(item => ({
             type: item.type,
@@ -81,7 +79,6 @@ const Statistics = () => {
         setStatisticsData(null);
       }
     } catch (error) {
-      console.error('Error fetching statistics data:', error);
       toaster.danger(Utils.getErrorMsg(error));
       setStatisticsData(null);
     } finally {
@@ -93,11 +90,8 @@ const Statistics = () => {
     fetchStatisticsData();
   }, [fetchStatisticsData]);
 
-  // Prepare pie chart data for file types
   const pieChartData = useMemo(() => {
     if (!statisticsData?.fileTypeStats) return [];
-
-    console.log('Raw fileTypeStats:', statisticsData.fileTypeStats);
 
     const processed = statisticsData.fileTypeStats.map(item => ({
       label: FILE_TYPE_NAMES[item.type] || item.type,
@@ -106,11 +100,9 @@ const Statistics = () => {
       type: item.type
     }));
 
-    console.log('Processed pieChartData:', processed);
     return processed;
   }, [statisticsData]);
 
-  // Prepare bar chart data for yearly distribution
   const yearlyChartData = useMemo(() => {
     if (!statisticsData?.timeStats) return [];
 
@@ -120,20 +112,43 @@ const Statistics = () => {
     }));
   }, [statisticsData]);
 
-  // Prepare horizontal bar chart data for creators
   const creatorChartData = useMemo(() => {
     if (!statisticsData?.creatorStats) return [];
 
-    return statisticsData.creatorStats.map(item => ({
-      name: item.creator,
-      value: item.count,
-    }));
-  }, [statisticsData]);
+    const processed = statisticsData.creatorStats.map(item => {
+      const collaborator = getCollaboratorFromHook ? getCollaboratorFromHook(item.creator) : getCollaborator(collaborators, item.creator);
+      return {
+        name: item.creator,
+        displayName: collaborator?.name || item.creator,
+        avatarUrl: collaborator?.avatar_url || `${mediaUrl}/avatars/default.png`,
+        value: item.count,
+        collaborator: collaborator
+      };
+    });
+
+    return processed.sort((a, b) => {
+      let compareValue = 0;
+
+      if (creatorSortBy === 'count') {
+        compareValue = a.value - b.value;
+      } else if (creatorSortBy === 'name') {
+        compareValue = a.displayName.localeCompare(b.displayName);
+      }
+
+      return creatorSortOrder === 'asc' ? compareValue : -compareValue;
+    });
+  }, [statisticsData, collaborators, getCollaboratorFromHook, creatorSortBy, creatorSortOrder]);
 
   const handleTimeGroupingChange = (newGrouping) => {
     setTimeGrouping(newGrouping);
     // Note: Time grouping change may require API enhancement in the future
     // For now, the API returns creation time data
+  };
+
+  const handleCreatorSortChange = (item) => {
+    const [sortBy, sortOrder] = item.value.split('-');
+    setCreatorSortBy(sortBy);
+    setCreatorSortOrder(sortOrder);
   };
 
   if (isLoading) {
@@ -161,7 +176,7 @@ const Statistics = () => {
       {/* Charts Section */}
       <Row className="statistics-charts">
         {/* File Type Distribution Pie Chart - Left */}
-        <Col lg="6" md="12" className="chart-container">
+        <Col md="6" xs="12" className="chart-container file-type-chart-container">
           <div className="chart-wrapper">
             <h4>{gettext('Proportion of different types of files')}</h4>
             <div className="pie-chart-container">
@@ -171,9 +186,22 @@ const Statistics = () => {
         </Col>
 
         {/* Top Contributors Horizontal Bar Chart - Right */}
-        <Col lg="6" md="12" className="chart-container">
+        <Col md="6" xs="12" className="chart-container file-creator-chart-container">
           <div className="chart-wrapper">
-            <h4>{gettext('Distributed by creator')}</h4>
+            <div className="chart-header d-flex justify-content-between align-items-center">
+              <h4>{gettext('Distributed by creator')}</h4>
+              <SortMenu
+                sortBy={creatorSortBy}
+                sortOrder={creatorSortOrder}
+                sortOptions={[
+                  { value: 'count-desc', text: gettext('Descending by count') },
+                  { value: 'count-asc', text: gettext('Ascending by count') },
+                  { value: 'name-desc', text: gettext('Descending by name') },
+                  { value: 'name-asc', text: gettext('Ascending by name') }
+                ]}
+                onSelectSortOption={handleCreatorSortChange}
+              />
+            </div>
             <div className="horizontal-bar-chart-container">
               {creatorChartData.length > 0 ? (
                 <HorizontalBarChart data={creatorChartData} />
@@ -187,31 +215,8 @@ const Statistics = () => {
         </Col>
       </Row>
 
-      {/* Summary Statistics - Top Section */}
-      <Row className="statistics-summary-row">
-        <Col lg="6" md="6" sm="12" className="summary-container">
-          <div className="summary-card">
-            <div className="summary-icon">📄</div>
-            <div className="summary-content">
-              <div className="summary-number">{statisticsData.totalFiles.toLocaleString()}</div>
-              <div className="summary-label">{gettext('File count')}</div>
-            </div>
-          </div>
-        </Col>
-        <Col lg="6" md="6" sm="12" className="summary-container">
-          <div className="summary-card">
-            <div className="summary-icon">👥</div>
-            <div className="summary-content">
-              <div className="summary-number">{statisticsData.totalCollaborators.toLocaleString()}</div>
-              <div className="summary-label">{gettext('Collaborator count')}</div>
-            </div>
-          </div>
-        </Col>
-      </Row>
-
-      {/* Time-based Distribution Bar Chart - Full Width Bottom */}
-      <Row className="statistics-time-chart">
-        <Col xs="12" className="chart-container">
+      <Row className="statistics-bottom-row">
+        <Col md="6" xs="12" className="chart-container time-chart-container">
           <div className="chart-wrapper">
             <div className="chart-header">
               <h4>{gettext('Distributed by time')}</h4>
@@ -243,20 +248,35 @@ const Statistics = () => {
             </div>
           </div>
         </Col>
+        <Col md="6" xs="12" className="chart-container summary-chart-container">
+          <div className="chart-wrapper">
+            <div className="summary-card">
+              <div className="summary-icon">📄</div>
+              <div className="summary-content">
+                <div className="summary-number">{statisticsData.totalFiles.toLocaleString()}</div>
+                <div className="summary-label">{gettext('File count')}</div>
+              </div>
+            </div>
+            <div className="summary-card">
+              <div className="summary-icon">👥</div>
+              <div className="summary-content">
+                <div className="summary-number">{statisticsData.totalCollaborators.toLocaleString()}</div>
+                <div className="summary-label">{gettext('Collaborator count')}</div>
+              </div>
+            </div>
+          </ div>
+        </Col>
       </Row>
     </div>
   );
 };
 
-// Simple Pie Chart Component using D3
 const PieChart = ({ data }) => {
   const svgRef = React.useRef();
   const containerRef = React.useRef();
 
   useEffect(() => {
-    console.log('PieChart received data:', data);
     if (!data || data.length === 0) {
-      console.log('PieChart: No data or empty data array');
       return;
     }
 
@@ -264,29 +284,40 @@ const PieChart = ({ data }) => {
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    // Responsive sizing
+    const tooltip = d3.select(container)
+      .append('div')
+      .attr('class', 'pie-chart-tooltip')
+      .style('position', 'absolute')
+      .style('background', 'rgba(0, 0, 0, 0.8)')
+      .style('color', 'white')
+      .style('padding', '8px 12px')
+      .style('border-radius', '4px')
+      .style('font-size', '12px')
+      .style('pointer-events', 'none')
+      .style('opacity', 0)
+      .style('z-index', '1000');
+
     const containerWidth = container.offsetWidth;
     const isMobile = containerWidth < 480;
-    const width = Math.min(400, containerWidth - 40);
-    const height = width;
-    const radius = Math.min(width, height) / 2 - (isMobile ? 20 : 40);
+    const radius = 150;
+    const pieSize = (radius + 20) * 2;
 
-    svg.attr('width', width).attr('height', height);
+    svg.attr('width', '100%').attr('height', pieSize);
 
     const g = svg.append('g')
-      .attr('transform', `translate(${width / 2}, ${height / 2})`);
+      .attr('transform', `translate(${pieSize / 2}, ${pieSize / 2})`);
 
     const pie = d3.pie()
       .value(d => d.value)
       .sort(null);
 
     const arc = d3.arc()
-      .innerRadius(radius * 0.4)
+      .innerRadius(0)
       .outerRadius(radius);
 
     const labelArc = d3.arc()
-      .innerRadius(radius * 0.7)
-      .outerRadius(radius * 0.7);
+      .innerRadius(radius * 0.4)
+      .outerRadius(radius * 0.4);
 
     const arcs = g.selectAll('.arc')
       .data(pie(data))
@@ -294,37 +325,88 @@ const PieChart = ({ data }) => {
       .append('g')
       .attr('class', 'arc');
 
-    // Draw slices
     arcs.append('path')
       .attr('d', arc)
       .attr('fill', d => d.data.color || '#95a5a6')
       .attr('stroke', '#fff')
       .attr('stroke-width', 2)
       .style('opacity', 0.9)
+      .style('cursor', 'pointer')
       .on('mouseover', function (event, d) {
-        d3.select(this).style('opacity', 1);
+        const total = d3.sum(data, d => d.value);
+        const percentage = Math.round((d.data.value / total) * 100);
+
+        d3.select(this)
+          .style('opacity', 1)
+          .transition()
+          .duration(200)
+          .attr('transform', function (d) {
+            const centroid = arc.centroid(d);
+            return `translate(${centroid[0] * 0.05}, ${centroid[1] * 0.05})`;
+          });
+
+        tooltip
+          .style('opacity', 1)
+          .html(`<strong>${d.data.label}</strong><br/>Count: ${d.data.value}<br/>Percentage: ${percentage}%`)
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 10) + 'px');
+      })
+      .on('mousemove', function (event, d) {
+        tooltip
+          .style('left', (event.pageX + 10) + 'px')
+          .style('top', (event.pageY - 10) + 'px');
       })
       .on('mouseout', function (event, d) {
-        d3.select(this).style('opacity', 0.9);
+        d3.select(this)
+          .style('opacity', 0.9)
+          .transition()
+          .duration(200)
+          .attr('transform', 'translate(0,0)');
+
+        tooltip.style('opacity', 0);
       });
 
-    // Add percentage labels only on larger slices and if not mobile
-    if (!isMobile) {
-      const total = d3.sum(data, d => d.value);
-      arcs.filter(d => (d.data.value / total) > 0.05)
-        .append('text')
-        .attr('transform', d => `translate(${labelArc.centroid(d)})`)
-        .style('text-anchor', 'middle')
-        .style('font-size', '11px')
-        .style('font-weight', '500')
-        .style('fill', '#333')
-        .text(d => `${Math.round((d.data.value / total) * 100)}%`);
-    }
+    const total = d3.sum(data, d => d.value);
+    const minSlicePercentage = 0.08;
 
-    // Create legend
+    arcs.filter(d => (d.data.value / total) >= minSlicePercentage)
+      .each(function (d) {
+        const centroid = labelArc.centroid(d);
+        const textGroup = d3.select(this);
+
+        const angle = (d.startAngle + d.endAngle) / 2;
+        const isRightSide = angle < Math.PI;
+        const rotation = (angle * 180 / Math.PI) - 90;
+
+        const finalRotation = isRightSide ? rotation : rotation + 180;
+        const textAnchor = isRightSide ? 'start' : 'end';
+
+        const percentage = Math.round((d.data.value / total) * 100);
+        const textContent = `${d.data.value}(${percentage}%)`;
+
+        const maxTextRadius = radius - 10; // Keep 10px from edge
+        const textRadius = Math.min(Math.sqrt(centroid[0] * centroid[0] + centroid[1] * centroid[1]), maxTextRadius * 0.8);
+
+        const adjustedCentroid = [
+          (centroid[0] / Math.sqrt(centroid[0] * centroid[0] + centroid[1] * centroid[1])) * textRadius,
+          (centroid[1] / Math.sqrt(centroid[0] * centroid[0] + centroid[1] * centroid[1])) * textRadius
+        ];
+
+        textGroup.append('text')
+          .attr('transform', `translate(${adjustedCentroid[0]}, ${adjustedCentroid[1]}) rotate(${finalRotation})`)
+          .style('text-anchor', textAnchor)
+          .style('font-size', '13px')
+          .style('font-weight', '600')
+          .style('color', '#666')
+          .style('fill', '#666')
+          .style('stroke', '#fff')
+          .style('stroke-width', '1px')
+          .text(textContent);
+      });
+
     const legendContainer = svg.append('g')
       .attr('class', 'legend')
-      .attr('transform', `translate(${width + (isMobile ? -160 : -140)}, 20)`);
+      .attr('transform', `translate(${pieSize + 15}, ${pieSize / 2 - (data.length * 11)})`); // Vertically center the legend
 
     const legend = legendContainer.selectAll('.legend-item')
       .data(data)
@@ -334,31 +416,40 @@ const PieChart = ({ data }) => {
       .attr('transform', (d, i) => `translate(0, ${i * 22})`);
 
     legend.append('rect')
-      .attr('width', 14)
-      .attr('height', 14)
-      .attr('rx', 2)
+      .attr('width', 20)
+      .attr('height', 6)
+      .attr('rx', 3)
       .attr('fill', d => d.color || '#95a5a6');
 
     legend.append('text')
-      .attr('x', 20)
-      .attr('y', 7)
+      .attr('x', 26)
+      .attr('y', 3)
       .attr('dy', '0.35em')
-      .style('font-size', isMobile ? '11px' : '12px')
+      .style('font-size', '13px')
       .style('fill', '#333')
+      .style('font-weight', '500')
       .text(d => {
-        return `${d.label} (${d.value})`;
+        const maxLength = isMobile ? 10 : 15;
+        const label = d.label.length > maxLength ? d.label.substring(0, maxLength) + '...' : d.label;
+        return label;
       });
 
   }, [data]);
 
+  useEffect(() => {
+    const currentContainer = containerRef.current;
+    return () => {
+      d3.select(currentContainer).selectAll('.pie-chart-tooltip').remove();
+    };
+  }, []);
+
   return (
-    <div ref={containerRef} style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+    <div ref={containerRef} style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <svg ref={svgRef}></svg>
     </div>
   );
 };
 
-// Simple Bar Chart Component using D3
 const BarChart = ({ data }) => {
   const svgRef = React.useRef();
   const containerRef = React.useRef();
@@ -370,9 +461,10 @@ const BarChart = ({ data }) => {
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    // Responsive sizing
     const containerWidth = container.offsetWidth;
+    const containerHeight = container.offsetHeight;
     const isMobile = containerWidth < 768;
+
     const margin = {
       top: 20,
       right: isMobile ? 20 : 40,
@@ -380,12 +472,11 @@ const BarChart = ({ data }) => {
       left: isMobile ? 40 : 60
     };
     const width = Math.max(300, containerWidth - margin.left - margin.right);
-    const height = isMobile ? 250 : 300;
-    const chartHeight = height - margin.top - margin.bottom;
+    const height = Math.max(200, containerHeight - margin.top - margin.bottom);
 
     const g = svg
       .attr('width', width + margin.left + margin.right)
-      .attr('height', height)
+      .attr('height', height + margin.top + margin.bottom)
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -396,53 +487,58 @@ const BarChart = ({ data }) => {
 
     const yScale = d3.scaleLinear()
       .domain([0, d3.max(data, d => d.value)])
-      .range([chartHeight, 0]);
+      .range([height, 0]);
 
-    // Create gradient for bars
-    const gradient = svg.append('defs')
-      .append('linearGradient')
-      .attr('id', 'barGradient')
-      .attr('gradientUnits', 'userSpaceOnUse')
-      .attr('x1', 0).attr('y1', chartHeight)
-      .attr('x2', 0).attr('y2', 0);
-
-    gradient.append('stop')
-      .attr('offset', '0%')
-      .attr('stop-color', '#ff9a56');
-
-    gradient.append('stop')
-      .attr('offset', '100%')
-      .attr('stop-color', '#ffd446');
-
-    // Bars with animation
     g.selectAll('.bar')
       .data(data)
       .enter()
-      .append('rect')
+      .append('path')
       .attr('class', 'bar')
-      .attr('x', d => xScale(d.name))
-      .attr('y', chartHeight)
-      .attr('width', xScale.bandwidth())
-      .attr('height', 0)
-      .attr('fill', 'url(#barGradient)')
-      .attr('rx', 3)
-      .style('filter', 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))')
+      .attr('fill', '#6395fa')
+      .attr('d', d => {
+        const x = xScale(d.name);
+        const width = xScale.bandwidth();
+        const height = 0;
+        const y = height;
+        const radius = 3;
+
+        return `M${x},${y} 
+                L${x},${y - height + radius} 
+                Q${x},${y - height} ${x + radius},${y - height} 
+                L${x + width - radius},${y - height} 
+                Q${x + width},${y - height} ${x + width},${y - height + radius} 
+                L${x + width},${y} 
+                Z`;
+      })
       .transition()
       .duration(800)
       .delay((d, i) => i * 50)
-      .attr('y', d => yScale(d.value))
-      .attr('height', d => chartHeight - yScale(d.value));
+      .attr('d', d => {
+        const x = xScale(d.name);
+        const width = xScale.bandwidth();
+        const barHeight = height - yScale(d.value);
+        const y = height;
+        const radius = Math.min(3, barHeight / 2);
 
-    // X axis
+        if (barHeight <= 0) return '';
+
+        return `M${x},${y} 
+                L${x},${y - barHeight + radius} 
+                Q${x},${y - barHeight} ${x + radius},${y - barHeight} 
+                L${x + width - radius},${y - barHeight} 
+                Q${x + width},${y - barHeight} ${x + width},${y - barHeight + radius} 
+                L${x + width},${y} 
+                Z`;
+      });
+
     g.append('g')
-      .attr('transform', `translate(0,${chartHeight})`)
+      .attr('transform', `translate(0,${height})`)
       .call(d3.axisBottom(xScale))
       .selectAll('text')
       .style('font-size', isMobile ? '10px' : '11px')
       .style('fill', '#666')
       .style('font-weight', '500');
 
-    // Y axis with grid lines
     const yAxis = g.append('g')
       .call(d3.axisLeft(yScale)
         .tickSize(-width)
@@ -455,16 +551,13 @@ const BarChart = ({ data }) => {
       .style('fill', '#666')
       .style('font-weight', '500');
 
-    // Style grid lines
     yAxis.selectAll('.tick line')
-      .style('stroke', '#f0f0f0')
+      .style('stroke', '#f5f5f5')
       .style('stroke-width', 1);
 
-    // Remove main axis lines
     yAxis.select('.domain').remove();
     g.select('.domain').remove();
 
-    // Add value labels on top of bars
     g.selectAll('.value-label')
       .data(data)
       .enter()
@@ -473,7 +566,7 @@ const BarChart = ({ data }) => {
       .attr('x', d => xScale(d.name) + xScale.bandwidth() / 2)
       .attr('y', d => yScale(d.value) - 8)
       .attr('text-anchor', 'middle')
-      .style('font-size', isMobile ? '9px' : '10px')
+      .style('font-size', '12px')
       .style('fill', '#666')
       .style('font-weight', '600')
       .style('opacity', 0)
@@ -486,13 +579,12 @@ const BarChart = ({ data }) => {
   }, [data]);
 
   return (
-    <div ref={containerRef} style={{ width: '100%', overflowX: 'auto' }}>
-      <svg ref={svgRef} style={{ minWidth: '300px', width: '100%' }}></svg>
+    <div ref={containerRef} className="bar-chart-responsive">
+      <svg ref={svgRef} style={{ minWidth: '300px', width: '100%', height: '100%' }}></svg>
     </div>
   );
 };
 
-// Simple Horizontal Bar Chart Component using D3
 const HorizontalBarChart = ({ data }) => {
   const svgRef = React.useRef();
   const containerRef = React.useRef();
@@ -504,17 +596,20 @@ const HorizontalBarChart = ({ data }) => {
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    // Responsive sizing
     const containerWidth = container.offsetWidth;
     const isMobile = containerWidth < 480;
     const margin = {
       top: 10,
-      right: isMobile ? 30 : 40,
-      bottom: 20,
-      left: isMobile ? 80 : 100
+      right: isMobile ? 60 : 80,
+      bottom: 0,
+      left: isMobile ? 100 : 120
     };
-    const width = Math.max(300, containerWidth - margin.left - margin.right);
-    const height = Math.min(350, Math.max(200, data.length * (isMobile ? 25 : 30))) - margin.top - margin.bottom;
+    const width = Math.max(350, containerWidth - margin.left - margin.right);
+    const calculatedHeight = Math.min(400, Math.max(200, data.length * (isMobile ? 35 : 40))) - margin.top - margin.bottom;
+
+    const containerHeight = container.offsetHeight || 300;
+    const maxAvailableHeight = containerHeight - margin.top - margin.bottom - 20;
+    const height = Math.max(calculatedHeight, Math.min(maxAvailableHeight, 350));
 
     const g = svg
       .attr('width', width + margin.left + margin.right)
@@ -522,80 +617,169 @@ const HorizontalBarChart = ({ data }) => {
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
+    const maxValue = d3.max(data, d => d.value);
+
+    const getNiceNumber = (value, round = true) => {
+      const exponent = Math.floor(Math.log10(value));
+      const fraction = value / Math.pow(10, exponent);
+      let niceFraction;
+
+      if (round) {
+        if (fraction < 1.5) niceFraction = 1;
+        else if (fraction < 3) niceFraction = 2;
+        else if (fraction < 7) niceFraction = 5;
+        else niceFraction = 10;
+      } else {
+        if (fraction <= 1) niceFraction = 1;
+        else if (fraction <= 2) niceFraction = 2;
+        else if (fraction <= 5) niceFraction = 5;
+        else niceFraction = 10;
+      }
+
+      return niceFraction * Math.pow(10, exponent);
+    };
+
+    const range = getNiceNumber(maxValue, false);
+    const stepSize = getNiceNumber(range / 4, true);
+    const niceMax = Math.ceil(maxValue / stepSize) * stepSize;
+
+    const adjustedMax = Math.max(niceMax, stepSize * 4);
+    const finalStepSize = adjustedMax / 4;
+
     const xScale = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.value)])
-      .range([0, width]);
+      .domain([0, adjustedMax])
+      .range([0, width - 60]);
 
     const yScale = d3.scaleBand()
       .domain(data.map(d => d.name))
       .range([0, height])
-      .padding(0.15);
+      .padding(0.3);
 
-    // Bars with gradient effect
-    const gradient = svg.append('defs')
-      .selectAll('linearGradient')
-      .data(data)
-      .enter()
-      .append('linearGradient')
-      .attr('id', (d, i) => `gradient${i}`)
-      .attr('gradientUnits', 'userSpaceOnUse')
-      .attr('x1', 0).attr('y1', 0)
-      .attr('x2', '100%').attr('y2', 0);
+    const xAxis = g.append('g')
+      .attr('transform', `translate(0,${height})`)
+      .call(d3.axisBottom(xScale)
+        .tickValues([0, finalStepSize, finalStepSize * 2, finalStepSize * 3, adjustedMax])
+        .tickFormat(d3.format('d'))
+        .tickSize(-height)
+      );
 
-    gradient.append('stop')
-      .attr('offset', '0%')
-      .attr('stop-color', (d, i) => {
-        const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b'];
-        return colors[i % colors.length];
-      });
+    xAxis.selectAll('text')
+      .style('font-size', isMobile ? '10px' : '11px')
+      .style('fill', '#666')
+      .style('font-weight', '500');
 
-    gradient.append('stop')
-      .attr('offset', '100%')
-      .attr('stop-color', (d, i) => {
-        const colors = ['#764ba2', '#667eea', '#f5576c', '#f093fb', '#00f2fe', '#4facfe', '#a8edea'];
-        return colors[i % colors.length];
-      });
+    xAxis.selectAll('.tick line')
+      .style('stroke', '#f5f5f5')
+      .style('stroke-width', 1);
 
-    // Bars
+    xAxis.select('.domain').remove();
+
+    const barHeight = 18;
+    const barY = d => yScale(d.name) + (yScale.bandwidth() - barHeight) / 2;
+
     g.selectAll('.bar')
       .data(data)
       .enter()
-      .append('rect')
+      .append('path')
       .attr('class', 'bar')
-      .attr('x', 0)
-      .attr('y', d => yScale(d.name))
-      .attr('width', 0)
-      .attr('height', yScale.bandwidth())
-      .attr('fill', (d, i) => `url(#gradient${i})`)
-      .attr('rx', 4)
+      .attr('fill', '#6395fa')
+      .attr('d', d => {
+        const width = 0;
+        const height = barHeight;
+        const y = barY(d);
+        return `M0,${y} 
+                L${width},${y} 
+                L${width},${y + height} 
+                L0,${y + height} 
+                Z`;
+      })
       .transition()
       .duration(800)
       .delay((d, i) => i * 100)
-      .attr('width', d => xScale(d.value));
+      .attr('d', d => {
+        const width = xScale(d.value);
+        const height = barHeight;
+        const y = barY(d);
+        const radius = Math.min(3, width / 2);
 
-    // Y axis - contributor names
-    g.append('g')
-      .call(d3.axisLeft(yScale).tickSize(0))
-      .selectAll('text')
-      .style('font-size', isMobile ? '10px' : '11px')
-      .style('fill', '#333')
-      .style('font-weight', '500');
+        if (width <= 0) return '';
 
-    // Remove Y axis line
-    g.select('.domain').remove();
+        return `M0,${y} 
+                L${width - radius},${y} 
+                Q${width},${y} ${width},${y + radius} 
+                L${width},${y + height - radius} 
+                Q${width},${y + height} ${width - radius},${y + height} 
+                L0,${y + height} 
+                Z`;
+      });
 
-    // Value labels at the end of bars
-    g.selectAll('.label')
+    const yAxisGroup = g.append('g')
+      .attr('class', 'y-axis');
+
+    data.forEach((d, i) => {
+      const yPos = yScale(d.name) + yScale.bandwidth() / 2;
+
+      const itemGroup = yAxisGroup.append('g')
+        .attr('transform', `translate(0, ${yPos})`);
+
+      const avatarCenterX = -margin.left + 4 + 14;
+
+      itemGroup.append('circle')
+        .attr('cx', avatarCenterX)
+        .attr('cy', 0)
+        .attr('r', 14)
+        .attr('fill', '#f0f0f0')
+        .attr('stroke', '#ddd')
+        .attr('stroke-width', 1);
+
+      itemGroup.append('clipPath')
+        .attr('id', `avatar-clip-${i}`)
+        .append('circle')
+        .attr('cx', avatarCenterX)
+        .attr('cy', 0)
+        .attr('r', 14);
+
+      itemGroup.append('image')
+        .attr('x', avatarCenterX - 14)
+        .attr('y', -14)
+        .attr('width', 28)
+        .attr('height', 28)
+        .attr('href', d.avatarUrl)
+        .attr('clip-path', `url(#avatar-clip-${i})`)
+        .style('opacity', 0)
+        .transition()
+        .duration(600)
+        .delay(i * 100)
+        .style('opacity', 1);
+
+      const nameX = avatarCenterX + 14 + 12;
+      itemGroup.append('text')
+        .attr('x', nameX)
+        .attr('y', 0)
+        .attr('dy', '0.35em')
+        .attr('text-anchor', 'start')
+        .style('font-size', '13px')
+        .style('fill', '#333')
+        .style('font-weight', '500')
+        .text(() => {
+          const maxLength = isMobile ? 12 : 18;
+          const name = d.displayName;
+          return name.length > maxLength ? name.substring(0, maxLength) + '...' : name;
+        })
+        .attr('title', d.displayName);
+    });
+
+    g.selectAll('.value-label')
       .data(data)
       .enter()
       .append('text')
-      .attr('class', 'label')
-      .attr('x', d => Math.min(xScale(d.value) + 5, width - 30))
-      .attr('y', d => yScale(d.name) + yScale.bandwidth() / 2)
-      .attr('dy', '.35em')
-      .style('font-size', isMobile ? '9px' : '10px')
+      .attr('class', 'value-label')
+      .attr('x', d => xScale(d.value) + 10)
+      .attr('y', d => barY(d) + barHeight / 2)
+      .attr('dy', '0.35em')
+      .style('font-size', '12px')
       .style('fill', '#666')
-      .style('font-weight', '500')
+      .style('font-weight', '600')
       .style('opacity', 0)
       .text(d => d.value)
       .transition()
@@ -606,8 +790,8 @@ const HorizontalBarChart = ({ data }) => {
   }, [data]);
 
   return (
-    <div ref={containerRef} style={{ width: '100%' }}>
-      <svg ref={svgRef}></svg>
+    <div ref={containerRef} style={{ width: '100%', height: '100%' }}>
+      <svg ref={svgRef} style={{ width: '100%', height: '100%' }}></svg>
     </div>
   );
 };
