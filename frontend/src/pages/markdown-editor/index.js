@@ -1,9 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
   EXTERNAL_EVENTS,
   EventBus,
   MarkdownEditor as SeafileMarkdownEditor,
-  MarkdownViewer as SeafileMarkdownViewer,
 } from '@seafile/seafile-editor';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -407,27 +406,19 @@ class MarkdownEditor extends React.Component {
           toggleLockFile={this.toggleLockFile}
         />
         <div className={`sf-md-viewer-content ${isLocked ? 'locked' : ''}`}>
-          {(filePerm === 'rw' && !isLocked) ?
-            <SeafileMarkdownEditor
-              ref={this.editorRef}
-              isFetching={loading}
-              initValue={this.getFileName(fileName)}
-              value={markdownContent}
-              editorApi={editorApi}
-              onSave={this.onSaveEditorContent}
-              onContentChanged={this.onContentChanged}
-              mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-            >
-              <DetailListView fileInfo={fileInfo} />
-            </SeafileMarkdownEditor>
-            :
-            <SeafileMarkdownViewer
-              isFetching={loading}
-              value={markdownContent}
-              mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
-              isShowOutline={true}
-            />
-          }
+          <SeafileMarkdownEditor
+            ref={this.editorRef}
+            isFetching={loading}
+            isReadonly={filePerm !== 'rw' || isLocked}
+            initValue={this.getFileName(fileName)}
+            value={markdownContent}
+            editorApi={editorApi}
+            onSave={this.onSaveEditorContent}
+            onContentChanged={this.onContentChanged}
+            mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
+          >
+            <DetailListView fileInfo={fileInfo} />
+          </SeafileMarkdownEditor>
         </div>
         {this.state.showMarkdownEditorDialog && (
           <>
