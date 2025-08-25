@@ -276,6 +276,10 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
     oq_cache.delete(session_id)
     session_info = response.session_info()
     attribute_mapping = attribute_mapping or SAML_ATTRIBUTE_MAPPING
+    if not attribute_mapping:
+        logger.error('ADFS attribute mapping is not valid.')
+        return render_error(request, login_failed_error_msg)
+
 
     # saml2 connect
     relay_state = request.POST.get('RelayState', '/saml/complete/')
@@ -314,6 +318,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         return HttpResponseRedirect(relay_state)
 
     if not session_info:
+        logger.error('ADFS session info is not valid.')
         return render_error(request, login_failed_error_msg)
 
     name_id = session_info.get('name_id', '')
