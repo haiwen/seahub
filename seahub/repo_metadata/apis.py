@@ -3270,3 +3270,177 @@ class MetadataImportTags(APIView):
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         return Response({'success': True})
+
+
+class MetadataStatistics(APIView):
+    """
+    API for retrieving library metadata statistics for the statistics view.
+    Provides aggregated data for file type distribution, timeline analysis,
+    creator breakdown, and summary statistics.
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        """
+        Get statistics data for metadata view including:
+        - File type distribution (for pie chart)
+        - Files by creation/modification time (for bar chart)  
+        - Files by creator (for horizontal bar chart)
+        - Summary statistics (total files and collaborators count)
+        """
+        # Resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # Permission check
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # Check if metadata is enabled
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+            
+            # Get all file records (excluding directories)
+            from seafevents.repo_metadata.constants import METADATA_TABLE
+            
+            # Base SQL to get all files (not directories)
+            sql = f'''
+                SELECT 
+                    `{METADATA_TABLE.columns.file_name.name}`,
+                    `{METADATA_TABLE.columns.parent_dir.name}`,
+                    `{METADATA_TABLE.columns.file_ctime.name}`,
+                    `{METADATA_TABLE.columns.file_mtime.name}`,
+                    `{METADATA_TABLE.columns.file_creator.name}`,
+                    `{METADATA_TABLE.columns.file_modifier.name}`,
+                    `{METADATA_TABLE.columns.file_type.name}`,
+                    `{METADATA_TABLE.columns.is_dir.name}`
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                ORDER BY `{METADATA_TABLE.columns.file_ctime.name}` DESC
+            '''
+            
+            logger.info(f'Fetching metadata statistics for repo {repo_id}')
+            results = metadata_server_api.query_rows(sql, [])
+            
+            if not results or 'results' not in results:
+                logger.warning(f'No metadata results found for repo {repo_id}')
+                return Response({
+                    'file_type_stats': [],
+                    'time_stats': [],
+                    'creator_stats': [],
+                    'summary_stats': {
+                        'total_files': 0,
+                        'total_collaborators': 0
+                    }
+                })
+            
+            files_data = results['results']
+            logger.info(f'Processing {len(files_data)} files for statistics')
+            
+            # Debug: log first few records to understand structure
+            if files_data:
+                logger.info(f'Sample record keys: {list(files_data[0].keys())}')
+                logger.info(f'Sample record: {files_data[0]}')
+            
+            # Process statistics
+            statistics = self._process_statistics(files_data)
+            
+            return Response(statistics)
+            
+        except Exception as e:
+            logger.exception(f'Error generating metadata statistics for repo {repo_id}: {e}')
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+    def _process_statistics(self, files_data):
+        """
+        Process raw file data into statistics for visualization
+        """
+        from collections import defaultdict
+        from datetime import datetime
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+        
+        # Initialize counters
+        file_type_counts = defaultdict(int)
+        time_stats = defaultdict(int)
+        creator_counts = defaultdict(int)
+        collaborators = set()
+        
+        # Process each file
+        for file_data in files_data:
+            filename = file_data.get(METADATA_TABLE.columns.file_name.name, '')
+            ctime = file_data.get(METADATA_TABLE.columns.file_ctime.name)
+            creator = file_data.get(METADATA_TABLE.columns.file_creator.name, '')
+            modifier = file_data.get(METADATA_TABLE.columns.file_modifier.name, '')
+            file_type = file_data.get(METADATA_TABLE.columns.file_type.name, '')
+            
+            # File type statistics (use database file_type directly)
+            # If no file_type is set, use 'other' as default
+            display_type = file_type if file_type else 'other'
+            file_type_counts[display_type] += 1
+            
+            # Time statistics (by year)
+            if ctime:
+                try:
+                    # Parse datetime string to extract year
+                    if isinstance(ctime, str):
+                        dt = datetime.fromisoformat(ctime.replace('Z', '+00:00'))
+                    else:
+                        dt = ctime
+                    year = dt.year
+                    time_stats[year] += 1
+                except (ValueError, AttributeError) as e:
+                    logger.warning(f'Failed to parse datetime {ctime}: {e}')
+            
+            # Creator statistics
+            if creator:
+                creator_counts[creator] += 1
+                collaborators.add(creator)
+            
+            # Track modifiers as collaborators too
+            if modifier and modifier != creator:
+                collaborators.add(modifier)
+        
+        # Format file type statistics
+        file_type_stats = [
+            {'type': file_type, 'count': count}
+            for file_type, count in file_type_counts.items()
+        ]
+        
+        # Format time statistics (sorted by year)
+        time_stats_list = [
+            {'year': year, 'count': count}
+            for year, count in sorted(time_stats.items())
+        ]
+        
+        # Format creator statistics (top 10, sorted by count)
+        creator_stats_sorted = sorted(creator_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+        creator_stats = [
+            {'creator': creator, 'count': count}
+            for creator, count in creator_stats_sorted
+        ]
+        
+        # Summary statistics
+        summary_stats = {
+            'total_files': len(files_data),
+            'total_collaborators': len(collaborators)
+        }
+        
+        logger.info(f'Statistics processed: {len(file_type_stats)} file types, {len(time_stats_list)} years, {len(creator_stats)} creators')
+        
+        return {
+            'file_type_stats': file_type_stats,
+            'time_stats': time_stats_list,
+            'creator_stats': creator_stats,
+            'summary_stats': summary_stats
+        }

@@ -10,6 +10,7 @@ export const KEY_ADD_VIEW_MAP = {
   ADD_GALLERY: 'ADD_GALLERY',
   ADD_KANBAN: 'ADD_KANBAN',
   ADD_MAP: 'ADD_MAP',
+  ADD_STATISTICS: 'ADD_STATISTICS',
 };
 
 const ADD_VIEW_OPTIONS = [
@@ -25,6 +26,10 @@ const ADD_VIEW_OPTIONS = [
     key: KEY_ADD_VIEW_MAP.ADD_KANBAN,
     type: VIEW_TYPE.KANBAN,
   },
+  {
+    key: KEY_ADD_VIEW_MAP.ADD_STATISTICS,
+    type: VIEW_TYPE.STATISTICS,
+  }
 ];
 
 const translateLabel = (type) => {
