@@ -7,7 +7,7 @@
 # zheng xie <xiez1989@gmail.com>, 2024
 # llj <lingjun.li1@gmail.com>, 2024
 # imwhatiam <imwhatiam123@gmail.com>, 2024
-# BingbingHaidian <michael18811380328@163.com>, 2024
+# Michael An <michael18811380328@163.com>, 2024
 # Seafile Info <info@seafile.com>, 2024
 # 
 #, fuzzy

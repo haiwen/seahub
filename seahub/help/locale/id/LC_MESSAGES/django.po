@@ -4,9 +4,6 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# ugusta <ugusta@hotmail.com>, 2024
-# Robert Högberg <robert.hogberg@gmail.com>, 2024
-# Radapompa <radapompa@gmail.com>, 2024
 # Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
@@ -17,151 +14,151 @@ msgstr ""
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
-"Language-Team: Swedish (https://app.transifex.com/haiwen/teams/5086/sv/)\n"
+"Language-Team: Indonesian (https://app.transifex.com/haiwen/teams/5086/id/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: sv\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: id\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr "Sidomeny"
+msgstr "Menu Navigasi Samping"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
-msgstr "Introduktion"
+msgstr "Pengenalan"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr "Hanterar filer och mappar"
+msgstr "Mengelola file dan folder"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr "Hanterar filer med kataloger"
+msgstr "Mengelola file dengan pustaka"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr "Återställer borttagna filer"
+msgstr "Memulihkan file yang dihapus"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr "Hittar äldre filversioner"
+msgstr "Mencari versi file lama"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr "Kataloghistorik och ögonblicksbilder"
+msgstr "Riwayat pustaka dan snapshot"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr "Sätter historik kvarhållningsperiod"
+msgstr "Mengatur periode retensi riwayat"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
-msgstr "Ta bort katalog"
+msgstr "Menghapus pustaka"
 
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr "Visar filer inom Webb App"
+msgstr "Melihat file dalam Aplikasi Web"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr "Fulltext filsökning"
+msgstr "Pencarian file teks lengkap"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr "Delning och samarbete"
+msgstr "Berbagi dan kolaborasi"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr "Delar filer och mappar"
+msgstr "Berbagi file dan folder"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr "Hanterar grupper"
+msgstr "Mengelola grup"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr "Låser filer"
+msgstr "Mengunci file"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr "Mapprättigheter"
+msgstr "Izin folder"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr "Avdelningsdelning"
+msgstr "Berbagi antar departemen"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr "Wiki och kunskapshantering"
+msgstr "Wiki dan manajemen pengetahuan"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr "Hantera en katalog som Wiki"
+msgstr "Mengelola pustaka sebagai Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr "Skrivbordsklient och synkronisering"
+msgstr "Klien desktop dan sinkronisasi"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr "Installera och synka filer"
+msgstr "Instal dan sinkronisasi file"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr "Synkronisera existerande mappar"
+msgstr "Sinkronisasi folder yang sudah ada"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr "Selektivt synka undermappar"
+msgstr "Sinkronisasi sub-folder secara selektif"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr "Läs-enbart synkronisering"
+msgstr "Sinkronisasi hanya baca"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr "Avsynkronisera och återsynkronisera kataloger"
+msgstr "Membatalkan sinkronisasi dan mensinkronisasi ulang pustaka"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr "Sätt synk intervall"
+msgstr "Mengatur interval sinkronisasi"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr "Proxyinställningar"
+msgstr "Pengaturan proxy"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
-msgstr "Filkonflikter"
+msgstr "Konflik file"
 
 #: templates/help/base.html:89
 msgid "Excluding files"
-msgstr "Exkludera filer"
+msgstr "Mengeluarkan file"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr "Driveklient"
+msgstr "Klien Drive"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr "Använda Seafile driveklient"
+msgstr "Menggunakan klien Drive Seafile"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr "Använda driveklient 2.0 på Windows"
+msgstr "Menggunakan klien Drive 2.0 di Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr "Säkerhet och kryptering"
+msgstr "Keamanan dan enkripsi"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr "Hur man använder krypterade kataloger"
+msgstr "Cara menggunakan pustaka terenkripsi"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -169,9 +166,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
-"När du och dina vänner synkar en delad filkatalog till era datorer kan ni "
-"lägga till, ta bort och ändra filer i katalogen tillsammans. Alla ändringar "
-"som ni gör i katalogen kommer automatiskt synkroniseras till andras datorer."
+"Setelah Anda dan teman - teman Anda mensinkronkan pustaka file bersama ke "
+"komputer Anda, Anda dapat menambahkan, menghapus, atau mengedit file di "
+"pustaka tersebut bersama - sama. Setiap perubahan yang Anda buat pada "
+"pustaka akan secara otomatis disinkronkan ke komputer orang lain."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -182,50 +180,50 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
-"Ibland kommer du och dina vänner ändra i samma fil samtidigt. Era ändringar "
-"kommer hamna i konflikt med varandra. I dessa fall kommer Seafile behålla "
-"den första versionen synkroniserad till molnet oändrat. Medan den döper om "
-"de andra versionerna till \"konfliktfil\". En konfliktfils namn slutar med "
-"dess användares mejladress samt nuvarande tid. Exempel test.txt (SFConflict "
-"name@example.com 2015-03-07-11-30-28)."
+"Terkadang Anda dan teman - teman Anda mungkin mengedit file yang sama pada "
+"waktu yang sama. Perubahan Anda mungkin bertentangan dengan perubahan "
+"mereka. Dalam hal ini, Seafile akan mempertahankan versi pertama yang "
+"disinkronkan ke cloud tetap tidak berubah, sementara mengganti nama versi "
+"lain menjadi \"file konflik\". Nama file konflik diakhiri dengan alamat "
+"email penulisnya, ditambah waktu saat ini, misalnya test.txt (SFConflict "
+"name@example.com 2015 - 03 - 07 - 11 - 30 - 28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
-"Du kan ta bort en katalog som ägs av dig. En borttagen katalog kan "
-"återställas av dig eller Seafile-serverns administratör."
+"Anda dapat menghapus pustaka yang dimiliki oleh Anda. Pustaka yang dihapus "
+"dapat dipulihkan oleh Anda atau administrator server Seafile."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr "Efter en katalog är borttagen, så får den följande effekter:"
+msgstr "Setelah sebuah pustaka dihapus, ini memiliki efek berikut:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
-"Delning av alla filer och mappar inom denna katalog har blivit avbruten."
+msgstr "Semua berbagi file dan folder dalam pustaka ini dibatalkan."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
-"Skrivbordsklienter som är synkroniserade med denna katalog kan inte "
-"synkronisera med den längre. Men de lokala filerna på klienten kommer inte "
-"tas bort."
+"Klien desktop yang disinkronkan dengan pustaka ini tidak dapat disinkronkan "
+"lagi dengannya. Tetapi file lokal di klien tidak akan dihapus."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr "Hantera och använda avdelningar"
+msgstr "Mengelola dan menggunakan departemen"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
-"Några organisationer har komplexa avdelningshierarkier. Det finns normalt "
-"två vanliga användningsfall för filhantering inom dessa organisationer:"
+"Beberapa organisasi terdiri dari hierarki departemen yang kompleks. Biasanya"
+" ada dua kasus penggunaan umum untuk manajemen file di organisasi - "
+"organisasi ini:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -233,9 +231,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
-"Det bör finnas en vanlig fildelningsyta för organisationen. Mapphierarkin "
-"bör kartlägga avdelningshierarkin. Det kommer vara separata mappar eller "
-"ytor tilldelade varje avdelning."
+"Harus ada ruang berbagi file umum untuk organisasi. Hierarki folder harus "
+"mencerminkan hierarki departemen. Akan ada folder atau ruang terpisah yang "
+"ditugaskan untuk setiap departemen."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -243,54 +241,53 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
-"Delningsytan bör vara ägd och hanterad av organisationen, men inte "
-"individuella anställda. Så att inte ägarskapet av filer behöver ändras när "
-"en anställd lämnar organisationen."
+"Ruang berbagi harus dimiliki dan dikelola oleh organisasi, bukan oleh "
+"karyawan individu. Sehingga kepemilikan file tidak perlu diubah ketika "
+"seorang karyawan meninggalkan organisasi."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
-"Funktionen \"Avdelningar\" är utformad för att möta de två ovanstående "
-"användningsfallen. Vi kommer att introducera denna funktion från 3 olika "
-"perspektiv:"
+"Fitur \"Departemen\" dirancang untuk memenuhi dua kasus penggunaan di atas. "
+"Kami akan memperkenalkan fitur ini dari 3 perspektif berbeda:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr "Systemadministratör"
+msgstr "Admin sistem"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr "Avdelningsadministratör"
+msgstr "Admin departemen"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr "Avdelningsmedlemmar"
+msgstr "Anggota departemen"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr "Systemadministratören kan:"
+msgstr "Admin sistem dapat:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr "Hantera avdelningshierarki och medlemmar"
+msgstr "Mengelola hierarki departemen dan anggota"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr "Tilldela lagringskvoter för avdelningar"
+msgstr "Menetapkan kuota penyimpanan untuk departemen"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr "Skapa och hantera delade kataloger i avdelningar"
+msgstr "Membuat dan mengelola pustaka bersama di departemen"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
-"Systemadministratören kan konfigurera avdelningshierarkin på två sätt: "
-"manuell konfiguration eller import från Active Directory."
+"Admin sistem dapat mengatur hierarki departemen dengan dua cara: pengaturan "
+"manual atau mengimpor dari Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -300,11 +297,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
-"Systemadministratören kan skapa valfritt antal avdelningar på toppnivå och "
-"skapa valfritt antal underavdelningar under varje avdelning. Och varje nivå "
-"av avdelning kan fyllas med medlemmar. Systemadministratören kan ställa in "
-"rollen för varje medlem till 'medlem' eller 'admin'. Vi kommer att "
-"introducera hur en avdelnings-administratör kan hantera avdelningen senare."
+"Admin sistem dapat membuat sejumlah departemen tingkat atas dan membuat "
+"berbagai tingkatan sub-departemen di bawah setiap departemen. Dan setiap "
+"tingkat departemen dapat diisi dengan anggota. Admin sistem dapat menetapkan"
+" peran setiap anggota menjadi 'anggota' atau 'admin'. Kami akan "
+"memperkenalkan bagaimana admin departemen dapat mengelola departemen nanti."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -313,19 +310,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
-"Systemadministratören kan också importera hierarkin från OUs "
-"(Organisatoriska Enheter) i AD. Varje OU kommer att importeras som en "
-"avdelning. Och under-OUs under en OU kommer att importeras som "
-"underavdelningar. Avdelningskataloger kan automatiskt skapas i "
-"importprocessen."
+"Admin sistem juga dapat mengimpor hierarki dari OU (Organizational Units) di"
+" AD. Setiap OU akan diimpor sebagai departemen. Dan sub-OU di bawah sebuah "
+"OU akan diimpor sebagai sub-departemen. Pustaka departemen dapat dibuat "
+"secara otomatis dalam proses impor."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
-"Systemadministratören kan också ta bort en avdelning efter att alla "
-"underavdelningar och kataloger har tagits bort."
+"Admin sistem juga dapat menghapus sebuah departemen setelah semua sub-"
+"departemen dan pustaka dihapus."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -335,12 +331,12 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
-"Kataloger som skapas inom en avdelning ägs av avdelningen själv, inte av "
-"någon enskild användare. Så systemadministratören kan tilldela "
-"lagringskvoter till en avdelning. Den totala storleken på alla kataloger i "
-"en avdelning kan inte överstiga lagringskvoten. <strong>Observera att kvoten"
-" för under-avdelningar inte beror på kvoten för dess överordnade "
-"avdelning.</strong>"
+"Pustaka yang dibuat di dalam sebuah departemen dimiliki oleh departemen "
+"sendiri, bukan oleh pengguna individu. Jadi admin sistem dapat menetapkan "
+"kuota penyimpanan untuk sebuah departemen. Total ukuran semua pustaka di "
+"sebuah departemen tidak dapat melebihi kuota penyimpanan. <strong>Harap "
+"perhatikan bahwa kuota sub-departemen tidak bergantung pada kuota departemen"
+" induknya.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -348,17 +344,17 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
-"Avdelningskataloger kan skapas av systemadministratören eller "
-"avdelningsadministratören. Det finns också ett alternativ för att "
-"kontrollera om enskilda användare kan dela kataloger till en avdelning."
+"Pustaka departemen dapat dibuat oleh admin sistem atau admin departemen. Ada"
+" juga opsi untuk mengontrol apakah pengguna individu dapat berbagi pustaka "
+"ke sebuah departemen."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
-"Alla ovanstående operationer kan göras i systemadministrationsgränssnittet. "
-"Se skärmbilden nedan för information."
+"Semua operasi di atas dapat dilakukan di antarmuka admin sistem. Lihat "
+"tangkapan layar di bawah untuk informasi."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -366,22 +362,22 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
-"Som nämnts ovan är avdelningsadministratör en speciell roll som tilldelas av"
-" system-administratören till vissa medlemmar i en avdelning. "
-"Avdelningsadministratörer kan utföra följande operationer i en avdelning "
-"efter inloggning på sitt eget konto."
+"Seperti disebutkan di atas, admin departemen adalah peran khusus yang "
+"diberikan oleh admin sistem kepada beberapa anggota sebuah departemen. Admin"
+" departemen dapat melakukan operasi berikut di sebuah departemen setelah "
+"masuk ke akunnya sendiri."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr "Åtkomst till avdelningens kataloger"
+msgstr "Akses ke pustaka departemen"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr "Hantera medlemmar i sin avdelning"
+msgstr "Mengelola anggota di departemennya"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr "Hantera kataloger i sin avdelning"
+msgstr "Mengelola pustaka di departemennya"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -390,35 +386,35 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
-"Om en användare är administratör för en avdelning kan hen lägga till eller "
-"ta bort medlemmar i avdelningen. Alla användare som är registrerade i "
-"systemet kan läggas till som medlem i avdelningen. Men om avdelningarna "
-"importeras från AD kommer ändringar i medlemskapet att skrivas över vid "
-"nästa synkronisering med AD."
+"Jika seorang pengguna adalah admin departemen, dia dapat menambahkan atau "
+"menghapus anggota di departemen tersebut. Setiap pengguna yang terdaftar "
+"dalam sistem dapat ditambahkan sebagai anggota departemen. Tetapi jika "
+"departemen - departemen diimpor dari AD, perubahan keanggotaan akan ditimpa "
+"pada sinkronisasi berikutnya dengan AD."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
-"Avdelningsadministratören kan hantera katalogerna i avdelningen. De stödda "
-"operationerna är:"
+"Admin departemen dapat mengelola pustaka di departemen tersebut. Operasi "
+"yang didukung adalah:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr "Skapa eller ta bort katalog"
+msgstr "Buat atau hapus pustaka"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr "Ändra katalognamn"
+msgstr "Ubah nama pustaka"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
-"Dela en katalog till användare eller grupper utanför denna avdelning. Detta "
-"är mycket användbart för samarbete mellan avdelningar."
+"Bagikan sebuah pustaka kepada pengguna atau grup di luar departemen ini. Ini"
+" sangat berguna untuk kolaborasi lintas - departemen."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -428,9 +424,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
-"Ställ in detaljerade behörigheter för mappar i katalogerna för användare "
-"eller under-avdelningar i denna avdelning. Detta fungerar som <a "
-"href=\"%(SITE_ROOT)shelp/folder_permission/\">mappbehörighetsfunktionen</a>."
+"Atur izin yang terperinci untuk folder - folder di pustaka bagi pengguna "
+"atau sub - departemen di departemen ini. Ini bekerja seperti <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">fitur izin folder</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -443,27 +439,26 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
-"En vanlig medlem i avdelningen kan använda avdelningen precis som en grupp. "
-"Varje avdelning presenteras för sina medlemmar som en grupp. En användare "
-"kan inte bara få tillgång till katalogerna i avdelningen hen tillhör, utan "
-"också katalogerna i föräldraavdelningarna för sin avdelning. Till exempel, "
-"om John är i \"EMEA\"-underavdelningen under \"Försäljnings\"-avdelningen, "
-"och \"Försäljning\" är en underavdelning under företaget \"ACME\", kan John "
-"då få tillgång till grupperna \"EMEA\", \"Försäljning\" och \"ACME\". "
-"Grupperna för avdelningar är markerade med en \"byggnads\"-ikon bredvid dess"
-" namn."
+"Seorang anggota biasa departemen dapat menggunakan departemen seperti sebuah"
+" grup. Setiap departemen ditampilkan kepada anggotanya sebagai sebuah grup. "
+"Seorang pengguna tidak hanya dapat mengakses pustaka di departemen tempat ia"
+" berada, tetapi juga pustaka di departemen induk departemennya. Misalnya, "
+"jika John berada di sub - departemen \"EMEA\" di bawah departemen \"Sales\","
+" dan \"Sales\" adalah sub - departemen di bawah perusahaan \"ACME\", John "
+"kemudian dapat mengakses grup \"EMEA\", \"Sales\", dan \"ACME\". Grup - grup"
+" untuk departemen ditandai dengan ikon \"gedung\" di samping namanya."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr "Använda proxy i Seafile-klienten"
+msgstr "Menggunakan proxy di klien Seafile"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
-"Seafile-klienten stöder 3 typer av proxyservrar: HTTP proxy, SOCKS5 proxy "
-"och system proxy settings."
+"Klien Seafile mendukung 3 jenis server proxy: proxy HTTP, proxy SOCKS5, dan "
+"pengaturan proxy sistem."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -473,11 +468,11 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
-"HTTP-proxy och SOCKS5-proxy kräver att du anger proxyserverns adress och "
-"port. Om du använder system proxy settings kommer Seafile läsa in "
-"operativsystemets proxyinställningar. Operativsystemet har möjlighet att "
-"automatiskt hitta proxyserver-information så att du inte behöver lägga in "
-"proxyserveradressen manuellt."
+"Proxy HTTP dan proxy SOCKS5 mengharuskan Anda memasukkan alamat dan port "
+"server proxy. Jika Anda menggunakan pengaturan proxy sistem, klien Seafile "
+"membaca pengaturan proxy dari sistem operasi. Sistem operasi memiliki "
+"beberapa mekanisme untuk mendeteksi otomatis informasi server proxy. Jadi "
+"Anda tidak perlu memasukkan alamat server proxy secara manual."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -485,14 +480,13 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
-"För att ändra proxyinställningar, klicka på Seafile ikonen i "
-"systemnotifikationsarean. Välj \"Inställningar\" i menyn. I pop-up "
-"inställningsdialogen så kan du ändra proxyinställningar i \"Nätverks\" "
-"tabben."
+"Untuk mengubah pengaturan proxy, klik ikon Seafile di area notifikasi "
+"sistem. Pilih \"Pengaturan\" di menu. Dalam dialog pengaturan yang muncul, "
+"Anda dapat mengubah pengaturan proxy di tab \"Jaringan\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 untuk Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -501,10 +495,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (dan versi - versi mendatang) didesain ulang dengan integrasi "
+"yang lebih dalam ke sistem operasi Windows 10. Ini mendukung versi Windows "
+"10 1709 (Pembaruan Musim Gugur 2017 untuk Windows 10) dan versi yang lebih "
+"baru. Kami menyarankan pengguna Windows 10 untuk mengupgrade ke SeaDrive 2.0"
+" untuk pengalaman drive virtual yang lebih asli."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Instal dan akses Drive Virtual"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -515,40 +514,56 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"Anda dapat mengunduh SeaDrive 2.0 dari situs web resmi Seafile. Setelah "
+"instalasi dan masuk ke akun Seafile Anda, SeaDrive akan mulai mengunduh "
+"daftar pustaka dan file dari server (sama seperti di SeaDrive 1.0.x). Proses"
+" ini mungkin membutuhkan beberapa waktu, tergantung pada jumlah file yang "
+"tersedia di akun Seafile Anda. Unduhan dilakukan secara bertahap, jadi "
+"sementara itu Anda sudah dapat mengakses beberapa file di drive virtual."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Untuk mengakses drive virtual, cukup buka Windows File Explorer. Ada simpul "
+"\"seadrive\" di panel navigasi Windows File Explorer."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Mengakses file di Drive Virtual"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Pustaka dikelompokkan menjadi 4 kategori di drive virtual: Pustaka Saya, "
+"Dibagikan dengan Saya, Dibagikan dengan Grup, dan Dibagikan dengan Semua."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Seperti yang Anda lihat, ikon status file lebih terintegrasi ke Windows File"
+" Explorer. Ikonnya sedikit berbeda dari versi 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"File di drive virtual dibuat sebagai \"tempat penampung\" (placeholder) di "
+"sistem file lokal. Mereka mungkin berada dalam 3 keadaan:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>File placeholder</b>: Representasi kosong dari file dan hanya dapat "
+"dibuka ketika ada koneksi jaringan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -558,12 +573,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>File lengkap</b>: File telah diunduh dan disimpan secara lokal. Unduhan "
+"berlangsung secara otomatis ketika file placeholder dibuka untuk pertama "
+"kalinya. File - file ini tersedia setiap kali Anda membuka SeaDrive tanpa "
+"memperhatikan koneksi jaringan. Sistem operasi mungkin memutuskan untuk "
+"menghapus file lengkap ketika lebih banyak ruang disk diperlukan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>File lengkap yang disematkan</b>: File telah diunduh dan disimpan secara "
+"lokal. File ini dijamin tersedia secara offline."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -573,10 +595,12 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
-"Du kan kontrollera vilka filer eller mappar som cachas lokalt. Detta kan "
-"ändras från snabbmenyn när du högerklickar på en fil eller mapp. Välj "
-"\"Behåll alltid på denna enhet\" när du vill fästa en fil eller mapp lokalt;"
-" välj \"Frigör utrymme\" när du vill rensa cachen för en fil eller mapp."
+"Anda dapat mengontrol file atau folder mana yang akan disimpan dalam cache "
+"secara lokal. Hal ini dapat diubah dari menu konteks saat Anda klik kanan "
+"pada sebuah file atau folder. Pilih \"Selalu simpan di perangkat ini\" "
+"ketika Anda ingin menempelkan sebuah file atau folder secara lokal; pilih "
+"\"Bebaskan ruang\" ketika Anda ingin membersihkan cache untuk sebuah file "
+"atau folder."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -584,13 +608,14 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
-"I SeaDrive 1.0 uppdateras inte cachade filer automatiskt när de uppdateras "
-"på servern. I SeaDrive 2.0 hålls fullständiga och fästa filer automatiskt "
-"synkroniserade med servern."
+"Di SeaDrive 1.0, file yang disimpan dalam cache tidak diperbarui secara "
+"otomatis ketika mereka diperbarui di server. Di SeaDrive 2.0, file lengkap "
+"dan file lengkap yang disematkan secara otomatis tetap sinkron dengan "
+"server."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr "Filnedladdning och kontroll"
+msgstr "Unduhan dan Pengontrolan File"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -599,9 +624,10 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
-"När du öppnar en platshållarfil kommer operativsystemet automatiskt börja "
-"ladda ner den. Om filen kan ta tid att ladda ner kommer en förloppsindikator"
-" visas i filutforskaren och du kan avbryta nedladdningen."
+"Setiap kali Anda membuka file placeholder, sistem operasi akan secara "
+"otomatis mulai mengunduhnya. Jika file tersebut membutuhkan beberapa waktu "
+"untuk diunduh, akan ada bilah progres yang muncul di File Explorer dan Anda "
+"dapat membatalkan unduhan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -610,6 +636,11 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Terkadang aplikasi latar belakang mungkin mencoba mengunduh file di drive "
+"virtual (seperti perangkat lunak Anti - Virus). Anda akan diberitahu oleh "
+"sistem operasi tentang hal ini dan Anda dapat memilih untuk membatalkan "
+"unduhan atau melarang aplikasi tersebut mengunduh file secara otomatis di "
+"masa depan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
@@ -618,7 +649,7 @@ msgstr "FAQ"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr "Kan jag skapa, ta bort eller byta namn på bibliotek?"
+msgstr "Bisakah saya membuat, menghapus, mengganti nama pustaka?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -627,15 +658,15 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
-"Ja. När du skapar, tar bort eller byter namn på biblioteksmappar i den "
-"virtuella enheten, kommer ändringarna att synas på servern. Du kan bara "
-"skapa, ta bort eller byta namn på bibliotek under kategorin \"Mina "
-"bibliotek\". Att skapa, ta bort eller byta namn på bibliotek i andra "
-"kategorier kommer att ignoreras."
+"Ya. Ketika Anda membuat, menghapus, atau mengganti nama folder pustaka di "
+"drive virtual, operasi tersebut akan tercermin di server. Anda hanya dapat "
+"membuat, menghapus, mengganti nama pustaka di bawah kategori \"Pustaka "
+"Saya\". Membuat, menghapus, atau mengganti nama pustaka di kategori lain "
+"akan diabaikan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr "Kan jag skapa filer eller mappar utanför en biblioteksmapp?"
+msgstr "Bisakah saya membuat file atau folder di luar folder pustaka?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -643,13 +674,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
-"Ja. Men filer som skapas utanför en biblioteksmapp kommer att ignoreras och "
-"INTE synkroniseras med servern. En ny mapp under mappen \"Mina bibliotek\" "
-"kommer att hanteras som ett nytt bibliotek."
+"Ya. Tetapi file yang dibuat di luar folder pustaka akan diabaikan dan TIDAK "
+"disinkronkan ke server. Folder baru di bawah folder \"Pustaka Saya\" akan "
+"ditulang sebagai pustaka baru."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr "Kan jag komma åt krypterade bibliotek?"
+msgstr "Bisakah saya mengakses pustaka terenkripsi?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -659,16 +690,16 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
-"Ja. Som standard synkroniseras inte krypterade bibliotek och visas inte i "
-"den virtuella enheten. Du måste manuellt välja vilka krypterade bibliotek "
-"som ska synkroniseras och ange lösenordet. Högerklicka bara på SeaDrive-"
-"ikonen i systemfältet och välj \"Visa krypterade bibliotek\". Ett fönster "
-"visas där du kan välja att synkronisera eller avsynkronisera ett krypterat "
-"bibliotek."
+"Ya. Secara default, pustaka terenkripsi tidak disinkronkan dan tidak "
+"ditampilkan di drive virtual. Anda perlu secara manual memilih pustaka "
+"terenkripsi mana yang akan disinkronkan dan memasukkan kata sandinya. Cukup "
+"klik kanan pada ikon SeaDrive di area sistem tray dan pilih \"Tampilkan "
+"pustaka terenkripsi\". Sebuah jendela akan muncul dan Anda dapat memilih "
+"untuk menyinkronkan atau mencabut sinkronisasi pustaka terenkripsi."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr "Är det kompatibelt med SeaDrive 1.0?"
+msgstr "Apakah kompatibel dengan SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -678,16 +709,16 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
-"SeaDrive 2.0 kommer att använda befintliga konton och deras metadata "
-"(lagrade under C:\\users\\användarnamn\\seadrive\\). Men den kommer inte att"
-" använda cachade filer från SeaDrive 1.0. Så alla lokalt cachade filer i "
-"version 1.0 kommer inte att vara tillgängliga i version 2.0. Du kan starta "
-"SeaDrive 1.0 igen för att ladda upp filerna till servern eller kopiera ut "
-"dem."
+"SeaDrive 2.0 akan menggunakan akun yang sudah ada dan metadata mereka "
+"(disimpan di folder C:\\users\\username\\seadrive\\). Namun, ia tidak akan "
+"menggunakan file yang disimpan di cache dari SeaDrive 1.0. Jadi, semua file "
+"yang disimpan di cache secara lokal di versi 1.0 tidak akan dapat diakses di"
+" versi 2.0. Anda dapat memulai SeaDrive 1.0 lagi untuk mengunggah file ke "
+"server atau menyalinnya."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr "Hur rensar jag cachen?"
+msgstr "Bagaimana cara membersihkan cache?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -698,10 +729,19 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Anda dapat secara manual memilih folder atau file mana yang akan disimpan di"
+" cache secara lokal. Jika Anda menemukan suatu folder mengkonsumsi terlalu "
+"banyak ruang, cukup pilih \"Bebaskan ruang\" pada folder tersebut dan semua "
+"file yang disimpan di cache dalam folder tersebut akan dibersihkan. Tidak "
+"perlu mengatur waktu pembersihan cache dan batas ukuran cache seperti di "
+"SeaDrive 1.0. Karena placeholder hanyalah file normal yang dibuat di disk "
+"lokal Anda, ukuran cache Anda hanya dibatasi oleh ruang disk yang tersedia "
+"di komputer Anda."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
+"Bagaimana cara menghapus shortcut SeaDrive yang tersisa di Windows Explorer?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -710,16 +750,18 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
-"Detta är ett avsiktligt beteende. Du behöver inte ta bort dem om du "
-"fortfarande behöver komma åt kontot senare."
+"Shortcut \"SeaDrive\" di Windows Explorer tidak akan hilang setelah Anda "
+"keluar dari program SeaDrive atau berganti akun Seafile di SeaDrive. Ini "
+"adalah perilaku yang disengaja. Anda tidak perlu menghapusnya jika Anda "
+"masih perlu mengakses akun tersebut nanti."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
-"Du kan vanligtvis ta bort dessa genvägar genom att avinstallera SeaDrive-"
-"programmet och välja \"Ta bort kontoinformation\" i dialogrutan."
+"Anda biasanya dapat menghapus shortcut tersebut dengan menguninstall program"
+" SeaDrive dan memilih \"Hapus informasi akun\" di dialog peringatan."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -730,16 +772,16 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
-"Om avinstallationen inte tar bort genvägarna framgångsrikt, kan du ta bort "
-"SeaDrive-genvägen i Windows Explorer genom att redigera registret. Öppna "
-"sökvägen "
+"Jika penguninstallan tidak berhasil menghapus shortcut tersebut, Anda dapat "
+"menghapus shortcut SeaDrive di Windows Explorer dengan mengedit registry. "
+"Buka jalur "
 "\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
-" i registereditorn. Ta bort undernycklarna som motsvarar den genväg du vill "
-"ta bort."
+" di editor registry. Hapus sub-kunci yang sesuai dengan shortcut yang ingin "
+"Anda hapus."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Cara Menggunakan Pustaka Terenkripsi"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -749,15 +791,15 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
-"Seafile tillhandahåller klientbaserad ände-till-ände-datakryptering. Du kan "
-"skapa krypterade kataloger för att använda denna funktion. Filinnehåll i "
-"krypterade kataloger krypteras på klientsidan. Krypteringslösenordet sparas "
-"inte på servern så inte ens serverns administratör kan komma åt innehållet i"
-" dina filer."
+"Seafile menyediakan enkripsi data end-to-end di sisi klien. Anda dapat "
+"membuat pustaka terenkripsi untuk menggunakan fitur ini. Isi file di pustaka"
+" terenkripsi dienkripsi di sisi klien. Kata sandi enkripsi tidak disimpan di"
+" server. Jadi, bahkan administrator server tidak dapat mengakses isi file "
+"Anda."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr "När en krypterad katalog skapas:"
+msgstr "Saat membuat pustaka terenkripsi:"
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -765,6 +807,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Jika Anda membuat pustaka terenkripsi di web app, kata sandi dikirim ke "
+"server. Server menggunakan kata sandi ini untuk membuat pustaka. Namun, ia "
+"tidak menyimpan kata sandi dalam teks biasa."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -773,10 +818,13 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Jika Anda membuat pustaka terenkripsi dari folder lokal dengan klien desktop"
+" (lihat <a href=\"%(SITE_ROOT)shelp/install_sync/\">sinkronisasi file</a>), "
+"kata sandi tidak dikirim ke server."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "Saat Anda mengakses pustaka terenkripsi:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -784,9 +832,9 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
-"Om du använder webbappen så måste du ange lösenordet till servern. Servern "
-"sparar lösenordet i minnet i krypterat format i 1 timme. Den sparar inte "
-"lösenordet på disk."
+"Jika Anda menggunakan web app, Anda harus memasukkan kata sandi ke server. "
+"Server akan menyimpan kata sandi dalam format terenkripsi selama 1 jam. Ia "
+"tidak akan menyimpan kata sandi di disk."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -794,22 +842,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Jika Anda menggunakan klien desktop untuk menyinkronkan pustaka, kata sandi "
+"tidak dikirim ke server. Klien mendekripsi dan mengenkripsi isi file secara "
+"lokal. Kata sandi teks biasa juga tidak disimpan di disk klien."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"Klien iOS mendukung enkripsi sisi klien sejak versi 2.1.6. Klien Android "
+"mendukungnya sejak versi 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Perhatikan bahwa pustaka terenkripsi hanya mengenkripsi isi file, bukan nama"
+" folder dan file."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Penguncian file"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -819,22 +874,32 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Saat lebih dari satu orang berkolaborasi pada sebuah file, kemungkinan lebih"
+" dari satu orang akan mengubah file pada waktu yang hampir bersamaan. "
+"Seafile menangani situasi ini dengan baik menggunakan file konflik. Namun, "
+"seringkali lebih nyaman untuk mengunci file ketika seseorang ingin secara "
+"eksklusif mengubah file. Seafile Professional Edition mendukung penguncian "
+"file."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Penguncian file berfungsi baik di web app maupun klien sinkronisasi desktop."
+" Kami akan memperkenalkannya satu per satu."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Penguncian file di Web App"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Untuk mengunci sebuah file, Anda dapat menavigasi ke folder file di web app,"
+" dan klik pada menu tarik-turun \"operasi\"."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -843,28 +908,40 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Setelah file dikunci, Anda dapat melihat tanda \"berhenti\" berwarna merah "
+"di sudut ikon file. Menggerakkan mouse ke tanda berhenti, Anda dapat melihat"
+" siapa yang mengunci file. Dan Anda juga dapat membuka kunci file yang "
+"dikunci oleh Anda. Namun, Anda tidak dapat membuka kunci file yang dikunci "
+"oleh orang lain."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Penguncian file di klien desktop"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Setelah sebuah pustaka disinkronkan ke desktop, Anda dapat mengunci/membuka "
+"kunci file di pustaka tersebut di dalam File Explorer di Windows atau Finder"
+" di Mac OS."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Untuk mengunci sebuah file, cukup klik kanan pada file yang telah "
+"disinkronkan dan pilih \"kunci file ini\" di menu \"Seafile\"."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Jika sebuah file dikunci oleh Anda, Anda dapat melihat tanda \"berhenti\" "
+"berwarna oranye pada ikon file. Anda dapat memilih untuk membuka kuncinya."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -872,6 +949,9 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Jika sebuah file dikunci oleh pengguna lain, Anda dapat melihat tanda "
+"\"berhenti\" berwarna merah pada ikon file. File secara otomatis diatur ke "
+"mode hanya-baca. Anda tidak dapat mengubahnya sampai kuncinya dibuka."
 
 #: templates/help/file_locking.html:21
 msgid ""
@@ -1196,7 +1276,7 @@ msgstr ""
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr "Exkluderar filer/mappar från synkronisering"
+msgstr ""
 
 #: templates/help/ignore.html:8
 msgid ""
@@ -1206,19 +1286,14 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
-"Ibland vill du inte synkronisera vissa filer eller mappar i en katalog. För "
-"att göra detta skapar du en fil med namnet seafile-ignore.txt i rotmappen i "
-"katalogen. Denna speciella fil specificerar filer och mappar som Seafile "
-"inte ska synka. Varje rad i seafile-ignore.txt speciferar ett mönster. "
-"Följande mönster stöds."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr "En blank rad matchar ingen fil."
+msgstr ""
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
-msgstr "En rad som börjar med # behandlas som en kommentar"
+msgstr ""
 
 #: templates/help/ignore.html:12
 msgid ""
@@ -1228,10 +1303,6 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
-"Seafile stöder jokertecken i sökmönstret. T.ex. \"foo/*\" matchar \"foo/1\" "
-"och \"foo/hello\". \"foo/?\" matchar \"foo/1\" men inte \"foo/hello\". "
-"Observera att jokertecknet * matchar alla sökvägar rekursivt under en mapp. "
-"T.ex. \"foo/*.html\" matchar \"foo/a.html\" och \"foo/templates/b.html\"."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1239,9 +1310,6 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
-"Om sökmönstret slutar med en slash, kommer det bara matcha en mapp. Med "
-"andra ord, \"foo/\" kommer matcha mappen \"foo\" och sökvägen under den, men"
-" inte en vanlig fil eller en symbolisk länk \"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -1250,18 +1318,14 @@ msgid ""
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
 msgstr ""
-"Om ett sökmönster inte slutar med en slash eller ett wildcard, kommer det "
-"inte matcha en mapp. Tex, \"foo\" kommer bara matcha en vanlig fil  \"foo\" "
-"eller en symbolisk länk - medan  \"foo/\" och \"foo*\" matchar en mapp och "
-"sökvägar under den."
 
 #: templates/help/ignore.html:18
 msgid "Example"
-msgstr "Exempel"
+msgstr ""
 
 #: templates/help/ignore.html:36
 msgid "Notes"
-msgstr "Anteckningar"
+msgstr ""
 
 #: templates/help/ignore.html:38
 msgid ""
@@ -1269,17 +1333,12 @@ msgid ""
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
 msgstr ""
-"Filen seafile-ignore.txt kontrollerar endast vilka filer som exkluderas på "
-"klientsidan. Du kan fortfarande skapa en fil från websidan som exkluderas på"
-" klienten. I detta fall,"
 
 #: templates/help/ignore.html:40
 msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
 msgstr ""
-"kommer den skapade filen fortfarande synkas tillbaka till klienten. Men alla"
-" senare lokala förändringar i dessa filer kommer ignoreras."
 
 #: templates/help/ignore.html:41
 msgid ""
@@ -1287,9 +1346,6 @@ msgid ""
 "to clients; If the file on the client is also modified, a conflict file will"
 " be generated on the client."
 msgstr ""
-"Om filen ändras på websidan, kommer den nya versionen också synkas tillbaka "
-"till klienten. Om filen på klienten också ändras kommer en konfliktfil "
-"genereras på klienten."
 
 #: templates/help/ignore.html:45
 msgid ""
@@ -1297,9 +1353,6 @@ msgid ""
 "already synced, and some time later you add it to the ignore list, its "
 "existing versions won't be removed."
 msgstr ""
-"seafile-ignore.txt exkluderar endast filer som inte redan är synkade. Om en "
-"fil redan synkats, och du senare lägger till den till listan, kommer den "
-"existerande versionen INTE tas bort."
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
@@ -1310,33 +1363,30 @@ msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
-"Efter nedladdning av Seafile-klienten är det 3 steg som behöver genomföras "
-"för att få allt att fungera."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
-msgstr "1. Välj en diskpartition för att spara lokal Seafile-data"
+msgstr ""
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
-msgstr "Väljer en mapp för att spara Seafile-data"
+msgstr ""
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
-msgstr "2. Skapa ett konto."
+msgstr ""
 
 #: templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
-msgstr "Skapa ett konto på en privat eller på en publik Seafile-server."
+msgstr ""
 
 #: templates/help/install_sync.html:18
 msgid "3. Sync a library"
-msgstr "3. Synkronisera en katalog"
+msgstr ""
 
 #: templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr ""
-"Klicka på \"Synka denna katalog\"-knappen för att synka med en lokal mapp."
 
 #: templates/help/install_sync.html:21
 msgid ""
@@ -1354,7 +1404,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
-msgstr "5. Bläddra bland filer i molnet"
+msgstr ""
 
 #: templates/help/install_sync.html:35
 msgid ""
@@ -1362,9 +1412,6 @@ msgid ""
 "syncing them. Seafile client comes with a \"cloud file browser\" to meet "
 "this need. Click an unsynced library will open the cloud file browser."
 msgstr ""
-"Ibland vill du ändra filer i molnet utan att synkronisera dem. "
-"Seafileklienten har en \"molnutforskare\" för att åstadkomma detta. Om du "
-"klickar på en osynkad katalog så öppnas molnutforskaren."
 
 #: templates/help/introduction.html:8
 msgid ""
@@ -1634,18 +1681,12 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
-"För att synkronisera en undermapp, öppna molnutforskaren genom att "
-"dubbelklicka på en katalog som inte har synkroniserats. Navigera till "
-"huvudmappen innehållande undermappen. Högerklicka på undermappen och välj "
-"\"Synka den här mappen\" i pop-up-menyn."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
-"Efter att ha synkroniserat undermappen kan du se synkroniseringstatus i "
-"\"Synkroniserade kataloger\"-gruppen i klientens huvudfönster."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
@@ -1948,12 +1989,6 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
-"Normalt sett så detekterar klienten automatiskt en lokal katalog och laddar "
-"upp ändringarna till servern. Men om den lokala mappen är på en Windows "
-"nätverksdisk så kan inte Seafile trovärdigt detektera ändringarna. I detta "
-"fall så kan du fråga Seafile klienten att periodvis kontrollera efter "
-"ändringar i den lokala mappen. Du kan sätta intervallet av denna periodiska "
-"synkroniseringen. Intervallet är i sekunder."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
@@ -1971,33 +2006,20 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
-"Ibland har du redan en katalog på Seafile-servern (delad av andra eller "
-"uppladdad från en annan dator). Du kan synkronisera denna katalog med en "
-"existerande mapp på din dator. Den lokala mappen måste ha samma namn som "
-"katalogen. Filerna i den lokala mappen kommer slås ihop med filerna i "
-"katalogen. Inga filer i den lokala mappen eller katalogen kommer bli "
-"överskrivna eller förlorade. Sammanslagningen kommer att skapa några <a "
-"href=\"%(SITE_ROOT)shelp/conflicts/\">konfliktfiler</a> om filernas innehåll"
-" är olika i den lokala mappen och katalogen."
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
-"För att synkronisera en katalog med en existerande mapp, högerklicka på "
-"katalogen i Seafile-klientens huvudfönster och klicka på \"Synkronisera "
-"denna katalog\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
-"I pop-up dialogen, klicka på \"Synkronisera med en existerande mapp\" "
-"länken."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr "Välj sedan en existerande mapp att synkronisera katalogen med."
+msgstr ""
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
@@ -2021,11 +2043,6 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
-"Ibland uppstår interna fel i klienten som hindrar synkronisering. I dessa "
-"fall är det bra att köra en \"omsynkronisering\" av katalogen. "
-"Omsynkronisering är att avsynkronisera och sedan omedelbart synkronisera "
-"katalogen med samma mapp. Du kan hitta detta val i pop-up-menyn i klientens "
-"huvudfönster."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -2084,7 +2101,7 @@ msgstr ""
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
 msgid "Details"
-msgstr "Detaljer"
+msgstr ""
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
