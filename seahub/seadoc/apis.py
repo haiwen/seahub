@@ -414,6 +414,9 @@ def latest_entry(request, file_uuid, filename):
             filepath = os.path.join(parent_path, filename)
             filepath = os.path.normpath(filepath)
             file_obj = seafile_api.get_dirent_by_path(repo_id, filepath)
+            if not file_obj:
+                logger.warning(f'file {filepath} not found')
+                return None
             dt = datetime.fromtimestamp(file_obj.mtime)
             return dt
         except Exception as e:
