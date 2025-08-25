@@ -6,6 +6,7 @@
 # Translators:
 # Efstathios Iosifidis <iefstathios@gmail.com>, 2024
 # nikolaosp <nikolaosp@gmail.com>, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: nikolaosp <nikolaosp@gmail.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Greek (https://app.transifex.com/haiwen/teams/5086/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,28 +34,28 @@ msgstr "Εισαγωγή"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Διαχείριση αρχείων και φακέλων"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Διαχείριση αρχείων με βιβλιοθήκες"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Επαναφορά διαγραμμένων αρχείων"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Εύρεση παλαιών εκδόσεων αρχείων"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Ιστορικό βιβλιοθήκης και στιγμιότυπα"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Ορισμός περιόδου διατήρησης ιστορικού"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -63,71 +64,71 @@ msgstr "Διαγραφή βιβλιοθήκης"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Προβολή αρχείων μέσα στην Εφαρμογή Ιστού"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Αναζήτηση πλήρους κειμένου αρχείων"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Διαμοιρασμός και συνεργασία"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Διαμοιρασμός αρχείων και φακέλων"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Διαχείριση ομάδων"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Κλείδωμα αρχείων"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Άδεια φακέλου"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Διαμοιρασμός τμημάτων"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki και διαχείριση γνώσης"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Διαχείριση μιας βιβλιοθήκης ως Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Πελάτης επιτραπέζιου υπολογιστή και συγχρονισμός"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Εγκατάσταση και συγχρονισμός αρχείων"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "Συγχρονισμός υφιστάμενων φακέλων"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Επιλεκτικός συγχρονισμός υποφακέλων"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Συγχρονισμός μόνο για ανάγνωση"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Ανενεργοποίηση και επανενεργοποίηση συγχρονισμού βιβλιοθηκών"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Ορισμός διαστήματος συγχρονισμού"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
@@ -143,23 +144,23 @@ msgstr "Αποκλεισμός αρχείων από το συγχρονισμό
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Πελάτης οντότητας αποθήκευσης (Drive client)"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Χρήση του πελάτη οντότητας αποθήκευσης (Drive client) του Seafile"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Χρήση του πελάτη οντότητας αποθήκευσης (Drive client) 2.0 στο Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Ασφάλεια και κρυπτογράφηση"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Πώς να χρησιμοποιήσετε κρυπτογραφημένες βιβλιοθήκες"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -167,6 +168,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"Μόλις εσείς και οι φίλοι σας συγχρονίσετε μια κοινόχρηστη βιβλιοθήκη αρχείων"
+" στους υπολογιστές σας, μπορείτε να προσθέσετε, να διαγράψετε ή να "
+"επεξεργαστείτε αρχεία στη βιβλιοθήκη μαζί. Κάθε αλλαγή που κάνετε στη "
+"βιβλιοθήκη θα συγχρονιστεί αυτόματα στους υπολογιστές των άλλων."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -2021,7 +2026,9 @@ msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Ορισμένοι τύποι αρχείων μπορούν να ανοίξουν και να προβληθούν απευθείας μέσα"
+" στην Εφαρμογή Ιστού του Seafile. Εκτρέμει αυτοί είναι:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Αρχεία εικόνων"

@@ -30,15 +30,15 @@
   "Cancel": "Annuler",
   "Switch_to_plain_text_editor": "Basculer en éditeur de texte plein",
   "Switch_to_rich_text_editor": "Basculer en éditeur de texte enrichi",
-  "Switch_to_viewer": "Switch to markdown viewer",
+  "Switch_to_viewer": "Basculer en visualiseur Markdown",
   "Help": "Aide",
   "Delete_table": "Supprimer le tableau",
   "Column": "Colonne",
   "Row": "Ligne",
-  "Insert_row_before": "Insert row before",
-  "Insert_row_after": "Insert row after",
-  "Insert_column_before": "Insert column before",
-  "Insert_column_after": "Insert column after",
+  "Insert_row_before": "Insérer au-dessus",
+  "Insert_row_after": "Insérer en-dessous",
+  "Insert_column_before": "Insérer à gauche",
+  "Insert_column_after": "Insérer à droite",
   "Delete_row": "Supprimer la ligne",
   "Delete_column": "Supprimer la colonne",
   "Insert_row": "Insérer une ligne",
@@ -136,12 +136,12 @@
   "Tags": "Tags",
   "Add_participants": "Ajouter des participants",
   "Clear_format": "Sans formatage",
-  "Image_address_invalid": "Image address invalid",
+  "Image_address_invalid": "L'adresse de l'image est invalide.",
   "Shortcut_help": "Aide raccourcis",
-  "Link_address_required": "Link address required",
-  "Link_address_invalid": "Link address invalid",
-  "Link_title_required": "Link title required",
-  "Blank_title_not_allowed": "Blank title not allowed",
+  "Link_address_required": "L'adresse du lien est nécessaire.",
+  "Link_address_invalid": "L'adresse du lien est invalide.",
+  "Link_title_required": "Le titre du lien est nécessaire.",
+  "Blank_title_not_allowed": "Un titre vide n'est pas autorisé.",
   "userHelp": {
     "title": "Raccourcis clavier",
     "userHelpData": [
@@ -149,7 +149,7 @@
         "shortcutType": "Liste des raccourcis",
         "shortcutData": {
           "Make_list": "Faire une liste",
-          "Make_ordered_list": "Make ordered list",
+          "Make_ordered_list": "Faire une liste ordonnée",
           "Insert_new_item": "Insérer un nouvel élément",
           "Insert_child_in_item": "Insérer enfant dans l'élément",
           "Increase_depth": "Améliorer la profondeur"
@@ -178,14 +178,14 @@
       {
         "shortcutType": "Raccourcis blocs de citation",
         "shortcutData": {
-          "Make_block_quote": "Make block quote",
-          "Escape_block_quote": "Escape block quote"
+          "Make_block_quote": "Faire un blockquote",
+          "Escape_block_quote": "Sortir du blockquote"
         }
       },
       {
         "shortcutType": "Raccourcis tableau",
         "shortcutData": {
-          "Insert_table_row": "Insert table row",
+          "Insert_table_row": "Insérer une ligne",
           "Escape_table": "Sortir de la table"
         }
       },
@@ -200,7 +200,7 @@
         "shortcutData": {
           "Bold": "Gras",
           "Italic": "Italique",
-          "Italic_bold": "Italic bold",
+          "Italic_bold": "Italique Gras",
           "Inline_code": "Ligne de code"
         }
       },
@@ -219,16 +219,21 @@
       }
     ]
   },
-  "Select_field": "Select field",
-  "Font_style": "Font style",
+  "Select_field": "Sélectionner un champ",
+  "Font_style": "Style de police",
   "Open_link": "Ouvrir le lien",
-  "Image_is_uploading": "Image is uploading",
-  "Image_loading_failed": "Image loading failed",
-  "Expand_editor": "Expand editor",
+  "Image_is_uploading": "L'image est en cours d'importation.",
+  "Image_loading_failed": "L'importation de l'image a échoué.",
+  "Expand_editor": "Afficher l'éditeur",
   "Insert_below": "Insérer en-dessous",
   "Insert_above": "Insérer au-dessus",
   "Insert_on_the_right": "Insérer à droite",
   "Insert_on_the_left": "Insérer à gauche",
   "Row(s)": "ligne(s)",
-  "Column(s)": "colonne(s)"
+  "Column(s)": "colonne(s)",
+  "Insert": "Insérer",
+  "Horizontal_align": "Horizontal align",
+  "Underline": "Souligné",
+  "Row_number": "Numéro de ligne",
+  "Column_number": "Numéro de colonne"
 }

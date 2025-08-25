@@ -434,10 +434,13 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0（和未來版本）經過重新設計，與Windows 10作業系統進行了更深入的集成。 它支持Windows 10 "
+"1709版本（Windows 10的2017秋季更新）和更高版本。 我們建議Windows 10用戶陞級到SeaDrive "
+"2.0，以獲得更多本機虛擬驅動器體驗。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "安裝並訪問虛擬驅動器"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -448,34 +451,37 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"您可以從Seafile官方網站下載SeaDrive 2.0。 "
+"安裝並登入您的Seafile帳戶後，SeaDrive將開始從服務器下載庫和檔案清單（就像SeaDrive 1.0.x中一樣）。 "
+"這可能需要一些時間，具體取決於您的seafile帳戶中可用的檔案數量。 下載是漸進式的，囙此在此期間，您已經可以訪問虛擬驅動器中的一些檔案。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
-msgstr ""
+msgstr "要訪問虛擬驅動器，只需打開Windows檔案資料總管。 Windows檔案資料總管的導航窗格中有一個“seadrive”節點。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "訪問虛擬驅動器中的檔案"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
-msgstr ""
+msgstr "虛擬驅動器中的庫分為4類：我的庫、與我共亯、與組共亯和與所有人共亯。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
-msgstr ""
+msgstr "如您所見，檔案狀態圖標更集成到Windows檔案資料總管中。 圖標與1.0版本略有不同。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
-msgstr ""
+msgstr "虛擬驅動器中的檔案在本地檔案系統中創建為“預留位置”。 它們可能位於 3 個州："
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
@@ -491,6 +497,8 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>完整檔案</b>: 檔案已下載並保存在本地。 首次打開預留位置檔案時，下載是自動的。 "
+"無論網絡連接如何，只要打開SeaDrive，這些檔案都是可用的。 當需要更多磁碟空間時，作業系統可能會决定清除完整檔案。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
@@ -506,17 +514,19 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"您可以控制哪些檔案或資料夾在本地緩存。 當您按右鍵檔案或資料夾時，可以從上下文選單中更改此設定。 "
+"當您想在本地固定檔案或資料夾時，選擇“始終保持在此設備上”； 當你想清理檔案或資料夾的緩存時，選擇“釋放空間”。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
 "In SeaDrive 1.0, cached files are not automatically updated when they're "
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
-msgstr ""
+msgstr "在SeaDrive 1.0中，緩存檔案在服務器上更新時不會自動更新。 在SeaDrive 2.0中，完整和固定檔案會自動與服務器保持同步。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "文件下載和控制"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -524,7 +534,7 @@ msgid ""
 "automatically start to download it. If the file may take some time to "
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
-msgstr ""
+msgstr "每當您打開預留位置檔案時，作業系統都會自動開始下載。如果文件下載可能需要一些時間，檔案資料總管中會顯示一個進度條，您可以取消下載。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -533,15 +543,16 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"有時，後臺應用程序可能會嘗試下載虛擬驅動器中的檔案（如防毒軟體）。 您將收到作業系統的通知，您可以選擇取消下載或禁止應用程序將來自動下載檔案。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "我可以創建、删除、重命名庫嗎？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -550,21 +561,23 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"對。 在虛擬驅動器中創建、删除或重命名庫資料夾時，該操作將反映在服務器上。 您只能在“我的庫”類別下創建、删除和重命名庫。 "
+"創建、删除或重命名其他類別中的庫將被忽略。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "我可以在庫資料夾之外創建檔案或資料夾嗎？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
 "Yes. But files created outside of a library folder will be ignored and NOT "
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
-msgstr ""
+msgstr "對。 但是，在庫資料夾之外創建的檔案將被忽略，並且不會同步到服務器。 “我的庫”資料夾下的新資料夾將作為新庫處理。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "我可以訪問加密庫嗎？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -574,6 +587,8 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"對。 默認情况下，加密庫不會同步並顯示在虛擬驅動器中。 您需要手動選擇要同步的加密庫並輸入密碼。 "
+"只需按右鍵系統託盤區域中的SeaDrive圖標，然後選擇“顯示加密庫”。 將顯示一個視窗，您可以選擇同步或取消同步加密庫。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
