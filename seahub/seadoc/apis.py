@@ -3177,6 +3177,42 @@ class SdocImportView(APIView):
 
         return Response({'success': True})
 
+class SeadocLinkedDocContent(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, file_uuid):
+        # jwt permission check
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        filetype, fileext = get_file_type_and_ext(uuid_map.filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        linked_doc_uuid = request.GET.get('linked_doc_uuid')
+        linked_doc_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(linked_doc_uuid)
+
+        linked_filetype, linked_fileext = get_file_type_and_ext(linked_doc_uuid_map.filename)
+        if linked_filetype != SEADOC:
+            error_msg = 'linked seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            
+        # get content from sdoc server
+        username = request.user.username
+        sdoc_server_api = SdocServerAPI(linked_doc_uuid, str(linked_doc_uuid_map.filename), username)
+        try:
+            res = sdoc_server_api.get_doc()
+            return Response({
+                'content': json.dumps(res)
+            })
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 def batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir):
     parent_path = gen_seadoc_image_parent_path(doc_uuid, repo_id, username)

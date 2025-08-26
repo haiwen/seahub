@@ -5,7 +5,7 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
     SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, SeadocNotificationsView, SeadocNotificationView, \
     SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers, SeadocEditorCallBack, \
-    SeadocDailyHistoryDetail, SeadocSearchFilenameView, SeadocExportView, SdocImportView, SeadocUploadVideo, SeadocDownloadVideo
+    SeadocDailyHistoryDetail, SeadocSearchFilenameView, SeadocExportView, SdocImportView, SeadocUploadVideo, SeadocDownloadVideo, SeadocLinkedDocContent
 
 # api/v2.1/seadoc/
 urlpatterns = [
@@ -53,4 +53,5 @@ urlpatterns = [
     re_path(r'^search-filename/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocSearchFilenameView.as_view(), name='seadoc_search_filename'),
     re_path(r'^export/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocExportView.as_view(), name='seadoc_export'),
     re_path(r'^import/(?P<repo_id>[-0-9a-f]{36})/$', SdocImportView.as_view(), name='seadoc_import'),
+    re_path(r'^linked-seadoc/(?P<file_uuid>[-0-9a-f]{36})/content/$', SeadocLinkedDocContent.as_view(), name='linked_seadoc_content'),
 ]
