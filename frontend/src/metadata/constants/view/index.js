@@ -7,6 +7,7 @@ import { SORT_COLUMN_OPTIONS, GALLERY_SORT_COLUMN_OPTIONS, GALLERY_FIRST_SORT_CO
 export * from './gallery';
 export * from './kanban';
 export * from './map';
+export * from './statistics';
 export * from './table';
 
 export const METADATA_VIEWS_KEY = 'sf-metadata-views';
