@@ -42,6 +42,8 @@ const translateLabel = (type) => {
       return gettext('Kanban');
     case VIEW_TYPE.MAP:
       return gettext('Map');
+    case VIEW_TYPE.STATISTICS:
+      return gettext('Statistics');
     default:
       return type;
   }
