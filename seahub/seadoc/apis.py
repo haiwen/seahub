@@ -90,7 +90,7 @@ class SeadocAccessToken(APIView):
 
     def get(self, request, repo_id):
         username = request.user.username
-        # argument check
+        # argument check        
         path = request.GET.get('p', None)
         if not path:
             error_msg = 'p invalid.'
@@ -132,6 +132,40 @@ class SeadocAccessToken(APIView):
         file_uuid = get_seadoc_file_uuid(repo, path)
         access_token = gen_seadoc_access_token(file_uuid, filename, username, permission=permission)
 
+        return Response({'access_token': access_token})
+
+class SeadocAccessTokenByFileUuid(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, file_uuid):
+        useranme = request.user.username
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        parent_dir = uuid_map.parent_path
+        file_name = uuid_map.filename
+        filetype, fileext = get_file_type_and_ext(filename)
+        if filetype != SEADOC:
+            error_msg = 'seadoc file type %s invalid.' % filetype
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        # permission check
+        permission = check_folder_permission(request, repo_id, parent_dir)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        access_token = gen_seadoc_access_token(file_uuid, filename, username, permission=permission)
         return Response({'access_token': access_token})
 
 
@@ -3176,7 +3210,6 @@ class SdocImportView(APIView):
             shutil.rmtree(tmp_extracted_path)
 
         return Response({'success': True})
-
 
 def batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir):
     parent_path = gen_seadoc_image_parent_path(doc_uuid, repo_id, username)
