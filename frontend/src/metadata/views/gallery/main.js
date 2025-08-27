@@ -193,7 +193,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const updateSelectedImages = useCallback((selectedImages) => {
     const ids = selectedImages.map(item => item.id);
-    updateSelectedRecordIds(ids);
+    updateSelectedRecordIds(ids, selectedImages);
   }, [updateSelectedRecordIds]);
 
   const handleClick = useCallback((event, image) => {
@@ -301,7 +301,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
   }, [onRemoveImage, updateCurrentDirent, updateSelectedImages]);
 
-  const handleMakeSelectedAsCoverPhoto = useCallback((selectedImage) => {
+  const setSelectedImageAsCover = useCallback((selectedImage) => {
     onSetPeoplePhoto(selectedImage, {
       success_callback: () => {
         updateCurrentDirent();
@@ -409,11 +409,15 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
 
     const unsubscribeSelectNone = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, selectNone);
+    const unsubscribeRemovePhotosFromCurrentSet = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.REMOVE_PHOTOS_FROM_CURRENT_SET, handleRemoveSelectedImages);
+    const unsubscribeSetPhotoAsCover = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SET_PHOTO_AS_COVER, setSelectedImageAsCover);
 
     return () => {
       container && resizeObserver.unobserve(container);
       modifyGalleryZoomGearSubscribe();
       unsubscribeSelectNone();
+      unsubscribeRemovePhotosFromCurrentSet();
+      unsubscribeSetPhotoAsCover();
       switchGalleryModeSubscribe();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -482,7 +486,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         onDuplicate={duplicateRecord}
         onRemoveImage={onRemoveImage ? handleRemoveSelectedImages : null}
         onAddImage={onAddImage}
-        onSetPeoplePhoto={handleMakeSelectedAsCoverPhoto}
+        onSetPeoplePhoto={setSelectedImageAsCover}
       />
       {isImagePopupOpen && (
         <ModalPortal>

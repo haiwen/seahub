@@ -296,10 +296,14 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
-  const updateSelectedRecordIds = useCallback((ids) => {
+  const updateSelectedRecordIds = useCallback((ids, records) => {
     toggleShowDirentToolbar(ids.length > 0);
     setTimeout(() => {
-      window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata);
+      if (records != undefined) {
+        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, records);
+      } else {
+        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata);
+      }
     }, 0);
   }, [metadata, toggleShowDirentToolbar]);
 
@@ -688,6 +692,7 @@ export const MetadataViewProvider = ({
         isBeingBuilt,
         errorMessage,
         metadata,
+        updateMetadata,
         store: storeRef.current,
         isDirentDetailShow: params.isDirentDetailShow,
         updateCurrentDirent: params.updateCurrentDirent,

@@ -12,7 +12,7 @@ const FaceRecognition = () => {
   const [showPeopleFaces, setShowPeopleFaces] = useState(false);
   const peopleRef = useRef(null);
 
-  const { metadata, store, updateCurrentDirent, updateCurrentPath } = useMetadataView();
+  const { metadata, store, updateCurrentDirent, updateCurrentPath, updateMetadata } = useMetadataView();
 
   const peoples = useMemo(() => {
     if (!Array.isArray(metadata.rows) || metadata.rows.length === 0) return [];
@@ -39,8 +39,9 @@ const FaceRecognition = () => {
     peopleRef.current = people;
     const name = people._is_someone ? (people._name || gettext('Person image')) : gettext('Unknown people');
     updateCurrentPath(`/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${FACE_RECOGNITION_VIEW_ID}/${name}`);
+    updateMetadata({ ...metadata, current_row_id: people._id });
     setShowPeopleFaces(true);
-  }, [updateCurrentPath]);
+  }, [metadata, updateCurrentPath, updateMetadata]);
 
   const closePeople = useCallback(() => {
     peopleRef.current = null;
