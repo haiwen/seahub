@@ -1740,6 +1740,8 @@ class LibContentView extends React.Component {
 
   addDirent = (name, type, size) => {
     let direntList = this.state.direntList;
+    // The notification server may have received the 'repo-update' message and setState the direntList.
+    // So this file may already be in the direntList, we check if it has a duplicate name to avoid inserting new file repeatedly.
     if (direntList.some(item => item.name === name)) {
       return;
     }
