@@ -406,7 +406,6 @@ def view_shared_upload_link(request, uploadlink):
         'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
         'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
         'avatar_url': avatar_url
-        
     }
 
     if not request.user.is_authenticated:
