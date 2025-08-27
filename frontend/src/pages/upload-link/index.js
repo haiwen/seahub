@@ -39,7 +39,7 @@ class SharedUploadLink extends React.Component {
         <div className="o-auto">
           <div className="py-4 px-6 mx-auto rounded" id="upload-link-panel">
             <h3 className="h5 d-flex text-nowrap">
-              {gettext('Upload Files to')}
+              {gettext('Upload files to')}
               <span className="op-target text-truncate mx-1">{dirName}</span>
             </h3>
             <p className="small shared-by">
