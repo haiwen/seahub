@@ -44,7 +44,7 @@ class DirentsDraggedPreview extends React.Component {
   };
 
   render() {
-    let{ selectedDirentList } = this.props;
+    let { selectedDirentList } = this.props;
     const inlineStyle = {
       position: 'absolute',
       opacity: 1,

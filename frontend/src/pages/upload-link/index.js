@@ -12,7 +12,8 @@ import '../../css/upload-link.css';
 const loggedUser = window.app.pageOptions.username;
 const {
   dirName,
-  sharedBy,
+  sharedByName,
+  sharedByAvatar,
   noQuota,
   maxUploadFileSize,
   token,
@@ -38,10 +39,15 @@ class SharedUploadLink extends React.Component {
         </div>
         <div className="o-auto">
           <div className="py-4 px-6 mx-auto rounded" id="upload-link-panel">
-            <h3 className="h5 d-flex text-nowrap" dangerouslySetInnerHTML={{ __html: gettext('Upload files to {folder_name_placeholder}')
-              .replace('{folder_name_placeholder}', `<span class="op-target text-truncate mx-1">${Utils.HTMLescape(dirName)}</span>`) }}>
+            <h3 className="h5 d-flex text-nowrap">
+              {gettext('Upload files to')}
+              <span className="op-target text-truncate mx-1">{dirName}</span>
             </h3>
-            <p className="small shared-by" dangerouslySetInnerHTML={{ __html: `${gettext('shared by:')} ${sharedBy.avatar} ${sharedBy.name}` }}></p>
+            <p className="small shared-by">
+              {gettext('Shared by:')}
+              <img src={sharedByAvatar} width={16} height={16} className='avatar mx-1' alt={gettext('Avatar')} />
+              {sharedByName}
+            </p>
             {noQuota ? (
               <div className="py-6 text-center">
                 <span className="sf3-font sf3-font-tips warning-icon"></span>

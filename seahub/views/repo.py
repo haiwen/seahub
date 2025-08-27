@@ -36,6 +36,7 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
 from seahub.group.utils import is_group_admin
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.constants import PERMISSION_INVISIBLE
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -392,7 +393,7 @@ def view_shared_upload_link(request, uploadlink):
     except Exception as e:
         logger.error(e)
         max_upload_file_size = -1
-
+    avatar_url, _, _ = api_avatar_url(username)
     data = {
         'repo': repo,
         'path': path,
@@ -404,6 +405,7 @@ def view_shared_upload_link(request, uploadlink):
         'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
         'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
         'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
+        'avatar_url': avatar_url
     }
 
     if not request.user.is_authenticated:
