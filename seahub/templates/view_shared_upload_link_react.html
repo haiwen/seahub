@@ -12,7 +12,7 @@
     dirName: "{{dir_name|escapejs}}",
     sharedBy: {
       name: "{{username|email2nickname|escapejs}}", 
-      avatar: '{% avatar username 16 %}'
+      avatar: "{{avatar_url}}"
     },
     noQuota: {% if no_quota %} true {% else %} false {% endif %},
     {% if max_upload_file_size > 0 %}
