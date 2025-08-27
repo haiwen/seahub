@@ -5,11 +5,12 @@ from .apis import SeadocAccessToken, SeadocUploadLink, SeadocDownloadLink, Seado
     SeadocCommentRepliesView, SeadocCommentReplyView, SeadocFileView, SeadocFileUUIDView, SeadocDirView, SdocRevisionBaseVersionContent, SeadocRevisionView, \
     SdocRepoTagsView, SdocRepoTagView, SdocRepoFileTagsView, SdocRepoFileTagView, SeadocNotificationsView, SeadocNotificationView, \
     SeadocFilesInfoView, DeleteSeadocOtherRevision, SeadocPublishedRevisionContent, SdocParticipantsView, SdocParticipantView, SdocRelatedUsers, SeadocEditorCallBack, \
-    SeadocDailyHistoryDetail, SeadocSearchFilenameView, SeadocExportView, SdocImportView, SeadocUploadVideo, SeadocDownloadVideo
+    SeadocDailyHistoryDetail, SeadocSearchFilenameView, SeadocExportView, SdocImportView, SeadocUploadVideo, SeadocDownloadVideo, SeadocAccessTokenByFileUuid
 
 # api/v2.1/seadoc/
 urlpatterns = [
     re_path(r'^access-token/(?P<repo_id>[-0-9a-f]{36})/$', SeadocAccessToken.as_view(), name='seadoc_access_token'),
+    re_path(r'^access-token-by-uuid/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocAccessTokenByFileUuid.as_view(), name='seadoc_access_token_by_uuid'),
     re_path(r'^upload-file/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadFile.as_view(), name='seadoc_upload_file'),
     re_path(r'^upload-link/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocUploadLink.as_view(), name='seadoc_upload_link'),
     re_path(r'^download-link/(?P<file_uuid>[-0-9a-f]{36})/$', SeadocDownloadLink.as_view(), name='seadoc_download_link'),
