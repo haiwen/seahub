@@ -1,16 +1,12 @@
-import React, { useMemo, useCallback, useState, useEffect } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
-import ModalPortal from '../../../../components/modal-portal';
-import PeoplesDialog from '../../../components/dialog/peoples-dialog';
 import { gettext } from '../../../../utils/constants';
 import { Dirent } from '../../../../models';
 import { useFileOperations } from '../../../../hooks/file-operations';
-import { GALLERY_OPERATION_KEYS, EVENT_BUS_TYPE } from '../../../constants';
+import { GALLERY_OPERATION_KEYS } from '../../../constants';
 
 const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
-  const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
-
   const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
 
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
@@ -92,7 +88,7 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveIma
         onRemoveImage(selectedImages);
         break;
       case GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS:
-        setPeoplesDialogShow(true);
+        onAddImage();
         break;
       case GALLERY_OPERATION_KEYS.SET_PHOTO_AS_COVER:
         onSetPeoplePhoto(selectedImages[0]);
@@ -100,40 +96,14 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveIma
       default:
         break;
     }
-  }, [handleDownload, onDelete, selectedImages, handleCopy, onRemoveImage, onSetPeoplePhoto]);
-
-  const closePeoplesDialog = useCallback(() => {
-    setPeoplesDialogShow(false);
-  }, []);
-
-  const addPeople = useCallback((peopleIds, addedImages, callback) => {
-    onAddImage(peopleIds, addedImages, callback);
-  }, [onAddImage]);
-
-  useEffect(() => {
-    const unsubscribeAddPhotoToGroups = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.ADD_PHOTO_TO_GROUPS, () => {
-      setPeoplesDialogShow(true);
-    });
-
-    return () => {
-      unsubscribeAddPhotoToGroups();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [handleDownload, onDelete, selectedImages, handleCopy, onRemoveImage, onAddImage, onSetPeoplePhoto]);
 
   return (
-    <>
-      <ContextMenu
-        options={options}
-        ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
-        onOptionClick={handleOptionClick}
-      />
-      {isPeoplesDialogShow && (
-        <ModalPortal>
-          <PeoplesDialog selectedImages={selectedImages} onToggle={closePeoplesDialog} onSubmit={addPeople} />
-        </ModalPortal>
-      )}
-    </>
+    <ContextMenu
+      options={options}
+      ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
+      onOptionClick={handleOptionClick}
+    />
   );
 };
 

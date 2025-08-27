@@ -15,6 +15,7 @@ import { getEventClassName } from '../../../utils/dom';
 import { getColumns, getImageSize, getRowHeight } from './utils';
 import ObjectUtils from '../../../utils/object';
 import { openFile } from '../../utils/file';
+import PeoplesDialog from '../../components/dialog/peoples-dialog';
 
 import './index.css';
 
@@ -30,6 +31,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedImages, setSelectedImages] = useState([]);
   const [lastSelectedImage, setLastSelectedImage] = useState(null);
+  const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
 
   const containerRef = useRef(null);
   const scrollContainer = useRef(null);
@@ -301,6 +303,21 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
   }, [onRemoveImage, updateCurrentDirent, updateSelectedImages]);
 
+  const handleAddPhotoToGroup = useCallback((selectedImages) => {
+    setPeoplesDialogShow(true);
+  }, []);
+
+  const closePeoplesDialog = useCallback(() => {
+    setPeoplesDialogShow(false);
+  }, []);
+
+  const addPhotoToGroup = useCallback((peopleIds, addedImages, callback) => {
+    onAddImage(peopleIds, addedImages, callback);
+    updateCurrentDirent();
+    setSelectedImages([]);
+    updateSelectedImages([]);
+  }, [onAddImage, updateCurrentDirent, updateSelectedImages]);
+
   const setSelectedImageAsCover = useCallback((selectedImage) => {
     onSetPeoplePhoto(selectedImage, {
       success_callback: () => {
@@ -411,6 +428,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     const unsubscribeSelectNone = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, selectNone);
     const unsubscribeRemovePhotosFromCurrentSet = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.REMOVE_PHOTOS_FROM_CURRENT_SET, handleRemoveSelectedImages);
     const unsubscribeSetPhotoAsCover = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SET_PHOTO_AS_COVER, setSelectedImageAsCover);
+    const unsubscribeAddPhotoToGroups = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.ADD_PHOTO_TO_GROUPS, handleAddPhotoToGroup);
 
     return () => {
       container && resizeObserver.unobserve(container);
@@ -418,6 +436,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       unsubscribeSelectNone();
       unsubscribeRemovePhotosFromCurrentSet();
       unsubscribeSetPhotoAsCover();
+      unsubscribeAddPhotoToGroups();
       switchGalleryModeSubscribe();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -485,7 +504,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         onDelete={handleDeleteSelectedImages}
         onDuplicate={duplicateRecord}
         onRemoveImage={onRemoveImage ? handleRemoveSelectedImages : null}
-        onAddImage={onAddImage}
+        onAddImage={onAddImage ? handleAddPhotoToGroup : null}
         onSetPeoplePhoto={setSelectedImageAsCover}
       />
       {isImagePopupOpen && (
@@ -500,6 +519,11 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
             moveToNextImage={moveToNextImage}
             onDeleteImage={deleteImage}
           />
+        </ModalPortal>
+      )}
+      {isPeoplesDialogShow && (
+        <ModalPortal>
+          <PeoplesDialog selectedImages={selectedImages} onToggle={closePeoplesDialog} onSubmit={addPhotoToGroup} />
         </ModalPortal>
       )}
     </div>
