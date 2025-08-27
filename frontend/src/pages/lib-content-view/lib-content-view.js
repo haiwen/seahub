@@ -1739,8 +1739,11 @@ class LibContentView extends React.Component {
   };
 
   addDirent = (name, type, size) => {
-    let item = this.createDirent(name, type, size);
     let direntList = this.state.direntList;
+    if (direntList.some(item => item.name === name)) {
+      return;
+    }
+    let item = this.createDirent(name, type, size);
     if (type === 'dir') {
       direntList.unshift(item);
     } else {
