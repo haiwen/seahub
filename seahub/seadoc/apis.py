@@ -135,12 +135,12 @@ class SeadocAccessToken(APIView):
         return Response({'access_token': access_token})
 
 class SeadocAccessTokenByFileUuid(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, file_uuid):
-        useranme = request.user.username
+        username = request.user.username
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
             error_msg = 'seadoc uuid %s not found.' % file_uuid
@@ -148,7 +148,8 @@ class SeadocAccessTokenByFileUuid(APIView):
         
         parent_dir = uuid_map.parent_path
         file_name = uuid_map.filename
-        filetype, fileext = get_file_type_and_ext(filename)
+        repo_id = uuid_map.repo_id
+        filetype, fileext = get_file_type_and_ext(file_name)
         if filetype != SEADOC:
             error_msg = 'seadoc file type %s invalid.' % filetype
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -165,7 +166,7 @@ class SeadocAccessTokenByFileUuid(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        access_token = gen_seadoc_access_token(file_uuid, filename, username, permission=permission)
+        access_token = gen_seadoc_access_token(file_uuid, file_name, username, permission=permission)
         return Response({'access_token': access_token})
 
 
