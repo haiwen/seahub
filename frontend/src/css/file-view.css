@@ -20,7 +20,7 @@ body {
 
 .onlyoffice-file-view-header-hidden {
   transition: all .3s ease-in-out;
-  display: none!important;
+  display: none !important;
 }
 
 #unfold-onlyoffice-file-view-header {
@@ -32,17 +32,18 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: rgba(255,255,255, 0.6);
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 0 0 14px 14px;
-  box-shadow: 0 0 8px rgba(0,0,0, 0.4);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   cursor: pointer;
 }
 
 #unfold-onlyoffice-file-view-header:hover {
-  background: rgba(255,255,255, 1);
+  background: rgba(255, 255, 255, 1);
 }
 
 .file-view-header .file-toolbar-btn {
+  position: relative;
   width: 28px;
   height: 28px;
   margin-left: 10px;
@@ -76,6 +77,17 @@ body {
 
 .file-view-header .file-toolbar-btn#save-file {
   color: #ED7109;
+}
+
+.file-view-header .file-toolbar-btn .comment-tip {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  border-radius: 50%;
+  width: 6px;
+  height: 6px;
+  z-index: 100;
+  background: red;
 }
 
 .file-view-header .file-toolbar-more-operations {
@@ -140,6 +152,7 @@ body {
     right: -500px;
     opacity: 0.5;
   }
+
   to {
     right: 0px;
     opacity: 1;
