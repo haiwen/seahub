@@ -42,6 +42,24 @@ class SearchOrgs extends Component {
     });
   };
 
+  updateStatus = (orgID, isActive) => {
+    let orgInfo = {};
+    orgInfo.isActive = isActive;
+    systemAdminAPI.sysAdminUpdateOrg(orgID, orgInfo).then(res => {
+      let newOrgList = this.state.orgList.map(org => {
+        if (org.org_id == orgID) {
+          org.is_active = isActive;
+        }
+        return org;
+      });
+      this.setState({ orgList: newOrgList });
+      toaster.success(gettext('Edit succeeded'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   updateRole = (orgID, role) => {
     let orgInfo = {};
     orgInfo.role = role;
@@ -129,6 +147,7 @@ class SearchOrgs extends Component {
                   loading={this.state.loading}
                   errorMsg={this.state.errorMsg}
                   items={this.state.orgList}
+                  updateStatus={this.updateStatus}
                   updateRole={this.updateRole}
                   deleteOrg={this.deleteOrg}
                 />
