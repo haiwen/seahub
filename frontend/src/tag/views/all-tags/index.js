@@ -26,7 +26,6 @@ const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
   useEffect(() => {
     const eventBus = context.eventBus;
     eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -42,24 +41,19 @@ const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
 
   const onChangeDisplayTag = useCallback((tagID = '', nodeKey = '') => {
     if (displayTag === tagID) return;
-
     const tag = tagID && getRowById(tagsData, tagID);
     let path = `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${ALL_TAGS_ID}`;
     if (tag) {
       path += `/${getTagName(tag)}`;
     }
-
     displayNodeKey.current = nodeKey || '';
     updateCurrentPath(path);
-
     setDisplayTag(tagID);
   }, [tagsData, displayTag, updateCurrentPath]);
 
   const loadMore = useCallback(async () => {
-    if (isLoadingMore) return;
-    if (!tagsData.hasMore) return;
+    if (isLoadingMore || !tagsData.hasMore) return;
     setLoadingMore(true);
-
     try {
       await store.loadMore(PER_LOAD_NUMBER);
       setLoadingMore(false);
@@ -69,7 +63,6 @@ const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
       setLoadingMore(false);
       return;
     }
-
   }, [isLoadingMore, tagsData, store]);
 
   useEffect(() => {
@@ -78,12 +71,22 @@ const AllTags = ({ updateCurrentPath, toggleShowDirentToolbar, ...params }) => {
     }
   }, [isLoading, isReloading, onChangeDisplayTag]);
 
-  if (isReloading) return (<CenteredLoading />);
+  if (isReloading) {
+    return (
+      <CenteredLoading />
+    );
+  }
 
   if (displayTag) {
     return (
       <div className="sf-metadata-all-tags-tag-files">
-        <TagViewProvider { ...params } tagID={displayTag} nodeKey={displayNodeKey.current} updateCurrentPath={updateCurrentPath} >
+        <TagViewProvider
+          { ...params }
+          toggleShowDirentToolbar={toggleShowDirentToolbar}
+          tagID={displayTag}
+          nodeKey={displayNodeKey.current}
+          updateCurrentPath={updateCurrentPath}
+        >
           <View />
         </TagViewProvider>
       </div>
