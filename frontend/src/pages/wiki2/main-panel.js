@@ -3,12 +3,11 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { SdocWikiEditor, DocInfo, ErrorBoundary, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import { CollaboratorsProvider, CommentContextProvider, EventBus, PluginsProvider, RightPanel } from '@seafile/sdoc-editor';
-import { gettext, username, wikiPermission, wikiId, siteRoot, isPro } from '../../utils/constants';
+import { gettext, wikiPermission, wikiId, siteRoot, isPro } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import Switch from '../../components/switch';
 import Loading from '../../components/loading';
 import { Utils } from '../../utils/utils';
-import Account from '../../components/common/account';
 import WikiTopNav from './top-nav';
 import { getCurrentPageConfig } from './utils';
 import RightHeader from './wiki-right-header';
@@ -299,7 +298,6 @@ class MainPanel extends Component {
               </DropdownMenu>
             </Dropdown>
             }
-            {username && <Account />}
           </div>
         </div>
         <div className="main-panel-center">
