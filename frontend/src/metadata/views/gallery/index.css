@@ -16,13 +16,6 @@
   gap: 2px;
   justify-content: left;
   align-items: center;
-  padding-left: calc(100% / 9);
-  padding-right: calc(100% / 9);
-}
-
-.sf-metadata-gallery-container-all {
-  padding-left: 16px;
-  padding-right: 16px;
 }
 
 .metadata-gallery-date-group {
@@ -56,6 +49,11 @@
 .metadata-gallery-main {
   flex: 1;
   width: 100%;
+  padding: 0 calc(100% / 9);
+}
+
+.sf-metadata-gallery-container-all .metadata-gallery-main {
+  padding: 0 16px;
 }
 
 .metadata-gallery-image-item {
