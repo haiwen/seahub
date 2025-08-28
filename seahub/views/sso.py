@@ -236,7 +236,16 @@ def client_sso_complete(request, token):
                 api_token = get_token_v2(
                     request, username, platform, device_id,
                     device_name, client_version, platform_version)
-            elif all(['shib_' + key not in request.GET for key in keys]):
+            elif all(['shib_' + key in request.session for key in keys]):
+                platform = request.session['shib_platform']
+                device_id = request.session['shib_device_id']
+                device_name = request.session['shib_device_name']
+                client_version = request.session['shib_client_version']
+                platform_version = request.session['shib_platform_version']
+                api_token = get_token_v2(
+                    request, username, platform, device_id,
+                    device_name, client_version, platform_version)
+            else:
                 api_token = get_token_v1(username)
 
             t.completed(username=username, api_key=api_token.key)
