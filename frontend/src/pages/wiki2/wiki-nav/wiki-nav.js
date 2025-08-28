@@ -65,8 +65,7 @@ class WikiNav extends Component {
   };
 
   toggleDropdown = () => {
-    const isShow = !this.state.isShowOperationDropdown;
-    this.setState({ isShowOperationDropdown: isShow });
+    this.setState({ isShowOperationDropdown: !this.state.isShowOperationDropdown });
   };
 
   handleImportPage = () => {
@@ -151,7 +150,7 @@ class WikiNav extends Component {
     const isDesktop = Utils.isDesktop();
     return (
       <div className='wiki-nav-body' onScroll={this.onWikiNavBodyScroll} ref={this.wikiNavBodyRef}>
-        <div className="wiki-nav-group-header d-flex justify-content-between align-items-center px-2">
+        <div className="wiki-nav-group-header wiki-nav-pages px-2">
           <h2 className="h6 font-weight-normal m-0">{gettext('Pages')}</h2>
           {isDesktop && wikiPermission === 'rw' &&
           <div className='d-none d-md-flex'>
@@ -188,7 +187,6 @@ class WikiNav extends Component {
                 {gettext('New page')}
               </UncontrolledTooltip>
             </div>
-
           </div>
           }
         </div>
@@ -196,15 +194,15 @@ class WikiNav extends Component {
           return this.renderPage(item, index, canDeletePage, id_page_map);
         })}
         {wikiPermission === 'rw' &&
-        <>
-          <div className="wiki-nav-group-header d-flex justify-content-between align-items-center px-2">
-            <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
-          </div>
-          <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
-            <span className="sf3-font-trash sf3-font mr-2"></span>
-            <span>{gettext('Trash')}</span>
-          </div>
-        </>
+          <>
+            <div className="wiki-nav-group-header px-2">
+              <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
+            </div>
+            <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
+              <span className="sf3-font-trash sf3-font mr-2"></span>
+              <span>{gettext('Trash')}</span>
+            </div>
+          </>
         }
       </div>
     );

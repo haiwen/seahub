@@ -1,14 +1,13 @@
 .wiki-plugin-operation-btn-container {
+  height: 24px;
+  width: 24px;
   border-radius: 3px;
   cursor: pointer;
-  height: 24px;
-  justify-content: center;
-  margin-left: 10px;
   position: relative;
-  width: 24px;
-  align-items: center;
   display: flex;
-  margin-right: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
 }
 
 .wiki-plugin-operation-btn-container:hover {
