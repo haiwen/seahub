@@ -398,6 +398,21 @@ class AccountInfo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'collaborate_email_interval invalid')
 
+        enable_login_email = request.data.get("enable_login_email", None)
+        if enable_login_email is not None:
+            try:
+                enable_login_email = int(enable_login_email)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'enable_login_email invalid')
+
+        enable_password_update_email = request.data.get("enable_password_update_email", None)
+        if enable_password_update_email is not None:
+            try:
+                enable_password_update_email = int(enable_password_update_email)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'enable_password_update_email invalid')
         # update user info
 
         if name is not None:
@@ -417,6 +432,14 @@ class AccountInfo(APIView):
         if collaborate_email_interval is not None:
             UserOptions.objects.set_collaborate_email_interval(
                 username, collaborate_email_interval)
+
+        if enable_password_update_email is not None:
+            UserOptions.objects.set_password_update_email_enable_status(
+                username, enable_password_update_email)
+
+        if enable_login_email is not None:
+            UserOptions.objects.set_login_email_enable_status(
+                username, enable_login_email)
 
         return Response(self._get_account_info(request))
 

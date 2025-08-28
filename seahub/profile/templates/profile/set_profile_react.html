@@ -58,6 +58,8 @@ window.app.pageOptions = {
 
   fileUpdatesEmailInterval: {{ file_updates_email_interval }},
   collaborateEmailInterval: {{ collaborate_email_interval }},
+  enablePasswordUpdateEmail: {{ enable_password_update_email }},
+  enableLoginEmail: {{ enable_login_email }},
 
   twoFactorAuthEnabled: {% if two_factor_auth_enabled %} true {% else %} false {% endif %},
   {% if two_factor_auth_enabled %}

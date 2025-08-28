@@ -22,6 +22,7 @@ from seaserv import seafile_api, ccnet_api, \
         get_group, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from seahub.auth.utils import send_login_email
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, file_icon_filter, email2contact_email
 from seahub.constants import REPO_TYPE_WIKI
@@ -30,12 +31,15 @@ from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.utils import get_user_repos
+from seahub.utils import get_user_repos, send_html_email, get_site_name, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
 import seahub.settings as settings
+from seahub.options.models import UserOptions
+
 
 JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
+
 
 logger = logging.getLogger(__name__)
 
@@ -190,6 +194,7 @@ def get_token_v1(username):
     return token
 
 _ANDROID_DEVICE_ID_PATTERN = re.compile('^[a-f0-9]{1,16}$')
+
 def get_token_v2(request, username, platform, device_id, device_name,
                  client_version, platform_version):
 
@@ -209,10 +214,17 @@ def get_token_v2(request, username, platform, device_id, device_name,
             raise serializers.ValidationError('invalid device id')
     else:
         raise serializers.ValidationError('invalid platform')
-
-    return TokenV2.objects.get_or_create_token(
+    enable_new_device_email = bool(UserOptions.objects.get_login_email_enable_status(username))
+    
+    has_device = TokenV2.objects.filter(user=username, device_id=device_id, platform=platform).first()
+    token = TokenV2.objects.get_or_create_token(
         username, platform, device_id, device_name,
         client_version, platform_version, get_client_ip(request))
+    
+    if IS_EMAIL_CONFIGURED and enable_new_device_email and (not has_device):
+        send_login_email(username)
+        
+    return token
 
 def get_api_token(request, keys=None, key_prefix='shib_'):
 
