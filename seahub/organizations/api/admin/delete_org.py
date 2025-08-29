@@ -13,7 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
 from seahub.base.accounts import User
-from seahub.organizations.models import OrgSAMLConfig
+from seahub.organizations.signals import org_deleted
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -59,12 +59,11 @@ class OrgAdminDeleteOrg(APIView):
 
             # remove org repos
             seafile_api.remove_org_repo_by_org_id(org_id)
-
-            # remove org saml config
-            OrgSAMLConfig.objects.filter(org_id=org_id).delete()
-
             # remove org
             ccnet_api.remove_org(org_id)
+            
+            # handle signal
+            org_deleted.send(sender=None, org_id=org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

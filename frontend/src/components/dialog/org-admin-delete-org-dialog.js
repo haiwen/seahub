@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, InputGroup, FormGroup } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, FormGroup } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
-import { Utils } from '../../utils/utils';
 
 const propTypes = {
   organizationName: PropTypes.string.isRequired,

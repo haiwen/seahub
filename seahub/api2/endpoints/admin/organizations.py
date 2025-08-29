@@ -15,6 +15,7 @@ from seaserv import ccnet_api, seafile_api
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT, \
         ORG_ENABLE_REACTIVATE
+from seahub.organizations.signals import org_deleted
 from seahub.organizations.utils import generate_org_reactivate_link
 from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email
 from seahub.utils.file_size import get_file_size_unit
@@ -472,12 +473,12 @@ class AdminOrganization(APIView):
 
             # remove org repos
             seafile_api.remove_org_repo_by_org_id(org_id)
-
-            # remove org saml config
-            OrgSAMLConfig.objects.filter(org_id=org_id).delete()
-
+            
             # remove org
             ccnet_api.remove_org(org_id)
+            
+            # handle signal
+            org_deleted.send(sender=None, org_id=org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

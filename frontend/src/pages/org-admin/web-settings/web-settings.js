@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { InputGroupText, Button } from 'reactstrap';
+import { InputGroupText } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
 import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, enableMultiADFS } from '../../../utils/constants';
@@ -223,9 +223,9 @@ class OrgWebSettings extends Component {
                 </Section>
                 <Section headingText={gettext('Delete')}>
                   <Fragment>
-                      <button onClick={this.toggleDeleteOrganization.bind(this, null)} className="btn btn-outline-primary" >
-                        {gettext('Delete Organization')}
-                      </button>
+                    <button onClick={this.toggleDeleteOrganization.bind(this, null)} className="btn btn-outline-primary" >
+                      {gettext('Delete Organization')}
+                    </button>
                   </Fragment>
                 </Section>
               </Fragment>
