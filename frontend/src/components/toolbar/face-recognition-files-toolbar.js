@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_OPERATION_KEYS } from '../../metadata/constants';
@@ -7,8 +7,7 @@ import { useFileOperations } from '../../hooks/file-operations';
 const FaceRecognitionFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const [selectedRecords, setSelectedRecords] = useState([]);
-  const [opList, setOpList] = useState([]);
-  const metadataRef = useRef([]);
+  const [isSomeone, setIsSomeone] = useState(false);
   const menuRef = useRef(null);
   const { handleDownload: handleDownloadAPI } = useFileOperations();
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
@@ -19,11 +18,10 @@ const FaceRecognitionFilesToolbar = () => {
   const canSetPeoplePhoto = window.sfMetadataContext.canSetPeoplePhoto();
 
   useEffect(() => {
-    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata, selectedRecords) => {
-      metadataRef.current = metadata || [];
+    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata, selectedRecords, isSomeone) => {
       setSelectedRecordIds(ids);
       setSelectedRecords(selectedRecords);
-      getOpList(ids);
+      setIsSomeone(isSomeone);
     });
 
     return () => {
@@ -55,26 +53,32 @@ const FaceRecognitionFilesToolbar = () => {
     });
   }, [eventBus, selectedRecords]);
 
+  const opList = useMemo(() => {
+    const list = [];
+    if (isSomeone && canRemovePhotoFromPeople) {
+      list.push({
+        key: GALLERY_OPERATION_KEYS.REMOVE_PHOTO_FROM_CURRENT_SET,
+        value: gettext('Remove from this group')
+      });
+    }
+    if (!isSomeone && canAddPhotoToPeople) {
+      list.push({
+        key: GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS,
+        value: gettext('Add to groups')
+      });
+    }
+    if (canSetPeoplePhoto && selectedRecordIds.length == 1) {
+      list.push({
+        key: GALLERY_OPERATION_KEYS.SET_PHOTO_AS_COVER,
+        value: gettext('Set as cover photo')
+      });
+    }
+    return list;
+  }, [isSomeone, selectedRecordIds, canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto]);
+
   const getMenuList = useCallback(() => {
     return opList;
   }, [opList]);
-
-  const getOpList = useCallback((selectedIDs) => {
-    const { current_row_id, id_row_map } = metadataRef.current;
-    const row = id_row_map[current_row_id];
-    const { _is_someone: isSomeone } = row;
-    const list = [];
-    if (isSomeone && canRemovePhotoFromPeople) {
-      list.push({ key: GALLERY_OPERATION_KEYS.REMOVE_PHOTO_FROM_CURRENT_SET, value: gettext('Remove from this group') });
-    }
-    if (!isSomeone && canAddPhotoToPeople) {
-      list.push({ key: GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS, value: gettext('Add to groups') });
-    }
-    if (canSetPeoplePhoto && selectedIDs.length == 1) {
-      list.push({ key: GALLERY_OPERATION_KEYS.SET_PHOTO_AS_COVER, value: gettext('Set as cover photo') });
-    }
-    setOpList(list);
-  }, [metadataRef, canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto]);
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {

@@ -296,11 +296,11 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
-  const updateSelectedRecordIds = useCallback((ids, records) => {
+  const updateSelectedRecordIds = useCallback((ids, records, isSomeone) => {
     toggleShowDirentToolbar(ids.length > 0);
     setTimeout(() => {
       if (records != undefined) {
-        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, records);
+        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, records, isSomeone);
       } else {
         window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata);
       }
@@ -692,7 +692,6 @@ export const MetadataViewProvider = ({
         isBeingBuilt,
         errorMessage,
         metadata,
-        updateMetadata,
         store: storeRef.current,
         isDirentDetailShow: params.isDirentDetailShow,
         updateCurrentDirent: params.updateCurrentDirent,

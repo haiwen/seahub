@@ -258,6 +258,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
         onRemoveImage={people._is_someone ? handleRemove : null}
         onAddImage={!people._is_someone ? handleAdd : null}
         onSetPeoplePhoto={handleSetPeoplePhoto}
+        isSomeone={people._is_someone}
       />
     </div>
   );

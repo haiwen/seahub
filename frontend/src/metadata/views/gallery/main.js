@@ -21,7 +21,7 @@ import './index.css';
 
 const OVER_SCAN_ROWS = 20;
 
-const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
+const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, onRemoveImage, onAddImage, onSetPeoplePhoto, isSomeone }) => {
   const [isFirstLoading, setFirstLoading] = useState(true);
   const [zoomGear, setZoomGear] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -195,8 +195,12 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
 
   const updateSelectedImages = useCallback((selectedImages) => {
     const ids = selectedImages.map(item => item.id);
-    updateSelectedRecordIds(ids, selectedImages);
-  }, [updateSelectedRecordIds]);
+    if (isSomeone != undefined) { // 'face recognition'
+      updateSelectedRecordIds(ids, selectedImages, isSomeone);
+    } else {
+      updateSelectedRecordIds(ids);
+    }
+  }, [isSomeone, updateSelectedRecordIds]);
 
   const handleClick = useCallback((event, image) => {
     if (event.metaKey || event.ctrlKey) {
