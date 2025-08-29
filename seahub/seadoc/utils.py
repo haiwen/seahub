@@ -346,7 +346,8 @@ def export_sdoc_prepare_images_folder(repo_id, doc_uuid, images_dir_id, username
     fake_obj_id = {
         'obj_id': images_dir_id,
         'dir_name': 'images',  # after download and zip, folder root name is images
-        'is_windows': 0
+        'is_windows': 0,
+        'parent_dir': '/',
     }
     try:
         token = seafile_api.get_fileserver_access_token(
