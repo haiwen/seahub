@@ -3270,3 +3270,330 @@ class MetadataImportTags(APIView):
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         return Response({'success': True})
+
+
+class MetadataStatistics(APIView):
+    """
+    API for retrieving library metadata statistics for the statistics view.
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        """
+        Get statistics data for metadata view including:
+        - File type distribution
+        - Files by creation/modification time
+        - Files by creator 
+        - Summary statistics
+        """
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+
+            from seafevents.repo_metadata.constants import METADATA_TABLE
+
+            sql = f'''
+                SELECT 
+                    `{METADATA_TABLE.columns.file_name.name}`,
+                    `{METADATA_TABLE.columns.parent_dir.name}`,
+                    `{METADATA_TABLE.columns.file_ctime.name}`,
+                    `{METADATA_TABLE.columns.file_mtime.name}`,
+                    `{METADATA_TABLE.columns.file_creator.name}`,
+                    `{METADATA_TABLE.columns.file_modifier.name}`,
+                    `{METADATA_TABLE.columns.file_type.name}`,
+                    `{METADATA_TABLE.columns.is_dir.name}`
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                ORDER BY `{METADATA_TABLE.columns.file_ctime.name}` DESC
+            '''
+
+            results = metadata_server_api.query_rows(sql, [])
+
+            if not results or 'results' not in results:
+                return Response({
+                    'file_type_stats': [],
+                    'time_stats': {
+                        'created': {'unit': 'year', 'data': []},
+                        'modified': {'unit': 'year', 'data': []}
+                    },
+                    'creator_stats': [],
+                    'summary_stats': {
+                        'total_files': 0,
+                        'total_collaborators': 0
+                    }
+                })
+
+            files_data = results['results']
+
+            statistics = self._process_statistics(files_data)
+
+            return Response(statistics)
+
+        except Exception as e:
+            logger.error(f'Error generating metadata statistics for repo {repo_id}: {e}')
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+    def _process_statistics(self, files_data):
+        """
+        Process raw file data into statistics for visualization.
+        """
+        from collections import defaultdict
+        from datetime import datetime
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+        file_type_counts = defaultdict(int)
+        creator_counts = defaultdict(int)
+        collaborators = set()
+
+        created_datetimes = []
+        modified_datetimes = []
+
+        for file_data in files_data:
+            ctime = file_data.get(METADATA_TABLE.columns.file_ctime.name)
+            mtime = file_data.get(METADATA_TABLE.columns.file_mtime.name)
+            creator = file_data.get(METADATA_TABLE.columns.file_creator.name, '')
+            modifier = file_data.get(METADATA_TABLE.columns.file_modifier.name, '')
+            file_type = file_data.get(METADATA_TABLE.columns.file_type.name, '')
+
+            display_type = file_type if file_type else 'other'
+            file_type_counts[display_type] += 1
+
+            if ctime:
+                try:
+                    if isinstance(ctime, str):
+                        dt = datetime.fromisoformat(ctime.replace('Z', '+00:00'))
+                    else:
+                        dt = ctime
+                    created_datetimes.append(dt)
+                except (ValueError, AttributeError):
+                    pass
+
+            if mtime:
+                try:
+                    if isinstance(mtime, str):
+                        dt = datetime.fromisoformat(mtime.replace('Z', '+00:00'))
+                    else:
+                        dt = mtime
+                    modified_datetimes.append(dt)
+                except (ValueError, AttributeError):
+                    pass
+
+            if creator:
+                creator_counts[creator] += 1
+                collaborators.add(creator)
+            
+            if modifier and modifier != creator:
+                collaborators.add(modifier)
+
+        created_time_stats = self._process_time_statistics(created_datetimes, 'created')
+        modified_time_stats = self._process_time_statistics(modified_datetimes, 'modified')
+
+        file_type_stats = [
+            {'type': file_type, 'count': count}
+            for file_type, count in file_type_counts.items()
+        ]
+
+        creator_stats_sorted = sorted(creator_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+        creator_stats = [
+            {'creator': creator, 'count': count}
+            for creator, count in creator_stats_sorted
+        ]
+
+        summary_stats = {
+            'total_files': len(files_data),
+            'total_collaborators': len(collaborators)
+        }
+
+        return {
+            'file_type_stats': file_type_stats,
+            'time_stats': {
+                'created': created_time_stats,
+                'modified': modified_time_stats
+            },
+            'creator_stats': creator_stats,
+            'summary_stats': summary_stats
+        }
+
+    def _process_time_statistics(self, datetimes, time_grouping='created'):
+        """
+        Process time statistics with dynamic granularity selection.
+
+        Algorithm:
+        - If data spans 3+ years: use yearly granularity
+        - If data spans 6+ months but <3 years: use monthly granularity  
+        - If data spans <6 months: use daily granularity
+        """
+        from collections import defaultdict
+        from datetime import datetime, timedelta
+        import calendar
+
+        if not datetimes:
+            return {'unit': 'year', 'data': [], 'grouping': time_grouping}
+
+        sorted_datetimes = sorted(datetimes)
+        min_date = sorted_datetimes[0]
+        max_date = sorted_datetimes[-1]
+        time_span = max_date - min_date
+
+        years_span = time_span.days / 365.25
+        months_span = time_span.days / 30.44
+        days_span = time_span.days
+
+        time_counts = defaultdict(int)
+        time_unit = 'year'
+
+        if years_span >= 3:
+            time_unit = 'year'
+            for dt in datetimes:
+                time_counts[dt.year] += 1
+
+            time_data = [
+                {'period': str(year), 'label': str(year), 'count': count}
+                for year, count in sorted(time_counts.items())
+            ]
+        elif months_span >= 6:
+            time_unit = 'month'
+            for dt in datetimes:
+                month_key = f"{dt.year}-{dt.month:02d}"
+                time_counts[month_key] += 1
+            time_data = []
+            for month_key, count in sorted(time_counts.items()):
+                year, month = month_key.split('-')
+                month_name = calendar.month_abbr[int(month)]
+                label = f"{month_name} {year}"
+                time_data.append({
+                    'period': month_key,
+                    'label': label,
+                    'count': count
+                })
+        else:
+            if days_span > 90:
+                time_unit = 'week'
+                for dt in datetimes:
+                    monday = dt - timedelta(days=dt.weekday())
+                    week_key = monday.strftime('%Y-%m-%d')
+                    time_counts[week_key] += 1
+
+                time_data = []
+                for week_key, count in sorted(time_counts.items()):
+                    week_start = datetime.strptime(week_key, '%Y-%m-%d')
+                    label = f"Week of {week_start.strftime('%b %d')}"
+                    time_data.append({
+                        'period': week_key,
+                        'label': label,
+                        'count': count
+                    })
+            else:
+                time_unit = 'day'
+                for dt in datetimes:
+                    day_key = dt.strftime('%Y-%m-%d')
+                    time_counts[day_key] += 1
+
+                time_data = []
+                for day_key, count in sorted(time_counts.items()):
+                    day_date = datetime.strptime(day_key, '%Y-%m-%d')
+                    label = day_date.strftime('%b %d')
+                    time_data.append({
+                        'period': day_key,
+                        'label': label,
+                        'count': count
+                    })
+
+        if time_unit in ['month', 'week', 'day'] and len(time_data) > 1:
+            time_data = self._fill_time_gaps(time_data, time_unit)
+
+        return {
+            'unit': time_unit,
+            'data': time_data,
+            'grouping': time_grouping
+        }
+
+    def _fill_time_gaps(self, time_data, time_unit):
+        """Fill gaps in time series data for smoother visualization."""
+        from datetime import datetime, timedelta
+        import calendar
+
+        if len(time_data) < 2:
+            return time_data
+
+        filled_data = []
+        current_data = {item['period']: item for item in time_data}
+
+        if time_unit == 'day':
+            start_date = datetime.strptime(time_data[0]['period'], '%Y-%m-%d')
+            end_date = datetime.strptime(time_data[-1]['period'], '%Y-%m-%d')
+            current_date = start_date
+
+            while current_date <= end_date:
+                period_key = current_date.strftime('%Y-%m-%d')
+                if period_key in current_data:
+                    filled_data.append(current_data[period_key])
+                else:
+                    label = current_date.strftime('%b %d')
+                    filled_data.append({
+                        'period': period_key,
+                        'label': label,
+                        'count': 0
+                    })
+                current_date += timedelta(days=1)
+        elif time_unit == 'week':
+            start_date = datetime.strptime(time_data[0]['period'], '%Y-%m-%d')
+            end_date = datetime.strptime(time_data[-1]['period'], '%Y-%m-%d')
+            current_date = start_date
+
+            while current_date <= end_date:
+                period_key = current_date.strftime('%Y-%m-%d')
+                if period_key in current_data:
+                    filled_data.append(current_data[period_key])
+                else:
+                    label = f"Week of {current_date.strftime('%b %d')}"
+                    filled_data.append({
+                        'period': period_key,
+                        'label': label,
+                        'count': 0
+                    })
+                current_date += timedelta(weeks=1)
+        elif time_unit == 'month':
+            periods = sorted(current_data.keys())
+            start_year, start_month = map(int, periods[0].split('-'))
+            end_year, end_month = map(int, periods[-1].split('-'))
+
+            current_year, current_month = start_year, start_month
+
+            while (current_year, current_month) <= (end_year, end_month):
+                period_key = f"{current_year}-{current_month:02d}"
+                if period_key in current_data:
+                    filled_data.append(current_data[period_key])
+                else:
+                    month_name = calendar.month_abbr[current_month]
+                    label = f"{month_name} {current_year}"
+                    filled_data.append({
+                        'period': period_key,
+                        'label': label,
+                        'count': 0
+                    })
+
+                current_month += 1
+                if current_month > 12:
+                    current_month = 1
+                    current_year += 1
+        else:
+            filled_data = time_data
+
+        return filled_data
