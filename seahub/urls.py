@@ -266,6 +266,7 @@ urlpatterns = [
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/download/$', download_file, name='download_file'),
+    re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/workflows/$', repo_workflows_view, name='view_workflows'),
 
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
