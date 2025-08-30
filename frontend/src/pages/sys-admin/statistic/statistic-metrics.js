@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import dayjs from 'dayjs';
+import Loading from '../../../components/loading';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Tooltip } from 'reactstrap';
@@ -156,38 +157,40 @@ class StatisticMetrics extends Component {
     const { groupedMetrics, loading, error } = this.state;
 
     return (
-      <div className="cur-metrics-content">
-        {loading ? (
-          <div className="loading-icon loading-tip"></div>
-        ) : error ? (
-          <div className="error text-danger">{error}</div>
-        ) : (
-          <div className="metrics-container">
-            <div className="card">
-              <div className="card-body">
-                <table className="table table-striped mb-0">
-                  <thead>
-                    <tr>
-                      <th width="40%">{gettext('Metrics')}</th>
-                      <th width="20%">{gettext('Node')}</th>
-                      <th width="15%">{gettext('Value')}</th>
-                      <th width="25%">{gettext('Collected time')}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(groupedMetrics).map(([component, metrics]) => (
-                      <ComponentMetricsTable
-                        key={component}
-                        componentName={component}
-                        metrics={metrics}
-                      />
-                    ))}
-                  </tbody>
-                </table>
+      <div className="cur-view-container">
+        <div className="cur-view-content cur-metrics-content">
+          {loading ? (
+            <Loading />
+          ) : error ? (
+            <div className="error text-danger">{error}</div>
+          ) : (
+            <div className="metrics-container">
+              <div className="card">
+                <div className="card-body">
+                  <table className="table table-striped mb-0">
+                    <thead>
+                      <tr>
+                        <th width="40%">{gettext('Metrics')}</th>
+                        <th width="20%">{gettext('Node')}</th>
+                        <th width="15%">{gettext('Value')}</th>
+                        <th width="25%">{gettext('Collected time')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(groupedMetrics).map(([component, metrics]) => (
+                        <ComponentMetricsTable
+                          key={component}
+                          componentName={component}
+                          metrics={metrics}
+                        />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   }
@@ -208,12 +211,12 @@ const style = `
       background: var(--bs-body-bg);
       padding: 16px 20px;
     }
-    
+
     .metric-info {
       display: flex;
       flex-direction: column;
     }
-    
+
     .metric-name {
       font-size: 14px;
     }
@@ -221,7 +224,7 @@ const style = `
     .metrics-container {
       padding: 0;
     }
-    
+
     .metrics-container .loading-tip {
       margin: 100px auto;
       text-align: center;
