@@ -39,6 +39,7 @@ const entryFiles = {
   repoHistory: '/repo-history.js',
   repoSnapshot: '/repo-snapshot.js',
   repoFolderTrash: '/repo-folder-trash.js',
+  repoWorkflows: '/repo-workflows.js',
   orgAdmin: '/pages/org-admin',
   sysAdmin: '/pages/sys-admin',
   uploadLink: '/pages/upload-link',
