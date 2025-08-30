@@ -10,6 +10,7 @@ import { enableSeafileAI } from '../utils/constants';
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
 const MetadataStatusContext = React.createContext(null);
+const { mdFileCountLimit } = window.app.pageOptions;
 
 export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMetadataView, statusCallback, children }) => {
   const enableMetadataManagement = useMemo(() => {
@@ -61,9 +62,14 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         details_settings: detailsSettings,
         face_recognition_enabled: enableFaceRecognition,
         global_hidden_columns: globalHiddenColumns,
+        records_count: recordsCount
       } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
+      }
+      if (recordsCount > mdFileCountLimit) {
+        let msg = `The number of metadata records exceeds the limit of ${mdFileCountLimit}`;
+        toaster.warning(msg, { hasCloseButton: true, duration: 5 });
       }
       setEnableTags(enableTags);
       setShowView(showView);
