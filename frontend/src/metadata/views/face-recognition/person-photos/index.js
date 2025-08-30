@@ -237,12 +237,14 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     const eventBus = window?.sfMetadataContext?.eventBus;
     if (!eventBus) return;
     const unsubscribeViewChange = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SERVER_VIEW, onViewChange);
+    const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_FACE_RECOGNITION_RECORDS, handleDelete);
     const localRecordChangedSubscribe = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, onRecordChange);
     return () => {
       unsubscribeViewChange && unsubscribeViewChange();
+      unsubscribeDeleteRecords && unsubscribeDeleteRecords();
       localRecordChangedSubscribe && localRecordChangedSubscribe();
     };
-  }, [onViewChange, onRecordChange]);
+  }, [onViewChange, handleDelete, onRecordChange]);
 
   if (isLoading) return (<CenteredLoading />);
 
@@ -256,6 +258,7 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
         onRemoveImage={people._is_someone ? handleRemove : null}
         onAddImage={!people._is_someone ? handleAdd : null}
         onSetPeoplePhoto={handleSetPeoplePhoto}
+        isSomeone={people._is_someone}
       />
     </div>
   );

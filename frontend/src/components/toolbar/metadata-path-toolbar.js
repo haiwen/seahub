@@ -8,6 +8,7 @@ import AllTagsToolbar from './all-tags-toolbar';
 import TagFilesToolbar from './tag-files-toolbar';
 import TableFilesToolbar from './table-files-toolbar';
 import GalleryFilesToolbar from './gallery-files-toolbar';
+import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
 
 const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
   const { idViewMap } = useMetadata();
@@ -18,6 +19,10 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
     return (
       <GalleryFilesToolbar />
     );
+  }
+
+  if (type === VIEW_TYPE.FACE_RECOGNITION) {
+    return <FaceRecognitionFilesToolbar />;
   }
 
   if (type === VIEW_TYPE.TABLE) {

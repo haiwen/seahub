@@ -85,6 +85,12 @@ export const EVENT_BUS_TYPE = {
   MODIFY_GALLERY_ZOOM_GEAR: 'modify_gallery_zoom_gear',
   SWITCH_GALLERY_GROUP_BY: 'switch_gallery_group_by',
 
+  // face recognition
+  DELETE_FACE_RECOGNITION_RECORDS: 'delete_face_recognition_records',
+  REMOVE_PHOTOS_FROM_CURRENT_SET: 'remove_photos_from_current_set',
+  SET_PHOTO_AS_COVER: 'set_photo_as_cover',
+  ADD_PHOTO_TO_GROUPS: 'add_photo_to_groups',
+
   // kanban
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
   OPEN_KANBAN_SETTINGS: 'open_kanban_settings',

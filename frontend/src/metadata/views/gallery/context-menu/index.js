@@ -1,16 +1,12 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
-import ModalPortal from '../../../../components/modal-portal';
-import PeoplesDialog from '../../../components/dialog/peoples-dialog';
 import { gettext } from '../../../../utils/constants';
 import { Dirent } from '../../../../models';
 import { useFileOperations } from '../../../../hooks/file-operations';
 import { GALLERY_OPERATION_KEYS } from '../../../constants';
 
 const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveImage, onAddImage, onSetPeoplePhoto }) => {
-  const [isPeoplesDialogShow, setPeoplesDialogShow] = useState(false);
-
   const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
 
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
@@ -22,22 +18,39 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveIma
   const options = useMemo(() => {
     let validOptions = [{ value: GALLERY_OPERATION_KEYS.DOWNLOAD, label: gettext('Download') }];
     if (onDelete && checkCanDeleteRow) {
-      validOptions.push({ value: GALLERY_OPERATION_KEYS.DELETE, label: gettext('Delete') });
+      validOptions.push({
+        value: GALLERY_OPERATION_KEYS.DELETE,
+        label: gettext('Delete')
+      });
     }
     if (onDuplicate && canDuplicateRow && selectedImages.length === 1) {
-      validOptions.push({ value: GALLERY_OPERATION_KEYS.DUPLICATE, label: gettext('Copy') });
+      validOptions.push({
+        value: GALLERY_OPERATION_KEYS.COPY,
+        label: gettext('Copy')
+      });
     }
     if (onRemoveImage && canRemovePhotoFromPeople) {
-      validOptions.push({ value: GALLERY_OPERATION_KEYS.REMOVE, label: gettext('Remove from this group') });
+      validOptions.push({
+        value: GALLERY_OPERATION_KEYS.REMOVE_PHOTO_FROM_CURRENT_SET,
+        label: gettext('Remove from this group')
+      });
     }
     if (onAddImage && canAddPhotoToPeople) {
-      validOptions.push({ value: GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS, label: gettext('Add to groups') });
+      validOptions.push({
+        value: GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS,
+        label: gettext('Add to groups')
+      });
     }
-    if (onSetPeoplePhoto && canSetPeoplePhoto) {
-      validOptions.push({ value: GALLERY_OPERATION_KEYS.SET_PEOPLE_PHOTO, label: gettext('Set as cover photo') });
+    if (onSetPeoplePhoto && canSetPeoplePhoto && selectedImages.length === 1) {
+      validOptions.push({
+        value: GALLERY_OPERATION_KEYS.SET_PHOTO_AS_COVER,
+        label: gettext('Set as cover photo')
+      });
     }
     return validOptions;
-  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople, canAddPhotoToPeople, selectedImages, onDuplicate, onDelete, onRemoveImage, onAddImage, canSetPeoplePhoto, onSetPeoplePhoto]);
+  }, [checkCanDeleteRow, canDuplicateRow, canRemovePhotoFromPeople,
+    canAddPhotoToPeople, selectedImages, onDuplicate, onDelete,
+    onRemoveImage, onAddImage, canSetPeoplePhoto, onSetPeoplePhoto]);
 
   const handleDuplicate = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
     const selectedImage = selectedImages[0];
@@ -68,44 +81,29 @@ const GalleryContextMenu = ({ selectedImages, onDelete, onDuplicate, onRemoveIma
       case GALLERY_OPERATION_KEYS.DELETE:
         onDelete(selectedImages);
         break;
-      case GALLERY_OPERATION_KEYS.DUPLICATE:
+      case GALLERY_OPERATION_KEYS.COPY:
         handleCopy();
         break;
-      case GALLERY_OPERATION_KEYS.REMOVE:
+      case GALLERY_OPERATION_KEYS.REMOVE_PHOTO_FROM_CURRENT_SET:
         onRemoveImage(selectedImages);
         break;
       case GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS:
-        setPeoplesDialogShow(true);
+        onAddImage();
         break;
-      case GALLERY_OPERATION_KEYS.SET_PEOPLE_PHOTO:
+      case GALLERY_OPERATION_KEYS.SET_PHOTO_AS_COVER:
         onSetPeoplePhoto(selectedImages[0]);
         break;
       default:
         break;
     }
-  }, [handleDownload, onDelete, selectedImages, handleCopy, onRemoveImage, onSetPeoplePhoto]);
-
-  const closePeoplesDialog = useCallback(() => {
-    setPeoplesDialogShow(false);
-  }, []);
-
-  const addPeople = useCallback((peopleIds, addedImages, callback) => {
-    onAddImage(peopleIds, addedImages, callback);
-  }, [onAddImage]);
+  }, [handleDownload, onDelete, selectedImages, handleCopy, onRemoveImage, onAddImage, onSetPeoplePhoto]);
 
   return (
-    <>
-      <ContextMenu
-        options={options}
-        ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
-        onOptionClick={handleOptionClick}
-      />
-      {isPeoplesDialogShow && (
-        <ModalPortal>
-          <PeoplesDialog selectedImages={selectedImages} onToggle={closePeoplesDialog} onSubmit={addPeople} />
-        </ModalPortal>
-      )}
-    </>
+    <ContextMenu
+      options={options}
+      ignoredTriggerElements={['.metadata-gallery-image-item', '.metadata-gallery-grid-image']}
+      onOptionClick={handleOptionClick}
+    />
   );
 };
 

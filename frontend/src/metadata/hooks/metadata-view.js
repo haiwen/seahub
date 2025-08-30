@@ -296,10 +296,14 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
-  const updateSelectedRecordIds = useCallback((ids) => {
+  const updateSelectedRecordIds = useCallback((ids, records, isSomeone) => {
     toggleShowDirentToolbar(ids.length > 0);
     setTimeout(() => {
-      window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata);
+      if (records != undefined) {
+        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, records, isSomeone);
+      } else {
+        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata);
+      }
     }, 0);
   }, [metadata, toggleShowDirentToolbar]);
 

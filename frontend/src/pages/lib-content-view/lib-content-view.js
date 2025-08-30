@@ -2473,7 +2473,13 @@ class LibContentView extends React.Component {
                         })}>
                         {isDirentSelected ? (
                           currentMode === TAGS_MODE || currentMode === METADATA_MODE ? (
-                            <MetadataPathToolbar repoID={repoID} repoInfo={currentRepoInfo} mode={currentMode} path={path} viewId={viewId} />
+                            <MetadataPathToolbar
+                              repoID={repoID}
+                              repoInfo={currentRepoInfo}
+                              mode={currentMode}
+                              path={path}
+                              viewId={viewId}
+                            />
                           ) : (
                             <SelectedDirentsToolbar
                               repoID={this.props.repoID}
