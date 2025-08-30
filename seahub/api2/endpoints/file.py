@@ -868,8 +868,6 @@ class FileView(APIView):
                 from seahub.seadoc.utils import get_seadoc_file_uuid
                 file_uuid = get_seadoc_file_uuid(repo, path)
                 FileComment.objects.filter(uuid=file_uuid).delete()
-                FileUUIDMap.objects.delete_fileuuidmap_by_path(
-                    repo_id, parent_dir, file_name, is_dir=False)
                 SeadocHistoryName.objects.filter(doc_uuid=file_uuid).delete()
                 SeadocCommentReply.objects.filter(doc_uuid=file_uuid).delete()
             if filetype == EXCALIDRAW:
