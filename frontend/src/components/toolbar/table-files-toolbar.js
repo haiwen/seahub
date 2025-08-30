@@ -64,8 +64,8 @@ const TableFilesToolbar = ({ repoID }) => {
       if (areRecordsInSameFolder) {
         if (canModify) {
           list.push(MOVE);
+          list.push(COPY);
         }
-        list.push(COPY);
         list.push(DOWNLOAD);
       }
 

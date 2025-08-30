@@ -140,8 +140,8 @@ const ContextMenu = ({
       if (areRecordsInSameFolder) {
         if (!isReadonly) {
           list.push({ value: OPERATION.MOVE, label: gettext('Move'), records });
+          list.push({ value: OPERATION.COPY, label: gettext('Copy'), records });
         }
-        list.push({ value: OPERATION.COPY, label: gettext('Copy'), records });
         list.push({ value: OPERATION.DOWNLOAD, label: gettext('Download'), records });
       }
 
