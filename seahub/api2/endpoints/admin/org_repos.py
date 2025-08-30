@@ -72,6 +72,7 @@ class AdminOrgRepos(APIView):
             repo_info['repo_name'] = repo.repo_name
             repo_info['repo_id'] = repo.id
             repo_info['encrypted'] = repo.encrypted
+            repo_info['head_commit_id'] = repo.head_cmmt_id
 
             owner_email = repo_id_2_email_dict.get(repo.id, '')
             repo_info['owner_email'] = owner_email
