@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, isPro } from '../../../utils/constants';
+import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
 import TrashDialog from '../../dialog/trash-dialog';
@@ -11,7 +11,6 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
-import SimpleWorkflowEditor from './workflow';
 
 import './index.css';
 
@@ -54,10 +53,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo, showMdVi
     setRepoHistoryDialogOpen(!isRepoHistoryDialogOpen);
   };
 
-  let [isWorkflowOpen, setWorkflowOpen] = useState(false);
-  const openWorkflow = () => setWorkflowOpen(true);
-  const closeWorkflow = () => setWorkflowOpen(false);
-
   const isDesktop = Utils.isDesktop();
   const isRepoOwner = owner_email == username;
   const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
@@ -67,14 +62,15 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo, showMdVi
     <TreeSection title={gettext('Others')} className="dir-others">
       {showMdView && (
         <>
-          <div className="dir-others-item text-nowrap" title="Workflow" onClick={openWorkflow}>
-            <span className="sf3-font-trash sf3-font"></span>
+          <a
+            className="dir-others-item text-nowrap"
+            title="Workflow"
+            href={`${siteRoot}repo/${repoID}/workflows`}
+          >
             <span className="dir-others-item-text">Workflow</span>
-          </div>
-          <SimpleWorkflowEditor open={isWorkflowOpen} onClose={closeWorkflow} repoId={repoID} />
+          </a>
         </>
-      )
-      }
+      )}
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
           repo={currentRepoInfo}
