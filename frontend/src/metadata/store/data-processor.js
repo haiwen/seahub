@@ -255,7 +255,9 @@ class DataProcessor {
         this.updateSummaries();
         break;
       }
-      case OPERATION_TYPE.MOVE_RECORD: {
+      case OPERATION_TYPE.MOVE_RECORD:
+      case OPERATION_TYPE.DUPLICATE_RECORD:
+      case OPERATION_TYPE.DUPLICATE_RECORDS: {
         this.run(table, { collaborators });
         break;
       }

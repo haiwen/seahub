@@ -1305,15 +1305,23 @@ class LibContentView extends React.Component {
   };
 
   // list operations
-  moveItemsAjaxCallback = (repoID, targetRepo, dirent, moveToDirentPath, nodeParentPath, taskId, byDialog = false) => {
+  moveItemsAjaxCallback = (repoID, targetRepo, dirent, moveToDirentPath, nodeParentPath, taskId, byDialog = false, options = {}) => {
     this.updateCurrentNotExistDirent(dirent);
+
+    const {
+      isBatchOperation = false,
+      batchFileNames = [],
+      customMessage = null
+    } = options;
 
     const dirName = dirent.name;
     const direntPath = Utils.joinPath(nodeParentPath, dirName);
+
     if (repoID !== targetRepo.repo_id) {
+      const operatedFilesLength = isBatchOperation ? batchFileNames.length : 1;
       this.setState({
         asyncCopyMoveTaskId: taskId,
-        asyncOperatedFilesLength: 1,
+        asyncOperatedFilesLength: operatedFilesLength,
         asyncOperationProgress: 0,
         asyncOperationType: 'move',
         isCopyMoveProgressDialogShow: true,
@@ -1324,27 +1332,37 @@ class LibContentView extends React.Component {
       });
     }
 
-    // 1. move to current repo
-    // 2. tow columns mode need update left tree
-    const updateAfterMove = () => {
-      if (repoID === targetRepo.repo_id && this.state.isTreePanelShown) {
-        this.updateMoveCopyTreeNode(moveToDirentPath);
-      }
-      this.moveDirent(direntPath, moveToDirentPath);
-    };
-
     if (this.state.isTreePanelShown) {
-      this.deleteTreeNode(direntPath, updateAfterMove);
-    } else {
-      updateAfterMove();
+      if (isBatchOperation) {
+        const direntPaths = batchFileNames.map(fileName => Utils.joinPath(nodeParentPath, fileName));
+        this.deleteTreeNodes(direntPaths, () => {
+          if (repoID === targetRepo.repo_id) {
+            this.updateMoveCopyTreeNode(moveToDirentPath);
+          }
+        });
+      } else {
+        this.deleteTreeNode(direntPath, () => {
+          if (repoID === targetRepo.repo_id) {
+            this.updateMoveCopyTreeNode(moveToDirentPath);
+          }
+        });
+      }
     }
 
-    // show tip message if move to current repo
-    if (repoID === targetRepo.repo_id) {
-      let message = gettext('Successfully moved {name}.');
+    let message;
+
+    if (customMessage) {
+      message = customMessage;
+    } else if (isBatchOperation && batchFileNames.length > 1) {
+      message = gettext('Successfully moved {name} and {n} other items');
+      message = message.replace('{name}', batchFileNames[0])
+        .replace('{n}', batchFileNames.length - 1);
+    } else {
+      message = gettext('Successfully moved {name}.');
       message = message.replace('{name}', dirName);
-      toaster.success(message);
     }
+
+    toaster.success(message);
 
     if (byDialog) {
       this.updateRecentlyUsedList(targetRepo, moveToDirentPath);
@@ -1382,12 +1400,20 @@ class LibContentView extends React.Component {
     });
   };
 
-  copyItemsAjaxCallback = (repoID, targetRepo, dirent, copyToDirentPath, nodeParentPath, taskId, byDialog = false) => {
+  copyItemsAjaxCallback = (repoID, targetRepo, dirent, copyToDirentPath, nodeParentPath, taskId, byDialog = false, options = {}) => {
     this.onSelectedDirentListUpdate([]);
+
+    const {
+      isBatchOperation = false,
+      batchFileNames = [],
+      customMessage = null
+    } = options;
+
     if (repoID !== targetRepo.repo_id) {
+      const operatedFilesLength = isBatchOperation ? batchFileNames.length : 1;
       this.setState({
         asyncCopyMoveTaskId: taskId,
-        asyncOperatedFilesLength: 1,
+        asyncOperatedFilesLength: operatedFilesLength,
         asyncOperationProgress: 0,
         asyncOperationType: 'copy',
         isCopyMoveProgressDialogShow: true
@@ -1409,8 +1435,19 @@ class LibContentView extends React.Component {
     }
 
     const dirName = dirent.name;
-    let message = gettext('Successfully copied %(name)s.');
-    message = message.replace('%(name)s', dirName);
+    let message;
+
+    if (customMessage) {
+      message = customMessage;
+    } else if (isBatchOperation && batchFileNames.length > 1) {
+      message = gettext('Successfully copied {name} and {n} other items');
+      message = message.replace('{name}', batchFileNames[0])
+        .replace('{n}', batchFileNames.length - 1);
+    } else {
+      message = gettext('Successfully copied %(name)s.');
+      message = message.replace('%(name)s', dirName);
+    }
+
     toaster.success(message);
 
     if (byDialog) {
@@ -2068,9 +2105,11 @@ class LibContentView extends React.Component {
     });
   };
 
-  deleteTreeNodes = (paths) => {
+  deleteTreeNodes = (paths, callback) => {
     let tree = treeHelper.deleteNodeListByPaths(this.state.treeData, paths);
-    this.setState({ treeData: tree });
+    this.setState({ treeData: tree }, () => {
+      callback && callback();
+    });
   };
 
   moveTreeNode = (nodePath, moveToPath, moveToRepo, nodeName) => {

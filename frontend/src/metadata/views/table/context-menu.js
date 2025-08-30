@@ -29,6 +29,8 @@ const OPERATION = {
   FILE_DETAILS: 'file-details',
   DETECT_FACES: 'detect-faces',
   MOVE: 'move',
+  COPY: 'copy',
+  DOWNLOAD: 'download',
 };
 
 const ContextMenu = ({
@@ -119,7 +121,6 @@ const ContextMenu = ({
       return list;
     }
 
-    // handle selected records
     const selectedRecordsIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
     if (selectedRecordsIds.length > 1) {
       let records = [];
@@ -129,6 +130,20 @@ const ContextMenu = ({
           records.push(record);
         }
       });
+
+      const areRecordsInSameFolder = (() => {
+        if (records.length <= 1) return true;
+        const firstPath = getParentDirFromRecord(records[0]);
+        return records.every(record => getParentDirFromRecord(record) === firstPath);
+      })();
+
+      if (areRecordsInSameFolder) {
+        if (!isReadonly) {
+          list.push({ value: OPERATION.MOVE, label: gettext('Move'), records });
+          list.push({ value: OPERATION.COPY, label: gettext('Copy'), records });
+        }
+        list.push({ value: OPERATION.DOWNLOAD, label: gettext('Download'), records });
+      }
 
       const ableDeleteRecords = getAbleDeleteRecords(records);
       if (ableDeleteRecords.length > 0) {
@@ -177,6 +192,10 @@ const ContextMenu = ({
     if (canModifyRow) {
       modifyOptions.push({ value: OPERATION.MOVE, label: isFolder ? gettext('Move folder') : gettext('Move file'), record });
     }
+    // Add copy and download options for single record
+    modifyOptions.push({ value: OPERATION.COPY, label: isFolder ? gettext('Copy folder') : gettext('Copy file'), record });
+    modifyOptions.push({ value: OPERATION.DOWNLOAD, label: isFolder ? gettext('Download folder') : gettext('Download file'), record });
+
     if (canDeleteRow) {
       modifyOptions.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
     }
@@ -301,9 +320,33 @@ const ContextMenu = ({
         break;
       }
       case OPERATION.MOVE: {
-        const { record } = option;
-        if (!record) break;
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, record);
+        const { record, records } = option;
+        if (records) {
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
+        } else if (record) {
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, [record]);
+        }
+        break;
+      }
+      case OPERATION.COPY: {
+        const { record, records } = option;
+        if (records) {
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, records);
+        } else if (record) {
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, [record]);
+        }
+        break;
+      }
+      case OPERATION.DOWNLOAD: {
+        const { record, records } = option;
+        if (records) {
+          // Multiple records
+          const recordIds = records.map(r => r._id).filter(Boolean);
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, recordIds);
+        } else if (record) {
+          // Single record
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, [record._id]);
+        }
         break;
       }
       default: {

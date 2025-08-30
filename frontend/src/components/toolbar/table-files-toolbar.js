@@ -8,7 +8,7 @@ import { getFileName } from '../../tag/utils/file';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
-import { getFileNameFromRecord } from '../../metadata/utils/cell';
+import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { getColumnByKey } from '../../metadata/utils/column';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 
@@ -21,6 +21,12 @@ const TableFilesToolbar = ({ repoID }) => {
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
+
+  const areRecordsInSameFolder = useMemo(() => {
+    if (records.length <= 1) return true;
+    const firstPath = records[0] ? getParentDirFromRecord(records[0]) : null;
+    return firstPath && records.every(record => getParentDirFromRecord(record) === firstPath);
+  }, [records]);
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
@@ -37,16 +43,32 @@ const TableFilesToolbar = ({ repoID }) => {
   }, [eventBus, selectedRecordIds]);
 
   const toggleMoveDialog = useCallback(() => {
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records[0]);
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
   }, [eventBus, records]);
+
+  const toggleCopyDialog = useCallback(() => {
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, records);
+  }, [eventBus, records]);
+
+  const downloadRecords = useCallback(() => {
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, selectedRecordIds);
+  }, [eventBus, selectedRecordIds]);
 
   const checkCanModifyRow = (row) => window.sfMetadataContext.canModifyRow(row);
 
   const getMenuList = useCallback(() => {
-    const { EXTRACT_FILE_DETAIL, EXTRACT_FILE_DETAILS, OPEN_FILE_IN_NEW_TAB, OPEN_FOLDER_IN_NEW_TAB, OPEN_PARENT_FOLDER, GENERATE_DESCRIPTION, OCR } = TextTranslation;
+    const { EXTRACT_FILE_DETAIL, EXTRACT_FILE_DETAILS, OPEN_FILE_IN_NEW_TAB, OPEN_FOLDER_IN_NEW_TAB, OPEN_PARENT_FOLDER, GENERATE_DESCRIPTION, OCR, COPY, DOWNLOAD, MOVE } = TextTranslation;
     const length = selectedRecordIds.length;
     const list = [];
     if (length > 1) {
+      if (areRecordsInSameFolder) {
+        if (canModify) {
+          list.push(MOVE);
+          list.push(COPY);
+        }
+        list.push(DOWNLOAD);
+      }
+
       if (enableSeafileAI) {
         const imageOrVideoRecords = records.filter(record => {
           if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
@@ -54,6 +76,7 @@ const TableFilesToolbar = ({ repoID }) => {
           return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
         });
         if (imageOrVideoRecords.length > 0) {
+          list.push('Divider');
           list.push(EXTRACT_FILE_DETAILS);
         }
       }
@@ -69,6 +92,8 @@ const TableFilesToolbar = ({ repoID }) => {
     list.push(OPEN_PARENT_FOLDER);
 
     const modifyOptions = [];
+    modifyOptions.push(COPY);
+    modifyOptions.push(DOWNLOAD);
 
     if (modifyOptions.length > 0) {
       list.push('Divider');
@@ -103,11 +128,23 @@ const TableFilesToolbar = ({ repoID }) => {
       }
     }
     return list;
-  }, [selectedRecordIds, records]);
+  }, [selectedRecordIds, records, canModify, areRecordsInSameFolder]);
 
   const onMenuItemClick = useCallback((operation) => {
     const records = selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean);
     switch (operation) {
+      case TextTranslation.MOVE.key: {
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
+        break;
+      }
+      case TextTranslation.COPY.key: {
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, records);
+        break;
+      }
+      case TextTranslation.DOWNLOAD.key: {
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, selectedRecordIds);
+        break;
+      }
       case TextTranslation.EXTRACT_FILE_DETAIL.key:
       case TextTranslation.EXTRACT_FILE_DETAILS.key: {
         const imageOrVideoRecords = records.filter(record => {
@@ -169,6 +206,23 @@ const TableFilesToolbar = ({ repoID }) => {
         <>
           <span className="cur-view-path-btn" onClick={toggleMoveDialog}>
             <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>
+          </span>
+        </>
+      }
+      {(length > 1 && canModify && areRecordsInSameFolder) &&
+        <>
+          <span className="cur-view-path-btn" onClick={toggleMoveDialog}>
+            <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>
+          </span>
+        </>
+      }
+      {((length === 1) || (length > 1 && areRecordsInSameFolder)) &&
+        <>
+          <span className="cur-view-path-btn" onClick={toggleCopyDialog}>
+            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')}></span>
+          </span>
+          <span className="cur-view-path-btn" onClick={downloadRecords}>
+            <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
           </span>
         </>
       }

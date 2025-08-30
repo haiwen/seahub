@@ -128,7 +128,8 @@ export default function apply(data, operation) {
       data.rows = updatedRows;
       return data;
     }
-    case OPERATION_TYPE.MOVE_RECORD: {
+    case OPERATION_TYPE.MOVE_RECORD:
+    case OPERATION_TYPE.MOVE_RECORDS: {
       const { update_data } = operation;
       const {
         modify_row_ids: updateRowIds,
@@ -143,6 +144,11 @@ export default function apply(data, operation) {
       if (Array.isArray(deletedRowIds) && deletedRowIds.length > 0) {
         updateDataByDeleteRecords(deletedRowIds);
       }
+      return data;
+    }
+    case OPERATION_TYPE.DUPLICATE_RECORD:
+    case OPERATION_TYPE.DUPLICATE_RECORDS: {
+      // Duplicate operations don't modify local data immediately
       return data;
     }
     case OPERATION_TYPE.MODIFY_FILTERS: {
