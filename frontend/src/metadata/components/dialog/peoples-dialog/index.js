@@ -21,12 +21,10 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
       return {
         value: people._id,
         label: (
-          <div className="select-option-people">
+          <>
             <People people={people} />
-            <div className="people-check-icon">
-              {isSelected && <i className="sf2-icon-tick"></i>}
-            </div>
-          </div>
+            {isSelected && <i className="sf2-icon-tick"></i>}
+          </>
         ),
       };
     });
