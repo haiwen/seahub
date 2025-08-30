@@ -1,0 +1,18 @@
+{% extends 'base_for_react.html' %}
+{% load seahub_tags i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block sub_title %}{% trans "Workflows" %} - {% endblock %}
+
+{% block extra_style %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+// overwrite the one in base_for_react.html
+window.app.pageOptions = {
+  repoID: '{{repo.id}}',
+};
+</script>
+{% render_bundle 'repoWorkflows' 'js' %}
+{% endblock %}
