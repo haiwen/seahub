@@ -339,6 +339,15 @@ def repo_folder_trash(request, repo_id):
             'is_repo_admin': repo_admin
             })
 
+@login_required
+def repo_workflows_view(request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+    return render(request, 'repo_workflows_react.html', {
+            'repo': repo,
+            })
+
 def can_access_repo_setting(request, repo_id, username):
     repo = seafile_api.get_repo(repo_id)
     if not repo:

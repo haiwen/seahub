@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, isPro } from '../../../utils/constants';
+import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
 import TrashDialog from '../../dialog/trash-dialog';
@@ -14,7 +14,7 @@ import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
 
 import './index.css';
 
-const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
+const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo, showMdView }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
 
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
@@ -58,9 +58,19 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
 
   const enableMonitorRepo = isPro && (permission == 'r' || permission == 'rw');
-
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
+      {showMdView && (
+        <>
+          <a
+            className="dir-others-item text-nowrap"
+            title="Workflow"
+            href={`${siteRoot}repo/${repoID}/workflows`}
+          >
+            <span className="dir-others-item-text">Workflow</span>
+          </a>
+        </>
+      )}
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
           repo={currentRepoInfo}
