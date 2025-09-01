@@ -20,7 +20,7 @@
 }
 
 .chart-container {
-  background: white;
+  background: var(--bs-body-bg);
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 -2px 4px #f0f0f0;
@@ -30,6 +30,11 @@
   overflow: hidden;
   transition: box-shadow 0.2s ease;
   min-height: 300px;
+}
+
+[data-bs-theme=dark] .chart-container {
+  border-color: var(--bs-border-color);
+  box-shadow: none;
 }
 
 .chart-container:hover {
@@ -73,7 +78,7 @@
 }
 
 .chart-header h4 {
-  color: #212529;
+  color: var(--bs-body-color);
   font-size: 14px;
   margin: 0;
   border-bottom: none;
@@ -141,7 +146,6 @@
   padding: 50px 20px;
   background: #fef7ea;
   border-radius: 10px;
-  color: #2c3e50;
   width: 240px;
   height: 240px;
   flex-shrink: 0;
@@ -192,8 +196,16 @@
   background-color: #f3f3f3;
 }
 
+.chart-container.time-chart-container .sf-metadata-radio-group::before {
+  content: none;
+}
+
+[data-bs-theme=dark] .chart-container.time-chart-container .sf-metadata-radio-group {
+  background-color: var(--bs-nav-active-bg);
+}
+
 .chart-container.time-chart-container .sf-metadata-radio-group .sf-metadata-radio-group-option.active {
-  background-color: #fff;
+  background-color: var(--bs-body-bg);
 }
 
 .chart-container.time-chart-container .sf-metadata-time-grouping-setter .sf-metadata-radio-group-option {

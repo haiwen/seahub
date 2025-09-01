@@ -5,6 +5,8 @@ export const BarChart = ({ data, unit }) => {
   const svgRef = useRef();
   const containerRef = useRef();
 
+  const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
+
   useEffect(() => {
     if (!data || data.length === 0) return;
 
@@ -20,7 +22,7 @@ export const BarChart = ({ data, unit }) => {
     const requiredWidth = data.length * totalBarWidth;
     const marginReserve = 40;
     const shouldScroll = requiredWidth > containerWidth - marginReserve;
-    const chartWidth = shouldScroll ? requiredWidth : containerWidth;
+    const chartWidth = shouldScroll ? requiredWidth : Math.max(containerWidth, requiredWidth);
 
     const margin = {
       top: 15,
@@ -44,7 +46,7 @@ export const BarChart = ({ data, unit }) => {
       .paddingInner(minBarSpacing / totalBarWidth)
       .paddingOuter(0.1);
 
-    const actualBarWidth = Math.min(barWidth, xScale.bandwidth());
+    const actualBarWidth = barWidth;
     const maxValue = d3.max(data, d => d.value);
     const yScale = d3.scaleLinear().domain([0, maxValue]).range([height, 0]).nice();
 
@@ -58,11 +60,11 @@ export const BarChart = ({ data, unit }) => {
 
     yAxis.selectAll('text')
       .style('font-size', '12px')
-      .style('fill', '#666')
-      .style('color', '#666');
+      .style('fill', 'var(--bs-body-secondary-color)')
+      .style('color', 'var(--bs-body-secondary-color)');
 
     yAxis.selectAll('.tick line')
-      .style('stroke', '#f5f5f5')
+      .style('stroke', isDark ? 'var(--bs-border-color)' : '#f5f5f5')
       .style('stroke-width', 1)
       .style('opacity', 0.7);
 
@@ -136,8 +138,8 @@ export const BarChart = ({ data, unit }) => {
             .attr('y', 12)
             .attr('text-anchor', 'middle')
             .style('font-size', '11px')
-            .style('fill', '#666')
-            .style('color', '#666')
+            .style('fill', 'var(--bs-body-secondary-color)')
+            .style('color', 'var(--bs-body-secondary-color)')
             .text(month);
 
           tickGroup.append('text')
@@ -145,8 +147,8 @@ export const BarChart = ({ data, unit }) => {
             .attr('y', 26)
             .attr('text-anchor', 'middle')
             .style('font-size', '10px')
-            .style('fill', '#666')
-            .style('color', '#666')
+            .style('fill', 'var(--bs-body-secondary-color)')
+            .style('color', 'var(--bs-body-secondary-color)')
             .text(year);
         } else {
           tickGroup.append('text')
@@ -154,8 +156,8 @@ export const BarChart = ({ data, unit }) => {
             .attr('y', 16)
             .attr('text-anchor', 'middle')
             .style('font-size', '11px')
-            .style('fill', '#666')
-            .style('color', '#666')
+            .style('fill', 'var(--bs-body-secondary-color)')
+            .style('color', 'var(--bs-body-secondary-color)')
             .text(dateText.length > 8 ? dateText.substring(0, 6) + '...' : dateText);
         }
       });
@@ -171,8 +173,8 @@ export const BarChart = ({ data, unit }) => {
       .attr('y', d => yScale(d.value) - 4)
       .attr('text-anchor', 'middle')
       .style('font-size', '11px')
-      .style('fill', '#666')
-      .style('color', '#666')
+      .style('fill', 'var(--bs-body-secondary-color)')
+      .style('color', 'var(--bs-body-secondary-color)')
       .style('opacity', 0)
       .text(d => yAxisTickFormat(d.value))
       .transition()
@@ -188,7 +190,7 @@ export const BarChart = ({ data, unit }) => {
         d3.select(this).transition().duration(200).attr('fill', '#ff9800');
       });
 
-  }, [data, unit]);
+  }, [data, unit, isDark]);
 
   const barWidth = 24;
   const minBarSpacing = 24;
@@ -214,6 +216,8 @@ export const BarChart = ({ data, unit }) => {
 export const HorizontalBarChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
+
+  const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
 
   useEffect(() => {
     if (!data || data.length === 0) return;
@@ -303,7 +307,7 @@ export const HorizontalBarChart = ({ data }) => {
       .attr('dy', '20px');
 
     xAxis.selectAll('.tick line')
-      .style('stroke', '#f5f5f5')
+      .style('stroke', isDark ? 'var(--bs-border-color)' : '#f5f5f5')
       .style('stroke-width', 1);
 
     xAxis.select('.domain').remove();
@@ -386,8 +390,8 @@ export const HorizontalBarChart = ({ data }) => {
         .attr('dy', '0.35em')
         .attr('text-anchor', 'start')
         .style('font-size', '13px')
-        .style('fill', '#333')
-        .style('color', '#333');
+        .style('fill', isDark ? 'var(--bs-body-secondary-color)' : '#333')
+        .style('color', isDark ? 'var(--bs-body-secondary-color)' : '#333');
 
       itemGroup.select('image').append('title').text(d.displayName);
       itemGroup.select('text').append('title').text(d.displayName);
@@ -424,7 +428,7 @@ export const HorizontalBarChart = ({ data }) => {
       .delay((d, i) => i * 100 + 400)
       .style('opacity', 1);
 
-  }, [data]);
+  }, [data, isDark]);
 
   const minBarSpacing = 26;
   const barHeight = 18;

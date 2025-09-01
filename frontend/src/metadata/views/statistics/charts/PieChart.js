@@ -5,6 +5,8 @@ const PieChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
 
+  const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
+
   useEffect(() => {
     if (!data || data.length === 0) return;
 
@@ -122,10 +124,22 @@ const PieChart = ({ data }) => {
           .attr('text-anchor', textAnchor)
           .attr('dominant-baseline', 'central')
           .style('font-size', '13px')
-          .style('color', '#666')
-          .style('fill', '#666')
+          .style('font-weight', '400')
+          .style('fill', 'none')
           .style('stroke', '#fff')
-          .style('stroke-width', '1px')
+          .style('stroke-width', '2px')
+          .style('stroke-linejoin', 'round')
+          .text(labelText);
+
+        // Then draw the main text (colored fill, no stroke)
+        textGroup.append('text')
+          .attr('transform', `translate(${labelX}, ${labelY}) rotate(${textRotation})`)
+          .attr('text-anchor', textAnchor)
+          .attr('dominant-baseline', 'central')
+          .style('font-size', '13px')
+          .style('font-weight', '400')
+          .style('fill', '#666')
+          .style('color', '#666')
           .text(labelText);
       });
 
@@ -151,15 +165,15 @@ const PieChart = ({ data }) => {
       .attr('y', 3)
       .attr('dy', '0.35em')
       .style('font-size', '13px')
-      .style('color', '#333')
-      .style('fill', '#333')
+      .style('color', isDark ? 'var(--bs-body-secondary-color)' : '#333')
+      .style('fill', isDark ? 'var(--bs-body-secondary-color)' : '#333')
       .text(d => {
         const maxLength = isMobile ? 10 : 15;
         const label = d.label.length > maxLength ? d.label.substring(0, maxLength) + '...' : d.label;
         return label;
       });
 
-  }, [data]);
+  }, [data, isDark]);
 
   useEffect(() => {
     const currentContainer = containerRef.current;
