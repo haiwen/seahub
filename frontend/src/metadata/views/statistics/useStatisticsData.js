@@ -17,7 +17,7 @@ export const useStatisticsData = (repoID) => {
       setIsLoading(true);
       const response = await metadataAPI.getStatistics(repoID);
 
-      if (response.data) {
+      if (response.data && response.data.summary_stats.total_files !== 0) {
         const transformedData = {
           fileTypeStats: response.data.file_type_stats.map(item => ({
             type: item.type,

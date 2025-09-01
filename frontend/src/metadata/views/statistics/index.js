@@ -11,6 +11,7 @@ import { processFileTypeData, processTimeData, processCreatorData } from './util
 import { TIME_GROUPING_OPTIONS, CREATOR_SORT_OPTIONS } from '../../constants/view/statistics';
 
 import './index.css';
+import EmptyTip from '../../../components/empty-tip';
 
 const Statistics = () => {
   const { repoID } = useMetadataView();
@@ -64,11 +65,7 @@ const Statistics = () => {
 
   if (!statisticsData) {
     return (
-      <div className="statistics-view">
-        <div className="statistics-error">
-          {gettext('No data available for statistics')}
-        </div>
-      </div>
+      <EmptyTip text={gettext('No data available for statistics')} />
     );
   }
 
@@ -77,7 +74,7 @@ const Statistics = () => {
       <div className="statistics-container">
         <div className="chart-container file-type-chart-container">
           <div className="chart-header">
-            <h4>{gettext('Proportion of different types of files')}</h4>
+            <h4>{gettext('Files by type')}</h4>
           </div>
           <div className="pie-chart-container">
             <PieChart data={pieChartData} />
@@ -86,7 +83,7 @@ const Statistics = () => {
 
         <div className="chart-container creator-chart-container">
           <div className="chart-header">
-            <h4>{gettext('Distributed by creator')}</h4>
+            <h4>{gettext('Files by creator')}</h4>
             <SortMenu
               sortBy={creatorSortBy}
               sortOrder={creatorSortOrder}

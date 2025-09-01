@@ -3483,39 +3483,22 @@ class MetadataStatistics(APIView):
                     'count': count
                 })
         else:
-            if days_span > 90:
-                time_unit = 'week'
-                for dt in datetimes:
-                    monday = dt - timedelta(days=dt.weekday())
-                    week_key = monday.strftime('%Y-%m-%d')
-                    time_counts[week_key] += 1
+            time_unit = 'day'
+            for dt in datetimes:
+                day_key = dt.strftime('%Y-%m-%d')
+                time_counts[day_key] += 1
 
-                time_data = []
-                for week_key, count in sorted(time_counts.items()):
-                    week_start = datetime.strptime(week_key, '%Y-%m-%d')
-                    label = f"Week of {week_start.strftime('%b %d')}"
-                    time_data.append({
-                        'period': week_key,
-                        'label': label,
-                        'count': count
-                    })
-            else:
-                time_unit = 'day'
-                for dt in datetimes:
-                    day_key = dt.strftime('%Y-%m-%d')
-                    time_counts[day_key] += 1
+            time_data = []
+            for day_key, count in sorted(time_counts.items()):
+                day_date = datetime.strptime(day_key, '%Y-%m-%d')
+                label = day_date.strftime('%b %d')
+                time_data.append({
+                    'period': day_key,
+                    'label': label,
+                    'count': count
+                })
 
-                time_data = []
-                for day_key, count in sorted(time_counts.items()):
-                    day_date = datetime.strptime(day_key, '%Y-%m-%d')
-                    label = day_date.strftime('%b %d')
-                    time_data.append({
-                        'period': day_key,
-                        'label': label,
-                        'count': count
-                    })
-
-        if time_unit in ['month', 'week', 'day'] and len(time_data) > 1:
+        if time_unit in ['month', 'day'] and len(time_data) > 1:
             time_data = self._fill_time_gaps(time_data, time_unit)
 
         return {
@@ -3552,23 +3535,7 @@ class MetadataStatistics(APIView):
                         'count': 0
                     })
                 current_date += timedelta(days=1)
-        elif time_unit == 'week':
-            start_date = datetime.strptime(time_data[0]['period'], '%Y-%m-%d')
-            end_date = datetime.strptime(time_data[-1]['period'], '%Y-%m-%d')
-            current_date = start_date
-
-            while current_date <= end_date:
-                period_key = current_date.strftime('%Y-%m-%d')
-                if period_key in current_data:
-                    filled_data.append(current_data[period_key])
-                else:
-                    label = f"Week of {current_date.strftime('%b %d')}"
-                    filled_data.append({
-                        'period': period_key,
-                        'label': label,
-                        'count': 0
-                    })
-                current_date += timedelta(weeks=1)
+                
         elif time_unit == 'month':
             periods = sorted(current_data.keys())
             start_year, start_month = map(int, periods[0].split('-'))
