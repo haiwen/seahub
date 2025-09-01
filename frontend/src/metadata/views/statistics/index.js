@@ -3,6 +3,7 @@ import { gettext } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import SortMenu from '../../../components/sort-menu';
 import RadioGroup from '../../components/radio-group';
+import EmptyTip from '../../../components/empty-tip';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useCollaborators } from '../../hooks/collaborators';
 import { PieChart, BarChart, HorizontalBarChart, SummaryCards } from './charts';
@@ -11,7 +12,6 @@ import { processFileTypeData, processTimeData, processCreatorData } from './util
 import { TIME_GROUPING_OPTIONS, CREATOR_SORT_OPTIONS } from '../../constants/view/statistics';
 
 import './index.css';
-import EmptyTip from '../../../components/empty-tip';
 
 const Statistics = () => {
   const { repoID } = useMetadataView();

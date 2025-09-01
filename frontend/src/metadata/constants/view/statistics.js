@@ -5,9 +5,9 @@ export const FILE_TYPE_NAMES = {
   [PREDEFINED_FILE_TYPE_OPTION_KEY.PICTURE]: gettext('Pictures'),
   [PREDEFINED_FILE_TYPE_OPTION_KEY.DOCUMENT]: gettext('Documents'),
   [PREDEFINED_FILE_TYPE_OPTION_KEY.VIDEO]: gettext('Videos'),
-  [PREDEFINED_FILE_TYPE_OPTION_KEY.AUDIO]: gettext('Audio'),
-  [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: gettext('Code'),
-  [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: gettext('Compressed'),
+  [PREDEFINED_FILE_TYPE_OPTION_KEY.AUDIO]: gettext('Audios'),
+  [PREDEFINED_FILE_TYPE_OPTION_KEY.CODE]: gettext('Codes'),
+  [PREDEFINED_FILE_TYPE_OPTION_KEY.COMPRESSED]: gettext('Compresseds'),
   [PREDEFINED_FILE_TYPE_OPTION_KEY.DIAGRAM]: gettext('Diagrams'),
   other: gettext('Others'),
 };
