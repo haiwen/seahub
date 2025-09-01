@@ -11,6 +11,7 @@ export * from './select-option';
 export * from './sort';
 export * from './error';
 export * from './view';
+export * from './search-persistence';
 
 export {
   EVENT_BUS_TYPE,
