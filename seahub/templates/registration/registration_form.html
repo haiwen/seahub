@@ -79,9 +79,13 @@
   }, 5000);
 
   {% else %}
+  {% if not request.is_mobile and not request.is_tablet %}
   {% include "snippets/password_strength_js.html" %}
+  {% endif %}
   $(function () {
-    setupPasswordField("id_password1", passwd_tip, template);
+    if (typeof setupPasswordField !== 'undefined') {
+      setupPasswordField("id_password1", passwd_tip, template);
+    }
   });
   $('#signup-form').on('submit', function() {
     var email = $('input[name="email"]').val().trim(),
