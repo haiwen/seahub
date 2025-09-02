@@ -2883,56 +2883,9 @@ a.sf-popover-item {
   font-size: 14px;
 }
 
-.registration-form-popover .arrow {
-  top: calc(50% - 4px);
-  right: -13px;
-}
-
-.registration-form-popover .arrow::before,
-.registration-form-popover .arrow::after {
-  border-top: 7px solid transparent;
-  border-bottom: 7px solid transparent;
-}
-
-.registration-form-popover .arrow::before {
-  right: 1px;
-  border-left: 7px solid #ddd;
-}
-
-.registration-form-popover .arrow::after {
-  right: 2px;
-  border-left: 7px solid #fff;
-}
-
 /* overwrite inline style */
 .registration-form-popover.mobile {
-  top: -142px !important;
   right: 0 !important;
-  left: unset !important;
-  transform: unset !important;
-}
-
-.registration-form-popover.mobile .arrow {
-  margin: 0;
-  top: 100% !important;
-  left: 20%;
-}
-
-.registration-form-popover.mobile .arrow::before,
-.registration-form-popover.mobile .arrow::after {
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-}
-
-.registration-form-popover.mobile .arrow::before {
-  top: 1px;
-  left: 1px;
-  border-top: 7px solid #ddd;
-}
-
-.registration-form-popover.mobile .arrow::after {
-  top: -0.4px;
-  border-top: 7px solid #fff;
 }
 
 .popover.registration-form-popover .popover-head {
