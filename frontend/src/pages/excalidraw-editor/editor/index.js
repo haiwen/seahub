@@ -16,7 +16,7 @@ import isHotkey from 'is-hotkey';
 
 import '@excalidraw/excalidraw/index.css';
 
-const { docUuid } = window.app.pageOptions;
+const { docUuid, filePerm } = window.app.pageOptions;
 window.name = `${docUuid}`;
 const UIOptions = {
   canvasActions: {
@@ -136,6 +136,7 @@ const SimpleEditor = () => {
   }, []);
 
   const handleChange = useCallback((elements, appState, files) => {
+    if (filePerm === 'r') return;
     const socketManager = SocketManager.getInstance();
     socketManager.syncLocalElementsToOthers(elements);
 
@@ -168,6 +169,7 @@ const SimpleEditor = () => {
   }, [excalidrawAPI]);
 
   const handlePointerUpdate = useCallback((payload) => {
+    if (filePerm === 'r') return;
     const socketManager = SocketManager.getInstance();
     socketManager.syncMouseLocationToOthers(payload);
   }, []);
@@ -205,6 +207,7 @@ const SimpleEditor = () => {
         onPointerUpdate={handlePointerUpdate}
         UIOptions={UIOptions}
         langCode={langList[window.app.config.lang] || 'en'}
+        viewModeEnabled={filePerm === 'r'}
       >
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
