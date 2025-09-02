@@ -9,4 +9,5 @@ urlpatterns = [
     re_path(r'^editor-status-callback/(?P<file_uuid>[-0-9a-f]{36})/$', ExdrawEditorCallBack.as_view(), name='exdraw_editor_callback'),
     re_path(r'^upload-image/(?P<file_uuid>[-0-9a-f]{36})/$', ExdrawUploadImage.as_view(), name='exdraw_upload_image'),
     re_path(r'^download-image/(?P<file_uuid>[-0-9a-f]{36})/(?P<filename>.*)$', ExdrawDownloadImage.as_view(), name='exdraw_download_image'),
+    re_path(r'^dir/(?P<file_uuid>[-0-9a-f]{36})/$', ExdrawDirView.as_view(), name='exdraw_dir_view'),
 ]
