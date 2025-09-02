@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
   if (!item || typeof item.path !== 'string') {
@@ -24,6 +25,11 @@ const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
         <div className="item-text">
           <span className="name user-select-none ellipsis" title={title}>{title}</span>
         </div>
+        {isSelected &&
+          <div className="item-right-icon">
+            <Icon symbol="check" color="currentColor"/>
+          </div>
+        }
       </div>
     </li>
   );

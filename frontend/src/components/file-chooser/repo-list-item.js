@@ -7,6 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Dirent from '../../models/dirent';
 import toaster from '../toast';
+import Icon from '../icon';
 
 const propTypes = {
   isCurrentRepo: PropTypes.bool,
@@ -227,6 +228,7 @@ class RepoListItem extends React.Component {
   };
 
   render() {
+    const { repo } = this.props;
     let repoActive = false;
     let isCurrentRepo = this.isCurrentRepo();
     if (isCurrentRepo && this.props.selectedPath == '/') {
@@ -243,12 +245,17 @@ class RepoListItem extends React.Component {
             </i>
           </div>
           <div className="item-text">
-            <span className="name user-select-none ellipsis" title={this.props.repo.repo_name}>{this.props.repo.repo_name}</span>
+            <span className="name user-select-none ellipsis" title={repo.repo_name}>{repo.repo_name}</span>
           </div>
+          {repoActive &&
+            <div className="item-right-icon">
+              <Icon symbol="check" color="currentColor"/>
+            </div>
+          }
         </div>
         {this.state.isShowChildren && (
           <TreeListView
-            repo={this.props.repo}
+            repo={repo}
             onDirentItemClick={this.onDirentItemClick}
             selectedRepo={this.props.selectedRepo}
             selectedPath={this.props.selectedPath}
