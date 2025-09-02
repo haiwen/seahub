@@ -1,6 +1,6 @@
 from django.urls import re_path
 from .apis import ExdrawAccessToken, ExdrawDownloadLink, ExdrawUploadFile, ExdrawEditorCallBack, ExdrawUploadImage, \
-    ExdrawDownloadImage
+    ExdrawDownloadImage, ExdrawDirView
 
 urlpatterns = [
     re_path(r'^access-token/(?P<repo_id>[-0-9a-f]{36})/$', ExdrawAccessToken.as_view(), name='exdraw_access_token'),

@@ -343,7 +343,7 @@ class ExdrawDirView(APIView):
         username = payload.get('username')
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
         if not uuid_map:
-            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            error_msg = 'file uuid %s not found.' % file_uuid
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         file_type = request.GET.get('type', 'image')  # sdoc, image, file
