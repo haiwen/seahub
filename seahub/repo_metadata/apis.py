@@ -3304,43 +3304,9 @@ class MetadataStatistics(APIView):
 
         try:
             metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-
             from seafevents.repo_metadata.constants import METADATA_TABLE
 
-            sql = f'''
-                SELECT 
-                    `{METADATA_TABLE.columns.file_name.name}`,
-                    `{METADATA_TABLE.columns.parent_dir.name}`,
-                    `{METADATA_TABLE.columns.file_ctime.name}`,
-                    `{METADATA_TABLE.columns.file_mtime.name}`,
-                    `{METADATA_TABLE.columns.file_creator.name}`,
-                    `{METADATA_TABLE.columns.file_modifier.name}`,
-                    `{METADATA_TABLE.columns.file_type.name}`,
-                    `{METADATA_TABLE.columns.is_dir.name}`
-                FROM `{METADATA_TABLE.name}`
-                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
-                ORDER BY `{METADATA_TABLE.columns.file_ctime.name}` DESC
-            '''
-
-            results = metadata_server_api.query_rows(sql, [])
-
-            if not results or 'results' not in results:
-                return Response({
-                    'file_type_stats': [],
-                    'time_stats': {
-                        'created': {'unit': 'year', 'data': []},
-                        'modified': {'unit': 'year', 'data': []}
-                    },
-                    'creator_stats': [],
-                    'summary_stats': {
-                        'total_files': 0,
-                        'total_collaborators': 0
-                    }
-                })
-
-            files_data = results['results']
-
-            statistics = self._process_statistics(files_data)
+            statistics = self._get_sql_statistics(metadata_server_api, METADATA_TABLE)
 
             return Response(statistics)
 
@@ -3349,218 +3315,314 @@ class MetadataStatistics(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-    def _process_statistics(self, files_data):
-        """
-        Process raw file data into statistics for visualization.
-        """
-        from collections import defaultdict
-        from datetime import datetime
-        from seafevents.repo_metadata.constants import METADATA_TABLE
-
-        file_type_counts = defaultdict(int)
-        creator_counts = defaultdict(int)
-        collaborators = set()
-
-        created_datetimes = []
-        modified_datetimes = []
-
-        for file_data in files_data:
-            ctime = file_data.get(METADATA_TABLE.columns.file_ctime.name)
-            mtime = file_data.get(METADATA_TABLE.columns.file_mtime.name)
-            creator = file_data.get(METADATA_TABLE.columns.file_creator.name, '')
-            modifier = file_data.get(METADATA_TABLE.columns.file_modifier.name, '')
-            file_type = file_data.get(METADATA_TABLE.columns.file_type.name, '')
-
-            display_type = file_type if file_type else 'other'
-            file_type_counts[display_type] += 1
-
-            if ctime:
-                try:
-                    if isinstance(ctime, str):
-                        dt = datetime.fromisoformat(ctime.replace('Z', '+00:00'))
-                    else:
-                        dt = ctime
-                    created_datetimes.append(dt)
-                except (ValueError, AttributeError):
-                    pass
-
-            if mtime:
-                try:
-                    if isinstance(mtime, str):
-                        dt = datetime.fromisoformat(mtime.replace('Z', '+00:00'))
-                    else:
-                        dt = mtime
-                    modified_datetimes.append(dt)
-                except (ValueError, AttributeError):
-                    pass
-
-            if creator:
-                creator_counts[creator] += 1
-                collaborators.add(creator)
-            
-            if modifier and modifier != creator:
-                collaborators.add(modifier)
-
-        created_time_stats = self._process_time_statistics(created_datetimes, 'created')
-        modified_time_stats = self._process_time_statistics(modified_datetimes, 'modified')
-
-        file_type_stats = [
-            {'type': file_type, 'count': count}
-            for file_type, count in file_type_counts.items()
-        ]
-
-        creator_stats_sorted = sorted(creator_counts.items(), key=lambda x: x[1], reverse=True)[:10]
-        creator_stats = [
-            {'creator': creator, 'count': count}
-            for creator, count in creator_stats_sorted
-        ]
-
-        summary_stats = {
-            'total_files': len(files_data),
-            'total_collaborators': len(collaborators)
-        }
-
-        return {
-            'file_type_stats': file_type_stats,
+    def _get_sql_statistics(self, metadata_server_api, METADATA_TABLE):
+        default_response = {
+            'file_type_stats': [],
             'time_stats': {
-                'created': created_time_stats,
-                'modified': modified_time_stats
+                'created': {'unit': 'year', 'data': [], 'grouping': 'created'},
+                'modified': {'unit': 'year', 'data': [], 'grouping': 'modified'}
             },
-            'creator_stats': creator_stats,
-            'summary_stats': summary_stats
+            'creator_stats': [],
+            'summary_stats': {
+                'total_files': 0,
+                'total_collaborators': 0
+            }
         }
 
-    def _process_time_statistics(self, datetimes, time_grouping='created'):
-        """
-        Process time statistics with dynamic granularity selection.
+        try:
+            file_type_stats = self._get_file_type_stats_sql(metadata_server_api, METADATA_TABLE)
+            creator_stats = self._get_creator_stats_sql(metadata_server_api, METADATA_TABLE)
+            summary_stats = self._get_summary_stats_sql(metadata_server_api, METADATA_TABLE)
+            time_stats = self._get_time_stats_sql(metadata_server_api, METADATA_TABLE)
 
-        Algorithm:
-        - If data spans 3+ years: use yearly granularity
-        - If data spans 6+ months but <3 years: use monthly granularity  
-        - If data spans <6 months: use daily granularity
-        """
-        from collections import defaultdict
-        from datetime import datetime, timedelta
-        import calendar
+            return {
+                'file_type_stats': file_type_stats,
+                'time_stats': time_stats,
+                'creator_stats': creator_stats,
+                'summary_stats': summary_stats
+            }
 
-        if not datetimes:
-            return {'unit': 'year', 'data': [], 'grouping': time_grouping}
+        except Exception as e:
+            logger.error(f'Error in SQL statistics processing: {e}')
+            return default_response
 
-        sorted_datetimes = sorted(datetimes)
-        min_date = sorted_datetimes[0]
-        max_date = sorted_datetimes[-1]
-        time_span = max_date - min_date
+    def _get_file_type_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        sql = f'''
+            SELECT 
+                `{METADATA_TABLE.columns.file_type.name}` as file_type,
+                COUNT(*) as count
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+            GROUP BY `{METADATA_TABLE.columns.file_type.name}`
+            ORDER BY count DESC
+        '''
 
-        years_span = time_span.days / 365.25
-        months_span = time_span.days / 30.44
-        days_span = time_span.days
+        results = metadata_server_api.query_rows(sql, [])
+        if not results or 'results' not in results:
+            return []
 
-        time_counts = defaultdict(int)
-        time_unit = 'year'
+        processed_results = []
+        for row in results['results']:
+            file_type = row.get('file_type', '') or 'other'
+            if not file_type.strip():
+                file_type = 'other'
+            processed_results.append({'type': file_type, 'count': row['count']})
+            
+        return processed_results
+
+    def _get_creator_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        sql = f'''
+            SELECT 
+                `{METADATA_TABLE.columns.file_creator.name}` as creator,
+                COUNT(*) as count
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_creator.name}` IS NOT NULL
+                AND `{METADATA_TABLE.columns.file_creator.name}` != ''
+            GROUP BY `{METADATA_TABLE.columns.file_creator.name}`
+            ORDER BY count DESC
+        '''
+
+        results = metadata_server_api.query_rows(sql, [])
+        if not results or 'results' not in results:
+            return []
+
+        return [
+            {'creator': row['creator'], 'count': row['count']}
+            for row in results['results']
+        ]
+
+    def _get_summary_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        sql = f'''
+            SELECT 
+                COUNT(*) as total_files
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+        '''
+
+        results = metadata_server_api.query_rows(sql, [])
+        if not results or 'results' not in results or not results['results']:
+            return {'total_files': 0, 'total_collaborators': 0}
+
+        row = results['results'][0]
+
+        collaborators_set = set()
+
+        all_creators_sql = f'''
+            SELECT DISTINCT `{METADATA_TABLE.columns.file_creator.name}` as creator
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_creator.name}` IS NOT NULL
+                AND `{METADATA_TABLE.columns.file_creator.name}` != ''
+        '''
+
+        creator_list_results = metadata_server_api.query_rows(all_creators_sql, [])
+        if creator_list_results and 'results' in creator_list_results:
+            for creator_row in creator_list_results['results']:
+                collaborators_set.add(creator_row['creator'])
+
+        all_modifiers_sql = f'''
+            SELECT DISTINCT `{METADATA_TABLE.columns.file_modifier.name}` as modifier
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_modifier.name}` IS NOT NULL
+                AND `{METADATA_TABLE.columns.file_modifier.name}` != ''
+        '''
+
+        modifier_list_results = metadata_server_api.query_rows(all_modifiers_sql, [])
+        if modifier_list_results and 'results' in modifier_list_results:
+            for modifier_row in modifier_list_results['results']:
+                collaborators_set.add(modifier_row['modifier'])
+        
+        return {
+            'total_files': row['total_files'],
+            'total_collaborators': len(collaborators_set)
+        }
+
+    def _get_time_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        date_range_sql = f'''
+            SELECT 
+                MIN(`{METADATA_TABLE.columns.file_ctime.name}`) as min_ctime,
+                MAX(`{METADATA_TABLE.columns.file_ctime.name}`) as max_ctime,
+                MIN(`{METADATA_TABLE.columns.file_mtime.name}`) as min_mtime,
+                MAX(`{METADATA_TABLE.columns.file_mtime.name}`) as max_mtime,
+                COUNT(*) as total_files
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND (`{METADATA_TABLE.columns.file_ctime.name}` IS NOT NULL 
+                    OR `{METADATA_TABLE.columns.file_mtime.name}` IS NOT NULL)
+        '''
+
+        range_results = metadata_server_api.query_rows(date_range_sql, [])
+        if not range_results or 'results' not in range_results or not range_results['results']:
+            return {
+                'created': {'unit': 'year', 'data': [], 'grouping': 'created'},
+                'modified': {'unit': 'year', 'data': [], 'grouping': 'modified'}
+            }
+
+        range_data = range_results['results'][0]
+
+        created_stats = self._get_time_period_stats_sql(
+            metadata_server_api, METADATA_TABLE, 'created', 
+            range_data['min_ctime'], range_data['max_ctime']
+        )
+        
+        modified_stats = self._get_time_period_stats_sql(
+            metadata_server_api, METADATA_TABLE, 'modified',
+            range_data['min_mtime'], range_data['max_mtime']
+        )
+        
+        return {
+            'created': created_stats,
+            'modified': modified_stats
+        }
+
+    def _get_time_period_stats_sql(self, metadata_server_api, METADATA_TABLE, time_type, min_date, max_date):
+        from datetime import datetime
+        
+        if not min_date or not max_date:
+            return {'unit': 'year', 'data': [], 'grouping': time_type}
+
+        try:
+            if isinstance(min_date, str):
+                min_dt = datetime.fromisoformat(min_date.replace('Z', '+00:00'))
+                max_dt = datetime.fromisoformat(max_date.replace('Z', '+00:00'))
+            else:
+                min_dt = min_date
+                max_dt = max_date
+
+            time_span = max_dt - min_dt
+            years_span = time_span.days / 365.25
+            months_span = time_span.days / 30.44
+
+        except (ValueError, AttributeError):
+            return {'unit': 'year', 'data': [], 'grouping': time_type}
+
+        date_column = METADATA_TABLE.columns.file_ctime.name if time_type == 'created' else METADATA_TABLE.columns.file_mtime.name
 
         if years_span >= 3:
-            time_unit = 'year'
-            for dt in datetimes:
-                time_counts[dt.year] += 1
+            sql = f'''
+                SELECT 
+                    `{date_column}` as date_value,
+                    COUNT(*) as count
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                    AND `{date_column}` IS NOT NULL
+                GROUP BY `{date_column}`
+                ORDER BY `{date_column}`
+            '''
 
-            time_data = [
-                {'period': str(year), 'label': str(year), 'count': count}
-                for year, count in sorted(time_counts.items())
+            results = metadata_server_api.query_rows(sql, [])
+            if not results or 'results' not in results:
+                return {'unit': 'year', 'data': [], 'grouping': time_type}
+
+            year_counts = {}
+            for row in results['results']:
+                try:
+                    if isinstance(row['date_value'], str):
+                        dt = datetime.fromisoformat(row['date_value'].replace('Z', '+00:00'))
+                    else:
+                        dt = row['date_value']
+                    year = dt.year
+                    year_counts[year] = year_counts.get(year, 0) + row['count']
+                except (ValueError, TypeError, AttributeError):
+                    continue
+
+            data = [
+                {
+                    'period': str(year),
+                    'label': str(year),
+                    'count': count
+                }
+                for year, count in sorted(year_counts.items())
             ]
+
+            return {'unit': 'year', 'data': data, 'grouping': time_type}
+
         elif months_span >= 6:
-            time_unit = 'month'
-            for dt in datetimes:
-                month_key = f"{dt.year}-{dt.month:02d}"
-                time_counts[month_key] += 1
-            time_data = []
-            for month_key, count in sorted(time_counts.items()):
-                year, month = month_key.split('-')
-                month_name = calendar.month_abbr[int(month)]
-                label = f"{month_name} {year}"
-                time_data.append({
-                    'period': month_key,
-                    'label': label,
-                    'count': count
-                })
-        else:
-            time_unit = 'day'
-            for dt in datetimes:
-                day_key = dt.strftime('%Y-%m-%d')
-                time_counts[day_key] += 1
+            sql = f'''
+                SELECT 
+                    `{date_column}` as date_value,
+                    COUNT(*) as count
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                    AND `{date_column}` IS NOT NULL
+                GROUP BY `{date_column}`
+                ORDER BY `{date_column}`
+            '''
+            
+            results = metadata_server_api.query_rows(sql, [])
+            if not results or 'results' not in results:
+                return {'unit': 'month', 'data': [], 'grouping': time_type}
 
-            time_data = []
-            for day_key, count in sorted(time_counts.items()):
-                day_date = datetime.strptime(day_key, '%Y-%m-%d')
-                label = day_date.strftime('%b %d')
-                time_data.append({
-                    'period': day_key,
-                    'label': label,
-                    'count': count
-                })
+            import calendar
+            month_counts = {}
+            for row in results['results']:
+                try:
+                    if isinstance(row['date_value'], str):
+                        dt = datetime.fromisoformat(row['date_value'].replace('Z', '+00:00'))
+                    else:
+                        dt = row['date_value']
+                    month_key = f"{dt.year}-{dt.month:02d}"
+                    month_counts[month_key] = month_counts.get(month_key, 0) + row['count']
+                except (ValueError, TypeError, AttributeError):
+                    continue
 
-        if time_unit in ['month', 'day'] and len(time_data) > 1:
-            time_data = self._fill_time_gaps(time_data, time_unit)
-
-        return {
-            'unit': time_unit,
-            'data': time_data,
-            'grouping': time_grouping
-        }
-
-    def _fill_time_gaps(self, time_data, time_unit):
-        """Fill gaps in time series data for smoother visualization."""
-        from datetime import datetime, timedelta
-        import calendar
-
-        if len(time_data) < 2:
-            return time_data
-
-        filled_data = []
-        current_data = {item['period']: item for item in time_data}
-
-        if time_unit == 'day':
-            start_date = datetime.strptime(time_data[0]['period'], '%Y-%m-%d')
-            end_date = datetime.strptime(time_data[-1]['period'], '%Y-%m-%d')
-            current_date = start_date
-
-            while current_date <= end_date:
-                period_key = current_date.strftime('%Y-%m-%d')
-                if period_key in current_data:
-                    filled_data.append(current_data[period_key])
-                else:
-                    label = current_date.strftime('%b %d')
-                    filled_data.append({
-                        'period': period_key,
+            data = []
+            for month_key, count in sorted(month_counts.items()):
+                try:
+                    year, month = month_key.split('-')
+                    month_name = calendar.month_abbr[int(month)]
+                    label = f"{month_name} {year}"
+                    data.append({
+                        'period': month_key,
                         'label': label,
-                        'count': 0
+                        'count': count
                     })
-                current_date += timedelta(days=1)
-                
-        elif time_unit == 'month':
-            periods = sorted(current_data.keys())
-            start_year, start_month = map(int, periods[0].split('-'))
-            end_year, end_month = map(int, periods[-1].split('-'))
+                except (ValueError, IndexError):
+                    continue
+            
+            return {'unit': 'month', 'data': data, 'grouping': time_type}
 
-            current_year, current_month = start_year, start_month
-
-            while (current_year, current_month) <= (end_year, end_month):
-                period_key = f"{current_year}-{current_month:02d}"
-                if period_key in current_data:
-                    filled_data.append(current_data[period_key])
-                else:
-                    month_name = calendar.month_abbr[current_month]
-                    label = f"{month_name} {current_year}"
-                    filled_data.append({
-                        'period': period_key,
-                        'label': label,
-                        'count': 0
-                    })
-
-                current_month += 1
-                if current_month > 12:
-                    current_month = 1
-                    current_year += 1
         else:
-            filled_data = time_data
+            sql = f'''
+                SELECT 
+                    `{date_column}` as date_value,
+                    COUNT(*) as count
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                    AND `{date_column}` IS NOT NULL
+                GROUP BY `{date_column}`
+                ORDER BY `{date_column}`
+            '''
 
-        return filled_data
+            results = metadata_server_api.query_rows(sql, [])
+            if not results or 'results' not in results:
+                return {'unit': 'day', 'data': [], 'grouping': time_type}
+
+            day_counts = {}
+            for row in results['results']:
+                try:
+                    if isinstance(row['date_value'], str):
+                        dt = datetime.fromisoformat(row['date_value'].replace('Z', '+00:00'))
+                    else:
+                        dt = row['date_value']
+                    day_key = dt.strftime('%Y-%m-%d')
+                    day_counts[day_key] = day_counts.get(day_key, 0) + row['count']
+                except (ValueError, TypeError, AttributeError):
+                    continue
+
+            data = []
+            for day_key, count in sorted(day_counts.items()):
+                try:
+                    date_obj = datetime.strptime(day_key, '%Y-%m-%d')
+                    label = date_obj.strftime('%b %d')
+                    data.append({
+                        'period': day_key,
+                        'label': label,
+                        'count': count
+                    })
+                except (ValueError, TypeError):
+                    continue
+
+            return {'unit': 'day', 'data': data, 'grouping': time_type}
