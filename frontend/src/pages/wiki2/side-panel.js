@@ -111,7 +111,7 @@ class SidePanel extends PureComponent {
   queryImportPageStatus = (task_id, task_type, new_page, from_page_id) => {
     userAPI.queryIOStatus(task_id, task_type).then(res => {
       if (res.data.is_finished === true) {
-        toaster.success('Import page success.');
+        toaster.success(gettext('Page imported'));
         this.setState({
           isShowImportPageDialog: false
         });

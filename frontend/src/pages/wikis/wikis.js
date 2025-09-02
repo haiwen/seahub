@@ -119,7 +119,7 @@ class Wikis extends Component {
   queryImportConfluenceStatus = (task_id, task_type) => {
     userAPI.queryIOStatus(task_id, task_type).then(res => {
       if (res.data.is_finished === true) {
-        toaster.success('Import confluence success.');
+        toaster.success(gettext('Confluence imported'));
         this.setState({
           isShowImportConfluenceDialog: false
         });
@@ -133,7 +133,7 @@ class Wikis extends Component {
       this.setState({
         isShowImportConfluenceDialog: false
       });
-      toaster.danger(gettext('Failed to import Confluence.'));
+      toaster.danger(gettext('Failed to import Confluence'));
     });
   };
 
