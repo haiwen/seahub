@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../icon';
 
 const propTypes = {
   selectedPath: PropTypes.string,
@@ -130,6 +131,11 @@ class TreeViewItem extends React.Component {
             <div className="item-text">
               <span className="name user-select-none ellipsis" title={node.object && node.object.name}>{node.object && node.object.name}</span>
             </div>
+            {isCurrentRepo && isCurrentPath &&
+              <div className="item-right-icon">
+                <Icon symbol="check" color="currentColor"/>
+              </div>
+            }
           </div>
         </div>
         {node.isExpanded && this.renderChildren()}
