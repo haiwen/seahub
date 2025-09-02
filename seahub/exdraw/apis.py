@@ -324,3 +324,88 @@ class ExdrawDownloadImage(APIView):
             content=resp.content, content_type=content_type)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
+
+class ExdrawDirView(APIView):
+    """list all files in dir
+    """
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, file_uuid):
+
+        # jwt permission check
+        auth = request.headers.get('authorization', '').split()
+        is_valid, payload = is_valid_exdraw_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = payload.get('username')
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        file_type = request.GET.get('type', 'image')  # sdoc, image, file
+        path = request.GET.get('p', '/')
+        path = normalize_dir_path(path)
+
+        repo_id = uuid_map.repo_id
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            dirs = seafile_api.list_dir_with_perm(
+                repo_id, path, dir_id, username, -1, -1)
+            dirs = dirs if dirs else []
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Failed to list dir.")
+
+        uuid_map_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, path)
+        dir_list, file_list = [], []
+        for dirent in dirs:
+            if dirent.permission == PERMISSION_INVISIBLE:
+                continue
+
+            entry = {}
+            if stat.S_ISDIR(dirent.mode):
+                dtype = "dir"
+            else:
+                dtype = "file"
+                filetype, fileext = get_file_type_and_ext(dirent.obj_name)
+                dirent_uuid_map = uuid_map_queryset.filter(filename=dirent.obj_name).first()
+                dirent_file_uuid = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
+                if file_type == 'sdoc' and filetype == SEADOC:
+                    entry["file_uuid"] = dirent_file_uuid
+                elif file_type == 'exdraw' and filetype == EXCALIDRAW:
+                    entry["file_uuid"] = dirent_file_uuid
+                elif filetype == 'image' and filetype == IMAGE:
+                    entry["file_uuid"] = dirent_file_uuid
+                elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
+                    entry["file_uuid"] = dirent_file_uuid
+                elif file_type == 'video' and filetype == VIDEO:
+                    entry["file_uuid"] = dirent_file_uuid
+                else:
+                    continue
+            entry["type"] = dtype
+            entry["name"] = dirent.obj_name
+            entry["id"] = dirent.obj_id
+            entry["mtime"] = dirent.mtime
+            entry["permission"] = dirent.permission
+            if dtype == 'dir':
+                dir_list.append(entry)
+            else:
+                file_list.append(entry)
+
+        dir_list.sort(key=lambda x: x['name'].lower())
+        file_list.sort(key=lambda x: x['name'].lower())
+        dentrys = dir_list + file_list
+        return Response(dentrys)
