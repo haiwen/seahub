@@ -682,6 +682,16 @@ table img {
   color: red;
 }
 
+.errorlist {
+  color: red;
+  padding: 0;
+}
+
+.error-tip {
+  text-align: center;
+  margin-top: 5em;
+}
+
 .ovhd {
   overflow: hidden;
 }
