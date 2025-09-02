@@ -43,7 +43,6 @@ export const MetadataViewProvider = ({
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const [errorMessage, setErrorMessage] = useState(null);
 
-  // Search state management
   const [searchState, setSearchState] = useState({
     searchValue: '',
     searchResult: null,
@@ -61,7 +60,6 @@ export const MetadataViewProvider = ({
   const delayReloadDataTimer = useRef(null);
   const collaboratorsRef = useRef(collaborators);
 
-  // Smart search helper functions
   const shouldPreserveSearch = useCallback((operationType) => {
     if (!searchState.isActive || !searchState.searchValue) return false;
     return shouldPreserveSearchForOperation(operationType);
@@ -80,15 +78,12 @@ export const MetadataViewProvider = ({
     setSearchState(prev => ({ ...prev, ...updates }));
   }, []);
 
-  // Reference to smartTableChanged function - will be set after it's defined
   const smartTableChangedRef = useRef(null);
 
-  // Helper function to call smart table changed
   const notifyTableChanged = useCallback((operationType) => {
     if (smartTableChangedRef.current) {
       smartTableChangedRef.current(operationType);
     } else {
-      // Fallback to simple behavior with safety checks
       if (storeRef.current?.data) {
         setMetadata(storeRef.current.data);
       }
@@ -101,7 +96,6 @@ export const MetadataViewProvider = ({
     }
   }, [searchState.isActive, clearSearchState]);
 
-  // Event handlers for different table change types
   const tableChanged = useCallback(() => {
     notifyTableChanged(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
   }, [notifyTableChanged]);
@@ -140,43 +134,36 @@ export const MetadataViewProvider = ({
 
   const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
     storeRef.current.modifyFilters(filterConjunction, filters, basicFilters);
-    // Filters change the base dataset, so we should clear search
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_FILTERS), 0);
   }, [storeRef, notifyTableChanged]);
 
   const modifySorts = useCallback((sorts, displaySorts = false) => {
     storeRef.current.modifySorts(sorts, displaySorts);
-    // Sorts preserve search context
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_SORTS), 0);
   }, [storeRef, notifyTableChanged]);
 
   const modifyGroupbys = useCallback((groupbys) => {
     storeRef.current.modifyGroupbys(groupbys);
-    // Groupby changes data organization, clear search
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_GROUPBYS), 0);
   }, [storeRef, notifyTableChanged]);
 
   const modifyHiddenColumns = useCallback((hiddenColumns) => {
     storeRef.current.modifyHiddenColumns(hiddenColumns);
-    // Hidden columns preserve search context
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS), 0);
   }, [storeRef, notifyTableChanged]);
 
   const modifySettings = useCallback((settings) => {
     storeRef.current.modifySettings(settings);
-    // Settings changes preserve search context
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_SETTINGS), 0);
   }, [storeRef, notifyTableChanged]);
 
   const updateLocalRecord = useCallback(({ recordId, parentDir, fileName }, update) => {
     storeRef.current.modifyLocalRecord({ record_id: recordId, parent_dir: parentDir, file_name: fileName }, update);
-    // Local record changes (like rename) preserve search context
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED), 0);
   }, [storeRef, notifyTableChanged]);
 
   const updateLocalColumnData = useCallback((columnKey, newData, oldData) => {
     storeRef.current.modifyLocalColumnData(columnKey, newData, oldData);
-    // Column data changes preserve search context
     setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED), 0);
   }, [notifyTableChanged]);
 
@@ -850,7 +837,6 @@ export const MetadataViewProvider = ({
     const matchedRowIds = Object.keys(searchResult.matchedRows);
     const filteredMetadata = createFilteredMetadata(baseMetadata, matchedRowIds, hasMatches);
 
-    // Update search state
     setSearchState(prev => ({
       ...prev,
       searchResult,
@@ -861,16 +847,13 @@ export const MetadataViewProvider = ({
   }, [globalHiddenColumns, collaboratorsCache, performSearch, createFilteredMetadata]);
 
   const smartTableChanged = useCallback((operationType = 'UNKNOWN') => {
-    // Safety check: ensure store is properly initialized
     if (!storeRef.current?.data) {
       return;
     }
 
     const newMetadata = storeRef.current.data;
 
-    // Smart search logic: only MODIFY_FILTERS and MODIFY_GROUPBYS reset search
     if (shouldPreserveSearch(operationType)) {
-      // Preserve search: reapply to new data
       if (searchState.searchValue) {
         const filteredMetadata = reapplySearchToMetadata(searchState.searchValue, newMetadata);
         setMetadata(filteredMetadata);
@@ -887,21 +870,18 @@ export const MetadataViewProvider = ({
     }
   }, [searchState, shouldPreserveSearch, reapplySearchToMetadata, clearSearchState]);
 
-  // Set the ref after smartTableChanged is defined
   smartTableChangedRef.current = smartTableChanged;
 
   const handleSearchRows = useCallback((searchVal, callback) => {
     const metadata = storeRef.current?.data;
     const tagsData = window.sfTagsDataStore?.data;
 
-    // Safety check: ensure metadata is properly initialized
     if (!metadata || !metadata.rows || !metadata.view || !metadata.view.columns) {
       callback && callback(null);
       return;
     }
 
     if (!searchVal || !metadata.rows.length) {
-      // Clear search
       setSearchState({
         searchValue: '',
         searchResult: null,
@@ -915,7 +895,6 @@ export const MetadataViewProvider = ({
 
     const searchRegRule = getSearchRule(searchVal);
     if (!searchRegRule) {
-      // Invalid search rule
       setSearchState({
         searchValue: '',
         searchResult: null,
@@ -954,7 +933,6 @@ export const MetadataViewProvider = ({
     const matchedRowIds = Object.keys(searchResult.matchedRows);
     const newMetadata = createFilteredMetadata(metadata, matchedRowIds, hasMatches);
 
-    // Update search state
     setSearchState({
       searchValue: searchVal,
       searchResult,
@@ -968,7 +946,6 @@ export const MetadataViewProvider = ({
 
   // init
   useEffect(() => {
-    // Clear search state immediately when switching views to prevent initialization errors
     if (searchState.isActive) {
       setSearchState({
         searchValue: '',
