@@ -2959,8 +2959,8 @@ class SeadocSearchFilenameView(APIView):
             suffixes = get_non_sdoc_file_exts()
         if search_type == 'video':
             suffixes = ['mp4', 'ogv', 'webm', 'mov',]
-        if search_type == 'draw':
-            suffixes = ['draw',]
+        if search_type == 'exdraw':
+            suffixes = ['exdraw',]
         if not suffixes:
             error_msg = 'search_type is not valid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
