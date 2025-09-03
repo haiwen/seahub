@@ -73,7 +73,6 @@ class LibContentView extends React.Component {
       libNeedDecrypt: false,
       isGroupOwnedRepo: false,
       userPerm: '',
-      showMdView: false,
       selectedDirentList: [],
       lastSelectedIndex: null,
       fileTags: [],
@@ -2347,11 +2346,8 @@ class LibContentView extends React.Component {
   };
 
   metadataStatusCallback = (status) => {
-    const { enableTags, showView } = status;
+    const { enableTags } = status;
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAG_STATUS, enableTags);
-    this.setState({
-      showMdView: showView
-    });
   };
 
   tagsChangedCallback = (tags) => {
@@ -2572,7 +2568,6 @@ class LibContentView extends React.Component {
                           updateRepoInfo={this.updateRepoInfo}
                           isGroupOwnedRepo={this.state.isGroupOwnedRepo}
                           userPerm={userPerm}
-                          showMdView={this.state.showMdView}
                           enableDirPrivateShare={enableDirPrivateShare}
                           isTreeDataLoading={this.state.isTreeDataLoading}
                           treeData={this.state.treeData}

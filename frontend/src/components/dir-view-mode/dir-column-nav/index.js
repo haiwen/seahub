@@ -42,7 +42,7 @@ class DirColumnNav extends React.Component {
 
   render() {
     const {
-      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25, showMdView
+      isTreeDataLoading, userPerm, treeData, repoID, currentPath, currentRepoInfo, navRate = 0.25
     } = this.props;
     const flex = navRate ? '0 0 ' + navRate * 100 + '%' : '0 0 25%';
     const select = this.props.inResizing ? 'none' : '';
@@ -71,12 +71,8 @@ class DirColumnNav extends React.Component {
               updateTreeNode={this.props.updateTreeNode}
               sortTreeNode={this.props.sortTreeNode}
             />
-            {showMdView &&
-              <>
-                <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-                <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-              </>
-            }
+            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+            <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} updateRepoInfo={this.props.updateRepoInfo} />
           </>
         )}
