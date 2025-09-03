@@ -113,7 +113,7 @@ const SelectSdocFileDialog = ({ editor, closeDialog, insertLinkCallback }) => {
       </div>
       <ModalBody className='p-0'>
         <div className='sdoc-file-select-container'>
-          <LocalImage fileType='file' onSelectedFile={onSelectedFile} toggle={closeDialog} searchContent={searchContent} isOpenSearch={isOpenSearch} />
+          <LocalImage fileType='image' onSelectedFile={onSelectedFile} toggle={closeDialog} searchContent={searchContent} isOpenSearch={isOpenSearch} />
           <div className='sdoc-file-select-footer'>
             <Button color='secondary' className='mr-2' onClick={closeDialog}>{t('Cancel')}</Button>
             <Button color='primary' className='highlight-bg-color' disabled={!currentSelectedFile} onClick={onSubmit}>{t('Confirm')}</Button>
