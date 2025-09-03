@@ -12,6 +12,7 @@ import SocketManager from '../socket/socket-manager';
 import { loadFromServerStorage } from '../data/server-storage';
 import { getSyncableElements } from '../data';
 import { gettext } from '../../../utils/constants';
+import SelectSdocFileDialog from '../extension/select-image-dialog';
 import isHotkey from 'is-hotkey';
 
 import '@excalidraw/excalidraw/index.css';
@@ -58,7 +59,7 @@ const SimpleEditor = () => {
   if (!initialStatePromiseRef.current.promise) {
     initialStatePromiseRef.current.promise = resolvablePromise();
   }
-
+  const [isShowImageDialog, setIsShowImageDialog] = useState(false);
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
 
   useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
@@ -193,6 +194,15 @@ const SimpleEditor = () => {
     };
   }, [beforeUnload]);
 
+  const closeDialog = useCallback(() => {
+    setIsShowImageDialog(false);
+    console.log('close');
+  }, []);
+
+  const handleCustomAction = () => {
+    setIsShowImageDialog(true);
+  };
+
   return (
     <div className='excali-container'>
       <div className='excali-tip-message'>
@@ -208,12 +218,25 @@ const SimpleEditor = () => {
       >
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
+          <button
+            onClick={handleCustomAction}
+            data-testid="upload_image"
+            title='上传资料库图片'
+            className='dropdown-menu-item dropdown-menu-item-base'
+          >
+            <div className="dropdown-menu-item__icon">
+              {/* <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" class="" fill="none" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="17" x2="12" y2="17.01"></line><path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path></g></svg> */}
+            </div>
+            <div class="dropdown-menu-item__text">上传资料库图片</div>
+          </button>
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
           <MainMenu.DefaultItems.ToggleTheme />
           <MainMenu.DefaultItems.ChangeCanvasBackground />
+
         </MainMenu>
       </Excalidraw>
+      {isShowImageDialog && <SelectSdocFileDialog closeDialog={closeDialog}/>}
     </div>
   );
 };
