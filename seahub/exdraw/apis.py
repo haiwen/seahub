@@ -1,4 +1,5 @@
 import os
+import stat
 import logging
 import requests
 import posixpath
@@ -13,6 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from seaserv import seafile_api
 
+from seahub.constants import PERMISSION_INVISIBLE
 from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING, FILE_TYPE_MIMETYPE_MAPPING
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.views import check_folder_permission
@@ -25,7 +27,8 @@ from seahub.exdraw.utils import is_valid_exdraw_access_token, get_exdraw_upload_
 
 from seahub.utils.file_types import EXCALIDRAW, IMAGE
 from seahub.utils.file_op import if_locked_by_online_office
-from seahub.utils import get_file_type_and_ext, normalize_file_path, is_pro_version, PREVIEW_FILEEXT
+from seahub.utils import get_file_type_and_ext, normalize_file_path, is_pro_version, PREVIEW_FILEEXT, \
+    normalize_dir_path, VIDEO, SEADOC
 from seahub.tags.models import FileUUIDMap
 
 
@@ -349,7 +352,6 @@ class ExdrawDirView(APIView):
         file_type = request.GET.get('type', 'image')  # sdoc, image, file
         path = request.GET.get('p', '/')
         path = normalize_dir_path(path)
-
         repo_id = uuid_map.repo_id
         dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         if not dir_id:
@@ -357,7 +359,8 @@ class ExdrawDirView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, path):
+        permission = seafile_api.check_permission_by_path(repo_id, path, username)
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -387,7 +390,7 @@ class ExdrawDirView(APIView):
                     entry["file_uuid"] = dirent_file_uuid
                 elif file_type == 'exdraw' and filetype == EXCALIDRAW:
                     entry["file_uuid"] = dirent_file_uuid
-                elif filetype == 'image' and filetype == IMAGE:
+                elif file_type == 'image' and filetype == IMAGE:
                     entry["file_uuid"] = dirent_file_uuid
                 elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
                     entry["file_uuid"] = dirent_file_uuid
