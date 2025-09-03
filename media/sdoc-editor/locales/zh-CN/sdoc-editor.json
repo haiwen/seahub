@@ -612,7 +612,7 @@
   "Processing_content_cannot_be_empty": "处理内容不能为空",
   "AI_error_message": "请求错误，请重试",
   "Add_video_link": "添加视频链接",
-  "Link_Seafile_video_file": "链接Seafile视频文件",
+  "Link_video_file": "链接视频文件",
   "Select_video_file": "选择视频文件",
   "Support_Youtube_Tencent_Bilibili_and_more": "支持Youtube，腾讯视频，B站及其他平台",
   "Image_cannot_be_copied_Please_download_the_source_image": "此照片不支持复制，请下载原图",
@@ -640,8 +640,13 @@
   "Comment_list": "评论列表",
   "Add_Comment": "添加评论",
   "Finish": "完成",
-  "Select_Excalidraw_file": "选择 Excalidraw 文件",
+  "Link_Excalidraw_file": "链接 Excalidraw 文件",
   "New_Excalidraw_file": "新建 Excalidraw 文件",
   "Whiteboard": "白板",
-  "Open": "打开"
+  "Open": "打开",
+  "Icon": "图标",
+  "Select_style": "选择样式",
+  "Edit_link": "编辑链接",
+  "Remove_link": "移除链接",
+  "Preview": "预览"
 }

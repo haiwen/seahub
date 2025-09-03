@@ -611,7 +611,7 @@
   "Processing_content_cannot_be_empty": "Processing content cannot be empty",
   "AI_error_message": "Request error, please try again",
   "Add_video_link": "Add video link",
-  "Link_Seafile_video_file": "Link Seafile video file",
+  "Link_video_file": "Link video file",
   "Select_video_file": "Select video file",
   "Support_Youtube_Tencent_Bilibili_and_more": "Support Youtube, Tencent, Bilibili and more",
   "Image_cannot_be_copied_Please_download_the_source_image": "Image cannot be copied. Please download the source image,",
@@ -640,8 +640,13 @@
   "Add_Comment": "Add Comment",
   "Finish": "Finish",
   "More_fluent": "More fluent",
-  "Select_Excalidraw_file": "Select Excalidraw file",
+  "Link_Excalidraw_file": "Link Excalidraw file",
   "New_Excalidraw_file": "New Excalidraw file",
   "Whiteboard": "Whiteboard",
-  "Open": "Open"
+  "Open": "Open",
+  "Icon": "Icon",
+  "Select_style": "Select style",
+  "Edit_link": "Edit link",
+  "Remove_link": "Remove link",
+  "Preview": "Preview"
 }
