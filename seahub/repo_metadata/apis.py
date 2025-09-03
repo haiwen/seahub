@@ -33,12 +33,6 @@ from seahub.settings import MD_FILE_COUNT_LIMIT
 logger = logging.getLogger(__name__)
 
 
-def _format_datetime(dt):
-    if isinstance(dt, str):
-        return datetime.fromisoformat(dt)
-    return dt
-
-
 
 class MetadataManage(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -3489,8 +3483,8 @@ class MetadataStatistics(APIView):
         if not min_date or not max_date:
             return {'unit': 'year', 'data': [], 'grouping': time_type}
         try:
-            min_dt = _format_datetime(min_date)
-            max_dt = _format_datetime(max_date)
+            min_dt = self._format_datetime(min_date)
+            max_dt = self._format_datetime(max_date)
             time_span = max_dt - min_dt
             years_span = time_span.days / 365.25
             months_span = time_span.days / 30.44
@@ -3519,7 +3513,7 @@ class MetadataStatistics(APIView):
             year_counts = {}
             for row in results['results']:
                 try:
-                    dt = _format_datetime(row['date_value'])
+                    dt = self._format_datetime(row['date_value'])
                     year = dt.year
                     year_counts[year] = year_counts.get(year, 0) + row['count']
                 except (ValueError, TypeError, AttributeError):
@@ -3556,7 +3550,7 @@ class MetadataStatistics(APIView):
             month_counts = {}
             for row in results['results']:
                 try:
-                    dt = _format_datetime(row['date_value'])
+                    dt = self._format_datetime(row['date_value'])
                     month_key = f"{dt.year}-{dt.month:02d}"
                     month_counts[month_key] = month_counts.get(month_key, 0) + row['count']
                 except (ValueError, TypeError, AttributeError):
@@ -3597,7 +3591,7 @@ class MetadataStatistics(APIView):
             day_counts = {}
             for row in results['results']:
                 try:
-                    dt = _format_datetime(row['date_value'])
+                    dt = self._format_datetime(row['date_value'])
                     day_key = dt.strftime('%Y-%m-%d')
                     day_counts[day_key] = day_counts.get(day_key, 0) + row['count']
                 except (ValueError, TypeError, AttributeError):
@@ -3617,3 +3611,8 @@ class MetadataStatistics(APIView):
                     continue
 
             return {'unit': 'day', 'data': data, 'grouping': time_type}
+
+    def _format_datetime(self, dt):
+        if isinstance(dt, str):
+            return datetime.fromisoformat(dt)
+        return dt
