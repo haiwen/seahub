@@ -111,14 +111,20 @@ class SelectDirentBody extends React.Component {
 
   selectMode = (mode) => {
     this.props.onUpdateMode(mode);
-    if (mode === MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY) {
-      this.props.selectRepo(this.props.currentRepo);
-    } else if (mode === MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES) {
-      this.props.selectRepo(this.props.repoList[0]);
-    } else if (mode === MODE_TYPE_MAP.RECENTLY_USED) {
-      this.props.selectRepo(null);
+    switch (mode) {
+      case MODE_TYPE_MAP.ONLY_CURRENT_LIBRARY:
+        this.props.selectRepo(this.props.currentRepo);
+        break;
+      case MODE_TYPE_MAP.ONLY_OTHER_LIBRARIES:
+        this.props.selectRepo(this.props.repoList[0]);
+        break;
+      case MODE_TYPE_MAP.RECENTLY_USED:
+        this.props.selectRepo(null);
+        break;
+      default:
+        break;
     }
-    this.props.setSelectedPath('/');
+    this.props.setSelectedPath('');
   };
 
   render() {

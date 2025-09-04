@@ -32,7 +32,7 @@ class CopyDirent extends React.Component {
       currentRepo: { repo_id: this.props.repoID },
       selectedRepo: { repo_id: this.props.repoID },
       repoList: [],
-      selectedPath: this.props.path,
+      selectedPath: '',
       selectedSearchedRepo: null,
       selectedSearchedItem: { repoID: '', filePath: '' },
       searchStatus: '',
