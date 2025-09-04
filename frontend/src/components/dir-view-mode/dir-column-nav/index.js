@@ -11,7 +11,6 @@ import './index.css';
 const propTypes = {
   currentPath: PropTypes.string.isRequired,
   userPerm: PropTypes.string.isRequired,
-  showMdView: PropTypes.bool.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
