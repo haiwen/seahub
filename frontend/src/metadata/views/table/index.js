@@ -87,7 +87,7 @@ const Table = () => {
 
   }, [metadata, store]);
 
-  const loadAll = useCallback(async (maxLoadNumber, callback) => {
+  const loadAll = useCallback(async (maxLoadNumber) => {
     if (!metadata.hasMore) return;
     setLoadingMore(true);
     const rowsCount = metadata.row_ids.length;
@@ -102,9 +102,8 @@ const Table = () => {
       return;
     }
     if (store.data.hasMore && store.data.row_ids.length < maxLoadNumber) {
-      loadAll(maxLoadNumber, callback);
+      loadAll(maxLoadNumber);
     } else {
-      typeof callback === 'function' && callback(store.data.hasMore);
       setLoadingMore(false);
     }
   }, [metadata, store]);
