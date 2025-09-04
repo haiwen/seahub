@@ -8,14 +8,14 @@ const SummaryCards = ({ totalFiles, totalCollaborators }) => {
         <Icon className="summary-icon" symbol="file-count" />
         <div className="summary-content">
           <div className="summary-number">{totalFiles.toLocaleString()}</div>
-          <div className="summary-label">{gettext('File count')}</div>
+          <div className="summary-label">{gettext('Files')}</div>
         </div>
       </div>
       <div className="summary-card">
         <Icon className="summary-icon" symbol="collaborator-count" />
         <div className="summary-content">
           <div className="summary-number">{totalCollaborators.toLocaleString()}</div>
-          <div className="summary-label">{gettext('Collaborator count')}</div>
+          <div className="summary-label">{gettext('Collaborators')}</div>
         </div>
       </div>
     </div>

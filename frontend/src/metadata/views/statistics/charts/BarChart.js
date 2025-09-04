@@ -19,20 +19,31 @@ export const BarChart = ({ data, unit }) => {
     const minBarSpacing = 24;
     const totalBarWidth = barWidth + minBarSpacing;
 
-    const requiredWidth = data.length * totalBarWidth;
-    const marginReserve = 40;
-    const shouldScroll = requiredWidth > containerWidth - marginReserve;
-    const chartWidth = shouldScroll ? requiredWidth : Math.max(containerWidth, requiredWidth);
+    const maxValue = d3.max(data, d => d.value);
+    const yAxisTickFormat = maxValue > 1000 ? d3.format('.1s') : d3.format('d'); // eg: 1200 -> 1.2k
+
+    const tempSvg = d3.select('body').append('svg').style('visibility', 'hidden');
+    const tempText = tempSvg.append('text')
+      .style('font-size', '12px')
+      .text(yAxisTickFormat(maxValue));
+    const maxLabelWidth = tempText.node().getBBox().width;
+    tempSvg.remove();
 
     const margin = {
       top: 15,
       right: 30,
       bottom: 60,
-      left: 20
+      left: Math.max(20, maxLabelWidth + 8)
     };
 
+    const requiredWidth = data.length * totalBarWidth + margin.left + margin.right;
+    const chartWidth = Math.max(containerWidth, requiredWidth);
+
+    const actualBarWidth = barWidth;
     const width = chartWidth - margin.left - margin.right;
     const height = 250 - margin.top - margin.bottom;
+
+    const yScale = d3.scaleLinear().domain([0, maxValue]).range([height, 0]).nice();
 
     const g = svg
       .attr('width', chartWidth)
@@ -45,12 +56,6 @@ export const BarChart = ({ data, unit }) => {
       .range([0, width])
       .paddingInner(minBarSpacing / totalBarWidth)
       .paddingOuter(0.1);
-
-    const actualBarWidth = barWidth;
-    const maxValue = d3.max(data, d => d.value);
-    const yScale = d3.scaleLinear().domain([0, maxValue]).range([height, 0]).nice();
-
-    const yAxisTickFormat = maxValue > 1000 ? d3.format('.1s') : d3.format('d');
     const yAxis = g.append('g')
       .call(d3.axisLeft(yScale)
         .tickSize(-width)
@@ -195,8 +200,15 @@ export const BarChart = ({ data, unit }) => {
   const barWidth = 24;
   const minBarSpacing = 24;
   const totalBarWidth = barWidth + minBarSpacing;
-  const requiredWidth = (data?.length || 0) * totalBarWidth;
-  const needsScrolling = requiredWidth > 400;
+
+  const maxValue = data ? d3.max(data, d => d.value) : 0;
+  const yAxisTickFormat = maxValue > 1000 ? d3.format('.1s') : d3.format('d');
+  const estimatedLabelWidth = yAxisTickFormat(maxValue).length * 7;
+  const estimatedLeftMargin = Math.max(20, estimatedLabelWidth + 15);
+  const estimatedMargins = estimatedLeftMargin + 30;
+
+  const requiredWidth = (data?.length || 0) * totalBarWidth + estimatedMargins;
+  const needsScrolling = requiredWidth > (containerRef.current?.offsetWidth || 400);
 
   return (
     <div ref={containerRef} className="bar-chart-responsive" style={{
@@ -204,9 +216,9 @@ export const BarChart = ({ data, unit }) => {
       overflowY: 'hidden',
     }}>
       <svg ref={svgRef} style={{
-        width: needsScrolling ? `${requiredWidth + 40}px` : '100%',
+        width: 'fit-content',
         height: '250px',
-        minWidth: needsScrolling ? `${requiredWidth + 40}px` : '100%'
+        minWidth: '100%'
       }}>
       </svg>
     </div>
