@@ -4,7 +4,7 @@ from .apis import MetadataRecognizeFaces, MetadataRecords, MetadataManage, Metad
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
     PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView, \
-    MetadataBatchRecords
+    MetadataBatchRecords, MetadataStatistics
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -48,4 +48,7 @@ urlpatterns = [
     re_path(r'^migrate-tags/$', MetadataMigrateTags.as_view(), name='api-v2.1-metadata-migrate-tags'),
     re_path(r'^export-tags/$', MetadataExportTags.as_view(), name='api-v2.1-metadata-export-tags'),
     re_path(r'^import-tags/$', MetadataImportTags.as_view(), name='api-v2.1-metadata-import-tags'),
+
+    # statistics api
+    re_path(r'^statistics/$', MetadataStatistics.as_view(), name='api-v2.1-metadata-statistics'),
 ]

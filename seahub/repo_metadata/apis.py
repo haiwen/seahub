@@ -3270,3 +3270,349 @@ class MetadataImportTags(APIView):
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
         return Response({'success': True})
+
+
+class MetadataStatistics(APIView):
+    """
+    API for retrieving library metadata statistics for the statistics view.
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id):
+        """
+        Get statistics data for metadata view including:
+        - File type distribution
+        - Files by creation/modification time
+        - Files by creator 
+        - Summary statistics
+        """
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not record or not record.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+            from seafevents.repo_metadata.constants import METADATA_TABLE
+
+            statistics = self._get_sql_statistics(metadata_server_api, METADATA_TABLE)
+
+            return Response(statistics)
+
+        except Exception as e:
+            logger.error(f'Error generating metadata statistics for repo {repo_id}: {e}')
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+    def _get_sql_statistics(self, metadata_server_api, METADATA_TABLE):
+        default_response = {
+            'file_type_stats': [],
+            'time_stats': {
+                'created': {'unit': 'year', 'data': [], 'grouping': 'created'},
+                'modified': {'unit': 'year', 'data': [], 'grouping': 'modified'}
+            },
+            'creator_stats': [],
+            'summary_stats': {
+                'total_files': 0,
+                'total_collaborators': 0
+            }
+        }
+
+        try:
+            file_type_stats = self._get_file_type_stats_sql(metadata_server_api, METADATA_TABLE)
+            creator_stats = self._get_creator_stats_sql(metadata_server_api, METADATA_TABLE)
+            summary_stats = self._get_summary_stats_sql(metadata_server_api, METADATA_TABLE)
+            time_stats = self._get_time_stats_sql(metadata_server_api, METADATA_TABLE)
+
+            return {
+                'file_type_stats': file_type_stats,
+                'time_stats': time_stats,
+                'creator_stats': creator_stats,
+                'summary_stats': summary_stats
+            }
+
+        except Exception as e:
+            logger.error(f'Error in SQL statistics processing: {e}')
+            return default_response
+
+    def _get_file_type_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        sql = f'''
+            SELECT 
+                `{METADATA_TABLE.columns.file_type.name}` as file_type,
+                COUNT(*) as count
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+            GROUP BY `{METADATA_TABLE.columns.file_type.name}`
+            ORDER BY count DESC
+        '''
+
+        results = metadata_server_api.query_rows(sql, [])
+        if not results or 'results' not in results:
+            return []
+
+        processed_results = []
+        for row in results['results']:
+            file_type = row.get('file_type', '') or 'other'
+            if not file_type.strip():
+                file_type = 'other'
+            processed_results.append({'type': file_type, 'count': row['count']})
+            
+        return processed_results
+
+    def _get_creator_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        sql = f'''
+            SELECT 
+                `{METADATA_TABLE.columns.file_creator.name}` as creator,
+                COUNT(*) as count
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_creator.name}` IS NOT NULL
+                AND `{METADATA_TABLE.columns.file_creator.name}` != ''
+            GROUP BY `{METADATA_TABLE.columns.file_creator.name}`
+            ORDER BY count DESC
+        '''
+
+        results = metadata_server_api.query_rows(sql, [])
+        if not results or 'results' not in results:
+            return []
+
+        return [
+            {'creator': row['creator'], 'count': row['count']}
+            for row in results['results']
+        ]
+
+    def _get_summary_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        sql = f'''
+            SELECT 
+                COUNT(*) as total_files
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+        '''
+
+        results = metadata_server_api.query_rows(sql, [])
+        if not results or 'results' not in results or not results['results']:
+            return {'total_files': 0, 'total_collaborators': 0}
+
+        row = results['results'][0]
+
+        collaborators_set = set()
+
+        all_creators_sql = f'''
+            SELECT DISTINCT `{METADATA_TABLE.columns.file_creator.name}` as creator
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_creator.name}` IS NOT NULL
+                AND `{METADATA_TABLE.columns.file_creator.name}` != ''
+        '''
+
+        creator_list_results = metadata_server_api.query_rows(all_creators_sql, [])
+        if creator_list_results and 'results' in creator_list_results:
+            for creator_row in creator_list_results['results']:
+                collaborators_set.add(creator_row['creator'])
+
+        all_modifiers_sql = f'''
+            SELECT DISTINCT `{METADATA_TABLE.columns.file_modifier.name}` as modifier
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND `{METADATA_TABLE.columns.file_modifier.name}` IS NOT NULL
+                AND `{METADATA_TABLE.columns.file_modifier.name}` != ''
+        '''
+
+        modifier_list_results = metadata_server_api.query_rows(all_modifiers_sql, [])
+        if modifier_list_results and 'results' in modifier_list_results:
+            for modifier_row in modifier_list_results['results']:
+                collaborators_set.add(modifier_row['modifier'])
+        
+        return {
+            'total_files': row['total_files'],
+            'total_collaborators': len(collaborators_set)
+        }
+
+    def _get_time_stats_sql(self, metadata_server_api, METADATA_TABLE):
+        date_range_sql = f'''
+            SELECT 
+                MIN(`{METADATA_TABLE.columns.file_ctime.name}`) as min_ctime,
+                MAX(`{METADATA_TABLE.columns.file_ctime.name}`) as max_ctime,
+                MIN(`{METADATA_TABLE.columns.file_mtime.name}`) as min_mtime,
+                MAX(`{METADATA_TABLE.columns.file_mtime.name}`) as max_mtime,
+                COUNT(*) as total_files
+            FROM `{METADATA_TABLE.name}`
+            WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                AND (`{METADATA_TABLE.columns.file_ctime.name}` IS NOT NULL 
+                    OR `{METADATA_TABLE.columns.file_mtime.name}` IS NOT NULL)
+        '''
+
+        range_results = metadata_server_api.query_rows(date_range_sql, [])
+        if not range_results or 'results' not in range_results or not range_results['results']:
+            return {
+                'created': {'unit': 'year', 'data': [], 'grouping': 'created'},
+                'modified': {'unit': 'year', 'data': [], 'grouping': 'modified'}
+            }
+
+        range_data = range_results['results'][0]
+
+        created_stats = self._get_time_period_stats_sql(
+            metadata_server_api, METADATA_TABLE, 'created', 
+            range_data['min_ctime'], range_data['max_ctime']
+        )
+        
+        modified_stats = self._get_time_period_stats_sql(
+            metadata_server_api, METADATA_TABLE, 'modified',
+            range_data['min_mtime'], range_data['max_mtime']
+        )
+        
+        return {
+            'created': created_stats,
+            'modified': modified_stats
+        }
+
+    def _get_time_period_stats_sql(self, metadata_server_api, METADATA_TABLE, time_type, min_date, max_date):
+        from datetime import datetime
+        
+        if not min_date or not max_date:
+            return {'unit': 'year', 'data': [], 'grouping': time_type}
+        try:
+            min_dt = self._format_datetime(min_date)
+            max_dt = self._format_datetime(max_date)
+            time_span = max_dt - min_dt
+            years_span = time_span.days / 365.25
+            months_span = time_span.days / 30.44
+
+        except (ValueError, AttributeError):
+            return {'unit': 'year', 'data': [], 'grouping': time_type}
+
+        date_column = METADATA_TABLE.columns.file_ctime.name if time_type == 'created' else METADATA_TABLE.columns.file_mtime.name
+
+        if years_span >= 3:
+            sql = f'''
+                SELECT 
+                    `{date_column}` as date_value,
+                    COUNT(*) as count
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                    AND `{date_column}` IS NOT NULL
+                GROUP BY `{date_column}`
+                ORDER BY `{date_column}`
+            '''
+
+            results = metadata_server_api.query_rows(sql, [])
+            if not results or 'results' not in results:
+                return {'unit': 'year', 'data': [], 'grouping': time_type}
+
+            year_counts = {}
+            for row in results['results']:
+                try:
+                    dt = self._format_datetime(row['date_value'])
+                    year = dt.year
+                    year_counts[year] = year_counts.get(year, 0) + row['count']
+                except (ValueError, TypeError, AttributeError):
+                    continue
+
+            data = [
+                {
+                    'period': str(year),
+                    'label': str(year),
+                    'count': count
+                }
+                for year, count in sorted(year_counts.items())
+            ]
+
+            return {'unit': 'year', 'data': data, 'grouping': time_type}
+
+        elif months_span >= 6:
+            sql = f'''
+                SELECT 
+                    `{date_column}` as date_value,
+                    COUNT(*) as count
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                    AND `{date_column}` IS NOT NULL
+                GROUP BY `{date_column}`
+                ORDER BY `{date_column}`
+            '''
+            
+            results = metadata_server_api.query_rows(sql, [])
+            if not results or 'results' not in results:
+                return {'unit': 'month', 'data': [], 'grouping': time_type}
+
+            import calendar
+            month_counts = {}
+            for row in results['results']:
+                try:
+                    dt = self._format_datetime(row['date_value'])
+                    month_key = f"{dt.year}-{dt.month:02d}"
+                    month_counts[month_key] = month_counts.get(month_key, 0) + row['count']
+                except (ValueError, TypeError, AttributeError):
+                    continue
+
+            data = []
+            for month_key, count in sorted(month_counts.items()):
+                try:
+                    year, month = month_key.split('-')
+                    month_name = calendar.month_abbr[int(month)]
+                    label = f"{month_name} {year}"
+                    data.append({
+                        'period': month_key,
+                        'label': label,
+                        'count': count
+                    })
+                except (ValueError, IndexError):
+                    continue
+            
+            return {'unit': 'month', 'data': data, 'grouping': time_type}
+
+        else:
+            sql = f'''
+                SELECT 
+                    `{date_column}` as date_value,
+                    COUNT(*) as count
+                FROM `{METADATA_TABLE.name}`
+                WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
+                    AND `{date_column}` IS NOT NULL
+                GROUP BY `{date_column}`
+                ORDER BY `{date_column}`
+            '''
+
+            results = metadata_server_api.query_rows(sql, [])
+            if not results or 'results' not in results:
+                return {'unit': 'day', 'data': [], 'grouping': time_type}
+
+            day_counts = {}
+            for row in results['results']:
+                try:
+                    dt = self._format_datetime(row['date_value'])
+                    day_key = dt.strftime('%Y-%m-%d')
+                    day_counts[day_key] = day_counts.get(day_key, 0) + row['count']
+                except (ValueError, TypeError, AttributeError):
+                    continue
+
+            data = []
+            for day_key, count in sorted(day_counts.items()):
+                try:
+                    date_obj = datetime.strptime(day_key, '%Y-%m-%d')
+                    label = date_obj.strftime('%b %d')
+                    data.append({
+                        'period': day_key,
+                        'label': label,
+                        'count': count
+                    })
+                except (ValueError, TypeError):
+                    continue
+
+            return {'unit': 'day', 'data': data, 'grouping': time_type}
+
+    def _format_datetime(self, dt):
+        if isinstance(dt, str):
+            return datetime.fromisoformat(dt)
+        return dt
