@@ -46,6 +46,7 @@ const InlineNameEditor = forwardRef(({ name, className, onSubmit }, ref) => {
       onChange={(handleInputChange)}
       onBlur={handleInputSubmit}
       onKeyDown={onKeyDown}
+      onClick={e => e.stopPropagation()}
     />
   );
 });

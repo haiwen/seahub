@@ -251,7 +251,7 @@ const ViewItem = ({
       >
         <div
           className="tree-node-text"
-          draggable={canUpdate}
+          draggable={!isRenaming && canUpdate}
           onDragStart={onDragStart}
           onDragEnter={onDragEnter}
           onDragLeave={onDragLeave}

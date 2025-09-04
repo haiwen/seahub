@@ -272,7 +272,7 @@ const ViewsFolder = ({
         <div
           className="tree-node-text views-folder-name"
           style={{ paddingLeft: leftIndent + 5 }}
-          draggable={canUpdate}
+          draggable={!isRenaming && canUpdate}
           onDragStart={onDragStart}
           onDragEnter={onDragEnter}
           onDragLeave={onDragLeave}
