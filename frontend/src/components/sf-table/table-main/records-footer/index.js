@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../../loading';
-import toaster from '../../../toast';
-import LoadAllTip from '../load-all-tip';
 import { RecordMetrics } from '../../utils/record-metrics';
 import { TreeMetrics } from '../../utils/tree-metrics';
 import { gettext } from '../../../../utils/constants';
@@ -50,13 +48,7 @@ class RecordsFooter extends React.Component {
       return;
     }
     const loadNumber = this.props.recordsCount < 50000 ? 50000 : 100000;
-    this.props.loadAll(loadNumber, (hasMoreRecords) => {
-      if (hasMoreRecords) {
-        toaster.success(<LoadAllTip load={this.props.loadAll} />, { duration: 5 });
-      } else {
-        toaster.success(gettext('All records loaded'));
-      }
-    });
+    this.props.loadAll(loadNumber);
   };
 
   setSummaryScrollLeft = (scrollLeft) => {
