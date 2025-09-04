@@ -19,7 +19,7 @@ from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING, FILE_TYPE_MIMETYP
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.exdraw.utils import is_valid_exdraw_access_token, get_exdraw_upload_link, get_exdraw_download_link, \
     get_exdraw_file_uuid, gen_exdraw_access_token, gen_exdraw_image_parent_path, get_exdraw_asset_upload_link, \
@@ -309,10 +309,17 @@ class ExdrawDownloadImage(APIView):
             error_msg = 'Image type not supported'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        from_repo = to_python_boolean(request.GET.get('from_repo', 'f'))
         repo_id = uuid_map.repo_id
         username = request.user.username
 
-        parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
+        if from_repo:
+            parent_path = os.path.dirname(filename)
+            parent_path = normalize_dir_path(parent_path)
+            filename = os.path.basename(filename)
+        else:
+            parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
+            
         download_link = get_exdraw_asset_download_link(repo_id, parent_path, filename, username)
         if not download_link:
             error_msg = 'file %s not found.' % filename
