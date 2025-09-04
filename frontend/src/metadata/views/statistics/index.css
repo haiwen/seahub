@@ -56,7 +56,7 @@
 
 .chart-container.time-chart-container {
   grid-area: time;
-  gap: 15px;
+  gap: 20px;
 }
 
 .chart-container.summary-chart-container {

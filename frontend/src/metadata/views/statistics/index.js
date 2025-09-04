@@ -104,7 +104,7 @@ const Statistics = () => {
 
         <div className="chart-container time-chart-container">
           <div className="chart-header">
-            <h4>{gettext('Distributed by time')}</h4>
+            <h4>{gettext('Files by time')}</h4>
             <RadioGroup
               className="sf-metadata-time-grouping-setter"
               value={timeGrouping}
