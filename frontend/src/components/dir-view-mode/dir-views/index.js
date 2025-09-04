@@ -19,7 +19,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   }, [window.app.pageOptions.enableMetadataManagement, currentRepoInfo]);
 
   const { isLoading } = useMetadata();
-  const { enableMetadata } = useMetadataStatus();
+  const { enableMetadata, showView } = useMetadataStatus();
 
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const toggleSettingsDialog = () => {
@@ -48,6 +48,10 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     }
     return operations;
   };
+
+  if (enableMetadata && !showView) {
+    return null;
+  }
 
   return (
     <>

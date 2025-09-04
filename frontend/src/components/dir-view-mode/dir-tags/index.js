@@ -10,7 +10,7 @@ import EditTagDialog from '../../../tag/components/dialog/edit-tag-dialog';
 const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const [isShowEditTagDialog, setIsShowEditTagDialog] = useState(false);
 
-  const { enableMetadata, enableTags } = useMetadataStatus();
+  const { enableMetadata, enableTags, showView } = useMetadataStatus();
   const { isLoading, tagsData, addTag } = useTags();
 
   const enableMetadataManagement = useMemo(() => {
@@ -52,6 +52,7 @@ const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
 
   if (!enableMetadataManagement) return null;
   if (!enableMetadata || !enableTags) return null;
+  if (enableMetadata && !showView) return null;
 
   return (
     <TreeSection
