@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { InputGroupText } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, enableMultiADFS } from '../../../utils/constants';
+import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, orgEnableAdminDeleteOrg, enableMultiADFS } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -221,13 +221,15 @@ class OrgWebSettings extends Component {
                     />
                   </Fragment>
                 </Section>
-                <Section headingText={gettext('Delete')}>
-                  <Fragment>
-                    <button onClick={this.toggleDeleteOrganization.bind(this, null)} className="btn btn-outline-primary" >
-                      {gettext('Delete Organization')}
-                    </button>
-                  </Fragment>
-                </Section>
+                {orgEnableAdminDeleteOrg &&
+                  <Section headingText={gettext('Delete')}>
+                    <Fragment>
+                      <button onClick={this.toggleDeleteOrganization.bind(this, null)} className="btn btn-outline-primary" >
+                        {gettext('Delete Organization')}
+                      </button>
+                    </Fragment>
+                  </Section>
+                }
               </Fragment>
               }
             </div>

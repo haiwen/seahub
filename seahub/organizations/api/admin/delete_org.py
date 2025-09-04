@@ -14,6 +14,7 @@ from seahub.api2.utils import api_error
 
 from seahub.base.accounts import User
 from seahub.organizations.signals import org_deleted
+from seahub.organizations.settings import ORG_ENABLE_ADMIN_DELETE_ORG
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -31,7 +32,7 @@ class OrgAdminDeleteOrg(APIView):
 
     def delete(self, request, org_id):
 
-        if not MULTI_TENANCY:
+        if not MULTI_TENANCY or not ORG_ENABLE_ADMIN_DELETE_ORG:
             error_msg = 'Feature is not enabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -61,7 +62,7 @@ class OrgAdminDeleteOrg(APIView):
             seafile_api.remove_org_repo_by_org_id(org_id)
             # remove org
             ccnet_api.remove_org(org_id)
-            
+
             # handle signal
             org_deleted.send(sender=None, org_id=org_id)
         except Exception as e:

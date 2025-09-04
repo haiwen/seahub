@@ -34,7 +34,7 @@ from seahub.organizations.forms import OrgRegistrationForm
 from seahub.organizations.settings import ORG_AUTO_URL_PREFIX, \
         ORG_MEMBER_QUOTA_ENABLED, ORG_ENABLE_ADMIN_INVITE_USER_VIA_WEIXIN, \
         ORG_ENABLE_ADMIN_CUSTOM_LOGO, ORG_ENABLE_ADMIN_CUSTOM_NAME, \
-        ORG_ENABLE_ADMIN_INVITE_USER
+        ORG_ENABLE_ADMIN_INVITE_USER, ORG_ENABLE_ADMIN_DELETE_ORG
 from seahub.organizations.utils import get_or_create_invitation_link, \
         can_use_sso_in_multi_tenancy
 from seahub.subscription.utils import subscription_check
@@ -300,6 +300,7 @@ def react_fake_view(request, **kwargs):
         'org_enable_admin_custom_logo': ORG_ENABLE_ADMIN_CUSTOM_LOGO,
         'org_enable_admin_custom_name': ORG_ENABLE_ADMIN_CUSTOM_NAME,
         'org_enable_admin_invite_user': ORG_ENABLE_ADMIN_INVITE_USER,
+        'org_enable_admin_delete_org': ORG_ENABLE_ADMIN_DELETE_ORG,
         'group_id': group_id,
         'invitation_link': invitation_link,
         'enable_multi_adfs': ENABLE_MULTI_ADFS and can_use_sso_in_multi_tenancy(org.org_id),
