@@ -314,7 +314,8 @@ class ExdrawDownloadImage(APIView):
         username = request.user.username
 
         if from_repo:
-            parent_path = os.path.dirname(filename)
+            file_path = normalize_file_path(filename)
+            parent_path = os.path.dirname(file_path)
             parent_path = normalize_dir_path(parent_path)
             filename = os.path.basename(filename)
         else:
