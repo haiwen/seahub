@@ -3,14 +3,16 @@ import os
 import uuid
 import logging
 from django.db import models
+from django.dispatch import receiver
 
+from seahub.base.models import OrgQuotaUsage, OrgLastActivityTime
 from .settings import ORG_MEMBER_QUOTA_DEFAULT
 
 from seahub.constants import DEFAULT_ORG
 from seahub.role_permissions.utils import get_available_roles
 from seahub.avatar.util import get_avatar_file_storage
 from seahub.avatar.settings import AVATAR_STORAGE_DIR
-from seahub.organizations.signals import org_operation_signal
+from seahub.organizations.signals import org_operation_signal, org_deleted
 
 logger = logging.getLogger(__name__)
 
@@ -206,3 +208,17 @@ class OrgAdminSettings(models.Model):
 
     class Meta:
         unique_together = [('org_id', 'key')]
+        
+
+# handle signal
+
+@receiver(org_deleted)
+def org_deleted_cb(sender, **kwargs):
+    org_id = kwargs['org_id']
+
+    OrgSAMLConfig.objects.filter(org_id=org_id).delete()
+    OrgAdminSettings.objects.filter(org_id=org_id).delete()
+    OrgSettings.objects.filter(org_id=org_id).delete()
+    OrgMemberQuota.objects.filter(org_id=org_id).delete()
+    OrgQuotaUsage.objects.filter(org_id=org_id).delete()
+    OrgLastActivityTime.objects.filter(org_id=org_id).delete()
