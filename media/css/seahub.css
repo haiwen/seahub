@@ -2772,22 +2772,6 @@ a.sf-popover-item {
   width: 180px;
 }
 
-/* pwd strength */
-#pwd_strength {
-  margin: 0px;
-}
-
-#pwd_strength span {
-  display: inline-block;
-  width: 70px;
-  border: 1px solid #fff;
-  background: #e4e4e4;
-  color: #cecece;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 16px;
-}
-
 /* user profile */
 #user-profile {
   width: 290px;
