@@ -105,6 +105,7 @@ export const enableMetadataManagement = window.app.pageOptions.enableMetadataMan
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI;
 export const enableWhiteboard = window.app.pageOptions.enableWhiteboard;
 export const enableMultipleOfficeSuite = window.app.pageOptions.enableMultipleOfficeSuite;
+export const officeSuiteEditFileExtention = window.app.pageOptions.officeSuiteEditFileExtention || [];
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
