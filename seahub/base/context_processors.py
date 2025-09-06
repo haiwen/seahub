@@ -27,7 +27,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, NOTIFICATION_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
-    ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER, MD_FILE_COUNT_LIMIT
+    ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER, MD_FILE_COUNT_LIMIT, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -162,6 +162,7 @@ def base(request):
         'onlyoffice_edit_file_extension': list(ONLYOFFICE_EDIT_FILE_EXTENSION),
         'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
         'office_web_app_edit_file_extension': list(OFFICE_WEB_APP_EDIT_FILE_EXTENSION),
+        'office_suite_edit_file_extension': OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES,
         'onlyoffice_converter_extensions': ONLYOFFICE_CONVERTER_EXTENSIONS,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'thumbnail_size_for_grid': THUMBNAIL_SIZE_FOR_GRID,

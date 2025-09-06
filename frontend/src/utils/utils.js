@@ -1,7 +1,7 @@
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
-  enableOfficeWebApp, officeWebAppEditFileExtension } from './constants';
+  enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtention } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -217,6 +217,8 @@ export const Utils = {
       return onlyofficeEditFileExtension.includes(file_ext);
     } else if (enableOfficeWebApp) {
       return officeWebAppEditFileExtension.includes(file_ext);
+    } else if (enableMultipleOfficeSuite) {
+      return officeSuiteEditFileExtention.includes(file_ext);
     } else {
       return false;
     }

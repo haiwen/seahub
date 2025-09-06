@@ -172,6 +172,7 @@
             enableFileTags: {% if enable_file_tags %} true {% else %} false {% endif %},
             enableShowAbout: {% if enable_show_about %} true {% else %} false {% endif %},
             enableMultipleOfficeSuite: {% if user.permissions.can_choose_office_suite %} true {% else %} false {% endif %},
+            officeSuiteEditFileExtention: {% if office_suite_edit_file_extension %} {{office_suite_edit_file_extension|safe}} {% else %} null {% endif %},
             showWechatSupportGroup: {% if show_wechat_support_group %} true {% else %} false {% endif %},
             baiduMapKey: '{{ baidu_map_key }}',
             googleMapKey: '{{ google_map_key }}',
