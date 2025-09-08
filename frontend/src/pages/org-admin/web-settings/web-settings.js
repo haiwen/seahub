@@ -225,7 +225,7 @@ class OrgWebSettings extends Component {
                   <Section headingText={gettext('Delete')}>
                     <Fragment>
                       <button onClick={this.toggleDeleteOrganization.bind(this, null)} className="btn btn-outline-primary" >
-                        {gettext('Delete Organization')}
+                        {gettext('Delete Team')}
                       </button>
                     </Fragment>
                   </Section>

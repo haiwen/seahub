@@ -56,7 +56,7 @@ class OrgAdminDeleteOrgDialog extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <SeahubModalHeader toggle={this.toggle}>{gettext('Delete Organization')}</SeahubModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>{gettext('Delete Team')}</SeahubModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
