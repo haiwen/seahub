@@ -1,16 +1,16 @@
 import React, { createRef, useState, useCallback, useMemo, forwardRef, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem as DefaultDropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import classnames from 'classnames';
-import ModalPortal from '../../../../../../../components/modal-portal';
-import Icon from '../../../../../../../components/icon';
-import { RenamePopover, OptionsPopover } from '../../../../../../components/popover';
-import DropdownItem from './dropdown-item';
-import { gettext } from '../../../../../../../utils/constants';
-import { isMobile } from '../../../../../../../utils/utils';
-import { checkIsPrivateColumn } from '../../../../../../utils/column';
-import { getDateDisplayString } from '../../../../../../utils/cell';
-import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
+import ModalPortal from '@/components/modal-portal';
+import Icon from '@/components/icon';
+import { RenamePopover, OptionsPopover } from '@/metadata/components/popover';
+import ColumnDropdownItem from './column-dropdown-item';
+import { gettext } from '@/utils/constants';
+import { isMobile } from '@/utils/utils';
+import { checkIsPrivateColumn } from '@/metadata/utils/column';
+import { getDateDisplayString } from '@/metadata/utils/cell';
+import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '@/metadata/constants';
 
 import './index.css';
 
@@ -70,10 +70,6 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     modifyColumnData(column.key, { options }, { options: oldData.options || [] }, { optionModifyType });
   }, [column, modifyColumnData]);
 
-  // const toggleDefineCascade = useCallback(() => {
-
-  // }, []);
-
   const onChangeDateFormat = useCallback((event, newFormat) => {
     event && event.stopPropagation();
     const oldFormat = column.data ? column.data.format : '';
@@ -85,6 +81,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
   }, [column, modifyColumnData]);
 
   const onDelete = useCallback(() => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
     deleteColumn(column.key, column);
   }, [column, deleteColumn]);
 
@@ -109,7 +106,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     const { data = {} } = column;
     if (!canModifyColumnData) {
       return (
-        <DropdownItem
+        <ColumnDropdownItem
           disabled={true}
           target="sf-metadata-edit-column-format"
           title={gettext('Edit format settings')}
@@ -146,14 +143,14 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
         <DropdownMenu style={{ marginLeft: '-16px', transform: 'none' }}>
           {options.map(option => {
             return (
-              <DefaultDropdownItem
+              <DropdownItem
                 className="sf-metadata-column-dropdown-item"
                 toggle={false}
                 key={option.value}
                 onClick={(event) => onChangeDateFormat(event, option.value)}
               >
                 {<span>{option.label}</span>}
-              </DefaultDropdownItem>
+              </DropdownItem>
             );
           })}
         </DropdownMenu>
@@ -204,7 +201,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
         <div ref={dropdownDomRef}>
           {type === CellType.SINGLE_SELECT && (
             <>
-              <DropdownItem
+              <ColumnDropdownItem
                 disabled={!canModifyColumnData}
                 target="sf-metadata-edit-column-options"
                 iconName="single-select"
@@ -212,18 +209,10 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
                 tip={isPrivateColumn ? gettext('This property is not editable') : gettext('You do not have permission')}
                 onChange={openOptionPopover}
               />
-              {/* <DropdownItem
-                disabled={!canModifyColumnData}
-                target="sf-metadata-edit-column-define-cascade"
-                iconName="linkage"
-                title={gettext('Define cascade')}
-                tip={gettext('You do not have permission')}
-                onChange={toggleDefineCascade}
-              /> */}
             </>
           )}
           {type === CellType.MULTIPLE_SELECT && (
-            <DropdownItem
+            <ColumnDropdownItem
               disabled={!canModifyColumnData}
               target="sf-metadata-edit-column-options"
               iconName="multiple-select"
@@ -232,23 +221,13 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
               onChange={openOptionPopover}
             />
           )}
-          {/* {type === CellType.NUMBER && (
-            TODO:
-            <DropdownItem
-              disabled={!canModifyColumnData}
-              target="sf-metadata-edit-column-format"
-              iconName="set-up"
-              title={gettext('Edit format settings')}
-              onChange={() => {}}
-            />
-          )} */}
           {type === CellType.DATE && (
             <>{renderDateFormat(canModifyColumnData)}</>
           )}
           {[CellType.DATE, CellType.SINGLE_SELECT, CellType.MULTIPLE_SELECT].includes(column.type) && (
-            <DefaultDropdownItem key="divider-item" divider />
+            <DropdownItem key="divider-item" divider />
           )}
-          <DropdownItem
+          <ColumnDropdownItem
             disabled={!canRenameColumn}
             target="sf-metadata-rename-column"
             iconName="rename"
@@ -259,7 +238,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           />
           {(SORT_COLUMN_OPTIONS.includes(column.type) || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)) && (
             <>
-              <DropdownItem
+              <ColumnDropdownItem
                 disabled={!canModifyView || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
                 target="sf-metadata-sort-ascending-column"
                 iconName="sort-ascending"
@@ -268,7 +247,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
                 onChange={() => modifySort(SORT_TYPE.UP)}
                 onMouseEnter={hideSubMenu}
               />
-              <DropdownItem
+              <ColumnDropdownItem
                 disabled={!canModifyView || SHOW_DISABLED_SORT_COLUMNS.includes(column.type)}
                 target="sf-metadata-sort-descending-column"
                 iconName="sort-descending"
@@ -279,7 +258,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
               />
             </>
           )}
-          <DropdownItem
+          <ColumnDropdownItem
             disabled={!canDeleteColumn}
             target="sf-metadata-delete-column"
             iconName="delete"

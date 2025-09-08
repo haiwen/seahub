@@ -20,12 +20,18 @@ export const getSelectedRow = ({ selectedPosition, isGroupView, recordGetterByIn
 
 export const getSelectedColumn = ({ selectedPosition, columns }) => {
   const { idx } = selectedPosition;
+  if (!columns || idx < 0 || idx >= columns.length) {
+    return null;
+  }
   return getColumnByIndex(idx, columns);
 };
 
 export const getSelectedCellValue = ({ selectedPosition, columns, isGroupView, recordGetterByIndex }) => {
   const column = getSelectedColumn({ selectedPosition, columns });
   const record = getSelectedRow({ selectedPosition, isGroupView, recordGetterByIndex });
+  if (!column || !record) {
+    return null;
+  }
   return getCellValueByColumn(record, column);
 };
 
@@ -58,10 +64,7 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
 
 export function selectedRangeIsSingleCell(selectedRange) {
   const { topLeft, bottomRight } = selectedRange;
-  if (
-    topLeft.idx !== bottomRight.idx ||
-    topLeft.rowIdx !== bottomRight.rowIdx
-  ) {
+  if (topLeft.idx !== bottomRight.idx || topLeft.rowIdx !== bottomRight.rowIdx) {
     return false;
   }
   return true;
@@ -73,8 +76,9 @@ export const getSelectedDimensions = ({
 }) => {
   const { idx, rowIdx, groupRecordIndex } = selectedPosition;
   const defaultDimensions = { width: 0, left: 0, top: 0, height: rowHeight, zIndex: 1 };
-  if (idx >= 0) {
-    const column = columns && columns[idx];
+
+  if (idx >= 0 && columns && columns.length > 0) {
+    const column = columns[idx];
     if (!column) {
       return defaultDimensions;
     }
@@ -108,14 +112,22 @@ export function getNewSelectedRange(startCell, nextCellPosition) {
 const getColumnRangeProperties = (from, to, columns) => {
   let totalWidth = 0;
   let anyColFrozen = false;
-  for (let i = from; i <= to; i++) {
+
+  const validFrom = Math.max(0, Math.min(from, columns.length - 1));
+  const validTo = Math.max(0, Math.min(to, columns.length - 1));
+
+  for (let i = validFrom; i <= validTo; i++) {
     const column = columns[i];
     if (column) {
       totalWidth += column.width;
       anyColFrozen = anyColFrozen || column.frozen;
     }
   }
-  return { totalWidth, anyColFrozen, left: columns[from].left };
+
+  const firstColumn = columns[validFrom];
+  const left = firstColumn ? firstColumn.left : 0;
+
+  return { totalWidth, anyColFrozen, left };
 };
 
 export const getSelectedRangeDimensions = ({
@@ -123,7 +135,12 @@ export const getSelectedRangeDimensions = ({
   groupOffsetLeft, getRecordTopFromRecordsBody,
 }) => {
   const { topLeft, bottomRight, startCell, cursorCell } = selectedRange;
-  if (topLeft.idx < 0) {
+  if (topLeft.idx < 0 || !columns || columns.length === 0) {
+    return { width: 0, left: 0, top: 0, height: rowHeight, zIndex: metadataZIndexes.CELL_MASK };
+  }
+
+  const maxColumnIndex = columns.length - 1;
+  if (topLeft.idx > maxColumnIndex || bottomRight.idx > maxColumnIndex) {
     return { width: 0, left: 0, top: 0, height: rowHeight, zIndex: metadataZIndexes.CELL_MASK };
   }
 
