@@ -64,10 +64,7 @@ export const isSelectedCellEditable = ({ enableCellSelect, selectedPosition, col
 
 export function selectedRangeIsSingleCell(selectedRange) {
   const { topLeft, bottomRight } = selectedRange;
-  if (
-    topLeft.idx !== bottomRight.idx ||
-    topLeft.rowIdx !== bottomRight.rowIdx
-  ) {
+  if (topLeft.idx !== bottomRight.idx || topLeft.rowIdx !== bottomRight.rowIdx) {
     return false;
   }
   return true;
