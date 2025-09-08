@@ -1811,7 +1811,8 @@ def send_file_access_msg(request, repo, path, access_from, custom_ip=None, custo
     username = request.user.username
     ip = custom_ip or get_remote_ip(request)
     user_agent = custom_agent or request.headers.get("user-agent")
-
+    if not user_agent:
+        user_agent = ''
     msg = {
         'msg_type': 'file-download-' + access_from,
         'user_name': username,
