@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import { KeyCodes } from '../../../../../../constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../../../store/operations';
+import toaster from '../../../../../../components/toast';
+import { gettext } from '../../../../../../utils/constants';
 
 import './index.css';
 
@@ -19,7 +21,6 @@ const Name = ({
   const [name, setName] = useState(option?.name || '');
   const ref = useRef(null);
 
-  // Update name state when option changes
   useEffect(() => {
     setName(option?.name || '');
   }, [option?.name]);
@@ -33,11 +34,18 @@ const Name = ({
 
       if (option.name === '' && onRemoveEmptyOption) {
         onRemoveEmptyOption(option.id);
+      } else if (option.name !== '') {
+        toaster.danger(gettext('Name is required'));
+        setName(option.name);
       }
       return;
     }
 
-    if (newName === option.name) return;
+    if (newName === option.name) {
+      onToggleFreeze(false);
+      onClose();
+      return;
+    }
 
     const newOption = Object.assign({}, option, { name: newName });
     onChange(newOption, COLUMN_DATA_OPERATION_TYPE.RENAME_OPTION, () => {
