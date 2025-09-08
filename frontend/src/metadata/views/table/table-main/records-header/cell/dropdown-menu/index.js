@@ -85,6 +85,8 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
   }, [column, modifyColumnData]);
 
   const onDelete = useCallback(() => {
+    // Clear any cell selections before deleting the column to prevent crash
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
     deleteColumn(column.key, column);
   }, [column, deleteColumn]);
 
