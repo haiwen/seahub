@@ -4,7 +4,15 @@ import { Dirent } from '@/models';
 import toaster from '../../components/toast';
 import Context from '../context';
 import Store from '../store';
-import { CellType, EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, SUPPORT_SEARCH_COLUMN_LIST, TABLE_NOT_DISPLAY_COLUMN_KEYS } from '../constants';
+import {
+  CellType,
+  EVENT_BUS_TYPE,
+  PER_LOAD_NUMBER,
+  PRIVATE_COLUMN_KEY,
+  SUPPORT_SEARCH_COLUMN_LIST,
+  TABLE_NOT_DISPLAY_COLUMN_KEYS,
+  shouldPreserveSearchForOperation
+} from '../constants';
 import { Utils, validateName } from '../../utils/utils';
 import { useMetadata } from './metadata';
 import { useCollaborators } from './collaborators';
@@ -35,6 +43,13 @@ export const MetadataViewProvider = ({
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const [errorMessage, setErrorMessage] = useState(null);
 
+  const [searchState, setSearchState] = useState({
+    searchValue: '',
+    searchResult: null,
+    isActive: false,
+    lastSearchMetadata: null // Store original metadata before search
+  });
+
   const { collaborators, collaboratorsCache } = useCollaborators();
   const { isBeingBuilt, setIsBeingBuilt } = useMetadata();
   const { onOCR: OCRAPI, generateDescription, extractFilesDetails, faceRecognition, generateFileTags: generateFileTagsAPI } = useMetadataAIOperations();
@@ -45,32 +60,70 @@ export const MetadataViewProvider = ({
   const delayReloadDataTimer = useRef(null);
   const collaboratorsRef = useRef(collaborators);
 
-  const tableChanged = useCallback(() => {
-    setMetadata(storeRef.current.data);
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
+  const shouldPreserveSearch = useCallback((operationType) => {
+    if (!searchState.isActive || !searchState.searchValue) return false;
+    return shouldPreserveSearchForOperation(operationType);
+  }, [searchState.isActive, searchState.searchValue]);
+
+  const clearSearchState = useCallback(() => {
+    setSearchState({
+      searchValue: '',
+      searchResult: null,
+      isActive: false,
+      lastSearchMetadata: null
+    });
   }, []);
+
+  const updateSearchState = useCallback((updates) => {
+    setSearchState(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  const smartTableChangedRef = useRef(null);
+
+  const notifyTableChanged = useCallback((operationType) => {
+    if (smartTableChangedRef.current) {
+      smartTableChangedRef.current(operationType);
+    } else {
+      if (storeRef.current?.data) {
+        setMetadata(storeRef.current.data);
+      }
+      if (searchState.isActive) {
+        clearSearchState();
+        if (window.sfMetadataContext?.eventBus) {
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
+        }
+      }
+    }
+  }, [searchState.isActive, clearSearchState]);
+
+  const tableChanged = useCallback(() => {
+    notifyTableChanged(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
+  }, [notifyTableChanged]);
+
+  const serverTableChanged = useCallback(() => {
+    notifyTableChanged(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED);
+  }, [notifyTableChanged]);
 
   const handleTableError = useCallback((error) => {
     toaster.danger(error.error);
   }, []);
 
   const updateMetadata = useCallback((data) => {
-    setMetadata(data);
-  }, []);
+    notifyTableChanged(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS);
+  }, [notifyTableChanged]);
 
   const reloadMetadata = useCallback(() => {
     setLoading(true);
     storeRef.current.reload(PER_LOAD_NUMBER).then(() => {
-      setMetadata(storeRef.current.data);
       setLoading(false);
       delayReloadDataTimer.current = null;
+      notifyTableChanged(EVENT_BUS_TYPE.RELOAD_DATA);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       setErrorMessage(errorMsg);
       setLoading(false);
     });
-    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
-  }, []);
+  }, [notifyTableChanged]);
 
   const delayReloadMetadata = useCallback(() => {
     delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
@@ -81,31 +134,38 @@ export const MetadataViewProvider = ({
 
   const modifyFilters = useCallback((filters, filterConjunction, basicFilters) => {
     storeRef.current.modifyFilters(filterConjunction, filters, basicFilters);
-  }, [storeRef]);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_FILTERS), 0);
+  }, [storeRef, notifyTableChanged]);
 
   const modifySorts = useCallback((sorts, displaySorts = false) => {
     storeRef.current.modifySorts(sorts, displaySorts);
-  }, [storeRef]);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_SORTS), 0);
+  }, [storeRef, notifyTableChanged]);
 
   const modifyGroupbys = useCallback((groupbys) => {
     storeRef.current.modifyGroupbys(groupbys);
-  }, [storeRef]);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_GROUPBYS), 0);
+  }, [storeRef, notifyTableChanged]);
 
   const modifyHiddenColumns = useCallback((hiddenColumns) => {
     storeRef.current.modifyHiddenColumns(hiddenColumns);
-  }, [storeRef]);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_HIDDEN_COLUMNS), 0);
+  }, [storeRef, notifyTableChanged]);
 
   const modifySettings = useCallback((settings) => {
     storeRef.current.modifySettings(settings);
-  }, [storeRef]);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_SETTINGS), 0);
+  }, [storeRef, notifyTableChanged]);
 
   const updateLocalRecord = useCallback(({ recordId, parentDir, fileName }, update) => {
     storeRef.current.modifyLocalRecord({ record_id: recordId, parent_dir: parentDir, file_name: fileName }, update);
-  }, [storeRef]);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED), 0);
+  }, [storeRef, notifyTableChanged]);
 
   const updateLocalColumnData = useCallback((columnKey, newData, oldData) => {
     storeRef.current.modifyLocalColumnData(columnKey, newData, oldData);
-  }, []);
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED), 0);
+  }, [notifyTableChanged]);
 
   const modifyRecords = useCallback((rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste = false, { success_callback, fail_callback } = {}) => {
     const isRename = storeRef.current.checkIsRenameFileOperator(rowIds, idOriginalRowUpdates);
@@ -284,7 +344,9 @@ export const MetadataViewProvider = ({
 
   const modifyColumnOrder = useCallback((sourceColumnKey, targetColumnKey) => {
     storeRef.current.modifyColumnOrder(sourceColumnKey, targetColumnKey);
-  }, [storeRef]);
+    // Column order changes preserve search context
+    setTimeout(() => notifyTableChanged(EVENT_BUS_TYPE.MODIFY_COLUMN_ORDER), 0);
+  }, [storeRef, notifyTableChanged]);
 
   const insertColumn = useCallback((name, type, { key, data }) => {
     storeRef.current.insertColumn(name, type, { key, data });
@@ -745,24 +807,106 @@ export const MetadataViewProvider = ({
     };
   }, [filterGroups]);
 
+  const reapplySearchToMetadata = useCallback((searchValue, baseMetadata) => {
+    if (!searchValue || !baseMetadata) return baseMetadata;
+
+    const searchRegRule = getSearchRule(searchValue);
+    if (!searchRegRule) return baseMetadata;
+
+    const { columns, hidden_columns } = baseMetadata.view;
+    const searchableColumns = columns.filter(column =>
+      !globalHiddenColumns.includes(column.key) &&
+      !hidden_columns.includes(column.key) &&
+      !TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(column.key) &&
+      SUPPORT_SEARCH_COLUMN_LIST.includes(column.type)
+    );
+
+    if (!searchableColumns.length) return baseMetadata;
+
+    const collaborators = collaboratorsRef.current;
+    const tagsData = window.sfTagsDataStore?.data;
+    const { searchResult, hasMatches } = performSearch(
+      baseMetadata,
+      searchableColumns,
+      searchRegRule,
+      collaborators,
+      tagsData,
+      collaboratorsCache
+    );
+
+    const matchedRowIds = Object.keys(searchResult.matchedRows);
+    const filteredMetadata = createFilteredMetadata(baseMetadata, matchedRowIds, hasMatches);
+
+    setSearchState(prev => ({
+      ...prev,
+      searchResult,
+      lastSearchMetadata: baseMetadata
+    }));
+
+    return filteredMetadata;
+  }, [globalHiddenColumns, collaboratorsCache, performSearch, createFilteredMetadata]);
+
+  const smartTableChanged = useCallback((operationType = 'UNKNOWN') => {
+    if (!storeRef.current?.data) {
+      return;
+    }
+
+    const newMetadata = storeRef.current.data;
+
+    if (shouldPreserveSearch(operationType)) {
+      if (searchState.searchValue) {
+        const filteredMetadata = reapplySearchToMetadata(searchState.searchValue, newMetadata);
+        setMetadata(filteredMetadata);
+      } else {
+        setMetadata(newMetadata);
+      }
+    } else {
+      // Clear search: show full new data (only for filters and groupby)
+      setMetadata(newMetadata);
+      if (searchState.isActive) {
+        clearSearchState();
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_SEARCH_BAR);
+      }
+    }
+  }, [searchState, shouldPreserveSearch, reapplySearchToMetadata, clearSearchState]);
+
+  smartTableChangedRef.current = smartTableChanged;
+
   const handleSearchRows = useCallback((searchVal, callback) => {
-    const metadata = storeRef.current.data;
+    const metadata = storeRef.current?.data;
     const tagsData = window.sfTagsDataStore?.data;
 
-    if (!searchVal || !metadata?.rows?.length) {
+    if (!metadata || !metadata.rows || !metadata.view || !metadata.view.columns) {
       callback && callback(null);
-      setMetadata(storeRef.current.data);
+      return;
+    }
+
+    if (!searchVal || !metadata.rows.length) {
+      setSearchState({
+        searchValue: '',
+        searchResult: null,
+        isActive: false,
+        lastSearchMetadata: null
+      });
+      setMetadata(metadata);
+      callback && callback(null);
       return;
     }
 
     const searchRegRule = getSearchRule(searchVal);
     if (!searchRegRule) {
+      setSearchState({
+        searchValue: '',
+        searchResult: null,
+        isActive: false,
+        lastSearchMetadata: null
+      });
+      setMetadata(metadata);
       callback && callback(null);
-      setMetadata(storeRef.current.data);
       return;
     }
 
-    const { columns, hidden_columns } = storeRef.current.data.view;
+    const { columns, hidden_columns } = metadata.view;
     const searchableColumns = columns.filter(column =>
       !globalHiddenColumns.includes(column.key) &&
       !hidden_columns.includes(column.key) &&
@@ -789,12 +933,28 @@ export const MetadataViewProvider = ({
     const matchedRowIds = Object.keys(searchResult.matchedRows);
     const newMetadata = createFilteredMetadata(metadata, matchedRowIds, hasMatches);
 
+    setSearchState({
+      searchValue: searchVal,
+      searchResult,
+      isActive: true,
+      lastSearchMetadata: metadata
+    });
+
     setMetadata(newMetadata);
     callback && callback(searchResult);
   }, [globalHiddenColumns, collaboratorsCache, createFilteredMetadata, performSearch]);
 
   // init
   useEffect(() => {
+    if (searchState.isActive) {
+      setSearchState({
+        searchValue: '',
+        searchResult: null,
+        isActive: false,
+        lastSearchMetadata: null
+      });
+    }
+
     setLoading(true);
     // init context
     const context = new Context();
@@ -812,7 +972,7 @@ export const MetadataViewProvider = ({
       toaster.danger(errorMsg);
     });
     const eventBus = window.sfMetadataContext.eventBus;
-    const unsubscribeServerTableChanged = eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, tableChanged);
+    const unsubscribeServerTableChanged = eventBus.subscribe(EVENT_BUS_TYPE.SERVER_TABLE_CHANGED, serverTableChanged);
     const unsubscribeTableChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED, tableChanged);
     const unsubscribeHandleTableError = eventBus.subscribe(EVENT_BUS_TYPE.TABLE_ERROR, handleTableError);
     const unsubscribeUpdateRows = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TABLE_ROWS, updateMetadata);
@@ -887,6 +1047,8 @@ export const MetadataViewProvider = ({
         errorMessage,
         metadata,
         store: storeRef.current,
+        searchState,
+        updateSearchState,
         isDirentDetailShow: params.isDirentDetailShow,
         updateCurrentDirent: params.updateCurrentDirent,
         showDirentDetail: params.showDirentDetail,
