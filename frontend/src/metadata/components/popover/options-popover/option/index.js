@@ -14,6 +14,7 @@ const Option = ({
   option, index,
   onDelete: propsDelete, onUpdate, onMove,
   onMouseLeave, onMouseEnter: propsMouseEnter, onToggleFreeze, onOpenNameEditor, onCloseNameEditor,
+  onRemoveEmptyOption,
 }) => {
   const ref = useRef(null);
   const [dropPosition, setDropPosition] = useState(null);
@@ -89,6 +90,7 @@ const Option = ({
           onToggleFreeze={onToggleFreeze}
           onOpen={onOpenNameEditor}
           onClose={onCloseNameEditor}
+          onRemoveEmptyOption={onRemoveEmptyOption}
         />
       </div>
       <div id={`sf-metadata-edit-option-more-operation-${option.id}`} className="sf-metadata-edit-option-more-operations">
@@ -115,6 +117,7 @@ Option.propTypes = {
   onToggleFreeze: PropTypes.func,
   onOpenNameEditor: PropTypes.func.isRequired,
   onCloseNameEditor: PropTypes.func.isRequired,
+  onRemoveEmptyOption: PropTypes.func,
 };
 
 export default Option;

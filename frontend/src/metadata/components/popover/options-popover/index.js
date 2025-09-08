@@ -123,6 +123,12 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
     setEditingOptionId('');
   }, []);
 
+  const onRemoveEmptyOption = useCallback((optionId) => {
+    const newOptions = options.filter(option => option.id !== optionId);
+    setOptions(newOptions);
+    setEditingOptionId('');
+  }, [options]);
+
   const onSearchValueChange = useCallback((value) => {
     if (searchValue === value) return;
     setSearchValue(value);
@@ -189,10 +195,11 @@ const OptionsPopover = ({ target, column, onToggle, onSubmit }) => {
           onToggleFreeze={onToggleFreeze}
           onOpenNameEditor={onOpenNameEditor}
           onCloseNameEditor={onCloseNameEditor}
+          onRemoveEmptyOption={onRemoveEmptyOption}
         />
       );
     }) : [];
-  }, [column, displayOptions, editingOptionId, deletingOptionId, viewingOptionId, onMove, onUpdate, updateDeleteOption, onMouseEnter, onMouseLeave, onToggleFreeze, onOpenNameEditor, onCloseNameEditor]);
+  }, [column, displayOptions, editingOptionId, deletingOptionId, viewingOptionId, onMove, onUpdate, updateDeleteOption, onMouseEnter, onMouseLeave, onToggleFreeze, onOpenNameEditor, onCloseNameEditor, onRemoveEmptyOption]);
 
   return (
     <>

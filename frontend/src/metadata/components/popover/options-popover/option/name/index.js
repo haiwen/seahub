@@ -14,13 +14,31 @@ const Name = ({
   onClose,
   onToggleFreeze,
   onChange,
+  onRemoveEmptyOption,
 }) => {
   const [name, setName] = useState(option?.name || '');
   const ref = useRef(null);
 
+  // Update name state when option changes
+  useEffect(() => {
+    setName(option?.name || '');
+  }, [option?.name]);
+
   const onSave = useCallback(() => {
     let newName = name.trim();
-    if (newName === option.name || newName === '') return;
+
+    if (newName === '') {
+      onToggleFreeze(false);
+      onClose();
+
+      if (option.name === '' && onRemoveEmptyOption) {
+        onRemoveEmptyOption(option.id);
+      }
+      return;
+    }
+
+    if (newName === option.name) return;
+
     const newOption = Object.assign({}, option, { name: newName });
     onChange(newOption, COLUMN_DATA_OPERATION_TYPE.RENAME_OPTION, () => {
       onToggleFreeze(false);
@@ -28,7 +46,7 @@ const Name = ({
     }, () => {
       onOpen(option.id);
     });
-  }, [name, onToggleFreeze, option, onChange, onOpen, onClose]);
+  }, [name, onToggleFreeze, option, onChange, onOpen, onClose, onRemoveEmptyOption]);
 
   const onClick = useCallback((event) => {
     if ((ref.current && !ref.current.contains(event.target)) && isEditing) {
@@ -59,10 +77,9 @@ const Name = ({
   useEffect(() => {
     document.addEventListener('mousedown', onClick);
     return () => {
-      document.addEventListener('mousedown', onClick);
+      document.removeEventListener('mousedown', onClick);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onClick]);
 
   return (
     <div ref={ref} className="sf-metadata-edit-option-name" style={{ width: 'calc(100% - 30px)' }} >
@@ -90,6 +107,7 @@ Name.propTypes = {
   onClose: PropTypes.func,
   onChange: PropTypes.func,
   onToggleFreeze: PropTypes.func,
+  onRemoveEmptyOption: PropTypes.func,
 };
 
 export default Name;
