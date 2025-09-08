@@ -70,10 +70,6 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     modifyColumnData(column.key, { options }, { options: oldData.options || [] }, { optionModifyType });
   }, [column, modifyColumnData]);
 
-  // const toggleDefineCascade = useCallback(() => {
-
-  // }, []);
-
   const onChangeDateFormat = useCallback((event, newFormat) => {
     event && event.stopPropagation();
     const oldFormat = column.data ? column.data.format : '';
@@ -85,7 +81,6 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
   }, [column, modifyColumnData]);
 
   const onDelete = useCallback(() => {
-    // Clear any cell selections before deleting the column to prevent crash
     window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
     deleteColumn(column.key, column);
   }, [column, deleteColumn]);
@@ -214,14 +209,6 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
                 tip={isPrivateColumn ? gettext('This property is not editable') : gettext('You do not have permission')}
                 onChange={openOptionPopover}
               />
-              {/* <DropdownItem
-                disabled={!canModifyColumnData}
-                target="sf-metadata-edit-column-define-cascade"
-                iconName="linkage"
-                title={gettext('Define cascade')}
-                tip={gettext('You do not have permission')}
-                onChange={toggleDefineCascade}
-              /> */}
             </>
           )}
           {type === CellType.MULTIPLE_SELECT && (
@@ -234,16 +221,6 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
               onChange={openOptionPopover}
             />
           )}
-          {/* {type === CellType.NUMBER && (
-            TODO:
-            <DropdownItem
-              disabled={!canModifyColumnData}
-              target="sf-metadata-edit-column-format"
-              iconName="set-up"
-              title={gettext('Edit format settings')}
-              onChange={() => {}}
-            />
-          )} */}
           {type === CellType.DATE && (
             <>{renderDateFormat(canModifyColumnData)}</>
           )}

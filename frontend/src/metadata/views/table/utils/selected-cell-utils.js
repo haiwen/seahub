@@ -116,7 +116,6 @@ const getColumnRangeProperties = (from, to, columns) => {
   let totalWidth = 0;
   let anyColFrozen = false;
 
-  // Ensure indices are within bounds
   const validFrom = Math.max(0, Math.min(from, columns.length - 1));
   const validTo = Math.max(0, Math.min(to, columns.length - 1));
 
@@ -128,7 +127,6 @@ const getColumnRangeProperties = (from, to, columns) => {
     }
   }
 
-  // Safely get the left position from the first valid column
   const firstColumn = columns[validFrom];
   const left = firstColumn ? firstColumn.left : 0;
 
@@ -144,7 +142,6 @@ export const getSelectedRangeDimensions = ({
     return { width: 0, left: 0, top: 0, height: rowHeight, zIndex: metadataZIndexes.CELL_MASK };
   }
 
-  // Check if the selected range indices are still valid after column deletion
   const maxColumnIndex = columns.length - 1;
   if (topLeft.idx > maxColumnIndex || bottomRight.idx > maxColumnIndex) {
     return { width: 0, left: 0, top: 0, height: rowHeight, zIndex: metadataZIndexes.CELL_MASK };
