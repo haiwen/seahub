@@ -85,7 +85,7 @@ export const DELETED_OPTION_TIPS = 'Deleted option';
 
 export const SUPPORT_BATCH_DOWNLOAD_TYPES = [];
 
-export const PER_LOAD_NUMBER = 1000;
+export const PER_LOAD_NUMBER = 10000;
 
 export const DEFAULT_RETRY_TIMES = 4;
 
