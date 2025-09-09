@@ -321,13 +321,14 @@ class MarkdownEditor extends React.Component {
     const fileName = Utils.getFileName(filePath);
     const suffix = fileName.slice(fileName.indexOf('.') + 1);
     const eventBus = EventBus.getInstance();
+    const editor = this.editorRef.current.getEditor();
     if (IMAGE_SUFFIXES.includes(suffix)) {
       let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath) + '?raw=1';
-      eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, isImage: true, selection });
+      eventBus.dispatch(EXTERNAL_EVENTS.INSERT_ATTACHMENTS, editor, { title: fileName, url: innerURL, isImage: true, selection });
       return;
     }
     let innerURL = serviceUrl + '/lib/' + repoID + '/file' + Utils.encodePath(filePath);
-    eventBus.dispatch(EXTERNAL_EVENTS.INSERT_IMAGE, { title: fileName, url: innerURL, selection });
+    eventBus.dispatch(EXTERNAL_EVENTS.INSERT_ATTACHMENTS, editor, { title: fileName, url: innerURL, selection });
   };
 
   addParticipants = () => {
