@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { InputGroupText } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, enableMultiADFS } from '../../../utils/constants';
+import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, orgEnableAdminDeleteOrg, enableMultiADFS } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -10,6 +10,7 @@ import Section from '../../common-admin/web-settings/section';
 import CheckboxItem from '../../common-admin/web-settings/checkbox-item';
 import FileItem from '../../common-admin/web-settings/file-item';
 import InputItem from './input-item';
+import DeleteOrganizationDialog from '../../../components/dialog/org-admin-delete-org-dialog';
 
 import '../../../css/system-admin-web-settings.css';
 
@@ -29,7 +30,8 @@ class OrgWebSettings extends Component {
       force_adfs_login: false,
       disable_org_encrypted_library: false,
       disable_org_user_clean_trash: false,
-      user_default_quota: 0
+      user_default_quota: 0,
+      isDeleteOrganizationDialogShow: false,
     };
   }
 
@@ -98,6 +100,19 @@ class OrgWebSettings extends Component {
   orgUpdateUserDefaultQuota = (key, quota) => {
     orgAdminAPI.orgAdminSetOrgUserDefaultQuota(orgID, parseInt(quota)).then((res) => {
       toaster.success(gettext('User default quota updated'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  toggleDeleteOrganization = () => {
+    this.setState({ isDeleteOrganizationDialogShow: !this.state.isDeleteOrganizationDialogShow });
+  };
+
+  deleteOrganization = () => {
+    orgAdminAPI.orgAdminDeleteOrg(orgID).then((res) => {
+      window.location.href = '/';
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -206,11 +221,27 @@ class OrgWebSettings extends Component {
                     />
                   </Fragment>
                 </Section>
+                {orgEnableAdminDeleteOrg &&
+                  <Section headingText={gettext('Delete')}>
+                    <Fragment>
+                      <button onClick={this.toggleDeleteOrganization.bind(this, null)} className="btn btn-outline-primary" >
+                        {gettext('Delete Team')}
+                      </button>
+                    </Fragment>
+                  </Section>
+                }
               </Fragment>
               }
             </div>
           </div>
         </div>
+        {this.state.isDeleteOrganizationDialogShow &&
+          <DeleteOrganizationDialog
+            organizationName={config_dict['org_name']}
+            toggle={this.toggleDeleteOrganization}
+            handleSubmit={this.deleteOrganization}
+          />
+        }
       </Fragment>
     );
   }

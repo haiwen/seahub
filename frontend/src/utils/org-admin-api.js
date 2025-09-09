@@ -566,6 +566,11 @@ class OrgAdminAPI {
     return this.req.put(url, form);
   }
 
+  orgAdminDeleteOrg(orgID) {
+    const url = this.server + '/api/v2.1/org/' + orgID + '/admin/delete-org/';
+    return this.req.delete(url);
+  }
+
 }
 
 let orgAdminAPI = new OrgAdminAPI();

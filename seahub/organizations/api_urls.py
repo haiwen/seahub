@@ -26,6 +26,7 @@ from .api.admin.user_repos import OrgAdminUserRepos, OrgAdminUserBesharedRepos
 
 from .api.admin.devices import OrgAdminDevices, OrgAdminDevicesErrors
 from .api.admin.logo import OrgAdminLogo
+from .api.admin.delete_org import OrgAdminDeleteOrg
 
 from .api.admin.statistics import OrgFileOperationsView, OrgTotalStorageView, \
         OrgActiveUsersView, OrgSystemTrafficView, OrgUserTrafficView, \
@@ -65,6 +66,7 @@ urlpatterns = [
         OrgVerifyDomain.as_view(),
         name='api-v2.1-org-admin-verify-domain'),
 
+    path('<int:org_id>/admin/delete-org/', OrgAdminDeleteOrg.as_view(), name='api-v2.1-org-admin-delete-org'),
     path('<int:org_id>/admin/logo/', OrgAdminLogo.as_view(), name='api-v2.1-org-admin-logo'),
     path('<int:org_id>/admin/devices/', OrgAdminDevices.as_view(), name='api-v2.1-org-admin-devices'),
     path('<int:org_id>/admin/devices-errors/', OrgAdminDevicesErrors.as_view(), name='api-v2.1-org-admin-devices-errors'),
