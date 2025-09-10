@@ -5,12 +5,13 @@ import classnames from 'classnames';
 import ModalPortal from '@/components/modal-portal';
 import Icon from '@/components/icon';
 import { RenamePopover, OptionsPopover } from '@/metadata/components/popover';
+import NumberFormatPopover from './number-format-popover';
 import ColumnDropdownItem from './column-dropdown-item';
 import { gettext } from '@/utils/constants';
 import { isMobile } from '@/utils/utils';
-import { checkIsPrivateColumn } from '@/metadata/utils/column';
+import { checkIsPrivateColumn, isNumberColumn } from '@/metadata/utils/column';
 import { getDateDisplayString } from '@/metadata/utils/cell';
-import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '@/metadata/constants';
+import { CellType, DEFAULT_DATE_FORMAT, DEFAULT_NUMBER_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '@/metadata/constants';
 
 import './index.css';
 
@@ -21,6 +22,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
   const [isSubMenuShow, setSubMenuShow] = useState(false);
   const [isRenamePopoverShow, setRenamePopoverShow] = useState(false);
   const [isOptionPopoverShow, setOptionPopoverShow] = useState(false);
+  const [isNumberFormatPopoverShow, setNumberFormatPopoverShow] = useState(false);
 
   const isPrivateColumn = useMemo(() => {
     return checkIsPrivateColumn(column);
@@ -64,6 +66,14 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     setOptionPopoverShow(false);
   }, []);
 
+  const openNumberFormatPopover = useCallback(() => {
+    setNumberFormatPopoverShow(true);
+  }, []);
+
+  const closeNumberFormatPopover = useCallback(() => {
+    setNumberFormatPopoverShow(false);
+  }, []);
+
   const onUpdateOptions = useCallback((options, optionModifyType) => {
     const oldData = column.data || {};
     setMenuShow(false);
@@ -78,6 +88,13 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     if (oldFormat !== newFormat) {
       modifyColumnData(column.key, { format: newFormat }, { format: oldFormat });
     }
+  }, [column, modifyColumnData]);
+
+  const onUpdateNumberFormat = useCallback((newFormatData) => {
+    const oldData = column.data || {};
+    setNumberFormatPopoverShow(false);
+    setMenuShow(false);
+    modifyColumnData(column.key, newFormatData, oldData);
   }, [column, modifyColumnData]);
 
   const onDelete = useCallback(() => {
@@ -185,9 +202,9 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
 
   useImperativeHandle(ref, () => ({
     isPopoverShow: () => {
-      return isRenamePopoverShow || isOptionPopoverShow;
+      return isRenamePopoverShow || isOptionPopoverShow || isNumberFormatPopoverShow;
     },
-  }), [isRenamePopoverShow, isOptionPopoverShow]);
+  }), [isRenamePopoverShow, isOptionPopoverShow, isNumberFormatPopoverShow]);
 
   const renderDropdownMenu = useCallback(() => {
     const { type } = column;
@@ -224,7 +241,18 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           {type === CellType.DATE && (
             <>{renderDateFormat(canModifyColumnData)}</>
           )}
-          {[CellType.DATE, CellType.SINGLE_SELECT, CellType.MULTIPLE_SELECT].includes(column.type) && (
+          {type === CellType.NUMBER && (
+            <ColumnDropdownItem
+              disabled={!canModifyColumnData}
+              target="sf-metadata-edit-number-format"
+              iconName="set-up"
+              title={gettext('Edit format settings')}
+              tip={isPrivateColumn ? gettext('This property is not editable') : gettext('You do not have permission')}
+              onChange={openNumberFormatPopover}
+              onMouseEnter={hideSubMenu}
+            />
+          )}
+          {[CellType.DATE, CellType.SINGLE_SELECT, CellType.MULTIPLE_SELECT, CellType.NUMBER].includes(column.type) && (
             <DropdownItem key="divider-item" divider />
           )}
           <ColumnDropdownItem
@@ -309,6 +337,16 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
             column={column}
             onToggle={closeOptionPopover}
             onSubmit={onUpdateOptions}
+          />
+        </ModalPortal>
+      )}
+      {isNumberFormatPopoverShow && (
+        <ModalPortal>
+          <NumberFormatPopover
+            target={`sf-metadata-column-${column.key}`}
+            column={column}
+            onToggle={closeNumberFormatPopover}
+            onSubmit={onUpdateNumberFormat}
           />
         </ModalPortal>
       )}
