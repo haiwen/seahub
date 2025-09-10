@@ -36,7 +36,7 @@
     <input name="access_token_ttl" value="{{access_token_ttl}}" type="hidden"/>
 </form>
 
-<iframe id="office_frame" name="office_frame" class="hide" allowfullscreen ></iframe>
+<iframe id="office_frame" name="office_frame" class="hide" allowfullscreen allow="clipboard-read *; clipboard-write *"></iframe>
 
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
