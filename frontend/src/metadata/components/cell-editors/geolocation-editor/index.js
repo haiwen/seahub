@@ -16,9 +16,46 @@ import { DEFAULT_POSITION } from '../../../constants';
 
 import './index.css';
 
-const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmit, onFullScreen, onReadyToEraseLocation, onMapReady }) => {
+const MapInstanceCache = {
+  instances: new Map(),
+
+  getKey(containerId, type) {
+    return `${type}_${containerId}`;
+  },
+
+  get(containerId, type) {
+    const key = this.getKey(containerId, type);
+    return this.instances.get(key);
+  },
+
+  set(containerId, type, mapInstance) {
+    const key = this.getKey(containerId, type);
+    this.instances.set(key, mapInstance);
+  },
+
+  remove(containerId, type) {
+    const key = this.getKey(containerId, type);
+    this.instances.delete(key);
+  },
+
+  clear() {
+    this.instances.clear();
+  }
+};
+
+const GeolocationEditor = ({
+  position,
+  locationTranslated,
+  isFullScreen,
+  onSubmit,
+  onFullScreen,
+  onReadyToEraseLocation,
+  onMapReady,
+  editorId = 'default'
+}) => {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [isMapInitialized, setMapInitialized] = useState(false);
 
   const type = useMemo(() => {
     const { type } = initMapInfo({ baiduMapKey, googleMapKey });
@@ -31,8 +68,8 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
   const markerRef = useRef(null);
   const labelRef = useRef(null);
   const googlePlacesRef = useRef(null);
+  const containerIdRef = useRef(`geolocation-editor-${editorId}-${Date.now()}`);
 
-  // Initialize input value with stored address if available
   useEffect(() => {
     if (locationTranslated?.address) {
       setInputValue(locationTranslated.address);
@@ -44,6 +81,8 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
   }, []);
 
   const search = useCallback(() => {
+    if (!mapRef.current) return;
+
     if (type === MAP_TYPE.B_MAP) {
       const options = {
         onSearchComplete: (results) => {
@@ -219,7 +258,6 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
           tags: []
         };
 
-        // Ensure marker and map are positioned correctly
         if (markerRef.current) {
           markerRef.current.setPosition(storedPoint);
         }
@@ -250,7 +288,6 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
           location_translated: locationTranslated
         };
 
-        // Ensure marker and map are positioned correctly
         if (markerRef.current) {
           markerRef.current.position = position;
         } else {
@@ -280,19 +317,72 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
     }
   }, [type, setupLabelEventListeners, parseBMapAddress, parseGMapAddress, locationTranslated, position, submit]);
 
+  const initializeOrReuseMap = useCallback(() => {
+    if (!ref.current) return;
+
+    const containerId = containerIdRef.current;
+
+    const cachedMap = MapInstanceCache.get(containerId, type);
+
+    if (cachedMap && cachedMap.getContainer && cachedMap.getContainer() === ref.current) {
+      mapRef.current = cachedMap;
+      setMapInitialized(true);
+
+      const targetPosition = isValidPosition(position?.lng, position?.lat) ? position : DEFAULT_POSITION;
+
+      if (type === MAP_TYPE.B_MAP) {
+        const point = new window.BMapGL.Point(targetPosition.lng, targetPosition.lat);
+        mapRef.current.setCenter(point);
+
+        if (markerRef.current) {
+          markerRef.current.setPosition(point);
+        }
+
+        if (locationTranslated?.address) {
+          addLabel(point, true);
+        }
+      } else if (type === MAP_TYPE.G_MAP) {
+        mapRef.current.setCenter(targetPosition);
+
+        if (markerRef.current) {
+          markerRef.current.position = targetPosition;
+        } else if (isValidPosition(position?.lng, position?.lat)) {
+          markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+            position: targetPosition,
+            map: mapRef.current,
+          });
+        }
+
+        if (locationTranslated?.address) {
+          addLabel(targetPosition, true);
+        }
+      }
+
+      onMapReady?.();
+      return;
+    }
+
+    if (type === MAP_TYPE.B_MAP) {
+      renderBaiduMap();
+    } else if (type === MAP_TYPE.G_MAP) {
+      renderGoogleMap();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [type, position, locationTranslated, addLabel, onMapReady]);
+
   const renderBaiduMap = useCallback(() => {
     if (!window.BMapGL.Map || !ref.current) return;
 
-    // Always create a fresh map instance
     mapRef.current = new window.BMapGL.Map(ref.current);
     const initPos = isValidPosition(position?.lng, position?.lat) ? position : DEFAULT_POSITION;
     const point = new window.BMapGL.Point(initPos.lng, initPos.lat);
 
-    // Small delay to ensure map container has proper dimensions
     setTimeout(() => {
       mapRef.current.centerAndZoom(point, 16);
       mapRef.current.enableScrollWheelZoom();
       mapRef.current.clearOverlays();
+
+      MapInstanceCache.set(containerIdRef.current, type, mapRef.current);
 
       const ZoomControl = createBMapZoomControl({
         anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
@@ -318,10 +408,10 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
 
       markerRef.current = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
       geocRef.current = new window.BMapGL.Geocoder();
+
       if (isValidPosition(position?.lng, position?.lat)) {
         mapRef.current.addOverlay(markerRef.current);
 
-        // If we have stored address, ensure map is centered on the actual stored position
         if (locationTranslated?.address) {
           const actualPoint = new window.BMapGL.Point(position.lng, position.lat);
           markerRef.current.setPosition(actualPoint);
@@ -347,11 +437,11 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
         addLabel(point, false);
       });
 
-      // Notify parent that map is ready
+      setMapInitialized(true);
       onMapReady?.();
     }, 10);
 
-  }, [position, onMapReady, addLabel, locationTranslated?.address, searchResults.length]);
+  }, [position, onMapReady, addLabel, locationTranslated?.address, searchResults.length, type]);
 
   const renderGoogleMap = useCallback(() => {
     if (!window.google?.maps?.Map || !ref.current) return;
@@ -360,10 +450,8 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
     const initPos = isValid ? position : DEFAULT_POSITION;
     const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
 
-    // Use stored position for initial center if available, otherwise use initPos
     const initialCenter = isValid && locationTranslated?.address ? position : initPos;
 
-    // Always create a fresh map instance
     mapRef.current = new window.google.maps.Map(ref.current, {
       center: initialCenter,
       zoom: 16,
@@ -380,15 +468,13 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
       colorScheme: isDark ? window.google.maps.ColorScheme.DARK : window.google.maps.ColorScheme.LIGHT,
     });
 
-    // Small delay to ensure map container has proper dimensions
     setTimeout(() => {
-      // Force resize trigger to ensure proper map layout
       window.google.maps.event.trigger(mapRef.current, 'resize');
 
-      // Re-center the map after resize
       mapRef.current.setCenter(initialCenter);
 
-      // control
+      MapInstanceCache.set(containerIdRef.current, type, mapRef.current);
+
       const zoomControl = createZoomControl({ map: mapRef.current });
       const geolocationControl = createGeolocationControl({
         map: mapRef.current,
@@ -471,10 +557,10 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
         });
       });
 
-      // Notify parent that map is ready
+      setMapInitialized(true);
       onMapReady?.();
     }, 10);
-  }, [position, locationTranslated?.address, onMapReady, parseGMapAddress, addLabel, searchResults.length]);
+  }, [position, locationTranslated?.address, onMapReady, parseGMapAddress, addLabel, searchResults.length, type]);
 
   const toggleFullScreen = useCallback((e) => {
     e.stopPropagation();
@@ -483,6 +569,8 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
   }, [onFullScreen]);
 
   const onSelect = useCallback((result) => {
+    if (!mapRef.current) return;
+
     const { lngLat, title, address } = result;
     let point = lngLat;
     if (type === MAP_TYPE.B_MAP) {
@@ -524,50 +612,63 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
   }, [type, addLabel]);
 
   useEffect(() => {
-    // Reset map reference to ensure fresh initialization
-    mapRef.current = null;
     markerRef.current = null;
     labelRef.current = null;
+    setMapInitialized(false);
 
-    // Always re-initialize the map to ensure proper centering
-    // Add a small delay to ensure DOM is fully rendered when component re-mounts
     const initializeMap = () => {
       const { type, key } = initMapInfo({ baiduMapKey, googleMapKey });
       if (type === MAP_TYPE.B_MAP) {
         if (!window.BMapGL) {
-          window.renderBaiduMap = () => renderBaiduMap();
+          window.renderBaiduMap = () => initializeOrReuseMap();
           loadMapSource(type, key);
         } else {
-          renderBaiduMap();
+          initializeOrReuseMap();
         }
       } else if (type === MAP_TYPE.G_MAP) {
         if (!window.google?.maps.Map) {
-          window.renderGoogleMap = () => renderGoogleMap();
+          window.renderGoogleMap = () => initializeOrReuseMap();
           loadMapSource(type, key);
         } else {
-          renderGoogleMap();
+          initializeOrReuseMap();
         }
       }
     };
 
-    // Use setTimeout to ensure DOM is ready, especially important for re-mounted components
-    const timeoutId = setTimeout(initializeMap, 50);
+    const timeoutId = setTimeout(initializeMap, 10);
 
     return () => {
       clearTimeout(timeoutId);
-      if (mapRef.current) {
-        if (type === MAP_TYPE.B_MAP) {
-          mapRef.current.clearOverlays?.();
-        } else if (labelRef.current) {
-          labelRef.current.setMap?.(null);
-        }
-        mapRef.current = null;
-        markerRef.current = null;
-        labelRef.current = null;
-      }
+      markerRef.current = null;
+      labelRef.current = null;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [initializeOrReuseMap]);
+
+  useEffect(() => {
+    if (!isMapInitialized || !mapRef.current) return;
+
+    const targetPosition = isValidPosition(position?.lng, position?.lat) ? position : DEFAULT_POSITION;
+
+    if (type === MAP_TYPE.B_MAP) {
+      const point = new window.BMapGL.Point(targetPosition.lng, targetPosition.lat);
+
+      if (locationTranslated?.address && position) {
+        if (markerRef.current) {
+          markerRef.current.setPosition(point);
+          mapRef.current.setCenter(point);
+          addLabel(point, true);
+        }
+      }
+    } else if (type === MAP_TYPE.G_MAP) {
+      if (locationTranslated?.address && position) {
+        if (markerRef.current) {
+          markerRef.current.position = targetPosition;
+          mapRef.current.panTo(targetPosition);
+          addLabel(targetPosition, true);
+        }
+      }
+    }
+  }, [position, locationTranslated, isMapInitialized, type, addLabel]);
 
   return (
     <div className={classNames('sf-geolocation-editor-container', { 'full-screen': isFullScreen })}>
@@ -628,7 +729,8 @@ GeolocationEditor.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onFullScreen: PropTypes.func.isRequired,
   onReadyToEraseLocation: PropTypes.func.isRequired,
-  onMapReady: PropTypes.func
+  onMapReady: PropTypes.func,
+  editorId: PropTypes.string,
 };
 
 export default GeolocationEditor;
