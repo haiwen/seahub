@@ -93,7 +93,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bs-body-tertiary-bg);
+  background-color: var(--bs-body-secondary-bg);
   color: #666;
   border: 1px solid var(--bs-border-color);
   border-radius: 0 3px 3px 0;

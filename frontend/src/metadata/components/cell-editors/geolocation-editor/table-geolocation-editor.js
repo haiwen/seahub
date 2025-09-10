@@ -12,12 +12,25 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
   const [isFullScreen, setFullScreen] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const [isReadyToEraseLocation, setReadyToEraseLocation] = useState(false);
-  const [editorStyle, setEditorStyle] = useState({});
+  const [editorStyle, setEditorStyle] = useState({ visibility: 'hidden' }); // Start hidden to prevent flash
+  const [editorKey, setEditorKey] = useState(Date.now()); // Add key to force re-mount
+  const [isMapReady, setMapReady] = useState(false); // Track map initialization
   const editorRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
     onClose: () => closeEditor()
   }));
+
+  // Force re-mount of GeolocationEditor when value or locationTranslated changes
+  useEffect(() => {
+    setEditorKey(Date.now());
+    setMapReady(false); // Reset map ready state on re-mount
+  }, [value, record?._location_translated]);
+
+  // Handle map ready callback
+  const handleMapReady = useCallback(() => {
+    setMapReady(true);
+  }, []);
 
   // Calculate viewport-aware positioning
   useEffect(() => {
@@ -40,7 +53,8 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
           position: 'absolute',
           zIndex: '1050',
           width: `${editorWidth}px`,
-          height: `${editorHeight}px`
+          height: `${editorHeight}px`,
+          visibility: isMapReady ? 'visible' : 'hidden' // Show only when map is ready
         };
 
         let left = (cellWidth - editorWidth) / 2;
@@ -69,7 +83,7 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
         setEditorStyle(adjustedStyle);
       }
     }
-  }, [isFullScreen]);
+  }, [isFullScreen, isMapReady]); // Add isMapReady to dependencies
 
   const closeEditor = useCallback(() => {
     if (isReadyToEraseLocation) {
@@ -139,14 +153,20 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
     setReadyToEraseLocation(true);
   }, []);
 
+  // Get stored location_translated data from record
+  const locationTranslated = record?._location_translated || null;
+
   return (
     <div className="sf-table-geolocation-editor" ref={editorRef} style={editorStyle}>
       {!isFullScreen ? (
         <GeolocationEditor
+          key={editorKey}
           position={currentValue}
+          locationTranslated={locationTranslated}
           onSubmit={onSubmit}
           onFullScreen={onFullScreen}
           onReadyToEraseLocation={onReadyToEraseLocation}
+          onMapReady={handleMapReady}
         />
       ) : (
         <Modal
@@ -156,11 +176,14 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
           zIndex={1052}
         >
           <GeolocationEditor
+            key={editorKey}
             position={currentValue}
+            locationTranslated={locationTranslated}
             isFullScreen={isFullScreen}
             onSubmit={onSubmit}
             onFullScreen={onFullScreen}
             onReadyToEraseLocation={onReadyToEraseLocation}
+            onMapReady={handleMapReady}
           />
         </Modal>
       )}

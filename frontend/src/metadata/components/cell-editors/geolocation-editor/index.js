@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { createBMapGeolocationControl, createBMapZoomControl } from '../../map-controller';
 import { initMapInfo, loadMapSource } from '../../../../utils/map-utils';
@@ -15,7 +16,7 @@ import { DEFAULT_POSITION } from '../../../constants';
 
 import './index.css';
 
-const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onReadyToEraseLocation }) => {
+const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmit, onFullScreen, onReadyToEraseLocation, onMapReady }) => {
   const [inputValue, setInputValue] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -31,6 +32,13 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   const labelRef = useRef(null);
   const googlePlacesRef = useRef(null);
 
+  // Initialize input value with stored address if available
+  useEffect(() => {
+    if (locationTranslated?.address) {
+      setInputValue(locationTranslated.address);
+    }
+  }, [locationTranslated]);
+
   const onChange = useCallback((e) => {
     setInputValue(e.target.value);
   }, []);
@@ -44,10 +52,11 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
             toaster.danger(gettext('Search failed, please enter detailed address.'));
             return;
           }
-          let searchResults = [];
-          for (let i = 0; i < results.getCurrentNumPois(); i++) {
+          const searchResults = [];
+          const numPois = results.getCurrentNumPois();
+          for (let i = 0; i < numPois; i++) {
             const value = results.getPoi(i);
-            const position = {
+            searchResults.push({
               address: value.address || '',
               title: value.title || '',
               tag: value.tags || [],
@@ -55,8 +64,7 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
                 lng: value.point.lng,
                 lat: value.point.lat,
               }
-            };
-            searchResults.push(position);
+            });
           }
           setSearchResults(searchResults);
         }
@@ -70,20 +78,16 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
         language: lang,
       };
       googlePlacesRef.current.textSearch(request, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          let searchResults = [];
-          for (let i = 0; i < results.length; i++) {
-            const value = {
-              address: results[i].formatted_address || '',
-              title: results[i].name || '',
-              tag: results[i].types || [],
-              lngLat: {
-                lng: results[i].geometry.location.lng(),
-                lat: results[i].geometry.location.lat(),
-              }
-            };
-            searchResults.push(value);
-          }
+        if (status === 'OK' && results?.length) {
+          const searchResults = results.map(result => ({
+            address: result.formatted_address || '',
+            title: result.name || '',
+            tag: result.types || [],
+            lngLat: {
+              lng: result.geometry.location.lng(),
+              lat: result.geometry.location.lat(),
+            }
+          }));
           setSearchResults(searchResults);
         }
       });
@@ -104,8 +108,8 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     setInputValue('');
     setSearchResults([]);
     if (type === MAP_TYPE.B_MAP) {
-      mapRef.current.clearOverlays();
-    } else {
+      mapRef.current?.clearOverlays();
+    } else if (labelRef.current) {
       labelRef.current.setMap(null);
       labelRef.current = null;
     }
@@ -115,8 +119,8 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   const close = useCallback((e) => {
     e.stopPropagation();
     if (type === MAP_TYPE.B_MAP) {
-      markerRef.current.getLabel()?.remove();
-    } else {
+      markerRef.current?.getLabel()?.remove();
+    } else if (labelRef.current) {
       labelRef.current.setMap(null);
       labelRef.current = null;
     }
@@ -132,37 +136,23 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   }, [onSubmit]);
 
   const parseBMapAddress = useCallback((result) => {
-    let value = {};
     const { surroundingPois, address, addressComponents, point } = result;
-    if (surroundingPois.length === 0) {
-      const { province, city, district, street } = addressComponents;
-      value.position = { lng: point.lng, lat: point.lat };
-      value.location_translated = {
-        address,
+    const hasNearbyPoi = surroundingPois.length > 0;
+    const poi = hasNearbyPoi ? surroundingPois[0] : null;
+
+    return {
+      position: { lng: point.lng, lat: point.lat },
+      location_translated: {
+        address: hasNearbyPoi ? poi.address : address,
         country: '',
-        province,
-        city,
-        district,
-        street,
-      };
-      value.title = '';
-      value.tags = [];
-    } else {
-      const position = surroundingPois[0];
-      const { address, title, tags, point, city, province } = position;
-      value.position = { lng: point.lng, lat: point.lat };
-      value.location_translated = {
-        address,
-        country: '',
-        province,
-        city,
-        district: '',
-        street: '',
-      };
-      value.title = title || '';
-      value.tags = tags || [];
-    }
-    return value;
+        province: hasNearbyPoi ? poi.province : addressComponents.province,
+        city: hasNearbyPoi ? poi.city : addressComponents.city,
+        district: hasNearbyPoi ? '' : addressComponents.district,
+        street: hasNearbyPoi ? '' : addressComponents.street,
+      },
+      title: hasNearbyPoi ? (poi.title || '') : '',
+      tags: hasNearbyPoi ? (poi.tags || []) : []
+    };
   }, []);
 
   const parseGMapAddress = useCallback((result) => {
@@ -197,108 +187,185 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
     return { position, location_translated };
   }, []);
 
-  const addLabel = useCallback((point) => {
+  const setupLabelEventListeners = useCallback((info) => {
+    setTimeout(() => {
+      const labelElement = document.getElementById('selection-label-content');
+      if (labelElement) {
+        labelElement.addEventListener('click', (e) => e.stopPropagation());
+      }
+
+      const closeBtn = document.getElementById('selection-label-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', close);
+      }
+
+      const submitBtn = document.getElementById('selection-label-submit');
+      if (submitBtn) {
+        submitBtn.addEventListener('click', () => submit(info));
+      }
+    }, 100);
+  }, [close, submit]);
+
+  const addLabel = useCallback((point, useStoredData = false) => {
     if (type === MAP_TYPE.B_MAP) {
-      markerRef.current.getLabel()?.remove();
+      markerRef.current?.getLabel()?.remove();
+
+      if (useStoredData && locationTranslated?.address && position) {
+        const storedPoint = new window.BMapGL.Point(position.lng, position.lat);
+        const storedInfo = {
+          position: position,
+          location_translated: locationTranslated,
+          title: locationTranslated.address,
+          tags: []
+        };
+
+        // Ensure marker and map are positioned correctly
+        if (markerRef.current) {
+          markerRef.current.setPosition(storedPoint);
+        }
+        if (mapRef.current) {
+          mapRef.current.setCenter(storedPoint);
+        }
+        setInputValue(locationTranslated.address);
+
+        const label = customBMapLabel(storedInfo);
+        markerRef.current?.setLabel(label);
+        setupLabelEventListeners(storedInfo);
+        return;
+      }
+
       geocRef.current.getLocation(point, (result) => {
         const info = parseBMapAddress(result);
         const { title, location_translated } = info;
-        setInputValue(title || location_translated.address);
+        setInputValue(location_translated.address || title);
+
         const label = customBMapLabel(info);
-        markerRef.current.setLabel(label);
-
-        setTimeout(() => {
-          const label = document.getElementById('selection-label-content');
-          if (label) {
-            label.addEventListener('click', (e) => e.stopPropagation());
-          }
-
-          const closeBtn = document.getElementById('selection-label-close');
-          if (closeBtn) {
-            closeBtn.addEventListener('click', close);
-          }
-
-          const submitBtn = document.getElementById('selection-label-submit');
-          if (submitBtn) {
-            submitBtn.addEventListener('click', () => submit(info));
-          }
-        }, 100);
+        markerRef.current?.setLabel(label);
+        setupLabelEventListeners(info);
       });
     } else {
+      if (useStoredData && locationTranslated?.address && position) {
+        const storedInfo = {
+          position: position,
+          location_translated: locationTranslated
+        };
+
+        // Ensure marker and map are positioned correctly
+        if (markerRef.current) {
+          markerRef.current.position = position;
+        } else {
+          markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+            position: position,
+            map: mapRef.current,
+          });
+        }
+        if (mapRef.current) {
+          mapRef.current.panTo(position);
+        }
+
+        labelRef.current = customGMapLabel(storedInfo, submit);
+        labelRef.current?.setMap(mapRef.current);
+        setInputValue(locationTranslated.address);
+        return;
+      }
+
       geocRef.current.geocode({ location: point, language: lang }, (results, status) => {
         if (status === 'OK' && results[0]) {
           const info = parseGMapAddress(results[0]);
           labelRef.current = customGMapLabel(info, submit);
-          labelRef.current.setMap(mapRef.current);
+          labelRef.current?.setMap(mapRef.current);
           setInputValue(info.location_translated.address);
         }
       });
     }
-  }, [type, close, submit, parseBMapAddress, parseGMapAddress]);
+  }, [type, setupLabelEventListeners, parseBMapAddress, parseGMapAddress, locationTranslated, position, submit]);
 
   const renderBaiduMap = useCallback(() => {
-    if (!window.BMapGL.Map) return;
+    if (!window.BMapGL.Map || !ref.current) return;
 
+    // Always create a fresh map instance
     mapRef.current = new window.BMapGL.Map(ref.current);
     const initPos = isValidPosition(position?.lng, position?.lat) ? position : DEFAULT_POSITION;
     const point = new window.BMapGL.Point(initPos.lng, initPos.lat);
-    mapRef.current.centerAndZoom(point, 16);
-    mapRef.current.enableScrollWheelZoom();
-    mapRef.current.clearOverlays();
 
-    const ZoomControl = createBMapZoomControl({
-      anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
-      offset: { x: 16, y: 30 }
-    });
-    const zoomControl = new ZoomControl();
-    mapRef.current.addControl(zoomControl);
+    // Small delay to ensure map container has proper dimensions
+    setTimeout(() => {
+      mapRef.current.centerAndZoom(point, 16);
+      mapRef.current.enableScrollWheelZoom();
+      mapRef.current.clearOverlays();
 
-    const GeolocationControl = createBMapGeolocationControl({
-      anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
-      offset: { x: 16, y: 96 },
-      callback: (point) => {
+      const ZoomControl = createBMapZoomControl({
+        anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
+        offset: { x: 16, y: 30 }
+      });
+      const zoomControl = new ZoomControl();
+      mapRef.current.addControl(zoomControl);
+
+      const GeolocationControl = createBMapGeolocationControl({
+        anchor: window.BMAP_ANCHOR_BOTTOM_RIGHT,
+        offset: { x: 16, y: 96 },
+        callback: (point) => {
+          if (mapRef.current.getOverlays().length === 0) {
+            mapRef.current.addOverlay(markerRef.current);
+          }
+          mapRef.current.centerAndZoom(point, 16);
+          markerRef.current.setPosition(point);
+          addLabel(point, false);
+        }
+      });
+      const geolocationControl = new GeolocationControl();
+      mapRef.current.addControl(geolocationControl);
+
+      markerRef.current = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
+      geocRef.current = new window.BMapGL.Geocoder();
+      if (isValidPosition(position?.lng, position?.lat)) {
+        mapRef.current.addOverlay(markerRef.current);
+
+        // If we have stored address, ensure map is centered on the actual stored position
+        if (locationTranslated?.address) {
+          const actualPoint = new window.BMapGL.Point(position.lng, position.lat);
+          markerRef.current.setPosition(actualPoint);
+          mapRef.current.setCenter(actualPoint);
+          addLabel(actualPoint, true);
+        } else {
+          addLabel(point, false);
+        }
+      }
+
+      mapRef.current.addEventListener('click', (e) => {
+        if (searchResults.length > 0) {
+          setSearchResults([]);
+          return;
+        }
+        const { lng, lat } = e.latlng;
+        const point = new window.BMapGL.Point(lng, lat);
         if (mapRef.current.getOverlays().length === 0) {
           mapRef.current.addOverlay(markerRef.current);
         }
-        mapRef.current.centerAndZoom(point, 16);
         markerRef.current.setPosition(point);
-        addLabel(point);
-      }
-    });
-    const geolocationControl = new GeolocationControl();
-    mapRef.current.addControl(geolocationControl);
+        mapRef.current.setCenter(point);
+        addLabel(point, false);
+      });
 
-    markerRef.current = new window.BMapGL.Marker(point, { offset: new window.BMapGL.Size(-2, -5) });
-    geocRef.current = new window.BMapGL.Geocoder();
-    if (isValidPosition(position?.lng, position?.lat)) {
-      mapRef.current.addOverlay(markerRef.current);
-      addLabel(point);
-    }
+      // Notify parent that map is ready
+      onMapReady?.();
+    }, 10);
 
-    mapRef.current.addEventListener('click', (e) => {
-      if (searchResults.length > 0) {
-        setSearchResults([]);
-        return;
-      }
-      const { lng, lat } = e.latlng;
-      const point = new window.BMapGL.Point(lng, lat);
-      if (mapRef.current.getOverlays().length === 0) {
-        mapRef.current.addOverlay(markerRef.current);
-      }
-      markerRef.current.setPosition(point);
-      mapRef.current.setCenter(point);
-      addLabel(point);
-    });
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [position?.lng, position?.lat]);
+  }, [position, locationTranslated?.address, addLabel, searchResults]);
 
   const renderGoogleMap = useCallback(() => {
+    if (!window.google?.maps?.Map || !ref.current) return;
+
     const isValid = isValidPosition(position?.lng, position?.lat);
     const initPos = isValid ? position : DEFAULT_POSITION;
     const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
+
+    // Use stored position for initial center if available, otherwise use initPos
+    const initialCenter = isValid && locationTranslated?.address ? position : initPos;
+
+    // Always create a fresh map instance
     mapRef.current = new window.google.maps.Map(ref.current, {
-      center: initPos,
+      center: initialCenter,
       zoom: 16,
       mapId: googleMapId,
       zoomControl: false,
@@ -313,83 +380,101 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
       colorScheme: isDark ? window.google.maps.ColorScheme.DARK : window.google.maps.ColorScheme.LIGHT,
     });
 
-    // control
-    const zoomControl = createZoomControl({ map: mapRef.current });
-    const geolocationControl = createGeolocationControl({
-      map: mapRef.current,
-      callback: (lngLat) => {
-        geocRef.current.geocode({ location: lngLat, language: lang }, (results, status) => {
-          if (status === 'OK' && results[0]) {
-            const info = parseGMapAddress(results[0]);
-            setInputValue(info.location_translated.address);
-            if (!markerRef.current) {
-              markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
-                position: lngLat,
-                map: mapRef.current,
-              });
-            } else {
-              markerRef.current.position = lngLat;
-            }
-            if (!labelRef.current) {
-              addLabel(lngLat);
-            } else {
-              labelRef.current.setPosition(lngLat);
-              labelRef.current.setInfo(info);
-            }
-          }
-        });
-      }
-    });
-    mapRef.current.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
-    mapRef.current.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControl);
+    // Small delay to ensure map container has proper dimensions
+    setTimeout(() => {
+      // Force resize trigger to ensure proper map layout
+      window.google.maps.event.trigger(mapRef.current, 'resize');
 
-    // marker
-    if (isValid) {
-      markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
-        position,
+      // Re-center the map after resize
+      mapRef.current.setCenter(initialCenter);
+
+      // control
+      const zoomControl = createZoomControl({ map: mapRef.current });
+      const geolocationControl = createGeolocationControl({
         map: mapRef.current,
-      });
-    }
-
-    // geocoder
-    geocRef.current = new window.google.maps.Geocoder();
-    isValid && addLabel(position);
-
-    googlePlacesRef.current = new window.google.maps.places.PlacesService(mapRef.current);
-
-    // map click event
-    window.google.maps.event.addListener(mapRef.current, 'click', (e) => {
-      if (searchResults.length > 0) {
-        setSearchResults([]);
-        return;
-      }
-      const latLng = e.latLng;
-      const point = { lat: latLng.lat(), lng: latLng.lng() };
-
-      if (!markerRef.current) {
-        markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
-          position: point,
-          map: mapRef.current,
-        });
-      } else {
-        markerRef.current.position = latLng;
-      }
-      mapRef.current.panTo(latLng);
-
-      geocRef.current.geocode({ location: point, language: lang }, (results, status) => {
-        if (status === 'OK' && results[0]) {
-          const info = parseGMapAddress(results[0]);
-          if (!labelRef.current) {
-            addLabel(point);
-          } else {
-            labelRef.current.setPosition(latLng);
-            labelRef.current.setInfo(info);
-          }
-          setInputValue(info.location_translated.address);
+        callback: (lngLat) => {
+          geocRef.current.geocode({ location: lngLat, language: lang }, (results, status) => {
+            if (status === 'OK' && results[0]) {
+              const info = parseGMapAddress(results[0]);
+              setInputValue(info.location_translated.address);
+              if (!markerRef.current) {
+                markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+                  position: lngLat,
+                  map: mapRef.current,
+                });
+              } else {
+                markerRef.current.position = lngLat;
+              }
+              if (!labelRef.current) {
+                addLabel(lngLat, false);
+              } else {
+                labelRef.current.setPosition(lngLat);
+                labelRef.current.setInfo(info);
+              }
+            }
+          });
         }
       });
-    });
-  }, [searchResults, position, addLabel, parseGMapAddress]);
+      mapRef.current.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(zoomControl);
+      mapRef.current.controls[window.google.maps.ControlPosition.RIGHT_BOTTOM].push(geolocationControl);
+
+      // marker
+      if (isValid) {
+        markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+          position,
+          map: mapRef.current,
+        });
+      }
+
+      // geocoder
+      geocRef.current = new window.google.maps.Geocoder();
+      if (isValid) {
+        if (locationTranslated?.address) {
+          addLabel(position, true);
+        } else {
+          addLabel(position, false);
+        }
+      }
+
+      googlePlacesRef.current = new window.google.maps.places.PlacesService(mapRef.current);
+
+      // map click event
+      window.google.maps.event.addListener(mapRef.current, 'click', (e) => {
+        if (searchResults.length > 0) {
+          setSearchResults([]);
+          return;
+        }
+        const latLng = e.latLng;
+        const point = { lat: latLng.lat(), lng: latLng.lng() };
+
+        if (!markerRef.current) {
+          markerRef.current = new window.google.maps.marker.AdvancedMarkerElement({
+            position: point,
+            map: mapRef.current,
+          });
+        } else {
+          markerRef.current.position = latLng;
+        }
+        mapRef.current.panTo(latLng);
+
+        geocRef.current.geocode({ location: point, language: lang }, (results, status) => {
+          if (status === 'OK' && results[0]) {
+            const info = parseGMapAddress(results[0]);
+            if (!labelRef.current) {
+              addLabel(point, false);
+            } else {
+              labelRef.current.setPosition(latLng);
+              labelRef.current.setInfo(info);
+            }
+            setInputValue(info.location_translated.address);
+          }
+        });
+      });
+
+      // Notify parent that map is ready
+      onMapReady?.();
+    }, 10);
+  }, [searchResults, position, addLabel, parseGMapAddress, locationTranslated?.address]);
 
   const toggleFullScreen = useCallback((e) => {
     e.stopPropagation();
@@ -408,12 +493,14 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
       }
       markerRef.current.setPosition(point);
       mapRef.current.setCenter(point);
-      addLabel(point);
+      addLabel(point, false);
     } else {
       const point = { lat: lngLat.lat, lng: lngLat.lng };
-      markerRef.current.position = point;
+      if (markerRef.current) {
+        markerRef.current.position = point;
+      }
       if (!labelRef.current) {
-        addLabel(point);
+        addLabel(point, false);
       } else {
         labelRef.current.setPosition(point);
         labelRef.current.setInfo({
@@ -437,23 +524,48 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
   }, [type, addLabel]);
 
   useEffect(() => {
-    if (mapRef.current) return;
-    const { type, key } = initMapInfo({ baiduMapKey, googleMapKey });
-    if (type === MAP_TYPE.B_MAP) {
-      if (!window.BMapGL) {
-        window.renderBaiduMap = () => renderBaiduMap();
-        loadMapSource(type, key);
-      } else {
-        renderBaiduMap();
+    // Reset map reference to ensure fresh initialization
+    mapRef.current = null;
+    markerRef.current = null;
+    labelRef.current = null;
+
+    // Always re-initialize the map to ensure proper centering
+    // Add a small delay to ensure DOM is fully rendered when component re-mounts
+    const initializeMap = () => {
+      const { type, key } = initMapInfo({ baiduMapKey, googleMapKey });
+      if (type === MAP_TYPE.B_MAP) {
+        if (!window.BMapGL) {
+          window.renderBaiduMap = () => renderBaiduMap();
+          loadMapSource(type, key);
+        } else {
+          renderBaiduMap();
+        }
+      } else if (type === MAP_TYPE.G_MAP) {
+        if (!window.google?.maps.Map) {
+          window.renderGoogleMap = () => renderGoogleMap();
+          loadMapSource(type, key);
+        } else {
+          renderGoogleMap();
+        }
       }
-    } else if (type === MAP_TYPE.G_MAP) {
-      if (!window.google?.maps.Map) {
-        window.renderGoogleMap = () => renderGoogleMap();
-        loadMapSource(type, key);
-      } else {
-        renderGoogleMap();
+    };
+
+    // Use setTimeout to ensure DOM is ready, especially important for re-mounted components
+    const timeoutId = setTimeout(initializeMap, 50);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (mapRef.current) {
+        if (type === MAP_TYPE.B_MAP) {
+          mapRef.current.clearOverlays?.();
+        } else if (labelRef.current) {
+          labelRef.current.setMap?.(null);
+        }
+        mapRef.current = null;
+        markerRef.current = null;
+        labelRef.current = null;
       }
-    }
+    };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -498,6 +610,25 @@ const GeolocationEditor = ({ position, isFullScreen, onSubmit, onFullScreen, onR
       </div>
     </div>
   );
+};
+
+GeolocationEditor.propTypes = {
+  position: PropTypes.shape({
+    lat: PropTypes.number,
+    lng: PropTypes.number
+  }),
+  locationTranslated: PropTypes.shape({
+    address: PropTypes.string,
+    city: PropTypes.string,
+    country: PropTypes.string,
+    district: PropTypes.string,
+    province: PropTypes.string
+  }),
+  isFullScreen: PropTypes.bool,
+  onSubmit: PropTypes.func.isRequired,
+  onFullScreen: PropTypes.func.isRequired,
+  onReadyToEraseLocation: PropTypes.func.isRequired,
+  onMapReady: PropTypes.func
 };
 
 export default GeolocationEditor;
