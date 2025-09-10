@@ -351,7 +351,7 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
       onMapReady?.();
     }, 10);
 
-  }, [position, locationTranslated?.address, addLabel, searchResults]);
+  }, [position, onMapReady, addLabel, locationTranslated?.address, searchResults.length]);
 
   const renderGoogleMap = useCallback(() => {
     if (!window.google?.maps?.Map || !ref.current) return;
@@ -474,7 +474,7 @@ const GeolocationEditor = ({ position, locationTranslated, isFullScreen, onSubmi
       // Notify parent that map is ready
       onMapReady?.();
     }, 10);
-  }, [searchResults, position, addLabel, parseGMapAddress, locationTranslated?.address]);
+  }, [position, locationTranslated?.address, onMapReady, parseGMapAddress, addLabel, searchResults.length]);
 
   const toggleFullScreen = useCallback((e) => {
     e.stopPropagation();

@@ -12,9 +12,9 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
   const [isFullScreen, setFullScreen] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const [isReadyToEraseLocation, setReadyToEraseLocation] = useState(false);
-  const [editorStyle, setEditorStyle] = useState({ visibility: 'hidden' }); // Start hidden to prevent flash
-  const [editorKey, setEditorKey] = useState(Date.now()); // Add key to force re-mount
-  const [isMapReady, setMapReady] = useState(false); // Track map initialization
+  const [editorStyle, setEditorStyle] = useState({ visibility: 'hidden' });
+  const [editorKey, setEditorKey] = useState(Date.now());
+  const [isMapReady, setMapReady] = useState(false);
   const editorRef = useRef(null);
 
   useImperativeHandle(ref, () => ({
