@@ -400,6 +400,11 @@ export const MetadataViewProvider = ({
           if (locationColumn) {
             idOldRecordData[recordId][locationColumnKey] = record[locationColumnKey];
             idOriginalOldRecordData[recordId][locationColumnKey] = record[locationColumnKey];
+
+            if (record._location_translated) {
+              idOldRecordData[recordId]._location_translated = record._location_translated;
+              idOriginalOldRecordData[recordId]._location_translated = record._location_translated;
+            }
           }
         });
         details.forEach(detail => {
@@ -415,6 +420,11 @@ export const MetadataViewProvider = ({
           if (locationColumn) {
             idRecordUpdates[updateRecordId][locationColumnKey] = detail[locationColumnKey];
             idOriginalRecordUpdates[updateRecordId][locationColumnKey] = detail[locationColumnKey];
+
+            if (detail._location_translated) {
+              idRecordUpdates[updateRecordId]._location_translated = detail._location_translated;
+              idOriginalRecordUpdates[updateRecordId]._location_translated = detail._location_translated;
+            }
           }
         });
         modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
