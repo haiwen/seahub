@@ -365,6 +365,16 @@ export const normalizeColumnData = (column) => {
   if (column.type === CellType.DATE) {
     return { ...data, format: data?.format || DEFAULT_DATE_FORMAT };
   }
+  if (column.type === CellType.NUMBER) {
+    return {
+      ...data,
+      format: data?.format || 'number',
+      decimal: data?.decimal || 'dot',
+      thousands: data?.thousands || 'no',
+      enable_precision: data?.enable_precision || false,
+      precision: data?.precision !== undefined ? data.precision : 2,
+    };
+  }
   return data;
 };
 
