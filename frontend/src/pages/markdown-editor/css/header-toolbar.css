@@ -77,3 +77,10 @@
 .sf-md-viewer-topbar .sf-md-header-more-tool:hover {
   background-color: #EFEFEF;
 }
+
+.sf-md-viewer-topbar .sf-operator-folder-divider {
+  margin: 8px 0;
+  border-top: 1px solid #e6e9ed;
+  height: 1px;
+  width: 100%;
+}

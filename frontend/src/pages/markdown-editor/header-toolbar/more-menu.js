@@ -66,11 +66,12 @@ class MoreMenu extends React.PureComponent {
           {(this.props.openDialogs && editorMode === 'rich') &&
             <DropdownItem onClick={this.onHelpModuleToggle}>{gettext('Help')}</DropdownItem>
           }
-          <DropdownItem onClick={this.props.openParentDirectory}>{gettext('Open parent folder')}</DropdownItem>
           {isSmall && canGenerateShareLink && <DropdownItem onClick={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
           {isSmall && canDownloadFile &&
             <DropdownItem onClick={this.downloadFile}>{gettext('Download')}</DropdownItem>
           }
+          <div className='sf-operator-folder-divider'></div>
+          <DropdownItem onClick={this.props.openParentDirectory}>{gettext('Open parent folder')}</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     );

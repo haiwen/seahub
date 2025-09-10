@@ -236,16 +236,13 @@ class FileToolbar extends React.Component {
             </DropdownToggle>
             <DropdownMenu>
               {filePerm == 'rw' && (
-                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
-                  {gettext('History')}
-                </a>
-              )}
-              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
-                {gettext('Open parent folder')}
-              </a>
-              {filePerm == 'rw' && (
                 <a href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`} className="dropdown-item">
                   {gettext('Open via client')}
+                </a>
+              )}
+              {filePerm == 'rw' && (
+                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
+                  {gettext('History')}
                 </a>
               )}
               {isTxt &&
@@ -258,6 +255,10 @@ class FileToolbar extends React.Component {
                   />
                 </DropdownItem>
               }
+              <div className='file-operator-folder-divider'></div>
+              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
+                {gettext('Open parent folder')}
+              </a>
             </DropdownMenu>
           </Dropdown>
         </div>

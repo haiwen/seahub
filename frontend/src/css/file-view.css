@@ -95,6 +95,13 @@ body {
   padding: 0;
 }
 
+.file-view-header .file-operator-folder-divider {
+  margin: 8px 0;
+  border-top: 1px solid #e6e9ed;
+  height: 1px;
+  width: 100%;
+}
+
 .file-title {
   font-size: 1.2rem;
   font-weight: bold;
