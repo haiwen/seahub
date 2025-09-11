@@ -35,7 +35,7 @@ class FileContent extends React.Component {
 
     return (
       <div className="file-view-content flex-1 p-0 border-0">
-        <iframe title={fileName} id="office-frame" name="office_frame" className="d-none" allowFullScreen></iframe>
+        <iframe title={fileName} id="office-frame" name="office_frame" className="d-none" allowFullScreen allow="clipboard-read *; clipboard-write *"></iframe>
         <form id="office-form" name="office_form" target="office_frame" action={actionURL} method="post">
           <input name="access_token" value={accessToken} type="hidden" />
           <input name="access_token_ttl" value={accessTokenTtl} type="hidden" />
