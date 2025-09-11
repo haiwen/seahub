@@ -669,7 +669,7 @@ class MetadataColumns(APIView):
     def put(self, request, repo_id):
         column_key = request.data.get('column_key', '')
         column_name = request.data.get('name', '')
-        column_data = request.data.get('data', {})  # Default to empty dict instead of empty string
+        column_data = request.data.get('data', '')
 
         if not column_key:
             error_msg = 'column_key invalid.'
@@ -705,14 +705,7 @@ class MetadataColumns(APIView):
 
         new_column_name = column_name if column_name else column['name']
         old_column_data = column.get('data', {})
-        
-        # Ensure both old_column_data and column_data are dictionaries before unpacking
-        if not isinstance(old_column_data, dict):
-            old_column_data = {}
-        if not isinstance(column_data, dict):
-            column_data = {}
-        
-        new_column_data = {**old_column_data, **column_data} if column_data else old_column_data
+        new_column_data = {**old_column_data, **column_data} if column_data else column['data']
 
         new_column = MetadataColumn(column_key, new_column_name, column['type'], new_column_data).to_dict()
         try:

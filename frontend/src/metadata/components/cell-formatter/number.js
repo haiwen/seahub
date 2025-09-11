@@ -4,10 +4,7 @@ import classnames from 'classnames';
 import { getNumberDisplayString } from '../../utils/cell/column/number';
 
 const NumberFormatter = ({ value, formats, className, children: emptyFormatter }) => {
-  const validValue = useMemo(() => {
-    console.log('NumberFormatter: Formatting value', { value, formats });
-    return getNumberDisplayString(value, formats);
-  }, [value, formats]);
+  const validValue = useMemo(() => getNumberDisplayString(value, formats), [value, formats]);
 
   if (!validValue) return emptyFormatter || null;
   return (

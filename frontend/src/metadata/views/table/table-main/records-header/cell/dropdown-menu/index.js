@@ -9,9 +9,9 @@ import NumberFormatPopover from './number-format-popover';
 import ColumnDropdownItem from './column-dropdown-item';
 import { gettext } from '@/utils/constants';
 import { isMobile } from '@/utils/utils';
-import { checkIsPrivateColumn, isNumberColumn } from '@/metadata/utils/column';
+import { checkIsPrivateColumn } from '@/metadata/utils/column';
 import { getDateDisplayString } from '@/metadata/utils/cell';
-import { CellType, DEFAULT_DATE_FORMAT, DEFAULT_NUMBER_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '@/metadata/constants';
+import { CellType, DEFAULT_DATE_FORMAT, SORT_COLUMN_OPTIONS, SHOW_DISABLED_SORT_COLUMNS, SORT_TYPE, EVENT_BUS_TYPE } from '@/metadata/constants';
 
 import './index.css';
 
@@ -298,7 +298,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
         </div>
       </DropdownMenu>
     );
-  }, [column, openRenamePopover, hideSubMenu, renderDateFormat, openOptionPopover, menuRef, dropdownDomRef, modifySort, onDelete, isPrivateColumn]);
+  }, [column, menuRef, dropdownDomRef, isPrivateColumn, openOptionPopover, renderDateFormat, openNumberFormatPopover, hideSubMenu, openRenamePopover, onDelete, modifySort]);
 
   return (
     <>
