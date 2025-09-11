@@ -94,6 +94,10 @@
   left: auto;
 }
 
+.search-container .input-icon .search-input {
+  padding-left: 35px;
+}
+
 .search-input {
   height: 1.875rem;
   width: 15rem;
