@@ -103,7 +103,7 @@ class GroupContainer extends Component {
     };
     let backDropStyle = {
       height: backdropHeight,
-      width: leftPaneWidth + scrollLeft ? GROUP_VIEW_OFFSET : 0,
+      width: leftPaneWidth + (scrollLeft ? GROUP_VIEW_OFFSET : 0),
       zIndex: Z_INDEX_GROUP_BACKDROP,
     };
 
