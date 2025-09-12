@@ -1,0 +1,212 @@
+.repo-workflow-main .loading-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.repo-workflow-main .side-panel {
+  transition: none;
+}
+
+.repo-workflow-main .side-panel .side-nav-con {
+  padding-top: 0;
+}
+
+.repo-workflow-main .side-panel .side-panel-header {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  margin: 0;
+  padding: 0 1rem;
+  font-size: 18px;
+  font-weight: 700;
+  border-right: 1px solid var(--bs-border-secondary-color);
+}
+
+.repo-workflow-main .side-panel .seafile-multicolor-icon {
+  font-size: 16px;
+  margin-right: 0;
+}
+
+.repo-workflow-main .side-panel .seafile-multicolor-icon,
+.repo-workflow-main .side-panel .sf3-font {
+  color: var(--bs-icon-color);
+  fill: var(--bs-icon-color);
+}
+
+.repo-workflow-main .side-panel .side-panel-footer {
+  padding: 16px;
+}
+
+.repo-workflow-main .side-panel .add-workflow-wrapper {
+  position: relative;
+}
+
+.repo-workflow-main .side-panel .add-workflow-btn {
+  width: 100%;
+}
+
+.repo-workflow-main .side-panel .empty-tip {
+  flex: 1;
+}
+
+.repo-workflow-main .add-workflow-dropdown {
+  position: absolute;
+  left: 0;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+}
+
+.repo-workflow-main .add-workflow-dropdown button {
+  background-color: initial !important;
+  border: none;
+}
+
+.add-workflow-dropdown-menu {
+  margin-bottom: 6px;
+}
+
+.add-workflow-dropdown-menu .dropdown-item {
+  display: flex;
+  align-items: center;
+}
+
+.add-workflow-dropdown-menu .item-icon {
+  margin-right: 0.5rem;
+}
+
+.repo-workflow-main .main-panel .cur-view-path {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 50px;
+}
+
+.repo-workflow-main .main-panel .cur-view-path-left {
+  flex: 1;
+}
+
+.repo-workflow-main .main-panel .cur-view-path-right {
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+.repo-workflow-main .main-panel .cur-view-content {
+  padding: 0;
+}
+
+.workflow-name-editor.form-control {
+  height: 26px;
+}
+
+.repo-workflow-main .path-container {
+  height: auto;
+}
+
+.repo-workflow-main .path-container .path-item.selected-workflow {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 6px;
+  color: var(--bs-body-color);
+  border-radius: 3px;
+}
+
+.repo-workflow-main .path-container .selected-workflow .selected-workflow-name {
+  max-width: 200px;
+}
+
+.repo-workflow-main .path-container .path-item.selected-workflow:hover {
+  background: var(--bs-nav-hover-bg);
+  cursor: pointer;
+}
+
+.repo-workflow-main .save-workflow-btn {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.repo-workflow-main .save-workflow-btn .loading-tip {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+
+.repo-workflow-main .path-container .path-item.selected-workflow .react-flow__wrapper {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.react-flow__renderer {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.workflows-wrapper {
+  /* position: relative;
+  flex: 1; */
+  height: 0;
+}
+
+.workflow-canvas {
+  position: relative;
+  flex: 1;
+}
+
+.seafile-multicolor-icon-trigger .st0 {
+  fill: #FFEECC;
+}
+
+.seafile-multicolor-icon-trigger .st1 {
+  fill: #FFAA00;
+}
+
+.seafile-multicolor-icon-judgment-condition .st0 {
+  fill: #D1E5FD;
+}
+
+.seafile-multicolor-icon-judgment-condition .st1 {
+  fill: #1B80F5;
+}
+
+.seafile-multicolor-icon-perform-action .st0 {
+  fill: #E7DFFF;
+}
+
+.seafile-multicolor-icon-perform-action .st1 {
+  fill: #8A63FF;
+}
+
+.border-radius-\[5px\] {
+  border-radius: 5px;
+}
+
+.border-radius-\[3px\] {
+  border-radius: 3px;
+}
+
+.width-\[240px\] {
+  width: 240px;
+}
+
+.width-\[24px\] {
+  width: 24px;
+}
+
+.height-\[24px\] {
+  height: 24px;
+}
+
+.width-\[20px\] {
+  width: 20px;
+}
+
+.height-\[20px\] {
+  height: 20px;
+}

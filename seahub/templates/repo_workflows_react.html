@@ -9,10 +9,11 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-// overwrite the one in base_for_react.html
-window.app.pageOptions = {
-  repoID: '{{repo.id}}',
-};
+  // overwrite the one in base_for_react.html
+  window.app.pageOptions = {
+    repoID: '{{repo.id}}',
+    repoName: '{{repo.name}}',
+  };
 </script>
 {% render_bundle 'repoWorkflows' 'js' %}
 {% endblock %}

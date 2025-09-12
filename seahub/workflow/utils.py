@@ -1,21 +1,21 @@
 
 
-def check_graph(graph_data=None): 
-    if not graph_data:
+def check_graph(graph=None):
+    if not graph:
         return False, None
-    
-    nodes = graph_data.get('nodes', [])
-    edges = graph_data.get('edges', [])
-    
+
+    nodes = graph.get('nodes', [])
+    edges = graph.get('edges', [])
+
     if not nodes:
         return False, None
-    
+
     start_nodes = []
     action_nodes = []
     for node in nodes:
         node_type = node.get('type')
         node_id = node.get('id')
-        node_config = node['data'].get('configId')
+        node_config = node['data'].get('config_id')
         if not node_config:
             return False, "not configured"
         if node_type == 'trigger':
@@ -25,10 +25,10 @@ def check_graph(graph_data=None):
     start_nodes =[node.get('id') for node in nodes if node.get('type') == 'trigger']
     if len(start_nodes) != 1:
         return False, None
-    
+
     if len(edges) == 0:
         return False, "edges not found"
-    
+
     if len(action_nodes) == 0:
         return False, "action node not found"
 
@@ -40,8 +40,8 @@ def check_graph(graph_data=None):
             return False, f"node not found: {edge['source']} -> {edge['target']}"
         if edge['source'] == start_node:
             is_start_node_edge = True
-    
+
     if not is_start_node_edge:
         return False, "start node not edge"
-    
+
     return True, True
