@@ -288,7 +288,6 @@ const TextTranslation = {
     key: 'Descending by name',
     value: gettext('Descending by name'),
   },
-  
   MORE: {
     key: 'More',
     value: gettext('More')

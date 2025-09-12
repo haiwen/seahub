@@ -642,7 +642,7 @@ export const Utils = {
         list.push(COPY);
       }
     }
-    
+
     if (permission == 'rw' || permission == 'cloud-edit') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
         list.push(RENAME);
