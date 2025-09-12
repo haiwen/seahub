@@ -11,6 +11,7 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
+import DirOthersItemWorkflow from './workflow';
 import Item from './item';
 import { useMetadataStatus } from '../../../hooks';
 
@@ -63,15 +64,10 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
       {enableMetadata && (
-        <>
-          <a
-            className="dir-others-item text-nowrap"
-            title="Workflow"
-            href={`${siteRoot}repo/${repoID}/workflows`}
-          >
-            <span className="dir-others-item-text">Workflow</span>
-          </a>
-        </>
+        <DirOthersItemWorkflow
+          siteRoot={siteRoot}
+          repoID={repoID}
+        />
       )}
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
@@ -132,7 +128,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
           toggleDialog={toggleRepoHistoryDialog}
         />
       )}
-    </TreeSection>
+    </TreeSection >
   );
 };
 

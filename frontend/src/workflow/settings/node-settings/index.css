@@ -1,0 +1,47 @@
+.workflow-node-settings-wrapper {
+  flex: 1;
+  height: 100%;
+  padding: 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.workflow-node-setting .btn-node-setting-toggle-conditions {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 10px;
+  user-select: none;
+  border-radius: 4px;
+  border: 1px solid var(--bs-border-color);
+}
+
+.workflow-node-setting .btn-node-setting-toggle-conditions:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
+
+.workflow-node-setting .btn-node-setting-toggle-conditions .sf3-font {
+  color: var(--bs-icon-color);
+  font-size: 14px;
+}
+
+.sf-metadata-filter-popover .node-setting-conditions-wrapper .filter-group-advanced .filter-group-container {
+  padding: 16px;
+}
+
+.workflow-node-setting .sf-metadata-single-select-property-detail-editor:hover {
+  background-color: var(--bs-body-secondary-bg);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.workflow-node-setting .sf-metadata-basic-filters-select.seafile-customize-select {
+  margin: 0;
+  padding-left: .5rem;
+}
+
+.workflow-node-setting .sf-metadata-basic-filters-select.highlighted .selected-option .selected-option-show,
+.workflow-node-setting .sf-metadata-basic-filters-select.highlighted .selected-option .sf3-font-down {
+  color: #ed7109 !important;
+}

@@ -11,10 +11,10 @@ class Workflow(models.Model):
     created_by = models.CharField(max_length=255)
     updated_by = models.CharField(max_length=255, null=True, blank=True)
     is_valid = models.BooleanField(default=True)
-    
+
     class Meta:
         db_table = 'workflows'
-    
+
     @property
     def graph_data(self):
         if self.graph:
@@ -23,14 +23,14 @@ class Workflow(models.Model):
             except json.JSONDecodeError:
                 return {}
         return {}
-    
+
 
     def to_dict(self):
         return {
             'id': str(self.id),
             'repo_id': self.repo_id,
             'name': self.name,
-            'graph_data': self.graph_data,
+            'graph': self.graph_data,
             'trigger_from': self.trigger_from,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
@@ -50,6 +50,6 @@ class WorkflowRun(models.Model):
     created_by = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     finished_at = models.DateTimeField(null=True, blank=True)
-    
+
     class Meta:
         db_table = 'workflow_run'

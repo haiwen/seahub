@@ -274,6 +274,7 @@ urlpatterns = [
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/revisions/(?P<revision_id>\d+)/$', view_sdoc_revision, name='view_sdoc_revision'),
     re_path(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
     re_path(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
+    re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/workflows/$', repo_workflows_view, name='view_workflows'),
 
     ### share/upload link ###
     re_path(r'^f/(?P<token>[a-f0-9]+)/$', view_shared_file, name='view_shared_file'),
@@ -488,11 +489,11 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/image-rotate/$', RepoImageRotateView.as_view(), name='api-v2.1-repo-image-rotate-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
-    
+
+
     ## user::workflow
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/workflows/$',  WorkflowsView.as_view(), name='api-v2.1-repo-workflows'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/workflows/(?P<workflow_id>\d+)/$',  WorkflowDetailView.as_view(), name='api-v2.1-repo-workflows'),
-
 
     ## user: repo file comments
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/$', FileCommentsView.as_view(), name='api-v2.1-file-comments'),
@@ -1123,4 +1124,3 @@ if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
         urlpatterns += [
             re_path(r'^api/v2.1/ai/', include('seahub.ai.urls')),
         ]
-
