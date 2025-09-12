@@ -330,17 +330,17 @@ class SelectedDirentsToolbar extends React.Component {
           <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
           <span>{selectedLen}{' '}{gettext('selected')}</span>
         </span>
+        {canDownload &&
+          <span className="cur-view-path-btn sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')} onClick={this.onDownload}></span>
+        }
+        {canDelete &&
+          <span className="cur-view-path-btn sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')} onClick={this.onItemsDelete}></span>
+        }
         {canModify &&
           <span className="cur-view-path-btn sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')} onClick={this.onMove}></span>
         }
         {canCopy &&
           <span className="cur-view-path-btn sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')} onClick={this.onCopy}></span>
-        }
-        {canDelete &&
-          <span className="cur-view-path-btn sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')} onClick={this.onItemsDelete}></span>
-        }
-        {canDownload &&
-          <span className="cur-view-path-btn sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')} onClick={this.onDownload}></span>
         }
         {selectedLen == 1 && this.getDirentSharePerm() &&
           <span className="cur-view-path-btn sf3-font-share sf3-font" aria-label={gettext('Share')} title={gettext('Share')} onClick={this.onShare}></span>
