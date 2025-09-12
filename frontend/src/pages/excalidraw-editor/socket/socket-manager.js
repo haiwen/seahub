@@ -110,6 +110,18 @@ class SocketManager {
     return await this.fileManager.getFiles(fileIds);
   };
 
+  fetchImageFilesFromRepo = async (opts) => {
+    const fileIds = opts.elements.filter(element => {
+      return (
+        isInitializedImageElement(element)
+      );
+    }).map(element => {
+      return element.filename || element.fileId;
+    });
+
+    return await this.fileManager.getFiles(fileIds);
+  };
+
   loadImageFiles = throttle(async () => {
     const { loadedFiles, erroredFiles } =
         await this.fetchImageFilesFromServer({

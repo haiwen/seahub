@@ -100,6 +100,24 @@ export const saveFilesToServer = async (addedFiles) => {
 
 };
 
+export const saveFilesToRepo = async (addedFiles) => {
+  const savedFiles = [];
+  const erroredFiles = [];
+
+  await Promise.all([...addedFiles].map(async ([id, file]) => {
+    try {
+      savedFiles.push(id);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+      erroredFiles.push(id);
+    }
+  }));
+
+  return { savedFiles, erroredFiles };
+
+};
+
 const getImageUrl = (fileName) => {
   const docUuid = context.getDocUuid();
   const { server } = window.app.pageOptions;
@@ -116,9 +134,34 @@ export const loadFilesFromServer = async (fileIds) => {
       loadedFiles.push({
         mimeType: 'image/jpeg',
         id: id.split('.')[0],
-        dataURL: imageUrl,
+        dataURL: 'http://127.0.0.1/thumbnail/9ff8f352-2c82-4802-8484-e7f90d2d0148/1024/qe.png?mtime=1756964849',
         created: Date.now(),
         lastRetrieved: Date.now(),
+      });
+    } catch (error) {
+      erroredFiles.set(id, true);
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  }));
+
+  return { loadedFiles, erroredFiles };
+};
+
+export const loadFilesFromRepo = async (fileIds) => {
+  const loadedFiles = [];
+  const erroredFiles = new Map();
+  await Promise.all([...new Set(fileIds)].map(async (id) => {
+    try {
+      // const { data } = await context.downloadRepoImage(id);
+
+      loadedFiles.push({
+        mimeType: 'image/jpeg',
+        id: id.split('.')[0],
+        dataURL: 'http://127.0.0.1/thumbnail/9ff8f352-2c82-4802-8484-e7f90d2d0148/1024/qe.png?mtime=1756964849',
+        created: Date.now(),
+        lastRetrieved: Date.now(),
+        origin: 'repo'
       });
     } catch (error) {
       erroredFiles.set(id, true);
