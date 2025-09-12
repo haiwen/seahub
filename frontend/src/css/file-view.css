@@ -154,6 +154,11 @@ body {
   z-index: 50;
 }
 
+.seafile-file-detail-right-panel-wrapper {
+  display: flex;
+  position: relative;
+}
+
 @keyframes move {
   from {
     right: -500px;

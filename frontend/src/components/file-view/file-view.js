@@ -16,6 +16,8 @@ import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import { MetadataMiddlewareProvider, MetadataStatusProvider } from '../../hooks';
 import Loading from '../loading';
 import WebSocketClient from '../../utils/websocket-service';
+import ResizeWidth from './resize-width';
+import LocalStorage from '../../utils/local-storage-utils';
 
 import '../../css/file-view.css';
 
@@ -33,6 +35,8 @@ const { isStarred, isLocked, lockedByMe,
   repoID, fileUuid, filePath, filePerm, enableWatermark, userNickName,
   fileName, repoEncrypted, isRepoAdmin, fileType
 } = window.app.pageOptions;
+const MIN_PANEL_WIDTH = 360;
+const MAX_PANEL_WIDTH = 620;
 
 class FileView extends React.Component {
 
@@ -47,6 +51,7 @@ class FileView extends React.Component {
       isHeaderShown: (storedIsHeaderShown === null) || (storedIsHeaderShown == 'true'),
       isDetailsPanelOpen: false,
       isCommentUpdated: false,
+      width: MIN_PANEL_WIDTH,
     };
 
     this.socketManager = new WebSocketClient(this.onMessageCallback, repoID);
@@ -55,6 +60,15 @@ class FileView extends React.Component {
   componentDidMount() {
     const fileIcon = Utils.getFileIconUrl(fileName);
     document.getElementById('favicon').href = fileIcon;
+
+    const newfileType = fileName?.split('.').pop();
+    const settings = LocalStorage.getItem(`${newfileType}_detail_storage`) || {};
+    const { panelWidth } = settings;
+    const width = Math.max(
+      MIN_PANEL_WIDTH,
+      Math.min(parseInt(panelWidth, 10) || MIN_PANEL_WIDTH, MAX_PANEL_WIDTH)
+    );
+    this.setState({ width });
   }
 
   onMessageCallback = (data) => {
@@ -144,6 +158,31 @@ class FileView extends React.Component {
     this.commentPanelRef = ref;
   };
 
+  panelWrapperStyle = () => {
+    let style = {
+      width: this.state.width,
+      zIndex: 101,
+    };
+
+    if (!style.width || style.width < MIN_PANEL_WIDTH) {
+      style.width = MIN_PANEL_WIDTH;
+    } else if (style.width > MAX_PANEL_WIDTH) {
+      style.width = MAX_PANEL_WIDTH;
+    }
+
+    return style;
+  };
+
+  resizeWidth = (width) => {
+    this.setState({ width: width });
+  };
+
+  resizeWidthEnd = (width) => {
+    const newfileType = fileName?.split('.').pop();
+    const settings = LocalStorage.getItem(`${newfileType}_detail_storage`) || {};
+    LocalStorage.setItem(`${newfileType}_detail_storage`, JSON.stringify({ ...settings, panelWidth: width }));
+  };
+
   render() {
     const { isOnlyofficeFile = false } = this.props;
     const { isDetailsPanelOpen, isHeaderShown } = this.state;
@@ -209,13 +248,17 @@ class FileView extends React.Component {
               {isDetailsPanelOpen && (
                 <MetadataStatusProvider repoID={repoID} repoInfo={repoInfo}>
                   <MetadataMiddlewareProvider repoID={repoID} repoInfo={repoInfo}>
-                    <EmbeddedFileDetails
-                      repoID={repoID}
-                      path={filePath}
-                      dirent={{ 'name': fileName, type: 'file' }}
-                      repoInfo={repoInfo}
-                      onClose={this.toggleDetailsPanel}
-                    />
+                    <div className='seafile-file-detail-right-panel-wrapper' style={this.panelWrapperStyle()}>
+                      <ResizeWidth minWidth={MIN_PANEL_WIDTH} maxWidth={MAX_PANEL_WIDTH} resizeWidth={this.resizeWidth} resizeWidthEnd={this.resizeWidthEnd} />
+                      <EmbeddedFileDetails
+                        repoID={repoID}
+                        path={filePath}
+                        dirent={{ 'name': fileName, type: 'file' }}
+                        repoInfo={repoInfo}
+                        onClose={this.toggleDetailsPanel}
+                        width={this.state.width}
+                      />
+                    </div>
                   </MetadataMiddlewareProvider>
                 </MetadataStatusProvider>
               )}
