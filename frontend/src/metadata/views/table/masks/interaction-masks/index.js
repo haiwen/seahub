@@ -17,7 +17,7 @@ import { isSpace } from '../../../../../utils/hotkey';
 import { getFormatRecordData } from '../../../../utils/cell/cell-format-utils';
 import {
   CellType, EVENT_BUS_TYPE, GROUP_ROW_TYPE, TRANSFER_TYPES, EDITOR_TYPE, GRID_HEADER_DOUBLE_HEIGHT, GRID_HEADER_DEFAULT_HEIGHT,
-  NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP, HEADER_HEIGHT_TYPE, PASTE_SOURCE
+  NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP, HEADER_HEIGHT_TYPE, PASTE_SOURCE, PRIVATE_COLUMN_KEY
 } from '../../../../constants';
 import {
   getNewSelectedRange, getSelectedDimensions, selectedRangeIsSingleCell,
@@ -534,6 +534,15 @@ class InteractionMasks extends React.Component {
         if (isValidCellValue(cellVal)) {
           if (type === CellType.TAGS) {
             hasTagsColumn = true;
+          } else if (type === CellType.GEOLOCATION) {
+            originalOldRecordData[key] = cellVal;
+            originalUpdate[key] = null;
+
+            const locationTranslatedVal = record[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+            if (locationTranslatedVal) {
+              originalOldRecordData[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = locationTranslatedVal;
+              originalUpdate[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = null;
+            }
           } else {
             originalOldRecordData[key] = cellVal;
             originalUpdate[key] = null;
