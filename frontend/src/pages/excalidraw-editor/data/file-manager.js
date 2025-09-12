@@ -23,6 +23,7 @@ class FileManager {
   };
 
   isFileSavedOrBeingSaved = (file) => {
+    if (!file) return;
     const fileVersion = this.getFileVersion(file);
     return (
       this.savedFiles.get(file.id) === fileVersion ||
@@ -84,7 +85,11 @@ class FileManager {
     try {
       const { loadedFiles, erroredFiles } = await this._getFiles(ids);
       for (const file of loadedFiles) {
-        this.savedFiles.set(file.id, this.getFileVersion(file));
+        if (file.origin) {
+          this.savedFiles.set(file.id, undefined);
+        } else {
+          this.savedFiles.set(file.id, this.getFileVersion(file));
+        }
       }
       for (const [fileId] of erroredFiles) {
         this.erroredFiles_fetch.set(fileId, true);

@@ -93,20 +93,21 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, t, searchContent, isOpen
   }, []);
 
   const getSearchFiles = useCallback((searchContent, fileType) => {
-    return context.getSearchFilesByFilename(searchContent, 1, 100, fileType).then(res => {
-      res.data.results.forEach((item) => {
-        item.indexId = slugid.nice();
-        item.type = 'file';
-        item.file_uuid = item.doc_uuid;
-      });
-      if (res.data.results.length === 0) {
-        setHasSearchResult(false);
-      } else {
-        setHasSearchResult(true);
-      }
-      setIsCurrentLibrary(false);
-      setTreeData(res.data.results);
-    });
+    // 搜索目前没做，后端说参考在当前资料库搜索功能
+    // return context.getSearchFilesByFilename(searchContent, 1, 100, fileType).then(res => {
+    //   res.data.results.forEach((item) => {
+    //     item.indexId = slugid.nice();
+    //     item.type = 'file';
+    //     item.file_uuid = item.doc_uuid;
+    //   });
+    //   if (res.data.results.length === 0) {
+    //     setHasSearchResult(false);
+    //   } else {
+    //     setHasSearchResult(true);
+    //   }
+    //   setIsCurrentLibrary(false);
+    //   setTreeData(res.data.results);
+    // });
   }, []);
 
   const renderFileTree = useCallback((data) => {

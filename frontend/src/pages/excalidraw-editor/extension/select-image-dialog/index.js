@@ -1,59 +1,145 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Modal, ModalBody, Input } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import toaster from '../../../../components/toast';
-import context from '../../context';
-import { getErrorMsg } from '../../utils/common-utils';
+import FileManager from '../../data/file-manager';
+import { loadFilesFromRepo, saveFilesToRepo } from '../../data/server-storage';
 import LocalImage from './local-image';
 
 import './index.css';
+import { updateStaleImageStatuses } from '../../utils/exdraw-utils';
+import { isInitializedImageElement } from '../../utils/element-utils';
+import { CaptureUpdateAction } from '@excalidraw/excalidraw';
+import LocalData from '../../data/local-data';
+import SocketManager from '../../socket/socket-manager';
 
-const SelectSdocFileDialog = ({ editor, closeDialog, insertLinkCallback }) => {
+const SelectSdocFileDialog = ({ excalidrawAPI, closeDialog, insertLinkCallback }) => {
   const { t } = useTranslation('sdoc-editor');
   const [currentSelectedFile, setCurrentSelectedFile] = useState(null);
   const [temSearchContent, setTemSearchContent] = useState('');
   const [searchContent, setSearchContent] = useState('');
   const [isOpenSearch, setIsOpenSearch] = useState(false);
+  const fileManagerRef = useRef(null);
 
   let modalTitle = 'Select_image';
+  fileManagerRef.current = new FileManager({
+    getFiles: async (ids) => {
+      return loadFilesFromRepo(ids);
+    },
+    saveFiles: async ({ addedFiles }) => {
+      const { savedFiles, erroredFiles } = await saveFilesToRepo(addedFiles);
+
+      return {
+        savedFiles: savedFiles.reduce((acc, id) => {
+          const fileData = addedFiles.get(id);
+          if (fileData) {
+            acc.set(id, fileData);
+          }
+          return acc;
+        }, new Map()),
+        erroredFiles: erroredFiles.reduce((acc, id) => {
+          const fileData = addedFiles.get(id);
+          if (fileData) {
+            acc.set(id, fileData);
+          }
+          return acc;
+        }, new Map())
+      };
+    }
+  });
 
   const onSelectedFile = useCallback((fileInfo) => {
     setCurrentSelectedFile(fileInfo);
   }, []);
 
-  const insertFile = useCallback((fileInfo) => {
-    console.log('fileInfo', fileInfo);
+  const insertFile = useCallback(async (fileInfo) => {
+    const imageElement = {
+      'type': 'image',
+      'version': 1,
+      'versionNonce': Math.random(),
+      'isDeleted': false,
+      'id': Date.now(),
+      'fillStyle': 'hachure',
+      'strokeWidth': 1,
+      'strokeStyle': 'solid',
+      'roughness': 1,
+      'opacity': 100,
+      'angle': 0,
+      'x': 100,
+      'y': 200,
+      'strokeColor': '#000000',
+      'backgroundColor': 'transparent',
+      'width': 300,
+      'height': 200,
+      'seed': 987654321,
+      'groupIds': [],
+      'frameId': null,
+      'roundness': null,
+      'boundElements': null,
+      'updated': 1630000000000,
+      'link': null,
+      'locked': false,
+      'status': 'saved',
+      'fileId': fileInfo.name.split('.')[0],
+      'scale': [1, 1]
+    };
+    excalidrawAPI.updateScene({
+      elements: [imageElement],
+      captureUpdate: CaptureUpdateAction.IMMEDIATELY,
+    });
+    const newElement = [...excalidrawAPI.getSceneElementsIncludingDeleted(), imageElement];
 
-    // const { insertFileLinkCallback, insertSdocFileLinkCallback } = insertLinkCallback || {};
+    loadImages(newElement, true);
+  }, [excalidrawAPI]);
 
-    // insertFileLinkCallback && insertFileLinkCallback(editor, fileInfo.name, fileInfo.file_uuid);
-  }, [insertLinkCallback, editor]);
+  const loadImages = (data, isInitialLoad) => {
+    const socketManager = SocketManager.getInstance();
+    if (socketManager) {
+      if (data) {
+        socketManager.fetchImageFilesFromRepo({
+          elements: data,
+          forceFetchFiles: true,
+        }).then(({ loadedFiles, erroredFiles }) => {
+          excalidrawAPI.addFiles(loadedFiles);
+          updateStaleImageStatuses({
+            excalidrawAPI,
+            erroredFiles,
+            elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+          });
+        });
+      }
+    } else {
+      const fileIds =
+        data.scene.elements?.reduce((acc, element) => {
+          if (isInitializedImageElement(element)) {
+            return acc.concat(element.fileId);
+          }
+          return acc;
+        }, []) || [];
+      if (isInitialLoad && fileIds.length) {
+        LocalData.fileStorage
+          .getFiles(fileIds)
+          .then(({ loadedFiles, erroredFiles }) => {
+            if (loadedFiles.length) {
+              excalidrawAPI.addFiles(loadedFiles);
+            }
+            updateStaleImageStatuses({
+              excalidrawAPI,
+              erroredFiles,
+              elements: excalidrawAPI.getSceneElementsIncludingDeleted(),
+            });
+          });
+
+        LocalData.fileStorage.clearObsoleteFiles({ currentFileIds: fileIds });
+      }
+    }
+  };
 
   const onSubmit = useCallback(() => {
     if (!currentSelectedFile) return;
 
-    const { file_uuid } = currentSelectedFile;
-    let fileInfo = { ...currentSelectedFile };
-
-    // File has no id
-    if (!file_uuid || file_uuid === '') {
-      context.getSdocLocalFileId(currentSelectedFile.path).then(res => {
-        if (res.status === 200) {
-          fileInfo = { ...currentSelectedFile, file_uuid: res.data.file_uuid };
-        }
-
-        insertFile(fileInfo);
-        closeDialog();
-      }).catch(error => {
-        const errorMessage = getErrorMsg(error);
-        toaster.danger(errorMessage);
-      });
-      return;
-    }
-
-    insertFile(fileInfo);
+    insertFile(currentSelectedFile);
     closeDialog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSelectedFile]);

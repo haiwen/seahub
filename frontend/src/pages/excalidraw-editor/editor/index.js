@@ -196,7 +196,6 @@ const SimpleEditor = () => {
 
   const closeDialog = useCallback(() => {
     setIsShowImageDialog(false);
-    console.log('close');
   }, []);
 
   const handleCustomAction = () => {
@@ -236,7 +235,7 @@ const SimpleEditor = () => {
 
         </MainMenu>
       </Excalidraw>
-      {isShowImageDialog && <SelectSdocFileDialog closeDialog={closeDialog}/>}
+      {isShowImageDialog && <SelectSdocFileDialog excalidrawAPI={excalidrawAPI} closeDialog={closeDialog}/>}
     </div>
   );
 };

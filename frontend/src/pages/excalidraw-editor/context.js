@@ -67,6 +67,12 @@ class Context {
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   };
 
+  downloadRepoImage = (fileName) => {
+    const docUuid = this.getDocUuid();
+    const url = `${server}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}?from_repo=1`;
+    return axios.get(url);
+  };
+
   // local files
   getLocalFiles(p, type) {
     const docUuid = this.getDocUuid();
@@ -78,7 +84,7 @@ class Context {
   getSearchFilesByFilename(query, page, per_page, search_type) {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
-    const url = 'api/v2.1/seadoc/search-filename/' + docUuid + '/?query=' + query + '&page=' + page + '&per_page=' + per_page + '&search_type=' + search_type;
+    const url = `${server}/api/v2.1/seadoc/search-filename/${docUuid}/?query=${query}&page=${page}&per_page=${per_page}&search_type=${search_type}`;
 
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }
