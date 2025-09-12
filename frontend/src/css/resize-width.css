@@ -1,0 +1,37 @@
+.seafile-resize-width-handler {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 6px;
+}
+
+.seafile-resize-width-handler.resize-handler-placement-right {
+  left: 0;
+  right: auto;
+}
+
+.seafile-resize-width-handler:hover {
+  cursor: col-resize;
+}
+
+.seafile-resize-width-handler .seafile-resize-width-handler-content {
+  background-color: initial;
+  height: 100%;
+  position: relative;
+  width: 2px;
+}
+
+.seafile-resize-width-handler:hover .seafile-resize-width-handler-content {
+  background-color: #ccc;
+}
+
+.seafile-resize-width-handler .seafile-resize-width-handler-bar {
+  background-color: #2d7ff9;
+  border-radius: 3px;
+  content: "";
+  left: 50%;
+  margin-left: -3px;
+  position: absolute;
+  width: 6px;
+}
