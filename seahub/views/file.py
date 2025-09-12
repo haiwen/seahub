@@ -642,11 +642,13 @@ def view_lib_file(request, repo_id, path):
 
     org_id = request.user.org.org_id if is_org_context(request) else -1
     mobile_login = request.session.get(SESSION_MOBILE_LOGIN_KEY, False)
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
     # basic file info
     return_dict = {
         'is_pro': is_pro_version(),
         'repo': repo,
         'file_id': file_id,
+        'current_dir_id': dir_id,
         'last_commit_id': repo.head_cmmt_id,
         'is_repo_owner': is_repo_owner(request, repo_id, username),
         'is_repo_admin': is_repo_admin(username, repo_id),

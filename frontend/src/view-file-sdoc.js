@@ -15,7 +15,7 @@ const {
   docPath, docName, docUuid, seadocAccessToken, seadocServerUrl, assetsUrl,
   isSdocRevision, isPublished, originFilename, revisionCreatedAt, originFileVersion,
   originFilePath, originDocUuid, revisionId, isFreezed, mobileLogin, isRepoAdmin,
-  enableSeafileAI
+  enableSeafileAI, currentDirId
 } = window.app.pageOptions;
 
 window.seafile = {
@@ -53,6 +53,7 @@ window.seafile = {
   mobileLogin,
   enableSeafileAI,
   fileServerRoot,
+  currentDirId
 };
 
 const repoInfo = { encrypted: repoEncrypted, permission: filePerm, is_admin: isRepoAdmin };
