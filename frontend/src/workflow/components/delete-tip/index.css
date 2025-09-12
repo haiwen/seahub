@@ -1,0 +1,15 @@
+.workflow-delete-tip {
+  position: fixed;
+  z-index: 9999;
+}
+
+.workflow-delete-tip.tip-container {
+  display: flex;
+  flex-direction: column;
+  width: 232px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 2px 8px 1px rgb(0 0 0 / 20%);
+}

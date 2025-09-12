@@ -11,6 +11,7 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
+import Icon from '../../icon';
 import { useMetadataStatus } from '../../../hooks';
 
 import './index.css';
@@ -62,15 +63,17 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
       {enableMetadata && (
-        <>
+        <div className='dir-others-item text-nowrap' title={gettext('Workflow')}>
           <a
-            className="dir-others-item text-nowrap"
-            title="Workflow"
-            href={`${siteRoot}repo/${repoID}/workflows`}
+            title={gettext('Workflow')}
+            href={`${siteRoot}lib/${repoID}/workflows`}
+            target='_blank'
+            rel="noreferrer"
           >
-            <span className="dir-others-item-text">Workflow</span>
+            <Icon symbol="workflow" />
+            <span className="dir-others-item-text text-truncate">{gettext('Workflow')}</span>
           </a>
-        </>
+        </div>
       )}
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
@@ -81,19 +84,19 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
       {showSettings && (
         <div className='dir-others-item text-nowrap' title={gettext('Settings')} onClick={toggleSettingsDialog}>
           <span className="sf3-font-set-up sf3-font"></span>
-          <span className="dir-others-item-text">{gettext('Settings')}</span>
+          <span className="dir-others-item-text text-truncate">{gettext('Settings')}</span>
         </div>
       )}
       {userPerm == 'rw' && (
         <div className='dir-others-item text-nowrap' title={gettext('Trash')} onClick={toggleTrashDialog}>
           <span className="sf3-font-trash sf3-font"></span>
-          <span className="dir-others-item-text">{gettext('Trash')}</span>
+          <span className="dir-others-item-text text-truncate">{gettext('Trash')}</span>
         </div>
       )}
       {isDesktop && (
         <div className='dir-others-item text-nowrap' title={gettext('History')} onClick={toggleRepoHistoryDialog}>
           <span className="sf3-font-history sf3-font"></span>
-          <span className="dir-others-item-text">{gettext('History')}</span>
+          <span className="dir-others-item-text text-truncate">{gettext('History')}</span>
         </div>
       )}
       {isDesktop && (isRepoOwner || isDepartmentAdmin) && (
@@ -128,7 +131,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
           toggleDialog={toggleRepoHistoryDialog}
         />
       )}
-    </TreeSection>
+    </TreeSection >
   );
 };
 

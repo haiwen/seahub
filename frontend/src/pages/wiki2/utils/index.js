@@ -1,13 +1,5 @@
 import { serviceURL, mediaUrl } from '../../../utils/constants';
-
-const generatorBase64Code = (keyLength = 4) => {
-  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
-  let key = '';
-  for (let i = 0; i < keyLength; i++) {
-    key += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return key;
-};
+import { generatorBase64Code } from '../../../utils/utils';
 
 const generateUniqueId = (navigation = [], length = 4) => {
   let idMap = {};
