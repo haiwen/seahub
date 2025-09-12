@@ -191,6 +191,7 @@ export const MetadataViewProvider = ({
         return;
       }
     }
+
     storeRef.current.modifyRecords(rowIds, idRowUpdates, idOriginalRowUpdates, idOldRowData, idOriginalOldRowData, isCopyPaste, isRename, {
       fail_callback: (error) => {
         fail_callback && fail_callback(error);
@@ -377,6 +378,7 @@ export const MetadataViewProvider = ({
     }
 
     const recordIds = records.map(record => getRecordIdFromRecord(record));
+
     extractFilesDetails(recordObjIds, {
       success_callback: ({ details }) => {
         let idOldRecordData = {};
@@ -384,9 +386,13 @@ export const MetadataViewProvider = ({
         let idRecordUpdates = {};
         let idOriginalRecordUpdates = {};
         const captureColumnKey = PRIVATE_COLUMN_KEY.CAPTURE_TIME;
-        const captureColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
         const locationColumnKey = PRIVATE_COLUMN_KEY.LOCATION;
-        const locationColumn = getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.LOCATION);
+
+        const freshMetadata = storeRef.current?.data || metadata;
+
+        const captureColumn = getColumnByKey(freshMetadata.columns, PRIVATE_COLUMN_KEY.CAPTURE_TIME);
+        const locationColumn = getColumnByKey(freshMetadata.columns, PRIVATE_COLUMN_KEY.LOCATION);
+
         records.forEach(record => {
           const recordId = record[PRIVATE_COLUMN_KEY.ID];
           idOldRecordData[recordId] = {};
@@ -407,6 +413,7 @@ export const MetadataViewProvider = ({
             }
           }
         });
+
         details.forEach(detail => {
           const updateRecordId = detail[PRIVATE_COLUMN_KEY.ID];
           idRecordUpdates[updateRecordId] = {};
@@ -427,6 +434,7 @@ export const MetadataViewProvider = ({
             }
           }
         });
+
         modifyRecords(recordIds, idRecordUpdates, idOriginalRecordUpdates, idOldRecordData, idOriginalOldRecordData);
       }
     });
