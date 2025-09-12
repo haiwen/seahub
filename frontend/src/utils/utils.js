@@ -534,11 +534,11 @@ export const Utils = {
     }
 
     if (permission == 'rw' || permission == 'cloud-edit') {
-      list.push(RENAME, MOVE);
+      list.push(MOVE);
     }
 
     if (isCustomPermission && customPermission.permission.modify) {
-      list.push(RENAME, MOVE);
+      list.push(MOVE);
     }
 
     if (permission == 'rw' || permission == 'cloud-edit') {
@@ -547,6 +547,14 @@ export const Utils = {
 
     if (isCustomPermission && customPermission.permission.copy) {
       list.push(COPY);
+    }
+
+    if (permission == 'rw' || permission == 'cloud-edit') {
+      list.push(RENAME);
+    }
+
+    if (isCustomPermission && customPermission.permission.modify) {
+      list.push(RENAME);
     }
 
     if (dirent.starred) {

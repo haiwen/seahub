@@ -336,14 +336,14 @@ class SelectedDirentsToolbar extends React.Component {
         {canDelete &&
           <span className="cur-view-path-btn sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')} onClick={this.onItemsDelete}></span>
         }
+        {selectedLen == 1 && this.getDirentSharePerm() &&
+          <span className="cur-view-path-btn sf3-font-share sf3-font" aria-label={gettext('Share')} title={gettext('Share')} onClick={this.onShare}></span>
+        }
         {canModify &&
           <span className="cur-view-path-btn sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')} onClick={this.onMove}></span>
         }
         {canCopy &&
           <span className="cur-view-path-btn sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')} onClick={this.onCopy}></span>
-        }
-        {selectedLen == 1 && this.getDirentSharePerm() &&
-          <span className="cur-view-path-btn sf3-font-share sf3-font" aria-label={gettext('Share')} title={gettext('Share')} onClick={this.onShare}></span>
         }
         {selectedLen === 1 &&
           <ItemDropdownMenu
