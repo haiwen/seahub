@@ -588,7 +588,7 @@ export const Utils = {
       SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
       HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT,
       CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC, EXPORT_SDOC,
-      STAR, UNSTAR
+      STAR, UNSTAR, MORE
     } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
@@ -623,13 +623,13 @@ export const Utils = {
 
     if (permission == 'rw' || permission == 'cloud-edit') {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        list.push(RENAME, MOVE);
+        list.push(MOVE);
       }
     }
 
     if (isCustomPermission && customPermission.permission.modify) {
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        list.push(RENAME, MOVE);
+        list.push(MOVE);
       }
     }
 
@@ -640,6 +640,18 @@ export const Utils = {
     if (isCustomPermission) {
       if (customPermission.permission.copy) {
         list.push(COPY);
+      }
+    }
+    
+    if (permission == 'rw' || permission == 'cloud-edit') {
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        list.push(RENAME);
+      }
+    }
+
+    if (isCustomPermission && customPermission.permission.modify) {
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        list.push(RENAME);
       }
     }
 
@@ -694,12 +706,13 @@ export const Utils = {
     }
 
     if (permission == 'rw') {
-      list.push('Divider');
-      list.push(PROPERTIES, HISTORY);
+      let subOpList = [];
+      subOpList.push(PROPERTIES, HISTORY);
       if (isPro && fileAuditEnabled) {
-        list.push(ACCESS_LOG);
+        subOpList.push(ACCESS_LOG);
       }
-      list.push('Divider', OPEN_VIA_CLIENT);
+      subOpList.push(OPEN_VIA_CLIENT);
+      list.push({ ...MORE, subOpList });
     }
 
     if (permission == 'r') {
