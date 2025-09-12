@@ -740,9 +740,9 @@ class DirentGridView extends React.Component {
     } else {
       let menuList = [];
       if (!hasCustomPermission('modify') && !hasCustomPermission('copy') && !hasCustomPermission('download') && !hasCustomPermission('delete')) return;
-      ['move', 'copy', 'download', 'delete'].forEach(action => {
-        if (hasCustomPermission(action)) {
-          menuList.push(TextTranslation[action.toUpperCase()]);
+      [TextTranslation.DOWNLOAD, TextTranslation.DELETE, TextTranslation.MOVE, TextTranslation.COPY].forEach(action => {
+        if (hasCustomPermission(action.key.toLowerCase())) {
+          menuList.push(action);
         }
       });
       this.handleContextClick(event, DIRENTS_MENU_ID, menuList);

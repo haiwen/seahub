@@ -439,12 +439,12 @@ class DirentListView extends React.Component {
         let menuList = [];
         if (isCustomPermission) {
           const { modify: canModify, copy: canCopy, download: canDownload, delete: canDelete } = customPermission.permission;
-          canModify && menuList.push(TextTranslation.MOVE);
-          canCopy && menuList.push(TextTranslation.COPY);
           canDownload && menuList.push(TextTranslation.DOWNLOAD);
           canDelete && menuList.push(TextTranslation.DELETE);
+          canModify && menuList.push(TextTranslation.MOVE);
+          canCopy && menuList.push(TextTranslation.COPY);
         } else {
-          menuList = [TextTranslation.MOVE, TextTranslation.COPY, TextTranslation.DOWNLOAD, TextTranslation.DELETE];
+          menuList = [TextTranslation.DOWNLOAD, TextTranslation.DELETE, TextTranslation.MOVE, TextTranslation.COPY];
         }
 
         this.handleContextClick(event, id, menuList);
