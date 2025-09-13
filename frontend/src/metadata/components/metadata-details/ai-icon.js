@@ -116,7 +116,9 @@ const AIIcon = () => {
             if (address) {
               update[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = address;
             }
-            Object.keys(update).length > 0 && onLocalRecordChange(recordId, update);
+            if (Object.keys(update).length > 0) {
+              onLocalRecordChange({ recordId, parentDir, fileName }, update);
+            }
           },
         });
         break;

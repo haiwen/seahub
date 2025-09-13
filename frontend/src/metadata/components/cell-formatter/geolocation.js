@@ -28,6 +28,7 @@ GeolocationFormatter.propTypes = {
   children: PropTypes.any,
   className: PropTypes.string,
   hyphen: PropTypes.string,
+  record: PropTypes.object,
 };
 
 export default GeolocationFormatter;

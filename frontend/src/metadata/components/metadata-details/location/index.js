@@ -65,6 +65,23 @@ class Location extends React.Component {
         isReadyToEraseLocation: false,
       });
     }
+
+    if (prevProps.record?._location_translated?.address !== this.props.record?._location_translated?.address) {
+      this.setState({
+        address: this.props.record?._location_translated?.address || '',
+      });
+    }
+
+    if (prevProps.position !== this.props.position) {
+      this.setState({
+        latLng: this.props.position,
+      }, () => {
+        if (isValidPosition(this.props.position?.lng, this.props.position?.lat) && !this.map) {
+          this.initMap();
+        }
+      });
+    }
+
     if (!this.map) return;
     if (!isValidPosition(latLng?.lng, latLng?.lat)) return;
 
@@ -251,7 +268,13 @@ class Location extends React.Component {
                   background: 'transparent',
                 }}
               >
-                <GeolocationEditor position={latLng} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
+                <GeolocationEditor
+                  position={latLng}
+                  locationTranslated={this.props.record?._location_translated}
+                  onSubmit={this.onSubmit}
+                  onFullScreen={this.onFullScreen}
+                  onReadyToEraseLocation={this.onReadyToEraseLocation}
+                />
               </Popover>
             </ClickOutside>
           ) : (
@@ -261,7 +284,14 @@ class Location extends React.Component {
               toggle={this.onFullScreen}
               zIndex={1052}
             >
-              <GeolocationEditor position={latLng} isFullScreen={isFullScreen} onSubmit={this.onSubmit} onFullScreen={this.onFullScreen} onReadyToEraseLocation={this.onReadyToEraseLocation} />
+              <GeolocationEditor
+                position={latLng}
+                locationTranslated={this.props.record?._location_translated}
+                isFullScreen={isFullScreen}
+                onSubmit={this.onSubmit}
+                onFullScreen={this.onFullScreen}
+                onReadyToEraseLocation={this.onReadyToEraseLocation}
+              />
             </Modal>
           )
         )}

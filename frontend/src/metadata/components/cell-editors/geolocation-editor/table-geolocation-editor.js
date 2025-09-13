@@ -1,7 +1,7 @@
 import React, { useState, useCallback, forwardRef, useImperativeHandle, useEffect, useRef } from 'react';
 import { Modal } from 'reactstrap';
 import GeolocationEditor from './index';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getRecordIdFromRecord } from '../../../utils/cell';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
@@ -12,14 +12,20 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
   const [isFullScreen, setFullScreen] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
   const [isReadyToEraseLocation, setReadyToEraseLocation] = useState(false);
-  const [editorStyle, setEditorStyle] = useState({});
+  const [editorStyle, setEditorStyle] = useState({ visibility: 'hidden' });
+  const [isMapReady, setMapReady] = useState(false);
   const editorRef = useRef(null);
+
+  const editorIdRef = useRef(`table-editor-${record?._id || 'default'}-${Date.now()}`);
 
   useImperativeHandle(ref, () => ({
     onClose: () => closeEditor()
   }));
 
-  // Calculate viewport-aware positioning
+  const handleMapReady = useCallback(() => {
+    setMapReady(true);
+  }, []);
+
   useEffect(() => {
     if (!isFullScreen && editorRef.current) {
       const editorElement = editorRef.current;
@@ -40,7 +46,8 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
           position: 'absolute',
           zIndex: '1050',
           width: `${editorWidth}px`,
-          height: `${editorHeight}px`
+          height: `${editorHeight}px`,
+          visibility: isMapReady ? 'visible' : 'hidden'
         };
 
         let left = (cellWidth - editorWidth) / 2;
@@ -69,7 +76,7 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
         setEditorStyle(adjustedStyle);
       }
     }
-  }, [isFullScreen]);
+  }, [isFullScreen, isMapReady]);
 
   const closeEditor = useCallback(() => {
     if (isReadyToEraseLocation) {
@@ -84,19 +91,13 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
         });
       }).then(() => {
         setCurrentValue(null);
-        setReadyToEraseLocation(false);
-        if (window.sfMetadataContext?.eventBus) {
-          const updates = {
-            [PRIVATE_COLUMN_KEY.LOCATION]: null,
-            [PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED]: null
-          };
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId }, updates);
-        }
+        onClose && onClose();
       }).catch((error) => {
-        toaster.danger(gettext('Failed to modify records'));
+        toaster.danger(gettext('Failed to clear location data'));
       });
+    } else {
+      onClose && onClose();
     }
-    onClose && onClose();
   }, [isReadyToEraseLocation, onClose, record]);
 
   const onFullScreen = useCallback(() => {
@@ -106,11 +107,9 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
   const onSubmit = useCallback((locationData) => {
     const { position, location_translated } = locationData;
 
-    // Update location data using direct API calls
     const repoID = window.sfMetadataContext.getSetting('repoID');
     const recordId = getRecordIdFromRecord(record);
 
-    // First update location_translated, then location
     window.sfMetadataContext.modifyRecord(repoID, recordId, {
       [PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED]: location_translated
     }).then(() => {
@@ -121,17 +120,8 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
       setCurrentValue(position);
       setFullScreen(false);
       onClose && onClose();
-
-      // Dispatch local update event for real-time UI updates
-      if (window.sfMetadataContext?.eventBus) {
-        const updates = {
-          [PRIVATE_COLUMN_KEY.LOCATION]: position,
-          [PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED]: location_translated
-        };
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId }, updates);
-      }
     }).catch((error) => {
-      toaster.danger(gettext('Failed to modify records'));
+      toaster.danger(gettext('Failed to save location data'));
     });
   }, [record, onClose]);
 
@@ -139,14 +129,19 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
     setReadyToEraseLocation(true);
   }, []);
 
+  const locationTranslated = record?._location_translated || null;
+
   return (
     <div className="sf-table-geolocation-editor" ref={editorRef} style={editorStyle}>
       {!isFullScreen ? (
         <GeolocationEditor
+          editorId={editorIdRef.current}
           position={currentValue}
+          locationTranslated={locationTranslated}
           onSubmit={onSubmit}
           onFullScreen={onFullScreen}
           onReadyToEraseLocation={onReadyToEraseLocation}
+          onMapReady={handleMapReady}
         />
       ) : (
         <Modal
@@ -156,16 +151,21 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
           zIndex={1052}
         >
           <GeolocationEditor
+            editorId={`${editorIdRef.current}-fullscreen`}
             position={currentValue}
+            locationTranslated={locationTranslated}
             isFullScreen={isFullScreen}
             onSubmit={onSubmit}
             onFullScreen={onFullScreen}
             onReadyToEraseLocation={onReadyToEraseLocation}
+            onMapReady={handleMapReady}
           />
         </Modal>
       )}
     </div>
   );
 });
+
+TableGeolocationEditor.displayName = 'TableGeolocationEditor';
 
 export default TableGeolocationEditor;

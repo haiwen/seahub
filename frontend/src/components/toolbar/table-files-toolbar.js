@@ -131,7 +131,6 @@ const TableFilesToolbar = ({ repoID }) => {
   }, [selectedRecordIds, records, canModify, areRecordsInSameFolder]);
 
   const onMenuItemClick = useCallback((operation) => {
-    const records = selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean);
     switch (operation) {
       case TextTranslation.MOVE.key: {
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
@@ -155,6 +154,7 @@ const TableFilesToolbar = ({ repoID }) => {
           const fileName = getFileNameFromRecord(record);
           return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
         });
+
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, imageOrVideoRecords);
         break;
       }
@@ -181,7 +181,7 @@ const TableFilesToolbar = ({ repoID }) => {
       default:
         break;
     }
-  }, [repoID, eventBus, selectedRecordIds]);
+  }, [repoID, eventBus, records, selectedRecordIds]);
 
   useEffect(() => {
     const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata) => {

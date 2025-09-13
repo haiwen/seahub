@@ -96,9 +96,36 @@ export const MetadataAIOperationsProvider = ({
     const inProgressToaster = toaster.notifyInProgress(gettext('Extracting file details by AI...'), { duration: null });
     metadataAPI.extractFileDetails(repoID, objIds).then(res => {
       const details = res?.data?.details || [];
+
+      const processedDetails = details.map(detail => {
+        const processedDetail = { ...detail };
+
+        if (detail._location && detail._location.lng !== undefined && detail._location.lat !== undefined) {
+          processedDetail._location = {
+            lng: detail._location.lng,
+            lat: detail._location.lat
+          };
+
+          if (detail._location_translated) {
+            processedDetail._location_translated = detail._location_translated;
+          } else if (detail._location) {
+            processedDetail._location_translated = {
+              address: '',
+              country: '',
+              province: '',
+              city: '',
+              district: '',
+              street: ''
+            };
+          }
+        }
+
+        return processedDetail;
+      });
+
       inProgressToaster.close();
       toaster.success(gettext('File details extracted'));
-      success_callback && success_callback({ details });
+      success_callback && success_callback({ details: processedDetails });
     }).catch(error => {
       inProgressToaster.close();
       const errorMessage = gettext('Failed to extract file details');
