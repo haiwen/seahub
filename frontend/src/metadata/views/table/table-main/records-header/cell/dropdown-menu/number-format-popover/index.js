@@ -10,11 +10,11 @@ import './index.css';
 
 const FORMAT_OPTIONS = [
   { label: gettext('Number'), value: 'number' },
-  { label: gettext('Percentage'), value: 'percent' },
-  { label: gettext('Chinese Yuan'), value: 'yuan' },
+  { label: gettext('Percent'), value: 'percent' },
+  { label: gettext('Yuan'), value: 'yuan' },
   { label: gettext('Dollar'), value: 'dollar' },
   { label: gettext('Euro'), value: 'euro' },
-  { label: gettext('Custom Currency'), value: 'custom_currency' },
+  { label: gettext('Custom currency'), value: 'custom_currency' },
 ];
 
 const DECIMAL_OPTIONS = [
@@ -23,9 +23,9 @@ const DECIMAL_OPTIONS = [
 ];
 
 const THOUSANDS_OPTIONS = [
-  { label: gettext('No Separator(1000000)'), value: 'no' },
-  { label: gettext('Comma(1.000.000)'), value: 'comma' },
-  { label: gettext('Space(1 000 000)'), value: 'space' },
+  { label: gettext('No separator (1000000)'), value: 'no' },
+  { label: gettext('Comma (1.000.000)'), value: 'comma' },
+  { label: gettext('Space (1 000 000)'), value: 'space' },
 ];
 
 const PRECISION_OPTIONS = [
@@ -153,7 +153,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
         {isCustomCurrency && (
           <>
             <FormGroup className="">
-              <Label>{gettext('Custom Sign')}</Label>
+              <Label>{gettext('Custom symbol')}</Label>
               <Input
                 type="text"
                 value={customSymbol}
@@ -164,7 +164,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
             </FormGroup>
 
             <FormGroup className="">
-              <Label>{gettext('Sign Position')}</Label>
+              <Label>{gettext('Symbol position')}</Label>
               <CustomizeSelect
                 value={selectedSignPosition}
                 options={SIGN_POSITION_OPTIONS}
@@ -175,7 +175,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
         )}
 
         <FormGroup className="">
-          <Label>{gettext('Decimal Separator')}</Label>
+          <Label>{gettext('Decimal separator')}</Label>
           <CustomizeSelect
             value={selectedDecimal}
             options={DECIMAL_OPTIONS}
@@ -184,7 +184,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
         </FormGroup>
 
         <FormGroup className="">
-          <Label>{gettext('Thousands Separator')}</Label>
+          <Label>{gettext('Thousands separator')}</Label>
           <CustomizeSelect
             value={selectedThousands}
             options={THOUSANDS_OPTIONS}
@@ -202,7 +202,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
               className="sf-metadata-number-format-checkbox mr-2"
             />
             <Label for="enable-precision" className="mb-0">
-              {gettext('Enforce Precision')}
+              {gettext('Enforce precision')}
             </Label>
           </div>
         </FormGroup>
