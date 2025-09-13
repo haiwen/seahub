@@ -141,7 +141,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
       header={gettext('Number Format Settings')}
     >
       <div className="sf-metadata-number-format-popover-content sf-metadata-column-data-settings">
-        <FormGroup className="">
+        <FormGroup>
           <Label>{gettext('Format')}</Label>
           <CustomizeSelect
             value={selectedFormat}
@@ -152,7 +152,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
 
         {isCustomCurrency && (
           <>
-            <FormGroup className="">
+            <FormGroup>
               <Label>{gettext('Custom symbol')}</Label>
               <Input
                 type="text"
@@ -163,7 +163,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
               />
             </FormGroup>
 
-            <FormGroup className="">
+            <FormGroup>
               <Label>{gettext('Symbol position')}</Label>
               <CustomizeSelect
                 value={selectedSignPosition}
@@ -174,7 +174,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
           </>
         )}
 
-        <FormGroup className="">
+        <FormGroup>
           <Label>{gettext('Decimal separator')}</Label>
           <CustomizeSelect
             value={selectedDecimal}
@@ -183,7 +183,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
           />
         </FormGroup>
 
-        <FormGroup className="">
+        <FormGroup>
           <Label>{gettext('Thousands separator')}</Label>
           <CustomizeSelect
             value={selectedThousands}
@@ -192,7 +192,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
           />
         </FormGroup>
 
-        <FormGroup className="">
+        <FormGroup>
           <div className="d-flex align-items-center">
             <Input
               type="checkbox"
@@ -208,7 +208,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
         </FormGroup>
 
         {enablePrecision && (
-          <FormGroup className="">
+          <FormGroup>
             <Label>{gettext('Precision')}</Label>
             <CustomizeSelect
               value={selectedPrecision}

@@ -73,7 +73,7 @@ const DateData = ({ value, column, onChange }) => {
 
   return (
     <div className="sf-metadata-column-data-settings sf-metadata-date-column-data-settings">
-      <FormGroup className="">
+      <FormGroup>
         <Label>{gettext('Format')}</Label>
         <CustomizeSelect
           value={selectedValue}
