@@ -34,7 +34,7 @@ from seahub.base.accounts import User
 from seahub.base.decorators import require_POST
 from seahub.base.models import ClientLoginToken
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
-from seahub.profile.models import Profile
+from seahub.profile.models import Profile, ExUser
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.revision_tag.models import RevisionTags
 from seahub.tags.models import FileUUIDMap
@@ -1023,7 +1023,8 @@ def react_fake_view(request, **kwargs):
 
     username = request.user.username
 
-    if resolve(request.path).url_name == 'lib_view':
+    url_name = resolve(request.path).url_name
+    if url_name in ['lib_view', 'ex_lib_view']:
 
         repo_id = kwargs.get('repo_id', '')
         repo_name = kwargs.get('repo_name', '')
@@ -1068,7 +1069,7 @@ def react_fake_view(request, **kwargs):
                 error_msg = 'Permission denied.'
                 return render_error(request, error_msg)
 
-            next_url = reverse('lib_view', args=[converted_repo_id,
+            next_url = reverse(url_name, args=[converted_repo_id,
                                                  converted_repo.repo_name,
                                                  converted_path.strip('/')])
             return HttpResponseRedirect(next_url)
@@ -1110,7 +1111,12 @@ def react_fake_view(request, **kwargs):
     if enable_clean_trash:
         enable_clean_trash = int(not org_setting[DISABLE_ORG_USER_CLEAN_TRASH])
 
+    can_use_ex_repos = False
+    if ExUser.objects.filter(email=username).exists():
+        can_use_ex_repos = True # 后面需要判断
+
     return_dict = {
+        'can_use_ex_repos': can_use_ex_repos,
         "guide_enabled": guide_enabled,
         'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
         'max_upload_file_size': max_upload_file_size,

@@ -62,6 +62,7 @@ const propTypes = {
   dirent: PropTypes.object,
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
+  isExternal: PropTypes.bool,
 };
 
 const DIRENT_GRID_CONTAINER_MENU_ID = 'dirent-grid-container-menu';
@@ -834,7 +835,7 @@ class DirentGridView extends React.Component {
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
-    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu, this.props.isExternal);
   };
 
   renderSelectionBox = () => {
@@ -1012,6 +1013,7 @@ class DirentGridView extends React.Component {
               enableDirPrivateShare={this.props.enableDirPrivateShare}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.closeSharedDialog}
+              isExternal={this.props.isExternal}
             />
           </ModalPortal>
         }

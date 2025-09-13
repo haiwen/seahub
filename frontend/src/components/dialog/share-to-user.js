@@ -158,6 +158,7 @@ const propTypes = {
   isRepoOwner: PropTypes.bool.isRequired,
   repoType: PropTypes.string,
   onAddCustomPermissionToggle: PropTypes.func,
+  isExternal: PropTypes.bool,
 };
 
 class ShareToUser extends React.Component {
@@ -167,7 +168,7 @@ class ShareToUser extends React.Component {
     this.state = {
       selectedOption: null,
       errorMsg: [],
-      permission: 'rw',
+      permission: props.isExternal ? 'r' : 'rw',
       sharedItems: [],
       isWiki: this.props.repoType === 'wiki',
       tmpUserList: [],
@@ -175,20 +176,24 @@ class ShareToUser extends React.Component {
     };
     this.options = [];
     this.permissions = [];
-    let { itemType, isRepoOwner } = props;
-    if (itemType === 'library') {
-      this.permissions = isRepoOwner ? ['rw', 'r', 'admin', 'cloud-edit', 'preview'] : ['rw', 'r', 'cloud-edit', 'preview'];
-    } else if (this.props.itemType === 'dir') {
-      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
-    }
-    if (!isPro) {
-      this.permissions = ['rw', 'r'];
-    }
-    if (this.props.isGroupOwnedRepo) {
-      this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
-    }
-    if (this.state.isWiki) {
-      this.permissions = ['rw', 'r'];
+    let { itemType, isRepoOwner, isExternal } = props;
+    if (isExternal) {
+      this.permissions = ['r', 'preview']
+    } else {
+      if (itemType === 'library') {
+        this.permissions = isRepoOwner ? ['rw', 'r', 'admin', 'cloud-edit', 'preview'] : ['rw', 'r', 'cloud-edit', 'preview'];
+      } else if (this.props.itemType === 'dir') {
+        this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+      }
+      if (!isPro) {
+        this.permissions = ['rw', 'r'];
+      }
+      if (this.props.isGroupOwnedRepo) {
+        this.permissions = ['rw', 'r', 'cloud-edit', 'preview'];
+      }
+      if (this.state.isWiki) {
+        this.permissions = ['rw', 'r'];
+      }
     }
   }
 
@@ -478,7 +483,7 @@ class ShareToUser extends React.Component {
                   currentPermission={this.state.permission}
                   permissions={this.permissions}
                   onPermissionChanged={this.setPermission}
-                  enableAddCustomPermission={isPro}
+                  enableAddCustomPermission={isPro && !this.props.isExternal}
                   isWiki={this.state.isWiki}
                   onAddCustomPermissionToggle={this.props.onAddCustomPermissionToggle}
                 />

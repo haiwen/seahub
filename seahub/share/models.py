@@ -711,3 +711,21 @@ def remove_share_info(sender, **kwargs):
     ExtraGroupsSharePermission.objects.filter(repo_id=repo_id).delete()
 
     CustomSharePermissions.objects.filter(repo_id=repo_id).delete()
+
+
+class ExternalRepoUploadLinkLog(models.Model):
+    link_token = models.CharField(max_length=255)
+    file_path = models.TextField()
+    commit_id = models.CharField(max_length=255)
+    ip_addr = models.CharField(max_length=255)
+    download_cnt = models.BigIntegerField(default=0)
+    is_virus = models.BooleanField(default=False)
+    file_size = models.BigIntegerField(default=0)
+
+    created_time = models.DateTimeField(default=datetime.datetime.now)
+    updated_time = models.DateTimeField(default=datetime.datetime.now)
+    created_by = models.CharField(max_length=255, default='')
+    updated_by = models.CharField(max_length=255, default='')
+
+    class Meta:
+        db_table = 'ex_repo_uploadlink_log'

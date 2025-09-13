@@ -59,6 +59,7 @@ class ReposView(APIView):
             'shared': False,
             'group': False,
             'public': False,
+            'external': False,
         }
 
         request_type_list = request.GET.getlist('type', "")
@@ -122,6 +123,9 @@ class ReposView(APIView):
                 if r.is_virtual:
                     continue
 
+                if r.repo_type == 'external':
+                    continue
+
                 if is_wiki_repo(r):
                     continue
                 url, _, _ = api_avatar_url(email)
@@ -148,6 +152,59 @@ class ReposView(APIView):
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
                     "enable_onlyoffice": enable_onlyoffice
+                }
+
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    repo_info['storage_name'] = r.storage_name
+                    repo_info['storage_id'] = r.storage_id
+
+                repo_info_list.append(repo_info)
+
+        if filter_by['external']:
+
+            if org_id:
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id,
+                                                                  email,
+                                                                  ret_corrupted=True)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(email,
+                                                              ret_corrupted=True)
+
+            # Reduce memcache fetch ops.
+            modifiers_set = {x.last_modifier for x in owned_repos}
+            for e in modifiers_set:
+                if e not in contact_email_dict:
+                    contact_email_dict[e] = email2contact_email(e)
+                if e not in nickname_dict:
+                    nickname_dict[e] = email2nickname(e)
+
+            owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
+            for r in owned_repos:
+
+                # do not return virtual repos
+                if r.is_virtual:
+                    continue
+
+                if r.repo_type != 'external':
+                    continue
+
+                repo_info = {
+                    "type": "external",
+                    "repo_id": r.id,
+                    "repo_name": r.name,
+                    "owner_email": email,
+                    "owner_name": email2nickname(email),
+                    "owner_contact_email": email2contact_email(email),
+                    "last_modified": timestamp_to_isoformat_timestr(r.last_modify),
+                    "modifier_email": r.last_modifier,
+                    "modifier_name": nickname_dict.get(r.last_modifier, ''),
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                    "size": r.size,
+                    "encrypted": r.encrypted,
+                    "permission": 'rw',  # Always have read-write permission to owned repo
+                    "starred": r.repo_id in starred_repo_id_list,
+                    "status": normalize_repo_status_code(r.status),
+                    "salt": r.salt if r.enc_version >= 3 else '',
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:

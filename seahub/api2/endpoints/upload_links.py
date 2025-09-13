@@ -27,7 +27,7 @@ from seahub.api2.permissions import CanGenerateUploadLink
 from seahub.share.models import UploadLinkShare, check_share_link_common
 from seahub.utils import gen_shared_upload_link, gen_file_upload_url, \
         is_pro_version, get_password_strength_level, is_valid_password
-
+from seahub.utils.repo import is_external_repo
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
@@ -70,6 +70,8 @@ def get_upload_link_info(uls):
     else:
         expire_date = ''
 
+    is_external = is_external_repo(repo)
+
     data['repo_id'] = repo_id
     data['repo_name'] = repo.repo_name if repo else ''
     data['path'] = path
@@ -77,7 +79,7 @@ def get_upload_link_info(uls):
     data['obj_id'] = obj_id or ""
     data['view_cnt'] = uls.view_cnt
     data['ctime'] = ctime
-    data['link'] = gen_shared_upload_link(token)
+    data['link'] = gen_shared_upload_link(token, is_external)
     data['token'] = token
     data['username'] = uls.username
     data['expire_date'] = expire_date

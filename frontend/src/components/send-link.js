@@ -5,12 +5,14 @@ import { seafileAPI } from '../utils/seafile-api';
 import { gettext } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
+import { customAPI } from "../utils/custom-api";
 
 const propTypes = {
   token: PropTypes.string.isRequired,
   linkType: PropTypes.string.isRequired,
   toggleSendLink: PropTypes.func.isRequired,
-  closeShareDialog: PropTypes.func.isRequired
+  closeShareDialog: PropTypes.func.isRequired,
+  isExternal: PropTypes.bool,
 };
 
 class SendLink extends React.Component {
@@ -54,7 +56,7 @@ class SendLink extends React.Component {
 
     const { token, linkType } = this.props;
     const request = linkType == 'uploadLink' ?
-      seafileAPI.sendUploadLink(token, emails.trim(), msg.trim()) :
+      customAPI.sendUploadLink(token, emails.trim(), msg.trim(), this.props.isExternal) :
       seafileAPI.sendShareLink(token, emails.trim(), msg.trim());
     request.then((res) => {
       this.props.closeShareDialog();
@@ -97,16 +99,18 @@ class SendLink extends React.Component {
             placeholder={gettext('Emails, separated by \',\'')}
           />
         </FormGroup>
-        <FormGroup>
-          <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Message (optional):')}</Label>
-          <textarea
-            className="form-control w-75"
-            id="msg"
-            value={msg}
-            onChange={this.handleMsgInputChange}
-          >
-          </textarea>
-        </FormGroup>
+        {!this.props.isExternal &&
+          <FormGroup>
+            <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Message (optional):')}</Label>
+            <textarea
+              className="form-control w-75"
+              id="msg"
+              value={msg}
+              onChange={this.handleMsgInputChange}
+            >
+            </textarea>
+          </FormGroup>
+        }
         {errorMsg && <p className="error">{errorMsg}</p>}
         <Button color="primary" onClick={this.sendLink} disabled={btnDisabled} className="mr-2">{gettext('Send')}</Button>
         <Button color="secondary" onClick={this.props.toggleSendLink}>{gettext('Cancel')}</Button>

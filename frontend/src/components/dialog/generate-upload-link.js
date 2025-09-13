@@ -16,6 +16,7 @@ const propTypes = {
   itemPath: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   closeShareDialog: PropTypes.func.isRequired,
+  isExternal: PropTypes.bool,
 };
 
 const inputWidth = Utils.isDesktop() ? 250 : 210;
@@ -28,7 +29,7 @@ class GenerateUploadLink extends React.Component {
     this.defaultExpireDays = this.isExpireDaysNoLimit ? '' : uploadLinkExpireDaysDefault;
 
     this.state = {
-      showPasswordInput: shareLinkForceUsePassword ? true : false,
+      showPasswordInput: !!(props.isExternal || shareLinkForceUsePassword),
       passwordVisible: false,
       password: '',
       passwordnew: '',
@@ -361,6 +362,7 @@ class GenerateUploadLink extends React.Component {
             token={sharedUploadInfo.token}
             toggleSendLink={this.toggleSendLink}
             closeShareDialog={this.props.closeShareDialog}
+            isExternal={this.props.isExternal}
           />
           }
         </div>
@@ -370,7 +372,7 @@ class GenerateUploadLink extends React.Component {
       <Form className="generate-upload-link">
         <FormGroup check>
           <Label check>
-            {shareLinkForceUsePassword ? (
+            {this.state.showPasswordInput ? (
               <Label check>
                 <Input type="checkbox" checked readOnly disabled />
                 <span>{gettext('Add password protection')}</span>

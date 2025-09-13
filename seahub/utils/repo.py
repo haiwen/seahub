@@ -377,5 +377,9 @@ def repo_has_been_shared_out(request, repo_id):
 
     return has_been_shared_out
 
+
+def is_external_repo(repo):
+    return repo.repo_type == 'external'
+
 # TODO
 from seahub.share.utils import is_repo_admin

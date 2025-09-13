@@ -2,6 +2,7 @@
 from django.urls import include, path, re_path
 from django.views.generic import TemplateView
 
+from seahub.pingan.internal_api import InternalUploadLinkLogs
 from seahub.ai.apis import ImageCaption, GenerateSummary, GenerateFileTags, OCR, Translate, WritingAssistant
 from seahub.api2.endpoints.share_link_auth import ShareLinkUserAuthView, ShareLinkEmailAuthView
 from seahub.api2.endpoints.internal_api import InternalUserListView, InternalCheckShareLinkAccess, \
@@ -20,7 +21,7 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_lib_file_via_smart_link, view_media_file_via_share_link, \
     view_media_file_via_public_wiki, view_sdoc_revision
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
-    view_shared_upload_link, view_lib_as_wiki
+    view_shared_upload_link, view_lib_as_wiki, view_external_shared_upload_link
 
 from seahub.dingtalk.views import dingtalk_login, dingtalk_callback, \
         dingtalk_connect, dingtalk_connect_callback, dingtalk_disconnect
@@ -270,6 +271,7 @@ urlpatterns = [
     re_path(r'^d/(?P<token>[a-f0-9]+)/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
     re_path(r'^u/d/(?P<token>[a-f0-9]+)/$', view_shared_upload_link, name='view_shared_upload_link'),
     path('view-image-via-share-link/', view_media_file_via_share_link, name='view_media_file_via_share_link'),
+    re_path(r'^u/sharefile/(?P<token>[a-f0-9]+)/$', view_external_shared_upload_link, name='view_external_shared_upload_link_ex'),
 
 
     # dingtalk
@@ -300,10 +302,13 @@ urlpatterns = [
     path('shared-with-ocm/', react_fake_view, name="shared_with_ocm"),
     path('libraries/', react_fake_view, name="libs"),
     path('my-libs/', react_fake_view, name="my_libs"),
+    path('ex-libs/', react_fake_view, name="ex_libs"),
     path('groups/', react_fake_view, name="groups"),
     path('group/<int:group_id>/', react_fake_view, name="group"),
     re_path(r'^library/(?P<repo_id>[-0-9a-f]{36})/$', react_fake_view, name="library_view"),
+    re_path(r'^ex-library/(?P<repo_id>[-0-9a-f]{36})/$', react_fake_view, name="library_view"),
     re_path(r'^library/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="lib_view"),
+    re_path(r'^ex-library/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="ex_lib_view"),
     re_path(r'^remote-library/(?P<provider_id>[-0-9a-f]{36})/(?P<repo_id>[-0-9a-f]{36})/(?P<repo_name>[^/]+)/(?P<path>.*)$', react_fake_view, name="remote_lib_view"),
     path('my-libs/deleted/', react_fake_view, name="my_libs_deleted"),
     path('org/', react_fake_view, name="org"),
@@ -390,6 +395,8 @@ urlpatterns = [
     ## user::shared-repos
     re_path(r'^api/v2.1/shared-repos/$', SharedRepos.as_view(), name='api-v2.1-shared-repos'),
     re_path(r'^api/v2.1/shared-repos/(?P<repo_id>[-0-9a-f]{36})/$', SharedRepo.as_view(), name='api-v2.1-shared-repo'),
+
+    re_path(r'^api/v2.1/internal/ex-upload-link/logs/$', InternalUploadLinkLogs.as_view(), name='api-v2.1-ex-upload-links-log'),
 
     ## user::shared-download-links
     re_path(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),

@@ -36,6 +36,8 @@ import GroupView from './pages/groups/group-view';
 import InvitationsView from './pages/invitations/invitations-view';
 import Wikis from './pages/wikis/wikis';
 import Libraries from './pages/libraries';
+import ExLibContentView from './pages/ex-lib-content-view/ex-lib-content-view';
+import ExLibraries from "./pages/ex-libs/ex-libs";
 
 import './css/layout.css';
 import './css/toolbar.css';
@@ -57,7 +59,7 @@ class App extends Component {
       inResizing: false,
       sidePanelRate: parseFloat(localStorage.getItem('sf_side_panel_rate') || INIT_SIDE_PANEL_RATE),
     };
-    this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org']; // and group
+    this.dirViewPanels = ['libraries', 'my-libs', 'shared-libs', 'org', 'ex-libs']; // and group
     window.onpopstate = this.onpopstate;
     const eventBus = new EventBus();
     this.eventBus = eventBus;
@@ -211,6 +213,9 @@ class App extends Component {
       case 'org': {
         return 'Shared with all';
       }
+      case 'ex-libs': {
+        return '外部资料库';
+      }
     }
   };
 
@@ -350,6 +355,8 @@ class App extends Component {
                 eventBus={this.eventBus}
                 resetTitle={this.resetTitle}
               />
+              <ExLibraries path={siteRoot + 'ex-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+              <ExLibContentView path={siteRoot + 'ex-library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel} onTabNavClick={this.tabItemClick}/>
             </Router>
           </div>
           <MediaQuery query="(max-width: 767.8px)">

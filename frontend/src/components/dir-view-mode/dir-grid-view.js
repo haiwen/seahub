@@ -38,6 +38,7 @@ const propTypes = {
   fullDirentList: PropTypes.array,
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
+  isExternal: PropTypes.bool,
 };
 
 class DirGridView extends React.Component {
@@ -98,6 +99,7 @@ class DirGridView extends React.Component {
           onFileTagChanged={this.props.onFileTagChanged}
           getMenuContainerSize={this.props.getMenuContainerSize}
           eventBus={this.props.eventBus}
+          isExternal={this.props.isExternal}
         />
       </Fragment>
     );

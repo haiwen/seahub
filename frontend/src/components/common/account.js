@@ -27,6 +27,9 @@ class Account extends Component {
       isOrgStaff: false,
       usageRate: '',
       enableSubscription: false,
+      exQuotaUsage: '',
+      exQuotaTotal: '',
+      exUsageRate: '',
     };
     this.isFirstMounted = true;
   }
@@ -87,6 +90,9 @@ class Account extends Component {
           isOrgStaff: resp.data.is_org_staff === 1 ? true : false,
           showInfo: !this.state.showInfo,
           enableSubscription: resp.data.enable_subscription,
+          exUsageRate: resp.data.external_space_usage,
+          exQuotaUsage: Utils.bytesToSize(resp.data.external_usage),
+          exQuotaTotal: Utils.bytesToSize(resp.data.external_total),
         });
       }).catch(error => {
         let errMessage = Utils.getErrorMsg(error);
@@ -166,6 +172,10 @@ class Account extends Component {
               <div className="item">
                 <p>{gettext('Used:')}{' '}{this.state.quotaUsage} / {this.state.quotaTotal}</p>
                 <div id="quota-bar"><span id="quota-usage" className="usage" style={{ width: this.state.usageRate }}></span></div>
+              </div>
+              <div className="item">
+                <p>{'外部资料库: '}{' '}{this.state.exQuotaUsage} / {this.state.exQuotaTotal}</p>
+                <div id="quota-bar"><span id="quota-usage" className="usage" style={{width: this.state.exUsageRate}}></span></div>
               </div>
             </div>
             <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>

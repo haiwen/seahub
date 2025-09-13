@@ -165,6 +165,13 @@ class CreateRepoDialog extends React.Component {
         passwd: password,
       };
     }
+    if (libraryType === 'external') {
+      repo = {
+        name: repoName,
+        passwd: password,
+        is_external: true,
+      };
+    }
 
     const storage_id = this.state.storage_id;
     if (storage_id) {

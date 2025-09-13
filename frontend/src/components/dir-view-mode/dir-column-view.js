@@ -84,6 +84,7 @@ const propTypes = {
   eventBus: PropTypes.object,
   updateCurrentDirent: PropTypes.func.isRequired,
   updateCurrentPath: PropTypes.func,
+  isExternal: PropTypes.bool,
 };
 
 class DirColumnView extends React.Component {
@@ -266,6 +267,7 @@ class DirColumnView extends React.Component {
               showDirentDetail={this.props.showDirentDetail}
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
+              isExternal={this.props.isExternal}
             />
           )}
           {currentMode === GRID_MODE && (
@@ -303,6 +305,7 @@ class DirColumnView extends React.Component {
               onFileTagChanged={this.props.onFileTagChanged}
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
+              isExternal={this.props.isExternal}
             />
           )}
         </div>

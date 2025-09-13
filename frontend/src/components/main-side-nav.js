@@ -7,7 +7,7 @@ import {
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
   canViewOrg, enableOCM, enableOCMViaWebdav,
-  isPro, isDBSqlite3, customNavItems, mediaUrl
+  isPro, isDBSqlite3, customNavItems, mediaUrl, canUseExRepos
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
@@ -286,6 +286,14 @@ class MainSideNav extends React.Component {
                 {this.renderSharedAdmin()}
               </li>
               {customNavItems && this.renderCustomNavItems()}
+              {canUseExRepos && (
+                <li className="nav-item">
+                  <Link to={ siteRoot + 'ex-libs/' } className={`nav-link ellipsis ${this.getActiveClass('ex-libs') || this.getActiveClass('deleted') }`} title={'外部资料库'} onClick={(e) => this.tabItemClick(e, 'ex-libs')}>
+                    <span className="sf2-icon-user" aria-hidden="true"></span>
+                    <span className="nav-text">{'外部资料库'}</span>
+                  </Link>
+                </li>
+              )}
             </ul>
 
             <h2 className="mb-2 pt-1 px-2 font-weight-normal heading">{gettext('Help and resources')}</h2>

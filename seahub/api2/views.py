@@ -83,7 +83,7 @@ from seahub.utils.repo import get_repo_owner, get_library_storages, \
         get_locked_files_by_dir, get_related_users_by_repo, \
         is_valid_repo_id_format, can_set_folder_perm_by_user, \
         add_encrypted_repo_secret_key_to_database, get_available_repo_perms, \
-        parse_repo_perm
+        parse_repo_perm, is_external_repo
 from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.file_types import DOCUMENT, MARKDOWN
@@ -319,10 +319,18 @@ class AccountInfo(APIView):
             quota_total = seafile_api.get_user_quota(email)
             quota_usage = seafile_api.get_user_self_usage(email)
 
+        external_quota_total = seafile_api.get_user_external_quota(email)
+        external_quota_usage = seafile_api.get_user_external_usage(email)
+
         if quota_total > 0:
             info['space_usage'] = str(float(quota_usage) / quota_total * 100) + '%'
         else:                       # no space quota set in config
             info['space_usage'] = '0%'
+
+        if external_quota_total > 0:
+            info['external_space_usage'] = str(float(external_quota_usage) / external_quota_total * 100) + '%'
+        else:
+            info['external_space_usage'] = '0%'
 
         url, _, _ = api_avatar_url(email)
 
@@ -337,6 +345,9 @@ class AccountInfo(APIView):
         info['institution'] = p.institution if p and p.institution else ""
         info['is_staff'] = request.user.is_staff
         info['enable_subscription'] = subscription_check()
+
+        info['external_total'] = external_quota_total
+        info['external_usage'] = external_quota_usage
 
         if getattr(settings, 'MULTI_INSTITUTION', False):
             from seahub.institutions.models import InstitutionAdmin
@@ -1099,6 +1110,7 @@ class Repos(APIView):
 
         username = request.user.username
         repo_name = request.data.get("name", None)
+        is_external = request.data.get('is_external', None)
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
@@ -1118,7 +1130,7 @@ class Repos(APIView):
                 # client generates magic and random key
                 repo_id, error = self._create_enc_repo(request, repo_id, repo_name, repo_desc, username, org_id)
             else:
-                repo_id, error = self._create_repo(request, repo_name, repo_desc, username, org_id)
+                repo_id, error = self._create_repo(request, repo_name, repo_desc, username, org_id, is_external=is_external)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -1142,15 +1154,20 @@ class Repos(APIView):
             # FIXME: according to the HTTP spec, need to return 201 code and
             # with a corresponding location header
             # resp['Location'] = reverse('api2-repo', args=[repo_id])
+            resp['is_external'] = is_external
             return resp
 
-    def _create_repo(self, request, repo_name, repo_desc, username, org_id):
+    def _create_repo(self, request, repo_name, repo_desc, username, org_id, is_external=False):
         passwd = request.data.get("passwd", None)
 
         # to avoid 'Bad magic' error when create repo, passwd should be 'None'
         # not an empty string when create unencrypted repo
         if not passwd:
             passwd = None
+
+        repo_type = None
+        if is_external:
+            repo_type = 'external'
 
         if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
             return None, api_error(status.HTTP_403_FORBIDDEN,
@@ -1178,7 +1195,7 @@ class Repos(APIView):
                         return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd,
+                            repo_desc, username, passwd, repo_type=repo_type,
                             enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
                             pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
                             pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None,
@@ -1186,13 +1203,13 @@ class Repos(APIView):
                 else:
                     # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
                     repo_id = seafile_api.create_repo(repo_name,
-                            repo_desc, username, passwd,
+                            repo_desc, username, passwd, repo_type=repo_type,
                             enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
                             pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
                             pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd,
+                        repo_desc, username, passwd, repo_type=repo_type,
                         enc_version=settings.ENCRYPTED_LIBRARY_VERSION,
                         pwd_hash_algo=settings.ENCRYPTED_LIBRARY_PWD_HASH_ALGO or None,
                         pwd_hash_params=settings.ENCRYPTED_LIBRARY_PWD_HASH_PARAMS or None)
@@ -1202,7 +1219,7 @@ class Repos(APIView):
 
         return repo_id, None
 
-    def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
+    def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id, is_external=False):
 
         if not config.ENABLE_ENCRYPTED_LIBRARY:
             error_msg = 'NOT allow to create encrypted library.'
@@ -1218,6 +1235,10 @@ class Repos(APIView):
         if not _REPO_ID_PATTERN.match(repo_id):
             error_msg = 'Repo id must be a valid uuid'
             return None, api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_type = None
+        if is_external:
+            repo_type = 'external'
 
         try:
             enc_version = int(request.data.get('enc_version', 0))
@@ -1259,6 +1280,7 @@ class Repos(APIView):
                                                               repo_desc, username,
                                                               magic, random_key, salt,
                                                               enc_version,
+                                                              repo_type=repo_type,
                                                               pwd_hash=pwd_hash,
                                                               pwd_hash_algo=pwd_hash_algo,
                                                               pwd_hash_params=pwd_hash_params)
@@ -1267,6 +1289,7 @@ class Repos(APIView):
                                                               repo_desc, username,
                                                               magic, random_key, salt,
                                                               enc_version,
+                                                              repo_type=repo_type,
                                                               pwd_hash=pwd_hash,
                                                               pwd_hash_algo=pwd_hash_algo,
                                                               pwd_hash_params=pwd_hash_params,
@@ -1276,6 +1299,7 @@ class Repos(APIView):
                                                           repo_desc, username,
                                                           magic, random_key, salt,
                                                           enc_version,
+                                                          repo_type=repo_type,
                                                           pwd_hash=pwd_hash,
                                                           pwd_hash_algo=pwd_hash_algo,
                                                           pwd_hash_params=pwd_hash_params)
@@ -1752,6 +1776,9 @@ class DownloadRepo(APIView):
         if not repo:
             error_msg = f'Library {repo_id} not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if is_external_repo(repo):
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access external library.')
 
         perm = check_folder_permission(request, repo_id, '/')
         if not perm:

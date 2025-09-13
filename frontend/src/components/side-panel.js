@@ -5,7 +5,8 @@ import MediaQuery from 'react-responsive';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
 import MainSideNavFolded from './main-side-nav-folded';
-import { SIDE_PANEL_FOLDED_WIDTH } from '../constants';
+import { SIDE_PANEL_FOLDED_WIDTH, canUseExRepos } from '../constants';
+import GuestMainSideNav from './guest-main-side-nav';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool,
@@ -20,6 +21,18 @@ const propTypes = {
 };
 
 class SidePanel extends React.Component {
+
+    let showMainSideNav = false;
+    let showGuestMainSideNav = false;
+    let showEmpty = false;
+
+    if (!isGuest) {
+        showMainSideNav = true;
+    } else if (canUseExRepos) {
+        showGuestMainSideNav = true;
+    } else {
+        showEmpty = true;
+    }
 
   render() {
     const { children, isSidePanelFolded, style, eventBus } = this.props;
@@ -51,6 +64,8 @@ class SidePanel extends React.Component {
               eventBus={eventBus}
             />
           }
+          {showMainSideNav && <MainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} draftCounts={this.props.draftCounts}/>}
+          {showGuestMainSideNav && <GuestMainSideNav tabItemClick={this.props.tabItemClick} currentTab={this.props.currentTab} draftCounts={this.props.draftCounts}/>}
         </div>
       </div>
     );

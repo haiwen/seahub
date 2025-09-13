@@ -27,7 +27,7 @@ from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
-from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner
+from seahub.utils.repo import parse_repo_perm, is_repo_admin, is_repo_owner, is_external_repo
 from seahub.utils.file_types import SEADOC, \
         MARKDOWN_SUPPORT_CONVERT_TYPES, SDOC_SUPPORT_CONVERT_TYPES, \
         DOCX_SUPPORT_CONVERT_TYPES
@@ -163,6 +163,8 @@ class FileView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        is_external = is_external_repo(repo)
+
         username = request.user.username
         parent_dir = os.path.dirname(path)
 
@@ -269,6 +271,10 @@ class FileView(APIView):
             return Response(file_info)
 
         if operation == 'rename':
+
+            if is_external:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
             # argument check
             new_file_name = request.data.get('newname', None)
             if not new_file_name:
@@ -337,6 +343,10 @@ class FileView(APIView):
             return Response(file_info)
 
         if operation == 'move':
+
+            if is_external:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
             # argument check
             dst_repo_id = request.data.get('dst_repo', None)
             dst_dir = request.data.get('dst_dir', None)

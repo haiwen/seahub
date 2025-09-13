@@ -16,6 +16,7 @@ import contextlib
 import json
 from datetime import datetime
 from urllib.parse import urlparse, urljoin
+from seahub.pingan.settings import PINGAN_DMZ_DOMAIN
 
 from constance import config
 import seaserv
@@ -1026,6 +1027,29 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
 
     msg.send()
 
+
+######################### Start PingAn Group related ########################
+from seahub.pingan.email_api import PAFileEmailApi
+def send_pafile_html_email_with_dj_template(recipients, subject, dj_template,
+                                            context={}, sender=None,
+                                            template=None, message=''):
+    base_context = {
+        'url_base': get_site_scheme_and_netloc(),
+        'site_name': get_site_name(),
+        'media_url': MEDIA_URL,
+        'logo_path': LOGO_PATH,
+    }
+    context.update(base_context)
+    t = loader.get_template(dj_template)
+    html_message = t.render(context)
+
+    email_api = PAFileEmailApi()
+    for r in recipients:
+        request_id = email_api.send_email(r, subject, html_message)
+        return request_id
+######################### End PingAn Group related ##########################
+
+
 def gen_dir_share_link(token):
     """Generate directory share link.
     """
@@ -1046,7 +1070,16 @@ def gen_shared_link(token, s_type):
     else:
         return '%s/d/%s/' % (service_url, token)
 
-def gen_shared_upload_link(token):
+def gen_shared_upload_link(token, is_external=False):
+
+    if is_external:
+        service_url = get_service_url()
+        assert service_url is not None
+
+        service_url = PINGAN_DMZ_DOMAIN
+        service_url = service_url.rstrip('/')
+        return '%s/u/sharefile/%s/' % (service_url, token)
+
     service_url = get_service_url()
     assert service_url is not None
 

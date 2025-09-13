@@ -29,6 +29,7 @@ const propTypes = {
   repoEncrypted: PropTypes.bool,
   userPerm: PropTypes.string,
   enableDirPrivateShare: PropTypes.bool,
+  isExternal: PropTypes.bool,
 };
 
 class ShareDialog extends React.Component {
@@ -146,7 +147,7 @@ class ShareDialog extends React.Component {
                     </NavLink>
                   </NavItem>
                 )}
-                {isPro && !isCustomPermission && canShareRepo && (
+                {isPro && !isCustomPermission && canShareRepo && !this.props.isExternal && (
                   <NavItem role="tab" aria-selected={activeTab === 'customSharePermission'} aria-controls="custom-share-perm-panel">
                     <NavLink className={activeTab === 'customSharePermission' ? 'active' : ''} onClick={this.toggle.bind(this, 'customSharePermission')} tabIndex="0" onKeyDown={this.onTabKeyDown}>
                       {gettext('Custom sharing permissions')}
@@ -190,6 +191,7 @@ class ShareDialog extends React.Component {
                   itemPath={this.props.itemPath}
                   repoID={this.props.repoID}
                   closeShareDialog={this.props.toggleDialog}
+                  isExternal={this.props.isExternal}
                 />
               </TabPane>
             }
@@ -213,6 +215,7 @@ class ShareDialog extends React.Component {
                       repoID={this.props.repoID}
                       isRepoOwner={this.state.isRepoOwner}
                       onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
+                      isExternal={this.props.isExternal}
                     />
                   </TabPane>
                 }
@@ -226,10 +229,11 @@ class ShareDialog extends React.Component {
                       isRepoOwner={this.state.isRepoOwner}
                       repo={this.props.repo}
                       onAddCustomPermissionToggle={this.onAddCustomPermissionToggle}
+                      isExternal={this.props.isExternal}
                     />
                   </TabPane>
                 }
-                {(isPro && activeTab === 'customSharePermission' && canShareRepo) && (
+                {(isPro && !this.props.isExternal && activeTab === 'customSharePermission' && canShareRepo) && (
                   <TabPane tabId="customSharePermission" role="tabpanel" id="custom-share-perm-panel">
                     <CustomPermissionManager repoID={this.props.repoID} />
                   </TabPane>

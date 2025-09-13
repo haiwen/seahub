@@ -8,6 +8,8 @@ import re
 
 from seaserv import FILE_SERVER_PORT
 
+JWT_PRIVATE_KEY = ''
+
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
@@ -1257,4 +1259,4 @@ if ENABLE_LDAP:
 
 # settings.py
 
-
+JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY

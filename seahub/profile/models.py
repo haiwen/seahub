@@ -242,3 +242,9 @@ def remove_user_for_inst_deleted(sender, **kwargs):
     Profile.objects.filter(institution=inst_name).update(institution="")
     InstitutionAdmin.objects.filter(institution__name=inst_name).delete()
 
+
+class ExUser(models.Model):
+    email = models.CharField(unique=True, max_length=255, db_index=True)
+
+    class Meta:
+        db_table = 'ex_repo_user'

@@ -11,7 +11,7 @@ from .endpoints.shared_upload_links import SharedUploadLinksView
 from .endpoints.be_shared_repo import BeSharedRepo
 from .endpoints.search_user import SearchUser
 from .endpoints.send_share_link_email import SendShareLinkView
-from .endpoints.send_upload_link_email import SendUploadLinkView
+from .endpoints.send_upload_link_email import SendUploadLinkView, SendExUploadLinkView
 from .endpoints.sso.client_sso_link import ClientSSOLink
 
 urlpatterns = [
@@ -74,6 +74,7 @@ urlpatterns = [
     path('default-repo/', DefaultRepoView.as_view(), name='api2-defaultrepo'),
     path('send-share-link/', SendShareLinkView.as_view(), name='api2-send-share-link'),
     path('send-upload-link/', SendUploadLinkView.as_view(), name='api2-send-upload-link'),
+    path('send-ex-upload-link/', SendExUploadLinkView.as_view(), name='api2-send-ex-upload-link'),
     path('shared-links/', SharedLinksView.as_view()),
     path('shared-upload-links/', SharedUploadLinksView.as_view()),
     path('repo-tokens/', RepoTokensView.as_view(), name='api2-repo-tokens'),

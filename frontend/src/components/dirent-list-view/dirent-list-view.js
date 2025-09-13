@@ -60,6 +60,7 @@ const propTypes = {
   posY: PropTypes.string,
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
+  isExternal: PropTypes.bool,
 };
 
 class DirentListView extends React.Component {
@@ -618,7 +619,7 @@ class DirentListView extends React.Component {
   getDirentItemMenuList = (dirent, isContextmenu) => {
     const isRepoOwner = this.isRepoOwner;
     const currentRepoInfo = this.props.currentRepoInfo;
-    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
+    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu, this.props.isExternal);
   };
 
   onTableDragEnter = (e) => {
@@ -831,6 +832,7 @@ class DirentListView extends React.Component {
                   onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
                   loadDirentList={this.props.loadDirentList}
                   onAddFolder={this.props.onAddFolder}
+                  isExternal={this.props.isExternal}
                 />
               );
             })}

@@ -1,0 +1,27 @@
+{% extends 'email_base.html' %}
+
+{% load i18n seahub_tags %}
+
+{% block email_con %}
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{{name}}，您好：<br />
+
+外部文件 {{filename}} 已被防病毒检测程序拦截。
+
+</p>
+
+<p style="font-size:14px;color:#434144;">
+文件的上传路径是: {{ file_link }} <br>
+请知悉！
+</p>
+
+{% if extra_msg %}
+<p>" {{ extra_msg }} "</p>
+{% endif %}
+
+{% endautoescape %}
+{% endblock %}

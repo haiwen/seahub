@@ -14,6 +14,7 @@ from urllib.parse import quote
 import seaserv
 from seaserv import seafile_api
 
+from seahub.pingan.settings import PINGAN_IS_DMZ_SERVER
 from seahub.auth.decorators import login_required
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.decorators import share_link_audit, share_link_login_required
@@ -439,3 +440,63 @@ def view_shared_upload_link(request, uploadlink):
         data['logo_path'] = get_logo_path_by_user(uploadlink.username)
 
     return render(request, 'view_shared_upload_link_react.html', data)
+
+
+@share_link_audit
+def view_external_shared_upload_link(request, uploadlink):
+    if not PINGAN_IS_DMZ_SERVER:
+        return render_error(request, '内网无法访问该链接')
+
+    token = uploadlink.token
+
+    password_check_passed, err_msg = check_share_link_common(request,
+                                                             uploadlink,
+                                                             is_upload_link=True)
+    if not password_check_passed:
+        d = {'token': token, 'view_name': 'view_external_shared_upload_link_ex', 'err_msg': err_msg}
+        return render(request, 'share_access_validation.html', d)
+
+    username = uploadlink.username
+    repo_id = uploadlink.repo_id
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    path = uploadlink.path
+    if path == '/':
+        # use repo name as dir name if share whole library
+        dir_name = repo.name
+    else:
+        dir_name = os.path.basename(path[:-1])
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    if repo.encrypted or \
+            seafile_api.check_permission_by_path(repo_id, '/', username) != 'rw':
+        return render_error(request, _('Permission denied'))
+
+    uploadlink.view_cnt = F('view_cnt') + 1
+    uploadlink.save()
+
+    no_quota = True if seaserv.check_quota(repo_id) < 0 else False
+
+    try:
+        max_upload_file_size = seafile_api.get_server_config_int('fileserver', 'max_upload_size')
+    except Exception as e:
+        logger.error(e)
+        max_upload_file_size = -1
+
+    return render(request, 'view_shared_upload_link_react.html', {
+            'repo': repo,
+            'path': path,
+            'username': username,
+            'dir_name': dir_name,
+            'max_upload_file_size': max_upload_file_size,
+            'no_quota': no_quota,
+            'uploadlink': uploadlink,
+            'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
+            'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
+            'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
+            })

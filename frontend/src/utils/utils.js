@@ -487,12 +487,17 @@ export const Utils = {
     return title;
   },
 
-  getFolderOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
+  getFolderOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu, isExternal=false) {
 
     let list = [];
     const { SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, PERMISSION, OPEN_VIA_CLIENT } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
+    if (isExternal) {
+      return [
+          SHARE, DOWNLOAD, DELETE, COPY, OPEN_VIA_CLIENT
+      ]
+    }
 
     if (isContextmenu) {
       if (permission == 'rw' || permission == 'r') {
@@ -551,7 +556,7 @@ export const Utils = {
     return list;
   },
 
-  getFileOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
+  getFileOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu, isExternal=false) {
     let list = [];
     const {
       SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, TAGS, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
@@ -560,6 +565,12 @@ export const Utils = {
     } = TextTranslation;
     const permission = dirent.permission;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(permission);
+    if (isExternal) {
+      return [
+          SHARE, DOWNLOAD, DELETE, COPY, TAGS, UNLOCK, LOCK,
+      COMMENT, HISTORY, ACCESS_LOG, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT
+      ]
+    }
 
     if (isContextmenu) {
       if (permission == 'rw' || permission == 'r') {
@@ -701,8 +712,8 @@ export const Utils = {
     return withoutDot ? parts.pop() : '.' + parts.pop();
   },
 
-  getDirentOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu) {
-    const operationListGetter = dirent.type === 'dir' ? Utils.getFolderOperationList : Utils.getFileOperationList;
+  getDirentOperationList: function (isRepoOwner, currentRepoInfo, dirent, isContextmenu, isExternal=false) {
+    const operationListGetter = dirent.type === 'dir' ? Utils.getFolderOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu, isExternal) : Utils.getFileOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu, isExternal);
     return operationListGetter(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   },
 

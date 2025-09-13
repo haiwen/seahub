@@ -152,6 +152,7 @@
             showLogoutIcon: {% if show_logout_icon %} true {% else %} false {% endif %},
             additionalShareDialogNote: {% if additional_share_dialog_note %} {{ additional_share_dialog_note|safe }} {% else %} null {% endif %},
             additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
+            canUseExRepos: {% if can_use_ex_repos %} true {% else %} false {% endif %},
             enableOnlyoffice: {% if enable_onlyoffice %} true {% else %} false {% endif %},
             onlyofficeEditFileExtension: {% if onlyoffice_edit_file_extension %} {{onlyoffice_edit_file_extension|safe}} {% else %} [] {% endif %},
             onlyofficeConverterExtensions: {% if onlyoffice_converter_extensions %} {{onlyoffice_converter_extensions|safe}} {% else %} null {% endif %},

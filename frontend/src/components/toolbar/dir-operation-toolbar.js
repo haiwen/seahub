@@ -27,6 +27,7 @@ const propTypes = {
   direntList: PropTypes.array.isRequired,
   children: PropTypes.object,
   loadDirentList: PropTypes.func
+  isExternal: PropTypes.bool,
 };
 
 class DirOperationToolbar extends React.Component {
@@ -216,7 +217,7 @@ class DirOperationToolbar extends React.Component {
     let itemType = path === '/' ? 'library' : 'dir';
     let itemName = path == '/' ? repoName : Utils.getFolderName(path);
 
-    let canUpload = true;
+    let canUpload = !this.props.isExternal;
     let canCreate = true;
     if (isCustomPermission) {
       const { permission } = customPermission;
@@ -417,6 +418,7 @@ class DirOperationToolbar extends React.Component {
               userPerm={this.props.userPerm}
               isGroupOwnedRepo={this.props.isGroupOwnedRepo}
               toggleDialog={this.onShareClick}
+              isExternal={this.props.isExternal}
             />
           </ModalPortal>
         }
