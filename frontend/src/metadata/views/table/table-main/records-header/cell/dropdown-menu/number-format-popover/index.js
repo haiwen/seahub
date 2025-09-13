@@ -3,61 +3,170 @@ import PropTypes from 'prop-types';
 import { FormGroup, Label, Input } from 'reactstrap';
 import CustomizePopover from '@/components/customize-popover';
 import CustomizeSelect from '@/components/customize-select';
+import Switch from '@/components/switch';
 import { gettext } from '@/utils/constants';
 import { DEFAULT_NUMBER_FORMAT } from '@/metadata/constants';
 
 import './index.css';
 
+// Default values constants
+const DEFAULTS = {
+  DECIMAL_SEPARATOR: 'dot',
+  THOUSANDS_SEPARATOR: 'no',
+  PRECISION: 2,
+  CURRENCY_SYMBOL_POSITION: 'before',
+  CURRENCY_SYMBOL: '',
+  ENABLE_PRECISION: false,
+};
+
+// Format type constants
+const FORMAT_TYPES = {
+  CUSTOM_CURRENCY: 'custom_currency',
+  NUMBER: 'number',
+  PERCENT: 'percent',
+  YUAN: 'yuan',
+  DOLLAR: 'dollar',
+  EURO: 'euro',
+};
+
 const FORMAT_OPTIONS = [
-  { label: gettext('Number'), value: 'number' },
-  { label: gettext('Percentage'), value: 'percent' },
-  { label: gettext('Chinese Yuan'), value: 'yuan' },
-  { label: gettext('Dollar'), value: 'dollar' },
-  { label: gettext('Euro'), value: 'euro' },
-  { label: gettext('Custom Currency'), value: 'custom_currency' },
+  { label: gettext('Number'), value: FORMAT_TYPES.NUMBER },
+  { label: gettext('Percent'), value: FORMAT_TYPES.PERCENT },
+  { label: gettext('Yuan'), value: FORMAT_TYPES.YUAN },
+  { label: gettext('Dollar'), value: FORMAT_TYPES.DOLLAR },
+  { label: gettext('Euro'), value: FORMAT_TYPES.EURO },
+  { label: gettext('Custom currency'), value: FORMAT_TYPES.CUSTOM_CURRENCY },
 ];
 
 const DECIMAL_OPTIONS = [
   { label: gettext('Comma(1,03)'), value: 'comma' },
-  { label: gettext('Dot(1.03)'), value: 'dot' },
+  { label: gettext('Dot(1.03)'), value: DEFAULTS.DECIMAL_SEPARATOR },
 ];
 
 const THOUSANDS_OPTIONS = [
-  { label: gettext('No Separator(1000000)'), value: 'no' },
-  { label: gettext('Comma(1.000.000)'), value: 'comma' },
-  { label: gettext('Space(1 000 000)'), value: 'space' },
+  {
+    label: gettext('No separator (1000000)'),
+    value: DEFAULTS.THOUSANDS_SEPARATOR,
+  },
+  { label: gettext('Comma (1.000.000)'), value: 'comma' },
+  { label: gettext('Space (1 000 000)'), value: 'space' },
 ];
 
 const PRECISION_OPTIONS = [
   { label: '1', value: 0 },
   { label: '1.0', value: 1 },
-  { label: '1.00', value: 2 },
+  { label: '1.00', value: DEFAULTS.PRECISION },
   { label: '1.000', value: 3 },
 ];
 
 const SIGN_POSITION_OPTIONS = [
-  { label: gettext('Before'), value: 'before' },
+  { label: gettext('Before'), value: DEFAULTS.CURRENCY_SYMBOL_POSITION },
   { label: gettext('After'), value: 'after' },
 ];
 
 const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
   const currentData = useMemo(() => column.data || {}, [column.data]);
 
-  // Initialize state with current values
-  const [format, setFormat] = useState(() => currentData.format || DEFAULT_NUMBER_FORMAT);
-  const [decimalSeparator, setDecimalSeparator] = useState(() => currentData.decimal || 'dot');
-  const [thousandsSeparator, setThousandsSeparator] = useState(() => currentData.thousands || 'no');
-  const [enablePrecision, setEnablePrecision] = useState(() => currentData.enable_precision || false);
-  const [precision, setPrecision] = useState(() => currentData.precision !== undefined ? currentData.precision : 2);
-  const [customSymbol, setCustomSymbol] = useState(() => currentData.currency_symbol || '');
-  const [signPosition, setSignPosition] = useState(() => currentData.currency_symbol_position || 'before');
+  const initialValues = useMemo(
+    () => ({
+      format: currentData.format || DEFAULT_NUMBER_FORMAT,
+      decimal: currentData.decimal || DEFAULTS.DECIMAL_SEPARATOR,
+      thousands: currentData.thousands || DEFAULTS.THOUSANDS_SEPARATOR,
+      enable_precision:
+        currentData.enable_precision || DEFAULTS.ENABLE_PRECISION,
+      precision:
+        currentData.precision !== undefined
+          ? currentData.precision
+          : DEFAULTS.PRECISION,
+      currency_symbol: currentData.currency_symbol || DEFAULTS.CURRENCY_SYMBOL,
+      currency_symbol_position:
+        currentData.currency_symbol_position ||
+        DEFAULTS.CURRENCY_SYMBOL_POSITION,
+    }),
+    [currentData]
+  );
 
-  const isCustomCurrency = format === 'custom_currency';
+  const [format, setFormat] = useState(
+    () => currentData.format || DEFAULT_NUMBER_FORMAT
+  );
+  const [decimalSeparator, setDecimalSeparator] = useState(
+    () => currentData.decimal || DEFAULTS.DECIMAL_SEPARATOR
+  );
+  const [thousandsSeparator, setThousandsSeparator] = useState(
+    () => currentData.thousands || DEFAULTS.THOUSANDS_SEPARATOR
+  );
+  const [enablePrecision, setEnablePrecision] = useState(
+    () => currentData.enable_precision || DEFAULTS.ENABLE_PRECISION
+  );
+  const [precision, setPrecision] = useState(() =>
+    currentData.precision !== undefined
+      ? currentData.precision
+      : DEFAULTS.PRECISION
+  );
+  const [customSymbol, setCustomSymbol] = useState(
+    () => currentData.currency_symbol || DEFAULTS.CURRENCY_SYMBOL
+  );
+  const [signPosition, setSignPosition] = useState(
+    () =>
+      currentData.currency_symbol_position || DEFAULTS.CURRENCY_SYMBOL_POSITION
+  );
+  const [validationError, setValidationError] = useState('');
 
-  // Event handlers
-  const onFormatChange = useCallback((value) => {
-    setFormat(value);
-  }, []);
+  const isCustomCurrency = format === FORMAT_TYPES.CUSTOM_CURRENCY;
+
+  const hasChanges = useMemo(() => {
+    const currentValues = {
+      format,
+      decimal: decimalSeparator,
+      thousands: thousandsSeparator,
+      enable_precision: enablePrecision,
+      precision: enablePrecision ? precision : DEFAULTS.PRECISION,
+      currency_symbol: isCustomCurrency
+        ? customSymbol
+        : DEFAULTS.CURRENCY_SYMBOL,
+      currency_symbol_position: isCustomCurrency
+        ? signPosition
+        : DEFAULTS.CURRENCY_SYMBOL_POSITION,
+    };
+
+    return JSON.stringify(currentValues) !== JSON.stringify(initialValues);
+  }, [
+    format,
+    decimalSeparator,
+    thousandsSeparator,
+    enablePrecision,
+    precision,
+    customSymbol,
+    signPosition,
+    isCustomCurrency,
+    initialValues,
+  ]);
+
+  const validateForm = useCallback(() => {
+    if (isCustomCurrency && !customSymbol.trim()) {
+      setValidationError(gettext('Currency symbol is required'));
+      return false;
+    }
+    setValidationError('');
+    return true;
+  }, [isCustomCurrency, customSymbol]);
+
+  const onFormatChange = useCallback(
+    (value) => {
+      setFormat(value);
+      setValidationError('');
+
+      if (value !== FORMAT_TYPES.CUSTOM_CURRENCY) {
+        setCustomSymbol(DEFAULTS.CURRENCY_SYMBOL);
+      } else if (
+        value === FORMAT_TYPES.CUSTOM_CURRENCY &&
+        initialValues.format !== FORMAT_TYPES.CUSTOM_CURRENCY
+      ) {
+        setCustomSymbol(DEFAULTS.CURRENCY_SYMBOL);
+      }
+    },
+    [initialValues.format]
+  );
 
   const onDecimalSeparatorChange = useCallback((value) => {
     setDecimalSeparator(value);
@@ -75,24 +184,38 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
     setPrecision(value);
   }, []);
 
-  const onCustomSymbolChange = useCallback((e) => {
-    setCustomSymbol(e.target.value);
-  }, []);
+  const onCustomSymbolChange = useCallback(
+    (e) => {
+      setCustomSymbol(e.target.value);
+      if (validationError) {
+        setValidationError('');
+      }
+    },
+    [validationError]
+  );
 
   const onSignPositionChange = useCallback((value) => {
     setSignPosition(value);
   }, []);
 
-  const onSubmitForm = useCallback(() => {
+  const handlePopoverClose = useCallback(() => {
+    if (!hasChanges) {
+      onToggle();
+      return;
+    }
+
+    if (!validateForm()) {
+      return;
+    }
+
     const newData = {
       format,
       decimal: decimalSeparator,
       thousands: thousandsSeparator,
       enable_precision: enablePrecision,
-      precision: enablePrecision ? precision : 2,
+      precision: enablePrecision ? precision : DEFAULTS.PRECISION,
     };
 
-    // Add currency-specific properties only when needed
     if (isCustomCurrency) {
       newData.currency_symbol = customSymbol;
       newData.currency_symbol_position = signPosition;
@@ -100,48 +223,72 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
 
     onSubmit(newData);
     onToggle();
-  }, [format, decimalSeparator, thousandsSeparator, enablePrecision, precision, customSymbol, signPosition, isCustomCurrency, onSubmit, onToggle]);
+  }, [
+    hasChanges,
+    validateForm,
+    format,
+    decimalSeparator,
+    thousandsSeparator,
+    enablePrecision,
+    precision,
+    customSymbol,
+    signPosition,
+    isCustomCurrency,
+    onSubmit,
+    onToggle,
+  ]);
 
-  const onCancel = useCallback(() => {
-    onToggle();
-  }, [onToggle]);
+  const selectedFormat = useMemo(
+    () =>
+      FORMAT_OPTIONS.find((option) => option.value === format) ||
+      FORMAT_OPTIONS[0],
+    [format]
+  );
 
-  const selectedFormat = useMemo(() => (
-    FORMAT_OPTIONS.find(option => option.value === format) || FORMAT_OPTIONS[0]
-  ), [format]);
+  const selectedDecimal = useMemo(
+    () =>
+      DECIMAL_OPTIONS.find((option) => option.value === decimalSeparator) ||
+      DECIMAL_OPTIONS[1],
+    [decimalSeparator]
+  );
 
-  const selectedDecimal = useMemo(() => (
-    DECIMAL_OPTIONS.find(option => option.value === decimalSeparator) || DECIMAL_OPTIONS[1]
-  ), [decimalSeparator]);
+  const selectedThousands = useMemo(
+    () =>
+      THOUSANDS_OPTIONS.find((option) => option.value === thousandsSeparator) ||
+      THOUSANDS_OPTIONS[0],
+    [thousandsSeparator]
+  );
 
-  const selectedThousands = useMemo(() => (
-    THOUSANDS_OPTIONS.find(option => option.value === thousandsSeparator) || THOUSANDS_OPTIONS[0]
-  ), [thousandsSeparator]);
+  const selectedPrecision = useMemo(
+    () =>
+      PRECISION_OPTIONS.find((option) => option.value === precision) ||
+      PRECISION_OPTIONS[2],
+    [precision]
+  );
 
-  const selectedPrecision = useMemo(() => (
-    PRECISION_OPTIONS.find(option => option.value === precision) || PRECISION_OPTIONS[2]
-  ), [precision]);
-
-  const selectedSignPosition = useMemo(() => (
-    SIGN_POSITION_OPTIONS.find(option => option.value === signPosition) || SIGN_POSITION_OPTIONS[0]
-  ), [signPosition]);
+  const selectedSignPosition = useMemo(
+    () =>
+      SIGN_POSITION_OPTIONS.find((option) => option.value === signPosition) ||
+      SIGN_POSITION_OPTIONS[0],
+    [signPosition]
+  );
 
   return (
     <CustomizePopover
       target={target}
-      className="sf-metadata-number-format-popover"
-      popoverClassName="sf-metadata-popover"
-      placement="bottom-start"
+      className='sf-metadata-number-format-popover'
+      popoverClassName='sf-metadata-popover number-format-settings'
+      placement='bottom-start'
       isOpen={true}
-      toggle={onToggle}
-      hidePopover={onToggle}
-      hidePopoverWithEsc={onToggle}
+      toggle={handlePopoverClose}
+      hidePopover={handlePopoverClose}
+      hidePopoverWithEsc={handlePopoverClose}
       hideArrow={true}
       canHide={true}
       header={gettext('Number Format Settings')}
     >
-      <div className="sf-metadata-number-format-popover-content sf-metadata-column-data-settings">
-        <FormGroup className="">
+      <div className='sf-metadata-number-format-popover-content sf-metadata-column-data-settings'>
+        <FormGroup>
           <Label>{gettext('Format')}</Label>
           <CustomizeSelect
             value={selectedFormat}
@@ -152,19 +299,26 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
 
         {isCustomCurrency && (
           <>
-            <FormGroup className="">
-              <Label>{gettext('Custom Sign')}</Label>
+            <FormGroup>
+              <Label>{gettext('Custom symbol')}</Label>
               <Input
-                type="text"
+                type='text'
                 value={customSymbol}
                 onChange={onCustomSymbolChange}
                 placeholder={gettext('Enter custom currency symbol')}
-                className="sf-metadata-number-format-input"
+                className={`sf-metadata-number-format-input${
+                  validationError ? ' error' : ''
+                }`}
               />
+              {validationError && (
+                <div className='sf-metadata-validation-error'>
+                  {validationError}
+                </div>
+              )}
             </FormGroup>
 
-            <FormGroup className="">
-              <Label>{gettext('Sign Position')}</Label>
+            <FormGroup>
+              <Label>{gettext('Symbol position')}</Label>
               <CustomizeSelect
                 value={selectedSignPosition}
                 options={SIGN_POSITION_OPTIONS}
@@ -174,8 +328,8 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
           </>
         )}
 
-        <FormGroup className="">
-          <Label>{gettext('Decimal Separator')}</Label>
+        <FormGroup>
+          <Label>{gettext('Decimal separator')}</Label>
           <CustomizeSelect
             value={selectedDecimal}
             options={DECIMAL_OPTIONS}
@@ -183,8 +337,8 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
           />
         </FormGroup>
 
-        <FormGroup className="">
-          <Label>{gettext('Thousands Separator')}</Label>
+        <FormGroup>
+          <Label>{gettext('Thousands separator')}</Label>
           <CustomizeSelect
             value={selectedThousands}
             options={THOUSANDS_OPTIONS}
@@ -192,23 +346,19 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
           />
         </FormGroup>
 
-        <FormGroup className="">
-          <div className="d-flex align-items-center">
-            <Input
-              type="checkbox"
-              id="enable-precision"
-              checked={enablePrecision}
-              onChange={onEnablePrecisionChange}
-              className="sf-metadata-number-format-checkbox mr-2"
-            />
-            <Label for="enable-precision" className="mb-0">
-              {gettext('Enforce Precision')}
-            </Label>
-          </div>
+        <FormGroup>
+          <Switch
+            className="enforce-precision-switch"
+            checked={enablePrecision}
+            placeholder={gettext('Enforce precision')}
+            onChange={onEnablePrecisionChange}
+            size="small"
+            textPosition="right"
+          />
         </FormGroup>
 
         {enablePrecision && (
-          <FormGroup className="">
+          <FormGroup>
             <Label>{gettext('Precision')}</Label>
             <CustomizeSelect
               value={selectedPrecision}
@@ -217,15 +367,6 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
             />
           </FormGroup>
         )}
-
-        <div className="sf-metadata-column-data-settings-footer d-flex justify-content-end mt-3">
-          <button type="button" className="btn btn-secondary btn-sm mr-2" onClick={onCancel}>
-            {gettext('Cancel')}
-          </button>
-          <button type="button" className="btn btn-primary btn-sm" onClick={onSubmitForm}>
-            {gettext('Submit')}
-          </button>
-        </div>
       </div>
     </CustomizePopover>
   );
