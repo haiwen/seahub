@@ -1,0 +1,61 @@
+.sf-metadata-number-format-popover {
+  z-index: 1050;
+}
+
+.sf-metadata-number-format-popover-content {
+  padding: 16px;
+  min-width: 280px;
+}
+
+.sf-metadata-number-format-popover-content.sf-metadata-column-data-settings .form-group {
+  margin-bottom: 16px;
+}
+
+.sf-metadata-number-format-popover-content.sf-metadata-column-data-settings .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.sf-metadata-number-format-popover-content.sf-metadata-column-data-settings label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #212529;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.sf-metadata-number-format-input {
+  font-size: 13px;
+  height: 32px;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  padding: 4px 8px;
+  width: 100%;
+}
+
+.sf-metadata-number-format-input:focus {
+  border-color: #57a3f3;
+  box-shadow: 0 0 0 2px rgba(87, 163, 243, 0.2);
+  outline: none;
+}
+
+.sf-metadata-number-format-checkbox {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+/* Dark theme support */
+[data-bs-theme=dark] .sf-metadata-number-format-popover-content.sf-metadata-column-data-settings label {
+  color: #ffffff;
+}
+
+[data-bs-theme=dark] .sf-metadata-number-format-input {
+  background-color: #2b2b2b;
+  border-color: #4a4a4a;
+  color: #ffffff;
+}
+
+[data-bs-theme=dark] .sf-metadata-number-format-input:focus {
+  border-color: #57a3f3;
+  background-color: #2b2b2b;
+}

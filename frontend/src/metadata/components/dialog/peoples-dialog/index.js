@@ -67,7 +67,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
     <Modal isOpen={true} toggle={() => onToggle()} className="sf-metadata-peoples-dialog">
       <SeahubModalHeader toggle={() => onToggle()}>{gettext('People')}</SeahubModalHeader>
       <ModalBody>
-        <FormGroup className="">
+        <FormGroup>
           <Label>{gettext('People')}</Label>
           <CustomizeSelect
             value={selectedValue ? { label: selectedValue } : {}}
