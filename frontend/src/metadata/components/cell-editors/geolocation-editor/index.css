@@ -40,6 +40,12 @@
   color: var(--bs-icon-secondary-color);
 }
 
+.sf-geolocation-editor-container .editor-header .header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .sf-geolocation-editor-container .editor-header .full-screen {
   width: 24px;
   height: 24px;
@@ -48,6 +54,42 @@
 
 .sf-geolocation-editor-container .editor-header .full-screen:hover {
   background-color: var(--bs-hover-bg);
+}
+
+.sf-geolocation-editor-container .editor-header .cur-view-path-btn {
+  cursor: pointer;
+  font-size: 14px;
+  height: 24px;
+  min-width: 24px;
+  width: fit-content;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sf-geolocation-editor-container .editor-header .cur-view-path-btn.sf3-font {
+  font-size: 16px;
+  color: var(--bs-icon-color);
+}
+
+.sf-geolocation-editor-container .editor-header .cur-view-path-btn:hover {
+  background-color: var(--bs-hover-bg);
+  border-radius: 3px;
+}
+
+.sf-geolocation-editor-container .editor-header .btn {
+  height: 24px;
+  display: flex;
+  align-items: center;
+  padding: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 3px;
+}
+
+.sf-geolocation-editor-container .editor-header .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .sf-geolocation-editor-container .search-container {
@@ -65,11 +107,18 @@
 .sf-geolocation-editor-container .search-container .search-input {
   flex: 1;
   height: 100%;
-  padding-right: 38px;
+  padding-right: 44px;
   border-radius: 3px 0 0 3px;
   border-right: none;
   box-shadow: 0 0 2px #0000004d;
+  color: #212529;
+  background-color: #fff;
   cursor: text;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 .sf-geolocation-editor-container .search-container .clean-btn {
@@ -77,14 +126,15 @@
   height: 24px;
   position: absolute;
   font-size: 16px;
-  color: var(--bs-icon-color);
+  color: #666;
   top: 7px;
-  right: 8px;
+  right: 14px;
   cursor: pointer;
+  z-index: 1;
 }
 
 .sf-geolocation-editor-container .search-container .clean-btn:hover {
-  background-color: var(--bs-hover-bg);
+  background-color: #efefef;
 }
 
 .sf-geolocation-editor-container .search-container .search-btn {
@@ -93,7 +143,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bs-body-secondary-bg);
+  background-color: #f5f5f5;
   color: #666;
   border: 1px solid var(--bs-border-color);
   border-radius: 0 3px 3px 0;
@@ -255,7 +305,7 @@
 }
 
 .sf-geolocation-editor-container .search-result-item:hover {
-  background-color: var(--bs-th-bg);
+  background-color: #f9f9f9;
 }
 
 .sf-geolocation-editor-container .search-result-item .search-result-item-title {
@@ -281,4 +331,55 @@
   height: 0;
   position: absolute;
   width: 200px;
+}
+
+/* Search Error Styles */
+.sf-geolocation-editor-container .search-error-container {
+  width: 90%;
+  max-width: 450px;
+  position: absolute;
+  top: 58px;
+  left: 24px;
+  right: 0;
+  z-index: 1000;
+  padding: 8px 12px;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+}
+
+.sf-geolocation-editor-container .search-error-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #721c24;
+  font-size: 13px;
+}
+
+.sf-geolocation-editor-container .search-error-message .error-icon {
+  color: #dc3545;
+  flex-shrink: 0;
+}
+
+/* Search Loading Styles */
+.sf-geolocation-editor-container .search-loading-container {
+  width: 90%;
+  max-width: 450px;
+  position: absolute;
+  top: 58px;
+  left: 24px;
+  right: 0;
+  z-index: 1000;
+  padding: 8px 12px;
+  background-color: #d1ecf1;
+  border: 1px solid #bee5eb;
+  border-radius: 4px;
+}
+
+.sf-geolocation-editor-container .search-loading-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bs-info-text-emphasis);
+  font-size: 13px;
 }
