@@ -131,7 +131,7 @@ class LogUserSelector extends Component {
           <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
         </span>
         {isOpen && (
-          <div className="position-absolute activity-modifier-selector-container rounded shadow" ref={ref => this.userSelector = ref}>
+          <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>
             <ul className="activity-selected-modifiers px-3 py-1 list-unstyled">
               {selectedItems.map((item, index) => {
                 return (
