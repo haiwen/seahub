@@ -2109,7 +2109,7 @@ def view_sdoc_revision(request, repo_id, revision_id):
 
     revision = SeadocRevision.objects.get_by_revision_id(repo_id, revision_id)
     if not revision:
-        return render_error(request, 'revision not found')
+        return render_error(request, _('revision not found'))
 
     is_published = revision.is_published
     if is_published:
