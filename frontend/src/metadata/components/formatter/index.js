@@ -33,7 +33,7 @@ const Formatter = ({ field, value, isSample, queryUserAPI, emptyTip, tagsData, .
     case CellType.CTIME:
     case CellType.MTIME: {
       return (
-        <CTimeFormatter value={value} className={className}>
+        <CTimeFormatter value={value} className={className} {...params}>
           <Empty fieldType={fieldType} placeholder={emptyTip} />
         </CTimeFormatter>
       );

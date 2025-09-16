@@ -1,3 +1,4 @@
+import { gettext } from '../../../utils/constants';
 import { PRIVATE_COLUMN_KEY } from '../column';
 import { FILTER_PREDICATE_TYPE } from '../filter';
 import { SORT_COLUMN_OPTIONS, GALLERY_SORT_COLUMN_OPTIONS, GALLERY_FIRST_SORT_COLUMN_OPTIONS, SORT_TYPE,
@@ -26,19 +27,30 @@ export const VIEW_TYPE = {
   FACE_RECOGNITION: 'face_recognition',
   KANBAN: 'kanban',
   MAP: 'map',
+  CARD: 'card',
   STATISTICS: 'statistics',
+};
+
+export const VIEW_TYPE_LABEL = {
+  [VIEW_TYPE.GALLERY]: gettext('Gallery'),
+  [VIEW_TYPE.TABLE]: gettext('Table'),
+  [VIEW_TYPE.KANBAN]: gettext('Kanban'),
+  [VIEW_TYPE.MAP]: gettext('Map'),
+  [VIEW_TYPE.CARD]: gettext('Card'),
+  [VIEW_TYPE.STATISTICS]: gettext('Statistics')
 };
 
 export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
 
 export const VIEW_TYPE_ICON = {
   [VIEW_TYPE.TABLE]: 'table',
-  [VIEW_TYPE.GALLERY]: 'image',
-  [VIEW_TYPE.FACE_RECOGNITION]: 'face-recognition-view',
+  [VIEW_TYPE.GALLERY]: 'gallery',
+  [VIEW_TYPE.FACE_RECOGNITION]: 'face-recognition',
   [VIEW_TYPE.KANBAN]: 'kanban',
   [VIEW_TYPE.MAP]: 'map',
+  [VIEW_TYPE.CARD]: 'card',
   [VIEW_TYPE.STATISTICS]: 'statistics',
-  'image': 'image'
+  'image': 'gallery'
 };
 
 export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
@@ -84,6 +96,21 @@ export const VIEW_TYPE_DEFAULT_BASIC_FILTER = {
       filter_term: []
     },
   ],
+  [VIEW_TYPE.CARD]: [
+    {
+      column_key: PRIVATE_COLUMN_KEY.IS_DIR,
+      filter_predicate: FILTER_PREDICATE_TYPE.IS,
+      filter_term: 'file'
+    }, {
+      column_key: PRIVATE_COLUMN_KEY.FILE_TYPE,
+      filter_predicate: FILTER_PREDICATE_TYPE.IS_ANY_OF,
+      filter_term: []
+    }, {
+      column_key: PRIVATE_COLUMN_KEY.TAGS,
+      filter_predicate: FILTER_PREDICATE_TYPE.HAS_ALL_OF,
+      filter_term: []
+    },
+  ],
   [VIEW_TYPE.MAP]: [
     {
       column_key: PRIVATE_COLUMN_KEY.FILE_TYPE,
@@ -109,6 +136,7 @@ export const VIEW_TYPE_DEFAULT_SORTS = {
   [VIEW_TYPE.GALLERY]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
   [VIEW_TYPE.FACE_RECOGNITION]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
   [VIEW_TYPE.KANBAN]: [],
+  [VIEW_TYPE.CARD]: [],
   [VIEW_TYPE.MAP]: [{ column_key: PRIVATE_COLUMN_KEY.FILE_CTIME, sort_type: SORT_TYPE.DOWN }],
   [VIEW_TYPE.STATISTICS]: [],
 };
@@ -118,6 +146,7 @@ export const VIEW_SORT_COLUMN_RULES = {
   [VIEW_TYPE.GALLERY]: (column) => GALLERY_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
   [VIEW_TYPE.FACE_RECOGNITION]: (column) => GALLERY_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
   [VIEW_TYPE.KANBAN]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
+  [VIEW_TYPE.CARD]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.MAP]: (column) => GALLERY_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
 };
 
@@ -126,6 +155,7 @@ export const VIEW_FIRST_SORT_COLUMN_RULES = {
   [VIEW_TYPE.GALLERY]: (column) => GALLERY_FIRST_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
   [VIEW_TYPE.FACE_RECOGNITION]: (column) => GALLERY_FIRST_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
   [VIEW_TYPE.KANBAN]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
+  [VIEW_TYPE.CARD]: (column) => SORT_COLUMN_OPTIONS.includes(column.type),
   [VIEW_TYPE.MAP]: (column) => GALLERY_FIRST_SORT_COLUMN_OPTIONS.includes(column.type) || GALLERY_FIRST_SORT_PRIVATE_COLUMN_KEYS.includes(column.key),
 };
 
@@ -149,7 +179,8 @@ export const VIEW_DEFAULT_SETTINGS = {
     [KANBAN_SETTINGS_KEYS.SHOW_COLUMN_NAME]: false,
     [KANBAN_SETTINGS_KEYS.TEXT_WRAP]: false,
     [KANBAN_SETTINGS_KEYS.COLUMNS]: [],
-  }
+  },
+  [VIEW_TYPE.CARD]: {}
 };
 
 export const VIEW_PROPERTY_KEYS = {
@@ -172,4 +203,4 @@ export const VIEW_INCOMPATIBLE_PROPERTIES = [
   VIEW_PROPERTY_KEYS.SETTINGS,
 ];
 
-export const VIEW_TYPES_SUPPORT_SHOW_DETAIL = [VIEW_TYPE.GALLERY, VIEW_TYPE.KANBAN, VIEW_TYPE.FACE_RECOGNITION];
+export const VIEW_TYPES_SUPPORT_SHOW_DETAIL = [VIEW_TYPE.GALLERY, VIEW_TYPE.KANBAN, VIEW_TYPE.FACE_RECOGNITION, VIEW_TYPE.CARD];

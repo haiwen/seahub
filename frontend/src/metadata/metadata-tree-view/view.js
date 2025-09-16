@@ -8,18 +8,15 @@ import toaster from '../../components/toast';
 import InlineNameEditor from './inline-name-editor';
 import { Utils, isMobile } from '../../utils/utils';
 import { useMetadata } from '../hooks';
-import { FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, VIEW_DEFAULT_SETTINGS, VIEW_INCOMPATIBLE_PROPERTIES, VIEW_PROPERTY_KEYS, VIEW_TYPE, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
+import {
+  FACE_RECOGNITION_VIEW_ID, METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY,
+  VIEW_DEFAULT_SETTINGS, VIEW_INCOMPATIBLE_PROPERTIES, VIEW_PROPERTY_KEYS,
+  VIEW_TYPE, VIEW_TYPE_LABEL, VIEW_TYPE_ICON, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW
+} from '../constants';
 import { validateName } from '../utils/validate';
 
 const MOVE_TO_FOLDER_PREFIX = 'move_to_folder_';
 const TURN_VIEW_INTO_PREFIX = 'turn_view_into_';
-
-const VIEW_TYPE_LABEL = {
-  [VIEW_TYPE.GALLERY]: gettext('Gallery'),
-  [VIEW_TYPE.TABLE]: gettext('Table'),
-  [VIEW_TYPE.KANBAN]: gettext('Kanban'),
-  [VIEW_TYPE.MAP]: gettext('Map'),
-};
 
 const ViewItem = ({
   leftIndent,
