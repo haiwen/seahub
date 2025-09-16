@@ -105,7 +105,7 @@ export const enableMetadataManagement = window.app.pageOptions.enableMetadataMan
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI;
 export const enableWhiteboard = window.app.pageOptions.enableWhiteboard;
 export const enableMultipleOfficeSuite = window.app.pageOptions.enableMultipleOfficeSuite;
-export const officeSuiteEditFileExtention = window.app.pageOptions.officeSuiteEditFileExtention || [];
+export const officeSuiteEditFileExtension = window.app.pageOptions.officeSuiteEditFileExtension || [];
 
 export const curNoteMsg = window.app.pageOptions.curNoteMsg;
 export const curNoteID = window.app.pageOptions.curNoteID;
@@ -121,7 +121,7 @@ export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false
 export const onlyofficeEditFileExtension = window.app.pageOptions.onlyofficeEditFileExtension || [];
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
-export const isMultiTenancy = window.app.pageOptions.isMultiTenacy;
+export const isMultiTenancy = window.app.pageOptions.isMultiTenancy;
 export const enableFileTags = window.app.pageOptions.enableFileTags || false;
 
 export const enableShowAbout = window.app.pageOptions.enableShowAbout || false;

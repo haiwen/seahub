@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
 import toaster from '../toast';
-import TipDialog from '../dialog/tip-dailog';
+import TipDialog from '../dialog/tip-dialog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
@@ -339,9 +339,7 @@ class DirOperationToolbar extends React.Component {
             {content}
           </div>
         )}
-        {this.state.isImportingSdoc && (
-          <TipDialog modalTitle={gettext('Import sdoc')} modalTip={gettext('Importing sdoc, please wait...')}/>
-        )}
+        {this.state.isImportingSdoc && <TipDialog/>}
         <div>
           <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} />
         </div>

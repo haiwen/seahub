@@ -1,7 +1,7 @@
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
-  enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtention } from './constants';
+  enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtension } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
 import toaster from '../components/toast';
@@ -218,7 +218,7 @@ export const Utils = {
     } else if (enableOfficeWebApp) {
       return officeWebAppEditFileExtension.includes(file_ext);
     } else if (enableMultipleOfficeSuite) {
-      return officeSuiteEditFileExtention.includes(file_ext);
+      return officeSuiteEditFileExtension.includes(file_ext);
     } else {
       return false;
     }
@@ -1681,7 +1681,7 @@ export const Utils = {
    * If dirent is none, then check whether the user can share the repo
    * scene 1: root path or folder path, control the share button in the toolbar
    * scene 2: selected a dirent, control the share button in the toolbar dropdown-menu
-   * scene 3: dirent list(grid list), control the share button in the dirent-item or righe-menu
+   * scene 3: dirent list(grid list), control the share button in the dirent-item or right-menu
    *
    * @param {*} repoInfo
    * @param {*} userDirPermission
