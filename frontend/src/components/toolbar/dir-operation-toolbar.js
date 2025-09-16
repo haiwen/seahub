@@ -320,8 +320,8 @@ class DirOperationToolbar extends React.Component {
             )}
             {canCreate && (
               <Fragment>
-                <DropdownItem onClick={this.onCreateFolderToggle}>{gettext('New Folder')}</DropdownItem>
-                <DropdownItem onClick={this.onCreateFileToggle}>{gettext('New File')}</DropdownItem>
+                <DropdownItem onClick={this.onCreateFolder}>{gettext('New Folder')}</DropdownItem>
+                <DropdownItem onClick={() => this.onCreateFile('')}>{gettext('New File')}</DropdownItem>
               </Fragment>
             )}
           </DropdownMenu>
