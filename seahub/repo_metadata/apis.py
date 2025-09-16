@@ -705,6 +705,8 @@ class MetadataColumns(APIView):
 
         new_column_name = column_name if column_name else column['name']
         old_column_data = column.get('data', {})
+        if not old_column_data:
+            old_column_data = {}
         new_column_data = {**old_column_data, **column_data} if column_data else column['data']
 
         new_column = MetadataColumn(column_key, new_column_name, column['type'], new_column_data).to_dict()
