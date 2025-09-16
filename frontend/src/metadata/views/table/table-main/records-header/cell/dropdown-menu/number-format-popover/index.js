@@ -48,7 +48,7 @@ const THOUSANDS_OPTIONS = [
     label: gettext('No separator (1000000)'),
     value: DEFAULTS.THOUSANDS_SEPARATOR,
   },
-  { label: gettext('Comma (1.000.000)'), value: 'comma' },
+  { label: gettext('Comma (1,000,000)'), value: 'comma' },
   { label: gettext('Space (1 000 000)'), value: 'space' },
 ];
 
