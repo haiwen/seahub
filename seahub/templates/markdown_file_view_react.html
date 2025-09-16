@@ -21,7 +21,7 @@
         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
         {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
     </head>
-    <body data-bs-theme="{% if request.session.dark_mode %}dark{% else %}light{% endif %}" id="{% block body_id %}base{% endblock %}">
+    <body data-bs-theme="light" id="{% block body_id %}base{% endblock %}">
         <div id="root"></div>
         <div id="modal-wrapper"></div>
         <script type="text/javascript">
@@ -70,14 +70,6 @@
         }
         </script>
         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js?v={{ seafile_version }}"></script>
-        <script>
-            (function() {
-                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const initialTheme = (systemDark ? 'dark' : 'light');
-                document.body.setAttribute('data-bs-theme', initialTheme);
-                document.body.classList.toggle('dark-theme', initialTheme === 'dark');
-            })();
-        </script>
 
         {% render_bundle 'markdownEditor' 'js' %}
     </body>
