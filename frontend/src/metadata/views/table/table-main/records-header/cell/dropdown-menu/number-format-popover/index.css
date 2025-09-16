@@ -11,19 +11,10 @@
   padding: 16px;
 }
 
-.sf-metadata-number-format-popover-content.sf-metadata-column-data-settings .form-group {
-  margin-bottom: 16px;
-}
-
-.sf-metadata-number-format-popover-content.sf-metadata-column-data-settings .form-group:last-child {
-  margin-bottom: 0;
-}
-
 .sf-metadata-number-format-popover-content.sf-metadata-column-data-settings label {
   font-size: 14px;
   font-weight: 500;
   color: var(--bs-body-color);
-  margin-bottom: 6px;
   display: block;
 }
 

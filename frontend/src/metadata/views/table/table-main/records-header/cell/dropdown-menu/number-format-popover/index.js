@@ -57,6 +57,9 @@ const PRECISION_OPTIONS = [
   { label: '1.0', value: 1 },
   { label: '1.00', value: DEFAULTS.PRECISION },
   { label: '1.000', value: 3 },
+  { label: '1.0000', value: 4 },
+  { label: '1.00000', value: 5 },
+  { label: '1.000000', value: 6 },
 ];
 
 const SIGN_POSITION_OPTIONS = [
