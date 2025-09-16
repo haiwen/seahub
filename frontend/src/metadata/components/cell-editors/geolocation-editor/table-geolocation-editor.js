@@ -12,18 +12,26 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
   const editorRef = useRef(null);
 
   const editorIdRef = useRef(`table-editor-${record?._id || 'default'}-${Date.now()}`);
+  const latestValueRef = useRef({ position: currentValue, location_translated: record?._location_translated || null });
 
   useImperativeHandle(ref, () => ({
-    onClose: () => closeEditor()
+    getValue: () => latestValueRef.current,
+    onClose: () => {
+      setFullScreen(false);
+      onClose && onClose();
+    }
   }));
+
+  useEffect(() => {
+    latestValueRef.current = {
+      position: currentValue,
+      location_translated: record?._location_translated || null
+    };
+  }, [currentValue, record?._location_translated]);
 
   const handleMapReady = useCallback(() => {
     setMapReady(true);
   }, []);
-
-  const closeEditor = useCallback(() => {
-    onClose && onClose();
-  }, [onClose]);
 
   useEffect(() => {
     if (!isFullScreen && editorRef.current) {
@@ -83,18 +91,18 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
 
   const onSubmit = useCallback((locationData) => {
     const { position, location_translated } = locationData;
-    onCommit && onCommit({ position, location_translated });
+    latestValueRef.current = { position, location_translated };
     setCurrentValue(position);
     setFullScreen(false);
     onClose && onClose();
-  }, [onCommit, onClose]);
+  }, [onClose]);
 
   const onDeleteLocation = useCallback(() => {
-    onCommit && onCommit({ position: null, location_translated: null });
+    latestValueRef.current = { position: null, location_translated: null };
     setCurrentValue(null);
     setFullScreen(false);
     onClose && onClose();
-  }, [onCommit, onClose]);
+  }, [onClose]);
 
   const locationTranslated = record?._location_translated || null;
 
