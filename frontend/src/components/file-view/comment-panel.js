@@ -6,10 +6,14 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import CommentList from './comment-widget/comment-list';
 import ReplyList from './comment-widget/reply-list';
+import LocalStorage from '../../utils/local-storage-utils';
+import ResizeWidth from './resize-width';
 
 import '../../css/comments-list.css';
 
-const { username, repoID, filePath, fileUuid } = window.app.pageOptions;
+const { username, repoID, filePath, fileUuid, fileName } = window.app.pageOptions;
+const MIN_PANEL_WIDTH = 360;
+const MAX_PANEL_WIDTH = 620;
 
 const CommentPanelPropTypes = {
   toggleCommentPanel: PropTypes.func.isRequired,
@@ -28,9 +32,26 @@ class CommentPanel extends React.Component {
       participants: null,
       relatedUsers: null,
       currentComment: null,
+      width: MIN_PANEL_WIDTH,
     };
     this.toBeAddedParticipant = [];
   }
+
+  panelWrapperStyle = () => {
+
+    let style = {
+      width: this.state.width,
+      zIndex: 101,
+    };
+
+    if (!style.width || style.width < MIN_PANEL_WIDTH) {
+      style.width = MIN_PANEL_WIDTH;
+    } else if (style.width > MAX_PANEL_WIDTH) {
+      style.width = MAX_PANEL_WIDTH;
+    }
+
+    return style;
+  };
 
   forceUpdate = () => {
     this.listComments();
@@ -163,6 +184,15 @@ class CommentPanel extends React.Component {
     this.listComments();
     this.getParticipants();
     this.listRepoRelatedUsers();
+
+    const newfileType = fileName?.split('.').pop();
+    const settings = LocalStorage.getItem(`${newfileType}_comment_storage`) || {};
+    const { panelWidth } = settings;
+    const width = Math.max(
+      MIN_PANEL_WIDTH,
+      Math.min(parseInt(panelWidth, 10) || MIN_PANEL_WIDTH, MAX_PANEL_WIDTH)
+    );
+    this.setState({ width });
   }
 
   onClickComment = (currentComment) => {
@@ -173,10 +203,21 @@ class CommentPanel extends React.Component {
     this.setState({ currentComment: null });
   };
 
+  resizeWidth = (width) => {
+    this.setState({ width: width });
+  };
+
+  resizeWidthEnd = (width) => {
+    const newfileType = fileName?.split('.').pop();
+    const settings = LocalStorage.getItem(`${newfileType}_comment_storage`) || {};
+    LocalStorage.setItem(`${newfileType}_comment_storage`, JSON.stringify({ ...settings, panelWidth: width }));
+  };
+
   render() {
     const { commentsList } = this.state;
     return (
-      <div className="seafile-comment">
+      <div className="seafile-comment" style={this.panelWrapperStyle()}>
+        <ResizeWidth minWidth={MIN_PANEL_WIDTH} maxWidth={MAX_PANEL_WIDTH} resizeWidth={this.resizeWidth} resizeWidthEnd={this.resizeWidthEnd} />
         {
           this.state.currentComment ?
             <ReplyList
