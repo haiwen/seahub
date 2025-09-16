@@ -40,6 +40,21 @@ const DATE_FORMAT_MAP = {
 // number
 const DEFAULT_NUMBER_FORMAT = 'number';
 
+// number format options
+const NUMBER_FORMAT_OPTIONS = [
+  'number',
+  'percent',
+  'yuan',
+  'dollar',
+  'euro',
+  'custom_currency'
+];
+
+const NUMBER_DECIMAL_SEPARATOR_OPTIONS = ['comma', 'dot'];
+const NUMBER_THOUSANDS_SEPARATOR_OPTIONS = ['no', 'comma', 'space'];
+const NUMBER_PRECISION_OPTIONS = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const NUMBER_SIGN_POSITION_OPTIONS = ['before', 'after'];
+
 const NOT_SUPPORT_EDIT_COLUMN_TYPE = [
   CellType.CTIME,
   CellType.MTIME,
@@ -125,6 +140,11 @@ export {
   DATE_UNIT,
   DATE_FORMAT_MAP,
   DEFAULT_NUMBER_FORMAT,
+  NUMBER_FORMAT_OPTIONS,
+  NUMBER_DECIMAL_SEPARATOR_OPTIONS,
+  NUMBER_THOUSANDS_SEPARATOR_OPTIONS,
+  NUMBER_PRECISION_OPTIONS,
+  NUMBER_SIGN_POSITION_OPTIONS,
   DATE_DEFAULT_TYPES,
   NOT_SUPPORT_EDIT_COLUMN_TYPE,
   NOT_SUPPORT_EDIT_COLUMN_TYPE_MAP,
