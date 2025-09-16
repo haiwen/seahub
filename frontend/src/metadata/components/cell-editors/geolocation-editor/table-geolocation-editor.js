@@ -11,7 +11,6 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
   const [isMapReady, setMapReady] = useState(false);
   const editorRef = useRef(null);
 
-  const editorIdRef = useRef(`table-editor-${record?._id || 'default'}-${Date.now()}`);
   const latestValueRef = useRef({ position: currentValue, location_translated: record?._location_translated || null });
 
   useImperativeHandle(ref, () => ({
@@ -110,7 +109,6 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
     <div className="sf-table-geolocation-editor" ref={editorRef} style={editorStyle}>
       {!isFullScreen ? (
         <GeolocationEditor
-          editorId={editorIdRef.current}
           position={currentValue}
           locationTranslated={locationTranslated}
           onSubmit={onSubmit}
@@ -126,7 +124,6 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
           zIndex={1052}
         >
           <GeolocationEditor
-            editorId={`${editorIdRef.current}-fullscreen`}
             position={currentValue}
             locationTranslated={locationTranslated}
             isFullScreen={isFullScreen}
