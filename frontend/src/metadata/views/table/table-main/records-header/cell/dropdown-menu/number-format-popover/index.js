@@ -48,7 +48,7 @@ const THOUSANDS_OPTIONS = [
     label: gettext('No separator (1000000)'),
     value: DEFAULTS.THOUSANDS_SEPARATOR,
   },
-  { label: gettext('Comma (1.000.000)'), value: 'comma' },
+  { label: gettext('Comma (1,000,000)'), value: 'comma' },
   { label: gettext('Space (1 000 000)'), value: 'space' },
 ];
 
@@ -288,7 +288,7 @@ const NumberFormatPopover = ({ target, column, onToggle, onSubmit }) => {
       hidePopoverWithEsc={handlePopoverClose}
       hideArrow={true}
       canHide={true}
-      header={gettext('Number Format Settings')}
+      header={gettext('Number format settings')}
     >
       <div className='sf-metadata-number-format-popover-content sf-metadata-column-data-settings'>
         <FormGroup>

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-25 11:42+0800\n"
+"POT-Creation-Date: 2025-09-16 17:38+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Muhammed Şamil Kıvanç, 2022\n"
 "Language-Team: Turkish (http://app.transifex.com/haiwen/seahub/language/tr/)\n"
@@ -178,7 +178,7 @@ msgstr ""
 msgid "Library can not be transferred to owner."
 msgstr "Kütüphane sahibine devredilemez."
 
-#: seahub/api2/endpoints/admin/organizations.py:418
+#: seahub/api2/endpoints/admin/organizations.py:419
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
@@ -447,7 +447,7 @@ msgstr "Virüs dosyası bulunamadı."
 #: seahub/notifications/models.py:782 seahub/notifications/models.py:812
 #: seahub/notifications/models.py:834 seahub/notifications/models.py:860
 #: seahub/notifications/models.py:877 seahub/notifications/models.py:894
-#: seahub/notifications/models.py:923 seahub/seadoc/apis.py:2757
+#: seahub/notifications/models.py:923 seahub/seadoc/apis.py:2792
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
 #: seahub/utils/__init__.py:171 seahub/views/__init__.py:834
 #: seahub/views/ajax.py:398 seahub/views/ajax.py:402 seahub/wiki/views.py:210
@@ -474,9 +474,9 @@ msgstr "Geçersiz hedef yolu"
 #: seahub/api2/views.py:2078 seahub/api2/views.py:2140
 #: seahub/api2/views.py:2184 seahub/api2/views.py:2230
 #: seahub/api2/views.py:2279 seahub/api2/views.py:2692
-#: seahub/api2/views.py:2800 seahub/seadoc/apis.py:381
-#: seahub/seadoc/apis.py:505 seahub/seadoc/apis.py:599
-#: seahub/seadoc/apis.py:3110
+#: seahub/api2/views.py:2800 seahub/seadoc/apis.py:416
+#: seahub/seadoc/apis.py:540 seahub/seadoc/apis.py:634
+#: seahub/seadoc/apis.py:3145
 msgid "Out of quota."
 msgstr "Kota dışında."
 
@@ -513,7 +513,7 @@ msgstr "%s kullanıcı bulunamadı."
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
 #: seahub/api2/endpoints/via_repo_token.py:852
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:2086 seahub/seadoc/apis.py:3117
+#: seahub/api2/views.py:2086 seahub/seadoc/apis.py:3152
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
@@ -527,7 +527,7 @@ msgstr ""
 #: seahub/api2/endpoints/upload_links.py:316
 #: seahub/api2/endpoints/wiki2.py:1470 seahub/api2/endpoints/wikis.py:115
 #: seahub/api2/endpoints/wikis.py:210 seahub/profile/forms.py:24
-#: seahub/profile/views.py:279 seahub/seadoc/apis.py:2741
+#: seahub/profile/views.py:279 seahub/seadoc/apis.py:2776
 #: seahub/seadoc/views.py:31 seahub/seadoc/views.py:85
 #: seahub/seadoc/views.py:168 seahub/subscription/views.py:27
 #: seahub/subscription/views.py:43 seahub/thumbnail/views.py:54
@@ -550,7 +550,7 @@ msgstr "Dosya kilitli değil."
 msgid "You can not refresh this file's lock."
 msgstr "Bu dosyanın kilidini yenileyemezsiniz."
 
-#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2748
+#: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2783
 msgid "The participant already exists."
 msgstr "Katılımcı zaten var."
 
@@ -709,7 +709,7 @@ msgid "Expiration time should be earlier than %s."
 msgstr "Son kullanma süresi %s'den önce olmalıdır."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
-#: seahub/seadoc/apis.py:652
+#: seahub/seadoc/apis.py:687
 #: seahub/templates/remote_user/create_unknown_user_false.html:4
 #: seahub/templates/remote_user/error.html:4
 msgid "Error"
@@ -899,7 +899,7 @@ msgstr "Wiki bulunamadı."
 msgid "Name is required."
 msgstr "İsim gerekli."
 
-#: seahub/api2/utils.py:333
+#: seahub/api2/utils.py:335
 msgid "A share link for you"
 msgstr ""
 
@@ -1544,11 +1544,11 @@ msgstr "%(site_name)s takımı"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
 #: seahub/views/__init__.py:463 seahub/views/ajax.py:378
-#: seahub/views/ajax.py:424 seahub/views/file.py:1265
-#: seahub/views/file.py:1293 seahub/views/file.py:1517
-#: seahub/views/file.py:1557 seahub/views/repo.py:114 seahub/views/repo.py:171
-#: seahub/views/repo.py:229 seahub/views/repo.py:257 seahub/views/repo.py:286
-#: seahub/views/repo.py:383
+#: seahub/views/ajax.py:424 seahub/views/file.py:1267
+#: seahub/views/file.py:1295 seahub/views/file.py:1519
+#: seahub/views/file.py:1559 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
+#: seahub/views/repo.py:384
 msgid "Permission denied"
 msgstr "İzin reddedildi"
 
@@ -1652,10 +1652,10 @@ msgstr "Parolanızı oluşturun"
 #: seahub/organizations/templates/organizations/org_register.html:59
 #: seahub/share/templates/share/share_link_email_audit.html:39
 #: seahub/templates/decrypt_repo_form.html:13
-#: seahub/templates/registration/password_change_form.html:25
+#: seahub/templates/registration/password_change_form.html:24
 #: seahub/templates/registration/password_reset_confirm.html:28
 #: seahub/templates/registration/password_reset_form.html:40
-#: seahub/templates/registration/password_set_form.html:28
+#: seahub/templates/registration/password_set_form.html:27
 #: seahub/templates/share_access_validation.html:29
 msgid "Submit"
 msgstr "Gönder"
@@ -2148,42 +2148,42 @@ msgid "Admin Email"
 msgstr "Admin E-postası"
 
 #: seahub/organizations/templates/organizations/org_register.html:52
-#: seahub/templates/registration/password_change_form.html:22
-#: seahub/templates/registration/password_set_form.html:25
-#: seahub/templates/registration/registration_form.html:38
+#: seahub/templates/registration/password_change_form.html:21
+#: seahub/templates/registration/password_set_form.html:24
+#: seahub/templates/registration/registration_form.html:37
 #: seahub/templates/sysadmin/sudo_mode.html:4
 #: seahub/templates/sysadmin/sudo_mode.html:37
 msgid "Confirm Password"
 msgstr "Şifreyi Onayla"
 
 #: seahub/organizations/templates/organizations/org_register.html:89
-#: seahub/templates/registration/registration_form.html:92
+#: seahub/templates/registration/registration_form.html:91
 msgid "Email cannot be blank"
 msgstr "Eposta boş bırakılamaz"
 
 #: seahub/organizations/templates/organizations/org_register.html:93
 #: seahub/templates/registration/login.html:195
-#: seahub/templates/registration/password_change_form.html:53
+#: seahub/templates/registration/password_change_form.html:52
 #: seahub/templates/registration/password_reset_confirm.html:56
-#: seahub/templates/registration/password_set_form.html:51
-#: seahub/templates/registration/registration_form.html:96
+#: seahub/templates/registration/password_set_form.html:50
+#: seahub/templates/registration/registration_form.html:95
 #: seahub/templates/sysadmin/sudo_mode.html:70
 msgid "Password cannot be blank"
 msgstr "Şifre boş bırakılamaz"
 
 #: seahub/organizations/templates/organizations/org_register.html:97
-#: seahub/templates/registration/password_change_form.html:57
+#: seahub/templates/registration/password_change_form.html:56
 #: seahub/templates/registration/password_reset_confirm.html:60
-#: seahub/templates/registration/password_set_form.html:55
-#: seahub/templates/registration/registration_form.html:100
+#: seahub/templates/registration/password_set_form.html:54
+#: seahub/templates/registration/registration_form.html:99
 msgid "Please enter the password again"
 msgstr "Lütfen şifreyi tekrar giriniz."
 
 #: seahub/organizations/templates/organizations/org_register.html:101
-#: seahub/templates/registration/password_change_form.html:61
+#: seahub/templates/registration/password_change_form.html:60
 #: seahub/templates/registration/password_reset_confirm.html:64
-#: seahub/templates/registration/password_set_form.html:59
-#: seahub/templates/registration/registration_form.html:104
+#: seahub/templates/registration/password_set_form.html:58
+#: seahub/templates/registration/registration_form.html:103
 msgid "Passwords don't match"
 msgstr "Şifreler eşleşmiyor."
 
@@ -2203,12 +2203,12 @@ msgstr "Sonraki"
 msgid "Per page: "
 msgstr "Her bir sayfa:"
 
-#: seahub/organizations/views.py:323 seahub/organizations/views.py:353
+#: seahub/organizations/views.py:324 seahub/organizations/views.py:354
 #: seahub/thumbnail/views.py:160
 msgid "Invalid token."
 msgstr "Geçersiz jeton"
 
-#: seahub/organizations/views.py:356
+#: seahub/organizations/views.py:357
 #| msgid "Expiration"
 msgid "Expired token."
 msgstr ""
@@ -2265,7 +2265,7 @@ msgstr "Şifrelenmiş kütüphane varsayılan kütüphane olarak ayarlanamaz."
 msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" varsayılan kütüphaneniz olarak başarıyla kuruldu."
 
-#: seahub/repo_metadata/apis.py:147
+#: seahub/repo_metadata/apis.py:155
 #, python-format
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
@@ -2517,8 +2517,8 @@ msgstr "Paylaşılan Kütüphaneler"
 #: seahub/templates/onlyoffice_file_view_react.html:86
 #: seahub/templates/onlyoffice_file_view_react.html:181
 #: seahub/templates/onlyoffice_file_view_react.html:204
-#: seahub/templates/sdoc_file_view_react.html:64
-#: seahub/templates/sdoc_file_view_react.html:87
+#: seahub/templates/sdoc_file_view_react.html:65
+#: seahub/templates/sdoc_file_view_react.html:88
 #: seahub/templates/view_file_onlyoffice.html:93
 #: seahub/templates/view_file_onlyoffice.html:184
 #: seahub/templates/view_file_onlyoffice.html:207
@@ -2541,7 +2541,7 @@ msgid ""
 msgstr "Hesabı etkinleştirmek için lütfen %(expiration_days)s gün içinde linki tıklayın."
 
 #: seahub/templates/registration/activation_email.html:18
-#: seahub/templates/registration/registration_form.html:59
+#: seahub/templates/registration/registration_form.html:58
 msgid "Sign Up"
 msgstr "Kayıt ol"
 
@@ -2634,7 +2634,7 @@ msgstr "Mevcut Şifre"
 msgid "New Password"
 msgstr "Yeni Şifre"
 
-#: seahub/templates/registration/password_change_form.html:49
+#: seahub/templates/registration/password_change_form.html:48
 msgid "Current password cannot be blank"
 msgstr "Geçerli şifre boş bırakılamaz."
 
@@ -2734,15 +2734,15 @@ msgstr "Kayıt tamamlandı, lütfen yöneticinin hesabınızı etkinleştirmesi 
 msgid "Signup function is not enabled."
 msgstr "Kayıt işlevi etkin değil."
 
-#: seahub/templates/registration/registration_form.html:44
+#: seahub/templates/registration/registration_form.html:43
 msgid "Department"
 msgstr "Bölüm"
 
-#: seahub/templates/registration/registration_form.html:49
+#: seahub/templates/registration/registration_form.html:48
 msgid "Telephone"
 msgstr "Telefon"
 
-#: seahub/templates/registration/registration_form.html:54
+#: seahub/templates/registration/registration_form.html:53
 msgid "Note"
 msgstr "Not"
 
@@ -2797,12 +2797,12 @@ msgstr "İzleyen sayfaya gidebilir ve dosyalarınızı yükleyebilirsiniz."
 msgid "Password strength should be strong or very strong"
 msgstr ""
 
-#: seahub/templates/snippets/password_strength_js.html:11
+#: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
 msgstr ""
 
-#: seahub/templates/snippets/password_strength_js.html:18
+#: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
@@ -3097,7 +3097,7 @@ msgstr "Belirttiğiniz geçmiş yok"
 msgid "Unknown error"
 msgstr "Bilinmeyen hata"
 
-#: seahub/views/__init__.py:805 seahub/views/repo.py:290
+#: seahub/views/__init__.py:805 seahub/views/repo.py:291
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" mevcut değil."
@@ -3124,9 +3124,9 @@ msgid "Bad upload link token."
 msgstr "Kötü bağlantı yükleme jetonu."
 
 #: seahub/views/ajax.py:335 seahub/views/file.py:534 seahub/views/file.py:566
-#: seahub/views/file.py:1285 seahub/views/file.py:1551
-#: seahub/views/file.py:2126 seahub/views/file.py:2131
-#: seahub/views/file.py:2138
+#: seahub/views/file.py:1287 seahub/views/file.py:1553
+#: seahub/views/file.py:2128 seahub/views/file.py:2133
+#: seahub/views/file.py:2140
 msgid "File does not exist"
 msgstr "Dosya yok."
 
@@ -3154,57 +3154,62 @@ msgstr "Seçtiğiniz kodlama uygun değil."
 msgid "Unknown file encoding"
 msgstr "Bilinmeyen dosya kodlama"
 
-#: seahub/views/file.py:381 seahub/views/file.py:786 seahub/views/file.py:941
-#: seahub/views/file.py:977
+#: seahub/views/file.py:381 seahub/views/file.py:788 seahub/views/file.py:943
+#: seahub/views/file.py:979
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Dosya boyutu %s i aşıyor, online açılamaz."
 
-#: seahub/views/file.py:393 seahub/views/file.py:782
+#: seahub/views/file.py:393 seahub/views/file.py:784
 msgid "The library is encrypted, can not open file online."
 msgstr "Kütüphane şifreli, dosyayı çevrimiçi açamıyor."
 
 #: seahub/views/file.py:521 seahub/views/file.py:543 seahub/views/file.py:548
-#: seahub/views/file.py:602 seahub/views/file.py:1136
-#: seahub/views/file.py:1162 seahub/views/file.py:1192
-#: seahub/views/file.py:1336 seahub/views/file.py:1593
-#: seahub/views/file.py:2090
+#: seahub/views/file.py:602 seahub/views/file.py:1138
+#: seahub/views/file.py:1164 seahub/views/file.py:1194
+#: seahub/views/file.py:1338 seahub/views/file.py:1595
+#: seahub/views/file.py:2092
 msgid "Unable to view file"
 msgstr "Dosya görüntülenemiyor."
 
-#: seahub/views/file.py:812 seahub/views/file.py:1086
-#: seahub/views/file.py:1415 seahub/views/file.py:1650
+#: seahub/views/file.py:814 seahub/views/file.py:1088
+#: seahub/views/file.py:1417 seahub/views/file.py:1652
 msgid "Error when prepare Office Online file preview page."
 msgstr "Office Online dosyası önizleme sayfası hazırlanırken hata oluştu."
 
-#: seahub/views/file.py:847 seahub/views/file.py:1102
-#: seahub/views/file.py:1435 seahub/views/file.py:1666
+#: seahub/views/file.py:849 seahub/views/file.py:1104
+#: seahub/views/file.py:1437 seahub/views/file.py:1668
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr "OnlyOffice dosyası önizleme sayfası hazırlanırken hata oluştu."
 
-#: seahub/views/file.py:1228
+#: seahub/views/file.py:1230
 msgid "Unable to download file, invalid file path"
 msgstr "Dosya indirilemedi, geçersiz dosya yolu"
 
-#: seahub/views/file.py:1237
+#: seahub/views/file.py:1239
 msgid "Unable to download file, wrong file path"
 msgstr "Dosya indirilemedi, hatalı dosya yolu"
 
-#: seahub/views/file.py:1244
+#: seahub/views/file.py:1246
 msgid "Unable to download file."
 msgstr "Dosya indirilemedi."
 
-#: seahub/views/file.py:1460 seahub/views/file.py:1719
-#: seahub/views/repo.py:324
+#: seahub/views/file.py:1462 seahub/views/file.py:1721
+#: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
 msgstr "%s için link paylaş."
 
-#: seahub/views/file.py:1858 seahub/views/file.py:1863
+#: seahub/views/file.py:1861 seahub/views/file.py:1866
 msgid "Unable to download file"
 msgstr "Dosya indirilemiyor."
 
-#: seahub/views/file.py:2119
+#: seahub/views/file.py:2114
+#| msgid "Wiki not found."
+msgid "revision not found"
+msgstr ""
+
+#: seahub/views/file.py:2121
 msgid "The original file does not exist"
 msgstr ""
 
