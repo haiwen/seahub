@@ -425,7 +425,7 @@ msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 for Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -487,7 +487,7 @@ msgstr "虛擬驅動器中的檔案在本地檔案系統中創建為“預留位
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
-msgstr ""
+msgstr "<b>Placeholder file</b>: 檔案的空表示，只有在有網絡連接時才能打開。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -504,7 +504,7 @@ msgstr ""
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
-msgstr ""
+msgstr "<b>固定完整檔案</b>: 檔案已下載並保存在本地。 它保證可以離線使用。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -592,7 +592,7 @@ msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "它與 SeaDrive 1.0 相容嗎？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -602,10 +602,13 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive 2.0 將使用任何現有的帳戶及其元數據（存儲在 C:\\users\\username\\seadrive\\ "
+"文件夾下）。但它不會使用 SeaDrive 1.0 的緩存文件。因此，1.0 版本中任何本地緩存的文件在 2.0 版本中都將無法訪問。您可以再次啟動 "
+"SeaDrive 1.0 將文件上傳到服務器或複製出來。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "如何清理緩存？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -616,10 +619,12 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"您可以手動選擇要在本地緩存的文件夾或文件。如果您發現某個文件夾佔用過多空間，只需選擇在該文件夾上「釋放空間」，該文件夾中的所有緩存文件將被清理。無需像 "
+"SeaDrive 1.0 那樣設置緩存清理時間和緩存大小限制。因為佔位符只是在您本地磁盤上創建的普通文件，您的緩存大小僅受計算機上可用磁盤空間的限制"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "如何移除 Windows 資源管理器中剩餘的 SeaDrive 快捷方式？"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -628,12 +633,14 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"退出 SeaDrive 程序或在 SeaDrive 中切換 Seafile 帳戶後，Windows "
+"資源管理器中的「SeaDrive」快捷方式不會消失。這是預期行為。如果您稍後仍需要訪問該帳戶，則無需移除它們"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
-msgstr ""
+msgstr "您通常可以通過卸載 SeaDrive 程序並在提示對話框中選擇「移除帳戶信息」來移除這些快捷方式。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -644,6 +651,8 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"如果卸載未能成功移除快捷方式，您可以通過編輯註冊表來移除 Windows 資源管理器中的 SeaDrive 快捷方式。在註冊表編輯器中打開路徑 "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\"。移除對應於您要移除的快捷方式的子鍵。"
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -669,7 +678,7 @@ msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr ""
+msgstr "如果您在網頁應用程式中建立加密資料庫，密碼會傳送至伺服器。伺服器使用此密碼建立資料庫，但不會儲存明文密碼。"
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -678,6 +687,8 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"如果使用案頭用戶端從本地資料夾創建加密庫（請<a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">參閱1檔案同步1</a>），則密碼不會發送到服務器。"
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -721,22 +732,24 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"當多人協作處理同一個文件時，很可能有多人幾乎同時修改該文件。Seafile "
+"透過衝突文件很好地處理了這種情況。但當一個人想要獨佔修改文件時，鎖定文件往往更為方便。Seafile 專業版支援文件鎖定功能。"
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
-msgstr ""
+msgstr "文件鎖定功能在網頁應用程式和桌面同步用戶端上均可使用。我們將逐一介紹它們。"
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "網頁應用程式上的文件鎖定"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
-msgstr ""
+msgstr "要鎖定文件，您可以在網頁應用程式中導航到文件所在的資料夾，然後點擊「操作」下拉選單。"
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -745,45 +758,46 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"文件被鎖定後，您可以在文件圖示的角落看到一個紅色的「停止標誌」。將滑鼠移動到停止標誌上，您可以看到是誰鎖定了文件。您也可以解鎖自己鎖定的文件，但無法解鎖其他人鎖定的文件。"
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "桌面用戶端上的文件鎖定"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
-msgstr ""
+msgstr "資料庫同步到桌面後，您可以在 Windows 的檔案總管或 Mac OS 的 Finder 中鎖定/解鎖該資料庫中的文件。"
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
-msgstr ""
+msgstr "要鎖定文件，只需在已同步的文件上按右鍵，然後在「Seafile」選單中選擇「鎖定此文件」。"
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
-msgstr ""
+msgstr "如果文件由您鎖定，您可以在文件圖示上看到一個橙色的「停止標誌」。您可以選擇解鎖它。"
 
 #: templates/help/file_locking.html:19
 msgid ""
 "If a file is locked by other user, you can see a red \"stop sign\" on the "
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
-msgstr ""
+msgstr "如果文件被其他使用者鎖定，您可以在文件圖示上看到一個紅色的「停止標誌」。文件會自動設為唯讀。在解鎖之前，您無法修改它。"
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
-msgstr ""
+msgstr "如果資料庫未同步，您仍然可以使用雲端文件瀏覽器來鎖定和解鎖其中的文件。"
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "自動鎖定 Office 文件"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -793,18 +807,20 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"資料庫同步到桌面後，當您開啟資料庫中的 Microsoft Office 文件時，Seafile 會自動鎖定該文件。當您關閉文件時，Seafile "
+"會自動解鎖文件。鎖定狀態會傳播到同步此資料庫的其他電腦。這可以防止多人同時編輯同一個 Office 文件，方便協作。"
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "文件鎖定的詳細信息"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
-msgstr ""
+msgstr "關於文件鎖定的工作原理，有一些實用的提示："
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "已鎖定的文件只能由鎖定它的使用者解鎖。"
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -813,16 +829,17 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"已鎖定的文件不能被其他使用者修改、移動、重新命名或刪除。但其他使用者仍然可以移動、刪除或重新命名已鎖定文件的父資料夾。文件鎖定的主要目的是防止多人同時編輯。"
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
-msgstr ""
+msgstr "當已鎖定文件的父資料夾在同一資料庫中被重新命名或移動時，操作後文件仍然保持鎖定狀態。"
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "查找文件的舊版本"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -831,10 +848,12 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile "
+"追蹤所有文件的修改歷史。每當文件被修改時，都會創建新版本，而舊版本仍會保留一段可配置的時間。當您想要訪問文件的舊版本時，文件歷史功能就變得非常實用。"
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "列出文件的所有版本："
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -842,16 +861,17 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"在 Seafile 網頁應用程式中，導航到包含該文件的資料夾。將游標移動到該文件所在的行上。操作選單將顯示。您可以點擊選單中的「歷史」按鈕。"
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
-msgstr ""
+msgstr "該文件的所有版本列表將按時間順序顯示，從較新到較舊。列表還包含文件的重命名歷史。"
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "您可以下載、還原、查看文件的任何版本。"
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -860,10 +880,12 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"您可以設定檔版本的保留期：<a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">設定歷史保留期</a>。"
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "使用資料夾權限進行細粒度的訪問控制"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -874,13 +896,16 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"對於共亯庫或資料夾，您可以為個人或組設定其子資料夾的許可權。 可用許可權與<a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">共亯庫</a>中描述的許可權相同。 "
+"以下是一些用例："
 
 #: templates/help/folder_permission.html:10
 msgid ""
 "You shared a library to a group with \"read only\" permission. You also want"
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
-msgstr ""
+msgstr "您以「唯讀」權限與群組共享了一個資料庫。您還希望允許該群組的特定成員修改某個子資料夾中的文件。您可以向此人授予此子資料夾的寫入權限。"
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -889,6 +914,8 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"您向 3 個群組共享了一個資料庫。該資料庫下有 3 "
+"個子資料夾，每個群組有一個用於上傳文件的子資料夾。但是您不希望使用者更改不屬於其群組的文件。您可以只向對應的群組授予子資料夾的寫入權限。"
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -897,17 +924,18 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"資料夾權限僅對您共享給他人的資料庫和資料夾有效。要有效地設置其子資料夾的資料夾權限，您應該先共享父資料庫或資料夾；否則資料夾權限將不會生效。"
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
-msgstr ""
+msgstr "資料夾權限的一個重要設計目標是支持分層權限："
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "子資料夾會自動繼承其父資料夾的資料夾權限。"
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -917,10 +945,12 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"子資料夾上設置的權限會覆蓋其父資料夾上設置的權限。例如，您為使用者 A 設置了對「會議文件」資料夾的「讀寫」權限，並為使用者 A "
+"設置了對子資料夾「會議文件/今日」的「唯讀」權限。那麼使用者 A 對「會議文件/今日」的權限就是「唯讀」。"
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "基本用法"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -929,6 +959,7 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"只有資料庫的所有者才能設置其子資料夾的資料夾權限。在文件瀏覽介面中，點擊「更多操作」按鈕，在下拉選單中選擇「權限」。在彈出的視窗中，您可以查看和設置此資料夾的資料夾權限。"
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -937,23 +968,24 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"如果您想查看資料庫中設置的所有資料夾權限，將滑鼠懸停在資料庫上。點擊「更多操作」按鈕，在下拉選單中選擇「資料夾權限」。在彈出的視窗中，您可以查看和設置此資料庫中的資料夾權限。"
 
 #: templates/help/folder_permission.html:22
 msgid ""
 "When other users navigate into a folder, there will be a small \"eye\" icon "
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
-msgstr ""
+msgstr "當其他使用者導航到資料夾時，「唯讀」子資料夾旁邊會有一個小「眼睛」圖標。當使用者導航到該子資料夾時，他/她將無法添加/修改/刪除文件。"
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
-msgstr ""
+msgstr "如果「唯讀」資料夾透過 Seafile 桌面應用程式同步到電腦，「唯讀」資料夾下的更改將不會上傳到雲端。"
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "進階：不同權限之間的優先級"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -963,6 +995,9 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"資料夾權限比共享中設置的權限具有更高的優先級。例如，如果您以「讀寫」權限與使用者 A "
+"共享資料庫，同時也為該資料庫的某個子資料夾設置「唯讀」權限。那麼使用者 A "
+"對該子資料夾只有「唯讀」訪問權限，而對所有其他子資料夾和文件具有「讀寫」訪問權限。"
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -971,16 +1006,17 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"設置給特定使用者的資料夾權限比設置給群組的權限具有更高的優先級。也就是說，在檢查資料夾的權限時，如果系統匹配到特定於使用者的權限，它將忽略為使用者所屬群組設置的所有權限。"
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
-msgstr ""
+msgstr "子資料夾的權限比父資料夾的權限具有更高的優先級。"
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "這裡有一個更複雜的例子："
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -992,6 +1028,10 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"假設資料夾結構為 \"A/B\"，使用者 \"John\" 屬於群組 \"Staff\"。如果您為 John 設置了對資料夾 A 的 \"唯讀\" "
+"權限，並為群組 \"Staff\" 設置了對資料夾 \"A/B\" 的 \"讀寫\" 權限。那麼 John 對資料夾 \"A/B\" 的權限仍然只有 "
+"\"唯讀\"。這是因為，根據規則 2，系統首先匹配到了資料夾 \"A/B\" 和使用者 \"John\" 的 \"唯讀\" 權限，此權限是從其父資料夾 "
+"\"A\" 繼承而來的。"
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -999,95 +1039,97 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"如果您使用的是 Pro 版伺服器，您可以在 Seafile 網頁應用中搜尋檔案和資料夾名稱，以及特定檔案的內容。目前 Seafile "
+"可以搜尋以下類型檔案的內容："
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office 文件：.doc、.docx（僅限 Pro 版伺服器）"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint：.ppt、.pptx（僅限 Pro 版伺服器）"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel：.xls、.xlsx（僅限 Pro 版伺服器）"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice 檔案"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF 檔案"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown 檔案：.md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "各種原始碼檔案"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "文字檔案：.txt、.log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
 "Note that your Seafile system administrator may not have enabled the full-"
 "text search feature. In that case, you can only search file and folder "
 "names."
-msgstr ""
+msgstr "請注意，您的 Seafile 系統管理員可能尚未啟用全文搜尋功能。在這種情況下，您只能搜尋檔案和資料夾名稱。"
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
-msgstr ""
+msgstr "建立群組是向多人共用檔案的便捷方式。在 Seafile 中，您可以輕鬆建立和管理群組。"
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "以下是 Seafile 中群組的工作方式："
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
-msgstr ""
+msgstr "每個群組都有一個擁有者。預設情況下，擁有者是群組的建立者。他/她可以將群組的所有權轉移給其他成員。"
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
-msgstr ""
+msgstr "每個群組可以有多個管理員。群組擁有者和群組管理員可以新增更多群組管理員。"
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
-msgstr ""
+msgstr "群組管理員可以在群組中新增/刪除成員。他/她還可以取消在群組中分享的資料庫。"
 
 #: templates/help/groups_managing.html:13
 msgid ""
 "Click on the \"Shared with groups\" tab on the left panel, and you'll see "
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
-msgstr ""
+msgstr "點擊左側面板的 \"與群組共用\" 標籤，您將看到所有您加入的群組。點擊任意群組，您將看到共用到此群組的資料庫。"
 
 #: templates/help/groups_managing.html:14
 msgid ""
 "To create a new group, click on the \"Shared with groups\" tab on the left "
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
-msgstr ""
+msgstr "若要建立新群組，請點擊左側面板的 \"與群組共用\" 標籤。然後點擊 \"所有群組\"。在頁面中，您可以點擊 \"新增群組\" 按鈕來建立群組。"
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1095,6 +1137,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"有關如何將庫或資料夾共亯給組，請參閱<a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">共用檔和資料夾</a>。"
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
