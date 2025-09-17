@@ -107,21 +107,26 @@ const getImageUrl = (fileName) => {
   return url;
 };
 
-export const loadFilesFromServer = async (fileIds) => {
+export const loadFilesFromServer = async (elements) => {
   const loadedFiles = [];
   const erroredFiles = new Map();
-  await Promise.all([...new Set(fileIds)].map(async (id) => {
+  await Promise.all(elements.map(async (element) => {
     try {
-      const imageUrl = getImageUrl(id);
+      const { fileId, filename, from } = element;
+      let imageUrl = getImageUrl(filename);
+      if (from && from === 'seahub') {
+        imageUrl = element.dataURL;
+      }
+
       loadedFiles.push({
         mimeType: 'image/jpeg',
-        id: id.split('.')[0],
+        id: fileId,
         dataURL: imageUrl,
         created: Date.now(),
         lastRetrieved: Date.now(),
       });
     } catch (error) {
-      erroredFiles.set(id, true);
+      erroredFiles.set(element.id, true);
       // eslint-disable-next-line no-console
       console.error(error);
     }

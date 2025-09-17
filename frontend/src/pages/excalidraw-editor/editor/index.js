@@ -5,7 +5,7 @@ import { LibraryIndexedDBAdapter } from './library-adapter';
 import context from '../context';
 import TipMessage from './tip-message';
 import { importFromLocalStorage } from '../data/local-storage';
-import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
+import { generateImageElement, resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { getFilename, isInitializedImageElement } from '../utils/element-utils';
 import LocalData from '../data/local-data';
 import SocketManager from '../socket/socket-manager';
@@ -87,6 +87,7 @@ const SimpleEditor = () => {
       } else {
         const fileIds =
           data.scene.elements?.reduce((acc, element) => {
+            if (element.from && element.form === 'seahub') return acc;
             if (isInitializedImageElement(element)) {
               return acc.concat(element.fileId);
             }
@@ -196,14 +197,23 @@ const SimpleEditor = () => {
     };
   }, [beforeUnload]);
 
-  const closeDialog = useCallback(() => {
-    setIsShowImageDialog(false);
-    console.log('close');
-  }, []);
+  const onCustomImageDialogToggle = useCallback(() => {
+    setIsShowImageDialog(!isShowImageDialog);
+  }, [isShowImageDialog]);
 
-  const handleCustomAction = () => {
-    setIsShowImageDialog(true);
-  };
+  const insertCustomImage = useCallback(async (filePath) => {
+    const oldElements = excalidrawAPI.getSceneElementsIncludingDeleted();
+    const newImage = generateImageElement(filePath);
+    // add image elements
+    excalidrawAPI.updateScene({
+      elements: [...oldElements, newImage],
+      captureUpdate: CaptureUpdateAction.NEVER,
+    });
+
+    // add image content to canvas
+    const socketManager = SocketManager.getInstance();
+    socketManager.loadImageFiles();
+  }, [excalidrawAPI]);
 
   return (
     <div className='excali-container'>
@@ -222,15 +232,15 @@ const SimpleEditor = () => {
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
           <button
-            onClick={handleCustomAction}
+            onClick={onCustomImageDialogToggle}
             data-testid="upload_image"
-            title='上传资料库图片'
+            title={gettext('Upload lib image')}
             className='dropdown-menu-item dropdown-menu-item-base'
           >
             <div className="dropdown-menu-item__icon">
-              {/* <svg aria-hidden="true" focusable="false" role="img" viewBox="0 0 24 24" class="" fill="none" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><g stroke-width="1.5"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><circle cx="12" cy="12" r="9"></circle><line x1="12" y1="17" x2="12" y2="17.01"></line><path d="M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"></path></g></svg> */}
+              <span className='sf3-font-upload-files sf3-font dropdown-item-icon'></span>
             </div>
-            <div class="dropdown-menu-item__text">上传资料库图片</div>
+            <div className="dropdown-menu-item__text">{gettext('Upload lib image')}</div>
           </button>
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
@@ -239,7 +249,7 @@ const SimpleEditor = () => {
 
         </MainMenu>
       </Excalidraw>
-      {isShowImageDialog && <SelectSdocFileDialog closeDialog={closeDialog}/>}
+      {isShowImageDialog && <SelectSdocFileDialog insertImage={insertCustomImage} closeDialog={onCustomImageDialogToggle}/>}
     </div>
   );
 };

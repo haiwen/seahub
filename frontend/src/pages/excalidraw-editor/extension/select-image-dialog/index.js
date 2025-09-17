@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Button, Modal, ModalBody, Input } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
-import toaster from '../../../../components/toast';
-import context from '../../context';
-import { getErrorMsg } from '../../utils/common-utils';
 import LocalImage from './local-image';
 
 import './index.css';
+const { serviceURL, siteRoot } = window.app.config;
+const { repoID } = window.app.pageOptions;
 
-const SelectSdocFileDialog = ({ editor, closeDialog, insertLinkCallback }) => {
+const SelectSdocFileDialog = ({ insertImage, closeDialog }) => {
   const { t } = useTranslation('sdoc-editor');
   const [currentSelectedFile, setCurrentSelectedFile] = useState(null);
   const [temSearchContent, setTemSearchContent] = useState('');
@@ -23,37 +22,12 @@ const SelectSdocFileDialog = ({ editor, closeDialog, insertLinkCallback }) => {
     setCurrentSelectedFile(fileInfo);
   }, []);
 
-  const insertFile = useCallback((fileInfo) => {
-    console.log('fileInfo', fileInfo);
-
-    // const { insertFileLinkCallback, insertSdocFileLinkCallback } = insertLinkCallback || {};
-
-    // insertFileLinkCallback && insertFileLinkCallback(editor, fileInfo.name, fileInfo.file_uuid);
-  }, [insertLinkCallback, editor]);
-
   const onSubmit = useCallback(() => {
     if (!currentSelectedFile) return;
+    const path = currentSelectedFile.path;
+    const filePath = `${serviceURL}${siteRoot}repo/${repoID}/raw${path}`;
+    insertImage(filePath);
 
-    const { file_uuid } = currentSelectedFile;
-    let fileInfo = { ...currentSelectedFile };
-
-    // File has no id
-    if (!file_uuid || file_uuid === '') {
-      context.getSdocLocalFileId(currentSelectedFile.path).then(res => {
-        if (res.status === 200) {
-          fileInfo = { ...currentSelectedFile, file_uuid: res.data.file_uuid };
-        }
-
-        insertFile(fileInfo);
-        closeDialog();
-      }).catch(error => {
-        const errorMessage = getErrorMsg(error);
-        toaster.danger(errorMessage);
-      });
-      return;
-    }
-
-    insertFile(fileInfo);
     closeDialog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSelectedFile]);

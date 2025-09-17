@@ -6,11 +6,13 @@ import toaster from '../../../../../components/toast';
 import context from '../../../context';
 import { getErrorMsg } from '../../../utils/common-utils';
 import { addDataToTree } from '../helpers';
+import { gettext } from '../../../../../utils/constants';
 
 import './index.css';
 
-const LocalFiles = ({ onSelectedFile, toggle, fileType, t, searchContent, isOpenSearch }) => {
+const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSearch }) => {
   const folderRef = useRef(null);
+
   const [expandedFolder, setExpandedFolder] = useState(new Set([]));
   const [currentActiveItem, setCurrentActiveItem] = useState(null);
   const [treeData, setTreeData] = useState([]);
@@ -139,7 +141,7 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, t, searchContent, isOpen
               <div className='sdoc-folder-children'>
                 {item.children?.length === 0 && (
                   <div className='sdoc-folder-children-empty'>
-                    {`(${t('Empty')})`}
+                    {`(${gettext('Empty')})`}
                   </div>
                 )}
                 {item.children?.length > 0 && (
@@ -170,7 +172,7 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, t, searchContent, isOpen
     <div className='sdoc-files-tree'>
       {renderFileTree(treeData)}
       {isOpenSearch && !hasSearchResult && !isCurrentLibrary && (
-        <div className='sdoc-file-search-no-result'>{t('No_results')}</div>
+        <div className='sdoc-file-search-no-result'>{gettext('No_results')}</div>
       )}
     </div>
   );
