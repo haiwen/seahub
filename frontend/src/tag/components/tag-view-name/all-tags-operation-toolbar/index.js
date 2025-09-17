@@ -7,9 +7,9 @@ import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../hooks';
 import tagsAPI from '../../../api';
 import ImportTagsDialog from '../../../../components/dialog/import-tags-dialog';
-
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
+
 import './index.css';
 
 const AllTagsOperationToolbar = ({ repoID }) => {
@@ -79,17 +79,19 @@ const AllTagsOperationToolbar = ({ repoID }) => {
             onClick={toggleMenuOpen}
             onKeyDown={onDropdownKeyDown}
             data-toggle="dropdown"
+            aria-label={gettext('More operations')}
+            aria-expanded={isMenuOpen}
           >
-            <i className="sf3-font-new sf3-font path-item-new-toggle"></i>
-            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
+            <i className="sf3-font-new sf3-font path-item-new-toggle" aria-hidden="true"></i>
+            <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             <DropdownItem onClick={openAddTag}>
-              <i className="sf3-font sf3-font-new mr-2 dropdown-item-icon"></i>
+              <i className="sf3-font sf3-font-new mr-2 dropdown-item-icon" aria-hidden="true"></i>
               {gettext('New tag')}
             </DropdownItem>
             <DropdownItem onClick={handleImportTags}>
-              <i className="sf3-font-import-sdoc sf3-font mr-2 dropdown-item-icon"></i>
+              <i className="sf3-font-import-sdoc sf3-font mr-2 dropdown-item-icon" aria-hidden="true"></i>
               {gettext('Import tags')}
             </DropdownItem>
           </DropdownMenu>

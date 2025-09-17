@@ -14,7 +14,6 @@ import ConfirmRestoreRepo from './components/dialog/confirm-restore-repo';
 
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/repo-snapshot.css';
 
 const {
@@ -149,7 +148,7 @@ class RepoSnapshot extends React.Component {
                   <span className="heading-commit-time ml-1">({commitTime})</span>
                 </h2>
                 <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
-                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
+                  <span aria-hidden="true" className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
                 </a>
                 {folderPath == '/' && (
                   <div className="d-flex mb-2 align-items-center">
@@ -341,7 +340,7 @@ class FolderItem extends React.Component {
               role="button"
             >
             </i>
-            <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`op-icon sf3-font sf3-font-download1 ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')}></a>
+            <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`op-icon sf3-font sf3-font-download1 ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')} role="button" aria-label={gettext('Download')}></a>
           </div>
         </td>
       </tr>

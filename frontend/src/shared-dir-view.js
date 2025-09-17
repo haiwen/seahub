@@ -349,7 +349,7 @@ class SharedDirView extends React.Component {
                         disabled={item.disabled || false}
                         title={item.title || ''}
                       >
-                        <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                        <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
                         {item.text}
                       </DropdownItem>
                     );
@@ -1188,7 +1188,13 @@ class Item extends React.Component {
           <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a role="button" className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
+            <a
+              role="button"
+              className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href="#"
+              onClick={this.zipDownloadFolder}
+              title={gettext('Download')}
+              aria-label={gettext('Download')}
+            >
             </a>
             }
           </td>
@@ -1242,7 +1248,7 @@ class Item extends React.Component {
           <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
+            <a role="button" className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
             }
           </td>
         </tr>

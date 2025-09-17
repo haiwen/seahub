@@ -90,14 +90,20 @@ class LogRepoSelector extends Component {
 
     return (
       <div className="position-relative d-inline-block" ref={this.dropdownRef}>
-        <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
+        <span
+          className="cur-activity-modifiers d-inline-block p-2 rounded"
+          onClick={this.onToggleClick}
+          aria-label={gettext('Toggle repo selector')}
+          role="button"
+          title={gettext('Toggle repo selector')}
+        >
           {selectedItems.length > 0 ? (
             <>
               <span>{gettext('Libraries')}{':'}</span>
               <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext('Libraries')}
-          <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
+          <i aria-hidden="true" className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
         </span>
         {isOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.repoSelector = ref}>

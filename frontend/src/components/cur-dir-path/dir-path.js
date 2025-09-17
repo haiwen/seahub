@@ -239,8 +239,10 @@ class DirPath extends React.Component {
           className="cur-view-path-btn mr-1"
           title={isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel')}
           onClick={this.props.toggleTreePanel}
+          aria-label={isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel')}
+          role="button"
         >
-          <span className="sf3-font-side-bar sf3-font"></span>
+          <span className="sf3-font-side-bar sf3-font" aria-hidden="true"></span>
         </span>
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (

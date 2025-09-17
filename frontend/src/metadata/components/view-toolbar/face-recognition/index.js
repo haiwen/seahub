@@ -52,8 +52,14 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDeta
               modifySorts={modifySorts}
             />
             {!isCustomPermission && (
-              <div className="cur-view-path-btn ml-2" onClick={onToggleDetail}>
-                <span className="sf3-font sf3-font-info" aria-label={gettext('Properties')} title={gettext('Properties')}></span>
+              <div
+                className="cur-view-path-btn ml-2"
+                onClick={onToggleDetail}
+                aria-label={gettext('Properties')}
+                title={gettext('Properties')}
+                role="button"
+              >
+                <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
               </div>
             )}
           </>

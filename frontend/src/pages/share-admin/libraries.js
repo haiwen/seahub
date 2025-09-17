@@ -45,7 +45,7 @@ class Content extends Component {
 
     // sort
     const sortByName = sortBy == 'name';
-    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+    const sortIcon = sortOrder == 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
 
     const isDesktop = Utils.isDesktop();
     return (

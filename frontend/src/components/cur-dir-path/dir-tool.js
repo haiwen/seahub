@@ -33,12 +33,9 @@ class DirTool extends React.Component {
 
   render() {
     const { currentMode, currentPath, sortBy, sortOrder, viewId, isCustomPermission, onToggleDetail, onCloseDetail } = this.props;
-    const propertiesText = TextTranslation.PROPERTIES.value;
-    const isFileExtended = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
-    const isTagView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/');
-    const isAllTagsView = currentPath.split('/').pop() === ALL_TAGS_ID;
 
-    if (isFileExtended) {
+    const isMetadataView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/');
+    if (isMetadataView) {
       return (
         <div className="dir-tool">
           <MetadataViewToolBar
@@ -51,22 +48,31 @@ class DirTool extends React.Component {
       );
     }
 
+    const isTagView = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/');
     if (isTagView) {
+      const isAllTagsView = currentPath.split('/').pop() === ALL_TAGS_ID;
       return (
         <div className="dir-tool">
-          {isAllTagsView && <TagsTableSearcher />}
-          {isAllTagsView ? <AllTagsSortSetter /> : <TagFilesViewToolbar />}
+          {isAllTagsView ? <><TagsTableSearcher /><AllTagsSortSetter /></> : <TagFilesViewToolbar />}
         </div>
       );
     }
 
+    const propertiesText = TextTranslation.PROPERTIES.value;
     return (
       <div className="dir-tool d-flex">
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
         <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
         {(!isCustomPermission) &&
-          <div className="cur-view-path-btn" onClick={onToggleDetail}>
-            <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
+          <div
+            className="cur-view-path-btn"
+            onClick={onToggleDetail}
+            aria-label={propertiesText}
+            title={propertiesText}
+            role="button"
+            tabIndex="0"
+          >
+            <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
           </div>
         }
       </div>

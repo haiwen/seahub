@@ -8,7 +8,12 @@ import '../css/nav-item-icon.css';
 
 function NavItemIcon({ symbol, className, disable, onClick }) {
   return (
-    <div onClick={onClick} className={classNames('nav-item-icon', { 'nav-item-icon-disable': disable })} role="button">
+    <div
+      onClick={onClick}
+      className={classNames('nav-item-icon', { 'nav-item-icon-disable': disable })}
+      role="button"
+      aria-label={symbol}
+    >
       {symbol === 'file' && <FileIcon className='seafile-multicolor-icon' aria-hidden="true" />}
       {symbol === 'files' && <FilesIcon className='seafile-multicolor-icon' aria-hidden="true" />}
     </div>

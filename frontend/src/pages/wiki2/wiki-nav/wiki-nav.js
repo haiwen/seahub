@@ -161,8 +161,15 @@ class WikiNav extends Component {
                 toggle={this.toggleDropdown}
                 className="page-operation-dropdown"
               >
-                <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown">
-                  <i className="page-operation-dropdown-toggle"></i>
+                <DropdownToggle
+                  className="page-operation-dropdown-toggle"
+                  tag="span"
+                  role='button'
+                  tabIndex={0}
+                  data-toggle="dropdown"
+                  aria-expanded={this.state.isShowOperationDropdown}
+                  aria-label={gettext('More page operations')}
+                >
                 </DropdownToggle>
                 <DropdownMenu
                   className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
@@ -176,13 +183,14 @@ class WikiNav extends Component {
                 </DropdownMenu>
               </Dropdown>
             </div>
-            <div className="wiki-add-page-btn" role='button'>
-              <i
-                id='wiki-add-new-page'
-                onClick={this.props.handleAddNewPage}
-                className='sf3-font sf3-font-enlarge add-new-page'
-              >
-              </i>
+            <div
+              className="wiki-add-page-btn"
+              role='button'
+              id='wiki-add-new-page'
+              onClick={this.props.handleAddNewPage}
+              aria-label={gettext('New page')}
+            >
+              <i className='sf3-font sf3-font-enlarge add-new-page' aria-hidden="true"></i>
               <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
                 {gettext('New page')}
               </UncontrolledTooltip>

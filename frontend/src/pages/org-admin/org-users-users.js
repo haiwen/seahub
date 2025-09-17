@@ -264,22 +264,23 @@ class OrgUsers extends Component {
 
   render() {
     const topBtn = 'btn btn-secondary operation-item';
-    let topbarChildren;
-    topbarChildren = (
+    let topbarChildren = (
       <Fragment>
-        <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>{gettext('Import users')}</button>
-        <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Add user')}
+        <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>
+          {gettext('Import users')}
+        </button>
+        <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser} aria-label={gettext('Add user')}>
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>{gettext('Add user')}
         </button>
         {orgEnableAdminInviteUser &&
-        <button className={topBtn} title={gettext('Invite users')} onClick={this.toggleInviteUserDialog}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Invite users')}
-        </button>
+          <button className={topBtn} title={gettext('Invite users')} onClick={this.toggleInviteUserDialog} aria-label={gettext('Invite users')}>
+            <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>{gettext('Invite users')}
+          </button>
         }
         {invitationLink &&
-        <button className={topBtn} title={'通过微信邀请用户'} onClick={this.toggleInviteUserViaWeiXinDialog}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{'通过微信邀请用户'}
-        </button>
+          <button className={topBtn} title={gettext('Invite users via WeChat')} onClick={this.toggleInviteUserViaWeiXinDialog} aria-label={gettext('Invite users via WeChat')}>
+            <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>{gettext('Invite users via WeChat')}
+          </button>
         }
         {this.state.isImportOrgUsersDialogOpen &&
         <ModalPortal>

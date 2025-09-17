@@ -15,7 +15,6 @@ import UpdateRepoCommitLabels from './components/dialog/edit-repo-commit-labels'
 
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/repo-history.css';
 
 const {
@@ -110,7 +109,7 @@ class RepoHistory extends React.Component {
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{ __html: title }} className="d-flex text-nowrap"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
-                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
+                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block" aria-hidden="true"></span>
                 </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
                 <Content

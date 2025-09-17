@@ -103,7 +103,7 @@ const Tag = ({ node, currentPath, leftIndent, selectedNodeKey, expanded, checkNo
           <div className="tag-tree-node-count">{tagCount}</div>
         </div>
         <div className="left-icon" style={{ left: leftIndent - SIDEBAR_INIT_LEFT_INDENT }}>
-          {hasChildren && <i className={classnames('folder-toggle-icon sf3-font sf3-font-down', { 'rotate-270': !expanded })} onClick={onToggleExpanded}></i>}
+          {hasChildren && <i className={classnames('folder-toggle-icon sf3-font sf3-font-down', { 'rotate-270': !expanded })} onClick={onToggleExpanded} aria-hidden="true"></i>}
           <div className="tree-node-icon">
             <div className="tag-tree-node-color" style={{ backgroundColor: tagColor }}></div>
           </div>

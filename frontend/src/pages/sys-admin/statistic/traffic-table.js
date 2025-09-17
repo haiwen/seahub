@@ -18,7 +18,7 @@ class TrafficTable extends React.Component {
 
   render() {
     const { type, sortBy, sortOrder } = this.props;
-    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+    const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block" aria-hidden="true"></span> : <span className="sf3-font sf3-font-down" aria-hidden="true"></span>;
 
     return (
       <table className="table-hover">

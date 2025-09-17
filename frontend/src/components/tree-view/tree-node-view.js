@@ -4,6 +4,7 @@ import { permission } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
+import { gettext } from '@/utils/constants';
 
 const LEFT_INDENT = 20;
 
@@ -316,6 +317,8 @@ class TreeNodeView extends React.Component {
                 className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={this.onLoadToggle}
+                role="button"
+                aria-label={node.isExpanded ? gettext('Collapse') : gettext('Expand')}
               >
               </i>
             )}

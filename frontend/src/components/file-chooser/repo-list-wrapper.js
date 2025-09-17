@@ -110,7 +110,7 @@ const RepoListWrapper = (props) => {
           <div className="file-chooser-container">
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className="item-toggle sf3-font sf3-font-down"></span>
+                <span className="item-toggle sf3-font sf3-font-down" aria-hidden="true"></span>
                 <span className="library">{gettext('Libraries')}</span>
               </div>
               <RepoListView

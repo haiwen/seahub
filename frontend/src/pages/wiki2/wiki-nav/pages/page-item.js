@@ -310,7 +310,13 @@ const PageItem = ({
                 />
               )}
             </div>
-            <div className="wiki-add-page-btn" onClick={toggleInsertPage} role='button'>
+            <div
+              className="wiki-add-page-btn"
+              onClick={toggleInsertPage}
+              role='button'
+              title={gettext('Add page inside')}
+              aria-label={gettext('Add page inside')}
+            >
               <span className='sf3-font sf3-font-enlarge' aria-hidden="true"></span>
             </div>
           </div>

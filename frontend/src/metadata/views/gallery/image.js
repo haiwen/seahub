@@ -28,7 +28,7 @@ const Image = ({
   return (
     <div
       id={img.id}
-      tabIndex={1}
+      tabIndex={0}
       className={classnames('metadata-gallery-image-item', {
         'metadata-gallery-image-item-selected': isSelected,
       })}
@@ -36,6 +36,8 @@ const Image = ({
       onClick={(e) => onClick(e, img)}
       onDoubleClick={(e) => onDoubleClick(e, img)}
       onContextMenu={(e) => onContextMenu(e, img)}
+      aria-label={img.name}
+      role='button'
     >
       <img
         className="metadata-gallery-grid-image"

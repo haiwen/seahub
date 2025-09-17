@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { enableSeadoc, enableWhiteboard, gettext } from '../../utils/constants';
 import toaster from '../toast';
-import TipDialog from '../dialog/tip-dailog';
+import TipDialog from '../dialog/tip-dialog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
@@ -245,9 +245,11 @@ class DirOperationToolbar extends React.Component {
               onClick={this.toggleDesktopOpMenu}
               onKeyDown={this.onDropdownToggleKeyDown}
               data-toggle="dropdown"
+              aria-label={gettext('More operations')}
+              aria-expanded={this.state.isDesktopMenuOpen}
             >
-              <i className="sf3-font-new sf3-font"></i>
-              <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
+              <i className="sf3-font-new sf3-font" aria-hidden="true"></i>
+              <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i>
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
               {opList.map((item, index) => {
@@ -268,9 +270,9 @@ class DirOperationToolbar extends React.Component {
                         className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
-                        <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                        <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
                         <span className="mr-auto">{item.text}</span>
-                        <i className="sf3-font-down sf3-font rotate-270"></i>
+                        <i className="sf3-font-down sf3-font rotate-270" aria-hidden="true"></i>
                       </DropdownToggle>
                       <DropdownMenu flip={false} modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}>
                         {item.subOpList.map((item, index) => {
@@ -286,7 +288,7 @@ class DirOperationToolbar extends React.Component {
                 } else {
                   return (
                     <DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
-                      <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                      <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
                       {item.text}
                     </DropdownItem>
                   );
@@ -304,8 +306,8 @@ class DirOperationToolbar extends React.Component {
             role="button"
             className="path-item"
           >
-            <i className="sf3-font-new sf3-font"></i>
-            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
+            <i className="sf3-font-new sf3-font" aria-hidden="true"></i>
+            <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             {canUpload && (
@@ -330,9 +332,7 @@ class DirOperationToolbar extends React.Component {
             {content}
           </div>
         )}
-        {this.state.isImportingSdoc && (
-          <TipDialog modalTitle={gettext('Import sdoc')} modalTip={gettext('Importing sdoc, please wait...')}/>
-        )}
+        {this.state.isImportingSdoc && <TipDialog/>}
         <div>
           <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} accept=".sdoczip"/>
         </div>

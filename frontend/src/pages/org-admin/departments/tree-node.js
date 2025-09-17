@@ -125,8 +125,14 @@ class DepartmentsV2TreeNode extends Component {
           onMouseLeave={this.onMouseLeave}
         >
           {this.state.isShowTreeIcon ?
-            <span className="departments-v2-tree-icon" onClick={(e) => this.toggleChildren(e)}>
-              <i className={`sf3-font sf3-font-down ${isChildrenShow ? '' : 'rotate-270'}`}></i>
+            <span
+              className="departments-v2-tree-icon"
+              onClick={(e) => this.toggleChildren(e)}
+              role="button"
+              aria-label={gettext('Toggle children')}
+              title={gettext('Toggle children')}
+            >
+              <i aria-hidden="true" className={`sf3-font sf3-font-down ${isChildrenShow ? '' : 'rotate-270'}`}></i>
             </span>
             :
             <span style={{ width: 24 }}></span>

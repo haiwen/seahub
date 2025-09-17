@@ -18,8 +18,18 @@ class ForbidUploadListItem extends React.Component {
         </td>
         <td>{Utils.bytesToSize(file.size)}</td>
         <td>
-          <div className="d-flex align-items-center">
-            <span className="upload-failure-icon sf3-font sf3-font-info mr-2"></span>
+          <div
+            className="d-flex align-items-center"
+            aria-label={gettext('File too large')}
+            title={gettext('File too large')}
+            role="button"
+            tabIndex={0}
+          >
+            <span
+              className="upload-failure-icon sf3-font sf3-font-info mr-2"
+              aria-hidden="true"
+            >
+            </span>
             <span className="upload-failure-msg">{gettext('File too large')}</span>
           </div>
         </td>

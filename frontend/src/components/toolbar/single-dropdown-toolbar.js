@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { gettext } from '../../utils/constants';
 
 import '../../css/single-dropdown-toolbar.css';
 
@@ -46,6 +47,8 @@ class SingleDropdownToolbar extends React.Component {
           onClick={this.toggleDropdownMenu}
           onKeyDown={this.onDropdownToggleKeyDown}
           data-toggle="dropdown"
+          aria-label={gettext('More options')}
+          aria-expanded={this.state.isDropdownMenuOpen}
         >
           {withPlusIcon && <i className="sf3-font-new sf3-font main-icon"></i>}
           <i className="sf3-font-down sf3-font"></i>

@@ -121,14 +121,20 @@ class LogUserSelector extends Component {
 
     return (
       <div className="position-relative d-inline-block ml-2" ref={this.dropdownRef}>
-        <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
+        <span
+          className="cur-activity-modifiers d-inline-block p-2 rounded"
+          onClick={this.onToggleClick}
+          aria-label={gettext('Toggle user selector')}
+          role="button"
+          title={gettext('Toggle user selector')}
+        >
           {selectedItems.length > 0 ? (
             <>
               <span>{(this.props.componentName + ':')}</span>
               <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
             </>
           ) : this.props.componentName}
-          <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
+          <i aria-hidden="true" className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
         </span>
         {isOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>

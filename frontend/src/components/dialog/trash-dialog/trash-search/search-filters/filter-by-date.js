@@ -126,6 +126,8 @@ const FilterByDate = ({ date, onChange }) => {
               e.stopPropagation();
               toggle();
             }}
+            role="button"
+            aria-label={gettext('Toggle date filter menu')}
           />
         </DropdownToggle>
         <ModalPortal>

@@ -135,13 +135,11 @@ class SeafileMarkdownViewer extends React.Component {
       return <Loading />;
     }
 
-    const containerClass = `wiki-page-container ${containerClassName}`;
     // In dir-column-file width is 100%;
     // In wiki-viewer width isn't 100%
-    const contentClassName = `wiki-page-content ${isWiki ? '' : 'w-100'}`;
     return (
-      <div ref={this.scrollRef} className={containerClass}>
-        <div className={contentClassName} ref={ref => this.seafileMarkdownViewerRef = ref}>
+      <div ref={this.scrollRef} className={`wiki-page-container ${containerClassName}`}>
+        <div className={`wiki-page-content ${isWiki ? '' : 'w-100'}`} ref={ref => this.seafileMarkdownViewerRef = ref}>
           {this.props.children}
           {this.renderMarkdown()}
           {isMarkdownEditorRenderCompleted && (

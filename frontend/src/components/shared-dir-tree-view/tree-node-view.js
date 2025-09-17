@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { gettext } from '@/utils/constants';
 
 const LEFT_INDENT = 20;
 
@@ -141,6 +142,8 @@ class TreeNodeView extends React.Component {
                 className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
                 onMouseDown={e => e.stopPropagation()}
                 onClick={this.onLoadToggle}
+                role="button"
+                aria-label={node.isExpanded ? gettext('Collapse') : gettext('Expand')}
               >
               </i>
             )}

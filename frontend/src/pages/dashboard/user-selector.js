@@ -72,14 +72,20 @@ class UserSelector extends Component {
     const filteredAvailableUsers = query.trim() ? availableUsers.filter(item => item.contact_email.indexOf(query.trim()) != -1 || item.name.indexOf(query.trim()) != -1) : availableUsers;
     return (
       <div className="mt-4 position-relative">
-        <span className="cur-activity-modifiers d-inline-block p-2 rounded" onClick={this.onToggleClick}>
+        <span
+          className="cur-activity-modifiers d-inline-block p-2 rounded"
+          onClick={this.onToggleClick}
+          aria-label={gettext('Toggle user selector')}
+          role="button"
+          title={gettext('Toggle user selector')}
+        >
           {currentSelectedUsers.length > 0 ? (
             <>
               <span>{gettext('Modified by:')}</span>
               <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext('Modified by')}
-          <i className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
+          <i aria-hidden="true" className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
         </span>
         {isPopoverOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>

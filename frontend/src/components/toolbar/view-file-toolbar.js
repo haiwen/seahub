@@ -130,7 +130,7 @@ class ViewFileToolbar extends React.Component {
             data-toggle="dropdown"
           >
             {this.props.children}
-            <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle"></i>
+            <i className="sf3-font-down sf3-font ml-1 path-item-dropdown-toggle" aria-hidden="true"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed' onMouseMove={this.onDropDownMouseMove}>
             {opList.map((item, index) => {
@@ -151,9 +151,9 @@ class ViewFileToolbar extends React.Component {
                       className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                       onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                     >
-                      <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                      <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
                       <span className="mr-auto">{item.text}</span>
-                      <i className="sf3-font-down sf3-font rotate-270"></i>
+                      <i className="sf3-font-down sf3-font rotate-270" aria-hidden="true"></i>
                     </DropdownToggle>
                     <DropdownMenu>
                       {item.subOpList.map((item, index) => {
@@ -169,7 +169,7 @@ class ViewFileToolbar extends React.Component {
               } else {
                 return (
                   <DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
-                    <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                    <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
                     {item.text}
                   </DropdownItem>
                 );

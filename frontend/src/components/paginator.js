@@ -89,7 +89,7 @@ class Paginator extends Component {
           disabled={currentPage == 1}
           onClick={this.goToPrevious}
         >
-          <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
+          <span aria-hidden="true" className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
         </button>
         <span className="btn btn-primary mx-4">{currentPage}</span>
         <button
@@ -97,7 +97,7 @@ class Paginator extends Component {
           disabled={!this.props.hasNextPage}
           onClick={this.goToNext}
         >
-          <span className="sf3-font sf3-font-down rotate-270 d-inline-block"></span>
+          <span aria-hidden="true" className="sf3-font sf3-font-down rotate-270 d-inline-block"></span>
         </button>
 
         <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
@@ -109,7 +109,7 @@ class Paginator extends Component {
             onClick={this.toggleOperationMenu}
           >
             <span className='pr-3'>{this.getPerPageText(curPerPage)}</span>
-            <span className={className('sf3-font sf3-font-down d-inline-block', { 'rotate-180': this.state.isMenuShow })}></span>
+            <span aria-hidden="true" className={className('sf3-font sf3-font-down d-inline-block', { 'rotate-180': this.state.isMenuShow })}></span>
           </DropdownToggle>
           <DropdownMenu className="paginator-dropdown-menu">
             {PER_PAGES.map(perPage => {

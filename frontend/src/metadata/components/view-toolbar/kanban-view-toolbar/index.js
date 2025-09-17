@@ -73,8 +73,15 @@ const KanbanViewToolBar = ({
           />
         )}
         {!isCustomPermission && (
-          <div className="cur-view-path-btn ml-2" onClick={toggleDetails} aria-label={gettext('Properties')} title={gettext('Properties')}>
-            <span className="sf3-font sf3-font-info"></span>
+          <div
+            className="cur-view-path-btn ml-2"
+            onClick={toggleDetails}
+            role="button"
+            aria-label={gettext('Properties')}
+            title={gettext('Properties')}
+            tabIndex={0}
+          >
+            <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
           </div>
         )}
       </div>

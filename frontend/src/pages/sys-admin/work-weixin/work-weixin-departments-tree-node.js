@@ -104,7 +104,7 @@ class WorkWeixinDepartmentsTreeNode extends Component {
             onMouseLeave={this.onMouseLeave}
           >
             <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
-              <i className={toggleClass}></i>
+              <i className={toggleClass} aria-hidden="true"></i>
             </span>
             <span className="tree-node-text">{department.name}</span>
             {isPro &&

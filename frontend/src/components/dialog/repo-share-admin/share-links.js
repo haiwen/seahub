@@ -84,6 +84,7 @@ class Item extends Component {
             checked={item.isSelected || false}
             className="vam"
             onChange={this.toggleSelectLink}
+            aria-label={item.isSelected ? gettext('Unselect this item') : gettext('Select this item')}
           />
         </td>
         <td>
@@ -246,7 +247,15 @@ class RepoShareAdminShareLinks extends Component {
     return (
       <tr>
         <th width="5%" className="text-center">
-          {withCheckbox && <input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />}
+          {withCheckbox &&
+            <input
+              type="checkbox"
+              checked={isAllLinksSelected}
+              className="vam"
+              onChange={this.toggleSelectAllLinks}
+              aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
+            />
+          }
         </th>
         <th width="20%">{gettext('Creator')}</th>
         <th width="22%">{gettext('Name')}</th>

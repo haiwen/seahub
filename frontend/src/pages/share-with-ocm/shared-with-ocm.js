@@ -81,8 +81,8 @@ class Content extends Component {
       const isDesktop = Utils.isDesktop();
       if (isDesktop) {
         const sortIcon = sortOrder === 'asc'
-          ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
-          : <span className="sf3-font sf3-font-down"></span>;
+          ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
+          : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
 
         return currentViewMode == LIST_MODE
           ? (

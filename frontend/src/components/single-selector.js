@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { gettext } from '@/utils/constants';
 
 import '../css/single-selector.css';
 
@@ -70,11 +71,11 @@ class Selector extends Component {
     } = this.props;
     return (
       <div className="sf-single-selector position-relative">
-        <div onClick={this.onToggleClick}>
+        <div onClick={this.onToggleClick} role='button' aria-label={gettext('Toggle selector menu')}>
           {customSelectorToggle ? customSelectorToggle : (
             <span className="cur-option">
               {currentSelectedOption ? currentSelectedOption.text : ''}
-              {isDropdownToggleShown && <i className="sf3-font sf3-font-down ml-1 toggle-icon"></i>}
+              {isDropdownToggleShown && <i aria-hidden="true" className="sf3-font sf3-font-down ml-1 toggle-icon"></i>}
             </span>
           )}
         </div>
