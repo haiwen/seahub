@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
-import slugid from 'slugid';
+import { v4 as uuidv4 } from 'uuid';
 import toaster from '../../../../../components/toast';
 import context from '../../../context';
 import { getErrorMsg } from '../../../utils/common-utils';
@@ -37,7 +37,7 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSea
   const getTreeData = useCallback((p, indexId, treeData,) => {
     return context.getLocalFiles(p, fileType).then(res => {
       res.data.forEach((item) => {
-        item.indexId = slugid.nice();
+        item.indexId = uuidv4();
       });
       setHasSearchResult(false);
       setIsCurrentLibrary(true);
@@ -97,7 +97,7 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSea
   const getSearchFiles = useCallback((searchContent, fileType) => {
     return context.getSearchFilesByFilename(searchContent, 1, 100, fileType).then(res => {
       res.data.results.forEach((item) => {
-        item.indexId = slugid.nice();
+        item.indexId = uuidv4();
         item.type = 'file';
         item.file_uuid = item.doc_uuid;
       });

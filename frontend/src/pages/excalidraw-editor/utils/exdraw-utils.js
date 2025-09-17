@@ -1,5 +1,5 @@
 import { CaptureUpdateAction, isInvisiblySmallElement, newElementWith } from '@excalidraw/excalidraw';
-import slugid from 'slugid';
+import { v4 as uuidv4 } from 'uuid';
 import { DELETED_ELEMENT_TIMEOUT } from '../constants';
 import { isInitializedImageElement } from './element-utils';
 
@@ -81,7 +81,7 @@ const DEFAULT_IMAGE = {
 };
 
 export const generateImageElement = (filePath) => {
-  const id = slugid.nice();
+  const id = uuidv4();
   const image = {
     ...DEFAULT_IMAGE,
     id: id,
