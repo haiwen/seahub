@@ -80,7 +80,7 @@ const TreeSection = ({ repoID, stateStorageKey, title, children, renderHeaderOpe
         <div className="tree-section-header-operations">
           {renderOperations()}
           <div className="tree-section-header-operation" onClick={toggleShowChildren}>
-            <i className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
+            <i aria-hidden="true" className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
           </div>
         </div>
       </div>

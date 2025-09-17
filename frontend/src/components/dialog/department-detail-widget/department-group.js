@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from '../../loading';
 import { isOrgContext } from '../../../utils/constants';
+import { gettext } from '@/utils/constants';
 
 const ItemPropTypes = {
   department: PropTypes.object,
@@ -57,12 +58,20 @@ class Item extends Component {
     const { hasChild, isExpanded } = department;
     return (
       <>
-        <div className={isCurrent ? 'tr-highlight group-item' : 'group-item'} onClick={this.getMembers} style={{ paddingLeft: `${this.props.padding}px` }}>
+        <div
+          className={isCurrent ? 'tr-highlight group-item' : 'group-item'}
+          onClick={this.getMembers}
+          style={{ paddingLeft: `${this.props.padding}px` }}
+          role="button"
+          aria-label={gettext('Get department members')}
+        >
           {hasChild &&
             <span
               className={`sf3-font sf3-font-down ${isExpanded ? '' : 'rotate-270'} d-inline-block`}
               onClick={this.toggleExpanded}
               style={{ color: '#666' }}
+              role="button"
+              aria-label={gettext('Toggle department group menu')}
             >
             </span>
           }

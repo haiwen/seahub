@@ -54,15 +54,17 @@ class LastPathItemWrapper extends React.Component {
             onClick={this.toggleDesktopOpMenu}
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
+            aria-label={gettext('More operations')}
+            aria-expanded={this.state.isDesktopMenuOpen}
           >
-            <i className="sf3-font-new sf3-font"></i>
-            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
+            <i className="sf3-font-new sf3-font" aria-hidden="true"></i>
+            <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             {opList.map((item, index) => {
               return (
                 <DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
-                  <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`}></i>
+                  <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
                   {item.text}
                 </DropdownItem>
               );

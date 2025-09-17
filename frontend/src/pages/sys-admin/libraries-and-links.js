@@ -152,8 +152,9 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     <>
       {path === 'all-libraries' && (
         <MainPanelTopbar search={getSearch()} { ...commonProps }>
-          <Button className="btn btn-secondary operation-item" onClick={toggleCreateRepoDialog}>
-            <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('New Library')}
+          <Button className="btn btn-secondary operation-item" onClick={toggleCreateRepoDialog} aria-label={gettext('New Library')}>
+            <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>
+            {gettext('New Library')}
           </Button>
         </MainPanelTopbar>
       )}

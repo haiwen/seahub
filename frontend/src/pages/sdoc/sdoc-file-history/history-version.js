@@ -98,8 +98,14 @@ class HistoryVersion extends React.Component {
         {path[2] === 0 && (
           <div className="daily-history-detail-toggle-container">
             {count > 1 && (
-              <div className={classnames('daily-history-detail-toggle', { 'daily-history-detail-show': showDaily })} onClick={this.showDailyHistory}>
-                <i className="direction-icon sf3-font sf3-font-down"></i>
+              <div
+                className={classnames('daily-history-detail-toggle', { 'daily-history-detail-show': showDaily })}
+                role="button"
+                aria-label={gettext('Show daily history')}
+                title={gettext('Show daily history')}
+                onClick={this.showDailyHistory}
+              >
+                <i aria-hidden="true" className="direction-icon sf3-font sf3-font-down"></i>
               </div>
             )}
           </div>
@@ -133,8 +139,8 @@ class HistoryVersion extends React.Component {
               >
                 <ModalBody className='sdoc-operation-mobile-modal-body'>
                   <div className='option-item'>
-                    <i className='mr-3 sf3-font sf3-font-download1'></i>
-                    <a href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</a>
+                    <i aria-hidden="true" className='mr-3 sf3-font sf3-font-download1'></i>
+                    <a href={url} onClick={this.onItemDownLoad} aria-label={gettext('Download')} title={gettext('Download')}>{gettext('Download')}</a>
                   </div>
                   {(path[0] !== 0 && path[1] !== 0 && path[2] !== 0) && (
                     <div className='option-item'>

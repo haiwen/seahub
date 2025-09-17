@@ -92,7 +92,7 @@ class Content extends Component {
       const sortByName = sortBy == 'name';
       const sortByTime = sortBy == 'time';
       const sortBySize = sortBy == 'size';
-      const sortIcon = sortOrder == 'asc' ? <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span className="sf3-font sf3-font-down"></span>;
+      const sortIcon = sortOrder == 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
 
       const isDesktop = Utils.isDesktop();
       const itemsContent = (

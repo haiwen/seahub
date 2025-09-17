@@ -63,7 +63,7 @@ class DirentItem extends React.Component {
           </td>
           <td>
             {isOpIconShown && dirent.is_file &&
-            <i role="button" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} onClick={this.downloadDirent}></i>
+            <i role="button" aria-hidden="true" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} onClick={this.downloadDirent}></i>
             }
           </td>
           <td>{Utils.bytesToSize(dirent.size)}</td>

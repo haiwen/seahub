@@ -73,8 +73,13 @@ class SelectEditor extends React.Component {
         value: gettext('Add custom permission'),
         isDisabled: true,
         label: (
-          <div className="permission-editor-btn-add-custom-permission" onClick={this.props.onAddCustomPermissionToggle}>
-            <i className="sf3-font sf3-font-enlarge"></i>
+          <div
+            className="permission-editor-btn-add-custom-permission"
+            onClick={this.props.onAddCustomPermissionToggle}
+            role="button"
+            aria-label={gettext('Add custom permission')}
+          >
+            <i className="sf3-font sf3-font-enlarge" aria-hidden="true"></i>
             <span>{gettext('Add custom permission')}</span>
           </div>
         )

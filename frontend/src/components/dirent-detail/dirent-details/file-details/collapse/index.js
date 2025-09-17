@@ -18,7 +18,7 @@ const Collapse = ({ className, title, children, isShow = true }) => {
       <div className="file-details-collapse-header">
         <div className="file-details-collapse-header-title">{title}</div>
         <div className="file-details-collapse-header-operation" onClick={toggleShowChildren}>
-          <i className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
+          <i aria-hidden="true" className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
         </div>
       </div>
       {showChildren && (

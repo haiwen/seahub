@@ -99,7 +99,15 @@ class UploadListItem extends React.Component {
                   {!resumableFile.isUploading() && (
                     <div className="progress-container d-flex align-items-center">
                       <div className="progress">
-                        <div className="progress-bar" role="progressbar" style={{ width: `${progress}%` }} aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100"></div>
+                        <div
+                          className="progress-bar"
+                          role="progressbar"
+                          style={{ width: `${progress}%` }}
+                          aria-valuenow={progress}
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                        >
+                        </div>
                       </div>
                     </div>
                   )}
@@ -132,8 +140,14 @@ class UploadListItem extends React.Component {
             </div>
           )}
           {this.state.uploadState === UPLOAD_ERROR && (
-            <div className="d-flex align-items-center">
-              <span className="upload-failure-icon sf3-font sf3-font-info mr-2"></span>
+            <div
+              className="d-flex align-items-center"
+              aria-label={gettext('Upload failed')}
+              title={gettext('Upload failed')}
+              role="button"
+              tabIndex={0}
+            >
+              <span className="upload-failure-icon sf3-font sf3-font-info mr-2" aria-hidden="true"></span>
               <span className="upload-failure-msg" dangerouslySetInnerHTML={{ __html: error }}></span>
             </div>
           )}

@@ -5,6 +5,7 @@ import { fileName, historyRepoID } from './utils/constants';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
 import { seafileAPI } from './utils/seafile-api';
+import { gettext } from '@/utils/constants';
 
 import './css/layout.css';
 import './css/file-history.css';
@@ -51,8 +52,15 @@ class FileHistory extends React.Component {
         <div className="flex-fill d-flex flex-column text-truncate">
           <div className="history-header file-history-header flex-shrink-0">
             <div className="title d-flex mw-100">
-              <a href="#" className="go-back" title="Back" onClick={this.onBackClick}>
-                <span className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
+              <a
+                href="#"
+                className="go-back"
+                title={gettext('Back')}
+                onClick={this.onBackClick}
+                role="button"
+                aria-label={gettext('Back')}
+              >
+                <span className="sf3-font sf3-font-down rotate-90 d-inline-block" aria-hidden="true"></span>
               </a>
               <span className="name text-truncate" title={fileName}>{fileName}</span>
             </div>

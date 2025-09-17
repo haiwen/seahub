@@ -59,7 +59,10 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, ta
         <i
           className={classNames('sf3-font sf3-font-down kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
           title={isCollapsed ? gettext('Expand') : gettext('Collapse')}
-          onClick={handleCollapse}>
+          onClick={handleCollapse}
+          aria-label={isCollapsed ? gettext('Expand') : gettext('Collapse')}
+          role="button"
+        >
         </i>
       </div>
     </div>

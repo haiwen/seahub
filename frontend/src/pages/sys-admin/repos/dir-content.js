@@ -80,6 +80,7 @@ class DirentItem extends React.Component {
             <i
               className="op-icon sf3-font sf3-font-download1"
               title={gettext('Download')}
+              aria-hidden="true"
               onClick={this.downloadDirent}
             >
             </i>

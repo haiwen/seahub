@@ -95,7 +95,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
           'highlighted': selectedOptions.length > 0,
         })}>
           <div className="filter-label" title={gettext('Creator')}>{gettext('Creator')}</div>
-          <i className="sf3-font sf3-font-down sf3-font pl-1" />
+          <i className="sf3-font sf3-font-down sf3-font pl-1" aria-hidden="true" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
+import { gettext } from '@/utils/constants';
 
 import './index.css';
 
@@ -34,14 +35,18 @@ const TagItem = ({
         onClick={() => onSelect(tagId)}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
+        role='button'
+        aria-label={gettext('Select tag')}
       >
         {hasChildren && (
           <span
             className="sf-metadata-tags-editor-tree-expand-icon"
             style={{ left: depth * NODE_ICON_LEFT_INDENT }}
             onClick={onToggleExpand}
+            role="button"
+            aria-label={isFolded ? gettext('Expand') : gettext('Collapse')}
           >
-            <i className={classNames('sf3-font sf3-font-down', { 'rotate-270': isFolded })}></i>
+            <i aria-hidden="true" className={classNames('sf3-font sf3-font-down', { 'rotate-270': isFolded })}></i>
           </span>
         )}
         <div className="sf-metadata-tag-color-and-name">

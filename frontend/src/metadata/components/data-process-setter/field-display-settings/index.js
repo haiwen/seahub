@@ -4,6 +4,7 @@ import { Label } from 'reactstrap';
 import classnames from 'classnames';
 import { Transition } from 'react-transition-group';
 import FieldItem from './field-item';
+import { gettext } from '@/utils/constants';
 
 import './index.css';
 
@@ -33,10 +34,15 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
 
   return (
     <div className="sf-metadata-filed-display-setting">
-      <div className="sf-metadata-filed-display-setting-header d-flex align-items-center justify-content-between" onClick={expandAllFields} >
+      <div
+        className="sf-metadata-filed-display-setting-header d-flex align-items-center justify-content-between"
+        onClick={expandAllFields}
+        role="button"
+        aria-label={isCollapsed ? gettext('Expand') : gettext('Collapse')}
+      >
         <Label className="mb-0">{textProperties.titleValue}</Label>
         <div className="sf-metadata-filed-display-toggle-btn">
-          <i className={classnames('sf3-font sf3-font-down', { 'rotate-270': isCollapsed })}></i>
+          <i aria-hidden="true" className={classnames('sf3-font sf3-font-down', { 'rotate-270': isCollapsed })}></i>
         </div>
       </div>
       <Transition nodeRef={nodeRef} in={!isCollapsed} timeout={DURATION}>

@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Dropdown, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
-import ColumnPopover from '../../../../../components/popover/column-popover';
-import Icon from '../../../../../../components/icon';
-import { getEventClassName } from '../../../../../../utils/dom';
-import CustomDropdownMenu from '../../../../../components/popover/column-popover/dropdown-menu';
+import ColumnPopover from '@/metadata/components/popover/column-popover';
+import Icon from '@/components/icon';
+import { gettext } from '@/utils/constants';
+import { getEventClassName } from '@/utils/dom';
+import CustomDropdownMenu from '@/metadata/components/popover/column-popover/dropdown-menu';
 
 import './index.css';
 
@@ -85,6 +86,8 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
         <DropdownToggle
           tag="span"
           className="sf-metadata-result-table-cell column insert-column"
+          aria-label={gettext('Add column')}
+          role="button"
         >
           <Icon symbol="add-table" />
         </DropdownToggle>

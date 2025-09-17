@@ -649,7 +649,7 @@ class DirentListView extends React.Component {
   };
 
   getHeaders = (isDesktop) => {
-    const { direntList, sortBy, sortOrder } = this.props;
+    const { direntList, sortBy, sortOrder, isAllItemSelected } = this.props;
     if (!isDesktop) {
       return [
         { isFixed: false, width: 0.12 },
@@ -658,19 +658,20 @@ class DirentListView extends React.Component {
       ];
     }
 
-    const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
+    const sortIcon = <span aria-hidden="true" className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
     return [
       { isFixed: true,
         width: 31,
         className: 'pl10 pr-2 cursor-pointer',
-        title: this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
-        ariaLabel: this.props.isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
+        title: isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
+        ariaLabel: isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
         children: (
           <input
             type="checkbox"
             className="vam cursor-pointer"
-            checked={this.props.isAllItemSelected}
+            checked={isAllItemSelected}
             disabled={direntList.length === 0}
+            aria-label={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
             readOnly
           />
         ),

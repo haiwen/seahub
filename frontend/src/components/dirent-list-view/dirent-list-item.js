@@ -805,6 +805,7 @@ class DirentListItem extends React.Component {
                 style={{ position: 'relative', top: -1 }}
                 onChange={() => {}}
                 checked={isSelected}
+                aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
               />
             </td>
             <td className="pl-2 pr-2">

@@ -288,7 +288,11 @@ const ViewsFolder = ({
           ) : folderName}
         </div>
         <div className="left-icon" style={{ left: leftIndent - 40 }}>
-          <i className={classnames('folder-toggle-icon sf3-font sf3-font-down', { 'rotate-270': !expanded })}></i>
+          <i
+            className={classnames('folder-toggle-icon sf3-font sf3-font-down', { 'rotate-270': !expanded })}
+            aria-hidden="true"
+          >
+          </i>
           <span className="tree-node-icon">
             <i className="sf3-font sf3-font-folder"></i>
           </span>

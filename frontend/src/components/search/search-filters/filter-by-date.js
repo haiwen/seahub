@@ -178,6 +178,8 @@ const FilterByDate = ({ date, onChange }) => {
               e.stopPropagation();
               toggle();
             }}
+            role="button"
+            aria-label={isOpen ? gettext('Collapse') : gettext('Expand')}
           />
         </DropdownToggle>
         <ModalPortal>
@@ -192,6 +194,8 @@ const FilterByDate = ({ date, onChange }) => {
                       e.stopPropagation();
                       toggleType();
                     }}
+                    role="button"
+                    aria-label={isTypeOpen ? gettext('Collapse') : gettext('Expand')}
                   />
                 </DropdownToggle>
                 <DropdownMenu>

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Nav from './org-users-nav';
 import OrgAdminList from './org-admin-list';
 import MainPanelTopbar from './main-panel-topbar';
@@ -95,20 +95,26 @@ class OrgUsers extends Component {
     const topBtn = 'btn btn-secondary operation-item';
     let topbarChildren;
     topbarChildren = (
-      <Fragment>
-        <button className={topBtn} title={gettext('Add admin')} onClick={this.toggleAddOrgAdmin}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1"></i>{gettext('Add admin')}
+      <>
+        <button
+          className={topBtn}
+          title={gettext('Add admin')}
+          onClick={this.toggleAddOrgAdmin}
+          aria-label={gettext('Add admin')}
+        >
+          <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>
+          {gettext('Add admin')}
         </button>
         {this.state.isShowAddOrgAdminDialog &&
         <ModalPortal>
           <AddOrgAdminDialog toggle={this.toggleAddOrgAdmin} onAddedOrgAdmin={this.onAddedOrgAdmin}/>
         </ModalPortal>
         }
-      </Fragment>
+      </>
     );
 
     return (
-      <Fragment>
+      <>
         <MainPanelTopbar children={topbarChildren}/>
         <div className="main-panel-center flex-row">
           <div className="cur-view-container">
@@ -123,7 +129,7 @@ class OrgUsers extends Component {
             />
           </div>
         </div>
-      </Fragment>
+      </>
     );
   }
 }

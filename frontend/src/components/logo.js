@@ -54,7 +54,7 @@ class Logo extends React.Component {
   render() {
     return (
       <div className='top-logo'>
-        <a href={siteRoot} id="logo">
+        <a href={siteRoot} id="logo" aria-label={siteTitle} title={siteTitle}>
           <img src={this.getLogoSrc()} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
         </a>
         {this.props.showCloseSidePanelIcon &&

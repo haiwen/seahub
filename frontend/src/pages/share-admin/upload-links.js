@@ -65,7 +65,15 @@ class Content extends Component {
             isFixed: true,
             width: 30,
             className: 'text-center',
-            children: (<input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />)
+            children: (
+              <input
+                type="checkbox"
+                checked={isAllLinksSelected}
+                className="vam"
+                onChange={this.toggleSelectAllLinks}
+                aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
+              />
+            )
           }, // checkbox
           { isFixed: true, width: 40 }, // icon
           { isFixed: false, width: 0.33, children: gettext('Name') },
@@ -182,6 +190,7 @@ class Item extends Component {
                 className="vam"
                 onClick={this.onCheckboxClicked}
                 onChange={this.toggleSelectLink}
+                aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
               />
             </td>
             <td className="pl-2 pr-2"><img src={iconUrl} alt="" width="24" /></td>

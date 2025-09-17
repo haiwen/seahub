@@ -131,7 +131,16 @@ export default class PageDropdownMenu extends Component {
         toggle={this.onDropdownToggle}
         className="page-operation-dropdown"
       >
-        <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
+        <DropdownToggle
+          className="page-operation-dropdown-toggle"
+          tag="span"
+          role='button'
+          tabIndex={0}
+          data-toggle="dropdown"
+          aria-expanded={this.state.isShowOperationDropdown}
+          aria-label={gettext('More page operations')}
+        >
+        </DropdownToggle>
         <DropdownMenu
           className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
           flip={true}

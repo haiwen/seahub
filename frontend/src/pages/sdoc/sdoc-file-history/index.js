@@ -296,16 +296,22 @@ class SdocFileHistory extends React.Component {
             className="sdoc-file-changes-last d-flex align-items-center justify-content-center"
             id="sdoc-file-changes-last"
             onClick={this.lastChange}
+            role="button"
+            aria-label={gettext('Last modification')}
+            title={gettext('Last modification')}
           >
-            <span className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
+            <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
           </div>
           <div className="sdoc-file-changes-divider"></div>
           <div
             className="sdoc-file-changes-next d-flex align-items-center justify-content-center"
             id="sdoc-file-changes-next"
             onClick={this.nextChange}
+            role="button"
+            aria-label={gettext('Next modification')}
+            title={gettext('Next modification')}
           >
-            <span className="sf3-font sf3-font-down"></span>
+            <span aria-hidden="true" className="sf3-font sf3-font-down"></span>
           </div>
           <UncontrolledTooltip placement="bottom" target="sdoc-file-changes-last" delay={0} fade={false}>
             {gettext('Last modification')}

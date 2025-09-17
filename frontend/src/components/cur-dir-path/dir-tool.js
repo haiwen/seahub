@@ -65,8 +65,15 @@ class DirTool extends React.Component {
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
         <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
         {(!isCustomPermission) &&
-          <div className="cur-view-path-btn" onClick={onToggleDetail}>
-            <span className="sf3-font sf3-font-info" aria-label={propertiesText} title={propertiesText}></span>
+          <div
+            className="cur-view-path-btn"
+            onClick={onToggleDetail}
+            aria-label={propertiesText}
+            title={propertiesText}
+            role="button"
+            tabIndex="0"
+          >
+            <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
           </div>
         }
       </div>
