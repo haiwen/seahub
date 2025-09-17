@@ -14,7 +14,6 @@ import ConfirmRestoreRepo from './components/dialog/confirm-restore-repo';
 
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/repo-snapshot.css';
 
 const {

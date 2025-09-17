@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import listener from '../context-menu/globalEventListener';
 import { gettext } from '../../utils/constants';
@@ -7,7 +8,6 @@ import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 
 import '../../css/item-dropdown-menu.css';
-import classNames from 'classnames';
 
 const propTypes = {
   tagName: PropTypes.string,

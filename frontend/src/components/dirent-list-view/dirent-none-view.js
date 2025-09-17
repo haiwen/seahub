@@ -6,9 +6,9 @@ import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
+import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 import '../../css/tip-for-new-file.css';
-import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

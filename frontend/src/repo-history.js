@@ -15,7 +15,6 @@ import UpdateRepoCommitLabels from './components/dialog/edit-repo-commit-labels'
 
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/repo-history.css';
 
 const {

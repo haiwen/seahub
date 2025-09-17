@@ -14,7 +14,6 @@ import CleanTrash from './components/dialog/clean-trash';
 
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/repo-folder-trash.css';
 
 const {

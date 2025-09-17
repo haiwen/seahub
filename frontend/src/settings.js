@@ -29,7 +29,6 @@ import UserUpdatePassword from './components/dialog/user-password-widgets/user-u
 import './css/layout.css';
 import './css/toolbar.css';
 import './css/search.css';
-
 import './css/user-settings.css';
 
 const {

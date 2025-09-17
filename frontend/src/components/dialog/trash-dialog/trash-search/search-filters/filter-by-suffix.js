@@ -46,7 +46,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           'highlighted': inputValue.length > 0,
         })} onClick={toggle}>
           <div className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</div>
-          <i className="sf3-font sf3-font-down pl-1"aria-hidden="true" />
+          <i className="sf3-font sf3-font-down pl-1" aria-hidden="true" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">
