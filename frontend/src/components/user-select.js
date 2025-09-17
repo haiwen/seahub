@@ -126,13 +126,15 @@ class UserSelect extends React.Component {
     let { highlightIndex, maxItemNum, itemHeight } = this.state;
     if (highlightIndex > 0) {
       this.setState({ highlightIndex: highlightIndex - 1 }, () => {
-        if (highlightIndex < this.state.searchedUsers.length - maxItemNum) {
+        if (this.container && highlightIndex < this.state.searchedUsers.length - maxItemNum) {
           this.container.scrollTop -= itemHeight;
         }
       });
     } else {
       this.setState({ highlightIndex: this.state.searchedUsers.length - 1 }, () => {
-        this.container.scrollTop = this.container.scrollHeight;
+        if (this.container) {
+          this.container.scrollTop = this.container.scrollHeight;
+        }
       });
     }
   };
@@ -143,13 +145,15 @@ class UserSelect extends React.Component {
     let { highlightIndex, maxItemNum, itemHeight } = this.state;
     if (highlightIndex < this.state.searchedUsers.length - 1) {
       this.setState({ highlightIndex: highlightIndex + 1 }, () => {
-        if (highlightIndex >= maxItemNum) {
+        if (this.container && highlightIndex >= maxItemNum) {
           this.container.scrollTop += itemHeight;
         }
       });
     } else {
       this.setState({ highlightIndex: 0 }, () => {
-        this.container.scrollTop = 0;
+        if (this.container) {
+          this.container.scrollTop = 0;
+        }
       });
     }
   };
