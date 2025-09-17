@@ -168,9 +168,7 @@ class RepoShareAdminUserShares extends Component {
       <Fragment>
         {loading && <Loading />}
         {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
-        {!loading && !errorMsg && !items.length &&
-        <EmptyTip text={gettext('No user shares')}/>
-        }
+        {!loading && !errorMsg && !items.length && <EmptyTip text={gettext('No user shares')}/>}
         {!loading && !errorMsg && items.length > 0 &&
         <table className="table-hover">
           <thead>
