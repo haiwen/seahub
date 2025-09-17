@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 17:56+0800\n"
+"POT-Creation-Date: 2025-09-17 13:44+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: English (http://app.transifex.com/haiwen/seahub/language/"
@@ -733,10 +733,10 @@ msgstr "Add Wiki"
 #: frontend/src/components/dialog/org-add-user-dialog.js:143
 #: frontend/src/components/dialog/org-rename-department-dialog.js:88
 #: frontend/src/components/dialog/rename-repo.js:61
-#: frontend/src/components/dialog/repo-share-admin/group-shares.js:182
+#: frontend/src/components/dialog/repo-share-admin/group-shares.js:180
 #: frontend/src/components/dialog/repo-share-admin/share-links.js:252
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:242
-#: frontend/src/components/dialog/repo-share-admin/user-shares.js:178
+#: frontend/src/components/dialog/repo-share-admin/user-shares.js:176
 #: frontend/src/components/dialog/search-file-dialog.js:97
 #: frontend/src/components/dialog/share-repo-dialog.js:132
 #: frontend/src/components/dialog/sysadmin-dialog/add-department-v2-dialog.js:83
@@ -1407,8 +1407,8 @@ msgstr "Storage Backend"
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:334
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:297
 #: frontend/src/components/dialog/repo-api-token-dialog.js:242
-#: frontend/src/components/dialog/repo-share-admin/group-shares.js:184
-#: frontend/src/components/dialog/repo-share-admin/user-shares.js:180
+#: frontend/src/components/dialog/repo-share-admin/group-shares.js:182
+#: frontend/src/components/dialog/repo-share-admin/user-shares.js:178
 #: frontend/src/components/dialog/share-repo-dialog.js:134
 #: frontend/src/components/dialog/share-to-group.js:414
 #: frontend/src/components/dialog/share-to-group.js:424
@@ -11335,6 +11335,18 @@ msgstr "Change cover"
 msgid "User {user_link} has added you to {group_link}"
 msgstr "User {user_link} has added you to {group_link}"
 
+#: frontend/src/translate.js:38
+#, fuzzy
+#| msgid "No users"
+msgid "No user shares"
+msgstr "No users"
+
+#: frontend/src/translate.js:39
+#, fuzzy
+#| msgid "No groups"
+msgid "No group shares"
+msgstr "No groups"
+
 #: frontend/src/user-notifications.js:202
 msgid "Mark all read"
 msgstr "Mark all read"
@@ -11578,9 +11590,6 @@ msgstr "Name cannot be double dots"
 #~| msgid "Institution Admin"
 #~ msgid "Institution"
 #~ msgstr "Institution Admin"
-
-#~ msgid "No users"
-#~ msgstr "No users"
 
 #, fuzzy
 #~| msgid "Set Admin"

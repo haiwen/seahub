@@ -35,3 +35,5 @@ gettext('No libraries have been shared directly with you. A shared library can b
 gettext('Group info');
 gettext('Change view type');
 gettext('User {user_link} has added you to {group_link}');
+gettext('No user shares');
+gettext('No group shares');
