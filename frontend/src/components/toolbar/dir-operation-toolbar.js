@@ -127,18 +127,11 @@ class DirOperationToolbar extends React.Component {
     if (!this.fileInputRef.current.files.length) {
       return;
     }
-    // check file extension
-    let fileName = this.fileInputRef.current.files[0].name;
-    if (fileName.substr(fileName.lastIndexOf('.') + 1) != 'sdoczip') {
-      toaster.warning(gettext('Please choose a .sdoczip file.'), { hasCloseButton: true, duration: null });
-      return;
-    }
     this.setState({ isImportingSdoc: true });
     const file = this.fileInputRef.current.files[0];
     let { repoID, path } = this.props;
     seafileAPI.importSdoc(file, repoID, path).then((res) => {
       this.props.loadDirentList(path);
-
     }).catch((error) => {
       let errMsg = Utils.getErrorMsg(error);
       toaster.danger(errMsg);
@@ -341,7 +334,7 @@ class DirOperationToolbar extends React.Component {
           <TipDialog modalTitle={gettext('Import sdoc')} modalTip={gettext('Importing sdoc, please wait...')}/>
         )}
         <div>
-          <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} />
+          <input className="d-none" type="file" onChange={this.uploadSdoc} ref={this.fileInputRef} accept=".sdoczip"/>
         </div>
       </Fragment>
     );
