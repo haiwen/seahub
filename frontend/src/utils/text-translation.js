@@ -264,9 +264,25 @@ const TextTranslation = {
     key: 'Generate tags',
     value: gettext('Generate file tags'),
   },
-  OCR: {
-    key: 'OCR',
+  DETECT_FACES: {
+    key: 'Detect faces',
+    value: gettext('Detect faces'),
+  },
+  EXTRACT_TEXT: {
+    key: 'Extract text',
     value: gettext('Extract text'),
+  },
+  CLEAR_SELECTED: {
+    key: 'Clear selected',
+    value: gettext('Clear selected'),
+  },
+  DELETE_SELECTED: {
+    key: 'Delete selected',
+    value: gettext('Delete selected'),
+  },
+  COPY_SELECTED: {
+    key: 'Copy selected',
+    value: gettext('Copy selected'),
   },
 
   // tag view
@@ -291,6 +307,20 @@ const TextTranslation = {
   MORE: {
     key: 'More',
     value: gettext('More')
+  },
+
+  // Gallery-specific operations
+  REMOVE_FROM_GROUP: {
+    key: 'Remove from group',
+    value: gettext('Remove from this group')
+  },
+  ADD_TO_GROUPS: {
+    key: 'Add to groups',
+    value: gettext('Add to groups')
+  },
+  SET_AS_COVER: {
+    key: 'Set as cover',
+    value: gettext('Set as cover photo')
   },
 };
 

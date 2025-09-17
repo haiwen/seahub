@@ -359,14 +359,10 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
-  const updateSelectedRecordIds = useCallback((ids, records, isSomeone) => {
+  const updateSelectedRecordIds = useCallback((ids, isSomeone) => {
     toggleShowDirentToolbar(ids.length > 0);
     setTimeout(() => {
-      if (records != undefined) {
-        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, records, isSomeone);
-      } else {
-        window.sfMetadataContext && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata);
-      }
+      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, isSomeone);
     }, 0);
   }, [metadata, toggleShowDirentToolbar]);
 
@@ -1010,11 +1006,12 @@ export const MetadataViewProvider = ({
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
-    const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.OCR, onOCR);
+    const unsubscribeOCR = eventBus.subscribe(EVENT_BUS_TYPE.EXTRACT_TEXT, onOCR);
     const unsubscribeToggleMoveDialog = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, handleMoveRecords);
     const unsubscribeToggleCopyDialog = eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, handleCopyRecords);
     const unsubscribeDownloadRecords = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, handleDownloadRecords);
     const unsubscribeSearchRows = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_ROWS, handleSearchRows);
+    const unsubscribeGenerateFileTags = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_FILE_TAGS, generateFileTags);
 
     return () => {
       if (window.sfMetadataContext) {
@@ -1046,6 +1043,7 @@ export const MetadataViewProvider = ({
       unsubscribeToggleCopyDialog();
       unsubscribeDownloadRecords();
       unsubscribeSearchRows();
+      unsubscribeGenerateFileTags();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps

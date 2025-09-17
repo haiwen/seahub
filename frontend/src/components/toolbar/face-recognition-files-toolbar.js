@@ -3,25 +3,32 @@ import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_OPERATION_KEYS } from '../../metadata/constants';
 import { useFileOperations } from '../../hooks/file-operations';
+import RowUtils from '../../metadata/views/table/utils/row-utils';
+import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 
 const FaceRecognitionFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
-  const [selectedRecords, setSelectedRecords] = useState([]);
-  const [isSomeone, setIsSomeone] = useState(false);
   const menuRef = useRef(null);
+  const metadataRef = useRef([]);
   const { handleDownload: handleDownloadAPI } = useFileOperations();
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
 
   const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
-  const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
-  const canAddPhotoToPeople = window.sfMetadataContext.canAddPhotoToPeople();
-  const canSetPeoplePhoto = window.sfMetadataContext.canSetPeoplePhoto();
+  const canModifyRow = window.sfMetadataContext.canModifyRow();
+  const faceRecognitionPermission = useMemo(() => {
+    return {
+      canAddPhotoToPeople: window.sfMetadataContext.canAddPhotoToPeople(),
+      canRemovePhotoFromPeople: window.sfMetadataContext.canRemovePhotoFromPeople(),
+      canSetPeoplePhoto: window.sfMetadataContext.canSetPeoplePhoto(),
+    };
+  }, []);
+
+  const selectedRecords = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
   useEffect(() => {
-    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata, selectedRecords, isSomeone) => {
+    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata) => {
+      metadataRef.current = metadata;
       setSelectedRecordIds(ids);
-      setSelectedRecords(selectedRecords);
-      setIsSomeone(isSomeone);
     });
 
     return () => {
@@ -53,32 +60,18 @@ const FaceRecognitionFilesToolbar = () => {
     });
   }, [eventBus, selectedRecords]);
 
-  const opList = useMemo(() => {
-    const list = [];
-    if (isSomeone && canRemovePhotoFromPeople) {
-      list.push({
-        key: GALLERY_OPERATION_KEYS.REMOVE_PHOTO_FROM_CURRENT_SET,
-        value: gettext('Remove from this group')
-      });
-    }
-    if (!isSomeone && canAddPhotoToPeople) {
-      list.push({
-        key: GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS,
-        value: gettext('Add to groups')
-      });
-    }
-    if (canSetPeoplePhoto && selectedRecordIds.length == 1) {
-      list.push({
-        key: GALLERY_OPERATION_KEYS.SET_PHOTO_AS_COVER,
-        value: gettext('Set as cover photo')
-      });
-    }
-    return list;
-  }, [isSomeone, selectedRecordIds, canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto]);
-
-  const getMenuList = useCallback(() => {
-    return opList;
-  }, [opList]);
+  // Build toolbar dropdown menu options (like gallery-files-toolbar)
+  const toolbarMenuOptions = useMemo(() => {
+    if (!selectedRecords.length) return [];
+    return buildGalleryToolbarMenuOptions(
+      selectedRecords,
+      metadataRef.current.columns || [],
+      true,
+      canModifyRow,
+      false,
+      faceRecognitionPermission
+    );
+  }, [selectedRecords, canModifyRow, faceRecognitionPermission]);
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
@@ -116,7 +109,7 @@ const FaceRecognitionFilesToolbar = () => {
         item={{}}
         toggleClass="cur-view-path-btn sf3-font-more sf3-font"
         onMenuItemClick={onMenuItemClick}
-        getMenuList={getMenuList}
+        getMenuList={() => toolbarMenuOptions}
       />
     </div>
   );

@@ -35,6 +35,18 @@
 }
 
 /* end file-operation toolbar */
+
+/* Disabled toolbar button styles */
+.cur-view-path-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.cur-view-path-btn.disabled:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
 #cur-folder-more-op-toggle {
   margin-right: 0px;
 }

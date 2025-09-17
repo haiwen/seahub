@@ -9,3 +9,29 @@
   left: 0;
   text-align: center;
 }
+
+.disabled-menu-item {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+  pointer-events: auto !important;
+}
+
+.disabled-menu-item:hover {
+  background-color: transparent !important;
+  color: inherit !important;
+}
+
+.sf-table-tooltip {
+  z-index: 10000;
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+.sf-table-tooltip .tooltip-inner {
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 12px;
+  line-height: 1.4;
+}

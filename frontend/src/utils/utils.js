@@ -137,6 +137,10 @@ export const Utils = {
 
   // check if a file is an image
   imageCheck: function (filename) {
+    // check for null, undefined, or non-string values
+    if (!filename || typeof filename !== 'string') {
+      return false;
+    }
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
@@ -147,6 +151,10 @@ export const Utils = {
   },
 
   pdfCheck: function (filename) {
+    // check for null, undefined, or non-string values
+    if (!filename || typeof filename !== 'string') {
+      return false;
+    }
     if (filename.lastIndexOf('.') == -1) {
       return false;
     }
@@ -207,6 +215,10 @@ export const Utils = {
   },
 
   isEditableOfficeFile: function (filename) {
+    // check for null, undefined, or non-string values
+    if (!filename || typeof filename !== 'string') {
+      return false;
+    }
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
@@ -225,6 +237,10 @@ export const Utils = {
   },
 
   isEditableSdocFile: function (filename) {
+    // check for null, undefined, or non-string values
+    if (!filename || typeof filename !== 'string') {
+      return false;
+    }
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
@@ -240,6 +256,10 @@ export const Utils = {
 
   // check if a file is a video
   videoCheck: function (filename) {
+    // check for null, undefined, or non-string values
+    if (!filename || typeof filename !== 'string') {
+      return false;
+    }
     // no file ext
     if (filename.lastIndexOf('.') == -1) {
       return false;
@@ -438,6 +458,10 @@ export const Utils = {
   },
 
   getFileIconName: function (fileName) {
+    // check for null, undefined, or non-string values
+    if (!fileName || typeof fileName !== 'string') {
+      return Utils.FILEEXT_ICON_MAP['default'];
+    }
     if (fileName.lastIndexOf('.') == -1) return Utils.FILEEXT_ICON_MAP['default'];
     const file_ext = fileName.substr(fileName.lastIndexOf('.') + 1).toLowerCase();
     if (Utils.FILEEXT_ICON_MAP[file_ext]) return Utils.FILEEXT_ICON_MAP[file_ext];
@@ -445,6 +469,10 @@ export const Utils = {
   },
 
   getFileIconUrl: function (filename) {
+    // check for null, undefined, or non-string values
+    if (!filename || typeof filename !== 'string') {
+      return mediaUrl + 'img/file/256/' + Utils.FILEEXT_ICON_MAP['default'];
+    }
     let file_ext = '';
     if (filename.lastIndexOf('.') == -1) {
       return mediaUrl + 'img/file/256/' + Utils.FILEEXT_ICON_MAP['default'];

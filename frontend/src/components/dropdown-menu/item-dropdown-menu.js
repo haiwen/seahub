@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import listener from '../context-menu/globalEventListener';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
+import DropdownMenuItem from './dropdown-menu-item';
 
 import '../../css/item-dropdown-menu.css';
 
@@ -265,10 +265,13 @@ class ItemDropdownMenu extends React.Component {
                           return <DropdownItem key={index} divider />;
                         } else {
                           return (
-                            <DropdownItem key={index} data-toggle={item.key} onClick={this.onMenuItemClick} onKeyDown={this.onMenuItemKeyDown}>
-                              {item.icon_dom || null}
-                              <span>{item.value}</span>
-                            </DropdownItem>
+                            <DropdownMenuItem
+                              key={index}
+                              menuItem={item}
+                              onClick={this.onMenuItemClick}
+                              onKeyDown={this.onMenuItemKeyDown}
+                              isSubMenuItem={true}
+                            />
                           );
                         }
                       })}
@@ -277,20 +280,14 @@ class ItemDropdownMenu extends React.Component {
                 );
               } else {
                 return (
-                  <DropdownItem
+                  <DropdownMenuItem
                     key={index}
-                    className={classNames({ 'position-relative pl-5': this.props.tickable })}
-                    data-toggle={menuItem.key}
+                    menuItem={menuItem}
                     onClick={this.onMenuItemClick}
                     onKeyDown={this.onMenuItemKeyDown}
                     onMouseMove={this.onDropDownMouseMove}
-                  >
-                    {menuItem.tick && (
-                      <i className="dropdown-item-tick sf2-icon-tick"></i>
-                    )}
-                    {menuItem.icon_dom || null}
-                    {menuItem.value}
-                  </DropdownItem>
+                    tickable={this.props.tickable}
+                  />
                 );
               }
             })}
