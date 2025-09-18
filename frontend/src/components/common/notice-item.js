@@ -340,13 +340,10 @@ class NoticeItem extends React.Component {
     if (noticeType === MSG_TYPE_FACE_CLUSTER) {
       let repo_id = detail.repo_id;
       let repo_name = detail.repo_name;
-
       const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
       const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
-
       let notice = gettext('Face recognition is done for library {libraryName}.');
       notice = notice.replace('{libraryName}', repoLink);
-
       return { avatar_url: null, notice };
     }
 
