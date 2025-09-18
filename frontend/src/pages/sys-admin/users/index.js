@@ -7,8 +7,6 @@ import UsersNav from './users-nav';
 import Users from './users';
 import Search from '../search';
 import AdminUsers from './admin-users';
-import LDAPImportedUsers from './ldap-imported-users';
-import LDAPUsers from './ldap-users';
 import UserNav from './user-nav';
 import toaster from '../../../components/toast';
 import { Utils } from '../../../utils/utils';
@@ -150,8 +148,6 @@ const UsersLayout = ({ ...commonProps }) => {
           {...usersProps}
         />
         <AdminUsers path="admins" perPage={perPage} {...usersProps} />
-        <LDAPImportedUsers path="ldap-imported" {...usersProps} />
-        <LDAPUsers path="ldap" {...usersProps} />
       </Router>
     </>
   );
