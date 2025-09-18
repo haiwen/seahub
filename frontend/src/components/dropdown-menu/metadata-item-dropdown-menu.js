@@ -196,7 +196,7 @@ class ItemDropdownMenu extends React.Component {
     }
 
     return (
-      <Dropdown tag="span" direction='down' isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
+      <Dropdown tag="span" isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick} className="vam">
         <DropdownToggle
           tag={tagName || 'i'}
           role="button"
@@ -213,7 +213,6 @@ class ItemDropdownMenu extends React.Component {
           <DropdownMenu
             style={menuStyle}
             className={`${this.props.menuClassname} position-fixed`}
-            flip={false}
             modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
           >
             {menuList.map((menuItem, index) => {
