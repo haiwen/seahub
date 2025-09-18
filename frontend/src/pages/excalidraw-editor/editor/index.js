@@ -213,6 +213,7 @@ const SimpleEditor = () => {
     // add image content to canvas
     const socketManager = SocketManager.getInstance();
     socketManager.loadImageFiles();
+
   }, [excalidrawAPI]);
 
   return (
@@ -231,25 +232,16 @@ const SimpleEditor = () => {
       >
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
-          <button
-            onClick={onCustomImageDialogToggle}
-            data-testid="upload_image"
-            title={gettext('Upload lib image')}
-            className='dropdown-menu-item dropdown-menu-item-base'
-          >
-            <div className="dropdown-menu-item__icon">
-              <span className='sf3-font-upload-files sf3-font dropdown-item-icon'></span>
-            </div>
-            <div className="dropdown-menu-item__text">{gettext('Link image')}</div>
-          </button>
+          <MainMenu.Item className='sf3-font-upload-files sf3-font' onClick={onCustomImageDialogToggle}>
+            {gettext('Link image')}
+          </MainMenu.Item>
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
           <MainMenu.DefaultItems.ToggleTheme />
           <MainMenu.DefaultItems.ChangeCanvasBackground />
-
         </MainMenu>
       </Excalidraw>
-      {isShowImageDialog && <SelectSdocFileDialog insertImage={insertCustomImage} closeDialog={onCustomImageDialogToggle}/>}
+      <SelectSdocFileDialog isOpen={isShowImageDialog} insertImage={insertCustomImage} closeDialog={onCustomImageDialogToggle}/>
     </div>
   );
 };

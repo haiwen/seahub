@@ -9,7 +9,7 @@ import './index.css';
 const { serviceURL, siteRoot } = window.app.config;
 const { repoID } = window.app.pageOptions;
 
-const SelectSdocFileDialog = ({ insertImage, closeDialog }) => {
+const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
   const { t } = useTranslation('sdoc-editor');
   const [currentSelectedFile, setCurrentSelectedFile] = useState(null);
   const [temSearchContent, setTemSearchContent] = useState('');
@@ -68,7 +68,7 @@ const SelectSdocFileDialog = ({ insertImage, closeDialog }) => {
   }, [isOpenSearch]);
 
   return (
-    <Modal isOpen={true} autoFocus={false} zIndex={1071} returnFocusAfterClose={false} className="sdoc-file-select-dialog" contentClassName="sdoc-file-select-modal">
+    <Modal isOpen={isOpen} autoFocus={false} zIndex={1071} returnFocusAfterClose={false} className="sdoc-file-select-dialog" contentClassName="sdoc-file-select-modal">
       <div className='modal-header-container'>
         <h5 className='modal-title-container'>{t(modalTitle)}</h5>
         <div className='search-container'>

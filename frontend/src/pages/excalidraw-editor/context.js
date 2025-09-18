@@ -71,7 +71,7 @@ class Context {
   getLocalFiles(p, type) {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
-    const url = `${server}/api/v2.1/exdraw/dir/${docUuid}/?p=${p}&type=${type}&doc_uuid=${docUuid}`;
+    const url = `${server}/api/v2.1/seadoc/dir/${docUuid}/?p=${p}&type=${type}&doc_uuid=${docUuid}`;
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }
 
