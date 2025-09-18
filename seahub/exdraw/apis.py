@@ -23,7 +23,7 @@ from seahub.exdraw.utils import is_valid_exdraw_access_token, get_exdraw_upload_
     get_exdraw_file_uuid, gen_exdraw_access_token, gen_exdraw_image_parent_path, get_exdraw_asset_upload_link, \
     get_exdraw_asset_download_link
 
-from seahub.utils.file_types import EXCALIDRAW
+from seahub.utils.file_types import EXCALIDRAW, IMAGE
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.utils import get_file_type_and_ext, normalize_file_path, is_pro_version, PREVIEW_FILEEXT
 from seahub.tags.models import FileUUIDMap
@@ -310,7 +310,6 @@ class ExdrawDownloadImage(APIView):
         username = request.user.username
 
         parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
-            
         download_link = get_exdraw_asset_download_link(repo_id, parent_path, filename, username)
         if not download_link:
             error_msg = 'file %s not found.' % filename
