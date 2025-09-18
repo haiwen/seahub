@@ -2555,7 +2555,7 @@ class SeadocDirView(APIView):
                     entry["file_uuid"] = dirent_file_uuid
                 elif file_type == 'exdraw' and filetype == EXCALIDRAW:
                     entry["file_uuid"] = dirent_file_uuid
-                elif filetype == 'image' and filetype == IMAGE:
+                elif file_type == 'image' and filetype == IMAGE:
                     entry["file_uuid"] = dirent_file_uuid
                 elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
                     entry["file_uuid"] = dirent_file_uuid

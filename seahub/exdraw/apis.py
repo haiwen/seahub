@@ -1,5 +1,4 @@
 import os
-import stat
 import logging
 import requests
 import posixpath
@@ -14,21 +13,19 @@ from rest_framework.permissions import IsAuthenticated
 
 from seaserv import seafile_api
 
-from seahub.constants import PERMISSION_INVISIBLE
 from seahub.exdraw.settings import MIMETYPE_FILE_TYPE_MAPPING, FILE_TYPE_MIMETYPE_MAPPING
 from seahub.utils.error_msg import file_type_error_msg
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.exdraw.utils import is_valid_exdraw_access_token, get_exdraw_upload_link, get_exdraw_download_link, \
     get_exdraw_file_uuid, gen_exdraw_access_token, gen_exdraw_image_parent_path, get_exdraw_asset_upload_link, \
     get_exdraw_asset_download_link
 
-from seahub.utils.file_types import EXCALIDRAW, IMAGE
+from seahub.utils.file_types import EXCALIDRAW
 from seahub.utils.file_op import if_locked_by_online_office
-from seahub.utils import get_file_type_and_ext, normalize_file_path, is_pro_version, PREVIEW_FILEEXT, \
-    normalize_dir_path, VIDEO, SEADOC
+from seahub.utils import get_file_type_and_ext, normalize_file_path, is_pro_version, PREVIEW_FILEEXT
 from seahub.tags.models import FileUUIDMap
 
 
@@ -309,17 +306,10 @@ class ExdrawDownloadImage(APIView):
             error_msg = 'Image type not supported'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        from_repo = to_python_boolean(request.GET.get('from_repo', 'f'))
         repo_id = uuid_map.repo_id
         username = request.user.username
 
-        if from_repo:
-            file_path = normalize_file_path(filename)
-            parent_path = os.path.dirname(file_path)
-            parent_path = normalize_dir_path(parent_path)
-            filename = os.path.basename(filename)
-        else:
-            parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
+        parent_path = gen_exdraw_image_parent_path(file_uuid, repo_id, username)
             
         download_link = get_exdraw_asset_download_link(repo_id, parent_path, filename, username)
         if not download_link:
@@ -335,88 +325,3 @@ class ExdrawDownloadImage(APIView):
             content=resp.content, content_type=content_type)
         response['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * 7)
         return response
-
-class ExdrawDirView(APIView):
-    """list all files in dir
-    """
-    authentication_classes = ()
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, file_uuid):
-
-        # jwt permission check
-        auth = request.headers.get('authorization', '').split()
-        is_valid, payload = is_valid_exdraw_access_token(auth, file_uuid, return_payload=True)
-        if not is_valid:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        username = payload.get('username')
-        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
-        if not uuid_map:
-            error_msg = 'file uuid %s not found.' % file_uuid
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        file_type = request.GET.get('type', 'image')  # sdoc, image, file
-        path = request.GET.get('p', '/')
-        path = normalize_dir_path(path)
-        repo_id = uuid_map.repo_id
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-        if not dir_id:
-            error_msg = 'Folder %s not found.' % path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        permission = seafile_api.check_permission_by_path(repo_id, path, username)
-        if not permission:
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        try:
-            dirs = seafile_api.list_dir_with_perm(
-                repo_id, path, dir_id, username, -1, -1)
-            dirs = dirs if dirs else []
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Failed to list dir.")
-
-        uuid_map_queryset = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, path)
-        dir_list, file_list = [], []
-        for dirent in dirs:
-            if dirent.permission == PERMISSION_INVISIBLE:
-                continue
-
-            entry = {}
-            if stat.S_ISDIR(dirent.mode):
-                dtype = "dir"
-            else:
-                dtype = "file"
-                filetype, fileext = get_file_type_and_ext(dirent.obj_name)
-                dirent_uuid_map = uuid_map_queryset.filter(filename=dirent.obj_name).first()
-                dirent_file_uuid = str(dirent_uuid_map.uuid) if dirent_uuid_map else ''
-                if file_type == 'sdoc' and filetype == SEADOC:
-                    entry["file_uuid"] = dirent_file_uuid
-                elif file_type == 'exdraw' and filetype == EXCALIDRAW:
-                    entry["file_uuid"] = dirent_file_uuid
-                elif file_type == 'image' and filetype == IMAGE:
-                    entry["file_uuid"] = dirent_file_uuid
-                elif file_type == 'file' and filetype not in (SEADOC, IMAGE):
-                    entry["file_uuid"] = dirent_file_uuid
-                elif file_type == 'video' and filetype == VIDEO:
-                    entry["file_uuid"] = dirent_file_uuid
-                else:
-                    continue
-            entry["type"] = dtype
-            entry["name"] = dirent.obj_name
-            entry["id"] = dirent.obj_id
-            entry["mtime"] = dirent.mtime
-            entry["permission"] = dirent.permission
-            if dtype == 'dir':
-                dir_list.append(entry)
-            else:
-                file_list.append(entry)
-
-        dir_list.sort(key=lambda x: x['name'].lower())
-        file_list.sort(key=lambda x: x['name'].lower())
-        dentrys = dir_list + file_list
-        return Response(dentrys)
