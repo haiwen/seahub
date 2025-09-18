@@ -278,49 +278,10 @@ div[tabindex="-1"][role="group"] {
   margin-right: 0.25rem;
 }
 
-.review {
-  padding: 0;
-}
-
-.review .cur-file-info {
-  margin: 0;
-}
-
-.review .file-feature {
-  width: 4.1875rem;
-  height: 4.1875rem;
-  font-size: 3rem;
-}
-
-.review-state {
-  position: relative;
-  margin: auto 0.5rem;
-  border: 1px solid transparent;
-  border-radius: 3px;
-}
-
-.review-state-finished {
-  color: #316100;
-  background-color: #dff1cc;
-  border-color: #d2ecb8;
-}
-
-.review-state-closed {
-  color: #6b1110;
-  background-color: #f5d2d2;
-  border-color: #f1c1c0;
-}
-
-.review-state-closed:focus,
-.review-state-finished:focus {
-  box-shadow: 0 0 0 0;
-}
-
 img[src=""],img:not([src]) { /* for first loading img*/
   opacity:0;
 }
 
-.cur-view-path.draft-review-nav,
 .cur-view-path.share-upload-nav {
   padding: 0 1rem;
 }
