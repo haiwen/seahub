@@ -311,7 +311,6 @@ img[src=""],img:not([src]) { /* for first loading img*/
   display: flex;
   align-items: center;
   word-break: keep-all;
-  max-width: 80%;
   height: 24px;
   overflow: hidden;
 }
