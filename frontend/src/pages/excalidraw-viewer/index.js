@@ -8,6 +8,7 @@ const ExcaliViewer = () => {
   const [fileContent, setFileContent] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const [isInSdoc, setIsInSdoc] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [isResize, setIsResize] = useState(false);
 
   useEffect(() => {
@@ -30,6 +31,9 @@ const ExcaliViewer = () => {
         if (event.data.isInSdoc === true && !isInSdoc) {
           setIsInSdoc(true);
         }
+        if (event.data.isFullScreen === true && !isFullScreen) {
+          setIsFullScreen(true);
+        }
       }
 
       if (event.data?.type === 'resizeWindowWidth') {
@@ -50,6 +54,7 @@ const ExcaliViewer = () => {
       isFetching={isFetching}
       sceneContent={fileContent}
       isInSdoc={isInSdoc}
+      isFullScreen={isFullScreen}
       isResizeSdocPageWidth={isResize}
     />
   );

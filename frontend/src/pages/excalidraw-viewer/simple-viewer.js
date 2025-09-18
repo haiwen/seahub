@@ -6,7 +6,7 @@ import { langList } from './constants';
 
 import '@excalidraw/excalidraw/index.css';
 
-const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocPageWidth }) => {
+const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isFullScreen, isResizeSdocPageWidth }) => {
   // eslint-disable-next-line
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
 
@@ -20,13 +20,19 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocP
 
   // Fit iframe inner element size within sdoc-editor
   useEffect(() => {
+    if (excalidrawAPI && isFullScreen) {
+      setTimeout(() => {
+        excalidrawAPI.scrollToContent(sceneContent.elements, { fitToViewport: true });
+      }, 100);
+    }
+
     if (excalidrawAPI && isInSdoc) {
       setTimeout(() => {
         excalidrawAPI.scrollToContent(sceneContent.elements, { fitToViewport: true, viewportZoomFactor: 0.9 });
       }, 100);
     }
     // eslint-disable-next-line
-  }, [excalidrawAPI, isResizeSdocPageWidth, isInSdoc]);
+  }, [excalidrawAPI, isResizeSdocPageWidth, isInSdoc, isFullScreen]);
 
   if (isFetching) {
     return (
@@ -38,7 +44,7 @@ const SimpleViewer = ({ sceneContent = null, isFetching, isInSdoc, isResizeSdocP
 
   return (
     <>
-      <div className={classNames('excali-container', { 'in-sdoc': isInSdoc })} style={{ height: '100vh', width: '100vw' }}>
+      <div className={classNames('excali-container', { 'in-sdoc': isInSdoc || isFullScreen })} style={{ height: '100vh', width: '100vw' }}>
         <Excalidraw
           initialData={sceneContent}
           excalidrawAPI={(api) => setExcalidrawAPI(api)}
