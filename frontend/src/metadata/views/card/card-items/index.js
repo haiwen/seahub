@@ -118,7 +118,10 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
     }
   }, [isDirentDetailShow]);
 
-  const isEmpty = records.length == 0;
+  // const isEmpty = records.length == 0;
+  if (records.length == 0) {
+    return <EmptyTip text={gettext('No items')} />;
+  }
 
   return (
     <>
@@ -128,27 +131,22 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
         })}
         onClick={handleClickOutside}
       >
-        {isEmpty && (<EmptyTip text={gettext('No items')} />)}
-        {!isEmpty && (
-          <>
-            {records.map((record, index) => {
-              const isSelected = selectedCard === record._id;
-              return (
-                <CardItem
-                  key={index}
-                  isSelected={isSelected}
-                  record={record}
-                  tagsData={tagsData}
-                  fileNameColumn={fileNameColumn}
-                  mtimeColumn={mtimeColumn}
-                  onOpenFile={onOpenFile}
-                  onSelectCard={onSelectCard}
-                  onContextMenu={(e) => onContextMenu(e, record._id)}
-                />
-              );
-            })}
-          </>
-        )}
+        {records.map((record, index) => {
+          const isSelected = selectedCard === record._id;
+          return (
+            <CardItem
+              key={index}
+              isSelected={isSelected}
+              record={record}
+              tagsData={tagsData}
+              fileNameColumn={fileNameColumn}
+              mtimeColumn={mtimeColumn}
+              onOpenFile={onOpenFile}
+              onSelectCard={onSelectCard}
+              onContextMenu={(e) => onContextMenu(e, record._id)}
+            />
+          );
+        })}
       </div>
       <ContextMenu
         selectedCard={selectedCard}
