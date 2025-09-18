@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
-import { siteRoot, gettext, haveLDAP, isDefaultAdmin } from '../../../utils/constants';
+import { siteRoot, gettext, isDefaultAdmin } from '../../../utils/constants';
 import SortMenu from '../../../components/sort-menu';
 import { NAV_ITEM_MARGIN } from '../../../constants';
 
@@ -19,12 +19,6 @@ class Nav extends React.Component {
     this.navItems = [
       { name: 'users', urlPart: 'users', text: gettext('All') }
     ];
-    if (haveLDAP) {
-      this.navItems.push(
-        { name: 'ldap', urlPart: 'users/ldap', text: gettext('LDAP') },
-        { name: 'ldap-imported', urlPart: 'users/ldap-imported', text: gettext('LDAP(imported)') }
-      );
-    }
     if (isDefaultAdmin) {
       this.navItems.push(
         { name: 'admin', urlPart: 'users/admins', text: gettext('Admin') }
