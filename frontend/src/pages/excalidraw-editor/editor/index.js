@@ -240,7 +240,7 @@ const SimpleEditor = () => {
             <div className="dropdown-menu-item__icon">
               <span className='sf3-font-upload-files sf3-font dropdown-item-icon'></span>
             </div>
-            <div className="dropdown-menu-item__text">{gettext('Upload lib image')}</div>
+            <div className="dropdown-menu-item__text">{gettext('Link image')}</div>
           </button>
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
