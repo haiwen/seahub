@@ -118,7 +118,6 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
     }
   }, [isDirentDetailShow]);
 
-  // const isEmpty = records.length == 0;
   if (records.length == 0) {
     return <EmptyTip text={gettext('No items')} />;
   }
