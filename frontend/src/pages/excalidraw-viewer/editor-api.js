@@ -1,7 +1,7 @@
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 
-const { repoID, filePath, fileName } = window.shared.pageOptions;
+const { repoID, filePath, fileName, rawPath } = window.shared.pageOptions;
 let dirPath = Utils.getDirName(filePath);
 
 class EditorApi {
@@ -14,10 +14,7 @@ class EditorApi {
   }
 
   getFileContent = () => {
-    return seafileAPI.getFileDownloadLink(repoID, filePath).then(res => {
-      const downLoadUrl = res.data;
-      return seafileAPI.getFileContent(downLoadUrl);
-    });
+    return seafileAPI.getFileContent(rawPath);
   };
 }
 

@@ -68,21 +68,20 @@ class FileManager {
     }
   };
 
-  getFiles = async (ids) => {
-    if (!ids.length) {
+  getFiles = async (elements) => {
+    if (!elements.length) {
       return {
         loadedFiles: [],
         erroredFiles: new Map(),
       };
     }
 
-    for (const filename of ids) {
-      const id = filename.split('.')[0];
-      this.fetchingFiles.set(id, true);
+    for (const element of elements) {
+      this.fetchingFiles.set(element.id, true);
     }
 
     try {
-      const { loadedFiles, erroredFiles } = await this._getFiles(ids);
+      const { loadedFiles, erroredFiles } = await this._getFiles(elements);
       for (const file of loadedFiles) {
         this.savedFiles.set(file.id, this.getFileVersion(file));
       }
@@ -91,8 +90,8 @@ class FileManager {
       }
       return { loadedFiles, erroredFiles };
     } finally {
-      for (const id of ids) {
-        this.fetchingFiles.delete(id);
+      for (const element of elements) {
+        this.fetchingFiles.delete(element.id);
       }
     }
   };

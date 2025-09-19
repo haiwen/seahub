@@ -62,18 +62,16 @@ class Collab {
   };
 
   fetchImageFilesFromServer = async (opts) => {
-    const fileIds = opts.elements.filter(element => {
+    const elements = opts.elements.filter(element => {
       return (
         isInitializedImageElement(element) &&
         !this.fileManager.isFileTracked(element.fileId) &&
         !element.isDeleted &&
         (opts.forceFetchFiles ? element.status !== 'pending' || Date.now() - element.updated > 10000 : element.status === 'saved')
       );
-    }).map(element => {
-      return element.filename || element.fileId;
     });
 
-    return await this.fileManager.getFiles(fileIds);
+    return await this.fileManager.getFiles(elements);
 
   };
 
