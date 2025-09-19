@@ -135,3 +135,18 @@
   position: absolute;
   right: 4px;
 }
+
+.sdoc-file-info .item-right-icon {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.sdoc-file-info .item-right-icon {
+  right: 8px;
+  position: absolute;
+}
+
+.sdoc-file-info .item-right-icon svg {
+  fill: #666;
+}

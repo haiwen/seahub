@@ -1,5 +1,4 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
-import { withTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import { v4 as uuidv4 } from 'uuid';
 import toaster from '../../../../../components/toast';
@@ -7,6 +6,7 @@ import context from '../../../context';
 import { getErrorMsg } from '../../../utils/common-utils';
 import { addDataToTree } from '../helpers';
 import { gettext } from '../../../../../utils/constants';
+import Icon from '../../../../../components/icon';
 
 import './index.css';
 
@@ -129,7 +129,7 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSea
           {type === 'dir' && (
             <div ref={folderRef} className='sdoc-folder'>
               <div
-                className={classnames('sdoc-folder-info sdoc-file-info', { 'active': selected, 'expanded': expandedFolder.has(indexId) })}
+                className={classnames('sdoc-folder-info sdoc-file-info', { 'expanded': expandedFolder.has(indexId) })}
                 onClick={(e) => onToggle(e, item, treeData)}
               >
                 <div className='sdoc-file-icon-container'>
@@ -151,7 +151,7 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSea
             </div>
           )}
           {['file', 'video', 'exdraw'].includes(type) && (
-            <div className={classnames('sdoc-file-info', { 'active': selected })} onClick={(e) => {
+            <div className={classnames('sdoc-file-info')} onClick={(e) => {
               onSelectFile(e, item);
             }}>
               <div className='sdoc-file-icon-container'>
@@ -160,6 +160,11 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSea
               </div>
               <span className='sdoc-file-name'>{name}</span>
               {item.fullpath && folderPath.length !== 0 && (<span className='sdoc-search-folder-name'>{folderPath}</span>)}
+              {selected && (
+                <div className="item-right-icon">
+                  <Icon symbol="check" color="currentColor"/>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -178,4 +183,4 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSea
   );
 };
 
-export default withTranslation('sdoc-editor')(LocalFiles);
+export default LocalFiles;

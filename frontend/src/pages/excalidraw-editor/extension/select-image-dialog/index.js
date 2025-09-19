@@ -1,22 +1,20 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Button, Modal, ModalBody, Input } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import LocalImage from './local-image';
+import { gettext } from '../../../../utils/constants';
 
 import './index.css';
+
 const { serviceURL, siteRoot } = window.app.config;
 const { repoID } = window.app.pageOptions;
 
 const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
-  const { t } = useTranslation('sdoc-editor');
   const [currentSelectedFile, setCurrentSelectedFile] = useState(null);
   const [temSearchContent, setTemSearchContent] = useState('');
   const [searchContent, setSearchContent] = useState('');
   const [isOpenSearch, setIsOpenSearch] = useState(false);
-
-  let modalTitle = 'Select_image';
 
   const onSelectedFile = useCallback((fileInfo) => {
     setCurrentSelectedFile(fileInfo);
@@ -70,14 +68,14 @@ const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
   return (
     <Modal isOpen={isOpen} autoFocus={false} zIndex={1071} returnFocusAfterClose={false} className="sdoc-file-select-dialog" contentClassName="sdoc-file-select-modal">
       <div className='modal-header-container'>
-        <h5 className='modal-title-container'>{t(modalTitle)}</h5>
+        <h5 className='modal-title-container'>{gettext('Select image')}</h5>
         <div className='search-container'>
           {!isOpenSearch && <div className='search-icon-container'><div className='sdocfont sdoc-find-replace sdoc-files-search-popover' onClick={toggleSearch} ></div></div>}
           {isOpenSearch && (
             <div className='sdoc-files-search-popover-container'>
               <div className='sdoc-search-wrapper'>
                 <div className='sdocfont sdoc-find-replace sdoc-search'></div>
-                <Input autoFocus className='sdoc-search-input' onKeyUp={handleInputKeyDown} onChange={handleSearchInputChange} id='sdoc-search' placeholder={t('Search')} />
+                <Input autoFocus className='sdoc-search-input' onKeyUp={handleInputKeyDown} onChange={handleSearchInputChange} id='sdoc-search' placeholder={gettext('Search')} />
                 <div className='sdocfont sdoc-close1 sdoc-close' onClick={toggleSearch}></div>
               </div>
             </div>
@@ -89,8 +87,8 @@ const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
         <div className='sdoc-file-select-container'>
           <LocalImage fileType='image' onSelectedFile={onSelectedFile} toggle={closeDialog} searchContent={searchContent} isOpenSearch={isOpenSearch} />
           <div className='sdoc-file-select-footer'>
-            <Button color='secondary' className='mr-2' onClick={closeDialog}>{t('Cancel')}</Button>
-            <Button color='primary' className='highlight-bg-color' disabled={!currentSelectedFile} onClick={onSubmit}>{t('Confirm')}</Button>
+            <Button color='secondary' className='mr-2' onClick={closeDialog}>{gettext('Cancel')}</Button>
+            <Button color='primary' className='highlight-bg-color' disabled={!currentSelectedFile} onClick={onSubmit}>{gettext('Confirm')}</Button>
           </div>
         </div>
       </ModalBody>
