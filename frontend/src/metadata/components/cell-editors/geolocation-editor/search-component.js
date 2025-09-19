@@ -6,13 +6,10 @@ import IconBtn from '../../../../components/icon-btn';
 import Icon from '../../../../components/icon';
 
 const performSearch = (type, inputValue, map, callbacks) => {
-  if (!inputValue.trim()) {
-    callbacks.onSearchError(gettext('Please enter a search term'));
-    return;
-  }
+  if (!inputValue.trim()) return;
 
   if (!map) {
-    callbacks.onSearchError(gettext('Map is not ready. Please wait a moment and try again.'));
+    callbacks.onSearchError(gettext('Map is not ready'));
     return;
   }
 
@@ -27,7 +24,7 @@ const performSearch = (type, inputValue, map, callbacks) => {
 
 const performBaiduSearch = (inputValue, map, callbacks) => {
   if (!map || !window.BMapGL) {
-    callbacks.onSearchError(gettext('Search service unavailable. Please try again.'));
+    callbacks.onSearchError(gettext('Search service unavailable'));
     return;
   }
 
@@ -35,13 +32,13 @@ const performBaiduSearch = (inputValue, map, callbacks) => {
     onSearchComplete: (results) => {
       try {
         if (!results || typeof results.getCurrentNumPois !== 'function') {
-          callbacks.onSearchError(gettext('Search service unavailable. Please try again.'));
+          callbacks.onSearchError(gettext('Search service unavailable'));
           return;
         }
 
         const numPois = results.getCurrentNumPois();
         if (numPois === 0) {
-          callbacks.onSearchError(gettext('No results found. Try different keywords or check spelling.'));
+          callbacks.onSearchError(gettext('No results found'));
           return;
         }
 
@@ -62,17 +59,17 @@ const performBaiduSearch = (inputValue, map, callbacks) => {
         }
 
         if (searchResults.length === 0) {
-          callbacks.onSearchError(gettext('No results found. Try different keywords or check spelling.'));
+          callbacks.onSearchError(gettext('No results found'));
           return;
         }
 
         callbacks.onSearchComplete(searchResults);
       } catch (error) {
-        callbacks.onSearchError(gettext('Search service unavailable. Please try again.'));
+        callbacks.onSearchError(gettext('Search service unavailable'));
       }
     },
     onSearchError: () => {
-      callbacks.onSearchError(gettext('Search service unavailable. Please try again.'));
+      callbacks.onSearchError(gettext('Search service unavailable'));
     }
   };
 
@@ -80,13 +77,13 @@ const performBaiduSearch = (inputValue, map, callbacks) => {
     const local = new window.BMapGL.LocalSearch(map, options);
     local.search(inputValue);
   } catch (error) {
-    callbacks.onSearchError(gettext('Search service unavailable. Please try again.'));
+    callbacks.onSearchError(gettext('Search service unavailable'));
   }
 };
 
 const performGoogleSearch = (inputValue, map, callbacks) => {
   if (!map || !window.google?.maps?.places?.PlacesService) {
-    callbacks.onSearchError(gettext('Search service unavailable. Please try again.'));
+    callbacks.onSearchError(gettext('Search service unavailable'));
     return;
   }
 
@@ -111,13 +108,13 @@ const performGoogleSearch = (inputValue, map, callbacks) => {
         callbacks.onSearchComplete(searchResults);
       } else {
         const errorMessage = status === 'ZERO_RESULTS'
-          ? gettext('No results found. Try different keywords or check spelling.')
-          : gettext('Search service unavailable. Please try again.');
+          ? gettext('No results found')
+          : gettext('Search service unavailable');
         callbacks.onSearchError(errorMessage);
       }
     });
   } catch (error) {
-    callbacks.onSearchError(gettext('Search service unavailable. Please try again.'));
+    callbacks.onSearchError(gettext('Search service unavailable'));
   }
 };
 
@@ -170,7 +167,7 @@ const SearchComponent = ({
         if (currentMap) {
           performSearch(type, value, currentMap, callbacks);
         } else {
-          callbacks.onSearchError(gettext('Map is not ready. Please wait a moment and try again.'));
+          callbacks.onSearchError(gettext('Map is not ready'));
         }
       }, 500);
       return;
