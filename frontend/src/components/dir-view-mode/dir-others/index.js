@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, isPro } from '../../../utils/constants';
+import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
 import TrashDialog from '../../dialog/trash-dialog';
@@ -11,12 +11,14 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
+import Icon from '../../icon';
+import { useMetadataStatus } from '../../../hooks';
 
 import './index.css';
 
 const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
-
+  const { enableMetadata } = useMetadataStatus();
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   let [activeTab, setActiveTab] = useState(TAB.HISTORY_SETTING);
@@ -58,9 +60,21 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
 
   const enableMonitorRepo = isPro && (permission == 'r' || permission == 'rw');
-
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
+      {enableMetadata && (
+        <div className='dir-others-item text-nowrap' title={gettext('Workflow')}>
+          <a
+            title={gettext('Workflow')}
+            href={`${siteRoot}lib/${repoID}/workflows`}
+            target='_blank'
+            rel="noreferrer"
+          >
+            <Icon symbol="workflow" />
+            <span className="dir-others-item-text text-truncate">{gettext('Workflow')}</span>
+          </a>
+        </div>
+      )}
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
           repo={currentRepoInfo}
@@ -70,19 +84,19 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
       {showSettings && (
         <div className='dir-others-item text-nowrap' title={gettext('Settings')} onClick={toggleSettingsDialog}>
           <span className="sf3-font-set-up sf3-font"></span>
-          <span className="dir-others-item-text">{gettext('Settings')}</span>
+          <span className="dir-others-item-text text-truncate">{gettext('Settings')}</span>
         </div>
       )}
       {userPerm == 'rw' && (
         <div className='dir-others-item text-nowrap' title={gettext('Trash')} onClick={toggleTrashDialog}>
           <span className="sf3-font-trash sf3-font"></span>
-          <span className="dir-others-item-text">{gettext('Trash')}</span>
+          <span className="dir-others-item-text text-truncate">{gettext('Trash')}</span>
         </div>
       )}
       {isDesktop && (
         <div className='dir-others-item text-nowrap' title={gettext('History')} onClick={toggleRepoHistoryDialog}>
           <span className="sf3-font-history sf3-font"></span>
-          <span className="dir-others-item-text">{gettext('History')}</span>
+          <span className="dir-others-item-text text-truncate">{gettext('History')}</span>
         </div>
       )}
       {isDesktop && (isRepoOwner || isDepartmentAdmin) && (
@@ -117,7 +131,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
           toggleDialog={toggleRepoHistoryDialog}
         />
       )}
-    </TreeSection>
+    </TreeSection >
   );
 };
 
