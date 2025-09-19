@@ -40,7 +40,7 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(repo['head_commit_id'])
             assert len(repo['modifier_email']) > 0
             assert len(repo['modifier_name']) > 0
-            assert len(repo['modifier_contact_email']) == 0
+            assert len(repo['modifier_contact_email']) > 0
 
     def test_get_repo_info(self):
         with self.get_tmp_repo() as repo:
