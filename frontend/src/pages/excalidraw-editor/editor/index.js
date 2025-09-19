@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
+import isUrl from 'is-url';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import context from '../context';
@@ -87,7 +88,7 @@ const SimpleEditor = () => {
       } else {
         const fileIds =
           data.scene.elements?.reduce((acc, element) => {
-            if (element.from && element.form === 'seahub') return acc;
+            if (element.dataURL && isUrl(element.dataURL)) return acc;
             if (isInitializedImageElement(element)) {
               return acc.concat(element.fileId);
             }

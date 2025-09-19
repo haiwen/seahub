@@ -90,7 +90,6 @@ export const generateImageElement = (filePath) => {
     update: Date.now(),
     versionNonce: 1,
     status: 'saved',
-    from: 'seahub',
   };
 
   return image;

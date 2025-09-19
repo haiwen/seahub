@@ -4,6 +4,7 @@ import {
   restoreElements,
 } from '@excalidraw/excalidraw';
 import { getSyncableElements } from '.';
+import isUrl from 'is-url';
 import context from '../context';
 
 class ServerScreenCache {
@@ -112,9 +113,9 @@ export const loadFilesFromServer = async (elements) => {
   const erroredFiles = new Map();
   await Promise.all(elements.map(async (element) => {
     try {
-      const { fileId, filename, from } = element;
+      const { fileId, filename, dataURL } = element;
       let imageUrl = getImageUrl(filename);
-      if (from && from === 'seahub') {
+      if (dataURL && isUrl(imageUrl)) {
         imageUrl = element.dataURL;
       }
 
