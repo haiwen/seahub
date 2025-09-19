@@ -236,6 +236,7 @@ def oauth_callback(request):
     # update user's profile
     name = oauth_user_info.get('name', '')
     contact_email = oauth_user_info.get('contact_email', '')
+    login_id = oauth_user_info.get('login_id', '')
 
     profile = Profile.objects.get_profile_by_user(email)
     if not profile:
@@ -247,6 +248,10 @@ def oauth_callback(request):
 
     if contact_email:
         profile.contact_email = contact_email.strip()
+        profile.save()
+
+    if login_id:
+        profile.login_id = login_id.strip()
         profile.save()
 
     if CUSTOM_GET_USER_ROLE:
