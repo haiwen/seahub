@@ -29,7 +29,7 @@ class DirTest(BaseTestCase):
         assert self.folder_name == json_resp[0]['name']
         assert self.file_name == json_resp[1]['name']
         assert len(json_resp[1]['modifier_name']) > 0
-        assert len(json_resp[1]['modifier_contact_email']) > 0
+        assert len(json_resp[1]['modifier_contact_email']) == 0
 
     def test_can_create(self):
         resp = self.client.post(self.endpoint + '?p=/new_dir', {
