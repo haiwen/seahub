@@ -37,3 +37,4 @@ gettext('Change view type');
 gettext('User {user_link} has added you to {group_link}');
 gettext('No user shares');
 gettext('No group shares');
+gettext('Face recognition is done for library {libraryName}.');
