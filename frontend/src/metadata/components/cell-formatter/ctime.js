@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
 
-const CTimeFormatter = ({ value, className, children: emptyFormatter }) => {
+const CTimeFormatter = ({ value, className, children: emptyFormatter, format }) => {
   if (!value) return emptyFormatter || null;
 
-  const valueFormat = dayjs(value).format('YYYY-MM-DD HH:mm:ss');
+  const valueFormat = format == 'relativeTime'
+    ? dayjs(value).fromNow()
+    : dayjs(value).format('YYYY-MM-DD HH:mm:ss');
   return (
     <div
       className={classnames('sf-metadata-ui cell-formatter-container ctime-formatter', className)}

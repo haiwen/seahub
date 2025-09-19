@@ -36,6 +36,10 @@ const ViewsMoreOperations = ({ menuProps }) => {
         addView(VIEW_TYPE.MAP);
         return;
       }
+      case KEY_ADD_VIEW_MAP.ADD_CARD: {
+        addView(VIEW_TYPE.CARD);
+        return;
+      }
       case KEY_ADD_VIEW_MAP.ADD_STATISTICS: {
         addView(VIEW_TYPE.STATISTICS);
         return;

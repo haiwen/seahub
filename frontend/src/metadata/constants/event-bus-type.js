@@ -91,6 +91,11 @@ export const EVENT_BUS_TYPE = {
   SET_PHOTO_AS_COVER: 'set_photo_as_cover',
   ADD_PHOTO_TO_GROUPS: 'add_photo_to_groups',
 
+  // card
+  TOGGLE_CARD_SETTINGS: 'toggle_card_settings',
+  OPEN_CARD_SETTINGS: 'open_card_settings',
+  CLOSE_CARD_SETTINGS: 'close_card_settings',
+
   // kanban
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
   OPEN_KANBAN_SETTINGS: 'open_kanban_settings',

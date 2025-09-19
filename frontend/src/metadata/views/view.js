@@ -6,6 +6,7 @@ import Gallery from './gallery';
 import FaceRecognition from './face-recognition';
 import Kanban from './kanban';
 import Map from './map';
+import Card from './card';
 import Statistics from './statistics';
 import { useMetadataView } from '../hooks/metadata-view';
 import { VIEW_TYPE } from '../constants';
@@ -32,6 +33,9 @@ const View = () => {
       }
       case VIEW_TYPE.MAP: {
         return <Map />;
+      }
+      case VIEW_TYPE.CARD: {
+        return <Card />;
       }
       case VIEW_TYPE.STATISTICS: {
         return <Statistics />;

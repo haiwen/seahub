@@ -5,6 +5,7 @@ import TableViewToolbar from './table-view-toolbar';
 import GalleryViewToolbar from './gallery-view-toolbar';
 import FaceRecognitionViewToolbar from './face-recognition';
 import KanbanViewToolBar from './kanban-view-toolbar';
+import CardViewToolBar from './card-view-toolbar';
 import MapViewToolBar from './map-view-toolbar';
 
 import './index.css';
@@ -101,6 +102,18 @@ const ViewToolBar = ({ viewId, isCustomPermission, onToggleDetail, onCloseDetail
       )}
       {viewType === VIEW_TYPE.KANBAN && (
         <KanbanViewToolBar
+          isCustomPermission={isCustomPermission}
+          readOnly={readOnly}
+          view={view}
+          collaborators={collaborators}
+          modifyFilters={modifyFilters}
+          modifySorts={modifySorts}
+          onToggleDetail={onToggleDetail}
+          onCloseDetail={onCloseDetail}
+        />
+      )}
+      {viewType === VIEW_TYPE.CARD && (
+        <CardViewToolBar
           isCustomPermission={isCustomPermission}
           readOnly={readOnly}
           view={view}
