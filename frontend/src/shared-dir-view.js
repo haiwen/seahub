@@ -876,14 +876,12 @@ class SharedDirView extends React.Component {
                     )
                   }
                 </div>
-                <div className="cur-view-path-right">
-                  {isDesktop && (
-                    <>
-                      <ViewModes currentViewMode={mode} switchViewMode={this.switchMode} />
-                      <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
-                    </>
-                  )}
-                </div>
+                {isDesktop && (
+                  <div className="cur-view-path-right ml-4">
+                    <ViewModes currentViewMode={mode} switchViewMode={this.switchMode} />
+                    <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+                  </div>
+                )}
               </div>
               {!noQuota && canUpload && (
                 <FileUploader
