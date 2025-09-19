@@ -24,7 +24,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import is_org_user
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, to_python_boolean, get_user_common_info
+from seahub.api2.utils import api_error, to_python_boolean, get_user_common_info, get_user_contact_email
 from seahub.api2.models import TokenV2
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.views import gen_org_url_prefix
@@ -1178,7 +1178,7 @@ class AdminSearchUser(APIView):
             info['avatar_url'] = url
             info['email'] = user.email
             info['name'] = email2nickname(user.email)
-            info['contact_email'] = email2contact_email(user.email)
+            info['contact_email'] = get_user_contact_email(user.email)
 
             info['is_staff'] = user.is_staff
             info['is_active'] = user.is_active

@@ -701,12 +701,12 @@ class User(object):
                 user_language = Profile.objects.get_user_language(u.email)
                 translation.activate(user_language)
 
-                send_html_email_with_dj_template(email2contact_email(u.email, profile_only=False),
+                send_html_email_with_dj_template(email2contact_email(u.email),
                                                  subject=_('Account %(account)s froze on %(site)s.') % {
-                                                     "account": email2contact_email(self.email, profile_only=False),
+                                                     "account": email2contact_email(self.email),
                                                      "site": get_site_name()},
                                                  dj_template='sysadmin/user_freeze_email.html',
-                                                 context={'user': email2contact_email(self.email, profile_only=False)})
+                                                 context={'user': email2contact_email(self.email)})
 
                 # restore current language
                 translation.activate(cur_language)
@@ -732,12 +732,12 @@ class User(object):
                 user_language = Profile.objects.get_user_language(u.email)
                 translation.activate(user_language)
 
-                send_html_email_with_dj_template(email2contact_email(u.email, profile_only=False),
+                send_html_email_with_dj_template(email2contact_email(u.email),
                                                  subject=_('Account %(account)s froze on %(site)s.') % {
-                                                     "account": email2contact_email(self.email, profile_only=False),
+                                                     "account": email2contact_email(self.email),
                                                      "site": get_site_name()},
                                                  dj_template='sysadmin/user_freeze_email.html',
-                                                 context={'user': email2contact_email(self.email, profile_only=False)})
+                                                 context={'user': email2contact_email(self.email)})
 
                 # restore current language
                 translation.activate(cur_language)

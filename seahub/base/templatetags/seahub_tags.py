@@ -383,14 +383,14 @@ def email2nickname(value):
     if profile is not None and profile.nickname and profile.nickname.strip():
         nickname = profile.nickname.strip()
     else:
-        contact_email = email2contact_email(value, profile_only=False)
+        contact_email = email2contact_email(value)
         nickname = contact_email.split('@')[0]
 
     cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
 
 @register.filter(name='email2contact_email')
-def email2contact_email(value, profile_only=True):
+def email2contact_email(value):
     """
     Return contact_email if it exists and it's not an empty string,
     otherwise return username(login email).
@@ -403,7 +403,7 @@ def email2contact_email(value, profile_only=True):
     if contact_email and contact_email.strip():
         return contact_email
 
-    contact_email = Profile.objects.get_contact_email_by_user(value, profile_only=profile_only)
+    contact_email = Profile.objects.get_contact_email_by_user(value)
     cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
     return contact_email
 

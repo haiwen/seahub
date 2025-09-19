@@ -30,7 +30,9 @@ from seahub.group.utils import is_group_member
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.utils import get_user_repos
+from seahub.profile.models import Profile
+from seahub.profile.settings import CONTACT_CACHE_PREFIX, CONTACT_CACHE_TIMEOUT
+from seahub.utils import get_user_repos, normalize_cache_key
 from seahub.utils.mail import send_html_email_with_dj_template
 from django.utils.translation import gettext as _
 import seahub.settings as settings
@@ -397,3 +399,18 @@ def send_comment_update_event(file_uuid):
             logger.error(f'Send comment update event failed: {resp.content}')
     except Exception as e:
         logger.error(f'Send comment update event error. ERROR: {e}')
+        
+        
+def get_user_contact_email(username):
+    if not username:
+        return ''
+
+    key = normalize_cache_key(username, CONTACT_CACHE_PREFIX)
+    contact_email = cache.get(key)
+    if contact_email and contact_email.strip():
+        return contact_email
+    
+    profile = Profile.objects.get_profile_by_user(username)
+    contact_email = profile.contact_email if profile and profile.contact_email else ''
+    cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
+    return contact_email

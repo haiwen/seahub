@@ -90,15 +90,12 @@ class ProfileManager(models.Manager):
         else:
             return None
 
-    def get_contact_email_by_user(self, username, profile_only=False):
+    def get_contact_email_by_user(self, username):
         """Get a user's contact email, use username(login email) if not found.
         """
         p = self.get_profile_by_user(username)
         if p and p.contact_email:
             return p.contact_email
-
-        if profile_only:
-            return ''
         
         return username
 
