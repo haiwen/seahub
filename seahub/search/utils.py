@@ -171,7 +171,7 @@ def search_files(repos_map, search_path, keyword, obj_desc, start, size, org_id=
                 continue
             else:
                 f['repo_id'] = repo.repo_id
-                f['fullpath'] = f['fullpath'].split(repo.origin_path)[-1]
+                f['fullpath'] = f['fullpath'].removeprefix(repo.origin_path)
 
         if not repo.owner:
             if org_id:
