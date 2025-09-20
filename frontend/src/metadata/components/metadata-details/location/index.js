@@ -41,7 +41,6 @@ class Location extends React.Component {
       isLoading: false,
       isEditorShown: false,
       isFullScreen: false,
-      isReadyToEraseLocation: false,
     };
   }
 
@@ -62,7 +61,6 @@ class Location extends React.Component {
       this.setState({
         latLng: this.props.position,
         address: this.props.record?._location_translated?.address || '',
-        isReadyToEraseLocation: false,
       });
     }
 
@@ -191,13 +189,6 @@ class Location extends React.Component {
 
   closeEditor = () => {
     this.setState({ isEditorShown: false });
-    if (this.state.isReadyToEraseLocation) {
-      this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, null);
-      this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, null);
-      this.setState({ latLng: null, address: '', isReadyToEraseLocation: false });
-      this.mapType === MAP_TYPE.B_MAP && this.map.destroy();
-      this.map = null;
-    }
   };
 
   onSubmit = (value) => {
@@ -216,8 +207,19 @@ class Location extends React.Component {
     });
   };
 
-  onReadyToEraseLocation = () => {
-    this.setState({ isReadyToEraseLocation: true });
+  onDeleteLocation = () => {
+    this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, null);
+    this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, null);
+    this.setState({
+      latLng: null,
+      address: '',
+      isEditorShown: false,
+      isFullScreen: false
+    });
+    if (this.map) {
+      this.mapType === MAP_TYPE.B_MAP && this.map.destroy();
+      this.map = null;
+    }
   };
 
   render() {
@@ -273,7 +275,7 @@ class Location extends React.Component {
                   locationTranslated={this.props.record?._location_translated}
                   onSubmit={this.onSubmit}
                   onFullScreen={this.onFullScreen}
-                  onReadyToEraseLocation={this.onReadyToEraseLocation}
+                  onDeleteLocation={this.onDeleteLocation}
                 />
               </Popover>
             </ClickOutside>
@@ -290,7 +292,7 @@ class Location extends React.Component {
                 isFullScreen={isFullScreen}
                 onSubmit={this.onSubmit}
                 onFullScreen={this.onFullScreen}
-                onReadyToEraseLocation={this.onReadyToEraseLocation}
+                onDeleteLocation={this.onDeleteLocation}
               />
             </Modal>
           )
