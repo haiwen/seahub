@@ -1478,7 +1478,7 @@ a.table-sort-op:hover {
   width: calc(100% - 40px);
   max-width: 950px;
   margin: 0 auto;
-  background: #fff;
+  background: var(--bs-body-bg);
   border: 1px solid #ccc;
   box-shadow: 0 0 6px #ccc;
   text-align: center;
