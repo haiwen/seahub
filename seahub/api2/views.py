@@ -320,7 +320,7 @@ class AccountInfo(APIView):
             quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
             is_org_staff = request.user.org.is_staff
             info['is_org_staff'] = is_org_staff
-                
+
         else:
             quota_total = seafile_api.get_user_quota(email)
             quota_usage = seafile_api.get_user_self_usage(email)
@@ -744,7 +744,7 @@ class Search(APIView):
                         continue
                     else:
                         f['repo_id'] = real_repo_id
-                        f['fullpath'] = f['fullpath'].split(origin_path)[-1]
+                        f['fullpath'] = f['fullpath'].removeprefix(origin_path)
 
                 f['repo_owner_email'] = owner_map.get(repo_id, '')
 
