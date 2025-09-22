@@ -201,8 +201,8 @@ const MultiSelectionDetails = ({
         {renderOverlappingThumbnails()}
 
         <div className="detail-content">
-          <p className="text-center">{gettext(`${selectedDirents.length} items have been selected`)}</p>
 
+          <p className="text-center">{gettext('{xxx} items have been selected').replace('{xxx}', selectedDirents.length)}</p>
           {isLoading && (
             <div className="text-center py-4">
               <Loading />
