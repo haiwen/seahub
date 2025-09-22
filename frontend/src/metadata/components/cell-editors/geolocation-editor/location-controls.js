@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../../components/icon';
-import IconBtn from '../../../../components/icon-btn';
 
 const LocationControls = ({
   hasLocationChanged,
@@ -19,12 +18,9 @@ const LocationControls = ({
         <span className="ml-2">{gettext('Address')}</span>
       </div>
       <div className="header-actions">
-        <IconBtn
-          className="full-screen"
-          symbol="full-screen"
-          size={24}
-          onClick={onFullScreen}
-        />
+        <span title={gettext('Full screen')} aria-label={gettext('Full screen')} onClick={onFullScreen}>
+          <i className="cur-view-path-btn iconfont icon-fullscreen" />
+        </span>
         {position && (
           <span
             className="cur-view-path-btn sf3-font sf3-font-delete1"

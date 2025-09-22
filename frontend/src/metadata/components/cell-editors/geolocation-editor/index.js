@@ -151,8 +151,12 @@ const GeolocationEditor = ({
   const toggleFullScreen = useCallback((e) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
-    onFullScreen();
-  }, [onFullScreen]);
+    const locationData = {
+      position: currentPosition,
+      location_translated: currentLocationTranslated.address,
+    };
+    onFullScreen(locationData);
+  }, [currentLocationTranslated, currentPosition, onFullScreen]);
 
   return (
     <div

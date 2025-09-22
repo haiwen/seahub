@@ -67,7 +67,8 @@
   align-items: center;
 }
 
-.sf-geolocation-editor-container .editor-header .cur-view-path-btn.sf3-font {
+.sf-geolocation-editor-container .editor-header .cur-view-path-btn.sf3-font,
+.sf-geolocation-editor-container .editor-header .cur-view-path-btn.iconfont {
   font-size: 16px;
   color: var(--bs-icon-color);
 }
@@ -82,9 +83,14 @@
   display: flex;
   align-items: center;
   padding: 6px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   border-radius: 3px;
+}
+
+.sf-geolocation-editor-container .editor-header .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .sf-geolocation-editor-container .editor-header .btn:disabled {
