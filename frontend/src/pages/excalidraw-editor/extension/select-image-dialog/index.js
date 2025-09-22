@@ -7,7 +7,7 @@ import { gettext } from '../../../../utils/constants';
 
 import './index.css';
 
-const { serviceURL, siteRoot } = window.app.config;
+const { serviceURL } = window.app.config;
 const { repoID } = window.app.pageOptions;
 
 const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
@@ -23,7 +23,7 @@ const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
   const onSubmit = useCallback(() => {
     if (!currentSelectedFile) return;
     const path = currentSelectedFile.path;
-    const filePath = `${serviceURL}${siteRoot}repo/${repoID}/raw${path}`;
+    const filePath = `${serviceURL}/repo/${repoID}/raw${path}`;
     insertImage(filePath);
 
     closeDialog();
