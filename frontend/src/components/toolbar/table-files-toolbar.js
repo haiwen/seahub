@@ -182,7 +182,7 @@ const TableFilesToolbar = ({ repoID }) => {
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
 
-      {!isMultiple && !readOnly && (
+      {!readOnly && (!isMultiple || areRecordsInSameFolder) && (
         <>
           <span
             className="cur-view-path-btn"

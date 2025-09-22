@@ -23,7 +23,7 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
   }
 
   if (type === VIEW_TYPE.FACE_RECOGNITION) {
-    return <FaceRecognitionFilesToolbar />;
+    return <FaceRecognitionFilesToolbar repoID={repoID} />;
   }
 
   if (type === VIEW_TYPE.TABLE) {

@@ -83,7 +83,6 @@ const KanbanFilesToolbar = ({ repoID }) => {
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
-      // Basic file operations
       case TextTranslation.MOVE.key:
       case TextTranslation.MOVE_FILE.key:
       case TextTranslation.MOVE_FOLDER.key: {
@@ -98,8 +97,6 @@ const KanbanFilesToolbar = ({ repoID }) => {
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, selectedRecordIds);
         break;
       }
-
-      // AI operations
       case TextTranslation.EXTRACT_FILE_DETAIL.key:
       case TextTranslation.EXTRACT_FILE_DETAILS.key: {
         const imageOrVideoRecords = records.filter(record => {
@@ -135,8 +132,6 @@ const KanbanFilesToolbar = ({ repoID }) => {
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.EXTRACT_TEXT, records[0], menuRef.current.dropdownRef.current);
         break;
       }
-
-      // Navigation operations
       case TextTranslation.OPEN_FILE_IN_NEW_TAB.key:
       case TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key: {
         openInNewTab(repoID, records[0]);
@@ -146,8 +141,6 @@ const KanbanFilesToolbar = ({ repoID }) => {
         openParentFolder(records[0]);
         break;
       }
-
-      // File management operations
       case TextTranslation.RENAME.key:
       case TextTranslation.RENAME_FILE.key:
       case TextTranslation.RENAME_FOLDER.key: {

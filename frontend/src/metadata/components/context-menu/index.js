@@ -10,7 +10,6 @@ const ContextMenu = ({
   options,
   boundaryCoordinates = { top: 0, right: window.innerWidth, bottom: window.innerHeight, left: 0 },
   onOptionClick,
-  ignoredTriggerElements,
   allowedTriggerElements
 }) => {
   const menuRef = useRef(null);
@@ -106,18 +105,9 @@ const ContextMenu = ({
       event.preventDefault();
       if (menuRef.current && menuRef.current.contains(event.target)) return;
 
-      // If allowedTriggerElements is specified, only show menu if clicked on allowed elements
       if (allowedTriggerElements && allowedTriggerElements.length > 0) {
         const isAllowedElement = allowedTriggerElements.some(target => event.target.closest(target));
         if (!isAllowedElement) {
-          return;
-        }
-      }
-
-      // If ignoredTriggerElements is specified, don't show menu if clicked on ignored elements
-      if (ignoredTriggerElements && ignoredTriggerElements.length > 0) {
-        const isIgnoredElement = ignoredTriggerElements.some(target => event.target.closest(target));
-        if (isIgnoredElement) {
           return;
         }
       }
@@ -134,7 +124,7 @@ const ContextMenu = ({
       const metadataWrapper = document.querySelector('#sf-metadata-wrapper');
       metadataWrapper && metadataWrapper.removeEventListener('contextmenu', handleShow);
     };
-  }, [getMenuPosition, ignoredTriggerElements, allowedTriggerElements]);
+  }, [getMenuPosition, allowedTriggerElements]);
 
   useEffect(() => {
     if (visible) {
@@ -225,7 +215,6 @@ ContextMenu.propTypes = {
     PropTypes.string,
   ])).isRequired,
   boundaryCoordinates: PropTypes.object,
-  ignoredTriggerElements: PropTypes.array,
   allowedTriggerElements: PropTypes.array,
   onOptionClick: PropTypes.func.isRequired,
 };

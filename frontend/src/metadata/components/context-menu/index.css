@@ -4,38 +4,3 @@
   box-shadow: 0 0 5px #ccc;
   position: fixed;
 }
-
-.sf-metadata-contextmenu .disabled-menu-item {
-  opacity: 0.5;
-  cursor: not-allowed !important;
-  color: #999 !important;
-}
-
-.sf-metadata-contextmenu .disabled-menu-item:hover {
-  background-color: transparent !important;
-  color: #999 !important;
-}
-
-.sf-metadata-contextmenu button.disabled-menu-item {
-  pointer-events: none;
-}
-
-.sf-metadata-contextmenu button.disabled-menu-item:hover {
-  background-color: transparent !important;
-  color: inherit !important;
-}
-
-.sf-metadata-tooltip {
-  z-index: 10000;
-  max-width: 300px;
-  word-wrap: break-word;
-}
-
-.sf-metadata-tooltip .tooltip-inner {
-  background-color: #333;
-  color: #fff;
-  border-radius: 4px;
-  padding: 6px 8px;
-  font-size: 12px;
-  line-height: 1.4;
-}

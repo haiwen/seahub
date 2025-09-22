@@ -1,14 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_OPERATION_KEYS, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { useFileOperations } from '../../hooks/file-operations';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import { getColumnByKey } from '../sf-table/utils/column';
 import { useMetadataStatus } from '../../hooks';
+import TextTranslation from '../../utils/text-translation';
+import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
+import { checkIsDir } from '../../metadata/utils/row';
+import { getFileNameFromRecord } from '../../metadata/utils/cell';
+import { Utils } from '../../utils/utils';
 
-const FaceRecognitionFilesToolbar = () => {
+const FaceRecognitionFilesToolbar = (repoID) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const menuRef = useRef(null);
   const metadataRef = useRef([]);
@@ -87,21 +92,64 @@ const FaceRecognitionFilesToolbar = () => {
     );
   }, [selectedRecords, enableTags, readOnly, faceRecognitionPermission]);
 
-  const onMenuItemClick = useCallback((operation) => {
-    switch (operation) {
-      case GALLERY_OPERATION_KEYS.REMOVE_PHOTO_FROM_CURRENT_SET:
+  const onMenuItemClick = useCallback((option) => {
+    switch (option.key) {
+      case TextTranslation.OPEN_FILE_IN_NEW_TAB.key:
+      case TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key: {
+        openInNewTab(repoID, selectedRecords[0]);
+        break;
+      }
+      case TextTranslation.OPEN_PARENT_FOLDER.key: {
+        openParentFolder(selectedRecords[0]);
+        break;
+      }
+      case TextTranslation.EXTRACT_FILE_DETAIL.key:
+      case TextTranslation.EXTRACT_FILE_DETAILS.key: {
+        const imageOrVideoRecords = selectedRecords.filter(record => {
+          const isFolder = checkIsDir(record);
+          if (isFolder || readOnly) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+        });
+
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, imageOrVideoRecords);
+        break;
+      }
+      case TextTranslation.DETECT_FACES.key: {
+        const images = selectedRecords.filter(record => {
+          const isFolder = checkIsDir(record);
+          if (isFolder || readOnly) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName);
+        });
+        eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, images);
+        break;
+      }
+      case TextTranslation.GENERATE_DESCRIPTION.key: {
+        eventBus.dispatch(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, selectedRecords[0]);
+        break;
+      }
+      case TextTranslation.GENERATE_TAGS.key: {
+        eventBus.dispatch(EVENT_BUS_TYPE.GENERATE_FILE_TAGS, selectedRecords[0]);
+        break;
+      }
+      case TextTranslation.EXTRACT_TEXT.key: {
+        eventBus.dispatch(EVENT_BUS_TYPE.EXTRACT_TEXT, selectedRecords[0], menuRef.current.dropdownRef.current);
+        break;
+      }
+      case TextTranslation.REMOVE_FROM_GROUP:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.REMOVE_PHOTOS_FROM_CURRENT_SET, selectedRecords);
         break;
-      case GALLERY_OPERATION_KEYS.ADD_PHOTO_TO_GROUPS:
+      case TextTranslation.ADD_TO_GROUPS:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.ADD_PHOTO_TO_GROUPS);
         break;
-      case GALLERY_OPERATION_KEYS.SET_PHOTO_AS_COVER:
+      case TextTranslation.SET_AS_COVER:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.SET_PHOTO_AS_COVER, selectedRecords[0]);
         break;
       default:
         return;
     }
-  }, [eventBus, selectedRecords]);
+  }, [repoID, eventBus, readOnly, selectedRecords]);
 
   const length = selectedRecordIds.length;
   return (
