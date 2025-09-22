@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { gettext } from '../../utils/constants';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import TextTranslation from '../../utils/text-translation';
@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { checkIsDir } from '../../metadata/utils/row';
 import { useMetadataStatus } from '../../hooks';
+import { getColumnByKey } from '../../metadata/utils/column';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -17,14 +18,18 @@ const GalleryFilesToolbar = () => {
   const metadataRef = useRef([]);
   const menuRef = useRef(null);
 
-  const { enableFaceRecognition } = useMetadataStatus();
-  const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
-  const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
-  const checkCanModifyRow = useCallback((row) => window.sfMetadataContext?.canModifyRow?.(row) ?? true, []);
-  const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
-  const canAddPhotoToPeople = window.sfMetadataContext.canAddPhotoToPeople();
-  const canSetPeoplePhoto = window.sfMetadataContext.canSetPeoplePhoto();
   const repoID = window.sfMetadataContext?.getSetting('repoID') || '';
+  const { enableFaceRecognition, enableTags } = useMetadataStatus();
+  const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
+
+  const readOnly = !window.sfMetadataContext.canModify();
+  const faceRecognitionPermission = useMemo(() => {
+    return {
+      canAddPhotoToPeople: window.sfMetadataContext.canAddPhotoToPeople(),
+      canRemovePhotoFromPeople: window.sfMetadataContext.canRemovePhotoFromPeople(),
+      canSetPeoplePhoto: window.sfMetadataContext.canSetPeoplePhoto(),
+    };
+  }, []);
 
   useEffect(() => {
     const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata, isSomeone) => {
@@ -46,23 +51,21 @@ const GalleryFilesToolbar = () => {
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
-  const isReadonly = false;
-
   const toolbarMenuOptions = useMemo(() => {
     if (!records.length) return [];
-
+    const metadataStatus = {
+      enableFaceRecognition,
+      enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
     return buildGalleryToolbarMenuOptions(
       records,
-      metadataRef.current.columns || [],
-      enableFaceRecognition,
-      checkCanModifyRow,
-      canRemovePhotoFromPeople,
-      canAddPhotoToPeople,
-      canSetPeoplePhoto,
-      isReadonly,
-      isSomeone
+      readOnly,
+      metadataStatus,
+      isSomeone,
+      faceRecognitionPermission
     );
-  }, [records, enableFaceRecognition, checkCanModifyRow, canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto, isReadonly, isSomeone]);
+  }, [records, readOnly, enableFaceRecognition, enableTags, isSomeone, faceRecognitionPermission]);
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
@@ -79,9 +82,7 @@ const GalleryFilesToolbar = () => {
       case TextTranslation.EXTRACT_FILE_DETAILS.key: {
         const imageOrVideoRecords = records.filter(record => {
           const isFolder = checkIsDir(record);
-          if (isFolder) return false;
-          const canModifyRow = checkCanModifyRow(record);
-          if (!canModifyRow) return false;
+          if (isFolder || readOnly) return false;
           const fileName = getFileNameFromRecord(record);
           return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
         });
@@ -92,9 +93,7 @@ const GalleryFilesToolbar = () => {
       case TextTranslation.DETECT_FACES.key: {
         const images = records.filter(record => {
           const isFolder = checkIsDir(record);
-          if (isFolder) return false;
-          const canModifyRow = checkCanModifyRow(record);
-          if (!canModifyRow) return false;
+          if (isFolder || readOnly) return false;
           const fileName = getFileNameFromRecord(record);
           return Utils.imageCheck(fileName);
         });
@@ -116,7 +115,7 @@ const GalleryFilesToolbar = () => {
       default:
         break;
     }
-  }, [repoID, records, eventBus, checkCanModifyRow]);
+  }, [repoID, records, eventBus, readOnly]);
 
   // Individual button handlers
   const onMoveClick = useCallback(() => {
@@ -139,11 +138,6 @@ const GalleryFilesToolbar = () => {
     });
   }, [selectedRecordIds, eventBus]);
 
-  const isMultipleImages = records.length > 1;
-  const canMove = useMemo(() => records.length > 0 && !isMultipleImages && records.every(record => checkCanModifyRow?.(record) !== false), [records, checkCanModifyRow, isMultipleImages]);
-  const canCopy = useMemo(() => records.length > 0 && !isMultipleImages, [records, isMultipleImages]);
-  const canDownload = useMemo(() => records.length > 0, [records]);
-  const canDelete = useMemo(() => records.length > 0 && checkCanDeleteRow, [records, checkCanDeleteRow]);
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
@@ -159,27 +153,20 @@ const GalleryFilesToolbar = () => {
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
 
-      {!isMultipleImages && (
+      {length === 1 && !readOnly && (
         <>
-          {canMove && (
-            <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')}>
-              <span className="sf3-font-move sf3-font" aria-label={gettext('Move')}></span>
-            </span>
-          )}
-          {canCopy && (
-            <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')}>
-              <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')}></span>
-            </span>
-          )}
+          <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')}>
+            <span className="sf3-font-move sf3-font" aria-label={gettext('Move')}></span>
+          </span>
+          <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')}>
+            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')}></span>
+          </span>
         </>
       )}
-
-      {canDownload && (
-        <span className="cur-view-path-btn" onClick={onDownloadClick} title={gettext('Download')}>
-          <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')}></span>
-        </span>
-      )}
-      {canDelete && (
+      <span className="cur-view-path-btn" onClick={onDownloadClick} title={gettext('Download')}>
+        <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')}></span>
+      </span>
+      {!readOnly && (
         <span className="cur-view-path-btn" onClick={onDeleteClick} title={gettext('Delete')}>
           <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')}></span>
         </span>

@@ -9,7 +9,8 @@ import { useMetadataView } from '../../../hooks/metadata-view';
 import TextTranslation from '../../../../utils/text-translation';
 import { getRowsByIds } from '../../../../components/sf-table/utils/table';
 import { openInNewTab, openParentFolder } from '../../../utils/file';
-import { EVENT_BUS_TYPE } from '../../../constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { getColumnByKey } from '../../../utils/column';
 
 const GalleryContextMenu = ({
   selectedImages,
@@ -21,7 +22,7 @@ const GalleryContextMenu = ({
   onSetPeoplePhoto
 }) => {
   const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
-  const { enableFaceRecognition } = useMetadataStatus();
+  const { enableFaceRecognition, enableTags } = useMetadataStatus();
   const {
     metadata,
     repoID,
@@ -32,32 +33,37 @@ const GalleryContextMenu = ({
     generateFileTags
   } = useMetadataView();
 
-  const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
-  const canModifyRow = window.sfMetadataContext.canModifyRow();
-  const canRemovePhotoFromPeople = window.sfMetadataContext.canRemovePhotoFromPeople();
-  const canAddPhotoToPeople = window.sfMetadataContext.canAddPhotoToPeople();
-  const canSetPeoplePhoto = window.sfMetadataContext.canSetPeoplePhoto();
+  const readOnly = useMemo(() => !window.sfMetadataContext.canModify(), []);
+
+  const faceRecognitionPermission = useMemo(() => {
+    return {
+      canAddPhotoToPeople: window.sfMetadataContext.canAddPhotoToPeople(),
+      canRemovePhotoFromPeople: window.sfMetadataContext.canRemovePhotoFromPeople(),
+      canSetPeoplePhoto: window.sfMetadataContext.canSetPeoplePhoto(),
+    };
+  }, []);
 
   const records = useMemo(() => {
     const ids = selectedImages.map(image => image.id);
     return getRowsByIds(metadata, ids);
   }, [metadata, selectedImages]);
+
   const options = useMemo(() => {
     const selectedRecordIds = selectedImages.map(image => image.id);
     const records = getRowsByIds(metadata, selectedRecordIds);
+    const metadataStatus = {
+      enableFaceRecognition,
+      enableGenerateDescription: getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
     return buildGalleryMenuOptions(
       records,
-      metadata?.columns || [],
-      enableFaceRecognition,
-      canModifyRow,
-      checkCanDeleteRow,
-      canRemovePhotoFromPeople,
-      canAddPhotoToPeople,
-      canSetPeoplePhoto,
-      false, // isReadonly
-      isSomeone
+      readOnly,
+      metadataStatus,
+      isSomeone,
+      faceRecognitionPermission
     );
-  }, [selectedImages, metadata, enableFaceRecognition, canModifyRow, checkCanDeleteRow, canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto, isSomeone]);
+  }, [selectedImages, metadata, enableFaceRecognition, enableTags, readOnly, isSomeone, faceRecognitionPermission]);
 
   const handleDuplicate = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
     const selectedImage = selectedImages[0];

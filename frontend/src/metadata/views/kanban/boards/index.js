@@ -30,7 +30,7 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
 
-  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail } = useMetadataView();
+  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail, updateSelectedRecordIds } = useMetadataView();
   const { collaborators } = useCollaborators();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -215,16 +215,18 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
   const onSelectCard = useCallback((record) => {
     const recordId = getRecordIdFromRecord(record);
     if (selectedCard === recordId) return;
+    updateSelectedRecordIds([recordId]);
     handleUpdateCurrentDirent(record);
     onCloseSettings();
     showDirentDetail();
-  }, [selectedCard, onCloseSettings, showDirentDetail, handleUpdateCurrentDirent]);
+  }, [selectedCard, onCloseSettings, showDirentDetail, handleUpdateCurrentDirent, updateSelectedRecordIds]);
 
   const handleClickOutside = useCallback((event) => {
     if (isDragging) return;
     setSelectedCard(null);
     updateCurrentDirent();
-  }, [isDragging, updateCurrentDirent]);
+    updateSelectedRecordIds([]);
+  }, [isDragging, updateCurrentDirent, updateSelectedRecordIds]);
 
   const updateDragging = useCallback((isDragging) => {
     setDragging(isDragging);
@@ -235,7 +237,8 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
     if (selectedCard === recordId) return;
     const record = getRowById(metadata, recordId);
     handleUpdateCurrentDirent(record);
-  }, [metadata, selectedCard, handleUpdateCurrentDirent]);
+    updateSelectedRecordIds([recordId]);
+  }, [metadata, selectedCard, handleUpdateCurrentDirent, updateSelectedRecordIds]);
 
   const onDeleteRecords = useCallback((recordIds) => {
     deleteRecords(recordIds, {

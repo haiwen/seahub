@@ -1,20 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
-import { EVENT_BUS_TYPE, GALLERY_OPERATION_KEYS } from '../../metadata/constants';
+import { EVENT_BUS_TYPE, GALLERY_OPERATION_KEYS, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { useFileOperations } from '../../hooks/file-operations';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
+import { getColumnByKey } from '../sf-table/utils/column';
+import { useMetadataStatus } from '../../hooks';
 
 const FaceRecognitionFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const menuRef = useRef(null);
   const metadataRef = useRef([]);
+
+  const { enableTags } = useMetadataStatus();
   const { handleDownload: handleDownloadAPI } = useFileOperations();
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
 
-  const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
-  const canModifyRow = window.sfMetadataContext.canModifyRow();
+  const readOnly = !window.sfMetadataContext.canModify();
   const faceRecognitionPermission = useMemo(() => {
     return {
       canAddPhotoToPeople: window.sfMetadataContext.canAddPhotoToPeople(),
@@ -43,6 +46,14 @@ const FaceRecognitionFilesToolbar = () => {
     eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   }, [eventBus]);
 
+  const onMoveClick = useCallback(() => {
+    eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, selectedRecords);
+  }, [selectedRecords, eventBus]);
+
+  const onCopyClick = useCallback(() => {
+    eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, selectedRecords);
+  }, [selectedRecords, eventBus]);
+
   const handleDownload = useCallback(() => {
     const list = selectedRecords.map(record => {
       const { parentDir, name: fileName } = record || {};
@@ -60,18 +71,21 @@ const FaceRecognitionFilesToolbar = () => {
     });
   }, [eventBus, selectedRecords]);
 
-  // Build toolbar dropdown menu options (like gallery-files-toolbar)
   const toolbarMenuOptions = useMemo(() => {
     if (!selectedRecords.length) return [];
+    const metadataStatus = {
+      enableFaceRecognition: true,
+      enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
     return buildGalleryToolbarMenuOptions(
       selectedRecords,
-      metadataRef.current.columns || [],
+      readOnly,
+      metadataStatus,
       true,
-      canModifyRow,
-      false,
       faceRecognitionPermission
     );
-  }, [selectedRecords, canModifyRow, faceRecognitionPermission]);
+  }, [selectedRecords, enableTags, readOnly, faceRecognitionPermission]);
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
@@ -96,10 +110,20 @@ const FaceRecognitionFilesToolbar = () => {
         <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
+      {!readOnly && length === 1 && (
+        <>
+          <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')}>
+            <span className="sf3-font-move sf3-font" aria-label={gettext('Move')}></span>
+          </span>
+          <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')}>
+            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')}></span>
+          </span>
+        </>
+      )}
       <span className="cur-view-path-btn" onClick={handleDownload}>
         <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
       </span>
-      {checkCanDeleteRow &&
+      {!readOnly &&
         <span className="cur-view-path-btn" onClick={deleteRecords}>
           <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
         </span>

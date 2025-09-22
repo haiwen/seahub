@@ -9,11 +9,11 @@ import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
-import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder';
+import { buildKanbanToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 
-const TableFilesToolbar = ({ repoID }) => {
+const KanbanFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const [metadata, setMetadata] = useState({});
   const metadataRef = useRef([]);
@@ -41,13 +41,13 @@ const TableFilesToolbar = ({ repoID }) => {
       enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
       enableTags
     };
-    return buildTableToolbarMenuOptions(
+    return buildKanbanToolbarMenuOptions(
       records,
       readOnly,
       metadataStatus,
       isMultiple,
       areRecordsInSameFolder,
-      true
+      false
     );
   }, [records, metadata.columns, enableFaceRecognition, enableTags, readOnly, isMultiple, areRecordsInSameFolder]);
 
@@ -232,8 +232,8 @@ const TableFilesToolbar = ({ repoID }) => {
   );
 };
 
-TableFilesToolbar.propTypes = {
+KanbanFilesToolbar.propTypes = {
   repoID: PropTypes.string.isRequired,
 };
 
-export default TableFilesToolbar;
+export default KanbanFilesToolbar;

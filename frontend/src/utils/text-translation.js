@@ -309,7 +309,7 @@ const TextTranslation = {
     value: gettext('More')
   },
 
-  // Gallery-specific operations
+  // face-specific operations
   REMOVE_FROM_GROUP: {
     key: 'Remove from group',
     value: gettext('Remove from this group')

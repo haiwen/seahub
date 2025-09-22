@@ -6,12 +6,13 @@ import { useMetadataView } from '../../hooks/metadata-view';
 import { useMetadataStatus } from '../../../hooks/metadata-status';
 import RowUtils from './utils/row-utils';
 import { checkIsDir } from '../../utils/row';
-import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE } from '../../constants';
+import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import ContextMenuComponent from '../../components/context-menu';
 import { openInNewTab, openParentFolder } from '../../utils/file';
-import { buildUnifiedMenuOptions } from '../../utils/menu-builder';
+import { buildTableMenuOptions } from '../../utils/menu-builder';
 import TextTranslation from '../../../utils/text-translation';
+import { getColumnByKey } from '../../utils/column';
 
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
@@ -21,10 +22,10 @@ const ContextMenu = ({
   const currentRecord = useRef(null);
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
   const { metadata } = useMetadataView();
-  const { enableFaceRecognition } = useMetadataStatus();
+  const { enableFaceRecognition, enableTags } = useMetadataStatus();
   const repoID = window.sfMetadataStore.repoId;
 
-  const checkCanModifyRow = useCallback((row) => window.sfMetadataContext.canModifyRow(row), []);
+  const readOnly = !window.sfMetadataContext.canModify();
 
   const toggleDeleteFolderDialog = useCallback(record => {
     if (deletedFolderPath) {
@@ -45,10 +46,12 @@ const ContextMenu = ({
   }, [deleteRecords]);
 
   const options = useMemo(() => {
-    const permission = window.sfMetadataContext.getPermission();
-    const isReadonly = permission === 'r';
     const { columns } = metadata;
-
+    const metadataStatus = {
+      enableFaceRecognition,
+      enableGenerateDescription: getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
     // handle selected multiple cells
     if (selectedRange) {
       const { topLeft, bottomRight } = selectedRange;
@@ -60,17 +63,15 @@ const ContextMenu = ({
         }
       }
 
-      return buildUnifiedMenuOptions(
+      const isMultiple = records.length > 1;
+      return buildTableMenuOptions(
         records,
-        columns,
-        enableFaceRecognition,
-        checkCanModifyRow,
-        (row) => window.sfMetadataContext.checkCanDeleteRow(row),
-        true, // isMultipleRecords
-        isReadonly,
-        true, // areRecordsInSameFolder (not applicable for selected range)
-        null, // column (not applicable for selected range)
-        true // isSelectedRange
+        readOnly,
+        metadataStatus,
+        isMultiple,
+        false,
+        false,
+        true
       );
     }
 
@@ -90,17 +91,14 @@ const ContextMenu = ({
         return records.every(record => getParentDirFromRecord(record) === firstPath);
       })();
 
-      return buildUnifiedMenuOptions(
+      return buildTableMenuOptions(
         records,
-        columns,
-        enableFaceRecognition,
-        checkCanModifyRow,
-        (row) => window.sfMetadataContext.checkCanDeleteRow(row),
-        true, // isMultipleRecords
-        isReadonly,
+        readOnly,
+        metadataStatus,
+        true,
         areRecordsInSameFolder,
-        null, // column (not applicable for multiple records)
-        false // isSelectedRange
+        false,
+        false,
       );
     }
 
@@ -111,19 +109,16 @@ const ContextMenu = ({
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex }) || RowUtils.getRecordById(selectedRecordsIds[0], metadata);
     if (!record) return [];
 
-    return buildUnifiedMenuOptions(
+    return buildTableMenuOptions(
       [record],
-      columns,
-      enableFaceRecognition,
-      checkCanModifyRow,
-      (row) => window.sfMetadataContext.checkCanDeleteRow(row),
-      false, // isMultipleRecords
-      isReadonly,
-      true, // areRecordsInSameFolder (single record)
+      readOnly,
+      metadataStatus,
+      false,
+      true,
       column,
-      false // isSelectedRange
+      false
     );
-  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, enableFaceRecognition, checkCanModifyRow]);
+  }, [metadata, enableFaceRecognition, enableTags, selectedRange, recordMetrics, selectedPosition, recordGetterByIndex, isGroupView, readOnly]);
 
   const handleOptionClick = useCallback((option, event) => {
     // Get the current context records based on selection state

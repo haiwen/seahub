@@ -9,6 +9,7 @@ import TagFilesToolbar from './tag-files-toolbar';
 import TableFilesToolbar from './table-files-toolbar';
 import GalleryFilesToolbar from './gallery-files-toolbar';
 import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
+import KanbanFilesToolbar from './kanban-files-toolbar';
 
 const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
   const { idViewMap } = useMetadata();
@@ -29,6 +30,10 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
     return (
       <TableFilesToolbar repoID={repoID} />
     );
+  }
+
+  if (type === VIEW_TYPE.KANBAN) {
+    return <KanbanFilesToolbar repoID={repoID} />;
   }
 
   if (mode === TAGS_MODE) {
