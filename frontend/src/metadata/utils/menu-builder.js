@@ -566,6 +566,13 @@ export const buildKanbanToolbarMenuOptions = (records, readOnly, metadataStatus)
       key: TextTranslation.OPEN_PARENT_FOLDER.key,
       value: TextTranslation.OPEN_PARENT_FOLDER.value
     });
+
+    menuOptions.push('Divider');
+
+    menuOptions.push({
+      key: TextTranslation.RENAME.key,
+      value: TextTranslation.RENAME.value
+    });
   }
 
   const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus);
