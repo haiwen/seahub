@@ -268,7 +268,7 @@
   border-radius: 3px;
   text-decoration: none;
   min-width: 28px;
-  max-width: 172px;
+  max-width: 145px; /* for long path in mobile */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
