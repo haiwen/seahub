@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { CaptureUpdateAction, Excalidraw, MainMenu, newElementWith, reconcileElements, restoreElements, useHandleLibrary } from '@excalidraw/excalidraw';
+import isUrl from 'is-url';
 import { langList } from '../constants';
 import { LibraryIndexedDBAdapter } from './library-adapter';
 import context from '../context';
 import TipMessage from './tip-message';
 import { importFromLocalStorage } from '../data/local-storage';
-import { resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
+import { generateImageElement, resolvablePromise, updateStaleImageStatuses } from '../utils/exdraw-utils';
 import { getFilename, isInitializedImageElement } from '../utils/element-utils';
 import LocalData from '../data/local-data';
 import SocketManager from '../socket/socket-manager';
 import { loadFromServerStorage } from '../data/server-storage';
 import { getSyncableElements } from '../data';
 import { gettext } from '../../../utils/constants';
+import SelectSdocFileDialog from '../extension/select-image-dialog';
 import isHotkey from 'is-hotkey';
 
 import '@excalidraw/excalidraw/index.css';
@@ -58,7 +60,7 @@ const SimpleEditor = () => {
   if (!initialStatePromiseRef.current.promise) {
     initialStatePromiseRef.current.promise = resolvablePromise();
   }
-
+  const [isShowImageDialog, setIsShowImageDialog] = useState(false);
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
 
   useHandleLibrary({ excalidrawAPI, adapter: LibraryIndexedDBAdapter });
@@ -86,6 +88,7 @@ const SimpleEditor = () => {
       } else {
         const fileIds =
           data.scene.elements?.reduce((acc, element) => {
+            if (element.dataURL && isUrl(element.dataURL)) return acc;
             if (isInitializedImageElement(element)) {
               return acc.concat(element.fileId);
             }
@@ -195,6 +198,25 @@ const SimpleEditor = () => {
     };
   }, [beforeUnload]);
 
+  const onCustomImageDialogToggle = useCallback(() => {
+    setIsShowImageDialog(!isShowImageDialog);
+  }, [isShowImageDialog]);
+
+  const insertCustomImage = useCallback(async (filePath) => {
+    const oldElements = excalidrawAPI.getSceneElementsIncludingDeleted();
+    const newImage = generateImageElement(filePath);
+    // add image elements
+    excalidrawAPI.updateScene({
+      elements: [...oldElements, newImage],
+      captureUpdate: CaptureUpdateAction.NEVER,
+    });
+
+    // add image content to canvas
+    const socketManager = SocketManager.getInstance();
+    socketManager.loadImageFiles();
+
+  }, [excalidrawAPI]);
+
   return (
     <div className='excali-container'>
       <div className='excali-tip-message'>
@@ -211,12 +233,16 @@ const SimpleEditor = () => {
       >
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
+          <MainMenu.Item className='sf3-font-upload-files sf3-font' onClick={onCustomImageDialogToggle}>
+            {gettext('Link image')}
+          </MainMenu.Item>
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
           <MainMenu.DefaultItems.ToggleTheme />
           <MainMenu.DefaultItems.ChangeCanvasBackground />
         </MainMenu>
       </Excalidraw>
+      <SelectSdocFileDialog isOpen={isShowImageDialog} insertImage={insertCustomImage} closeDialog={onCustomImageDialogToggle}/>
     </div>
   );
 };
