@@ -181,15 +181,22 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     }
     if (ObjectUtils.isSameObject(direntRef.current, dirent, ['name'])) return;
 
-    setLoading(true);
-    direntRef.current = dirent;
-
     const fileName = dirent.name;
     let parentDir = path.split('/').pop() === fileName ? Utils.getDirName(path) : path;
 
     if (!parentDir.startsWith('/')) {
       parentDir = '/' + parentDir;
     }
+    if (SYSTEM_FOLDERS.includes(parentDir + fileName)) {
+      setLoading(true);
+      direntRef.current = null;
+      setRecord(null);
+      setOriginColumns([]);
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    direntRef.current = dirent;
     metadataAPI.getRecord(repoID, { parentDir, fileName }).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
