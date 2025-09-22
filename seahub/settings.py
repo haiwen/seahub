@@ -656,7 +656,7 @@ TERMS_OF_SERVICE_LINK = ''
 ALLOWED_HOSTS = ['*']
 
 # Logging
-seafile_log_to_stdout = os.getenv('SEAFILE_LOG_TO_STDOUT', 'false') == 'true'
+seafile_log_to_stdout = os.getenv('SEAFILE_LOG_TO_STDOUT', 'false').lower() == 'true'
 if seafile_log_to_stdout:
     LOGGING = {
         'version': 1,
@@ -980,7 +980,7 @@ ENABLE_WHITEBOARD = False
 # Settings for notification server   #
 ######################################
 
-ENABLE_NOTIFICATION_SERVER = os.environ.get('ENABLE_NOTIFICATION_SERVER', 'false') == 'true'
+ENABLE_NOTIFICATION_SERVER = os.environ.get('ENABLE_NOTIFICATION_SERVER', 'false').lower() == 'true'
 NOTIFICATION_SERVER_URL = os.environ.get('NOTIFICATION_SERVER_URL', '')
 INNER_NOTIFICATION_SERVER_URL = os.environ.get('INNER_NOTIFICATION_SERVER_URL', 'http://127.0.0.1:8083' )
 
@@ -1269,8 +1269,8 @@ elif CACHE_PROVIDER == 'memcached':
 else:
     raise ValueError(f'Invalid CACHE_PROVIDER: {CACHE_PROVIDER}')
 
-if os.environ.get('ENABLE_SEADOC', ''):
-    ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', '').lower() == 'true'
+if os.environ.get('ENABLE_SEADOC'):
+    ENABLE_SEADOC = os.environ.get('ENABLE_SEADOC', 'false').lower() == 'true'
 SEADOC_PRIVATE_KEY = JWT_PRIVATE_KEY
 EXCALIDRAW_PRIVATE_KEY = JWT_PRIVATE_KEY
 SEADOC_SERVER_URL = os.environ.get('SEADOC_SERVER_URL', '') or SEADOC_SERVER_URL
@@ -1292,15 +1292,15 @@ sys.path.pop(0)
 # Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
-if os.environ.get('ENABLE_SEAFILE_AI', ''):
-    ENABLE_SEAFILE_AI = os.environ.get('ENABLE_SEAFILE_AI', '').lower() == 'true'
+if os.environ.get('ENABLE_SEAFILE_AI'):
+    ENABLE_SEAFILE_AI = os.environ.get('ENABLE_SEAFILE_AI', 'false').lower() == 'true'
 SEAFILE_AI_SECRET_KEY = os.environ.get('SEAFILE_AI_SECRET_KEY', '') or SEAFILE_AI_SECRET_KEY
 SEAFILE_AI_SERVER_URL = os.environ.get('SEAFILE_AI_SERVER_URL', '') or SEAFILE_AI_SERVER_URL
 
 
 SEAFEVENTS_SERVER_URL = 'http://127.0.0.1:8889'
 
-IS_PRO_VERSION = os.environ.get('IS_PRO_VERSION', 'false') == 'true'
+IS_PRO_VERSION = os.environ.get('IS_PRO_VERSION', 'false').lower() == 'true'
 
 CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {
