@@ -412,5 +412,6 @@ def get_user_contact_email(username):
     
     profile = Profile.objects.get_profile_by_user(username)
     contact_email = profile.contact_email if profile and profile.contact_email else ''
-    cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
+    if contact_email:
+        cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
     return contact_email

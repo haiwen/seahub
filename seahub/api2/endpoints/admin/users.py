@@ -1029,9 +1029,6 @@ class AdminSearchUser(APIView):
             # search user from ccnet db
             users += ccnet_api.search_emailusers('DB', query_str, 0, 10)
 
-            # search user from ccnet ldapimport
-            users += ccnet_api.search_emailusers('LDAP', query_str, 0, 10)
-
             ccnet_user_emails = [u.email for u in users]
 
             # get institution for user from ccnet
@@ -1083,30 +1080,14 @@ class AdminSearchUser(APIView):
 
             ccnet_users = []
             ccnet_db_users = ccnet_api.search_emailusers('DB', query_str, 0, page * per_page)
-            ccnet_ldap_import_users = []
 
             if len(ccnet_db_users) == page * per_page:
 
                 # users from ccnet db is enough
                 ccnet_users = ccnet_db_users[-per_page:]
 
-            elif len(ccnet_db_users) < page * per_page:
-
-                ccnet_ldap_import_users = ccnet_api.search_emailusers('LDAP',
-                                                                      query_str,
-                                                                      0,
-                                                                      page*per_page - len(ccnet_db_users))
-
-                if int(len(ccnet_db_users)/per_page) == page-1:
-                    # need ccnet_db_users + ccnet_ldap_import_users
-                    ccnet_users = ccnet_db_users[(page-1)*per_page-len(ccnet_db_users):] + ccnet_ldap_import_users
-
-                if int(len(ccnet_db_users)/per_page) < page-1:
-                    # users only from ccnet_ldap_import_users
-                    ccnet_users = ccnet_ldap_import_users[-per_page:]
-
             # search user from profile
-            all_ccnet_users = ccnet_db_users + ccnet_ldap_import_users
+            all_ccnet_users = ccnet_db_users
             all_profile_users = []
 
             if len(all_ccnet_users) == page * per_page:
