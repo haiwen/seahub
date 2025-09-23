@@ -70,29 +70,12 @@ class SysInfo(APIView):
             logger.error(e)
             active_db_users = 0
 
-        try:
-            active_ldap_users = ccnet_api.count_emailusers('LDAP')
-        except Exception as e:
-            logger.error(e)
-            active_ldap_users = 0
 
         try:
             inactive_db_users = ccnet_api.count_inactive_emailusers('DB')
         except Exception as e:
             logger.error(e)
             inactive_db_users = 0
-
-        try:
-            inactive_ldap_users = ccnet_api.count_inactive_emailusers('LDAP')
-        except Exception as e:
-            logger.error(e)
-            inactive_ldap_users = 0
-
-        active_users = active_db_users + active_ldap_users if \
-            active_ldap_users > 0 else active_db_users
-
-        inactive_users = inactive_db_users + inactive_ldap_users if \
-            inactive_ldap_users > 0 else inactive_db_users
 
         # get license info
         is_pro = is_pro_version()
@@ -142,8 +125,8 @@ class SysInfo(APIView):
             current_connected_devices_count = 0
 
         info = {
-            'users_count': active_users + inactive_users,
-            'active_users_count': active_users,
+            'users_count': active_db_users + inactive_db_users,
+            'active_users_count': active_db_users,
             'repos_count': repos_count,
             'total_files_count': total_files_count,
             'groups_count': groups_count,
