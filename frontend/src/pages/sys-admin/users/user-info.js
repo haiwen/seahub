@@ -106,7 +106,7 @@ class Content extends Component {
               <img src={user.avatar_url} alt={user.name} width="80" className="rounded" />
             </dd>
 
-            <dt className="info-item-heading">{gettext('Email')}</dt>
+            <dt className="info-item-heading">{gettext('User ID')}</dt>
             <dd className="info-item-content">{user.email}</dd>
 
             {user.org_name &&
