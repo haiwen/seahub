@@ -8747,7 +8747,7 @@ msgstr "共享给"
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:27
 #: frontend/src/pages/sys-admin/users/user-info.js:114
 msgid "Organization"
-msgstr "公共"
+msgstr "团队"
 
 #: frontend/src/pages/org-admin/org-logs.js:47
 #: frontend/src/pages/sys-admin/groups/groups.js:149
