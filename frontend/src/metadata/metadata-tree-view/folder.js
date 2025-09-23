@@ -113,6 +113,14 @@ const ViewsFolder = ({
         prepareAddView(VIEW_TYPE.MAP);
         return;
       }
+      case KEY_ADD_VIEW_MAP.ADD_CARD: {
+        prepareAddView(VIEW_TYPE.CARD);
+        return;
+      }
+      case KEY_ADD_VIEW_MAP.ADD_STATISTICS: {
+        prepareAddView(VIEW_TYPE.STATISTICS);
+        return;
+      }
       case TextTranslation.RENAME.key: {
         setRenaming(true);
         return;
