@@ -57,7 +57,7 @@ from seahub.utils import render_error, is_org_context, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW)
+                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EXCALIDRAW)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
 from seahub.utils.file_op import check_file_lock, \
@@ -1500,6 +1500,14 @@ def view_shared_file(request, fileshare):
         data['file_perm'] = ret_dict['file_perm']
         data['share_link_username'] = ret_dict['share_link_username']
 
+    if filetype == EXCALIDRAW:
+        file_uuid = get_exdraw_file_uuid(repo, path)
+        data['file_uuid'] = file_uuid
+        data['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
+        data['excalidraw_server_url'] = EXCALIDRAW_SERVER_URL
+        data['can_edit_file'] = can_edit
+        data['file_perm'] = permission
+
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user
         data['logo_path'] = get_logo_path_by_user(shared_by)
@@ -1986,7 +1994,7 @@ def view_media_file_via_share_link(request):
     shared_file_name = os.path.basename(file_share.path)
     file_type, file_ext = get_file_type_and_ext(shared_file_name)
 
-    if file_type != MARKDOWN:
+    if file_type != MARKDOWN and file_type != EXCALIDRAW:
         err_msg = 'Invalid file type'
         return render_error(request, err_msg)
 

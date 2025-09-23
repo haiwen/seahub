@@ -2,11 +2,11 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 
 const { repoID, filePath, fileName } = window.app.pageOptions;
-let dirPath = Utils.getDirName(filePath);
 
 class EditorApi {
 
   saveContent(content) {
+    let dirPath = Utils.getDirName(filePath);
     return seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
       const uploadLink = res.data;
       return seafileAPI.updateFile(uploadLink, filePath, fileName, content);

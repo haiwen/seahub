@@ -4,6 +4,7 @@ import isHotkey from 'is-hotkey';
 import PropTypes from 'prop-types';
 import LocalImage from './local-image';
 import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -23,7 +24,7 @@ const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
   const onSubmit = useCallback(() => {
     if (!currentSelectedFile) return;
     const path = currentSelectedFile.path;
-    const filePath = `${serviceURL}/repo/${repoID}/raw${path}`;
+    const filePath = serviceURL + '/lib/' + repoID + '/file' + Utils.encodePath(path) + '?raw=1';
     insertImage(filePath);
 
     closeDialog();
