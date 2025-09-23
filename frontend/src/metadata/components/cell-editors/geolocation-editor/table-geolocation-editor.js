@@ -1,26 +1,32 @@
 import React, { useState, useCallback, forwardRef, useImperativeHandle, useEffect, useRef } from 'react';
 import { Modal } from 'reactstrap';
 import GeolocationEditor from './index';
-import { PRIVATE_COLUMN_KEY } from '../../../constants';
-import { getRecordIdFromRecord } from '../../../utils/cell';
-import toaster from '../../../../components/toast';
-import { gettext } from '../../../../utils/constants';
 
 import './table-geolocation-editor.css';
 
 const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, column, columns, ...props }, ref) => {
   const [isFullScreen, setFullScreen] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
-  const [isReadyToEraseLocation, setReadyToEraseLocation] = useState(false);
   const [editorStyle, setEditorStyle] = useState({ visibility: 'hidden' });
   const [isMapReady, setMapReady] = useState(false);
   const editorRef = useRef(null);
 
-  const editorIdRef = useRef(`table-editor-${record?._id || 'default'}-${Date.now()}`);
+  const latestValueRef = useRef({ position: currentValue, location_translated: record?._location_translated || null });
 
   useImperativeHandle(ref, () => ({
-    onClose: () => closeEditor()
+    getValue: () => latestValueRef.current,
+    onClose: () => {
+      setFullScreen(false);
+      onClose && onClose();
+    }
   }));
+
+  useEffect(() => {
+    latestValueRef.current = {
+      position: currentValue,
+      location_translated: record?._location_translated || null
+    };
+  }, [currentValue, record?._location_translated]);
 
   const handleMapReady = useCallback(() => {
     setMapReady(true);
@@ -78,56 +84,27 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
     }
   }, [isFullScreen, isMapReady]);
 
-  const closeEditor = useCallback(() => {
-    if (isReadyToEraseLocation) {
-      const repoID = window.sfMetadataContext.getSetting('repoID');
-      const recordId = getRecordIdFromRecord(record);
-
-      window.sfMetadataContext.modifyRecord(repoID, recordId, {
-        [PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED]: null
-      }).then(() => {
-        return window.sfMetadataContext.modifyRecord(repoID, recordId, {
-          [PRIVATE_COLUMN_KEY.LOCATION]: null
-        });
-      }).then(() => {
-        setCurrentValue(null);
-        onClose && onClose();
-      }).catch((error) => {
-        toaster.danger(gettext('Failed to clear location data'));
-      });
-    } else {
-      onClose && onClose();
-    }
-  }, [isReadyToEraseLocation, onClose, record]);
-
-  const onFullScreen = useCallback(() => {
+  const onFullScreen = useCallback((locationData) => {
+    const { position, location_translated } = locationData;
+    latestValueRef.current = { position, location_translated };
+    setCurrentValue(position);
     setFullScreen(!isFullScreen);
   }, [isFullScreen]);
 
   const onSubmit = useCallback((locationData) => {
     const { position, location_translated } = locationData;
+    latestValueRef.current = { position, location_translated };
+    setCurrentValue(position);
+    setFullScreen(false);
+    onClose && onClose();
+  }, [onClose]);
 
-    const repoID = window.sfMetadataContext.getSetting('repoID');
-    const recordId = getRecordIdFromRecord(record);
-
-    window.sfMetadataContext.modifyRecord(repoID, recordId, {
-      [PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED]: location_translated
-    }).then(() => {
-      return window.sfMetadataContext.modifyRecord(repoID, recordId, {
-        [PRIVATE_COLUMN_KEY.LOCATION]: position
-      });
-    }).then(() => {
-      setCurrentValue(position);
-      setFullScreen(false);
-      onClose && onClose();
-    }).catch((error) => {
-      toaster.danger(gettext('Failed to save location data'));
-    });
-  }, [record, onClose]);
-
-  const onReadyToEraseLocation = useCallback(() => {
-    setReadyToEraseLocation(true);
-  }, []);
+  const onDeleteLocation = useCallback(() => {
+    latestValueRef.current = { position: null, location_translated: null };
+    setCurrentValue(null);
+    setFullScreen(false);
+    onClose && onClose();
+  }, [onClose]);
 
   const locationTranslated = record?._location_translated || null;
 
@@ -135,29 +112,27 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
     <div className="sf-table-geolocation-editor" ref={editorRef} style={editorStyle}>
       {!isFullScreen ? (
         <GeolocationEditor
-          editorId={editorIdRef.current}
           position={currentValue}
           locationTranslated={locationTranslated}
           onSubmit={onSubmit}
           onFullScreen={onFullScreen}
-          onReadyToEraseLocation={onReadyToEraseLocation}
+          onDeleteLocation={onDeleteLocation}
           onMapReady={handleMapReady}
         />
       ) : (
         <Modal
           size='lg'
           isOpen={true}
-          toggle={onFullScreen}
+          toggle={() => onFullScreen(latestValueRef.current)}
           zIndex={1052}
         >
           <GeolocationEditor
-            editorId={`${editorIdRef.current}-fullscreen`}
             position={currentValue}
             locationTranslated={locationTranslated}
             isFullScreen={isFullScreen}
             onSubmit={onSubmit}
             onFullScreen={onFullScreen}
-            onReadyToEraseLocation={onReadyToEraseLocation}
+            onDeleteLocation={onDeleteLocation}
             onMapReady={handleMapReady}
           />
         </Modal>

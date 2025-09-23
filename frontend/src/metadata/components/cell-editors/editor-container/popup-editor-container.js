@@ -6,7 +6,7 @@ import Editor from '../editor';
 import { Utils } from '../../../../utils/utils';
 import { isCellValueChanged, getCellValueByColumn, getColumnOptionNameById, getColumnOptionNamesByIds, getFileNameFromRecord } from '../../../utils/cell';
 import { canEditCell, getColumnOriginName } from '../../../utils/column';
-import { CellType, metadataZIndexes, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS } from '../../../constants';
+import { CellType, metadataZIndexes, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEYS, PRIVATE_COLUMN_KEY } from '../../../constants';
 
 const NOT_SUPPORT_EDITOR_COLUMN_TYPES = [
   CellType.CTIME, CellType.MTIME, CellType.CREATOR, CellType.LAST_MODIFIER, CellType.FILE_NAME,
@@ -172,7 +172,15 @@ class PopupEditorContainer extends React.Component {
     const { key: columnKey, type: columnType } = column;
     if (columnType === CellType.TAGS) return;
     if (columnType === CellType.GEOLOCATION) {
-      // For non-image files, there might be no editor, so check before calling onClose
+      // For geolocation, get the value from the editor and transform it properly
+      if (this.getEditor() && this.getEditor().getValue) {
+        const geolocationValue = this.getEditor().getValue();
+        const { position, location_translated } = geolocationValue || { position: null, location_translated: null };
+        const updated = { [columnKey]: position };
+        updated[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = location_translated;
+        this.commitData(updated, true);
+      }
+      // Always call onClose for geolocation editor
       if (this.getEditor() && this.getEditor().onClose) {
         this.getEditor().onClose();
       }
@@ -197,17 +205,46 @@ class PopupEditorContainer extends React.Component {
     const { key: columnKey, type: columnType, name: columnName } = column;
     const originalOldCellValue = getCellValueByColumn(record, column);
     let originalUpdates = { ...updated };
-    if (!isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType) || !this.isNewValueValid(updated)) {
+
+    let hasChanged;
+    if (columnType === CellType.GEOLOCATION) {
+      const currentLocation = originalOldCellValue;
+      const newLocation = originalUpdates[columnKey];
+      const currentTranslated = record[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+      const newTranslated = originalUpdates[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+
+      hasChanged = isCellValueChanged(currentLocation, newLocation, columnType) ||
+                  (currentTranslated !== newTranslated);
+    } else {
+      hasChanged = isCellValueChanged(originalOldCellValue, originalUpdates[columnKey], columnType);
+    }
+
+    if (!hasChanged || !this.isNewValueValid(updated)) {
       if (closeEditor && typeof this.editor.onClose === 'function') {
         this.editor.onClose();
       }
       return;
     }
+
     this.changeCommitted = true;
     const rowId = record._id;
-    const key = Object.keys(updated)[0];
-    const value = updated[key];
-    const updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
+
+    let updates;
+    if (columnType === CellType.GEOLOCATION) {
+      updates = {};
+      const locationValue = updated[columnKey];
+      if (PRIVATE_COLUMN_KEYS.includes(columnKey)) {
+        updates[columnKey] = locationValue;
+      } else {
+        updates[columnName] = locationValue;
+      }
+      updates[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = updated[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED];
+    } else {
+      const key = Object.keys(updated)[0];
+      const value = updated[key];
+      updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
+    }
+
     const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
 
     // updates used for update remote record data
