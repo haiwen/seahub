@@ -8,8 +8,6 @@ import { gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
-import UsersNav from './users-nav';
-import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
@@ -160,26 +158,18 @@ class Users extends Component {
 
   render() {
     return (
-      <Fragment>
-        <MainPanelTopbar {...this.props} />
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <UsersNav currentItem="ldap" />
-            <div className="cur-view-content">
-              <Content
-                resetPerPage={this.resetPerPage}
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.userList}
-                currentPage={this.state.currentPage}
-                hasNextPage={this.state.hasNextPage}
-                curPerPage={this.state.perPage}
-                getListByPage={this.getUsersListByPage}
-              />
-            </div>
-          </div>
-        </div>
-      </Fragment>
+      <div className="cur-view-content">
+        <Content
+          resetPerPage={this.resetPerPage}
+          loading={this.state.loading}
+          errorMsg={this.state.errorMsg}
+          items={this.state.userList}
+          currentPage={this.state.currentPage}
+          hasNextPage={this.state.hasNextPage}
+          curPerPage={this.state.perPage}
+          getListByPage={this.getUsersListByPage}
+        />
+      </div>
     );
   }
 }
