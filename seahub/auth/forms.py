@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import time
 from django.conf import settings
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -191,7 +192,8 @@ class PasswordResetForm(forms.Form):
         try:
             self.users_cache = User.objects.get(email=vid)
         except User.DoesNotExist:
-            raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
+            self.users_cache = None
+            return
 
         if is_ldap_user(self.users_cache):
             raise forms.ValidationError(_("Can not reset password, please contact LDAP admin."))
@@ -216,6 +218,10 @@ class PasswordResetForm(forms.Form):
         """
 
         user = self.users_cache
+        if not user:
+            time.sleep(0.5) # Simulate the time cost of sending a email
+            return
+        
         if not domain_override:
             site_name = get_site_name()
         else:
