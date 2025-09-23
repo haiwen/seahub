@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button } from 'reactstrap';
-import { Router, useLocation, navigate } from '@gatsbyjs/reach-router';
+import { useLocation, navigate } from '@gatsbyjs/reach-router';
 import MainPanelTopbar from '../main-panel-topbar';
 import { gettext, siteRoot } from '../../../utils/constants';
 import UsersNav from './users-nav';
@@ -105,6 +105,8 @@ const UsersLayout = ({ ...commonProps }) => {
   const usersProps = {
     curTab,
     isAdmin,
+    perPage,
+    currentPage,
     isLDAPImported,
     isAddUserDialogOpen,
     isImportUserDialogOpen,
@@ -140,19 +142,12 @@ const UsersLayout = ({ ...commonProps }) => {
         }
       </MainPanelTopbar>
       <UsersNav currentItem={curTab} sortBy={sortBy} sortOrder={sortOrder} sortItems={sortByQuotaUsage} />
-      <Router className="d-flex overflow-hidden">
-        <Users
-          default
-          sortBy={sortBy}
-          sortOrder={sortOrder}
-          perPage={perPage}
-          currentPage={currentPage}
-          {...usersProps}
-        />
-        <AdminUsers path="admins" perPage={perPage} {...usersProps} />
-        <LDAPImportedUsers path="ldap-imported" {...usersProps} />
-        <LDAPUsers path="ldap" {...usersProps} />
-      </Router>
+      <div className="d-flex overflow-hidden">
+        {commonProps.tab === '' && <Users default sortBy={sortBy} sortOrder={sortOrder} {...usersProps} />}
+        {commonProps.tab === 'admins' && <AdminUsers path="admins" {...usersProps} />}
+        {commonProps.tab === 'ldap-imported' && <LDAPImportedUsers path="ldap-imported" {...usersProps} />}
+        {commonProps.tab === 'ldap' && <LDAPUsers path="ldap" {...usersProps} />}
+      </div>
     </>
   );
 };

@@ -248,8 +248,10 @@ class SysAdmin extends React.Component {
               <AdminOperationLogs path="operation" />
               <AdminLoginLogs path="login" />
             </AdminLogs>
-            <UsersLayout path={`${siteRoot}sys/users/*`} {...commonProps} />
-            <UsersLayout path={`${siteRoot}sys/users/admins`} {...commonProps} />
+            <UsersLayout path={`${siteRoot}sys/users/*`} {...commonProps} tab={''} />
+            <UsersLayout path={`${siteRoot}sys/users/admins`} {...commonProps} tab={'admins'} />
+            <UsersLayout path={`${siteRoot}sys/users/ldap-imported/`} {...commonProps} tab={'ldap-imported'} />
+            <UsersLayout path={`${siteRoot}sys/users/ldap/`} {...commonProps} tab={'ldap'} />
             <SearchUsers path={siteRoot + 'sys/search-users'} {...commonProps} />
             <UserLayout path={`${siteRoot}sys/users/:email/`} {...commonProps} >
               <User path="/" />
