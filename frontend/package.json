@@ -13,7 +13,7 @@
     "@seafile/comment-editor": "0.0.13",
     "@seafile/react-image-lightbox": "4.0.2",
     "@seafile/resumablejs": "1.1.16",
-    "@seafile/seafile-calendar": "0.1.1",
+    "@seafile/seafile-calendar": "0.1.2",
     "@seafile/seafile-editor": "2.0.33",
     "@seafile/seafile-sdoc-editor": "2.0.96",
     "@seafile/stldraw-editor": "1.0.1",
