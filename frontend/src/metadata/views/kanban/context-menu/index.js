@@ -26,7 +26,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
     onOCR,
     generateFileTags
   } = useMetadataView();
-  const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
+  const { handleDownload: handleDownloadAPI } = useFileOperations();
 
   const record = useMemo(() => getRowById(metadata, selectedCard), [metadata, selectedCard]);
   const isDir = useMemo(() => checkIsDir(record), [record]);
@@ -64,10 +64,6 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
     });
   }, [record, selectedCard, onRename]);
 
-  const handleCopy = useCallback(() => {
-    handleCopyAPI(parentDir, [{ name: oldName, is_dir: isDir }]);
-  }, [handleCopyAPI, parentDir, oldName, isDir]);
-
   const handleDownload = useCallback(() => {
     handleDownloadAPI(parentDir, [{ name: oldName, is_dir: isDir }]);
   }, [handleDownloadAPI, parentDir, oldName, isDir]);
@@ -90,7 +86,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, [record]);
         break;
       case TextTranslation.COPY.key:
-        handleCopy();
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, [record]);
         break;
       case TextTranslation.DOWNLOAD.key: {
         handleDownload();
@@ -123,7 +119,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
         break;
       }
     }
-  }, [record, handleCopy, updateFaceRecognition, repoID, openRenameDialog, handleDownload, onDelete, selectedCard, updateRecordDetails, updateRecordDescription, generateFileTags, onOCR]);
+  }, [record, updateFaceRecognition, repoID, openRenameDialog, handleDownload, onDelete, selectedCard, updateRecordDetails, updateRecordDescription, generateFileTags, onOCR]);
 
   useEffect(() => {
     const unsubscribeToggleKanbanRenameDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_RENAME_DIALOG, openRenameDialog);

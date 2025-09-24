@@ -120,7 +120,7 @@ const ContextMenu = ({
       false
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metadata, enableFaceRecognition, enableTags, selectedRange, recordMetrics, selectedPosition, selectedPosition.idx, recordGetterByIndex, isGroupView, readOnly]);
+  }, [metadata, enableFaceRecognition, enableTags, selectedRange, recordMetrics, selectedPosition, selectedPosition?.idx, recordGetterByIndex, isGroupView, readOnly]);
 
   const handleOptionClick = useCallback((option, event) => {
     // Get the current context records based on selection state
