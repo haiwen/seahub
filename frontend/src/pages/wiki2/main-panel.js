@@ -223,7 +223,7 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className='d-flex align-items-center'>
-            <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />
+            {menuItems.length > 0 && <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />}
             {menuItems.length > 0 &&
             <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
               <DropdownToggle
