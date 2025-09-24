@@ -177,7 +177,7 @@ const LocalFiles = ({ onSelectedFile, toggle, fileType, searchContent, isOpenSea
     <div className='sdoc-files-tree'>
       {renderFileTree(treeData)}
       {isOpenSearch && !hasSearchResult && !isCurrentLibrary && (
-        <div className='sdoc-file-search-no-result'>{gettext('No_results')}</div>
+        <div className='sdoc-file-search-no-result'>{gettext('No results')}</div>
       )}
     </div>
   );
