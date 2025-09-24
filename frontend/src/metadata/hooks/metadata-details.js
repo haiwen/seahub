@@ -207,6 +207,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       setOriginColumns(columns);
       setLoading(false);
     }).catch(error => {
+      setRecord(null);
       if (error.response && error.response.status === 404 && onErrMessage) {
         const err = `${direntType === 'file' ? 'File' : 'Folder' } does not exist`;
         onErrMessage(err);
