@@ -13,7 +13,7 @@ import { buildKanbanToolbarMenuOptions } from '../../metadata/utils/menu-builder
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 
-const KanbanFilesToolbar = ({ repoID }) => {
+const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const [metadata, setMetadata] = useState({});
   const metadataRef = useRef([]);
@@ -54,16 +54,16 @@ const KanbanFilesToolbar = ({ repoID }) => {
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, []);
-    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-  }, [eventBus]);
+    updateCurrentDirent();
+  }, [eventBus, updateCurrentDirent]);
 
   const deleteRecords = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_RECORDS, selectedRecordIds, {
       success_callback: () => {
-        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        updateCurrentDirent();
       }
     });
-  }, [eventBus, selectedRecordIds]);
+  }, [eventBus, selectedRecordIds, updateCurrentDirent]);
 
   const toggleMoveDialog = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
@@ -141,13 +141,10 @@ const KanbanFilesToolbar = ({ repoID }) => {
         openParentFolder(records[0]);
         break;
       }
-      case TextTranslation.RENAME.key:
-      case TextTranslation.RENAME_FILE.key:
-      case TextTranslation.RENAME_FOLDER.key: {
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
+      case TextTranslation.RENAME.key: {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_RENAME_DIALOG);
         break;
       }
-
       default:
         break;
     }

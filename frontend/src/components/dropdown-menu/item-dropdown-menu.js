@@ -98,7 +98,7 @@ class ItemDropdownMenu extends React.Component {
 
   onHideMenu = () => {
     if (this.state.isItemMenuShow) {
-      this.setState({ isItemMenuShow: false });
+      this.setState({ isItemMenuShow: false, isSubMenuShown: false });
       if (typeof(this.props.unfreezeItem) === 'function') {
         this.props.unfreezeItem();
       }
@@ -120,7 +120,7 @@ class ItemDropdownMenu extends React.Component {
 
   toggleOperationMenu = () => {
     this.setState(
-      { isItemMenuShow: !this.state.isItemMenuShow },
+      { isItemMenuShow: !this.state.isItemMenuShow, isSubMenuShown: false },
       () => {
         if (this.state.isItemMenuShow && typeof(this.props.freezeItem) === 'function') {
           this.props.freezeItem();

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import ContextMenu from '../../../components/context-menu';
 import RenameDialog from '../../../components/dialog/rename-dialog';
@@ -124,6 +124,13 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
       }
     }
   }, [record, handleCopy, updateFaceRecognition, repoID, openRenameDialog, handleDownload, onDelete, selectedCard, updateRecordDetails, updateRecordDescription, generateFileTags, onOCR]);
+
+  useEffect(() => {
+    const unsubscribeToggleKanbanRenameDialog = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.TOGGLE_KANBAN_RENAME_DIALOG, openRenameDialog);
+    return () => {
+      unsubscribeToggleKanbanRenameDialog();
+    };
+  }, [openRenameDialog]);
 
   return (
     <>

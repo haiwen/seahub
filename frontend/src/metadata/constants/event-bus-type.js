@@ -101,6 +101,7 @@ export const EVENT_BUS_TYPE = {
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
   OPEN_KANBAN_SETTINGS: 'open_kanban_settings',
   CLOSE_KANBAN_SETTINGS: 'close_kanban_settings',
+  TOGGLE_KANBAN_RENAME_DIALOG: 'toggle_kanban_rename_dialog',
 
   // map
   MODIFY_MAP_TYPE: 'modify_map_type',

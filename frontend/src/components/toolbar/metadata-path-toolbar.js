@@ -11,14 +11,14 @@ import GalleryFilesToolbar from './gallery-files-toolbar';
 import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
 import KanbanFilesToolbar from './kanban-files-toolbar';
 
-const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
+const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent }) => {
   const { idViewMap } = useMetadata();
   const view = useMemo(() => idViewMap[viewId], [viewId, idViewMap]);
   const type = view?.type;
 
   if (type === VIEW_TYPE.GALLERY) {
     return (
-      <GalleryFilesToolbar />
+      <GalleryFilesToolbar updateCurrentDirent={updateCurrentDirent} />
     );
   }
 
@@ -33,7 +33,7 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
   }
 
   if (type === VIEW_TYPE.KANBAN) {
-    return <KanbanFilesToolbar repoID={repoID} />;
+    return <KanbanFilesToolbar repoID={repoID} updateCurrentDirent={updateCurrentDirent} />;
   }
 
   if (mode === TAGS_MODE) {

@@ -106,6 +106,7 @@ const ContextMenu = ({
     if (!selectedPosition) return [];
     const { groupRecordIndex, rowIdx: recordIndex, idx } = selectedPosition;
     const column = columns[idx];
+    const isNameColumn = column && (column.key === PRIVATE_COLUMN_KEY.FILE_NAME);
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex }) || RowUtils.getRecordById(selectedRecordsIds[0], metadata);
     if (!record) return [];
 
@@ -115,10 +116,11 @@ const ContextMenu = ({
       metadataStatus,
       false,
       true,
-      column,
+      isNameColumn,
       false
     );
-  }, [metadata, enableFaceRecognition, enableTags, selectedRange, recordMetrics, selectedPosition, recordGetterByIndex, isGroupView, readOnly]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadata, enableFaceRecognition, enableTags, selectedRange, recordMetrics, selectedPosition, selectedPosition.idx, recordGetterByIndex, isGroupView, readOnly]);
 
   const handleOptionClick = useCallback((option, event) => {
     // Get the current context records based on selection state
@@ -161,7 +163,7 @@ const ContextMenu = ({
     const isMultiple = currentRecords.length > 1;
     const singleRecord = currentRecords.length === 1 ? currentRecords[0] : null;
 
-    switch (option.key || option.value) {
+    switch (option.key) {
       case TextTranslation.OPEN_FILE_IN_NEW_TAB.key:
       case TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key: {
         if (singleRecord) {
@@ -196,7 +198,7 @@ const ContextMenu = ({
         }
         break;
       }
-      case TextTranslation.OCR.key: {
+      case TextTranslation.EXTRACT_TEXT.key: {
         if (singleRecord) {
           onOCR(singleRecord, 'sf-table-rdg-selected');
         }

@@ -2475,6 +2475,7 @@ class LibContentView extends React.Component {
                               mode={currentMode}
                               path={path}
                               viewId={viewId}
+                              updateCurrentDirent={this.updateCurrentDirent}
                             />
                           ) : (
                             <SelectedDirentsToolbar

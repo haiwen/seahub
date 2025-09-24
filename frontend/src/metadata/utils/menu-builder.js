@@ -19,11 +19,9 @@ export const shouldEnableOption = (records, optionKey, readOnly, metadataStatus,
     case TextTranslation.COPY_SELECTED.key:
       return isSelectedRange;
 
-    case TextTranslation.RENAME.key:
-    case TextTranslation.RENAME_FILE.key:
-    case TextTranslation.RENAME_FOLDER.key: {
+    case TextTranslation.RENAME.key:{
       if (isMultiple || isSelectedRange || readOnly) return false;
-      return !readOnly && isNameCol;
+      return isNameCol;
     }
 
     case TextTranslation.MOVE.key:
@@ -283,17 +281,6 @@ export const buildTableToolbarMenuOptions = (records, readOnly, metadataStatus, 
     value: TextTranslation.OPEN_PARENT_FOLDER.value
   });
 
-  if (!isMultiple) {
-    if (menuOptions.length > 0) {
-      menuOptions.push('Divider');
-    }
-
-    addOptionIfEnabled(TextTranslation.RENAME.key, {
-      key: TextTranslation.RENAME.key,
-      value: isFolder ? TextTranslation.RENAME_FOLDER.value : TextTranslation.RENAME_FILE.value
-    });
-  }
-
   const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus, isMultiple);
   if (aiOptions.length > 0) {
     menuOptions.push('Divider');
@@ -342,19 +329,19 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
     return menuOptions;
   }
 
+  menuOptions.push({
+    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+  });
+
+  menuOptions.push({
+    key: TextTranslation.OPEN_PARENT_FOLDER.key,
+    value: TextTranslation.OPEN_PARENT_FOLDER.value
+  });
+
+  menuOptions.push('Divider');
+
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-      value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.OPEN_PARENT_FOLDER.key,
-      value: TextTranslation.OPEN_PARENT_FOLDER.value
-    });
-
-    menuOptions.push('Divider');
-
     menuOptions.push({
       key: TextTranslation.MOVE.key,
       value: TextTranslation.MOVE.value
@@ -436,17 +423,15 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
     return menuOptions;
   }
 
-  if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-      value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-    });
+  menuOptions.push({
+    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+  });
 
-    menuOptions.push({
-      key: TextTranslation.OPEN_PARENT_FOLDER.key,
-      value: TextTranslation.OPEN_PARENT_FOLDER.value
-    });
-  }
+  menuOptions.push({
+    key: TextTranslation.OPEN_PARENT_FOLDER.key,
+    value: TextTranslation.OPEN_PARENT_FOLDER.value
+  });
 
   const aiOptions = buildAISubmenuOptions(selectedImages, readOnly, metadataStatus, isMultipleImages);
   if (aiOptions.length > 0) {
@@ -495,25 +480,24 @@ export const buildKanbanMenuOptions = (records, readOnly, metadataStatus) => {
   }
 
   const menuOptions = [];
+
+  menuOptions.push({
+    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+  });
+
+  menuOptions.push({
+    key: TextTranslation.OPEN_PARENT_FOLDER.key,
+    value: TextTranslation.OPEN_PARENT_FOLDER.value
+  });
+
+  menuOptions.push('Divider');
+
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-      value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.OPEN_PARENT_FOLDER.key,
-      value: TextTranslation.OPEN_PARENT_FOLDER.value
-    });
-
-    menuOptions.push('Divider');
-
     menuOptions.push({
       key: TextTranslation.RENAME.key,
       value: TextTranslation.RENAME.value
     });
-
-    menuOptions.push('Divider');
 
     menuOptions.push({
       key: TextTranslation.MOVE.key,
@@ -556,19 +540,19 @@ export const buildKanbanToolbarMenuOptions = (records, readOnly, metadataStatus)
   }
 
   const menuOptions = [];
+
+  menuOptions.push({
+    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+  });
+
+  menuOptions.push({
+    key: TextTranslation.OPEN_PARENT_FOLDER.key,
+    value: TextTranslation.OPEN_PARENT_FOLDER.value
+  });
+
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-      value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.OPEN_PARENT_FOLDER.key,
-      value: TextTranslation.OPEN_PARENT_FOLDER.value
-    });
-
     menuOptions.push('Divider');
-
     menuOptions.push({
       key: TextTranslation.RENAME.key,
       value: TextTranslation.RENAME.value
