@@ -61,9 +61,15 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         details_settings: detailsSettings,
         face_recognition_enabled: enableFaceRecognition,
         global_hidden_columns: globalHiddenColumns,
+        exceed_limit: exceedLimit,
+        md_file_count_limit: mdFileCountLimit
       } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
+      }
+      if (exceedLimit) {
+        let msg = `The number of metadata records exceeds the limit of ${mdFileCountLimit}`;
+        toaster.warning(msg, { hasCloseButton: true, duration: 5 });
       }
       setEnableTags(enableTags);
       setShowView(showView);
