@@ -550,7 +550,7 @@ class SeadocUploadVideo(APIView):
         relative_path = []
         for file in file_list:
             file_path = posixpath.join(parent_path, file.name)
-            file_path = os.path.normpath(file_path) 
+            file_path = os.path.normpath(file_path)
             files = {'file': file}
             data = {'parent_dir': parent_path, 'filename': file.name, 'target_file': file_path}
             resp = requests.post(upload_link, files=files, data=data)
@@ -2961,6 +2961,8 @@ class SeadocSearchFilenameView(APIView):
             suffixes = ['mp4', 'ogv', 'webm', 'mov',]
         if search_type == 'exdraw':
             suffixes = ['exdraw',]
+        if search_type == 'image':
+            suffixes = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp',  'webp']
         if not suffixes:
             error_msg = 'search_type is not valid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -3082,7 +3084,7 @@ class SeadocExportView(APIView):
         response = FileResponse(open(tmp_zip_path, 'rb'),
                                 content_type="application/x-zip-compressed",
                                 as_attachment=True)
-        
+
         response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(uuid_map.filename[:-4] + ZSDOC)
         if wiki_page_name:
             response['Content-Disposition'] = 'attachment;filename*=UTF-8\'\'' + quote(wiki_page_name[:-4] + ZSDOC)

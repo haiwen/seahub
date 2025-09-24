@@ -78,7 +78,7 @@ class Context {
   getSearchFilesByFilename(query, page, per_page, search_type) {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
-    const url = 'api/v2.1/seadoc/search-filename/' + docUuid + '/?query=' + query + '&page=' + page + '&per_page=' + per_page + '&search_type=' + search_type;
+    const url = server + '/api/v2.1/seadoc/search-filename/' + docUuid + '/?query=' + query + '&page=' + page + '&per_page=' + per_page + '&search_type=' + search_type;
 
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }
