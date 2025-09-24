@@ -11,7 +11,7 @@ ONLYOFFICE_CONVERTER_URL = ONLYOFFICE_APIJS_URL.replace("/web-apps/apps/api/docu
 
 ONLYOFFICE_EXT_WORD = getattr(settings,
                               'ONLYOFFICE_EXT_WORD',
-                              ["doc", "docm", "docx", "dot",
+                              ["doc", "docm", "docx", "docxf", "dot",
                                "dotm", "dotx", "epub", "fb2",
                                "fodt", "htm", "html", "md",
                                "hwp", "hwpx", "mht", "mhtml",
