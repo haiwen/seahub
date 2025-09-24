@@ -352,6 +352,9 @@ class DirentGridView extends React.Component {
       case 'New Word File':
         this.onCreateFile('.docx');
         break;
+      case 'New Docxf File':
+        this.onCreateFile('.docxf');
+        break;
       case 'New Whiteboard File':
         this.onCreateFile('.draw');
         break;

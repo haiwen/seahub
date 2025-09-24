@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { enableSeadoc, gettext, enableWhiteboard } from '../../utils/constants';
+import { enableSeadoc, gettext, enableWhiteboard, onlyofficeSupportEditDocxf } from '../../utils/constants';
 import Loading from '../loading';
 import TextTranslation from '../../utils/text-translation';
 import { Utils } from '../../utils/utils';
@@ -119,6 +119,9 @@ class DirentNoneView extends React.Component {
       case 'New Word File':
         this.onCreateFile('.docx');
         break;
+      case 'New Docxf File':
+        this.onCreateFile('.docxf');
+        break;
       case 'New Whiteboard File':
         this.onCreateFile('.draw');
         break;
@@ -162,6 +165,9 @@ class DirentNoneView extends React.Component {
               <br />
               {enableSeadoc && !currentRepoInfo.encrypted &&
                 <button className="big-new-file-button" onClick={this.onCreateFile.bind(this, '.sdoc')}>{'+ SeaDoc'}</button>
+              }
+              {onlyofficeSupportEditDocxf &&
+                <button className="big-new-file-button" onClick={this.onCreateFile.bind(this, '.docxf')}>{'+ Docxf'}</button>
               }
             </>
           )}
