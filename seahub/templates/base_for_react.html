@@ -159,6 +159,7 @@
             additionalAboutDialogLinks: {% if additional_about_dialog_links %} {{ additional_about_dialog_links|safe }} {% else %} null {% endif %},
             enableOnlyoffice: {% if enable_onlyoffice %} true {% else %} false {% endif %},
             onlyofficeEditFileExtension: {% if onlyoffice_edit_file_extension %} {{onlyoffice_edit_file_extension|safe}} {% else %} [] {% endif %},
+            onlyofficeSupportEditDocxf: {% if onlyoffice_support_edit_docxf %} true {% else %} false {% endif %},
             onlyofficeConverterExtensions: {% if onlyoffice_converter_extensions %} {{onlyoffice_converter_extensions|safe}} {% else %} null {% endif %},
             enableOfficeWebApp: {% if enable_office_web_app %} true {% else %} false {% endif %},
             officeWebAppEditFileExtension: {% if office_web_app_edit_file_extension %} {{office_web_app_edit_file_extension|safe}} {% else %} [] {% endif %},

@@ -160,6 +160,7 @@ def base(request):
         'LOGIN_URL': dj_settings.LOGIN_URL,
         'enable_onlyoffice': ENABLE_ONLYOFFICE,
         'onlyoffice_edit_file_extension': list(ONLYOFFICE_EDIT_FILE_EXTENSION),
+        'onlyoffice_support_edit_docxf': ENABLE_ONLYOFFICE and 'docxf' in list(ONLYOFFICE_EDIT_FILE_EXTENSION),
         'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
         'office_web_app_edit_file_extension': list(OFFICE_WEB_APP_EDIT_FILE_EXTENSION),
         'office_suite_edit_file_extension': OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES,

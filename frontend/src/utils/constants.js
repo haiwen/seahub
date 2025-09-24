@@ -119,6 +119,7 @@ export const enableOfficeWebApp = window.app.pageOptions.enableOfficeWebApp || f
 export const officeWebAppEditFileExtension = window.app.pageOptions.officeWebAppEditFileExtension || [];
 export const enableOnlyoffice = window.app.pageOptions.enableOnlyoffice || false;
 export const onlyofficeEditFileExtension = window.app.pageOptions.onlyofficeEditFileExtension || [];
+export const onlyofficeSupportEditDocxf = window.app.pageOptions.onlyofficeSupportEditDocxf || false;
 export const onlyofficeConverterExtensions = window.app.pageOptions.onlyofficeConverterExtensions || [];
 
 export const isMultiTenancy = window.app.pageOptions.isMultiTenancy;
