@@ -60,11 +60,14 @@ class MetadataManage(APIView):
         details_settings = '{}'
         face_recognition_enabled = False
         global_hidden_columns = []
+        records_count = 0
+        exceed_limit = False
 
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             show_view = False
             if record and record.enabled:
+                from seafevents.repo_metadata.constants import METADATA_TABLE
                 is_enabled = True
                 show_view = True
                 details_settings = record.details_settings
@@ -84,6 +87,13 @@ class MetadataManage(APIView):
                         show_view = not check_invisible_folder(repo_id, request.user.username, org_id)
                     except Exception as e:
                         logger.error(e)
+
+                metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+                sql = f'SELECT COUNT(1) AS records_count FROM `{METADATA_TABLE.name}`'
+                query_result = metadata_server_api.query_rows(sql)
+                results = query_result.get('results')
+                records_count = results[0].get('records_count')
+                exceed_limit = records_count > MD_FILE_COUNT_LIMIT
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -96,7 +106,9 @@ class MetadataManage(APIView):
             'tags_lang': tags_lang,
             'details_settings': details_settings,
             'global_hidden_columns': global_hidden_columns,
-            'show_view': show_view
+            'show_view': show_view,
+            'exceed_limit': exceed_limit,
+            'md_file_count_limit': MD_FILE_COUNT_LIMIT,
         })
 
     def put(self, request, repo_id):
