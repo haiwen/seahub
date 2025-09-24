@@ -67,6 +67,8 @@ class UpdateRepoCommitLabels extends React.Component {
               isMulti={true}
               onChange={this.handleInputChange}
               placeholder=''
+              noOptionsMessage={() => {return gettext('No options available');}}
+              formatCreateLabel={(inputValue) => {return gettext('Add option: %s').replace('%s', inputValue);}}
             />
             {formErrorMsg && <p className="error m-0 mt-2">{formErrorMsg}</p>}
           </React.Fragment>
