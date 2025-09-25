@@ -1,3 +1,5 @@
+import { MAP_TYPE } from '../constants';
+
 /* eslint-disable no-loss-of-precision */
 const x_PI = Math.PI * 3000.0 / 180.0;
 const PI = Math.PI;
@@ -117,4 +119,24 @@ export const gcj02_to_wgs84 = (lng, lat) => {
   dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI);
   dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
   return { lat: Number((_lat - dLat).toFixed(digits)), lng: Number((_lng - dLng).toFixed(digits)) };
+};
+
+// Converts WGS84 coordinates to the map's native coordinate system
+export const convertToMapCoords = (type, position) => {
+  if (type === MAP_TYPE.B_MAP) {
+    const gcjPos = wgs84_to_gcj02(position.lng, position.lat);
+    const bdPos = gcj02_to_bd09(gcjPos.lng, gcjPos.lat);
+    return bdPos;
+  }
+  return position;
+};
+
+// Converts coordinates from the map's native system to WGS84
+export const convertToWGS84 = (type, position) => {
+  if (type === MAP_TYPE.B_MAP) {
+    const gcjPos = bd09_to_gcj02(position.lng, position.lat);
+    const wgsPos = gcj02_to_wgs84(gcjPos.lng, gcjPos.lat);
+    return wgsPos;
+  }
+  return position;
 };

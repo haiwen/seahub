@@ -17,7 +17,7 @@ import { eventBus } from '../../../../components/common/event-bus';
 import { createZoomControl } from '../../map-controller/zoom';
 import ClickOutside from '../../../../components/click-outside';
 import GeolocationEditor from '../../cell-editors/geolocation-editor';
-import { bd09_to_gcj02, gcj02_to_bd09, gcj02_to_wgs84, wgs84_to_gcj02 } from '../../../../utils/coord-transform';
+import { convertToMapCoords } from '../../../../utils/coord-transform';
 
 import './index.css';
 
@@ -85,7 +85,7 @@ class Location extends React.Component {
     if (!isValidPosition(latLng?.lng, latLng?.lat)) return;
 
     if (prevState.latLng?.lat !== latLng.lat || prevState.latLng?.lng !== latLng.lng) {
-      const position = this.convertToMapCoords(latLng);
+      const position = convertToMapCoords(this.mapType, latLng);
       if (this.mapType === MAP_TYPE.B_MAP) {
         this.marker.setPosition(position);
         this.map.panTo(position);
@@ -100,31 +100,6 @@ class Location extends React.Component {
     this.unsubscribeClearMapInstance();
     this.map = null;
   }
-  // Converts WGS84 coordinates to the map's native coordinate system
-  convertToMapCoords = (position) => {
-    if (!isValidPosition(position?.lng, position?.lat)) {
-      return null;
-    }
-    if (this.mapType === MAP_TYPE.B_MAP) {
-      const gcjPos = wgs84_to_gcj02(position.lng, position.lat);
-      const bdPos = gcj02_to_bd09(gcjPos.lng, gcjPos.lat);
-      return bdPos;
-    }
-    return position;
-  };
-
-  // Converts coordinates from the map's native system to WGS84
-  convertFromMapCoords = (position) => {
-    if (!isValidPosition(position?.lng, position?.lat)) {
-      return null;
-    }
-    if (this.mapType === MAP_TYPE.B_MAP) {
-      const gcjPos = bd09_to_gcj02(position.lng, position.lat);
-      const wgsPos = gcj02_to_wgs84(gcjPos.lng, gcjPos.lat);
-      return wgsPos;
-    }
-    return position;
-  };
 
   initMap = () => {
     const { record } = this.props;
@@ -166,8 +141,7 @@ class Location extends React.Component {
       if (!window.BMapGL.Map) return;
 
       const { latLng } = this.state;
-      const gcPos = wgs84_to_gcj02(latLng.lng, latLng.lat);
-      const bdPos = gcj02_to_bd09(gcPos.lng, gcPos.lat);
+      const bdPos = convertToMapCoords(this.mapType, latLng);
       this.map = new window.BMapGL.Map('sf-geolocation-map-container');
       this.map.disableScrollWheelZoom(true);
       this.map.centerAndZoom(bdPos, 16);
@@ -219,9 +193,8 @@ class Location extends React.Component {
 
   onSubmit = (value) => {
     const { position, location_translated } = value;
-    const latLng = this.convertFromMapCoords(position);
     this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED, location_translated);
-    this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, latLng);
+    this.props.onChange(PRIVATE_COLUMN_KEY.LOCATION, position);
     this.setState({
       latLng: position,
       address: location_translated?.address,
@@ -298,7 +271,7 @@ class Location extends React.Component {
                 }}
               >
                 <GeolocationEditor
-                  position={this.convertToMapCoords(latLng)}
+                  position={latLng}
                   locationTranslated={this.props.record?._location_translated}
                   onSubmit={this.onSubmit}
                   onFullScreen={this.onFullScreen}
@@ -314,7 +287,7 @@ class Location extends React.Component {
               zIndex={1052}
             >
               <GeolocationEditor
-                position={this.convertToMapCoords(latLng)}
+                position={latLng}
                 locationTranslated={this.props.record?._location_translated}
                 isFullScreen={isFullScreen}
                 onSubmit={this.onSubmit}
