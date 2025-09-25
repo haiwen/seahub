@@ -9,20 +9,21 @@ import TagFilesToolbar from './tag-files-toolbar';
 import TableFilesToolbar from './table-files-toolbar';
 import GalleryFilesToolbar from './gallery-files-toolbar';
 import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
+import KanbanFilesToolbar from './kanban-files-toolbar';
 
-const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
+const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent }) => {
   const { idViewMap } = useMetadata();
   const view = useMemo(() => idViewMap[viewId], [viewId, idViewMap]);
   const type = view?.type;
 
   if (type === VIEW_TYPE.GALLERY) {
     return (
-      <GalleryFilesToolbar />
+      <GalleryFilesToolbar updateCurrentDirent={updateCurrentDirent} />
     );
   }
 
   if (type === VIEW_TYPE.FACE_RECOGNITION) {
-    return <FaceRecognitionFilesToolbar />;
+    return <FaceRecognitionFilesToolbar repoID={repoID} />;
   }
 
   if (type === VIEW_TYPE.TABLE) {
@@ -31,20 +32,26 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId }) => {
     );
   }
 
+  if (type === VIEW_TYPE.KANBAN) {
+    return <KanbanFilesToolbar repoID={repoID} updateCurrentDirent={updateCurrentDirent} />;
+  }
+
   if (mode === TAGS_MODE) {
     const isAllTagsView = path.split('/').pop() === ALL_TAGS_ID;
-    if (isAllTagsView) return <AllTagsToolbar />;
-
-    return <TagFilesToolbar currentRepoInfo={repoInfo} />;
+    if (isAllTagsView) {
+      return <AllTagsToolbar />;
+    } else {
+      return <TagFilesToolbar currentRepoInfo={repoInfo} />;
+    }
   }
 
 };
 
-MetadataPathToolbar.propTypes = {
+ViewToolbar.propTypes = {
   repoID: PropTypes.string.isRequired,
   repoInfo: PropTypes.object.isRequired,
   mode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
 };
 
-export default MetadataPathToolbar;
+export default ViewToolbar;

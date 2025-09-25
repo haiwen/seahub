@@ -220,6 +220,8 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
     setMetadata(newMetadata);
   }, [metadata, collaborators]);
 
+  const isSomeone = people?._is_someone;
+
   useEffect(() => {
     loadData({ sorts: view.sorts });
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -255,10 +257,10 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
         isLoadingMore={isLoadingMore}
         onLoadMore={onLoadMore}
         onDelete={handleDelete}
-        onRemoveImage={people._is_someone ? handleRemove : null}
-        onAddImage={!people._is_someone ? handleAdd : null}
+        onRemoveImage={isSomeone ? handleRemove : null}
+        onAddImage={!isSomeone ? handleAdd : null}
         onSetPeoplePhoto={handleSetPeoplePhoto}
-        isSomeone={people._is_someone}
+        isSomeone={isSomeone}
       />
     </div>
   );

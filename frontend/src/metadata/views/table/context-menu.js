@@ -1,37 +1,18 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, enableSeafileAI } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
 import { useMetadataView } from '../../hooks/metadata-view';
 import { useMetadataStatus } from '../../../hooks/metadata-status';
 import RowUtils from './utils/row-utils';
 import { checkIsDir } from '../../utils/row';
-import { getColumnByKey, isNameColumn } from '../../utils/column';
 import { EVENT_BUS_TYPE, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord } from '../../utils/cell';
 import ContextMenuComponent from '../../components/context-menu';
 import { openInNewTab, openParentFolder } from '../../utils/file';
-
-const OPERATION = {
-  CLEAR_SELECTED: 'clear-selected',
-  COPY_SELECTED: 'copy-selected',
-  OPEN_PARENT_FOLDER: 'open-parent-folder',
-  OPEN_IN_NEW_TAB: 'open-new-tab',
-  GENERATE_DESCRIPTION: 'generate-description',
-  OCR: 'ocr',
-  IMAGE_DESCRIPTION: 'image-description',
-  FILE_TAGS: 'file-tags',
-  DELETE_RECORD: 'delete-record',
-  DELETE_RECORDS: 'delete-records',
-  RENAME_FILE: 'rename-file',
-  FILE_DETAIL: 'file-detail',
-  FILE_DETAILS: 'file-details',
-  DETECT_FACES: 'detect-faces',
-  MOVE: 'move',
-  COPY: 'copy',
-  DOWNLOAD: 'download',
-};
+import { buildTableMenuOptions } from '../../utils/menu-builder';
+import TextTranslation from '../../../utils/text-translation';
+import { getColumnByKey } from '../../utils/column';
 
 const ContextMenu = ({
   isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
@@ -41,17 +22,10 @@ const ContextMenu = ({
   const currentRecord = useRef(null);
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
   const { metadata } = useMetadataView();
-  const { enableFaceRecognition } = useMetadataStatus();
+  const { enableFaceRecognition, enableTags } = useMetadataStatus();
   const repoID = window.sfMetadataStore.repoId;
 
-  const checkCanModifyRow = (row) => window.sfMetadataContext.canModifyRow(row);
-
-  const checkIsDescribableFile = useCallback(record => {
-    const fileName = getFileNameFromRecord(record);
-    return checkCanModifyRow(record) && Utils.isDescriptionSupportedFile(fileName);
-  }, []);
-
-  const getAbleDeleteRecords = useCallback(records => records.filter(r => window.sfMetadataContext.checkCanDeleteRow(r)), []);
+  const readOnly = !window.sfMetadataContext.canModify();
 
   const toggleDeleteFolderDialog = useCallback(record => {
     if (deletedFolderPath) {
@@ -72,20 +46,14 @@ const ContextMenu = ({
   }, [deleteRecords]);
 
   const options = useMemo(() => {
-    const permission = window.sfMetadataContext.getPermission();
-    const isReadonly = permission === 'r';
     const { columns } = metadata;
-    const descriptionColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION);
-    const tagsColumn = getColumnByKey(columns, PRIVATE_COLUMN_KEY.TAGS);
-    let list = [];
-
+    const metadataStatus = {
+      enableFaceRecognition,
+      enableGenerateDescription: getColumnByKey(metadata.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
     // handle selected multiple cells
     if (selectedRange) {
-      if (!isReadonly) {
-        list.push({ value: OPERATION.CLEAR_SELECTED, label: gettext('Clear selected') });
-      }
-      list.push({ value: OPERATION.COPY_SELECTED, label: gettext('Copy selected') });
-
       const { topLeft, bottomRight } = selectedRange;
       let records = [];
       for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
@@ -95,30 +63,16 @@ const ContextMenu = ({
         }
       }
 
-      const ableDeleteRecords = getAbleDeleteRecords(records);
-      if (ableDeleteRecords.length > 0) {
-        list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete selected'), records: ableDeleteRecords });
-      }
-
-      const imageOrVideoRecords = records.filter(record => {
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-      });
-      if (imageOrVideoRecords.length > 0) {
-        list.push('Divider');
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-      }
-
-      if (enableFaceRecognition && enableSeafileAI) {
-        const imageRecords = records.filter(record => {
-          const fileName = getFileNameFromRecord(record);
-          return Utils.imageCheck(fileName);
-        });
-        if (imageRecords.length > 0) {
-          list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
-        }
-      }
-      return list;
+      const isMultiple = records.length > 1;
+      return buildTableMenuOptions(
+        records,
+        readOnly,
+        metadataStatus,
+        isMultiple,
+        false,
+        false,
+        true
+      );
     }
 
     const selectedRecordsIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
@@ -137,223 +91,193 @@ const ContextMenu = ({
         return records.every(record => getParentDirFromRecord(record) === firstPath);
       })();
 
-      if (areRecordsInSameFolder) {
-        if (!isReadonly) {
-          list.push({ value: OPERATION.MOVE, label: gettext('Move'), records });
-          list.push({ value: OPERATION.COPY, label: gettext('Copy'), records });
-        }
-        list.push({ value: OPERATION.DOWNLOAD, label: gettext('Download'), records });
-      }
-
-      const ableDeleteRecords = getAbleDeleteRecords(records);
-      if (ableDeleteRecords.length > 0) {
-        list.push({ value: OPERATION.DELETE_RECORDS, label: gettext('Delete'), records: ableDeleteRecords });
-      }
-
-      const imageOrVideoRecords = records.filter(record => {
-        if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
-        const fileName = getFileNameFromRecord(record);
-        return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
-      });
-      if (imageOrVideoRecords.length > 0) {
-        list.push('Divider');
-        list.push({ value: OPERATION.FILE_DETAILS, label: gettext('Extract file details'), records: imageOrVideoRecords });
-      }
-
-      if (enableFaceRecognition && enableSeafileAI) {
-        const imageRecords = records.filter(record => {
-          if (checkIsDir(record) || !checkCanModifyRow(record)) return false;
-          return Utils.imageCheck(getFileNameFromRecord(record));
-        });
-        if (imageRecords.length > 0) {
-          list.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: imageRecords });
-        }
-      }
-      return list;
+      return buildTableMenuOptions(
+        records,
+        readOnly,
+        metadataStatus,
+        true,
+        areRecordsInSameFolder,
+        false,
+        false,
+      );
     }
 
     // handle selected cell
-    if (!selectedPosition) return list;
+    if (!selectedPosition) return [];
     const { groupRecordIndex, rowIdx: recordIndex, idx } = selectedPosition;
     const column = columns[idx];
+    const isNameColumn = column && (column.key === PRIVATE_COLUMN_KEY.FILE_NAME);
     const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex }) || RowUtils.getRecordById(selectedRecordsIds[0], metadata);
-    if (!record) return list;
+    if (!record) return [];
 
-    const canModifyRow = checkCanModifyRow(record);
-    const canDeleteRow = window.sfMetadataContext.checkCanDeleteRow(record);
-    const isFolder = checkIsDir(record);
-    list.push({ value: OPERATION.OPEN_IN_NEW_TAB, label: isFolder ? gettext('Open folder in new tab') : gettext('Open file in new tab'), record });
-    list.push({ value: OPERATION.OPEN_PARENT_FOLDER, label: gettext('Open parent folder'), record });
-
-    const modifyOptions = [];
-    if (canModifyRow && column && isNameColumn(column)) {
-      modifyOptions.push({ value: OPERATION.RENAME_FILE, label: isFolder ? gettext('Rename folder') : gettext('Rename file'), record });
-    }
-    if (canModifyRow) {
-      modifyOptions.push({ value: OPERATION.MOVE, label: isFolder ? gettext('Move folder') : gettext('Move file'), record });
-    }
-    // Add copy and download options for single record
-    modifyOptions.push({ value: OPERATION.COPY, label: isFolder ? gettext('Copy folder') : gettext('Copy file'), record });
-    modifyOptions.push({ value: OPERATION.DOWNLOAD, label: isFolder ? gettext('Download folder') : gettext('Download file'), record });
-
-    if (canDeleteRow) {
-      modifyOptions.push({ value: OPERATION.DELETE_RECORD, label: isFolder ? gettext('Delete folder') : gettext('Delete file'), record });
-    }
-    if (modifyOptions.length > 0) {
-      list.push('Divider');
-      list.push(...modifyOptions);
-    }
-
-    const fileName = getFileNameFromRecord(record);
-    const isImage = Utils.imageCheck(fileName);
-    const isVideo = Utils.videoCheck(fileName);
-    if (isImage || isVideo) {
-      list.push('Divider');
-      list.push({ value: OPERATION.FILE_DETAIL, label: gettext('Extract file detail'), record });
-    }
-
-    if (enableSeafileAI && !isFolder && canModifyRow) {
-      const isDescribableFile = checkIsDescribableFile(record);
-      const isPdf = Utils.pdfCheck(fileName);
-      const aiOptions = [];
-
-      if (enableFaceRecognition && isImage) {
-        aiOptions.push({ value: OPERATION.DETECT_FACES, label: gettext('Detect faces'), records: [record] });
-      }
-      if (descriptionColumn && isDescribableFile) {
-        aiOptions.push({ value: OPERATION.GENERATE_DESCRIPTION, label: gettext('Generate description'), record });
-      }
-      if (tagsColumn && isDescribableFile && !isVideo) {
-        aiOptions.push({ value: OPERATION.FILE_TAGS, label: gettext('Generate file tags'), record });
-      }
-      if (isImage || isPdf) {
-        aiOptions.push({ value: OPERATION.OCR, label: gettext('Extract text'), record });
-      }
-      if (aiOptions.length) {
-        list.push(...aiOptions);
-      }
-    }
-
-    return list;
-  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, checkIsDescribableFile, getAbleDeleteRecords, enableFaceRecognition]);
+    return buildTableMenuOptions(
+      [record],
+      readOnly,
+      metadataStatus,
+      false,
+      true,
+      isNameColumn,
+      false
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [metadata, enableFaceRecognition, enableTags, selectedRange, recordMetrics, selectedPosition, selectedPosition?.idx, recordGetterByIndex, isGroupView, readOnly]);
 
   const handleOptionClick = useCallback((option, event) => {
-    switch (option.value) {
-      case OPERATION.OPEN_IN_NEW_TAB: {
-        const { record } = option;
-        openInNewTab(repoID, record);
+    // Get the current context records based on selection state
+    const getCurrentRecords = () => {
+      if (selectedRange) {
+        const { topLeft, bottomRight } = selectedRange;
+        let records = [];
+        for (let i = topLeft.rowIdx; i <= bottomRight.rowIdx; i++) {
+          const record = recordGetterByIndex({ isGroupView, groupRecordIndex: topLeft.groupRecordIndex, recordIndex: i });
+          if (record) {
+            records.push(record);
+          }
+        }
+        return records;
+      }
+
+      const selectedRecordsIds = recordMetrics ? Object.keys(recordMetrics.idSelectedRecordMap) : [];
+      if (selectedRecordsIds.length > 1) {
+        let records = [];
+        selectedRecordsIds.forEach(id => {
+          const record = metadata.id_row_map[id];
+          if (record) {
+            records.push(record);
+          }
+        });
+        return records;
+      }
+
+      // Single record
+      if (selectedPosition) {
+        const { groupRecordIndex, rowIdx: recordIndex } = selectedPosition;
+        const record = recordGetterByIndex({ isGroupView, groupRecordIndex, recordIndex }) || RowUtils.getRecordById(selectedRecordsIds[0], metadata);
+        return record ? [record] : [];
+      }
+
+      return [];
+    };
+
+    const currentRecords = getCurrentRecords();
+    const isMultiple = currentRecords.length > 1;
+    const singleRecord = currentRecords.length === 1 ? currentRecords[0] : null;
+
+    switch (option.key) {
+      case TextTranslation.OPEN_FILE_IN_NEW_TAB.key:
+      case TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key: {
+        if (singleRecord) {
+          openInNewTab(repoID, singleRecord);
+        }
         break;
       }
-      case OPERATION.OPEN_PARENT_FOLDER: {
+      case TextTranslation.OPEN_PARENT_FOLDER.key: {
         event.preventDefault();
-        const { record } = option;
-        openParentFolder(record);
+        if (singleRecord) {
+          openParentFolder(singleRecord);
+        }
         break;
       }
-      case OPERATION.COPY_SELECTED: {
+      case TextTranslation.COPY_SELECTED.key: {
         onCopySelected && onCopySelected();
         break;
       }
-      case OPERATION.CLEAR_SELECTED: {
+      case TextTranslation.CLEAR_SELECTED.key: {
         onClearSelected && onClearSelected();
         break;
       }
-      case OPERATION.GENERATE_DESCRIPTION: {
-        const { record } = option;
-        if (!record) break;
-        updateRecordDescription(record);
-        break;
-      }
-      case OPERATION.FILE_TAGS: {
-        const { record } = option;
-        if (!record) break;
-        generateFileTags(record);
-        break;
-      }
-      case OPERATION.OCR: {
-        const { record } = option;
-        if (!record) break;
-        onOCR(record, 'sf-table-rdg-selected');
-        break;
-      }
-      case OPERATION.DELETE_RECORD: {
-        const { record } = option;
-        if (!record || !record._id || !deleteRecords) break;
-        if (checkIsDir(record)) {
-          toggleDeleteFolderDialog(record);
-          break;
-        }
-        deleteRecords([record._id]);
-        break;
-      }
-      case OPERATION.DELETE_RECORDS: {
-        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-        selectNone && selectNone();
-
-        const { records } = option;
-        const recordsIds = Array.isArray(records) ? records.map((record) => record._id).filter(Boolean) : [];
-        if (recordsIds.length === 0 || !deleteRecords) break;
-        deleteRecords(recordsIds);
-        break;
-      }
-      case OPERATION.RENAME_FILE: {
-        const { record } = option;
-        if (!record || !record._id) break;
-
-        // rename file via FileNameEditor
-        window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR);
-        break;
-      }
-      case OPERATION.FILE_DETAILS: {
-        const { records } = option;
-        updateRecordDetails(records);
-        break;
-      }
-      case OPERATION.FILE_DETAIL: {
-        const { record } = option;
-        updateRecordDetails([record]);
-        break;
-      }
-      case OPERATION.DETECT_FACES: {
-        const { records } = option;
-        updateFaceRecognition(records);
-        break;
-      }
-      case OPERATION.MOVE: {
-        const { record, records } = option;
-        if (records) {
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
-        } else if (record) {
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, [record]);
+      case TextTranslation.GENERATE_DESCRIPTION.key: {
+        if (singleRecord) {
+          updateRecordDescription(singleRecord);
         }
         break;
       }
-      case OPERATION.COPY: {
-        const { record, records } = option;
-        if (records) {
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, records);
-        } else if (record) {
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, [record]);
+      case TextTranslation.GENERATE_TAGS.key: {
+        if (singleRecord) {
+          generateFileTags(singleRecord);
         }
         break;
       }
-      case OPERATION.DOWNLOAD: {
-        const { record, records } = option;
-        if (records) {
-          // Multiple records
-          const recordIds = records.map(r => r._id).filter(Boolean);
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, recordIds);
-        } else if (record) {
-          // Single record
-          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, [record._id]);
+      case TextTranslation.EXTRACT_TEXT.key: {
+        if (singleRecord) {
+          onOCR(singleRecord, 'sf-table-rdg-selected');
         }
         break;
       }
-      default: {
+      case TextTranslation.DELETE.key:
+      case TextTranslation.DELETE_SELECTED.key: {
+        if (currentRecords.length > 0) {
+          if (isMultiple) {
+            // Multiple records deletion
+            window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+            selectNone && selectNone();
+            const recordsIds = currentRecords.map((record) => record._id).filter(Boolean);
+            if (recordsIds.length > 0 && deleteRecords) {
+              deleteRecords(recordsIds);
+            }
+          } else if (singleRecord) {
+            // Single record deletion
+            if (singleRecord._id && deleteRecords) {
+              if (checkIsDir(singleRecord)) {
+                toggleDeleteFolderDialog(singleRecord);
+                break;
+              }
+              deleteRecords([singleRecord._id]);
+            }
+          }
+        }
         break;
       }
+      case TextTranslation.RENAME.key: {
+        if (singleRecord && singleRecord._id) {
+          // rename file via FileNameEditor
+          window.sfMetadataContext.eventBus.dispatch(METADATA_EVENT_BUS_TYPE.OPEN_EDITOR);
+        }
+        break;
+      }
+      case TextTranslation.EXTRACT_FILE_DETAILS.key: {
+        if (currentRecords.length > 0) {
+          updateRecordDetails(currentRecords);
+        }
+        break;
+      }
+      case TextTranslation.EXTRACT_FILE_DETAIL.key: {
+        if (singleRecord) {
+          updateRecordDetails([singleRecord]);
+        }
+        break;
+      }
+      case TextTranslation.DETECT_FACES.key: {
+        if (currentRecords.length > 0) {
+          updateFaceRecognition(currentRecords);
+        }
+        break;
+      }
+      case TextTranslation.MOVE.key: {
+        if (currentRecords.length > 0) {
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, currentRecords);
+        }
+        break;
+      }
+      case TextTranslation.COPY.key: {
+        if (currentRecords.length > 0) {
+          window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, currentRecords);
+        }
+        break;
+      }
+      case TextTranslation.DOWNLOAD.key: {
+        if (currentRecords.length > 0) {
+          const recordsIds = currentRecords.map((record) => record._id).filter(Boolean);
+          if (recordsIds.length > 0) {
+            window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, recordsIds);
+          }
+        }
+        break;
+      }
+      default:
+        break;
     }
-  }, [repoID, onCopySelected, onClearSelected, updateRecordDescription, generateFileTags, onOCR, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, updateFaceRecognition]);
+  }, [isGroupView, selectedPosition, recordMetrics, selectedRange, metadata, recordGetterByIndex, repoID, onCopySelected, onClearSelected, updateRecordDescription, generateFileTags, onOCR, deleteRecords, toggleDeleteFolderDialog, selectNone, updateRecordDetails, updateFaceRecognition]);
 
   const { top, left } = getTableCanvasContainerRect();
   const { right, bottom } = getTableContentRect();

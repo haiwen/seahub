@@ -1,66 +1,149 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { gettext } from '../../utils/constants';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
+import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
-import { Dirent } from '../../models';
-import { useFileOperations } from '../../hooks/file-operations';
+import { buildGalleryToolbarMenuOptions } from '../../metadata/utils/menu-builder';
+import TextTranslation from '../../utils/text-translation';
+import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
+import { getFileNameFromRecord } from '../../metadata/utils/cell/core';
+import { Utils } from '../../utils/utils';
+import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
+import { checkIsDir } from '../../metadata/utils/row';
+import { useMetadataStatus } from '../../hooks';
+import { getColumnByKey } from '../../metadata/utils/column';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
+  const [isSomeone, setIsSomeone] = useState(false);
   const metadataRef = useRef([]);
-  const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
+  const menuRef = useRef(null);
+
+  const repoID = window.sfMetadataContext?.getSetting('repoID') || '';
+  const { enableFaceRecognition, enableTags } = useMetadataStatus();
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
 
-  const checkCanDeleteRow = window.sfMetadataContext.checkCanDeleteRow();
-  const canDuplicateRow = window.sfMetadataContext.canDuplicateRow();
+  const readOnly = !window.sfMetadataContext.canModify();
+  const faceRecognitionPermission = useMemo(() => {
+    return {
+      canAddPhotoToPeople: window.sfMetadataContext.canAddPhotoToPeople(),
+      canRemovePhotoFromPeople: window.sfMetadataContext.canRemovePhotoFromPeople(),
+      canSetPeoplePhoto: window.sfMetadataContext.canSetPeoplePhoto(),
+    };
+  }, []);
 
   useEffect(() => {
-    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata) => {
+    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata, isSomeone) => {
       metadataRef.current = metadata || [];
       setSelectedRecordIds(ids);
+      setIsSomeone(isSomeone);
+    });
+
+    const unsubscribeMetadata = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_METADATA, (updatedMetadata) => {
+      metadataRef.current = updatedMetadata || [];
     });
 
     return () => {
       unsubscribeSelectedFileIds && unsubscribeSelectedFileIds();
+      unsubscribeMetadata && unsubscribeMetadata();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
+  const toolbarMenuOptions = useMemo(() => {
+    if (!records.length) return [];
+    const metadataStatus = {
+      enableFaceRecognition,
+      enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
+      enableTags
+    };
+    return buildGalleryToolbarMenuOptions(
+      records,
+      readOnly,
+      metadataStatus,
+      isSomeone,
+      faceRecognitionPermission
+    );
+  }, [records, readOnly, enableFaceRecognition, enableTags, isSomeone, faceRecognitionPermission]);
+
+  const onMenuItemClick = useCallback((operation) => {
+    switch (operation) {
+      case TextTranslation.OPEN_FILE_IN_NEW_TAB.key:
+      case TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key: {
+        openInNewTab(repoID, records[0]);
+        break;
+      }
+      case TextTranslation.OPEN_PARENT_FOLDER.key: {
+        openParentFolder(records[0]);
+        break;
+      }
+      case TextTranslation.EXTRACT_FILE_DETAIL.key:
+      case TextTranslation.EXTRACT_FILE_DETAILS.key: {
+        const imageOrVideoRecords = records.filter(record => {
+          const isFolder = checkIsDir(record);
+          if (isFolder || readOnly) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName) || Utils.videoCheck(fileName);
+        });
+
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, imageOrVideoRecords);
+        break;
+      }
+      case TextTranslation.DETECT_FACES.key: {
+        const images = records.filter(record => {
+          const isFolder = checkIsDir(record);
+          if (isFolder || readOnly) return false;
+          const fileName = getFileNameFromRecord(record);
+          return Utils.imageCheck(fileName);
+        });
+        eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, images);
+        break;
+      }
+      case TextTranslation.GENERATE_DESCRIPTION.key: {
+        eventBus.dispatch(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, records[0]);
+        break;
+      }
+      case TextTranslation.GENERATE_TAGS.key: {
+        eventBus.dispatch(EVENT_BUS_TYPE.GENERATE_FILE_TAGS, records[0]);
+        break;
+      }
+      case TextTranslation.EXTRACT_TEXT.key: {
+        eventBus.dispatch(EVENT_BUS_TYPE.EXTRACT_TEXT, records[0], menuRef.current.dropdownRef.current);
+        break;
+      }
+      default:
+        break;
+    }
+  }, [repoID, records, eventBus, readOnly]);
+
+  // Individual button handlers
+  const onMoveClick = useCallback(() => {
+    eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
+  }, [records, eventBus]);
+
+  const onCopyClick = useCallback(() => {
+    eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_COPY_DIALOG, records);
+  }, [records, eventBus]);
+
+  const onDownloadClick = useCallback(() => {
+    eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, selectedRecordIds);
+  }, [selectedRecordIds, eventBus]);
+
+  const onDeleteClick = useCallback(() => {
+    eventBus.dispatch(EVENT_BUS_TYPE.DELETE_RECORDS, selectedRecordIds, {
+      success_callback: () => {
+        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+      }
+    });
+  }, [selectedRecordIds, eventBus]);
+
+
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, []);
     eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   }, [eventBus]);
-
-  const handleDownload = useCallback(() => {
-    const list = records.map(record => {
-      const { _parent_dir: parentDir, _name: fileName } = record || {};
-      const name = parentDir === '/' ? fileName : `${parentDir}/${fileName}`;
-      return { name };
-    });
-    handleDownloadAPI('/', list);
-  }, [handleDownloadAPI, records]);
-
-  const deleteRecords = useCallback(() => {
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_RECORDS, selectedRecordIds, {
-      success_callback: () => {
-        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-      }
-    });
-  }, [eventBus, selectedRecordIds]);
-
-  const handleDuplicate = useCallback((destRepo, dirent, destPath, nodeParentPath, isByDialog) => {
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DUPLICATE_RECORD, selectedRecordIds[0],
-      destRepo, dirent, destPath, nodeParentPath, isByDialog);
-  }, [eventBus, selectedRecordIds]);
-
-  const handleCopy = useCallback(() => {
-    const { _parent_dir: parentDir, _name: fileName } = records[0] || {};
-    const dirent = new Dirent({ name: fileName });
-    handleCopyAPI(parentDir, dirent, false, handleDuplicate);
-  }, [records, handleCopyAPI, handleDuplicate]);
 
   const length = selectedRecordIds.length;
   return (
@@ -69,19 +152,38 @@ const GalleryFilesToolbar = () => {
         <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
-      <span className="cur-view-path-btn" onClick={handleDownload}>
-        <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
+
+      {length === 1 && !readOnly && (
+        <>
+          <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')}>
+            <span className="sf3-font-move sf3-font" aria-label={gettext('Move')}></span>
+          </span>
+          <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')}>
+            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')}></span>
+          </span>
+        </>
+      )}
+      <span className="cur-view-path-btn" onClick={onDownloadClick} title={gettext('Download')}>
+        <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')}></span>
       </span>
-      {checkCanDeleteRow &&
-        <span className="cur-view-path-btn" onClick={deleteRecords}>
-          <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
+      {!readOnly && (
+        <span className="cur-view-path-btn" onClick={onDeleteClick} title={gettext('Delete')}>
+          <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')}></span>
         </span>
-      }
-      {(canDuplicateRow && length === 1) &&
-      <span className="cur-view-path-btn" onClick={handleCopy}>
-        <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')}></span>
-      </span>
-      }
+      )}
+
+      {toolbarMenuOptions.length > 0 && (
+        <ItemDropdownMenu
+          ref={menuRef}
+          toggleClass="cur-view-path-btn sf3-font-more sf3-font"
+          item={{}}
+          freezeItem={() => {}}
+          unfreezeItem={() => {}}
+          toggleItemMenuShow={() => {}}
+          getMenuList={() => toolbarMenuOptions}
+          onMenuItemClick={onMenuItemClick}
+        />
+      )}
     </div>
   );
 };

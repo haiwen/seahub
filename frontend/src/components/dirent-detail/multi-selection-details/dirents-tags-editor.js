@@ -189,7 +189,7 @@ const DirentsTagsEditor = ({
 DirentsTagsEditor.propTypes = {
   records: PropTypes.array.isRequired,
   field: PropTypes.object.isRequired,
-  onBatchMetadataRefresh: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   repoID: PropTypes.string.isRequired,
   modifyLocalFileTags: PropTypes.func,
 };

@@ -19,7 +19,6 @@
 }
 
 /* end toolbar-container */
-
 /* file-operation toolbar eg: edit, upload, new, share*/
 .operation-item  {
   padding: 0 0.5rem;
@@ -35,6 +34,7 @@
 }
 
 /* end file-operation toolbar */
+
 #cur-folder-more-op-toggle {
   margin-right: 0px;
 }

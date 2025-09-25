@@ -50,9 +50,10 @@ export const EVENT_BUS_TYPE = {
   UPDATE_RECORD_DETAILS: 'update_record_details',
   UPDATE_FACE_RECOGNITION: 'update_face_recognition',
   GENERATE_DESCRIPTION: 'generate_description',
-  OCR: 'ocr',
+  EXTRACT_TEXT: 'extract_text',
   SEARCH_ROWS: 'search_rows',
   RESET_SEARCH_BAR: 'reset_search_bar',
+  GENERATE_FILE_TAGS: 'generate_file_tags',
 
   // metadata
   RELOAD_DATA: 'reload_data',
@@ -100,6 +101,7 @@ export const EVENT_BUS_TYPE = {
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',
   OPEN_KANBAN_SETTINGS: 'open_kanban_settings',
   CLOSE_KANBAN_SETTINGS: 'close_kanban_settings',
+  TOGGLE_KANBAN_RENAME_DIALOG: 'toggle_kanban_rename_dialog',
 
   // map
   MODIFY_MAP_TYPE: 'modify_map_type',

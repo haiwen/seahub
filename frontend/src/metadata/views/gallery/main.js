@@ -196,7 +196,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const updateSelectedImages = useCallback((selectedImages) => {
     const ids = selectedImages.map(item => item.id);
     if (isSomeone != undefined) { // 'face recognition'
-      updateSelectedRecordIds(ids, selectedImages, isSomeone);
+      updateSelectedRecordIds(ids, isSomeone);
     } else {
       updateSelectedRecordIds(ids);
     }
@@ -503,8 +503,8 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         )}
       </div>
       <GalleryContextmenu
-        metadata={metadata}
         selectedImages={selectedImages}
+        isSomeone={isSomeone}
         onDelete={handleDeleteSelectedImages}
         onDuplicate={duplicateRecord}
         onRemoveImage={onRemoveImage ? handleRemoveSelectedImages : null}

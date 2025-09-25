@@ -108,7 +108,7 @@ const KanbanContextMenu = ({ selectedCard, onDelete, onRename }) => {
       <ContextMenu
         options={options}
         onOptionClick={handleOptionClick}
-        ignoredTriggerElements={['.sf-metadata-kanban-card']}
+        allowedTriggerElements={['.sf-metadata-kanban-card']}
       />
       {isRenameDialogShow && (
         <RenameDialog

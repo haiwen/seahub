@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { DropdownItem } from 'reactstrap';
+import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import PropTypes from 'prop-types';
 import ModalPortal from '../../../components/modal-portal';
+import ContextMenuItem from './context-menu-item';
 
 import './index.css';
 
@@ -9,17 +10,52 @@ const ContextMenu = ({
   options,
   boundaryCoordinates = { top: 0, right: window.innerWidth, bottom: window.innerHeight, left: 0 },
   onOptionClick,
-  ignoredTriggerElements
+  allowedTriggerElements
 }) => {
   const menuRef = useRef(null);
   const [visible, setVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [subMenuState, setSubMenuState] = useState({ isOpen: false, currentItem: null });
 
   const handleHide = useCallback((event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setVisible(false);
+    // Don't hide if clicking inside the menu
+    if (menuRef.current && menuRef.current.contains(event.target)) {
+      return;
     }
-  }, [menuRef]);
+    setVisible(false);
+    setSubMenuState({ isOpen: false, currentItem: null });
+  }, []);
+
+  const toggleSubMenu = useCallback((e) => {
+    setSubMenuState(prev => ({
+      isOpen: !prev.isOpen,
+      currentItem: prev.currentItem
+    }));
+  }, []);
+
+  const handleSubMenuMouseEnter = useCallback((item) => {
+    setSubMenuState({
+      isOpen: true,
+      currentItem: item.value
+    });
+  }, []);
+
+  const handleMainMenuMouseMove = useCallback((e) => {
+    if (subMenuState.isOpen && e.target && e.target.className.includes('dropdown-item')) {
+      setSubMenuState({ isOpen: false, currentItem: null });
+    }
+  }, [subMenuState.isOpen]);
+
+  const handleOptionClickInternal = useCallback((event, option) => {
+    event.stopPropagation();
+    event.preventDefault();
+    onOptionClick && onOptionClick(option, event);
+    // Use setTimeout to ensure the click handler executes before hiding
+    setTimeout(() => {
+      setVisible(false);
+      setSubMenuState({ isOpen: false, currentItem: null });
+    }, 0);
+  }, [onOptionClick]);
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     let menuStyles = {
@@ -64,19 +100,16 @@ const ContextMenu = ({
     return menuStyles;
   }, [boundaryCoordinates, options]);
 
-  const handleOptionClick = useCallback((event, option) => {
-    event.stopPropagation();
-    onOptionClick(option, event);
-    setVisible(false);
-  }, [onOptionClick]);
-
   useEffect(() => {
     const handleShow = (event) => {
       event.preventDefault();
       if (menuRef.current && menuRef.current.contains(event.target)) return;
 
-      if (ignoredTriggerElements && !ignoredTriggerElements.some(target => event.target.closest(target))) {
-        return;
+      if (allowedTriggerElements && allowedTriggerElements.length > 0) {
+        const isAllowedElement = allowedTriggerElements.some(target => event.target.closest(target));
+        if (!isAllowedElement) {
+          return;
+        }
       }
 
       setVisible(true);
@@ -91,7 +124,7 @@ const ContextMenu = ({
       const metadataWrapper = document.querySelector('#sf-metadata-wrapper');
       metadataWrapper && metadataWrapper.removeEventListener('contextmenu', handleShow);
     };
-  }, [getMenuPosition, ignoredTriggerElements]);
+  }, [getMenuPosition, allowedTriggerElements]);
 
   useEffect(() => {
     if (visible) {
@@ -114,15 +147,50 @@ const ContextMenu = ({
         {options.map((option, index) => {
           if (option === 'Divider') {
             return <DropdownItem key={index} divider />;
+          } else if (option.subOpList) {
+            return (
+              <Dropdown
+                key={index}
+                direction="right"
+                className="w-100"
+                isOpen={subMenuState.isOpen && subMenuState.currentItem === option.key}
+                toggle={toggleSubMenu}
+                onMouseMove={(e) => { e.stopPropagation(); }}
+              >
+                <DropdownToggle
+                  tag="span"
+                  className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
+                  onMouseEnter={() => handleSubMenuMouseEnter(option)}
+                >
+                  <span className="mr-auto">{option.value}</span>
+                  <i className="sf3-font-down sf3-font rotate-270"></i>
+                </DropdownToggle>
+                <DropdownMenu>
+                  {option.subOpList.map((subItem, subIndex) => {
+                    if (subItem === 'Divider') {
+                      return <DropdownItem key={subIndex} divider />;
+                    } else {
+                      return (
+                        <ContextMenuItem
+                          key={subIndex}
+                          option={subItem}
+                          onClick={handleOptionClickInternal}
+                          isSubMenuItem={true}
+                        />
+                      );
+                    }
+                  })}
+                </DropdownMenu>
+              </Dropdown>
+            );
           } else {
             return (
-              <button
+              <ContextMenuItem
                 key={index}
-                className="dropdown-item"
-                onClick={(event) => handleOptionClick(event, option)}
-              >
-                {option.label}
-              </button>
+                option={option}
+                onClick={handleOptionClickInternal}
+                onMouseMove={handleMainMenuMouseMove}
+              />
             );
           }
         })}
@@ -134,13 +202,20 @@ const ContextMenu = ({
 ContextMenu.propTypes = {
   options: PropTypes.arrayOf(PropTypes.oneOfType([
     PropTypes.shape({
+      key: PropTypes.string.isRequired,
       value: PropTypes.string.isRequired,
-      label: PropTypes.string.isRequired,
+      subOpList: PropTypes.arrayOf(PropTypes.oneOfType([
+        PropTypes.shape({
+          key: PropTypes.string.isRequired,
+          value: PropTypes.string.isRequired,
+        }),
+        PropTypes.string,
+      ])),
     }),
     PropTypes.string,
   ])).isRequired,
   boundaryCoordinates: PropTypes.object,
-  ignoredTriggerElements: PropTypes.array,
+  allowedTriggerElements: PropTypes.array,
   onOptionClick: PropTypes.func.isRequired,
 };
 

@@ -9,11 +9,11 @@ import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
-import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder';
+import { buildKanbanToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
 
-const TableFilesToolbar = ({ repoID }) => {
+const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const [metadata, setMetadata] = useState({});
   const metadataRef = useRef([]);
@@ -41,29 +41,29 @@ const TableFilesToolbar = ({ repoID }) => {
       enableGenerateDescription: getColumnByKey(metadataRef.current.columns, PRIVATE_COLUMN_KEY.FILE_DESCRIPTION) !== null,
       enableTags
     };
-    return buildTableToolbarMenuOptions(
+    return buildKanbanToolbarMenuOptions(
       records,
       readOnly,
       metadataStatus,
       isMultiple,
       areRecordsInSameFolder,
-      true
+      false
     );
   }, [records, metadata.columns, enableFaceRecognition, enableTags, readOnly, isMultiple, areRecordsInSameFolder]);
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, []);
-    eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
-  }, [eventBus]);
+    updateCurrentDirent();
+  }, [eventBus, updateCurrentDirent]);
 
   const deleteRecords = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.DELETE_RECORDS, selectedRecordIds, {
       success_callback: () => {
-        eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
+        updateCurrentDirent();
       }
     });
-  }, [eventBus, selectedRecordIds]);
+  }, [eventBus, selectedRecordIds, updateCurrentDirent]);
 
   const toggleMoveDialog = useCallback(() => {
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_MOVE_DIALOG, records);
@@ -141,6 +141,10 @@ const TableFilesToolbar = ({ repoID }) => {
         openParentFolder(records[0]);
         break;
       }
+      case TextTranslation.RENAME.key: {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.TOGGLE_KANBAN_RENAME_DIALOG);
+        break;
+      }
       default:
         break;
     }
@@ -168,7 +172,7 @@ const TableFilesToolbar = ({ repoID }) => {
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
 
-      {!readOnly && (!isMultiple || areRecordsInSameFolder) && (
+      {!isMultiple && !readOnly && (
         <>
           <span
             className="cur-view-path-btn"
@@ -218,8 +222,8 @@ const TableFilesToolbar = ({ repoID }) => {
   );
 };
 
-TableFilesToolbar.propTypes = {
+KanbanFilesToolbar.propTypes = {
   repoID: PropTypes.string.isRequired,
 };
 
-export default TableFilesToolbar;
+export default KanbanFilesToolbar;
