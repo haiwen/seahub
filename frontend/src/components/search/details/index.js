@@ -10,6 +10,7 @@ import { MetadataStatusProvider } from '../../../hooks';
 import LibDetail from '../../dirent-detail/lib-details';
 import { Body, Header } from '../../dirent-detail/detail';
 import { gettext, mediaUrl, siteRoot, thumbnailSizeForGrid } from '../../../utils/constants';
+import Loading from '@/components/loading';
 
 import './index.css';
 
@@ -18,10 +19,12 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
   const [direntDetail, setDirentDetail] = useState(null);
   const [errMessage, setErrMessage] = useState(null);
   const [libErrorMessage, setLibErrorMessage] = useState(null);
+  const [isLoadingRepo, setIsLoadingRepo] = useState(true);
 
   useEffect(() => {
     setRepoInfo(null);
     setLibErrorMessage(null);
+    setIsLoadingRepo(true);
     const controller = new AbortController();
     const fetchData = async () => {
       try {
@@ -43,6 +46,8 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
           const errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
         }
+      } finally {
+        setIsLoadingRepo(false);
       }
     };
     const timer = setTimeout(fetchData, 100);
@@ -50,6 +55,7 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
     return () => {
       controller.abort();
       clearTimeout(timer);
+      setIsLoadingRepo(false);
     };
   }, [repoID, path]);
 
@@ -101,6 +107,16 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
     };
   }, [repoID, repoInfo, path, dirent]);
 
+  if (isLoadingRepo) {
+    return (
+      <div className="searched-item-details">
+        <div className="cur-view-detail" style={{ width: 300, padding: '20px' }}>
+          <Loading/>
+        </div>
+      </div>
+    );
+  }
+
   // search result is repo, this repo has been deleted; search result is file or folder, the repo has been deleted
   if (!repoInfo && libErrorMessage) {
     return (
@@ -145,7 +161,18 @@ const SearchedItemDetails = ({ repoID, path, dirent }) => {
     );
   }
 
-  if (!direntDetail) return null;
+  if (!direntDetail) {
+    return (
+      <div className="searched-item-details">
+        <div className="cur-view-detail" style={{ width: 300 }}>
+          <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)}></Header>
+          <Body>
+            <Loading />
+          </Body>
+        </div>
+      </div>
+    );
+  }
 
   let parentDir = path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path; // deal with folder path comes from search results, eg: /folder/
   parentDir = Utils.getDirName(parentDir);
