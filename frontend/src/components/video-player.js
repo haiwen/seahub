@@ -32,9 +32,15 @@ class VideoPlayer extends React.Component {
 
   // destroy player on unmount
   componentWillUnmount() {
-    if (this.player) {
-      this.player.dispose();
-    }
+    setTimeout(() => {
+      try {
+        if (this.player) {
+          this.player.dispose();
+        }
+      } catch (e) {
+        //
+      }
+    }, 0);
   }
 
   // wrap the player in a div with a `data-vjs-player` attribute
