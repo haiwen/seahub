@@ -31,7 +31,7 @@ import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
-import MetadataPathToolbar from '../../components/toolbar/metadata-path-toolbar';
+import ViewToolbar from '../../components/toolbar/view-toolbar';
 import { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 
@@ -2469,7 +2469,7 @@ class LibContentView extends React.Component {
                         })}>
                         {isDirentSelected ? (
                           currentMode === TAGS_MODE || currentMode === METADATA_MODE ? (
-                            <MetadataPathToolbar
+                            <ViewToolbar
                               repoID={repoID}
                               repoInfo={currentRepoInfo}
                               mode={currentMode}

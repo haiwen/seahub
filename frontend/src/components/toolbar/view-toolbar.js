@@ -11,7 +11,7 @@ import GalleryFilesToolbar from './gallery-files-toolbar';
 import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
 import KanbanFilesToolbar from './kanban-files-toolbar';
 
-const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent }) => {
+const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent }) => {
   const { idViewMap } = useMetadata();
   const view = useMemo(() => idViewMap[viewId], [viewId, idViewMap]);
   const type = view?.type;
@@ -38,18 +38,20 @@ const MetadataPathToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurre
 
   if (mode === TAGS_MODE) {
     const isAllTagsView = path.split('/').pop() === ALL_TAGS_ID;
-    if (isAllTagsView) return <AllTagsToolbar />;
-
-    return <TagFilesToolbar currentRepoInfo={repoInfo} />;
+    if (isAllTagsView) {
+      return <AllTagsToolbar />;
+    } else {
+      return <TagFilesToolbar currentRepoInfo={repoInfo} />;
+    }
   }
 
 };
 
-MetadataPathToolbar.propTypes = {
+ViewToolbar.propTypes = {
   repoID: PropTypes.string.isRequired,
   repoInfo: PropTypes.object.isRequired,
   mode: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
 };
 
-export default MetadataPathToolbar;
+export default ViewToolbar;
