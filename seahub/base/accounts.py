@@ -63,6 +63,8 @@ ANONYMOUS_EMAIL = 'Anonymous'
 
 UNUSABLE_PASSWORD = '!'  # This will never be a valid hash
 
+SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
+
 
 def default_ldap_role_mapping(role):
     return role
@@ -968,6 +970,8 @@ class CustomLDAPBackend(object):
         # search user from ldap server
         try:
             auth_user = SocialAuthUser.objects.filter(username=ldap_user, provider=LDAP_PROVIDER).first()
+            if not auth_user and SSO_LDAP_USE_SAME_UID:
+                auth_user = SocialAuthUser.objects.filter(username=ldap_user).first()
             if auth_user:
                 login_attr = auth_user.uid
             else:
@@ -981,6 +985,8 @@ class CustomLDAPBackend(object):
         except Exception as e:
             if ENABLE_MULTI_LDAP:
                 auth_user = SocialAuthUser.objects.filter(username=ldap_user, provider=MULTI_LDAP_1_PROVIDER).first()
+                if not auth_user and SSO_LDAP_USE_SAME_UID:
+                    auth_user = SocialAuthUser.objects.filter(username=ldap_user).first()
                 if auth_user:
                     login_attr = auth_user.uid
                 else:
