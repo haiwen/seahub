@@ -34,6 +34,7 @@ from djangosaml2.views import LogoutView
 from seaserv import ccnet_api, seafile_api
 
 from seahub import auth
+from seahub.api2.utils import get_api_token
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
 from seahub import settings
@@ -282,7 +283,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
 
 
     # saml2 connect
-    relay_state = request.POST.get('RelayState', '/saml/complete/')
+    relay_state = request.POST.get('RelayState', '/saml2/complete/')
     is_saml2_connect = parse_qs(urlparse(unquote(relay_state)).query).get('is_saml2_connect', [''])[0]
     if is_saml2_connect == 'true':
         if not request.user.is_authenticated:
@@ -391,7 +392,7 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
                 saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
         return HttpResponseForbidden(_('Login failed: user is deactivated. '
                                        'Please report to your organization (company) administrator.'))
-
+    request.user = user
     auth_login(request, user)
     _set_subject_id(request.saml_session, session_info['name_id'])
 
@@ -402,8 +403,15 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
         logger.warning('The RelayState parameter exists but is empty')
         relay_state = default_relay_state
     logger.debug('Redirecting to the RelayState: %s', relay_state)
-    return HttpResponseRedirect(relay_state)
 
+    api_token = get_api_token(request)
+    response = HttpResponseRedirect(relay_state)
+    response.set_cookie('seahub_auth', request.user.username + '@' + api_token.key)
+    if user.is_authenticated and user.is_staff:
+        update_sudo_mode_ts(request)
+    
+    return response
+    
 
 def metadata(request, org_id=None):
     org = None
