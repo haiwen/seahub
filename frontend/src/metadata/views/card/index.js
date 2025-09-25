@@ -4,12 +4,7 @@ import { EVENT_BUS_TYPE } from '../../constants';
 import CardItems from './card-items';
 import Settings from './settings';
 
-import './index.css';
-
 const Card = () => {
-
-  // Thu Sep 11 18:29:51 CST 2025
-  // 'Settings' will be implemented later
   const [isShowSettings, setShowSettings] = useState(false);
 
   const {
@@ -46,7 +41,7 @@ const Card = () => {
 
   return (
     <div className="sf-metadata-container">
-      <div className="sf-metadata-view-card flex-fill o-auto">
+      <div className="sf-metadata-view-card flex-fill o-hidden position-relative">
         <CardItems
           modifyRecord={modifyRecord}
           deleteRecords={deleteRecords}
@@ -54,7 +49,7 @@ const Card = () => {
           onCloseSettings={closeSettings}
         />
         {isShowSettings && (
-          <div className="sf-metadata-view-setting-panel sf-metadata-view-card-setting h-100">
+          <div className="sf-metadata-view-setting-panel sf-metadata-view-card-setting h-100 position-absolute end-0 top-0">
             <Settings
               columns={columns}
               columnsMap={metadata.key_column_map}

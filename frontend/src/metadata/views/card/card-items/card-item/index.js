@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import Formatter from './formatter';
 import {
   getCellValueByColumn,
+  isValidCellValue,
   getParentDirFromRecord, getFileMTimeFromRecord
 } from '../../../../utils/cell';
 import { Utils } from '../../../../../utils/utils';
@@ -18,6 +19,9 @@ const CardItem = ({
   tagsData,
   fileNameColumn,
   mtimeColumn,
+  displayColumns,
+  displayEmptyValue,
+  displayColumnName,
   onOpenFile,
   onSelectCard,
   onContextMenu,
@@ -80,6 +84,28 @@ const CardItem = ({
       <div className="sf-metadata-card-item-text-container">
         <Formatter value={fileNameValue} column={fileNameColumn} record={record} onFileNameClick={handleFilenameClick} tagsData={tagsData} />
         <Formatter value={mtimeValue} format="relativeTime" column={mtimeColumn} record={record} tagsData={tagsData} />
+        {displayColumns.map((column) => {
+          const value = getCellValueByColumn(record, column);
+          if (!displayEmptyValue && !isValidCellValue(value)) {
+            if (displayColumnName) {
+              return (
+                <div className="sf-metadata-card-item-field" key={column.key}>
+                  <span className="sf-metadata-card-item-field-name">{column.name}</span>
+                </div>
+              );
+            }
+            return null;
+          }
+
+          return (
+            <div className="sf-metadata-card-item-field" key={column.key}>
+              {displayColumnName && (
+                <span className="sf-metadata-card-item-field-name">{column.name}</span>
+              )}
+              <Formatter value={value} column={column} record={record} tagsData={tagsData} />
+            </div>
+          );
+        })}
       </div>
     </article>
   );

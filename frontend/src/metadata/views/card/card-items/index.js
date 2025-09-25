@@ -2,6 +2,7 @@ import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
+import { CARD_SETTINGS_KEYS } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { getRecordIdFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { openFile } from '../../../utils/file';
@@ -35,6 +36,18 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
   const mtimeColumn = useMemo(() => {
     return metadata.key_column_map['_file_mtime'];
   }, [metadata.key_column_map]);
+
+  const displayColumns = useMemo(() => {
+    const displayColumnsConfig = metadata.view.settings[CARD_SETTINGS_KEYS.COLUMNS];
+    if (!displayColumnsConfig) return [];
+    return displayColumnsConfig
+      .filter(config => config.shown)
+      .map(config => metadata.key_column_map[config.key]);
+  }, [metadata.key_column_map, metadata.view.settings]);
+
+  const displayEmptyValue = useMemo(() => !metadata.view.settings[CARD_SETTINGS_KEYS.HIDE_EMPTY_VALUE], [metadata.view.settings]);
+  const displayColumnName = useMemo(() => metadata.view.settings[CARD_SETTINGS_KEYS.SHOW_COLUMN_NAME], [metadata.view.settings]);
+  const textWrap = useMemo(() => metadata.view.settings[CARD_SETTINGS_KEYS.TEXT_WRAP], [metadata.view.settings]);
 
   const records = useMemo(() => {
     const { rows } = metadata;
@@ -126,7 +139,8 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
     <>
       <div
         ref={containerRef}
-        className={classnames('sf-metadata-view-card-items-container d-flex flex-wrap', {
+        className={classnames('sf-metadata-view-card-items-container d-flex flex-wrap h-100 o-auto', {
+          'sf-metadata-view-card-items-container-text-wrap': textWrap
         })}
         onClick={handleClickOutside}
       >
@@ -140,6 +154,9 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
               tagsData={tagsData}
               fileNameColumn={fileNameColumn}
               mtimeColumn={mtimeColumn}
+              displayColumns={displayColumns}
+              displayEmptyValue={displayEmptyValue}
+              displayColumnName={displayColumnName}
               onOpenFile={onOpenFile}
               onSelectCard={onSelectCard}
               onContextMenu={(e) => onContextMenu(e, record._id)}
