@@ -7,6 +7,7 @@ import { MAP_TYPE } from '../../../../constants';
 import LocationControls from './location-controls';
 import SearchComponent from './search-component';
 import MapContainer from './map-container';
+import { convertToWGS84 } from '../../../../utils/coord-transform';
 
 import './index.css';
 
@@ -23,7 +24,7 @@ const GeolocationEditor = ({
   const [searchResults, setSearchResults] = useState([]);
   const [searchError, setSearchError] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const [currentPosition, setCurrentPosition] = useState(null);
+  const [currentPosition, setCurrentPosition] = useState(position);
   const [hasPositionChanged, setHasPositionChanged] = useState(false);
   const [currentLocationTranslated, setCurrentLocationTranslated] = useState(null);
 
@@ -55,11 +56,11 @@ const GeolocationEditor = ({
   const submit = useCallback((value) => {
     const { position, location_translated } = value;
     const location = {
-      position,
+      position: convertToWGS84(type, position),
       location_translated,
     };
     onSubmit(location);
-  }, [onSubmit]);
+  }, [type, onSubmit]);
 
   const handleMapPositionChange = useCallback((newPosition) => {
     setCurrentPosition(newPosition);
@@ -133,7 +134,6 @@ const GeolocationEditor = ({
 
   const save = useCallback(() => {
     if (!currentPosition || !inputValue) return;
-
     const locationData = {
       position: currentPosition,
       location_translated: {
@@ -151,12 +151,8 @@ const GeolocationEditor = ({
   const toggleFullScreen = useCallback((e) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
-    const locationData = {
-      position: currentPosition,
-      location_translated: currentLocationTranslated.address,
-    };
-    onFullScreen(locationData);
-  }, [currentLocationTranslated, currentPosition, onFullScreen]);
+    onFullScreen();
+  }, [onFullScreen]);
 
   return (
     <div

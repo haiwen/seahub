@@ -8,6 +8,7 @@ import { baiduMapKey, googleMapId, googleMapKey } from '../../../../utils/consta
 import { MAP_TYPE } from '../../../../constants';
 import { isValidPosition } from '../../../utils/validate';
 import { DEFAULT_POSITION } from '../../../constants';
+import { convertToMapCoords } from '../../../../utils/coord-transform';
 
 const MapContainer = ({
   position,
@@ -72,7 +73,7 @@ const MapContainer = ({
     }
   }, [type]);
 
-  const handleMapClick = useCallback((point, useStoredData = false) => {
+  const handleGeolocationClick = useCallback((point) => {
     if (onPositionChange) {
       const newPosition = type === MAP_TYPE.B_MAP
         ? { lng: point.lng, lat: point.lat }
@@ -111,7 +112,7 @@ const MapContainer = ({
         }
       }
 
-      if (!useStoredData && onAddressChange) {
+      if (onAddressChange) {
         performReverseGeocode(newPosition, (address, locationData) => {
           onAddressChange(address);
           if (onLocationTranslatedChange && locationData) {
@@ -120,12 +121,7 @@ const MapContainer = ({
         });
       }
     }
-  }, [type, performReverseGeocode, onPositionChange, onAddressChange, onLocationTranslatedChange]);
-
-  const handleGeolocationClick = useCallback((point) => {
-    handleMapClick(point, false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [onAddressChange, onLocationTranslatedChange, onPositionChange, performReverseGeocode, type]);
 
   const setupBaiduMapControls = useCallback((map) => {
     const ZoomControl = createBMapZoomControl({
@@ -158,16 +154,11 @@ const MapContainer = ({
 
   const initializeBaiduMarker = useCallback((map, point) => {
     geocRef.current = new window.BMapGL.Geocoder();
-
-    if (isValidPosition(position?.lng, position?.lat)) {
-      markerRef.current = new window.BMapGL.Marker(point, {
-        offset: new window.BMapGL.Size(-2, -5),
-      });
-      map.addOverlay(markerRef.current);
-    } else {
-      markerRef.current = null;
-    }
-  }, [position]);
+    markerRef.current = new window.BMapGL.Marker(point, {
+      offset: new window.BMapGL.Size(-2, -5),
+    });
+    map.addOverlay(markerRef.current);
+  }, []);
 
   const initializeGoogleMarker = useCallback((map, initialPosition) => {
     geocRef.current = new window.google.maps.Geocoder();
@@ -189,19 +180,22 @@ const MapContainer = ({
       const { lng, lat } = e.latlng;
       const point = new window.BMapGL.Point(lng, lat);
 
-      if (!markerRef.current) {
-        markerRef.current = new window.BMapGL.Marker(point, {
-          offset: new window.BMapGL.Size(-2, -5),
-        });
+      if (map.getOverlays().indexOf(markerRef.current) === -1) {
         map.addOverlay(markerRef.current);
-      } else {
-        if (map.getOverlays().indexOf(markerRef.current) === -1) {
-          map.addOverlay(markerRef.current);
-        }
-        markerRef.current.setPosition(point);
       }
+      markerRef.current.setPosition(point);
       map.setCenter(point);
-      handleMapClick(point, false);
+      if (onPositionChange) {
+        onPositionChange({ lng, lat });
+        if (onAddressChange) {
+          performReverseGeocode({ lng, lat }, (address, locationData) => {
+            onAddressChange(address);
+            if (onLocationTranslatedChange && locationData) {
+              onLocationTranslatedChange(locationData);
+            }
+          });
+        }
+      }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -220,7 +214,17 @@ const MapContainer = ({
         markerRef.current.position = latLng;
       }
       map.panTo(latLng);
-      handleMapClick(point, false);
+      if (onPositionChange) {
+        onPositionChange(point);
+        if (onAddressChange) {
+          performReverseGeocode(point, (address, locationData) => {
+            onAddressChange(address);
+            if (onLocationTranslatedChange && locationData) {
+              onLocationTranslatedChange(locationData);
+            }
+          });
+        }
+      }
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -230,7 +234,8 @@ const MapContainer = ({
 
     mapRef.current = new window.BMapGL.Map(ref.current);
     const initPos = isValidPosition(position?.lng, position?.lat) ? position : DEFAULT_POSITION;
-    const point = new window.BMapGL.Point(initPos.lng, initPos.lat);
+    const bdPos = convertToMapCoords(MAP_TYPE.B_MAP, initPos);
+    const point = new window.BMapGL.Point(bdPos.lng, bdPos.lat);
 
     setTimeout(() => {
       mapRef.current.centerAndZoom(point, 16);
@@ -240,17 +245,6 @@ const MapContainer = ({
       setupBaiduMapControls(mapRef.current);
       initializeBaiduMarker(mapRef.current, point);
       setupBaiduMapEvents(mapRef.current);
-
-      if (isValidPosition(position?.lng, position?.lat)) {
-        if (locationTranslated?.address) {
-          const actualPoint = new window.BMapGL.Point(position.lng, position.lat);
-          markerRef.current.setPosition(actualPoint);
-          mapRef.current.setCenter(actualPoint);
-          handleMapClick(actualPoint, true);
-        } else {
-          handleMapClick(point, false);
-        }
-      }
 
       if (onMapReady) {
         const refs = {
@@ -268,16 +262,7 @@ const MapContainer = ({
         onMapReady(refs);
       }
     }, 10);
-  }, [
-    position,
-    locationTranslated?.address,
-    setupBaiduMapControls,
-    initializeBaiduMarker,
-    setupBaiduMapEvents,
-    handleMapClick,
-    onMapReady,
-    mapRefs,
-  ]);
+  }, [position, setupBaiduMapControls, initializeBaiduMarker, setupBaiduMapEvents, onMapReady, mapRefs]);
 
   const renderGoogleMap = useCallback(() => {
     if (!window.google?.maps?.Map || !ref.current) return;
@@ -313,14 +298,6 @@ const MapContainer = ({
       initializeGoogleMarker(mapRef.current, initPos);
       setupGoogleMapEvents(mapRef.current);
 
-      if (isValid) {
-        if (locationTranslated?.address) {
-          handleMapClick(position, true);
-        } else {
-          handleMapClick(position, false);
-        }
-      }
-
       if (onMapReady) {
         const refs = {
           mapRef: mapRef.current,
@@ -337,40 +314,26 @@ const MapContainer = ({
         onMapReady(refs);
       }
     }, 10);
-  }, [
-    position,
-    locationTranslated?.address,
-    setupGoogleMapControls,
-    initializeGoogleMarker,
-    setupGoogleMapEvents,
-    handleMapClick,
-    onMapReady,
-    mapRefs,
-  ]);
-
-  const renderBaiduMapRef = useRef();
-  const renderGoogleMapRef = useRef();
-
-  renderBaiduMapRef.current = renderBaiduMap;
-  renderGoogleMapRef.current = renderGoogleMap;
+  }, [position, locationTranslated?.address, setupGoogleMapControls, initializeGoogleMarker, setupGoogleMapEvents, onMapReady, mapRefs]);
 
   const initializeMap = useCallback(() => {
     const { type: mapType, key } = initMapInfo({ baiduMapKey, googleMapKey });
     if (mapType === MAP_TYPE.B_MAP) {
       if (!window.BMapGL) {
-        window.renderBaiduMap = () => renderBaiduMapRef.current?.();
+        window.renderBaiduMap = () => renderBaiduMap();
         loadMapSource(mapType, key);
       } else {
-        renderBaiduMapRef.current?.();
+        renderBaiduMap();
       }
     } else if (mapType === MAP_TYPE.G_MAP) {
       if (!window.google?.maps.Map) {
-        window.renderGoogleMap = () => renderGoogleMapRef.current?.();
+        window.renderGoogleMap = () => renderGoogleMap();
         loadMapSource(mapType, key);
       } else {
-        renderGoogleMapRef.current?.();
+        renderGoogleMap();
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

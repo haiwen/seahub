@@ -84,10 +84,7 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
     }
   }, [isFullScreen, isMapReady]);
 
-  const onFullScreen = useCallback((locationData) => {
-    const { position, location_translated } = locationData;
-    latestValueRef.current = { position, location_translated };
-    setCurrentValue(position);
+  const onFullScreen = useCallback(() => {
     setFullScreen(!isFullScreen);
   }, [isFullScreen]);
 
@@ -123,7 +120,7 @@ const TableGeolocationEditor = forwardRef(({ value, onCommit, onClose, record, c
         <Modal
           size='lg'
           isOpen={true}
-          toggle={() => onFullScreen(latestValueRef.current)}
+          toggle={onFullScreen}
           zIndex={1052}
         >
           <GeolocationEditor
