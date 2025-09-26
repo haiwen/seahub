@@ -63,7 +63,7 @@ const CardViewToolbar = ({
         {!readOnly && (
           <IconBtn
             symbol="set-up"
-            className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting d-none"
+            className="sf-metadata-view-tool-operation-btn sf-metadata-view-tool-setting"
             size={24}
             role="button"
             aria-label={gettext('Settings')}

@@ -30,6 +30,25 @@
   font-weight: 500;
 }
 
+.sf-metadata-card-item .sf-metadata-card-item-field {
+  margin-top: 10px;
+}
+
+.sf-metadata-card-item .sf-metadata-card-item-field-name {
+  display: block;
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.sf-metadata-card-item .sf-metadata-card-item-field .sf-metadata-record-cell-empty {
+  display: inline-block;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  height: 8px;
+  width: 20px;
+}
+
 .sf-metadata-card-item .sf-metadata-ui {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -65,37 +84,37 @@
   transform: translateY(-1px);
 }
 
-.sf-metadata-card-item .sf-metadata-card-item-record .collaborators-formatter {
+.sf-metadata-card-item .sf-metadata-card-item-field .collaborators-formatter {
   display: flex;
   flex-wrap: wrap;
 }
 
-.sf-metadata-card-item .sf-metadata-card-item-record .collaborators-formatter .collaborator-item {
+.sf-metadata-card-item .sf-metadata-card-item-field .collaborators-formatter .collaborator-item {
   margin-top: 2px;
   margin-bottom: 2px;
 }
 
-.sf-metadata-card-item .sf-metadata-card-item-record .sf-metadata-checkbox-formatter {
+.sf-metadata-card-item .sf-metadata-card-item-field .sf-metadata-checkbox-formatter {
   justify-content: flex-start;
   padding-left: 2px;
 }
 
-.sf-metadata-card-item .sf-metadata-card-item-record .sf-metadata-multiple-select-formatter {
+.sf-metadata-card-item .sf-metadata-card-item-field .sf-metadata-multiple-select-formatter {
   flex-wrap: wrap;
 }
 
-.sf-metadata-card-item .sf-metadata-card-item-record .sf-metadata-multiple-select-formatter .sf-metadata-ui-select-option {
+.sf-metadata-card-item .sf-metadata-card-item-field .sf-metadata-multiple-select-formatter .sf-metadata-ui-select-option {
   margin-top: 2px;
   margin-bottom: 2px;
 }
 
-.sf-metadata-view-kanban-boards-text-wrap .sf-metadata-card-item-record .text-formatter {
+.sf-metadata-view-card-items-container-text-wrap .sf-metadata-card-item-field .text-formatter {
   white-space: normal;
   max-height: 68px;
 }
 
 .sf-metadata-card-item .long-text-formatter,
-.sf-metadata-view-kanban-boards-text-wrap .sf-metadata-card-item-record .long-text-formatter {
+.sf-metadata-view-card-items-container-text-wrap .sf-metadata-card-item-field .long-text-formatter {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;

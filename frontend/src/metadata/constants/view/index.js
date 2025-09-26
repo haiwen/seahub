@@ -168,6 +168,13 @@ export const KANBAN_SETTINGS_KEYS = {
   COLUMNS: 'columns', // display and order
 };
 
+export const CARD_SETTINGS_KEYS = {
+  HIDE_EMPTY_VALUE: 'hide_empty_value',
+  SHOW_COLUMN_NAME: 'show_column_name',
+  TEXT_WRAP: 'text_wrap',
+  COLUMNS: 'columns', // display and order
+};
+
 export const VIEW_DEFAULT_SETTINGS = {
   [VIEW_TYPE.TABLE]: {},
   [VIEW_TYPE.GALLERY]: {},
@@ -180,7 +187,12 @@ export const VIEW_DEFAULT_SETTINGS = {
     [KANBAN_SETTINGS_KEYS.TEXT_WRAP]: false,
     [KANBAN_SETTINGS_KEYS.COLUMNS]: [],
   },
-  [VIEW_TYPE.CARD]: {}
+  [VIEW_TYPE.CARD]: {
+    [CARD_SETTINGS_KEYS.HIDE_EMPTY_VALUE]: false,
+    [CARD_SETTINGS_KEYS.SHOW_COLUMN_NAME]: false,
+    [CARD_SETTINGS_KEYS.TEXT_WRAP]: false,
+    [CARD_SETTINGS_KEYS.COLUMNS]: [],
+  }
 };
 
 export const VIEW_PROPERTY_KEYS = {
