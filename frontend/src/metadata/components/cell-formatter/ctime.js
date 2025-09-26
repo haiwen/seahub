@@ -12,7 +12,7 @@ const CTimeFormatter = ({ value, className, children: emptyFormatter, format }) 
   return (
     <div
       className={classnames('sf-metadata-ui cell-formatter-container ctime-formatter', className)}
-      title={valueFormat}
+      title={dayjs(value).format('dddd, MMMM D, YYYY h:mm:ss A')}
     >
       {valueFormat}
     </div>
