@@ -98,6 +98,10 @@ class PopupEditorContainer extends React.Component {
 
     if (column.type === CellType.DATE) {
       editorProps.format = column?.data?.format;
+      if (column.key === PRIVATE_COLUMN_KEY.CAPTURE_TIME) {
+        // convert hh:mm:ss to hh:mm if exists
+        editorProps.format = editorProps.format.replace('HH:mm:ss', 'HH:mm');
+      }
     }
 
     if (column.type === CellType.TAGS) {
@@ -169,27 +173,33 @@ class PopupEditorContainer extends React.Component {
   commit = () => {
     const { column, record } = this.props;
     if (!record._id) return;
+    const editor = this.getEditor();
+    if (!editor) return;
     const { key: columnKey, type: columnType } = column;
     if (columnType === CellType.TAGS) return;
     if (columnType === CellType.GEOLOCATION) {
       // For geolocation, get the value from the editor and transform it properly
-      if (this.getEditor() && this.getEditor().getValue) {
-        const geolocationValue = this.getEditor().getValue();
+      if (editor.getValue) {
+        const geolocationValue = editor.getValue();
         const { position, location_translated } = geolocationValue || { position: null, location_translated: null };
         const updated = { [columnKey]: position };
         updated[PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED] = location_translated;
         this.commitData(updated, true);
       }
       // Always call onClose for geolocation editor
-      if (this.getEditor() && this.getEditor().onClose) {
-        this.getEditor().onClose();
+      if (editor.onClose) {
+        editor.onClose();
       }
       return;
     }
 
-    if (!this.getEditor()) return;
+    let newValue = editor.getValue();
+    if (columnType === CellType.DATE && columnKey === PRIVATE_COLUMN_KEY.CAPTURE_TIME && typeof newValue === 'string') {
+      if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$/.test(newValue)) {
+        newValue = newValue + ':00';
+      }
+    }
 
-    const newValue = this.getEditor().getValue();
     let updated = columnType === CellType.DATE ? { [columnKey]: newValue } : newValue;
     if (columnType === CellType.SINGLE_SELECT) {
       updated[columnKey] = newValue[columnKey] ? getColumnOptionNameById(column, newValue[columnKey]) : '';
