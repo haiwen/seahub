@@ -648,5 +648,8 @@
   "Select_style": "选择样式",
   "Edit_link": "编辑链接",
   "Remove_link": "移除链接",
-  "Preview": "预览"
+  "Preview": "预览",
+  "Go_to_link": "跳转链接",
+  "Link_block" : "链接节点",
+  "The_link_address_or_link_block_is_required": "链接地址或链接节点是必填项。"
 }
