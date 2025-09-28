@@ -1,3 +1,4 @@
+import datetime
 import os
 
 import json
@@ -15,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from seahub.api2.authentication import RepoAPITokenAuthentication
-from seahub.base.models import FileComment
+from seahub.base.models import FileComment, FileTrash
 from seahub.repo_api_tokens.utils import get_dir_file_info_list
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
@@ -1400,7 +1401,7 @@ class ViaRepoMetadataRecords(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-        
+
         username = request.repo_api_token_obj.generated_by
         repo_id = request.repo_api_token_obj.repo_id
 
@@ -1464,14 +1465,14 @@ class ViaRepoMetadataRecords(APIView):
         return Response(results)
 
     def put(self, request):
-        
+
         repo_id = request.repo_api_token_obj.repo_id
         username = request.repo_api_token_obj.generated_by
         records_data = request.data.get('records_data')
         if not records_data:
             error_msg = 'records_data invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
 
         if len(records_data) > METADATA_RECORD_UPDATE_LIMIT:
             error_msg = 'Number of records exceeds the limit of 1000.'
@@ -2768,3 +2769,143 @@ class ViaRepoMetadataMergeTags(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         return Response({'success': True})
+
+
+class ViaRepoRecentlyChangedFiles(APIView):
+    authentication_classes = (RepoAPITokenAuthentication,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        repo_id = request.repo_api_token_obj.repo_id
+        username = request.repo_api_token_obj.generated_by
+
+        try:
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 1000))
+        except:
+            page = 1
+            per_page = 1000
+
+        if page < 1:
+            error_msg = 'page invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if per_page < 0:
+            error_msg = 'per_page invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        start = (page - 1) * per_page
+        limit = per_page
+
+        since = request.GET.get('since')
+        if not since:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if 'T' not in since or '+' not in since:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            datetime.datetime.fromisoformat(since)
+        except:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission_by_repo_api(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        metadata_server_api = MetadataServerAPI(repo_id, username)
+        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `_file_mtime`>"{since}" AND `_is_dir`=false ORDER BY `_file_mtime` LIMIT {start}, {limit}'
+
+        try:
+            query_result = metadata_server_api.query_rows(sql)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'files': query_result.get('results', [])})
+
+
+class ViaRepoRecentlyDeletedFiles(APIView):
+    authentication_classes = (RepoAPITokenAuthentication,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request):
+        repo_id = request.repo_api_token_obj.repo_id
+
+        try:
+            page = int(request.GET.get('page', 1))
+            per_page = int(request.GET.get('per_page', 1000))
+        except:
+            page = 1
+            per_page = 1000
+
+        if page < 1:
+            error_msg = 'page invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if per_page < 1:
+            error_msg = 'per_page invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        start = (page - 1) * per_page
+        limit = per_page
+
+        since = request.GET.get('since')
+        if not since:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if 'T' not in since or '+' not in since:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            dt = datetime.datetime.fromisoformat(since)
+            dt = dt.astimezone(datetime.timezone.utc)
+            since = dt.strftime('%Y-%m-%d %H:%M:%S')
+        except:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        permission = check_folder_permission_by_repo_api(request, repo_id, '/')
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            deleted_files = FileTrash.objects.filter(repo_id=repo_id, obj_type='file', delete_time__gt=since).order_by('delete_time')[start:limit]
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        files = []
+        for file in deleted_files:
+            data = {}
+            data['obj_name'] = file.obj_name
+            data['path'] = file.path
+            files.append(data)
+
+        return Response({'files': files})
