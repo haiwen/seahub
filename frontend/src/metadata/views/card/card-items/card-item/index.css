@@ -1,5 +1,6 @@
 .sf-metadata-card-item {
-  width: 300px;
+  min-width: 0;
+  height: fit-content;
   background: #f9f9f9;
   border: 1px solid #e2e2e2;
   border-radius: 6px;
@@ -7,6 +8,7 @@
   flex-direction: column;
   overflow: hidden;
   user-select: none;
+  transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease;
 }
 
 .sf-metadata-card-item.selected {
@@ -19,7 +21,26 @@
 }
 
 .sf-metadata-card-item-image-container {
-  height: 200px;
+  position: relative;
+  width: 100%;
+  background: #fafafa;
+  overflow: hidden;
+  min-height: 150px;
+}
+
+/* Use pseudo-element to establish aspect ratio (3:2) so height is always reserved */
+.sf-metadata-card-item-image-container::before {
+  content: '';
+  display: block;
+  padding-top: 66.6667%;
+}
+
+.sf-metadata-card-item-image-container .sf-metadata-card-item-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .sf-metadata-card-item-text-container {
@@ -82,6 +103,8 @@
 
 .sf-metadata-card-item .file-name-formatter .sf-metadata-file-icon {
   transform: translateY(-1px);
+  max-width: 100%;
+  height: auto;
 }
 
 .sf-metadata-card-item .sf-metadata-card-item-field .collaborators-formatter {

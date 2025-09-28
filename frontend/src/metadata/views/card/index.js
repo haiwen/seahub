@@ -41,7 +41,7 @@ const Card = () => {
 
   return (
     <div className="sf-metadata-container">
-      <div className="sf-metadata-view-card flex-fill o-hidden position-relative">
+      <div className="sf-metadata-view-card flex-fill o-auto position-relative">
         <CardItems
           modifyRecord={modifyRecord}
           deleteRecords={deleteRecords}

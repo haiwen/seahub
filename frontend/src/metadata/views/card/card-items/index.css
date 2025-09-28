@@ -1,4 +1,21 @@
 .sf-metadata-view-card-items-container {
+  height: auto;
+  --sf-card-min-width: 240px;
+  --sf-card-max-width: 1fr;
+  --sf-card-gap: 20px;
   padding: 20px;
-  grid-gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--sf-card-min-width), var(--sf-card-max-width)));
+  gap: var(--sf-card-gap);
+  align-content: start;
+}
+
+@media (max-width: 1200px) {
+  .sf-metadata-view-card-items-container { --sf-card-min-width: 210px; }
+}
+@media (max-width: 900px) {
+  .sf-metadata-view-card-items-container { --sf-card-min-width: 190px; }
+}
+@media (max-width: 600px) {
+  .sf-metadata-view-card-items-container { --sf-card-min-width: 160px; padding: 12px; --sf-card-gap: 12px; }
 }

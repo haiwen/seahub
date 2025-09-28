@@ -78,8 +78,8 @@ const CardItem = ({
       onClick={handleClickCard}
       onContextMenu={onContextMenu}
     >
-      <div className="sf-metadata-card-item-image-container d-flex justify-content-center align-items-center">
-        <img className="mw-100 mh-100" ref={imgRef} src={imageURLs.URL} onError={onLoadError} alt="" />
+      <div className="sf-metadata-card-item-image-container">
+        <img loading="lazy" className="sf-metadata-card-item-image" ref={imgRef} src={imageURLs.URL} onError={onLoadError} alt="" />
       </div>
       <div className="sf-metadata-card-item-text-container">
         <Formatter value={fileNameValue} column={fileNameColumn} record={record} onFileNameClick={handleFilenameClick} tagsData={tagsData} />
