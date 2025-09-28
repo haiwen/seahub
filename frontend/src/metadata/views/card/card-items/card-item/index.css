@@ -24,10 +24,21 @@
 
 .sf-metadata-card-item-text-container {
   padding: 10px;
+  background-color: var(--bs-body-bg);
 }
 
 .sf-metadata-card-item-text-container .sf-metadata-file-name {
   font-weight: 500;
+}
+
+.sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .collaborator-item {
+  background-color: transparent;
 }
 
 .sf-metadata-card-item .sf-metadata-card-item-field {
