@@ -14,7 +14,7 @@
 }
 
 .sf-metadata-card-item:hover {
-  background: #fff;
+  background: var(--bs-body-bg);
   box-shadow: 0 0 3px #0000002e;
 }
 
@@ -38,6 +38,7 @@
 }
 
 .sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .collaborator-item {
+  color: var(--bs-body-color);
   background-color: transparent;
 }
 
@@ -133,4 +134,14 @@
   overflow: hidden;
   line-height: 1.5;
   white-space: normal;
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item {
+  background: #131313;
+  border-color: var(--bs-border-secondary-color);
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item:hover {
+  background-color: var(--bs-body-bg);
+  box-shadow: none;
 }
