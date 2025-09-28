@@ -7,7 +7,6 @@ import posixpath
 import requests
 import time
 import stat
-import pytz
 
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
@@ -29,7 +28,7 @@ from seahub.repo_metadata.utils import get_update_record, get_unmodifiable_colum
 from seahub.seadoc.models import SeadocHistoryName, SeadocCommentReply
 from seahub.utils.file_op import if_locked_by_online_office
 from seahub.seadoc.utils import get_seadoc_file_uuid
-from seahub.settings import MAX_PATH, TIME_ZONE
+from seahub.settings import MAX_PATH
 from seahub.api2.endpoints.move_folder_merge import move_folder_with_merge
 from seahub.api2.endpoints.multi_share_links import check_permissions_arg, get_share_link_info
 from seahub.utils.repo import parse_repo_perm
@@ -2803,6 +2802,10 @@ class ViaRepoRecentlyChangedFiles(APIView):
             error_msg = 'since invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        if 'T' not in since or '+' not in since:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             datetime.datetime.fromisoformat(since)
         except:
@@ -2827,7 +2830,7 @@ class ViaRepoRecentlyChangedFiles(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, username)
         from seafevents.repo_metadata.constants import METADATA_TABLE
 
-        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `_file_mtime`>"{since}" ORDER BY `_file_mtime` LIMIT {start}, {limit}'
+        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE `_file_mtime`>"{since}" AND `_is_dir`=false ORDER BY `_file_mtime` LIMIT {start}, {limit}'
 
         try:
             query_result = metadata_server_api.query_rows(sql)
@@ -2836,7 +2839,7 @@ class ViaRepoRecentlyChangedFiles(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response(query_result)
+        return Response({'files': query_result.get('results', [])})
 
 
 class ViaRepoRecentlyDeletedFiles(APIView):
@@ -2869,22 +2872,17 @@ class ViaRepoRecentlyDeletedFiles(APIView):
             error_msg = 'since invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            datetime.datetime.fromisoformat(since)
-        except:
+        if 'T' not in since or '+' not in since:
             error_msg = 'since invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if 'Z' in since or ('T' in since and '+' in since):
+        try:
             dt = datetime.datetime.fromisoformat(since)
             dt = dt.astimezone(datetime.timezone.utc)
             since = dt.strftime('%Y-%m-%d %H:%M:%S')
-        else:
-            localtime_zone = pytz.timezone(TIME_ZONE)
-            dt = datetime.datetime.strptime(since, '%Y-%m-%d %H:%M:%S')
-            dt = localtime_zone.localize(dt)
-            dt_utc = dt.astimezone(pytz.utc)
-            since = dt_utc.strftime('%Y-%m-%d %H:%M:%S')
+        except:
+            error_msg = 'since invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
