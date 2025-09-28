@@ -30,6 +30,7 @@ from django.views.decorators.http import condition
 
 from seaserv import seafile_api, check_quota, get_org_id_by_repo_id
 
+from seahub.repo_metadata.metadata_server_api import list_metadata_view_records
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.views import check_folder_permission
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication, CsrfExemptSessionAuthentication
@@ -3213,8 +3214,72 @@ class SdocImportView(APIView):
             shutil.rmtree(tmp_extracted_path)
 
         return Response({'success': True})
+    
+    
+class SeadocSearchMetadataRecords(APIView):
 
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsProVersion, )
+    throttle_classes = (UserRateThrottle,)
 
+    def get(self, request, file_uuid):
+        """Search sdoc by filename.
+        """
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % file_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        start = request.GET.get('start', 0)
+        limit = request.GET.get('limit', 1000)
+
+        try:
+            start = int(start)
+            limit = int(limit)
+        except:
+            start = 0
+            limit = 1000
+        
+        search_type = request.GET.get('search_type', None)
+        file_types, suffix = [], None
+        if search_type == 'sdoc':
+            suffix = 'sdoc'
+        if search_type == 'file':
+            file_types.append('_document')
+        if search_type == 'video':
+            file_types.append('_video')
+        if search_type == 'exdraw':
+            suffix = 'exdraw'
+        if search_type == 'image':
+            file_types.append('_picture')
+            
+        sorts = [{"column_key": "_file_mtime", "sort_type": "down"}]
+        basic_filters = [{"column_key": "_is_dir", "filter_predicate": "is", "filter_term": "file"}]
+        filter_conjunction = 'And'
+        filters = []
+        if suffix:
+            filters.append({'"column_key": "_suffix","filter_predicate": "contains","filter_term": suffix'})
+        if file_types:
+            basic_filters.append({"column_key": "_file_type", "filter_predicate": "is_any_of", "filter_term": file_types})
+        
+        fake_view = {
+            "filters":filters,
+            "sorts": sorts,
+            "filter_conjunction": filter_conjunction,
+            "basic_filters": basic_filters
+        }
+        
+        try:
+            results = list_metadata_view_records(uuid_map.repo_id, request.user.username, fake_view, False, start, limit)
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(results)
+
+        
 def batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir):
     parent_path = gen_seadoc_image_parent_path(doc_uuid, repo_id, username)
     upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
