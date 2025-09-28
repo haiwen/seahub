@@ -120,7 +120,7 @@ from seahub.api2.endpoints.via_repo_token import ViaRepoDirView, ViaRepoUploadLi
     ViaRepoMoveDir, ViaRepoShareLink, ViaRepoMetadataRecords, \
     ViaRepoMetadataViews, ViaRepoMetadataTags, ViaRepoMetadataViewsDuplicateView, ViaRepoMetadataViewsMoveView, \
     ViaRepoMetadataTagsStatusManage, ViaRepoMetadataViewsDetailView, ViaRepoMetadataTagsLinks, ViaRepoMetadataFileTags, \
-    ViaRepoMetadataTagFiles, ViaRepoMetadataTagsFiles, ViaRepoMetadataMergeTags
+    ViaRepoMetadataTagFiles, ViaRepoMetadataTagsFiles, ViaRepoMetadataMergeTags, ViaRepoRecentlyChangedFiles, ViaRepoRecentlyDeletedFiles
 from seahub.api2.endpoints.abuse_reports import AbuseReportsView
 from seahub.api2.endpoints.ocm import OCMProtocolView, OCMSharesView, OCMNotificationsView, \
     OCMSharesPrepareView, OCMSharePrepareView, OCMSharesReceivedView, OCMShareReceivedView
@@ -535,6 +535,8 @@ urlpatterns = [
             name='via-repo-token-tags-files'),
     re_path(r'^api/v2.1/via-repo-token/metadata/merge-tags/$', ViaRepoMetadataMergeTags.as_view(),
             name='via-repo-token-metadata-merge-tags'),
+    re_path(r'^api/v2.1/via-repo-token/recently-changed-files/$', ViaRepoRecentlyChangedFiles.as_view(), name='via-repo-token-recently-changed-files'),
+    re_path(r'^api/v2.1/via-repo-token/recently-deleted-files/$', ViaRepoRecentlyDeletedFiles.as_view(), name='via-repo-token-recently-deleted-files'),
 
     # user::related-files
     re_path(r'^api/v2.1/related-files/$', RelatedFilesView.as_view(), name='api-v2.1-related-files'),
