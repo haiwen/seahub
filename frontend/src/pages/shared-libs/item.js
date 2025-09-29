@@ -118,6 +118,12 @@ class Item extends Component {
     }
   };
 
+  onStarKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onToggleStarRepo();
+    }
+  };
+
   visitRepo = () => {
     navigate(this.repoURL);
   };
@@ -158,13 +164,21 @@ class Item extends Component {
       return (
         <Fragment>
           {currentViewMode == LIST_MODE ? (
-            <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver} onContextMenu={this.handleContextMenu}>
+            <tr
+              className={this.state.highlight ? 'tr-highlight' : ''}
+              onMouseOver={this.handleMouseOver}
+              onMouseOut={this.handleMouseOut}
+              onFocus={this.handleMouseOver}
+              onContextMenu={this.handleContextMenu}
+            >
               <td className="text-center">
                 <i
                   role="button"
+                  tabIndex="0"
                   title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                   aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                   onClick={this.onToggleStarRepo}
+                  onKeyDown={this.onStarKeyDown}
                   className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
                 >
                 </i>
@@ -201,9 +215,11 @@ class Item extends Component {
                 {isStarred &&
                   <i
                     role="button"
+                    tabIndex="0"
                     title={gettext('Unstar')}
                     aria-label={gettext('Unstar')}
                     onClick={this.onToggleStarRepo}
+                    onKeyDown={this.onStarKeyDown}
                     className='op-icon library-grid-item-icon sf3-font-star sf3-font'
                   >
                   </i>

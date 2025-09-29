@@ -521,8 +521,7 @@ class SharedRepoListItem extends React.Component {
     }
   };
 
-  onToggleStarRepo = (e) => {
-    e.preventDefault();
+  onToggleStarRepo = () => {
     const { repo_name: repoName } = this.props.repo;
     if (this.state.isStarred) {
       seafileAPI.unstarItem(this.props.repo.repo_id, '/').then(() => {
@@ -547,6 +546,12 @@ class SharedRepoListItem extends React.Component {
     }
   };
 
+  onStarKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onToggleStarRepo();
+    }
+  };
+
   handleContextMenu = (e) => {
     this.props.onContextMenu(e, this.props.repo);
   };
@@ -567,9 +572,11 @@ class SharedRepoListItem extends React.Component {
         <td className="text-center">
           <i
             role="button"
+            tabIndex="0"
             title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
             aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
             onClick={this.onToggleStarRepo}
+            onKeyDown={this.onStarKeyDown}
             className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
           >
           </i>
@@ -605,9 +612,11 @@ class SharedRepoListItem extends React.Component {
               {isStarred &&
                 <i
                   role="button"
+                  tabIndex="0"
                   title={gettext('Unstar')}
                   aria-label={gettext('Unstar')}
                   onClick={this.onToggleStarRepo}
+                  onKeyDown={this.onStarKeyDown}
                   className='op-icon library-grid-item-icon sf3-font-star sf3-font'
                 >
                 </i>

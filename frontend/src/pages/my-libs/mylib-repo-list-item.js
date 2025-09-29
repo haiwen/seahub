@@ -61,13 +61,6 @@ class MylibRepoListItem extends React.Component {
     };
   }
 
-  onFocus = () => {
-    if (!this.props.isItemFreezed) {
-      this.setState({
-        isOpIconShow: true
-      });
-    }
-  };
 
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
@@ -159,6 +152,12 @@ class MylibRepoListItem extends React.Component {
         let errMessage = Utils.getErrorMsg(error);
         toaster.danger(errMessage);
       });
+    }
+  };
+
+  onStarKeyDown = (e) => {
+    if (e.key == 'Enter' || e.key == 'Space') {
+      this.onToggleStarRepo();
     }
   };
 
@@ -282,13 +281,21 @@ class MylibRepoListItem extends React.Component {
     let iconTitle = Utils.getLibIconTitle(repo);
     let repoURL = `${siteRoot}library/${repo.repo_id}/${Utils.encodePath(repo.repo_name)}/`;
     return currentViewMode == LIST_MODE ? (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onFocus={this.onFocus} onContextMenu={this.handleContextMenu}>
+      <tr
+        className={this.state.highlight ? 'tr-highlight' : ''}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onFocus={this.onMouseEnter}
+        onContextMenu={this.handleContextMenu}
+      >
         <td className="text-center">
           <i
             role="button"
+            tabIndex="0"
             title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
             aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
             onClick={this.onToggleStarRepo}
+            onKeyDown={this.onStarKeyDown}
             className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
           >
           </i>
@@ -335,7 +342,7 @@ class MylibRepoListItem extends React.Component {
         className="library-grid-item px-3 d-flex justify-content-between align-items-center"
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-        onFocus={this.onFocus}
+        onFocus={this.onMouseEnter}
         onContextMenu={this.handleContextMenu}
       >
         <div className="d-flex align-items-center text-truncate">
@@ -353,10 +360,12 @@ class MylibRepoListItem extends React.Component {
               {isStarred &&
                 <i
                   role="button"
+                  tabIndex="0"
                   title={gettext('Unstar')}
                   aria-label={gettext('Unstar')}
                   className='op-icon library-grid-item-icon sf3-font-star sf3-font'
                   onClick={this.onToggleStarRepo}
+                  onKeyDown={this.onStarKeyDown}
                 >
                 </i>
               }
