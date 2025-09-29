@@ -41,13 +41,11 @@ class SingleDropdownToolbar extends React.Component {
     return (
       <Dropdown isOpen={this.state.isDropdownMenuOpen} toggle={this.toggleDropdownMenu} direction="down">
         <DropdownToggle
-          tag="span"
-          role="button"
-          className={withPlusIcon ? 'ml-2 sf-dropdown-combined-toggle' : 'ml-1 sf-dropdown-toggle'}
+          className={`border-0 font-weight-normal ${withPlusIcon ? 'ml-2 sf-dropdown-combined-toggle' : 'ml-1 sf-dropdown-toggle'}`}
           onClick={this.toggleDropdownMenu}
           onKeyDown={this.onDropdownToggleKeyDown}
           data-toggle="dropdown"
-          aria-label={gettext('More options')}
+          aria-label={gettext('Operations')}
           aria-expanded={this.state.isDropdownMenuOpen}
         >
           {withPlusIcon && <i className="sf3-font-new sf3-font main-icon"></i>}
