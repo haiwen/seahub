@@ -627,6 +627,9 @@ class SystemAdminAPI {
     if (orgInfo.isActive != undefined) {
       formData.append('is_active', orgInfo.isActive);
     }
+    if (orgInfo.forceSSOLogin != undefined) {
+      formData.append('force_adfs_login', orgInfo.forceSSOLogin);
+    }
     return this.req.put(url, formData);
   }
 

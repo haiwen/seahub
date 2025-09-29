@@ -39,7 +39,7 @@ from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 from seahub.utils.user_permissions import get_user_role
-from seahub.utils.auth import get_login_bg_image_path
+from seahub.utils.auth import get_login_bg_image_path, can_user_update_password
 from seahub.organizations.models import OrgSAMLConfig
 from seahub.organizations.utils import can_use_sso_in_multi_tenancy
 
@@ -359,14 +359,8 @@ def password_reset(request, is_admin_site=False,
                    token_generator=default_token_generator,
                    post_reset_redirect=None):
 
-    has_bind_social_auth = False
-    if SocialAuthUser.objects.filter(username=request.user.username).exists():
-        has_bind_social_auth = True
-
-    can_reset_password = True
-    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
-        can_reset_password = False
-
+    
+    can_reset_password = can_user_update_password(request.user)
     if not can_reset_password:
         return render_error(request, _('Unable to reset password.'))
 
@@ -453,14 +447,8 @@ def password_change(request, template_name='registration/password_change_form.ht
                     post_change_redirect=None, password_change_form=PasswordChangeForm):
     if post_change_redirect is None:
         post_change_redirect = reverse('auth_password_change_done')
-
-    has_bind_social_auth = False
-    if SocialAuthUser.objects.filter(username=request.user.username).exists():
-        has_bind_social_auth = True
-
-    can_change_password = True
-    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
-        can_change_password = False
+        
+    can_change_password = can_user_update_password(request.user)
 
     if not can_change_password:
         return render_error(request, _('Unable to change password.'))
@@ -554,6 +542,7 @@ def multi_adfs_sso(request):
             render_data['error_msg'] = 'Error, please contact administrator.'
             return render(request, template_name, render_data)
 
+        request.session['MULTI_SAML_EMAIL'] = login_email
         return HttpResponseRedirect(get_service_url().rstrip('/') + '/org/custom/%s/saml2/login/' % str(org_id))
 
     if request.method == "GET":

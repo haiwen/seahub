@@ -21,6 +21,7 @@ from seahub.organizations.models import OrgAdminSettings, FORCE_ADFS_LOGIN
 
 from captcha.fields import CaptchaField
 
+from seahub.utils.auth import is_force_user_sso, can_user_update_password
 from seahub.utils.password import get_password_strength_requirements, \
         is_password_strength_valid
 
@@ -110,51 +111,12 @@ class AuthenticationForm(forms.Form):
                 else:
                     self.errors['inactive'] = _("This account is inactive.")
                     raise forms.ValidationError(_("This account is inactive."))
-
-            # Non administrators can only log in with single sign on
-            org_id = -1
-            orgs = ccnet_api.get_orgs_by_user(username)
-
-            # check if user is admin
-            if orgs:
-                org_id = orgs[0].org_id
-                is_admin = ccnet_api.is_org_staff(org_id, username)
-            else:
-                is_admin = self.user_cache.is_staff
-
-            # get disable password login setting
-            disable_pwd_login = settings.DISABLE_ADFS_USER_PWD_LOGIN
-            enable_mul_adfs = getattr(settings, 'ENABLE_MULTI_ADFS', False)
-            if org_id > 0 and enable_mul_adfs:
-                org_settings = OrgAdminSettings.objects.filter(org_id=org_id,
-                                                               key=FORCE_ADFS_LOGIN).first()
-                if org_settings:
-                    disable_pwd_login = int(org_settings.value)
-
-            # get social provider identifier
-            enable_adfs = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
-            enable_oauth = getattr(settings, 'ENABLE_OAUTH', False)
-            provider_identifier = ''
-            if enable_adfs or enable_mul_adfs:
-                provider_identifier = getattr(settings,
-                                              'SAML_PROVIDER_IDENTIFIER',
-                                              'saml')
-            elif enable_oauth:
-                provider_identifier = getattr(settings,
-                                              'OAUTH_PROVIDER_DOMAIN',
-                                              '')
-
-            # check if disable password login
-            if disable_pwd_login and not is_admin and \
-                    (enable_adfs or enable_mul_adfs or enable_oauth):
-                social_user = SocialAuthUser.objects.filter(
-                    username=username,
-                    provider=provider_identifier
-                )
-                if social_user.exists():
-                    self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
-                    raise forms.ValidationError(_('Please use Single Sign-On to login.'))
-
+                
+                
+            if is_force_user_sso(self.user_cache):
+                self.errors['disable_pwd_login'] = _('Please use Single Sign-On to login.')
+                raise forms.ValidationError(_('Please use Single Sign-On to login.'))
+                
         # TODO: determine whether this should move to its own method.
         if self.request:
             if not self.request.session.test_cookie_worked():
@@ -198,14 +160,7 @@ class PasswordResetForm(forms.Form):
         if is_ldap_user(self.users_cache):
             raise forms.ValidationError(_("Can not reset password, please contact LDAP admin."))
         
-        username = self.users_cache.username
-        has_bind_social_auth = False
-        if SocialAuthUser.objects.filter(username=username).exists():
-            has_bind_social_auth = True
-
-        can_reset_password = True
-        if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
-            can_reset_password = False
+        can_reset_password = can_user_update_password(self.users_cache)
         if not can_reset_password:
             raise forms.ValidationError(_('Unable to reset password.'))
 

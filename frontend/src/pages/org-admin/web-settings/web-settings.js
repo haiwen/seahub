@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { InputGroupText } from 'reactstrap';
 import { Utils } from '../../../utils/utils';
 import { orgAdminAPI } from '../../../utils/org-admin-api';
-import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, orgEnableAdminDeleteOrg, enableMultiADFS } from '../../../utils/constants';
+import { gettext, mediaUrl, logoPath, orgID, orgEnableAdminCustomLogo, orgEnableAdminCustomName, orgEnableAdminDeleteOrg, enableMultiADFS, enableSSO } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import toaster from '../../../components/toast';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -172,17 +172,6 @@ class OrgWebSettings extends Component {
                     />
                   </Fragment>
                 </Section>
-                {enableMultiADFS &&
-                  <Section headingText={gettext('User')}>
-                    <CheckboxItem
-                      saveSetting={this.orgSaveSetting}
-                      displayName={gettext('Disable SAML user email / password login')}
-                      keyText='force_adfs_login'
-                      value={force_adfs_login}
-                      helpTip={gettext('Force user to use SSO login if SAML account is bound')}
-                    />
-                  </Section>
-                }
                 {(sysEnableUserCleanTrash || sysEnableEncryptedLibrary) &&
                   <Section headingText={gettext('Library')}>
                     <Fragment>
@@ -220,6 +209,17 @@ class OrgWebSettings extends Component {
                       }
                     />
                   </Fragment>
+                  {(enableMultiADFS || enableSSO) &&
+                    <Fragment>
+                      <CheckboxItem
+                        saveSetting={this.orgSaveSetting}
+                        displayName={gettext('Disable SSO user email / password login')}
+                        keyText='force_adfs_login'
+                        value={force_adfs_login}
+                        helpTip={gettext('Force user to use SSO login if SSO account is bound')}
+                      />
+                    </Fragment>
+                  }
                 </Section>
                 {orgEnableAdminDeleteOrg &&
                   <Section headingText={gettext('Delete')}>

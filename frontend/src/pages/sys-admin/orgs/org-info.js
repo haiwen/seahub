@@ -12,6 +12,7 @@ import SysAdminSetOrgNameDialog from '../../../components/dialog/sysadmin-dialog
 import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import OrgNav from './org-nav';
+import CheckboxItem from '../../common-admin/web-settings/checkbox-item';
 
 class Content extends Component {
 
@@ -36,6 +37,12 @@ class Content extends Component {
     this.setState({ isSetMaxUserNumberDialogOpen: !this.state.isSetMaxUserNumberDialogOpen });
   };
 
+
+  updateForceSSOLogin = (key, value) => {
+    this.props.updateForceSSOLogin(key, value);
+  };
+
+
   render() {
     const { loading, errorMsg } = this.props;
     if (loading) {
@@ -43,7 +50,7 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, metadata_url, domain } = this.props.orgInfo;
+      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, metadata_url, domain, force_adfs_login, enable_sso } = this.props.orgInfo;
       const { isSetQuotaDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
       return (
         <>
@@ -75,6 +82,20 @@ class Content extends Component {
               {`${Utils.bytesToSize(quota_usage)} / ${quota > 0 ? Utils.bytesToSize(quota) : '--'}`}
               <EditIcon onClick={this.toggleSetQuotaDialog} />
             </dd>
+            {enable_sso &&
+              <>
+                <dt className="info-item-heading">{gettext('SSO')}</dt>
+                <dd className="info-item-content">
+                  <CheckboxItem
+                    saveSetting={this.updateForceSSOLogin}
+                    displayName={gettext('Disable SSO user email / password login')}
+                    keyText='force_adfs_login'
+                    value={force_adfs_login}
+                    helpTip={gettext('Force user to use SSO login if SSO account is bound')}
+                  />
+                </dd>
+              </>
+            }
             {enable_saml_login &&
               <>
                 <dt className="info-item-heading">{gettext('SAML Config')}</dt>
@@ -143,6 +164,7 @@ Content.propTypes = {
   updateQuota: PropTypes.func.isRequired,
   updateName: PropTypes.func.isRequired,
   updateMaxUserNumber: PropTypes.func.isRequired,
+  updateForceSSOLogin: PropTypes.func,
 };
 
 class OrgInfo extends Component {
@@ -212,6 +234,16 @@ class OrgInfo extends Component {
     });
   };
 
+  updateForceSSOLogin = (key, value) => {
+    const data = { forceSSOLogin: value };
+    systemAdminAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
+      toaster.success(gettext('Successfully saved.'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
   render() {
     const { orgInfo } = this.state;
     return (
@@ -229,6 +261,7 @@ class OrgInfo extends Component {
                 updateQuota={this.updateQuota}
                 updateName={this.updateName}
                 updateMaxUserNumber={this.updateMaxUserNumber}
+                updateForceSSOLogin={this.updateForceSSOLogin}
               />
             </div>
           </div>

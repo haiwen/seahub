@@ -12,6 +12,7 @@ from django.utils.translation import gettext as _
 import seaserv
 from seaserv import seafile_api
 
+from seahub.utils.auth import is_force_user_sso, can_user_update_password
 from .forms import DetailedProfileForm
 from .models import Profile, DetailedProfile
 from seahub.auth.models import SocialAuthUser
@@ -139,13 +140,7 @@ def edit_profile(request):
             org_saml_connected = SocialAuthUser.objects.filter(
                 username=request.user.username, provider=SAML_PROVIDER_IDENTIFIER).exists()
 
-    has_bind_social_auth = False
-    if SocialAuthUser.objects.filter(username=request.user.username).exists():
-        has_bind_social_auth = True
-
-    can_update_password = True
-    if has_bind_social_auth and (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD):
-        can_update_password = False
+    can_update_password = can_user_update_password(request.user)
 
     WEBDAV_SECRET_SETTED = False
     if settings.ENABLE_WEBDAV_SECRET and \
@@ -153,6 +148,7 @@ def edit_profile(request):
         WEBDAV_SECRET_SETTED = True
 
     show_two_factor_auth = has_two_factor_auth() and not request.session.get('is_sso_user')
+    force_user_sso_login = is_force_user_sso(request.user)
 
     resp_dict = {
             'form': form,
@@ -164,7 +160,7 @@ def edit_profile(request):
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': show_two_factor_auth,
-            'ENABLE_CHANGE_PASSWORD': can_update_password if has_bind_social_auth else settings.ENABLE_CHANGE_PASSWORD,
+            'ENABLE_CHANGE_PASSWORD': can_update_password,
             'ENABLE_GET_AUTH_TOKEN_BY_SESSION': settings.ENABLE_GET_AUTH_TOKEN_BY_SESSION,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
             'WEBDAV_SECRET_SETTED': WEBDAV_SECRET_SETTED,
@@ -188,6 +184,7 @@ def edit_profile(request):
             'enable_adfs': enable_adfs,
             'saml_connected': saml_connected,
             'enable_multi_adfs': enable_multi_adfs,
+            'force_user_sso_login': force_user_sso_login,
             'org_saml_connected': org_saml_connected,
             'org_id': request.user.org and request.user.org.org_id or None,
             'strong_pwd_required': bool(config.USER_STRONG_PASSWORD_REQUIRED),

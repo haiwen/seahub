@@ -29,6 +29,7 @@ from seahub.settings import ENABLE_UPDATE_USER_INFO, ENABLE_USER_SET_CONTACT_EMA
 import seaserv
 from seaserv import ccnet_api, seafile_api
 
+from seahub.utils.auth import can_user_update_password
 from seahub.utils.db_api import SeafileDB
 from seahub.utils.password import is_password_strength_valid
 
@@ -234,17 +235,11 @@ class ResetPasswordView(APIView):
         if user.enc_password != UNUSABLE_PASSWORD and not old_password:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Old password invalid')
 
-        has_bind_social_auth = False
-        if SocialAuthUser.objects.filter(username=request.user.username).exists():
-            has_bind_social_auth = True
-
-        can_update_password = True
-        if (not settings.ENABLE_SSO_USER_CHANGE_PASSWORD) and has_bind_social_auth:
-            can_update_password = False
+        can_update_password = can_user_update_password(user)
 
         if not can_update_password:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
-
+        
         if old_password and not user.check_password(old_password):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Old password incorrect')
 

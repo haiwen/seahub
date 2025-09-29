@@ -35,6 +35,8 @@ from seaserv import ccnet_api, seafile_api
 
 from seahub import auth
 from seahub.api2.utils import get_api_token
+from seahub.adfs_auth.backends import SSO_LDAP_USE_SAME_UID, LDAP_PROVIDER
+from seahub.adfs_auth.utils import update_user_role, parse_user_attributes, sync_saml_groups
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
 from seahub import settings
@@ -42,9 +44,8 @@ from seahub.base.accounts import User
 from seahub.auth.models import SocialAuthUser
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import render_error
+from seahub.utils.auth import is_force_user_sso
 from seahub.utils.licenseparse import user_number_over_limit
-from seahub.utils.file_size import get_quota_from_string
-from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.adfs_auth.signals import saml_sso_failed
 # Added by khorkin
 from seahub.base.sudo_mode import update_sudo_mode_ts
@@ -55,10 +56,11 @@ except ImportError:
 
 SAML_PROVIDER_IDENTIFIER = getattr(settings, 'SAML_PROVIDER_IDENTIFIER', 'saml')
 SAML_ATTRIBUTE_MAPPING = getattr(settings, 'SAML_ATTRIBUTE_MAPPING', {})
-
+INTERNAL_SERVER_ERROR_MSG = _('Internal server error. Please contact system administrator.')
+LOGIN_FAILED_ERROR_MSG = _('Login failed: Bad response from ADFS/SAML service. '
+                               'Please report to your organization (company) administrator.')
 
 logger = logging.getLogger('djangosaml2')
-
 
 def _set_subject_id(session, subject_id):
     session['_saml2_subject_id'] = code(subject_id)
@@ -72,16 +74,9 @@ def get_org_admins(org):
             org_admins.append(user)
     return org_admins
 
-
+    
 def update_user_profile(user, attribute_mapping, attributes):
-    parse_result = {}
-    for saml_attr, django_attrs in list(attribute_mapping.items()):
-        try:
-            for attr in django_attrs:
-                parse_result[attr] = attributes[saml_attr][0]
-        except KeyError:
-            pass
-
+    parse_result = parse_user_attributes(attribute_mapping, attributes)
     display_name = parse_result.get('display_name', '')
     contact_email = parse_result.get('contact_email', '')
     telephone = parse_result.get('telephone', '')
@@ -113,15 +108,449 @@ def update_user_profile(user, attribute_mapping, attributes):
 
     # update user role
     role = parse_result.get('role', '')
-    if role:
-        User.objects.update_role(user.username, role)
+    update_user_role(user, role)
+    
+def _send_error_notifications(admins, error_msg):
+    for admin in admins:
+        saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
+    
+def _handle_user_over_limit(request, org=None):
+    # check user number limit by license
+    if user_number_over_limit():
+        logger.error('The number of users exceeds the license limit.')
+        # send error msg to admin
+        error_msg = 'The number of users exceeds the license limit.'
+        admins = User.objects.get_superusers()
+        for admin in admins:
+            saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
+        return render_error(request, _("The number of users exceeds the limit."))
+    
+    # check user number limit by org member quota
+    if org:
+        org_members = len(ccnet_api.get_org_emailusers(org.url_prefix, -1, -1))
+        if ORG_MEMBER_QUOTA_ENABLED:
+            from seahub.organizations.models import OrgMemberQuota
+            org_members_quota = OrgMemberQuota.objects.get_quota(org.org_id)
+            if org_members_quota is not None and org_members >= org_members_quota:
+                logger.error('The number of users exceeds the organization quota.')
+                # send error msg to admin
+                error_msg = 'The number of users exceeds the organization quota.'
+                org_admins = get_org_admins(org)
+                for org_admin in org_admins:
+                    saml_sso_failed.send(sender=None, to_user=org_admin.email,
+                                         error_msg=error_msg)
+                return render_error(request, _("The number of users exceeds the limit."))
 
-        # update user role quota
-        role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
-        if role_quota:
-            quota = get_quota_from_string(role_quota)
-            seafile_api.set_role_quota(role, quota)
+def _handle_acs_in_org(request, org_id):
+    
+    org_id = int(org_id)
+    org = ccnet_api.get_org_by_id(org_id)
+    if not org:
+        logger.error('Cannot find an organization related to org_id %s.' % org_id)
+        return render_error(request, INTERNAL_SERVER_ERROR_MSG)
+    email_in_session = request.session.get('MULTI_SAML_EMAIL')
+    try:
+        del request.session['MULTI_SAML_EMAIL']
+    except:
+        pass
+    
+    if 'SAMLResponse' not in request.POST:
+        logger.error('Missing "SAMLResponse" parameter in POST data.')
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        org_admins = get_org_admins(org)
+        _send_error_notifications(org_admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    try:
+        conf = get_config(None, request)
+    except RuntimeError as e:
+        logger.error(e)
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        org_admins = get_org_admins(org)
+        _send_error_notifications(org_admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, INTERNAL_SERVER_ERROR_MSG)
+    
+    identity_cache = IdentityCache(request.saml_session)
+    client = Saml2Client(conf, identity_cache=identity_cache)
+    oq_cache = OutstandingQueriesCache(request.saml_session)
+    oq_cache.sync()
+    outstanding_queries = oq_cache.outstanding_queries()
+    
+    xmlstr = request.POST['SAMLResponse']
+    try:
+        response = client.parse_authn_request_response(xmlstr,
+                                                       BINDING_HTTP_POST,
+                                                       outstanding_queries)
+    except Exception as e:
+        logger.error('SAMLResponse Error: %s' % e)
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        org_admins = get_org_admins(org)
+        _send_error_notifications(org_admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    if response is None:
+        logger.error('Invalid SAML Assertion received.')
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        if org:
+            org_admins = get_org_admins(org)
+            for org_admin in org_admins:
+                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
+        else:
+            admins = User.objects.get_superusers()
+            for admin in admins:
+                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    session_id = response.session_id()
+    oq_cache.delete(session_id)
+    session_info = response.session_info()
+    attribute_mapping = SAML_ATTRIBUTE_MAPPING
+    if not attribute_mapping:
+        logger.error('ADFS attribute mapping is not valid.')
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    # saml2 connect
+    relay_state = request.POST.get('RelayState', '/saml2/complete/')
+    is_saml2_connect = parse_qs(urlparse(unquote(relay_state)).query).get('is_saml2_connect', [''])[0]
+    if is_saml2_connect == 'true':
+        if not request.user.is_authenticated:
+            return HttpResponseBadRequest(_('Failed to bind SAML, please login first.'))
+        
+        # get uid and other attrs from session_info
+        name_id = session_info.get('name_id', '')
+        if not name_id:
+            logger.error('The name_id is not available. Could not determine user identifier.')
+            return render_error(request, INTERNAL_SERVER_ERROR_MSG)
+        
+        name_id = name_id.text
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
+        if saml_user:
+            logger.error('The SAML user has already been bound to another account.')
+            return render_error(request, INTERNAL_SERVER_ERROR_MSG)
+        
+        # bind saml user
+        username = request.user.username
+        SocialAuthUser.objects.add(username, SAML_PROVIDER_IDENTIFIER, name_id)
+        
+        # update user's profile
+        attributes = session_info.get('ava', {})
+        if attributes:
+            try:
+                update_user_profile(request.user, attribute_mapping, attributes)
+            except Exception as e:
+                logger.warning('Failed to update user\'s profile, error: %s' % e)
+        
+        # set subject_id, saml single logout need this
+        _set_subject_id(request.saml_session, session_info['name_id'])
+        
+        return HttpResponseRedirect(relay_state)
+    
+    if not session_info:
+        logger.error('ADFS session info is not valid.')
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    name_id = session_info.get('name_id', '')
+    if not name_id:
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    uid = name_id.text
+    if not uid:
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    attributes = session_info.get('ava', {})
+    user_attributes = parse_user_attributes(attribute_mapping, attributes)
+    contact_email = user_attributes.get('contact_email', '')
+    
+    # check contact_email in session
+    if email_in_session != contact_email:
+        return render_error(request, _(
+            'Login failed: The email %s is not consistent with the email %s from ADFS/SAML service' % (
+                email_in_session, contact_email)))
+    
+    saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
+    if not saml_user and SSO_LDAP_USE_SAME_UID:
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
+        if saml_user:
+            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+    
+    if saml_user:
+        username = saml_user.username
+        is_new_user = False
+    
+    else:
+        old_user = User.objects.get(email=uid)
+        profile_user = Profile.objects.get_profile_by_contact_email(contact_email)
+        if old_user:
+            username = old_user.username
+            is_new_user = True
+        elif profile_user:
+            username = profile_user.user
+            is_new_user = True
+        else:
+            username = None
+            is_new_user = True
+            _handle_user_over_limit(request, org)
+    
+    if username and not ccnet_api.org_user_exists(org_id, username):
+        return render_error(request, _('User not found in Team.'))
+    
+    logger.debug('Trying to authenticate the user')
+    user = auth.authenticate(saml_username=username,
+                             org_id=org_id)
+    if user is None:
+        logger.error('ADFS/SAML single sign-on failed: failed to create user.')
+        # send error msg to admin
+        error_msg = 'ADFS/SAML single sign-on failed: failed to create user.'
+        org_admins = get_org_admins(org)
+        _send_error_notifications(org_admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    username = user.username
+    if is_new_user:
+        SocialAuthUser.objects.add(username, SAML_PROVIDER_IDENTIFIER, uid)
+    
+    try:
+        update_user_profile(user, attribute_mapping, attributes)
+    except Exception as e:
+        logger.warning('Failed to update user\'s profile, error: %s' % e)
+    
+    try:
+        # update user groups
+        seafile_groups = attributes.get('seafile_groups', [])
+        sync_saml_groups(user, seafile_groups)
+    except Exception as e:
+        logger.warning('Failed to update user\'s groups, error: %s' % e)
+    
+    if not user.is_active:
+        logger.error('ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username)
+        # send error msg to admin
+        error_msg = 'ADFS/SAML single sign-on failed: user % is deactivated.' % user.username
+        org_admins = get_org_admins(org)
+        _send_error_notifications(org_admins, error_msg)
+        return HttpResponseForbidden(_('Login failed: user is deactivated. '
+                                       'Please report to your organization (company) administrator.'))
+    
+    request.user = user
+    auth_login(request, user)
+    _set_subject_id(request.saml_session, session_info['name_id'])
+    
+    # redirect the user to the view where he came from
+    default_relay_state = settings.LOGIN_REDIRECT_URL
+    relay_state = request.POST.get('RelayState', default_relay_state)
+    if not relay_state:
+        logger.warning('The RelayState parameter exists but is empty')
+        relay_state = default_relay_state
+    logger.debug('Redirecting to the RelayState: %s', relay_state)
+    
+    api_token = get_api_token(request)
+    response = HttpResponseRedirect(relay_state)
+    response.set_cookie('seahub_auth', request.user.username + '@' + api_token.key)
+    if user.is_authenticated and user.is_staff:
+        update_sudo_mode_ts(request)
+    
+    return response
 
+
+def _handle_acs(request):
+    org_id = -1
+    if 'SAMLResponse' not in request.POST:
+        logger.error('Missing "SAMLResponse" parameter in POST data.')
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        admins = User.objects.get_superusers()
+        _send_error_notifications(admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    try:
+        conf = get_config(None, request)
+    except RuntimeError as e:
+        logger.error(e)
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        admins = User.objects.get_superusers()
+        _send_error_notifications(admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    except Exception as e:
+        logger.error(e)
+        return render_error(request, INTERNAL_SERVER_ERROR_MSG)
+    
+    identity_cache = IdentityCache(request.saml_session)
+    client = Saml2Client(conf, identity_cache=identity_cache)
+    oq_cache = OutstandingQueriesCache(request.saml_session)
+    oq_cache.sync()
+    outstanding_queries = oq_cache.outstanding_queries()
+    
+    xmlstr = request.POST['SAMLResponse']
+    try:
+        response = client.parse_authn_request_response(xmlstr,
+                                                       BINDING_HTTP_POST,
+                                                       outstanding_queries)
+    except Exception as e:
+        logger.error('SAMLResponse Error: %s' % e)
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        admins = User.objects.get_superusers()
+        _send_error_notifications(admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    if response is None:
+        logger.error('Invalid SAML Assertion received.')
+        # send error msg to admin
+        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
+        admins = User.objects.get_superusers()
+        _send_error_notifications(admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    session_id = response.session_id()
+    oq_cache.delete(session_id)
+    session_info = response.session_info()
+    attribute_mapping = SAML_ATTRIBUTE_MAPPING
+    if not attribute_mapping:
+        logger.error('ADFS attribute mapping is not valid.')
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    # saml2 connect
+    relay_state = request.POST.get('RelayState', '/saml2/complete/')
+    is_saml2_connect = parse_qs(urlparse(unquote(relay_state)).query).get('is_saml2_connect', [''])[0]
+    if is_saml2_connect == 'true':
+        if not request.user.is_authenticated:
+            return HttpResponseBadRequest(_('Failed to bind SAML, please login first.'))
+        
+        # get uid and other attrs from session_info
+        name_id = session_info.get('name_id', '')
+        if not name_id:
+            logger.error('The name_id is not available. Could not determine user identifier.')
+            return render_error(request, INTERNAL_SERVER_ERROR_MSG)
+        
+        name_id = name_id.text
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
+        if saml_user:
+            logger.error('The SAML user has already been bound to another account.')
+            return render_error(request, INTERNAL_SERVER_ERROR_MSG)
+        
+        # bind saml user
+        username = request.user.username
+        SocialAuthUser.objects.add(username, SAML_PROVIDER_IDENTIFIER, name_id)
+        
+        # update user's profile
+        attributes = session_info.get('ava', {})
+        if attributes:
+            try:
+                update_user_profile(request.user, attribute_mapping, attributes)
+            except Exception as e:
+                logger.warning('Failed to update user\'s profile, error: %s' % e)
+        
+        # set subject_id, saml single logout need this
+        _set_subject_id(request.saml_session, session_info['name_id'])
+        
+        return HttpResponseRedirect(relay_state)
+    
+    if not session_info:
+        logger.error('ADFS session info is not valid.')
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    name_id = session_info.get('name_id', '')
+    if not name_id:
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    uid = name_id.text
+    if not uid:
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
+    
+    attributes = session_info.get('ava', {})
+    user_attributes = parse_user_attributes(attribute_mapping, attributes)
+    contact_email = user_attributes.get('contact_email', '')
+    
+    saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
+    if not saml_user and SSO_LDAP_USE_SAME_UID:
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
+        if saml_user:
+            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+    
+    if saml_user:
+        username = saml_user.username
+        is_new_user = False
+    
+    else:
+        old_user = User.objects.get(email=uid)
+        profile_user = Profile.objects.get_profile_by_contact_email(contact_email)
+        if old_user:
+            username = old_user.username
+            is_new_user = True
+        elif profile_user:
+            username = profile_user.user
+            is_new_user = True
+        else:
+            username = None
+            is_new_user = True
+            # check user number limit by license
+            _handle_user_over_limit(request)
+    
+    if username and not ccnet_api.org_user_exists(org_id, username):
+        return render_error(request, _('User not found in Team.'))
+    
+    logger.debug('Trying to authenticate the user')
+    user = auth.authenticate(saml_username=username,
+                             org_id=org_id)
+    if user is None:
+        logger.error('ADFS/SAML single sign-on failed: failed to create user.')
+        # send error msg to admin
+        error_msg = 'ADFS/SAML single sign-on failed: failed to create user.'
+        admins = User.objects.get_superusers()
+        _send_error_notifications(admins, error_msg)
+    
+    username = user.username
+    if is_new_user:
+        SocialAuthUser.objects.add(username, SAML_PROVIDER_IDENTIFIER, uid)
+    
+    try:
+        update_user_profile(user, attribute_mapping, attributes)
+    except Exception as e:
+        logger.warning('Failed to update user\'s profile, error: %s' % e)
+    
+    try:
+        # update user groups
+        seafile_groups = attributes.get('seafile_groups', [])
+        sync_saml_groups(user, seafile_groups)
+    except Exception as e:
+        logger.warning('Failed to update user\'s groups, error: %s' % e)
+    
+    if not user.is_active:
+        logger.error('ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username)
+        # send error msg to admin
+        error_msg = 'ADFS/SAML single sign-on failed: user % is deactivated.' % user.username
+        admins = User.objects.get_superusers()
+        _send_error_notifications(admins, error_msg)
+        return HttpResponseForbidden(_('Login failed: user is deactivated. '
+                                       'Please report to your organization (company) administrator.'))
+    
+    request.user = user
+    auth_login(request, user)
+    _set_subject_id(request.saml_session, session_info['name_id'])
+    
+    # redirect the user to the view where he came from
+    default_relay_state = settings.LOGIN_REDIRECT_URL
+    relay_state = request.POST.get('RelayState', default_relay_state)
+    if not relay_state:
+        logger.warning('The RelayState parameter exists but is empty')
+        relay_state = default_relay_state
+    logger.debug('Redirecting to the RelayState: %s', relay_state)
+    
+    api_token = get_api_token(request)
+    response = HttpResponseRedirect(relay_state)
+    response.set_cookie('seahub_auth', request.user.username + '@' + api_token.key)
+    if user.is_authenticated and user.is_staff:
+        update_sudo_mode_ts(request)
+    
+    return response
+    
 
 def login(request, org_id=None):
     org = None
@@ -186,231 +615,10 @@ def assertion_consumer_service(request, org_id=None, attribute_mapping=None, cre
     settings.py. The `djangosaml2.backends.Saml2Backend` can be used for this purpose,
     though some implementations may instead register their own subclasses of Saml2Backend.
     """
-
-    internal_server_error_msg = _('Internal server error. Please contact system administrator.')
-    login_failed_error_msg = _('Login failed: Bad response from ADFS/SAML service. '
-                               'Please report to your organization (company) administrator.')
-
-    org = None
     if org_id and int(org_id) > 0:
-        org_id = int(org_id)
-        org = ccnet_api.get_org_by_id(org_id)
-        if not org:
-            logger.error('Cannot find an organization related to org_id %s.' % org_id)
-            return render_error(request, internal_server_error_msg)
-    else:
-        org_id = -1
+        return _handle_acs_in_org(request, org_id)
 
-    if 'SAMLResponse' not in request.POST:
-        logger.error('Missing "SAMLResponse" parameter in POST data.')
-        # send error msg to admin
-        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
-        if org:
-            org_admins = get_org_admins(org)
-            for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
-        else:
-            admins = User.objects.get_superusers()
-            for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-        return render_error(request, login_failed_error_msg)
-
-    try:
-        conf = get_config(None, request)
-    except RuntimeError as e:
-        logger.error(e)
-        # send error msg to admin
-        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
-        if org:
-            org_admins = get_org_admins(org)
-            for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
-        else:
-            admins = User.objects.get_superusers()
-            for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-        return render_error(request, login_failed_error_msg)
-    except Exception as e:
-        logger.error(e)
-        return render_error(request, internal_server_error_msg)
-
-    identity_cache = IdentityCache(request.saml_session)
-    client = Saml2Client(conf, identity_cache=identity_cache)
-    oq_cache = OutstandingQueriesCache(request.saml_session)
-    oq_cache.sync()
-    outstanding_queries = oq_cache.outstanding_queries()
-
-    xmlstr = request.POST['SAMLResponse']
-    try:
-        response = client.parse_authn_request_response(xmlstr,
-                                                       BINDING_HTTP_POST,
-                                                       outstanding_queries)
-    except Exception as e:
-        logger.error('SAMLResponse Error: %s' % e)
-        # send error msg to admin
-        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
-        if org:
-            org_admins = get_org_admins(org)
-            for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
-        else:
-            admins = User.objects.get_superusers()
-            for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-        return render_error(request, login_failed_error_msg)
-
-    if response is None:
-        logger.error('Invalid SAML Assertion received.')
-        # send error msg to admin
-        error_msg = 'ADFS/SAML service error. Please check and fix the ADFS/SAML service.'
-        if org:
-            org_admins = get_org_admins(org)
-            for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
-        else:
-            admins = User.objects.get_superusers()
-            for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-        return render_error(request, login_failed_error_msg)
-
-    session_id = response.session_id()
-    oq_cache.delete(session_id)
-    session_info = response.session_info()
-    attribute_mapping = attribute_mapping or SAML_ATTRIBUTE_MAPPING
-    if not attribute_mapping:
-        logger.error('ADFS attribute mapping is not valid.')
-        return render_error(request, login_failed_error_msg)
-
-
-    # saml2 connect
-    relay_state = request.POST.get('RelayState', '/saml2/complete/')
-    is_saml2_connect = parse_qs(urlparse(unquote(relay_state)).query).get('is_saml2_connect', [''])[0]
-    if is_saml2_connect == 'true':
-        if not request.user.is_authenticated:
-            return HttpResponseBadRequest(_('Failed to bind SAML, please login first.'))
-
-        # get uid and other attrs from session_info
-        name_id = session_info.get('name_id', '')
-        if not name_id:
-            logger.error('The name_id is not available. Could not determine user identifier.')
-            return render_error(request, internal_server_error_msg)
-
-        name_id = name_id.text
-        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, name_id)
-        if saml_user:
-            logger.error('The SAML user has already been bound to another account.')
-            return render_error(request, internal_server_error_msg)
-
-        # bind saml user
-        username = request.user.username
-        SocialAuthUser.objects.add(username, SAML_PROVIDER_IDENTIFIER, name_id)
-
-        # update user's profile
-        attributes = session_info.get('ava', {})
-        if attributes:
-            try:
-                update_user_profile(request.user, attribute_mapping, attributes)
-            except Exception as e:
-                logger.warning('Failed to update user\'s profile, error: %s' % e)
-
-        # set subject_id, saml single logout need this
-        _set_subject_id(request.saml_session, session_info['name_id'])
-
-        return HttpResponseRedirect(relay_state)
-
-    if not session_info:
-        logger.error('ADFS session info is not valid.')
-        return render_error(request, login_failed_error_msg)
-
-    name_id = session_info.get('name_id', '')
-    if not name_id:
-        return render_error(request, login_failed_error_msg)
-
-    uid = name_id.text
-    if not uid:
-        return render_error(request, login_failed_error_msg)
-
-    if not SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER,
-                                                          uid):
-        # check user number limit by license
-        if user_number_over_limit():
-            logger.error('The number of users exceeds the license limit.')
-            # send error msg to admin
-            error_msg = 'The number of users exceeds the license limit.'
-            admins = User.objects.get_superusers()
-            for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-            return render_error(request, _("The number of users exceeds the limit."))
-
-        # check user number limit by org member quota
-        if org:
-            org_members = len(ccnet_api.get_org_emailusers(org.url_prefix, -1, -1))
-            if ORG_MEMBER_QUOTA_ENABLED:
-                from seahub.organizations.models import OrgMemberQuota
-                org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
-                if org_members_quota is not None and org_members >= org_members_quota:
-                    logger.error('The number of users exceeds the organization quota.')
-                    # send error msg to admin
-                    error_msg = 'The number of users exceeds the organization quota.'
-                    org_admins = get_org_admins(org)
-                    for org_admin in org_admins:
-                        saml_sso_failed.send(sender=None, to_user=org_admin.email,
-                                             error_msg=error_msg)
-                    return render_error(request, _("The number of users exceeds the limit."))
-
-    # authenticate the remote user
-    logger.debug('Trying to authenticate the user')
-    user = auth.authenticate(session_info=session_info,
-                             attribute_mapping=attribute_mapping,
-                             create_unknown_user=create_unknown_user,
-                             org_id=org_id)
-    if user is None:
-        logger.error('ADFS/SAML single sign-on failed: failed to create user.')
-        # send error msg to admin
-        error_msg = 'ADFS/SAML single sign-on failed: failed to create user.'
-        if org:
-            org_admins = get_org_admins(org)
-            for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
-        else:
-            admins = User.objects.get_superusers()
-            for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-        return render_error(request, login_failed_error_msg)
-
-    if not user.is_active:
-        logger.error('ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username)
-        # send error msg to admin
-        error_msg = 'ADFS/SAML single sign-on failed: user % is deactivated.' % user.username
-        if org:
-            org_admins = get_org_admins(org)
-            for org_admin in org_admins:
-                saml_sso_failed.send(sender=None, to_user=org_admin.email, error_msg=error_msg)
-        else:
-            admins = User.objects.get_superusers()
-            for admin in admins:
-                saml_sso_failed.send(sender=None, to_user=admin.email, error_msg=error_msg)
-        return HttpResponseForbidden(_('Login failed: user is deactivated. '
-                                       'Please report to your organization (company) administrator.'))
-    request.user = user
-    auth_login(request, user)
-    _set_subject_id(request.saml_session, session_info['name_id'])
-
-    # redirect the user to the view where he came from
-    default_relay_state = settings.LOGIN_REDIRECT_URL
-    relay_state = request.POST.get('RelayState', default_relay_state)
-    if not relay_state:
-        logger.warning('The RelayState parameter exists but is empty')
-        relay_state = default_relay_state
-    logger.debug('Redirecting to the RelayState: %s', relay_state)
-
-    api_token = get_api_token(request)
-    response = HttpResponseRedirect(relay_state)
-    response.set_cookie('seahub_auth', request.user.username + '@' + api_token.key)
-    if user.is_authenticated and user.is_staff:
-        update_sudo_mode_ts(request)
-    
-    return response
+    return _handle_acs(request)
     
 
 def metadata(request, org_id=None):
@@ -521,10 +729,14 @@ def saml2_disconnect(request, org_id=None):
         if request.user.org.org_id != org_id:
             logger.error('User %s does not belong to this organization: %s.' % (request.user.username, org.org_name))
             return HttpResponseBadRequest(_('Internal server error. Please contact system administrator.'))
-
+    
     username = request.user.username
     if request.user.enc_password == '!':
         return HttpResponseBadRequest(_('Failed to unbind SAML, please set a password first.'))
+    
+    if is_force_user_sso(request.user):
+        return render_error(request, _('Failed to unbind SAML, the user is forced login by SSO.') )
+        
 
     profile = Profile.objects.get_profile_by_user(username)
     if not profile or not profile.contact_email:

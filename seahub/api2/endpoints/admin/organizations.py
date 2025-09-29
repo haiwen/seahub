@@ -29,7 +29,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.permissions import IsProVersion
 from seahub.role_permissions.utils import get_available_roles
-from seahub.organizations.models import OrgSAMLConfig
+from seahub.organizations.models import OrgSAMLConfig, OrgAdminSettings
 from seahub.utils.ccnet_db import CcnetDB
 from seahub.utils.db_api import SeafileDB
 
@@ -51,6 +51,11 @@ try:
     from seahub.settings import ENABLE_MULTI_ADFS
 except ImportError:
     ENABLE_MULTI_ADFS = False
+
+try:
+    from seahub.settings import ENABLE_OAUTH
+except ImportError:
+    ENABLE_OAUTH = False
 
 logger = logging.getLogger(__name__)
 
@@ -103,13 +108,20 @@ def get_org_detailed_info(org):
 
     # saml config
     org_info['enable_saml_login'] = False
+    org_info['enable_sso'] = False
+    org_info['force_adfs_login'] = 0
+    if ENABLE_OAUTH or ENABLE_MULTI_ADFS:
+        org_info['enable_sso'] = True
+        org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key='force_adfs_login').first()
+        org_info['force_adfs_login'] = org_setting and int(org_setting.value) or 0
+    
     if ENABLE_MULTI_ADFS:
         org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
         if org_saml_config:
             org_info['enable_saml_login'] = True
             org_info['metadata_url'] = org_saml_config.metadata_url
             org_info['domain'] = org_saml_config.domain
-
+    
     return org_info
 
 
@@ -430,7 +442,12 @@ class AdminOrganization(APIView):
                     }
                     send_html_email(subject, email_template, con_context,
                                     from_email, [email2contact_email(email)])
-
+                    
+        force_adfs_login = request.data.get('force_adfs_login', None)
+        if force_adfs_login is not None:
+            OrgAdminSettings.objects.update_or_create(org_id=org_id, key='force_adfs_login',
+                                                              defaults={'value': force_adfs_login})
+            
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
         return Response(org_info)

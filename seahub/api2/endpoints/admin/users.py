@@ -28,6 +28,7 @@ from seahub.api2.utils import api_error, to_python_boolean, get_user_common_info
 from seahub.api2.models import TokenV2
 from seahub.organizations.models import OrgSettings
 from seahub.organizations.views import gen_org_url_prefix
+from seahub.utils.auth import can_user_update_password
 from seahub.utils.ccnet_db import get_ccnet_db_name
 import seahub.settings as settings
 from seahub.settings import SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, INIT_PASSWD, \
@@ -1481,23 +1482,16 @@ class AdminUserResetPassword(APIView):
             error_msg = 'email invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        has_bind_social_auth = False
-        if SocialAuthUser.objects.filter(username=email).exists():
-            has_bind_social_auth = True
-
-        can_reset_password = True
-        if has_bind_social_auth and (not ENABLE_SSO_USER_CHANGE_PASSWORD):
-            can_reset_password = False
-
-        if not can_reset_password:
-            return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
-
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist as e:
             logger.error(e)
             error_msg = 'email invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        can_reset_password = can_user_update_password(user)
+        if not can_reset_password:
+            return api_error(status.HTTP_400_BAD_REQUEST, _('Unable to reset password.'))
 
         profile = Profile.objects.get_profile_by_user(email)
         if IS_EMAIL_CONFIGURED and profile and profile.contact_email:
