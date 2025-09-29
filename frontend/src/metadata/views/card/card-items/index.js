@@ -143,7 +143,7 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
     <>
       <div
         ref={containerRef}
-        className={classnames('sf-metadata-view-card-items-container d-flex flex-wrap h-100 o-auto', {
+        className={classnames('sf-metadata-view-card-items-container', {
           'sf-metadata-view-card-items-container-text-wrap': textWrap
         })}
         onClick={handleClickOutside}
