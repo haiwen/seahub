@@ -1,8 +1,9 @@
 .sf-metadata-card-item {
   width: 300px;
   background: #f9f9f9;
-  border: 1px solid #e2e2e2;
+  border: 1px solid var(--bs-border-secondary-color);
   border-radius: 6px;
+  box-shadow: 0 0 3px #0000001f;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -14,8 +15,7 @@
 }
 
 .sf-metadata-card-item:hover {
-  background: #fff;
-  box-shadow: 0 0 3px #0000002e;
+  box-shadow: 0 0 6px #0000002e;
 }
 
 .sf-metadata-card-item-image-container {
@@ -24,10 +24,21 @@
 
 .sf-metadata-card-item-text-container {
   padding: 10px;
+  background-color: var(--bs-body-bg);
 }
 
 .sf-metadata-card-item-text-container .sf-metadata-file-name {
   font-weight: 500;
+}
+
+.sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .collaborator-item {
+  background-color: transparent;
 }
 
 .sf-metadata-card-item .sf-metadata-card-item-field {

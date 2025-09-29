@@ -19,6 +19,7 @@ const CardItem = ({
   tagsData,
   fileNameColumn,
   mtimeColumn,
+  modifierColumn,
   displayColumns,
   displayEmptyValue,
   displayColumnName,
@@ -30,6 +31,7 @@ const CardItem = ({
 
   const fileNameValue = getCellValueByColumn(record, fileNameColumn);
   const mtimeValue = getCellValueByColumn(record, mtimeColumn);
+  const modifierValue = getCellValueByColumn(record, modifierColumn);
 
   // for the big image
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
@@ -82,8 +84,11 @@ const CardItem = ({
         <img className="mw-100 mh-100" ref={imgRef} src={imageURLs.URL} onError={onLoadError} alt="" />
       </div>
       <div className="sf-metadata-card-item-text-container">
-        <Formatter value={fileNameValue} column={fileNameColumn} record={record} onFileNameClick={handleFilenameClick} tagsData={tagsData} />
-        <Formatter value={mtimeValue} format="relativeTime" column={mtimeColumn} record={record} tagsData={tagsData} />
+        <Formatter value={fileNameValue} column={fileNameColumn} record={record} showThumbnail={false} onFileNameClick={handleFilenameClick} tagsData={tagsData} />
+        <div className="sf-metadata-card-last-modified-info">
+          <Formatter value={modifierValue} column={modifierColumn} record={record} tagsData={tagsData} />
+          <Formatter value={mtimeValue} format="relativeTime" column={mtimeColumn} record={record} tagsData={tagsData} />
+        </div>
         {displayColumns.map((column) => {
           const value = getCellValueByColumn(record, column);
           if (!displayEmptyValue && !isValidCellValue(value)) {
@@ -114,8 +119,13 @@ const CardItem = ({
 CardItem.propTypes = {
   isSelected: PropTypes.bool,
   record: PropTypes.object,
+  tagsData: PropTypes.object,
   fileNameColumn: PropTypes.object,
   mtimeColumn: PropTypes.object,
+  modifierColumn: PropTypes.object,
+  displayColumns: PropTypes.array,
+  displayEmptyValue: PropTypes.bool,
+  displayColumnName: PropTypes.bool,
   onOpenFile: PropTypes.func.isRequired,
   onSelectCard: PropTypes.func.isRequired,
   onContextMenu: PropTypes.func.isRequired,

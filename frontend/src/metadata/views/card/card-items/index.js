@@ -2,7 +2,7 @@ import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
-import { CARD_SETTINGS_KEYS } from '../../../constants';
+import { CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { getRecordIdFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { openFile } from '../../../utils/file';
@@ -30,11 +30,15 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
   const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
 
   const fileNameColumn = useMemo(() => {
-    return metadata.key_column_map['_name'];
+    return metadata.key_column_map[PRIVATE_COLUMN_KEY.FILE_NAME];
   }, [metadata.key_column_map]);
 
   const mtimeColumn = useMemo(() => {
-    return metadata.key_column_map['_file_mtime'];
+    return metadata.key_column_map[PRIVATE_COLUMN_KEY.FILE_MTIME];
+  }, [metadata.key_column_map]);
+
+  const modifierColumn = useMemo(() => {
+    return metadata.key_column_map[PRIVATE_COLUMN_KEY.FILE_MODIFIER];
   }, [metadata.key_column_map]);
 
   const displayColumns = useMemo(() => {
@@ -154,6 +158,7 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
               tagsData={tagsData}
               fileNameColumn={fileNameColumn}
               mtimeColumn={mtimeColumn}
+              modifierColumn={modifierColumn}
               displayColumns={displayColumns}
               displayEmptyValue={displayEmptyValue}
               displayColumnName={displayColumnName}
