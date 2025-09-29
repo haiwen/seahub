@@ -3258,7 +3258,7 @@ class SeadocSearchMetadataRecords(APIView):
         filter_conjunction = 'And'
         filters = []
         if suffix:
-            filters.append({'"column_key": "_suffix","filter_predicate": "contains","filter_term": suffix'})
+            filters.append({"column_key": "_suffix","filter_predicate": "contains","filter_term": suffix})
         if file_types:
             basic_filters.append({"column_key": "_file_type", "filter_predicate": "is_any_of", "filter_term": file_types})
         
@@ -3270,13 +3270,13 @@ class SeadocSearchMetadataRecords(APIView):
         }
         
         try:
-            results = list_metadata_view_records(uuid_map.repo_id, request.user.username, fake_view, False, start, limit)
+            records = list_metadata_view_records(uuid_map.repo_id, request.user.username, fake_view, False, start, limit)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response(results)
+        return Response(records['results'])
 
         
 def batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir):
