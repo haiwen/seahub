@@ -3223,7 +3223,7 @@ class SeadocSearchMetadataRecords(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
-        """Search sdoc by filename.
+        """Search file by type from metadata records
         """
 
         uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
