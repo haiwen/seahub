@@ -63,6 +63,10 @@
   background-color: transparent;
 }
 
+.sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .ctime-formatter {
+  color: #666;
+}
+
 .sf-metadata-card-item .sf-metadata-card-item-field {
   margin-top: 10px;
 }
