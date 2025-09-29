@@ -3232,13 +3232,18 @@ class SeadocSearchMetadataRecords(APIView):
 
         start = request.GET.get('start', 0)
         limit = request.GET.get('limit', 1000)
-
         try:
             start = int(start)
             limit = int(limit)
         except:
             start = 0
             limit = 1000
+            
+        repo_id = uuid_map.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         search_type = request.GET.get('search_type', None)
         file_types, suffix = [], None
@@ -3268,15 +3273,27 @@ class SeadocSearchMetadataRecords(APIView):
             "filter_conjunction": filter_conjunction,
             "basic_filters": basic_filters
         }
+        results = {
+            "repo_id": repo_id,
+            "repo_name": repo.repo_name
+        }
         
         try:
-            records = list_metadata_view_records(uuid_map.repo_id, request.user.username, fake_view, False, start, limit)
+            records_dict = list_metadata_view_records(uuid_map.repo_id, request.user.username, fake_view, False, start, limit)
         except Exception as err:
             logger.error(err)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response(records['results'])
+        
+        records = records_dict.get('results') or []
+        for r in records:
+            file_creator = r.get('_file_creator')
+            if file_creator:
+                file_creator_nickname = email2nickname(file_creator)
+                r['file_creator_nickname'] = file_creator_nickname
+        
+        results['records'] = records
+        return Response(results)
 
         
 def batch_upload_sdoc_images(doc_uuid, repo_id, username, image_dir):
