@@ -3246,27 +3246,30 @@ class SeadocSearchMetadataRecords(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         search_type = request.GET.get('search_type', None)
-        file_types, suffix = [], None
+        file_types, suffix, exclude_type = [], None, None
+        sorts = [{"column_key": "_file_mtime", "sort_type": "down"}]
+        basic_filters = [{"column_key": "_is_dir", "filter_predicate": "is", "filter_term": "file"}]
+        filter_conjunction = 'And'
+        filters = []
+        
+        
         if search_type == 'sdoc':
             suffix = 'sdoc'
         if search_type == 'file':
             file_types.append('_document')
+            exclude_type = 'sdoc'
         if search_type == 'video':
             file_types.append('_video')
         if search_type == 'exdraw':
             suffix = 'exdraw'
         if search_type == 'image':
             file_types.append('_picture')
-            
-        sorts = [{"column_key": "_file_mtime", "sort_type": "down"}]
-        basic_filters = [{"column_key": "_is_dir", "filter_predicate": "is", "filter_term": "file"}]
-        filter_conjunction = 'And'
-        filters = []
         if suffix:
             filters.append({"column_key": "_suffix","filter_predicate": "contains","filter_term": suffix})
         if file_types:
             basic_filters.append({"column_key": "_file_type", "filter_predicate": "is_any_of", "filter_term": file_types})
-        
+        if exclude_type:
+            filters.append({"column_key": "_suffix","filter_predicate": "does_not_contain","filter_term": exclude_type})
         fake_view = {
             "filters":filters,
             "sorts": sorts,
