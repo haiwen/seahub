@@ -3219,7 +3219,6 @@ class SdocImportView(APIView):
 class SeadocSearchMetadataRecords(APIView):
 
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsProVersion, )
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, file_uuid):
