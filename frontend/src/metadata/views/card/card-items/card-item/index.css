@@ -14,7 +14,7 @@
 }
 
 .sf-metadata-card-item:hover {
-  background: #fff;
+  background: var(--bs-body-bg);
   box-shadow: 0 0 3px #0000002e;
 }
 
@@ -24,10 +24,22 @@
 
 .sf-metadata-card-item-text-container {
   padding: 10px;
+  background-color: var(--bs-body-bg);
 }
 
 .sf-metadata-card-item-text-container .sf-metadata-file-name {
   font-weight: 500;
+}
+
+.sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .collaborator-item {
+  color: var(--bs-body-color);
+  background-color: transparent;
 }
 
 .sf-metadata-card-item .sf-metadata-card-item-field {
@@ -122,4 +134,14 @@
   overflow: hidden;
   line-height: 1.5;
   white-space: normal;
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item {
+  background: #131313;
+  border-color: var(--bs-border-secondary-color);
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item:hover {
+  background-color: var(--bs-body-bg);
+  box-shadow: none;
 }
