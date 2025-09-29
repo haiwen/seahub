@@ -48,18 +48,18 @@ const Card = () => {
           modifyColumnData={modifyColumnData}
           onCloseSettings={closeSettings}
         />
-        {isShowSettings && (
-          <div className="sf-metadata-view-setting-panel sf-metadata-view-card-setting h-100 position-absolute end-0 top-0">
-            <Settings
-              columns={columns}
-              columnsMap={metadata.key_column_map}
-              settings={metadata.view.settings}
-              modifySettings={modifySettings}
-              onClose={closeSettings}
-            />
-          </div>
-        )}
       </div>
+      {isShowSettings && (
+        <div className="sf-metadata-view-setting-panel sf-metadata-view-card-setting h-100">
+          <Settings
+            columns={columns}
+            columnsMap={metadata.key_column_map}
+            settings={metadata.view.settings}
+            modifySettings={modifySettings}
+            onClose={closeSettings}
+          />
+        </div>
+      )}
     </div>
   );
 };
