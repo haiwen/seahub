@@ -96,6 +96,8 @@ export const EVENT_BUS_TYPE = {
   TOGGLE_CARD_SETTINGS: 'toggle_card_settings',
   OPEN_CARD_SETTINGS: 'open_card_settings',
   CLOSE_CARD_SETTINGS: 'close_card_settings',
+  DISPLAY_SORTS: 'display_sorts',
+  TOGGLE_CARD_RENAME_DIALOG: 'toggle_card_rename_dialog',
 
   // kanban
   TOGGLE_KANBAN_SETTINGS: 'toggle_kanban_settings',

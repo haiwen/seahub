@@ -572,3 +572,102 @@ export const buildKanbanToolbarMenuOptions = (records, readOnly, metadataStatus)
   }
   return menuOptions;
 };
+
+export const buildCardToolbarMenuOptions = (records, readOnly, metadataStatus) => {
+  if (!records || records.length === 0) {
+    return [];
+  }
+  const menuOptions = [
+    {
+      key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+      value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+    },
+    {
+      key: TextTranslation.OPEN_PARENT_FOLDER.key,
+      value: TextTranslation.OPEN_PARENT_FOLDER.value
+    }
+  ];
+  if (!readOnly) {
+    menuOptions.push('Divider');
+    menuOptions.push(
+      {
+        key: TextTranslation.RENAME.key,
+        value: TextTranslation.RENAME.value
+      }
+    );
+  }
+  const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus);
+  if (aiOptions.length > 0) {
+    if (menuOptions.length > 0) {
+      menuOptions.push('Divider');
+    }
+    menuOptions.push(
+      {
+        key: 'AI',
+        value: gettext('AI'),
+        subOpList: aiOptions
+      }
+    );
+  }
+  return menuOptions;
+};
+
+export const buildCardMenuOptions = (records, readOnly, metadataStatus) => {
+  if (!records || records.length === 0) {
+    return [];
+  }
+
+  const menuOptions = [];
+
+  menuOptions.push({
+    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+  });
+
+  menuOptions.push({
+    key: TextTranslation.OPEN_PARENT_FOLDER.key,
+    value: TextTranslation.OPEN_PARENT_FOLDER.value
+  });
+
+  menuOptions.push('Divider');
+
+  if (!readOnly) {
+    menuOptions.push({
+      key: TextTranslation.RENAME.key,
+      value: TextTranslation.RENAME.value
+    });
+
+    menuOptions.push({
+      key: TextTranslation.MOVE.key,
+      value: TextTranslation.MOVE.value
+    });
+
+    menuOptions.push({
+      key: TextTranslation.COPY.key,
+      value: TextTranslation.COPY.value
+    });
+  }
+
+  menuOptions.push({
+    key: TextTranslation.DOWNLOAD.key,
+    value: TextTranslation.DOWNLOAD.value
+  });
+
+  if (!readOnly) {
+    menuOptions.push({
+      key: TextTranslation.DELETE.key,
+      value: TextTranslation.DELETE.value
+    });
+  }
+
+  const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus);
+  if (aiOptions.length > 0) {
+    menuOptions.push('Divider');
+    menuOptions.push({
+      key: 'AI',
+      value: gettext('AI'),
+      subOpList: aiOptions
+    });
+  }
+  return menuOptions;
+};
