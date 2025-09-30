@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import Switch from '../../../../components/switch';
 import Icon from '../../../../components/icon';
 
-function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconConfig }) {
+function FieldItem({ field, index, isCollapsed, onToggleField, onMoveField, fieldIconConfig, updateDragOverKey, dragOverColumnKey, draggingColumnIndex, updateDraggingKey }) {
   let enteredCounter = 0;
   const fieldItemRef = useRef(null);
   const [isItemDropTipShow, setDropTipShow] = useState(false);
@@ -20,14 +21,16 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
     e.dataTransfer.setDragImage(fieldItemRef.current, 10, 10);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('application/sf-metadata-field-display-setting', field.key);
+    updateDraggingKey(field.key);
   };
 
-  const onTableDragEnter = (e) => {
+  const onDragEnter = (e) => {
     e.stopPropagation();
     enteredCounter++;
     if (enteredCounter !== 0 && !isItemDropTipShow) {
       setDropTipShow(true);
     }
+    updateDragOverKey(field.key);
   };
 
   const onDragOver = (e) => {
@@ -37,6 +40,7 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
     e.stopPropagation();
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    updateDragOverKey(field.key);
   };
 
   const onDragLeave = (e) => {
@@ -45,6 +49,7 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
     if (enteredCounter === 0) {
       setDropTipShow(false);
     }
+    updateDragOverKey(null);
   };
 
   const onDrop = (e) => {
@@ -54,6 +59,8 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
     const droppedColumnKey = e.dataTransfer.getData('application/sf-metadata-field-display-setting');
     if (droppedColumnKey === field.key) return;
     onMoveField(droppedColumnKey, field.key);
+    updateDragOverKey(null);
+    updateDraggingKey(null);
   };
 
   const placeholder = () => {
@@ -65,12 +72,18 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
     );
   };
 
+  const isOver = (dragOverColumnKey === field.key);
+
   return (
     <div
       ref={fieldItemRef}
-      className={`sf-metadata-field-display-setting-item-container ${isCollapsed ? 'd-none' : ''}`}
+      className={classNames('sf-metadata-field-display-setting-item-container',
+        { 'd-none': isCollapsed },
+        { 'hide-column-can-drop-top': isOver && draggingColumnIndex >= index },
+        { 'hide-column-can-drop': isOver && draggingColumnIndex < index },
+      )}
       onDrop={onDrop}
-      onDragEnter={onTableDragEnter}
+      onDragEnter={onDragEnter}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
     >
@@ -89,10 +102,15 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
 
 FieldItem.propTypes = {
   isCollapsed: PropTypes.bool,
+  index: PropTypes.number.isRequired,
   field: PropTypes.object.isRequired,
   fieldIconConfig: PropTypes.object,
   onToggleField: PropTypes.func.isRequired,
   onMoveField: PropTypes.func.isRequired,
+  updateDragOverKey: PropTypes.func.isRequired,
+  dragOverColumnKey: PropTypes.string,
+  draggingColumnIndex: PropTypes.number,
+  updateDraggingKey: PropTypes.func.isRequired,
 };
 
 export default FieldItem;

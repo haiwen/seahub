@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from 'reactstrap';
 import classnames from 'classnames';
@@ -15,6 +15,18 @@ const DURATION = 300;
 const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggleField, onMoveField, onToggleFieldsVisibility }) => {
   const nodeRef = useRef(null);
   const [isCollapsed, setCollapsed] = useState(true);
+  const [dragOverColumnKey, setDragOverCellKey] = useState(null);
+  const [draggingColumnKey, setDraggingCellKey] = useState(null);
+
+  const updateDragOverKey = useCallback((cellKey) => {
+    if (cellKey === dragOverColumnKey) return;
+    setDragOverCellKey(cellKey);
+  }, [dragOverColumnKey]);
+
+  const updateDraggingKey = useCallback((cellKey) => {
+    if (cellKey === draggingColumnKey) return;
+    setDraggingCellKey(cellKey);
+  }, [draggingColumnKey]);
 
   const expandAllFields = () => {
     setCollapsed(!isCollapsed);
@@ -31,6 +43,7 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
     exited: { opacity: 0, height: 0 },
   };
   const fieldAllShown = fields.every(field => field.shown);
+  const draggingColumnIndex = draggingColumnKey ? fields.findIndex(f => f.key === draggingColumnKey) : -1;
 
   return (
     <div className="sf-metadata-field-display-setting">
@@ -60,10 +73,15 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
                   <FieldItem
                     key={`${field.key}-${index}`}
                     field={field}
+                    index={index}
                     fieldIconConfig={fieldIconConfig}
                     isCollapsed={isCollapsed}
                     onToggleField={onToggleField}
                     onMoveField={onMoveField}
+                    updateDragOverKey={updateDragOverKey}
+                    updateDraggingKey={updateDraggingKey}
+                    dragOverColumnKey={dragOverColumnKey}
+                    draggingColumnIndex={draggingColumnIndex}
                   />
                 );
               })}

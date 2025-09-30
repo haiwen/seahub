@@ -83,3 +83,21 @@
 .sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch-input:checked~.custom-switch-indicator:before {
   left: 12px;
 }
+
+.sf-metadata-field-display-setting-item-container.hide-column-can-drop::after,
+.sf-metadata-field-display-setting-item-container.hide-column-can-drop-top::before {
+  content: '';
+  height: 1px;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  background: #666;
+}
+
+.sf-metadata-field-display-setting-item-container.hide-column-can-drop::after {
+  bottom: 0;
+}
+
+.sf-metadata-field-display-setting-item-container.hide-column-can-drop-top::before {
+  top: 0;
+}
