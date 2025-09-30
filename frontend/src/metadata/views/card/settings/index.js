@@ -4,7 +4,7 @@ import OpIcon from '../../../../components/op-icon';
 import Switch from '../../../../components/switch';
 import FieldDisplaySettings from '../../../components/data-process-setter/field-display-settings';
 import { gettext } from '../../../../utils/constants';
-import { COLUMNS_ICON_CONFIG, CARD_SETTINGS_KEYS } from '../../../constants';
+import { COLUMNS_ICON_CONFIG, CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getColumnByKey } from '../../../utils/column';
 import { useMetadataStatus } from '../../../../hooks';
 
@@ -22,9 +22,10 @@ const Settings = ({
 
   const displayColumns = useMemo(() => {
     const displayColumnsConfig = settings[CARD_SETTINGS_KEYS.COLUMNS].filter(column => !globalHiddenColumns.includes(column.key));
-    const nameColumnKey = '_name';
-    const mtimeColumnKey = '_file_mtime';
-    const filteredColumns = validColumns.filter(item => item.key !== nameColumnKey && item.key !== mtimeColumnKey);
+    const nameColumnKey = PRIVATE_COLUMN_KEY.FILE_NAME;
+    const mtimeColumnKey = PRIVATE_COLUMN_KEY.FILE_MTIME;
+    const lastModifierColumnKey = PRIVATE_COLUMN_KEY.FILE_MODIFIER;
+    const filteredColumns = validColumns.filter(item => item.key !== nameColumnKey && item.key !== mtimeColumnKey && item.key !== lastModifierColumnKey);
 
     if (!displayColumnsConfig) {
       return filteredColumns.map(column => ({ ...column, shown: false }));
