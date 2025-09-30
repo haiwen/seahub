@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Label } from 'reactstrap';
 import classnames from 'classnames';
@@ -15,6 +15,18 @@ const DURATION = 300;
 const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggleField, onMoveField, onToggleFieldsVisibility }) => {
   const nodeRef = useRef(null);
   const [isCollapsed, setCollapsed] = useState(true);
+  const [dragOverColumnKey, setDragOverCellKey] = useState(null);
+  const [draggingColumnKey, setDraggingCellKey] = useState(null);
+
+  const updateDragOverKey = useCallback((cellKey) => {
+    if (cellKey === dragOverColumnKey) return;
+    setDragOverCellKey(cellKey);
+  }, [dragOverColumnKey]);
+
+  const updateDraggingKey = useCallback((cellKey) => {
+    if (cellKey === draggingColumnKey) return;
+    setDraggingCellKey(cellKey);
+  }, [draggingColumnKey]);
 
   const expandAllFields = () => {
     setCollapsed(!isCollapsed);
@@ -31,39 +43,45 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
     exited: { opacity: 0, height: 0 },
   };
   const fieldAllShown = fields.every(field => field.shown);
+  const draggingColumnIndex = draggingColumnKey ? fields.findIndex(f => f.key === draggingColumnKey) : -1;
 
   return (
-    <div className="sf-metadata-filed-display-setting">
+    <div className="sf-metadata-field-display-setting">
       <div
-        className="sf-metadata-filed-display-setting-header d-flex align-items-center justify-content-between"
+        className="sf-metadata-field-display-setting-header d-flex align-items-center justify-content-between"
         onClick={expandAllFields}
         role="button"
         aria-label={isCollapsed ? gettext('Expand') : gettext('Collapse')}
       >
         <Label className="mb-0">{textProperties.titleValue}</Label>
-        <div className="sf-metadata-filed-display-toggle-btn">
+        <div className="sf-metadata-field-display-toggle-btn">
           <i aria-hidden="true" className={classnames('sf3-font sf3-font-down', { 'rotate-270': isCollapsed })}></i>
         </div>
       </div>
       <Transition nodeRef={nodeRef} in={!isCollapsed} timeout={DURATION}>
         {state => (
-          <div className="sf-metadata-filed-display-setting-wrapper" ref={nodeRef} style={{ ...defaultStyle, ...transitionStyles[state] }}>
-            <div className={`sf-metadata-filed-display-setting-banner ${isCollapsed ? 'd-none' : 'd-flex'} align-items-center justify-content-between h-5 mt-2 mb-2`}>
+          <div className="sf-metadata-field-display-setting-wrapper" ref={nodeRef} style={{ ...defaultStyle, ...transitionStyles[state] }}>
+            <div className={`sf-metadata-field-display-setting-banner ${isCollapsed ? 'd-none' : 'd-flex'} align-items-center justify-content-between h-5 mt-2 mb-2`}>
               <Label className="mb-0">{textProperties.bannerValue}</Label>
               <span className="show-all-button" onClick={() => onToggleFieldsVisibility(!fieldAllShown)}>
                 {fieldAllShown ? textProperties.hideValue : textProperties.showValue}
               </span>
             </div>
-            <div className="sf-metadata-filed-display-setting-body">
+            <div className="sf-metadata-field-display-setting-body">
               {fields.map((field, index) => {
                 return (
                   <FieldItem
                     key={`${field.key}-${index}`}
                     field={field}
+                    index={index}
                     fieldIconConfig={fieldIconConfig}
                     isCollapsed={isCollapsed}
                     onToggleField={onToggleField}
                     onMoveField={onMoveField}
+                    updateDragOverKey={updateDragOverKey}
+                    updateDraggingKey={updateDraggingKey}
+                    dragOverColumnKey={dragOverColumnKey}
+                    draggingColumnIndex={draggingColumnIndex}
                   />
                 );
               })}
