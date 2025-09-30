@@ -321,8 +321,26 @@ class MylibRepoListItem extends React.Component {
         <td>
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div className="d-flex align-items-center">
-              <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
-              <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
+              <i
+                className="op-icon sf3-font-share sf3-font"
+                title={gettext('Share')}
+                role="button"
+                tabIndex="0"
+                aria-label={gettext('Share')}
+                onClick={this.onShareToggle}
+                onKeyDown={Utils.onKeyDown}
+              >
+              </i>
+              <i
+                className="op-icon sf3-font-delete1 sf3-font"
+                title={gettext('Delete')}
+                role="button"
+                tabIndex="0"
+                aria-label={gettext('Delete')}
+                onClick={this.onDeleteToggle}
+                onKeyDown={Utils.onKeyDown}
+              >
+              </i>
               <LibraryOpMenu
                 isPC={true}
                 repo={this.props.repo}
@@ -377,8 +395,26 @@ class MylibRepoListItem extends React.Component {
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
           <div className="flex-shrink-0 d-flex align-items-center">
-            <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onShareToggle}></i>
-            <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onDeleteToggle}></i>
+            <i
+              className="op-icon sf3-font-share sf3-font"
+              title={gettext('Share')}
+              role="button"
+              tabIndex="0"
+              aria-label={gettext('Share')}
+              onClick={this.onShareToggle}
+              onKeyDown={Utils.onKeyDown}
+            >
+            </i>
+            <i
+              className="op-icon sf3-font-delete1 sf3-font"
+              title={gettext('Delete')}
+              role="button"
+              tabIndex="0"
+              aria-label={gettext('Delete')}
+              onClick={this.onDeleteToggle}
+              onKeyDown={Utils.onKeyDown}
+            >
+            </i>
             <LibraryOpMenu
               isPC={true}
               repo={this.props.repo}
