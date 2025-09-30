@@ -23,6 +23,7 @@ import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialo
 import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
+import OpIcon from '../../components/op-icon';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -155,12 +156,6 @@ class MylibRepoListItem extends React.Component {
     }
   };
 
-  onStarKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.onToggleStarRepo();
-    }
-  };
-
   onShareToggle = () => {
     this.setState({ isShareDialogShow: !this.state.isShareDialogShow });
   };
@@ -289,16 +284,11 @@ class MylibRepoListItem extends React.Component {
         onContextMenu={this.handleContextMenu}
       >
         <td className="text-center">
-          <i
-            role="button"
-            tabIndex="0"
-            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-            aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-            onClick={this.onToggleStarRepo}
-            onKeyDown={this.onStarKeyDown}
+          <OpIcon
             className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-          >
-          </i>
+            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            op={this.onToggleStarRepo}
+          />
         </td>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
@@ -310,9 +300,7 @@ class MylibRepoListItem extends React.Component {
             />
           )}
           {!this.state.isRenaming && repo.repo_name && (
-            <Fragment>
-              <Link to={repoURL}>{repo.repo_name}</Link>
-            </Fragment>
+            <Link to={repoURL}>{repo.repo_name}</Link>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
             (gettext('Broken (please contact your administrator to fix this library)'))
@@ -321,26 +309,16 @@ class MylibRepoListItem extends React.Component {
         <td>
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div className="d-flex align-items-center">
-              <i
+              <OpIcon
                 className="op-icon sf3-font-share sf3-font"
                 title={gettext('Share')}
-                role="button"
-                tabIndex="0"
-                aria-label={gettext('Share')}
-                onClick={this.onShareToggle}
-                onKeyDown={Utils.onKeyDown}
-              >
-              </i>
-              <i
+                op={this.onShareToggle}
+              />
+              <OpIcon
                 className="op-icon sf3-font-delete1 sf3-font"
                 title={gettext('Delete')}
-                role="button"
-                tabIndex="0"
-                aria-label={gettext('Delete')}
-                onClick={this.onDeleteToggle}
-                onKeyDown={Utils.onKeyDown}
-              >
-              </i>
+                op={this.onDeleteToggle}
+              />
               <LibraryOpMenu
                 isPC={true}
                 repo={this.props.repo}
@@ -376,16 +354,11 @@ class MylibRepoListItem extends React.Component {
             <Fragment>
               <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               {isStarred &&
-                <i
-                  role="button"
-                  tabIndex="0"
-                  title={gettext('Unstar')}
-                  aria-label={gettext('Unstar')}
-                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
-                  onClick={this.onToggleStarRepo}
-                  onKeyDown={this.onStarKeyDown}
-                >
-                </i>
+              <OpIcon
+                className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                title={gettext('Unstar')}
+                op={this.onToggleStarRepo}
+              />
               }
             </Fragment>
           )}
@@ -395,26 +368,16 @@ class MylibRepoListItem extends React.Component {
         </div>
         {(repo.repo_name && this.state.isOpIconShow) && (
           <div className="flex-shrink-0 d-flex align-items-center">
-            <i
+            <OpIcon
               className="op-icon sf3-font-share sf3-font"
               title={gettext('Share')}
-              role="button"
-              tabIndex="0"
-              aria-label={gettext('Share')}
-              onClick={this.onShareToggle}
-              onKeyDown={Utils.onKeyDown}
-            >
-            </i>
-            <i
+              op={this.onShareToggle}
+            />
+            <OpIcon
               className="op-icon sf3-font-delete1 sf3-font"
               title={gettext('Delete')}
-              role="button"
-              tabIndex="0"
-              aria-label={gettext('Delete')}
-              onClick={this.onDeleteToggle}
-              onKeyDown={Utils.onKeyDown}
-            >
-            </i>
+              op={this.onDeleteToggle}
+            />
             <LibraryOpMenu
               isPC={true}
               repo={this.props.repo}
