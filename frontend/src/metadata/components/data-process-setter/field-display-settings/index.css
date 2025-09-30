@@ -1,4 +1,4 @@
-.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-header .sf-metadata-filed-display-toggle-btn {
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-header .sf-metadata-field-display-toggle-btn {
   width: 20px;
   height: 20px;
   display: flex;
@@ -9,20 +9,20 @@
   transition: transform .3s cubic-bezier(.645,.045,.355,1);
 }
 
-.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-header .sf-metadata-filed-display-toggle-btn:hover {
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-header .sf-metadata-field-display-toggle-btn:hover {
   border-radius: 3px;
   background-color: var(--bs-hover-bg);
   color: var(--bs-icon-color);
   cursor: pointer;
 }
 
-.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-banner .show-all-button {
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-banner .show-all-button {
   color: #FF8000;
   cursor: pointer;
   font-size: 12px;
 }
 
-.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-item-container {
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-body .sf-metadata-field-display-setting-item-container {
   position: relative;
   display: flex;
   font-size: 14px;
@@ -31,21 +31,21 @@
   border-radius: 4px;
 }
 
-.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-item-container:hover {
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-body .sf-metadata-field-display-setting-item-container:hover {
   background-color: var(--bs-nav-hover-bg);
 }
 
-.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-dragbar {
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-body .sf-metadata-field-display-setting-dragbar {
   color: #c2c2c2;
   cursor: grab;
   margin-right: 8px;
 }
 
-.sf-metadata-filed-display-setting .sf-metadata-filed-display-setting-body .sf-metadata-filed-display-setting-dragbar .seafile-multicolor-icon-drag {
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-body .sf-metadata-field-display-setting-dragbar .seafile-multicolor-icon-drag {
   vertical-align: -0.15em;
 }
 
-.sf-metadata-filed-display-setting-item-container .sf-metadata-switch.custom-switch {
+.sf-metadata-field-display-setting-item-container .sf-metadata-switch.custom-switch {
   width: 100%;
   padding-left: 0;
   display: inline-flex;
@@ -53,7 +53,7 @@
   justify-content: space-between;
 }
 
-.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .seafile-multicolor-icon {
+.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .seafile-multicolor-icon {
   fill: #666;
   transform: scale(0.8);
   font-size: 16px;
@@ -61,25 +61,25 @@
   vertical-align: -0.15em;
 }
 
-.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-description {
+.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-description {
   margin-left: 0;
   padding-right: 5px;
   flex: 1;
   transition: .3s color;
 }
 
-.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator {
+.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator {
   width: 22px;
   height: 12px;
   border-radius: 6px;
   margin-right: .25rem;
 }
 
-.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator::before {
+.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch .custom-switch-indicator::before {
   height: 8px;
   width: 8px;
 }
 
-.sf-metadata-filed-display-setting-item-container .sf-metadata-switch .custom-switch-input:checked~.custom-switch-indicator:before {
+.sf-metadata-field-display-setting-item-container .sf-metadata-switch .custom-switch-input:checked~.custom-switch-indicator:before {
   left: 12px;
 }

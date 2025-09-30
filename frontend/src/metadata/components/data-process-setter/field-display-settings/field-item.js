@@ -19,7 +19,7 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
     e.stopPropagation();
     e.dataTransfer.setDragImage(fieldItemRef.current, 10, 10);
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('application/sf-metadata-filed-display-setting', field.key);
+    e.dataTransfer.setData('application/sf-metadata-field-display-setting', field.key);
   };
 
   const onTableDragEnter = (e) => {
@@ -51,14 +51,14 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
     e.stopPropagation();
     e.preventDefault();
     setDropTipShow(false);
-    const droppedColumnKey = e.dataTransfer.getData('application/sf-metadata-filed-display-setting');
+    const droppedColumnKey = e.dataTransfer.getData('application/sf-metadata-field-display-setting');
     if (droppedColumnKey === field.key) return;
     onMoveField(droppedColumnKey, field.key);
   };
 
   const placeholder = () => {
     return (
-      <div className="sf-metadata-filed-display-setting-switch">
+      <div className="sf-metadata-field-display-setting-switch">
         <Icon symbol={fieldIconConfig[field.type]} />
         <span className="text-truncate">{field.name}</span>
       </div>
@@ -68,13 +68,13 @@ function FieldItem({ field, isCollapsed, onToggleField, onMoveField, fieldIconCo
   return (
     <div
       ref={fieldItemRef}
-      className={`sf-metadata-filed-display-setting-item-container ${isCollapsed ? 'd-none' : ''}`}
+      className={`sf-metadata-field-display-setting-item-container ${isCollapsed ? 'd-none' : ''}`}
       onDrop={onDrop}
       onDragEnter={onTableDragEnter}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
     >
-      <div className="sf-metadata-filed-display-setting-dragbar" draggable="true" onDragStart={onDragStart}>
+      <div className="sf-metadata-field-display-setting-dragbar" draggable="true" onDragStart={onDragStart}>
         <Icon symbol="drag" />
       </div>
       <Switch

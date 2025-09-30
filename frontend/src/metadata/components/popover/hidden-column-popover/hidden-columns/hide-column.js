@@ -22,10 +22,10 @@ const HideColumnItem = ({
   const ref = useRef(null);
 
   const onDragStart = useCallback((event) => {
-    const dragData = JSON.stringify({ type: 'sf-metadata-filed-display-setting', column_key: column.key });
+    const dragData = JSON.stringify({ type: 'sf-metadata-field-display-setting', column_key: column.key });
     event.dataTransfer.setDragImage(ref.current, 10, 10);
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('application/drag-sf-metadata-filed-display-setting', dragData);
+    event.dataTransfer.setData('application/drag-sf-metadata-field-display-setting', dragData);
     updateDraggingKey(column.key);
   }, [column, updateDraggingKey]);
 
@@ -48,10 +48,10 @@ const HideColumnItem = ({
 
   const onDrop = useCallback((event) => {
     event.stopPropagation();
-    let dragData = event.dataTransfer.getData('application/drag-sf-metadata-filed-display-setting');
+    let dragData = event.dataTransfer.getData('application/drag-sf-metadata-field-display-setting');
     if (!dragData) return false;
     dragData = JSON.parse(dragData);
-    if (dragData.type !== 'sf-metadata-filed-display-setting' || !dragData.column_key) return false;
+    if (dragData.type !== 'sf-metadata-field-display-setting' || !dragData.column_key) return false;
     if (dragData.column_key !== column.key) {
       onMove && onMove(dragData.column_key, column.key);
     }

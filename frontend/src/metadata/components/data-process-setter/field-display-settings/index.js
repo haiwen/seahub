@@ -33,28 +33,28 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
   const fieldAllShown = fields.every(field => field.shown);
 
   return (
-    <div className="sf-metadata-filed-display-setting">
+    <div className="sf-metadata-field-display-setting">
       <div
-        className="sf-metadata-filed-display-setting-header d-flex align-items-center justify-content-between"
+        className="sf-metadata-field-display-setting-header d-flex align-items-center justify-content-between"
         onClick={expandAllFields}
         role="button"
         aria-label={isCollapsed ? gettext('Expand') : gettext('Collapse')}
       >
         <Label className="mb-0">{textProperties.titleValue}</Label>
-        <div className="sf-metadata-filed-display-toggle-btn">
+        <div className="sf-metadata-field-display-toggle-btn">
           <i aria-hidden="true" className={classnames('sf3-font sf3-font-down', { 'rotate-270': isCollapsed })}></i>
         </div>
       </div>
       <Transition nodeRef={nodeRef} in={!isCollapsed} timeout={DURATION}>
         {state => (
-          <div className="sf-metadata-filed-display-setting-wrapper" ref={nodeRef} style={{ ...defaultStyle, ...transitionStyles[state] }}>
-            <div className={`sf-metadata-filed-display-setting-banner ${isCollapsed ? 'd-none' : 'd-flex'} align-items-center justify-content-between h-5 mt-2 mb-2`}>
+          <div className="sf-metadata-field-display-setting-wrapper" ref={nodeRef} style={{ ...defaultStyle, ...transitionStyles[state] }}>
+            <div className={`sf-metadata-field-display-setting-banner ${isCollapsed ? 'd-none' : 'd-flex'} align-items-center justify-content-between h-5 mt-2 mb-2`}>
               <Label className="mb-0">{textProperties.bannerValue}</Label>
               <span className="show-all-button" onClick={() => onToggleFieldsVisibility(!fieldAllShown)}>
                 {fieldAllShown ? textProperties.hideValue : textProperties.showValue}
               </span>
             </div>
-            <div className="sf-metadata-filed-display-setting-body">
+            <div className="sf-metadata-field-display-setting-body">
               {fields.map((field, index) => {
                 return (
                   <FieldItem
