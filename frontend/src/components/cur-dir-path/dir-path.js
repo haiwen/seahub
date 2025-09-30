@@ -133,7 +133,7 @@ class DirPath extends React.Component {
           role={children ? 'button' : null}
           onClick={children ? this.handleRefresh : () => {}}
         >
-          <MetadataViewName id={viewId} />
+          {viewId && <MetadataViewName id={viewId} />}
         </span>
         {children && (
           <>
