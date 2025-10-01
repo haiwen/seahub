@@ -7,6 +7,7 @@ import toaster from '../../../components/toast';
 import InternalLinkDialog from '../../../components/dialog/internal-link-dialog';
 import ShareDialog from '../../../components/dialog/share-dialog';
 import CreateFile from '../../../components/dialog/create-file-dialog';
+import SearchedItemDetails from '../../../components/search/details';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -48,6 +49,7 @@ class ExternalOperations extends React.Component {
     this.unsubscribeCreateSdocFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_SDOC_FILE, this.onCreateSdocFile);
     this.unsubscribeCreateWhiteboardFile = eventBus.subscribe(EXTERNAL_EVENT.CREATE_WHITEBOARD_FILE, this.onCreateWhiteboardFile);
     this.unsubscribeGenerateExdrawReadOnlyLink = eventBus.subscribe(EXTERNAL_EVENT.GENERATE_EXDRAW_READ_ONLY_LINK, this.generateExdrawReadOnlyLink);
+    this.unsubscribeUseFileMetadataComponent = eventBus.subscribe(EXTERNAL_EVENT.FILE_METADATA_COMPONENT, this.useFileMetadataComponent);
   }
 
   componentWillUnmount() {
@@ -61,6 +63,13 @@ class ExternalOperations extends React.Component {
     this.unsubscribeClearNotification();
     this.unsubscribeCreateWhiteboardFile();
     this.unsubscribeGenerateExdrawReadOnlyLink();
+    this.unsubscribeUseFileMetadataComponent();
+  }
+
+  useFileMetadataComponent = (callback) => {
+    if (typeof callback === 'function') {
+      callback(SearchedItemDetails);
+    }
   }
 
   onInternalLinkToggle = (options) => {
