@@ -19,7 +19,7 @@ const FileContent = ({ lineWrapping }) => {
 };
 
 const SharedFileViewText = () => {
-  let [lineWrapping, setLineWrapping] = useState(localStorage.getItem('sf_txt_file_line_wrapping') === 'true' || false);
+  let [lineWrapping, setLineWrapping] = useState(localStorage.getItem('sf_txt_file_line_wrapping') === 'true' || true);
 
   const updateLineWrapping = (newLineWrapping) => {
     setLineWrapping(newLineWrapping);

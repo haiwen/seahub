@@ -49,7 +49,7 @@ class ViewFileText extends React.Component {
       needSave: false,
       isSaving: false,
       participants: [],
-      lineWrapping: localStorage.getItem('sf_txt_file_line_wrapping') === 'true' || false,
+      lineWrapping: localStorage.getItem('sf_txt_file_line_wrapping') === 'true' || true,
     };
     this.onSave = this.onSave.bind(this);
     this.isParticipant = false;
