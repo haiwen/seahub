@@ -245,7 +245,7 @@ class GroupMembers extends Component {
         groupName: res.data.group_name,
         currentPage: page,
         perPage: perPage,
-        hasNextPage: Utils.hasNextPage(page, perPage, 3),
+        hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
       });
     }).catch((error) => {
       this.setState({
