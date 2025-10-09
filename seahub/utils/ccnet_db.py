@@ -27,6 +27,13 @@ class CcnetUsers(object):
         self.ctime = kwargs.get('ctime')
         self.role = kwargs.get('role')
         self.passwd = kwargs.get('passwd')
+        
+        
+class CcnetGroupMembers(object):
+    def __init__(self, **kwargs):
+        self.group_id = kwargs.get('group_id')
+        self.user_name = kwargs.get('user_name')
+        self.is_staff = kwargs.get('is_staff')
 
 
 class CcnetUserRole(object):
@@ -315,3 +322,34 @@ class CcnetDB:
                         f"{old_path_prefix}%"  # Pattern to match all children
                     ]
                 )
+                
+    def get_group_members(self, group_id, start, limit):
+        sql = f"""
+        SELECT group_id, user_name, is_staff
+        FROM `{self.db_name}`.`GroupUser`
+        WHERE group_id=%s ORDER BY id
+        LIMIT %s OFFSET %s
+        """
+        
+        count_sql = f"SELECT COUNT(1) from `{self.db_name}`.`GroupUser` WHERE group_id=%s"
+        users = []
+        with connection.cursor() as cursor:
+            cursor.execute(count_sql, [group_id])
+            total_count = int(cursor.fetchone()[0])
+            cursor.execute(sql, [group_id, limit, start])
+            
+            for item in cursor.fetchall():
+                group_id = item[0]
+                user_name = item[1]
+                is_staff = item[2]
+                params = {
+                    'group_id': group_id,
+                    'user_name': user_name,
+                    'is_staff': is_staff,
+                    
+                }
+                users_obj = CcnetGroupMembers(**params)
+                users.append(users_obj)
+        return users, total_count
+    
+

@@ -29,15 +29,15 @@ class Content extends Component {
   };
 
   getPreviousPageList = () => {
-    this.props.getListByPage(this.props.pageInfo.current_page - 1);
+    this.props.getListByPage(this.props.currentPage - 1);
   };
 
   getNextPageList = () => {
-    this.props.getListByPage(this.props.pageInfo.current_page + 1);
+    this.props.getListByPage(this.props.currentPage + 1);
   };
 
   render() {
-    const { loading, errorMsg, items, pageInfo, curPerPage } = this.props;
+    const { loading, errorMsg, items, curPerPage, currentPage, hasNextPage } = this.props;
     if (loading) {
       return <Loading />;
     } else if (errorMsg) {
@@ -73,16 +73,15 @@ class Content extends Component {
               })}
             </tbody>
           </table>
-          {pageInfo &&
           <Paginator
             gotoPreviousPage={this.getPreviousPageList}
             gotoNextPage={this.getNextPageList}
-            currentPage={pageInfo.current_page}
-            hasNextPage={pageInfo.has_next_page}
+            currentPage={currentPage}
+            hasNextPage={hasNextPage}
             curPerPage={curPerPage}
             resetPerPage={this.props.resetPerPage}
           />
-          }
+
         </Fragment>
       );
       return items.length ? table : emptyTip;
@@ -98,8 +97,9 @@ Content.propTypes = {
   resetPerPage: PropTypes.func,
   updateMemberRole: PropTypes.func.isRequired,
   curPerPage: PropTypes.number,
-  pageInfo: PropTypes.object,
   getListByPage: PropTypes.func.isRequired,
+  hasNextPage: PropTypes.bool,
+  currentPage: PropTypes.number,
 };
 
 class Item extends Component {
@@ -217,9 +217,9 @@ class GroupMembers extends Component {
       errorMsg: '',
       groupName: '',
       memberList: [],
-      pageInfo: {},
       currentPage: 1,
       perPage: 100,
+      hasNextPage: false,
       isAddMemberDialogOpen: false
     };
   }
@@ -243,7 +243,9 @@ class GroupMembers extends Component {
         loading: false,
         memberList: res.data.members,
         groupName: res.data.group_name,
-        pageInfo: res.data.page_info
+        currentPage: page,
+        perPage: perPage,
+        hasNextPage: Utils.hasNextPage(page, perPage, res.data.total_count),
       });
     }).catch((error) => {
       this.setState({
@@ -344,10 +346,11 @@ class GroupMembers extends Component {
                 items={this.state.memberList}
                 removeMember={this.removeMember}
                 updateMemberRole={this.updateMemberRole}
-                pageInfo={this.state.pageInfo}
                 curPerPage={this.state.perPage}
                 getListByPage={this.getListByPage}
                 resetPerPage={this.resetPerPage}
+                hasNextPage={this.state.hasNextPage}
+                currentPage={this.state.currentPage}
               />
             </div>
           </div>

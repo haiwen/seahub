@@ -20,6 +20,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.utils.ccnet_db import CcnetDB
 
 logger = logging.getLogger(__name__)
 
@@ -54,32 +55,23 @@ class AdminGroupMembers(APIView):
             per_page = 100
 
         start = (page - 1) * per_page
-        limit = per_page + 1
+        limit = per_page
 
         try:
-            members = ccnet_api.get_group_members(group_id, start, limit)
+            ccnet_db = CcnetDB()
+            members, total_count = ccnet_db.get_group_members(group_id, start, limit)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        if len(members) > per_page:
-            members = members[:per_page]
-            has_next_page = True
-        else:
-            has_next_page = False
-
-        
         member_usernames = [m.user_name for m in members]
         members_info = get_group_members_info(group_id, member_usernames)
         group_members = {
             'group_id': group_id,
             'group_name': group.group_name,
             'members': members_info,
-            'page_info': {
-                'has_next_page': has_next_page,
-                'current_page': page
-            }
+            'total_count': total_count
         }
         return Response(group_members)
 
