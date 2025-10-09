@@ -9,7 +9,6 @@ export default function useResizeObserver(ref) {
     const el = ref.current;
     if (!el) return;
 
-    // Initialize with current size
     const rect = el.getBoundingClientRect();
     setSize({ width: Math.round(rect.width), height: Math.round(rect.height) });
 

@@ -29,13 +29,12 @@ const PieChart = ({ data }) => {
       .style('opacity', 0)
       .style('z-index', '1000');
 
-    const containerWidth = container.offsetWidth;
-    const isMobile = containerWidth < 480;
+    const isMobile = containerW < 480;
     const maxRadius = 150;
     const padding = 20;
-    const legendWidth = Math.min(160, Math.max(120, containerWidth * 0.25));
+    const legendWidth = Math.min(160, Math.max(120, containerW * 0.25));
     // Always place legend on the right side of the pie
-    const radius = Math.max(60, Math.min(maxRadius, (containerWidth - legendWidth - padding * 2) / 2));
+    const radius = Math.max(60, Math.min(maxRadius, (containerW - legendWidth - padding * 2) / 2));
     const pieSize = (radius + padding) * 2;
 
     const totalWidth = pieSize + legendWidth + padding;

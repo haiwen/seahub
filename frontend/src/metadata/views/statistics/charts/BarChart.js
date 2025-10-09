@@ -12,11 +12,9 @@ export const BarChart = ({ data, unit }) => {
   useEffect(() => {
     if (!data || data.length === 0) return;
 
-    const container = containerRef.current;
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const containerWidth = container.offsetWidth;
     const maxBarWidth = 24;
     const minGap = 12;
 
@@ -37,16 +35,15 @@ export const BarChart = ({ data, unit }) => {
       left: Math.max(28, maxLabelWidth + 10)
     };
 
-    const chartWidth = containerWidth;
-    const width = Math.max(0, chartWidth - margin.left - margin.right);
+    const width = Math.max(0, containerW - margin.left - margin.right);
     const height = 250 - margin.top - margin.bottom;
 
     const yScale = d3.scaleLinear().domain([0, maxValue]).range([height, 0]).nice();
 
     const g = svg
-      .attr('width', chartWidth)
+      .attr('width', containerW)
       .attr('height', 250)
-      .attr('viewBox', `0 0 ${chartWidth} 250`)
+      .attr('viewBox', `0 0 ${containerW} 250`)
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
@@ -238,12 +235,10 @@ export const HorizontalBarChart = ({ data }) => {
   useEffect(() => {
     if (!data || data.length === 0) return;
 
-    const container = containerRef.current;
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const containerWidth = container.offsetWidth;
-    const isMobile = containerWidth < 480;
+    const isMobile = containerW < 480;
     const margin = {
       top: 10,
       right: isMobile ? 60 : 80,
@@ -251,18 +246,16 @@ export const HorizontalBarChart = ({ data }) => {
       left: isMobile ? 100 : 120
     };
 
-    const width = Math.max(350, containerWidth - margin.left - margin.right);
+    const width = Math.max(350, containerW - margin.left - margin.right);
 
     const minBarSpacing = 26;
     const barHeight = 18;
     const totalItemHeight = barHeight + minBarSpacing;
     const requiredContentHeight = data.length * totalItemHeight;
-
-    const containerHeight = container.offsetHeight || 340;
-    const availableHeight = containerHeight - margin.top - margin.bottom;
+    const availableHeight = containerH - margin.top - margin.bottom;
 
     const shouldScroll = requiredContentHeight > availableHeight;
-    const svgHeight = shouldScroll ? requiredContentHeight + margin.top + margin.bottom : containerHeight;
+    const svgHeight = shouldScroll ? requiredContentHeight + margin.top + margin.bottom : containerH;
 
     const actualContentHeight = shouldScroll ? requiredContentHeight : availableHeight;
     const centerOffset = shouldScroll ? 0 : Math.max(0, (availableHeight - requiredContentHeight) / 2);
@@ -270,7 +263,7 @@ export const HorizontalBarChart = ({ data }) => {
     const g = svg
       .attr('width', '100%')
       .attr('height', svgHeight)
-      .attr('viewBox', `0 0 ${containerWidth} ${svgHeight}`)
+      .attr('viewBox', `0 0 ${containerW} ${svgHeight}`)
       .attr('preserveAspectRatio', 'xMidYMid meet')
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
