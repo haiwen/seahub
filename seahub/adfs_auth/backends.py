@@ -43,11 +43,11 @@ class Saml2Backend(ModelBackend):
     
     
     def authenticate(self, saml_username=None, org_id=None, create_unknown_user=True, **kwargs):
-        if saml_username:
-            username = saml_username
-            user = self.get_user(username)
-        else:
-            user = None
+        if not saml_username:
+            return
+        username = saml_username
+        user = self.get_user(username)
+        
 
         if not user and create_unknown_user:
             activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
