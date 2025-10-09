@@ -21,6 +21,7 @@ import RepoAPITokenDialog from '../dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import { LIST_MODE } from '../dir-view-mode/constants';
 import TransferDialog from '../dialog/transfer-dialog';
+import OpIcon from '../../components/op-icon';
 
 dayjs.extend(relativeTime);
 
@@ -441,9 +442,28 @@ class SharedRepoListItem extends React.Component {
     } else {
       operations = this.generatorOperations();
     }
-    const shareOperation = <i className="op-icon sf3-font-share sf3-font" title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.onItemShare}></i>;
-    const unshareOperation = <i className="op-icon sf2-icon-x3" title={gettext('Unshare')} role="button" aria-label={gettext('Unshare')} onClick={this.onItemUnshare}></i>;
-    const deleteOperation = <i className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDeleteToggle}></i>;
+    const shareOperation = (
+      <OpIcon
+        className="op-icon sf3-font-share sf3-font"
+        title={gettext('Share')}
+        op={this.onItemShare}
+      />
+    );
+    const unshareOperation = (
+      <OpIcon
+        className="op-icon sf2-icon-x3"
+        title={gettext('Unshare')}
+        op={this.onItemUnshare}
+      />
+    );
+    const deleteOperation = (
+      <OpIcon
+        className="op-icon sf3-font-delete1 sf3-font"
+        title={gettext('Delete')}
+        role="button" aria-label={gettext('Delete')}
+        op={this.onItemDeleteToggle}
+      />
+    );
 
     if (this.isDepartmentOwnerGroupMember) {
       const advancedOperations = this.getAdvancedOperations();
@@ -482,8 +502,11 @@ class SharedRepoListItem extends React.Component {
                     >
                       <DropdownToggle
                         tag="span"
+                        role="button"
+                        tabIndex="0"
                         className="dropdown-item font-weight-normal rounded-0 d-flex justify-content-between align-items-center pr-2"
                         onMouseEnter={this.toggleAdvancedMenuShown}
+                        onKeyDown={this.toggleAdvancedMenuShown}
                       >
                         {this.translateMenuItem(item)}
                         <i className="sf3-font-down sf3-font rotate-270"></i>
@@ -546,12 +569,6 @@ class SharedRepoListItem extends React.Component {
     }
   };
 
-  onStarKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.onToggleStarRepo();
-    }
-  };
-
   handleContextMenu = (e) => {
     this.props.onContextMenu(e, this.props.repo);
   };
@@ -570,24 +587,17 @@ class SharedRepoListItem extends React.Component {
         onContextMenu={this.handleContextMenu}
       >
         <td className="text-center">
-          <i
-            role="button"
-            tabIndex="0"
-            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-            aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-            onClick={this.onToggleStarRepo}
-            onKeyDown={this.onStarKeyDown}
+          <OpIcon
             className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-          >
-          </i>
+            title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+            op={this.onToggleStarRepo}
+          />
         </td>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle} width="24" /></td>
         <td>
           {this.state.isRenaming ?
             <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-            <Fragment>
-              <Link to={libPath}>{repo.repo_name}</Link>
-            </Fragment>
+            <Link to={libPath}>{repo.repo_name}</Link>
           }
         </td>
         <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
@@ -610,16 +620,11 @@ class SharedRepoListItem extends React.Component {
             <Fragment>
               <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               {isStarred &&
-                <i
-                  role="button"
-                  tabIndex="0"
-                  title={gettext('Unstar')}
-                  aria-label={gettext('Unstar')}
-                  onClick={this.onToggleStarRepo}
-                  onKeyDown={this.onStarKeyDown}
-                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
-                >
-                </i>
+              <OpIcon
+                className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                title={gettext('Unstar')}
+                op={this.onToggleStarRepo}
+              />
               }
             </Fragment>
           }
