@@ -2,7 +2,7 @@ import React, { useMemo, useCallback, useState, useRef, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useMetadataView } from '../../../hooks/metadata-view';
-import { CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY } from '../../../constants';
+import { CARD_SETTINGS_KEYS, PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { getRecordIdFromRecord, getFileNameFromRecord, getParentDirFromRecord } from '../../../utils/cell';
 import { openFile } from '../../../utils/file';
@@ -23,7 +23,19 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
 
-  const { isDirentDetailShow, metadata, updateCurrentDirent, showDirentDetail } = useMetadataView();
+  const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
+
+  useEffect(() => {
+    const unsubscribe = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, (ids) => {
+      setSelectedCard(Array.isArray(ids) ? ids[0] : null);
+    });
+    return () => {
+      unsubscribe && unsubscribe();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { isDirentDetailShow, metadata, updateCurrentDirent, showDirentDetail, updateSelectedRecordIds } = useMetadataView();
   const { tagsData } = useTags();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -88,7 +100,8 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
       file_tags: []
     });
     setSelectedCard(recordId);
-  }, [updateCurrentDirent]);
+    updateSelectedRecordIds([recordId]);
+  }, [updateCurrentDirent, updateSelectedRecordIds]);
 
   const onSelectCard = useCallback((record) => {
     const recordId = getRecordIdFromRecord(record);
@@ -100,8 +113,9 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
 
   const handleClickOutside = useCallback((event) => {
     setSelectedCard(null);
+    updateSelectedRecordIds([]);
     updateCurrentDirent();
-  }, [updateCurrentDirent]);
+  }, [updateCurrentDirent, updateSelectedRecordIds]);
 
   const onContextMenu = useCallback((event, recordId) => {
     event.preventDefault();
@@ -114,10 +128,11 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
     deleteRecords(recordIds, {
       success_callback: () => {
         setSelectedCard(null);
+        updateSelectedRecordIds([]);
         updateCurrentDirent();
       },
     });
-  }, [deleteRecords, updateCurrentDirent]);
+  }, [deleteRecords, updateCurrentDirent, updateSelectedRecordIds]);
 
   const onRename = useCallback((rowId, updates, oldRowData, originalUpdates, originalOldRowData, { success_callback }) => {
     modifyRecord(rowId, updates, oldRowData, originalUpdates, originalOldRowData, {
@@ -132,8 +147,9 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
   useEffect(() => {
     if (!isDirentDetailShow) {
       setSelectedCard(null);
+      updateSelectedRecordIds([]);
     }
-  }, [isDirentDetailShow]);
+  }, [isDirentDetailShow, updateSelectedRecordIds]);
 
   if (records.length == 0) {
     return <EmptyTip text={gettext('No items')} />;

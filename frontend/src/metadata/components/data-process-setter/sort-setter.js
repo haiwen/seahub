@@ -50,13 +50,13 @@ const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSor
   }, [modifySorts]);
 
   if (!columns) return null;
-  const className = classnames(wrapperClass, { 'active': sorts.length > 0 });
+
   return (
     <>
       <IconBtn
         symbol="sort"
         size={24}
-        className={className}
+        className={classnames(wrapperClass, { 'active': sorts.length > 0 })}
         onClick={onSetterToggle}
         role="button"
         onKeyDown={onKeyDown}
@@ -78,7 +78,6 @@ const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSor
       )}
     </>
   );
-
 };
 
 
