@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import useResizeObserver from '../useResizeObserver';
 
 const PieChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
+  const { width: containerW } = useResizeObserver(containerRef);
 
   const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
 
@@ -29,10 +31,21 @@ const PieChart = ({ data }) => {
 
     const containerWidth = container.offsetWidth;
     const isMobile = containerWidth < 480;
-    const radius = 150;
-    const pieSize = (radius + 20) * 2;
+    const maxRadius = 150;
+    const padding = 20;
+    const legendWidth = Math.min(160, Math.max(120, containerWidth * 0.25));
+    // Always place legend on the right side of the pie
+    const radius = Math.max(60, Math.min(maxRadius, (containerWidth - legendWidth - padding * 2) / 2));
+    const pieSize = (radius + padding) * 2;
 
-    svg.attr('width', '100%').attr('height', pieSize);
+    const totalWidth = pieSize + legendWidth + padding;
+    const totalHeight = pieSize;
+
+    svg
+      .attr('width', '100%')
+      .attr('height', totalHeight)
+      .attr('viewBox', `0 0 ${totalWidth} ${totalHeight}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet');
 
     const g = svg.append('g')
       .attr('transform', `translate(${pieSize / 2}, ${pieSize / 2})`);
@@ -143,9 +156,11 @@ const PieChart = ({ data }) => {
           .text(labelText);
       });
 
+    const legendX = pieSize + 15;
+    const legendY = (pieSize / 2 - (data.length * 11));
     const legendContainer = svg.append('g')
       .attr('class', 'legend')
-      .attr('transform', `translate(${pieSize + 15}, ${pieSize / 2 - (data.length * 11)})`);
+      .attr('transform', `translate(${legendX}, ${legendY})`);
 
     const legend = legendContainer.selectAll('.legend-item')
       .data(data)
@@ -173,7 +188,7 @@ const PieChart = ({ data }) => {
         return label;
       });
 
-  }, [data, isDark]);
+  }, [data, isDark, containerW]);
 
   useEffect(() => {
     const currentContainer = containerRef.current;
@@ -183,7 +198,7 @@ const PieChart = ({ data }) => {
   }, []);
 
   return (
-    <div ref={containerRef} style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingLeft: '30px' }}>
+    <div ref={containerRef} style={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingLeft: '0' }}>
       <svg ref={svgRef}></svg>
     </div>
   );

@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
+import useResizeObserver from '../useResizeObserver';
 
 export const BarChart = ({ data, unit }) => {
   const svgRef = useRef();
   const containerRef = useRef();
+  const { width: containerW } = useResizeObserver(containerRef);
 
   const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
 
@@ -15,9 +17,8 @@ export const BarChart = ({ data, unit }) => {
     svg.selectAll('*').remove();
 
     const containerWidth = container.offsetWidth;
-    const barWidth = 24;
-    const minBarSpacing = 24;
-    const totalBarWidth = barWidth + minBarSpacing;
+    const maxBarWidth = 24;
+    const minGap = 12;
 
     const maxValue = d3.max(data, d => d.value);
     const yAxisTickFormat = maxValue > 1000 ? d3.format('.1s') : d3.format('d'); // eg: 1200 -> 1.2k
@@ -31,16 +32,13 @@ export const BarChart = ({ data, unit }) => {
 
     const margin = {
       top: 15,
-      right: 30,
+      right: 20,
       bottom: 60,
-      left: Math.max(20, maxLabelWidth + 8)
+      left: Math.max(28, maxLabelWidth + 10)
     };
 
-    const requiredWidth = data.length * totalBarWidth + margin.left + margin.right;
-    const chartWidth = Math.max(containerWidth, requiredWidth);
-
-    const actualBarWidth = barWidth;
-    const width = chartWidth - margin.left - margin.right;
+    const chartWidth = containerWidth;
+    const width = Math.max(0, chartWidth - margin.left - margin.right);
     const height = 250 - margin.top - margin.bottom;
 
     const yScale = d3.scaleLinear().domain([0, maxValue]).range([height, 0]).nice();
@@ -48,13 +46,15 @@ export const BarChart = ({ data, unit }) => {
     const g = svg
       .attr('width', chartWidth)
       .attr('height', 250)
+      .attr('viewBox', `0 0 ${chartWidth} 250`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const xScale = d3.scaleBand()
       .domain(data.map(d => d.name))
       .range([0, width])
-      .paddingInner(minBarSpacing / totalBarWidth)
+      .paddingInner(0.2)
       .paddingOuter(0.1);
     const yAxis = g.append('g')
       .call(d3.axisLeft(yScale)
@@ -75,6 +75,9 @@ export const BarChart = ({ data, unit }) => {
 
     yAxis.select('.domain').remove();
 
+    const bandwidth = xScale.bandwidth();
+    const actualBarWidth = Math.min(maxBarWidth, Math.max(4, bandwidth - minGap));
+
     g.selectAll('.bar')
       .data(data)
       .enter()
@@ -82,25 +85,25 @@ export const BarChart = ({ data, unit }) => {
       .attr('class', 'bar')
       .attr('fill', '#ff9800')
       .attr('d', d => {
-        const x = xScale(d.name) + (xScale.bandwidth() - actualBarWidth) / 2;
+        const x = xScale(d.name) + (bandwidth - actualBarWidth) / 2;
         const width = actualBarWidth;
         const height = 0;
         const y = height;
         const radius = Math.min(4, actualBarWidth / 6);
 
-        return `M${x},${y} 
-                L${x},${y - height + radius} 
-                Q${x},${y - height} ${x + radius},${y - height} 
-                L${x + width - radius},${y - height} 
-                Q${x + width},${y - height} ${x + width},${y - height + radius} 
-                L${x + width},${y} 
+        return `M${x},${y}
+                L${x},${y - height + radius}
+                Q${x},${y - height} ${x + radius},${y - height}
+                L${x + width - radius},${y - height}
+                Q${x + width},${y - height} ${x + width},${y - height + radius}
+                L${x + width},${y}
                 Z`;
       })
       .transition()
       .duration(400)
       .delay((d, i) => i * 100)
       .attr('d', d => {
-        const x = xScale(d.name) + (xScale.bandwidth() - actualBarWidth) / 2;
+        const x = xScale(d.name) + (bandwidth - actualBarWidth) / 2;
         const width = actualBarWidth;
         const barHeight = height - yScale(d.value);
         const y = height;
@@ -108,12 +111,12 @@ export const BarChart = ({ data, unit }) => {
 
         if (barHeight <= 0) return '';
 
-        return `M${x},${y} 
-                L${x},${y - barHeight + radius} 
-                Q${x},${y - barHeight} ${x + radius},${y - barHeight} 
-                L${x + width - radius},${y - barHeight} 
-                Q${x + width},${y - barHeight} ${x + width},${y - barHeight + radius} 
-                L${x + width},${y} 
+        return `M${x},${y}
+                L${x},${y - barHeight + radius}
+                Q${x},${y - barHeight} ${x + radius},${y - barHeight}
+                L${x + width - radius},${y - barHeight}
+                Q${x + width},${y - barHeight} ${x + width},${y - barHeight + radius}
+                L${x + width},${y}
                 Z`;
       });
 
@@ -195,7 +198,7 @@ export const BarChart = ({ data, unit }) => {
         d3.select(this).transition().duration(200).attr('fill', '#ff9800');
       });
 
-  }, [data, unit, isDark]);
+  }, [data, unit, isDark, containerW]);
 
   const barWidth = 24;
   const minBarSpacing = 24;
@@ -216,9 +219,9 @@ export const BarChart = ({ data, unit }) => {
       overflowY: 'hidden',
     }}>
       <svg ref={svgRef} style={{
-        width: 'fit-content',
+        width: needsScrolling ? 'fit-content' : '100%',
         height: '250px',
-        minWidth: '100%'
+        minWidth: needsScrolling ? 'auto' : '100%'
       }}>
       </svg>
     </div>
@@ -228,6 +231,7 @@ export const BarChart = ({ data, unit }) => {
 export const HorizontalBarChart = ({ data }) => {
   const svgRef = useRef();
   const containerRef = useRef();
+  const { width: containerW, height: containerH } = useResizeObserver(containerRef);
 
   const isDark = document.body.getAttribute('data-bs-theme') === 'dark';
 
@@ -266,6 +270,8 @@ export const HorizontalBarChart = ({ data }) => {
     const g = svg
       .attr('width', '100%')
       .attr('height', svgHeight)
+      .attr('viewBox', `0 0 ${containerWidth} ${svgHeight}`)
+      .attr('preserveAspectRatio', 'xMidYMid meet')
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
@@ -349,12 +355,12 @@ export const HorizontalBarChart = ({ data }) => {
 
         if (width <= 0) return '';
 
-        return `M0,${y} 
-                L${width - radius},${y} 
-                Q${width},${y} ${width},${y + radius} 
-                L${width},${y + height - radius} 
-                Q${width},${y + height} ${width - radius},${y + height} 
-                L0,${y + height} 
+        return `M0,${y}
+                L${width - radius},${y}
+                Q${width},${y} ${width},${y + radius}
+                L${width},${y + height - radius}
+                Q${width},${y + height} ${width - radius},${y + height}
+                L0,${y + height}
                 Z`;
       });
 
@@ -440,7 +446,7 @@ export const HorizontalBarChart = ({ data }) => {
       .delay((d, i) => i * 100 + 400)
       .style('opacity', 1);
 
-  }, [data, isDark]);
+  }, [data, isDark, containerW, containerH]);
 
   const minBarSpacing = 26;
   const barHeight = 18;

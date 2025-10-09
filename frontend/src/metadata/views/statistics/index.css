@@ -7,14 +7,13 @@
 
 .statistics-container {
   width: 100%;
-  min-width: 1200px;
   min-height: 100%;
   height: max-content;
   gap: 20px;
   display: grid;
-  grid-template-columns: 550px 1fr auto;
-  grid-template-rows: 420px 340px;
-  grid-template-areas: 
+  grid-template-columns: minmax(300px, 550px) minmax(0, 1fr) minmax(260px, auto);
+  grid-template-rows: minmax(360px, 420px) minmax(300px, 340px);
+  grid-template-areas:
     "file-type creator creator"
     "time time summary";
 }
@@ -61,11 +60,12 @@
 
 .chart-container.summary-chart-container {
   grid-area: summary;
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  gap: 24px;
-  width: fit-content;
+  align-items: stretch;
+  gap: 16px;
+  width: 100%;
 }
 
 .chart-header {
@@ -106,11 +106,13 @@
   justify-content: center;
   align-items: center;
   min-height: 320px;
+  width: 100%;
 }
 
 .bar-chart-container {
   height: 240px;
   overflow-x: auto;
+  width: 100%;
 }
 
 .horizontal-bar-chart-container {
@@ -126,7 +128,7 @@
   height: 240px;
   display: flex;
   flex-direction: column;
-  min-width: 400px;
+  min-width: 0; /* allow shrink in nested flex/grid */
 }
 
 .bar-chart-responsive svg {
@@ -136,19 +138,23 @@
 
 .card-container {
   display: flex;
-  gap: 20px;
+  flex-direction: row; /* always row */
+  gap: 16px;
+  flex-wrap: nowrap; /* keep single row */
+  width: 100%;
+  overflow-x: auto;
 }
 
 .summary-card {
+  width: 220px;
+  height: 180px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 50px 20px;
+  padding: 32px 16px;
   background: #fef7ea;
   border-radius: 10px;
-  width: 240px;
-  height: 240px;
-  flex-shrink: 0;
+  flex: 0 0 auto;
 }
 
 .summary-card:nth-child(2) {
@@ -319,13 +325,13 @@
     min-height: 100%;
     padding: 20px;
   }
-  
+
   .statistics-container {
     grid-template-columns: 1fr;
-    grid-template-rows: 420px 420px minmax(420px, auto) 420px;
-    grid-template-areas: 
+    grid-template-rows: 420px 420px 340px 340px;
+    grid-template-areas:
       "file-type"
-      "creator" 
+      "creator"
       "time"
       "summary";
     max-width: 550px;
@@ -335,21 +341,25 @@
   }
 
   .chart-container.summary-chart-container {
-    justify-content: space-between;
-    align-items: center;
-    padding: 40px 24px;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 20px;
   }
-  
+
+  .chart-container.summary-chart-container .card-container {
+    justify-content: center;
+  }
+
   .summary-card {
-    width: 240px;
-    height: 240px;
-    padding: 24px;
+    width: 220px;
+    height: 180px;
+    padding: 20px;
   }
-  
+
   .summary-number {
     font-size: 24px;
   }
-  
+
   .summary-icon {
     font-size: 28px;
     width: 40px;
@@ -361,50 +371,52 @@
   .statistics-view {
     padding: 0;
   }
-  
+
   .statistics-container {
     padding: 16px;
     gap: 16px;
     max-width: 100%;
     grid-template-rows: repeat(4, 380px);
   }
-  
+
   .chart-container {
     padding: 20px;
   }
-  
+
   .chart-container h4 {
     font-size: 14px;
     margin-bottom: 16px;
     padding-bottom: 8px;
   }
-  
+
   .chart-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
     margin-bottom: 16px;
   }
-  
+
   .chart-container.summary-chart-container {
     flex-direction: column;
     justify-content: center;
     gap: 16px;
-    padding: 24px 20px;
-  }
-  
-  .summary-card {
+    padding: 16px;
     width: 100%;
-    max-width: 300px;
-    height: 100px;
-    padding: 20px;
-    align-self: center;
+    overflow-x: auto;
   }
-  
+
+  .summary-card {
+    width: 220px;
+    max-width: none;
+    height: 140px;
+    padding: 16px;
+    align-self: stretch;
+  }
+
   .summary-number {
     font-size: 20px;
   }
-  
+
   .summary-icon {
     font-size: 24px;
     width: 36px;
