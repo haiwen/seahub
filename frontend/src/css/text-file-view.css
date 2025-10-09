@@ -1,3 +1,40 @@
 .text-file-view {
   overflow: auto;
 }
+
+.txt-line-wrap-menu .custom-switch {
+  padding-left: 0px;
+  width: 100%;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.txt-line-wrap-menu .custom-switch .custom-switch-description {
+  margin-left: 0px;
+  color: unset;
+  transition: none;
+}
+
+.txt-line-wrap-menu .custom-switch .custom-switch-indicator {
+  width: 22px;
+  height: 12px;
+  border-radius: 6px;
+}
+
+.txt-line-wrap-menu .custom-switch .custom-switch-indicator:before {
+  height: 8px;
+  width: 8px;
+}
+
+.txt-line-wrap-menu .custom-switch .custom-switch-input:checked ~ .custom-switch-indicator:before {
+  left: 12px;
+}
+
+.txt-line-wrap-menu .custom-switch .custom-switch-input:checked~.custom-switch-indicator {
+  background: #ff8000;
+}
+
+.txt-line-wrap-menu .custom-switch .custom-switch-input:focus~.custom-switch-indicator {
+  box-shadow: 0 0 0 2px rgba(255, 128, 0, .25);
+  border-color: #ff8000;
+}
