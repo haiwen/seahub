@@ -2,13 +2,17 @@
   color: var(--bs-icon-color);
   padding: 2px 4px;
   border-radius: 3px;
+  line-height: 1.2;
 }
 
+.sf-dropdown-combined-toggle:active,
 .sf-dropdown-combined-toggle:hover {
-  background: var(--bs-hover-bg);
+  color: var(--bs-icon-color)!important;
+  background: var(--bs-hover-bg)!important;
 }
 
 .sf-dropdown-combined-toggle .main-icon {
+  font-size: 1rem;
   margin-right: 2px;
 }
 

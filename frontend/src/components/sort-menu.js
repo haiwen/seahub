@@ -51,16 +51,13 @@ class SortMenu extends React.Component {
         toggle={this.toggleDropdownMenu}
       >
         <DropdownToggle
-          tag="span"
-          role="button"
-          data-toggle="dropdown"
+          className="border-0 font-weight-normal cur-view-path-btn px-1"
           title={gettext('Switch sort mode')}
+          data-toggle="dropdown"
           aria-label={gettext('Switch sort mode')}
           aria-expanded={isDropdownMenuOpen}
         >
-          <span className="cur-view-path-btn px-1">
-            <i className="sf3-font-sort2 sf3-font" aria-label={gettext('Switch sort mode')}></i>
-          </span>
+          <i className="sf3-font-sort2 sf3-font"></i>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {sortOptions.map((item, index) => {

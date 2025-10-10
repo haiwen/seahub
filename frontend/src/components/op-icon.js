@@ -13,7 +13,7 @@ class OpIcon extends React.Component {
   render() {
     const { className, op, title } = this.props;
     return (
-      <span
+      <i
         tabIndex="0"
         role="button"
         className={className}
@@ -22,7 +22,7 @@ class OpIcon extends React.Component {
         onClick={op}
         onKeyDown={Utils.onKeyDown}
       >
-      </span>
+      </i>
     );
   }
 }

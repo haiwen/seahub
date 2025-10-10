@@ -18,6 +18,7 @@ import SortOptionsDialog from '../../components/dialog/sort-options';
 import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import MobileItemMenu from '../../components/mobile-item-menu';
+import OpIcon from '../../components/op-icon';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -202,7 +203,11 @@ class Item extends Component {
             <td><img src={item.icon_url} title={item.icon_title} alt={item.icon_title} width="24" /></td>
             <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
             <td>
-              <i role="button" className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} aria-label={gettext('Leave Share')} onClick={this.leaveShare}></i>
+              <OpIcon
+                className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`}
+                title={gettext('Leave Share')}
+                op={this.leaveShare}
+              />
             </td>
             {inAllLibs
               ? (
@@ -231,7 +236,11 @@ class Item extends Component {
               <Link to={shareRepoUrl} className="library-name text-truncate" title={item.repo_name}>{item.repo_name}</Link>
             </div>
             <div className="flex-shrink-0">
-              <i role="button" className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} aria-label={gettext('Leave Share')} onClick={this.leaveShare}></i>
+              <OpIcon
+                className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`}
+                title={gettext('Leave Share')}
+                op={this.leaveShare}
+              />
             </div>
           </div>
         );

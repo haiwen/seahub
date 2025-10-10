@@ -60,16 +60,13 @@ class ViewModes extends React.Component {
         id="cur-view-change-mode-dropdown"
       >
         <DropdownToggle
-          tag="span"
-          role="button"
-          data-toggle="dropdown"
+          className="border-0 font-weight-normal cur-view-path-btn px-1"
           title={gettext('Switch view mode')}
+          data-toggle="dropdown"
           aria-label={gettext('Switch view mode')}
           aria-expanded={isDropdownMenuOpen}
         >
-          <span className='cur-view-path-btn px-1'>
-            <span className={`sf3-font sf3-font-${currentViewMode}-view`} aria-label={gettext('Switch view mode')}></span>
-          </span>
+          <i className={`sf3-font sf3-font-${currentViewMode}-view`}></i>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {options.map((item, index) => {
@@ -77,13 +74,13 @@ class ViewModes extends React.Component {
               <DropdownItem className='p-0' key={index} onClick={this.props.switchViewMode.bind(this, item.value)}>
                 <div className="view-modes-dropdown-wrapper">
                   <span className='view-modes-dropdown-tick'>
-                    {currentViewMode === item.value && <i className="sf2-icon-tick" aria-hidden="true"></i>}
+                    {currentViewMode === item.value && <i className="sf2-icon-tick"></i>}
                   </span>
                   <span className="view-modes-dropdown-content d-flex align-items-center">
                     <span className={`sf3-font-${item.icon} sf3-font mr-2`} aria-hidden="true"></span>
                     <span>{item.text}</span>
                   </span>
-                  <span className="view-modes-dropdown-shortcut ml-4 d-flex align-items-center" aria-hidden="true">{item.shortcut}</span>
+                  <span className="view-modes-dropdown-shortcut ml-4 d-flex align-items-center">{item.shortcut}</span>
                 </div>
               </DropdownItem>
             );

@@ -12,6 +12,7 @@ import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import OpIcon from '../../components/op-icon';
 
 dayjs.extend(relativeTime);
 
@@ -55,14 +56,11 @@ class Item extends Component {
     }
   };
 
-  share = (e) => {
-    e.preventDefault();
+  share = () => {
     this.setState({ isShowSharedDialog: true });
   };
 
-  leaveShare = (e) => {
-    e.preventDefault();
-
+  leaveShare = () => {
     const data = this.props.data;
 
     let request;
@@ -129,10 +127,10 @@ class Item extends Component {
   onMenuItemClick = (operation, event) => {
     switch (operation) {
       case 'Share':
-        this.share(event);
+        this.share();
         break;
       case 'Unshare':
-        this.leaveShare(event);
+        this.leaveShare();
         break;
       default:
         break;
@@ -158,29 +156,38 @@ class Item extends Component {
       return (
         <Fragment>
           {currentViewMode == LIST_MODE ? (
-            <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver} onContextMenu={this.handleContextMenu}>
+            <tr
+              className={this.state.highlight ? 'tr-highlight' : ''}
+              onMouseOver={this.handleMouseOver}
+              onMouseOut={this.handleMouseOut}
+              onFocus={this.handleMouseOver}
+              onContextMenu={this.handleContextMenu}
+            >
               <td className="text-center">
-                <i
-                  role="button"
-                  title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                  aria-label={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
-                  onClick={this.onToggleStarRepo}
+                <OpIcon
                   className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
-                >
-                </i>
+                  title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
+                  op={this.onToggleStarRepo}
+                />
               </td>
               <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
               <td>
-                <Fragment>
-                  <Link to={shareRepoUrl}>{data.repo_name}</Link>
-                </Fragment>
+                <Link to={shareRepoUrl}>{data.repo_name}</Link>
               </td>
               <td>
                 <div className="d-flex align-items-center">
                   {(isPro && data.is_admin) &&
-                  <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+                  <OpIcon
+                    className={shareIconClassName}
+                    title={gettext('Share')}
+                    op={this.share}
+                  />
                   }
-                  <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+                  <OpIcon
+                    className={leaveShareIconClassName}
+                    title={gettext('Leave Share')}
+                    op={this.leaveShare}
+                  />
                 </div>
               </td>
               <td>{data.size}</td>
@@ -199,22 +206,26 @@ class Item extends Component {
                 <img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="36" className="mr-2" />
                 <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
                 {isStarred &&
-                  <i
-                    role="button"
-                    title={gettext('Unstar')}
-                    aria-label={gettext('Unstar')}
-                    onClick={this.onToggleStarRepo}
-                    className='op-icon library-grid-item-icon sf3-font-star sf3-font'
-                  >
-                  </i>
+                <OpIcon
+                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                  title={gettext('Unstar')}
+                  op={this.onToggleStarRepo}
+                />
                 }
               </div>
-
               <div className="flex-shrink-0 d-flex align-items-center">
                 {(isPro && data.is_admin) &&
-                <a href="#" className={shareIconClassName} title={gettext('Share')} role="button" aria-label={gettext('Share')} onClick={this.share}></a>
+                <OpIcon
+                  className={shareIconClassName}
+                  title={gettext('Share')}
+                  op={this.share}
+                />
                 }
-                <a href="#" className={leaveShareIconClassName} title={gettext('Leave Share')} role="button" aria-label={gettext('Leave Share')} onClick={this.leaveShare}></a>
+                <OpIcon
+                  className={leaveShareIconClassName}
+                  title={gettext('Leave Share')}
+                  op={this.leaveShare}
+                />
               </div>
             </div>
           )}
