@@ -6,7 +6,7 @@ import {
   gettext, siteRoot, canAddGroup, canAddRepo, canShareRepo,
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
-  canViewOrg, enableOCM, enableOCMViaWebdav,
+  canViewOrg, enableOCM, enableOCMViaWebdav, canCreateWiki,
   isPro, isDBSqlite3, customNavItems, mediaUrl, helpLink
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
@@ -263,12 +263,14 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
               }
+              {canCreateWiki &&
               <li className={`nav-item ${this.getActiveClass('published')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
                   <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Wikis')}</span>
                 </Link>
               </li>
+              }
               {canInvitePeople &&
               <li className={`nav-item ${this.getActiveClass('invitations')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
