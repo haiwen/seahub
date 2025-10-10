@@ -58,6 +58,10 @@ class CustomizePopover extends React.Component {
     e.stopPropagation();
   };
 
+  onPopoverInsideMouseDown = (e) => {
+    e.stopPropagation();
+  };
+
   render() {
     const {
       target, boundariesElement, innerClassName, popoverClassName, hideArrow = true, modifiers,
@@ -79,7 +83,11 @@ class CustomizePopover extends React.Component {
         modifiers={modifiers}
         {...additionalProps}
       >
-        <div ref={ref => this.popoverRef = ref} onClick={this.onPopoverInsideClick}>
+        <div
+          ref={ref => this.popoverRef = ref}
+          onClick={this.onPopoverInsideClick}
+          onMouseDown={this.onPopoverInsideMouseDown}
+        >
           {this.props.children}
         </div>
       </Popover>
