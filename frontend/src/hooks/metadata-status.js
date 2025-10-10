@@ -77,6 +77,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
       setDetailsSettings(JSON.parse(detailsSettings));
       setEnableFaceRecognition(enableSeafileAI && enableFaceRecognition);
       setEnableMetadata(enableMetadata);
+      window.app.pageOptions.enableMetadata = enableMetadata;
       const parsedGlobalHiddenColumns = typeof globalHiddenColumns === 'string'
         ? JSON.parse(globalHiddenColumns)
         : (globalHiddenColumns || []);
@@ -109,6 +110,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
     setTagsLang('en');
     setEnableTags(newValue);
     setShowView(newValue);
+    window.app.pageOptions.enableMetadata = newValue;
   }, [enableMetadata, cancelMetadataURL]);
 
   const updateEnableTags = useCallback((newValue, lang = 'en') => {
