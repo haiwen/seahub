@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
-import { gettext, siteRoot, canInvitePeople, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
+import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
   isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg, enableShowAbout } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
@@ -183,6 +183,7 @@ class MainSideNavFolded extends React.Component {
                 </>
                 }
 
+                {canCreateWiki &&
                 <li className={`nav-item ${this.getActiveClass('published')}`} onMouseEnter={this.closeSubNav}>
                   <Link
                     className={`nav-link ellipsis ${this.getActiveClass('published')}`}
@@ -194,6 +195,7 @@ class MainSideNavFolded extends React.Component {
                     <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
                   </Link>
                 </li>
+                }
 
                 {canInvitePeople &&
                 <li className={`nav-item ${this.getActiveClass('invitations')}`} onMouseEnter={this.closeSubNav}>
