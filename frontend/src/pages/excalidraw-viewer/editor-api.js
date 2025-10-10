@@ -1,11 +1,17 @@
+import axios from 'axios';
 import { seafileAPI } from '../../utils/seafile-api';
 
-const { rawPath } = window.shared.pageOptions;
+const { rawPath, docUuid, exdrawAccessToken, exdrawServerUrl } = window.shared.pageOptions;
 
 class EditorApi {
 
   getFileContent = () => {
     return seafileAPI.getFileContent(rawPath);
+  };
+
+  getExdrawContent = () => {
+    const url = `${exdrawServerUrl}/api/v1/exdraw/${docUuid}/`;
+    return axios.get(url, { headers: { Authorization: `Token ${exdrawAccessToken}` } });
   };
 }
 

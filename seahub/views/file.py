@@ -69,7 +69,7 @@ from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
 from seahub.group.utils import is_group_member
 from seahub.seadoc.utils import get_seadoc_file_uuid, \
         gen_seadoc_access_token, is_seadoc_revision, gen_share_seadoc_access_token
-from seahub.exdraw.utils import get_exdraw_file_uuid
+from seahub.exdraw.utils import get_exdraw_file_uuid, gen_exdraw_access_token
 from seahub.seadoc.models import SeadocRevision
 
 import seahub.settings as settings
@@ -1383,6 +1383,19 @@ def view_shared_file(request, fileshare):
             'seadoc_access_token': ret_dict['seadoc_access_token'],
         }
 
+    if filetype == EXCALIDRAW:
+        file_uuid = get_exdraw_file_uuid(repo, path)
+        ret_dict['file_uuid'] = file_uuid
+        ret_dict['assets_url'] = '/api/v2.1/exdraw/download-image/' + file_uuid
+        ret_dict['excalidraw_server_url'] = EXCALIDRAW_SERVER_URL
+        ret_dict['can_edit_file'] = can_edit
+        exdraw_perm = 'rw' if can_edit else 'r'
+        ret_dict['file_perm'] = exdraw_perm
+
+        ret_dict['excalidraw_access_token'] = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
+
+        send_file_access_msg(request, repo, path, 'web')
+
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
             ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
@@ -1501,12 +1514,12 @@ def view_shared_file(request, fileshare):
         data['share_link_username'] = ret_dict['share_link_username']
 
     if filetype == EXCALIDRAW:
-        file_uuid = get_exdraw_file_uuid(repo, path)
-        data['file_uuid'] = file_uuid
-        data['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
-        data['excalidraw_server_url'] = EXCALIDRAW_SERVER_URL
-        data['can_edit_file'] = can_edit
-        data['file_perm'] = permission
+        data['file_uuid'] = ret_dict['file_uuid']
+        data['assets_url'] = ret_dict['assets_url']
+        data['excalidraw_server_url'] = ret_dict['excalidraw_server_url']
+        data['excalidraw_access_token'] = ret_dict['excalidraw_access_token']
+        data['can_edit_file'] = ret_dict['can_edit_file']
+        data['file_perm'] = ret_dict['file_perm']
 
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user

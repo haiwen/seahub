@@ -12,7 +12,7 @@ const ExcaliViewer = () => {
   const [isResize, setIsResize] = useState(false);
 
   useEffect(() => {
-    editorApi.getFileContent().then(res => {
+    editorApi.getExdrawContent().then(res => {
       if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
         // collaborators.forEach is not a function
         res.data['appState']['collaborators'] = [];
