@@ -20,8 +20,9 @@
 }
 
 .shared-file-view-head {
-  width: 950px;
+  width: 100%;
   height: 60px;
+  padding: 0 1rem;
   background: #fff;
   margin: 0 auto;
   display: flex;
@@ -56,6 +57,29 @@
 
 .shared-file-view-body .sf-slate-viewer-outline {
   top: 145px !important;
+}
+
+.shared-file-view-head .file-toolbar-btn {
+  width: 28px;
+  height: 28px;
+  padding: 0 4px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.shared-file-view-head .file-toolbar-btn .sdocfont {
+  color: #666;
+}
+
+.shared-file-view-head .file-toolbar-btn .seafile-multicolor-icon {
+  fill: #666;
+}
+
+.shared-file-view-head .file-toolbar-btn:hover {
+  background-color: #EFEFEF;
+  border-radius: 3px;
 }
 
 @media (max-width: 991.98px) {

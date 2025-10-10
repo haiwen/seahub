@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import Switch from '../common/switch';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -70,13 +71,25 @@ class FileToolbar extends React.Component {
     this.setState({ isShareDialogOpen: !this.state.isShareDialogOpen });
   };
 
-  toggleMoreOpMenu = () => {
+  toggleMoreOpMenu = (event) => {
+    if (this.state.moreDropdownOpen) {
+      const el = document.getElementById('txt-line-wrap-menu');
+      if (el && el.contains(event.target)) {
+        return;
+      }
+    }
     this.setState({
       moreDropdownOpen: !this.state.moreDropdownOpen
     });
   };
 
-  toggle = () => {
+  toggle = (event) => {
+    if (this.state.dropdownOpen) {
+      const el = document.getElementById('mobile-txt-line-wrap-menu');
+      if (el && el.contains(event.target)) {
+        return;
+      }
+    }
     this.setState({
       dropdownOpen: !this.state.dropdownOpen
     });
@@ -118,6 +131,7 @@ class FileToolbar extends React.Component {
     }
 
     const shortcutMain = Utils.isMac() ? '⌘ + ' : 'Ctrl + ';
+    const isTxt = fileExt && fileExt.toLowerCase() === 'txt';
 
     return (
       <Fragment>
@@ -213,7 +227,7 @@ class FileToolbar extends React.Component {
               title={gettext('More operations')}
               tag="div"
             >
-              <Icon symbol="more-vertical" />
+              <Icon symbol="more-level" />
             </DropdownToggle>
             <DropdownMenu right={true}>
               {filePerm == 'rw' && (
@@ -224,6 +238,16 @@ class FileToolbar extends React.Component {
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
                 {gettext('Open parent folder')}
               </a>
+              {isTxt &&
+                <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
+                  <Switch
+                    checked={this.props.lineWrapping}
+                    placeholder={gettext('Line wrapping')}
+                    className="txt-line-wrap-menu w-100"
+                    onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
+                  />
+                </DropdownItem>
+              }
             </DropdownMenu>
           </Dropdown>
         </div>
@@ -251,7 +275,7 @@ class FileToolbar extends React.Component {
           </ButtonGroup>
 
           <DropdownToggle className="mx-1" aria-label={gettext('More operations')}>
-            <Icon symbol="more-vertical" />
+            <Icon symbol="more-level" />
           </DropdownToggle>
           <DropdownMenu right={true}>
             <DropdownItem>
@@ -277,6 +301,16 @@ class FileToolbar extends React.Component {
               </DropdownItem>
             )}
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
+            {isTxt &&
+              <DropdownItem id='mobile-txt-line-wrap-menu' className='dropdown-item'>
+                <Switch
+                  checked={this.props.lineWrapping}
+                  placeholder={gettext('Line wrapping')}
+                  className="txt-line-wrap-menu w-100"
+                  onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
+                />
+              </DropdownItem>
+            }
           </DropdownMenu>
         </Dropdown>
 

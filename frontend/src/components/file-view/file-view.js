@@ -145,6 +145,8 @@ class FileView extends React.Component {
                   toggleDetailsPanel={this.toggleDetailsPanel}
                   setImageScale={this.props.setImageScale}
                   rotateImage={this.props.rotateImage}
+                  lineWrapping={this.props.lineWrapping}
+                  updateLineWrapping={this.props.updateLineWrapping}
                 />
               }
             </div>

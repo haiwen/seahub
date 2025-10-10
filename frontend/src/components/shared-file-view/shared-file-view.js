@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import watermark from 'watermark-dom';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Account from '../common/account';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
-import { Button } from 'reactstrap';
 import { Utils } from '../../utils/utils';
 import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
 import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import toaster from '../toast';
-import watermark from 'watermark-dom';
+import Switch from '../common/switch';
+import IconButton from '../icon-button';
 
 import '../../css/shared-file-view.css';
 
@@ -26,6 +28,7 @@ class SharedFileView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      moreDropdownOpen: false,
       showSaveSharedFileDialog: false,
       isAddAbuseReportDialogOpen: false
     };
@@ -52,6 +55,18 @@ class SharedFileView extends React.Component {
   toggleAddAbuseReportDialog = () => {
     this.setState({
       isAddAbuseReportDialogOpen: !this.state.isAddAbuseReportDialogOpen
+    });
+  };
+
+  toggleMoreOpMenu = (event) => {
+    if (this.state.moreDropdownOpen) {
+      const el = document.getElementById('txt-line-wrap-menu');
+      if (el && el.contains(event.target)) {
+        return;
+      }
+    }
+    this.setState({
+      moreDropdownOpen: !this.state.moreDropdownOpen
     });
   };
 
@@ -123,20 +138,45 @@ class SharedFileView extends React.Component {
               }
             </div>
             <div className="flex-shrink-0 ml-4">
-              {(canDownload && loginUser && (loginUser !== sharedBy)) &&
-                <Button color="secondary" id="save"
-                  onClick={this.handleSaveSharedFileDialog}>{gettext('Save as ...')}
-                </Button>
-              }{' '}
-              {(canDownload && !trafficOverLimit) &&
-
-                <a href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`} className="btn btn-success">{gettext('Download')} ({Utils.bytesToSize(fileSize)})</a>
-              }{' '}
-              {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) &&
-                <Button
-                  onClick={this.toggleAddAbuseReportDialog}>{gettext('Report Abuse')}
-                </Button>
-              }
+              <Dropdown isOpen={this.state.moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
+                <DropdownToggle
+                  className="file-toolbar-btn"
+                  aria-label={gettext('More operations')}
+                  title={gettext('More operations')}
+                  tag="span"
+                >
+                  <IconButton
+                    id="shared-file-view-more-level"
+                    icon="more-level"
+                    text={gettext('More operations')}
+                  />
+                </DropdownToggle>
+                <DropdownMenu>
+                  {(canDownload && loginUser && (loginUser !== sharedBy)) && (
+                    <DropdownItem onClick={this.handleSaveSharedFileDialog}>
+                      {gettext('Save as ...')}
+                    </DropdownItem>
+                  )}
+                  {(canDownload && !trafficOverLimit) &&
+                    <a href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`} className="dropdown-item">{gettext('Download')} ({Utils.bytesToSize(fileSize)})</a>
+                  }
+                  {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) && (
+                    <DropdownItem onClick={this.toggleAddAbuseReportDialog}>
+                      {gettext('Report Abuse')}
+                    </DropdownItem>
+                  )}
+                  {this.props.canWrapLine && (
+                    <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
+                      <Switch
+                        checked={this.props.lineWrapping}
+                        placeholder={gettext('Line wrapping')}
+                        className="txt-line-wrap-menu w-100"
+                        onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
+                      />
+                    </DropdownItem>
+                  )}
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </div>
           {this.props.content}
