@@ -118,6 +118,7 @@ body {
         docName: '{{ file_name|escapejs }}',
         docUuid: '{{ file_uuid }}',
         assetsUrl: '{{ assets_url }}',
+        exdrawAccessToken: '{{ excalidraw_access_token }}',
         exdrawServerUrl: '{{ excalidraw_server_url }}',
         canEditFile: {% if can_edit_file %}true{% else %}false{% endif %},
         filePerm: '{{ file_perm }}',
