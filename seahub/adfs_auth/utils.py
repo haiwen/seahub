@@ -2,6 +2,8 @@
 import re
 import copy
 import logging
+from collections import OrderedDict
+from fnmatch import fnmatch
 from os import path
 
 import saml2.xmldsig
@@ -9,11 +11,16 @@ from saml2 import BINDING_HTTP_REDIRECT, BINDING_HTTP_POST, NAMEID_FORMAT_EMAILA
 from saml2.config import SPConfig
 from django.utils.translation import gettext as _
 
-from seaserv import ccnet_api
+from seaserv import ccnet_api, seafile_api
 
+from seahub.adfs_auth.backends import SHIBBOLETH_AFFILIATION_ROLE_MAP, CACHE_KEY_GROUPS
+from seahub.base.accounts import User
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.utils import get_service_url
 from seahub.organizations.models import OrgSAMLConfig
 from seahub import settings
+from django.core.cache import cache
+from seahub.utils.file_size import get_quota_from_string
 
 logger = logging.getLogger(__name__)
 
@@ -134,3 +141,105 @@ def config_settings_loader(request):
         logger.exception('Failed to load adfs/saml config, error: %s' % e)
         raise RuntimeError('Failed to load adfs/saml config, error: %s' % e)
     return conf
+
+
+def parse_user_attributes(attribute_mapping, attributes):
+    parse_result = {}
+    for saml_attr, django_attrs in list(attribute_mapping.items()):
+        try:
+            for attr in django_attrs:
+                parse_result[attr] = attributes[saml_attr][0]
+        except KeyError:
+            pass
+
+    return parse_result
+
+
+def update_user_role(user, role):
+    if role:
+        User.objects.update_role(user.username, role)
+        
+        # update user role quota
+        role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
+        if role_quota:
+            quota = get_quota_from_string(role_quota)
+            seafile_api.set_role_quota(role, quota)
+        
+        return
+    
+    if not SHIBBOLETH_AFFILIATION_ROLE_MAP:
+        return
+    
+    if user.username in SHIBBOLETH_AFFILIATION_ROLE_MAP:
+        role = SHIBBOLETH_AFFILIATION_ROLE_MAP[user.username]
+    elif 'patterns' in SHIBBOLETH_AFFILIATION_ROLE_MAP:
+        
+        patterns = SHIBBOLETH_AFFILIATION_ROLE_MAP['patterns']
+        
+        try:
+            ordered_patterns = OrderedDict(patterns)
+        except Exception as e:
+            logger.error(e)
+            return
+        
+        for key in ordered_patterns:
+            if fnmatch(user.username, key):
+                role = ordered_patterns[key]
+                break
+    else:
+        return
+    
+    if role:
+        User.objects.update_role(user.email, role)
+        # update user role quota
+        role_quota = get_enabled_role_permissions_by_role(role)['role_quota']
+        if role_quota:
+            quota = get_quota_from_string(role_quota)
+            seafile_api.set_role_quota(role, quota)
+            
+            
+def sync_saml_groups(user, seafile_groups):
+    if not isinstance(seafile_groups, list):
+        logger.error('seafile_groups type invalid, it should be a list instance')
+        return
+
+    if not seafile_groups:
+        return
+
+    # support a list of comma-separated IDs as seafile_groups claim
+    if len(seafile_groups) == 1 and ',' in seafile_groups[0]:
+        seafile_groups = [group.strip() for group in seafile_groups[0].split(',')]
+
+    if all(str(group_id).isdigit() for group_id in seafile_groups):
+        # all groups are provided as numeric IDs
+        saml_group_ids = [int(group_id) for group_id in seafile_groups]
+    else:
+        # groups are provided as names, try to get current group information from cache
+        all_groups = cache.get(CACHE_KEY_GROUPS)
+        if not all_groups or any(group not in all_groups for group in seafile_groups):
+            # groups not yet cached or missing entry, reload groups from API
+            all_groups = {group.group_name: group.id for group in ccnet_api.get_all_groups(-1, -1)}
+            cache.set(CACHE_KEY_GROUPS, all_groups, 3600)  # cache for 1 hour
+        # create groups which are not yet existing
+        for group in [group_name for group_name in seafile_groups if group_name not in all_groups]:
+            new_group = ccnet_api.create_group(group, 'system admin') # we are not operating in user context here
+            if new_group < 0:
+                logger.error('failed to create group %s' % group)
+                return
+            all_groups[group] = new_group
+        # generate numeric IDs from group names
+        saml_group_ids = [id for group, id in all_groups.items() if group in seafile_groups]
+
+    joined_groups = ccnet_api.get_groups(user.username)
+    joined_group_ids = [g.id for g in joined_groups]
+    joined_group_map = {g.id: g.creator_name for g in joined_groups}
+
+    need_join_groups = list(set(saml_group_ids) - set(joined_group_ids))
+    for group_id in need_join_groups:
+        group = ccnet_api.get_group(group_id)
+        if group:
+            ccnet_api.group_add_member(group_id, group.creator_name, user.username)
+
+    need_quit_groups = list(set(joined_group_ids) - set(saml_group_ids))
+    for group_id in need_quit_groups:
+        ccnet_api.group_remove_member(group_id, joined_group_map[group_id], user.username)

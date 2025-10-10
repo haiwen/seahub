@@ -179,6 +179,7 @@ export const orgEnableAdminCustomName = window.org ? window.org.pageOptions.orgE
 export const orgEnableAdminInviteUser = window.org ? window.org.pageOptions.orgEnableAdminInviteUser === 'True' : false;
 export const orgEnableAdminDeleteOrg = window.org ? window.org.pageOptions.orgEnableAdminDeleteOrg === 'True' : false;
 export const enableMultiADFS = window.org ? window.org.pageOptions.enableMultiADFS === 'True' : false;
+export const enableSSO = window.org ? window.org.pageOptions.enableSSO === 'True' : false;
 export const enableSubscription = window.org ? window.org.pageOptions.enableSubscription : false;
 export const enableExternalBillingService = window.org ? window.org.pageOptions.enableExternalBillingService : false;
 

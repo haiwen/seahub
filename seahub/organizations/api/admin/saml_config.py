@@ -101,6 +101,22 @@ class OrgSAMLConfigView(APIView):
 
         return Response({'saml_config': saml_config.to_dict()})
 
+    def delete(self, request, org_id):
+        # resource check
+        org_id = int(org_id)
+        org = ccnet_api.get_org_by_id(org_id)
+        if not org:
+            error_msg = 'Organization %s not found.' % org_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+    
+        try:
+            OrgSAMLConfig.objects.filter(org_id=org_id).delete()
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+    
+        return Response({'success': True})
+
 
 class OrgVerifyDomain(APIView):
 

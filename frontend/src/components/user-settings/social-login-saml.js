@@ -11,7 +11,8 @@ const {
   samlConnected,
   enableMultiADFS,
   orgSamlConnected,
-  socialNextPage
+  socialNextPage,
+  forceUserSSOLogin,
 } = window.app.pageOptions;
 
 class SocialLoginSAML extends React.Component {
@@ -50,7 +51,7 @@ class SocialLoginSAML extends React.Component {
           <h3 className="setting-item-heading">{gettext('Single Sign On (SSO)')}</h3>
           <p className="mb-2">{'SAML'}</p>
           {(samlConnected || (orgSamlConnected && isOrgContext)) ?
-            <button className="btn btn-outline-primary" onClick={this.confirmDisconnect}>{gettext('Disconnect')}</button> :
+            <button className="btn btn-outline-primary" onClick={this.confirmDisconnect} disabled={forceUserSSOLogin}>{gettext('Disconnect')}</button> :
             <a href={connectUrl} className="btn btn-outline-primary">{gettext('Connect')}</a>
           }
         </div>
