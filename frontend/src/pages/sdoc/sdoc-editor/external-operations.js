@@ -70,7 +70,7 @@ class ExternalOperations extends React.Component {
     if (typeof callback === 'function') {
       callback(SearchedItemDetails);
     }
-  }
+  };
 
   onInternalLinkToggle = (options) => {
     if (options && options.internalLink) {
