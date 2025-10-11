@@ -53,7 +53,8 @@ class FilesActivities extends Component {
             name: item.author_name,
             contact_email: item.author_contact_email,
             avatar_url: item.avatar_url,
-            isSelected: false
+            isSelected: false,
+            login_id: item.login_id
           });
         }
       });
@@ -152,7 +153,8 @@ class FilesActivities extends Component {
             name: item.author_name,
             contact_email: item.author_contact_email,
             avatar_url: item.avatar_url,
-            isSelected: false
+            isSelected: false,
+            login_id: item.login_id,
           });
         }
       });
