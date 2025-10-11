@@ -135,6 +135,7 @@ class DirView extends Component {
         const fileObj = res.data[0];
         let newDirent = new Dirent({
           'is_file': true,
+          'type': 'file',
           'obj_name': fileObj.name,
           'file_size': Utils.bytesToSize(fileObj.size),
           'last_update': (new Date()).getTime()
