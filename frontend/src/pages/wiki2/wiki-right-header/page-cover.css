@@ -13,12 +13,13 @@
 
 .wiki-cover-controller-btn {
   padding: 0 .5rem;
-  background: var(--bs-icon-rgb);
+  background: rgb(102 102 102 / 50%);
   height: 28px;
   line-height: 28px;
   border-radius: 4px;
   font-size: 14px;
-  color: var(--bs-body-color);
+  font-weight: 400;
+  color: #FFFFFF;
   cursor: pointer;
   position: absolute;
   top: 16px;
@@ -26,7 +27,7 @@
 }
 
 .wiki-cover-controller-btn:hover {
-  background: var(--bs-icon-hover-rgb);
+  background: rgb(102 102 102 / 70%);
 }
 
 .wiki-page-cover-popover {
