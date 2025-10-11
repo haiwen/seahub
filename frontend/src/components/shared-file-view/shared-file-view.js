@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Account from '../common/account';
-import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, SF_COLOR_MODE } from '../../utils/constants';
+import { Utils, getColorScheme } from '../../utils/utils';
 import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
 import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import toaster from '../toast';
 import Switch from '../switch';
 import IconButton from '../icon-button';
+import IconBtn from '../icon-btn';
 
 import '../../css/shared-file-view.css';
 
@@ -28,6 +29,7 @@ class SharedFileView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      colorMode: getColorScheme(),
       moreDropdownOpen: false,
       showSaveSharedFileDialog: false,
       isAddAbuseReportDialogOpen: false
@@ -94,6 +96,7 @@ class SharedFileView extends React.Component {
         }
       });
     }
+    this.initializeColorMode();
   }
 
   renderPath = () => {
@@ -116,17 +119,41 @@ class SharedFileView extends React.Component {
     );
   };
 
+  initializeColorMode() {
+    const colorMode = localStorage.getItem(SF_COLOR_MODE);
+    if (colorMode) {
+      this.setState({ colorMode });
+      document.body.setAttribute('data-bs-theme', colorMode);
+    }
+  }
+
+  onColorModeChange = () => {
+    const colorMode = this.state.colorMode === 'light' ? 'dark' : 'light';
+    this.setState({ colorMode });
+    localStorage.setItem(SF_COLOR_MODE, colorMode);
+    document.body.setAttribute('data-bs-theme', colorMode);
+  };
+
   render() {
     const { fileType } = this.props;
+    const { colorMode } = this.state;
+    const symbol = colorMode === 'light' ? 'dark-mode' : 'light-mode';
+    const title = colorMode === 'light' ? gettext('Dark mode') : gettext('Light mode');
+    const isDefaultLogo = logoPath === 'img/seafile-logo.png';
+    let path = logoPath;
+    if (colorMode === 'dark' && isDefaultLogo) {
+      path = logoPath.replace('.png', '-dark.png');
+    }
     return (
       <div className="shared-file-view-md">
         <div className="shared-file-view-md-header d-flex">
-          <React.Fragment>
-            <a href={siteRoot}>
-              <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
-            </a>
-          </React.Fragment>
-          { loginUser && <Account /> }
+          <a href={siteRoot}>
+            <img src={mediaUrl + path} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
+          </a>
+          <div className="d-flex justify-content-between align-items-center">
+            <IconBtn symbol={symbol} size={32} className="sf-icon-color-mode" title={title} onClick={this.onColorModeChange} />
+            {loginUser && <Account />}
+          </div>
         </div>
         <div className="shared-file-view-md-main">
           <div className={`shared-file-view-head ${(fileType == 'md' || fileType == 'pdf') ? 'w-100 px-4' : ''}`}>
