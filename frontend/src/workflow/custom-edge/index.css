@@ -1,0 +1,59 @@
+.workflow-canvas .react-flow__edge-custom .react-flow__edge-path {
+  stroke: var(--bs-workflow-edge-color);
+  stroke-width: 2;
+}
+
+.workflow-canvas .react-flow__edge-custom .react-flow__edge-path.--hovered {
+  stroke: var(--bs-workflow-edge-hover-color);
+}
+
+.workflow-canvas .react-flow__edge-custom.selected .react-flow__edge-path.--hovered,
+.workflow-canvas .react-flow__edge-custom.selected .react-flow__edge-path,
+.workflow-canvas .react-flow__edge-custom.selectable:focus .react-flow__edge-path {
+  stroke: var(--bs-workflow-edge-selected-color);
+}
+
+.react-flow__edgelabel-renderer {
+  z-index: 2;
+}
+
+.workflow-custom-edge-btn {
+  margin-left: 10px;
+  border: 2px solid #bdbdbd;
+}
+
+.workflow-custom-edge-btn:first-child {
+  margin-left: 0;
+}
+
+.workflow-custom-edge-btn .seafile-multicolor-icon {
+  width: 14px;
+  height: 14px;
+  fill: #bdbdbd;
+}
+
+.workflow-custom-edge-btn .sf3-font-new {
+  font-size: 14px;
+  color: #bdbdbd;
+}
+
+.workflow-custom-edge-btn:hover {
+  border-color: var(--bs-workflow-edge-hover-color);
+  cursor: pointer;
+}
+
+.workflow-custom-edge-btn:hover .seafile-multicolor-icon {
+  fill: var(--bs-workflow-edge-hover-color);
+}
+
+.workflow-custom-edge-btn:hover .sf3-font-new {
+  color: var(--bs-workflow-edge-hover-color);
+}
+
+.workflow-custom-edge-label {
+  position: absolute;
+  left: 10px;
+  font-size: 12px;
+  color: hsl(220, 3%, 51%);
+  background-color: hsla(220, 47%, 99%, 0.85);
+}
