@@ -74,7 +74,7 @@ class TermsAndConditions(models.Model):
                 date_active__lte=timezone.now(),
                 slug=slug).latest('date_active')
         except TermsAndConditions.DoesNotExist:
-            raise Http404
+            active_terms = None
 
         return active_terms
 
