@@ -6,6 +6,7 @@ import Dirent from '../../../models/dirent';
 import { Utils } from '../../../utils/utils';
 import { useCollaborators } from '../../../metadata';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
+import { useMetadataStatus } from '../../../hooks';
 
 import './index.css';
 
@@ -15,6 +16,7 @@ const SdocEditor = () => {
   const [direntList, setDirentList] = useState([]);
   const [currentDirent, setCurrentDirent] = useState(null);
   const { collaborators } = useCollaborators();
+  const { enableMetadata } = useMetadataStatus();
   const plugins = useMemo(() => {
     const { repoID, docPath, docPerm, isRepoAdmin } = window.seafile;
     return [
@@ -94,6 +96,7 @@ const SdocEditor = () => {
   useEffect(() => {
     onSetFavicon();
     getDirentList();
+    window.seafile = { ...window.seafile, enableMetadata };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
