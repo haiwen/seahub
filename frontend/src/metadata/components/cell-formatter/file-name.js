@@ -7,7 +7,7 @@ import { siteRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getParentDirFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 import { checkIsDir } from '../../utils/row';
 
-const FileName = ({ record, className: propsClassName, value, showThumbnail = true, onFileNameClick, ...params }) => {
+const FileName = ({ record, className: propsClassName, value, hideIcon = false, onFileNameClick, ...params }) => {
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
   const isDir = useMemo(() => checkIsDir(record), [record]);
   const className = useMemo(() => {
@@ -16,19 +16,20 @@ const FileName = ({ record, className: propsClassName, value, showThumbnail = tr
   }, [propsClassName, value]);
 
   const iconUrl = useMemo(() => {
+    if (hideIcon) return {};
     if (isDir) {
       const icon = Utils.getFolderIconUrl();
       return { iconUrl: icon, defaultIconUrl: icon };
     }
     const defaultIconUrl = Utils.getFileIconUrl(value);
-    if (Utils.imageCheck(value) && showThumbnail) {
+    if (Utils.imageCheck(value)) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
       const repoID = window.sfMetadataStore.repoId;
       const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(record)}`;
       return { iconUrl: thumbnail, defaultIconUrl };
     }
     return { iconUrl: defaultIconUrl, defaultIconUrl };
-  }, [isDir, value, parentDir, record, showThumbnail]);
+  }, [isDir, hideIcon, value, parentDir, record]);
 
   return (<FileNameFormatter { ...params } className={className} value={value} onClickName={onFileNameClick} { ...iconUrl } />);
 
@@ -36,6 +37,7 @@ const FileName = ({ record, className: propsClassName, value, showThumbnail = tr
 
 FileName.propTypes = {
   value: PropTypes.string,
+  hideIcon: PropTypes.bool,
   record: PropTypes.object.isRequired,
   className: PropTypes.string,
   onFileNameClick: PropTypes.func,

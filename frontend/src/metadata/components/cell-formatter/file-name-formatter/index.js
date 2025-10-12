@@ -24,9 +24,11 @@ const FileNameFormatter = ({
       className={classnames('sf-metadata-ui cell-formatter-container file-name-formatter', className)}
       title={value}
     >
-      <div className="sf-metadata-file-icon-container">
-        <img className="sf-metadata-file-icon" src={icon} onError={onLoadError} alt='' />
-      </div>
+      {icon &&
+        <div className="sf-metadata-file-icon-container">
+          <img className="sf-metadata-file-icon" src={icon} onError={onLoadError} alt='' />
+        </div>
+      }
       <span className="sf-metadata-file-name" onClick={onClickName}>{value}</span>
     </div>
   );
