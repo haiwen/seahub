@@ -84,7 +84,14 @@ const CardItem = ({
         <img loading="lazy" className="sf-metadata-card-item-image" ref={imgRef} src={imageURLs.URL} onError={onLoadError} alt="" />
       </div>
       <div className="sf-metadata-card-item-text-container">
-        <Formatter value={fileNameValue} column={fileNameColumn} record={record} showThumbnail={false} onFileNameClick={handleFilenameClick} tagsData={tagsData} />
+        <Formatter
+          value={fileNameValue}
+          column={fileNameColumn}
+          record={record}
+          hideIcon={true}
+          onFileNameClick={handleFilenameClick}
+          tagsData={tagsData}
+        />
         <div className="sf-metadata-card-last-modified-info">
           <Formatter value={modifierValue} column={modifierColumn} record={record} tagsData={tagsData} />
           <Formatter value={mtimeValue} format="relativeTime" column={mtimeColumn} record={record} tagsData={tagsData} />
