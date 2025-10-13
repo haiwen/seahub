@@ -43,7 +43,7 @@ class DeleteFolderDialog extends Component {
     const { path, toggleDialog } = this.props;
     const folderName = Utils.getFileName(path);
     const opTarget = '<span class="op-target">' + Utils.HTMLescape(folderName) + '</span>';
-    const message = gettext('Are you sure you want to delete %s ?').replace('%s', opTarget);
+    const message = gettext('Are you sure you want to delete {placeholder} ?').replace('{placeholder}', opTarget);
 
     let alert_message = '';
     if (sharedToUserCount > 0 || sharedToGroupCount > 0) {
