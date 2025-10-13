@@ -7,6 +7,7 @@ import { gettext, siteRoot } from '../../../../../utils/constants';
 import { seafileAPI } from '../../../../../utils/seafile-api';
 import toaster from '../../../../toast';
 import MobileItemMenu from '../../../../../components/mobile-item-menu';
+import { formatWithTimezone } from '../../../../../utils/time';
 
 class FileRecord extends React.Component {
 
@@ -72,7 +73,7 @@ class FileRecord extends React.Component {
           <td className="pl-2 pr-2"><img src={Utils.getFolderIconUrl()} alt={gettext('Folder')} width="24" /></td>
           <td><a href="#" onClick={this.renderFolder}>{record.obj_name}</a></td>
           <td>{record.parent_dir}</td>
-          <td title={dayjs(record.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(record.deleted_time).format('YYYY-MM-DD')}</td>
+          <td title={formatWithTimezone(record.deleted_time)}>{dayjs(record.deleted_time).format('YYYY-MM-DD')}</td>
           <td></td>
           <td>
             <a href="#" className={(isIconShown || isMobile) ? '' : 'invisible'} onClick={this.onRestoreClicked} role="button">{gettext('Restore')}</a>
@@ -87,7 +88,7 @@ class FileRecord extends React.Component {
             </a>
           </td>
           <td>{record.parent_dir}</td>
-          <td title={dayjs(record.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>
+          <td title={formatWithTimezone(record.deleted_time)}>
             {dayjs(record.deleted_time).format('YYYY-MM-DD')}
           </td>
           <td>{Utils.bytesToSize(record.size)}</td>
@@ -112,7 +113,7 @@ class FileRecord extends React.Component {
             <br />
             <span className="item-meta-info">{record.parent_dir}</span>
             <br />
-            <span className="item-meta-info" title={dayjs(record.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(record.deleted_time).format('YYYY-MM-DD')}</span>
+            <span className="item-meta-info" title={formatWithTimezone(record.deleted_time)}>{dayjs(record.deleted_time).format('YYYY-MM-DD')}</span>
           </td>
           <td>
             <MobileItemMenu>

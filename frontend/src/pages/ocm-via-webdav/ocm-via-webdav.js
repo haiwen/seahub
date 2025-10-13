@@ -8,6 +8,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+import { formatWithTimezone } from '../../utils/time';
 
 import '../../css/lib-content-view.css';
 
@@ -279,7 +280,7 @@ class Item extends Component {
           {path ? '' : <i className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></i>}
         </td>
         <td>{item.shared_by}</td>
-        <td title={dayjs(item.ctime).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.ctime).fromNow()}</td>
+        <td title={formatWithTimezone(item.ctime)}>{dayjs(item.ctime).fromNow()}</td>
       </tr>
     );
   }

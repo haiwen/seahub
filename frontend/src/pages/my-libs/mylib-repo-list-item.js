@@ -24,6 +24,7 @@ import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog'
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
 import OpIcon from '../../components/op-icon';
+import { formatWithTimezone } from '../../utils/time';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -331,7 +332,7 @@ class MylibRepoListItem extends React.Component {
         </td>
         <td>{repo.size}</td>
         {(storages.length > 0 && !inAllLibs) && <td>{repo.storage_name}</td>}
-        <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</td>
+        <td title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</td>
       </tr>
     ) : (
       <div
@@ -417,7 +418,7 @@ class MylibRepoListItem extends React.Component {
             <div>(gettext('Broken (please contact your administrator to fix this library)'))</div>
           }
           <span className="item-meta-info">{repo.size}</span>
-          <span className="item-meta-info" title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</span>
+          <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
         </td>
         <td>
           {repo.repo_name && (

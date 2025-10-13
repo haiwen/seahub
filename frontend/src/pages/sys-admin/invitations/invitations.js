@@ -13,6 +13,7 @@ import Paginator from '../../../components/paginator';
 import OpMenu from '../../../components/dialog/op-menu';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
+import { formatWithTimezone } from '../../../utils/time';
 
 dayjs.extend(relativeTime);
 
@@ -213,11 +214,11 @@ class Item extends Component {
           </td>
           <td>{this.getInviteTypeText()}</td>
           <td>
-            <span title={dayjs(item.invite_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.invite_time).fromNow()}</span>
+            <span title={formatWithTimezone(item.invite_time)}>{dayjs(item.invite_time).fromNow()}</span>
           </td>
           <td>
             {item.accept_time ?
-              <span title={dayjs(item.accept_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.accept_time).fromNow()}</span> :
+              <span title={formatWithTimezone(item.accept_time)}>{dayjs(item.accept_time).fromNow()}</span> :
               '--'
             }
           </td>

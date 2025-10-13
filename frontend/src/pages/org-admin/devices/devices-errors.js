@@ -14,6 +14,8 @@ import DevicesNav from './devices-nav';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import Paginator from '../../../components/paginator';
+import { formatWithTimezone } from '../../../utils/time';
+
 
 dayjs.extend(relativeTime);
 
@@ -112,7 +114,7 @@ class Item extends Component {
         <td><Link to={`${siteRoot}sysadmin/#libs/${item.repo_id}`}>{item.repo_name}</Link></td>
         <td>{item.error_msg}</td>
         <td>
-          <span className="item-meta-info" title={dayjs(item.last_accessed).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.error_time).fromNow()}</span>
+          <span className="item-meta-info" title={formatWithTimezone(item.error_time)}>{dayjs(item.error_time).fromNow()}</span>
         </td>
       </tr>
     );

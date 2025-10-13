@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import dayjs from 'dayjs';
+import { formatWithTimezone } from '../../../utils/time';
 
 const CTimeFormatter = ({ value, className, children: emptyFormatter, format }) => {
   if (!value) return emptyFormatter || null;
@@ -12,7 +13,7 @@ const CTimeFormatter = ({ value, className, children: emptyFormatter, format }) 
   return (
     <div
       className={classnames('sf-metadata-ui cell-formatter-container ctime-formatter', className)}
-      title={dayjs(value).format('dddd, MMMM D, YYYY h:mm:ss A')}
+      title={formatWithTimezone(value)}
     >
       {valueFormat}
     </div>

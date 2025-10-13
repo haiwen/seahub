@@ -13,6 +13,7 @@ import {
 import { Utils } from '../../../../utils/utils';
 import { openFile } from '../../../../metadata/utils/file';
 import { TAG_FILE_KEY } from '../../../constants/file';
+import { formatWithTimezone } from '../../../../utils/time';
 
 import './index.css';
 
@@ -36,7 +37,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
   }, [file]);
   const tags = useMemo(() => getTagsFromRecord(file), [file]);
 
-  const mtimeTip = useMemo(() => mtime ? dayjs(mtime).format('dddd, MMMM D, YYYY h:mm:ss A') : '', [mtime]);
+  const mtimeTip = useMemo(() => mtime ? formatWithTimezone(mtime) : '', [mtime]);
   const mtimeRelative = useMemo(() => mtime ? dayjs(mtime).fromNow() : '', [mtime]);
   const path = useMemo(() => getFilePathByRecord(repoID, file), [repoID, file]);
 
