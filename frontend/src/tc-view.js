@@ -37,7 +37,7 @@ class TCView extends React.Component {
             <EmptyTip
               text={
                 <>
-                  <p className="m-0">{gettext('There is no teams and conditions yet.')}</p>
+                  <p className="m-0">{gettext('There is no terms and conditions yet.')}</p>
                 </>
               }
             />
