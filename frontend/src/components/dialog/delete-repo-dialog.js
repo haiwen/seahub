@@ -51,8 +51,8 @@ class DeleteRepoDialog extends Component {
     const { isRequestSended } = this.state;
     const repo = this.props.repo;
     const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name || repo.name) + '</span>';
-    let message = gettext('Are you sure you want to delete %s ?');
-    message = message.replace('%s', repoName);
+    let message = gettext('Are you sure you want to delete {placeholder} ?');
+    message = message.replace('{placeholder}', repoName);
 
     let alert_message = '';
     if (this.state.sharedToUserCount > 0 || this.state.sharedToGroupCount > 0) {
