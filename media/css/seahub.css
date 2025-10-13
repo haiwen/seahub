@@ -2169,31 +2169,32 @@ a.sf-popover-item {
 }
 
 /* policy service link */
-.login-panel-bottom-divider {
-  border: 0;
-  height: 1px;
-  background-color: #DBDBDB;
-  margin: 20px -25px 0px -25px;
-  opacity: 1;
-}
-
 .login-panel-bottom-privacy-policy {
-  font-size: 12px;
-  line-height: 1;
-  margin-top: 12px;
+  height: 38px;
+  border-radius: 19px;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 9px 12px;
+  margin: 50px auto 0;
+  font-size: 14px;
+  width: fit-content;
+  line-height: 20px;
   display: flex;
   justify-content: center;
 }
 
 .login-panel-bottom-privacy-policy a {
-  color: #ED7109;
-  font-size: 12px;
+  color: #FFF;
+  font-size: 14px;
   font-weight: normal;
   padding: 0 0.5rem;
 }
 
+.login-panel-bottom-privacy-policy a:hover {
+  text-decoration: underline;
+}
+
 .login-panel-bottom-privacy-policy .login-panel-bottom-seperator {
-  border-right: 1px solid #ED7109;
+  border-right: 1px solid #FFF;
 }
 
 #registration-form .login-panel-bottom-divider,
