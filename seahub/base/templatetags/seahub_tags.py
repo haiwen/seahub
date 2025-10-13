@@ -408,10 +408,7 @@ def email2contact_email(value):
 
 @register.filter(name='email2login_id')
 def email2login_id(value):
-    """
-    Return contact_email if it exists and it's not an empty string,
-    otherwise return username(login email).
-    """
+    
     if not value:
         return ''
 
