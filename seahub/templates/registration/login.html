@@ -11,9 +11,24 @@
 <style type="text/css">
 html, body, #wrapper { height:100%; }
 #wrapper {
-    background: url('{{ MEDIA_URL }}{{login_bg_image_path}}') center top no-repeat scroll;
-    background-size: cover;
-    padding-top:1px;
+  background: url('{{ MEDIA_URL }}{{login_bg_image_path}}') center top no-repeat scroll;
+  background-size: cover;
+  padding-top: 1px;
+  position: relative;
+}
+#wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+.login-panel-outer-container {
+  position: relative;
+  z-index: 10;
 }
 #lang {
     margin:0;
@@ -118,8 +133,8 @@ html, body, #wrapper { height:100%; }
         <a href="{{ signup_url }}" class="normal px-2 bottom-item" id="sign-up">{% trans "Signup" %}</a>
         {% endif %}
     </div>
-    {% include "snippets/policy_service_link.html" %}
 </div>
+{% include "snippets/policy_service_link.html" %}
 </div>
 {% endblock %}
 
