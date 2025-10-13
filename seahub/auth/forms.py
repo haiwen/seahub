@@ -64,7 +64,7 @@ class AuthenticationForm(forms.Form):
                 user = User.objects.get(email=email)
                 if not user.is_active:
                     is_first_login = not UserOptions.objects.is_user_logged_in(user.username)
-                    if not is_first_login:
+                    if not is_first_login or not settings.ACTIVATE_AFTER_FIRST_LOGIN:
                         self.errors['inactive'] = _("This account is inactive.")
                         raise forms.ValidationError(_("This account is inactive."))
             except User.DoesNotExist:
