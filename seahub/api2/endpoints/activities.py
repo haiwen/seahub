@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 
-from seahub.base.templatetags.seahub_tags import email2contact_email
+from seahub.base.templatetags.seahub_tags import email2contact_email, email2login_id
 from seahub.utils import EVENTS_ENABLED, get_user_activities, is_pro_version, IS_DB_SQLITE3
 from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr
 from seahub.api2.utils import api_error
@@ -65,6 +65,7 @@ class ActivitiesView(APIView):
             d['author_email'] = e.op_user
             d['author_name'] = email2nickname(e.op_user)
             d['author_contact_email'] = email2contact_email(e.op_user)
+            d['login_id'] = email2login_id(e.op_user)
 
             try:
                 avatar_size = int(request.GET.get('avatar_size', 72))

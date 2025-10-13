@@ -19,7 +19,7 @@ from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX, \
     EMAIL_ID_CACHE_TIMEOUT, EMAIL_ID_CACHE_PREFIX, CONTACT_CACHE_TIMEOUT, \
-    CONTACT_CACHE_PREFIX
+    CONTACT_CACHE_PREFIX, LOGIN_ID_CACHE_PREFIX, LOGIN_ID_CACHE_TIMEOUT
 from seahub.cconvert import CConvert
 from seahub.settings import TIME_ZONE
 from seahub.shortcuts import get_first_object_or_none
@@ -392,6 +392,22 @@ def email2contact_email(value):
     contact_email = Profile.objects.get_contact_email_by_user(value)
     cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT) 
     return contact_email
+
+@register.filter(name='email2login_id')
+def email2login_id(value):
+    if not value:
+        return ''
+
+    key = normalize_cache_key(value, LOGIN_ID_CACHE_PREFIX)
+    login_id = cache.get(key)
+    if login_id and login_id.strip():
+        return login_id
+    
+    profile = Profile.objects.get_profile_by_user(value)
+    login_id = profile and profile.login_id or ''
+    cache.set(key, login_id, LOGIN_ID_CACHE_TIMEOUT)
+    return login_id
+
 
 @register.filter(name='email2id')
 def email2id(value):

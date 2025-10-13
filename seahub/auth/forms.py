@@ -58,8 +58,10 @@ class AuthenticationForm(forms.Form):
             try:
                 user = User.objects.get(email=email)
                 if not user.is_active:
-                    self.errors['inactive'] = _("This account is inactive.")
-                    raise forms.ValidationError(_("This account is inactive."))
+                    is_first_login = not UserOptions.objects.is_user_logged_in(user.username)
+                    if not is_first_login:
+                        self.errors['inactive'] = _("This account is inactive.")
+                        raise forms.ValidationError(_("This account is inactive."))
             except User.DoesNotExist:
                 pass
             
