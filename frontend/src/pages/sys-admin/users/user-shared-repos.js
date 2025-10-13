@@ -164,19 +164,17 @@ class Repos extends Component {
 
   render() {
     return (
-      <>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.repoList}
-              />
-            </div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={this.state.repoList}
+            />
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

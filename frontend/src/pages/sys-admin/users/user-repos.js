@@ -300,21 +300,19 @@ class Repos extends Component {
 
   render() {
     return (
-      <Fragment>
-        <div className="main-panel-center flex-row">
-          <div className="cur-view-container">
-            <div className="cur-view-content">
-              <Content
-                loading={this.state.loading}
-                errorMsg={this.state.errorMsg}
-                items={this.state.repoList}
-                deleteRepo={this.deleteRepo}
-                transferRepo={this.transferRepo}
-              />
-            </div>
+      <div className="main-panel-center flex-row h-100">
+        <div className="cur-view-container">
+          <div className="cur-view-content">
+            <Content
+              loading={this.state.loading}
+              errorMsg={this.state.errorMsg}
+              items={this.state.repoList}
+              deleteRepo={this.deleteRepo}
+              transferRepo={this.transferRepo}
+            />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
