@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import dayjs from 'dayjs';
 import { DropdownItem } from 'reactstrap';
 import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -14,6 +13,7 @@ import toaster from '../toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import { Dirent } from '../../models';
+import { formatUnixWithTimezone } from '../../utils/time';
 
 import '../../css/dirent-list-item.css';
 
@@ -859,7 +859,7 @@ class DirentListItem extends React.Component {
             </td>
             <td className="operation">{this.renderItemOperation()}</td>
             <td className="file-size">{dirent.size || ''}</td>
-            <td className="last-update" title={dayjs.unix(dirent.mtime).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dirent.mtime_relative}</td>
+            <td className="last-update" title={formatUnixWithTimezone(dirent.mtime)}>{dirent.mtime_relative}</td>
           </tr>
           :
           <tr>

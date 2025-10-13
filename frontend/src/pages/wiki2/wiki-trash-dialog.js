@@ -10,6 +10,7 @@ import toaster from '../../components/toast';
 import Paginator from '../../components/paginator';
 import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
 import NavItemIcon from './common/nav-item-icon';
+import { formatWithTimezone } from '../../utils/time';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
@@ -265,7 +266,7 @@ class Item extends React.Component {
         <tr>
           <td>{item.name}</td>
           <td>{Utils.bytesToSize(item.size)}</td>
-          <td title={dayjs(item.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
+          <td title={formatWithTimezone(item.deleted_time)}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
           <td>{isAdmin && <a href="#" onClick={this.restoreItem} role="button">{gettext('Restore')}</a>}</td>
         </tr>
       );
@@ -275,7 +276,7 @@ class Item extends React.Component {
         <td><NavItemIcon symbol={'file'} disable={true} /></td>
         <td>{item.name}</td>
         <td>{Utils.bytesToSize(item.size)}</td>
-        <td title={dayjs(item.deleted_time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
+        <td title={formatWithTimezone(item.deleted_time)}>{dayjs(item.deleted_time).format('YYYY-MM-DD')}</td>
         <td>
           {isAdmin &&
             <a href="#" className={isIconShown ? '' : 'invisible'} onClick={this.restoreItem} role="button">{gettext('Restore')}</a>

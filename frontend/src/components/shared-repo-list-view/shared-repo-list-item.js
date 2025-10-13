@@ -22,6 +22,7 @@ import RepoShareAdminDialog from '../dialog/repo-share-admin-dialog';
 import { LIST_MODE } from '../dir-view-mode/constants';
 import TransferDialog from '../dialog/transfer-dialog';
 import OpIcon from '../../components/op-icon';
+import { formatWithTimezone } from '../../utils/time';
 
 dayjs.extend(relativeTime);
 
@@ -602,7 +603,7 @@ class SharedRepoListItem extends React.Component {
         </td>
         <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
         <td>{repo.size}</td>
-        <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</td>
+        <td title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</td>
         <td title={repo.owner_contact_email}>{repo.owner_name}</td>
       </tr>
     ) : (
@@ -658,7 +659,7 @@ class SharedRepoListItem extends React.Component {
             <br />
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
             <span className="item-meta-info">{repo.size}</span>
-            <span className="item-meta-info" title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).fromNow()}</span>
+            <span className="item-meta-info" title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).fromNow()}</span>
           </td>
           <td>{this.generatorMobileMenu()}</td>
         </tr>

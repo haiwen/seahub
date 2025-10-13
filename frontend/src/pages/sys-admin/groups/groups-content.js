@@ -13,6 +13,7 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import SysAdminTransferGroupDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog';
 import ChangeGroupDialog from '../../../components/dialog/change-group-dialog';
 import UserLink from '../user-link';
+import { formatWithTimezone } from '../../../utils/time';
 
 dayjs.extend(relativeTime);
 
@@ -240,7 +241,7 @@ class Item extends Component {
             }
           </td>
           <td>
-            <span title={dayjs(item.created_at).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.created_at).fromNow()}</span>
+            <span title={formatWithTimezone(item.created_at)}>{dayjs(item.created_at).fromNow()}</span>
           </td>
           <td>
             {(isOpIconShown && item.owner != 'system admin') &&

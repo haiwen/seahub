@@ -12,6 +12,7 @@ import UserLink from '../user-link';
 import Paginator from '../../../components/paginator';
 import { eventBus } from '../../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../../components/common/event-bus-type';
+import { formatWithTimezone } from '../../../utils/time';
 
 dayjs.extend(relativeTime);
 
@@ -115,7 +116,7 @@ class Item extends Component {
         <td><Link to={`${siteRoot}sysadmin/#libs/${item.repo_id}`}>{item.repo_name}</Link></td>
         <td>{item.error_msg}</td>
         <td>
-          <span className="item-meta-info" title={dayjs(item.last_accessed).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.error_time).fromNow()}</span>
+          <span className="item-meta-info" title={formatWithTimezone(item.last_accessed)}>{dayjs(item.error_time).fromNow()}</span>
         </td>
       </tr>
     );

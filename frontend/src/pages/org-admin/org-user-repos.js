@@ -10,6 +10,7 @@ import toaster from '../../components/toast';
 import OrgAdminUserNav from '../../components/org-admin-user-nav';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import MainPanelTopbar from './main-panel-topbar';
+import { formatWithTimezone } from '../../utils/time';
 
 import '../../css/org-admin-user.css';
 
@@ -174,7 +175,7 @@ class Item extends Component {
           </td>
           <td>{repo.repo_name}</td>
           <td>{Utils.bytesToSize(repo.size)}</td>
-          <td title={dayjs(repo.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(repo.last_modified).format('YYYY-MM-DD')}</td>
+          <td title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).format('YYYY-MM-DD')}</td>
           <td>
             <i
               role="button"

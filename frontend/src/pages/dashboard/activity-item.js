@@ -6,6 +6,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ListCreatedFileDialog from '../../components/dialog/list-created-files-dialog';
 import ModalPortal from '../../components/modal-portal';
+import { formatWithTimezone } from '../../utils/time';
 
 import '../../css/files-activities.css';
 
@@ -207,7 +208,7 @@ class ActivityItem extends Component {
               {moreDetails && smallLibLink}
             </td>
             <td className="relative-time">
-              <time datetime={item.time} is="relative-time" title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).fromNow()}</time>
+              <time datetime={item.time} is="relative-time" title={formatWithTimezone(item.time)}>{dayjs(item.time).fromNow()}</time>
             </td>
           </tr>
         ) : (
@@ -222,7 +223,7 @@ class ActivityItem extends Component {
             </td>
             <td className="text-end align-top">
               <span className="text-secondary mobile-activity-time">
-                <time datetime={item.time} is="relative-time" title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).fromNow()}</time>
+                <time datetime={item.time} is="relative-time" title={formatWithTimezone(item.time)}>{dayjs(item.time).fromNow()}</time>
               </span>
               {moreDetails && <br /> }
               {moreDetails && libLink}

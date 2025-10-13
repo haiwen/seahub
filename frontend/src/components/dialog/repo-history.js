@@ -11,6 +11,7 @@ import ModalPortal from '../../components/modal-portal';
 import CommitDetails from '../../components/dialog/commit-details';
 import UpdateRepoCommitLabels from '../../components/dialog/edit-repo-commit-labels';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import { formatWithTimezone } from '../../utils/time';
 
 import '../../css/repo-history.css';
 
@@ -256,7 +257,7 @@ class Item extends React.Component {
             <a href="#" className="details" onClick={this.showCommitDetails} role="button">{gettext('Details')}</a>
             }
           </td>
-          <td title={dayjs(item.time).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.time).format('YYYY-MM-DD')}</td>
+          <td title={formatWithTimezone(item.time)}>{dayjs(item.time).format('YYYY-MM-DD')}</td>
           <td>{name}</td>
           <td>
             {item.client_version ? `${item.device_name} / ${item.client_version}` : 'API / --'}

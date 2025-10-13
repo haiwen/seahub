@@ -11,6 +11,7 @@ import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
 import SysAdminUnlinkDevice from '../../../components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog';
+import { formatWithTimezone } from '../../../utils/time';
 
 dayjs.extend(relativeTime);
 
@@ -156,7 +157,7 @@ class Item extends Component {
           <td>{item.device_name}</td>
           <td>{item.last_login_ip}</td>
           <td>
-            <span title={dayjs(item.last_accessed).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_accessed).fromNow()}</span>
+            <span title={formatWithTimezone(item.last_accessed)}>{dayjs(item.last_accessed).fromNow()}</span>
           </td>
           <td>
             <i

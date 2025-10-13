@@ -13,6 +13,7 @@ import ShareDialog from '../../components/dialog/share-dialog';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import OpIcon from '../../components/op-icon';
+import { formatWithTimezone } from '../../utils/time';
 
 dayjs.extend(relativeTime);
 
@@ -191,7 +192,7 @@ class Item extends Component {
                 </div>
               </td>
               <td>{data.size}</td>
-              <td title={dayjs(data.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(data.last_modified).fromNow()}</td>
+              <td title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</td>
               <td title={data.owner_contact_email}>{data.owner_name}</td>
             </tr>
           ) : (
@@ -257,7 +258,7 @@ class Item extends Component {
               <br />
               <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
               <span className="item-meta-info">{data.size}</span>
-              <span className="item-meta-info" title={dayjs(data.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(data.last_modified).fromNow()}</span>
+              <span className="item-meta-info" title={formatWithTimezone(data.last_modified)}>{dayjs(data.last_modified).fromNow()}</span>
             </td>
             <td>
               <MobileItemMenu isOpen={this.state.isOpMenuOpen} toggle={this.toggleOpMenu}>

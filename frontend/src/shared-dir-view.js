@@ -30,6 +30,7 @@ import MobileItemMenu from './components/mobile-item-menu';
 import {
   DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
 } from './components/resize-bar/constants';
+import { formatWithTimezone } from './utils/time';
 
 import './css/layout.css';
 import './css/header.css';
@@ -1183,7 +1184,7 @@ class Item extends React.Component {
           </td>
           <td></td>
           <td></td>
-          <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>
+          <td title={formatWithTimezone(item.last_modified)}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
             <a
@@ -1243,7 +1244,7 @@ class Item extends React.Component {
           <td className="tag-list-title">
           </td>
           <td>{Utils.bytesToSize(item.size)}</td>
-          <td title={dayjs(item.last_modified).format('dddd, MMMM D, YYYY h:mm:ss A')}>{dayjs(item.last_modified).fromNow()}</td>
+          <td title={formatWithTimezone(item.last_modified)}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
             <a role="button" className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
