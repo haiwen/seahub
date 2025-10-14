@@ -9,6 +9,7 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/sort-setter';
 import TagFilesViewToolbar from '../../tag/components/toolbar';
+import OpIcon from '../../components/op-icon';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -62,18 +63,13 @@ class DirTool extends React.Component {
     return (
       <div className="dir-tool d-flex">
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
-        <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+        <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
         {(!isCustomPermission) &&
-          <div
-            className="cur-view-path-btn"
-            onClick={onToggleDetail}
-            aria-label={propertiesText}
+          <OpIcon
+            className="cur-view-path-btn sf3-font sf3-font-info ml-2"
             title={propertiesText}
-            role="button"
-            tabIndex="0"
-          >
-            <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
-          </div>
+            op={onToggleDetail}
+          />
         }
       </div>
     );

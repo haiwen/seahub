@@ -264,10 +264,8 @@ class SharedWithAll extends React.Component {
               </h3>
               {Utils.isDesktop() && (
                 <div className="d-flex align-items-center">
-                  <div className="mr-2">
-                    <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
-                  </div>
-                  <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
+                  <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                  <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption}/>
                 </div>
               )}
               {this.renderSortIconInMobile()}

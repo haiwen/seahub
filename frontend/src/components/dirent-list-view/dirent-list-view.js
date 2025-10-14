@@ -661,7 +661,7 @@ class DirentListView extends React.Component {
       ];
     }
 
-    const sortIcon = <span aria-hidden="true" className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
+    const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
     return [
       { isFixed: true,
         width: 31,

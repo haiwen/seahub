@@ -50,7 +50,14 @@ class WatchUnwatchFileChanges extends React.Component {
     const clickHandler = monitored ? this.unwatchFileChanges : this.watchFileChanges;
 
     return (
-      <div className='dir-others-item text-nowrap' title={monitorText} onClick={clickHandler}>
+      <div
+        role="button"
+        tabIndex="0"
+        className='dir-others-item text-nowrap'
+        title={monitorText}
+        onClick={clickHandler}
+        onKeyDown={Utils.onKeyDown}
+      >
         <span className="sf3-font-monitor sf3-font"></span>
         <span className="dir-others-item-text">{monitorText}</span>
       </div>

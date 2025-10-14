@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
 import { ALL_TAGS_ID } from '../../constants';
 import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import Icon from '../../../components/icon';
 
 import './index.css';
@@ -21,6 +22,8 @@ const AllTags = ({ currentPath, selectAllTags }) => {
     <div
       className={classnames('tree-node-inner text-nowrap all-tags-tree-node-inner', { 'tree-node-hight-light': isSelected })}
       onClick={handleClick}
+      tabIndex="0"
+      onKeyDown={Utils.onKeyDown}
     >
       <div className="tree-node-text">{gettext('All tags')}</div>
       <div className="left-icon">

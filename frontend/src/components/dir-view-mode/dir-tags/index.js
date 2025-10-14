@@ -6,6 +6,7 @@ import { useMetadataStatus } from '../../../hooks';
 import { TagsTreeView } from '../../../tag';
 import { useTags } from '../../../tag/hooks';
 import EditTagDialog from '../../../tag/components/dialog/edit-tag-dialog';
+import OpIcon from '../../../components/op-icon';
 
 const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
   const [isShowEditTagDialog, setIsShowEditTagDialog] = useState(false);
@@ -42,9 +43,11 @@ const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     let operations = [];
     if (enableTags && canAdd) {
       operations.push(
-        <span key="tree-section-create-operation" role="button" className="tree-section-header-operation tree-section-create-operation" onClick={openAddTag}>
-          <i className="sf3-font sf3-font-new"></i>
-        </span>
+        <OpIcon
+          className="tree-section-header-operation tree-section-create-operation sf3-font sf3-font-new"
+          title={gettext('New tag')}
+          op={openAddTag}
+        />
       );
     }
     return operations;
