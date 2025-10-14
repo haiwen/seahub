@@ -223,6 +223,7 @@
 .wiki-nav .page-operation-dropdown .page-operation-dropdown-menu {
   margin-left: -15px;
   margin-top: 4px;
+  overflow-y: visible !important;
 }
 
 .page-operation-dropdown-menu .divider {
