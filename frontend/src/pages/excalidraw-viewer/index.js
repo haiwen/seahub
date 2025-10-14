@@ -11,17 +11,6 @@ const ExcaliViewer = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [isResize, setIsResize] = useState(false);
 
-  useEffect(() => {
-    editorApi.getExdrawContent().then(res => {
-      if (res.data?.appState?.collaborators && !Array.isArray(res.data.appState.collaborators)) {
-        // collaborators.forEach is not a function
-        res.data['appState']['collaborators'] = [];
-      }
-      setFileContent(res.data);
-      setIsFetching(false);
-    });
-  }, []);
-
   // Use postMessage to communicate with parent Sdoc container
   useEffect(() => {
     window.parent.postMessage({ type: 'checkSdocParent' }, '*');
@@ -48,6 +37,26 @@ const ExcaliViewer = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = isInSdoc ? await editorApi.getFileContent() : await editorApi.getExdrawContent();
+
+        const data = res.data;
+        if (data?.appState?.collaborators && !Array.isArray(data.appState.collaborators)) {
+          // collaborators.forEach is not a function
+          data['appState']['collaborators'] = [];
+        }
+
+        setFileContent(data);
+        setIsFetching(false);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, [isInSdoc]);
 
   return (
     <SimpleViewer
