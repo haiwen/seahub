@@ -475,7 +475,10 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
         fileext = 'exdraw'
         filetype = 'Excalidraw'
         file_id = seafile_api.get_file_id_by_path(repo_id, req_path)
+        file_uuid = get_exdraw_file_uuid(repo, req_path)
         username = request.user.username
+        exdraw_perm = 'r'
+        excalidraw_access_token = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
         use_onetime = False if filetype in (VIDEO, AUDIO) else True
         token = seafile_api.get_fileserver_access_token(repo_id, file_id,
                                                     'view', username,
@@ -499,6 +502,9 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
             'file_encoding_list': [],
             'filetype': filetype,
             'traffic_over_limit': False,
+            'file_uuid': file_uuid,
+            'excalidraw_server_url': EXCALIDRAW_SERVER_URL,
+            'excalidraw_access_token': excalidraw_access_token,
         }
         return render(request, template, data)
 
