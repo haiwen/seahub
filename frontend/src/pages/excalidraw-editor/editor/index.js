@@ -18,8 +18,6 @@ import isHotkey from 'is-hotkey';
 
 import '@excalidraw/excalidraw/index.css';
 
-const { docUuid, filePerm } = window.app.pageOptions;
-window.name = `${docUuid}`;
 const UIOptions = {
   canvasActions: {
     saveToActiveFile: false,
@@ -56,6 +54,7 @@ const initializeScene = async () => {
 
 const SimpleEditor = () => {
 
+  const filePermRef = useRef(null);
   const initialStatePromiseRef = useRef({ promise: null });
   if (!initialStatePromiseRef.current.promise) {
     initialStatePromiseRef.current.promise = resolvablePromise();
@@ -113,19 +112,18 @@ const SimpleEditor = () => {
       }
     };
 
-    context.initSettings().then(() => {
-      const config = context.getSettings();
-      initializeScene().then(async (data) => {
-        // init socket
-        SocketManager.getInstance(excalidrawAPI, data.scene, config);
-        loadImages(data, /* isInitialLoad */true);
-        initialStatePromiseRef.current.promise.resolve(data.scene);
-      });
+    const config = context.getExdrawConfig();
+    initializeScene().then(async (data) => {
+      // init socket
+      SocketManager.getInstance(excalidrawAPI, data.scene, config);
+      loadImages(data, /* isInitialLoad */true);
+      initialStatePromiseRef.current.promise.resolve(data.scene);
     });
 
   }, [excalidrawAPI]);
 
   useEffect(() => {
+    filePermRef.current = context.getSetting('filePerm');
     const handleHotkeySave = (event) => {
       if (isHotkey('mod+s', event)) {
         // delete cmd+s
@@ -139,7 +137,7 @@ const SimpleEditor = () => {
   }, []);
 
   const handleChange = useCallback((elements, appState, files) => {
-    if (filePerm === 'r') return;
+    if (filePermRef.current === 'r') return;
     const socketManager = SocketManager.getInstance();
     socketManager.syncLocalElementsToOthers(elements);
 
@@ -172,7 +170,7 @@ const SimpleEditor = () => {
   }, [excalidrawAPI]);
 
   const handlePointerUpdate = useCallback((payload) => {
-    if (filePerm === 'r') return;
+    if (filePermRef.current === 'r') return;
     const socketManager = SocketManager.getInstance();
     socketManager.syncMouseLocationToOthers(payload);
   }, []);
@@ -229,7 +227,7 @@ const SimpleEditor = () => {
         onPointerUpdate={handlePointerUpdate}
         UIOptions={UIOptions}
         langCode={langList[window.app.config.lang] || 'en'}
-        viewModeEnabled={filePerm === 'r'}
+        viewModeEnabled={filePermRef.current === 'r'}
       >
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />

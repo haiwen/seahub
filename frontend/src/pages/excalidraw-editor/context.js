@@ -1,12 +1,6 @@
 import Url from 'url-parse';
 import ExcalidrawServerApi from './api';
-import editorApi from './api/editor-api';
 import axios from 'axios';
-
-const { avatarURL } = window.app.config;
-const { docUuid, excalidrawServerUrl, server } = window.app.pageOptions;
-const userInfo = window.app.userInfo;
-
 
 class Context {
   constructor() {
@@ -16,12 +10,14 @@ class Context {
     this.accessToken = '';
   }
 
-  initSettings = async () => {
-    this.docUuid = docUuid;
+  initSettings = () => {
+    this.settings = window.excalidraw;
+    const { serviceURL, excalidrawServerUrl, docUuid, userInfo, accessToken, avatarURL } = this.settings;
+
+    this.serviceURL = serviceURL;
     this.exdrawServer = excalidrawServerUrl;
+    this.docUuid = docUuid;
     this.user = { ...userInfo, _username: userInfo.username, username: userInfo.name, avatarUrl: avatarURL };
-    const resResult = await editorApi.getExdrawToken();
-    const accessToken = resResult;
     this.accessToken = accessToken;
     this.exdrawApi = new ExcalidrawServerApi({ exdrawUuid: docUuid, exdrawServer: excalidrawServerUrl, accessToken });
   };
@@ -30,7 +26,11 @@ class Context {
     return this.docUuid;
   };
 
-  getSettings = () => {
+  getSetting = (key) => {
+    return this.settings[key];
+  };
+
+  getExdrawConfig = () => {
     return {
       docUuid: this.docUuid,
       exdrawServer: new Url(this.exdrawServer).origin,
@@ -50,8 +50,8 @@ class Context {
   uploadExdrawImage = (fileUuid, fileItem) => {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
-
-    const url = `${server}/api/v2.1/exdraw/upload-image/${docUuid}/`;
+    const serviceURL = this.serviceURL;
+    const url = `${serviceURL}/api/v2.1/exdraw/upload-image/${docUuid}/`;
     const form = new FormData();
     form.append('image_data', fileItem.dataURL);
     form.append('image_id', fileUuid);
@@ -62,8 +62,8 @@ class Context {
   downloadExdrawImage = (fileUuid) => {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
-
-    const url = `${server}/api/v2.1/exdraw/download-image/${docUuid}/${fileUuid}`;
+    const serviceURL = this.serviceURL;
+    const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${fileUuid}`;
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   };
 
@@ -71,14 +71,16 @@ class Context {
   getLocalFiles(p, type) {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
-    const url = `${server}/api/v2.1/seadoc/dir/${docUuid}/?p=${p}&type=${type}&doc_uuid=${docUuid}`;
+    const serviceURL = this.serviceURL;
+    const url = `${serviceURL}/api/v2.1/seadoc/dir/${docUuid}/?p=${p}&type=${type}&doc_uuid=${docUuid}`;
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }
 
   getSearchFilesByFilename(query, page, per_page, search_type) {
     const docUuid = this.getDocUuid();
     const accessToken = this.accessToken;
-    const url = server + '/api/v2.1/seadoc/search-filename/' + docUuid + '/?query=' + query + '&page=' + page + '&per_page=' + per_page + '&search_type=' + search_type;
+    const serviceURL = this.serviceURL;
+    const url = serviceURL + '/api/v2.1/seadoc/search-filename/' + docUuid + '/?query=' + query + '&page=' + page + '&per_page=' + per_page + '&search_type=' + search_type;
 
     return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
   }

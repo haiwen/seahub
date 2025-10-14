@@ -103,8 +103,8 @@ export const saveFilesToServer = async (addedFiles) => {
 
 const getImageUrl = (fileName) => {
   const docUuid = context.getDocUuid();
-  const { server } = window.app.pageOptions;
-  const url = `${server}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
+  const serviceURL = context.getSetting('serviceURL');
+  const url = `${serviceURL}/api/v2.1/exdraw/download-image/${docUuid}/${fileName}`;
   return url;
 };
 
