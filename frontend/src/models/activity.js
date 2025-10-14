@@ -14,6 +14,7 @@ class Acticity {
     this.op_type = json.op_type;
     this.createdFilesCount = 0;
     this.createdFilesList = [];
+    this.login_id = json.login_id;
     if (json.op_type === 'clean-up-trash') {
       this.days = json.days;
     } else if (json.op_type === 'rename' && json.obj_type === 'repo') {

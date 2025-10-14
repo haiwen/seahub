@@ -467,7 +467,7 @@ class GroupMembersImport(APIView):
         emails_list = []
         for record in records:
             if record[0]:
-                email = record[0].strip().lower()
+                email = str(record[0]).strip().lower()
                 emails_list.append(email)
 
         result = {}
@@ -486,12 +486,14 @@ class GroupMembersImport(APIView):
             user_not_found = False
 
             try:
-                User.objects.get(email=email)
+                User.objects.get(email=email_from_excel)
             except User.DoesNotExist:
                 user_not_found = True
 
             if user_not_found:
-                email = Profile.objects.get_username_by_contact_email(email)
+                email = Profile.objects.get_username_by_contact_email(email_from_excel)
+                if not email:
+                    email = Profile.objects.get_username_by_login_id(email_from_excel)
                 try:
                     User.objects.get(email=email)
                     user_not_found = False
@@ -571,10 +573,14 @@ class GroupMembersImportExample(APIView):
     def get(self, request):
 
         data_list = []
-        head = [_('Email')]
+        head = [_('Email or LoginID')]
         for i in range(5):
             username = "test" + str(i) + "@example.com"
             data_list.append([username])
+            
+        for i in range(5):
+            login_id = "ID" + str(i)
+            data_list.append([login_id])
 
         wb = write_xls('sample', head, data_list)
         if not wb:

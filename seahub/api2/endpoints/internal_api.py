@@ -18,6 +18,7 @@ from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
 from seahub.utils import normalize_file_path, get_file_type_and_ext
 from seahub.views import check_folder_permission
 
+
 logger = logging.getLogger(__name__)
 
 OP_DOWNLOAD = 'download'
@@ -29,7 +30,6 @@ AVAILABLE_OPS = [
 
 
 class InternalUserListView(APIView):
-   
     throttle_classes = (UserRateThrottle, )
     
     def post(self, request):
@@ -184,12 +184,11 @@ class InternalCheckFileOperationAccess(APIView):
         if username:
             op_perms = parse_repo_perm(seafile_api.check_permission_by_path(
                         repo_id, '/', username))
-            
+
             if op == OP_DOWNLOAD:
                 if not (ignore_download_perms or op_perms.can_download):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-               
             if op == OP_UPLOAD and not op_perms.can_upload:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
