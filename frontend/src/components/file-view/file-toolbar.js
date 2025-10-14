@@ -259,16 +259,6 @@ class FileToolbar extends React.Component {
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
                 {gettext('Open parent folder')}
               </a>
-              {isTxt &&
-                <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
-                  <Switch
-                    checked={this.props.lineWrapping}
-                    placeholder={gettext('Line wrapping')}
-                    className="txt-line-wrap-menu w-100"
-                    onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
-                  />
-                </DropdownItem>
-              }
             </DropdownMenu>
           </Dropdown>
         </div>
