@@ -2007,19 +2007,11 @@ class Wiki2RepoViews(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        repo_id = wiki.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        wiki_config = get_wiki_config(repo_id, username)
-        wiki_settings = wiki_config.get('settings', {})
-        enable_link_repos = wiki_settings.get('enable_link_repos', False)
-        if not enable_link_repos:
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
             return Response([])
         try:
-            wiki_views = WikiViews.objects.list_views(repo_id)
+            wiki_views = WikiViews.objects.list_views(wiki_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2056,26 +2048,18 @@ class Wiki2RepoViews(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        repo_id = wiki.repo_id
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        wiki_config = get_wiki_config(repo_id, username)
-        wiki_settings = wiki_config.get('settings', {})
-        enable_link_repos = wiki_settings.get('enable_link_repos', False)
-        if not enable_link_repos:
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        wiki_linked_repos = wiki_config.get('linked_repos', [])
+        wiki_linked_repos = wiki_settings.get_linked_repos()
         if link_repo_id not in wiki_linked_repos:
             error_msg = f'The repo {link_repo_id} is not linked to wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            new_view = WikiViews.objects.add_view(repo_id, view_name, link_repo_id, view_type, view_data)
+            new_view = WikiViews.objects.add_view(wiki_id, view_name, link_repo_id, view_type, view_data)
             if not new_view:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'add view failed')
         except Exception as e:
@@ -2110,10 +2094,8 @@ class Wiki2RepoViews(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        wiki_config = get_wiki_config(wiki_id, username)
-        wiki_settings = wiki_config.get('settings', {})
-        enable_link_repos = wiki_settings.get('enable_link_repos', False)
-        if not enable_link_repos:
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -2157,10 +2139,8 @@ class Wiki2RepoViews(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        wiki_config = get_wiki_config(wiki_id, username)
-        wiki_settings = wiki_config.get('settings', {})
-        enable_link_repos = wiki_settings.get('enable_link_repos', False)
-        if not enable_link_repos:
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -2210,10 +2190,8 @@ class Wiki2RepoView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        wiki_config = get_wiki_config(repo_id, username)
-        wiki_settings = wiki_config.get('settings', {})
-        enable_link_repos = wiki_settings.get('enable_link_repos', False)
-        if not enable_link_repos:
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         try:
