@@ -283,7 +283,7 @@ class DirPath extends React.Component {
             className="path-item"
             data-path="/"
             onClick={this.onPathClick}
-            onKeyDown={this.onPathClick}
+            onKeyDown={Utils.onKeyDown}
             role="button"
             title={repoName}
             tabIndex="0"
