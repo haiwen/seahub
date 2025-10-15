@@ -213,8 +213,8 @@ class WikiNav extends Component {
                       {gettext('Import page')}
                     </DropdownToggle>
                     <DropdownMenu>
-                      <DropdownItem key="import-sdoc" data-toggle="import-sdoc" onClick={this.handleImportPage.bind(this, 'sdoc')}>{gettext('Improve page from docx')}</DropdownItem>
-                      <DropdownItem key="import-md" data-toggle="import-md" onClick={this.handleImportPage.bind(this, 'md')}>{gettext('Improve page from Markdown')}</DropdownItem>
+                      <DropdownItem key="import-sdoc" data-toggle="import-sdoc" onClick={this.handleImportPage.bind(this, 'sdoc')}>{gettext('Import page from docx')}</DropdownItem>
+                      <DropdownItem key="import-md" data-toggle="import-md" onClick={this.handleImportPage.bind(this, 'md')}>{gettext('Import page from Markdown')}</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
                 </DropdownMenu>
