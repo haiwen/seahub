@@ -95,6 +95,50 @@ class Wiki2Publish(models.Model):
             'visit_count': self.visit_count
         }
 
+
+class Wiki2Settings(models.Model):
+    wiki_id = models.CharField(max_length=36, db_index=True)
+    enable_link_repos = models.BooleanField(default=False)
+    linked_repos = models.TextField(default='[]')
+
+    class Meta:
+        db_table = 'wiki_settings'
+    
+    def get_linked_repos(self):
+        try:
+            return json.loads(self.linked_repos) if self.linked_repos else []
+        except (json.JSONDecodeError, TypeError):
+            return []
+    
+    def set_linked_repos(self, repos):
+        if not isinstance(repos, list):
+            raise ValueError('linked_repos must be a list')
+        self.linked_repos = json.dumps(repos)
+    
+    def add_linked_repo(self, repo_id):
+        repos = self.get_linked_repos()
+        if repo_id not in repos:
+            repos.append(repo_id)
+            self.set_linked_repos(repos)
+            return True
+        return False
+    
+    def remove_linked_repo(self, repo_id):
+        repos = self.get_linked_repos()
+        if repo_id in repos:
+            repos.remove(repo_id)
+            self.set_linked_repos(repos)
+            return True
+        return False
+    
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'wiki_id': self.wiki_id,
+            'enable_link_repos': self.enable_link_repos,
+            'linked_repos': self.get_linked_repos()
+        }
+
 class WikiView(object):
     def __init__(self, name, linked_repo_id, type='table', view_data={}):
         self.name = name
