@@ -12,7 +12,13 @@ export const MetadataMiddlewareProvider = ({ repoID, currentPath, repoInfo, sele
   return (
     <MetadataMiddlewareContext.Provider value={{}}>
       <CollaboratorsProvider repoID={repoID}>
-        <TagsProvider repoID={repoID} currentPath={currentPath} repoInfo={repoInfo} selectTagsView={selectTagsView} tagsChangedCallback={tagsChangedCallback}>
+        <TagsProvider
+          repoID={repoID}
+          currentPath={currentPath}
+          repoInfo={repoInfo}
+          selectTagsView={selectTagsView}
+          tagsChangedCallback={tagsChangedCallback}
+        >
           <MetadataAIOperationsProvider
             repoID={repoID}
             enableMetadata={enableMetadata}

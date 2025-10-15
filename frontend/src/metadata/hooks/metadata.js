@@ -7,7 +7,6 @@ import { gettext } from '../../utils/constants';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { FACE_RECOGNITION_VIEW_ID, VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { useMetadataStatus } from '../../hooks';
-import { updateFavicon } from '../utils/favicon';
 import { getViewName } from '../utils/view';
 
 const CACHED_COLLAPSED_FOLDERS_PREFIX = 'sf-metadata-collapsed-folders';
@@ -21,7 +20,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
   const [idViewMap, setIdViewMap] = useState({});
 
   const collapsedFoldersIds = useRef([]);
-  const originalTitleRef = useRef(document.title);
 
   const { enableMetadata, enableFaceRecognition, isBeingBuilt, setIsBeingBuilt, updateEnableFaceRecognition: updateEnableFaceRecognitionAPI } = useMetadataStatus();
 
@@ -425,19 +423,6 @@ export const MetadataProvider = ({ repoID, currentPath, repoInfo, selectMetadata
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isBeingBuilt]);
-
-  useEffect(() => {
-    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) return;
-    const [, , currentViewId] = currentPath.split('/');
-    const currentView = idViewMap[currentViewId];
-    if (currentView) {
-      document.title = `${currentView.name} - Seafile`;
-      updateFavicon(currentView.type);
-      return;
-    }
-    document.title = originalTitleRef.current;
-    updateFavicon('default');
-  }, [currentPath, idViewMap]);
 
   return (
     <MetadataContext.Provider value={{

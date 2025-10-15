@@ -40,3 +40,29 @@
 .detail-header .detail-control:hover i {
   fill: var(--bs-icon-hover-color);
 }
+
+.detail-header .detail-title {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  width: 0; /* prevent strut flex layout */
+}
+
+.detail-header .detail-title .detail-header-icon-container {
+  height: 32px;
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+
+.detail-header .detail-title .detail-title-name {
+  margin-right: 8px;
+  line-height: 1.5rem;
+  vertical-align: middle;
+  font-size: 1rem;
+  color: var(--bs-body-color);
+}
+

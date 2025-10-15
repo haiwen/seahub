@@ -160,14 +160,10 @@ const ViewItem = ({
   const renameView = useCallback((name, failCallback) => {
     onUpdate(viewId, { name }, () => {
       setRenaming(false);
-      if (!isSelected) return;
-      document.title = `${name} - Seafile`;
     }, (error) => {
       failCallback(error);
-      if (!isSelected) return;
-      document.title = `${viewName} - Seafile`;
     });
-  }, [isSelected, onUpdate, viewId, viewName]);
+  }, [onUpdate, viewId]);
 
   const isValid = useCallback((event) => {
     return event.dataTransfer.types.includes(METADATA_VIEWS_DRAG_DATA_KEY);

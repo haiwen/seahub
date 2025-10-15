@@ -155,8 +155,7 @@ const MetadataTreeView = ({ userPerm, currentPath }) => {
             if (item.type === VIEWS_TYPE_FOLDER) {
               return renderFolder(item, index);
             }
-            const view = idViewMap[item._id];
-            return renderView(view, index);
+            return renderView(idViewMap[item._id], index);
           })}
           {showInput && (newView ?
             <NewView newView={newView} leftIndent={TREE_NODE_LEFT_INDENT * 2} addView={handleAddView} /> :

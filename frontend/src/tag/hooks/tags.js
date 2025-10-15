@@ -4,7 +4,6 @@ import toaster from '../../components/toast';
 import { useMetadataStatus } from '../../hooks';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { getTagColor, getTagId, getTagName, getCellValueByColumn } from '../utils/cell';
-import { updateFavicon } from '../utils/favicon';
 import Context from '../context';
 import Store from '../store';
 import { PER_LOAD_NUMBER, EVENT_BUS_TYPE } from '../../metadata/constants';
@@ -25,7 +24,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
 
   const storeRef = useRef(null);
   const contextRef = useRef(null);
-  const originalTitleRef = useRef(document.title);
 
   const { enableMetadata, enableTags } = useMetadataStatus();
 
@@ -247,8 +245,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
   }, [storeRef]);
 
   useEffect(() => {
-    if (!handleSelectTag) return;
-    if (isLoading) return;
+    if (isLoading || !handleSelectTag) return;
     const { search } = window.location;
     const urlParams = new URLSearchParams(search);
     if (!urlParams.has('tag')) return;
@@ -269,33 +266,6 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
-
-  useEffect(() => {
-    if (!currentPath) return;
-    if (!currentPath.includes('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/')) return;
-    const pathList = currentPath.split('/');
-    const [, , currentTagId, children] = pathList;
-    if (currentTagId === ALL_TAGS_ID) {
-      if (children) {
-        document.title = `${children} - Seafile`;
-        updateFavicon('default');
-      } else {
-        document.title = `${gettext('All tags')} - Seafile`;
-      }
-      return;
-    }
-
-    const currentTag = getRowById(tagsData, currentTagId);
-    if (currentTag) {
-      const tagName = getTagName(currentTag);
-      document.title = `${tagName} - Seafile`;
-      updateFavicon('default');
-      return;
-    }
-    document.title = originalTitleRef.current;
-    updateFavicon('default');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPath, tagsData]);
 
   return (
     <TagsContext.Provider value={{
