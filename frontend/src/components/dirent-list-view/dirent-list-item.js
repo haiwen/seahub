@@ -11,6 +11,7 @@ import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import toaster from '../toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
+import OpIcon from '../../components/op-icon';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import { Dirent } from '../../models';
 import { formatUnixWithTimezone } from '../../utils/time';
@@ -695,26 +696,18 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow && !dirent.isSelected &&
               <div className="operations d-flex align-items-center">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
-                  <a
-                    href="#"
+                  <OpIcon
                     className="op-icon sf3-font sf3-font-download1"
                     title={gettext('Download')}
-                    role="button"
-                    aria-label={gettext('Download')}
-                    onClick={this.onItemDownload}
-                  >
-                  </a>
+                    op={this.onItemDownload}
+                  />
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
-                  <a
-                    href="#"
+                  <OpIcon
                     className="op-icon sf3-font-delete1 sf3-font"
                     title={gettext('Delete')}
-                    role="button"
-                    aria-label={gettext('Delete')}
-                    onClick={this.onItemDelete}
-                  >
-                  </a>
+                    op={this.onItemDelete}
+                  />
                 )}
                 <ItemDropdownMenu
                   toggleClass="sf3-font-more sf3-font op-icon ml-0"
@@ -732,10 +725,18 @@ class DirentListItem extends React.Component {
             {this.state.isOperationShow &&
               <div className="operations d-flex align-items-center">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
-                  <a href="#" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} role="button" aria-label={gettext('Download')} onClick={this.onItemDownload}></a>
+                  <OpIcon
+                    className="op-icon sf3-font sf3-font-download1"
+                    title={gettext('Download')}
+                    op={this.onItemDownload}
+                  />
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
-                  <a href="#" className="op-icon sf3-font-delete1 sf3-font" title={gettext('Delete')} role="button" aria-label={gettext('Delete')} onClick={this.onItemDelete}></a>
+                  <OpIcon
+                    className="op-icon sf3-font-delete1 sf3-font"
+                    title={gettext('Delete')}
+                    op={this.onItemDelete}
+                  />
                 )}
                 <ItemDropdownMenu
                   toggleClass="sf3-font-more sf3-font op-icon ml-0"
@@ -792,32 +793,25 @@ class DirentListItem extends React.Component {
             onMouseDown={this.onItemMouseDown}
             onContextMenu={this.onItemContextMenu}
           >
-            <td
-              className={classnames('pl10 pr-2 cursor-pointer', { 'tr-drag-effect': this.state.isDragTipShow })}
-              onClick={this.onItemSelected}
-              role="button"
-              aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
-            >
+            <td className={classnames('pl10 pr-2 cursor-pointer', { 'tr-drag-effect': this.state.isDragTipShow })}>
               <input
                 type="checkbox"
                 className="vam cursor-pointer"
-                onClick={this.onItemSelected}
                 style={{ position: 'relative', top: -1 }}
-                onChange={() => {}}
                 checked={isSelected}
                 aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+                title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+                onClick={this.onItemSelected}
+                onKeyDown={Utils.onKeyDown}
               />
             </td>
             <td className="pl-2 pr-2">
               {dirent.starred !== undefined &&
-                <i
-                  role="button"
-                  aria-label={dirent.starred ? gettext('Unstar') : gettext('Star')}
-                  title={dirent.starred ? gettext('Unstar') : gettext('Star')}
-                  onClick={this.onItemStarred}
+                <OpIcon
                   className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}
-                >
-                </i>
+                  title={dirent.starred ? gettext('Unstar') : gettext('Star')}
+                  op={this.onItemStarred}
+                />
               }
             </td>
             <td className="pl-2 pr-2">
@@ -826,9 +820,11 @@ class DirentListItem extends React.Component {
                   <img
                     ref={ref => this.dragIconRef = ref}
                     src={`${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`}
+                    alt={dirent.name}
                     className="thumbnail cursor-pointer"
+                    tabIndex="0"
                     onClick={this.onItemClick}
-                    alt=""
+                    onKeyDown={Utils.onKeyDown}
                     draggable={false}
                   /> :
                   <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' draggable={false} />

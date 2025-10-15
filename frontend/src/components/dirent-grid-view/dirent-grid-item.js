@@ -341,8 +341,10 @@ class DirentGridItem extends React.Component {
               <img
                 src={`${siteRoot}${dirent.encoded_thumbnail_src || ''}?mtime=${dirent.mtime}`}
                 className="thumbnail"
+                tabIndex="0"
                 onClick={this.onItemClick}
-                alt=""
+                onKeyDown={Utils.onKeyDown}
+                alt={dirent.name}
                 draggable={false}
               /> :
               <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' draggable={false} />
