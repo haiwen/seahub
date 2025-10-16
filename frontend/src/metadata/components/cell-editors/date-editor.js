@@ -51,6 +51,8 @@ class DateEditor extends Component {
     const { lang = 'zh-cn', value } = this.props;
     const isZhcn = lang === 'zh-cn';
     if (value && dayjs(value).isValid()) {
+      let validValue = dayjs(value).isValid() ? dayjs(value) : dayjs(this.defaultCalendarValue);
+      this.setState({ value: isZhcn ? dayjs(validValue).locale('zh-cn') : dayjs(validValue).locale('en-gb') });
       if (typeof value === 'string' && value.length === 1 && !isNaN(Number(value, 10))) {
         this.timer = setTimeout(() => {
           let inputDom = document.getElementsByClassName('rc-calendar-input')[0];
@@ -60,8 +62,6 @@ class DateEditor extends Component {
         }, 200);
         return;
       }
-      let validValue = dayjs(value).isValid() ? dayjs(value) : dayjs(this.defaultCalendarValue);
-      this.setState({ value: isZhcn ? dayjs(validValue).locale('zh-cn') : dayjs(validValue).locale('en-gb') });
     }
     document.addEventListener('keydown', this.onHotKey, true);
   }
@@ -211,6 +211,7 @@ class DateEditor extends Component {
           onOpenChange={this.onOpenChange}
           open={true}
           style={{ zIndex: 1060 }}
+
         >
           {
             ({ value }) => {
