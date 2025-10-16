@@ -1,4 +1,4 @@
-.sf-metadata-rc-calendar .rc-calendar-date {
+/* .sf-metadata-rc-calendar .rc-calendar-date {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -110,4 +110,4 @@
 
 [data-bs-theme=dark] .rc-calendar-disabled-cell .rc-calendar-date {
   background: rgba(255, 255, 255, .02);
-}
+} */
