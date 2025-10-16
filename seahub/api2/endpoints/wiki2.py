@@ -25,7 +25,7 @@ from django.urls import reverse
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, is_wiki_repo
+from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
@@ -1879,30 +1879,42 @@ class Wiki2SettingsView(APIView):
         if not check_wiki_permission(wiki, username):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         
-        enable_link_repos = request.data.get('enable_link_repos')
+        enable_link_repos = request.data.get('enable_link_repos', 'false')
+        if enable_link_repos not in ('true', 'false'):
+            error_msg = 'enable_link_repos invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        enable_link_repos = to_python_boolean(enable_link_repos)
+            
         linked_repos = request.data.get('linked_repos', [])
         try:
             wiki_settings, created = Wiki2Settings.objects.get_or_create(
                 wiki_id=wiki_id,
                 defaults={'enable_link_repos': False, 'linked_repos': '[]'}
             )
-            
-            if enable_link_repos is not None:
-                wiki_settings.enable_link_repos = enable_link_repos
-                if not enable_link_repos:
-                    wiki_settings.set_linked_repos([])
+            wiki_settings.enable_link_repos = enable_link_repos
+            if not enable_link_repos:
+                wiki_settings.set_linked_repos([])
             
             if enable_link_repos:
                 for repo_id in linked_repos:
-                    if not seafile_api.get_repo(repo_id):
+                    if repo_id == wiki_id:
+                        error_msg = 'Wiki can not be linked to itself.'
+                        return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+                    repo = seafile_api.get_repo(repo_id)
+                    if not repo:
                         error_msg = f'The repo {repo_id} is not linked to wiki {wiki_id}.'
+                        return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+                    if repo.repo_type == 'wiki':
+                        error_msg = f'The wiki {repo_id} is not linked to wiki {wiki_id}.'
                         return api_error(status.HTTP_404_NOT_FOUND, error_msg)
                     permission = check_folder_permission(request, repo_id, '/')
                     if permission != 'rw':
                         error_msg = 'Permission denied.'
                         return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            if enable_link_repos and linked_repos:
-                wiki_settings.set_linked_repos(linked_repos)
+                if linked_repos:
+                    wiki_settings.set_linked_repos(linked_repos)
+            else:
+                wiki_settings.set_linked_repos([])
             wiki_settings.save()
         except Exception as e:
             logger.error(e)
@@ -1922,6 +1934,9 @@ class Wiki2LinkedReposView(APIView):
         if not repo_id:
             error_msg = 'repo_id is required.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if repo_id == wiki_id:
+            error_msg = 'Wiki can not be linked to itself.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
@@ -1939,8 +1954,13 @@ class Wiki2LinkedReposView(APIView):
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
-        if not seafile_api.get_repo(repo_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
             error_msg = f'Library {repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if repo.repo_type == 'wiki':
+            error_msg = f'The wiki {repo_id} is not linked to wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         permission = check_folder_permission(request, repo_id, '/')
