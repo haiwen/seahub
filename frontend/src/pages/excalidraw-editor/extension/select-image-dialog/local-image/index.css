@@ -114,3 +114,18 @@
   display: flex;
   justify-content: center;
 }
+
+.sdoc-file-info .item-right-icon {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.sdoc-file-info .item-right-icon {
+  right: 8px;
+  position: absolute;
+}
+
+.sdoc-file-info .item-right-icon svg {
+  fill: #666;
+}

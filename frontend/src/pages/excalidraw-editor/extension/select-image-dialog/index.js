@@ -67,27 +67,31 @@ const SelectSdocFileDialog = ({ isOpen, insertImage, closeDialog }) => {
   }, [isOpenSearch]);
 
   return (
-    <Modal isOpen={isOpen} autoFocus={false} zIndex={1071} returnFocusAfterClose={false} className="sdoc-file-select-dialog" contentClassName="sdoc-file-select-modal">
+    <Modal isOpen={isOpen} autoFocus={false} zIndex={1071} returnFocusAfterClose={false} className="exdraw-file-select-dialog" contentClassName="file-select-modal">
       <div className='modal-header-container'>
         <h5 className='modal-title-container'>{gettext('Select image')}</h5>
         <div className='search-container'>
-          {!isOpenSearch && <div className='search-icon-container'><div className='sdocfont sdoc-find-replace sdoc-files-search-popover' onClick={toggleSearch} ></div></div>}
+          {!isOpenSearch && (
+            <div className='search-disable-container'>
+              <div className='sdocfont sdoc-find-replace sdoc-files-search-popover' onClick={toggleSearch} ></div>
+            </div>
+          )}
           {isOpenSearch && (
-            <div className='sdoc-files-search-popover-container'>
-              <div className='sdoc-search-wrapper'>
-                <div className='sdocfont sdoc-find-replace sdoc-search'></div>
-                <Input autoFocus className='sdoc-search-input' onKeyUp={handleInputKeyDown} onChange={handleSearchInputChange} id='sdoc-search' placeholder={gettext('Search')} />
-                <div className='sdocfont sdoc-close1 sdoc-close' onClick={toggleSearch}></div>
+            <div className='files-search-popover-container'>
+              <div className='search-enable-container'>
+                <div className='sdocfont sdoc-find-replace'></div>
+                <Input autoFocus className='search-input' onKeyUp={handleInputKeyDown} onChange={handleSearchInputChange} placeholder={gettext('Search')} />
+                <div className='sdocfont sdoc-close1' onClick={toggleSearch}></div>
               </div>
             </div>
           )}
         </div>
-        <div className='sdocfont sdoc-close1 sdoc-close-dialog' onClick={closeDialog}></div>
+        <div className='sdocfont sdoc-close1' onClick={closeDialog}></div>
       </div>
       <ModalBody className='p-0'>
-        <div className='sdoc-file-select-container'>
+        <div className='file-select-container'>
           <LocalImage fileType='image' onSelectedFile={onSelectedFile} toggle={closeDialog} searchContent={searchContent} isOpenSearch={isOpenSearch} />
-          <div className='sdoc-file-select-footer'>
+          <div className='file-select-footer'>
             <Button color='secondary' className='mr-2' onClick={closeDialog}>{gettext('Cancel')}</Button>
             <Button color='primary' className='highlight-bg-color' disabled={!currentSelectedFile} onClick={onSubmit}>{gettext('Confirm')}</Button>
           </div>

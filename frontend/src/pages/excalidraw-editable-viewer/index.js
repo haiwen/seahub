@@ -80,7 +80,7 @@ function ExcalidrawEdiableViewer() {
         </div>
 
         <div className='doc-ops'>
-          <span className="collaborator-name">{gettext('Username')}:</span>
+          <span className="collaborator-name">{gettext('Your name')}:</span>
           {!isEditName && (
             <span className="collaborator-name">{username}</span>
           )}
