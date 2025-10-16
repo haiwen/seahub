@@ -310,11 +310,7 @@ class FileToolbar extends React.Component {
                 </a>
               </DropdownItem>
             )}
-            {(
-              <DropdownItem onClick={this.props.toggleCommentPanel}>
-                {gettext('Comment')}
-              </DropdownItem>
-            )}
+            <DropdownItem onClick={this.props.toggleCommentPanel}>{gettext('Comment')}</DropdownItem>
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
             {isTxt &&
               <DropdownItem id='mobile-txt-line-wrap-menu' className='dropdown-item'>

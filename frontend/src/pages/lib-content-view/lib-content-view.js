@@ -107,7 +107,6 @@ class LibContentView extends React.Component {
       tagId: '',
       currentDirent: null,
     };
-
     this.oldOnpopstate = window.onpopstate;
     window.onpopstate = this.onpopstate;
     this.lastModifyTime = new Date();
@@ -239,6 +238,7 @@ class LibContentView extends React.Component {
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
       const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
+      document.title = repoInfo.repo_name;
 
       this.setState({
         treeData: treeHelper.buildTree(),
@@ -336,6 +336,7 @@ class LibContentView extends React.Component {
       currentRepoInfo: null,
     });
     this.socket.close();
+    this.props.resetTitle();
   }
 
   componentDidUpdate(prevProps) {
@@ -492,7 +493,6 @@ class LibContentView extends React.Component {
 
   showDir = (path) => {
     let repoID = this.props.repoID;
-    this.props.resetTitle();
 
     if (!this.state.isSessionExpired) {
       // update state
@@ -2451,9 +2451,26 @@ class LibContentView extends React.Component {
         onCopyItem={this.onCopyItem}
       >
         <DndProvider backend={HTML5Backend}>
-          <MetadataStatusProvider repoID={repoID} repoInfo={currentRepoInfo} currentPath={path} hideMetadataView={this.hideMetadataView} statusCallback={this.metadataStatusCallback} >
-            <MetadataMiddlewareProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectTagsView={this.onTreeNodeClick} tagsChangedCallback={this.tagsChangedCallback}>
-              <MetadataProvider repoID={repoID} currentPath={path} repoInfo={currentRepoInfo} selectMetadataView={this.onTreeNodeClick} >
+          <MetadataStatusProvider
+            repoID={repoID}
+            repoInfo={currentRepoInfo}
+            currentPath={path}
+            hideMetadataView={this.hideMetadataView}
+            statusCallback={this.metadataStatusCallback}
+          >
+            <MetadataMiddlewareProvider
+              repoID={repoID}
+              currentPath={path}
+              repoInfo={currentRepoInfo}
+              selectTagsView={this.onTreeNodeClick}
+              tagsChangedCallback={this.tagsChangedCallback}
+            >
+              <MetadataProvider
+                repoID={repoID}
+                currentPath={path}
+                repoInfo={currentRepoInfo}
+                selectMetadataView={this.onTreeNodeClick}
+              >
                 <div className="main-panel-center flex-row">
                   <div className="cur-view-container">
                     {this.state.currentRepoInfo.status === 'read-only' &&
