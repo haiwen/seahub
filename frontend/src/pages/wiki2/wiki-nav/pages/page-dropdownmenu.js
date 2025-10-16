@@ -23,6 +23,9 @@ export default class PageDropdownMenu extends Component {
   constructor(props) {
     super(props);
     this.pageNameMap = this.calculateNameMap();
+    this.state = {
+      isImportPageMenuShown: false,
+    };
   }
 
   calculateNameMap = () => {
@@ -31,6 +34,20 @@ export default class PageDropdownMenu extends Component {
       map[page.name] = true;
       return map;
     }, {});
+  };
+
+  showImportPageMenu = (e) => {
+    if (e) e.stopPropagation();
+    if (!this.state.isImportPageMenuShown) {
+      this.setState({ isImportPageMenuShown: true });
+    }
+  };
+
+  hideImportPageMenu = (e) => {
+    if (e) e.stopPropagation();
+    if (this.state.isImportPageMenuShown) {
+      this.setState({ isImportPageMenuShown: false });
+    }
   };
 
   onDropdownToggle = (evt) => {
@@ -61,11 +78,11 @@ export default class PageDropdownMenu extends Component {
     this.props.duplicatePage({ from_page_id: page.id }, () => {}, this.duplicatePageFailure);
   };
 
-  importPage = () => {
+  importPage = (suffix) => {
     const { page } = this.props;
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.docx,.md';
+    fileInput.accept = suffix;
     fileInput.style.display = 'none';
 
     fileInput.addEventListener('change', (e) => {
@@ -148,7 +165,28 @@ export default class PageDropdownMenu extends Component {
           {this.renderItem(this.addPageBelow, 'enlarge', gettext('Add page below'))}
           {this.renderItem(this.duplicatePage, 'copy1', gettext('Duplicate page'))}
           {canDeletePage && this.renderItem(this.onDeletePage, 'delete1', gettext('Delete page'))}
-          {this.renderItem(this.importPage, 'import-sdoc', gettext('Import page'))}
+          <Dropdown
+            direction="right"
+            className="w-100"
+            inNavbar={true}
+            isOpen={this.state.isImportPageMenuShown}
+            toggle={() => {}}
+            onMouseEnter={this.showImportPageMenu}
+            onMouseLeave={this.hideImportPageMenu}
+          >
+            <DropdownToggle
+              tag="span"
+              className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2"
+              onMouseEnter={this.showImportPageMenu}
+            >
+              <i className={'sf3-font sf3-font-import-sdoc'} aria-hidden="true" />
+              {gettext('Import page')}
+            </DropdownToggle>
+            <DropdownMenu className="ml-0">
+              <DropdownItem key="import-docx" onClick={this.importPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
+              <DropdownItem key="import-md" onClick={this.importPage.bind(this, '.md')}>{gettext('Import page from Markdown')}</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
           <hr className='divider' />
           {this.renderItem(this.handleOpenInNewTab, 'open-in-new-tab', gettext('Open in new tab'))}
         </DropdownMenu>

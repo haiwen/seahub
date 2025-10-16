@@ -36,6 +36,7 @@ class WikiNav extends Component {
     this.state = {
       idFoldedStatusMap: {}, // Move idFoldedStatusMap to state
       isShowOperationDropdown: false,
+      isImportPageMenuShown: false,
     };
     this.folderClassNameCache = '';
     this.lastScrollTop = 0;
@@ -68,10 +69,24 @@ class WikiNav extends Component {
     this.setState({ isShowOperationDropdown: !this.state.isShowOperationDropdown });
   };
 
-  handleImportPage = () => {
+  showImportPageMenu = (e) => {
+    if (e) e.stopPropagation();
+    if (!this.state.isImportPageMenuShown) {
+      this.setState({ isImportPageMenuShown: true });
+    }
+  };
+
+  hideImportPageMenu = (e) => {
+    if (e) e.stopPropagation();
+    if (this.state.isImportPageMenuShown) {
+      this.setState({ isImportPageMenuShown: false });
+    }
+  };
+
+  handleImportPage = (suffix) => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    fileInput.accept = '.docx,.md';
+    fileInput.accept = suffix;
     fileInput.style.display = 'none';
 
     fileInput.addEventListener('change', (e) => {
@@ -176,10 +191,28 @@ class WikiNav extends Component {
                   flip={false}
                   modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
                 >
-                  <DropdownItem onClick={this.handleImportPage}>
-                    <i className="sf3-font sf3-font-import-sdoc" aria-hidden="true" />
-                    <span className="item-text">{gettext('Import page')}</span>
-                  </DropdownItem>
+                  <Dropdown
+                    direction="right"
+                    className="w-100"
+                    inNavbar={true}
+                    isOpen={this.state.isImportPageMenuShown}
+                    toggle={() => {}}
+                    onMouseEnter={this.showImportPageMenu}
+                    onMouseLeave={this.hideImportPageMenu}
+                  >
+                    <DropdownToggle
+                      tag="span"
+                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2"
+                      onMouseEnter={this.showImportPageMenu}
+                    >
+                      <i className={'sf3-font sf3-font-import-sdoc'} aria-hidden="true" />
+                      {gettext('Import page')}
+                    </DropdownToggle>
+                    <DropdownMenu className="ml-0">
+                      <DropdownItem key="import-docx" onClick={this.handleImportPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
+                      <DropdownItem key="import-md" onClick={this.handleImportPage.bind(this, '.md')}>{gettext('Import page from Markdown')}</DropdownItem>
+                    </DropdownMenu>
+                  </Dropdown>
                 </DropdownMenu>
               </Dropdown>
             </div>
