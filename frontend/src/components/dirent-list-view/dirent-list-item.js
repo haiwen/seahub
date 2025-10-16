@@ -801,6 +801,7 @@ class DirentListItem extends React.Component {
                 checked={isSelected}
                 aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
                 title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+                onChange={() => {}}
                 onClick={this.onItemSelected}
                 onKeyDown={Utils.onKeyDown}
               />

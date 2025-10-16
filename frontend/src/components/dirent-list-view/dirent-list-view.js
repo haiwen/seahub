@@ -674,6 +674,7 @@ class DirentListView extends React.Component {
             disabled={direntList.length === 0}
             aria-label={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
             title={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+            onChange={() => {}}
             onClick={this.props.onAllItemSelected}
             onKeyDown={Utils.onKeyDown}
           />

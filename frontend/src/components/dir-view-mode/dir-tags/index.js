@@ -44,6 +44,7 @@ const DirTags = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
     if (enableTags && canAdd) {
       operations.push(
         <OpIcon
+          key='0'
           className="tree-section-header-operation tree-section-create-operation sf3-font sf3-font-new"
           title={gettext('New tag')}
           op={openAddTag}
