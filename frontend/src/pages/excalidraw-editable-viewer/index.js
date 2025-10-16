@@ -14,7 +14,7 @@ const userInfo = {
   name: name || '',
   username: shareLinkUsername,
   contact_email: '',
-}
+};
 
 // used for support lib
 window.name = `${docUuid}`;
@@ -51,9 +51,9 @@ function ExcalidrawEdiableViewer() {
     updateAppIcon();
   }, []);
 
-  const onEditNameToggle = () => {
+  const onEditNameToggle = useCallback(() => {
     setIsEditName(true);
-  }
+  }, []);
 
   const onRenameConfirm = useCallback((value) => {
     setUsername(value);
@@ -63,15 +63,14 @@ function ExcalidrawEdiableViewer() {
       username: value,
       avatarURL: avatarURL,
     };
-    console.log(newUser);
     const socketManager = SocketManager.getInstance();
     socketManager.updateUserInfo(newUser);
     setIsEditName(false);
-  }, [])
+  }, []);
 
   const onRenameCancel = useCallback(() => {
     setIsEditName(false);
-  }, [])
+  }, []);
 
   return (
     <div className="exdraw-editable-viewer-wrapper">
