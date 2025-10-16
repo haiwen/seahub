@@ -1311,10 +1311,17 @@ def view_shared_file(request, fileshare):
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
 
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+
     if not request.user.is_authenticated:
         username = ANONYMOUS_EMAIL
+        if filetype == EXCALIDRAW:
+            username = str(time.time())
+        name = ANONYMOUS_EMAIL
     else:
         username = request.user.username
+        name = request.user.name
 
     # check file lock info
     try:
@@ -1329,8 +1336,6 @@ def view_shared_file(request, fileshare):
     can_copy_content = fileshare.get_permissions()['can_copy_content']
     can_download = fileshare.get_permissions()['can_download']
     can_edit = fileshare.get_permissions()['can_edit'] and (not is_locked or locked_by_online_office)
-    filename = os.path.basename(path)
-    filetype, fileext = get_file_type_and_ext(filename)
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1408,10 +1413,10 @@ def view_shared_file(request, fileshare):
         if not can_edit:
             ret_dict['excalidraw_access_token'] = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
         else:
-            name = username
-            username = str(time.time())
             ret_dict['excalidraw_access_token'] = gen_share_exdraw_access_token(file_uuid, filename, username, name, permission=exdraw_perm)
 
+        ret_dict['name'] = name
+        ret_dict['share_link_username'] = username
         send_file_access_msg(request, repo, path, 'web')
 
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
@@ -1538,6 +1543,8 @@ def view_shared_file(request, fileshare):
         data['excalidraw_access_token'] = ret_dict['excalidraw_access_token']
         data['can_edit_file'] = ret_dict['can_edit_file']
         data['file_perm'] = ret_dict['file_perm']
+        data['name'] = ret_dict['name']
+        data['share_link_username'] = ret_dict['share_link_username']
 
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user

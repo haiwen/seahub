@@ -52,7 +52,7 @@ const initializeScene = async () => {
   };
 };
 
-const SimpleEditor = () => {
+const SimpleEditor = ({ isSharedView = false }) => {
 
   const filePermRef = useRef(null);
   const initialStatePromiseRef = useRef({ promise: null });
@@ -231,9 +231,11 @@ const SimpleEditor = () => {
       >
         <MainMenu>
           <MainMenu.DefaultItems.SaveAsImage />
-          <MainMenu.Item className='sf3-font-upload-files sf3-font' onClick={onCustomImageDialogToggle}>
-            {gettext('Link image')}
-          </MainMenu.Item>
+          {!isSharedView && (
+            <MainMenu.Item className='sf3-font-upload-files sf3-font' onClick={onCustomImageDialogToggle}>
+              {gettext('Link image')}
+            </MainMenu.Item>
+          )}
           <MainMenu.DefaultItems.Help />
           <MainMenu.DefaultItems.ClearCanvas />
           <MainMenu.DefaultItems.ToggleTheme />
