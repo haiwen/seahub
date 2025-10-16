@@ -12,6 +12,7 @@ import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
+import OpIcon from '../../components/op-icon';
 
 dayjs.extend(relativeTime);
 
@@ -247,14 +248,11 @@ class Item extends Component {
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></td>
         <td>
-          <i
-            role="button"
+          <OpIcon
             className={`sf3-font sf3-font-x-01 op-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
             title={gettext('Unstar')}
-            aria-label={gettext('Unstar')}
-            onClick={this.unstar}
-          >
-          </i>
+            op={this.unstar}
+          />
         </td>
       </tr>
     );
