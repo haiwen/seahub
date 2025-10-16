@@ -82,11 +82,7 @@ export default class PageDropdownMenu extends Component {
     const { page } = this.props;
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
-    if (suffix === 'md') {
-      fileInput.accept = '.md';
-    } else {
-      fileInput.accept = '.docx';
-    }
+    fileInput.accept = suffix;
     fileInput.style.display = 'none';
 
     fileInput.addEventListener('change', (e) => {
@@ -186,9 +182,9 @@ export default class PageDropdownMenu extends Component {
               <i className={'sf3-font sf3-font-import-sdoc'} aria-hidden="true" />
               {gettext('Import page')}
             </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem key="import-docx" data-toggle="import-docx" onClick={this.importPage.bind(this, 'docx')}>{gettext('Import page from docx')}</DropdownItem>
-              <DropdownItem key="import-md" data-toggle="import-md" onClick={this.importPage.bind(this, 'md')}>{gettext('Import page from Markdown')}</DropdownItem>
+            <DropdownMenu className="ml-0">
+              <DropdownItem key="import-docx" onClick={this.importPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
+              <DropdownItem key="import-md" onClick={this.importPage.bind(this, '.md')}>{gettext('Import page from Markdown')}</DropdownItem>
             </DropdownMenu>
           </Dropdown>
           <hr className='divider' />
