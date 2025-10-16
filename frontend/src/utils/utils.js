@@ -177,7 +177,7 @@ export const Utils = {
         permissionOptions.push('download_upload');
       }
     } else {
-      if ((this.isEditableOfficeFile(path) || this.isEditableSdocFile(path)) && (permission == 'rw' || permission == 'admin') && canEdit) {
+      if ((this.isEditableOfficeFile(path) || this.isEditableSdocFile(path) || this.isEditableExdrawFile(path)) && (permission == 'rw' || permission == 'admin') && canEdit) {
         permissionOptions.push('edit_download');
       }
 
@@ -232,6 +232,20 @@ export const Utils = {
     const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
 
     if (enableSeadoc && file_ext == 'sdoc') {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  isEditableExdrawFile: function (filename) {
+    // no file ext
+    if (filename.lastIndexOf('.') == -1) {
+      return false;
+    }
+    const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+
+    if (enableSeadoc && file_ext == 'exdraw') {
       return true;
     } else {
       return false;

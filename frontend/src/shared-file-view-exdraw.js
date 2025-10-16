@@ -2,6 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Utils } from './utils/utils';
 import ExcaliViewer from './pages/excalidraw-viewer';
+import ExcalidrawEdiableViewer from './pages/excalidraw-editable-viewer';
 
 const { siteRoot, avatarURL } = window.app.config;
 const { username } = window.app.pageOptions;
@@ -36,4 +37,4 @@ window.seafile = {
 
 
 const root = createRoot(document.getElementById('wrapper'));
-root.render(<ExcaliViewer />);
+root.render(canEdit ? <ExcalidrawEdiableViewer /> : <ExcaliViewer />);

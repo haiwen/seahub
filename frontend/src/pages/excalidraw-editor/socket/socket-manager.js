@@ -65,6 +65,15 @@ class SocketManager {
     });
   }
 
+  updateUserInfo = (newUser) => {
+    const collaborators = new Map(this.collaborators);
+    this.config.user = newUser;
+    collaborators.set(newUser._username, newUser, { isCurrentUser: true });
+    this.collaborators = collaborators;
+
+    this.excalidrawAPI.updateScene({ collaborators });
+  };
+
   static getInstance = (excalidrawAPI, document, socketConfig) => {
     if (this.instance) {
       return this.instance;
@@ -254,7 +263,7 @@ class SocketManager {
     const { user, ...updates } = params;
     if (!collaborators.get(user._username)) return;
 
-    const newUser = Object.assign({}, collaborators.get(user._username), updates);
+    const newUser = Object.assign({}, collaborators.get(user._username), { ...updates, username: user.username });
     collaborators.set(newUser._username, newUser);
     this.collaborators = collaborators;
 

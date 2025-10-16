@@ -69,7 +69,7 @@ from seahub.utils.repo import is_repo_owner, parse_repo_perm, is_repo_admin
 from seahub.group.utils import is_group_member
 from seahub.seadoc.utils import get_seadoc_file_uuid, \
         gen_seadoc_access_token, is_seadoc_revision, gen_share_seadoc_access_token
-from seahub.exdraw.utils import get_exdraw_file_uuid, gen_exdraw_access_token
+from seahub.exdraw.utils import get_exdraw_file_uuid, gen_exdraw_access_token, gen_share_exdraw_access_token
 from seahub.seadoc.models import SeadocRevision
 
 import seahub.settings as settings
@@ -386,6 +386,10 @@ def can_preview_file(file_name, file_size, repo):
         error_msg = "File preview unsupported"
         return False, error_msg
 
+    elif filetype in (EXCALIDRAW) and not ENABLE_SEADOC:
+        error_msg = "File preview unsupported"
+        return False, error_msg
+
     elif fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
             fileext in ONLYOFFICE_FILE_EXTENSION:
 
@@ -433,6 +437,9 @@ def can_edit_file(file_name, file_size, repo):
         return True, ''
 
     if file_type in (SEADOC) and ENABLE_SEADOC:
+        return True, ''
+
+    if file_type in (EXCALIDRAW) and ENABLE_SEADOC:
         return True, ''
 
     if ENABLE_OFFICE_WEB_APP_EDIT and \
@@ -1304,10 +1311,17 @@ def view_shared_file(request, fileshare):
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
 
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+
     if not request.user.is_authenticated:
         username = ANONYMOUS_EMAIL
+        if filetype == EXCALIDRAW:
+            username = str(time.time())
+        name = ANONYMOUS_EMAIL
     else:
         username = request.user.username
+        name = request.user.name
 
     # check file lock info
     try:
@@ -1322,8 +1336,6 @@ def view_shared_file(request, fileshare):
     can_copy_content = fileshare.get_permissions()['can_copy_content']
     can_download = fileshare.get_permissions()['can_download']
     can_edit = fileshare.get_permissions()['can_edit'] and (not is_locked or locked_by_online_office)
-    filename = os.path.basename(path)
-    filetype, fileext = get_file_type_and_ext(filename)
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1398,8 +1410,13 @@ def view_shared_file(request, fileshare):
         exdraw_perm = 'rw' if can_edit else 'r'
         ret_dict['file_perm'] = exdraw_perm
 
-        ret_dict['excalidraw_access_token'] = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
+        if not can_edit:
+            ret_dict['excalidraw_access_token'] = gen_exdraw_access_token(file_uuid, filename, username, permission=exdraw_perm)
+        else:
+            ret_dict['excalidraw_access_token'] = gen_share_exdraw_access_token(file_uuid, filename, username, name, permission=exdraw_perm)
 
+        ret_dict['name'] = name
+        ret_dict['share_link_username'] = username
         send_file_access_msg(request, repo, path, 'web')
 
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
@@ -1526,6 +1543,8 @@ def view_shared_file(request, fileshare):
         data['excalidraw_access_token'] = ret_dict['excalidraw_access_token']
         data['can_edit_file'] = ret_dict['can_edit_file']
         data['file_perm'] = ret_dict['file_perm']
+        data['name'] = ret_dict['name']
+        data['share_link_username'] = ret_dict['share_link_username']
 
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user

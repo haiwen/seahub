@@ -1,0 +1,87 @@
+#wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+}
+
+.exdraw-editable-viewer-wrapper {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.exdraw-editable-viewer-wrapper .exdraw-editable-viewer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e6e8;
+  flex-shrink: 0;
+  height: 56px;
+  position: relative;
+  background-color: #fff;
+}
+
+.exdraw-editable-viewer-wrapper .exdraw-editable-viewer-content {
+  flex: 1;
+  display: flex
+}
+
+.exdraw-editable-viewer-header .doc-info {
+  display: flex;
+  align-items: center;
+}
+
+.exdraw-editable-viewer-header .doc-info .doc-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #212529;
+}
+
+.exdraw-editable-viewer-header .doc-ops .collaborator-name {
+  margin-right: 10px;
+}
+
+.exdraw-editable-viewer-header .doc-ops .sdocfont {
+  font-size: 14px;
+  display: inline-block;
+  color: #6e7687;
+}
+
+.exdraw-editable-viewer-header .doc-ops .sdocfont:hover {
+  color: #333;
+  cursor: pointer;
+}
+
+
+
+.exdraw-editable-viewer-content .excali-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.exdraw-editable-viewer-content .excali-container .excali-tip-message {
+  position: absolute;
+  top: 16px;
+  left: 60px;
+  z-index: 2;
+  color: #999;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.excalidraw .popover {
+  filter: none;
+  --bs-popover-border-color: transparent;
+}
+
+.excalidraw .dropdown-menu {
+  display: block;
+  border: unset;
+  --bs-dropdown-border-radius: 10px;
+  --bs-dropdown-padding-x: auto;
+}
