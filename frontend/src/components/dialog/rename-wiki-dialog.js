@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Alert, Label } from 'reactstrap';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
@@ -19,7 +19,6 @@ class RenameWikiDialog extends React.Component {
       errMessage: '',
       isSubmitBtnActive: false,
     };
-    this.newInput = React.createRef();
   }
 
   handleChange = (e) => {
@@ -70,13 +69,10 @@ class RenameWikiDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle} autoFocus={false}>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Rename Wiki')}</SeahubModalHeader>
         <ModalBody>
-          <p>{gettext('New Wiki name')}</p>
+          <Label for="rename-wiki-input">{gettext('Rename Wiki to')}</Label>
           <Input
             onKeyDown={this.handleKeyDown}
-            innerRef={this.newInput}
-            placeholder="newName"
-            name="new-wiki-name"
-            id="new-wiki-name"
+            name="rename-wiki-input"
             value={this.state.newName}
             onChange={this.handleChange}
             autoFocus={true}
