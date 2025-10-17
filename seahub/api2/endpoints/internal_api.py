@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 import os
-import posixpath
 import re
 from io import BytesIO
 import requests
