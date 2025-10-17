@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils, validateName } from '../../utils/utils';
-import { Button, Modal, Input, ModalBody, ModalFooter, Alert } from 'reactstrap';
+import { Button, Modal, Input, ModalBody, ModalFooter, Alert, Label } from 'reactstrap';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 const propTypes = {
@@ -17,25 +17,24 @@ class Rename extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newName: '',
+      newName: this.props.dirent.name,
       errMessage: '',
       isSubmitBtnActive: false,
     };
     this.newInput = React.createRef();
   }
 
-  UNSAFE_componentWillMount() {
-    this.setState({ newName: this.props.dirent.name });
-  }
-
   componentDidMount() {
-    const { dirent } = this.props;
-    this.changeState(dirent);
+    this.updateName(this.props.dirent);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.changeState(nextProps.dirent);
+    this.updateName(nextProps.dirent);
   }
+
+  updateName = (dirent) => {
+    this.setState({ newName: dirent.name });
+  };
 
   handleChange = (e) => {
     if (!e.target.value.trim()) {
@@ -76,11 +75,6 @@ class Rename extends React.Component {
     this.props.toggleCancel();
   };
 
-  changeState = (dirent) => {
-    let name = dirent.name;
-    this.setState({ newName: name });
-  };
-
   onAfterModelOpened = () => {
     if (!this.newInput.current) return;
     const { dirent } = this.props;
@@ -100,11 +94,12 @@ class Rename extends React.Component {
       <Modal isOpen={true} toggle={this.toggle} onOpened={this.onAfterModelOpened}>
         <SeahubModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</SeahubModalHeader>
         <ModalBody>
-          <p>{type === 'file' ? gettext('New file name') : gettext('New folder name')}</p>
+          <Label for={type === 'file' ? 'new-file-name' : 'new-folder-name'}>
+            {type === 'file' ? gettext('New file name') : gettext('New folder name')}
+          </Label>
           <Input
             onKeyDown={this.handleKeyDown}
             innerRef={this.newInput}
-            placeholder="newName"
             value={this.state.newName}
             onChange={this.handleChange}
             name={type === 'file' ? 'new-file-name' : 'new-folder-name'}
