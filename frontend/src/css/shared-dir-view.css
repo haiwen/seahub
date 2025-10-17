@@ -125,10 +125,6 @@ body {
   animation: displaySelectedToolbar .3s ease-in-out 1;
 }
 
-#shared-dir-view #cur-view-change-mode-dropdown {
-  margin-right: 8px;
-}
-
 .grid-item .action-icon {
   position: absolute;
   top: 10px;

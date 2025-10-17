@@ -4,6 +4,8 @@ import { gettext, siteRoot, name } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
+import OpIcon from '../../components/op-icon';
+import OpElement from '../../components/op-element';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import toaster from '../toast';
 import { Dirent } from '../../models';
@@ -326,24 +328,48 @@ class SelectedDirentsToolbar extends React.Component {
 
     return (
       <div className="selected-dirents-toolbar">
-        <span className="cur-view-path-btn px-2" onClick={this.props.unSelectDirent}>
-          <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+        <OpElement
+          className="cur-view-path-btn px-2"
+          title={gettext('Unselect')}
+          op={this.props.unSelectDirent}
+        >
+          <span className="sf3-font-x-01 sf3-font mr-2"></span>
           <span>{selectedLen}{' '}{gettext('selected')}</span>
-        </span>
+        </OpElement>
         {canDownload &&
-          <span className="cur-view-path-btn sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')} onClick={this.onDownload}></span>
+          <OpIcon
+            className="cur-view-path-btn sf3-font-download1 sf3-font"
+            title={gettext('Download')}
+            op={this.onDownload}
+          />
         }
         {canDelete &&
-          <span className="cur-view-path-btn sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')} onClick={this.onItemsDelete}></span>
+          <OpIcon
+            className="cur-view-path-btn sf3-font-delete1 sf3-font"
+            title={gettext('Delete')}
+            op={this.onItemsDelete}
+          />
         }
         {selectedLen == 1 && this.getDirentSharePerm() &&
-          <span className="cur-view-path-btn sf3-font-share sf3-font" aria-label={gettext('Share')} title={gettext('Share')} onClick={this.onShare}></span>
+          <OpIcon
+            className="cur-view-path-btn sf3-font-share sf3-font"
+            title={gettext('Share')}
+            op={this.onShare}
+          />
         }
         {canModify &&
-          <span className="cur-view-path-btn sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')} onClick={this.onMove}></span>
+          <OpIcon
+            className="cur-view-path-btn sf3-font-move1 sf3-font"
+            title={gettext('Move')}
+            op={this.onMove}
+          />
         }
         {canCopy &&
-          <span className="cur-view-path-btn sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')} onClick={this.onCopy}></span>
+          <OpIcon
+            className="cur-view-path-btn sf3-font-copy1 sf3-font"
+            title={gettext('Copy')}
+            op={this.onCopy}
+          />
         }
         {selectedLen === 1 &&
           <ItemDropdownMenu

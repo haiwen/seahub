@@ -396,10 +396,8 @@ class Libraries extends Component {
               <h3 className="sf-heading m-0">{gettext('Files')}</h3>
               {isDesktop &&
               <div className="d-flex align-items-center">
-                <div className="mr-2">
-                  <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
-                </div>
-                <ReposSortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+                <ViewModes currentViewMode={currentViewMode} switchViewMode={this.switchViewMode} />
+                <ReposSortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
               </div>
               }
             </div>

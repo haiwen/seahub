@@ -10,6 +10,7 @@ import { debounce, Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
+import OpIcon from '../../components/op-icon';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -235,15 +236,11 @@ class DirPath extends React.Component {
     const pathElem = this.turnPathToLink(currentPath);
     return (
       <div className="path-container dir-view-path">
-        <span
-          className="cur-view-path-btn mr-1"
+        <OpIcon
+          className="cur-view-path-btn mr-1 sf3-font-side-bar sf3-font"
           title={isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel')}
-          onClick={this.props.toggleTreePanel}
-          aria-label={isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel')}
-          role="button"
-        >
-          <span className="sf3-font-side-bar sf3-font" aria-hidden="true"></span>
-        </span>
+          op={this.props.toggleTreePanel}
+        />
         {this.props.pathPrefix && this.props.pathPrefix.map((item, index) => {
           return (
             <Fragment key={index}>
@@ -282,7 +279,17 @@ class DirPath extends React.Component {
           >
             <span className="last-path-item" title={repoName}>{repoName}</span>
           </DirOperationToolbar> :
-          <span className="path-item" data-path="/" onClick={this.onPathClick} role="button" title={repoName}>{repoName}</span>
+          <span
+            className="path-item"
+            data-path="/"
+            onClick={this.onPathClick}
+            onKeyDown={Utils.onKeyDown}
+            role="button"
+            title={repoName}
+            tabIndex="0"
+          >
+            {repoName}
+          </span>
         }
         {pathElem}
       </div>

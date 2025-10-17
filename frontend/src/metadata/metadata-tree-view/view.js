@@ -237,10 +237,14 @@ const ViewItem = ({
       <div
         className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
         title={viewName}
+        aria-label={viewName}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
+        onFocus={onMouseEnter}
         onClick={() => onClick(view, isSelected)}
+        onKeyDown={Utils.onKeyDown}
+        tabIndex="0"
       >
         <div
           className="tree-node-text"

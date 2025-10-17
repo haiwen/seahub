@@ -880,7 +880,7 @@ class SharedDirView extends React.Component {
                 {isDesktop && (
                   <div className="cur-view-path-right ml-4">
                     <ViewModes currentViewMode={mode} switchViewMode={this.switchMode} />
-                    <SortMenu sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+                    <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
                   </div>
                 )}
               </div>

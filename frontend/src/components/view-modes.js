@@ -57,16 +57,17 @@ class ViewModes extends React.Component {
       <Dropdown
         isOpen={isDropdownMenuOpen}
         toggle={this.toggleDropdownMenu}
-        id="cur-view-change-mode-dropdown"
       >
         <DropdownToggle
-          className="border-0 font-weight-normal cur-view-path-btn px-1"
+          tag="i"
+          role="button"
+          tabIndex="0"
+          className={`sf3-font sf3-font-${currentViewMode}-view cur-view-path-btn px-1`}
           title={gettext('Switch view mode')}
           data-toggle="dropdown"
           aria-label={gettext('Switch view mode')}
           aria-expanded={isDropdownMenuOpen}
         >
-          <i className={`sf3-font sf3-font-${currentViewMode}-view`}></i>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {options.map((item, index) => {

@@ -5,6 +5,7 @@ import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
 import { gettext } from '@/utils/constants';
+import OpIcon from '../../components/op-icon';
 
 const LEFT_INDENT = 20;
 
@@ -299,6 +300,9 @@ class TreeNodeView extends React.Component {
           onMouseDown={this.onItemMouseDown}
           onContextMenu={this.onItemContextMenu}
           onClick={this.onNodeClick}
+          onKeyDown={Utils.onKeyDown}
+          onFocus={this.onMouseEnter}
+          tabIndex="0"
         >
           <div
             className="tree-node-text"
@@ -313,14 +317,12 @@ class TreeNodeView extends React.Component {
           </div>
           <div className="left-icon" style={{ left: leftIndent - 40 }}>
             {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
-              <i
+              <OpIcon
                 className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
+                title={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
                 onMouseDown={e => e.stopPropagation()}
-                onClick={this.onLoadToggle}
-                role="button"
-                aria-label={node.isExpanded ? gettext('Collapse') : gettext('Expand')}
-              >
-              </i>
+                op={this.onLoadToggle}
+              />
             )}
             <i className="tree-node-icon">{icon}</i>
           </div>

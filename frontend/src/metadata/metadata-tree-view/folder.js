@@ -269,13 +269,20 @@ const ViewsFolder = ({
   return (
     <div className="tree-node views-folder-wrapper">
       <div
-        className={classnames('tree-node-inner views-folder-main text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-drop': isDropShow, 'tree-node-sort': isSortShow })}
+        className={classnames('tree-node-inner views-folder-main text-nowrap', {
+          'tree-node-inner-hover': highlight,
+          'tree-node-drop': isDropShow,
+          'tree-node-sort': isSortShow
+        })}
         type="dir"
         title={folderName}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
+        onFocus={onMouseEnter}
         onClick={clickFolder}
+        onKeyDown={Utils.onKeyDown}
+        tabIndex="0"
       >
         <div
           className="tree-node-text views-folder-name"
@@ -298,7 +305,6 @@ const ViewsFolder = ({
         <div className="left-icon" style={{ left: leftIndent - 40 }}>
           <i
             className={classnames('folder-toggle-icon sf3-font sf3-font-down', { 'rotate-270': !expanded })}
-            aria-hidden="true"
           >
           </i>
           <span className="tree-node-icon">

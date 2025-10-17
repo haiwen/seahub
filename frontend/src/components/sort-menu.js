@@ -6,6 +6,7 @@ import { gettext } from '../utils/constants';
 import '../css/item-dropdown-menu.css';
 
 const propTypes = {
+  className: PropTypes.string,
   sortBy: PropTypes.string,
   sortOrder: PropTypes.string,
   sortOptions: PropTypes.array,
@@ -37,7 +38,7 @@ class SortMenu extends React.Component {
 
   render() {
     const { isDropdownMenuOpen } = this.state;
-    const { sortBy, sortOrder } = this.props;
+    const { sortBy, sortOrder, className } = this.props;
     const sortOptions = this.sortOptions.map(item => {
       return {
         ...item,
@@ -49,15 +50,18 @@ class SortMenu extends React.Component {
       <Dropdown
         isOpen={isDropdownMenuOpen}
         toggle={this.toggleDropdownMenu}
+        className={className || ''}
       >
         <DropdownToggle
-          className="border-0 font-weight-normal cur-view-path-btn px-1"
+          tag="i"
+          role="button"
+          tabIndex="0"
+          className="sf3-font-sort2 sf3-font cur-view-path-btn px-1"
           title={gettext('Switch sort mode')}
           data-toggle="dropdown"
           aria-label={gettext('Switch sort mode')}
           aria-expanded={isDropdownMenuOpen}
         >
-          <i className="sf3-font-sort2 sf3-font"></i>
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {sortOptions.map((item, index) => {

@@ -661,13 +661,11 @@ class DirentListView extends React.Component {
       ];
     }
 
-    const sortIcon = <span aria-hidden="true" className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
+    const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
     return [
       { isFixed: true,
         width: 31,
         className: 'pl10 pr-2 cursor-pointer',
-        title: isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
-        ariaLabel: isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items'),
         children: (
           <input
             type="checkbox"
@@ -675,13 +673,12 @@ class DirentListView extends React.Component {
             checked={isAllItemSelected}
             disabled={direntList.length === 0}
             aria-label={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-            readOnly
+            title={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+            onChange={() => {}}
+            onClick={this.props.onAllItemSelected}
+            onKeyDown={Utils.onKeyDown}
           />
         ),
-        onClick: (e) => {
-          e.stopPropagation();
-          this.props.onAllItemSelected();
-        }
       },
       {
         isFixed: true, width: 32, className: 'pl-2 pr-2', // star

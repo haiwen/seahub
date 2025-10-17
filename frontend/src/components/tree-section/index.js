@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { TREE_PANEL_SECTION_STATE_KEY } from '../../constants';
+import OpIcon from '../../components/op-icon';
+import { gettext } from '../../utils/constants';
 
 import './index.css';
 
@@ -71,17 +73,21 @@ const TreeSection = ({ repoID, stateStorageKey, title, children, renderHeaderOpe
   return (
     <div className={classnames('tree-section', className)}>
       <div
+        tabIndex="0"
         className={classnames('tree-section-header', { 'tree-section-header-hover': highlight })}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
+        onFocus={onMouseEnter}
       >
-        <div className="tree-section-header-title">{title}</div>
+        <span className="tree-section-header-title">{title}</span>
         <div className="tree-section-header-operations">
           {renderOperations()}
-          <div className="tree-section-header-operation" onClick={toggleShowChildren}>
-            <i aria-hidden="true" className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
-          </div>
+          <OpIcon
+            className={`tree-section-header-operation sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}
+            op={toggleShowChildren}
+            title={showChildren ? gettext('Fold') : gettext('Unfold')}
+          />
         </div>
       </div>
       {showChildren && (

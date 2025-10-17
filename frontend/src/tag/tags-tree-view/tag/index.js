@@ -7,6 +7,7 @@ import { getRowById } from '../../../components/sf-table/utils/table';
 import { useTags } from '../../hooks';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../../constants/sidebar-tree';
 import { getAllChildTagsIdsFromNode } from '../../utils/tree';
+import { Utils } from '../../../utils/utils';
 
 import './index.css';
 
@@ -93,10 +94,13 @@ const Tag = ({ node, currentPath, leftIndent, selectedNodeKey, expanded, checkNo
       <div
         className={classnames('tree-node-inner text-nowrap tag-tree-node', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
         title={`${tagName} (${tagCount})`}
+        aria-label={`${tagName} (${tagCount})`}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
         onMouseLeave={onMouseLeave}
         onClick={() => selectNode(node)}
+        tabIndex="0"
+        onKeyDown={Utils.onKeyDown}
       >
         <div className="tree-node-text tag-tree-node-text" style={{ paddingLeft: leftIndent + NODE_TEXT_LEFT_INDENT_UNIT }}>
           <div className="tag-tree-node-name">{tagName}</div>

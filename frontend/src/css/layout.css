@@ -323,10 +323,6 @@ img[src=""],img:not([src]) { /* for first loading img*/
   color: #444;
 }
 
-.dir-tool>div {
-  margin-left: 8px;
-}
-
 .dir-tool {
   height: 1.5rem;
   display: flex;

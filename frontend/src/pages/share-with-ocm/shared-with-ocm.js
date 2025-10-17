@@ -433,13 +433,12 @@ class SharedWithOCM extends Component {
                   <h3 className="sf-heading m-0">{gettext('Shared from other servers')}</h3>
                   {Utils.isDesktop() && (
                     <div className="d-flex align-items-center">
-                      <div className="mr-2">
-                        <ViewModes
-                          currentViewMode={currentViewMode}
-                          switchViewMode={this.switchViewMode}
-                        />
-                      </div>
+                      <ViewModes
+                        currentViewMode={currentViewMode}
+                        switchViewMode={this.switchViewMode}
+                      />
                       <ReposSortMenu
+                        className="ml-2"
                         sortOptions={this.sortOptions}
                         sortBy={sortBy}
                         sortOrder={sortOrder}
