@@ -1,6 +1,11 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 import os
+import posixpath
+import re
+from io import BytesIO
+import requests
+import json
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,8 +16,12 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_valid_internal_jwt, get_user_common_info
 from seahub.base.accounts import User
 from seahub.repo_api_tokens.models import RepoAPITokens
+from seahub.seadoc.utils import gen_seadoc_image_parent_path, get_seadoc_asset_upload_link
+from seahub.settings import SERVICE_URL
 from seahub.share.models import UploadLinkShare, FileShare, check_share_link_access, check_share_link_access_by_scope
 from seaserv import seafile_api
+
+from seahub.tags.models import FileUUIDMap
 from seahub.utils.repo import parse_repo_perm
 from seahub.views.file import send_file_access_msg, FILE_TYPE_FOR_NEW_FILE_LINK
 from seahub.utils import normalize_file_path, get_file_type_and_ext
@@ -28,6 +37,7 @@ AVAILABLE_OPS = [
     OP_DOWNLOAD
 ]
 
+SEADOC_IMAGE_CONVERT_LIMIT = 50
 
 class InternalUserListView(APIView):
     throttle_classes = (UserRateThrottle, )
@@ -278,3 +288,95 @@ class CheckShareLinkThumbnailAccess(APIView):
             'share_type': share_obj.s_type
         }
         return Response(resp_json)
+
+
+class InternalConvertSeadocImage(APIView):
+    authentication_classes = ()
+    throttle_classes = (UserRateThrottle,)
+    
+    def _handle_outer_image(self, repo_id, doc_uuid, image_url, image_name):
+        resp = requests.get(image_url)
+        image_content = resp.content
+        parent_path = gen_seadoc_image_parent_path(doc_uuid, repo_id, '')
+
+        upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, '')
+        files = {'file': (f'{image_name}', BytesIO(image_content))}
+        data = {'parent_dir': parent_path}
+        requests.post(upload_link, files=files, data=data)
+        
+    def _handle_inner_image(self, repo_id, doc_uuid, image_url, image_name):
+        md_img_url_re = re.compile(r"^(.+?)/lib/([-a-f0-9]{36})/file/(.+?)(\?|$)", re.IGNORECASE)
+        seadoc_img_url_re =  re.compile("^(.+?)/api/v2.1/seadoc/download-image/([-a-f0-9]{36})/(.+?)(\?|$)", re.IGNORECASE)
+        is_md_image, is_seadoc_image, match_result = False, False, None
+        md_match_result = md_img_url_re.match(image_url)
+        seadoc_match_result = seadoc_img_url_re.match(image_url)
+        
+        if md_match_result:
+            is_md_image = True
+            match_result = md_match_result
+        elif seadoc_match_result:
+            is_seadoc_image = True
+            match_result = seadoc_match_result
+        else:
+            logger.warning(f"Failed to covert seadoc image: {image_url}")
+            return
+        
+        if is_md_image:
+            src_repo_id = match_result.group(2)
+            src_file_path = match_result.group(3)
+            src_dir = os.path.dirname(src_file_path)
+            src_file_name = os.path.basename(src_file_path)
+        elif is_seadoc_image:
+            src_doc_uuid = match_result.group(2)
+            src_file_name = match_result.group(3)
+            src_uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(src_doc_uuid)
+            if not src_uuid_map:
+                error_msg = 'src seadoc uuid %s not found.' % doc_uuid
+                raise error_msg
+            
+            src_repo_id = src_uuid_map.repo_id
+            src_dir = gen_seadoc_image_parent_path(src_doc_uuid, src_repo_id, '')
+        else:
+            return
+
+        dst_dir = gen_seadoc_image_parent_path(doc_uuid, repo_id, '')
+        seafile_api.copy_file(
+            src_repo_id, src_dir,
+            json.dumps([src_file_name]),
+            repo_id, dst_dir,
+            json.dumps([image_name]),
+            '', 0, synchronous=1
+        )
+        
+    def post(self, request, doc_uuid):
+        # jwt permission check
+        auth = request.headers.get('authorization', '').split()
+        if not is_valid_internal_jwt(auth, provided_key='seadoc'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        image_name_url_map = request.data.get('image_name_url_map')
+        if not image_name_url_map:
+            return Response({'success': True})
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(doc_uuid)
+        if not uuid_map:
+            error_msg = 'seadoc uuid %s not found.' % doc_uuid
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_id = uuid_map.repo_id
+        count = 0
+        for image_name, image_url in image_name_url_map.items():
+            try:
+                if SERVICE_URL in image_url:
+                    self._handle_inner_image(repo_id, doc_uuid, image_url, image_name)
+                else:
+                    self._handle_outer_image(repo_id, doc_uuid, image_url, image_name)
+                count += 1
+            except Exception as e:
+                logger.error(e)
+                continue
+            if count >= SEADOC_IMAGE_CONVERT_LIMIT:
+                break
+            
+        return Response({'success': True})
