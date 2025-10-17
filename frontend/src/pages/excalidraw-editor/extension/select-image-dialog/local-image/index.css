@@ -103,6 +103,18 @@
   height: 36px;
 }
 
+.sdoc-file-info .item-right-icon {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  position: absolute;
+  right: 8px;
+}
+
+.sdoc-file-info .item-right-icon svg {
+  fill: #666;
+}
+
 .sdoc-folder-container.sdoc-folder-search-results .sdoc-file-name,
 .sdoc-search-folder-name {
   height: 19.5px;
