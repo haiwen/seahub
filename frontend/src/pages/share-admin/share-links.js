@@ -19,6 +19,8 @@ import Selector from '../../components/single-selector';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
+import OpElement from '../../components/op-element';
+import OpIcon from '../../components/op-icon';
 
 import '../../css/share-admin-links.css';
 
@@ -89,6 +91,7 @@ class Content extends Component {
                   checked={isAllLinksSelected}
                   className="vam"
                   onChange={this.toggleSelectAllLinks}
+                  onKeyDown={Utils.onKeyDown}
                   aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
                 />
               )
@@ -288,6 +291,7 @@ class Item extends Component {
                 className="vam"
                 onClick={this.onCheckboxClicked}
                 onChange={this.toggleSelectLink}
+                onKeyDown={Utils.onKeyDown}
                 aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
               />
             </td>
@@ -318,23 +322,17 @@ class Item extends Component {
             <td>
               <div className="d-flex align-items-center">
                 {!item.is_expired &&
-                <i
-                  role="button"
+                <OpIcon
                   className={`sf2-icon-link op-icon ${isOpIconShown ? '' : 'invisible'}`}
                   title={gettext('View')}
-                  aria-label={gettext('View')}
-                  onClick={this.viewLink}
-                >
-                </i>
+                  op={this.viewLink}
+                />
                 }
-                <i
-                  role="button"
+                <OpIcon
                   className={`sf3-font-delete1 sf3-font op-icon ${isOpIconShown ? '' : 'invisible'}`}
                   title={gettext('Remove')}
-                  aria-label={gettext('Remove')}
-                  onClick={this.removeLink}
-                >
-                </i>
+                  op={this.removeLink}
+                />
               </div>
             </td>
           </tr>
@@ -564,13 +562,19 @@ class ShareAdminShareLinks extends Component {
               {selectedLinksLen > 0
                 ? (
                   <div className="selected-items-toolbar">
-                    <span className="cur-view-path-btn px-1" onClick={this.cancelSelectAllLinks}>
-                      <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+                    <OpElement
+                      className="cur-view-path-btn px-1"
+                      op={this.cancelSelectAllLinks}
+                      title={gettext('Unselect')}
+                    >
+                      <span className="sf3-font-x-01 sf3-font mr-2"></span>
                       <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
-                    </span>
-                    <span className="cur-view-path-btn ml-4" onClick={this.toggleDeleteShareLinksDialog}>
-                      <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
-                    </span>
+                    </OpElement>
+                    <OpIcon
+                      className="cur-view-path-btn ml-4 sf3-font-delete1 sf3-font"
+                      title={gettext('Delete')}
+                      op={this.toggleDeleteShareLinksDialog}
+                    />
                   </div>
                 )
                 : (

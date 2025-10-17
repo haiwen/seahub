@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
+import { Utils } from '../utils/utils';
 
 import '../css/single-selector.css';
 
@@ -71,20 +72,33 @@ class Selector extends Component {
     } = this.props;
     return (
       <div className="sf-single-selector position-relative">
-        <div onClick={this.onToggleClick} role='button' aria-label={gettext('Toggle selector menu')}>
+        <div
+          role='button'
+          tabIndex="0"
+          aria-label={gettext('Toggle selector menu')}
+          onClick={this.onToggleClick}
+          onKeyDown={Utils.onKeyDown}
+        >
           {customSelectorToggle ? customSelectorToggle : (
             <span className="cur-option">
               {currentSelectedOption ? currentSelectedOption.text : ''}
-              {isDropdownToggleShown && <i aria-hidden="true" className="sf3-font sf3-font-down ml-1 toggle-icon"></i>}
+              {isDropdownToggleShown && <i className="sf3-font sf3-font-down ml-1 toggle-icon"></i>}
             </span>
           )}
         </div>
         {isPopoverOpen && (
           <div className={`options-container position-absolute rounded shadow mt-1 ${menuCustomClass}`} ref={ref => this.selector = ref}>
-            <ul className="option-list list-unstyled py-3 o-auto">
+            <ul className="option-list list-unstyled py-3 o-auto" role="menu">
               {options.map((item, index) => {
                 return (
-                  <li key={index} className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center" onClick={(e) => {this.selectItem(e, item);}}>
+                  <li
+                    key={index}
+                    tabIndex="0"
+                    role="menuitem"
+                    className="option-item h-6 py-1 px-3 d-flex justify-content-between align-items-center"
+                    onClick={(e) => {this.selectItem(e, item);}}
+                    onKeyDown={Utils.onKeyDown}
+                  >
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
                     <i className={`sf2-icon-tick ${item.isSelected ? '' : 'invisible'}`}></i>
                   </li>

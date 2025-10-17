@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { gettext } from '../../utils/constants';
 import Select, { components } from 'react-select';
+import { gettext } from '../../utils/constants';
 import { MenuSelectStyle } from '../common/select';
+import OpIcon from '../../components/op-icon';
+
 import '../../css/select-editor.css';
 
 const propTypes = {
@@ -148,13 +150,11 @@ class SelectEditor extends React.Component {
         {(isTextMode && !this.state.isEditing) &&
           <div className="d-flex align-item-center">
             <span>{this.props.translateOption(currentOption)}</span>
-            <i
-              role="button"
-              aria-label={gettext('Edit')}
-              title={gettext('Edit')}
+            <OpIcon
               className={classnames('sf3-font sf3-font-rename op-icon ml-1', { 'invisible': !isEditIconShow })}
-              onClick={this.onEditPermission}>
-            </i>
+              title={gettext('Edit')}
+              op={this.onEditPermission}
+            />
           </div>
         }
       </div>
