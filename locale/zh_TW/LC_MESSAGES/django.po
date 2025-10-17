@@ -416,7 +416,7 @@ msgstr "密碼已重置為: %s"
 #: seahub/api2/endpoints/admin/users.py:1536
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr "成功將用戶 %(user)s 的密碼重置為 %(passwd)s, 一封郵件已發送。"
+msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:1540 seahub/views/sysadmin.py:524
 #, python-format
@@ -1111,13 +1111,13 @@ msgstr "該資料庫中的檔案無法線上查看。"
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr "您的配额已近滿，請聯繫管理員。"
+msgstr ""
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr "團隊配额已近滿，請聯繫管理員。"
+msgstr ""
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1786,7 +1786,7 @@ msgstr "新檔案 <a href='%(file_link)s'>%(file_name)s</a> 上傳到了 <a href
 #: seahub/notifications/models.py:617
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr "新檔案 <a href='%(file_link)s'>%(file_name)s</a> 上傳到了 <a href='%(link)s'>%(name)s</a>"
+msgstr ""
 
 #: seahub/notifications/models.py:652
 #, python-format
@@ -1798,7 +1798,7 @@ msgstr "新資料夾 <a href='%(folder_link)s'>%(folder_name)s</a> 上傳到了 
 #: seahub/notifications/models.py:659
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr "新資料夾 <a href='%(folder_link)s'>%(folder_name)s</a> 上傳到了 <a href='%(link)s'>%(name)s</a>"
+msgstr ""
 
 #: seahub/notifications/models.py:793
 #, python-format
@@ -2062,7 +2062,7 @@ msgstr "%(author)s 在文件 %(sdoc_name)s 中添加了新的回覆。"
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr "%(author)s 在文件 %(sdoc_name)s 中將評論 \"%(resolve_comment)s\" 標記為已解決。"
+msgstr ""
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
@@ -2131,7 +2131,7 @@ msgstr "您的團隊 %(org_name)s 已被停用。"
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr "如果您喜歡繼續使用我們的網站，請點擊 <a href=\"%(link)s\">這裡</a>。否則，您的帳戶將在 60 天內被刪除。"
+msgstr ""
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2337,14 +2337,14 @@ msgstr "驗證碼為 %(code)s。有效時間為一小時。"
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr "您已收到 %(shared_from)s 分享的文件鏈接。"
+msgstr ""
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr "您可以點擊 <a href=%(url)s>這裡</a> 來驗證您的電郵地址並訪問它。"
+msgstr ""
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
@@ -2508,7 +2508,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr "您的團隊已停用，請重新啟用並重新登入。"
+msgstr ""
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2865,7 +2865,7 @@ msgstr "新的 %(repo_name)s 密碼是 %(password)s。請盡快更改密碼。"
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr "管理員在 %(site_name)s 重置了您的密碼，請點擊以下連結繼續："
+msgstr ""
 
 #: seahub/templates/sysadmin/sudo_mode.html:39
 msgid "Confirm password to continue"
@@ -2926,7 +2926,7 @@ msgstr "你在%(site_name)s 的密碼已被重置，現在是%(password)s，請�
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr "您的團隊空間已超過限制，請盡快升級。"
+msgstr ""
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
@@ -2961,7 +2961,7 @@ msgstr "修改後"
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr "您的空間已超過限制，請盡快升級。"
+msgstr ""
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"

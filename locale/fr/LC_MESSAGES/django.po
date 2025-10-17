@@ -2166,7 +2166,7 @@ msgstr "Vous recevez cet e-mail car votre équipe %(org_name)s a été désactiv
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr "Si vous souhaitez continuer à utiliser notre site, cliquez <a href=\"%(link)s\">ici</a>. Sinon, votre compte sera supprimé dans 60 jours."
+msgstr ""
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2543,7 +2543,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr "Si vous souhaitez réactiver votre équipe et vous reconnecter, veuillez cliquer <a href=\"%(link)s\">ici</a>."
+msgstr ""
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
