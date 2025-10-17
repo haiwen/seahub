@@ -739,7 +739,7 @@ msgstr ""
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "Hur man använder krypterade kataloger"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -765,6 +765,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Om du skapar en krypterad katalog i webbappen, skickas lösenordet till "
+"servern. Servern använder det lösenordet för att skapa katalogen. Men det "
+"lagrar inte plain text lösenordet."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -773,10 +776,13 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Om du skapar en krypterad katalog från en lokal mapp med klienten för "
+"skrivbordet (se <a href=\"%(SITE_ROOT)shelp/install_sync/\">fil "
+"synkning</a>), lösenordet skickas inte till servern."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr ""
+msgstr "När du åtkomst krypterad katalog:"
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -794,22 +800,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Om du använder skrivbordsklienten för att synka katalogen, skickas inte "
+"lösenordet till servern. Klienten dekrypterar och krypterar filinnehållet "
+"lokalmente. Plain text lösenordet sparas inte heller på disken."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"iOS klient stöder klientbaserad kryptering från version 2.1.6. Android "
+"klient stöder det från version 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Observera att krypterad katalog endast krypterar innehållet i filerna, men "
+"inte mapp- och filnamn."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Fil låsning"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -825,16 +838,20 @@ msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Observera att fil låsning endast gäller för filer i krypterade kataloger. "
+"Det gäller inte för mapp- och filnamn."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Fil låsning på webbappen"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Om du vill låsa en fil, kan du navigera till mappen där filen finns i "
+"webbappen, och klicka på \"operations\" dröpningsmeny."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -843,28 +860,38 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Observera att när en fil är låst, visas en röd \"stop sign\" i hörnet av "
+"filikonen. Om du flyttar musen över \"stop sign\", kan du se vem som låst "
+"filen. Du kan också låsa en fil som du låst. Men du kan inte låsa filer som "
+"låsts av andra användare."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Fil låsning på skrivbordsklienten"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Observera att fil låsning endast gäller för filer i krypterade kataloger. "
+"Det gäller inte för mapp- och filnamn."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Om du vill låsa en fil, kan du högerklicka på filen i File Explorer på "
+"Windows eller Finder på Mac OS. Välj \"lock this file\" i \"Seafile\" menyn."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Observera att när en fil är låst av dig, visas en orange \"stop sign\" i "
+"hörnet av filikonen. Du kan välja att låsa filen."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -872,12 +899,17 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Observera att när en fil är låst av andra användare, visas en röd \"stop "
+"sign\" i hörnet av filikonen. Filen blir automatiskt inställd på läs- och "
+"skrivskyddad. Du kan inte ändra filen tills den är låst."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Observera att när en katalog inte är synkroniserad, kan du fortfarande låsa "
+"och låsa filer i den katalogen i webbfilenäsaren."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
@@ -891,6 +923,11 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Observera att när en katalog är synkroniserad till skrivbordet, när du "
+"öppnar en Microsoft Office fil i katalogen, låses filen automatiskt. När du "
+"stänger filen, låses filen automatiskt upp. Låsningsstatusen propageras till"
+" andra datorer som synkroniserar katalogen. Det förhindrar samtidig "
+"redigering av samma Office fil och är praktiskt för samarbete."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
@@ -1649,31 +1686,39 @@ msgstr ""
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Ställa in kvarhållningsperiod för kataloghistorik"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"En katalogs kvarhållningsperiod för historik styr hur länge du kan komma "
+"åtdin historikdata i följande funktioner:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Återställ borttagna filer: du kan inte återställa filer och mappar som togs "
+"bortinnan kvarhållningsperioden."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Filversioner: du kan inte komma åt filversioner som är äldre än "
+"kvarhållningsperioden."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Kataloghistorik och ögonblicksbilder: du kan inte komma åt "
+"katalogögonblicksbildersom är äldre än kvarhållningsperioden."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1681,51 +1726,67 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Kvarhållningsperioden för gamla filversioner kan konfigureras för "
+"varjekatalog separat. Du måste vara katalogens ägare för att ställa in "
+"kvarhållningsperioden.Så här ställer du in kvarhållningsperiodens längd:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"I Seafile Web App klickar du på fliken \"Mina\" i navigationspanelen (som "
+"iskärmbilden nedan). Alla kataloger som ägs av dig kommer att listas."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Flytta markören till raden för katalogen. En operationsmeny kommer att "
+"visas.Klicka på \"Historikinställningar\" i rullgardinsmenyn."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"I popup-dialogrutan kan du ställa in längden på filkvarhållningsperioden."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "I Seafile finns det några sätt att dela filer och mappar med andra:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Använda länkar: det finns flera typer av länkar som kan användas för att "
+"delamed olika omfång av samarbetare."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Delningslänkar: Valfri användare som har tillgång till länkarna kan komma "
+"åtfilerna eller mapparna som länkarna pekar på. Inloggning krävs inte."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Uppladdningslänkar: Valfri användare som har tillgång till länkarna kan "
+"ladda uppfiler till mappen som länken pekar på. Inloggning krävs inte."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Interna länkar: Endast inloggade användare som har läsbehörighet till "
+"fileneller mappen kan komma åt denna länk. Används för intern fildelning."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1733,10 +1794,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Dela kataloger eller mappar: används för att ställa in åtkomstbehörigheter "
+"till enkatalog eller mapp för specifika användare eller grupper. Användare "
+"måste logga inför att komma åt mapparna."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Skapa delningslänkar till filer eller mappar"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1744,12 +1808,17 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Delningslänkar är publika länkar till filer eller mappar. De kan nås avalla,"
+" inklusive dem som inte har ett Seafile-konto. Du kan också användalösenord "
+"och förfallotid för att skydda dina länkar."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Du kan också ställa in åtkomstbehörighet till delningslänkar. Det finns tre "
+"typer avbehörigheter:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1757,6 +1826,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Endast förhandsgranskning: filen eller filerna i mappen kan endast visas i "
+"webbläsare,men kan inte laddas ner. Detta är användbart för att dela "
+"konfidentiell data."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1764,16 +1836,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Redigera i molnet och ladda ner: Liknande \"Förhandsgranska och ladda ner\","
+" men omfilen kan redigeras i webbläsare (t.ex. en Office-fil), får alla "
+"användare somhar tillgång till länken redigera den."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Så här skapar du en delningslänk i Seafile web app:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navigera till föräldermappen som innehåller filen eller mappen. Håll musen "
+"överfilen eller mappen och klicka på ikonen \"Dela\" som visas."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1781,6 +1858,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Ett popup-fönster med delningsalternativ kommer att visas. Klicka på fliken "
+"\"Delningslänk\"i vänster panel. Klicka sedan på knappen \"Generera\" för "
+"att skapa en länk. Du kananvända lösenord, förfallotid och behörighet för "
+"att skydda din länk."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1788,10 +1869,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Kopiera länken till e-post, chattprogram eller vilket annat verktyg som "
+"helst föratt skicka den till andra."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Du kan också skapa delningslänkar från skrivbordsklienterna."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1800,6 +1883,10 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Om katalogen är synkroniserad, dubbelklickar du på katalogen i huvudfönstret"
+" iSeafile-klienten. Den lokala mappen för den katalogen öppnas. "
+"Högerklickapå filen eller mappen som du vill skapa en länk till. I popup-"
+"menyn väljer du\"Seafile\" och sedan \"Skapa delningslänk\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1807,10 +1894,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Om katalogen inte är synkroniserad, dubbelklickar du på katalogen i "
+"huvudfönstret iSeafile-klienten. Fönstret för molnfilutforskaren öppnas, och"
+" du kan skapaen länk till en fil eller mapp i det."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Skapa uppladdningslänkar till mappar"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -2001,7 +2091,7 @@ msgstr "Välj sedan en existerande mapp att synkronisera katalogen med."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Avsynkronisera och återsynkronisera katalog"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -2013,6 +2103,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"När du inte längre vill synkronisera en lokal mapp med en katalog kan du "
+"avsynkronisera den.Efter att du har avsynkroniserat en katalog kommer "
+"ändringar i den lokala mappen och filernainte att laddas upp, och ändringar "
+"i katalogen kommer inte att laddas ner. Om du villsynkronisera katalogen med"
+" den lokala mappen igen kan du använda funktionen<a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">synkronisera med "
+"existerande mapp</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -2033,16 +2130,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Efter att du har installerat en driveklient med instruktionerna på "
+"<ahref=\"https://www.seafile.com/en/download/\">nedladdningssidan</a>, kan "
+"du starta dengenom att dubbelklicka på appikonen \"SeaDrive\" på din "
+"skrivbord."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Du kommer att bli ombedd att välja en enhetsbokstav för den virtuella "
+"enheten. Som standardkommer \"S:\" att användas."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Därefter kommer du att bli ombedd att logga in på din Seafile-server."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -2051,6 +2154,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Efter att du har loggat in på servern startar Driveklienten att hämta "
+"katalog- ochfilist från servern. Filinnehållet laddas inte ner just nu. Så "
+"det tar inte lång tid.Du kan låta den köra i bakgrunden. Du kommer att "
+"meddelas när hämtningen är klar."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -2060,26 +2167,33 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Den virtuella enhetsmappen öppnas. Du kommer att märka att den fungerar "
+"precis som enordinär hårddisk på din dator. De översta mapparna i den "
+"virtuella enheten är katalogerpå Seafile-servern. Filinnehållet laddas ner "
+"när du öppnar en fil. Nyligen öppnadefiler cachas på din lokala disk. Alla "
+"cachade filer markeras med en grön bock."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Synkroniserat tillstånd"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Filer och mappar i den virtuella enheten är antingen endast i molnet, "
+"synkroniserade elleri delvis synkroniserat tillstånd."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Tillstånd"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -2088,7 +2202,7 @@ msgstr "Detaljer"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Endast molninnehåll"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -2098,71 +2212,90 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Endast molninnehåll visas i den virtuella enheten men använder inte hela "
+"mängden utrymmesom filen skulle. I din filutforskare kan du se filen men "
+"innehållet laddas inte ner heltförrän du behöver det. Det som laddas ner är "
+"endast information om filen, som dess namn,dess storlek och datumet då den "
+"uppdaterades."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Synkroniserat innehåll"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Synkroniserat innehåll är nedladdat och sparat på din dators hårddisk. Du "
+"kan redigeradessa filer direkt från program på din dator."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Delvis synkroniserat innehåll"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Delvis synkroniserade mappar innehåller både synkroniserade och endast "
+"molnbaserade filer ellermappar."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Speciella tillstånd"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"För filer som redan är synkroniserade till den lokala datorn kan de vara i 3"
+" andraspeciella tillstånd, förutom det normala \"synkroniserade\" "
+"tillståndet."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Låst av annan användare"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Filen är låst av en annan användare på servern. Du kan endast öppna filen "
+"iskrivskyddat läge. Du kan inte ändra, ta bort, byta namn på eller flytta "
+"filen."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Låst av mig"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Filen är låst av dig. Detta hindrar andra från att ändra filen."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Skrivskyddad"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Mappen eller katalogen för denna fil delas med skrivskyddad behörighet till "
+"dig.Du kan inte ändra, ta bort eller flytta filen."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Driveklienten rensar regelbundet oanvända cachade filer i bakgrunden. Du "
+"kanockså begränsa det lokala cacheutrymmet."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2170,10 +2303,14 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Du kan logga in på flera konton i Driveklienten. Emellertid visas endast "
+"filer påden för närvarande valda servern i den virtuella enheten. Du kan "
+"växla mellan konton."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Varför kan jag inte skapa nya filer eller ta bort mappar i rotmappen?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2184,13 +2321,22 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Rotmappen i den virtuella enheten innehåller endast katalogmappar. Seafile "
+"kanendast synkronisera filer inom kataloger. Filerna i rotmappen kan inte "
+"laddas upptill Seafile-servern. Så det är meningslöst att stödja skapande av"
+" filer i rotmappen.Eftersom de översta mapparna i den virtuella enheten "
+"representerar kataloger, vill viinte att användare ska ta bort sina "
+"kataloger av misstag. Därför stödjer inteDriveklienten borttagning av "
+"översta mappar."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Vissa typer av filer kan öppnas och visas direkt i Seafile Web App. För "
+"närvarande är de:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Bildfiler"

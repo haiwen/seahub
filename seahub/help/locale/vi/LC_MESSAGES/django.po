@@ -5,6 +5,7 @@
 # 
 # Translators:
 # ldphuong <ldphuong@gmail.com>, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: ldphuong <ldphuong@gmail.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Vietnamese (https://app.transifex.com/haiwen/teams/5086/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,105 +33,105 @@ msgstr "Giới thiệu"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Quản lý tệp và thư mục"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Quản lý tệp và thư mục"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Phục hồi tệp đã xóa"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Tìm kiếm phiên bản tệp cũ"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Lịch sử và nháp thư viện"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Cài đặt kỳ hạn giữ lịch sử"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
-msgstr "Đang xóa thư viện"
+msgstr "Xóa thư viện"
 
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Xem tệp trong ứng dụng Web"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Tìm kiếm toàn văn bản tệp"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Chia sẻ và cộng tác"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Chia sẻ tệp và thư mục"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Quản lý nhóm"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Khóa tệp"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Quyền truy cập thư mục"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Chia sẻ phòng ban"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Quản lý wiki và kiến thức"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Quản lý thư viện như Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Ứng dụng máy tính và đồng bộ hóa"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Cài đặt và đồng bộ tệp"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr ""
+msgstr " Đồng bộ tệp và thư mục hiện có"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr " Đồng bộ tệp và thư mục con"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr " Đồng bộ tệp và thư mục con (chỉ đọc)"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Hủy đồng bộ và đồng bộ lại thư viện"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Cài đặt khoảng thời gian đồng bộ  "
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr ""
+msgstr "Cài đặt proxy"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
@@ -138,27 +139,27 @@ msgstr "Xung đột dữ liệu"
 
 #: templates/help/base.html:89
 msgid "Excluding files"
-msgstr "Loại trừ"
+msgstr "Loại trừ tệp"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Ứng dụng máy tính"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Sử dụng ứng dụng máy tính"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Sử dụng ứng dụng máy tính 2.0 trên Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Bảo mật và mã hóa"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Cách sử dụng thư viện mã hóa"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -166,6 +167,9 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"Khi bạn và bạn bè đồng bộ một thư viện tệp chia sẻ lên máy tính, bạn có thể "
+"thêm, xóa hoặc chỉnh sửa tệp trong thư viện cùng nhau. Mọi thay đổi bạn thực"
+" hiện trong thư viện sẽ được đồng bộ tự động với máy tính của bạn bè."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -176,36 +180,48 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"Khi bạn và bạn bè chỉnh sửa cùng một tệp tại cùng một thời điểm, thay đổi "
+"của bạn có thể xung đột với thay đổi của bạn bè. Trong trường hợp này, "
+"Seafile sẽ giữ nguyên phiên bản đầu tiên được đồng bộ lên đám mây, đồng thời"
+" đổi tên phiên bản còn lại thành tệp \"xung đột\". Tên tệp \"xung đột\" sẽ "
+"kết thúc bằng địa chỉ email của tác giả, плюs thời gian hiện tại, ví dụ: "
+"test.txt (SFConflict name@example.com 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Bạn có thể xóa một thư viện mà bạn sở hữu. Một thư viện đã bị xóa có thể "
+"được khôi phục bởi bạn hoặc quản trị viên máy chủ Seafile."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Sau khi một thư viện bị xóa, nó có những tác động sau:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Tất cả các chia sẻ tệp và thư mục trong thư viện này đều bị hủy."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Ứng dụng máy tính đồng bộ với thư viện này không thể đồng bộ với thư viện "
+"này nữa. Nhưng tệp và thư mục trên máy tính của bạn vẫn sẽ được giữ nguyên."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Quản lý và sử dụng phòng ban"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Hầu hết các tổ chức có cấu trúc phòng ban phức tạp. Thông thường, có hai "
+"trường hợp sử dụng phổ biến cho quản lý tệp trong các tổ chức này:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -213,6 +229,8 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Hầu hết các tổ chức có cấu trúc phòng ban phức tạp. Thông thường, có hai "
+"trường hợp sử dụng phổ biến cho quản lý tệp trong các tổ chức này:"
 
 #: templates/help/departments.html:9
 msgid ""
@@ -220,46 +238,52 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Hầu hết các tổ chức có cấu trúc phòng ban phức tạp. Thông thường, có hai "
+"trường hợp sử dụng phổ biến cho quản lý tệp trong các tổ chức này:"
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Hầu hết các tổ chức có cấu trúc phòng ban phức tạp. Thông thường, có hai "
+"trường hợp sử dụng phổ biến cho quản lý tệp trong các tổ chức này:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Quản trị viên hệ thống"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Quản trị viên phòng ban"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Thành viên phòng ban"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Quản trị viên hệ thống có thể:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Quản lý cấu trúc phòng ban và thành viên"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Gán giới hạn lưu trữ cho phòng ban"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Tạo và quản lý thư viện tệp chia sẻ trong phòng ban"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Quản trị viên hệ thống có thể thiết lập cấu trúc phòng ban theo hai cách: "
+"thủ công hoặc nhập khẩu từ Active Directory.  "
 
 #: templates/help/departments.html:26
 msgid ""
@@ -269,6 +293,13 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Quản trị viên hệ thống có thể thiết lập cấu trúc phòng ban theo hai cách: "
+"thủ công hoặc nhập khẩu từ Active Directory. Quản trị viên hệ thống có thể "
+"tạo bất kỳ số lượng phòng ban cấp cao nhất nào và tạo bất kỳ cấp độ phòng "
+"ban con nào dưới mỗi phòng ban. Mỗi cấp độ phòng ban có thể được điền với "
+"thành viên. Quản trị viên hệ thống có thể đặt vai trò của mỗi thành viên "
+"thành 'member' hoặc 'admin'. Chúng ta sẽ giới thiệu cách quản trị viên phòng"
+" ban có thể quản lý phòng ban sau."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -277,12 +308,20 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Quản trị viên hệ thống có thể nhập khẩu cấu trúc phòng ban từ các đơn vị tổ "
+"chức (OU) trong Active Directory. Mỗi OU sẽ được nhập khẩu như một phòng "
+"ban. Và các OU con dưới mỗi OU sẽ được nhập khẩu như các phòng ban con. Các "
+"thư viện tệp được tạo trong quá trình nhập khẩu sẽ được sở hữu bởi phòng ban"
+" đó. Quản trị viên hệ thống có thể xóa một phòng ban sau khi tất cả các "
+"phòng ban con và thư viện tệp trong phòng ban đó đều bị xóa."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Quản trị viên hệ thống có thể xóa một phòng ban sau khi tất cả các phòng ban"
+" con và thư viện tệp trong phòng ban đó đều bị xóa."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -292,6 +331,10 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Quản trị viên hệ thống có thể gán giới hạn lưu trữ cho phòng ban. Tổng kích "
+"thước của tất cả các thư viện tệp trong phòng ban không thể vượt quá giới "
+"hạn lưu trữ. <strong>Vui lòng lưu ý rằng giới hạn lưu trữ của phòng ban con "
+"không phụ thuộc vào giới hạn lưu trữ của phòng ban cha.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -299,12 +342,21 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"Quản trị viên hệ thống có thể tạo thư viện tệp chia sẻ trong phòng ban. Quản"
+" trị viên hệ thống có thể kiểm soát xem liệu người dùng có thể chia sẻ thư "
+"viện tệp vào phòng ban hay không. Quản trị viên hệ thống có thể gán giới hạn"
+" lưu trữ cho phòng ban. Tổng kích thước của tất cả các thư viện tệp trong "
+"phòng ban không thể vượt quá giới hạn lưu trữ. <strong>Vui lòng lưu ý rằng "
+"giới hạn lưu trữ của phòng ban con không phụ thuộc vào giới hạn lưu trữ của "
+"phòng ban cha.</strong>"
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Tất cả các hoạt động trên có thể được thực hiện trong giao diện quản trị "
+"viên hệ thống. Xem ảnh dưới đây để biết thêm thông tin."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -312,18 +364,23 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Quản trị viên phòng ban là một vai trò đặc biệt được gán bởi quản trị viên "
+"hệ thống cho một số thành viên trong phòng ban. Quản trị viên phòng ban có "
+"thể thực hiện các hoạt động sau khi đăng nhập vào tài khoản của mình:"
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào các thư viện tệp trong phòng "
+"ban."
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Quản trị viên phòng ban có thể quản lý thành viên trong phòng ban."
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Quản trị viên phòng ban có thể quản lý thư viện tệp trong phòng ban."
 
 #: templates/help/departments.html:42
 msgid ""
@@ -332,26 +389,36 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Nếu một người dùng là quản trị viên của phòng ban, ông/ô có thể thêm hoặc "
+"xóa thành viên trong phòng ban. Bất kỳ người dùng nào đăng ký trong hệ thống"
+" đều có thể được thêm vào phòng ban. Nhưng nếu phòng ban được nhập khẩu từ "
+"Active Directory, những thay đổi về thành viên sẽ bị ghi đè khi hệ thống "
+"đồng bộ với Active Directory."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"Quản trị viên phòng ban có thể quản lý thư viện tệp trong phòng ban. Các "
+"hoạt động được hỗ trợ bao gồm:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Tạo hoặc xóa thư viện tệp"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Thay đổi tên thư viện tệp"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
+"Quản trị viên phòng ban có thể chia sẻ thư viện tệp với người dùng hoặc nhóm"
+" bên ngoài phòng ban. Điều này rất hữu ích cho việc cộng tác giữa các phòng "
+"ban."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -361,6 +428,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Quản trị viên phòng ban có thể thiết lập quyền truy cập vào thư mục trong "
+"thư viện tệp cho người dùng hoặc phòng ban con trong phòng ban. Điều này "
+"hoạt động tương tự như tính năng quyền truy cập vào thư mục."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -373,16 +443,23 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào các thư viện tệp trong phòng ban"
+" và các thư viện tệp trong phòng ban cha. Ví dụ, nếu John là thành viên "
+"trong phòng ban \"EMEA\" dưới phòng ban \"Sales\", và \"Sales\" là phòng ban"
+" con của \"ACME\", John có thể truy cập vào các nhóm \"EMEA\", \"Sales\" và "
+"\"ACME\". Các nhóm phòng ban được đánh dấu bằng biểu tượng \"tòa nhà\"."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Quản trị viên phòng ban có thể sử dụng proxy trong ứng dụng Seafile."
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+"Ứng dụng Seafile hỗ trợ 3 loại proxy server: HTTP proxy, SOCKS5 proxy và cài"
+" đặt proxy hệ thống."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -392,6 +469,12 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"Ứng dụng Seafile hỗ trợ 3 loại proxy server: HTTP proxy, SOCKS5 proxy và cài"
+" đặt proxy hệ thống. HTTP proxy và SOCKS5 proxy yêu cầu bạn nhập địa chỉ và "
+"cổng proxy server. Nếu bạn sử dụng cài đặt proxy hệ thống, ứng dụng Seafile "
+"đọc cài đặt proxy từ hệ thống. Hệ thống có các cơ chế tự động phát hiện "
+"thông tin proxy server. Vì vậy, bạn không cần phải nhập manual proxy server "
+"address."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -399,10 +482,13 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"Quản trị viên phòng ban có thể thay đổi cài đặt proxy trong ứng dụng "
+"Seafile. Trong cửa sổ cài đặt, chọn \"Network\" tab. Trong tab này, bạn có "
+"thể thay đổi cài đặt proxy."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 for Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -411,10 +497,17 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (và các phiên bản sau) được thiết kế với tích hợp sâu hơn với "
+"hệ thống điều hành Windows 10. Nó hỗ trợ phiên bản Windows 10 1709 (cập nhật"
+" hè 2017 cho Windows 10) và các phiên bản sau. Chúng tôi khuyến nghị rằng "
+"người dùng Windows 10 nên nâng cấp lên SeaDrive 2.0 để có trải nghiệm "
+"virtual drive nativa hơn."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
 msgstr ""
+"Quản trị viên phòng ban có thể cài đặt và truy cập vào virtual drive trong "
+"ứng dụng Seafile."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -425,40 +518,62 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"Quản trị viên phòng ban có thể cài đặt và truy cập vào virtual drive trong "
+"ứng dụng Seafile. Sau khi cài đặt và đăng nhập vào tài khoản Seafile, ứng "
+"dụng Seafile sẽ bắt đầu tải xuống danh sách thư viện và tệp từ server (như "
+"trong phiên bản Seafile 1.0.x). Nó có thể mất một khoảng thời gian, tùy "
+"thuộc vào số lượng tệp có sẵn trong tài khoản Seafile. Tải xuống là "
+"progressive, vì vậy trong thời gian này, bạn có thể đã truy cập vào một số "
+"tệp trong virtual drive."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào virtual drive trong ứng dụng "
+"Seafile. Để truy cập vào virtual drive, chỉ cần mở Windows file explorer. "
+"Trong navigation pane của Windows file explorer, có một node \"seadrive\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào tệp tin trong virtual drive."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào các thư viện tệp trong virtual "
+"drive. Các thư viện tệp được nhóm thành 4 loại: My Libraries, Shared with "
+"me, Shared with groups và Shared with all."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào các biểu tượng trạng thái tệp "
+"tin trong virtual drive. Các biểu tượng này được tích hợp sâu hơn trong "
+"Windows file explorer. Các biểu tượng này có thể khác so với phiên bản 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào các tệp tin trong virtual drive."
+" Các tệp tin trong virtual drive có thể ở trong 3 trạng thái:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào tệp tin placeholder trong "
+"virtual drive. Tệp tin placeholder chỉ là một biểu diễn trống của tệp tin và"
+" chỉ có thể được mở khi có kết nối mạng."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -468,12 +583,21 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào tệp tin full trong virtual "
+"drive. Tệp tin full là tệp tin đã được tải xuống và lưu trữ ở trên máy tính."
+" Tải xuống là tự động khi tệp tin placeholder được mở lần đầu tiên. Các tệp "
+"tin full này có thể được truy cập bất cứ khi nào mà không cần kết nối mạng. "
+"Hệ thống điều hành có thể quyết định xóa tệp tin full khi cần phải giải "
+"phóng không gian đĩa."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào tệp tin pinned full trong "
+"virtual drive. Tệp tin pinned full là tệp tin đã được tải xuống và lưu trữ ở"
+" trên máy tính. Nó được đảm bảo sẽ có sẵn khi không có kết nối mạng."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -483,6 +607,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được lưu trữ "
+"trong cache. Điều này có thể được thay đổi từ context menu khi bạn nhấn "
+"chuột phải vào tệp tin hoặc thư mục. Chọn \"Always keep on this device\" khi"
+" bạn muốn pin tệp tin hoặc thư mục vào cache; chọn \"Free up space\" khi bạn"
+" muốn xóa cache cho tệp tin hoặc thư mục."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -490,10 +619,17 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào tệp tin cached trong virtual "
+"drive. Tệp tin cached là tệp tin được lưu trữ trong cache. Tệp tin cached "
+"này có thể được truy cập bất cứ khi nào mà không cần kết nối mạng. Tệp tin "
+"cached này có thể được xóa khi cần phải giải phóng không gian đĩa."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin được tải xuống trong "
+"virtual drive. Tệp tin được tải xuống có thể được xóa khi cần phải giải "
+"phóng không gian đĩa."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -502,6 +638,9 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin được tải xuống trong "
+"virtual drive. Tệp tin được tải xuống có thể được hủy bỏ khi cần phải giải "
+"phóng không gian đĩa."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -510,15 +649,25 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin được tải xuống trong "
+"virtual drive. Tệp tin được tải xuống có thể được hủy bỏ khi cần phải giải "
+"phóng không gian đĩa."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
 msgstr ""
+"Quản trị viên phòng ban có thể truy cập vào FAQ trong virtual drive. FAQ là "
+"tệp tin chứa các câu hỏi thường gặp và câu trả lời."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -527,10 +676,20 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -538,10 +697,20 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -551,10 +720,20 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -564,10 +743,20 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -578,10 +767,20 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -590,12 +789,22 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -606,10 +815,20 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -619,10 +838,20 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -630,6 +859,11 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -638,10 +872,20 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:19
 msgid ""
@@ -649,6 +893,11 @@ msgid ""
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:20
 msgid ""
@@ -656,22 +905,42 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -681,22 +950,42 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -705,28 +994,53 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -734,16 +1048,31 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -753,18 +1082,38 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -773,6 +1122,11 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
+" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
+"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
+"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
+"các thư mục khác sẽ bị игнори."
 
 #: templates/help/file_locking.html:29
 msgid ""
@@ -1245,18 +1599,29 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile sử dụng \"thư viện\" để tổ chức tệp tin. Một thư viện là một thư mục"
+" chứa tập hợp các tệp tin và thư mục. Bạn có thể tạo một thư viện cho mỗi dự"
+" án mà bạn đang làm, hoặc cho mỗi loại tệp tin mà bạn muốn lưu trong "
+"Seafile. Một thư viện hoạt động gần như một thư mục cấp cao nhất. Nhưng nó "
+"cũng có một số đặc tính riêng:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Chaque bibliothèque maintient son propre historique de modifications de "
+"fichier. Il n'y a pas d'historique global de modifications de fichiers "
+"across toutes les bibliothèques."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Chaque bibliothèque peut être synchronisée séparément avec les clients "
+"ordinateur. Vous pouvez choisir quelles bibliothèques doivent être "
+"synchronisées."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1265,6 +1630,9 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Khi bạn đăng nhập vào ứng dụng Seafile lần đầu tiên, Seafile sẽ tự động tạo "
+"một thư viện mặc định có tên \"My Library\" cho bạn. Bạn cũng có thể tạo "
+"thêm các thư viện. Dưới đây là hình ảnh khi bạn đã tạo một số thư viện."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
@@ -1279,6 +1647,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Sau khi <a href=\"%(SITE_ROOT)shelp/install_sync/\">synchronize một thư viện"
+" với client máy tính</a>, bạn có thể thực hiện bất kỳ thao tác file nào "
+"trong thư mục thư viện. Các thao tác này sẽ được tải lên server. "
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
