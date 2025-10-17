@@ -15,7 +15,6 @@ import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
-import '../../../css/metadata-rc-calendar.css';
 
 dayjs.extend(utc);
 dayjs.extend(localeData);
@@ -51,8 +50,6 @@ class DateEditor extends Component {
     const { lang = 'zh-cn', value } = this.props;
     const isZhcn = lang === 'zh-cn';
     if (value && dayjs(value).isValid()) {
-      let validValue = dayjs(value).isValid() ? dayjs(value) : dayjs(this.defaultCalendarValue);
-      this.setState({ value: isZhcn ? dayjs(validValue).locale('zh-cn') : dayjs(validValue).locale('en-gb') });
       if (typeof value === 'string' && value.length === 1 && !isNaN(Number(value, 10))) {
         this.timer = setTimeout(() => {
           let inputDom = document.getElementsByClassName('rc-calendar-input')[0];
@@ -62,6 +59,8 @@ class DateEditor extends Component {
         }, 200);
         return;
       }
+      let validValue = dayjs(value).isValid() ? dayjs(value) : dayjs(this.defaultCalendarValue);
+      this.setState({ value: isZhcn ? dayjs(validValue).locale('zh-cn') : dayjs(validValue).locale('en-gb') });
     }
     document.addEventListener('keydown', this.onHotKey, true);
   }
@@ -169,7 +168,12 @@ class DateEditor extends Component {
     if (this.timeFormat.indexOf('ss') > 0) return;
 
     setTimeout(() => {
-      this.closeEditor();
+      // For DetailDateEditor: explicitly ask parent to close.
+      if (Utils.isFunction(this.props.onClose)) {
+        this.props.onClose(false);
+      }
+      // For PopupEditorContainer: keep commit path via onBlur.
+      this.onBlur();
     }, 1);
   };
 
@@ -211,7 +215,6 @@ class DateEditor extends Component {
           onOpenChange={this.onOpenChange}
           open={true}
           style={{ zIndex: 1060 }}
-
         >
           {
             ({ value }) => {
