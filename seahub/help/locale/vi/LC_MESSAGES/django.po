@@ -428,9 +428,6 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
-"Quản trị viên phòng ban có thể thiết lập quyền truy cập vào thư mục trong "
-"thư viện tệp cho người dùng hoặc phòng ban con trong phòng ban. Điều này "
-"hoạt động tương tự như tính năng quyền truy cập vào thư mục."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -872,11 +869,6 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
-"Quản trị viên phòng ban có thể kiểm soát tệp tin hoặc thư mục được tạo, xóa,"
-" đổi tên trong virtual drive. Tệp tin hoặc thư mục được tạo, xóa, đổi tên "
-"trong virtual drive sẽ được phản ánh trên server. Chỉ có thể tạo, xóa, đổi "
-"tên thư mục trong thư mục \"My Libraries\". Tạo, xóa, đổi tên thư mục trong "
-"các thư mục khác sẽ bị игнори."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"

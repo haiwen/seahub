@@ -416,7 +416,6 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
-"プロキシ設定を変更するには、システム通知領域にあるSeafileアイコンをクリックします。メニューで[設定]を選択します。ポップアップ設定ダイアログで、[ネットワーク]タブでプロキシ設定を変更できます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
@@ -512,7 +511,6 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
-"ローカルにキャッシュされるファイルまたはフォルダーを制御できます。これは、ファイルまたはフォルダーを右クリックすると、コンテキストメニューから変更できます。ファイルまたはフォルダーをローカルに固定する場合は、[常にこのデバイスに保持する]を選択します。ファイルまたはフォルダーのキャッシュをクリアする場合は、[空き容量を増やす]を選択します。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -587,7 +585,6 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
-"はい。デフォルトでは、暗号化されたライブラリは同期されず、仮想ドライブに表示されません。同期する暗号化されたライブラリを手動で選択し、パスワードを入力する必要があります。システムトレイ領域にあるSeaDriveアイコンを右クリックし、[暗号化されたライブラリを表示]を選択します。ウィンドウが表示され、暗号化されたライブラリを同期または同期解除することを選択できます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
@@ -620,9 +617,6 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
-"ローカルにキャッシュするフォルダーまたはファイルを手動で選択できます。フォルダーが過剰なスペースを消費している場合は、そのフォルダーで[空き容量を増やす]を選択するだけで、そのフォルダー内のキャッシュされたファイルはすべてクリアされます。SeaDrive"
-" "
-"1.0のように、キャッシュのクリア時間とキャッシュサイズの制限を設定する必要はありません。プレースホルダーはローカルディスクに作成された通常のファイルであるため、キャッシュサイズはコンピューターで使用可能なディスク容量によってのみ制限されます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
@@ -642,7 +636,6 @@ msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
-"通常、これらのショートカットは、SeaDriveプログラムをアンインストールし、プロンプトダイアログで[アカウント情報の削除]を選択することで削除できます。"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -753,7 +746,7 @@ msgstr "Webアプリでのファイルのロック"
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
-msgstr "ファイルをロックするには、Webアプリでファイルのフォルダーに移動し、[操作]ドロップダウンメニューをクリックします。"
+msgstr ""
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -780,7 +773,7 @@ msgstr ""
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
-msgstr "ファイルをロックするには、同期されたファイルを右クリックし、[Seafile]メニューの[このファイルをロック]を選択します。"
+msgstr ""
 
 #: templates/help/file_locking.html:17
 msgid ""
@@ -867,8 +860,6 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
-"Seafile "
-"Webアプリで、ファイルを含むフォルダーに移動します。カーソルをそのファイルの行に移動します。操作メニューが表示されます。そのメニューの[履歴]ボタンをクリックできます。"
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
@@ -964,7 +955,6 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
-"ライブラリの所有者のみが、サブフォルダーのフォルダー権限を設定できます。ファイルブラウジングインターフェイスで、[その他の操作]ボタンをクリックし、ドロップダウンメニューで[権限]を選択します。ポップアップウィンドウで、このフォルダーのフォルダー権限を表示および設定できます。"
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -973,7 +963,6 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
-"ライブラリに設定されているすべてのフォルダー権限を表示する場合は、ライブラリにマウスを合わせます。[その他の操作]ボタンをクリックし、ドロップダウンメニューで[フォルダー権限]を選択します。ポップアップウィンドウで、このライブラリのフォルダー権限を表示および設定できます。"
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -1130,7 +1119,6 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
-"左側のパネルにある[グループと共有]タブをクリックすると、参加しているすべてのグループが表示されます。任意のグループをクリックすると、このグループに共有されているライブラリが表示されます。"
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1138,7 +1126,6 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
-"新しいグループを作成するには、左側のパネルにある[グループと共有]タブをクリックします。次に、[すべてのグループ]をクリックします。ページで、[新しいグループ]ボタンをクリックしてグループを作成できます。"
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1254,7 +1241,7 @@ msgstr "Seafile "
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
-msgstr "Seafileクライアントソフトをダウンロードしたら、あとは利用可能になるまでたったの３ステップです。"
+msgstr ""
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
@@ -1331,14 +1318,14 @@ msgid ""
 "You can download the clients in <a "
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
-msgstr "クライアントは、Seafile Webサイトからダウンロードできます。"
+msgstr ""
 
 #: templates/help/introduction.html:11
 msgid ""
 "If this manual does not contain the information you needed, you can seek "
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
-msgstr "このマニュアルに必要な情報が含まれていない場合は、フォーラムでヘルプを求めることができます。"
+msgstr ""
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -2005,7 +1992,7 @@ msgid ""
 "After installing a drive client with the instructions on the <a "
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
-msgstr "ドライブクライアントをインストールした後、デスクトップにある「SeaDrive」アプリのアイコンをダブルクリックして起動できます。"
+msgstr ""
 
 #: templates/help/using_drive_client.html:8
 msgid ""

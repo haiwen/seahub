@@ -167,7 +167,7 @@ msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル 
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} と {fileCount} 個の他のファイルを作成しました。"
+msgstr ""
 
 #: frontend/src/components/common/notice-item.js:272
 msgid "{user} deleted file {fileName} in library {libraryName}."
@@ -177,7 +177,7 @@ msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル 
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} と {fileCount} 個の他のファイルを削除しました。"
+msgstr ""
 
 #: frontend/src/components/common/notice-item.js:276
 msgid "{user} restored file {fileName} in library {libraryName}."
@@ -195,7 +195,7 @@ msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル 
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} と {fileCount} 個の他のファイルを移動しました。"
+msgstr ""
 
 #: frontend/src/components/common/notice-item.js:286
 msgid "{user} updated file {fileName} in library {libraryName}."
@@ -209,7 +209,7 @@ msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ 
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ {folderName} と {folderCount} 個の他のフォルダを作成しました。"
+msgstr ""
 
 #: frontend/src/components/common/notice-item.js:301
 msgid "{user} deleted folder {folderName} in library {libraryName}."
@@ -219,7 +219,7 @@ msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ 
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ {folderName} と {folderCount} 個の他のフォルダを削除しました。"
+msgstr ""
 
 #: frontend/src/components/common/notice-item.js:305
 msgid "{user} restored folder {folderName} in library {libraryName}."
@@ -238,7 +238,7 @@ msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ 
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr "ユーザーがライブラリ {libraryName} 内にフォルダ {folderName} と {folderCount} 個の他のフォルダを移動しました。"
+msgstr ""
 
 #: frontend/src/components/common/notice-item.js:362
 #: frontend/src/components/common/notice-item.js:389
@@ -1675,13 +1675,13 @@ msgstr "本当に {placeholder} を削除しますか？"
 msgid ""
 "This folder has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr "このフォルダは {user_amount} のユーザーと {group_amount} のグループに共有されています。"
+msgstr ""
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:59
 msgid ""
 "This library has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr "このライブラリは {user_amount} のユーザーと {group_amount} のグループに共有されています。"
+msgstr ""
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:68
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:33
@@ -1825,7 +1825,7 @@ msgstr ""
 
 #: frontend/src/components/dialog/file-access-log.js:87
 msgid "{placeholder} Access Log"
-msgstr "アクセスログ"
+msgstr ""
 
 #: frontend/src/components/dialog/file-access-log.js:103
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:293
@@ -2056,14 +2056,14 @@ msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. We have created a personal library for you. "
 "You can create more libraries later."
-msgstr "ようこそ {site_name_placeholder} へ。{site_name_placeholder} はファイルをライブラリに整理します。各ライブラリは個別に同期および共有することができます。ユーザーのために個人用ライブラリを作成しました。後でライブラリを作成することもできます。"
+msgstr ""
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:31
 msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. However, since you are a guest user now, you "
 "can not create libraries."
-msgstr "ようこそ {site_name_placeholder} へ。{site_name_placeholder} はファイルをライブラリに整理します。各ライブラリは個別に同期および共有することができます。しかし、現在はゲストユーザーなので、ライブラリを作成することはできません。"
+msgstr ""
 
 #: frontend/src/components/dialog/image-dialog/index.js:98
 msgid "The image could not be previewed."
@@ -2292,7 +2292,7 @@ msgstr "カンマ区切りのメールアドレス"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:68
 msgid "Successfully added label(s) for library {placeholder}"
-msgstr "{placeholder} ライブラリにラベルを正常に追加しました"
+msgstr ""
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:83
 #: frontend/src/components/library-op-menu.js:169
@@ -4390,26 +4390,26 @@ msgstr "ロック"
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:357
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:765
 msgid "Frozen by {name}"
-msgstr "凍結済み"
+msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:357
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:765
 msgid "locked by {name}"
-msgstr "ロック済み"
+msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:477
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:234
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:88
 #| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unstarred {name_placeholder}."
-msgstr "成功してブックマークを解除しました"
+msgstr ""
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:487
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:244
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:98
 #| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully starred {name_placeholder}."
-msgstr "成功してブックマークを追加しました"
+msgstr ""
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:802
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:803
@@ -4558,7 +4558,7 @@ msgstr "アップロードを準備中..."
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:95
 #: frontend/src/pages/upload-link/upload-list-item.js:95
 msgid "Remaining"
-msgstr "残り {remaining}"
+msgstr ""
 
 #: frontend/src/components/file-uploader/upload-list-item.js:96
 #: frontend/src/components/file-uploader/upload-list-item.js:122
@@ -4618,7 +4618,7 @@ msgstr "アップロード済み {uploaded_files_num}/{all_files_num} ファイ�
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:56
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:58
 msgid "{failed_files_num} file(s) failed to upload"
-msgstr "アップロードに失敗した {failed_files_num} ファイル"
+msgstr ""
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:67
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:67
@@ -5139,7 +5139,7 @@ msgstr "ドキュメントを印刷"
 msgid ""
 "Permission denied. Please try {placeholder-left}login again.{placeholder-"
 "right}"
-msgstr "アクセス権限がありません。再度ログインしてください。"
+msgstr ""
 
 #: frontend/src/components/popover/edit-filetag-popover.js:141
 #: frontend/src/tag/views/all-tags/tags-table/index.js:318
@@ -5359,7 +5359,7 @@ msgstr "有効時間"
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:578
 #| msgid "xxx cells selected"
 msgid "xxx cells cut"
-msgstr "{xxx} セルを切り取りました"
+msgstr ""
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:578
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:677
@@ -5369,7 +5369,7 @@ msgstr "1 セルを切り取りました"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:615
 msgid "xxx rows are copied."
-msgstr "{xxx} 行をコピーしました"
+msgstr ""
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:615
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:717
@@ -5378,7 +5378,7 @@ msgstr "1 行をコピーしました"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:646
 msgid "xxx cells copied"
-msgstr "{xxx} セルをコピーしました"
+msgstr ""
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:646
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:749
@@ -5393,7 +5393,7 @@ msgstr "レコードがありません"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:112
 msgid "xxx records selected"
-msgstr "{xxx} レコードが選択されました"
+msgstr ""
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:112
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:105
@@ -5402,11 +5402,11 @@ msgstr "1 レコードが選択されました"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:116
 msgid "xxx cells selected"
-msgstr "{xxx} セルが選択されました"
+msgstr ""
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:121
 msgid "xxx records"
-msgstr "{xxx} レコード"
+msgstr ""
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:123
 msgid "xxx record"
@@ -5476,7 +5476,7 @@ msgstr "認証済みのユーザー"
 msgid ""
 "Share links cannot be generated because \"Invisible\", \"Online Read-Write\""
 " or \"Online Read-Only\" is set for you on some folder(s) in the library."
-msgstr "共有リンクを生成できません。ライブラリ内の一部フォルダーに \"Invisible\", \"Online Read-Write\" または \"Online Read-Only\" が設定されています。"
+msgstr ""
 
 #: frontend/src/components/share-link-panel/link-creation.js:177
 msgid "Please enter an integer bigger than 1 as number of links."
@@ -5589,7 +5589,7 @@ msgstr "操作に失敗しました。ネットワークをご確認ください
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:273
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:261
 msgid "Failed to delete {name}."
-msgstr "操作に失敗しました。ネットワークをご確認ください。"
+msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:314
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:456
@@ -5613,13 +5613,13 @@ msgstr "SeaTable統合"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:140
 #: frontend/src/pages/shared-libs/item.js:100
 msgid "Successfully unstarred {library_name_placeholder}."
-msgstr "成功してブックマークを解除しました"
+msgstr ""
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:563
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:150
 #: frontend/src/pages/shared-libs/item.js:110
 msgid "Successfully starred {library_name_placeholder}."
-msgstr "成功してブックマークを追加しました"
+msgstr ""
 
 #: frontend/src/components/single-selector.js:74
 #| msgid "Clear selected"
@@ -5914,7 +5914,7 @@ msgstr "前回のアクセス"
 #: frontend/src/pages/linked-devices/linked-devices.js:119
 #| msgid "Successfully copied %(name)s."
 msgid "Successfully unlinked %(name)s."
-msgstr "デバイスがリンク解除されました"
+msgstr ""
 
 #: frontend/src/components/user-settings/linked-devices.js:230
 #: frontend/src/pages/linked-devices/linked-devices.js:216
@@ -6348,7 +6348,7 @@ msgstr "プロパティによるグループ化"
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:32
 #| msgid "Grouped by xxx properties"
 msgid "Grouped by {name_placeholder} properties"
-msgstr "プロパティによるグループ化"
+msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:34
 #: frontend/src/metadata/views/kanban/settings/index.js:103
@@ -6362,7 +6362,7 @@ msgstr "プロパティを非表示"
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:25
 #| msgid "Failed to modify hidden properties"
 msgid "{name_placeholder} hidden properties"
-msgstr "プロパティを非表示"
+msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:26
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:152
@@ -6390,7 +6390,7 @@ msgstr "プリセット非表示プロパティ"
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:50
 #| msgid "xxx preset hidden properties"
 msgid "{name_placeholder} preset hidden properties"
-msgstr "プリセット非表示プロパティ"
+msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:20
 msgid "1 sort"
@@ -7311,7 +7311,7 @@ msgstr "ファイルの移動に失敗しました"
 #: frontend/src/metadata/store/server-operator.js:109
 #| msgid "Failed to modify filter"
 msgid "Failed to move {n} items"
-msgstr "アイテムの移動に失敗しました"
+msgstr ""
 
 #: frontend/src/metadata/store/server-operator.js:123
 #| msgid "Failed to duplicate page"
@@ -7326,7 +7326,7 @@ msgstr "ファイルの複製に失敗しました"
 #: frontend/src/metadata/store/server-operator.js:135
 #| msgid "Failed to copy %(name)s"
 msgid "Failed to copy {n} items"
-msgstr "アイテムのコピーに失敗しました"
+msgstr ""
 
 #: frontend/src/metadata/store/server-operator.js:136
 #| msgid "Failed to modify filter"
@@ -8281,41 +8281,41 @@ msgstr "ライブラリをコピーできました。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:969
 msgid "Restored {name} and {n} other items"
-msgstr "ライブラリを復元できました。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:970
 msgid "Restored {name}"
-msgstr "ライブラリを復元できました。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:977
 msgid "Failed to restore {name} and {n} other items"
-msgstr "ライブラリを復元できませんでした。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:978
 msgid "Failed to restore {name}"
-msgstr "ライブラリを復元できませんでした。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1000
 msgid "Successfully deleted {name} and {n} other items."
-msgstr "ライブラリを削除できました。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1017
 msgid "Failed to delete {name} and {n} other items."
-msgstr "ライブラリを削除できませんでした。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1255
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1283
 msgid "Failed to delete {name}"
-msgstr "ライブラリを削除できませんでした。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1356
 #| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully moved {name} and {n} other items"
-msgstr "ライブラリを移動できました。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1360
 msgid "Successfully moved {name}."
-msgstr "ライブラリを移動できました。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1385
 msgid "Failed to move {name}."
@@ -8324,7 +8324,7 @@ msgstr "{name} の移動に失敗しました。"
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1442
 #| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully copied {name} and {n} other items"
-msgstr "ライブラリをコピーできました。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1446
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:139
@@ -8334,11 +8334,11 @@ msgstr "「%(name)s」をコピーしました。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1471
 msgid "Failed to copy %(name)s"
-msgstr "ライブラリをコピーできませんでした。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1493
 msgid "Failed to convert {name}."
-msgstr "ライブラリを変換できませんでした。"
+msgstr ""
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1504
 msgid "Successfully converted the file."
@@ -8449,7 +8449,7 @@ msgstr "壊れています（管理者に連絡して、このライブラリを
 #: frontend/src/pages/shared-libs/item.js:80
 #: frontend/src/pages/shared-with-all/index.js:76
 msgid "Successfully unshared {name}"
-msgstr "共有を解除しました。"
+msgstr ""
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:166
 #| msgid "No libraries have been shared with you"
@@ -9401,7 +9401,7 @@ msgstr "共有されたライブラリはありません。"
 #: frontend/src/pages/shared-libs/item.js:85
 #: frontend/src/pages/shared-with-all/index.js:81
 msgid "Failed to unshare {name}"
-msgstr "共有を解除できませんでした。"
+msgstr ""
 
 #: frontend/src/pages/shared-with-all/index.js:131
 #| msgid "No libraries"
@@ -9562,7 +9562,7 @@ msgstr "{placeholder}を削除しました。"
 #: frontend/src/pages/sys-admin/groups/group-repos.js:134
 #| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unshare {placeholder} ?"
-msgstr "グループからライブラリ共有を外すのはよろしいですか？"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:163
 #| msgid "Restore Library"
@@ -9588,13 +9588,13 @@ msgstr "ヒント：名前にキーワードを入力して検索できます"
 msgid ""
 "licensed to {placeholder_license_to}, upgrade service expired in "
 "{placeholder_license_expiration}"
-msgstr "ライセンスが有効期限切れです。アップグレードサービスが期限切れです。"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/info.js:70
 msgid ""
 "licensed to {placeholder_license_to}, expires on "
 "{placeholder_license_expiration}"
-msgstr "ライセンスが有効期限切れです。ライセンスの有効期限が切れています。"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/info.js:95
 msgid "System Info"
@@ -9655,7 +9655,7 @@ msgstr "組織"
 #: frontend/src/pages/sys-admin/users/users-content.js:404
 msgid ""
 "Are you sure you want to revoke the admin permission of {placeholder} ?"
-msgstr "管理者権限を取り消すのはよろしいですか？"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:197
 #: frontend/src/pages/sys-admin/users/users-content.js:576
@@ -9667,7 +9667,7 @@ msgstr "管理者権限を取り消す"
 #: frontend/src/pages/sys-admin/users/search-users.js:249
 #: frontend/src/pages/sys-admin/users/users.js:382
 msgid "Successfully revoked the admin permission of {placeholder}."
-msgstr "管理者権限を取り消しました。"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:268
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:352
@@ -9699,7 +9699,7 @@ msgstr "管理権限を設定"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:201
 msgid "Are you sure you want to set {placeholder} as Admin?"
-msgstr "管理者権限を設定するのはよろしいですか？"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:311
 #| msgid "Name updated"
@@ -9822,7 +9822,7 @@ msgstr "全ての通知"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:235
 #: frontend/src/pages/sys-admin/users/users-content.js:403
 msgid "Are you sure you want to reset the password of {placeholder} ?"
-msgstr "パスワードをリセットするのはよろしいですか？"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/orgs/org-admins.js:287
 #: frontend/src/pages/sys-admin/orgs/org-users.js:312
@@ -9851,7 +9851,7 @@ msgstr ""
 msgid ""
 "{userCount} user(s) and {repoCount} libraries of this organization will also"
 " be deleted."
-msgstr "この組織に属する {userCount} ユーザーと {repoCount} ライブラリーも削除されます。"
+msgstr ""
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:236
 #| msgid "deleted"
@@ -10532,7 +10532,7 @@ msgstr "新しい Wiki を追加するには、下の \"Add Wiki\" ボタンを�
 
 #: frontend/src/repo-snapshot.js:132
 msgid "{placeholder} Snapshot"
-msgstr "サムネイル"
+msgstr ""
 
 #: frontend/src/settings.js:55
 msgid "Profile"
@@ -11146,7 +11146,7 @@ msgstr "%(name)s のほか%(amount)s項目を移動しました。"
 
 #: frontend/src/utils/utils.js:1593
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
-msgstr "%(name)s と他の %(amount)s 個のアイテムのコピーに失敗しました。"
+msgstr ""
 
 #: frontend/src/utils/utils.js:1596
 msgid "Failed to copy %(name)s."
@@ -11154,7 +11154,7 @@ msgstr "%(name)s のコピーに失敗しました。"
 
 #: frontend/src/utils/utils.js:1606
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
-msgstr "%(name)s と他の %(amount)s 個のアイテムの移動に失敗しました。"
+msgstr ""
 
 #: frontend/src/utils/utils.js:1609
 msgid "Failed to move %(name)s."

@@ -202,7 +202,7 @@ msgstr "ライブラリは所有者に転送することはできません"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr "このアカウントは非アクティブです。"
+msgstr ""
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
@@ -403,7 +403,7 @@ msgstr "%s のパスワード再設定"
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr "パスワード再設定リンクが %(contact_email)s に送信されました。"
+msgstr ""
 
 #: seahub/api2/endpoints/admin/users.py:1534 seahub/views/sysadmin.py:494
 #, python-format
@@ -1108,13 +1108,13 @@ msgstr "該当ファイルのプレビューは対応されません。"
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr "あなたのクォータは既に十分な空き容量を持っていません。"
+msgstr ""
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr "チームのクォータは既に十分な空き容量を持っていません。"
+msgstr ""
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1231,12 +1231,12 @@ msgstr "既定"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr "チーム {org_name} は無効です。"
+msgstr ""
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr "チーム {org_name} を有効にするには、{SUPPORT_EMAIL} に連絡してください。"
+msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1541,7 +1541,7 @@ msgstr "こんにちは、"
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr "「%(grp_name)s」グループに参加を希望しています。申請依頼文は次の通りです："
+msgstr ""
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
@@ -1609,12 +1609,12 @@ msgstr "%s を削除しました。"
 #: seahub/invitations/models.py:96
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr "サイト %s に参加するように招待する。"
+msgstr ""
 
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr "チーム {org_name} に参加するように招待する。"
+msgstr ""
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1644,7 +1644,7 @@ msgstr "Hi,"
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr "チーム %(org_name)s に参加するように招待する。"
+msgstr ""
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
@@ -1656,7 +1656,7 @@ msgstr "チーム %(inviter_name)s が %(site_name)s に参加するように招
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr "チーム %(org_name)s からアクセスを取り消しました。"
+msgstr ""
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -1688,7 +1688,7 @@ msgstr "入力必須です"
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:104
 #, python-format
 msgid "Virus detected on %s"
-msgstr "バーチャルマシン上で検出された病毒"
+msgstr ""
 
 #: seahub/notifications/management/commands/send_dingtalk_notifications.py:185
 #: seahub/notifications/templates/notifications/notice_email.html:9
@@ -1761,7 +1761,7 @@ msgstr "フォルダを復元しました"
 #: seahub/notifications/management/commands/send_file_updates.py:278
 #, python-format
 msgid "New file updates on %s"
-msgstr "ファイルの更新通知"
+msgstr ""
 
 #: seahub/notifications/management/commands/send_notices.py:461
 #, python-format
@@ -1771,7 +1771,7 @@ msgstr "%sの新規通知"
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:252
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr "%sの新規通知"
+msgstr ""
 
 #: seahub/notifications/models.py:610
 #, python-format
@@ -1824,14 +1824,14 @@ msgstr "ファイル <a href='%(file_url)s'>%(file_name)s</a> にユーザ %(aut
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr "ファイル <a href='%(file_url)s'>%(file_name)s</a> にユーザ %(author)s からの新しいコメントがあります。"
+msgstr ""
 
 #: seahub/notifications/models.py:882
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr "ユーザ %(from_user)s が、ファイル <a href='%(file_url)s'>%(file_name)s</a> の下書き #%(draft_id)s の共有を求めました。"
+msgstr ""
 
 #: seahub/notifications/models.py:905
 #: seahub/notifications/templates/notifications/notice_email.html:66
@@ -1839,7 +1839,7 @@ msgstr "ユーザ %(from_user)s が、ファイル <a href='%(file_url)s'>%(file
 msgid ""
 "Guest %(user)s accepted your <a "
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
-msgstr "ゲスト %(user)s が、%(time)s に、招待を受け入れました。"
+msgstr ""
 
 #: seahub/notifications/models.py:929
 #, python-format
@@ -1854,60 +1854,60 @@ msgstr "ユーザ %(user)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo
 #: seahub/notifications/models.py:1002
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_link)s を作成しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_link)s を作成しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1009
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_name)s を削除しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_name)s を削除しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1015
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_link)s を復元しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1019
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(old_obj_name)s を %(obj_link)s に名前を変更しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1024
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_link)s を移動しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_link)s を移動しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1030
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_link)s を更新しました。"
+msgstr ""
 
 #: seahub/notifications/models.py:1033
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr "ユーザ %(name)s が、ライブラリ <a href=\"%(repo_url)s\">%(repo_name)s</a> 内で、%(obj_type)s %(obj_link)s を %(op_type)s しました。"
+msgstr ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -2059,7 +2059,7 @@ msgstr "%(author)s は、ドキュメント %(sdoc_name)s に新しい返信を�
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr "%(author)s は、ドキュメント %(sdoc_name)s のコメント \"%(resolve_comment)s\" を解決済みにマークしました。"
+msgstr ""
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
@@ -2121,14 +2121,14 @@ msgstr "メールアドレスが無効です。"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr "チーム %(org_name)s は、非アクティブ化されました。"
+msgstr ""
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr "もし、サイトを引き続き利用したい場合は、<a href=\"%(link)s\">ここ</a>をクリックしてください。そうでない場合は、60日以内にアカウントが削除されます。"
+msgstr ""
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2334,14 +2334,14 @@ msgstr "検証コードは %(code)s です。有効期限は1時間です。"
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr " %(shared_from)s があなたにファイルリンクを共有しました。"
+msgstr ""
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr "メールアドレスを検証して、このリンクを訪問するには、<a href=%(url)s>ここ</a>をクリックしてください。"
+msgstr ""
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
@@ -2505,7 +2505,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr "チームを再アクティベートしてログインしてください。"
+msgstr ""
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2888,7 +2888,7 @@ msgstr "%(site_name)s のアカウント %(username)s が有効化されまし�
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr "%(nickname)s が %(site_name)s で %(org_name)s の組織に参加を招待しました。"
+msgstr ""
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
@@ -2923,7 +2923,7 @@ msgstr "%(site_name)s のパスワードはリセットされました。新規�
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr "チームのクォータがほぼ切れています。"
+msgstr ""
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
@@ -2958,7 +2958,7 @@ msgstr "変更後"
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr "ユーザーのクォータがほぼ切れています。"
+msgstr ""
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"

@@ -1793,7 +1793,7 @@ msgstr "Un archivo llamado <a href='%(file_link)s'>%(file_name)s</a> es subido a
 #: seahub/notifications/models.py:617
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr "Un archivo llamado <a href='%(file_link)s'>%(file_name)s</a> es subido a <a href='%(link)s'>%(name)s</a>"
+msgstr ""
 
 #: seahub/notifications/models.py:652
 #, python-format
@@ -1805,7 +1805,7 @@ msgstr "Una carpeta llamada <a href='%(folder_link)s'>%(folder_name)s</a> es sub
 #: seahub/notifications/models.py:659
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr "Una carpeta llamada <a href='%(folder_link)s'>%(folder_name)s</a> es subida a <a href='%(link)s'>%(name)s</a>"
+msgstr ""
 
 #: seahub/notifications/models.py:793
 #, python-format
@@ -2071,7 +2071,7 @@ msgstr "%(author)s ha agregado una nueva respuesta en el documento %(sdoc_name)s
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr "%(author)s ha marcado el comentario \"%(resolve_comment)s\" como resuelto en el documento %(sdoc_name)s."
+msgstr ""
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
@@ -2140,7 +2140,7 @@ msgstr "La organización %(org_name)s ha sido desactivada."
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr "La organización %(org_name)s ha sido desactivada. Si deseas continuar usando nuestro sitio, haz clic <a href=\"%(link)s\">aquí</a>. De lo contrario, tu cuenta será eliminada en 60 días."
+msgstr ""
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2346,14 +2346,14 @@ msgstr "El código de verificación es %(code)s. Es válido por una hora."
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr "El %(shared_from)s ha compartido un enlace de archivo con usted."
+msgstr ""
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr "Puede hacer clic <a href=%(url)s>aquí</a> para verificar su dirección de correo electrónico y acceder a él."
+msgstr ""
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
@@ -2517,7 +2517,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr "Por favor, haga clic en <a href=%(url)s>aquí</a> para verificar su dirección de correo electrónico y luego vuelva a iniciar sesión."
+msgstr ""
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
