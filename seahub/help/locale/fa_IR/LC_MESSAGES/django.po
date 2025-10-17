@@ -4,8 +4,6 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Efstathios Iosifidis <eiosifidis@gmail.com>, 2024
-# nikolaosp <nikolaosp@gmail.com>, 2024
 # Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
@@ -16,12 +14,12 @@ msgstr ""
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
 "Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
-"Language-Team: Greek (https://app.transifex.com/haiwen/teams/5086/el/)\n"
+"Language-Team: Persian (Iran) (https://app.transifex.com/haiwen/teams/5086/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: el\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: fa_IR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
@@ -30,137 +28,137 @@ msgstr ""
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
-msgstr "Εισαγωγή"
+msgstr ""
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr "Διαχείριση αρχείων και φακέλων"
+msgstr ""
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr "Διαχείριση αρχείων με βιβλιοθήκες"
+msgstr ""
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr "Επαναφορά διαγραμμένων αρχείων"
+msgstr ""
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr "Εύρεση παλαιών εκδόσεων αρχείων"
+msgstr ""
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr "Ιστορικό βιβλιοθήκης και στιγμιότυπα"
+msgstr ""
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr "Ορισμός περιόδου διατήρησης ιστορικού"
+msgstr ""
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
-msgstr "Διαγραφή βιβλιοθήκης"
+msgstr ""
 
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr "Προβολή αρχείων μέσα στην Εφαρμογή Ιστού"
+msgstr ""
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr "Αναζήτηση πλήρους κειμένου αρχείων"
+msgstr ""
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr "Διαμοιρασμός και συνεργασία"
+msgstr ""
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr "Διαμοιρασμός αρχείων και φακέλων"
+msgstr ""
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr "Διαχείριση ομάδων"
+msgstr ""
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr "Κλείδωμα αρχείων"
+msgstr ""
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr "Άδεια φακέλου"
+msgstr ""
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr "Διαμοιρασμός τμημάτων"
+msgstr ""
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr "Wiki και διαχείριση γνώσης"
+msgstr ""
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr "Διαχείριση μιας βιβλιοθήκης ως Wiki"
+msgstr ""
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr "Πελάτης επιτραπέζιου υπολογιστή και συγχρονισμός"
+msgstr ""
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr "Εγκατάσταση και συγχρονισμός αρχείων"
+msgstr ""
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr "Συγχρονισμός υφιστάμενων φακέλων"
+msgstr ""
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr "Επιλεκτικός συγχρονισμός υποφακέλων"
+msgstr ""
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr "Συγχρονισμός μόνο για ανάγνωση"
+msgstr ""
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr "Ανενεργοποίηση και επανενεργοποίηση συγχρονισμού βιβλιοθηκών"
+msgstr ""
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr "Ορισμός διαστήματος συγχρονισμού"
+msgstr ""
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr "Ρυθμίσεις διαμεσολαβητή"
+msgstr ""
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
-msgstr "Ασυμφωνία αρχείων"
+msgstr ""
 
 #: templates/help/base.html:89
 msgid "Excluding files"
-msgstr "Αποκλεισμός αρχείων από το συγχρονισμό"
+msgstr ""
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr "Πελάτης οντότητας αποθήκευσης (Drive client)"
+msgstr ""
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr "Χρήση του πελάτη οντότητας αποθήκευσης (Drive client) του Seafile"
+msgstr ""
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr "Χρήση του πελάτη οντότητας αποθήκευσης (Drive client) 2.0 στο Windows"
+msgstr ""
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr "Ασφάλεια και κρυπτογράφηση"
+msgstr ""
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr "Πώς να χρησιμοποιήσετε κρυπτογραφημένες βιβλιοθήκες"
+msgstr ""
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -168,10 +166,6 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
-"Μόλις εσείς και οι φίλοι σας συγχρονίσετε μια κοινόχρηστη βιβλιοθήκη αρχείων"
-" στους υπολογιστές σας, μπορείτε να προσθέσετε, να διαγράψετε ή να "
-"επεξεργαστείτε αρχεία στη βιβλιοθήκη μαζί. Κάθε αλλαγή που κάνετε στη "
-"βιβλιοθήκη θα συγχρονιστεί αυτόματα στους υπολογιστές των άλλων."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -1064,7 +1058,7 @@ msgstr ""
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr "Αποκλεισμός αρχείων/φακέλων από τον συγχρονισμό"
+msgstr ""
 
 #: templates/help/ignore.html:8
 msgid ""
@@ -1077,11 +1071,11 @@ msgstr ""
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr "Μία κενή γραμμή δεν επιλέγει κανένα αρχείο."
+msgstr ""
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
-msgstr "Μία γραμμή που ξεκινά με # προσθέτει ένα σχόλιο."
+msgstr ""
 
 #: templates/help/ignore.html:12
 msgid ""
@@ -1091,11 +1085,6 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
-"Το Seafile υποστηρίζει wildcards στα μοτίβα.  Για παράδειγμα, \"foo/*\" "
-"επιλέγει το \"foo/1\" και \"foo/hello\". Το \"foo/?\" επιλέγει το \"foo/1\" "
-"αλλά όχι το \"foo/hello\". Σημειώστε ότι ο χαρακτήρας wildcard * επιλέγει "
-"όλα τα path σε ένα φάκελο. Για παράδειγμα, το \"foo/*.html\" επιλέγει το "
-"\"foo/a.html\" και το \"foo/templates/b.html\"."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1111,17 +1100,14 @@ msgid ""
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
 msgstr ""
-"Αν ένα μοτίβο δεν τελειώνει με slash, δεν επιλέξει φάκελο.  Δηλαδή, το "
-"\"foo\" θα επιλέξει το αρχείο \"foo\" ή ένα συμβολικό δεσμό. Αλλά το "
-"\"foo/\" και \"foo*\" θα επιλέξει ένα φάκελο και τους υποφακέλους του."
 
 #: templates/help/ignore.html:18
 msgid "Example"
-msgstr "Παράδειγμα"
+msgstr ""
 
 #: templates/help/ignore.html:36
 msgid "Notes"
-msgstr "Σημειώσεις"
+msgstr ""
 
 #: templates/help/ignore.html:38
 msgid ""
@@ -1129,18 +1115,12 @@ msgid ""
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
 msgstr ""
-"Το αρχείο seafile-ignore.txt ορίζει ποια αρχεία θα εξαιρεθούν στην πλευρά "
-"του πελάτη. Εξακολουθείτε να μπορείτε να δημιουργήσετε κάποιο αρχείο στο web"
-" κομμάτι το οποίο να εξαιρείται από το συγχρονισμό με τον πελάτη.  Σε αυτή "
-"την περίπτωση,"
 
 #: templates/help/ignore.html:40
 msgid ""
 "The created file will still be synced back to clients. But any later local "
 "changes to those files will be ignored."
 msgstr ""
-"Το αρχείο που δημιουργείται θα συγχρονίζεται στους πελάτες.  Αλλά "
-"οποιοσδήποτε τοπικές αλλαγές σε αυτά τα αρχεία θα αγνοούνται."
 
 #: templates/help/ignore.html:41
 msgid ""
@@ -1148,9 +1128,6 @@ msgid ""
 "to clients; If the file on the client is also modified, a conflict file will"
 " be generated on the client."
 msgstr ""
-"Αν το αρχείο τροποποιηθεί στο seahub, η νέα έκδοση θα συγχρονιστεί στους "
-"πελάτες. Αν το αρχείο στον πελάτη έχει τροποποιηθεί, θα δημιουργηθεί ένα "
-"αντικρουώμενο αρχείο στον πελάτη."
 
 #: templates/help/ignore.html:45
 msgid ""
@@ -1158,9 +1135,6 @@ msgid ""
 "already synced, and some time later you add it to the ignore list, its "
 "existing versions won't be removed."
 msgstr ""
-"το seafile-ignore.txt απλά εξαιρεί τα αρχεία που δεν έχουν ακόμα "
-"συγχρονιστεί.  Αν το αρχείο έχει συγχρονιστεί και σε κάποια στιγμή αργότερα "
-"το προσθέσετε στην λίστα αγνόησης, οι υπάρχουσες εκδόσεις δεν θα αφαιρεθούν."
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
@@ -1171,14 +1145,10 @@ msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
 msgstr ""
-"Αφού κατεβάσετε το πρόγραμμα πελάτη Seafile, πρέπει να κάνετε 3 βήματα για "
-"να το ρυθμίσετε και να το χρησιμοποιήσετε."
 
 #: templates/help/install_sync.html:10
 msgid "1. Select a disk partition to store local Seafile data"
 msgstr ""
-"1. Επιλέγξτε ένα διαμέρισμα στο δίσκο για να αποθηκεύονται τα αρχεία του "
-"Seafile"
 
 #: templates/help/install_sync.html:11
 msgid "Selecting a folder to store Seafile data"
@@ -1186,40 +1156,33 @@ msgstr ""
 
 #: templates/help/install_sync.html:13
 msgid "2. Add an account"
-msgstr "2. Εισάγετε ένα λογαριασμό"
+msgstr ""
 
 #: templates/help/install_sync.html:14
 msgid "Add an account on your private Seafile server or our public server."
 msgstr ""
-"Προσθέστε ένα λογαριασμό στον προσωπικό σας Seafile server ή στον δικό μας "
-"δημόσιο server."
 
 #: templates/help/install_sync.html:18
 msgid "3. Sync a library"
-msgstr "3. Συγχρονίστε μία βιβλιοθήκη"
+msgstr ""
 
 #: templates/help/install_sync.html:20
 msgid "Click the \"Sync this library\" button to sync it with a local folder."
 msgstr ""
-"Κάντε κλικ στο κουμπί \"Συγχρονιστε αυτή τη βιβλιοθήκη\" για να την "
-"συγχρονίσετε σε έναν τοπικό φάκελο."
 
 #: templates/help/install_sync.html:21
 msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr ""
-"Έπειτα, προσθέτετε κάποια αρχεία στην βιβλιοθήκη.  Θα συγχρονιστούν αυτόματα"
-" με την πλατφόρμα cloud."
 
 #: templates/help/install_sync.html:26
 msgid "4. (Optional) Create a library"
-msgstr "4. (Προεραιτικά) Δημιουργήστε μία βιβλιοθήκη"
+msgstr ""
 
 #: templates/help/install_sync.html:28
 msgid "You can also create a library from a local folder."
 msgstr ""
-"Μπορείτε επίσης να δημιουργήσετε μια βιβλιοθήκη από έναν τοπικό φάκελο."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
@@ -1915,12 +1878,12 @@ msgstr ""
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "آیکون"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
 msgid "Details"
-msgstr "Λεπτομέρειες"
+msgstr ""
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
@@ -2026,9 +1989,7 @@ msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
-"Ορισμένοι τύποι αρχείων μπορούν να ανοίξουν και να προβληθούν απευθείας μέσα"
-" στην Εφαρμογή Ιστού του Seafile. Εκτρέμει αυτοί είναι:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr "Αρχεία εικόνων"
+msgstr ""

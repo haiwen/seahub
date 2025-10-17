@@ -6,6 +6,7 @@
 # Translators:
 # Kvita <transifex@kvita.com.ua>, 2024
 # Alexander Laskavtsev <laskavtsev@gmail.com>, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Alexander Laskavtsev <laskavtsev@gmail.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Ukrainian (https://app.transifex.com/haiwen/teams/5086/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +25,7 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Навігаційне меню"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
@@ -33,28 +34,28 @@ msgstr "Про систему"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Управління файлами та папками"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Управління файлами з бібліотеки"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Відновлення видалених файлів"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Знаходження старих версій файлів"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Історія бібліотеки та знімки"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Встановлення періоду утримання історії"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
@@ -63,75 +64,75 @@ msgstr "Видалення бібліотеки"
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Перегляд файлів в Web-додатку"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Пошук за текстом у файлах"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Поділитися та співпраця"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Поділитися файлами та папками"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Управління групами"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Заблокувати файли"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Права доступу до папки"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Поділитися з відділами"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki та управління знаннями"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Управління бібліотекою як Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Клієнт для настільного комп'ютера та синхронізація"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Встановлення та синхронізація файлів"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "Синхронізація існуючих папок"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Вибіркове синхронізація підпапок"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Тільки для читання синхронізація"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Від'єднання та повторне синхронізація бібліотек"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Встановлення інтервалу синхронізації"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr ""
+msgstr "Налаштування проксі"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
@@ -143,23 +144,23 @@ msgstr "Виключення файлів"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Клієнт для драйву"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Використання клієнта для драйву Seafile"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Використання клієнта для драйву Seafile 2.0 на Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Безпека та шифрування"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Як користуватися шифрованими бібліотеками"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -167,6 +168,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"Коли ви та ваші друзі синхронізуєте спільну бібліотеку файлів на своїм "
+"комп'ютері, ви можете додавати, видаляти або редагувати файли у бібліотеці "
+"разом. Усі зміни, які ви зробите у бібліотеці, будуть автоматично "
+"синхронізовані з комп'ютерами інших користувачів."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -177,36 +182,48 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"Коли ви та ваші друзі редагуєте один і той самий файл одночасно, ваші зміни "
+"можуть конфліктувати з іншими. У цьому випадку Seafile збереже першу версію "
+"файлу у облаку незмінною, а перейменує іншу версію у файл з конфліктом. Ім'я"
+" файлу з конфліктом закінчується на електронну адресу автора, плюс поточний "
+"час, наприклад, test.txt (SFConflict name@example.com 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Ви можете видалити бібліотеку, власну для вас. Видалена бібліотека може бути"
+" відновлена ви або адміністратор сервера Seafile."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Після видалення бібліотеки вона має наступні ефекти:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Всі спільні файли та папки у цій бібліотеці будуть скасовані."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Клієнти для настільного комп'ютера, синхронізовані з циєю бібліотекою, "
+"більше не можуть синхронізуватися з нею. Але локальні файли на клієнті не "
+"будуть видалені."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Управління та використання відділів"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Деякі організації мають складну ієрархію відділів. Зазвичай є дві загальні "
+"ситуації для управління файлами у цих організаціях:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -214,6 +231,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"У організації повинен бути спільний простір для спільного зберігання файлів."
+" Ієрархія папок повинна відповідати ієрархії відділів. У кожен відділ буде "
+"присвоєно окрема папка або простір для спільного зберігання файлів."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -221,46 +241,53 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"У спільному просторі для спільного зберігання файлів повинен бути власник, "
+"але не окремі працівники. Таким чином, власник файлів не буде змінюватися, "
+"коли працівник виходить з організації."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Функція \"Відділи\" спроектована для вирішення вищеописаних двох випадків "
+"використання. Ми розглянемо цю функцію з трьох різних перспектив:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Адміністратор системи"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Адміністратор відділу"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Учасники відділу"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Адміністратор системи може:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Управління ієрархією відділів та учасниками"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Назначити обмеження на зберігання для відділів"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Створити та керувати спільними бібліотеками у відділах"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Адміністратор системи може встановити ієрархію відділів в двох способах: "
+"вручну або імпортувати з Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -270,6 +297,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Адміністратор системи може створити будь-яку кількість верхніх рівнів "
+"відділів та створити будь-яку кількість під-відділів під кожен відділ. Кожен"
+" рівень відділу може бути заповнений учасниками. Адміністратор системи може "
+"встановити роль кожного учасника у відділі як 'учасник' або 'адміністратор'."
+" Ми розглянемо, як адміністратор відділу може керувати відділом пізніше."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -278,12 +310,23 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Адміністратор системи може також імпортувати ієрархію з OU (Organizational "
+"Units) у AD. Кожен OU буде імпортований як відділ. А під-OUs під кожен OU "
+"будуть імпортовані як під-відділи. Бібліотеки, створені всередині відділу, "
+"належать самому відділу, а не окремим користувачам. Таким чином, "
+"адміністратор системи може назначити обмеження на зберігання для відділів. "
+"Загальна сума розміру всіх бібліотек у відділі не повинна перевищувати "
+"обмеження на зберігання. <strong>Зауважте, що обмеження на зберігання під-"
+"відділу не залежить від обмеження на зберігання його батьківського "
+"відділу.</strong>"
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Адміністратор системи може також видалити відділ після видалення всіх під-"
+"відділів та бібліотек."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -293,6 +336,12 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Бібліотеки, створені всередині відділу, належать самому відділу, а не "
+"окремим користувачам. Таким чином, адміністратор системи може назначити "
+"обмеження на зберігання для відділів. Загальна сума розміру всіх бібліотек у"
+" відділі не повинна перевищувати обмеження на зберігання. <strong>Зауважте, "
+"що обмеження на зберігання під-відділу не залежить від обмеження на "
+"зберігання його батьківського відділу.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -300,12 +349,22 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"Адміністратор системи може створити бібліотеку всередині відділу. Також "
+"адміністратор відділу може створити бібліотеку всередині свого відділу. Усі "
+"бібліотеки, створені всередині відділу, належать самому відділу, а не "
+"окремим користувачам. Таким чином, адміністратор системи може назначити "
+"обмеження на зберігання для відділів. Загальна сума розміру всіх бібліотек у"
+" відділі не повинна перевищувати обмеження на зберігання. <strong>Зауважте, "
+"що обмеження на зберігання під-відділу не залежить від обмеження на "
+"зберігання його батьківського відділу.</strong>"
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Всі вищеописані операції можна виконати в інтерфейсі адміністратора системи."
+" Дивіться нижче знімок екрану для інформації."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -313,14 +372,23 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Якщо ви звертаєтеся до вищеописаних операцій, то ви повинні бути "
+"адміністратором відділу. Адміністратор відділу може виконувати наступні "
+"операції після входу в свій акаунт."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
 msgstr ""
+"Усі бібліотеки, створені всередині відділу, належать самому відділу, а не "
+"окремим користувачам. Таким чином, адміністратор відділу може отримати "
+"доступ до бібліотек відділу після входу в свій акаунт."
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
 msgstr ""
+"Усі бібліотеки, створені всередині відділу, належать самому відділу, а не "
+"окремим користувачам. Таким чином, адміністратор відділу може керувати "
+"учасниками відділу після входу в свій акаунт."
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
@@ -333,6 +401,10 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Якщо користувач є адміністратором відділу, він може додати або видалити "
+"учасників відділу. Усі користувачі зареєстровані в системі можуть бути "
+"додані як учасники відділу. Але якщо відділи були імпортовані з AD, зміни до"
+" членства будуть перезаписані на наступній синхронізації з AD."
 
 #: templates/help/departments.html:44
 msgid ""
@@ -403,7 +475,7 @@ msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 for Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -1907,7 +1979,7 @@ msgstr ""
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Іконка"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
