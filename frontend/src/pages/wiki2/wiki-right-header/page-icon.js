@@ -12,7 +12,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
   const isDesktop = Utils.isDesktop();
 
   const handleSetIcon = useCallback((emoji) => {
-    onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: emoji });
+    onUpdatePage && onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: emoji });
     setTimeout(() => {
       popoverRef.current?.toggle();
     }, 300);
@@ -63,7 +63,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
 
 PageIcon.propTypes = {
   currentPageConfig: PropTypes.object.isRequired,
-  onUpdatePage: PropTypes.func.isRequired,
+  onUpdatePage: PropTypes.func,
 };
 
 export default PageIcon;

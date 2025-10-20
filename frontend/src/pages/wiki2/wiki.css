@@ -10,8 +10,8 @@ body {
   overflow: hidden;
 }
 
-.wiki2-main-panel.show-comment-panel .wiki-page-title-wrapper,
-.wiki2-main-panel.show-comment-panel .sdoc-editor-container .sdoc-article-container .article.sdoc-editor__article {
+.wiki2-main-panel.show-right-panel .wiki-page-title-wrapper,
+.wiki2-main-panel.show-right-panel .sdoc-editor-container .sdoc-article-container .article.sdoc-editor__article {
   padding-left: 50px;
 }
 
@@ -69,6 +69,7 @@ body {
   min-width: 500px;
 }
 
+.main-panel-center .wiki-content-right-panel-wrapper,
 .main-panel-center .sdoc-content-right-panel-wrapper {
   margin-top: -44px;
   height: calc(100vh + 44px);

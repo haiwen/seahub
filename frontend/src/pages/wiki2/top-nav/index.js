@@ -17,7 +17,7 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, currentPageLocked }
       {paths.map((item, index) => {
         return (
           <Fragment key={item.id}>
-            <div className='wiki2-top-nav-item d-flex align-items-center' onClick={() => {setCurrentPage(item.id);}}>
+            <div className='wiki2-top-nav-item d-flex align-items-center' onClick={() => {setCurrentPage && setCurrentPage(item.id);}}>
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
               <div className="d-flex align-items-center">
                 <span className='text-truncate' title={item.name} aria-label={item.name}>{item.name}</span>
@@ -35,7 +35,7 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, currentPageLocked }
 WikiTopNav.propTypes = {
   config: PropTypes.object,
   currentPageId: PropTypes.string,
-  setCurrentPage: PropTypes.func.isRequired,
+  setCurrentPage: PropTypes.func,
   currentPageLocked: PropTypes.bool,
 };
 

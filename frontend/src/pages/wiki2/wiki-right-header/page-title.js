@@ -13,7 +13,7 @@ import './page-title.css';
 const propTypes = {
   isUpdateBySide: PropTypes.bool,
   currentPageConfig: PropTypes.object.isRequired,
-  onUpdatePage: PropTypes.func.isRequired,
+  onUpdatePage: PropTypes.func,
 };
 
 const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
@@ -30,13 +30,13 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
 
   const handleAddIcon = useCallback(() => {
     const icon = generateARandomEmoji();
-    onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: icon });
+    onUpdatePage && onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: icon });
   }, [currentPageConfig.id, currentPageConfig.name, onUpdatePage]);
 
   const handleAddCover = useCallback(() => {
     const coverName = WIKI_COVER_LIST[Math.floor(Math.random() * WIKI_COVER_LIST.length)];
     const coverImgUrl = `${coverName}`;
-    onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, cover_img_url: coverImgUrl });
+    onUpdatePage && onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, cover_img_url: coverImgUrl });
   }, [currentPageConfig.id, currentPageConfig.name, onUpdatePage]);
 
   // Update current page favicon
