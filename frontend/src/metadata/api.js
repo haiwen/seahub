@@ -91,7 +91,7 @@ class MetadataManagerAPI {
     return this.req.put(url, data);
   };
 
-  getRecord(repoID, { recordId, parentDir, fileName }) {
+  getRecord(repoID, { recordId, parentDir, fileName }, fallBackToBasicInfo) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/record/';
     let params = {};
     if (recordId) {
@@ -103,6 +103,9 @@ class MetadataManagerAPI {
       if (fileName) {
         params['file_name'] = fileName;
       }
+    }
+    if (fallBackToBasicInfo) {
+      params['fallback_to_basic_info'] = fallBackToBasicInfo;
     }
     return this.req.get(url, { params: params });
   }
