@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.repo_metadata.models import RepoMetadata, RepoMetadataViews
@@ -29,6 +29,7 @@ from seahub.repo_metadata.constants import FACE_RECOGNITION_VIEW_ID, METADATA_RE
 from seahub.file_tags.models import FileTags
 from seahub.repo_tags.models import RepoTags
 from seahub.settings import MD_FILE_COUNT_LIMIT
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 
@@ -480,6 +481,11 @@ class MetadataRecord(APIView):
                 error_msg = 'file_name invalid'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        try:
+            fallback_to_basic_info = to_python_boolean(request.GET.get('fallback_to_basic_info', 'false'))
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'fallback_to_basic_info invalid')
+
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is disabled for repo {repo_id}.'
@@ -516,8 +522,25 @@ class MetadataRecord(APIView):
         rows = query_result.get('results')
 
         if not rows:
-            error_msg = 'Record not found'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            if parent_dir and file_name and fallback_to_basic_info:
+                real_path = os.path.join(parent_dir, file_name)
+                dirent = seafile_api.get_dirent_by_path(repo_id, real_path)
+                if not dirent:
+                    error_msg = 'Record not found'
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+                row_info = {
+                    "_file_modifier": dirent.modifier,
+                    "_file_mtime": timestamp_to_isoformat_timestr(dirent.mtime),
+                    "_is_dir": False,
+                    "_name": file_name,
+                    "_parent_dir": parent_dir,
+                    "_size": dirent.size,
+                    "_suffix": os.path.splitext(file_name)[1][1:]
+                }
+                query_result['results'] = [row_info]
+            else:
+                error_msg = 'Record not found'
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return Response(query_result)
 
@@ -779,7 +802,7 @@ class MetadataBatchRecords(APIView):
         if not files or not isinstance(files, list):
             error_msg = 'files parameter is required and must be a list'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        
+
         if len(files) > METADATA_RECORD_UPDATE_LIMIT:
             error_msg = 'Number of records exceeds the limit of %s.' % METADATA_RECORD_UPDATE_LIMIT
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -814,7 +837,7 @@ class MetadataBatchRecords(APIView):
                         'type': column.get('type'),
                         'data': column.get('data', {})
                     })
-            
+
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -822,14 +845,14 @@ class MetadataBatchRecords(APIView):
 
         where_conditions = []
         parameters = []
-        
+
         for file_info in files:
             parent_dir = file_info.get('parent_dir')
             file_name = file_info.get('file_name')
-            
+
             if not parent_dir or not file_name:
                 continue
-                
+
             where_conditions.append(f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?)')
             parameters.extend([parent_dir, file_name])
 
@@ -2530,13 +2553,13 @@ class MetadataFileTags(APIView):
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         row_id_map = {}
-        
+
         for file_tags in file_tags_data:
             record_id = file_tags.get('record_id', '')
             tags = file_tags.get('tags', [])
             if not record_id:
                 continue
-            
+
             row_id_map[record_id] = tags
 
         if not row_id_map:
@@ -2897,14 +2920,14 @@ class MetadataMigrateTags(APIView):
             tag_dict.get(TAGS_TABLE.columns.id.name, '')
             for tag_dict in existing_tag_records
         }
-        
+
         tags_to_create = [] # [{name:'', color:''}, ...]
         old_tag_name_to_metadata_tag_id = {} # {old_tag_name:id,} Existing tags
 
         for repo_tag in repo_tags:
             tag_name = repo_tag.name
             tag_color = repo_tag.color
-            
+
             if tag_name in existing_tag_map:
                 # Tag already exists, no need to create it
                 new_tag_id = existing_tag_map.get(tag_name)
@@ -2915,7 +2938,7 @@ class MetadataMigrateTags(APIView):
                     TAGS_TABLE.columns.name.name: tag_name,
                     TAGS_TABLE.columns.color.name: tag_color
                 })
-        
+
         if tags_to_create:
             response = metadata_server_api.insert_rows(tags_table_id, tags_to_create)
             new_tag_ids = response.get('row_ids', [])
@@ -2924,7 +2947,7 @@ class MetadataMigrateTags(APIView):
                 tag_name = tag.get(TAGS_TABLE.columns.name.name)
                 old_tag_name_to_metadata_tag_id[tag_name] = new_tag_id
         return old_tag_name_to_metadata_tag_id
-    
+
     def _get_old_tags_info(self, tagged_files):
         old_tag_name_to_file_paths = {} # {old_tag_name: {file_path,....}}
         file_paths_set = set() # Used for querying metadata later
@@ -2933,10 +2956,10 @@ class MetadataMigrateTags(APIView):
             parent_path = tagged_file.file_uuid.parent_path
             filename = tagged_file.file_uuid.filename
             file_path = posixpath.join(parent_path, filename)
-            
+
             if old_tag_name not in old_tag_name_to_file_paths:
                 old_tag_name_to_file_paths[old_tag_name] = set()
-            
+
             old_tag_name_to_file_paths[old_tag_name].add(file_path)
             file_paths_set.add(file_path)
         return old_tag_name_to_file_paths, file_paths_set
@@ -2951,21 +2974,21 @@ class MetadataMigrateTags(APIView):
             filename = os.path.basename(file_path)
             dir_paths.append(parent_dir)
             filenames.append(filename)
-        
+
         batch_size = 100
         all_metadata_records = []
-        
+
         for i in range(0, len(dir_paths), batch_size):
             batch_dir_paths = dir_paths[i:i+batch_size]
             batch_filenames = filenames[i:i+batch_size]
-            
+
             where_conditions = []
             parameters = []
             for j in range(len(batch_dir_paths)):
                 where_conditions.append(f"(`{METADATA_TABLE.columns.parent_dir.name}` = ? AND `{METADATA_TABLE.columns.file_name.name}` = ?)")
                 parameters.append(batch_dir_paths[j])
                 parameters.append(batch_filenames[j])
-                
+
             where_clause = " OR ".join(where_conditions)
             sql = f'''
                 SELECT `{METADATA_TABLE.columns.id.name}`, 
@@ -2975,20 +2998,20 @@ class MetadataMigrateTags(APIView):
                 WHERE `{METADATA_TABLE.columns.is_dir.name}` = FALSE
                 AND ({where_clause})
                 '''
-                
+
             query_result = metadata_server_api.query_rows(sql, parameters)
             batch_metadata_records = query_result.get('results', [])
             all_metadata_records.extend(batch_metadata_records)
 
         return all_metadata_records
-    
+
     def _handle_tags_link(self, metadata_records, metadata_tag_id_to_file_paths, METADATA_TABLE):
         file_path_to_record_id = {}  # {file_path: record_id}
         for record in metadata_records:
             parent_dir = record.get(METADATA_TABLE.columns.parent_dir.name)
             file_name = record.get(METADATA_TABLE.columns.file_name.name)
             record_id = record.get(METADATA_TABLE.columns.id.name)
-            
+
             file_path = posixpath.join(parent_dir, file_name)
             file_path_to_record_id[file_path] = record_id
         # create record id to tag id mapping
@@ -2998,14 +3021,14 @@ class MetadataMigrateTags(APIView):
                 record_id = file_path_to_record_id.get(file_path)
                 if not record_id:
                     continue
-                    
+
                 if record_id not in record_to_tags_map:
                     record_to_tags_map[record_id] = []
-                    
+
                 record_to_tags_map[record_id].append(tag_id)
-        
+
         return record_to_tags_map
-    
+
     def post(self, request, repo_id):
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -3017,7 +3040,7 @@ class MetadataMigrateTags(APIView):
         if not metadata or not metadata.enabled:
             error_msg = f'Metadata extension is not enabled for library {repo_name}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         tags_enabled = metadata.tags_enabled
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
         if not tags_enabled:
@@ -3025,7 +3048,7 @@ class MetadataMigrateTags(APIView):
             metadata.tags_lang = 'en'
             metadata.save()
             init_tags(metadata_server_api)
-        
+
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -3035,7 +3058,7 @@ class MetadataMigrateTags(APIView):
         if not tags_table:
             return api_error(status.HTTP_404_NOT_FOUND, 'tags table not found')
         tags_table_id = tags_table['id']
-        
+
         # create new tags
         repo_tags = RepoTags.objects.get_all_by_repo_id(repo_id)
         if not repo_tags:
@@ -3047,21 +3070,21 @@ class MetadataMigrateTags(APIView):
             repo_tags.delete()
             return Response({'success': True})
         old_tag_name_to_file_paths, file_paths_set = self._get_old_tags_info(tagged_files)
-        
+
         metadata_tag_id_to_file_paths = {}  # {tag_id: file_paths}
         for tag_name, tag_id in metadata_tags.items():
             if tag_name not in old_tag_name_to_file_paths:
                 continue
             file_paths = old_tag_name_to_file_paths[tag_name]
             metadata_tag_id_to_file_paths[tag_id] = file_paths
-        
+
         try:
             # query records
             metadata_records = self._get_metadata_records(metadata_server_api, file_paths_set, METADATA_TABLE)
             record_to_tags_map = self._handle_tags_link(metadata_records, metadata_tag_id_to_file_paths, METADATA_TABLE)
             metadata_server_api.insert_link(
-                TAGS_TABLE.file_link_id, 
-                METADATA_TABLE.id, 
+                TAGS_TABLE.file_link_id,
+                METADATA_TABLE.id,
                 record_to_tags_map
             )
             # clear old tag data
@@ -3096,7 +3119,7 @@ class MetadataExportTags(APIView):
         if not can_read_metadata(request, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
 
         from seafevents.repo_metadata.constants import TAGS_TABLE
@@ -3117,7 +3140,7 @@ class MetadataExportTags(APIView):
                     '_tag_parent_links': [link_info.get('row_id', '') for link_info in tag_parent_links],
                     '_tag_sub_links': [link_info.get('row_id', '') for link_info in tag_sub_links],
                 })
-                
+
             response = HttpResponse(
                 json.dumps(export_data, ensure_ascii=False),
                 content_type='application/json'
@@ -3160,7 +3183,7 @@ class MetadataImportTags(APIView):
             # Update the imported tag ID to an existing tag ID on the server
             tag[tags_table.columns.id.name] = tags_id_map[tag.get(tags_table.columns.id.name, '')]
             processed_tags.append(tag)
-        
+
         child_links_map = {}
         # old child links -> new child links  and remove exist tags
         for tag in processed_tags:
@@ -3170,13 +3193,13 @@ class MetadataImportTags(APIView):
             formatted_child_links = list(set(new_child_links) - set(exist_tags_ids))
             if formatted_child_links:
                 child_links_map[tag_id] = formatted_child_links
-        
+
         return child_links_map
 
     def _get_existing_tags(self, metadata_server_api, tag_names, tags_table):
         tag_names_str = ', '.join([f'"{tag_name}"' for tag_name in tag_names])
         sql = f'SELECT * FROM {tags_table.name} WHERE `{tags_table.columns.name.name}` in ({tag_names_str})'
-        
+
         exist_rows = metadata_server_api.query_rows(sql)
         existing_tags = exist_rows.get('results', [])
 
@@ -3187,21 +3210,21 @@ class MetadataImportTags(APIView):
                 for link in tag_sub_links:
                     sub_links.append(link['row_id'])
                 item['_tag_sub_links'] = sub_links
-        
+
         return existing_tags
 
     def _classify_tags(self, file_content, existing_tags, tags_table):
         new_tags = []
         imported_existing_tags = []
         existing_id_map = {}
-        
+
         if existing_tags:
             existing_tag_names = [tag.get(tags_table.columns.name.name, '') for tag in existing_tags]
             processed_names = set()
-            
+
             for tag_data in file_content:
                 tag_name = tag_data.get(tags_table.columns.name.name, '')
-                
+
                 if tag_name in existing_tag_names and tag_name not in processed_names:
                     idx = existing_tag_names.index(tag_name)
                     imported_existing_tags.append(tag_data)
@@ -3213,7 +3236,7 @@ class MetadataImportTags(APIView):
                     processed_names.add(tag_name)
         else:
             new_tags = file_content
-            
+
         return new_tags, imported_existing_tags, existing_id_map
 
     def post(self, request, repo_id):
@@ -3225,7 +3248,7 @@ class MetadataImportTags(APIView):
         if not metadata or not metadata.enabled or not metadata.tags_enabled:
             error_msg = f'The tags is disabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = f'Library {repo_id} not found.'
@@ -3246,12 +3269,12 @@ class MetadataImportTags(APIView):
             tag_names = [tag.get(TAGS_TABLE.columns.name.name, '') for tag in file_content]
             if not tag_names:
                 return Response({'success': True})
-                
+
             existing_tags = self._get_existing_tags(metadata_server_api, tag_names, TAGS_TABLE)
             new_tags, imported_existing_tags, existing_id_map = self._classify_tags(
                 file_content, existing_tags, TAGS_TABLE
             )
-            
+
             if new_tags:
                 create_tags_data = [
                     {
@@ -3263,15 +3286,15 @@ class MetadataImportTags(APIView):
                 resp = metadata_server_api.insert_rows(tags_table_id, create_tags_data)
             else:
                 return Response({'success': True})
-            
+
             # child links map structure: {tag_id: [child_tag_id1, child_tag_id2], ....}
             child_links_map = self._handle_tag_links(
-                new_tags, existing_tags, existing_id_map, 
+                new_tags, existing_tags, existing_id_map,
                 imported_existing_tags, resp, TAGS_TABLE
             )
-            
+
             if child_links_map:
-                metadata_server_api.insert_link(TAGS_TABLE.self_link_id, tags_table_id, child_links_map, True)            
+                metadata_server_api.insert_link(TAGS_TABLE.self_link_id, tags_table_id, child_links_map, True)
         except Exception as e:
             logger.exception(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -3291,7 +3314,7 @@ class MetadataStatistics(APIView):
         Get statistics data for metadata view including:
         - File type distribution
         - Files by creation/modification time
-        - Files by creator 
+        - Files by creator
         - Summary statistics
         """
         repo = seafile_api.get_repo(repo_id)
@@ -3373,7 +3396,7 @@ class MetadataStatistics(APIView):
             if not file_type.strip():
                 file_type = 'other'
             processed_results.append({'type': file_type, 'count': row['count']})
-            
+
         return processed_results
 
     def _get_creator_stats_sql(self, metadata_server_api, METADATA_TABLE):
@@ -3439,7 +3462,7 @@ class MetadataStatistics(APIView):
         if modifier_list_results and 'results' in modifier_list_results:
             for modifier_row in modifier_list_results['results']:
                 collaborators_set.add(modifier_row['modifier'])
-        
+
         return {
             'total_files': row['total_files'],
             'total_collaborators': len(collaborators_set)
@@ -3469,15 +3492,15 @@ class MetadataStatistics(APIView):
         range_data = range_results['results'][0]
 
         created_stats = self._get_time_period_stats_sql(
-            metadata_server_api, METADATA_TABLE, 'created', 
+            metadata_server_api, METADATA_TABLE, 'created',
             range_data['min_ctime'], range_data['max_ctime']
         )
-        
+
         modified_stats = self._get_time_period_stats_sql(
             metadata_server_api, METADATA_TABLE, 'modified',
             range_data['min_mtime'], range_data['max_mtime']
         )
-        
+
         return {
             'created': created_stats,
             'modified': modified_stats
@@ -3485,7 +3508,7 @@ class MetadataStatistics(APIView):
 
     def _get_time_period_stats_sql(self, metadata_server_api, METADATA_TABLE, time_type, min_date, max_date):
         from datetime import datetime
-        
+
         if not min_date or not max_date:
             return {'unit': 'year', 'data': [], 'grouping': time_type}
         try:
@@ -3547,7 +3570,7 @@ class MetadataStatistics(APIView):
                 GROUP BY `{date_column}`
                 ORDER BY `{date_column}`
             '''
-            
+
             results = metadata_server_api.query_rows(sql, [])
             if not results or 'results' not in results:
                 return {'unit': 'month', 'data': [], 'grouping': time_type}
@@ -3575,7 +3598,7 @@ class MetadataStatistics(APIView):
                     })
                 except (ValueError, IndexError):
                     continue
-            
+
             return {'unit': 'month', 'data': data, 'grouping': time_type}
 
         else:
