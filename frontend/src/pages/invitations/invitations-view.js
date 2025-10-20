@@ -12,6 +12,7 @@ import InvitationRevokeDialog from '../../components/dialog/invitation-revoke-di
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
+import OpIcon from '../../components/op-icon';
 import MobileItemMenu from '../../components/mobile-item-menu';
 
 import '../../css/invitations.css';
@@ -98,22 +99,16 @@ class Item extends React.Component {
             <td>
               {isOpIconShown && (
                 item.accept_time ?
-                  <i
-                    role="button"
+                  <OpIcon
                     className="op-icon sf3-font sf3-font-cancel-invitation"
                     title={gettext('Revoke Access')}
-                    aria-label={gettext('Revoke Access')}
-                    onClick={this.toggleRevokeDialog}
-                  >
-                  </i> :
-                  <i
-                    role="button"
+                    op={this.toggleRevokeDialog}
+                  /> :
+                  <OpIcon
                     className="sf3-font sf3-font-x-01 op-icon"
                     title={gettext('Delete')}
-                    aria-label={gettext('Delete')}
-                    onClick={this.deleteItem}
-                  >
-                  </i>
+                    op={this.deleteItem}
+                  />
               )}
             </td>
           </tr>
