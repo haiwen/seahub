@@ -70,7 +70,7 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
               <div className='wiki-file-preview-container' ref={wikiFilePreviewRef}>
                 <div className='wiki-scroll-container' ref={scrollRef}>
                   <div className='wiki-preview-container'>
-                    <RightHeader currentPageConfig={ currentPageConfig && {...currentPageConfig, locked: true }} />
+                    <RightHeader currentPageConfig={ currentPageConfig && { ...currentPageConfig, locked: true }} />
                     <SdocWikiEditor
                       document={docContent}
                       docUuid={previewDocUuid}
@@ -91,27 +91,27 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
       {isShowZoomOut && docContent?.elements && previewDocInfo.config && (
         ReactDOM.createPortal(
           <div className='wiki-zoom-out-container' onClick={() => setIsShowZoomOut(false)}>
-              <div
-                className='file-preview-zoom-out-container'
-                ref={wikiFilePreviewRef}
-                onClick={(e) => e.stopPropagation()}
-              >
-                <div className='wiki-scroll-container' ref={scrollRef}>
-                  <div className='wiki-preview-container'>
-                    <RightHeader currentPageConfig={ currentPageConfig && {...currentPageConfig, locked: true }} />
-                    <SdocWikiEditor
-                      document={docContent}
-                      docUuid={previewDocUuid}
-                      isWikiReadOnly={true}
-                      scrollRef={scrollRef}
-                      collaborators={[]}
-                      showComment={false}
-                      isShowRightPanel={false}
-                      setEditor={setEditor}
-                    />
-                  </div>
+            <div
+              className='file-preview-zoom-out-container'
+              ref={wikiFilePreviewRef}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className='wiki-scroll-container' ref={scrollRef}>
+                <div className='wiki-preview-container'>
+                  <RightHeader currentPageConfig={ currentPageConfig && { ...currentPageConfig, locked: true }} />
+                  <SdocWikiEditor
+                    document={docContent}
+                    docUuid={previewDocUuid}
+                    isWikiReadOnly={true}
+                    scrollRef={scrollRef}
+                    collaborators={[]}
+                    showComment={false}
+                    isShowRightPanel={false}
+                    setEditor={setEditor}
+                  />
                 </div>
               </div>
+            </div>
           </div>,
           document.body
         )

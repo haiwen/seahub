@@ -97,21 +97,21 @@ class MainPanel extends Component {
     this.unsubscribeWikiFilePreview();
   }
 
-  componentDidUpdate(prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.docUuid !== this.state.docUuid) {
-      this.setState({ isShowRightPanel: false, isPreviewFile: false });
+      this.setState({ isShowRightPanel: false });
     }
   }
 
   toggleWikiFilePreview = (data) => {
-    this.setState({ 
-      isPreviewFile: true, 
-      isReloadingPreview: true, 
+    this.setState({
+      isPreviewFile: true,
+      isReloadingPreview: true,
       previewDocUuid: {},
       isShowRightPanel: false
     });
-    
-    // Firstly get access token config and then use it to get wiki content 
+
+    // Firstly get access token config and then use it to get wiki content
     const getWikiPage = wikiAPI.getWiki2Page(data.wiki_repo_id, data.page_id);
     getWikiPage.then(res => {
       const { seadoc_access_token, assets_url } = res.data;
@@ -125,10 +125,10 @@ class MainPanel extends Component {
 
       const sdocServerApi = new SDocServerApi(config);
       sdocServerApi.getDocContent().then(docRes => {
-        this.setState({ 
-          docContent: docRes.data, 
+        this.setState({
+          docContent: docRes.data,
           isReloadingPreview: false,
-          previewDocInfo: { pageId: data.page_id, config: this.props.config}
+          previewDocInfo: { pageId: data.page_id, config: this.props.config }
         });
       });
     }).catch(error => {
@@ -147,7 +147,7 @@ class MainPanel extends Component {
 
   togglePreview = () => {
     this.setState({ isPreviewFile: false });
-  }
+  };
 
   updateUnseenNotificationsCount = (count) => {
     this.setState({ unseenNotificationsCount: count });
@@ -375,12 +375,12 @@ class MainPanel extends Component {
             )}
           </div>
           {this.state.isPreviewFile &&
-            <WikiRightPanel 
+            <WikiRightPanel
               docContent={this.state.docContent}
-              previewDocUuid={this.state.previewDocUuid} 
-              setEditor={this.setEditor} 
+              previewDocUuid={this.state.previewDocUuid}
+              setEditor={this.setEditor}
               togglePreview={this.togglePreview}
-              isReloadingPreview={this.state.isReloadingPreview} 
+              isReloadingPreview={this.state.isReloadingPreview}
               previewDocInfo={this.state.previewDocInfo}
             />}
           {this.state.isShowRightPanel && (
