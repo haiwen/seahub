@@ -197,7 +197,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     }
     setLoading(true);
     direntRef.current = dirent;
-    metadataAPI.getRecord(repoID, { parentDir, fileName }).then(res => {
+    const fallBackToBasicInfo = true;
+    metadataAPI.getRecord(repoID, { parentDir, fileName }, fallBackToBasicInfo).then(res => {
       const { results, metadata } = res.data;
       const record = Array.isArray(results) && results.length > 0 ? results[0] : {};
       const allColumns = normalizeFields(metadata).map(field => new Column(field));
