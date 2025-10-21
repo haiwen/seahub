@@ -57,7 +57,7 @@
   font-size: 1rem;
 }
 
-.lightbox-side-panel .detail-header .detail-title .name,
+.lightbox-side-panel .detail-header .detail-title .detail-title-name,
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-title,
 .lightbox-side-panel .dirent-detail-item .dirent-detail-item-name,
 .lightbox-side-panel .sf-metadata-number-property-detail-editor {
