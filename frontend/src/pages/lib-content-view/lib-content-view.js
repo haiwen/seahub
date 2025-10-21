@@ -303,16 +303,7 @@ class LibContentView extends React.Component {
   handleError = (error) => {
     let errorMsg = gettext('Please check the network.');
     if (error.response) {
-      switch (error.response.status) {
-        case 403:
-          errorMsg = gettext('Permission denied');
-          break;
-        case 404:
-          errorMsg = gettext('Library share permission not found.');
-          break;
-        default:
-          errorMsg = gettext('Error');
-      }
+      errorMsg = error.response.data.error_msg || gettext('Error');
     }
     this.setState({
       isDirentListLoading: false,
