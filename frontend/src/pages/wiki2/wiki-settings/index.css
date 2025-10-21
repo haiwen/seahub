@@ -1,0 +1,109 @@
+.wiki-settings-dialog {
+  max-width: 760px;
+}
+
+@media (min-width: 768px) {
+  .wiki-settings-dialog .modal-content {
+    min-height: 534px;
+  }
+}
+
+.wiki-settings-dialog .wiki-setting-nav {
+  border-bottom: 1px solid var(--bs-border-color) !important;
+}
+
+@media (min-width: 768px) {
+  .wiki-settings-dialog .wiki-setting-nav {
+    min-width: 240px;
+    border-bottom: none;
+    border-right: 1px solid var(--bs-border-color) !important;
+  }
+}
+
+.wiki-settings-dialog .wiki-setting-nav .nav-pills .nav-item .nav-link {
+  margin: 0;
+  padding: 0 10px;
+  height: 32px;
+  flex: 1 1 auto;
+}
+
+.wiki-settings-dialog .wiki-setting-nav .nav-pills .nav-item .nav-link:hover {
+  background: var(--bs-nav-hover-bg);
+}
+
+.wiki-settings-dialog .wiki-setting-nav .nav-pills .nav-item .nav-link.active {
+  background: var(--bs-nav-active-bg);
+  color: inherit;
+  position: relative;
+}
+
+.wiki-settings-dialog .wiki-setting-nav .nav-pills .nav-item .nav-link.active::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 24px;
+  background-color: #ff9800;
+  border-radius: 2px;
+  position: absolute;
+  top: 4px;
+  left: -8px;
+  z-index: 0;
+}
+
+.wiki-settings-dialog .tab-pane {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.wiki-settings-dialog .open-metadata-tip {
+  background-color: #ffeacd;
+  margin: -1rem -1rem 1rem;
+  padding: 0.5rem 1rem;
+}
+
+.wiki-linked-repos {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.wiki-linked-repos__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wiki-linked-repos__header .operation {
+  padding: 4px 1rem;
+  font-weight: 500;
+  color: #ff9800;
+  border: solid 1px #ff9800;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.wiki-linked-repos__body {
+  height: 328px;
+  overflow: auto;
+}
+
+.wiki-linked-repos__body .linked-repos-table .repo-name {
+  color: #666;
+}
+
+.wiki-linked-repos__body .linked-repos-table .repo-op {
+  text-align: center;
+  cursor: pointer;
+}
+
+.wiki-linked-repos__body .linked-repos-table .repo-op .sf3-font {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  color: #666;
+}
+
+.wiki-linked-repos__body .linked-repos-table .repo-op .sf3-font:hover {
+  background-color: #e5e5e5;
+}
