@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { SdocWikiEditor, DocInfo, ErrorBoundary, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import { CollaboratorsProvider, CommentContextProvider, EventBus, PluginsProvider, RightPanel } from '@seafile/sdoc-editor';
-import { gettext, wikiPermission, wikiId, siteRoot, isPro } from '../../utils/constants';
+import { gettext, wikiPermission, wikiId, siteRoot, isPro, seadocServerUrl } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import Switch from '../../components/switch';
 import Loading from '../../components/loading';
@@ -15,6 +15,9 @@ import CommentPlugin from './wiki-comment/plugin-item';
 import User from '../../metadata/model/user';
 import { metadataAPI } from '../../metadata';
 import classnames from 'classnames';
+import wikiAPI from '../../utils/wiki-api';
+import WikiRightPanel from './wiki-right-panel';
+import SDocServerApi from '../../utils/sdoc-server-api';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -49,6 +52,11 @@ class MainPanel extends Component {
       collaborators: [],
       editor: {},
       unseenNotificationsCount: 0,
+      isPreviewFile: false,
+      docContent: {},
+      previewDocUuid: '',
+      isReloadingPreview: true,
+      previewDocInfo: {}
     };
     this.scrollRef = React.createRef();
     this.exportDropdownRef = React.createRef();
@@ -81,10 +89,12 @@ class MainPanel extends Component {
     this.fetchCollaborators(wikiId);
     const eventBus = EventBus.getInstance();
     this.unsubscribeUnseenNotificationsCount = eventBus.subscribe(EXTERNAL_EVENT.UNSEEN_NOTIFICATIONS_COUNT, this.updateUnseenNotificationsCount);
+    this.unsubscribeWikiFilePreview = eventBus.subscribe(EXTERNAL_EVENT.TRANSFER_PREVIEW_FILE_ID, this.toggleWikiFilePreview);
   }
 
   componentWillUnmount() {
     this.unsubscribeUnseenNotificationsCount();
+    this.unsubscribeWikiFilePreview();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -92,6 +102,39 @@ class MainPanel extends Component {
       this.setState({ isShowRightPanel: false });
     }
   }
+
+  toggleWikiFilePreview = (data) => {
+    this.setState({
+      isPreviewFile: true,
+      isReloadingPreview: true,
+      previewDocUuid: {},
+      isShowRightPanel: false
+    });
+
+    // Firstly get access token config and then use it to get wiki content
+    const getWikiPage = wikiAPI.getWiki2Page(data.wiki_repo_id, data.page_id);
+    getWikiPage.then(res => {
+      const { seadoc_access_token, assets_url } = res.data;
+      const docUuid = assets_url.slice(assets_url.lastIndexOf('/') + 1);
+      const config = {
+        docUuid,
+        sdocServer: seadocServerUrl,
+        accessToken: seadoc_access_token,
+      };
+      this.setState({ previewDocUuid: docUuid });
+
+      const sdocServerApi = new SDocServerApi(config);
+      sdocServerApi.getDocContent().then(docRes => {
+        this.setState({
+          docContent: docRes.data,
+          isReloadingPreview: false,
+          previewDocInfo: { pageId: data.page_id, config: this.props.config }
+        });
+      });
+    }).catch(error => {
+      console.error(error);
+    });
+  };
 
   fetchCollaborators(wikiId) {
     metadataAPI.getCollaborators(wikiId).then(res => {
@@ -101,6 +144,10 @@ class MainPanel extends Component {
       this.setState({ collaborators });
     });
   }
+
+  togglePreview = () => {
+    this.setState({ isPreviewFile: false });
+  };
 
   updateUnseenNotificationsCount = (count) => {
     this.setState({ unseenNotificationsCount: count });
@@ -184,7 +231,8 @@ class MainPanel extends Component {
 
   setIsShowRightPanel = () => {
     this.setState(prevState => ({
-      isShowRightPanel: !prevState.isShowRightPanel
+      isShowRightPanel: !prevState.isShowRightPanel,
+      isPreviewFile: false
     }));
   };
 
@@ -199,7 +247,7 @@ class MainPanel extends Component {
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = currentPageLocked || !(permission === 'rw');
     return (
-      <div className={classnames('wiki2-main-panel', { 'show-comment-panel': this.state.isShowRightPanel })} style={style}>
+      <div className={classnames('wiki2-main-panel', { 'show-right-panel': this.state.isShowRightPanel || this.state.isPreviewFile })} style={style}>
         <div className='wiki2-main-panel-north'>
           <div className="d-flex align-items-center flex-fill o-hidden">
             <div className='wiki2-main-panel-north-content'>
@@ -326,6 +374,15 @@ class MainPanel extends Component {
               </div>
             )}
           </div>
+          {this.state.isPreviewFile &&
+            <WikiRightPanel
+              docContent={this.state.docContent}
+              previewDocUuid={this.state.previewDocUuid}
+              setEditor={this.setEditor}
+              togglePreview={this.togglePreview}
+              isReloadingPreview={this.state.isReloadingPreview}
+              previewDocInfo={this.state.previewDocInfo}
+            />}
           {this.state.isShowRightPanel && (
             <ErrorBoundary>
               <CollaboratorsProvider collaborators={this.state.collaborators}>

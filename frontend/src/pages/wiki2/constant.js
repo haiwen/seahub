@@ -13,6 +13,8 @@ const WIKI_COVER_LIST = [
   'wiki-cover-9.jpg',
 ];
 
+const WIKI_RIGHT_PANEL_WIDTH = 'wiki_right_panel_width';
+
 const DEFAULT_PAGE_NAME = 'New page';
 
-export { FOLDER, PAGE, WIKI_COVER_LIST, DEFAULT_PAGE_NAME };
+export { FOLDER, PAGE, WIKI_COVER_LIST, DEFAULT_PAGE_NAME, WIKI_RIGHT_PANEL_WIDTH };
