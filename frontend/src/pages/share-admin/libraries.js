@@ -13,6 +13,7 @@ import SharedRepoInfo from '../../models/shared-repo-info';
 import PermSelect from '../../components/dialog/perm-select';
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
+import OpIcon from '../../components/op-icon';
 
 class Content extends Component {
 
@@ -237,14 +238,11 @@ class Item extends Component {
             />
           </td>
           <td>
-            <i
-              role="button"
-              aria-label={gettext('Unshare')}
+            <OpIcon
               className={`sf3-font sf3-font-x-01 op-icon ${isOpIconShown ? '' : 'invisible'}`}
               title={gettext('Unshare')}
-              onClick={this.unshare}
-            >
-            </i>
+              op={this.unshare}
+            />
           </td>
         </tr>
       );
