@@ -206,8 +206,12 @@ class WikiNav extends Component {
             <div className="wiki-nav-group-header px-2">
               <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
             </div>
+            <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleSettingDialog}>
+              <span className="sf3-font sf3-font-set-up mr-2"></span>
+              <span>{gettext('Settings')}</span>
+            </div>
             <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
-              <span className="sf3-font-trash sf3-font mr-2"></span>
+              <span className="sf3-font sf3-font-trash mr-2"></span>
               <span>{gettext('Trash')}</span>
             </div>
           </>
