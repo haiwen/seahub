@@ -1140,6 +1140,20 @@ def load_local_settings(module):
                 globals()[name] = value
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(module, attr)
+            
+def logger_error(error, filename='seahub_settings.py'):
+    from datetime import datetime
+    import traceback
+    
+    log_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    error_type = type(error).__name__
+    error_traceback = traceback.format_exc()
+    log_entry = f"[{log_time}] [ERROR] {filename} load: {error_type}: {str(error)}\n{error_traceback}\n"
+    
+    log_file_path = os.path.join(LOG_DIR, 'seahub.log')
+    with open(log_file_path, 'a', encoding='utf-8') as f:
+        f.write(log_entry)
+
 
 # Load local_settings.py
 try:
@@ -1157,6 +1171,8 @@ try:
     import seahub_settings
 except ImportError:
     pass
+except Exception as e:
+    logger_error(e)
 else:
     # In server release, sqlite3 db file is <topdir>/seahub.db
     DATABASES['default']['NAME'] = os.path.join(install_topdir, 'seahub.db')
