@@ -19,6 +19,8 @@ import CommonUndoTool from '../../components/common/common-undo-tool';
 import PublishedWikiExtrance from '../../components/published-wiki-entrance';
 import { userAPI } from '../../utils/user-api';
 import ImportWikiPageDialog from '../../components/dialog/import-wiki-page-dialog';
+import WikiSettingsDialog from './wiki-settings';
+
 import './side-panel.css';
 
 const { repoName, publishUrl } = window.wiki.config;
@@ -41,7 +43,8 @@ class SidePanel extends PureComponent {
     super(props);
     this.state = {
       isShowTrashDialog: false,
-      customUrl: publishUrl
+      customUrl: publishUrl,
+      isShowSettingDialog: false,
     };
   }
 
@@ -198,36 +201,12 @@ class SidePanel extends PureComponent {
     this.setState({ isShowTrashDialog: !this.state.isShowTrashDialog });
   };
 
-  toggleImportPageDialog = () => {
-    this.setState({ isShowImportPageDialog: !this.state.isShowImportPageDialog });
+  toggleSettingDialog = () => {
+    this.setState({ isShowSettingDialog: !this.state.isShowSettingDialog });
   };
 
-  renderWikiNav = () => {
-    const { config, onUpdatePage } = this.props;
-    const { pages, navigation } = config;
-    return (
-      <div className="wiki2-pages-container">
-        {isObjectNotEmpty(config) &&
-          <WikiNav
-            navigation={navigation}
-            pages={pages}
-            onDeletePage={this.onDeletePage}
-            onUpdatePage={onUpdatePage}
-            setCurrentPage={this.props.setCurrentPage}
-            onMovePage={this.movePage}
-            updateWikiConfig={this.props.updateWikiConfig}
-            onAddNewPage={this.onAddNewPage}
-            duplicatePage={this.duplicatePage}
-            importPage={this.importPage}
-            getCurrentPageId={this.props.getCurrentPageId}
-            addPageInside={this.addPageInside}
-            toggleTrashDialog={this.toggleTrashDialog}
-            addSiblingPage={this.addSiblingPage}
-            handleAddNewPage={this.handleAddNewPage}
-          />
-        }
-      </div>
-    );
+  toggleImportPageDialog = () => {
+    this.setState({ isShowImportPageDialog: !this.state.isShowImportPageDialog });
   };
 
   // default page name
@@ -279,6 +258,35 @@ class SidePanel extends PureComponent {
     });
   };
 
+  renderWikiNav = () => {
+    const { config, onUpdatePage } = this.props;
+    const { pages, navigation } = config;
+    return (
+      <div className="wiki2-pages-container">
+        {isObjectNotEmpty(config) &&
+          <WikiNav
+            navigation={navigation}
+            pages={pages}
+            onDeletePage={this.onDeletePage}
+            onUpdatePage={onUpdatePage}
+            setCurrentPage={this.props.setCurrentPage}
+            onMovePage={this.movePage}
+            updateWikiConfig={this.props.updateWikiConfig}
+            onAddNewPage={this.onAddNewPage}
+            duplicatePage={this.duplicatePage}
+            importPage={this.importPage}
+            getCurrentPageId={this.props.getCurrentPageId}
+            addPageInside={this.addPageInside}
+            toggleTrashDialog={this.toggleTrashDialog}
+            toggleSettingDialog={this.toggleSettingDialog}
+            addSiblingPage={this.addSiblingPage}
+            handleAddNewPage={this.handleAddNewPage}
+          />
+        }
+      </div>
+    );
+  };
+
   render() {
     const { isLoading, config, style } = this.props;
     return (
@@ -309,6 +317,9 @@ class SidePanel extends PureComponent {
           <ImportWikiPageDialog
             toggleDialog={this.toggleImportPageDialog}
           />
+        )}
+        {this.state.isShowSettingDialog && (
+          <WikiSettingsDialog toggleDialog={this.toggleSettingDialog} />
         )}
         {wikiPermission === 'rw' &&
           <WikiExternalOperations onAddWikiPage={this.onAddWikiPage.bind(false)} />
