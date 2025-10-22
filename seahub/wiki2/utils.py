@@ -14,7 +14,7 @@ from urllib.parse import urljoin
 
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
-from seahub.utils import gen_inner_file_get_url, gen_file_upload_url
+from seahub.utils import gen_inner_file_get_url, gen_inner_file_upload_url
 from seahub.group.utils import is_group_admin, is_group_member
 from seahub.wiki2.models import WikiPageTrash
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
@@ -237,7 +237,7 @@ def save_wiki_config(wiki, username, wiki_config):
     if not token:
         raise Exception('upload token invalid')
 
-    upload_link = gen_file_upload_url(token, 'upload-api')
+    upload_link = gen_inner_file_upload_url('upload-api', token)
     upload_link = upload_link + '?replace=1'
 
     files = {
