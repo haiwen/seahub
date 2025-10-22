@@ -62,6 +62,17 @@ class PopupEditorContainer extends React.Component {
     this.editor = editor;
   };
 
+  computeTagsEditorCustomStyle = () => {
+    const { top, height } = this.props;
+    const vh = window.innerHeight || 0;
+    const spaceBelow = vh - (top + height);
+    const spaceAbove = top;
+    if (spaceBelow >= 400 || spaceBelow >= spaceAbove) {
+      return { top: 0, bottom: 'auto' };
+    }
+    return { top: 'auto', bottom: '5px' };
+  };
+
   createEditor = () => {
     const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, onSelectTag, onDeselectTag } = this.props;
     const readOnly = !canEditCell(column, record, true) || NOT_SUPPORT_EDITOR_COLUMN_TYPES.includes(column.type);
@@ -114,7 +125,8 @@ class PopupEditorContainer extends React.Component {
         column: {
           ...column,
           width: TAGS_EDITOR_WIDTH,
-        }
+        },
+        customStyle: this.computeTagsEditorCustomStyle()
       };
     }
 

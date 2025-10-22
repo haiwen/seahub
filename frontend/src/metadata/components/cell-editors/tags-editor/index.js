@@ -40,8 +40,6 @@ const TagsEditor = forwardRef(({
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const itemHeight = 30;
   const editorContainerRef = useRef(null);
-  const editorRef = useRef(null);
-  const [editorStyle, setEditorStyle] = useState({ position: 'absolute', zIndex: '1050', visibility: 'hidden' });
 
   const localStorage = context.localStorage;
 
@@ -287,46 +285,10 @@ const TagsEditor = forwardRef(({
     }
   }, [keyNodeFoldedMap, searchedKeyNodeFoldedMap, searchValue]);
 
-  const computePlacement = useCallback(() => {
-    const el = editorRef.current;
-    if (!el) return;
-
-    const parent = el.parentElement;
-    if (!parent) return;
-
-    const parentRect = parent.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
-    const viewportWidth = window.innerWidth;
-    const rect = el.getBoundingClientRect();
-    const naturalHeight = Math.max(el.scrollHeight || 0, rect.height);
-    const naturalWidth = rect.width;
-
-    let left = 0;
-    const rightEdge = parentRect.left + left + naturalWidth;
-    if (rightEdge > viewportWidth) {
-      left = viewportWidth - parentRect.left - naturalWidth - 10;
-    }
-    if (parentRect.left + left < 0) {
-      left = -parentRect.left + 10;
-    }
-
-    let top = parentRect.height + 5;
-    const bottomEdge = parentRect.top + top + naturalHeight;
-    if (bottomEdge > viewportHeight) {
-      top = -naturalHeight - 5;
-      if (parentRect.top + top < 0) {
-        top = -Math.min(naturalHeight, parentRect.top - 10) - 5;
-      }
-    }
-
-    setEditorStyle({ position: 'absolute', zIndex: '1050', left: `${left}px`, top: `${top}px`, visibility: 'visible' });
-  }, []);
-
   useEffect(() => {
     if (editorContainerRef.current) {
       setMaxItemNum(getMaxItemNum());
     }
-    computePlacement();
     document.addEventListener('keydown', onHotKey, true);
     return () => {
       document.removeEventListener('keydown', onHotKey, true);
@@ -434,11 +396,7 @@ const TagsEditor = forwardRef(({
   }, [nodes, tagsData, value, highlightNodeIndex, searchValue, recentlyUsedTags, keyNodeFoldedMap, searchedKeyNodeFoldedMap, showRecentlyUsed, renderRecentlyUsed, toggleExpandTreeNode, handleSelectTags, onTreeMenuMouseEnter, onTreeMenuMouseLeave]);
 
   return (
-    <div
-      className="sf-metadata-tags-editor tags-tree-container"
-      ref={editorRef}
-      style={{ ...style, ...customStyle, ...editorStyle }}
-    >
+    <div className="sf-metadata-tags-editor tags-tree-container" style={{ ...style, ...customStyle }}>
       <DeleteTag value={value} tags={tagsData} onDelete={handleSelectTags} />
       <div className="sf-metadata-search-tags-container">
         <SearchInput
