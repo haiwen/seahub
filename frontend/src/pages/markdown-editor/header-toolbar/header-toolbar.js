@@ -186,14 +186,6 @@ class HeaderToolbar extends React.Component {
                   icon='info'
                   onMouseDown={this.onArticleInfoToggle}
                 />
-                {this.props.fileInfo.permission == 'rw' && (
-                  <ButtonItem
-                    id="open-via-client"
-                    icon="client"
-                    text={gettext('Open via Client')}
-                    onClick={this.openFileViaClient}
-                  />
-                )}
               </ButtonGroup>
               <MoreMenu
                 readOnly={this.props.readOnly}
