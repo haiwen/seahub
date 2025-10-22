@@ -33,7 +33,7 @@ LDAP_PROVIDER = getattr(settings, 'LDAP_PROVIDER', 'ldap')
 SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
 
 
-class Saml2Backend(ModelBackend):
+class Saml2Backend(object):
     def get_user(self, username):
         try:
             user = User.objects.get(email=username)
@@ -42,11 +42,12 @@ class Saml2Backend(ModelBackend):
         return user
     
     
-    def authenticate(self, saml_username=None, org_id=None, create_unknown_user=True, **kwargs):
+    def authenticate(self, saml_username=None, org_id=None, create_unknown_user=True):
         if not saml_username:
-            return
-        username = saml_username
-        user = self.get_user(username)
+            user = None
+        else:
+            username = saml_username
+            user = self.get_user(username)
         
 
         if not user and create_unknown_user:

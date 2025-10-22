@@ -285,7 +285,10 @@ def _handle_acs_in_org(request, org_id):
         is_new_user = False
     
     else:
-        old_user = User.objects.get(email=uid)
+        try:
+            old_user = User.objects.get(email=uid)
+        except User.DoesNotExist:
+            old_user = None
         profile_user = Profile.objects.get_profile_by_contact_email(contact_email)
         if old_user:
             username = old_user.username
@@ -479,7 +482,10 @@ def _handle_acs(request):
         is_new_user = False
     
     else:
-        old_user = User.objects.get(email=uid)
+        try:
+            old_user = User.objects.get(email=uid)
+        except User.DoesNotExist:
+            old_user = None
         profile_user = Profile.objects.get_profile_by_contact_email(contact_email)
         if old_user:
             username = old_user.username
@@ -492,9 +498,6 @@ def _handle_acs(request):
             is_new_user = True
             # check user number limit by license
             _handle_user_over_limit(request)
-    
-    if username and not ccnet_api.org_user_exists(org_id, username):
-        return render_error(request, _('User not found in Team.'))
     
     logger.debug('Trying to authenticate the user')
     user = auth.authenticate(saml_username=username,
