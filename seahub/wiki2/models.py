@@ -164,7 +164,7 @@ class WikiView(object):
         }
         self.view_json.update(self.view_data)
 
-class WikiViewsManager(models.Manager):
+class WikiFileViewsManager(models.Manager):
     def add_view(self, wiki_id, view_name, linked_repo_id, view_type='table', view_data={}):
         wiki_views = self.filter(wiki_id=wiki_id).first()
         if not wiki_views:
@@ -244,14 +244,14 @@ class WikiViewsManager(models.Manager):
         wiki_views.save()
         return json.loads(wiki_views.details)
 
-class WikiViews(models.Model):
+class WikiFileViews(models.Model):
     wiki_id = models.CharField(max_length=36, db_index=True)
     details = models.TextField()
 
-    objects = WikiViewsManager()
+    objects = WikiFileViewsManager()
 
     class Meta:
-        db_table = 'wiki_view'
+        db_table = 'wiki_file_views'
 
     @property
     def views_ids(self):
