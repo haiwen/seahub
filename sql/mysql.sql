@@ -1684,3 +1684,20 @@ CREATE TABLE `stats_ai_by_owner` (
   UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`),
   KEY `ix_stats_ai_by_owner_username_month` (`username`,`month`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `wiki_settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wiki_id` varchar(36) NOT NULL,
+  `enable_link_repos` tinyint(1) NOT NULL,
+  `linked_repos` longtext,
+  PRIMARY KEY (`id`),
+  KEY `idx_wiki_settings_wiki_id` (`wiki_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `wiki_file_views` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wiki_id` varchar(36) NOT NULL,
+  `details` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_wiki_file_views_wiki_id` (`wiki_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

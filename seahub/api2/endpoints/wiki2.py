@@ -29,7 +29,7 @@ from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
-from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiViews, Wiki2Settings
+from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiFileViews, Wiki2Settings
 from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
@@ -2031,7 +2031,7 @@ class Wiki2RepoViews(APIView):
         if not wiki_settings or not wiki_settings.enable_link_repos:
             return Response([])
         try:
-            wiki_views = WikiViews.objects.list_views(wiki_id)
+            wiki_views = WikiFileViews.objects.list_views(wiki_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2079,7 +2079,7 @@ class Wiki2RepoViews(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            new_view = WikiViews.objects.add_view(wiki_id, view_name, link_repo_id, view_type, view_data)
+            new_view = WikiFileViews.objects.add_view(wiki_id, view_name, link_repo_id, view_type, view_data)
             if not new_view:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'add view failed')
         except Exception as e:
@@ -2119,7 +2119,7 @@ class Wiki2RepoViews(APIView):
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        views = WikiViews.objects.filter(
+        views = WikiFileViews.objects.filter(
             wiki_id=wiki_id,
         ).first()
         if not views:
@@ -2131,7 +2131,7 @@ class Wiki2RepoViews(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            WikiViews.objects.update_view(wiki_id, view_id, view_data)
+            WikiFileViews.objects.update_view(wiki_id, view_id, view_data)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2164,7 +2164,7 @@ class Wiki2RepoViews(APIView):
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        views = WikiViews.objects.filter(
+        views = WikiFileViews.objects.filter(
             wiki_id=wiki_id,
         ).first()
         if not views:
@@ -2177,7 +2177,7 @@ class Wiki2RepoViews(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            WikiViews.objects.delete_view(wiki_id, view_id)
+            WikiFileViews.objects.delete_view(wiki_id, view_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2215,7 +2215,7 @@ class Wiki2RepoView(APIView):
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         try:
-            view = WikiViews.objects.get_view(wiki_id, view_id)
+            view = WikiFileViews.objects.get_view(wiki_id, view_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
