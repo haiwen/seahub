@@ -202,11 +202,14 @@ class WikiNav extends Component {
                   >
                     <DropdownToggle
                       tag="span"
-                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2"
+                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2 justify-content-between"
                       onMouseEnter={this.showImportPageMenu}
                     >
-                      <i className={'sf3-font sf3-font-import-sdoc'} aria-hidden="true" />
-                      {gettext('Import page')}
+                      <span>
+                        <i className='sf3-font sf3-font-import-sdoc' aria-hidden="true" />
+                        <span className="mr-2">{gettext('Import page')}</span>
+                      </span>
+                      <i className="sf3-font-down sf3-font rotate-270 mr-0" aria-hidden="true"></i>
                     </DropdownToggle>
                     <DropdownMenu className="ml-0">
                       <DropdownItem key="import-docx" onClick={this.handleImportPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
