@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { isPro, gettext, mediaUrl, siteRoot } from '../../utils/constants';
 import InternalLinkOperation from '../operations/internal-link-operation';
+import OpIcon from '../../components/op-icon';
 
 const propTypes = {
   toggleStar: PropTypes.func.isRequired,
@@ -11,7 +12,8 @@ const propTypes = {
   isOnlyofficeFile: PropTypes.bool.isRequired
 };
 
-const { fileName, repoID, filePath,
+const {
+  fileName, repoID, filePath,
   latestContributor, latestContributorName, lastModificationTime
 } = window.app.pageOptions;
 
@@ -21,11 +23,6 @@ class FileInfo extends React.PureComponent {
     super(props);
   }
 
-  toggleStar = (e) => {
-    e.preventDefault();
-    this.props.toggleStar();
-  };
-
   render() {
     const { isStarred, isLocked, isOnlyofficeFile } = this.props;
     const starredText = isStarred ? gettext('starred') : gettext('unstarred');
@@ -34,20 +31,19 @@ class FileInfo extends React.PureComponent {
       <div className="text-truncate">
         <h2 className="file-title d-flex align-items-center">
           <span className="file-name text-truncate" title={fileName}>{fileName}</span>
-          <a className={`file-star sf3-font ${isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}
-            href="#"
+          <OpIcon
+            className={`op-icon mr-0 file-star sf3-font ${isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}
             title={starredText}
-            role="button"
-            aria-label={isStarred ? gettext('Unstar') : gettext('Star')}
-            onClick={this.toggleStar}>
-          </a>
+            op={this.props.toggleStar}
+          />
           <InternalLinkOperation repoID={repoID} path={filePath} />
           {(isPro && isLocked && !isOnlyofficeFile) &&
-            <img className="file-locked-icon" width="16"
+            <img
+              className="file-locked-icon"
+              width="16"
               src={`${mediaUrl}img/file-locked-32.png`}
               alt={lockedText}
               title={lockedText}
-              aria-label={lockedText}
             />
           }
         </h2>
