@@ -181,7 +181,7 @@ export default class PageDropdownMenu extends Component {
             >
               <span>
                 <i className='sf3-font sf3-font-import-sdoc' aria-hidden="true" />
-                <span className="mr-2">{gettext('Import page')}</span>
+                <span>{gettext('Import page')}</span>
               </span>
               <i className="sf3-font-down sf3-font rotate-270 mr-0" aria-hidden="true"></i>
             </DropdownToggle>
