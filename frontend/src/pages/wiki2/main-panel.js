@@ -99,10 +99,10 @@ class MainPanel extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.docUuid !== this.state.docUuid) {
-      this.setState({ 
+      this.setState({
         isShowRightPanel: false,
         isPreviewFile: false
-    });
+      });
     }
   }
 
@@ -135,6 +135,7 @@ class MainPanel extends Component {
         });
       });
     }).catch(error => {
+      // eslint-disable-next-line no-console
       console.error(error);
     });
   };
