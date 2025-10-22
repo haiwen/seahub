@@ -30,8 +30,13 @@ const ResizeWidth = ({ minWidth, maxWidth, resizeWidth: resizeWidthAPI, resizeWi
 
   const calculateResizedWidth = (event) => {
     const width = getWidthFromMouseEvent(event);
-    const resizedWidth = document.body.clientWidth - width;
-    if ((minWidth && resizedWidth < minWidth) || (maxWidth && resizedWidth > maxWidth)) return -1;
+    let resizedWidth = document.body.clientWidth - width;
+    if (minWidth && resizedWidth < minWidth) {
+      resizedWidth = minWidth;
+    }
+    if ((maxWidth && resizedWidth > maxWidth)) {
+      resizedWidth = maxWidth;
+    }
     return resizedWidth;
   };
 

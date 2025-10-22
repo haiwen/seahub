@@ -99,7 +99,10 @@ class MainPanel extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.docUuid !== this.state.docUuid) {
-      this.setState({ isShowRightPanel: false });
+      this.setState({ 
+        isShowRightPanel: false,
+        isPreviewFile: false
+    });
     }
   }
 

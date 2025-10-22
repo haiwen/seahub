@@ -148,6 +148,11 @@
   max-width: none !important;
 }
 
+.wiki-zoom-out-container .sdoc-outline-wrapper,
+.wiki-file-preview-panel-body .sdoc-outline-wrapper {
+  display: none !important;
+}
+
 .wiki-zoom-out-container {
   position: fixed;
   inset: 0;
