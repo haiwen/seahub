@@ -286,4 +286,5 @@
 
 .wiki-nav .wiki2-trash:hover {
   background-color: var(--bs-wiki-nav-hover-bg);
+  border-radius: 3px;
 }

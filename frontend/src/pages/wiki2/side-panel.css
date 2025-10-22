@@ -78,7 +78,8 @@
 }
 
 .wiki-nav-group-header.wiki-nav-pages:hover {
-  background-color: var(--bs-wiki-nav-active-bg);
+  background-color: var(--bs-wiki-nav-hover-bg);
+  border-radius: 3px;
 }
 
 .wiki-nav-group-header.wiki-nav-pages .more-wiki-page-operation {
