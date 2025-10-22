@@ -508,6 +508,7 @@ def _handle_acs(request):
         error_msg = 'ADFS/SAML single sign-on failed: failed to create user.'
         admins = User.objects.get_superusers()
         _send_error_notifications(admins, error_msg)
+        return render_error(request, LOGIN_FAILED_ERROR_MSG)
     
     username = user.username
     if is_new_user:
