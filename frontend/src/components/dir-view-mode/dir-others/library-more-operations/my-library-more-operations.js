@@ -17,6 +17,7 @@ import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dia
 import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../../../components/dialog/repo-office-suite-dialog';
 import LibraryOpMenu from '../../../../components/library-op-menu';
+import Icon from '../../../icon';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -150,7 +151,7 @@ class LibraryMoreOperations extends React.Component {
           onMenuItemClick={this.onMenuItemClick}
         >
           <>
-            <span className="sf3-font-more sf3-font"></span>
+            <span className="d-flex align-items-center"><Icon symbol="more-level" /></span>
             <span className="dir-others-item-text">{gettext('More')}</span>
           </>
         </LibraryOpMenu>

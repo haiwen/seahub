@@ -71,21 +71,21 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
       {showSettings && (
         <Item
           text={gettext('Settings')}
-          iconClass="sf3-font-set-up sf3-font"
+          iconSymbol="set-up"
           op={toggleSettingsDialog}
         />
       )}
       {userPerm == 'rw' && (
         <Item
           text={gettext('Trash')}
-          iconClass="sf3-font-trash sf3-font"
+          iconSymbol="trash"
           op={toggleTrashDialog}
         />
       )}
       {isDesktop && (
         <Item
           text={gettext('History')}
-          iconClass="sf3-font-history sf3-font"
+          iconSymbol="history"
           op={toggleRepoHistoryDialog}
         />
       )}

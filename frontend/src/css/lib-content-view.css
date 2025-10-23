@@ -123,6 +123,11 @@
   justify-content: center;
 }
 
+.folder-toggle-icon .seafile-multicolor-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
 .tree-node-drop {
   border-radius: 4px;
   background-color: rgb(200, 220, 240);
@@ -149,6 +154,11 @@
   width: 1rem;
   text-align: center;
   color: var(--bs-icon-color);
+}
+
+.tree-node-icon .seafile-multicolor-icon {
+  width: 1rem;
+  height: 1rem;
 }
 
 .tree-node-inner .right-icon {
