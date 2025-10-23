@@ -614,7 +614,7 @@
   "Add_video_link": "添加视频链接",
   "Link_video_file": "链接视频文件",
   "Select_video_file": "选择视频文件",
-  "Support_Youtube_Tencent_Bilibili_and_more": "支持Youtube，腾讯视频，B站及其他平台",
+  "Support_YouTube_Bilibili_and_more": "支持 YouTube，B站及其他平台",
   "Image_cannot_be_copied_Please_download_the_source_image": "此照片不支持复制，请下载原图",
   "And_select_insert_-_image_to_upload": "后点击工具栏「插入」- 「照片」上传",
   "Image_copy_error": "图片复制错误",
@@ -651,5 +651,6 @@
   "Preview": "预览",
   "Go_to_link": "跳转链接",
   "Link_block" : "链接节点",
-  "The_link_address_or_link_block_is_required": "链接地址或链接节点是必填项。"
+  "The_link_address_or_link_block_is_required": "链接地址或链接节点是必填项。",
+  "Comment_filter": "评论过滤"
 }
