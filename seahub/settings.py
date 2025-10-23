@@ -1125,10 +1125,6 @@ def load_local_settings(module):
     that begin with "EXTRA_".
 
     '''
-    if hasattr(module, 'HTTP_SERVER_ROOT'):
-        if not hasattr(module, 'FILE_SERVER_ROOT'):
-            module.FILE_SERVER_ROOT = module.HTTP_SERVER_ROOT
-        del module.HTTP_SERVER_ROOT
     for attr in dir(module):
         match = re.search(r'^EXTRA_(\w+)', attr)
         if match:
