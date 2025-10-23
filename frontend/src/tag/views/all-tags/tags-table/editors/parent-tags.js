@@ -5,7 +5,7 @@ import { getParentLinks } from '../../../../utils/cell';
 import TagsEditor from '../../../../../metadata/components/cell-editors/tags-editor';
 import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
 
-const ParentTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, deleteTagLinks, ...editorProps }, ref) => {
+const ParentTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, deleteTagLinks, customStyle, ...editorProps }, ref) => {
   const { tagsData, context } = useTags();
 
   const tag = useMemo(() => {
@@ -35,6 +35,7 @@ const ParentTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, delete
         onDeselect={deselectTag}
         canEditData={context.canModify()}
         canAddTag={context.canAddTag()}
+        customStyle={customStyle}
       />
     </div>
   );

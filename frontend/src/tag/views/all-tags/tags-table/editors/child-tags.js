@@ -5,7 +5,7 @@ import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getChildLinks } from '../../../../utils/cell';
 import { getRecordIdFromRecord } from '../../../../../metadata/utils/cell';
 
-const ChildTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, deleteTagLinks, ...editorProps }, ref) => {
+const ChildTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, deleteTagLinks, customStyle, ...editorProps }, ref) => {
   const { tagsData, context } = useTags();
 
   const tag = useMemo(() => {
@@ -35,6 +35,7 @@ const ChildTagsEditor = forwardRef(({ editingRowId, column, addTagLinks, deleteT
         onDeselect={deselectTag}
         canEditData={context.canModify()}
         canAddTag={context.canAddTag()}
+        customStyle={customStyle}
       />
     </div>
   );
