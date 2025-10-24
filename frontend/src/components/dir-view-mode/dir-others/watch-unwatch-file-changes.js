@@ -4,6 +4,7 @@ import { Utils } from '../../../utils/utils';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
+import Icon from '../../icon';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -58,7 +59,7 @@ class WatchUnwatchFileChanges extends React.Component {
         onClick={clickHandler}
         onKeyDown={Utils.onKeyDown}
       >
-        <span className="sf3-font-monitor sf3-font"></span>
+        <span className="d-flex align-items-center"><Icon symbol="monitor" /></span>
         <span className="dir-others-item-text">{monitorText}</span>
       </div>
     );

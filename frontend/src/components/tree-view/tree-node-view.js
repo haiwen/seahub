@@ -6,6 +6,7 @@ import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { Utils, isMobile } from '../../utils/utils';
 import { gettext } from '@/utils/constants';
 import OpIcon from '../../components/op-icon';
+import Icon from '../icon';
 
 const LEFT_INDENT = 20;
 
@@ -181,25 +182,25 @@ class TreeNodeView extends React.Component {
     let icon = '';
     let type = '';
     if (node.object.type === 'dir') {
-      icon = <i className="sf3-font sf3-font-folder"></i>;
+      icon = <Icon symbol="folder" className="sf3-font-folder-icon" />;
       type = 'dir';
     } else {
       let index = node.object.name.lastIndexOf('.');
       if (index === -1) {
-        icon = <i className="sf3-font sf3-font-file"></i>;
+        icon = <Icon symbol="file" />;
         type = 'file';
       } else {
         let suffix = node.object.name.slice(index).toLowerCase();
         if (suffix === '.png' || suffix === '.jpg' || suffix === '.jpeg' || suffix === '.gif' || suffix === '.bmp') {
-          icon = <i className="sf3-font sf3-font-image"></i>;
+          icon = <Icon symbol="gallery" />;
           type = 'image';
         }
         else if (suffix === '.md' || suffix === '.markdown') {
-          icon = <i className="sf3-font sf3-font-files2"></i>;
+          icon = <Icon symbol="file" />;
           type = 'file';
         }
         else {
-          icon = <i className="sf3-font sf3-font-file"></i>;
+          icon = <Icon symbol="file" />;
           type = 'file';
         }
       }
@@ -318,13 +319,14 @@ class TreeNodeView extends React.Component {
           <div className="left-icon" style={{ left: leftIndent - 40 }}>
             {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
               <OpIcon
-                className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
+                className={`folder-toggle-icon ${node.isExpanded ? 'rotate-90' : ''}`}
+                symbol="right_arrow"
                 title={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
                 onMouseDown={e => e.stopPropagation()}
                 op={this.onLoadToggle}
               />
             )}
-            <i className="tree-node-icon">{icon}</i>
+            <span className="tree-node-icon">{icon}</span>
           </div>
           {isNodeMenuShow && ((userPerm === 'rw' || permission || isCustomPermission) && this.state.isShowOperationMenu) && (
             <div className="right-icon">
