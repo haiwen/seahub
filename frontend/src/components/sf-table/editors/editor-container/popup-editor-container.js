@@ -10,6 +10,7 @@ import { checkIsPrivateColumn, getColumnOriginName } from '../../utils/column';
 import { checkCellValueChanged } from '../../utils/cell-comparer';
 import { getCellValueByColumn } from '../../utils/cell';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
+import { CellType } from '../../../../metadata/constants';
 
 class PopupEditorContainer extends React.Component {
 
@@ -54,6 +55,17 @@ class PopupEditorContainer extends React.Component {
     this.editor = editor;
   };
 
+  computeTagsEditorCustomStyle = () => {
+    const { top, height } = this.props;
+    const vh = window.innerHeight || 0;
+    const spaceBelow = vh - (top + height);
+    const spaceAbove = top;
+    if (spaceBelow >= 400 || spaceBelow >= spaceAbove) {
+      return { top: 0, bottom: 'auto' };
+    }
+    return { top: 'auto', bottom: '5px' };
+  };
+
   createEditor = () => {
     const { column, record, height, onPressTab, editorPosition, columns, modifyColumnData, readOnly, operation } = this.props;
     const value = this.getInitialValue();
@@ -80,6 +92,13 @@ class PopupEditorContainer extends React.Component {
       onPressTab,
       operation,
     };
+
+    if (column.type === CellType.LINK) {
+      editorProps = {
+        ...editorProps,
+        customStyle: this.computeTagsEditorCustomStyle()
+      };
+    }
 
     return (
       <Editor column={column} editorProps={editorProps} />

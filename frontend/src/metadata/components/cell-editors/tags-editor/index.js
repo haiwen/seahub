@@ -18,10 +18,8 @@ import DeleteTag from './delete-tags';
 import './index.css';
 
 const TagsEditor = forwardRef(({
-  height,
   column,
   value: oldValue,
-  editorPosition = { left: 0, top: 0 },
   onPressTab,
   onSelect,
   onDeselect,
@@ -42,7 +40,6 @@ const TagsEditor = forwardRef(({
   const [recentlyUsed, setRecentlyUsed] = useState([]);
   const itemHeight = 30;
   const editorContainerRef = useRef(null);
-  const editorRef = useRef(null);
 
   const localStorage = context.localStorage;
 
@@ -289,13 +286,6 @@ const TagsEditor = forwardRef(({
   }, [keyNodeFoldedMap, searchedKeyNodeFoldedMap, searchValue]);
 
   useEffect(() => {
-    if (editorRef.current) {
-      const { bottom } = editorRef.current.getBoundingClientRect();
-      if (bottom > window.innerHeight) {
-        editorRef.current.style.top = 'unset';
-        editorRef.current.style.bottom = editorPosition.top + height - window.innerHeight + 'px';
-      }
-    }
     if (editorContainerRef.current) {
       setMaxItemNum(getMaxItemNum());
     }
@@ -443,10 +433,8 @@ const TagsEditor = forwardRef(({
 });
 
 TagsEditor.propTypes = {
-  height: PropTypes.number,
   column: PropTypes.object,
   value: PropTypes.array,
-  editorPosition: PropTypes.object,
   onPressTab: PropTypes.func,
   onSelect: PropTypes.func,
   onDeselect: PropTypes.func,
