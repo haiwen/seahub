@@ -34,18 +34,6 @@ class UploadProgressDialog extends React.Component {
     });
   };
 
-  onDropdownToggleKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.toggleDropdown();
-    }
-  };
-
-  onMenuItemKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      e.target.click();
-    }
-  };
-
   render() {
     const { totalProgress, uploadBitrate, uploadFileList, forbidUploadFileList, isUploading } = this.props;
     const filesUploadedMsg = gettext('{uploaded_files_num}/{all_files_num} Files')
@@ -63,10 +51,10 @@ class UploadProgressDialog extends React.Component {
       <Fragment>
         <div className="text-center">
           <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
-            <DropdownToggle tag="span" color="primary" caret onKeyDown={this.onDropdownToggleKeyDown}>{gettext('Upload')}</DropdownToggle>
+            <DropdownToggle color="primary" caret>{gettext('Upload')}</DropdownToggle>
             <DropdownMenu>
-              <DropdownItem onClick={this.props.onFileUpload} onKeyDown={this.onMenuItemKeyDown}>{gettext('Upload Files')}</DropdownItem>
-              <DropdownItem onClick={this.props.onFolderUpload} onKeyDown={this.onMenuItemKeyDown}>{gettext('Upload Folder')}</DropdownItem>
+              <DropdownItem onClick={this.props.onFileUpload}>{gettext('Upload Files')}</DropdownItem>
+              <DropdownItem onClick={this.props.onFolderUpload}>{gettext('Upload Folder')}</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
           <Button color="primary" outline={true} className="ml-4"
