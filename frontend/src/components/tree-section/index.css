@@ -67,7 +67,8 @@
 
 .tree-section .tree-section-header .tree-section-header-operation .sf3-font,
 .tree-section .tree-section-header-operation .dropdown .sf-dropdown-toggle,
-.tree-section .tree-section-header-operation.tree-section-create-operation {
+.tree-section .tree-section-header-operation.tree-section-create-operation,
+.tree-section .tree-section-header-operation .seafile-multicolor-icon {
   margin-left: 0;
   line-height: 1.5;
   font-size: 16px;
