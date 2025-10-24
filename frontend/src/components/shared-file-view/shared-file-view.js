@@ -9,7 +9,6 @@ import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
 import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import toaster from '../toast';
 import Switch from '../switch';
-import IconButton from '../icon-button';
 
 import '../../css/shared-file-view.css';
 
@@ -140,17 +139,13 @@ class SharedFileView extends React.Component {
             <div className="flex-shrink-0 ml-4">
               <Dropdown isOpen={this.state.moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
                 <DropdownToggle
-                  className="file-toolbar-btn"
+                  tag="i"
+                  role="button"
+                  tabIndex={0}
+                  className="sf3-font-more sf3-font op-icon m-0"
                   aria-label={gettext('More operations')}
                   title={gettext('More operations')}
-                  tag="span"
-                >
-                  <IconButton
-                    id="shared-file-view-more-level"
-                    icon="more-level"
-                    text={gettext('More operations')}
-                  />
-                </DropdownToggle>
+                />
                 <DropdownMenu>
                   {(canDownload && loginUser && (loginUser !== sharedBy)) && (
                     <DropdownItem onClick={this.handleSaveSharedFileDialog}>
@@ -158,7 +153,11 @@ class SharedFileView extends React.Component {
                     </DropdownItem>
                   )}
                   {(canDownload && !trafficOverLimit) &&
-                    <a href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`} className="dropdown-item">{gettext('Download')} ({Utils.bytesToSize(fileSize)})</a>
+                    <DropdownItem
+                      href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`}
+                    >
+                      {gettext('Download')} ({Utils.bytesToSize(fileSize)})
+                    </DropdownItem>
                   }
                   {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) && (
                     <DropdownItem onClick={this.toggleAddAbuseReportDialog}>
