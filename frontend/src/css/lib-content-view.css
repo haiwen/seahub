@@ -104,10 +104,11 @@
 }
 
 .tree-node-inner .left-icon {
+  height: 24px;
   position: absolute;
   display: flex;
   align-items: center;
-  top: 1px;
+  top: 2px;
   left: 0;
   padding-left: 1.5rem;
 }
@@ -116,11 +117,11 @@
   position: absolute;
   left: 0;
   color: var(--bs-icon-color);
-  line-height: 1.625;
   width: 1.5rem;
+  height: 100%;
   display: flex;
-  align-content: center;
   justify-content: center;
+  align-items: center;
 }
 
 .folder-toggle-icon .seafile-multicolor-icon {
@@ -150,7 +151,8 @@
 }
 
 .tree-node-icon {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   width: 1rem;
   text-align: center;
   color: var(--bs-icon-color);
