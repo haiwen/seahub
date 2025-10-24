@@ -39,6 +39,7 @@ import seahub.settings as settings
 from seahub.tags.models import FileUUIDMap
 
 JWT_PRIVATE_KEY = getattr(settings, 'JWT_PRIVATE_KEY', '')
+SEADOC_PRIVATE_KEY = getattr(settings, 'SEADOC_PRIVATE_KEY', '')
 
 
 logger = logging.getLogger(__name__)
@@ -346,8 +347,11 @@ def send_share_link_emails(emails, fs, shared_from):
             logger.error('Failed to send code via email to %s' % email)
             continue
 
-def is_valid_internal_jwt(auth):
-
+def is_valid_internal_jwt(auth, provided_key=None):
+    key = JWT_PRIVATE_KEY
+    if provided_key == 'seadoc':
+        key = SEADOC_PRIVATE_KEY
+    
     if not auth or auth[0].lower()!= 'token' or len(auth) != 2:
         return False
 
@@ -356,7 +360,7 @@ def is_valid_internal_jwt(auth):
         return False
 
     try:
-        payload = jwt.decode(token, JWT_PRIVATE_KEY, algorithms=['HS256'])
+        payload = jwt.decode(token, key, algorithms=['HS256'])
     except:
         return False
     else:
