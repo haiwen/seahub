@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import InternalLinkDialog from '../dialog/internal-link-dialog';
+import OpIcon from '../op-icon';
+
 import './internal-link-operation.css';
 
 const propTypes = {
@@ -28,9 +30,11 @@ class InternalLinkOperation extends React.Component {
     const title = gettext('Internal Link');
     return (
       <Fragment>
-        <span className='dialog-operation'>
-          <i className="file-internal-link sf3-font sf3-font-link" title={title} aria-label={title} onClick={this.onInternalLinkDialogToggle}/>
-        </span>
+        <OpIcon
+          className="op-icon file-internal-link sf3-font sf3-font-link"
+          title={title}
+          op={this.onInternalLinkDialogToggle}
+        />
         {isShowInternalLinkDialog && (
           <InternalLinkDialog
             repoID={repoID}

@@ -34,7 +34,7 @@
 }
 
 #findbar {
-  top: -7px;
+  top: 7px;
   right: 10px;
   inset-inline-start: auto;
   background: var(--bs-body-bg);

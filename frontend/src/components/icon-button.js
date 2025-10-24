@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Tooltip } from 'reactstrap';
+import { Button, Tooltip } from 'reactstrap';
 import Icon from './icon';
 
 const propTypes = {
@@ -37,32 +37,33 @@ class IconButton extends React.Component {
           delay={{ show: 0, hide: 0 }}
           target={this.props.id}
           placement='bottom'
-          isOpen={this.state.tooltipOpen}>
+          isOpen={this.state.tooltipOpen}
+        >
           {this.props.text}
         </Tooltip>
       </>
     );
     if (this.props.href) {
       return (
-        <div
+        <a
           id={this.props.id}
           className={classNames('file-toolbar-btn', { 'disabled': this.props.disabled })}
           aria-label={this.props.text}
-          onClick={() => window.open(this.props.href, '_parent')}
+          href={this.props.href}
         >
           {btnContent}
-        </div>
+        </a>
       );
     } else {
       return (
-        <div
+        <Button
           id={this.props.id}
-          className={classNames('file-toolbar-btn', { 'disabled': this.props.disabled })}
+          className={classNames('border-0 p-0 bg-transparent file-toolbar-btn', { 'disabled': this.props.disabled })}
           onClick={this.props.disabled ? () => {} : this.props.onClick}
           aria-label={this.props.text}
         >
           {btnContent}
-        </div>
+        </Button>
       );
     }
   }

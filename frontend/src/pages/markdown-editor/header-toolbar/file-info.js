@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import InternalLinkOperation from '../../../components/operations/internal-link-operation';
+import OpIcon from '../../../components/op-icon';
 
 const { repoID, filePath } = window.app.pageOptions;
 
@@ -19,9 +20,11 @@ class FileInfo extends React.PureComponent {
       <div className="topbar-file-info text-truncate ml-0 mr-4">
         <div className="file-title">
           <span className='file-name text-truncate'>{fileInfo.name}</span>
-          <span className="file-star" title={starTitle}>
-            <i className={starIconClass} onClick={this.props.toggleStar}/>
-          </span>
+          <OpIcon
+            className={`op-icon file-star ${starIconClass}`}
+            title={starTitle}
+            op={this.props.toggleStar}
+          />
           <InternalLinkOperation path={filePath} repoID={repoID} />
           {(isPro && isLocked) && (
             <img

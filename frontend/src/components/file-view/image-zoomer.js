@@ -128,15 +128,14 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
       >
         <DropdownToggle
           tag='div'
+          role='button'
+          tabIndex="0"
           className="position-relative"
           data-toggle="dropdown"
           aria-expanded={isScaleMenuOpen}
-          role='button'
-          tabIndex={0}
-          aria-label={gettext('Scale menu')}
         >
-          <Input id="cur-scale-input" type="text" value={curScaleText} readOnly={true} aria-label={gettext('Current scale')} />
-          <i id="scale-menu-caret" className="sf3-font-down sf3-font" aria-hidden="true"></i>
+          <Input id="cur-scale-input" type="text" value={curScaleText} readOnly={true} tabIndex="-1" />
+          <i id="scale-menu-caret" className="sf3-font-down sf3-font"></i>
         </DropdownToggle>
         <DropdownMenu id="scale-menu">
           {SCALE_OPTIONS.map((item, index) => {

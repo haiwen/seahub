@@ -1,4 +1,5 @@
 import React, { useMemo, useCallback, useState } from 'react';
+import { Button } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../../components/icon';
 import HideColumnPopover from '../popover/hidden-column-popover';
@@ -22,9 +23,9 @@ const SettingsIcon = () => {
 
   return (
     <>
-      <div className="detail-control mr-2" id={target} onClick={onSetterToggle} title={gettext('Settings')}>
+      <Button className="border-0 p-0 bg-transparent detail-control mr-2" id={target} onClick={onSetterToggle} title={gettext('Settings')}>
         <Icon symbol="set-up" className="detail-control-icon" />
-      </div>
+      </Button>
       {isShowSetter && (
         <HideColumnPopover
           readOnly={false}
