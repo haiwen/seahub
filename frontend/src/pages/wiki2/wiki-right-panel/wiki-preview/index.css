@@ -106,6 +106,15 @@
   padding: 0 8px !important;
 }
 
+.wiki-zoom-out-container a,
+.wiki-file-preview-panel-body a {
+  color: #212529;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-position: under;
+  text-decoration-color: rgb(55 53 47 / 25%);
+}
+
 .wiki-zoom-out-container .wiki-page-cover,
 .wiki-file-preview-panel-body .wiki-page-cover {
   height: 30vh !important;
