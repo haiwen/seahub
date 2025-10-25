@@ -110,54 +110,6 @@
   flex: 1;
 }
 
-.wiki-nav .more-wiki-page-operation {
-  width: 20px;
-  height: 20px;
-  padding: 0 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.wiki-nav .wiki-add-page-btn {
-  height: 20px;
-  line-height: 20px;
-  padding: 0 3px;
-  margin-left: 4px;
-}
-
-.wiki-nav .wiki-add-page-btn:hover,
-.wiki-nav .more-wiki-page-operation:hover {
-  border-radius: 3px;
-  background-color: #DFDFDD;
-}
-
-.wiki-nav .wiki-page-item .wiki-add-page-btn .sf3-font.sf3-font-enlarge,
-.wiki-nav .wiki-page-item .more-wiki-page-operation .seafile-multicolor-icon-more-level {
-  font-size: 14px;
-  cursor: pointer;
-  opacity: 0;
-}
-
-.wiki-nav .wiki-page-item:hover .sf3-font.sf3-font-enlarge,
-.wiki-nav .wiki-page-item:hover .more-wiki-page-operation .seafile-multicolor-icon-more-level {
-  opacity: 1;
-}
-
-.wiki-nav .more-wiki-page-operation:hover {
-  cursor: pointer;
-}
-
-.wiki-nav .more-wiki-page-operation .dtable-font {
-  font-size: 14px;
-  margin-right: 10px;
-}
-
-.wiki-nav .wiki-page-item.wiki-page-freezed .sf3-font.sf3-font-enlarge,
-.wiki-nav .wiki-page-item.wiki-page-freezed .seafile-multicolor-icon-more-level {
-  opacity: 1;
-}
-
 .wiki-nav-footer {
   user-select: none;
 }
@@ -211,13 +163,6 @@
 
 .wiki-sidebar .wiki-nav-footer .add-wiki-page-btn {
   border-top: none;
-}
-
-.wiki-nav .page-operation-dropdown-toggle {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  opacity: 0;
 }
 
 .wiki-nav .page-operation-dropdown .page-operation-dropdown-menu {

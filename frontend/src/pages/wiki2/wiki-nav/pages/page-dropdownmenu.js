@@ -5,6 +5,7 @@ import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { getWikPageLink } from '../../utils';
 import { INSERT_POSITION } from '../constants';
+import Icon from '../../../../components/icon';
 
 export default class PageDropdownMenu extends Component {
 
@@ -24,6 +25,7 @@ export default class PageDropdownMenu extends Component {
     super(props);
     this.pageNameMap = this.calculateNameMap();
     this.state = {
+      isMenuOpen: false,
       isImportPageMenuShown: false,
     };
   }
@@ -50,9 +52,10 @@ export default class PageDropdownMenu extends Component {
     }
   };
 
-  onDropdownToggle = (evt) => {
-    evt.stopPropagation();
-    this.props.toggle();
+  onDropdownToggle = () => {
+    this.setState({
+      isMenuOpen: !this.state.isMenuOpen
+    });
   };
 
   onRename = (event) => {
@@ -142,13 +145,24 @@ export default class PageDropdownMenu extends Component {
 
   render() {
     const { canDeletePage = true } = this.props;
+    const { isMenuOpen } = this.state;
     return (
       <Dropdown
-        isOpen={true}
+        isOpen={isMenuOpen}
         toggle={this.onDropdownToggle}
         className="page-operation-dropdown"
       >
-        <DropdownToggle className="page-operation-dropdown-toggle" tag="span" data-toggle="dropdown"></DropdownToggle>
+        <DropdownToggle
+          className="op-icon"
+          tag="span"
+          data-toggle="dropdown"
+          role="button"
+          tabIndex={0}
+          title={gettext('More operations')}
+          aria-label={gettext('More operations')}
+        >
+          <Icon symbol="more-level" />
+        </DropdownToggle>
         <DropdownMenu
           className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
           flip={true}
