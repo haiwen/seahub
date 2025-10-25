@@ -8,7 +8,7 @@
 }
 
 .shared-file-view-md-header {
-  background: #f5f5f5;
+  background: var(--bs-header-bg);
   height: 53px;
   border-bottom: 1px solid var(--bs-border-secondary-color);
   padding: 8px 16px 4px;
@@ -31,7 +31,7 @@
 }
 
 .shared-file-view-head h2 {
-  color: #222;
+  color: var(--bs-body-color);
   font-size: 1.4em;
   margin-bottom: 0px;
   font-weight: 400;
