@@ -43,8 +43,6 @@ class FileUploader extends React.Component {
       isUploadRemindDialogShow: false,
       currentResumableFile: null,
       uploadBitrate: 0,
-      cumulativeTotalFiles: 0,
-      cumulativeCompletedFiles: 0,
     };
 
     this.uploadInput = React.createRef();
@@ -56,12 +54,9 @@ class FileUploader extends React.Component {
     this.bitrateInterval = 500; // Interval in milliseconds to calculate the bitrate
     window.onbeforeunload = this.onbeforeunload;
     this.isUploadLinkLoaded = false;
-    // per-batch control
-    this.batchActive = false;
-    this.batchAddedCount = 0;
-    this.batchErrorShown = false;
-    // session guard to avoid ghost restarts after cancel
-    this.uploadSessionId = 0;
+    this.isCancellingAll = false;
+    this.uploadSession = 0;
+    this.suppressAdds = false;
   }
 
   componentDidMount() {
@@ -69,7 +64,6 @@ class FileUploader extends React.Component {
       target: '',
       query: this.setQuery || {},
       fileType: this.props.filetypes,
-      // disable internal cumulative maxFiles check; we enforce per-batch limit ourselves
       maxFiles: undefined,
       maxFileSize: maxUploadFileSize * 1000 * 1000 || undefined,
       testMethod: this.props.testMethod || 'post',
@@ -149,44 +143,6 @@ class FileUploader extends React.Component {
     this.resumable.on('dragstart', this.onDragStart.bind(this));
   };
 
-  // ---------- Small helpers to avoid repeated code ----------
-  beginBatch = () => {
-    this.pruneCompletedFromQueue();
-    this.batchActive = true;
-    this.batchAddedCount = 0;
-    this.batchErrorShown = false;
-  };
-
-  resetBatchFlags = () => {
-    this.batchActive = false;
-    this.batchAddedCount = 0;
-    this.batchErrorShown = false;
-  };
-
-  setDirectoryMode = (enable) => {
-    if (!this.uploadInput || !this.uploadInput.current) return;
-    if (enable) {
-      this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
-    } else {
-      this.uploadInput.current.removeAttribute('webkitdirectory');
-    }
-  };
-
-  pruneCompletedFromQueue = () => {
-    try {
-      if (!this.resumable || !Array.isArray(this.resumable.files) || !this.resumable.files.length) return;
-      const isComplete = (f) => Math.round(f.progress() * 100) === 100 || f.isSaved === true;
-      this.resumable.files.slice().forEach(f => {
-        if (isComplete(f)) {
-          try { this.resumable.removeFile(f); } catch (e) { /* no-op */ }
-        }
-      });
-      this.resumable.files = this.resumable.files.filter(f => !isComplete(f));
-    } catch (e) {
-      // no-op
-    }
-  };
-
   maxFilesErrorCallback = (files, errorCount) => {
     let maxFiles = maxNumberOfFilesForFileupload;
     let message = gettext('Please upload no more than {maxFiles} files at a time.');
@@ -224,19 +180,12 @@ class FileUploader extends React.Component {
   };
 
   onFileAdded = (resumableFile, files) => {
-    // initialize batch state if not active
-    if (!this.batchActive) {
-      this.batchActive = true;
-      this.batchAddedCount = 0;
-      this.batchErrorShown = false;
+    if (this.isCancellingAll) {
+      try { this.resumable.removeFile(resumableFile); } catch (e) { /* noop */ }
+      return;
     }
-    this.batchAddedCount += 1;
-    if (this.batchAddedCount > (maxNumberOfFilesForFileupload || Infinity)) {
-      try { this.resumable.removeFile(resumableFile); } catch (e) { /* no-op */ }
-      if (!this.batchErrorShown) {
-        this.maxFilesErrorCallback();
-        this.batchErrorShown = true;
-      }
+    if (this.suppressAdds) {
+      try { this.resumable.removeFile(resumableFile); } catch (e) { /* noop */ }
       return;
     }
     let isFile = resumableFile.fileName === resumableFile.relativePath;
@@ -258,34 +207,27 @@ class FileUploader extends React.Component {
           currentResumableFile: resumableFile,
         });
       } else {
-        // count accepted single file
-        this.setState(prev => ({ cumulativeTotalFiles: prev.cumulativeTotalFiles + 1 }));
-        this.setUploadFileList();
+        this.setUploadFileList(this.resumable.files);
         let { token, relativePath } = this.props;
-        const sessionId = ++this.uploadSessionId;
+        const sessionAtRequest = this.uploadSession;
         seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
+          if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
           this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
-          // Only continue if session is still valid
-          if (sessionId !== this.uploadSessionId) return;
-          this.resumableUpload(resumableFile, sessionId);
+          this.resumableUpload(resumableFile);
         }).catch(error => {
           let errMessage = Utils.getErrorMsg(error);
           toaster.danger(errMessage);
         });
       }
     } else {
-      // count each accepted file added via multi-add path
-      this.setState(prev => ({ cumulativeTotalFiles: prev.cumulativeTotalFiles + 1 }));
-      this.setUploadFileList();
+      this.setUploadFileList(this.resumable.files);
       if (!this.isUploadLinkLoaded) {
         this.isUploadLinkLoaded = true;
         let { token, relativePath } = this.props;
-        const sessionId = ++this.uploadSessionId;
+        const sessionAtRequest = this.uploadSession;
         seafileAPI.sharedLinkGetFileUploadUrl(token, relativePath).then(res => {
+          if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
           this.resumable.opts.target = res.data.upload_link + '?ret-json=1';
-          // Guard against stale async starts after cancel
-          if (!this.isUploadLinkLoaded || sessionId !== this.uploadSessionId) return;
-          if (!this.resumable || !Array.isArray(this.resumable.files) || this.resumable.files.length === 0) return;
           this.resumable.upload();
         }).catch(error => {
           let errMessage = Utils.getErrorMsg(error);
@@ -295,19 +237,16 @@ class FileUploader extends React.Component {
     }
   };
 
-  resumableUpload = (resumableFile, sessionId) => {
+  resumableUpload = (resumableFile) => {
     let { repoID, path } = this.props;
+    const sessionAtRequest = this.uploadSession;
     seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName).then(res => {
+      if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
       let uploadedBytes = res.data.uploadedBytes;
       let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
       let offset = Math.floor(uploadedBytes / blockSize);
       resumableFile.markChunksCompleted(offset);
-      // Ensure file still exists and session is still active
-      if (sessionId !== this.uploadSessionId || !this.isUploadLinkLoaded) return;
-      const stillQueued = this.resumable && Array.isArray(this.resumable.files)
-        ? this.resumable.files.some(f => f.uniqueIdentifier === resumableFile.uniqueIdentifier)
-        : false;
-      if (!stillQueued) return;
+      if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
       this.resumable.upload();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -316,6 +255,31 @@ class FileUploader extends React.Component {
   };
 
   filesAddedComplete = (resumable, files) => {
+    if (this.isCancellingAll || this.suppressAdds) {
+      return;
+    }
+    // Enforce per-batch max limit
+    const maxPerBatch = typeof maxNumberOfFilesForFileupload !== 'undefined' ? maxNumberOfFilesForFileupload : undefined;
+    if (maxPerBatch && files && files.length > maxPerBatch) {
+      let message = gettext('Please upload no more than {maxFiles} files at a time.');
+      message = message.replace('{maxFiles}', maxPerBatch);
+      toaster.danger(message);
+
+      files.forEach(file => {
+        try { resumable.removeFile(file); } catch (e) { /* noop */ }
+      });
+
+      const remaining = resumable.files || [];
+      this.setState({
+        uploadFileList: remaining,
+        isUploadProgressDialogShow: remaining.length > 0 ? this.state.isUploadProgressDialogShow : false,
+      });
+      if (remaining.length === 0) {
+        Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', false);
+      }
+      return;
+    }
+
     let { forbidUploadFileList } = this.state;
     if (forbidUploadFileList.length > 0 && files.length === 0) {
       this.setState({
@@ -323,26 +287,15 @@ class FileUploader extends React.Component {
         totalProgress: 100
       });
     }
-    this.resetBatchFlags();
+
+    this.setUploadFileList();
   };
 
   setUploadFileList = () => {
-    const incoming = (this.resumable && Array.isArray(this.resumable.files)) ? this.resumable.files.slice() : [];
-    this.setState(prev => {
-      const byId = new Map();
-      const merged = [];
-      const pushUnique = (arr) => arr.forEach(it => {
-        if (!byId.has(it.uniqueIdentifier)) {
-          byId.set(it.uniqueIdentifier, true);
-          merged.push(it);
-        }
-      });
-      pushUnique(prev.uploadFileList || []);
-      pushUnique(incoming);
-      return {
-        uploadFileList: merged,
-        isUploadProgressDialogShow: true,
-      };
+    let uploadFileList = this.resumable.files;
+    this.setState({
+      uploadFileList: uploadFileList,
+      isUploadProgressDialogShow: true,
     });
     Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', true);
   };
@@ -397,17 +350,7 @@ class FileUploader extends React.Component {
   };
 
   onProgress = () => {
-    let totalSize = 0; let loaded = 0;
-    if (this.resumable && Array.isArray(this.resumable.files)) {
-      this.resumable.files.forEach(file => {
-        totalSize += file.size || 0;
-        loaded += (file.progress() || 0) * (file.size || 0);
-      });
-    }
-    let progress = totalSize > 0 ? Math.round((loaded / totalSize) * 100) : 0;
-    if (!progress && this.state.cumulativeTotalFiles > 0) {
-      progress = Math.round((this.state.cumulativeCompletedFiles / this.state.cumulativeTotalFiles) * 100);
-    }
+    let progress = Math.round(this.resumable.progress() * 100);
     this.setState({ totalProgress: progress });
     Utils.registerGlobalVariable('uploader', 'totalProgress', progress);
   };
@@ -441,10 +384,7 @@ class FileUploader extends React.Component {
         }
         return item;
       });
-      this.setState(prev => ({
-        uploadFileList: uploadFileList,
-        cumulativeCompletedFiles: prev.cumulativeCompletedFiles + 1,
-      }));
+      this.setState({ uploadFileList: uploadFileList });
 
       return;
     }
@@ -491,10 +431,7 @@ class FileUploader extends React.Component {
       }
       return item;
     });
-    this.setState(prev => ({
-      uploadFileList: uploadFileList,
-      cumulativeCompletedFiles: prev.cumulativeCompletedFiles + 1,
-    }));
+    this.setState({ uploadFileList: uploadFileList });
   };
 
   onFileError = (resumableFile, message) => {
@@ -534,10 +471,6 @@ class FileUploader extends React.Component {
     this.notifiedFolders = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
-    this.pruneCompletedFromQueue();
-    this.resetBatchFlags();
-    // invalidate any pending async starts
-    this.uploadSessionId++;
   };
 
   onPause = () => {
@@ -549,8 +482,6 @@ class FileUploader extends React.Component {
     this.isUploadLinkLoaded = false;
     // After the error, the user can switch windows
     Utils.registerGlobalVariable('uploader', 'totalProgress', 100);
-    // invalidate any pending async starts
-    this.uploadSessionId++;
   };
 
   onFileRetry = () => {
@@ -598,24 +529,24 @@ class FileUploader extends React.Component {
   onClick = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
-    this.beginBatch();
   };
 
   onFileUpload = () => {
-    this.beginBatch();
-    this.setDirectoryMode(false);
+    this.suppressAdds = false;
+    this.uploadInput.current.removeAttribute('webkitdirectory');
+
     this.uploadInput.current.click();
   };
 
   onFolderUpload = () => {
-    this.beginBatch();
-    this.setDirectoryMode(true);
+    this.suppressAdds = false;
+    this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
     this.uploadInput.current.click();
   };
 
   onDragStart = () => {
-    this.setDirectoryMode(true);
-    this.beginBatch();
+    this.suppressAdds = false;
+    this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
   };
 
   onCloseUploadDialog = () => {
@@ -623,18 +554,12 @@ class FileUploader extends React.Component {
     this.resumable.files = [];
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
-    this.setState({
-      isUploadProgressDialogShow: false,
-      uploadFileList: [],
-      forbidUploadFileList: [],
-      cumulativeTotalFiles: 0,
-      cumulativeCompletedFiles: 0,
-    });
+    this.setState({ isUploadProgressDialogShow: false, uploadFileList: [], forbidUploadFileList: [] });
     Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', false);
   };
 
   onUploadCancel = (uploadingItem) => {
-    const wasSaved = !!uploadingItem.isSaved;
+
     let uploadFileList = this.state.uploadFileList.filter(item => {
       if (item.uniqueIdentifier === uploadingItem.uniqueIdentifier) {
         item.cancel(); // execute cancel function will delete the file at the same time
@@ -650,36 +575,27 @@ class FileUploader extends React.Component {
       this.loaded = 0;
     }
 
-    this.setState(prev => ({
-      uploadFileList: uploadFileList,
-      cumulativeTotalFiles: wasSaved ? prev.cumulativeTotalFiles : Math.max(0, (prev.cumulativeTotalFiles || 0) - 1),
-    }));
+    this.setState({ uploadFileList: uploadFileList });
   };
 
   onCancelAllUploading = () => {
-    let canceledCount = 0;
-    let uploadFileList = this.state.uploadFileList.filter(item => {
-      if (Math.round(item.progress()) !== 1) {
-        if (!item.isSaved) canceledCount += 1;
-        item.cancel();
-        return false;
-      }
-      return true;
-    });
+    this.isCancellingAll = true;
+    this.uploadSession += 1;
+    this.suppressAdds = true;
+
+    const completedItems = this.state.uploadFileList.filter(item => Math.round(item.progress()) === 1);
+    try { this.resumable.cancel(); } catch (e) { /* noop */ }
 
     this.loaded = 0;
 
-    this.setState(prev => ({
+    this.setState({
       totalProgress: 100,
-      uploadFileList: uploadFileList,
-      cumulativeTotalFiles: Math.max(0, (prev.cumulativeTotalFiles || 0) - canceledCount),
-    }));
+      uploadFileList: completedItems
+    });
     // reset upload link loaded
     this.isUploadLinkLoaded = false;
-    // hard stop underlying resumable and invalidate session to avoid ghost restarts
-    try { this.resumable.cancel(); } catch (e) { /* no-op */ }
-    this.resetBatchFlags();
-    this.uploadSessionId++;
+
+    setTimeout(() => { this.isCancellingAll = false; }, 0);
   };
 
   onUploadRetry = (resumableFile) => {
@@ -803,8 +719,6 @@ class FileUploader extends React.Component {
             forbidUploadFileList={this.state.forbidUploadFileList}
             totalProgress={this.state.totalProgress}
             uploadBitrate={this.state.uploadBitrate}
-            filesUploadedNum={this.state.cumulativeCompletedFiles}
-            allFilesNum={this.state.cumulativeTotalFiles}
             onCloseUploadDialog={this.onCloseUploadDialog}
             onCancelAllUploading={this.onCancelAllUploading}
             onUploadCancel={this.onUploadCancel}
