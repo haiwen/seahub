@@ -16,7 +16,9 @@ const propTypes = {
   onUploadRetry: PropTypes.func.isRequired,
   onFileUpload: PropTypes.func.isRequired,
   onFolderUpload: PropTypes.func.isRequired,
-  isUploading: PropTypes.bool.isRequired
+  isUploading: PropTypes.bool.isRequired,
+  filesUploadedNum: PropTypes.number,
+  allFilesNum: PropTypes.number,
 };
 
 class UploadProgressDialog extends React.Component {
@@ -47,10 +49,12 @@ class UploadProgressDialog extends React.Component {
   };
 
   render() {
-    const { totalProgress, uploadBitrate, uploadFileList, forbidUploadFileList, isUploading } = this.props;
+    const { totalProgress, uploadBitrate, uploadFileList, forbidUploadFileList, isUploading, filesUploadedNum, allFilesNum } = this.props;
+    const uploadedCount = typeof filesUploadedNum === 'number' ? filesUploadedNum : uploadFileList.filter(file => file.isSaved).length;
+    const totalCount = typeof allFilesNum === 'number' ? allFilesNum : uploadFileList.length;
     const filesUploadedMsg = gettext('{uploaded_files_num}/{all_files_num} Files')
-      .replace('{uploaded_files_num}', uploadFileList.filter(file => file.isSaved).length)
-      .replace('{all_files_num}', uploadFileList.length);
+      .replace('{uploaded_files_num}', uploadedCount)
+      .replace('{all_files_num}', totalCount);
     let filesFailedMsg;
     if (!isUploading) {
       const failedNum = uploadFileList.filter(file => file.error).length + forbidUploadFileList.length;
