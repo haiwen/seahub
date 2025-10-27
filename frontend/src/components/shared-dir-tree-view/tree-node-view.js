@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
+import { Utils } from '../../utils/utils';
 
 const LEFT_INDENT = 20;
 
@@ -129,6 +130,10 @@ class TreeNodeView extends React.Component {
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}
           onClick={this.onNodeClick}
+          tabIndex={0}
+          role="treeitem"
+          aria-selected={node.path == currentPath}
+          onKeyDown={Utils.onKeyDown}
         >
           <div
             className="tree-node-text"
@@ -143,7 +148,9 @@ class TreeNodeView extends React.Component {
                 onMouseDown={e => e.stopPropagation()}
                 onClick={this.onLoadToggle}
                 role="button"
-                aria-label={node.isExpanded ? gettext('Collapse') : gettext('Expand')}
+                tabIndex={0}
+                onKeyDown={Utils.onKeyDown}
+                aria-label={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
               >
               </i>
             )}
