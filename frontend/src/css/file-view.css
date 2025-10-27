@@ -44,8 +44,10 @@ body {
 
 .file-view-header .file-toolbar-btn {
   position: relative;
+  min-width: 0;
   width: 28px;
   height: 28px;
+  border-radius: 3px;
   margin-left: 10px;
   cursor: pointer;
   display: flex;
@@ -54,16 +56,19 @@ body {
 }
 
 .file-view-header .file-toolbar-btn .sdocfont {
+  font-size: .875rem;
+  font-weight: 400;
   color: #666;
 }
 
 .file-view-header .file-toolbar-btn .seafile-multicolor-icon {
   fill: #666;
+  width: .875rem;
+  height: .875rem;
 }
 
 .file-view-header .file-toolbar-btn:hover {
-  background-color: var(--bs-hover-bg);
-  border-radius: 3px;
+  background-color: var(--bs-hover-bg)!important;
 }
 
 .file-view-header .file-toolbar-btn.disabled {

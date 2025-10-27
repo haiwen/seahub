@@ -31,6 +31,8 @@ import {
   DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE
 } from './components/resize-bar/constants';
 import { formatWithTimezone } from './utils/time';
+import OpIcon from './components/op-icon';
+import OpElement from './components/op-element';
 
 import './css/layout.css';
 import './css/header.css';
@@ -229,18 +231,6 @@ class SharedDirView extends React.Component {
     });
   };
 
-  onDropdownToggleKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.toggleDropdownMenu();
-    }
-  };
-
-  onMenuItemKeyDown = (item, e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      item.onClick();
-    }
-  };
-
   visitFolder = (folderPath) => {
     this.setState({
       path: folderPath
@@ -312,7 +302,16 @@ class SharedDirView extends React.Component {
           if (index != zipped.length - 1) {
             return (
               <React.Fragment key={index}>
-                <span className="path-item" title={item.name} role="button" onClick={this.visitFolder.bind(this, item.path)}>{item.name}</span>
+                <span
+                  className="path-item"
+                  title={item.name}
+                  role="button"
+                  tabIndex={0}
+                  onClick={this.visitFolder.bind(this, item.path)}
+                  onKeyDown={Utils.onKeyDown}
+                >
+                  {item.name}
+                </span>
                 <span className="path-split"> / </span>
               </React.Fragment>
             );
@@ -326,9 +325,10 @@ class SharedDirView extends React.Component {
               <DropdownToggle
                 tag="div"
                 role="button"
+                tabIndex={0}
                 className="path-item path-item-dropdown-toggle"
                 onClick={this.toggleDropdownMenu}
-                onKeyDown={this.onDropdownToggleKeyDown}
+                onKeyDown={Utils.onKeyDown}
                 data-toggle="dropdown"
               >
                 <span title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
@@ -346,7 +346,6 @@ class SharedDirView extends React.Component {
                       <DropdownItem
                         key={index}
                         onClick={item.onClick}
-                        onKeyDown={this.onMenuItemKeyDown.bind(this, item)}
                         disabled={item.disabled || false}
                         title={item.title || ''}
                       >
@@ -855,17 +854,25 @@ class SharedDirView extends React.Component {
                   {(showDownloadIcon && this.state.items.some(item => item.isSelected))
                     ? (
                       <div className="selected-items-toolbar">
-                        <span className="cur-view-path-btn px-1" onClick={this.unselectItems}>
-                          <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+                        <OpElement
+                          className="cur-view-path-btn px-1"
+                          title={gettext('Unselect')}
+                          op={this.unselectItems}
+                        >
+                          <i className="sf3-font-x-01 sf3-font mr-2" aria-hidden={true}></i>
                           <span>{`${selectedItemsLength} ${gettext('selected')}`}</span>
-                        </span>
-                        <span className="cur-view-path-btn ml-4" onClick={this.zipDownloadSelectedItems}>
-                          <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
-                        </span>
+                        </OpElement>
+                        <OpIcon
+                          className="sf3-font-download1 sf3-font cur-view-path-btn ml-4"
+                          title={gettext('Download')}
+                          op={this.zipDownloadSelectedItems}
+                        />
                         {(canDownload && loginUser && (loginUser !== sharedBy)) &&
-                        <span className="cur-view-path-btn ml-4" onClick={this.saveSelectedItems}>
-                          <span className="sf3-font-save sf3-font" aria-label={gettext('Save')} title={gettext('Save')}></span>
-                        </span>
+                        <OpIcon
+                          className="sf3-font-save sf3-font cur-view-path-btn ml-4"
+                          onClick={this.saveSelectedItems}
+                          title={gettext('Save')}
+                        />
                         }
                       </div>
                     )
@@ -1057,7 +1064,12 @@ class Content extends React.Component {
             <tr>
               {showDownloadIcon &&
               <th width="3%" className="text-center">
-                <input type="checkbox" checked={isAllItemsSelected} onChange={this.props.toggleAllSelected} />
+                <input
+                  type="checkbox"
+                  checked={isAllItemsSelected}
+                  onChange={this.props.toggleAllSelected}
+                  onKeyDown={Utils.onKeyDown}
+                />
               </th>
               }
               <th width="5%"></th>
@@ -1134,8 +1146,7 @@ class Item extends React.Component {
     });
   };
 
-  zipDownloadFolder = (e) => {
-    e.preventDefault();
+  zipDownloadFolder = () => {
     this.props.zipDownloadFolder.bind(this, this.props.item.folder_path)();
   };
 
@@ -1175,7 +1186,7 @@ class Item extends React.Component {
         >
           {showDownloadIcon &&
             <td className="text-center">
-              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
+              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} onKeyDown={Utils.onKeyDown} />
             </td>
           }
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
@@ -1187,14 +1198,11 @@ class Item extends React.Component {
           <td title={formatWithTimezone(item.last_modified)}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a
-              role="button"
-              className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href="#"
-              onClick={this.zipDownloadFolder}
+            <OpIcon
+              className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`}
               title={gettext('Download')}
-              aria-label={gettext('Download')}
-            >
-            </a>
+              op={this.zipDownloadFolder}
+            />
             }
           </td>
         </tr>
@@ -1229,7 +1237,7 @@ class Item extends React.Component {
         >
           {showDownloadIcon &&
             <td className="text-center">
-              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} />
+              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} onKeyDown={Utils.onKeyDown} />
             </td>
           }
           <td className="text-center">
@@ -1247,7 +1255,7 @@ class Item extends React.Component {
           <td title={formatWithTimezone(item.last_modified)}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a role="button" className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
+            <a className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
             }
           </td>
         </tr>
@@ -1309,8 +1317,7 @@ class GridItem extends React.Component {
     this.setState({ isIconShown: false });
   };
 
-  zipDownloadFolder = (e) => {
-    e.preventDefault();
+  zipDownloadFolder = () => {
     this.props.zipDownloadFolder.bind(this, this.props.item.folder_path)();
   };
 
@@ -1344,8 +1351,11 @@ class GridItem extends React.Component {
           </a>
           <a href={folderURL} className="grid-file-name grid-file-name-link" onClick={this.onFolderItemClick}>{item.folder_name}</a>
           {showDownloadIcon &&
-            <a role="button" className={`action-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href="#" onClick={this.zipDownloadFolder} title={gettext('Download')} aria-label={gettext('Download')}>
-            </a>
+            <OpIcon
+              className={`action-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`}
+              title={gettext('Download')}
+              op={this.zipDownloadFolder}
+            />
           }
         </li>
       );

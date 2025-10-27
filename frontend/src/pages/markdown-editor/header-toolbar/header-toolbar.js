@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { EXTERNAL_EVENTS, EventBus } from '@seafile/seafile-editor';
 import { gettext, canGenerateShareLink, isPro, mediaUrl, canLockUnlockFile } from '../../../utils/constants';
 import ButtonGroup from './button-group';
-import ButtonItem from './button-item';
 import MoreMenu from './more-menu';
 import FileInfo from './file-info';
 import Icon from '../../../components/icon';
+import IconButton from '../../../components/icon-button';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
@@ -48,11 +48,6 @@ class HeaderToolbar extends React.Component {
 
   downloadFile = () => {
     location.href = '?dl=1';
-  };
-
-  openFileViaClient = () => {
-    const { repoID, path } = this.props.fileInfo;
-    location.href = `seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(path)}`;
   };
 
   openParentDirectory = () => {
@@ -135,27 +130,27 @@ class HeaderToolbar extends React.Component {
             <div className="topbar-btn-container">
               <ButtonGroup>
                 {(canLockUnlockFile && !isLocked) && (
-                  <ButtonItem
+                  <IconButton
                     id="lock-unlock-file"
                     icon='lock'
                     text={gettext('Lock')}
-                    onMouseDown={this.props.toggleLockFile}
+                    onClick={this.props.toggleLockFile}
                   />
                 )}
                 {(canLockUnlockFile && lockedByMe) && (
-                  <ButtonItem
+                  <IconButton
                     id="lock-unlock-file"
                     icon='unlock'
                     text={gettext('Unlock')}
-                    onMouseDown={this.props.toggleLockFile}
+                    onClick={this.props.toggleLockFile}
                   />
                 )}
                 {canGenerateShareLink && (
-                  <ButtonItem
+                  <IconButton
                     id='shareBtn'
                     text={gettext('Share')}
                     icon='share'
-                    onMouseDown={this.props.toggleShareLinkDialog}
+                    onClick={this.props.toggleShareLinkDialog}
                   />
                 )}
                 {saving ?
@@ -163,28 +158,27 @@ class HeaderToolbar extends React.Component {
                     <Icon symbol="spinner" />
                   </button>
                   :
-                  <ButtonItem
+                  <IconButton
                     text={gettext('Save')}
                     id={'saveButton'}
                     icon='save'
                     disabled={!contentChanged}
-                    onMouseDown={this.props.onSaveEditorContent}
-                    isActive={contentChanged}
+                    onClick={this.props.onSaveEditorContent}
                   />
                 }
                 {canDownloadFile && (
-                  <ButtonItem
+                  <IconButton
                     id="download-file"
                     icon="download"
                     text={gettext('Download')}
                     onClick={this.downloadFile}
                   />
                 )}
-                <ButtonItem
+                <IconButton
                   id="file-info"
                   text={gettext('Info')}
                   icon='info'
-                  onMouseDown={this.onArticleInfoToggle}
+                  onClick={this.onArticleInfoToggle}
                 />
               </ButtonGroup>
               <MoreMenu
@@ -212,13 +206,12 @@ class HeaderToolbar extends React.Component {
                     <Icon symbol="spinner" />
                   </button>
                   :
-                  <ButtonItem
+                  <IconButton
                     text={gettext('Save')}
                     id={'saveButton'}
                     icon='save'
                     disabled={!contentChanged}
-                    onMouseDown={this.props.onSaveEditorContent}
-                    isActive={contentChanged}
+                    onClick={this.props.onSaveEditorContent}
                   />
                 }
               </ButtonGroup>
@@ -252,13 +245,12 @@ class HeaderToolbar extends React.Component {
                     <Icon symbol="spinner" />
                   </button>
                   :
-                  <ButtonItem
+                  <IconButton
                     id={'saveButton'}
                     text={gettext('Save')}
                     icon='save'
-                    onMouseDown={this.props.onSaveEditorContent}
+                    onClick={this.props.onSaveEditorContent}
                     disabled={!contentChanged}
-                    isActive={contentChanged}
                   />
                 }
               </ButtonGroup>
@@ -282,13 +274,12 @@ class HeaderToolbar extends React.Component {
                     <Icon symbol="spinner" />
                   </button>
                   :
-                  <ButtonItem
+                  <IconButton
                     id={'saveButton'}
                     text={gettext('Save')}
                     icon='save'
                     onMouseDown={this.props.onSaveEditorContent}
                     disabled={!contentChanged}
-                    isActive={contentChanged}
                   />
                 }
               </ButtonGroup>

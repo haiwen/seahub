@@ -52,6 +52,9 @@ class FileUploader extends React.Component {
     this.bitrateInterval = 500; // Interval in milliseconds to calculate the bitrate
     window.onbeforeunload = this.onbeforeunload;
     this.isUploadLinkLoaded = false;
+    this.isCancellingAll = false;
+    this.uploadSession = 0;
+    this.suppressAdds = false;
   }
 
   componentDidMount() {
@@ -59,7 +62,7 @@ class FileUploader extends React.Component {
       target: '',
       query: this.setQuery || {},
       fileType: this.props.filetypes,
-      maxFiles: maxNumberOfFilesForFileupload || undefined,
+      maxFiles: undefined,
       maxFileSize: maxUploadFileSize * 1000 * 1000 || undefined,
       testMethod: this.props.testMethod || 'post',
       testChunks: this.props.testChunks || false,
@@ -175,9 +178,16 @@ class FileUploader extends React.Component {
   };
 
   onFileAdded = (resumableFile, files) => {
+    if (this.isCancellingAll) {
+      try { this.resumable.removeFile(resumableFile); } catch (e) { /* noop */ }
+      return;
+    }
+    if (this.suppressAdds) {
+      try { this.resumable.removeFile(resumableFile); } catch (e) { /* noop */ }
+      return;
+    }
     const { isCustomPermission = false } = this.props;
     let isFile = resumableFile.fileName === resumableFile.relativePath;
-    // uploading is file and only upload one file
     if (isFile && files.length === 1) {
       let hasRepetition = false;
       if (!isCustomPermission) {
@@ -197,7 +207,9 @@ class FileUploader extends React.Component {
       } else {
         this.setUploadFileList(this.resumable.files);
         let { repoID, path } = this.props;
+        const sessionAtRequest = this.uploadSession;
         seafileAPI.getFileServerUploadLink(repoID, path).then(res => {
+          if (this.isCancellingAll || this.uploadSession !== sessionAtRequest) return;
           this.resumable.opts.target = res.data + '?ret-json=1';
           this.resumableUpload(resumableFile);
         }).catch(error => {
@@ -210,7 +222,9 @@ class FileUploader extends React.Component {
       if (!this.isUploadLinkLoaded) {
         this.isUploadLinkLoaded = true;
         let { repoID, path } = this.props;
+        const sessionAtRequest = this.uploadSession;
         seafileAPI.getFileServerUploadLink(repoID, path).then(res => {
+          if (this.isCancellingAll || this.uploadSession !== sessionAtRequest) return;
           this.resumable.opts.target = res.data + '?ret-json=1';
           this.resumable.upload();
         }).catch(error => {
@@ -223,11 +237,14 @@ class FileUploader extends React.Component {
 
   resumableUpload = (resumableFile) => {
     let { repoID, path } = this.props;
+    const sessionAtRequest = this.uploadSession;
     seafileAPI.getFileUploadedBytes(repoID, path, resumableFile.fileName).then(res => {
+      if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
       let uploadedBytes = res.data.uploadedBytes;
       let blockSize = parseInt(resumableUploadFileBlockSize) * 1024 * 1024 || 1024 * 1024;
       let offset = Math.floor(uploadedBytes / blockSize);
       resumableFile.markChunksCompleted(offset);
+      if (this.isCancellingAll || this.suppressAdds || this.uploadSession !== sessionAtRequest) return;
       this.resumable.upload();
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -236,6 +253,35 @@ class FileUploader extends React.Component {
   };
 
   filesAddedComplete = (resumable, files) => {
+    if (this.isCancellingAll) {
+      return;
+    }
+    if (this.suppressAdds) {
+      return;
+    }
+
+    const maxPerBatch = typeof maxNumberOfFilesForFileupload !== 'undefined' ? maxNumberOfFilesForFileupload : undefined;
+
+    if (maxPerBatch && files && files.length > maxPerBatch) {
+      let message = gettext('Please upload no more than {maxFiles} files at a time.');
+      message = message.replace('{maxFiles}', maxPerBatch);
+      toaster.danger(message);
+
+      files.forEach(file => {
+        try { resumable.removeFile(file); } catch (e) { /* noop */ }
+      });
+
+      const remaining = resumable.files || [];
+      this.setState({
+        uploadFileList: remaining,
+        isUploadProgressDialogShow: remaining.length > 0 ? this.state.isUploadProgressDialogShow : false,
+      });
+      if (remaining.length === 0) {
+        Utils.registerGlobalVariable('uploader', 'isUploadProgressDialogShow', false);
+      }
+      return;
+    }
+
     let { forbidUploadFileList } = this.state;
     if (forbidUploadFileList.length > 0 && files.length === 0) {
       this.setState({
@@ -243,6 +289,8 @@ class FileUploader extends React.Component {
         totalProgress: 100
       });
     }
+
+    this.setUploadFileList();
   };
 
   setUploadFileList = () => {
@@ -488,17 +536,20 @@ class FileUploader extends React.Component {
   };
 
   onFileUpload = () => {
+    this.suppressAdds = false;
     this.uploadInput.current.removeAttribute('webkitdirectory');
 
     this.uploadInput.current.click();
   };
 
   onFolderUpload = () => {
+    this.suppressAdds = false;
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
     this.uploadInput.current.click();
   };
 
   onDragStart = () => {
+    this.suppressAdds = false;
     this.uploadInput.current.setAttribute('webkitdirectory', 'webkitdirectory');
   };
 
@@ -532,22 +583,23 @@ class FileUploader extends React.Component {
   };
 
   onCancelAllUploading = () => {
-    let uploadFileList = this.state.uploadFileList.filter(item => {
-      if (Math.round(item.progress() !== 1)) {
-        item.cancel();
-        return false;
-      }
-      return true;
-    });
+    this.isCancellingAll = true;
+    this.uploadSession += 1;
+    this.suppressAdds = true;
+
+    const completedItems = this.state.uploadFileList.filter(item => Math.round(item.progress()) === 1);
+
+    try { this.resumable.cancel(); } catch (e) { /* noop */ }
 
     this.loaded = 0;
 
     this.setState({
       totalProgress: 100,
-      uploadFileList: uploadFileList
+      uploadFileList: completedItems
     });
-    // reset upload link loaded
     this.isUploadLinkLoaded = false;
+
+    setTimeout(() => { this.isCancellingAll = false; }, 0);
   };
 
   onUploadRetry = (resumableFile) => {

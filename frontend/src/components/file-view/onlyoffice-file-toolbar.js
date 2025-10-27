@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Icon from '../../components/icon';
@@ -50,17 +50,19 @@ class OnlyofficeFileToolbar extends React.Component {
             text={gettext('Details')}
             onClick={this.props.toggleDetailsPanel}
           />
-          <div
-            className='file-toolbar-btn'
+          <Button
+            className='file-toolbar-btn border-0 p-0 bg-transparent'
             onClick={this.props.toggleCommentPanel}
             aria-label={gettext('Comment')}
           >
             <i className="sdocfont sdoc-comments"></i>
             {isCommentUpdated && <span className='comment-tip'></span>}
-          </div>
+          </Button>
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
               tag="span"
+              role='button'
+              tabIndex={0}
               className="file-toolbar-btn"
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
@@ -68,9 +70,9 @@ class OnlyofficeFileToolbar extends React.Component {
               <Icon symbol="more-level" />
             </DropdownToggle>
             <DropdownMenu>
-              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
+              <DropdownItem href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}>
                 {gettext('Open parent folder')}
-              </a>
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
           <IconButton

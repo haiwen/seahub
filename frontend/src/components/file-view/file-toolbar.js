@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Switch from '../switch';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -179,9 +179,9 @@ class FileToolbar extends React.Component {
           )}
           {(canEditFile && fileType != 'SDoc' && !err) &&
             (this.props.isSaving ?
-              <div type='button' aria-label={gettext('Saving...')} className={'file-toolbar-btn'}>
+              <Button type='button' aria-label={gettext('Saving...')} className={'file-toolbar-btn border-0 p-0 bg-transparent'}>
                 <Icon symbol="spinner" />
-              </div>
+              </Button>
               :
               (this.props.needSave ?
                 <IconButton
@@ -191,16 +191,16 @@ class FileToolbar extends React.Component {
                   onClick={this.props.onSave}
                 />
                 :
-                <div type='button' className='file-toolbar-btn disabled'>
+                <Button type='button' disabled={true} className='file-toolbar-btn disabled border-0 p-0 bg-transparent'>
                   <Icon symbol="save" />
-                </div>
+                </Button>
               ))}
           {canDownloadFile && (
             <IconButton
               id="download-file"
               icon="download"
               text={gettext('Download')}
-              href={fileDownloadURL}
+              href={fileDownloadURL || '?dl=1'}
             />
           )}
           <IconButton
@@ -209,14 +209,14 @@ class FileToolbar extends React.Component {
             text={gettext('Details')}
             onClick={this.props.toggleDetailsPanel}
           />
-          <div
-            className='file-toolbar-btn'
+          <Button
+            className='file-toolbar-btn border-0 p-0 bg-transparent'
             onClick={this.props.toggleCommentPanel}
             aria-label={gettext('Comment')}
           >
             <i className="sdocfont sdoc-comments"></i>
             {isCommentUpdated && <span className='comment-tip'></span>}
-          </div>
+          </Button>
           {showShareBtn && (
             <IconButton
               id="share-file"
@@ -231,19 +231,21 @@ class FileToolbar extends React.Component {
               aria-label={gettext('More operations')}
               title={gettext('More operations')}
               tag="span"
+              tabIndex="0"
+              role='button'
             >
               <Icon symbol="more-level" />
             </DropdownToggle>
             <DropdownMenu>
               {filePerm == 'rw' && (
-                <a href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`} className="dropdown-item">
+                <DropdownItem href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}>
                   {gettext('Open via client')}
-                </a>
+                </DropdownItem>
               )}
               {filePerm == 'rw' && (
-                <a href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`} className="dropdown-item">
+                <DropdownItem href={`${siteRoot}repo/file_revisions/${repoID}/?p=${encodeURIComponent(filePath)}&referer=${encodeURIComponent(location.href)}`}>
                   {gettext('History')}
-                </a>
+                </DropdownItem>
               )}
               {isTxt &&
                 <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
@@ -256,9 +258,9 @@ class FileToolbar extends React.Component {
                 </DropdownItem>
               }
               <div className='file-operator-folder-divider'></div>
-              <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="dropdown-item">
+              <DropdownItem href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`}>
                 {gettext('Open parent folder')}
-              </a>
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
