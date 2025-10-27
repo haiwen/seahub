@@ -139,131 +139,120 @@ class Wiki2Settings(models.Model):
             'linked_repos': self.get_linked_repos()
         }
 
-# class WikiView(object):
-#     def __init__(self, name, linked_repo_id, type='table', view_data={}):
-#         self.name = name
-#         self.type = type
-#         self.linked_repo_id = linked_repo_id
-#         self.view_data = view_data
-#         self.view_json = {}
+class WikiView(object):
+    def __init__(self, name, linked_repo_id, type='table', view_data={}):
+        self.name = name
+        self.type = type
+        self.linked_repo_id = linked_repo_id
+        self.view_data = view_data
+        self.view_json = {}
 
-#         self.init_view()
+        self.init_view()
 
-#     def init_view(self):
-#         self.view_json = {
-#             "_id": generate_random_string_lower_digits(4),
-#             "table_id": '0001',  # by default
-#             "name": self.name,
-#             "filters": [],
-#             "sorts": [],
-#             "groupbys": [],
-#             "filter_conjunction": "And",
-#             "hidden_columns": [],
-#             "type": self.type,
-#             "linked_repo_id": self.linked_repo_id
-#         }
-#         self.view_json.update(self.view_data)
+    def init_view(self):
+        self.view_json = {
+            "_id": generate_random_string_lower_digits(4),
+            "table_id": '0001',  # by default
+            "name": self.name,
+            "filters": [],
+            "sorts": [],
+            "groupbys": [],
+            "filter_conjunction": "And",
+            "hidden_columns": [],
+            "type": self.type,
+            "linked_repo_id": self.linked_repo_id
+        }
+        self.view_json.update(self.view_data)
 
-# class WikiFileViewsManager(models.Manager):
-#     def add_view(self, wiki_id, view_name, linked_repo_id, view_type='table', view_data={}):
-#         wiki_views = self.filter(wiki_id=wiki_id).first()
-#         if not wiki_views:
-#             # init view data
-#             new_view = WikiView(view_name, linked_repo_id, view_type, view_data)
+class WikiFileViewsManager(models.Manager):
+    def add_view(self, wiki_id, view_name, linked_repo_id, view_type='table', view_data={}):
+        wiki_views = self.filter(wiki_id=wiki_id).first()
+        if not wiki_views:
+            # init view data
+            new_view = WikiView(view_name, linked_repo_id, view_type, view_data)
 
-#             view_json = new_view.view_json
-#             view_id = view_json.get('_id')
-#             view_details = {
-#                 'views': [view_json],
-#                 'navigation': [{'_id': view_id, 'type': 'view'}, ]
-#             }
-#             self.create(
-#                 wiki_id=wiki_id,
-#                 details=json.dumps(view_details)
-#             )
-#         else:
-#             view_details = json.loads(wiki_views.details)
-#             navigation = view_details.get('navigation', [])
-#             view_name = get_no_duplicate_obj_name(view_name, wiki_views.views_names)
-#             new_view = WikiView(view_name, linked_repo_id, view_type, view_data)
-#             view_json = new_view.view_json
-#             view_id = view_json.get('_id')
-#             view_details['views'].append(view_json)
-#             new_view_nav = { '_id': view_id, 'type': 'view' }
-#             navigation.append(new_view_nav)
-#             wiki_views.details = json.dumps(view_details)
-#             wiki_views.save()
-#         return new_view.view_json
+            view_json = new_view.view_json
+            view_details = {
+                'views': [view_json],
+            }
+            self.create(
+                wiki_id=wiki_id,
+                details=json.dumps(view_details)
+            )
+        else:
+            view_details = json.loads(wiki_views.details)
+            view_name = get_no_duplicate_obj_name(view_name, wiki_views.views_names)
+            new_view = WikiView(view_name, linked_repo_id, view_type, view_data)
+            view_json = new_view.view_json
+            view_details['views'].append(view_json)
+            wiki_views.details = json.dumps(view_details)
+            wiki_views.save()
+        return new_view.view_json
 
-#     def list_views(self, wiki_id):
-#         wiki_views = self.filter(wiki_id=wiki_id).first()
-#         if not wiki_views:
-#             return {'views': [], 'navigation': []}
-#         return json.loads(wiki_views.details)
+    def list_views(self, wiki_id):
+        wiki_views = self.filter(wiki_id=wiki_id).first()
+        if not wiki_views:
+            return {'views': []}
+        return json.loads(wiki_views.details)
 
-#     def get_view(self, wiki_id, view_id):
-#         wiki_views = self.filter(wiki_id=wiki_id).first()
-#         if not wiki_views:
-#             return None
-#         view_details = json.loads(wiki_views.details)
-#         for v in view_details['views']:
-#             if v.get('_id') == view_id:
-#                 return v
+    def get_view(self, wiki_id, view_id):
+        wiki_views = self.filter(wiki_id=wiki_id).first()
+        if not wiki_views:
+            return None
+        view_details = json.loads(wiki_views.details)
+        for v in view_details['views']:
+            if v.get('_id') == view_id:
+                return v
 
-#     def update_view(self, wiki_id, view_id, view_dict):
-#         wiki_views = self.filter(wiki_id=wiki_id).first()
-#         view_dict.pop('_id', '')
-#         if 'name' in view_dict:
-#             exist_obj_names = wiki_views.views_names
-#             view_dict['name'] = get_no_duplicate_obj_name(view_dict['name'], exist_obj_names)
-#         view_details = json.loads(wiki_views.details)
-#         for v in view_details['views']:
-#             if v.get('_id') == view_id:
-#                 v.update(view_dict)
-#                 break
-#         wiki_views.details = json.dumps(view_details)
-#         wiki_views.save()
-#         return json.loads(wiki_views.details)
+    def update_view(self, wiki_id, view_id, view_dict):
+        wiki_views = self.filter(wiki_id=wiki_id).first()
+        view_dict.pop('_id', '')
+        if 'name' in view_dict:
+            exist_obj_names = wiki_views.views_names
+            view_dict['name'] = get_no_duplicate_obj_name(view_dict['name'], exist_obj_names)
+        view_details = json.loads(wiki_views.details)
+        for v in view_details['views']:
+            if v.get('_id') == view_id:
+                v.update(view_dict)
+                break
+        wiki_views.details = json.dumps(view_details)
+        wiki_views.save()
+        return json.loads(wiki_views.details)
 
-#     def delete_view(self, wiki_id, view_id):
-#         wiki_views = self.filter(wiki_id=wiki_id).first()
-#         view_details = json.loads(wiki_views.details)
-#         navigation = view_details.get('navigation', [])
-#         views = view_details.get('views', [])
+    def delete_view(self, wiki_id, view_id):
+        wiki_views = self.filter(wiki_id=wiki_id).first()
+        view_details = json.loads(wiki_views.details)
+        views = view_details.get('views', [])
 
-#         for view in views:
-#             if view.get('_id') == view_id:
-#                 views.remove(view)
-#                 break
-#         for nav_item in navigation:
-#             if nav_item.get('_id') == view_id:
-#                 navigation.remove(nav_item)
-#                 break
+        for view in views:
+            if view.get('_id') == view_id:
+                views.remove(view)
+                break
 
-#         wiki_views.details = json.dumps(view_details)
-#         wiki_views.save()
-#         return json.loads(wiki_views.details)
+        wiki_views.details = json.dumps(view_details)
+        wiki_views.save()
+        return json.loads(wiki_views.details)
 
-# class WikiFileViews(models.Model):
-#     wiki_id = models.CharField(max_length=36, db_index=True)
-#     details = models.TextField()
+class WikiFileViews(models.Model):
+    wiki_id = models.CharField(max_length=36, db_index=True)
+    details = models.TextField()
 
-#     objects = WikiFileViewsManager()
+    objects = WikiFileViewsManager()
 
-#     class Meta:
-#         db_table = 'wiki_file_views'
+    class Meta:
+        db_table = 'wiki_file_views'
 
-#     @property
-#     def views_ids(self):
-#         wiki_views = json.loads(self.details)
-#         views = wiki_views.get('views', [])
-#         return [v.get('_id') for v in views]
+    @property
+    def views_ids(self):
+        wiki_views = json.loads(self.details)
+        views = wiki_views.get('views', [])
+        return [v.get('_id') for v in views]
 
-#     @property
-#     def views_names(self):
-#         wiki_views = json.loads(self.details)
-#         views = wiki_views.get('views', [])
-#         return [v.get('name') for v in views]
+    @property
+    def views_names(self):
+        wiki_views = json.loads(self.details)
+        views = wiki_views.get('views', [])
+        return [v.get('name') for v in views]
 
 
 ###### signal handlers

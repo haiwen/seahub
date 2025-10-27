@@ -351,41 +351,41 @@ class WikiAPI {
     return this.req.delete(url, { data: params });
   }
 
-  // addWikiLinkedView(wikiId, params) {
-  //   const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
-  //   const formData = new FormData();
-  //   formData.append('name', params.name);
-  //   formData.append('type', params.type);
-  //   formData.append('link_repo_id', params.repo_id);
-  //   return this._sendPostRequest(url, formData);
-  // }
+  addWikiLinkedView(wikiId, params) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    const formData = new FormData();
+    formData.append('name', params.name);
+    formData.append('type', params.type);
+    formData.append('link_repo_id', params.repo_id);
+    return this._sendPostRequest(url, formData);
+  }
 
-  // updateWikiLinkedView(wikiId, paramsData) {
-  //   const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
-  //   const params = {
-  //     view_id: paramsData.view_id,
-  //     view_data: paramsData.view_data,
-  //   };
-  //   return this.req.put(url, params);
-  // }
+  updateWikiLinkedView(wikiId, paramsData) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    const params = {
+      view_id: paramsData.view_id,
+      view_data: paramsData.view_data,
+    };
+    return this.req.put(url, params);
+  }
 
-  // deleteWikiLinkedView(wikiId, view_id) {
-  //   const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
-  //   const params = {
-  //     view_id: view_id,
-  //   };
-  //   return this.req.delete(url, { data: params });
-  // }
+  deleteWikiLinkedView(wikiId, view_id) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    const params = {
+      view_id: view_id,
+    };
+    return this.req.delete(url, { data: params });
+  }
 
-  // listWikiLinkedViews(wikiId) {
-  //   const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
-  //   return this.req.get(url);
-  // }
+  listWikiLinkedViews(wikiId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    return this.req.get(url);
+  }
 
-  // listWikiLinkedViewDetail(wikiId, viewId) {
-  //   const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/' + viewId + '/';
-  //   return this.req.get(url);
-  // }
+  listWikiLinkedViewDetail(wikiId, viewId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/' + viewId + '/';
+    return this.req.get(url);
+  }
 
 }
 
