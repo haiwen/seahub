@@ -4,6 +4,7 @@ import NavItemIcon from '../common/nav-item-icon';
 import CustomIcon from '../custom-icon';
 import { gettext, mediaUrl } from '../../../utils/constants';
 import { getPaths } from '../utils/index';
+import { Utils } from '../../../utils/utils';
 
 import './index.css';
 
@@ -17,7 +18,13 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, currentPageLocked }
       {paths.map((item, index) => {
         return (
           <Fragment key={item.id}>
-            <div className='wiki2-top-nav-item d-flex align-items-center' onClick={() => {setCurrentPage && setCurrentPage(item.id);}}>
+            <div
+              role='button'
+              tabIndex={0}
+              className='wiki2-top-nav-item d-flex align-items-center'
+              onClick={() => { setCurrentPage && setCurrentPage(item.id); }}
+              onKeyDown={Utils.onKeyDown}
+            >
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
               <div className="d-flex align-items-center">
                 <span className='text-truncate' title={item.name} aria-label={item.name}>{item.name}</span>

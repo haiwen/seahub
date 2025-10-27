@@ -135,17 +135,15 @@ const AIIcon = () => {
   return (
     <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
       <DropdownToggle
-        tag="span"
-        role="button"
+        className="border-0 p-0 bg-transparent detail-control mr-2"
+        ref={menuToggleRef}
         data-toggle="dropdown"
         aria-expanded={isMenuShow}
         title='AI'
         aria-label='AI'
         tabIndex={0}
       >
-        <div className="detail-control mr-2" ref={menuToggleRef}>
-          <Icon symbol="ai" className="detail-control-icon" />
-        </div>
+        <Icon symbol="ai" className="detail-control-icon" />
       </DropdownToggle>
       {isMenuShow && (
         <div className="sf-metadata-ai-dropdown-menu large">

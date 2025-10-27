@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { UncontrolledTooltip, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PageItem from './pages/page-item';
@@ -9,6 +9,7 @@ import { gettext, wikiPermission } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Icon from '../../../components/icon';
+import OpIcon from '../../../components/op-icon';
 
 import '../css/wiki-nav.css';
 
@@ -37,6 +38,7 @@ class WikiNav extends Component {
       idFoldedStatusMap: {}, // Move idFoldedStatusMap to state
       isShowOperationDropdown: false,
       isImportPageMenuShown: false,
+      isHeaderHovered: false,
     };
     this.folderClassNameCache = '';
     this.lastScrollTop = 0;
@@ -81,6 +83,14 @@ class WikiNav extends Component {
     if (this.state.isImportPageMenuShown) {
       this.setState({ isImportPageMenuShown: false });
     }
+  };
+
+  handleHeaderMouseEnter = () => {
+    this.setState({ isHeaderHovered: true });
+  };
+
+  handleHeaderMouseLeave = () => {
+    this.setState({ isHeaderHovered: false });
   };
 
   handleImportPage = (suffix) => {
@@ -157,6 +167,7 @@ class WikiNav extends Component {
 
   // eslint-disable-next-line
   renderStructureBody = () => {
+    const { isHeaderHovered } = this.state;
     const { navigation, pages } = this.props;
     const pagesLen = pages.length;
     const canDeletePage = navigation.length > 1;
@@ -165,72 +176,74 @@ class WikiNav extends Component {
     const isDesktop = Utils.isDesktop();
     return (
       <div className='wiki-nav-body' onScroll={this.onWikiNavBodyScroll} ref={this.wikiNavBodyRef}>
-        <div className="wiki-nav-group-header wiki-nav-pages px-2">
+        <div
+          className="wiki-nav-group-header wiki-nav-pages px-2"
+          role="region"
+          aria-label={gettext('Pages')}
+          tabIndex={0}
+          onMouseEnter={this.handleHeaderMouseEnter}
+          onMouseLeave={this.handleHeaderMouseLeave}
+          onFocus={this.handleHeaderMouseEnter}
+        >
           <h2 className="h6 font-weight-normal m-0">{gettext('Pages')}</h2>
           {isDesktop && wikiPermission === 'rw' &&
           <div className='d-none d-md-flex'>
-            <div className="more-wiki-page-operation" onClick={this.toggleDropdown}>
-              <Icon symbol="more-level" />
-              <Dropdown
-                isOpen={this.state.isShowOperationDropdown}
-                toggle={this.toggleDropdown}
-                className="page-operation-dropdown"
-              >
-                <DropdownToggle
-                  className="page-operation-dropdown-toggle"
-                  tag="span"
-                  role='button'
-                  tabIndex={0}
-                  data-toggle="dropdown"
-                  aria-expanded={this.state.isShowOperationDropdown}
-                  aria-label={gettext('More page operations')}
-                >
-                </DropdownToggle>
-                <DropdownMenu
-                  className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
-                  flip={false}
-                  modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
-                >
-                  <Dropdown
-                    direction="right"
-                    className="w-100"
-                    inNavbar={true}
-                    isOpen={this.state.isImportPageMenuShown}
-                    toggle={() => {}}
-                    onMouseEnter={this.showImportPageMenu}
-                    onMouseLeave={this.hideImportPageMenu}
-                  >
-                    <DropdownToggle
-                      tag="span"
-                      className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2 justify-content-between"
-                      onMouseEnter={this.showImportPageMenu}
-                    >
-                      <span>
-                        <i className='sf3-font sf3-font-import-sdoc' aria-hidden="true" />
-                        <span>{gettext('Import page')}</span>
-                      </span>
-                      <i className="sf3-font-down sf3-font rotate-270 mr-0" aria-hidden="true"></i>
-                    </DropdownToggle>
-                    <DropdownMenu className="ml-0">
-                      <DropdownItem key="import-docx" onClick={this.handleImportPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
-                      <DropdownItem key="import-md" onClick={this.handleImportPage.bind(this, '.md')}>{gettext('Import page from Markdown')}</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </DropdownMenu>
-              </Dropdown>
-            </div>
-            <div
-              className="wiki-add-page-btn"
-              role='button'
-              id='wiki-add-new-page'
-              onClick={this.props.handleAddNewPage}
-              aria-label={gettext('New page')}
+            {isHeaderHovered &&
+            <Dropdown
+              isOpen={this.state.isShowOperationDropdown}
+              toggle={this.toggleDropdown}
+              className="page-operation-dropdown"
             >
-              <i className='sf3-font sf3-font-enlarge add-new-page' aria-hidden="true"></i>
-              <UncontrolledTooltip className='wiki-new-page-tooltip' target="wiki-add-new-page">
-                {gettext('New page')}
-              </UncontrolledTooltip>
-            </div>
+              <DropdownToggle
+                className="op-icon"
+                tag="span"
+                role='button'
+                tabIndex={0}
+                data-toggle="dropdown"
+                aria-expanded={this.state.isShowOperationDropdown}
+                title={gettext('More operations')}
+                aria-label={gettext('More operations')}
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
+              <DropdownMenu
+                className="page-operation-dropdown-menu dtable-dropdown-menu large position-fixed"
+                flip={false}
+                modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}
+              >
+                <Dropdown
+                  direction="right"
+                  className="w-100"
+                  inNavbar={true}
+                  isOpen={this.state.isImportPageMenuShown}
+                  toggle={() => {}}
+                  onMouseEnter={this.showImportPageMenu}
+                  onMouseLeave={this.hideImportPageMenu}
+                >
+                  <DropdownToggle
+                    tag="span"
+                    className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2 justify-content-between"
+                    onMouseEnter={this.showImportPageMenu}
+                  >
+                    <span>
+                      <i className='sf3-font sf3-font-import-sdoc' aria-hidden="true" />
+                      <span>{gettext('Import page')}</span>
+                    </span>
+                    <i className="sf3-font-down sf3-font rotate-270 mr-0" aria-hidden="true"></i>
+                  </DropdownToggle>
+                  <DropdownMenu className="ml-0">
+                    <DropdownItem key="import-docx" onClick={this.handleImportPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
+                    <DropdownItem key="import-md" onClick={this.handleImportPage.bind(this, '.md')}>{gettext('Import page from Markdown')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </DropdownMenu>
+            </Dropdown>
+            }
+            <OpIcon
+              className="sf3-font sf3-font-enlarge op-icon mr-0"
+              title={gettext('New page')}
+              op={this.props.handleAddNewPage}
+            />
           </div>
           }
         </div>
@@ -242,7 +255,13 @@ class WikiNav extends Component {
             <div className="wiki-nav-group-header px-2">
               <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
             </div>
-            <div className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
+            <div
+              role='button'
+              tabIndex={0}
+              className={classNames('wiki2-trash', { 'mt-0': !pagesLen })}
+              onClick={this.props.toggleTrashDialog}
+              onKeyDown={Utils.onKeyDown}
+            >
               <span className="sf3-font-trash sf3-font mr-2"></span>
               <span>{gettext('Trash')}</span>
             </div>

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody, Input } from 'reactstrap';
+import { Modal, ModalBody, Input, Button } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import searchAPI from '../../utils/search-api';
 import { gettext } from '../../utils/constants';
@@ -156,10 +156,10 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
 
   return (
     <>
-      <div className="wiki2-search" onClick={() => setIsModalOpen(true)}>
+      <Button className="wiki2-search border-0 p-0 font-weight-normal" onClick={() => setIsModalOpen(true)}>
         <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
         <span>{gettext('Search')}</span>
-      </div>
+      </Button>
       {isModalOpen &&
         <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
           <ModalBody>

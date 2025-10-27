@@ -279,17 +279,16 @@ class MainPanel extends Component {
             {menuItems.length > 0 &&
             <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
               <DropdownToggle
-                tag="span"
+                tag="i"
+                tabIndex={0}
                 role="button"
                 id="cur-folder-more-op-toggle"
-                className='wiki2-file-history-button'
+                className='wiki2-file-history-button sf3-font-more sf3-font'
                 data-toggle="dropdown"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 aria-expanded={isDropdownMenuOpen}
-              >
-                <span className="sf3-font-more sf3-font" aria-hidden="true"></span>
-              </DropdownToggle>
+              />
               <DropdownMenu>
                 {menuItems.map((menuItem, index) => {
                   if (menuItem.key === 'Freeze page') {
