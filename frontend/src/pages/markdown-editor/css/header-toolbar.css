@@ -26,6 +26,9 @@
   color: #666;
   border: none !important;
   font-size: .9375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 28px;
   width: 28px;
   min-width: 0;
@@ -33,6 +36,16 @@
   padding-top: 0;
   border-radius: 3px !important;
   margin-right: 10px;
+}
+
+.sf-md-viewer-topbar .btn:hover {
+  background-color: var(--bs-hover-bg) !important;
+}
+
+.sf-md-viewer-topbar .btn .seafile-multicolor-icon {
+  fill: #666;
+  width: .875rem;
+  height: .875rem;
 }
 
 .collab-users-dropdown.dropdown {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../icon';
 
@@ -21,9 +22,9 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
         <div className="detail-control-container">
           {children}
           {onClose &&
-            <div className="detail-control" onClick={onClose} title={gettext('Close')}>
+            <Button className="border-0 p-0 bg-transparent detail-control" onClick={onClose} title={gettext('Close')}>
               {closeIcon ? closeIcon : <Icon symbol="close" className="detail-control-icon" />}
-            </div>
+            </Button>
           }
         </div>
       )}
