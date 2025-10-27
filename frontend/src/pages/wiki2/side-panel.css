@@ -81,11 +81,3 @@
   background-color: var(--bs-wiki-nav-hover-bg);
   border-radius: 3px;
 }
-
-.wiki-nav-group-header.wiki-nav-pages .more-wiki-page-operation {
-  opacity: 0;
-}
-
-.wiki-nav-group-header.wiki-nav-pages:hover .more-wiki-page-operation {
-  opacity: 1;
-}

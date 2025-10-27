@@ -7,13 +7,13 @@ import NavItemIcon from '../../common/nav-item-icon';
 import PageDropdownMenu from './page-dropdownmenu';
 import { gettext, wikiId, wikiPermission } from '../../../../utils/constants';
 import AddNewPageDialog from '../add-new-page-dialog';
-import Icon from '../../../../components/icon';
 import CustomIcon from '../../custom-icon';
 import { eventBus } from '../../../../components/common/event-bus';
 import { INSERT_POSITION } from '../constants';
 import toaster from '../../../../components/toast';
 import wikiAPI from '../../../../utils/wiki-api';
 import { Utils } from '../../../../utils/utils';
+import OpIcon from '../../../../components/op-icon';
 
 const PageItem = ({
   page,
@@ -38,7 +38,6 @@ const PageItem = ({
   setClassName,
 }) => {
   const [isShowNameEditor, setIsShowNameEditor] = useState(false);
-  const [isShowOperationDropdown, setIsShowOperationDropdown] = useState(false);
   const [isShowInsertPage, setIsShowInsertPage] = useState(false);
   const [isShowAddSiblingPage, setIsShowAddSiblingPage] = useState(false);
   const [insertPosition, setInsertPosition] = useState('');
@@ -144,20 +143,6 @@ const PageItem = ({
     toggleTriggeredRef.current = true;
   }, [isShowNameEditor]);
 
-  const changeItemFreeze = (isFreeze) => {
-    if (isFreeze) {
-      ref.current.classList.add('wiki-page-freezed');
-    } else {
-      ref.current.classList.remove('wiki-page-freezed');
-    }
-  };
-
-  const toggleDropdown = useCallback(() => {
-    const isShow = !isShowOperationDropdown;
-    setIsShowOperationDropdown(isShow);
-    changeItemFreeze(isShow);
-  }, [isShowOperationDropdown]);
-
   const toggleInsertSiblingPage = useCallback((position) => {
     let insertPosition = null;
     if (position === INSERT_POSITION.BELOW || position === INSERT_POSITION.ABOVE) {
@@ -259,8 +244,17 @@ const PageItem = ({
           onMouseEnter={onMouseEnter}
           onMouseMove={onMouseMove}
           onMouseLeave={onMouseLeave}
+          tabIndex={0}
+          role="button"
+          onFocus={onMouseEnter}
         >
-          <div className="wiki-page-item-main" onClick={onClickPageItem}>
+          <div
+            tabIndex="0"
+            role="button"
+            className="wiki-page-item-main"
+            onClick={onClickPageItem}
+            onKeyDown={Utils.onKeyDown}
+          >
             <div
               className="wiki-page-content"
               style={pathStr ? {
@@ -278,7 +272,13 @@ const PageItem = ({
                 <NavItemIcon symbol={'file'} disable={true} />
               ))}
               {(isMouseEntered && childNumber > 0) && (
-                <div role="button" className="nav-item-icon" onClick={() => toggleExpand(page.id)}>
+                <div
+                  tabIndex="0"
+                  role="button"
+                  className="nav-item-icon"
+                  onClick={() => { toggleExpand(page.id); }}
+                  onKeyDown={Utils.onKeyDown}
+                >
                   <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
                 </div>
               )}
@@ -293,33 +293,25 @@ const PageItem = ({
               )}
             </div>
           </div>
+          {isMouseEntered &&
           <div className="d-none d-md-flex">
-            <div className="more-wiki-page-operation" onClick={toggleDropdown}>
-              <Icon symbol="more-level" />
-              {isShowOperationDropdown && (
-                <PageDropdownMenu
-                  page={page}
-                  pages={pages}
-                  canDeletePage={canDeletePage}
-                  toggle={toggleDropdown}
-                  toggleNameEditor={toggleNameEditor}
-                  duplicatePage={duplicatePage}
-                  onDeletePage={() => onDeletePage(page.id)}
-                  toggleInsertSiblingPage={toggleInsertSiblingPage}
-                  importPage={importPage}
-                />
-              )}
-            </div>
-            <div
-              className="wiki-add-page-btn"
-              onClick={toggleInsertPage}
-              role='button'
+            <PageDropdownMenu
+              page={page}
+              pages={pages}
+              canDeletePage={canDeletePage}
+              toggleNameEditor={toggleNameEditor}
+              duplicatePage={duplicatePage}
+              onDeletePage={() => onDeletePage(page.id)}
+              toggleInsertSiblingPage={toggleInsertSiblingPage}
+              importPage={importPage}
+            />
+            <OpIcon
+              className="sf3-font sf3-font-enlarge op-icon mr-0"
+              op={toggleInsertPage}
               title={gettext('Add page inside')}
-              aria-label={gettext('Add page inside')}
-            >
-              <span className='sf3-font sf3-font-enlarge' aria-hidden="true"></span>
-            </div>
+            />
           </div>
+          }
           {isShowInsertPage && (
             <AddNewPageDialog
               toggle={toggleInsertPage}
@@ -367,7 +359,13 @@ const PageItem = ({
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
       >
-        <div className="wiki-page-item-main" onClick={onClickPageItem}>
+        <div
+          tabIndex="0"
+          role="button"
+          className="wiki-page-item-main"
+          onClick={onClickPageItem}
+          onKeyDown={Utils.onKeyDown}
+        >
           <div
             className="wiki-page-content"
             style={pathStr ? {
@@ -385,7 +383,13 @@ const PageItem = ({
               <NavItemIcon symbol="files" disable={true} />
             ))}
             {(isMouseEntered && childNumber > 0) && (
-              <div role="button" className="nav-item-icon" onClick={() => toggleExpand(page.id)}>
+              <div
+                tabIndex="0"
+                role="button"
+                className="nav-item-icon"
+                onClick={() => toggleExpand(page.id)}
+                onKeyDown={Utils.onKeyDown}
+              >
                 <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
               </div>
             )}
