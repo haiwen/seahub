@@ -248,7 +248,13 @@ const PageItem = ({
           role="button"
           onFocus={onMouseEnter}
         >
-          <div className="wiki-page-item-main" onClick={onClickPageItem}>
+          <div
+            tabIndex="0"
+            role="button"
+            className="wiki-page-item-main"
+            onClick={onClickPageItem}
+            onKeyDown={Utils.onKeyDown}
+          >
             <div
               className="wiki-page-content"
               style={pathStr ? {
@@ -270,7 +276,7 @@ const PageItem = ({
                   tabIndex="0"
                   role="button"
                   className="nav-item-icon"
-                  onClick={() => toggleExpand(page.id)}
+                  onClick={() => { toggleExpand(page.id); }}
                   onKeyDown={Utils.onKeyDown}
                 >
                   <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
@@ -353,7 +359,13 @@ const PageItem = ({
         onMouseMove={onMouseMove}
         onMouseLeave={onMouseLeave}
       >
-        <div className="wiki-page-item-main" onClick={onClickPageItem}>
+        <div
+          tabIndex="0"
+          role="button"
+          className="wiki-page-item-main"
+          onClick={onClickPageItem}
+          onKeyDown={Utils.onKeyDown}
+        >
           <div
             className="wiki-page-content"
             style={pathStr ? {
@@ -371,7 +383,13 @@ const PageItem = ({
               <NavItemIcon symbol="files" disable={true} />
             ))}
             {(isMouseEntered && childNumber > 0) && (
-              <div role="button" className="nav-item-icon" onClick={() => toggleExpand(page.id)}>
+              <div
+                tabIndex="0"
+                role="button"
+                className="nav-item-icon"
+                onClick={() => toggleExpand(page.id)}
+                onKeyDown={Utils.onKeyDown}
+              >
                 <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
               </div>
             )}

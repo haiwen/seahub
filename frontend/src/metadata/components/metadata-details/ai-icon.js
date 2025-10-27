@@ -143,7 +143,7 @@ const AIIcon = () => {
         aria-label='AI'
         tabIndex={0}
       >
-          <Icon symbol="ai" className="detail-control-icon" />
+        <Icon symbol="ai" className="detail-control-icon" />
       </DropdownToggle>
       {isMenuShow && (
         <div className="sf-metadata-ai-dropdown-menu large">
