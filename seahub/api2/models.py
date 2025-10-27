@@ -120,7 +120,9 @@ class TokenV2Manager(models.Manager):
         if token and token.wiped_at:
             token.delete()
             token = None
-
+            
+        if device_name:
+            device_name = device_name[:40]
         if token:
             if token.client_version != client_version or token.platform_version != platform_version \
                 or token.device_name != device_name:
