@@ -216,7 +216,7 @@ from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx
 from seahub.ocm.settings import OCM_ENDPOINT
-from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view
+from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view, wiki_repo_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
     WikiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView, Wiki2RepoViews, Wiki2RepoView, \
@@ -817,6 +817,7 @@ urlpatterns = [
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/$', wiki_publish_view, name='wiki-publish'),
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/(?P<page_id>[-0-9a-zA-Z]{4})/$', wiki_publish_view, name='wiki-publish'),
     re_path(r'^wiki/file_revisions/(?P<wiki_id>[^/]+)/$', wiki_history_view, name='wiki-history'),
+    re_path(r'^wiki/repo-view/(?P<view_id>[^/]+)/$', wiki_repo_view, name='wiki-repo-view'),
 
     path('avatar/', include('seahub.avatar.urls')),
     path('group/', include('seahub.group.urls')),
@@ -877,7 +878,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/internal/repos/(?P<repo_id>[-0-9a-f]{36})/check-thumbnail/user-token/$', CheckThumbnailAccessByUserToken.as_view(), name='api-v2.1-internal-check-thumbnail-access-by-user-token'),
     re_path(r'^api/v2.1/internal/check-share-link-thumbnail/$', CheckShareLinkThumbnailAccess.as_view(), name='api-v2.1-internal-check-share-link-thumbnail-access'),
     re_path(r'^api/v2.1/internal/convert-seadoc-image/(?P<doc_uuid>[-0-9a-f]{36})/$', InternalConvertSeadocImage.as_view(), name="api-v2.1-internal-file-download-link-access"),
-    
+
     ### system admin ###
     re_path(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     path('sys/useradmin/export-excel/', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),

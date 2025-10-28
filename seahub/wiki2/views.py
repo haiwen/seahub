@@ -34,11 +34,11 @@ def wiki_view(request, wiki_id, page_id=None):
     wiki = Wiki.objects.get(wiki_id=wiki_id)
     if not wiki:
         raise Http404
-    
+
     username = request.user.username
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
-    
+
     file_path = ''
 
     if page_id:
@@ -69,7 +69,7 @@ def wiki_view(request, wiki_id, page_id=None):
         except Exception as e:
             logger.warning(e)
 
-    
+
     is_admin = is_repo_admin(username, repo_id)
     last_modified = datetime.fromtimestamp(last_modified)
     try:
@@ -160,11 +160,11 @@ def wiki_history_view(request, wiki_id):
     wiki = Wiki.objects.get(wiki_id=wiki_id)
     if not wiki:
         raise Http404
-    
+
     username = request.user.username
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
-    
+
     page_id = request.GET.get('page_id')
 
     if page_id:
@@ -192,4 +192,12 @@ def wiki_history_view(request, wiki_id):
         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
         "seadoc_access_token": gen_seadoc_access_token(file_uuid, file_name, username, permission='rw'),
         "seadoc_server_url": SEADOC_SERVER_URL
+    })
+
+def wiki_repo_view(request, view_id):
+
+    # get wikiView object or 404
+
+    return render(request, "wiki_repo_view.html", {
+        'view_id': view_id,
     })
