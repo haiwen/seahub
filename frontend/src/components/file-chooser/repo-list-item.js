@@ -77,7 +77,7 @@ class RepoListItem extends React.Component {
       parentPath = pathElements.join('/');
     }
     // create new folder in selected repo or folder
-    if (repo && selectedRepo && repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo !== selectedRepo && this.isComponentMounted) {
+    if (repo && selectedRepo && repo.repo_id === selectedRepo.repo_id && prevProps.selectedRepo.repo_id !== selectedRepo.repo_id && this.isComponentMounted) {
       seafileAPI.listDir(repo.repo_id, parentPath).then(res => {
         const { dirent_list = [], dir_id = '', user_perm = 'r' } = res?.data || {};
         const dirent = dirent_list.find(item => item.type === 'dir' && item.name === newFolderName);
