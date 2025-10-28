@@ -201,7 +201,11 @@ class ShareLinks extends Component {
 
   getShareLinksByPage = (page) => {
     const { perPage, sortBy, sortOrder } = this.props;
-    systemAdminAPI.sysAdminListShareLinks(page, perPage, sortBy, sortOrder).then((res) => {
+    // Accept only link-supported order fields
+    const allowed = ['ctime', 'view_cnt'];
+    const orderField = allowed.includes(sortBy) ? sortBy : '';
+    const orderDir = orderField ? sortOrder : undefined;
+    systemAdminAPI.sysAdminListShareLinks(page, perPage, orderField, orderDir).then((res) => {
       this.setState({
         shareLinkList: res.data.share_link_list,
         loading: false,

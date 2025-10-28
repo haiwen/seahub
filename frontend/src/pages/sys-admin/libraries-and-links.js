@@ -142,15 +142,23 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     const cleanUrlParams = () => {
       const url = new URL(window.location.href);
       const paramsToKeep = currentPathType === 'library' ? ['page', 'per_page', 'order_by'] : ['order_by', 'direction'];
+      const validOrderBy = currentPathType === 'library'
+        ? new Set(['size', 'file_count'])
+        : new Set(['ctime', 'view_cnt']);
+
+      const urlOrderBy = url.searchParams.get('order_by');
+      const isOrderValid = urlOrderBy ? validOrderBy.has(urlOrderBy) : false;
+
       const searchParams = new URLSearchParams();
 
       Array.from(url.searchParams.entries()).forEach(([key, value]) => {
-        if (paramsToKeep.includes(key)) {
-          searchParams.set(key, value);
-        }
+        if (!paramsToKeep.includes(key)) return;
+        if (key === 'order_by' && !isOrderValid) return;
+        if (key === 'direction' && currentPathType === 'link' && !isOrderValid) return;
+        searchParams.set(key, value);
       });
 
-      let next = url.pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
+      const next = url.pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
       if (url.pathname + url.search !== next) {
         navigate(next);
       }
@@ -159,6 +167,9 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     cleanUrlParams();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLibraries]);
+
+  const safeLinkSortBy = !isLibraries && (sortBy === 'ctime' || sortBy === 'view_cnt') ? sortBy : '';
+  const safeLinkSortOrder = safeLinkSortBy ? sortOrder : undefined;
 
   return (
     <>
@@ -182,7 +193,7 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
       {isLibraries ? (
         <ReposNav currentItem={curTab} sortBy={sortBy} sortItems={sortItems} />
       ) : (
-        <LinksNav currentItem={curTab} sortBy={sortBy} sortOrder={sortOrder} sortItems={sortItems} />
+        <LinksNav currentItem={curTab} sortBy={safeLinkSortBy} sortOrder={safeLinkSortOrder} sortItems={sortItems} />
       )}
       <Router className="d-flex overflow-hidden">
         <AllRepos
@@ -211,8 +222,8 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
           path="share-links"
           perPage={perPage}
           currentPage={currentPage}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
+          sortBy={safeLinkSortBy}
+          sortOrder={safeLinkSortOrder}
           onResetPerPage={onResetPerPage}
         />
         <UploadLinks path="upload-links" />
