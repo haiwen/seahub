@@ -13,6 +13,7 @@ from django.shortcuts import render
 
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.models import Wiki2Publish
+from seahub.wiki2.models import WikiFileViews
 from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
@@ -194,10 +195,19 @@ def wiki_history_view(request, wiki_id):
         "seadoc_server_url": SEADOC_SERVER_URL
     })
 
-def wiki_repo_view(request, view_id):
+def wiki_repo_view(request, wiki_id, view_id):
 
     # get wikiView object or 404
+    wikiFileView = WikiFileViews.objects.get_view(wiki_id, view_id)
+    if not wikiFileView:
+        raise Http404
+
+    repo_id = wikiFileView['linked_repo_id']
+    repo = seafile_api.get_repo(repo_id)
 
     return render(request, "wiki_repo_view.html", {
+        'repo': repo,
+        'wiki_id': wiki_id,
         'view_id': view_id,
+        'repo_id': repo_id,
     })

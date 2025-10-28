@@ -817,7 +817,7 @@ urlpatterns = [
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/$', wiki_publish_view, name='wiki-publish'),
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/(?P<page_id>[-0-9a-zA-Z]{4})/$', wiki_publish_view, name='wiki-publish'),
     re_path(r'^wiki/file_revisions/(?P<wiki_id>[^/]+)/$', wiki_history_view, name='wiki-history'),
-    re_path(r'^wiki/repo-view/(?P<view_id>[^/]+)/$', wiki_repo_view, name='wiki-repo-view'),
+    re_path(r'^wiki/(?P<wiki_id>[^/]+)/repo-views/(?P<view_id>[^/]+)/$', wiki_repo_view, name='wiki-repo-view'),
 
     path('avatar/', include('seahub.avatar.urls')),
     path('group/', include('seahub.group.urls')),
