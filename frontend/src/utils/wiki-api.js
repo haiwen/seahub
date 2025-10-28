@@ -387,6 +387,11 @@ class WikiAPI {
     return this.req.get(url);
   }
 
+  getViewRecords(wikiId, viewId, params) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/' + viewId + '/records/';
+    return this.req.get(url, { params: params });
+  }
+
 }
 
 let wikiAPI = new WikiAPI();
