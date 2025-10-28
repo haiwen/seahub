@@ -49,7 +49,7 @@ class AllRepos extends Component {
   };
 
   isValidSortBy = (sortBy) => {
-    return ['file_count-desc', 'size-desc', ''].includes(sortBy);
+    return ['file_count', 'size', ''].includes(sortBy);
   };
 
   resetPerPage = (perPage) => {

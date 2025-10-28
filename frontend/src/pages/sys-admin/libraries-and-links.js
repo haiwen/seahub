@@ -80,17 +80,28 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     setIsCleanTrashDialogOpen(!isCleanTrashDialogOpen);
   }, [isCleanTrashDialogOpen]);
 
-  const sortItems = (sortBy, sortOrder) => {
-    setSortBy(sortBy);
-    setSortOrder(sortOrder);
-    setCurrentPage(1);
-    const url = new URL(location.href);
+  const sortItems = (orderValueOrField, sortOrder) => {
+    const field = orderValueOrField;
+    const direction = sortOrder;
+    const newPage = 1;
+
+    setSortBy(field);
+    if (!isLibraries && direction) {
+      setSortOrder(direction);
+    }
+    setCurrentPage(newPage);
+
+    const url = new URL(window.location.href);
     const searchParams = new URLSearchParams(url.search);
-    searchParams.set('page', 1);
-    searchParams.set('order_by', sortBy);
-    sortOrder && searchParams.set('direction', sortOrder);
-    url.search = searchParams.toString();
-    navigate(url.toString());
+    searchParams.set('page', newPage);
+    searchParams.set('order_by', field);
+    if (isLibraries) {
+      searchParams.delete('direction');
+    } else if (direction) {
+      searchParams.set('direction', direction);
+    }
+    const next = url.pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
+    navigate(next);
   };
 
   const onResetPerPage = (perPage, callBack) => {
@@ -116,7 +127,7 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
   }, []);
 
   useEffect(() => {
-    const urlParams = (new URL(window.location)).searchParams;
+    const urlParams = (new URL(window.location.href)).searchParams;
     setSortBy(urlParams.get('order_by') || sortBy);
     setSortOrder(urlParams.get('direction') || sortOrder);
     setPerPage(parseInt(urlParams.get('per_page') || perPage));
@@ -129,8 +140,8 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     resetAllStates();
 
     const cleanUrlParams = () => {
-      const url = new URL(location.href);
-      const paramsToKeep = currentPathType === 'library' ? ['page', 'per_page'] : [];
+      const url = new URL(window.location.href);
+      const paramsToKeep = currentPathType === 'library' ? ['page', 'per_page', 'order_by'] : ['order_by', 'direction'];
       const searchParams = new URLSearchParams();
 
       Array.from(url.searchParams.entries()).forEach(([key, value]) => {
@@ -139,8 +150,9 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
         }
       });
 
-      if (url.search !== searchParams.toString()) {
-        navigate(url.pathname + (searchParams.toString() ? `?${searchParams}` : ''));
+      let next = url.pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
+      if (url.pathname + url.search !== next) {
+        navigate(next);
       }
     };
 
@@ -195,7 +207,14 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
           isCleanTrashDialogOpen={isCleanTrashDialogOpen}
           toggleCleanTrashDialog={toggleCleanTrashDialog}
         />
-        <ShareLinks path="share-links" onResetPerPage={onResetPerPage} />
+        <ShareLinks
+          path="share-links"
+          perPage={perPage}
+          currentPage={currentPage}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onResetPerPage={onResetPerPage}
+        />
         <UploadLinks path="upload-links" />
       </Router>
     </>
