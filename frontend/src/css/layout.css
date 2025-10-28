@@ -330,6 +330,12 @@ img[src=""],img:not([src]) { /* for first loading img*/
   text-align: center;
 }
 
+.dir-tool .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-color);
+}
+
 .sf-tip-default {
   font-size: 13px;
   color: var(--bs-body-secondary-color);

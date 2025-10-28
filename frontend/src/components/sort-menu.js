@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
+import Icon from './icon';
 
 import '../css/item-dropdown-menu.css';
 
@@ -53,15 +54,16 @@ class SortMenu extends React.Component {
         className={className || ''}
       >
         <DropdownToggle
-          tag="i"
+          tag="span"
           role="button"
           tabIndex="0"
-          className="sf3-font-sort2 sf3-font cur-view-path-btn px-1"
+          className="cur-view-path-btn px-1"
           title={gettext('Switch sort mode')}
           data-toggle="dropdown"
           aria-label={gettext('Switch sort mode')}
           aria-expanded={isDropdownMenuOpen}
         >
+          <Icon symbol="sort" />
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {sortOptions.map((item, index) => {

@@ -19,6 +19,7 @@ import SearchTags from './search-tags';
 import IconBtn from '../icon-btn';
 import SearchedItemDetails from './details';
 import { CollaboratorsProvider } from '../../metadata';
+import Icon from '../icon';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -906,7 +907,9 @@ class Search extends Component {
             <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler} style={isMaskShow ? { zIndex: SEARCH_MASK } : {}}></div>
             <div className={`search-container ${isMaskShow ? 'show' : ''}`} style={isMaskShow ? { zIndex: SEARCH_CONTAINER } : {}}>
               <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
-                <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+                <span className="search-icon-left input-icon-addon">
+                  <Icon symbol="search" />
+                </span>
                 <input
                   type="text"
                   className="form-control search-input"

@@ -66,7 +66,8 @@ class DirTool extends React.Component {
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
         {(!isCustomPermission) &&
           <OpIcon
-            className="cur-view-path-btn sf3-font sf3-font-info ml-2"
+            className="cur-view-path-btn ml-2"
+            symbol="info"
             title={propertiesText}
             op={onToggleDetail}
           />

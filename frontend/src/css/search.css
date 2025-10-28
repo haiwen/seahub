@@ -66,6 +66,11 @@
   display: flex;
 }
 
+.search-icon-left .seafile-multicolor-icon {
+  width: 18px;
+  height: 18px;
+}
+
 .search-icon-right {
   display: flex;
   pointer-events: all;

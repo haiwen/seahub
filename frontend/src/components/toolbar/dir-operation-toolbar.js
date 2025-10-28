@@ -8,6 +8,7 @@ import { enableSeadoc, enableWhiteboard, gettext, onlyofficeSupportEditDocxf } f
 import toaster from '../toast';
 import TipDialog from '../dialog/tip-dialog';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import Icon from '../icon';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -252,8 +253,10 @@ class DirOperationToolbar extends React.Component {
               aria-label={gettext('More operations')}
               aria-expanded={this.state.isDesktopMenuOpen}
             >
-              <i className="sf3-font-new sf3-font" aria-hidden="true"></i>
-              <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i>
+              {/* <i className="sf3-font-new sf3-font" aria-hidden="true"></i>
+              <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i> */}
+              <Icon symbol="plus_sign" />
+              <Icon symbol="right_arrow" className="path-item-dropdown-toggle rotate-90" />
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
               {opList.map((item, index) => {
