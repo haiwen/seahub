@@ -167,10 +167,15 @@ class WikiView(object):
 class WikiFileViewsManager(models.Manager):
     def add_view(self, wiki_id, view_name, linked_repo_id, view_type='table', view_data={}):
         wiki_views = self.filter(wiki_id=wiki_id).first()
+        if not view_data:
+            from seafevents.repo_metadata.constants import METADATA_TABLE
+            view_data = {
+                'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
+                'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }]
+            }
         if not wiki_views:
             # init view data
             new_view = WikiView(view_name, linked_repo_id, view_type, view_data)
-
             view_json = new_view.view_json
             view_details = {
                 'views': [view_json],
