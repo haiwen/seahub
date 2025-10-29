@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { gettext, mediaUrl, siteRoot, thumbnailDefaultSize } from '../../../../../utils/constants';
 import OpMenu from './op-menu';
 import Rename from '../../../../../components/rename';
+import { Utils } from '../../../../../utils/utils';
 
 import './index.css';
 
@@ -79,6 +80,11 @@ const People = ({ haveFreezed, people, onOpenPeople, onRename, onFreezed, onUnFr
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      aria-label={name}
+      onFocus={onMouseEnter}
+      onKeyDown={Utils.onKeyDown}
     >
       <div className="sf-metadata-people-info-img">
         <img src={defaultURL || similarPhotoURL} alt={name} onError={onImgLoadError} height={60} width={60} />
