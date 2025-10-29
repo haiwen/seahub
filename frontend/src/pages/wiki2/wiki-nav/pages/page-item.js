@@ -266,22 +266,22 @@ const PageItem = ({
               ) : (
                 <NavItemIcon symbol={'file'} disable={true} />
               ))}
-              {childNumber > 0 && (
+              {(!isMouseEntered && childNumber > 0) && (customIcon ? (
+                <CustomIcon icon={customIcon} />
+              ) : (
+                <NavItemIcon symbol={'file'} disable={true} />
+              ))}
+              {(isMouseEntered && childNumber > 0) && (
                 <div
                   tabIndex="0"
                   role="button"
-                  className="wiki-nav-item-icon"
+                  className="nav-item-icon"
                   onClick={() => { toggleExpand(page.id); }}
                   onKeyDown={Utils.onKeyDown}
                 >
                   <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
                 </div>
               )}
-              {childNumber > 0 && (customIcon ? (
-                <CustomIcon icon={customIcon} />
-              ) : (
-                <NavItemIcon symbol={'file'} disable={true} />
-              ))}
               <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
               {isShowNameEditor && (
                 <NameEditPopover
