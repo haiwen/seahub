@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Button } from 'reactstrap';
+import { Utils } from '../../../utils/utils';
 
 import './index.css';
 
@@ -21,14 +23,15 @@ const RadioGroup = ({ value, options, className, onChange: onChangeAPI }) => {
       {options.map(option => {
         const { value, label } = option;
         return (
-          <div
+          <Button
             key={value}
             data-option={value}
             className={classnames('sf-metadata-radio-group-option', { 'active': value === selected })}
             onClick={onChange}
+            onKeyDown={Utils.onKeyDown}
           >
             {label}
-          </div>
+          </Button>
         );
       })}
     </div>

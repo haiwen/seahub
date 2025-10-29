@@ -47,7 +47,7 @@
   transition: background 0.2s, border-color 0.2s;
 }
 
-.metadata-slider-container .metadata-slider-icon-button {
+.metadata-slider-icon-button {
   min-width: 1.5rem;
   height: 100%;
   display: flex;
