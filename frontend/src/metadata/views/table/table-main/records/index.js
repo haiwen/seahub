@@ -643,12 +643,14 @@ class Records extends Component {
     const { isGroupView } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
+
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
       recordMetrics, colOverScanStartIdx, colOverScanEndIdx,
       contextMenu: (
         <ContextMenu
+          metadata={this.props.metadata}
           isGroupView={isGroupView}
           recordGetterByIndex={this.props.recordGetterByIndex}
           deleteRecords={this.props.deleteRecords}
@@ -673,6 +675,7 @@ class Records extends Component {
       getTableCanvasContainerRect: this.getTableCanvasContainerRect,
       onShowExpandedPropsDialog: this.toggleExpandedPropsDialog,
     };
+
     if (this.props.isGroupView) {
       return (
         <GroupBody
@@ -779,6 +782,7 @@ class Records extends Component {
 }
 
 Records.propTypes = {
+  metadata: PropTypes.object,
   isGroupView: PropTypes.bool,
   columns: PropTypes.array,
   table: PropTypes.object,

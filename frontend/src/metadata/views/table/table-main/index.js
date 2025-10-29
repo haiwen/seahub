@@ -60,6 +60,7 @@ const TableMain = ({
     <div className={classnames('table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0 })}>
       <Records
         columns={columns}
+        metadata={metadata}
         recordIds={metadata.view.rows || []}
         groups={metadata.view.groups}
         groupbys={metadata.view.groupbys}
