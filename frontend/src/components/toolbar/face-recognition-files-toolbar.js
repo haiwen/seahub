@@ -15,6 +15,7 @@ import { Utils } from '../../utils/utils';
 
 const FaceRecognitionFilesToolbar = (repoID) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
+  const [selectedRecords, setSelectedRecords] = useState([]);
   const menuRef = useRef(null);
   const metadataRef = useRef([]);
 
@@ -31,12 +32,11 @@ const FaceRecognitionFilesToolbar = (repoID) => {
     };
   }, []);
 
-  const selectedRecords = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
-
   useEffect(() => {
     const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata) => {
       metadataRef.current = metadata;
       setSelectedRecordIds(ids);
+      setSelectedRecords(ids.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || []);
     });
 
     return () => {
@@ -47,6 +47,7 @@ const FaceRecognitionFilesToolbar = (repoID) => {
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
+    setSelectedRecords([]);
     eventBus && eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_SELECTED_RECORD_IDS, []);
     eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
   }, [eventBus]);
