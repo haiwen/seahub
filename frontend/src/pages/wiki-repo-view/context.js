@@ -29,6 +29,9 @@ class Context {
     this.metadataAPI = metadataAPI;
     this.tagsAPI = tagsAPI;
 
+    const { repoInfo } = this.settings;
+    this.permission = repoInfo.permission !== 'admin' && repoInfo.permission !== 'rw' ? 'r' : 'rw';
+
     // init localStorage
     const { repoID, viewID } = this.settings;
     const localStorageName = viewID ? `sf-metadata-${repoID}-${viewID}` : `sf-metadata-${repoID}`;
@@ -63,6 +66,12 @@ class Context {
     return username;
   };
 
+  // file tag
+  updateFileTags = (data) => {
+    const repoID = this.settings['repoID'];
+    return this.tagsAPI.updateFileTags(repoID, data);
+  };
+
   // collaborators
   getCollaborators = () => {
     const repoID = this.settings['repoID'];
@@ -81,20 +90,36 @@ class Context {
     return this.metadataAPI.getView(wikiID, viewId);
   };
 
-  // file tag
-  updateFileTags = (data) => {
-    const repoID = this.settings['repoID'];
-    return this.tagsAPI.updateFileTags(repoID, data);
+  modifyView = (repoId, viewId, viewData) => {
+    return this.metadataAPI.modifyView(wikiID, viewId, viewData);
   };
 
-  canInsertColumn = () => {};
-  canModify = () => {};
-  canModifyRow = () => {};
-  canModifyColumn = () => {};
-  canModifyColumnOrder = () => {};
-  canModifyRows = () => {};
-  canPreview = () => {};
-  canModifyView = () => {};
+  canInsertColumn = () => {
+    return false;
+  };
+  canModify = () => {
+    return false;
+  };
+  canModifyRow = () => {
+    return false;
+  };
+  canModifyColumn = () => {
+    return false;
+  };
+  canModifyColumnOrder = () => {
+    return false;
+  };
+  canModifyRows = () => {
+    return false;
+  };
+  canPreview = () => {
+    return false;
+  };
+
+  canModifyView = () => {
+    if (this.permission === 'r') return false;
+    return true;
+  };
 
 }
 

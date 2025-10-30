@@ -104,6 +104,7 @@ TableMain.propTypes = {
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
   searchResult: PropTypes.object,
+  updateFileTags: PropTypes.func,
 };
 
 export default TableMain;

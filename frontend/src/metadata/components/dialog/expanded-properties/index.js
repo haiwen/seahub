@@ -18,7 +18,6 @@ import Checkbox from './checkbox';
 import Rate from './rate';
 import Tags from './tags';
 import Geolocation from './geolocation';
-import { useMetadataView } from '../../../hooks/metadata-view';
 
 import './index.css';
 
@@ -41,9 +40,8 @@ const COLUMN_TYPE_ITEM_MAP = {
   [CellType.GEOLOCATION]: Geolocation,
 };
 
-const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
+const ExpandedPropertiesDialog = ({ recordId, columns, toggle, metadata, modifyRecord, modifyColumnData, updateFileTags }) => {
   const containerRef = useRef(null);
-  const { metadata, modifyRecord, modifyColumnData } = useMetadataView();
   const record = useMemo(() => metadata.id_row_map[recordId], [metadata, recordId]);
   const filename = useMemo(() => getFileNameFromRecord(record), [record]);
 
@@ -85,7 +83,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
                   <span className="text-center">{name}</span>
                 </div>
                 <div className="col-9 content-wrapper">
-                  {Component && <Component record={record} column={column} columns={columns} containerRef={containerRef} onCommit={onCommit} modifyColumnData={modifyColumnData} />}
+                  {Component && <Component record={record} column={column} columns={columns} containerRef={containerRef} onCommit={onCommit} modifyColumnData={modifyColumnData} updateFileTags={updateFileTags} />}
                 </div>
               </div>
             );
@@ -100,6 +98,7 @@ ExpandedPropertiesDialog.propTypes = {
   recordId: PropTypes.string.isRequired,
   columns: PropTypes.array.isRequired,
   toggle: PropTypes.func.isRequired,
+  updateFileTags: PropTypes.func,
 };
 
 export default ExpandedPropertiesDialog;

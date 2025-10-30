@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import { MetadataViewProvider } from './hooks/metadata-view';
 import { MetadataMiddlewareProvider, MetadataProvider } from '../../metadata';
 import { MetadataStatusProvider } from '../../hooks';
@@ -25,38 +27,41 @@ export default function WikiRepoView() {
   if (isLoading) return null;
 
   return (
-    <MetadataStatusProvider
-      repoID={repoID}
-      currentPath={'/'}
-      repoInfo={currentRepo}
-      hideMetadataView={false}
-      statusCallback={() => {}}
-    >
-      <MetadataMiddlewareProvider
+    <DndProvider backend={HTML5Backend}>
+      <MetadataStatusProvider
         repoID={repoID}
-        repoInfo={currentRepo}
         currentPath={'/'}
-        selectTagsView={() => {}}
-        tagsChangedCallback={() => {}}
+        repoInfo={currentRepo}
+        hideMetadataView={false}
+        statusCallback={() => {}}
       >
-        <MetadataProvider
+        <MetadataMiddlewareProvider
           repoID={repoID}
-          currentPath={'/'}
           repoInfo={currentRepo}
-          selectMetadataView={() => {}}
+          currentPath={'/'}
+          selectTagsView={() => {}}
+          tagsChangedCallback={() => {}}
         >
-          <div className='wiki-repo-view'>
-            <div className='wiki-repo-view-toolbar'>
-              <ViewToolBar viewId={viewID} />
-            </div>
-            <div className='wiki-repo-view-content'>
-              <MetadataViewProvider repoID={repoID} wikiID={wikiID} viewID={viewID}>
-                <View />
-              </MetadataViewProvider>
-            </div>
-          </div>
-        </MetadataProvider>
-      </MetadataMiddlewareProvider>
-    </MetadataStatusProvider>
+          <MetadataProvider
+            repoID={repoID}
+            currentPath={'/'}
+            repoInfo={currentRepo}
+            selectMetadataView={() => {}}
+          >
+            <MetadataViewProvider repoID={repoID} repoInfo={currentRepo} wikiID={wikiID} viewID={viewID}>
+              <div className='wiki-repo-view'>
+                <div className='wiki-repo-view-toolbar'>
+                  <ViewToolBar viewId={viewID} />
+                </div>
+                <div className='wiki-repo-view-content'>
+                  <View />
+                </div>
+              </div>
+            </MetadataViewProvider>
+          </MetadataProvider>
+        </MetadataMiddlewareProvider>
+      </MetadataStatusProvider>
+    </DndProvider>
+
   );
 }

@@ -92,6 +92,7 @@ TableMain.propTypes = {
   metadata: PropTypes.object.isRequired,
   modifyRecord: PropTypes.func,
   modifyRecords: PropTypes.func,
+  updateFileTags: PropTypes.func,
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
   searchResult: PropTypes.object,

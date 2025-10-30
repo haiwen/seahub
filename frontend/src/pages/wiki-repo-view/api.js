@@ -49,6 +49,12 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
+  listUserInfo = (userIds) => {
+    const url = this.server + '/api/v2.1/user-list/';
+    const params = { user_id_list: userIds };
+    return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
+  };
+
   getMetadata(wikiId, viewId, params) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/' + viewId + '/records/';
     return this.req.get(url, { params: params });
@@ -59,11 +65,15 @@ class MetadataManagerAPI {
     return this.req.get(url);
   }
 
-  listUserInfo = (userIds) => {
-    const url = this.server + '/api/v2.1/user-list/';
-    const params = { user_id_list: userIds };
-    return this._sendPostRequest(url, params, { headers: { 'Content-type': 'application/json' } });
-  };
+  modifyView(wikiId, viewId, viewData) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    const data = {
+      view_id: viewId,
+      view_data: viewData,
+    };
+    return this.req.put(url, data);
+  }
+
 
 }
 

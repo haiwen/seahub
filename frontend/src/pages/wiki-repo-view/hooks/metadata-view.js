@@ -46,10 +46,10 @@ export const MetadataViewProvider = ({
   toggleShowDirentToolbar,
   ...params
 }) => {
-  const { modifyLocalFileTags } = useTags();
   const [isLoading, setLoading] = useState(true);
   const [metadata, setMetadata] = useState({ rows: [], columns: [], view: {} });
   const [errorMessage, setErrorMessage] = useState(null);
+  const { modifyLocalFileTags } = useTags();
 
   const [searchState, setSearchState] = useState({
     searchValue: '',
