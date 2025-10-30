@@ -4,6 +4,7 @@ import { GalleryGroupBySetter, FilterSetter, SortSetter } from '../../data-proce
 import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataStatus } from '../../../../hooks';
+import OpIcon from '../../../../components/op-icon';
 
 const GalleryViewToolbar = ({
   readOnly, isCustomPermission, view, collaborators,
@@ -47,15 +48,11 @@ const GalleryViewToolbar = ({
           modifySorts={modifySorts}
         />
         {!isCustomPermission && (
-          <div
-            className="cur-view-path-btn ml-2"
-            onClick={onToggleDetail}
-            aria-label={gettext('Properties')}
+          <OpIcon
+            className="sf3-font sf3-font-info cur-view-path-btn ml-2"
             title={gettext('Properties')}
-            role="button"
-          >
-            <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
-          </div>
+            op={onToggleDetail}
+          />
         )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
