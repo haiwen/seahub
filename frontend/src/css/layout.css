@@ -63,6 +63,46 @@ select {
   color: var(--bs-body-color);
 }
 
+.side-panel .nav-item .nav-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.side-panel .nav-item .op-icon {
+  min-width: 24px;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  cursor: pointer;
+}
+
+.side-panel .sub-nav .nav-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 6px;
+}
+
+.side-panel .nav-item .op-icon .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
+  margin: 0;
+}
+
+.side-panel .sub-nav .nav-icon .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-color);
+  margin: 0;
+}
+
 @media (max-width: 767px) {
   .side-panel {
     position:fixed;
@@ -158,9 +198,9 @@ select {
   align-items: center;
 }
 
-.cur-view-path .cur-view-path-btn.sf3-font,
-.cur-view-path .cur-view-path-btn .sf3-font {
-  font-size: 16px;
+.cur-view-path .cur-view-path-btn .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
   color: var(--bs-icon-color);
 }
 

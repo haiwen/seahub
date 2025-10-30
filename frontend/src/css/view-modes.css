@@ -23,3 +23,7 @@
 .dropdown-item:hover .view-modes-dropdown-shortcut {
   color: #fff;
 }
+
+.dropdown-item:hover .seafile-multicolor-icon {
+  color: #fff;
+}

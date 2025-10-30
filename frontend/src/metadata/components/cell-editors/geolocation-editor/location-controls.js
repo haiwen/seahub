@@ -19,15 +19,17 @@ const LocationControls = ({
       </div>
       <div className="header-actions">
         <span title={gettext('Full screen')} aria-label={gettext('Full screen')} onClick={onFullScreen}>
-          <i className="cur-view-path-btn iconfont icon-fullscreen" />
+          <Icon symbol="fullscreen" className="cur-view-path-btn" />
         </span>
         {position && (
           <span
-            className="cur-view-path-btn sf3-font sf3-font-delete1"
+            className="cur-view-path-btn"
             aria-label={gettext('Delete location')}
             title={gettext('Delete location')}
             onClick={onClear}
-          />
+          >
+            <Icon symbol="delete1" />
+          </span>
         )}
         <button
           className="btn btn-primary"

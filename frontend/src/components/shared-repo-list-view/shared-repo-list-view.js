@@ -10,6 +10,7 @@ import Loading from '../loading';
 import { LIST_MODE } from '../dir-view-mode/constants';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, handleContextClick } from '../context-menu/actions';
+import Icon from '../icon';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -64,7 +65,7 @@ class SharedRepoListView extends React.Component {
       sortByName: this.props.sortBy == 'name',
       sortByTime: this.props.sortBy == 'time',
       sortBySize: this.props.sortBy == 'size',
-      sortIcon: this.props.sortOrder == 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>
+      sortIcon: <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${this.props.sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>
     };
   };
 
@@ -154,10 +155,10 @@ class SharedRepoListView extends React.Component {
           <tr>
             <th width="4%"></th>
             <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+            <th width="35%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
             <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-            <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+            <th width="14%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+            <th width="17%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
             <th width="17%">{gettext('Owner')}</th>
           </tr>
         </thead>

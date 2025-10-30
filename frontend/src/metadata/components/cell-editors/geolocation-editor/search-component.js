@@ -237,7 +237,7 @@ const SearchComponent = ({
           {isSearching ? (
             <i className="fa fa-spinner fa-spin"></i>
           ) : (
-            <i className="sf3-font sf3-font-search"></i>
+            <Icon symbol="search" />
           )}
         </span>
       </div>

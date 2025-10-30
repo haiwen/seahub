@@ -275,7 +275,7 @@ const ViewItem = ({
               <ItemDropdownMenu
                 item={{ name: 'metadata-view' }}
                 menuClassname="metadata-views-dropdown-menu"
-                toggleClass="sf3-font sf3-font-more"
+                toggleChildren={<Icon symbol="more-level" />}
                 freezeItem={freezeItem}
                 unfreezeItem={unfreezeItem}
                 getMenuList={() => operations}

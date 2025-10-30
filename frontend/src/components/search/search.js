@@ -925,11 +925,12 @@ class Search extends Component {
                 {isCloseShow &&
                   <button
                     type="button"
-                    className="search-icon-right sf3-font sf3-font-x-01"
+                    className="search-icon-right"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
                     title={gettext('Clear search')}
                   >
+                    <Icon symbol="x-01" />
                   </button>
                 }
                 {isMaskShow && (

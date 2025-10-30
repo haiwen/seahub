@@ -4,6 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
 import { GRID_MODE, LIST_MODE } from './dir-view-mode/constants';
+import Icon from './icon';
 
 import '../css/view-modes.css';
 
@@ -59,15 +60,16 @@ class ViewModes extends React.Component {
         toggle={this.toggleDropdownMenu}
       >
         <DropdownToggle
-          tag="i"
+          tag="span"
           role="button"
           tabIndex="0"
-          className={`sf3-font sf3-font-${currentViewMode}-view cur-view-path-btn px-1`}
+          className="cur-view-path-btn px-1"
           title={gettext('Switch view mode')}
           data-toggle="dropdown"
           aria-label={gettext('Switch view mode')}
           aria-expanded={isDropdownMenuOpen}
         >
+          <Icon symbol={currentViewMode === LIST_MODE ? 'list-view' : 'grid-view'} />
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {options.map((item, index) => {
@@ -78,7 +80,7 @@ class ViewModes extends React.Component {
                     {currentViewMode === item.value && <i className="sf2-icon-tick"></i>}
                   </span>
                   <span className="view-modes-dropdown-content d-flex align-items-center">
-                    <span className={`sf3-font-${item.icon} sf3-font mr-2`} aria-hidden="true"></span>
+                    <Icon symbol={item.icon} className="mr-2" />
                     <span>{item.text}</span>
                   </span>
                   <span className="view-modes-dropdown-shortcut ml-4 d-flex align-items-center">{item.shortcut}</span>

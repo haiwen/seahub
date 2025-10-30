@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { gettext, lang, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, seafileVersion, additionalAboutDialogLinks, aboutDialogCustomHtml } from '../../utils/constants';
 import '../../css/seahub-modal-header.css';
+import Icon from '../icon';
 
 const propTypes = {
   onCloseAboutDialog: PropTypes.func.isRequired,
@@ -66,7 +67,7 @@ class AboutDialog extends React.Component {
           <ModalBody>
             <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleDialog}>
               <span className="seahub-modal-btn-inner">
-                <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                <Icon symbol="x-01" className="w-4 h-4" />
               </span>
             </button>
             <div className="about-content" dangerouslySetInnerHTML={{ __html: aboutDialogCustomHtml }}></div>
@@ -79,7 +80,7 @@ class AboutDialog extends React.Component {
           <ModalBody>
             <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleDialog}>
               <span className="seahub-modal-btn-inner">
-                <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                <Icon symbol="x-01" className="w-4 h-4" />
               </span>
             </button>
             <div className="about-content">

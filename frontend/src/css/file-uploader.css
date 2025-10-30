@@ -117,6 +117,8 @@
 }
 
 .file-upload-item .upload-failure-icon {
+  display: flex;
+  align-items: center;
   width: 16px;
   height: 16px;
   padding: 4px;

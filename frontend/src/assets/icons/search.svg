@@ -1,6 +1,1 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-  <title>search</title>
-  <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="1.5" fill="none" style="fill:none" vector-effect="non-scaling-stroke"/>
-  <path d="M21.07 21.07 L28 28" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" style="fill:none" vector-effect="non-scaling-stroke"/>
-</svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1762150131601" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="28852" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M448 32c230.4 0 416 185.6 416 416 0 99.2-35.2 188.8-89.6 259.2l204.8 204.8c19.2 19.2 19.2 48 0 67.2-19.2 19.2-48 19.2-67.2 0l-204.8-204.8C636.8 832 547.2 864 448 864 217.6 864 32 678.4 32 448S217.6 32 448 32z m0 96C272 128 128 272 128 448s144 320 320 320 320-144 320-320S624 128 448 128z" fill="currentColor" p-id="28853"></path></svg>

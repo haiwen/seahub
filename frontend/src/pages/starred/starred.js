@@ -249,7 +249,8 @@ class Item extends Component {
         <td dangerouslySetInnerHTML={{ __html: data.mtime_relative }}></td>
         <td>
           <OpIcon
-            className={`sf3-font sf3-font-x-01 op-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
+            className={`op-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
+            symbol="x-01"
             title={gettext('Unstar')}
             op={this.unstar}
           />

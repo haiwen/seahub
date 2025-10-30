@@ -7,6 +7,7 @@ import toaster from '../../components/toast';
 import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
+import Icon from '../../components/icon';
 
 const propTypes = {
   inAllLibs: PropTypes.bool,
@@ -80,7 +81,7 @@ class GroupItem extends React.Component {
       <div className="pb-3">
         <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
           <h4 className="sf-heading m-0 d-flex align-items-center">
-            <span className={`${group.parent_group_id == 0 ? 'sf3-font-group' : 'sf3-font-department'} sf3-font nav-icon`} aria-hidden="true"></span>
+            <span className="nav-icon"><Icon symbol={group.parent_group_id == 0 ? 'group' : 'department'} /></span>
             <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
             <GroupOperationMenu
               group={group}

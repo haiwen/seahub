@@ -1,4 +1,6 @@
 .wiki-card-group .sf-heading {
+  display: flex;
+  align-items: center;
   margin: 16px 0 10px;
 }
 
@@ -39,11 +41,9 @@
   align-items: center;
 }
 
-.wiki-card-item .wiki-card-item-top .sf3-font-wiki.sf3-font {
+.wiki-card-item .wiki-card-item-top .wiki-icon {
   color: #FF9800;
-  font-size: 24px;
   height: 24px;
-  line-height: 24px;
 }
 
 .wiki-card-item .wiki-card-item-top .wiki-item-name {

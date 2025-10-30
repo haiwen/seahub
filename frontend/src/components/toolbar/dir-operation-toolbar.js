@@ -253,10 +253,8 @@ class DirOperationToolbar extends React.Component {
               aria-label={gettext('More operations')}
               aria-expanded={this.state.isDesktopMenuOpen}
             >
-              {/* <i className="sf3-font-new sf3-font" aria-hidden="true"></i>
-              <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i> */}
-              <Icon symbol="plus_sign" />
-              <Icon symbol="right_arrow" className="path-item-dropdown-toggle rotate-90" />
+              <Icon symbol="new" />
+              <Icon symbol="down" className="path-item-dropdown-toggle" />
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
               {opList.map((item, index) => {
@@ -282,9 +280,9 @@ class DirOperationToolbar extends React.Component {
                         className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
-                        <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
+                        <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" />
                         <span className="mr-auto">{item.text}</span>
-                        <i className="sf3-font-down sf3-font rotate-270" aria-hidden="true"></i>
+                        <Icon symbol="right_arrow" />
                       </DropdownToggle>
                       <DropdownMenu flip={false} modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}>
                         {item.subOpList.map((item, index) => {

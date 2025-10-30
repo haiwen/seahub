@@ -1203,7 +1203,8 @@ table td {
   font-size: 0;
 }
 
-.table-thead-hidden thead .sf3-font {
+.table-thead-hidden thead .sf3-font,
+.table-thead-hidden thead .seafile-multicolor-icon {
   display: none !important;
 }
 

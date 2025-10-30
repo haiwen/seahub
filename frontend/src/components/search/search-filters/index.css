@@ -182,12 +182,8 @@
   color: var(--bs-body-secondary-color);
 }
 
-.filter-by-date-menu .filter-by-date-menu-toolbar .delete-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 4px;
-  cursor: pointer;
+.filter-by-date-menu .filter-by-date-menu-toolbar .filter-by-date-type-toggle .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
 }
 
 .filter-by-date-menu .filter-by-date-custom-date-container {

@@ -68,10 +68,10 @@ const ViewsMoreOperations = ({ menuProps }) => {
         {...menuProps}
         item={{ name: 'views' }}
         menuClassname="metadata-views-dropdown-menu"
-        toggleClass="sf3-font sf3-font-new"
         menuStyle={isMobile ? { zIndex: 1050 } : {}}
         getMenuList={getMoreOperationsMenus}
         onMenuItemClick={clickMenu}
+        toggleChildren={<Icon symbol="new" />}
       />
     </div>
   );

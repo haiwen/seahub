@@ -11,6 +11,7 @@ import { PRIVATE_FILE_TYPE } from '../../constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import OpIcon from '../../components/op-icon';
+import Icon from '../icon';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -155,7 +156,7 @@ class DirPath extends React.Component {
           onClick={this.handleRefresh}
           onKeyDown={Utils.onKeyDown}
         >
-          <i className="sf3-font sf3-font-refresh"></i>
+          <Icon symbol="refresh" />
           <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
             {gettext('Refresh the view')}
           </UncontrolledTooltip>
@@ -249,7 +250,8 @@ class DirPath extends React.Component {
     return (
       <div className="path-container dir-view-path">
         <OpIcon
-          className="cur-view-path-btn mr-1 sf3-font-side-bar sf3-font"
+          className="cur-view-path-btn mr-1"
+          symbol="side-bar"
           title={isTreePanelShown ? gettext('Close the panel') : gettext('Open the panel')}
           op={this.props.toggleTreePanel}
         />

@@ -17,6 +17,7 @@ import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import FixedWidthTable from '../common/fixed-width-table';
 import { Dirent } from '../../models';
+import Icon from '../icon';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -661,7 +662,7 @@ class DirentListView extends React.Component {
       ];
     }
 
-    const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder == 'asc' ? 'rotate-180' : ''}`} /></span>;
     return [
       { isFixed: true,
         width: 31,
@@ -689,7 +690,7 @@ class DirentListView extends React.Component {
       {
         isFixed: false,
         width: 0.5,
-        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a>),
+        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a>),
       },
       {
         isFixed: false, width: 0.06, // tag
@@ -700,12 +701,12 @@ class DirentListView extends React.Component {
       {
         isFixed: false,
         width: 0.11,
-        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>)
+        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>)
       },
       {
         isFixed: false,
         width: 0.15,
-        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a>)
+        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a>)
       }
     ];
   };

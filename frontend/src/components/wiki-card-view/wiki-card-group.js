@@ -4,6 +4,7 @@ import WikiCardItem from './wiki-card-item';
 import WikiCardItemAdd from './wiki-card-item-add';
 import { isMobile } from '../../utils/utils';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
+import Icon from '../icon';
 
 const propTypes = {
   wikis: PropTypes.array.isRequired,
@@ -65,7 +66,7 @@ class WikiCardGroup extends Component {
     return (
       <div className='wiki-card-group mb-4'>
         <h4 className="sf-heading">
-          <span className={`sf3-font nav-icon sf3-font-${(isDepartment && depIcon) ? 'department' : isDepartment ? 'group' : 'mine'}`} aria-hidden="true"></span>
+          <span className="nav-icon d-flex align-items-center"><Icon symbol={(isDepartment && depIcon) ? 'department' : isDepartment ? 'group' : 'mine'} /></span>
           {title}
         </h4>
         {(wikis.length === 0 && noItemsTip) &&

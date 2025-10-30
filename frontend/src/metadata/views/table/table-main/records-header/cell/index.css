@@ -42,10 +42,12 @@
   display: none;
 }
 
-.sf-metadata-record-header-cell .sf-metadata-dropdown-menu .sf3-font-down {
+.sf-metadata-record-header-cell .sf-metadata-dropdown-menu .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
   color: #aaa;
 }
 
-.sf-metadata-record-header-cell .sf-metadata-dropdown-menu .sf3-font-down:hover {
+.sf-metadata-record-header-cell .sf-metadata-dropdown-menu .seafile-multicolor-icon-down:hover {
   color: #555;
 }

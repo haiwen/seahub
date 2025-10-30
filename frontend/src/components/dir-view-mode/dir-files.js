@@ -333,7 +333,6 @@ class DirFiles extends React.Component {
         <ItemDropdownMenu
           {...props}
           item={{ name: 'files' }}
-          toggleClass="sf3-font sf3-font-more"
           menuStyle={isMobile ? { zIndex: 1050 } : {}}
           getMenuList={this.getMenuList}
           onMenuItemClick={this.onMoreOperationClick}
