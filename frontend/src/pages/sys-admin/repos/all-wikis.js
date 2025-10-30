@@ -20,14 +20,18 @@ class AllWikis extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.currentPage !== this.props.currentPage) {
+    if (prevProps.currentPage !== this.props.currentPage ||
+      prevProps.sortBy !== this.props.sortBy
+    ) {
       this.getWikisByPage(this.props.currentPage);
     }
   }
 
   getWikisByPage = (page) => {
     const { perPage, sortBy } = this.props;
-    systemAdminAPI.sysAdminListAllWikis(page, perPage, sortBy).then((res) => {
+    const valid = ['size', 'file_count', ''].includes(sortBy);
+    const orderBy = valid ? sortBy : '';
+    systemAdminAPI.sysAdminListAllWikis(page, perPage, orderBy).then((res) => {
       this.setState({
         loading: false,
         wikis: res.data.wikis,
