@@ -67,14 +67,14 @@ class Nav extends React.Component {
             );
           })}
         </ul>
-        {showSortIcon &&
+        {showSortIcon && (
           <SortMenu
             sortBy={sortBy}
             sortOrder={sortOrder}
             sortOptions={this.sortOptions}
             onSelectSortOption={this.onSelectSortOption}
           />
-        }
+        )}
       </div>
     );
   }
