@@ -79,6 +79,8 @@ const CardItem = ({
       className={classnames('sf-metadata-card-item', { 'selected': isSelected })}
       onClick={handleClickCard}
       onContextMenu={onContextMenu}
+      tabIndex="0"
+      onKeyDown={Utils.onKeyDown}
     >
       <div className="sf-metadata-card-item-image-container">
         <img loading="lazy" className="sf-metadata-card-item-image" ref={imgRef} src={imageURLs.URL} onError={onLoadError} alt="" />

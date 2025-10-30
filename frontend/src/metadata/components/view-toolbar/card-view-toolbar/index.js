@@ -4,6 +4,7 @@ import IconBtn from '../../../../components/icon-btn';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { FilterSetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
+import OpIcon from '../../../../components/op-icon';
 
 const CardViewToolbar = ({
   isCustomPermission,
@@ -73,9 +74,11 @@ const CardViewToolbar = ({
           />
         )}
         {!isCustomPermission && (
-          <div className="cur-view-path-btn ml-2" onClick={toggleDetails} aria-label={gettext('Properties')} title={gettext('Properties')}>
-            <span className="sf3-font sf3-font-info"></span>
-          </div>
+          <OpIcon
+            className="sf3-font sf3-font-info cur-view-path-btn ml-2"
+            title={gettext('Properties')}
+            op={toggleDetails}
+          />
         )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
