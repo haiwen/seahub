@@ -1,8 +1,7 @@
 .file-internal-link {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  margin-left: 0.5rem;
+  margin-left: 0;
   color: #999;
-  margin-top: 2px;
 }
