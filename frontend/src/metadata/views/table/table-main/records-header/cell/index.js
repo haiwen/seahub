@@ -7,6 +7,7 @@ import ResizeColumnHandle from './resize-column-handle';
 import DropdownMenu from './dropdown-menu';
 import { gettext } from '../../../../../../utils/constants';
 import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../../../constants';
+import { Utils } from '../../../../../../utils/utils';
 
 import './index.css';
 
@@ -153,6 +154,9 @@ const Cell = ({
       style={style}
       id={`sf-metadata-column-${key}`}
       onClick={() => handleHeaderCellClick(column, frozen)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={Utils.onKeyDown}
       onContextMenu={onContextMenu}
     >
       <div className="sf-metadata-result-column-content sf-metadata-record-header-cell-left d-flex align-items-center text-truncate">
