@@ -304,16 +304,15 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
     <>
       <Dropdown className="sf-metadata-dropdown-menu" isOpen={isMenuShow} toggle={onToggle}>
         <DropdownToggle
-          tag="span"
+          tag="i"
+          tabIndex={0}
           role="button"
+          className='sf3-font sf3-font-down'
+          title={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={isMenuShow}
-          title={gettext('More operations')}
           aria-label={gettext('More operations')}
-          tabIndex={0}
-        >
-          <i className='sf3-font sf3-font-down' aria-hidden="true"></i>
-        </DropdownToggle>
+        />
         {isMenuShow && !isMobile &&
           <ModalPortal>
             <div className="sf-metadata-dropdown-menu large">{renderDropdownMenu()}</div>
