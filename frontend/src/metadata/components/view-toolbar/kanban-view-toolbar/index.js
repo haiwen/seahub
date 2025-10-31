@@ -4,6 +4,8 @@ import IconBtn from '../../../../components/icon-btn';
 import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { FilterSetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
+import OpIcon from '../../../../components/op-icon';
 
 const KanbanViewToolBar = ({
   isCustomPermission,
@@ -70,19 +72,15 @@ const KanbanViewToolBar = ({
             title={gettext('Settings')}
             tabIndex={0}
             onClick={onToggleKanbanSetting}
+            onKeyDown={Utils.onKeyDown}
           />
         )}
         {!isCustomPermission && (
-          <div
-            className="cur-view-path-btn ml-2"
-            onClick={toggleDetails}
-            role="button"
-            aria-label={gettext('Properties')}
+          <OpIcon
+            className="sf3-font sf3-font-info cur-view-path-btn ml-2"
             title={gettext('Properties')}
-            tabIndex={0}
-          >
-            <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
-          </div>
+            op={toggleDetails}
+          />
         )}
       </div>
       <div className="sf-metadata-tool-right-operations"></div>
