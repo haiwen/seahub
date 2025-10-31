@@ -5,6 +5,7 @@ import AddCategoryPopover from '../../../components/popover/kanban-add-category-
 import { gettext } from '../../../../utils/constants';
 import { COLUMN_DATA_OPERATION_TYPE } from '../../../store/operations';
 import { useMetadataView } from '../../../hooks/metadata-view';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -35,7 +36,16 @@ const AddBoard = ({ groupByColumn }) => {
 
   return (
     <div className="sf-metadata-kanban-add-board-wrapper">
-      <div id={id} className="sf-metadata-kanban-add-board-button" onClick={handleButtonClick} title={gettext('New category')}>
+      <div
+        id={id}
+        className="sf-metadata-kanban-add-board-button"
+        onClick={handleButtonClick}
+        title={gettext('New category')}
+        role="button"
+        tabIndex={0}
+        aria-label={gettext('New category')}
+        onKeyDown={Utils.onKeyDown}
+      >
         <Icon symbol="add-table" />
         <span className="sf-metadata-kanban-add-board-title">{gettext('New category')}</span>
       </div>
