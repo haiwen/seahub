@@ -163,7 +163,7 @@ const FilterByDate = ({ date, onChange }) => {
                     showHourAndMinute={false}
                     disabledDate={disabledStartDate}
                     value={time.from ? dayjs.unix(time.from) : null}
-                    onChange={(value) => setTime({ ...time, from: dayjs(value).unix() })}
+                    onChange={(value) => setTime({ ...time, from: dayjs(value?.startOf('day')).unix() })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>
@@ -173,7 +173,7 @@ const FilterByDate = ({ date, onChange }) => {
                     showHourAndMinute={false}
                     disabledDate={disabledEndDate}
                     value={time.to ? dayjs.unix(time.to) : null}
-                    onChange={(value) => setTime({ ...time, to: dayjs(value).unix() })}
+                    onChange={(value) => setTime({ ...time, to: dayjs(value?.endOf('day')).unix() })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>

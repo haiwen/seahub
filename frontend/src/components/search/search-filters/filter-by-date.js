@@ -240,7 +240,7 @@ const FilterByDate = ({ date, onChange }) => {
                     showHourAndMinute={false}
                     disabledDate={disabledStartDate}
                     value={time.from}
-                    onChange={(value) => setTime({ ...time, from: value })}
+                    onChange={(value) => setTime({ ...time, from: value?.startOf('day') })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>
@@ -250,7 +250,7 @@ const FilterByDate = ({ date, onChange }) => {
                     showHourAndMinute={false}
                     disabledDate={disabledEndDate}
                     value={time.to}
-                    onChange={(value) => setTime({ ...time, to: value })}
+                    onChange={(value) => setTime({ ...time, to: value?.endOf('day') })}
                     inputWidth={DATE_INPUT_WIDTH}
                   />
                 </div>
