@@ -137,8 +137,8 @@ class Item extends Component {
     this.setState({ isTransferDialogOpen: !this.state.isTransferDialogOpen });
   };
 
-  transferRepo = (owner, reshare) => {
-    this.props.transferRepo(this.props.item.id, owner.email, reshare);
+  transferRepo = (email, reshare) => {
+    this.props.transferRepo(this.props.item.id, email, reshare);
     this.toggleTransferDialog();
   };
 
