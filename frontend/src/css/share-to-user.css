@@ -29,3 +29,7 @@
   justify-content: space-between;
   position: relative;
 }
+
+.share-link-container .add-members .user-item .user-name {
+  color: #212529;
+}
