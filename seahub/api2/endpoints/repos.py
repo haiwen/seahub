@@ -25,6 +25,7 @@ from seahub.signals import repo_deleted
 from seahub.thumbnail.utils import remove_thumbnail_by_id
 from seahub.views import check_folder_permission, list_inner_pub_repos
 from seahub.share.models import ExtraSharePermission
+from seahub.repo_metadata.models import RepoMetadata
 from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version, gen_inner_file_get_url, gen_file_upload_url, \
     get_file_type_and_ext, file_types
@@ -340,6 +341,12 @@ class ReposView(APIView):
                     "enable_onlyoffice": enable_onlyoffice
                 }
                 repo_info_list.append(repo_info)
+        
+        repo_ids = [repo['repo_id'] for repo in repo_info_list]
+        repos_metadata = RepoMetadata.objects.filter(repo_id__in=repo_ids)
+        repo_metadata_dict = {repo_metadata.repo_id: repo_metadata.enabled for repo_metadata in repos_metadata}
+        for repo in repo_info_list:
+            repo['enable_metadata'] = repo_metadata_dict.get(repo['repo_id'], False)
 
         utc_dt = datetime.datetime.utcnow()
         timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')

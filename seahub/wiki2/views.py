@@ -11,9 +11,9 @@ from seaserv import seafile_api
 from django.http import Http404
 from django.shortcuts import render
 
+from seahub.api2.endpoints.repos import ReposView
 from seahub.wiki2.models import Wiki2 as Wiki
-from seahub.wiki2.models import Wiki2Publish
-from seahub.wiki2.models import WikiFileViews
+from seahub.wiki2.models import Wiki2Publish, WikiFileViews, Wiki2Settings
 from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
@@ -78,6 +78,25 @@ def wiki_view(request, wiki_id, page_id=None):
         publish_url = publish_config.publish_url
     except Wiki2Publish.DoesNotExist:
         publish_url = ''
+    
+    try:
+        response = ReposView().get(request)
+        repos = response.data.get('repos', [])
+    except Exception as e:
+        logger.error(e)
+        repos = []
+    
+    try:
+        settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        settings = {
+            'enable_link_repos': settings_obj.enable_link_repos,
+            'linked_repos': json.loads(settings_obj.linked_repos)
+        }
+    except Wiki2Settings.DoesNotExist:
+        settings = {
+            'enable_link_repos': False,
+            'linked_repos': []
+        }
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
         "is_admin": is_admin,
@@ -88,7 +107,9 @@ def wiki_view(request, wiki_id, page_id=None):
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": permission,
         "enable_user_clean_trash": config.ENABLE_USER_CLEAN_TRASH,
-        "publish_url": publish_url
+        "publish_url": publish_url,
+        "repos": repos,
+        "settings": settings
     })
 
 
