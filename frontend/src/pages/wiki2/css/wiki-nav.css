@@ -85,6 +85,19 @@
   overflow: hidden;
 }
 
+.wiki-nav .wiki-page-item-main .wiki-nav-item-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+}
+
+.wiki-nav .wiki-page-item-main:has(.wiki-nav-item-icon) .nav-item-icon {
+  margin-left: 0px !important;
+}
+
 .wiki-nav .wiki-page-content {
   height: 100%;
   padding-right: 8px;

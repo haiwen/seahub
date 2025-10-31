@@ -15,7 +15,6 @@ import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
-import '../../../css/metadata-rc-calendar.css';
 
 dayjs.extend(utc);
 dayjs.extend(localeData);
@@ -169,7 +168,12 @@ class DateEditor extends Component {
     if (this.timeFormat.indexOf('ss') > 0) return;
 
     setTimeout(() => {
-      this.closeEditor();
+      // For DetailDateEditor: explicitly ask parent to close.
+      if (Utils.isFunction(this.props.onClose)) {
+        this.props.onClose(false);
+      }
+      // For PopupEditorContainer: keep commit path via onBlur.
+      this.onBlur();
     }, 1);
   };
 
