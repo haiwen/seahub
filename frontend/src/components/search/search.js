@@ -824,8 +824,8 @@ class Search extends Component {
 
     if (filters.date.value) {
       const isCustom = filters.date.value === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
-      params.time_from = isCustom ? filters.date.start?.unix() : filters.date.from;
-      params.time_to = isCustom ? filters.date.end?.unix() : filters.date.to;
+      params.time_from = isCustom ? filters.date.from?.unix() : filters.date.from;
+      params.time_to = isCustom ? filters.date.to?.unix() : filters.date.to;
     }
 
     if (filters.suffixes) {
