@@ -503,6 +503,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         )}
       </div>
       <GalleryContextmenu
+        metadata={metadata}
         selectedImages={selectedImages}
         isSomeone={isSomeone}
         onDelete={handleDeleteSelectedImages}
