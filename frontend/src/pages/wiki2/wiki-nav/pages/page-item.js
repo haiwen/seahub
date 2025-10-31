@@ -257,8 +257,9 @@ const PageItem = ({
           >
             <div
               className="wiki-page-content"
+              onClick={() => { toggleExpand(page.id); }}
               style={pathStr ? {
-                marginLeft: (pathStr.split('-').length - 1) * 24
+                marginLeft: (pathStr.split('-').length - 1) * 20
               } : {}}
             >
               {childNumber === 0 && (customIcon ? (
@@ -271,7 +272,6 @@ const PageItem = ({
                   tabIndex="0"
                   role="button"
                   className="wiki-nav-item-icon"
-                  onClick={() => { toggleExpand(page.id); }}
                   onKeyDown={Utils.onKeyDown}
                 >
                   <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
