@@ -13,6 +13,7 @@ import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getColumnByKey } from '../../../utils/column';
 
 const GalleryContextMenu = ({
+  metadata,
   selectedImages,
   isSomeone,
   onDelete,
@@ -24,7 +25,6 @@ const GalleryContextMenu = ({
   const { handleDownload: handleDownloadAPI, handleCopy: handleCopyAPI } = useFileOperations();
   const { enableFaceRecognition, enableTags } = useMetadataStatus();
   const {
-    metadata,
     repoID,
     updateRecordDetails,
     updateFaceRecognition,
@@ -156,6 +156,7 @@ const GalleryContextMenu = ({
 };
 
 GalleryContextMenu.propTypes = {
+  metadata: PropTypes.object.isRequired,
   selectedImages: PropTypes.array,
   isSomeone: PropTypes.bool,
   onDelete: PropTypes.func,

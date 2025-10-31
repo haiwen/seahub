@@ -359,10 +359,11 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
-  const updateSelectedRecordIds = useCallback((ids, isSomeone) => {
+  const updateSelectedRecordIds = useCallback((ids, isSomeone, people) => {
     toggleShowDirentToolbar(ids.length > 0);
+    const data = isSomeone !== undefined ? people : metadata;
     setTimeout(() => {
-      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, isSomeone);
+      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, data, isSomeone);
     }, 0);
   }, [metadata, toggleShowDirentToolbar]);
 

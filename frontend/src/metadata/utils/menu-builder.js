@@ -375,7 +375,7 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
     });
   }
 
-  if (isSomeone && !readOnly) {
+  if (isSomeone !== undefined && !readOnly) {
     menuOptions.push('Divider');
 
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
@@ -386,7 +386,7 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
       });
     }
 
-    if (canAddPhotoToPeople) {
+    if (canAddPhotoToPeople && !isSomeone) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
@@ -445,7 +445,7 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
     });
   }
 
-  if (isSomeone && !readOnly) {
+  if (isSomeone !== undefined && !readOnly) {
     menuOptions.push('Divider');
 
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
@@ -456,7 +456,7 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
       });
     }
 
-    if (canAddPhotoToPeople) {
+    if (canAddPhotoToPeople && !isSomeone) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
