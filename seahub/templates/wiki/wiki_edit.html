@@ -31,8 +31,8 @@
             seadocAccessToken: "{{ seadoc_access_token }}",
             permission: "{{ permission }}",
             enableUserCleanTrash: {% if enable_user_clean_trash %} true {% else %} false {% endif %},
-            wikiSettings: "{{ settings|safe }}",
-            repos: "{{ repos|safe }}"
+            wikiSettings: {{ settings|safe }},
+            repos: {{ repos|safe }}
         }
     };
 </script>

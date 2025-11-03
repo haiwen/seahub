@@ -86,17 +86,25 @@ def wiki_view(request, wiki_id, page_id=None):
         logger.error(e)
         repos = []
     
-    try:
-        settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+    settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+    if settings_obj:
+        try:
+            linked_repos = json.loads(settings_obj.linked_repos) if settings_obj.linked_repos else []
+        except Exception as e:
+            logger.warning(e)
+            linked_repos = []
         settings = {
-            'enable_link_repos': settings_obj.enable_link_repos,
-            'linked_repos': json.loads(settings_obj.linked_repos)
+            "enable_link_repos": bool(settings_obj.enable_link_repos),
+            "linked_repos": linked_repos
         }
-    except Wiki2Settings.DoesNotExist:
+    else:
         settings = {
-            'enable_link_repos': False,
-            'linked_repos': []
+            "enable_link_repos": False,
+            "linked_repos": []
         }
+    
+    repos_json = json.dumps(repos)
+    settings_json = json.dumps(settings)
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
         "is_admin": is_admin,
@@ -108,8 +116,8 @@ def wiki_view(request, wiki_id, page_id=None):
         "permission": permission,
         "enable_user_clean_trash": config.ENABLE_USER_CLEAN_TRASH,
         "publish_url": publish_url,
-        "repos": repos,
-        "settings": settings
+        "repos": repos_json,
+        "settings": settings_json
     })
 
 
