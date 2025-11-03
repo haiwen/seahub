@@ -1076,6 +1076,14 @@ class MetadataViews(APIView):
         if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+
+        # The face_recognition view is unique for a repo, cannot be added repeatly.
+        if view_type == 'face_recognition':
+            view = RepoMetadataViews.objects.get_view(repo_id, FACE_RECOGNITION_VIEW_ID)
+            if view:
+                error_msg = 'The face recognition view already exists.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             new_view = RepoMetadataViews.objects.add_view(repo_id, view_name, view_type, view_data, folder_id)
@@ -1804,6 +1812,10 @@ class FaceRecognitionManage(APIView):
         if not metadata or not metadata.enabled:
             error_msg = f'The metadata module is not enabled for repo {repo_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if metadata and metadata.face_recognition_enabled:
+            error_msg = 'The face recognition feature is already enabled.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
