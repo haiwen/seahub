@@ -576,6 +576,8 @@ class UserNotification(models.Model):
             return self.format_repo_transfer_msg()
         elif self.is_repo_monitor_msg():
             return self.format_repo_monitor_msg()
+        elif self.is_face_cluster_msg():
+            return self.format_face_cluster_msg()
         else:
             return ''
 
@@ -1032,6 +1034,16 @@ class UserNotification(models.Model):
         else:
             message = _(f'{name} {op_type} {obj_type} {obj_link} in library {repo_link}.')
 
+        return message
+
+    def format_face_cluster_msg(self):
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return ""
+        repo_name = d.get('repo_name')
+        message = _(f'Face recognition is done for library {repo_name}.')
         return message
 
 
