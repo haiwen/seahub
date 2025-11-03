@@ -22,7 +22,7 @@ from django.utils.translation import gettext as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
-from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
@@ -2011,7 +2011,7 @@ class Wiki2LinkedReposView(APIView):
         return Response({"success": True})
 
 class Wiki2FileViews(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
     
