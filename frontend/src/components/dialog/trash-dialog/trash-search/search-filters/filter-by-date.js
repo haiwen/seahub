@@ -47,16 +47,15 @@ const FilterByDate = ({ date, onChange }) => {
 
   const toggle = useCallback(() => setIsOpen(!isOpen), [isOpen]);
 
-  const onClearDate = useCallback(() => {
-    setValue('');
-    setIsCustomDate(false);
-    setTime({ from: null, to: null });
-    setIsOpen(false);
-  }, []);
-
   const onOptionClick = useCallback((e) => {
     const option = Utils.getEventData(e, 'toggle') ?? e.currentTarget.getAttribute('data-toggle');
-    if (option === value) return;
+    if (option === value) {
+      setValue('');
+      setIsCustomDate(false);
+      setTime({ from: null, to: null });
+      setIsOpen(false);
+      return;
+    }
 
     const today = dayjs().endOf('day');
     const isCustomOption = option === SEARCH_FILTER_BY_DATE_OPTION_KEY.CUSTOM;
@@ -132,11 +131,6 @@ const FilterByDate = ({ date, onChange }) => {
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-date-menu">
-            <div className="filter-by-date-menu-toolbar">
-              <div className="delete-btn" onClick={onClearDate}>
-                <i className="op-icon sf3-font-delete1 sf3-font"></i>
-              </div>
-            </div>
             {options.map((option, i) => {
               const isSelected = option.key === value;
               if (option === 'Divider') return <div key={i} className="seafile-divider dropdown-divider"></div>;
