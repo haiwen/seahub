@@ -167,31 +167,6 @@
   font-size: 13px;
 }
 
-.filter-by-date-menu .filter-by-date-menu-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 12px;
-
-}
-
-.filter-by-date-menu .filter-by-date-menu-toolbar .filter-by-date-type-toggle {
-  display: flex;
-  align-items: center;
-}
-
-.filter-by-date-menu .filter-by-date-menu-toolbar .filter-by-date-type-toggle .filter-label {
-  color: var(--bs-body-secondary-color);
-}
-
-.filter-by-date-menu .filter-by-date-menu-toolbar .delete-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 4px;
-  cursor: pointer;
-}
-
 .filter-by-date-menu .filter-by-date-custom-date-container {
   width: 100%;
   display: flex;
