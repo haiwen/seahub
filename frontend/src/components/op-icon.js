@@ -5,6 +5,7 @@ import Icon from './icon';
 
 const propTypes = {
   className: PropTypes.string.isRequired,
+  style: PropTypes.object,
   op: PropTypes.func,
   title: PropTypes.string.isRequired,
   symbol: PropTypes.string
@@ -12,11 +13,12 @@ const propTypes = {
 class OpIcon extends React.Component {
 
   render() {
-    const { className, op, title, symbol } = this.props;
+    const { className, style, op, title, symbol } = this.props;
     const iconProps = {
       tabIndex: '0',
       role: 'button',
       className: className,
+      style: style || null,
       title: title,
       'aria-label': title,
       onClick: op,
@@ -28,7 +30,7 @@ class OpIcon extends React.Component {
         <Icon symbol={symbol} />
       </span>
     ) : (
-      <i {...iconProps} />
+      <i {...iconProps}></i>
     );
   }
 }

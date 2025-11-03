@@ -10,6 +10,7 @@ import { EVENT_BUS_TYPE } from '../../../constants/event-bus-type';
 import { checkIsNameColumn } from '../../../utils/column';
 import { MIN_COLUMN_WIDTH } from '../../../constants/grid';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../constants/tree';
+import { Utils } from '../../../../../utils/utils';
 
 import './index.css';
 
@@ -192,7 +193,10 @@ const Cell = ({
         ref={headerCellRef}
         style={style}
         id={`sf-metadata-column-${key}`}
+        tabIndex="0"
+        role="button"
         onClick={() => handleHeaderCellClick(column, frozen)}
+        onKeyDown={Utils.onKeyDown}
         onContextMenu={onContextMenu}
       >
         <div className="sf-table-column-content sf-table-header-cell-left d-flex align-items-center text-truncate">

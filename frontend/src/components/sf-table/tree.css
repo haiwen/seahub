@@ -22,16 +22,11 @@
   position: absolute;
   display: inline-flex;
   left: 0;
-  top: 50%;
   width: 20px;
   height: 20px;
   align-items: center;
   justify-content: center;
-  transform: translateY(-50%);
   z-index: 1;
-}
-
-.sf-table-tree .sf-table-record-tree-expand-icon .sf3-font {
   color: #666;
 }
 
