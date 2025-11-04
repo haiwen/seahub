@@ -1,12 +1,13 @@
 import React from 'react';
 import { gettext } from '../../utils/constants';
 import '../../css/seahub-modal-header.css';
+import Icon from '../icon';
 
 const SeahubModalCloseIcon = (props) => {
   return (
     <button type="button" className={`close seahub-modal-btn ${props.className ? props.className : ''}`} data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={props.toggle}>
       <span className="seahub-modal-btn-inner">
-        <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+        <Icon symbol="x-01" />
       </span>
     </button>
   );

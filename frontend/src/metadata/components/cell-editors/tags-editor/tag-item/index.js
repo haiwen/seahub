@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
 import { gettext } from '@/utils/constants';
+import Icon from '../../../../../components/icon';
 
 import './index.css';
 
@@ -46,7 +47,7 @@ const TagItem = ({
             role="button"
             aria-label={isFolded ? gettext('Expand') : gettext('Collapse')}
           >
-            <i aria-hidden="true" className={classNames('sf3-font sf3-font-down', { 'rotate-270': isFolded })}></i>
+            <Icon symbol="down" className={classNames({ 'rotate-270': isFolded })} />
           </span>
         )}
         <div className="sf-metadata-tag-color-and-name">

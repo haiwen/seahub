@@ -6,6 +6,7 @@ import listener from '../context-menu/globalEventListener';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
+import Icon from '../icon';
 
 import '../../css/item-dropdown-menu.css';
 
@@ -235,7 +236,7 @@ class ItemDropdownMenu extends React.Component {
                       onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                     >
                       <span className="mr-auto">{menuItem.value}</span>
-                      <i className="sf3-font-down sf3-font rotate-270"></i>
+                      <Icon symbol="down" className="rotate-270" />
                     </DropdownToggle>
                     <DropdownMenu
                       className="position-fixed"

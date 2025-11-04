@@ -13,7 +13,7 @@ const propTypes = {
 class OpIcon extends React.Component {
 
   render() {
-    const { className, style, op, title, symbol } = this.props;
+    const { className, style, op, title, symbol, ...others } = this.props;
     const iconProps = {
       tabIndex: '0',
       role: 'button',
@@ -22,7 +22,8 @@ class OpIcon extends React.Component {
       title: title,
       'aria-label': title,
       onClick: op,
-      onKeyDown: Utils.onKeyDown
+      onKeyDown: Utils.onKeyDown,
+      ...others
     };
 
     return symbol ? (

@@ -4,6 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import MobileItemMenu from '../components/mobile-item-menu';
+import Icon from './icon';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -235,7 +236,7 @@ class LibraryOperationMenu extends React.Component {
                       onMouseEnter={this.toggleAdvancedMenuShown}
                     >
                       {this.translateOperations(item)}
-                      <i className="sf3-font-down sf3-font rotate-270"></i>
+                      <Icon symbol="down" className="rotate-270" />
                     </DropdownToggle>
                     <DropdownMenu>
                       {advancedOperations.map((item, index) => {

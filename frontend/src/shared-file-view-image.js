@@ -4,6 +4,7 @@ import SharedFileView from './components/shared-file-view/shared-file-view';
 import SharedFileViewTip from './components/shared-file-view/shared-file-view-tip';
 import { Utils } from './utils/utils';
 import { gettext, siteRoot } from './utils/constants';
+import Icon from './components/icon';
 
 import './css/image-file-view.css';
 
@@ -48,15 +49,13 @@ class FileContent extends React.Component {
       <div className="shared-file-view-body d-flex text-center">
         <div className="image-file-view flex-1">
           {prevImgPath && (
-            <a href={prevImgURL} id="img-prev" title={gettext('you can also press ← ')}>
-              <span aria-hidden="true" className="sf3-font sf3-font-down rotate-90 d-inline-block">
-              </span>
+            <a href={prevImgURL} id="img-prev" className="d-flex align-items-center" title={gettext('you can also press ← ')}>
+              <Icon symbol="down" className="rotate-90" />
             </a>
           )}
           {nextImgPath && (
-            <a href={nextImgURL} id="img-next" title={gettext('you can also press →')}>
-              <span aria-hidden="true" className="sf3-font sf3-font-down rotate-270 d-inline-block">
-              </span>
+            <a href={nextImgURL} id="img-next" className="d-flex align-items-center" title={gettext('you can also press →')}>
+              <Icon symbol="down" className="rotate-270" />
             </a>
           )}
           <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" />

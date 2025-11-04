@@ -12,6 +12,7 @@ import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { buildKanbanToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
+import Icon from '../icon';
 
 const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -168,7 +169,9 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
   return (
     <div className="selected-dirents-toolbar">
       <span className="cur-view-path-btn px-2" onClick={unSelect}>
-        <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+        <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
+          <Icon symbol="x-01" />
+        </span>
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
 
@@ -178,15 +181,17 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
             className="cur-view-path-btn"
             onClick={toggleMoveDialog}
             title={gettext('Move')}
+            aria-label={gettext('Move')}
           >
-            <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')}></span>
+            <Icon symbol="move1" />
           </span>
           <span
             className="cur-view-path-btn"
             onClick={toggleCopyDialog}
             title={gettext('Copy')}
+            aria-label={gettext('Copy')}
           >
-            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')}></span>
+            <Icon symbol="copy1" />
           </span>
         </>
       )}
@@ -195,8 +200,9 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
         className="cur-view-path-btn"
         onClick={downloadRecords}
         title={gettext('Download')}
+        aria-label={gettext('Download')}
       >
-        <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')}></span>
+        <Icon symbol="download" />
       </span>
 
       {!readOnly && (
@@ -204,8 +210,9 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
           className="cur-view-path-btn"
           onClick={deleteRecords}
           title={gettext('Delete')}
+          aria-label={gettext('Delete')}
         >
-          <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')}></span>
+          <Icon symbol="delete1" />
         </span>
       )}
 
@@ -213,7 +220,8 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
         <ItemDropdownMenu
           ref={menuRef}
           item={{}}
-          toggleClass="cur-view-path-btn sf3-font-more sf3-font"
+          toggleClass="cur-view-path-btn"
+          toggleChildren={<Icon symbol="more-level" />}
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

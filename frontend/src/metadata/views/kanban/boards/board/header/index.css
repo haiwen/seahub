@@ -15,11 +15,14 @@
 .sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title {
   flex: 1;
   display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
 .sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title .sf-metadata-ui.cell-formatter-container {
   width: auto;
+  display: flex;
+  align-items: center;
 }
 
 .sf-metadata-view-kanban-board-header .sf-metadata-view-kanban-board-header-title .cards-quantity {
@@ -30,7 +33,7 @@
 
 .sf-metadata-view-kanban-board-header .board-header-operation-btn {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .board-header-operation-btn .kanban-header-op-btn {
@@ -43,6 +46,10 @@
   color: var(--bs-icon-color);
   cursor: pointer;
   border-radius: 3px;
+}
+
+.board-header-operation-btn .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
 }
 
 .board-header-operation-btn .kanban-header-op-btn.kanban-header-collapse-btn:hover,

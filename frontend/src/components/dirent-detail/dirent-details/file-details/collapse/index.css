@@ -40,6 +40,8 @@
   border-radius: 3px;
 }
 
-.file-details-collapse .file-details-collapse-header .sf3-font-down {
-  color: #666666;
+.file-details-collapse .file-details-collapse-header .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
 }

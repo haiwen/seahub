@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import { Transition } from 'react-transition-group';
 import FieldItem from './field-item';
 import { gettext } from '@/utils/constants';
+import Icon from '../../../../components/icon';
 
 import './index.css';
 
@@ -55,7 +56,7 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
       >
         <Label className="mb-0">{textProperties.titleValue}</Label>
         <div className="sf-metadata-field-display-toggle-btn">
-          <i aria-hidden="true" className={classnames('sf3-font sf3-font-down', { 'rotate-270': isCollapsed })}></i>
+          <Icon symbol="down" className={classnames({ 'rotate-270': isCollapsed })} />
         </div>
       </div>
       <Transition nodeRef={nodeRef} in={!isCollapsed} timeout={DURATION}>

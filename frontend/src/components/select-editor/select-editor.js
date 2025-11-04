@@ -5,6 +5,7 @@ import Select, { components } from 'react-select';
 import { gettext } from '../../utils/constants';
 import { MenuSelectStyle } from '../common/select';
 import OpIcon from '../../components/op-icon';
+import Icon from '../icon';
 
 import '../../css/select-editor.css';
 
@@ -28,7 +29,9 @@ const DropdownIndicator = props => {
   return (
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
-        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+        <span style={{ display: 'flex', alignItems: 'center', marginLeft: '-2px' }} aria-hidden="true">
+          <Icon symbol="down" style={{ width: '14px', height: '14px' }} />
+        </span>
       </components.DropdownIndicator>
     )
   );
@@ -151,7 +154,8 @@ class SelectEditor extends React.Component {
           <div className="d-flex align-item-center">
             <span>{this.props.translateOption(currentOption)}</span>
             <OpIcon
-              className={classnames('sf3-font sf3-font-rename op-icon ml-1', { 'invisible': !isEditIconShow })}
+              className={classnames('op-icon ml-1', { 'invisible': !isEditIconShow })}
+              symbol="rename"
               title={gettext('Edit')}
               op={this.onEditPermission}
             />

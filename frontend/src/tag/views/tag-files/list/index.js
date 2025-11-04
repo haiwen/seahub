@@ -8,6 +8,7 @@ import { useTags, useTagView } from '../../../hooks';
 import TagFile from './item';
 import { hideMenu } from '../../../../components/context-menu/actions';
 import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
+import Icon from '../../../../components/icon';
 
 const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMenu }) => {
   const [renameTargetId, setRenameTargetId] = useState(null);
@@ -92,7 +93,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
     };
   }, []);
 
-  const sortIcon = <span aria-hidden="true" className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
+  const sortIcon = <span className="d-inline-flex align-items-center ml-1"><Icon symbol="down" className={classNames('w-3 h-3', sortOrder == 'asc' ? 'rotate-180 d-inline-flex' : '')} /></span>;
 
   const headers = [
     {
@@ -118,7 +119,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       isFixed: false,
       width: 0.5,
       children: (
-        <a className="d-block table-sort-op" href="#" onClick={onSortName}>
+        <a className="d-inline-flex align-items-center table-sort-op" href="#" onClick={onSortName}>
           {gettext('Name')} {sortBy == 'name' && sortIcon}
         </a>
       ),
@@ -132,7 +133,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       isFixed: false,
       width: 0.11,
       children: (
-        <a className="d-block table-sort-op" href="#" onClick={onSortSize}>
+        <a className="d-inline-flex align-items-center table-sort-op" href="#" onClick={onSortSize}>
           {gettext('Size')} {sortBy == 'size' && sortIcon}
         </a>
       ),
@@ -140,7 +141,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       isFixed: false,
       width: 0.15,
       children: (
-        <a className="d-block table-sort-op" href="#" onClick={onSortTime}>
+        <a className="d-inline-flex align-items-center table-sort-op" href="#" onClick={onSortTime}>
           {gettext('Last Update')} {sortBy == 'time' && sortIcon}
         </a>
       ),

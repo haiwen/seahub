@@ -51,7 +51,7 @@ const ColumnType = forwardRef(({ column, onChange }, ref) => {
           >
             <Icon symbol={column.icon} className="sf-metadata-icon mr-2" />
             <span className="mr-auto">{column.name}</span>
-            <i className="sf3-font sf3-font-down" aria-hidden="true"></i>
+            <Icon symbol="down" />
           </DropdownToggle>
           <ModalPortal>
             <CustomDropdownMenu

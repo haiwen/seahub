@@ -983,14 +983,13 @@ class Search extends Component {
                     autoComplete="off"
                   />
                   {this.state.isCloseShow &&
-                    <button
-                      type="button"
-                      className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
+                    <IconBtn
+                      symbol="x-01"
+                      className="search-icon-right input-icon-addon"
                       onClick={this.onClearSearch}
                       aria-label={gettext('Clear search')}
                       title={gettext('Clear search')}
-                    >
-                    </button>
+                    />
                   }
                 </div>
                 <div className="search-result-container dropdown-search-result-container">

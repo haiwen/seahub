@@ -22,9 +22,9 @@ import { GroupsReposManager } from './groups-repos-manager';
 import EventBus from '../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import Icon from '../../components/icon';
 
 import '../../css/files.css';
-import Icon from '../../components/icon';
 
 class Libraries extends Component {
 

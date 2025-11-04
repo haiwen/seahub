@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import classNames from 'classnames';
 import listener from '../context-menu/globalEventListener';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import DropdownMenuItem from './dropdown-menu-item';
 import Icon from '../icon';
-import classNames from 'classnames';
 
 import '../../css/item-dropdown-menu.css';
 

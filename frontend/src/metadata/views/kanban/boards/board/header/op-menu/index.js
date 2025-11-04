@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../../../../utils/constants';
+import Icon from '../../../../../../../components/icon';
 
 const OpMenu = ({ onDelete, onFreezed, onUnFreezed }) => {
   let [isShow, setShow] = useState(false);
@@ -31,14 +32,16 @@ const OpMenu = ({ onDelete, onFreezed, onUnFreezed }) => {
   return (
     <Dropdown isOpen={isShow} toggle={toggle}>
       <DropdownToggle
-        tag="i"
+        tag="span"
         role="button"
         tabIndex="0"
-        className="sf-dropdown-toggle sf3-font-more sf3-font kanban-header-op-btn kanban-more-operations-toggle"
+        className="sf-dropdown-toggle kanban-header-op-btn kanban-more-operations-toggle"
         title={gettext('More operations')}
         aria-label={gettext('More operations')}
         data-toggle="dropdown"
-      />
+      >
+        <Icon symbol="more-level" />
+      </DropdownToggle>
       <DropdownMenu>
         <DropdownItem onClick={handleDelete}>{gettext('Delete')}</DropdownItem>
       </DropdownMenu>
@@ -53,4 +56,3 @@ OpMenu.propTypes = {
 };
 
 export default OpMenu;
-

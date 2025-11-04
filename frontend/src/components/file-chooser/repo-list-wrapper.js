@@ -7,6 +7,7 @@ import SearchedListView from './searched-list-view';
 import { SearchStatus } from './searcher';
 import { MODE_TYPE_MAP } from '../../constants';
 import Loading from '../loading';
+import Icon from '../icon';
 
 const RepoListWrapper = (props) => {
   const {
@@ -49,7 +50,9 @@ const RepoListWrapper = (props) => {
           <>
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className={`item-toggle sf3-font ${isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={props.onCurrentRepoToggle}></span>
+                <span className="item-toggle tree-node-icon icon" onClick={props.onCurrentRepoToggle}>
+                  <Icon symbol="down" className={isCurrentRepoShow ? '' : 'rotate-270'} />
+                </span>
                 <span className="library">{gettext('Current Library')}</span>
               </div>
               {(isCurrentRepoShow && currentRepoInfo) &&
@@ -69,7 +72,9 @@ const RepoListWrapper = (props) => {
             </div>
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className={`item-toggle sf3-font ${isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={props.onOtherRepoToggle}></span>
+                <span className="item-toggle tree-node-icon icon" onClick={props.onOtherRepoToggle}>
+                  <Icon symbol="down" className={isOtherRepoShow ? '' : 'rotate-270'} />
+                </span>
                 <span className="library">{gettext('Other Libraries')}</span>
               </div>
               {isOtherRepoShow &&
@@ -110,7 +115,9 @@ const RepoListWrapper = (props) => {
           <div className="file-chooser-container">
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className="item-toggle sf3-font sf3-font-down" aria-hidden="true"></span>
+                <span className="item-toggle tree-node-icon icon" onClick={props.onOtherRepoToggle}>
+                  <Icon symbol="down" className={isOtherRepoShow ? '' : 'rotate-270'} />
+                </span>
                 <span className="library">{gettext('Libraries')}</span>
               </div>
               <RepoListView

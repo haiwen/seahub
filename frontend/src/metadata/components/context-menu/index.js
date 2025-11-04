@@ -5,6 +5,7 @@ import ModalPortal from '../../../components/modal-portal';
 import ContextMenuItem from './context-menu-item';
 
 import './index.css';
+import Icon from '../../../components/icon';
 
 const ContextMenu = ({
   options,
@@ -163,7 +164,7 @@ const ContextMenu = ({
                   onMouseEnter={() => handleSubMenuMouseEnter(option)}
                 >
                   <span className="mr-auto">{option.value}</span>
-                  <i className="sf3-font-down sf3-font rotate-270"></i>
+                  <Icon symbol="down" className="rotate-270" />
                 </DropdownToggle>
                 <DropdownMenu>
                   {option.subOpList.map((subItem, subIndex) => {

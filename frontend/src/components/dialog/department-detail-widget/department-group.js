@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Loading from '../../loading';
 import { isOrgContext } from '../../../utils/constants';
 import { gettext } from '@/utils/constants';
+import Icon from '../../icon';
 
 const ItemPropTypes = {
   department: PropTypes.object,
@@ -67,12 +68,13 @@ class Item extends Component {
         >
           {hasChild &&
             <span
-              className={`sf3-font sf3-font-down ${isExpanded ? '' : 'rotate-270'} d-inline-block`}
+              className={`${isExpanded ? '' : 'rotate-270'} d-inline-flex align-items-center`}
               onClick={this.toggleExpanded}
               style={{ color: '#666' }}
               role="button"
               aria-label={gettext('Toggle department group menu')}
             >
+              <Icon symbol="down" />
             </span>
           }
           <span style={hasChild ? { paddingLeft: '8px' } : { paddingLeft: '20px' }}>{department.name}</span>

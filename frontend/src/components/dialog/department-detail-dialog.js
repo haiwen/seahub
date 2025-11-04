@@ -13,6 +13,7 @@ import SeahubModalHeader from '../common/seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';
 import DepartmentGroupMembers from './department-detail-widget/department-group-members';
 import DepartmentGroupMemberSelected from './department-detail-widget/department-group-member-selected';
+import Icon from '../icon.js';
 
 import '../../css/manage-members-dialog.css';
 import '../../css/group-departments.css';
@@ -275,12 +276,8 @@ class DepartmentDetailDialog extends React.Component {
                 placeholder={gettext('Search users')}
               />
               {keyword &&
-                <span className="input-icon-addon pe-auto">
-                  <i
-                    className="sf3-font sf3-font-x-01 clear-keyword-icon"
-                    onClick={this.clearKeyword}
-                  >
-                  </i>
+                <span className="input-icon-addon pe-auto" onClick={this.clearKeyword}>
+                  <Icon symbol="x-01" className="clear-keyword-icon" />
                 </span>
               }
             </div>

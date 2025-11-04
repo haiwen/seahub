@@ -32,8 +32,10 @@
   background-color: var(--bs-hover-bg);
 }
 
-.search-filter-toggle .sf3-font-down {
-  color: #666;
+.search-filter-toggle .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
 }
 
 .search-filters-container .search-filter .filter-label {

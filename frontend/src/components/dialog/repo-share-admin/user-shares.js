@@ -9,6 +9,7 @@ import Loading from '../../loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import SharePermissionEditor from '../../../components/select-editor/share-permission-editor';
+import OpIcon from '../../op-icon';
 
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -99,16 +100,16 @@ class Item extends Component {
           />
         </td>
         <td>
-          <i
+          <OpIcon
+            symbol="x-01"
+            className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             tabIndex="0"
             role="button"
-            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
             onClick={this.onDeleteLink}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
-          >
-          </i>
+          />
         </td>
       </tr>
     );

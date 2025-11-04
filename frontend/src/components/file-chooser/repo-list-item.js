@@ -246,17 +246,19 @@ class RepoListItem extends React.Component {
       <li>
         <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
           <div className="item-left-icon">
-            <span className={`item-toggle icon sf3-font sf3-font-down ${this.state.isShowChildren ? '' : 'rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
-            <i className="tree-node-icon">
-              <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
-            </i>
+            <span className="d-flex justify-content-center align-items-center item-toggle tree-node-icon icon" onClick={this.onToggleClick}>
+              <Icon symbol="down" className={this.state.isShowChildren ? '' : 'rotate-270'} />
+            </span>
+            <span className="tree-node-icon icon">
+              <Icon symbol="folder" />
+            </span>
           </div>
           <div className="item-text">
             <span className="name user-select-none ellipsis" title={repo.repo_name}>{repo.repo_name}</span>
           </div>
           {repoActive &&
             <div className="item-right-icon">
-              <Icon symbol="check" color="currentColor"/>
+              <Icon symbol="check" />
             </div>
           }
         </div>

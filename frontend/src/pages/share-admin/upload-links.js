@@ -19,9 +19,9 @@ import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
+import Icon from '../../components/icon';
 
 import '../../css/share-admin-links.css';
-import Icon from '../../components/icon';
 
 const contentPropTypes = {
   loading: PropTypes.bool.isRequired,

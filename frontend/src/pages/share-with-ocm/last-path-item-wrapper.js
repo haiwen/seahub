@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import Icon from '../../components/icon';
 
 const propTypes = {
   userPerm: PropTypes.string.isRequired,
@@ -57,8 +58,8 @@ class LastPathItemWrapper extends React.Component {
             aria-label={gettext('More operations')}
             aria-expanded={this.state.isDesktopMenuOpen}
           >
-            <i className="sf3-font-new sf3-font" aria-hidden="true"></i>
-            <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i>
+            <Icon symbol="new" />
+            <Icon symbol="down" className="path-item-dropdown-toggle" />
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             {opList.map((item, index) => {

@@ -429,11 +429,6 @@
   max-width: 230px;
 }
 
-.sf-metadata-record-header-cell .sf-metadata-dropdown-menu {
-  padding: 0 5px;
-  width: 20px;
-}
-
 .sf-metadata-wrapper .table-main-container {
   display: flex;
   flex: 1 1;

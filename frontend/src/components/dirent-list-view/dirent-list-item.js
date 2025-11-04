@@ -15,9 +15,9 @@ import OpIcon from '../../components/op-icon';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import { Dirent } from '../../models';
 import { formatUnixWithTimezone } from '../../utils/time';
+import Icon from '../icon';
 
 import '../../css/dirent-list-item.css';
-import Icon from '../icon';
 
 const propTypes = {
   path: PropTypes.string.isRequired,

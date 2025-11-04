@@ -5,9 +5,9 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
+import Icon from '../../components/icon';
 
 import '../../css/files-activities.css';
-import Icon from '../../components/icon';
 
 const propTypes = {
   availableUsers: PropTypes.array.isRequired,

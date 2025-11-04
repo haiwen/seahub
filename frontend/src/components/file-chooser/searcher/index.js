@@ -5,6 +5,7 @@ import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { SEARCH_CONTAINER } from '../../../constants/zIndexes';
 import { MODE_TYPE_MAP } from '../../../constants';
+import Icon from '../../icon';
 
 import './index.css';
 
@@ -122,7 +123,9 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
           autoFocus
         />
         {inputValue.length !== 0 && (
-          <span className="search-control op-icon op-icon-bg-light m-0 sf3-font sf3-font-x-01" onClick={onCloseSearching}></span>
+          <span className="search-control op-icon op-icon-bg-light m-0" onClick={onCloseSearching}>
+            <Icon symbol="x-01" />
+          </span>
         )}
       </div>
     </div>

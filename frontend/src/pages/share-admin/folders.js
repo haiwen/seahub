@@ -234,7 +234,8 @@ class Item extends Component {
           </td>
           <td>
             <OpIcon
-              className={`sf3-font sf3-font-x-01 op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              symbol="x-01"
               title={gettext('Unshare')}
               op={this.unshare}
             />

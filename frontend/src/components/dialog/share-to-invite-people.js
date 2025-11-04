@@ -10,6 +10,7 @@ import toaster from '../toast';
 import Loading from '../loading';
 import SharePermissionEditor from '../select-editor/share-permission-editor';
 import EmptyTip from '../empty-tip';
+import OpIcon from '../op-icon';
 import '../../css/invitations.css';
 
 class UserItem extends React.Component {
@@ -73,16 +74,16 @@ class UserItem extends React.Component {
         <td>{dayjs(item.expire_time).format('YYYY-MM-DD')}</td>
         <td className="name">{item.inviter_name}</td>
         <td>
-          <i
+          <OpIcon
+            symbol="x-01"
+            className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             tabIndex="0"
             role="button"
-            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            onClick={this.deleteShareItem}
+            op={this.deleteShareItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
-          >
-          </i>
+          />
         </td>
       </tr>
     );

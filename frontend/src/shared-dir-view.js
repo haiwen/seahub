@@ -33,6 +33,7 @@ import {
 import { formatWithTimezone } from './utils/time';
 import OpIcon from './components/op-icon';
 import OpElement from './components/op-element';
+import Icon from './components/icon';
 
 import './css/layout.css';
 import './css/header.css';
@@ -332,10 +333,14 @@ class SharedDirView extends React.Component {
                 data-toggle="dropdown"
               >
                 <span title={zipped[zipped.length - 1].name}>{zipped[zipped.length - 1].name}</span>
-                {canUpload
-                  ? <><i className="sf3-font-new sf3-font main-icon ml-2"></i><i className="sf3-font-down sf3-font"></i></>
-                  : <i className="sf3-font-down sf3-font ml-1"></i>
-                }
+                {canUpload ? (
+                  <span className="d-flex align-items-center">
+                    <Icon symbol="new" className="main-icon ml-2" />
+                    <Icon symbol="down" />
+                  </span>
+                ) : (
+                  <Icon symbol="down" className="ml-1" />
+                )}
               </DropdownToggle>
               <DropdownMenu className='position-fixed'>
                 {opList.map((item, index) => {
@@ -349,7 +354,7 @@ class SharedDirView extends React.Component {
                         disabled={item.disabled || false}
                         title={item.title || ''}
                       >
-                        <i className={`sf3-font-${item.icon} sf3-font mr-2 dropdown-item-icon`} aria-hidden="true"></i>
+                        <Icon symbol={item.icon} className="dropdown-item-icon mr-2" />
                         {item.text}
                       </DropdownItem>
                     );
@@ -859,18 +864,20 @@ class SharedDirView extends React.Component {
                           title={gettext('Unselect')}
                           op={this.unselectItems}
                         >
-                          <i className="sf3-font-x-01 sf3-font mr-2" aria-hidden={true}></i>
+                          <Icon symbol="x-01" className="mr-2" />
                           <span>{`${selectedItemsLength} ${gettext('selected')}`}</span>
                         </OpElement>
                         <OpIcon
-                          className="sf3-font-download1 sf3-font cur-view-path-btn ml-4"
+                          className="cur-view-path-btn ml-4"
+                          symbol="download"
                           title={gettext('Download')}
                           op={this.zipDownloadSelectedItems}
                         />
                         {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                         <OpIcon
-                          className="sf3-font-save sf3-font cur-view-path-btn ml-4"
-                          onClick={this.saveSelectedItems}
+                          className="cur-view-path-btn ml-4"
+                          symbol="save"
+                          op={this.saveSelectedItems}
                           title={gettext('Save')}
                         />
                         }
@@ -1056,7 +1063,7 @@ class Content extends React.Component {
       );
     }
 
-    const sortIcon = <span className={`sf3-font ${sortOrder == 'asc' ? 'sf3-font-down rotate-180 d-inline-block' : 'sf3-font-down'}`}></span>;
+    const sortIcon = <span className="d-flex align-items-center ml-1"><Icon symbol="down" className={sortOrder == 'asc' ? 'rotate-180' : ''} /></span>;
     return mode == LIST_MODE ? (
       <div className="table-container">
         <table className="table-hover">
@@ -1073,10 +1080,10 @@ class Content extends React.Component {
               </th>
               }
               <th width="5%"></th>
-              <th width={showDownloadIcon ? '50%' : '53%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
+              <th width={showDownloadIcon ? '50%' : '53%'}><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a></th>
               <th width="8%"></th>
-              <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
-              <th width="13%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
+              <th width="14%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a></th>
+              <th width="13%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a></th>
               <th width="7%"></th>
             </tr>
           </thead>
@@ -1199,7 +1206,8 @@ class Item extends React.Component {
           <td>
             {showDownloadIcon &&
             <OpIcon
-              className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`}
+              className={`op-icon ${isIconShown ? '' : ' invisible'}`}
+              symbol="download"
               title={gettext('Download')}
               op={this.zipDownloadFolder}
             />
@@ -1255,7 +1263,9 @@ class Item extends React.Component {
           <td title={formatWithTimezone(item.last_modified)}>{dayjs(item.last_modified).fromNow()}</td>
           <td>
             {showDownloadIcon &&
-            <a className={`op-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}></a>
+            <a className={`op-icon ${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
+              <Icon symbol="download" />
+            </a>
             }
           </td>
         </tr>
@@ -1352,7 +1362,8 @@ class GridItem extends React.Component {
           <a href={folderURL} className="grid-file-name grid-file-name-link" onClick={this.onFolderItemClick}>{item.folder_name}</a>
           {showDownloadIcon &&
             <OpIcon
-              className={`action-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`}
+              className={`action-icon ${isIconShown ? '' : ' invisible'}`}
+              symbol="download"
               title={gettext('Download')}
               op={this.zipDownloadFolder}
             />
@@ -1372,7 +1383,8 @@ class GridItem extends React.Component {
           </a>
           <a href={fileURL} className="grid-file-name grid-file-name-link" onClick={this.handleFileClick}>{item.file_name}</a>
           {showDownloadIcon &&
-            <a className={`action-icon sf3-font sf3-font-download1${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
+            <a className={`action-icon ${isIconShown ? '' : ' invisible'}`} href={`${fileURL}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}>
+              <Icon symbol="download" />
             </a>
           }
         </li>

@@ -35,19 +35,20 @@
 }
 
 .user-item .user-remove {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   width: 14px;
   margin: 0 -2px 0 2px;
 }
 
-.user-item .user-remove .sf3-font {
-  display: inline-block;
-  font-size: 12px;
+.user-item .user-remove .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
   color: #909090;
   cursor: pointer;
 }
 
-.user-item .user-remove .sf3-font:hover {
+.user-item .user-remove .seafile-multicolor-icon:hover {
   color: #666666;
   cursor: pointer;
 }

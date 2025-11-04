@@ -10,6 +10,7 @@ import IconBtn from '../../../icon-btn';
 import { SEARCH_FILTERS_SHOW_KEY } from '../../../../constants';
 import { repoTrashAPI } from '../../../../utils/repo-trash-api';
 import TrashFilters from './search-filters';
+import Icon from '../../../icon';
 
 import './search-trash.css';
 
@@ -114,7 +115,9 @@ class SearchTrash extends Component {
       <div className="search-container search-trash">
         <div className="search-controls">
           <div className="input-icon">
-            <i className="search-icon-left trash-input-icon-addon sf3-font sf3-font-search"></i>
+            <span className="search-icon-left">
+              <Icon symbol="search" />
+            </span>
             <input
               type="text"
               className="form-control search-trash-input"
@@ -126,9 +129,9 @@ class SearchTrash extends Component {
               ref={this.inputRef}
             />
             {value && (
-              <button
-                type="button"
-                className="search-icon-right sf3-font sf3-font-x-01"
+              <IconBtn
+                symbol="x-01"
+                className="search-icon-right"
                 onClick={this.onClearSearch}
                 aria-label={gettext('Clear search')}
                 title={gettext('Clear search')}

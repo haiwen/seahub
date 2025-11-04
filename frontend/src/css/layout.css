@@ -209,10 +209,6 @@ select {
   border-radius: 3px;
 }
 
-.cur-view-path .cur-view-path-btn .sf3-font-down {
-  margin-left: 2px;
-}
-
 .cur-view-path:after {
   position: absolute;
   left: 16px;
@@ -374,6 +370,11 @@ img[src=""],img:not([src]) { /* for first loading img*/
   width: 16px;
   height: 16px;
   color: var(--bs-icon-color);
+}
+
+.dir-tool .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
 }
 
 .sf-tip-default {

@@ -1,3 +1,4 @@
+import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
 
 const generateLabelContent = (info, isBMap = false) => {
@@ -5,6 +6,7 @@ const generateLabelContent = (info, isBMap = false) => {
   const { address } = location_translated;
   const tagContent = Array.isArray(tag) && tag.length > 0 ? tag[0] : '';
 
+  const icon = <Icon symbol="x-01" />;
   if (isBMap) {
     return `
       <div
@@ -16,12 +18,12 @@ const generateLabelContent = (info, isBMap = false) => {
             ${title ? `
               <span class="label-title text-truncate" title="${title}">${title}</span>
               <span class="close-btn" id="selection-label-close">
-                <i class="sf3-font sf3-font-x-01"></i>
+                ${icon}
               </span>
             ` : `
               <span class="label-address text-truncate simple" title="${address}">${address}</span>
               <span class="close-btn" id="selection-label-close">
-                <i class="sf3-font sf3-font-x-01"></i>
+                ${icon}
               </span>
             `}
           </div>
@@ -44,12 +46,12 @@ const generateLabelContent = (info, isBMap = false) => {
       ${title ? `
         <span class="label-title text-truncate" title="${title}">${title}</span>
         <span class="close-btn" id="selection-label-close">
-          <i class="sf3-font sf3-font-x-01"></i>
+          ${icon}
         </span>
       ` : `
         <span class="label-address text-truncate simple" title="${address}">${address}</span>
         <span class="close-btn" id="selection-label-close">
-          <i class="sf3-font sf3-font-x-01"></i>
+          ${icon}
         </span>
       `}
     </div>
