@@ -4300,7 +4300,7 @@ pre[class*=language-] {
 .file-preview-panel-body .sdoc-article-container .article.sdoc-editor__article {
   border: none;
   box-shadow: none;
-  padding: 8px
+  padding: 8px 16px;
 }
 
 .file-preview-panel-body .sdoc-article-container .sdoc-table-wrapper {
