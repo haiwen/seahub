@@ -110,7 +110,7 @@ msgstr "تراجع"
 
 #: frontend/src/components/common/go-back/index.js:15
 msgid "Go back"
-msgstr ""
+msgstr "عُد"
 
 #: frontend/src/components/common/notice-item.js:49
 msgid "File {file_link} has a new comment form user {author}."
@@ -1786,12 +1786,12 @@ msgstr "لا يوجد أعضاء"
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:66
 #| msgid "Delete Department"
 msgid "Get department members"
-msgstr ""
+msgstr "احصل على أعضاء القسم"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:74
 #| msgid "No department"
 msgid "Toggle department group menu"
-msgstr ""
+msgstr "تبديل قائمة مجموعة القسم"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:16
 #| msgid "deleted"
@@ -1821,7 +1821,7 @@ msgstr "تعديل العلامات"
 #, javascript-format
 #| msgid "Add option"
 msgid "Add option: %s"
-msgstr ""
+msgstr "إضافة خيار: %s"
 
 #: frontend/src/components/dialog/file-access-log.js:87
 msgid "{placeholder} Access Log"
@@ -2198,12 +2198,12 @@ msgstr "استيراد العلامات..."
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:209
 #| msgid "Import tags"
 msgid "Import page"
-msgstr ""
+msgstr "استيراد صفحة"
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:31
 #| msgid "Import tags"
 msgid "Importing page..."
-msgstr ""
+msgstr "جاري استيراد الصفحة..."
 
 #: frontend/src/components/dialog/internal-link-dialog.js:54
 #: frontend/src/components/dialog/internal-link.js:41
@@ -2754,17 +2754,17 @@ msgstr "تأكيد كلمة السر"
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:42
 #| msgid "Passwords don't match"
 msgid "Names don't match"
-msgstr ""
+msgstr "الأسماء لا تتطابق"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:59
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:228
 #| msgid "Delete Time"
 msgid "Delete Team"
-msgstr ""
+msgstr "حذف الفريق"
 
 #: frontend/src/components/dialog/org-admin-delete-org-dialog.js:63
 msgid "To confirm, type \"{placeholder}\" in the box below"
-msgstr ""
+msgstr "للتأكيد، اكتب \"{placeholder}\" في المربع أدناه"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:62
 #: frontend/src/pages/org-admin/org-users-users.js:276
@@ -3209,14 +3209,14 @@ msgstr "تم حذف {number_placeholder} رابط (روابط)  التحميل �
 #: frontend/src/pages/share-admin/upload-links.js:74
 #| msgid "Select all"
 msgid "Unselect items"
-msgstr ""
+msgstr "إلغاء تحديد العناصر"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:246
 #: frontend/src/pages/share-admin/share-links.js:92
 #: frontend/src/pages/share-admin/upload-links.js:74
 #| msgid "Select all"
 msgid "Select items"
-msgstr ""
+msgstr "حدد العناصر"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:250
 #: frontend/src/components/dirent-detail/lib-details.js:20
@@ -3747,27 +3747,27 @@ msgstr "إعدادات سجل {placeholder} التاريخي"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:130
 msgid "Department moved successfully"
-msgstr ""
+msgstr "تم نقل القسم بنجاح"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:142
 #| msgid "Change to department"
 msgid "Move to department"
-msgstr ""
+msgstr "انتقل إلى القسم"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:158
 #| msgid "Select a department"
 msgid "Select target department"
-msgstr ""
+msgstr "حدد القسم المستهدف"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:174
 #| msgid "Select a department"
 msgid "Search departments"
-msgstr ""
+msgstr "بحث الأقسام "
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:196
 #| msgid "User not found"
 msgid "Department not found"
-msgstr ""
+msgstr "لم يتم العثور على القسم"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-move-group-dialog.js:196
 #: frontend/src/components/user-select.js:265
@@ -3909,7 +3909,7 @@ msgstr "الرجاء إدخال حرف واحد أو أكثر"
 #: frontend/src/components/dialog/trash-dialog/index.js:105
 #| msgid "Search files"
 msgid "Search failed"
-msgstr ""
+msgstr "فشل البحث"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:229
 #: frontend/src/repo-folder-trash.js:186
@@ -3923,7 +3923,7 @@ msgstr "قم بزيارة الإصدار القديم من الصفحة"
 #: frontend/src/components/dialog/trash-dialog/index.js:264
 #| msgid "Search"
 msgid "Search in trash"
-msgstr ""
+msgstr "البحث في سلة المهملات"
 
 #: frontend/src/components/dialog/trash-dialog/index.js:268
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:883
@@ -3974,12 +3974,12 @@ msgstr "المسار الأصلي"
 #: frontend/src/repo-folder-trash.js:255
 #| msgid "Deleted Time"
 msgid "Deleted time"
-msgstr ""
+msgstr "وقت الحذف"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:97
 #| msgid "Deleted"
 msgid "Deleted by"
-msgstr ""
+msgstr "حُذِف بواسطة"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-creator.js:114
 #: frontend/src/components/search/search-filters/filter-by-creator.js:114
@@ -4013,7 +4013,7 @@ msgstr "الوقت المخصص"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:130
 msgid "Toggle date filter menu"
-msgstr ""
+msgstr "تبديل قائمة مرشح التاريخ"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:48
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:45
@@ -4038,12 +4038,12 @@ msgstr "تصفية"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:90
 msgid "Search failed. Please try again."
-msgstr ""
+msgstr "فشل البحث. يُرجى المحاولة مرة أخرى."
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:122
 #| msgid "Search users"
 msgid "Search in trash..."
-msgstr ""
+msgstr "البحث في سلة المهملات..."
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:133
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:134
@@ -4058,12 +4058,12 @@ msgstr "مسح البحث"
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:139
 #| msgid "No filters"
 msgid "Hide filters"
-msgstr ""
+msgstr "إخفاء المرشحات"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:139
 #| msgid "No filters"
 msgid "Show filters"
-msgstr ""
+msgstr "إظهار المرشحات"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-trash.js:140
 #: frontend/src/components/search/search.js:938
@@ -4360,12 +4360,12 @@ msgstr "معلومات الالتقاط"
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:205
 #| msgid "xxx cells selected"
 msgid "{xxx} items have been selected"
-msgstr ""
+msgstr "تم تحديد {xxx} عناصر/عنصرًا"
 
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:209
 #| msgid "Loading"
 msgid "Loading metadata..."
-msgstr ""
+msgstr "جاري تحميل البيانات الوصفية..."
 
 #: frontend/src/components/dirent-detail/people/index.js:28
 #: frontend/src/components/dirent-detail/people/index.js:29
@@ -4600,7 +4600,7 @@ msgstr "تم التحميل"
 #: frontend/src/pages/upload-link/upload-list-item.js:146
 #| msgid "Upload Files"
 msgid "Upload failed"
-msgstr ""
+msgstr "فشل التحميل"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:147
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:147
@@ -4815,20 +4815,20 @@ msgstr "بسط"
 #: frontend/src/components/file-view/image-zoomer.js:11
 #| msgid "Images"
 msgid "Page fit"
-msgstr ""
+msgstr "ملاءمة الصفحة"
 
 #: frontend/src/components/file-view/image-zoomer.js:12
 msgid "Actual size"
-msgstr ""
+msgstr "الحجم الفعلي"
 
 #: frontend/src/components/file-view/image-zoomer.js:136
 msgid "Scale menu"
-msgstr ""
+msgstr "قائمة القياسات"
 
 #: frontend/src/components/file-view/image-zoomer.js:138
 #| msgid "Current page"
 msgid "Current scale"
-msgstr ""
+msgstr "المقياس الحالي"
 
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:79
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:89
@@ -4870,7 +4870,7 @@ msgstr "مشاركة مع الكل"
 #: frontend/src/pages/share-with-ocm/shared-with-ocm.js:433
 #| msgid "Share to other server"
 msgid "Shared from other servers"
-msgstr ""
+msgstr "تمت مشاركتها من خوادم أخرى"
 
 #: frontend/src/components/group-members.js:74
 #: frontend/src/components/group-members.js:119
@@ -5624,7 +5624,7 @@ msgstr "تم تمييز المكتبة  {library_name_placeholder} ينجاح"
 #: frontend/src/components/single-selector.js:74
 #| msgid "Clear selected"
 msgid "Toggle selector menu"
-msgstr ""
+msgstr "تبديل قائمة الاختيار"
 
 #: frontend/src/components/sort-menu.js:21
 #: frontend/src/metadata/constants/view/statistics.js:34
@@ -5716,12 +5716,12 @@ msgstr "نقل"
 
 #: frontend/src/components/toolbar/common-toolbar.js:134
 msgid "Dark mode"
-msgstr ""
+msgstr "الوضع المظلم"
 
 #: frontend/src/components/toolbar/common-toolbar.js:134
 #| msgid "Switch sort mode"
 msgid "Light mode"
-msgstr ""
+msgstr "وضع الإضاءة"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:71
 #| msgid "Link has been copied to clipboard"
@@ -5774,7 +5774,7 @@ msgstr "ملف ورد Word جديد"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:207
 #| msgid "New SeaDoc File"
 msgid "New Docxf File"
-msgstr ""
+msgstr "ملف Docxf جديد"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:210
 #: frontend/src/utils/text-translation.js:32
@@ -5939,7 +5939,7 @@ msgstr "قم بإدراج حسابك في دفتر العناوين العام،
 #: frontend/src/components/user-settings/social-login.js:38
 #: frontend/src/settings.js:63
 msgid "Single Sign On (SSO)"
-msgstr ""
+msgstr "تسجيل الدخول الموحد (SSO)"
 
 #: frontend/src/components/user-settings/social-login-dingtalk.js:42
 #: frontend/src/components/user-settings/social-login-saml.js:55
@@ -6194,12 +6194,12 @@ msgstr "الرجاء اختيار"
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/custom-label.js:58
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:18
 msgid "Address"
-msgstr ""
+msgstr "عنوان"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/custom-label.js:33
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/custom-label.js:61
 msgid "Fill in"
-msgstr ""
+msgstr "تعبئة"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:21
 msgid "Full screen"
@@ -6209,13 +6209,13 @@ msgstr "ملء الشاشة"
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:28
 #| msgid "Deleted option"
 msgid "Delete location"
-msgstr ""
+msgstr "حذف الموقع"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:12
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:170
 #| msgid "is not empty"
 msgid "Map is not ready"
-msgstr ""
+msgstr "الخريطة ليست جاهزة"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:27
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:35
@@ -6226,19 +6226,19 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:112
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:117
 msgid "Search service unavailable"
-msgstr ""
+msgstr "خدمة البحث غير متاحة"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:41
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:62
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:111
 #| msgid "No results"
 msgid "No results found"
-msgstr ""
+msgstr "لم يتم العثور على نتائج"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:217
 #| msgid "Please enter the old password"
 msgid "Please enter the address"
-msgstr ""
+msgstr "الرجاء إدخال العنوان"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:260
 #| msgid "Saving..."
@@ -6301,7 +6301,7 @@ msgstr "إضافة وسم"
 #: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:39
 #| msgid "Select Image"
 msgid "Select tag"
-msgstr ""
+msgstr "حدد الوسم"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
 msgid "1 filter"
@@ -7132,7 +7132,7 @@ msgstr "بطاقة"
 #: frontend/src/metadata/constants/view/index.js:40
 #| msgid "Status"
 msgid "Statistics"
-msgstr ""
+msgstr "الإحصائيات"
 
 #: frontend/src/metadata/constants/view/statistics.js:5
 #: frontend/src/metadata/utils/column/index.js:283
@@ -7177,17 +7177,17 @@ msgstr "وقت الإنشاء"
 #: frontend/src/metadata/constants/view/statistics.js:28
 #| msgid "Modified files"
 msgid "Modified time"
-msgstr ""
+msgstr "وقت التعديل"
 
 #: frontend/src/metadata/constants/view/statistics.js:32
 #| msgid "locked by {name}"
 msgid "Ascending by count"
-msgstr ""
+msgstr "تصاعدي حسب العدد"
 
 #: frontend/src/metadata/constants/view/statistics.js:33
 #| msgid "locked by {name}"
 msgid "Descending by count"
-msgstr ""
+msgstr "تنازليا حسب العدد"
 
 #: frontend/src/metadata/hooks/metadata-ai-operation.js:77
 #| msgid "Generate description"
@@ -7256,15 +7256,15 @@ msgstr "حدد ما يصل إلى 50 ملفًا"
 
 #: frontend/src/metadata/hooks/metadata-view.js:570
 msgid "Can only move files that are in the same folder"
-msgstr ""
+msgstr "يمكن فقط نقل الملفات الموجودة في نفس المجلد"
 
 #: frontend/src/metadata/hooks/metadata-view.js:627
 msgid "Can only copy files that are in the same folder"
-msgstr ""
+msgstr "يمكن فقط نسخ الملفات الموجودة في نفس المجلد"
 
 #: frontend/src/metadata/hooks/metadata-view.js:690
 msgid "Can only download files that are in the same folder"
-msgstr ""
+msgstr "يمكن فقط تنزيل الملفات الموجودة في نفس المجلد"
 
 #: frontend/src/metadata/hooks/metadata.js:355
 msgid "Recognizing portraits. Please refresh the page later."
@@ -7311,7 +7311,7 @@ msgstr "فشل نقل الملف"
 #: frontend/src/metadata/store/server-operator.js:109
 #| msgid "Failed to modify filter"
 msgid "Failed to move {n} items"
-msgstr ""
+msgstr "فشل نقل {n} عنصرًا/عناصر"
 
 #: frontend/src/metadata/store/server-operator.js:123
 #| msgid "Failed to duplicate page"
@@ -7326,12 +7326,12 @@ msgstr "فشل في نسخ الملف"
 #: frontend/src/metadata/store/server-operator.js:135
 #| msgid "Failed to copy %(name)s"
 msgid "Failed to copy {n} items"
-msgstr ""
+msgstr "فشل نسخ {n} عنصرًا/عناصر"
 
 #: frontend/src/metadata/store/server-operator.js:136
 #| msgid "Failed to modify filter"
 msgid "Failed to copy file"
-msgstr ""
+msgstr "فشل في نسخ الملف"
 
 #: frontend/src/metadata/store/server-operator.js:149
 msgid "Failed to insert property"
@@ -7479,7 +7479,7 @@ msgstr "القديمه"
 #: frontend/src/metadata/utils/menu-builder.js:607
 #: frontend/src/metadata/utils/menu-builder.js:668
 msgid "AI"
-msgstr ""
+msgstr "الذكاء الاصطناعي"
 
 #: frontend/src/metadata/utils/validate/view.js:5
 #: frontend/src/tag/utils/validate/tag.js:5
@@ -7506,7 +7506,7 @@ msgstr "الاسم موجود بالفعل"
 #: frontend/src/metadata/views/card/card-items/index.js:155
 #| msgid "items"
 msgid "No items"
-msgstr ""
+msgstr "لا يوجد عناصر"
 
 #: frontend/src/metadata/views/card/settings/index.js:84
 #: frontend/src/metadata/views/kanban/settings/index.js:125
@@ -7576,32 +7576,32 @@ msgstr "المتعاونون"
 #: frontend/src/metadata/views/statistics/index.js:68
 #| msgid "No options available"
 msgid "No data available for statistics"
-msgstr ""
+msgstr "لا توجد بيانات متاحة الإحصائيات"
 
 #: frontend/src/metadata/views/statistics/index.js:77
 #| msgid "File type"
 msgid "Files by type"
-msgstr ""
+msgstr "الملفات حسب النوع"
 
 #: frontend/src/metadata/views/statistics/index.js:86
 #| msgid "File collaborators"
 msgid "Files by creator"
-msgstr ""
+msgstr "الملفات حسب المنشئ"
 
 #: frontend/src/metadata/views/statistics/index.js:99
 #| msgid "No collaborators available"
 msgid "No creator data available"
-msgstr ""
+msgstr "لا تتوفر بيانات المنشئ"
 
 #: frontend/src/metadata/views/statistics/index.js:107
 #| msgid "File expire time"
 msgid "Files by time"
-msgstr ""
+msgstr "الملفات حسب الوقت"
 
 #: frontend/src/metadata/views/statistics/index.js:123
 #| msgid "No options available"
 msgid "No time-based data available"
-msgstr ""
+msgstr "لا توجد بيانات متاحة على أساس الوقت"
 
 #: frontend/src/metadata/views/statistics/index.js:131
 #: frontend/src/pages/org-admin/devices/devices-errors.js:54
@@ -7722,98 +7722,98 @@ msgstr "لا يمكن حذف هذه الخاصية"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:34
 msgid "Percent"
-msgstr ""
+msgstr "النسبة"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:35
 msgid "Yuan"
-msgstr ""
+msgstr "يوان"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:36
 msgid "Dollar"
-msgstr ""
+msgstr "دولار"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:37
 #| msgid "European"
 msgid "Euro"
-msgstr ""
+msgstr "يورو"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:38
 #| msgid "Custom properties"
 msgid "Custom currency"
-msgstr ""
+msgstr "عملة مخصصة"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:42
 msgid "Comma(1,03)"
-msgstr ""
+msgstr "فاصلة(1,03)"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:43
 msgid "Dot(1.03)"
-msgstr ""
+msgstr "نقطة(1.03)"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:48
 msgid "No separator (1000000)"
-msgstr ""
+msgstr "بدون فاصل (1000000)"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:51
 msgid "Comma (1,000,000)"
-msgstr ""
+msgstr "فاصلة (1,000,000)"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:52
 msgid "Space (1 000 000)"
-msgstr ""
+msgstr "مسافة (000 000 1)"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:66
 msgid "Before"
-msgstr ""
+msgstr "قبل"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:67
 msgid "After"
-msgstr ""
+msgstr "بعد"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:150
 #| msgid "email is required"
 msgid "Currency symbol is required"
-msgstr ""
+msgstr "رمز العملة مطلوب"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:291
 #| msgid "Edit format settings"
 msgid "Number format settings"
-msgstr ""
+msgstr "إعدادات تنسيق الأرقام"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:306
 #| msgid "Custom properties"
 msgid "Custom symbol"
-msgstr ""
+msgstr "رمز مخصص"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:311
 msgid "Enter custom currency symbol"
-msgstr ""
+msgstr "أدخل رمز العملة المخصص"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:324
 msgid "Symbol position"
-msgstr ""
+msgstr "مكان الرمز"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:335
 msgid "Decimal separator"
-msgstr ""
+msgstr "فاصل عشري"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:344
 msgid "Thousands separator"
-msgstr ""
+msgstr "فاصل الآلاف"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:356
 msgid "Enforce precision"
-msgstr ""
+msgstr "تطبيق الدقة"
 
 #: frontend/src/metadata/views/table/table-main/records-header/cell/dropdown-menu/number-format-popover/index.js:365
 #| msgid "Permission"
 msgid "Precision"
-msgstr ""
+msgstr "الدقة"
 
 #: frontend/src/metadata/views/table/table-main/records-header/insert-column/index.js:89
 #| msgid "Add icon"
 msgid "Add column"
-msgstr ""
+msgstr "إضافة عمود"
 
 #: frontend/src/metadata/views/table/table-main/records/group-body/group-container/group-title.js:12
 msgid "Deleted option"
@@ -7947,7 +7947,7 @@ msgstr "أنشطتي"
 #: frontend/src/pages/dashboard/log-repo-selector.js:98
 #| msgid "Single select"
 msgid "Toggle repo selector"
-msgstr ""
+msgstr "تبديل محدد المستودع"
 
 #: frontend/src/pages/dashboard/log-repo-selector.js:122
 #| msgid "in all libraries"
@@ -7971,7 +7971,7 @@ msgstr "لم يتم العثور على المكتبة"
 #: frontend/src/pages/dashboard/user-selector.js:80
 #| msgid "Please select a file"
 msgid "Toggle user selector"
-msgstr ""
+msgstr "تبديل محدد المستخدم"
 
 #: frontend/src/pages/dashboard/log-user-selector.js:155
 #| msgid "Add user"
@@ -7993,17 +7993,17 @@ msgstr "البحث عن المعدلون"
 #: frontend/src/pages/excalidraw-editable-viewer/index.js:83
 #| msgid "Set user name"
 msgid "Your name"
-msgstr ""
+msgstr "اسمك"
 
 #: frontend/src/pages/excalidraw-editor/editor/index.js:187
 msgid ""
 "The uploaded image has not been saved yet. Please close this page later."
-msgstr ""
+msgstr "لم يتم حفظ الصورة التي تم تحميلها بعد. يرجى إغلاق هذه الصفحة لاحقًا."
 
 #: frontend/src/pages/excalidraw-editor/editor/index.js:236
 #| msgid "Person image"
 msgid "Link image"
-msgstr ""
+msgstr "رابط الصورة"
 
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:72
 #| msgid "Select Image"
