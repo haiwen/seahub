@@ -110,7 +110,7 @@ msgstr "Отменить"
 
 #: frontend/src/components/common/go-back/index.js:15
 msgid "Go back"
-msgstr ""
+msgstr "Вернуться назад"
 
 #: frontend/src/components/common/notice-item.js:49
 msgid "File {file_link} has a new comment form user {author}."
@@ -1786,12 +1786,12 @@ msgstr "Нет участников"
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:66
 #| msgid "Delete Department"
 msgid "Get department members"
-msgstr ""
+msgstr "Получить сотрудников отдела"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:74
 #| msgid "No department"
 msgid "Toggle department group menu"
-msgstr ""
+msgstr "Переключить меню группы отделов"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:16
 #| msgid "deleted"
@@ -1821,7 +1821,7 @@ msgstr "Изменить метки"
 #, javascript-format
 #| msgid "Add option"
 msgid "Add option: %s"
-msgstr ""
+msgstr "Добавить параметр: %s"
 
 #: frontend/src/components/dialog/file-access-log.js:87
 msgid "{placeholder} Access Log"
@@ -3209,14 +3209,14 @@ msgstr "Удалено {number_placeholder} ссылок для загрузки
 #: frontend/src/pages/share-admin/upload-links.js:74
 #| msgid "Select all"
 msgid "Unselect items"
-msgstr ""
+msgstr "Отменить выбор элементов"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:246
 #: frontend/src/pages/share-admin/share-links.js:92
 #: frontend/src/pages/share-admin/upload-links.js:74
 #| msgid "Select all"
 msgid "Select items"
-msgstr ""
+msgstr "Выбрать элементы"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:250
 #: frontend/src/components/dirent-detail/lib-details.js:20
@@ -4013,7 +4013,7 @@ msgstr "Пользовательское время"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:130
 msgid "Toggle date filter menu"
-msgstr ""
+msgstr "Переключить меню фильтра по дате"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-suffix.js:48
 #: frontend/src/components/search/search-filters/filter-by-suffix.js:45
@@ -4360,7 +4360,7 @@ msgstr "Информация о захвате"
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:205
 #| msgid "xxx cells selected"
 msgid "{xxx} items have been selected"
-msgstr ""
+msgstr "Выбрано {xxx} элементов"
 
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:209
 #| msgid "Loading"
@@ -4600,7 +4600,7 @@ msgstr "Загружено"
 #: frontend/src/pages/upload-link/upload-list-item.js:146
 #| msgid "Upload Files"
 msgid "Upload failed"
-msgstr ""
+msgstr "Ошибка загрузки"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:147
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:147
@@ -4823,12 +4823,12 @@ msgstr "Фактический размер"
 
 #: frontend/src/components/file-view/image-zoomer.js:136
 msgid "Scale menu"
-msgstr ""
+msgstr "Меню масштабирования"
 
 #: frontend/src/components/file-view/image-zoomer.js:138
 #| msgid "Current page"
 msgid "Current scale"
-msgstr ""
+msgstr "Текущий масштаб"
 
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:79
 #: frontend/src/components/file-view/onlyoffice-file-toolbar.js:89
@@ -5624,7 +5624,7 @@ msgstr "Отмечено {library_name_placeholder}."
 #: frontend/src/components/single-selector.js:74
 #| msgid "Clear selected"
 msgid "Toggle selector menu"
-msgstr ""
+msgstr "Переключить меню выбора"
 
 #: frontend/src/components/sort-menu.js:21
 #: frontend/src/metadata/constants/view/statistics.js:34
@@ -5774,7 +5774,7 @@ msgstr "Новый Word файл"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:207
 #| msgid "New SeaDoc File"
 msgid "New Docxf File"
-msgstr ""
+msgstr "Новый файл Docxf"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:210
 #: frontend/src/utils/text-translation.js:32
@@ -6209,13 +6209,13 @@ msgstr "Полный экран"
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:28
 #| msgid "Deleted option"
 msgid "Delete location"
-msgstr ""
+msgstr "Удалить местоположение"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:12
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:170
 #| msgid "is not empty"
 msgid "Map is not ready"
-msgstr ""
+msgstr "Карта еще не готова"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:27
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:35
@@ -6226,14 +6226,14 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:112
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:117
 msgid "Search service unavailable"
-msgstr ""
+msgstr "Служба поиска недоступна"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:41
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:62
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:111
 #| msgid "No results"
 msgid "No results found"
-msgstr ""
+msgstr "Результатов не найдено"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:217
 #| msgid "Please enter the old password"
@@ -6301,7 +6301,7 @@ msgstr "Добавить тег"
 #: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:39
 #| msgid "Select Image"
 msgid "Select tag"
-msgstr ""
+msgstr "Выбрать тег"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
 msgid "1 filter"
@@ -7479,7 +7479,7 @@ msgstr "Устаревший"
 #: frontend/src/metadata/utils/menu-builder.js:607
 #: frontend/src/metadata/utils/menu-builder.js:668
 msgid "AI"
-msgstr ""
+msgstr "ИИ"
 
 #: frontend/src/metadata/utils/validate/view.js:5
 #: frontend/src/tag/utils/validate/tag.js:5
@@ -7506,7 +7506,7 @@ msgstr "Имя уже существует"
 #: frontend/src/metadata/views/card/card-items/index.js:155
 #| msgid "items"
 msgid "No items"
-msgstr ""
+msgstr "Нет элементов"
 
 #: frontend/src/metadata/views/card/settings/index.js:84
 #: frontend/src/metadata/views/kanban/settings/index.js:125
@@ -7813,7 +7813,7 @@ msgstr "Точность"
 #: frontend/src/metadata/views/table/table-main/records-header/insert-column/index.js:89
 #| msgid "Add icon"
 msgid "Add column"
-msgstr ""
+msgstr "Добавить столбец"
 
 #: frontend/src/metadata/views/table/table-main/records/group-body/group-container/group-title.js:12
 msgid "Deleted option"
@@ -7947,7 +7947,7 @@ msgstr "Мои действия"
 #: frontend/src/pages/dashboard/log-repo-selector.js:98
 #| msgid "Single select"
 msgid "Toggle repo selector"
-msgstr ""
+msgstr "Переключить выбор репозитория"
 
 #: frontend/src/pages/dashboard/log-repo-selector.js:122
 #| msgid "in all libraries"
@@ -7971,7 +7971,7 @@ msgstr "Библиотека не найдена"
 #: frontend/src/pages/dashboard/user-selector.js:80
 #| msgid "Please select a file"
 msgid "Toggle user selector"
-msgstr ""
+msgstr "Переключить выбор пользователя"
 
 #: frontend/src/pages/dashboard/log-user-selector.js:155
 #| msgid "Add user"
@@ -7993,7 +7993,7 @@ msgstr "Поиск модификаторов"
 #: frontend/src/pages/excalidraw-editable-viewer/index.js:83
 #| msgid "Set user name"
 msgid "Your name"
-msgstr ""
+msgstr "Ваше имя"
 
 #: frontend/src/pages/excalidraw-editor/editor/index.js:187
 msgid ""
@@ -8003,12 +8003,12 @@ msgstr "Загруженное изображение еще не сохране
 #: frontend/src/pages/excalidraw-editor/editor/index.js:236
 #| msgid "Person image"
 msgid "Link image"
-msgstr ""
+msgstr "Изображение ссылки"
 
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:72
 #| msgid "Select Image"
 msgid "Select image"
-msgstr ""
+msgstr "Выбрать изображение"
 
 #: frontend/src/pages/file-history-old/history-item.js:62
 msgid "(current version)"
@@ -8527,7 +8527,7 @@ msgstr "Включить функцию отделов"
 #: frontend/src/pages/org-admin/departments/tree-node.js:132
 #: frontend/src/pages/org-admin/departments/tree-node.js:133
 msgid "Toggle children"
-msgstr ""
+msgstr "Переключение дочерних элементов"
 
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:130
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:134
@@ -9037,7 +9037,7 @@ msgstr "Добавить пользователя"
 #: frontend/src/pages/org-admin/org-users-users.js:282
 #| msgid "Invite users"
 msgid "Invite users via WeChat"
-msgstr ""
+msgstr "Пригласить пользователей через WeChat"
 
 #: frontend/src/pages/org-admin/side-panel.js:45
 #: frontend/src/pages/sys-admin/side-panel.js:54
@@ -9266,19 +9266,19 @@ msgstr "Подсказка: 0 означает ограничение по ум�
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:216
 #| msgid "Disable SAML user email / password login"
 msgid "Disable SSO user email / password login"
-msgstr ""
+msgstr "Отключить единый вход пользователя по электронной почте / паролю"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:219
 #: frontend/src/pages/sys-admin/orgs/org-info.js:94
 #| msgid "Force user to use SSO login if SAML account is bound"
 msgid "Force user to use SSO login if SSO account is bound"
-msgstr ""
+msgstr "Принудительно использовать вход SSO, если учетная запись SSO привязана"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:104
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:105
 #| msgid "No version history"
 msgid "Show daily history"
-msgstr ""
+msgstr "Показать ежедневную историю"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:279
 msgid "No changes"
@@ -9845,7 +9845,7 @@ msgstr "Количество групп"
 #: frontend/src/pages/sys-admin/orgs/org-info.js:87
 #| msgid "ISO"
 msgid "SSO"
-msgstr ""
+msgstr "SSO"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:144
 msgid ""
@@ -10006,7 +10006,7 @@ msgstr "Установить контактный email"
 #: frontend/src/pages/sys-admin/users/user-info.js:109
 #| msgid "User"
 msgid "User ID"
-msgstr ""
+msgstr "User ID"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:125
 msgid "Login ID"
@@ -10444,13 +10444,13 @@ msgstr "Дублировать страницу"
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:212
 #| msgid "Import tags"
 msgid "Import page from docx"
-msgstr ""
+msgstr "Импорт страницы из docx"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:187
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:213
 #| msgid "Export as docx"
 msgid "Import page from Markdown"
-msgstr ""
+msgstr "Импорт страницы из Markdown"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:191
 msgid "Open in new tab"
@@ -10480,7 +10480,7 @@ msgstr "Страницы"
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:186
 #| msgid "More operations"
 msgid "More page operations"
-msgstr ""
+msgstr "Дополнительные операции со страницей"
 
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:53
 #: frontend/src/pages/wiki2/wiki-right-header/page-cover.js:76
@@ -10882,12 +10882,12 @@ msgstr "Пользователь {user_link} добавил вас в {group_lin
 #: frontend/src/translate.js:38
 #| msgid "No users"
 msgid "No user shares"
-msgstr ""
+msgstr "Нет общих ресурсов пользователя"
 
 #: frontend/src/translate.js:39
 #| msgid "No groups"
 msgid "No group shares"
-msgstr ""
+msgstr "Нет общих ресурсов группы"
 
 #: frontend/src/translate.js:40
 #| msgid "{user} restored folder {folderName} in library {libraryName}."

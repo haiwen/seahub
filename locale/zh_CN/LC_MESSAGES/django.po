@@ -927,7 +927,7 @@ msgstr "%s 已被占用，请尝试其他名称。"
 
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Wiki not found."
-msgstr "Wiki未找到。"
+msgstr "知识库未找到。"
 
 #: seahub/api2/endpoints/wikis.py:215
 msgid "Name is required."
