@@ -1,3 +1,7 @@
+#wiki-repo-view {
+  overflow: hidden;
+}
+
 #wrapper {
   width: 100%;
   height: auto;
@@ -8,7 +12,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  height: 377px;
   min-width: 0;
 }
 
@@ -99,4 +103,5 @@
 .wiki-repo-view-content {
   flex: 1;
   display: flex;
+  height: 333px;
 }
