@@ -6164,7 +6164,7 @@ msgstr "我的知识库"
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:107
 #| msgid "No shared links"
 msgid "No shared Wikis"
-msgstr "没有共享的资料库"
+msgstr "没有共享的知识库"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:142
 msgid "Old Wikis"

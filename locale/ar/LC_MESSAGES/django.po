@@ -56,12 +56,12 @@ msgstr "فشل ربط SAML، يرجى تسجيل الدخول أولاً."
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "فشل تسجيل الدخول: بريدك الإلكتروني %s غير متوافق مع البريد الإلكتروني %s من خدمة ADFS/SAML"
 
 #: seahub/adfs_auth/views.py:302 seahub/adfs_auth/views.py:497
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "لم يتم العثور على المستخدم في الفريق."
 
 #: seahub/adfs_auth/views.py:337 seahub/adfs_auth/views.py:531
 msgid ""
@@ -83,7 +83,7 @@ msgstr "فشل في إلغاء ربط المصادقة سامل -SAML-، يرج�
 #: seahub/adfs_auth/views.py:738
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "فشل إلغاء ربط SAML، يتم إجبار المستخدم على تسجيل الدخول بواسطة SSO."
 
 #: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a contact email first."
@@ -606,7 +606,7 @@ msgstr "المجموعة غير موجودة"
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "البريد الإلكتروني أو معرف تسجيل الدخول"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
@@ -2724,7 +2724,7 @@ msgstr "فشل إعادة تعيين كلمة السر: هذا الرابط لم
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "إذا كان عنوان بريدك الإلكتروني موجودًا في قاعدة البيانات الخاصة بنا، فسوف تتلقى رسالة قريبًا."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
@@ -3259,7 +3259,7 @@ msgstr "غير قادر على تنزيل الملف"
 #: seahub/views/file.py:2160
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "لم يتم العثور على التعديل"
 
 #: seahub/views/file.py:2167
 msgid "The original file does not exist"

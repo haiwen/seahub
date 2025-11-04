@@ -71,12 +71,12 @@ msgstr "Не удалось привязать SAML. Сначала войдит
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Не удалось войти: Адрес электронной почты %s не соответствует адресу электронной почты %s из службы ADFS/SAML"
 
 #: seahub/adfs_auth/views.py:302 seahub/adfs_auth/views.py:497
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "Пользователь не найден в команде."
 
 #: seahub/adfs_auth/views.py:337 seahub/adfs_auth/views.py:531
 msgid ""
@@ -98,7 +98,7 @@ msgstr "Не удалось отменить привязку SAML. Сначал
 #: seahub/adfs_auth/views.py:738
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "Не удалось отвязать SAML, пользователь принудительно входит в систему с помощью единого входа."
 
 #: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a contact email first."
@@ -621,7 +621,7 @@ msgstr "Группа не существует"
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "Email или LoginID"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
@@ -2725,7 +2725,7 @@ msgstr "Не удалось изменить пароль: эта ссылка �
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Если ваш адрес электронной почты есть в нашей базе данных, вы вскоре получите сообщение."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
