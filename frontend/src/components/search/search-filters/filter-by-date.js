@@ -143,7 +143,7 @@ const FilterByDate = ({ date, onChange }) => {
 
   const disabledEndDate = useCallback((endDate) => {
     if (!endDate) return false;
-    const today = dayjs();
+    const today = dayjs().endOf('day');
     const startValue = time.from;
     if (!startValue) {
       return endDate.isAfter(today);
