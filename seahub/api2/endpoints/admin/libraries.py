@@ -355,10 +355,6 @@ class AdminLibrary(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not new_status and not new_repo_name and not new_owner:
-            error_msg = 'invalid params'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         if new_status:
             try:
                 seafile_api.set_repo_status(repo_id, normalize_repo_status_str(new_status))
