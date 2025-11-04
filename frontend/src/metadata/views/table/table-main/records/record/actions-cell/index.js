@@ -82,7 +82,7 @@ class ActionsCell extends Component {
               title={gettext('Select')}
               aria-label={gettext('Select')}
               checked={isSelected || false}
-              onClick={this.props.onSelectRecord}
+              onChange={this.props.onSelectRecord}
               onKeyDown={Utils.onKeyDown}
             />
           </div>
