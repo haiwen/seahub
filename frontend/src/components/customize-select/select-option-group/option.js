@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Utils } from '../../../utils/utils';
 
 class Option extends Component {
 
-  onSelectOption = (value, event) => {
+  onSelectOption = (event) => {
     if (this.props.supportMultipleSelect) {
       event.stopPropagation();
     }
-    this.props.onSelectOption(value, event);
+    this.props.onSelectOption(this.props.value, event);
   };
 
   onMouseEnter = () => {
@@ -27,10 +28,14 @@ class Option extends Component {
     return (
       <div
         className={classnames('seafile-select-option', { 'seafile-select-option-active': this.props.isActive })}
-        onClick={this.onSelectOption.bind(this, this.props.value)}
+        tabIndex="0"
+        role="menuitem"
+        onClick={this.onSelectOption}
+        onKeyDown={Utils.onKeyDown}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-      >{this.props.children}
+      >
+        {this.props.children}
       </div>
     );
   }
