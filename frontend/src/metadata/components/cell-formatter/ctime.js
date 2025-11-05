@@ -6,22 +6,19 @@ import { formatWithTimezone } from '../../../utils/time';
 
 const CTimeFormatter = ({ value, className, children: emptyFormatter, format }) => {
   if (!value) return emptyFormatter || null;
-
-  const valueFormat = format == 'relativeTime'
-    ? dayjs(value).fromNow()
-    : dayjs(value).format('YYYY-MM-DD HH:mm:ss');
   return (
     <div
       className={classnames('sf-metadata-ui cell-formatter-container ctime-formatter', className)}
       title={formatWithTimezone(value)}
     >
-      {valueFormat}
+      {format == 'relativeTime' ? dayjs(value).fromNow() : dayjs(value).format('YYYY-MM-DD HH:mm:ss')}
     </div>
   );
 };
 
 CTimeFormatter.propTypes = {
-  value: PropTypes.string.isRequired,
+  format: PropTypes.string,
+  value: PropTypes.string,
   className: PropTypes.string,
   children: PropTypes.any,
 };

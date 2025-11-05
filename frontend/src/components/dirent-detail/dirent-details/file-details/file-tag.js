@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { v4 as uuidV4 } from 'uuid';
 import classnames from 'classnames';
 import { getDirentPath } from '../utils';
-import { gettext } from '../../../../utils/constants';
 import EditFileTagPopover from '../../../popover/edit-filetag-popover';
 import FileTagList from '../../../file-tag-list';
 
@@ -27,11 +26,7 @@ const FileTag = ({ repoID, dirent, path, repoTags, fileTagList, onFileTagChanged
         id={tagListTitleID}
         onClick={onEditFileTagToggle}
       >
-        {Array.isArray(fileTagList) && fileTagList.length > 0 ? (
-          <FileTagList fileTagList={fileTagList} />
-        ) : (
-          <span className="empty-tip-text">{gettext('Empty')}</span>
-        )}
+        <FileTagList fileTagList={fileTagList} />
       </div>
       {isEditFileTagShow &&
         <EditFileTagPopover

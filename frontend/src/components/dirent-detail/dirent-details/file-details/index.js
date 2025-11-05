@@ -60,7 +60,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
   const { enableFaceRecognition, enableMetadata } = useMetadataStatus();
   const { record } = useMetadataDetails();
 
-  const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
+  const sizeField = useMemo(() => ({ type: CellType.SIZE, name: gettext('Size') }), []);
   const lastModifierField = useMemo(() => ({ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }), []);
   const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
   const tagsField = useMemo(() => ({ type: CellType.SINGLE_SELECT, name: gettext('Tags') }), []);
@@ -70,7 +70,7 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
     setCaptureInfoShow(savedValue);
   }, []);
 
-  const dom = (
+  let component = (
     <>
       <DetailItem field={sizeField} className="sf-metadata-property-detail-formatter">
         <Formatter field={sizeField} value={Utils.bytesToSize(direntDetail.size)} />
@@ -106,16 +106,15 @@ const FileDetails = React.memo(({ repoID, dirent, path, direntDetail, isShowRepo
     </>
   );
 
-  let component = dom;
   if (Utils.imageCheck(dirent.name) || Utils.videoCheck(dirent.name)) {
     const fileDetails = getCellValueByColumn(record, { key: PRIVATE_COLUMN_KEY.FILE_DETAILS });
     const fileDetailsJson = JSON.parse(fileDetails?.slice(9, -7) || '{}');
 
-    component = (
+    return (
       <>
         {enableMetadata && enableFaceRecognition && <People repoID={repoID} record={record} />}
         <Collapse title={gettext('General information')}>
-          {dom}
+          {component}
         </Collapse>
         {Object.keys(fileDetailsJson).length > 0 && (
           <Collapse title={gettext('Capture information')} isShow={isCaptureInfoShow}>
