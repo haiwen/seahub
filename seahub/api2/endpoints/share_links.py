@@ -280,6 +280,21 @@ class ShareLinks(APIView):
             else:
                 obj_name = ''
 
+            if repo_object and repo_object.is_virtual:
+                real_repo_id = repo.origin_repo_id
+            else:
+                real_repo_id = repo_id
+            
+            if s_type == 'd':
+                can_edit = False
+            else:
+                try:
+                    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+                    file_size = seafile_api.get_file_size(real_repo_id, repo_object.version, obj_id) or 0
+                    can_edit, _ = can_edit_file(obj_name, file_size, repo_object)
+                except SearpcError:
+                    can_edit = False
+
             link_info['repo_name'] = repo_name
             link_info['path'] = path
             link_info['obj_name'] = obj_name
@@ -296,6 +311,7 @@ class ShareLinks(APIView):
             link_info['password'] = fs.get_password()
             link_info['user_scope'] = fs.user_scope
 
+            link_info['can_edit']= can_edit
             tmp_key = f"{repo_id}_{path}"
             link_info['repo_folder_permission'] = repo_folder_permission_dict.get(tmp_key, "")
 
