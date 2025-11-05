@@ -266,13 +266,13 @@ def _handle_acs_in_org(request, org_id):
     
     attributes = session_info.get('ava', {})
     user_attributes = parse_user_attributes(attribute_mapping, attributes)
-    contact_email = user_attributes.get('contact_email', '')
+    contact_email = user_attributes.get('contact_email') or ''
     
     # check contact_email in session
-    if email_in_session != contact_email:
+    if email_in_session != contact_email.lower():
         return render_error(request, _(
             'Login failed: The email %s is not consistent with the email %s from ADFS/SAML service' % (
-                email_in_session, contact_email)))
+                email_in_session, contact_email.lower())))
     
     saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
     if not saml_user and SSO_LDAP_USE_SAME_UID:
