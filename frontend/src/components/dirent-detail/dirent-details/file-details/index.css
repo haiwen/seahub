@@ -18,3 +18,23 @@
   color: #666;
   font-size: 12px;
 }
+
+.sf-metadata-dirent-detail-description-container {
+  width: calc(100% + 8px);
+  height: fit-content;
+  min-height: 34px;
+  margin: 0 -4px;
+  border-radius: 3px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.sf-metadata-dirent-detail-description-container:hover,
+.sf-metadata-dirent-detail-description-container .sf-metadata-property-detail-editor.sf-metadata-long-text-property-detail-editor:not(:empty) {
+  background-color: #f5f5f5;
+}
+
+.sf-metadata-dirent-detail-description-container .sf-metadata-property-detail-editor.sf-metadata-long-text-property-detail-editor .long-text-formatter.sf-metadata-property-detail-formatter {
+  white-space: normal;
+  word-break: normal;
+}
