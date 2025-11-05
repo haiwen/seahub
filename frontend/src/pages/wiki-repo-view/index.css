@@ -22,6 +22,7 @@
   align-items: center;
   justify-content: end;
   padding: 16px;
+  border-bottom: 1px solid #eee;
 }
 
 .wiki-repo-view-toolbar .sf-metadata-tool {
@@ -97,8 +98,6 @@
   color: inherit;
   font-size: 16px;
 }
-
-
 
 .wiki-repo-view-content {
   flex: 1;
