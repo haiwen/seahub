@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -29,7 +30,15 @@ const FileNameFormatter = ({
           <img className="sf-metadata-file-icon" src={icon} onError={onLoadError} alt='' />
         </div>
       }
-      <span className="sf-metadata-file-name" onClick={onClickName}>{value}</span>
+      <span
+        tabIndex="0"
+        role="button"
+        className="sf-metadata-file-name"
+        onClick={onClickName}
+        onKeyDown={Utils.onKeyDown}
+      >
+        {value}
+      </span>
     </div>
   );
 };

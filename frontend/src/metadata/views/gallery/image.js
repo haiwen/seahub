@@ -38,6 +38,7 @@ const Image = ({
       onContextMenu={(e) => onContextMenu(e, img)}
       aria-label={img.name}
       role='button'
+      onKeyDown={Utils.onKeyDown}
     >
       <img
         className="metadata-gallery-grid-image"

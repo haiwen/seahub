@@ -3,6 +3,7 @@
 }
 
 .sf-table-searcher-btn {
+  color: var(--bs-icon-color);
   width: 24px;
   height: 24px;
   display: inline-flex;
@@ -15,11 +16,6 @@
 .sf-table-searcher-btn:hover {
   background-color: var(--bs-hover-bg);
   cursor: pointer;
-}
-
-.sf-table-searcher-btn .sf3-font-search {
-  display: inline-block;
-  color: var(--bs-icon-color);
 }
 
 .sf-table-searcher-input-wrapper {
@@ -45,9 +41,6 @@
   top: 50%;
   transform: translateY(-50%);
   color: var(--bs-icon-color);
-}
-
-.sf-table-searcher-input-wrapper .btn-close-searcher {
   font-size: 14px;
 }
 

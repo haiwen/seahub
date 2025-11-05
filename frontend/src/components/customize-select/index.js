@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import ModalPortal from '../modal-portal';
 import SelectOptionGroup from './select-option-group';
 import { getEventClassName } from '../../utils/dom';
+import { Utils } from '../../utils/utils';
 
 import './index.css';
 
@@ -92,13 +93,17 @@ class CustomizeSelect extends Component {
 
     return (
       <div
+        tabIndex="0"
+        role="button"
         ref={(node) => this.selector = node}
         className={classnames('seafile-customize-select custom-select',
           { 'focus': this.state.isShowSelectOptions },
           { 'disabled': readOnly },
           className
         )}
-        onClick={this.onSelectToggle}>
+        onClick={this.onSelectToggle}
+        onKeyDown={Utils.onKeyDown}
+      >
         <div className="selected-option">
           {value && value.label ?
             (enableDeleteSelected ?

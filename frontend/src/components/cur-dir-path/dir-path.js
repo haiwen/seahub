@@ -132,7 +132,11 @@ class DirPath extends React.Component {
         <span
           className="path-item path-item-read-only"
           role={children ? 'button' : null}
+          tabIndex={children ? 0 : -1}
+          aria-label={children ? gettext('Refresh the view') : ''}
           onClick={children ? this.handleRefresh : () => {}}
+          onKeyDown={children ? Utils.onKeyDown : () => {}}
+          title={children ? gettext('Refresh the view') : ''}
         >
           {viewId && <MetadataViewName id={viewId} />}
         </span>
@@ -142,7 +146,15 @@ class DirPath extends React.Component {
             <span className="path-item path-item-read-only">{children}</span>
           </>
         )}
-        <div className="path-item-refresh" id="sf-metadata-view-refresh" onClick={this.handleRefresh}>
+        <div
+          className="path-item-refresh"
+          id="sf-metadata-view-refresh"
+          role="button"
+          tabIndex={0}
+          aria-label={gettext('Refresh the view')}
+          onClick={this.handleRefresh}
+          onKeyDown={Utils.onKeyDown}
+        >
           <i className="sf3-font sf3-font-refresh"></i>
           <UncontrolledTooltip target="sf-metadata-view-refresh" placement="bottom">
             {gettext('Refresh the view')}

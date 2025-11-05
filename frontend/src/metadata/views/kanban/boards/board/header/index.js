@@ -5,6 +5,7 @@ import CellFormatter from '../../../../../components/cell-formatter';
 import { gettext } from '../../../../../../utils/constants';
 import OpMenu from './op-menu';
 import { CellType } from '../../../../../constants';
+import OpIcon from '../../../../../../components/op-icon';
 
 import './index.css';
 
@@ -56,14 +57,11 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, ta
       </div>
       <div className="board-header-operation-btn">
         {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handleUnFreezed} />}
-        <i
+        <OpIcon
           className={classNames('sf3-font sf3-font-down kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
-          title={isCollapsed ? gettext('Expand') : gettext('Collapse')}
-          onClick={handleCollapse}
-          aria-label={isCollapsed ? gettext('Expand') : gettext('Collapse')}
-          role="button"
-        >
-        </i>
+          title={isCollapsed ? gettext('Unfold') : gettext('Fold')}
+          op={handleCollapse}
+        />
       </div>
     </div>
   );

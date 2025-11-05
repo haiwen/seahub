@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { GalleryGroupBySetter, SortSetter } from '../../data-process-setter';
 import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, VIEW_TYPE } from '../../../constants';
+import OpIcon from '../../../../components/op-icon';
 
 const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDetail }) => {
   const [isShow, setShow] = useState(false);
@@ -52,15 +53,11 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDeta
               modifySorts={modifySorts}
             />
             {!isCustomPermission && (
-              <div
-                className="cur-view-path-btn ml-2"
-                onClick={onToggleDetail}
-                aria-label={gettext('Properties')}
+              <OpIcon
+                className="sf3-font sf3-font-info cur-view-path-btn ml-2"
                 title={gettext('Properties')}
-                role="button"
-              >
-                <span className="sf3-font sf3-font-info" aria-hidden="true"></span>
-              </div>
+                op={onToggleDetail}
+              />
             )}
           </>
         )}

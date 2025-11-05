@@ -5,6 +5,7 @@ import { isModG, isModShiftG } from '../../../utils/hotkey';
 import SFTableSearcherInput from './searcher-input';
 import { checkHasSearchResult } from '../utils/search';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
+import OpIcon from '../../../components/op-icon';
 
 const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells, closeSearcher, focusNextMatchedCell, focusPreviousMatchedCell, showResultNavigation = true }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -84,17 +85,11 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
   return (
     <div className="sf-table-searcher-container">
       {!isSearchActive && (
-        <span
-          className='sf-table-searcher-btn'
-          onClick={onToggleSearch}
-          onKeyDown={onToggleSearch}
-          role="button"
+        <OpIcon
+          className='sf-table-searcher-btn active-search m-0 sf3-font sf3-font-search'
           title={gettext('Search')}
-          aria-label={gettext('Search')}
-          tabIndex={0}
-        >
-          <i className='active-search m-0 sf3-font sf3-font-search' aria-hidden="true" ></i>
-        </span>
+          op={onToggleSearch}
+        />
       )}
       {isSearchActive && (
         <div className='sf-table-searcher-input-wrapper'>
@@ -107,9 +102,11 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
             searchCells={searchCells}
           />
           {renderSearchButtons()}
-          <span className="btn-close-searcher-wrapper input-icon-addon" onClick={handleCloseSearcher} role="button">
-            <i className='btn-close-searcher sf3-font sf3-font-x-01' aria-hidden="true"></i>
-          </span>
+          <OpIcon
+            title={gettext('Close')}
+            className="btn-close-searcher-wrapper input-icon-addon sf3-font sf3-font-x-01"
+            op={handleCloseSearcher}
+          />
         </div>
       )}
     </div>
