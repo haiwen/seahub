@@ -9,7 +9,7 @@ import Logout from '../common/logout';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import tagsAPI from '../../tag/api';
 import IconBtn from '../icon-btn';
-import { getColorScheme } from '../../utils/utils';
+import { getColorScheme, Utils } from '../../utils/utils';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -135,7 +135,17 @@ class CommonToolbar extends React.Component {
     return (
       <div className="common-toolbar">
         {showSearch && this.renderSearch()}
-        <IconBtn symbol={symbol} size={32} className="sf-icon-color-mode" title={title} onClick={this.onColorModeChange} />
+        <IconBtn
+          symbol={symbol}
+          size={32}
+          className="sf-icon-color-mode"
+          title={title}
+          onClick={this.onColorModeChange}
+          tabIndex={0}
+          role="button"
+          aria-label={title}
+          onKeyDown={Utils.onKeyDown}
+        />
         <Notification />
         <Account />
         {showLogoutIcon && (<Logout />)}
