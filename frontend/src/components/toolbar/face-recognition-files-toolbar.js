@@ -13,9 +13,10 @@ import { checkIsDir } from '../../metadata/utils/row';
 import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { Utils } from '../../utils/utils';
 
-const FaceRecognitionFilesToolbar = (repoID) => {
+const FaceRecognitionFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const [selectedRecords, setSelectedRecords] = useState([]);
+  const [isSomeone, setIsSomeone] = useState(false);
   const menuRef = useRef(null);
   const metadataRef = useRef([]);
 
@@ -33,10 +34,11 @@ const FaceRecognitionFilesToolbar = (repoID) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata) => {
+    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata, isSomeone) => {
       metadataRef.current = metadata;
       setSelectedRecordIds(ids);
       setSelectedRecords(ids.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || []);
+      setIsSomeone(isSomeone);
     });
 
     return () => {
@@ -88,13 +90,13 @@ const FaceRecognitionFilesToolbar = (repoID) => {
       selectedRecords,
       readOnly,
       metadataStatus,
-      true,
+      isSomeone,
       faceRecognitionPermission
     );
-  }, [selectedRecords, enableTags, readOnly, faceRecognitionPermission]);
+  }, [selectedRecords, enableTags, readOnly, faceRecognitionPermission, isSomeone]);
 
   const onMenuItemClick = useCallback((option) => {
-    switch (option.key) {
+    switch (option) {
       case TextTranslation.OPEN_FILE_IN_NEW_TAB.key:
       case TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key: {
         openInNewTab(repoID, selectedRecords[0]);
@@ -138,19 +140,19 @@ const FaceRecognitionFilesToolbar = (repoID) => {
         eventBus.dispatch(EVENT_BUS_TYPE.EXTRACT_TEXT, selectedRecords[0], menuRef.current.dropdownRef.current);
         break;
       }
-      case TextTranslation.REMOVE_FROM_GROUP:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.REMOVE_PHOTOS_FROM_CURRENT_SET, selectedRecords);
+      case TextTranslation.REMOVE_FROM_GROUP.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.REMOVE_PHOTOS_FROM_CURRENT_SET, selectedRecordIds);
         break;
-      case TextTranslation.ADD_TO_GROUPS:
+      case TextTranslation.ADD_TO_GROUPS.key:
         eventBus && eventBus.dispatch(EVENT_BUS_TYPE.ADD_PHOTO_TO_GROUPS);
         break;
-      case TextTranslation.SET_AS_COVER:
-        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.SET_PHOTO_AS_COVER, selectedRecords[0]);
+      case TextTranslation.SET_AS_COVER.key:
+        eventBus && eventBus.dispatch(EVENT_BUS_TYPE.SET_PHOTO_AS_COVER, selectedRecordIds[0]);
         break;
       default:
         return;
     }
-  }, [repoID, eventBus, readOnly, selectedRecords]);
+  }, [repoID, eventBus, readOnly, selectedRecords, selectedRecordIds]);
 
   const length = selectedRecordIds.length;
   return (

@@ -12,7 +12,7 @@ import { normalizeColumns } from '../../../utils/column';
 import { gettext } from '../../../../utils/constants';
 import { Utils } from '../../../../utils/utils';
 import { useMetadataView } from '../../../hooks/metadata-view';
-import { PER_LOAD_NUMBER, EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, UTC_FORMAT_DEFAULT } from '../../../constants';
+import { PER_LOAD_NUMBER, EVENT_BUS_TYPE, FACE_RECOGNITION_VIEW_ID, UTC_FORMAT_DEFAULT, PRIVATE_COLUMN_KEY } from '../../../constants';
 import { getRecordIdFromRecord, getParentDirFromRecord, getFileNameFromRecord } from '../../../utils/cell';
 import { sortTableRows } from '../../../utils/sort';
 import { useCollaborators } from '../../../hooks/collaborators';
@@ -167,6 +167,11 @@ const PeoplePhotos = ({ view, people, onClose, onDeletePeoplePhotos, onAddPeople
       if (rows.length < PER_LOAD_NUMBER) {
         metadata.hasMore = false;
       }
+      const newRows = [...metadata.rows];
+      newRows.forEach(row => {
+        row[PRIVATE_COLUMN_KEY.IS_DIR] = false;
+      });
+      metadata.rows = newRows;
       setMetadata(metadata);
       window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RESET_VIEW, metadata.view);
       setLoading(false);

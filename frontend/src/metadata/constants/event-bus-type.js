@@ -58,6 +58,7 @@ export const EVENT_BUS_TYPE = {
   // metadata
   RELOAD_DATA: 'reload_data',
   UPDATE_SEARCH_RESULT: 'update_search_result',
+  LOADING: 'loading',
 
   // view
   MODIFY_FILTERS: 'modify_filters',

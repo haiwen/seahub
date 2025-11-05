@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../../../icon';
 import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 
 class SelectAll extends Component {
 
@@ -41,7 +42,14 @@ class SelectAll extends Component {
     const { isSelectedAll } = this.state;
     const isSelectedParts = hasSelectedRecord && !isSelectedAll;
     return (
-      <div className="select-all-checkbox-container" onClick={this.onToggleSelectAll}>
+      <div
+        className="select-all-checkbox-container"
+        onClick={this.onToggleSelectAll}
+        role="button"
+        tabIndex={0}
+        onKeyDown={Utils.onKeyDown}
+        aria-label={gettext('Select all')}
+      >
         {isMobile ?
           <label className='mobile-select-all-container'>
             {isSelectedParts ?

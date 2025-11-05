@@ -12,11 +12,8 @@ import { SYSTEM_FOLDERS } from '../../../constants';
 const DirDetails = ({ readOnly = false, direntDetail, tagsData }) => {
   const { enableMetadata, enableMetadataManagement } = useMetadataStatus();
 
-  const lastModifiedTimeField = useMemo(() => {
-    return { type: CellType.MTIME, name: gettext('Last modified time') };
-  }, []);
-
-  const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
+  const lastModifiedTimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
+  const sizeField = useMemo(() => ({ type: CellType.SIZE, name: gettext('Size') }), []);
   const filesField = useMemo(() => ({ type: CellType.NUMBER, name: gettext('Files') }), []);
   let file_count = direntDetail.file_count || 0;
   let size = Utils.bytesToSize(direntDetail.size);
@@ -32,12 +29,12 @@ const DirDetails = ({ readOnly = false, direntDetail, tagsData }) => {
         <>
           <DetailItem field={filesField} value={file_count} className="sf-metadata-property-detail-formatter">
             {special_folder ?
-              <Formatter field={CellType.TEXT} value={'--'} /> :
+              <Formatter field={{ type: CellType.TEXT }} value={'--'} /> :
               <Formatter field={filesField} value={file_count} />}
           </DetailItem>
           <DetailItem field={sizeField} value={size} className="sf-metadata-property-detail-formatter">
             {special_folder ?
-              <Formatter field={CellType.TEXT} value={'--'} /> :
+              <Formatter field={{ type: CellType.TEXT }} value={'--'} /> :
               <Formatter field={sizeField} value={size} />}
           </DetailItem>
           <MetadataDetails readOnly={readOnly} tagsData={tagsData} />

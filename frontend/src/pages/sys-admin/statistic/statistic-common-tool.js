@@ -96,8 +96,8 @@ class StatisticCommonTool extends React.Component {
     this.setState({
       statisticType: 'itemButton',
     });
-    let startTime = dayjs(startValue).format('YYYY-MM-DD 00:00:00');
-    let endTime = dayjs(endValue).format('YYYY-MM-DD 00:00:00');
+    let startTime = dayjs(startValue).format('YYYY-MM-DD HH:mm:ss');
+    let endTime = dayjs(endValue).format('YYYY-MM-DD HH:mm:ss');
     let group_by = 'day';
     this.props.getActivesFiles(startTime, endTime, group_by);
   };
@@ -117,13 +117,13 @@ class StatisticCommonTool extends React.Component {
             <Picker
               disabledDate={this.disabledStartDate}
               value={startValue}
-              onChange={this.onChange.bind(this, 'startValue')}
+              onChange={value => this.onChange('startValue', value?.startOf('day'))}
             />
             <span className="system-statistic-connect">-</span>
             <Picker
               disabledDate={this.disabledEndDate}
               value={endValue}
-              onChange={this.onChange.bind(this, 'endValue')}
+              onChange={value => this.onChange('endValue', value?.endOf('day'))}
             />
             <Button color="primary" size="sm" className="system-statistic-button" onClick={this.onSubmit}>{gettext('Submit')}</Button>
           </div>

@@ -1584,7 +1584,7 @@ class PeoplePhotos(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # Reduce the size of the response
-        select_columns = f'`{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.file_ctime.name}`, `{METADATA_TABLE.columns.file_mtime.name}`'
+        select_columns = f'`{METADATA_TABLE.columns.id.name}`, `{METADATA_TABLE.columns.parent_dir.name}`, `{METADATA_TABLE.columns.file_name.name}`, `{METADATA_TABLE.columns.file_ctime.name}`, `{METADATA_TABLE.columns.file_mtime.name}`, `{METADATA_TABLE.columns.obj_id.name}`'
         capture_time_column_name = next((column.get('name') for column in columns if column.get('key') == PrivatePropertyKeys.CAPTURE_TIME), None)
         if capture_time_column_name:
             select_columns = f'{select_columns}, `{capture_time_column_name}`'

@@ -16,7 +16,7 @@ const LibDetail = React.memo(({ currentRepoInfo, onClose, isInSearch }) => {
   const [repo, setRepo] = useState({});
   const libIconUrl = useMemo(() => Utils.getLibIconUrl(currentRepoInfo), [currentRepoInfo]);
   const filesField = useMemo(() => ({ type: CellType.NUMBER, name: gettext('Files') }), []);
-  const sizeField = useMemo(() => ({ type: 'size', name: gettext('Size') }), []);
+  const sizeField = useMemo(() => ({ type: CellType.SIZE, name: gettext('Size') }), []);
   const creatorField = useMemo(() => ({ type: CellType.CREATOR, name: gettext('Creator') }), []);
   const mtimeField = useMemo(() => ({ type: CellType.MTIME, name: gettext('Last modified time') }), []);
 

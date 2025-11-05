@@ -109,11 +109,13 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
 
   return (
     <tr
+      tabIndex="0"
       className={classnames({
         'tr-highlight': highlight,
         'tr-active': isSelected
       })}
       onClick={handleClick}
+      onKeyDown={Utils.onKeyDown}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onContextMenu={handleContextMenu}
@@ -123,15 +125,24 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
           type="checkbox"
           className="vam cursor-pointer"
           style={{ position: 'relative', top: -1 }}
-          onClick={handleSelected}
-          onChange={() => {}}
           checked={isSelected}
           aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+          onChange={handleSelected}
+          onKeyDown={Utils.onKeyDown}
         />
       </td>
       <td className="pl-2 pr-2">
         <div className="dir-icon" onDragStart={(e) => e.preventDefault()}>
-          <img src={displayIcon} onError={onIconLoadError} className="thumbnail cursor-pointer" alt="" onClick={handleClickFileName} />
+          <img
+            src={displayIcon}
+            onError={onIconLoadError}
+            className="thumbnail cursor-pointer"
+            alt=""
+            onClick={handleClickFileName}
+            tabIndex="0"
+            row="button"
+            onKeyDown={Utils.onKeyDown}
+          />
         </div>
       </td>
       <td className="name">

@@ -196,11 +196,11 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
   const updateSelectedImages = useCallback((selectedImages) => {
     const ids = selectedImages.map(item => item.id);
     if (isSomeone != undefined) { // 'face recognition'
-      updateSelectedRecordIds(ids, isSomeone);
+      updateSelectedRecordIds(ids, isSomeone, metadata);
     } else {
       updateSelectedRecordIds(ids);
     }
-  }, [isSomeone, updateSelectedRecordIds]);
+  }, [isSomeone, updateSelectedRecordIds, metadata]);
 
   const handleClick = useCallback((event, image) => {
     if (event.metaKey || event.ctrlKey) {
@@ -430,8 +430,16 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     });
 
     const unsubscribeSelectNone = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_NONE, selectNone);
-    const unsubscribeRemovePhotosFromCurrentSet = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.REMOVE_PHOTOS_FROM_CURRENT_SET, handleRemoveSelectedImages);
-    const unsubscribeSetPhotoAsCover = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SET_PHOTO_AS_COVER, setSelectedImageAsCover);
+    const unsubscribeRemovePhotosFromCurrentSet = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.REMOVE_PHOTOS_FROM_CURRENT_SET, (ids) => {
+      const imagesToRemove = images.filter(img => ids.includes(img.id));
+      handleRemoveSelectedImages(imagesToRemove);
+    });
+    const unsubscribeSetPhotoAsCover = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.SET_PHOTO_AS_COVER, (id) => {
+      const image = images.find(img => img.id === id);
+      if (image) {
+        setSelectedImageAsCover(image);
+      }
+    });
     const unsubscribeAddPhotoToGroups = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.ADD_PHOTO_TO_GROUPS, handleAddPhotoToGroup);
 
     return () => {
@@ -444,7 +452,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
       switchGalleryModeSubscribe();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [images]);
 
   useEffect(() => {
     if (!imageSize || imageSize?.large < 0) return;
@@ -503,6 +511,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
         )}
       </div>
       <GalleryContextmenu
+        metadata={metadata}
         selectedImages={selectedImages}
         isSomeone={isSomeone}
         onDelete={handleDeleteSelectedImages}

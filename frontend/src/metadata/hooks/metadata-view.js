@@ -359,10 +359,11 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
-  const updateSelectedRecordIds = useCallback((ids, isSomeone) => {
+  const updateSelectedRecordIds = useCallback((ids, isSomeone, faceMetadata) => {
     toggleShowDirentToolbar(ids.length > 0);
+    const data = isSomeone !== undefined ? faceMetadata : metadata;
     setTimeout(() => {
-      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, metadata, isSomeone);
+      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, data, isSomeone);
     }, 0);
   }, [metadata, toggleShowDirentToolbar]);
 
@@ -1012,6 +1013,7 @@ export const MetadataViewProvider = ({
     const unsubscribeDownloadRecords = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, handleDownloadRecords);
     const unsubscribeSearchRows = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_ROWS, handleSearchRows);
     const unsubscribeGenerateFileTags = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_FILE_TAGS, generateFileTags);
+    const unsubscribeLoading = eventBus.subscribe(EVENT_BUS_TYPE.LOADING, (loading = false) => setLoading(loading));
 
     return () => {
       if (window.sfMetadataContext) {
@@ -1044,6 +1046,7 @@ export const MetadataViewProvider = ({
       unsubscribeDownloadRecords();
       unsubscribeSearchRows();
       unsubscribeGenerateFileTags();
+      unsubscribeLoading();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps

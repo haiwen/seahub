@@ -11,6 +11,7 @@ export {
   NEED_APPLY_AFTER_SERVER_OPERATION,
   VIEW_OPERATION,
   COLUMN_OPERATION,
+  NEED_LOADING_OPERATION,
 } from './constants';
 
 export {

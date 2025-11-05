@@ -102,10 +102,11 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
         <input
           type="checkbox"
           className="vam"
-          onChange={onSelectedAll}
           checked={isSelectedAll}
           title={isSelectedAll ? gettext('Unselect all') : gettext('Select all')}
           disabled={tagFiles.rows.length === 0}
+          onChange={onSelectedAll}
+          onKeyDown={Utils.onKeyDown}
         />
       )
     }, {

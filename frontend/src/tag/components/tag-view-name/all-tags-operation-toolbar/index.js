@@ -2,15 +2,12 @@ import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import EditTagDialog from '../../dialog/edit-tag-dialog';
-import { isEnter, isSpace } from '../../../../utils/hotkey';
 import { gettext } from '../../../../utils/constants';
 import { useTags } from '../../../hooks';
 import tagsAPI from '../../../api';
 import ImportTagsDialog from '../../../../components/dialog/import-tags-dialog';
 import toaster from '../../../../components/toast';
 import { Utils } from '../../../../utils/utils';
-
-import './index.css';
 
 const AllTagsOperationToolbar = ({ repoID }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -26,12 +23,6 @@ const AllTagsOperationToolbar = ({ repoID }) => {
   const toggleMenuOpen = useCallback(() => {
     setMenuOpen(!isMenuOpen);
   }, [isMenuOpen]);
-
-  const onDropdownKeyDown = useCallback((event) => {
-    if (isEnter(event) || isSpace(event)) {
-      toggleMenuOpen();
-    }
-  }, [toggleMenuOpen]);
 
   const openAddTag = useCallback(() => {
     setShowEditTagDialog(true);
@@ -75,15 +66,15 @@ const AllTagsOperationToolbar = ({ repoID }) => {
           <DropdownToggle
             tag="span"
             role="button"
+            tabIndex="0"
             className="path-item all-tags-operation-toggle"
             onClick={toggleMenuOpen}
-            onKeyDown={onDropdownKeyDown}
             data-toggle="dropdown"
             aria-label={gettext('More operations')}
             aria-expanded={isMenuOpen}
           >
-            <i className="sf3-font-new sf3-font path-item-new-toggle" aria-hidden="true"></i>
-            <i className="sf3-font-down sf3-font path-item-dropdown-toggle" aria-hidden="true"></i>
+            <i className="sf3-font-new sf3-font"></i>
+            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             <DropdownItem onClick={openAddTag}>
