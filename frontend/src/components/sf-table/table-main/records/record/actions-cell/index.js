@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Tooltip } from 'reactstrap';
-import { isMobile } from '../../../../../../utils/utils';
+import { isMobile, Utils } from '../../../../../../utils/utils';
 import { gettext } from '../../../../../../utils/constants';
 import { SEQUENCE_COLUMN_WIDTH } from '../../../../constants/grid';
 
@@ -80,18 +80,18 @@ class ActionsCell extends Component {
         }
         {!isSelected && <div className="sf-table-column-content row-index text-truncate">{this.getRecordNo()}</div>}
         <div className="sf-table-column-content actions-checkbox">
-          <div className="select-cell-checkbox-container" onClick={this.props.onSelectRecord}>
+          <div className="select-cell-checkbox-container">
             <input
               id={`select-cell-checkbox-${recordId}`}
               className="select-cell-checkbox"
               type='checkbox'
               name='row-selection'
               checked={isSelected || false}
-              readOnly
+              onChange={this.props.onSelectRecord}
+              onKeyDown={Utils.onKeyDown}
             />
             <label
               htmlFor={`select-cell-checkbox-${recordId}`}
-              name={gettext('Select')}
               title={gettext('Select')}
               aria-label={gettext('Select')}
             >

@@ -4,6 +4,8 @@ import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import TextTranslation from '../../utils/text-translation';
 import { getFileById, getFileName, getTagFileOperationList } from '../../tag/utils/file';
+import OpIcon from '../../components/op-icon';
+import OpElement from '../../components/op-element';
 
 const TagFilesToolbar = ({ currentRepoInfo }) => {
   const [selectedFileIds, setSelectedFileIds] = useState([]);
@@ -104,28 +106,40 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
 
   return (
     <div className="selected-dirents-toolbar">
-      <span className="cur-view-path-btn px-2" onClick={unSelect}>
-        <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+      <OpElement
+        className="cur-view-path-btn px-2"
+        title={gettext('Unselect')}
+        op={unSelect}
+      >
+        <span className="sf3-font-x-01 sf3-font mr-2"></span>
         <span>{selectedFilesLen}{' '}{gettext('selected')}</span>
-      </span>
+      </OpElement>
       {(selectedFilesLen === 1 && canModify) &&
         <>
-          <span className="cur-view-path-btn" onClick={moveTagFile}>
-            <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')} title={gettext('Move')}></span>
-          </span>
-          <span className="cur-view-path-btn" onClick={copyTagFile}>
-            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')} title={gettext('Copy')}></span>
-          </span>
+          <OpIcon
+            className="cur-view-path-btn sf3-font-move1 sf3-font"
+            title={gettext('Move')}
+            op={moveTagFile}
+          />
+          <OpIcon
+            className="cur-view-path-btn sf3-font-copy1 sf3-font"
+            title={gettext('Copy')}
+            op={copyTagFile}
+          />
         </>
       }
       {canModify &&
         <>
-          <span className="cur-view-path-btn" onClick={deleteTagFiles}>
-            <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
-          </span>
-          <span className="cur-view-path-btn" onClick={downloadTagFiles}>
-            <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
-          </span>
+          <OpIcon
+            className="cur-view-path-btn sf3-font-delete1 sf3-font"
+            title={gettext('Delete')}
+            op={deleteTagFiles}
+          />
+          <OpIcon
+            className="cur-view-path-btn sf3-font-download1 sf3-font"
+            title={gettext('Download')}
+            op={downloadTagFiles}
+          />
         </>
       }
       {selectedFilesLen === 1 &&

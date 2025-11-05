@@ -2,6 +2,7 @@ import React, { cloneElement, isValidElement, useCallback, useMemo } from 'react
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../../../../../utils/utils';
+import OpIcon from '../../../../../../components/op-icon';
 import { getCellValueByColumn } from '../../../../utils/cell';
 import { cellCompare, checkCellValueChanged } from '../../../../utils/cell-comparer';
 import { checkIsColumnEditable, checkIsNameColumn } from '../../../../utils/column';
@@ -124,6 +125,7 @@ const Cell = React.memo(({
   const getEvents = useCallback(() => {
     return {
       onClick: onCellClick,
+      onKeyDown: Utils.onKeyDown,
       onDoubleClick: onCellDoubleClick,
       onMouseDown: onCellMouseDown,
       onMouseEnter: onCellMouseEnter,
@@ -175,15 +177,12 @@ const Cell = React.memo(({
       return (
         <div className="sf-table-cell-tree-node">
           {hasChildNodes &&
-            <span
-              className="sf-table-record-tree-expand-icon"
+            <OpIcon
+              className={classnames('sf-table-record-tree-expand-icon sf3-font sf3-font-down', { 'rotate-270': isFoldedTreeNode })}
               style={{ left: treeNodeDepth * NODE_ICON_LEFT_INDENT }}
-              onClick={toggleExpandTreeNode}
-              role="button"
-              aria-label={isFoldedTreeNode ? gettext('Expand') : gettext('Collapse')}
-            >
-              <i aria-hidden="true" className={classnames('sf3-font sf3-font-down', { 'rotate-270': isFoldedTreeNode })}></i>
-            </span>
+              title={isFoldedTreeNode ? gettext('Unfold') : gettext('Fold')}
+              op={toggleExpandTreeNode}
+            />
           }
           <div className="sf-table-cell-tree-node-content" style={{ paddingLeft: NODE_CONTENT_LEFT_INDENT + treeNodeDepth * NODE_ICON_LEFT_INDENT }}>
             {columnFormatter}
