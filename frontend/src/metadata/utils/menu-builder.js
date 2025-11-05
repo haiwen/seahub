@@ -403,7 +403,7 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
   return menuOptions;
 };
 
-export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadataStatus, isSomeone = false, faceRecognitionPermission = {}) => {
+export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadataStatus, isSomeone, faceRecognitionPermission = {}) => {
   if (!selectedImages || selectedImages.length === 0) {
     return [];
   }
@@ -445,7 +445,7 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
     });
   }
 
-  if (isSomeone !== undefined && !readOnly) {
+  if (isSomeone !== null && !readOnly) {
     menuOptions.push('Divider');
 
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;

@@ -14,7 +14,6 @@ import { getColumnByKey } from '../../metadata/utils/column';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
-  const [isSomeone, setIsSomeone] = useState(false);
   const metadataRef = useRef([]);
   const menuRef = useRef(null);
 
@@ -32,10 +31,9 @@ const GalleryFilesToolbar = () => {
   }, []);
 
   useEffect(() => {
-    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata, isSomeone) => {
+    const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadata) => {
       metadataRef.current = metadata || [];
       setSelectedRecordIds(ids);
-      setIsSomeone(isSomeone);
     });
 
     const unsubscribeMetadata = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_METADATA, (updatedMetadata) => {
@@ -62,10 +60,10 @@ const GalleryFilesToolbar = () => {
       records,
       readOnly,
       metadataStatus,
-      isSomeone,
+      null,
       faceRecognitionPermission
     );
-  }, [records, readOnly, enableFaceRecognition, enableTags, isSomeone, faceRecognitionPermission]);
+  }, [records, readOnly, enableFaceRecognition, enableTags, faceRecognitionPermission]);
 
   const onMenuItemClick = useCallback((operation) => {
     switch (operation) {
