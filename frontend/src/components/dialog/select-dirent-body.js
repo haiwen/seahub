@@ -193,7 +193,7 @@ class SelectDirentBody extends React.Component {
             </Button>
             <div className='footer-right-btns'>
               <Button color="secondary m-1" onClick={this.onCancel}>{gettext('Cancel')}</Button>
-              <Button color="primary m-1" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+              <Button color="primary m-1" onClick={this.handleSubmit} disabled={!this.props.selectedPath}>{gettext('Submit')}</Button>
             </div>
           </ModalFooter>
         </Col>
