@@ -1012,6 +1012,7 @@ export const MetadataViewProvider = ({
     const unsubscribeDownloadRecords = eventBus.subscribe(EVENT_BUS_TYPE.DOWNLOAD_RECORDS, handleDownloadRecords);
     const unsubscribeSearchRows = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_ROWS, handleSearchRows);
     const unsubscribeGenerateFileTags = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_FILE_TAGS, generateFileTags);
+    const unsubscribeLoading = eventBus.subscribe(EVENT_BUS_TYPE.LOADING, (loading = false) => setLoading(loading));
 
     return () => {
       if (window.sfMetadataContext) {
@@ -1044,6 +1045,7 @@ export const MetadataViewProvider = ({
       unsubscribeDownloadRecords();
       unsubscribeSearchRows();
       unsubscribeGenerateFileTags();
+      unsubscribeLoading();
       delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
