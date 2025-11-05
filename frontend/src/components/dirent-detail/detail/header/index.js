@@ -34,7 +34,7 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired,
+  icon: PropTypes.string,
   iconSize: PropTypes.number,
   component: PropTypes.object,
   children: PropTypes.any,

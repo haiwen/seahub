@@ -13,7 +13,7 @@ const ViewDetails = ({ viewId, onClose }) => {
 
   return (
     <Detail className="sf-metadata-view-detail">
-      <Header title={view.name} iconSize={28} onClose={onClose} />
+      <Header title={view.name} onClose={onClose} />
       <Body>
         <div className="detail-content detail-content-empty">
           <EmptyTip text={gettext('There is no information to display.')} className="m-0 px-0 py-8" />

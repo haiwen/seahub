@@ -16,6 +16,7 @@ const CellType = {
   GEOLOCATION: 'geolocation',
   RATE: 'rate',
   LINK: 'link',
+  SIZE: 'size',
   TAGS: 'tags'
 };
 
