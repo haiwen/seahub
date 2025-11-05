@@ -6,6 +6,7 @@ import CustomizeSelect from '../../../../components/customize-select';
 import CommonAddTool from '../../../../components/common-add-tool';
 import Icon from '../../../../components/icon';
 import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 import { getColumnByKey } from '../../../utils/column';
 import { getEventClassName } from '../../../../utils/dom';
 import {
@@ -195,7 +196,14 @@ class SortPopover extends Component {
     return (
       <div key={'sort-item-' + index} className="sort-item">
         {!readOnly &&
-          <div className="delete-sort" onClick={(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}>
+          <div
+            className="delete-sort"
+            onClick={(viewType === VIEW_TYPE.GALLERY && index === 0) ? () => {} : (event) => this.deleteSort(event, index)}
+            tabIndex="0"
+            role="button"
+            onKeyDown={Utils.onKeyDown}
+            aria-label={gettext('Delete')}
+          >
             {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon className="sf-metadata-icon" symbol="fork-number"/>}
           </div>
         }

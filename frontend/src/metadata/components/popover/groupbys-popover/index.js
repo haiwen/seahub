@@ -8,6 +8,7 @@ import { gettext } from '../../../../utils/constants';
 import { generateDefaultGroupby, getGroupbyColumns } from '../../../utils/group';
 import { getEventClassName } from '../../../../utils/dom';
 import { EVENT_BUS_TYPE, MAX_GROUP_LEVEL } from '../../../constants';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -123,8 +124,26 @@ const GroupbysPopover = ({ groupbys: propsGroupBys, readOnly, hidePopover, onCha
         )}
         {groupbys.length > 0 && (
           <div className="groupbys-tools">
-            <span className="groupbys-tool-item" onClick={hideAllGroups}>{gettext('Collapse all')}</span>
-            <span className="groupbys-tool-item" onClick={showAllGroups}>{gettext('Expand all')}</span>
+            <span
+              className="groupbys-tool-item"
+              onClick={hideAllGroups}
+              role="button"
+              tabIndex={0}
+              onKeyDown={Utils.onKeyDown}
+              aria-label={gettext('Collapse all')}
+            >
+              {gettext('Collapse all')}
+            </span>
+            <span
+              className="groupbys-tool-item"
+              onClick={showAllGroups}
+              role="button"
+              tabIndex={0}
+              onKeyDown={Utils.onKeyDown}
+              aria-label={gettext('Expand all')}
+            >
+              {gettext('Expand all')}
+            </span>
           </div>
         )}
       </div>

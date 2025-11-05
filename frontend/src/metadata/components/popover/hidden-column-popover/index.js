@@ -7,6 +7,7 @@ import HiddenColumns from './hidden-columns';
 import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
 import { getEventClassName } from '../../../../utils/dom';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -108,8 +109,26 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
         <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} canReorder={canReorder} modifyColumnOrder={modifyColumnOrder} />
         {!readOnly && !searchValue && (
           <div className="sf-metadata-hide-columns-operations">
-            <div className="sf-metadata-hide-columns-operation px-2" onClick={hideAll} aria-label={gettext('Hide all')}>{gettext('Hide all')}</div>
-            <div className="sf-metadata-hide-columns-operation px-2" onClick={showAll} aria-label={gettext('Show all')}>{gettext('Show all')}</div>
+            <div
+              className="sf-metadata-hide-columns-operation px-2"
+              onClick={hideAll}
+              role="button"
+              tabIndex={0}
+              aria-label={gettext('Hide all')}
+              onKeyDown={Utils.onKeyDown}
+            >
+              {gettext('Hide all')}
+            </div>
+            <div
+              className="sf-metadata-hide-columns-operation px-2"
+              onClick={showAll}
+              role="button"
+              tabIndex={0}
+              aria-label={gettext('Show all')}
+              onKeyDown={Utils.onKeyDown}
+            >
+              {gettext('Show all')}
+            </div>
           </div>
         )}
       </div>

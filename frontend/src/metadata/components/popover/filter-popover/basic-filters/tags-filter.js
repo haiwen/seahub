@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Icon from '../../../../../components/icon';
 import { gettext } from '../../../../../utils/constants';
+import { Utils } from '../../../../../utils/utils';
 import { useMetadataStatus } from '../../../../../hooks';
 import { useTags } from '../../../../../tag/hooks';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
@@ -108,8 +109,15 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
         <div>
           {renderTagsTree()}
           {renderErrorMessage()}
-          <div className="delete-filter" onClick={onDeleteFilter}>
-            <Icon className="sf-metadata-icon" symbol="fork-number"/>
+          <div
+            tabIndex="0"
+            role="button"
+            className="delete-filter"
+            onClick={onDeleteFilter}
+            onKeyDown={Utils.onKeyDown}
+            aria-label={gettext('Delete')}
+          >
+            <Icon className="sf-metadata-icon" symbol="fork-number" />
           </div>
         </div>
       );

@@ -9,6 +9,7 @@ import CollaboratorFilter from './collaborator-filter';
 import FilterCalendar from '../filter-calendar';
 import RateItem from '../../../../cell-editors/rate-editor/rate-item';
 import { gettext } from '../../../../../../utils/constants';
+import { Utils } from '../../../../../../utils/utils';
 import { isCheckboxColumn, isDateColumn, getColumnOptions as getSelectColumnOptions } from '../../../../../utils/column';
 import {
   getFilterByColumn, getUpdatedFilterBySelectSingle, getUpdatedFilterBySelectMultiple, getUpdatedFilterByCreator, getUpdatedFilterByCollaborator,
@@ -578,8 +579,14 @@ class FilterItem extends React.Component {
     return (
       <div className="filter-item">
         {!readOnly && (
-          <div className="delete-filter" onClick={this.onDeleteFilter}>
-            <Icon className="sf-metadata-icon" symbol="fork-number"/>
+          <div
+            tabIndex="0"
+            role="button"
+            className="delete-filter"
+            onClick={this.onDeleteFilter}
+            onKeyDown={Utils.onKeyDown}
+          >
+            <Icon className="sf-metadata-icon" symbol="fork-number" />
           </div>
         )}
         <div className="condition">

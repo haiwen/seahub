@@ -6,7 +6,7 @@ import { SortPopover } from '../popover';
 import { gettext } from '../../../utils/constants';
 import { getValidSorts } from '../../utils/sort';
 import { EVENT_BUS_TYPE } from '../../constants';
-import { isEnter, isSpace } from '../../../utils/hotkey';
+import { Utils } from '../../../utils/utils';
 
 const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSorts, readOnly, columns, wrapperClass, modifySorts }) => {
   const [isShowSetter, setShowSetter] = useState(false);
@@ -39,11 +39,6 @@ const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSor
     setShowSetter(!isShowSetter);
   }, [isShowSetter]);
 
-  const onKeyDown = useCallback((event) => {
-    event.stopPropagation();
-    if (isEnter(event) || isSpace(event)) onSetterToggle();
-  }, [onSetterToggle]);
-
   const onChange = useCallback((update) => {
     const { sorts } = update || {};
     modifySorts(sorts);
@@ -58,11 +53,11 @@ const SortSetter = ({ target = 'sf-metadata-sort-popover', type, sorts: propsSor
         size={24}
         className={classnames(wrapperClass, { 'active': sorts.length > 0 })}
         onClick={onSetterToggle}
-        role="button"
-        onKeyDown={onKeyDown}
-        title={sortMessage}
-        aria-label={sortMessage}
         tabIndex={0}
+        role="button"
+        onKeyDown={Utils.onKeyDown}
+        title={sortMessage}
+        aria-label={gettext('Sort')}
         id={target}
       />
       {isShowSetter && (

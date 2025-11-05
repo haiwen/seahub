@@ -2,7 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'reactstrap';
 import Icon from '../../../../components/icon';
+import { gettext } from '../../../../utils/constants';
 import { EVENT_BUS_TYPE, GALLERY_ZOOM_GEAR_MIN, GALLERY_ZOOM_GEAR_MAX, STORAGE_GALLERY_ZOOM_GEAR_KEY } from '../../../constants';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -41,11 +43,20 @@ const GallerySliderSetter = ({ viewID }) => {
 
   return (
     <div className='metadata-slider-container'>
-      <Button className="metadata-slider-icon-button" onClick={handleImageShrink} disabled={sliderValue <= GALLERY_ZOOM_GEAR_MIN}>
+      <Button
+        className="metadata-slider-icon-button"
+        onClick={handleImageShrink}
+        disabled={sliderValue <= GALLERY_ZOOM_GEAR_MIN}
+        aria-label={gettext('Zoom out')}
+        title={gettext('Zoom out')}
+        onKeyDown={Utils.onKeyDown}
+      >
         <Icon symbol='minus_sign' className='metadata-slider-icon' />
       </Button>
       <Input
         type="range"
+        tabIndex={-1}
+        aria-hidden="true"
         min={GALLERY_ZOOM_GEAR_MIN}
         max={GALLERY_ZOOM_GEAR_MAX}
         step="1"
@@ -53,7 +64,14 @@ const GallerySliderSetter = ({ viewID }) => {
         onChange={handleGalleryColumnsChange}
         className="metadata-slider"
       />
-      <Button className="metadata-slider-icon-button" onClick={handleImageExpand} disabled={sliderValue >= GALLERY_ZOOM_GEAR_MAX}>
+      <Button
+        className="metadata-slider-icon-button"
+        onClick={handleImageExpand}
+        disabled={sliderValue >= GALLERY_ZOOM_GEAR_MAX}
+        aria-label={gettext('Zoom in')}
+        title={gettext('Zoom in')}
+        onKeyDown={Utils.onKeyDown}
+      >
         <Icon symbol='plus_sign' className='metadata-slider-icon' />
       </Button>
     </div>

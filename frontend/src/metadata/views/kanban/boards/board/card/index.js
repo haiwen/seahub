@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import Formatter from '../formatter';
 import { getCellValueByColumn, isValidCellValue } from '../../../../../utils/cell';
 import { CellType } from '../../../../../constants';
+import { Utils } from '../../../../../../utils/utils';
 
 import './index.css';
 
@@ -43,6 +44,10 @@ const Card = ({
       className={classnames('sf-metadata-kanban-card', { 'selected': isSelected })}
       onClick={handleClickCard}
       onContextMenu={onContextMenu}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isSelected ? 'true' : 'false'}
+      onKeyDown={Utils.onKeyDown}
     >
       {titleColumn && (
         <div className="sf-metadata-kanban-card-header">

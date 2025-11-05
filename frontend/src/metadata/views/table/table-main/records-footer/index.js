@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Loading from '../../../../../components/loading';
 import RecordMetrics from '../../utils/record-metrics';
 import { gettext } from '../../../../../utils/constants';
+import { Utils } from '../../../../../utils/utils';
 import { SEQUENCE_COLUMN_WIDTH, CANVAS_RIGHT_INTERVAL, metadataZIndexes } from '../../../../constants';
 import { addClassName, removeClassName } from '../../../../../utils/dom';
 import { getRecordsFromSelectedRange } from '../../utils/selected-cell-utils';
@@ -131,7 +132,16 @@ class RecordsFooter extends React.Component {
         <div className="rows-record d-flex text-nowrap" style={{ width: recordWidth }}>
           <span>{this.getRecord()}</span>
           {!isLoadingMore && hasMore &&
-            <span className="load-all ml-4" onClick={this.onClick}>{gettext('Load all')}</span>
+            <span
+              className="load-all ml-4"
+              onClick={this.onClick}
+              role="button"
+              tabIndex={0}
+              aria-label={gettext('Load all')}
+              onKeyDown={Utils.onKeyDown}
+            >
+              {gettext('Load all')}
+            </span>
           }
           {isLoadingMore &&
             <span className="loading-message ml-4">

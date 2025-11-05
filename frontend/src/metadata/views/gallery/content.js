@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import EmptyTip from '../../../components/empty-tip';
 import { gettext } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import { GALLERY_DATE_MODE, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP } from '../../constants';
 import Image from './image';
 import DayImages from './day-images';
@@ -149,9 +150,12 @@ const Content = ({
       >
         {childrenStartIndex === 0 && (
           <div
+            tabIndex={isDateTagClickable ? 0 : -1}
+            role="button"
             className={classNames('metadata-gallery-date-tag', { 'hover': isDateTagClickable })}
             style={{ height: paddingTop }}
             onClick={(event) => onDateTagClick(event, name)}
+            onKeyDown={Utils.onKeyDown}
           >
             {name || gettext('Empty')}
             {isDateTagClickable && <i className="metadata-gallery-date-tag-arrow sf3-font-down sf3-font rotate-270" />}

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { Utils } from '../../utils/utils';
 
 import './index.css';
 
@@ -13,6 +14,7 @@ function Switch({ onChange, checked, placeholder, disabled, className, size, tex
           type="checkbox"
           checked={checked}
           onChange={onChange}
+          onKeyDown={Utils.onKeyDown}
           name="custom-switch-checkbox"
           disabled={disabled}
         />

@@ -85,6 +85,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
       >
         <DropdownToggle
           tag="span"
+          tabIndex="0"
           className="sf-metadata-result-table-cell column insert-column"
           aria-label={gettext('Add column')}
           role="button"

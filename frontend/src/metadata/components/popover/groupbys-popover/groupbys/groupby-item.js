@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import { useDrag, useDrop } from 'react-dnd';
 import CustomizeSelect from '../../../../../components/customize-select';
 import Icon from '../../../../../components/icon';
+import OpElement from '../../../../../components/op-element';
 import { gettext } from '../../../../../utils/constants';
 import { getColumnByKey } from '../../../../utils/column';
 import { COLUMNS_ICON_CONFIG, SORT_TYPE, SORT_COLUMN_OPTIONS } from '../../../../constants';
@@ -167,9 +168,13 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
       )}
     >
       {!readOnly && (
-        <div className="delete-groupby" onClick={deleteGroupby} aria-label={gettext('Delete')}>
+        <OpElement
+          className="delete-groupby"
+          title={gettext('Delete')}
+          op={deleteGroupby}
+        >
           <Icon className="sf-metadata-icon" symbol="fork-number"/>
-        </div>
+        </OpElement>
       )}
       <div className="condition">
         <div className="groupby-column">
