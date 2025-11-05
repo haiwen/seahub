@@ -359,9 +359,9 @@ export const MetadataViewProvider = ({
     storeRef.current.updateFileTags(data);
   }, [storeRef, modifyLocalFileTags]);
 
-  const updateSelectedRecordIds = useCallback((ids, isSomeone, people) => {
+  const updateSelectedRecordIds = useCallback((ids, isSomeone, faceMetadata) => {
     toggleShowDirentToolbar(ids.length > 0);
-    const data = isSomeone !== undefined ? people : metadata;
+    const data = isSomeone !== undefined ? faceMetadata : metadata;
     setTimeout(() => {
       window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SELECT_RECORDS, ids, data, isSomeone);
     }, 0);
