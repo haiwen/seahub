@@ -52,7 +52,7 @@ class DirentGridItem extends React.Component {
       this.thumbnailCenter = videoThumbnailCenter;
       return true;
     }
-    if (Utils.imageCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
+    if (Utils.imageCheck(dirent.name) || Utils.svgCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
       this.thumbnailCenter = imageThumbnailCenter;
       return true;
     }
@@ -347,7 +347,18 @@ class DirentGridItem extends React.Component {
                 alt={dirent.name}
                 draggable={false}
               /> :
-              <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' draggable={false} />
+              (dirent.raw_path && Utils.svgCheck(dirent.name)) ? (
+                <img
+                  src={dirent.raw_path}
+                  tabIndex="0"
+                  onClick={this.onItemClick}
+                  onKeyDown={Utils.onKeyDown}
+                  alt={dirent.name}
+                  draggable={false}
+                />
+              ) : (
+                <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' draggable={false} />
+              )
             }
             {is_locked &&
               <img

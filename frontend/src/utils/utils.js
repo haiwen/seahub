@@ -146,6 +146,14 @@ export const Utils = {
     return image_exts.includes(file_ext);
   },
 
+  svgCheck: function (filename) {
+    if (filename.lastIndexOf('.') == -1) {
+      return false;
+    }
+    const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+    return file_ext === 'svg';
+  },
+
   pdfCheck: function (filename) {
     if (filename.lastIndexOf('.') == -1) {
       return false;

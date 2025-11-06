@@ -20,7 +20,7 @@ from seahub.api2.views import get_dir_file_recursively
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
-        normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
+        normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP, gen_file_get_url
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_tags import get_files_tags_in_dir
 from seahub.utils.file_types import IMAGE, VIDEO, PDF
@@ -152,6 +152,16 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                 file_info['file_tags'] = []
                 for file_tag in file_tags:
                     file_info['file_tags'].append(file_tag)
+
+            # get file raw url for svg file
+            if file_name.endswith('.svg'):
+                raw_path = ''
+                use_onetime = True
+                file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+                token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'view', username, use_onetime=use_onetime)
+                if token:
+                    raw_path = gen_file_get_url(token, file_name)
+                    file_info['raw_path'] = raw_path
 
             # get thumbnail info
             if with_thumbnail and not repo_obj.encrypted:
