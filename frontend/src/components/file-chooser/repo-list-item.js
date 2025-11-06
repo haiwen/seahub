@@ -222,7 +222,7 @@ class RepoListItem extends React.Component {
 
   onRepoItemClick = (e) => {
     const { repo, selectedPath } = this.props;
-    if (!this.isCurrentRepo() || (selectedPath !== '' && selectedPath !== '/')) {
+    if (!this.isCurrentRepo() || (selectedPath !== '/')) {
       this.props.onRepoItemClick(repo);
     } else {
       this.onToggleClick(e);
