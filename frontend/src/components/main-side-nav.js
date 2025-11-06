@@ -7,7 +7,7 @@ import {
   canGenerateShareLink, canGenerateUploadLink, canInvitePeople,
   enableTC, sideNavFooterCustomHtml, enableShowAbout, showWechatSupportGroup,
   canViewOrg, enableOCM, enableOCMViaWebdav, canCreateWiki,
-  isPro, isDBSqlite3, customNavItems, mediaUrl, helpLink
+  isPro, isDBSqlite3, customNavItems, helpLink
 } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
@@ -21,6 +21,8 @@ import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
 import { EVENT_BUS_TYPE } from './common/event-bus-type';
 import EventBus from './common/event-bus';
+import OpIcon from '../components/op-icon';
+import Icon from '../components/icon';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -117,8 +119,15 @@ class MainSideNav extends React.Component {
       <>
         {canAddGroup && (
           <>
-            <li className='nav-item' onClick={this.toggleCreateGroupDialog}>
-              <span className="nav-link" role="button">
+            <li
+              className='nav-item'
+              onClick={this.toggleCreateGroupDialog}
+              tabIndex={0}
+              role="button"
+              aria-label={gettext('New Group')}
+              onKeyDown={Utils.onKeyDown}
+            >
+              <span className="nav-link">
                 <i className="sf2-icon-plus nav-icon" aria-hidden="true"></i>
                 {gettext('New Group')}
               </span>
@@ -219,8 +228,7 @@ class MainSideNav extends React.Component {
     });
   };
 
-  toggleAboutDialog = (e) => {
-    e.preventDefault();
+  toggleAboutDialog = () => {
     this.setState({ isAboutDialogShow: !this.state.isAboutDialogShow });
   };
 
@@ -237,15 +245,27 @@ class MainSideNav extends React.Component {
                 <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                   <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Files')}</span>
-                  <span className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`} aria-hidden="true" onClick={this.toggleFilesNav}></span>
-                </Link>
-                <ul id="files-sub-nav" className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={{ height: filesNavUnfolded ? this.filesNavHeight : 0, opacity: filesNavUnfolded ? 1 : 0 }}>
-                  <FilesSubNav
-                    groupItems={groupItems}
-                    tabItemClick={this.tabItemClick}
-                    currentTab={this.props.currentTab}
+                  <OpIcon
+                    className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`}
+                    title={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
+                    op={this.toggleFilesNav}
                   />
-                  {this.renderAddGroup()}
+                </Link>
+                <ul
+                  id="files-sub-nav"
+                  className={`nav sub-nav nav-pills flex-column ${filesNavUnfolded ? 'side-panel-slide' : 'side-panel-slide-up'}`}
+                  style={ filesNavUnfolded ? { height: this.filesNavHeight, 'opacity': 1 } : { 'height': 0, 'opacity': 0 }}
+                >
+                  {filesNavUnfolded && (
+                    <>
+                      <FilesSubNav
+                        groupItems={groupItems}
+                        tabItemClick={this.tabItemClick}
+                        currentTab={this.props.currentTab}
+                      />
+                      {this.renderAddGroup()}
+                    </>
+                  )}
                 </ul>
               </li>
 
@@ -280,11 +300,18 @@ class MainSideNav extends React.Component {
               </li>
               }
               <li id="share-admin-nav" className='nav-item flex-column'>
-                <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
+                <div
+                  className="nav-link ellipsis"
+                  title={gettext('Share Admin')}
+                  onClick={this.shExtend}
+                  tabIndex={0}
+                  role="button"
+                  onKeyDown={Utils.onKeyDown}
+                >
                   <span className="sf3-font-wrench sf3-font" aria-hidden="true"></span>
                   <span className="nav-text">{gettext('Share Admin')}</span>
-                  <span className={`toggle-icon sf3-font sf3-font-down ${this.state.sharedExtended ? '' : 'rotate-90'}`} aria-hidden="true"></span>
-                </a>
+                  <span className={`toggle-icon sf3-font sf3-font-down ${this.state.sharedExtended ? '' : 'rotate-90'}`}></span>
+                </div>
                 {this.renderSharedAdmin()}
               </li>
               {customNavItems && this.renderCustomNavItems()}
@@ -317,27 +344,45 @@ class MainSideNav extends React.Component {
                 </li>
                 {enableShowAbout &&
                 <li className='nav-item'>
-                  <a href="#" className="nav-link" onClick={this.toggleAboutDialog}>
+                  <div
+                    className="nav-link"
+                    onClick={this.toggleAboutDialog}
+                    tabIndex={0}
+                    role="button"
+                    onKeyDown={Utils.onKeyDown}
+                  >
                     <span className="sf3-font-about sf3-font" aria-hidden="true"></span>
                     <span className="nav-text">{gettext('About')}</span>
-                  </a>
+                  </div>
                 </li>
                 }
                 {showWechatSupportGroup &&
                 <li className='nav-item'>
-                  <a href="#" className="nav-link" onClick={this.toggleWechatDialog}>
+                  <div
+                    className="nav-link"
+                    onClick={this.toggleWechatDialog}
+                    tabIndex={0}
+                    role="button"
+                    onKeyDown={Utils.onKeyDown}
+                  >
                     <span className="sf3-font-hi sf3-font" aria-hidden="true"></span>
                     <span className="nav-text">
                       {`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
                     </span>
-                  </a>
+                  </div>
                 </li>
                 }
               </ul>
             )
             }
-            <div className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center" onClick={this.props.toggleFoldSideNav}>
-              <img className="mr-2" src={`${mediaUrl}img/close-sidebar.svg`} width="20" alt="" />
+            <div
+              className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center"
+              onClick={this.props.toggleFoldSideNav}
+              tabIndex={0}
+              role="button"
+              onKeyDown={Utils.onKeyDown}
+            >
+              <Icon className="mr-2" symbol="close-sidebar" />
               <span>{gettext('Fold the sidebar')}</span>
             </div>
           </div>

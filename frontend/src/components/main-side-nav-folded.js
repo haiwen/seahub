@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ModalPortal from './modal-portal';
 import { Link } from '@gatsbyjs/reach-router';
 import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFooterCustomHtml, showWechatSupportGroup,
-  isPro, isDBSqlite3, customNavItems, mediaUrl, curNoteMsg, enableShowAbout } from '../utils/constants';
+  isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
 import FilesSubNav from '../components/files-sub-nav';
@@ -15,7 +15,7 @@ import toaster from './toast';
 import { FOLDED_SIDE_NAV_FILES, FOLDED_SIDE_NAV } from '../constants/zIndexes';
 import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
-
+import Icon from '../components/icon';
 
 import '../css/main-side-nav-folded.css';
 
@@ -104,8 +104,7 @@ class MainSideNavFolded extends React.Component {
     return this.props.currentTab === tab ? 'active' : '';
   };
 
-  toggleAboutDialog = (e) => {
-    e.preventDefault();
+  toggleAboutDialog = () => {
     this.setState({ isAboutDialogShow: !this.state.isAboutDialogShow });
   };
 
@@ -251,27 +250,46 @@ class MainSideNavFolded extends React.Component {
                   </li>
                   {enableShowAbout &&
                   <li className='nav-item'>
-                    <a href="#" className="nav-link" onClick={this.toggleAboutDialog} aria-label={gettext('About')}>
+                    <div
+                      className="nav-link"
+                      role="button"
+                      tabIndex={0}
+                      aria-label={gettext('About')}
+                      onClick={this.toggleAboutDialog}
+                      onKeyDown={Utils.onKeyDown}
+                    >
                       <span className="sf3-font-about sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-about"></span>
                       <Tip target="main-side-nav-folded-about" text={gettext('About')} />
-                    </a>
+                    </div>
                   </li>
                   }
                   {showWechatSupportGroup &&
                   <li className='nav-item'>
-                    <a href="#" className="nav-link" onClick={this.toggleWechatDialog} aria-label={`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}>
+                    <div
+                      className="nav-link"
+                      role="button"
+                      tabIndex={0}
+                      aria-label={`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
+                      onClick={this.toggleWechatDialog}
+                      onKeyDown={Utils.onKeyDown}
+                    >
                       <span className="sf3-font-hi sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wechat"></span>
                       <Tip target="main-side-nav-folded-wechat" text={`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`} />
-                    </a>
+                    </div>
                   </li>
                   }
                 </ul>
               }
               <div
                 className="side-nav-bottom-toolbar d-none d-md-flex mt-auto px-2 rounded flex-shrink-0 align-items-center"
+                tabIndex={0}
+                role="button"
                 onClick={this.props.toggleFoldSideNav}
+                onKeyDown={Utils.onKeyDown}
+                aria-label={gettext('Unfold the sidebar')}
+                title={gettext('Unfold the sidebar')}
               >
-                <img src={`${mediaUrl}img/open-sidebar.svg`} width="20" alt="" title={gettext('Unfold the sidebar')} />
+                <Icon symbol="open-sidebar" className="mr-0" />
               </div>
             </div>
           </div>
