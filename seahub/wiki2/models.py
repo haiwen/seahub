@@ -2,6 +2,7 @@
 import json
 import random
 import string
+import copy
 from django.db import models
 from seaserv import seafile_api
 
@@ -12,6 +13,17 @@ def generate_random_string_lower_digits(length):
     letters_and_digits = string.ascii_lowercase + string.digits
     random_string = ''.join(random.choice(letters_and_digits) for i in range(length))
     return random_string
+
+def generate_views_unique_id(length, view_ids):
+    if not view_ids:
+        return generate_random_string_lower_digits(length)
+
+    while True:
+        new_id = generate_random_string_lower_digits(length)
+        if new_id not in view_ids:
+            break
+
+    return new_id
 
 class WikiDoesNotExist(Exception):
     pass
@@ -98,7 +110,7 @@ class Wiki2Publish(models.Model):
 
 class Wiki2Settings(models.Model):
     wiki_id = models.CharField(max_length=36, db_index=True)
-    enable_link_repos = models.BooleanField(default=False)
+    enable_link_repos = models.BooleanField(default=True)
     linked_repos = models.TextField(default='[]')
 
     class Meta:
@@ -237,6 +249,21 @@ class WikiFileViewsManager(models.Manager):
         wiki_views.details = json.dumps(view_details)
         wiki_views.save()
         return json.loads(wiki_views.details)
+    
+    def duplicate_view(self, wiki_id, view_id):
+        wiki_views = self.filter(wiki_id=wiki_id).first()
+        view_details = json.loads(wiki_views.details)
+        duplicate_view = next((copy.deepcopy(view) for view in view_details['views'] if view.get('_id') == view_id), None)
+        if not duplicate_view:
+            return None
+        view_name = get_no_duplicate_obj_name(duplicate_view['name'], wiki_views.views_names)
+        new_view_id = generate_views_unique_id(4, wiki_views.views_ids)
+        duplicate_view['_id'] = new_view_id
+        duplicate_view['name'] = view_name
+        view_details['views'].append(duplicate_view)
+        wiki_views.details = json.dumps(view_details)
+        wiki_views.save()
+        return duplicate_view
 
 class WikiFileViews(models.Model):
     wiki_id = models.CharField(max_length=36, db_index=True)

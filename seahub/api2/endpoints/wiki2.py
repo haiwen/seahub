@@ -2219,6 +2219,55 @@ class Wiki2FileView(APIView):
         
         return Response({'view': view})
 
+class Wiki2FileViewDuplicateView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+    
+    def post(self, request, wiki_id):
+        view_id = request.data.get('view_id', None)
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        try:
+            wiki_file_views = WikiFileViews.objects.filter(wiki_id=wiki_id).first()
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        if view_id not in wiki_file_views.views_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        try:
+            new_view = WikiFileViews.objects.duplicate_view(wiki_id, view_id)
+            if not new_view:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'duplicate view failed')
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'view': new_view})
 
 class Wiki2FileViewRecords(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
