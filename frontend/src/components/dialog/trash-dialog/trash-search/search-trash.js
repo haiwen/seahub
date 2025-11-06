@@ -6,7 +6,7 @@ import { gettext } from '../../../../utils/constants';
 import { debounce, Utils } from '../../../../utils/utils';
 import toaster from '../../../toast';
 import Loading from '../../../loading';
-import IconBtn from '../../../icon-button';
+import IconBtn from '../../../icon-btn';
 import { SEARCH_FILTERS_SHOW_KEY } from '../../../../constants';
 import { repoTrashAPI } from '../../../../utils/repo-trash-api';
 import TrashFilters from './search-filters';
@@ -135,12 +135,13 @@ class SearchTrash extends Component {
               />
             )}
             <IconBtn
-              icon="filter-circled"
-              text={isFiltersShow ? gettext('Hide filters') : gettext('Show filters')}
+              symbol="filter-circled"
+              title={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
               aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
               size={20}
               className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
               onClick={this.handleFiltersShow}
+              tabIndex={0}
               id="search-filter-controller"
             />
           </div>
