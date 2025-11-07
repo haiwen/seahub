@@ -219,9 +219,10 @@ export const TagViewProvider = ({
     });
     setSortBy(sort.sort_by);
     setSortOrder(sort.order);
-    localStorage && localStorage.setItem(TAG_FILES_SORT, JSON.stringify(sort));
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, sort);
-  }, [tagFiles, localStorage, eventBus]);
+    if (localStorage) {
+      localStorage.setItem(TAG_FILES_SORT, JSON.stringify(sort));
+    }
+  }, [tagFiles, localStorage]);
 
   const switchViewMode = useCallback((mode) => {
     setViewMode(mode);

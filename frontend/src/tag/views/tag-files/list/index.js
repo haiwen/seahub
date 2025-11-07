@@ -13,7 +13,8 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
   const [renameTargetId, setRenameTargetId] = useState(null);
 
   const { tagsData } = useTags();
-  const { tagFiles, selectedFileIds, sortBy, sortOrder, sortFiles, updateSelectedFileIds } = useTagView();
+  const { tagFiles, selectedFileIds, sortBy, sortOrder, updateSelectedFileIds } = useTagView();
+  const eventBus = useMemo(() => window.sfTagsDataContext?.eventBus, []);
 
   const isSelectedAll = useMemo(() => {
     return selectedFileIds ? selectedFileIds.length === tagFiles.rows.length : false;
@@ -32,22 +33,22 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
     e.preventDefault();
     const sortBy = 'name';
     const order = sortOrder == 'asc' ? 'desc' : 'asc';
-    sortFiles({ sort_by: sortBy, order });
-  }, [sortOrder, sortFiles]);
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, { sort_by: sortBy, order });
+  }, [sortOrder, eventBus]);
 
   const onSortSize = useCallback((e) => {
     e.preventDefault();
     const sortBy = 'size';
     const order = sortOrder == 'asc' ? 'desc' : 'asc';
-    sortFiles({ sort_by: sortBy, order });
-  }, [sortOrder, sortFiles]);
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, { sort_by: sortBy, order });
+  }, [sortOrder, eventBus]);
 
   const onSortTime = useCallback((e) => {
     e.preventDefault();
     const sortBy = 'time';
     const order = sortOrder == 'asc' ? 'desc' : 'asc';
-    sortFiles({ sort_by: sortBy, order });
-  }, [sortOrder, sortFiles]);
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.MODIFY_TAG_FILES_SORT, { sort_by: sortBy, order });
+  }, [sortOrder, eventBus]);
 
   const onMouseDown = useCallback((event) => {
     if (event.button === 2) {
