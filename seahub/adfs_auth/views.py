@@ -289,7 +289,7 @@ def _handle_acs_in_org(request, org_id):
             old_user = User.objects.get(email=uid)
         except User.DoesNotExist:
             old_user = None
-        profile_user = Profile.objects.get_profile_by_contact_email(contact_email)
+        profile_user = Profile.objects.get_profile_by_contact_email(contact_email) if contact_email else None
         if old_user:
             username = old_user.username
             is_new_user = True
@@ -486,7 +486,7 @@ def _handle_acs(request):
             old_user = User.objects.get(email=uid)
         except User.DoesNotExist:
             old_user = None
-        profile_user = Profile.objects.get_profile_by_contact_email(contact_email)
+        profile_user = Profile.objects.get_profile_by_contact_email(contact_email) if contact_email else None
         if old_user:
             username = old_user.username
             is_new_user = True
