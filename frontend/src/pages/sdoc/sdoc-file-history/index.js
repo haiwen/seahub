@@ -60,6 +60,7 @@ class SdocFileHistory extends React.Component {
       accessToken: seadocAccessToken
     };
     this.sdocServerApi = new SDocServerApi(config);
+    this.sdocScrollContainer = null;
   }
 
   componentDidMount() {
@@ -232,7 +233,10 @@ class SdocFileHistory extends React.Component {
       const change = changes[currentDiffIndex];
       const changeElement = document.querySelectorAll(`[data-id="${change}"]`)[0];
       if (changeElement) {
-        this.historyContentRef.scrollTop = changeElement.offsetTop - 10;
+        if (!this.sdocScrollContainer) {
+          this.sdocScrollContainer = document.getElementById('sdoc-scroll-container');
+        }
+        this.sdocScrollContainer.scrollTop = changeElement.offsetTop - 10;
       }
     });
   };
