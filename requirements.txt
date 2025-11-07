@@ -29,3 +29,4 @@ pypinyin==0.55.*
 dnspython==2.7.*
 pillow-heif==1.0.*
 redis==6.2.*
+cairosvg==2.8.*

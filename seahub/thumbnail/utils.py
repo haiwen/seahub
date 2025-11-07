@@ -19,7 +19,7 @@ from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
 from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
-from seahub.utils.file_types import VIDEO, PDF
+from seahub.utils.file_types import VIDEO, PDF, SVG
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
@@ -127,6 +127,7 @@ def generate_thumbnail(request, repo_id, size, path):
         return create_pdf_thumbnails(repo, file_id, path, size,
                                      thumbnail_file, file_size)
 
+
     # image thumbnails
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
         return (False, 400)
@@ -134,6 +135,9 @@ def generate_thumbnail(request, repo_id, size, path):
     if fileext.lower() == 'psd':
         return create_psd_thumbnails(repo, file_id, path, size,
                                            thumbnail_file, file_size)
+    
+    if filetype == SVG:
+        return create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size)
 
     token = seafile_api.get_fileserver_access_token(repo_id,
             file_id, 'view', '', use_onetime=True)
@@ -264,6 +268,49 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
     except Exception as e:
         logger.error(e)
         os.unlink(tmp_path)
+        return (False, 500)
+    
+    
+def create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
+    try:
+        import cairosvg
+    except ImportError:
+        logger.error("Could not find cairosvg installed. "
+                     "Please install by 'pip install cairosvg' (requires system cairo library)")
+        return (False, 500)
+
+    token = seafile_api.get_fileserver_access_token(
+        repo.id, file_id, 'view', '', use_onetime=False
+    )
+    if not token:
+        logger.error(f"Failed to get access token for SVG file {file_id}")
+        return (False, 500)
+
+    inner_path = gen_inner_file_get_url(token, os.path.basename(path))
+    tmp_png_path = os.path.join(tempfile.gettempdir(), f"{file_id}.png")
+
+    try:
+        svg_file = urllib.request.urlopen(inner_path)
+        svg_file_content = svg_file.read()
+        t1 = timeit.default_timer()
+        cairosvg.svg2png(
+            bytestring=svg_file_content,
+            write_to=tmp_png_path,
+            dpi=200,
+            output_width=size,
+            output_height=size
+        )
+
+        t2 = timeit.default_timer()
+        logger.debug(f"Convert SVG [{path}] to PNG takes: {t2 - t1:.2f}s")
+
+        ret = _create_thumbnail_common(tmp_png_path, thumbnail_file, size)
+        os.unlink(tmp_png_path)
+        return ret
+
+    except Exception as e:
+        logger.error(f"Failed to generate SVG thumbnail for {path}: {str(e)}")
+        os.unlink(tmp_png_path)
         return (False, 500)
 
 def _create_thumbnail_common(fp, thumbnail_file, size):
