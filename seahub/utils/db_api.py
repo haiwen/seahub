@@ -34,29 +34,7 @@ class SeafileDB:
         self.db_name = self._get_seafile_db_name()
 
     def _get_seafile_db_name(self):
-
-        if env_seafile_db_name := os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', ''):
-            return env_seafile_db_name
-
-        conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR') or \
-                os.environ.get('SEAFILE_CONF_DIR')
-
-        if not conf_dir:
-            return ''
-
-        config = configparser.ConfigParser()
-        seafile_conf_path = os.path.join(conf_dir, 'seafile.conf')
-        config.read(seafile_conf_path)
-
-        if not config.has_section('database'):
-            return 'seafile_db'
-
-        if config.has_option('database', 'type') and config.get('database', 'type') != 'sqlite':
-            return ''
-
-        db_name = config.get('database', 'db_name')
-
-        return db_name or 'seafile_db'
+        return os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', '') or 'SYSDBA'
 
     def get_repo_user_share_list(self, repo_id, org_id=''):
 
@@ -67,7 +45,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.from_email, s.to_email, s.permission
             FROM
-                `{self.db_name}`.`SharedRepo` s
+                {self.db_name}.SharedRepo s
             WHERE
                 repo_id = %s;
             """
@@ -76,7 +54,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.from_email, s.to_email, s.permission
             FROM
-                `{self.db_name}`.`OrgSharedRepo` s
+                {self.db_name}.OrgSharedRepo s
             WHERE
                 repo_id = %s;
             """
@@ -108,7 +86,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.user_name, s.group_id, s.permission
             FROM
-                `{self.db_name}`.`RepoGroup` s
+                {self.db_name}.RepoGroup s
             WHERE
                 repo_id = %s;
             """
@@ -117,7 +95,7 @@ class SeafileDB:
             SELECT
                 s.repo_id, s.owner, s.group_id, s.permission
             FROM
-                `{self.db_name}`.`OrgGroupRepo` s
+                {self.db_name}.OrgGroupRepo s
             WHERE
                 repo_id = %s;
             """
@@ -148,7 +126,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, s.from_email, s.to_email, s.permission
             FROM
-                `{self.db_name}`.`SharedRepo` s join `{self.db_name}`.`VirtualRepo` v
+                {self.db_name}.SharedRepo s join {self.db_name}.VirtualRepo v
             ON
                 s.repo_id=v.repo_id
             WHERE
@@ -159,7 +137,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, s.from_email, s.to_email, s.permission
             FROM
-                `{self.db_name}`.`OrgSharedRepo` s join `{self.db_name}`.`VirtualRepo` v
+                {self.db_name}.OrgSharedRepo s join {self.db_name}.VirtualRepo v
             ON
                 s.repo_id=v.repo_id
             WHERE
@@ -193,7 +171,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, r.user_name, r.group_id, r.permission
             FROM
-                `{self.db_name}`.`RepoGroup` r join `{self.db_name}`.`VirtualRepo` v
+                {self.db_name}.RepoGroup r join {self.db_name}.VirtualRepo v
             ON
                 r.repo_id=v.repo_id
             WHERE
@@ -204,7 +182,7 @@ class SeafileDB:
             SELECT
                 v.origin_repo, v.path, r.owner, r.group_id, r.permission
             FROM
-                `{self.db_name}`.`OrgGroupRepo` r join `{self.db_name}`.`VirtualRepo` v
+                {self.db_name}.OrgGroupRepo r join {self.db_name}.VirtualRepo v
             ON
                 r.repo_id=v.repo_id
             WHERE
@@ -237,11 +215,11 @@ class SeafileDB:
                 u.repo_id, o.owner_id, u.email, e.token,
                 p.peer_id, p.peer_ip, p.peer_name, p.sync_time, p.client_ver, e.error_time, e.error_con, i.name
             FROM
-                `{self.db_name}`.`RepoSyncError` e
-            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token
-            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoTokenPeerInfo` p ON e.token = p.token
-            CROSS JOIN `{self.db_name}`.`RepoOwner` o
+                {self.db_name}.RepoSyncError e
+            LEFT JOIN {self.db_name}.RepoUserToken u ON e.token = u.token
+            LEFT JOIN {self.db_name}.RepoInfo i ON u.repo_id = i.repo_id
+            LEFT JOIN {self.db_name}.RepoTokenPeerInfo p ON e.token = p.token
+            CROSS JOIN {self.db_name}.RepoOwner o
             WHERE
                 u.repo_id = o.repo_id
             ORDER BY
@@ -253,11 +231,11 @@ class SeafileDB:
                 u.repo_id, o.owner_id, u.email, e.token,
                 p.peer_id, p.peer_ip, p.peer_name, p.sync_time, p.client_ver, e.error_time, e.error_con, i.name
             FROM
-                `{self.db_name}`.`RepoSyncError` e
-            LEFT JOIN `{self.db_name}`.`RepoUserToken` u ON e.token = u.token
-            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON u.repo_id = i.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoTokenPeerInfo` p ON e.token = p.token
-            CROSS JOIN `{self.db_name}`.`RepoOwner` o
+                {self.db_name}.RepoSyncError e
+            LEFT JOIN {self.db_name}.RepoUserToken u ON e.token = u.token
+            LEFT JOIN {self.db_name}.RepoInfo i ON u.repo_id = i.repo_id
+            LEFT JOIN {self.db_name}.RepoTokenPeerInfo p ON e.token = p.token
+            CROSS JOIN {self.db_name}.RepoOwner o
             WHERE
                 u.repo_id = o.repo_id
             ORDER BY
@@ -292,9 +270,9 @@ class SeafileDB:
     def get_org_trash_repo_list(self, org_id, start, limit):
 
         sql = f"""
-        SELECT repo_id, repo_name, head_id, owner_id, `size`, del_time
-        FROM `{self.db_name}`.`RepoTrash`
-        WHERE org_id = %s
+        SELECT repo_id, repo_name, head_id, owner_id, size, del_time
+        FROM {self.db_name}.RepoTrash
+        WHERE org_id = {org_id}
         ORDER BY del_time DESC
         LIMIT %s OFFSET %s
         """
@@ -326,23 +304,22 @@ class SeafileDB:
         empty org repo trash
         """
         def del_repo_trash(cursor, repo_ids):
-
             placeholders = ','.join(['%s'] * len(repo_ids))
 
             del_file_count_sql = f"""
-            DELETE FROM `{self.db_name}`.`RepoFileCount`
+            DELETE FROM {self.db_name}.RepoFileCount
             WHERE repo_id IN ({placeholders})
             """
             cursor.execute(del_file_count_sql, repo_ids)
 
             del_repo_info_sql = f"""
-            DELETE FROM `{self.db_name}`.`RepoInfo`
+            DELETE FROM {self.db_name}.RepoInfo
             WHERE repo_id IN ({placeholders})
             """
             cursor.execute(del_repo_info_sql, repo_ids)
 
             del_trash_sql = f"""
-            DELETE FROM `{self.db_name}`.`RepoTrash`
+            DELETE FROM {self.db_name}.RepoTrash
             WHERE repo_id IN ({placeholders})
             """
             cursor.execute(del_trash_sql, repo_ids)
@@ -351,7 +328,7 @@ class SeafileDB:
         SELECT
             t.repo_id
         FROM
-            `{self.db_name}`.`RepoTrash` t
+            {self.db_name}.RepoTrash t
         WHERE
             org_id = %s;
         """
@@ -366,7 +343,7 @@ class SeafileDB:
     def add_repos_to_org_user(self, org_id, username, repo_ids):
 
         sql = f"""
-            INSERT INTO `{self.db_name}`.`OrgRepo` (org_id, repo_id, user)
+            INSERT INTO {self.db_name}.OrgRepo (org_id, repo_id, user)
             VALUES (%s, %s, %s);
         """
         with connection.cursor() as cursor:
@@ -374,11 +351,10 @@ class SeafileDB:
                 cursor.execute(sql, [org_id, repo_id, username])
 
     def set_repo_type(self, repo_id, repo_type):
-
         sql = f"""
-            UPDATE `{self.db_name}`.`RepoInfo`
-            SET `type` = %s
-            WHERE `repo_id` = %s;
+            UPDATE {self.db_name}.RepoInfo
+            SET type = %s
+            WHERE repo_id = %s;
         """
         with connection.cursor() as cursor:
             cursor.execute(sql, [repo_type, repo_id])
@@ -387,10 +363,9 @@ class SeafileDB:
 
         repo_ids_sql = f"""
             SELECT repo_id
-            FROM `{self.db_name}`.`VirtualRepo`
+            FROM {self.db_name}.VirtualRepo
             WHERE origin_repo = %s;
         """
-
         repo_ids = [repo_id, ]
         with connection.cursor() as cursor:
             try:
@@ -413,7 +388,7 @@ class SeafileDB:
         placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgRepo`
+            UPDATE {self.db_name}.OrgRepo
             SET user = %s
             WHERE org_id = %s
             AND repo_id IN ({placeholders})
@@ -421,12 +396,11 @@ class SeafileDB:
             params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-            UPDATE `{self.db_name}`.`RepoOwner`
+            UPDATE {self.db_name}.RepoOwner
             SET owner_id = %s
             WHERE repo_id IN ({placeholders})
             """
             params = [new_owner] + repo_ids
-
         with connection.cursor() as cursor:
             cursor.execute(sql, params)
 
@@ -442,28 +416,29 @@ class SeafileDB:
 
         if org_id:
             delete_sql = f"""
-                DELETE From `{self.db_name}`.`OrgGroupRepo`
+                DELETE From {self.db_name}.OrgGroupRepo
                 WHERE owner=%s
                 AND repo_id=%s
                 AND org_id=%s
                 AND group_id=%s
+
             """
 
             sql = f"""
-                INSERT INTO `{self.db_name}`.`OrgGroupRepo` (org_id, repo_id, group_id, owner, permission)
+                INSERT INTO {self.db_name}.OrgGroupRepo (org_id, repo_id, group_id, owner, permission)
                 VALUES (%s, %s, %s, %s, "rw")
                 ON DUPLICATE KEY UPDATE owner=%s
             """
         else:
             delete_sql = f"""
-                DELETE FROM `{self.db_name}`.`RepoGroup`
+                DELETE FROM {self.db_name}.RepoGroup
                 WHERE user_name=%s
                 AND repo_id=%s
                 AND group_id=%s
             """
 
             sql = f"""
-                INSERT INTO `{self.db_name}`.`RepoGroup` (repo_id, group_id, user_name, permission)
+                INSERT INTO {self.db_name}.RepoGroup (repo_id, group_id, user_name, permission)
                 VALUES (%s, %s, %s, "rw")
                 ON DUPLICATE KEY UPDATE user_name=%s
             """
@@ -492,7 +467,7 @@ class SeafileDB:
         placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgSharedRepo`
+            UPDATE {self.db_name}.OrgSharedRepo
             SET from_email = %s
             WHERE org_id = %s
             AND repo_id IN ({placeholders})
@@ -500,7 +475,7 @@ class SeafileDB:
             params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-            UPDATE `{self.db_name}`.`SharedRepo`
+            UPDATE {self.db_name}.SharedRepo
             SET from_email = %s
             WHERE repo_id IN ({placeholders})
             """
@@ -517,7 +492,7 @@ class SeafileDB:
         placeholders = ','.join(['%s'] * len(repo_ids))
         if org_id:
             sql = f"""
-            UPDATE `{self.db_name}`.`OrgGroupRepo`
+            UPDATE {self.db_name}.OrgGroupRepo
             SET owner = %s
             WHERE org_id = %s
             AND repo_id IN ({placeholders})
@@ -525,7 +500,7 @@ class SeafileDB:
             params = [new_owner, org_id] + repo_ids
         else:
             sql = f"""
-            UPDATE `{self.db_name}`.`RepoGroup`
+            UPDATE {self.db_name}.RepoGroup
             SET user_name = %s
             WHERE repo_id IN ({placeholders})
             """
@@ -536,7 +511,7 @@ class SeafileDB:
 
     def delete_repo_user_token(self, repo_id, owner):
         sql = f"""
-          DELETE FROM `{self.db_name}`.`RepoUserToken`
+          DELETE FROM {self.db_name}.RepoUserToken
           WHERE repo_id=%s
           AND email=%s
           """
@@ -547,11 +522,11 @@ class SeafileDB:
         order_by_size_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
             FROM
-                 `{self.db_name}`.`Repo` r
-            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON r.repo_id = i.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoOwner` o ON i.repo_id = o.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoSize` s ON s.repo_id = r.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoFileCount` c ON r.repo_id = c.repo_id
+                 {self.db_name}.Repo r
+            LEFT JOIN {self.db_name}.RepoInfo i ON r.repo_id = i.repo_id
+            LEFT JOIN {self.db_name}.RepoOwner o ON i.repo_id = o.repo_id
+            LEFT JOIN {self.db_name}.RepoSize s ON s.repo_id = r.repo_id
+            LEFT JOIN {self.db_name}.RepoFileCount c ON r.repo_id = c.repo_id
             WHERE
                 i.type = 'wiki'
             ORDER BY
@@ -561,11 +536,11 @@ class SeafileDB:
         order_by_filecount_sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
             FROM
-                 `{self.db_name}`.`Repo` r
-            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON r.repo_id = i.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoOwner` o ON i.repo_id = o.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoSize` s ON s.repo_id = r.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoFileCount` c ON r.repo_id = c.repo_id
+                 {self.db_name}.Repo r
+            LEFT JOIN {self.db_name}.RepoInfo i ON r.repo_id = i.repo_id
+            LEFT JOIN {self.db_name}.RepoOwner o ON i.repo_id = o.repo_id
+            LEFT JOIN {self.db_name}.RepoSize s ON s.repo_id = r.repo_id
+            LEFT JOIN {self.db_name}.RepoFileCount c ON r.repo_id = c.repo_id
             WHERE
                 i.type = 'wiki'
             ORDER BY
@@ -575,11 +550,11 @@ class SeafileDB:
         sql = f"""
             SELECT r.repo_id, i.name, o.owner_id, i.is_encrypted, s.size, i.status, c.file_count, i.update_time
             FROM
-                 `{self.db_name}`.`Repo` r
-            LEFT JOIN `{self.db_name}`.`RepoInfo` i ON r.repo_id = i.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoOwner` o ON r.repo_id = o.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoSize` s ON r.repo_id = s.repo_id
-            LEFT JOIN `{self.db_name}`.`RepoFileCount` c ON r.repo_id = c.repo_id
+                 {self.db_name}.Repo r
+            LEFT JOIN {self.db_name}.RepoInfo i ON r.repo_id = i.repo_id
+            LEFT JOIN {self.db_name}.RepoOwner o ON r.repo_id = o.repo_id
+            LEFT JOIN {self.db_name}.RepoSize s ON r.repo_id = s.repo_id
+            LEFT JOIN {self.db_name}.RepoFileCount c ON r.repo_id = c.repo_id
             WHERE
                 i.type = 'wiki'
             LIMIT %s OFFSET %s
@@ -624,11 +599,11 @@ class SeafileDB:
         # Delete the share content shared to <username>
         if org_id:
             delete_share_sql = f"""
-            DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE to_email=%s AND org_id=%s
+            DELETE FROM {self.db_name}.OrgSharedRepo WHERE to_email=%s AND org_id=%s
             """
         else:
             delete_share_sql = f"""
-            DELETE FROM `{self.db_name}`.`SharedRepo` WHERE to_email=%s
+            DELETE FROM {self.db_name}.SharedRepo WHERE to_email=%s
             """
 
         with connection.cursor() as cursor:
@@ -638,17 +613,17 @@ class SeafileDB:
         # Delete the share content shared from <username>
         if org_id:
             delete_share_sql = f"""
-            DELETE FROM `{self.db_name}`.`OrgSharedRepo` WHERE from_email=%s AND org_id=%s
+            DELETE FROM {self.db_name}.OrgSharedRepo WHERE from_email=%s AND org_id=%s
             """
             delete_group_share_sql = f"""
-            DELETE FROM `{self.db_name}`.`OrgGroupRepo` WHERE owner=%s AND org_id=%s
+            DELETE FROM {self.db_name}.OrgGroupRepo WHERE owner=%s AND org_id=%s
             """
         else:
             delete_share_sql = f"""
-            DELETE FROM `{self.db_name}`.`SharedRepo` WHERE from_email=%s
+            DELETE FROM {self.db_name}.SharedRepo WHERE from_email=%s
             """
             delete_group_share_sql = f"""
-            DELETE FROM `{self.db_name}`.`RepoGroup` WHERE user_name=%s
+            DELETE FROM {self.db_name}.RepoGroup WHERE user_name=%s
             """
 
         with connection.cursor() as cursor:
@@ -658,8 +633,8 @@ class SeafileDB:
     def get_share_to_user_invisible_repos_info(self, username):
 
         repo_ids_sql = f"""
-            SELECT repo_id, `path`
-            FROM `{self.db_name}`.`FolderUserPerm`
+            SELECT repo_id, path
+            FROM {self.db_name}.FolderUserPerm
             WHERE user = %s  AND permission='invisible';
         """
 
@@ -682,8 +657,8 @@ class SeafileDB:
             return {}
         placeholders = ','.join(['%s'] * len(group_ids))
         repo_ids_sql = f"""
-            SELECT repo_id, `path`
-            FROM `{self.db_name}`.`FolderGroupPerm`
+            SELECT repo_id, path
+            FROM {self.db_name}.FolderGroupPerm
             WHERE group_id in ({placeholders}) AND permission='invisible';
         """
         repo_id_to_invisible_paths = {}
@@ -703,8 +678,8 @@ class SeafileDB:
 
     def get_share_to_user_folder_permission_by_username_and_repo_id(self, username, repo_id):
         sql = f"""
-            SELECT `path`, `permission`
-            FROM `{self.db_name}`.`FolderUserPerm`
+            SELECT path, permission
+            FROM {self.db_name}.FolderUserPerm
             WHERE user = %s AND repo_id = %s;
         """
         permission_to_folder_path = {}
@@ -722,8 +697,8 @@ class SeafileDB:
             return {}
         placeholders = ','.join(['%s'] * len(group_ids))
         sql = f"""
-            SELECT `path`, `permission`
-            FROM `{self.db_name}`.`FolderGroupPerm`
+            SELECT path, permission
+            FROM {self.db_name}.FolderGroupPerm
             WHERE group_id in ({placeholders}) AND repo_id = %s;
         """
         permission_to_folder_path = {}
@@ -739,13 +714,13 @@ class SeafileDB:
     def get_download_limit_org(self,start,per_page):
         sql = f"""
                 SELECT *
-                FROM `{self.db_name}`.`OrgDownloadRateLimit`
+                FROM {self.db_name}.OrgDownloadRateLimit
                 ORDER BY id
                 LIMIT %s OFFSET %s
                 """
         count_sql = f"""
                 SELECT COUNT(*) as total
-                FROM `{self.db_name}`.`OrgDownloadRateLimit`
+                FROM {self.db_name}.OrgDownloadRateLimit
                 """
         with connection.cursor() as cursor:
             cursor.execute(sql,[per_page,start])
@@ -760,7 +735,7 @@ class SeafileDB:
 
         path = normalize_file_path(path)
         sql = f"""
-        select repo_id from `{self.db_name}`.`VirtualRepo` where origin_repo=%s AND path=%s
+        select repo_id from {self.db_name}.VirtualRepo where origin_repo=%s AND path=%s
         """
         with connection.cursor() as cursor:
             cursor.execute(sql, [original_repo_id, path])

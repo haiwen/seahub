@@ -4,7 +4,7 @@ from django.db import connection, transaction
 
 
 def get_ccnet_db_name():
-    return os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'ccnet_db'
+    return os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'SYSDBA'
 
 
 class CcnetGroup(object):
@@ -54,9 +54,9 @@ class CcnetDB:
         SELECT
             g.group_id, group_name, creator_name, timestamp, type, parent_group_id
         FROM
-            `{self.db_name}`.`OrgGroup` o
+            {self.db_name}.OrgGroup o
         LEFT JOIN
-            `{self.db_name}`.`Group` g
+            {self.db_name}.Group g
         ON o.group_id=g.group_id
         WHERE
           org_id=%s AND parent_group_id<>0;
@@ -109,16 +109,16 @@ class CcnetDB:
 
         count_sql = f"""
             SELECT COUNT(1)
-            FROM `{self.db_name}`.`EmailUser` t1
-            LEFT JOIN `{self.db_name}`.`UserRole` t2 ON t1.email = t2.email
+            FROM {self.db_name}.EmailUser t1
+            LEFT JOIN {self.db_name}.UserRole t2 ON t1.email = t2.email
             {where_clause}
             ORDER BY t1.id
         """
 
         sql = f"""
             SELECT t1.id, t1.email, t1.is_staff, t1.is_active, t1.ctime, t2.role, t1.passwd
-            FROM `{self.db_name}`.`EmailUser` t1
-            LEFT JOIN `{self.db_name}`.`UserRole` t2 ON t1.email = t2.email
+            FROM {self.db_name}.EmailUser t1
+            LEFT JOIN {self.db_name}.UserRole t2 ON t1.email = t2.email
             {where_clause}
             ORDER BY t1.id
             LIMIT %s OFFSET %s;
@@ -161,9 +161,10 @@ class CcnetDB:
 
         sql = f"""
         SELECT user_name, group_id
-        FROM `{self.db_name}`.`GroupUser`
+        FROM {self.db_name}.GroupUser
         WHERE group_id IN ({placeholders})
         AND is_staff = 1
+
         """
 
         group_admins = {}
@@ -181,7 +182,7 @@ class CcnetDB:
 
     def change_groups_into_departments(self, group_id):
         sql = f"""
-        UPDATE `{self.db_name}`.`Group` g
+        UPDATE {self.db_name}.Group g
         SET
             g.creator_name = 'system admin',
             g.parent_group_id = -1
@@ -189,7 +190,7 @@ class CcnetDB:
             g.group_id = %s
         """
         structure_sql = f"""
-        INSERT INTO `{self.db_name}`.`GroupStructure` (group_id, path)
+        INSERT INTO {self.db_name}.GroupStructure (group_id, path)
         VALUES (%s, %s)
         """
 
@@ -203,8 +204,8 @@ class CcnetDB:
 
         placeholders = ','.join(['%s'] * len(user_list))
         sql = f"""
-        SELECT `email`
-        FROM `{self.db_name}`.`EmailUser`
+        SELECT email
+        FROM {self.db_name}.EmailUser
         WHERE email IN ({placeholders})
         AND is_active = 1
         AND email NOT LIKE %s
@@ -220,7 +221,7 @@ class CcnetDB:
     def get_org_user_count(self, org_id):
         sql = f"""
         SELECT COUNT(1)
-        FROM `{self.db_name}`.`OrgUser`
+        FROM {self.db_name}.OrgUser
         WHERE org_id=%s
         """
         user_count = 0
@@ -232,8 +233,8 @@ class CcnetDB:
     def get_user_role_from_db(self, email):
 
         sql = f"""
-        SELECT `role`, `is_manual_set`
-        FROM `{self.db_name}`.`UserRole`
+        SELECT role, is_manual_set
+        FROM {self.db_name}.UserRole
         WHERE email = %s;
         """
         with connection.cursor() as cursor:
@@ -255,7 +256,7 @@ class CcnetDB:
     def get_org_staffs(self, org_id):
         sql = f"""
         SELECT email 
-        FROM `{self.db_name}`.`OrgUser`
+        FROM {self.db_name}.OrgUser
         WHERE org_id={org_id} AND is_staff=1
         """
         with connection.cursor() as cursor:
@@ -268,7 +269,7 @@ class CcnetDB:
     def get_all_sub_groups(self, group_id):
         sql = f"""
         SELECT group_id
-        FROM `{self.db_name}`.`GroupStructure`
+        FROM {self.db_name}.GroupStructure
         WHERE path LIKE %s
         """
         with connection.cursor() as cursor:
@@ -279,18 +280,18 @@ class CcnetDB:
     def move_department(self, department_id, target_department_id):
         get_current_path_sql = f"""
         SELECT path
-        FROM `{self.db_name}`.`GroupStructure`
+        FROM {self.db_name}.GroupStructure
         WHERE group_id = %s
         """
 
         update_group_sql = f"""
-        UPDATE `{self.db_name}`.`Group`
+        UPDATE {self.db_name}.Group
         SET parent_group_id = %s
         WHERE group_id = %s
         """
 
         update_structure_sql = f"""
-        UPDATE `{self.db_name}`.`GroupStructure`
+        UPDATE {self.db_name}.GroupStructure
         SET path = CONCAT(%s, SUBSTRING(path, LENGTH(%s) + 1))
         WHERE path LIKE %s
         """
@@ -326,12 +327,12 @@ class CcnetDB:
     def get_group_members(self, group_id, start, limit):
         sql = f"""
         SELECT group_id, user_name, is_staff
-        FROM `{self.db_name}`.`GroupUser`
+        FROM {self.db_name}.GroupUser
         WHERE group_id=%s ORDER BY id
         LIMIT %s OFFSET %s
         """
         
-        count_sql = f"SELECT COUNT(1) from `{self.db_name}`.`GroupUser` WHERE group_id=%s"
+        count_sql = f"SELECT COUNT(1) from {self.db_name}.GroupUser WHERE group_id=%s"
         users = []
         with connection.cursor() as cursor:
             cursor.execute(count_sql, [group_id])

@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - master
-      - "13.0"
-
+      - "13-dameng"
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
