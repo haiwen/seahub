@@ -12,6 +12,15 @@ const propTypes = {
 };
 class OpIcon extends React.Component {
 
+  handleClick = (e) => {
+    const { op } = this.props;
+    if (op) {
+      op(e);
+    }
+    // Remove focus after click to prevent stuck hover state
+    e.currentTarget.blur();
+  };
+
   render() {
     const { className, style, op, title, symbol, ...others } = this.props;
     const iconProps = {
@@ -21,7 +30,7 @@ class OpIcon extends React.Component {
       style: style || null,
       title: title,
       'aria-label': title,
-      onClick: op,
+      onClick: this.handleClick,
       onKeyDown: Utils.onKeyDown,
       ...others
     };

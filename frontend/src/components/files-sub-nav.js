@@ -41,7 +41,7 @@ class FilesSubNav extends React.Component {
                 <span className="nav-icon">
                   <Icon symbol={item.parent_group_id == 0 ? 'group1' : 'department'} />
                 </span>
-                <span className="nav-text ellipsis" title={item.name}>{item.name}</span>
+                <span className="nav-text ellipsis">{item.name}</span>
               </Link>
             </li>
           );
@@ -63,7 +63,7 @@ class FilesSubNav extends React.Component {
               <span className="nav-icon">
                 <Icon symbol="mine" />
               </span>
-              <span className="nav-text ellipsis" title={gettext('My Libraries')}>{gettext('My Libraries')}</span>
+              <span className="nav-text ellipsis">{gettext('My Libraries')}</span>
             </Link>
           </li>
         )}
@@ -76,7 +76,7 @@ class FilesSubNav extends React.Component {
             <span className="nav-icon">
               <Icon symbol="share-with-me" />
             </span>
-            <span className="nav-text ellipsis" title={gettext('Shared with me')}>{gettext('Shared with me')}</span>
+            <span className="nav-text ellipsis">{gettext('Shared with me')}</span>
           </Link>
         </li>
         {canViewOrg &&
@@ -89,7 +89,7 @@ class FilesSubNav extends React.Component {
             <span className="nav-icon">
               <Icon symbol="share-with-all" />
             </span>
-            <span className="nav-text ellipsis" title={gettext('Shared with all')}>{gettext('Shared with all')}</span>
+            <span className="nav-text ellipsis">{gettext('Shared with all')}</span>
           </Link>
         </li>
         }
@@ -98,7 +98,6 @@ class FilesSubNav extends React.Component {
           <Link
             to={siteRoot + 'shared-with-ocm/'}
             className={`nav-link ellipsis ${this.getActiveClass('shared-with-ocm')}`}
-            title={gettext('Shared from other servers')}
             onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}
           >
             <span className="nav-icon">
@@ -113,7 +112,6 @@ class FilesSubNav extends React.Component {
           <Link
             to={siteRoot + 'ocm-via-webdav/'}
             className={`nav-link ellipsis ${this.getActiveClass('ocm-via-webdav')}`}
-            title={gettext('Shared from other servers')}
             onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}
           >
             <span className="nav-icon">
