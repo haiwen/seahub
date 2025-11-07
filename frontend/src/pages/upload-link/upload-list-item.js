@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Icon from '../../components/icon';
 
 const propTypes = {
   resumableFile: PropTypes.object.isRequired,
@@ -147,7 +148,9 @@ class UploadListItem extends React.Component {
               role="button"
               tabIndex={0}
             >
-              <span className="upload-failure-icon sf3-font sf3-font-info mr-2" aria-hidden="true"></span>
+              <span className="upload-failure-icon mr-2" aria-hidden="true">
+                <Icon symbol="info" />
+              </span>
               <span className="upload-failure-msg" dangerouslySetInnerHTML={{ __html: error }}></span>
             </div>
           )}

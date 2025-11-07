@@ -54,7 +54,8 @@ const FaceRecognitionViewToolbar = ({ readOnly, isCustomPermission, onToggleDeta
             />
             {!isCustomPermission && (
               <OpIcon
-                className="sf3-font sf3-font-info cur-view-path-btn ml-2"
+                className="cur-view-path-btn ml-2"
+                symbol="info"
                 title={gettext('Properties')}
                 op={onToggleDetail}
               />

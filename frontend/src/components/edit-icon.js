@@ -1,16 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
+import IconBtn from './icon-btn';
 
 function EditIcon({ onClick }) {
   return (
-    <i
-      role="button"
-      title={gettext('Edit')}
-      aria-label={gettext('Edit')}
-      className="sf3-font sf3-font-rename op-icon op-icon-bg-light ml-1"
-      onClick={onClick}>
-    </i>
+    <IconBtn symbol="rename" size={24} title={gettext('Edit')} className="op-icon op-icon-bg-light ml-1" onClick={onClick} />
   );
 }
 

@@ -5,6 +5,7 @@ import ModalPortal from '../../../components/modal-portal';
 import { Utils } from '../../../utils/utils';
 import { gettext } from '../../../utils/constants';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
+import Icon from '../../icon';
 
 const FilterByText = ({ searchFilenameOnly, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,7 +38,7 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
       <Dropdown isOpen={isOpen} toggle={toggle}>
         <DropdownToggle tag="div" className="search-filter-toggle">
           <div className="filter-label" title={label}>{label}</div>
-          <i className="sf3-font sf3-font-down sf3-font pl-1" aria-hidden="true" />
+          <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-text-menu">

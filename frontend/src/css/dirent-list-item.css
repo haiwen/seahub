@@ -25,3 +25,16 @@
   top: 50%;
   left: 50%;
 }
+
+.star-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.star-icon .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+}

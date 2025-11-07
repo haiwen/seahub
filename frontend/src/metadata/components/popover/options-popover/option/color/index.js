@@ -45,9 +45,10 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
     <>
       <IconBtn
         className="sf-metadata-edit-option-color"
+        symbol="down"
         id={target}
         style={{ backgroundColor: option?.color || null }}
-        CustomIcon={<i className="sf3-font sf3-font-down" aria-hidden="true" style={{ color: option?.textColor || '#666' }}></i>}
+        iconStyle={{ color: option?.textColor || '#666' }}
         onClick={openPopover}
       />
       {isShowPopover && (

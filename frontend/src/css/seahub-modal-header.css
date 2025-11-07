@@ -26,6 +26,8 @@
   background-color: var(--bs-hover-bg);
 }
 
-.modal .seahub-modal-btn .seahub-modal-btn-inner .sf3-font {
+.modal .seahub-modal-btn .seahub-modal-btn-inner .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
   color: var(--bs-icon-color);
 }

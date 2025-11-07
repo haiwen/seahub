@@ -7,6 +7,7 @@ import { gettext } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import Loading from './components/loading';
 import NoticeItem from './components/common/notice-item';
+import Icon from './components/icon';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -194,7 +195,7 @@ class UserNotificationsDialog extends React.Component {
           >
             <button type="button" className="close seahub-modal-btn" aria-label={gettext('More')}>
               <span className="seahub-modal-btn-inner">
-                <i className="sf3-font sf3-font-more" aria-hidden="true"></i>
+                <Icon symbol="more-level" className="w-4 h-4" />
               </span>
             </button>
           </DropdownToggle>
@@ -205,7 +206,7 @@ class UserNotificationsDialog extends React.Component {
         </Dropdown>
         <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} onClick={this.toggle}>
           <span className="seahub-modal-btn-inner">
-            <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+            <Icon symbol="x-01" className="w-4 h-4" />
           </span>
         </button>
       </div>

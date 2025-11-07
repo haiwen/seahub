@@ -11,6 +11,8 @@ import ModalPortal from './components/modal-portal';
 import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import ConfirmRestoreRepo from './components/dialog/confirm-restore-repo';
+import Icon from './components/icon';
+import OpIcon from './components/op-icon';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -148,7 +150,7 @@ class RepoSnapshot extends React.Component {
                   <span className="heading-commit-time ml-1">({commitTime})</span>
                 </h2>
                 <a href="#" className="go-back" title={gettext('Back')} role="button" aria-label={gettext('Back')} onClick={this.goBack}>
-                  <span aria-hidden="true" className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
+                  <Icon symbol="down" className="rotate-90" />
                 </a>
                 {folderPath == '/' && (
                   <div className="d-flex mb-2 align-items-center">
@@ -332,15 +334,16 @@ class FolderItem extends React.Component {
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
           <div className="d-flex align-items-center">
-            <i
-              className={`op-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`}
-              onClick={this.restoreItem}
+            <OpIcon
+              symbol="reply"
+              className={`op-icon ${isIconShown ? '' : 'invisible'}`}
+              op={this.restoreItem}
               title={gettext('Restore')}
               aria-label={gettext('Restore')}
-              role="button"
-            >
-            </i>
-            <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`op-icon sf3-font sf3-font-download1 ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')} role="button" aria-label={gettext('Download')}></a>
+            />
+            <a href={`${siteRoot}repo/${repoID}/${item.obj_id}/download/?file_name=${encodeURIComponent(item.name)}&p=${encodeURIComponent(Utils.joinPath(folderPath, item.name))}`} className={`op-icon ${isIconShown ? '' : 'invisible'}`} title={gettext('Download')} role="button" aria-label={gettext('Download')}>
+              <Icon symbol="download" />
+            </a>
           </div>
         </td>
       </tr>

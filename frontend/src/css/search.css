@@ -45,15 +45,6 @@
   padding: 12px;
 }
 
-.search-container.show .input-icon .search-icon-right.sf3-font-x-01 {
-  position: absolute;
-  top: 0;
-  right: 28px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .search-container.show .input-icon .search-icon-right.search-filter-controller.active {
   color: #ed7109;
 }
@@ -66,8 +57,18 @@
   display: flex;
 }
 
+.search-icon-left .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+}
+
 .search-icon-right {
+  position: absolute;
+  top: 0;
+  right: 28px;
   display: flex;
+  justify-content: center;
+  align-items: center;
   pointer-events: all;
   font-style: normal;
   min-width: 20px;

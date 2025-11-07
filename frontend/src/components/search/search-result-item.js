@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
+import IconBtn from '../icon-btn';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
@@ -69,13 +70,12 @@ class SearchResultItem extends React.Component {
           <div className="item-text ellipsis" dangerouslySetInnerHTML={{ __html: item.content }}></div>
         </div>
         {isHighlight && onDeleteItem && (
-          <button
-            type="button"
-            className="search-icon-right sf3-font sf3-font-x-01"
+          <IconBtn
+            symbol="x-01"
+            className="search-icon-right"
             onClick={this.deleteItem}
             aria-label={gettext('Delete')}
-          >
-          </button>
+          />
         )}
       </li>
     );

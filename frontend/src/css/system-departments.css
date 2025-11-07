@@ -117,3 +117,8 @@
 .departments-members-item {
   height: 58px;
 }
+
+.department-dropdown-menu .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+}

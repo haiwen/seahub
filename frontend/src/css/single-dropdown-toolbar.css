@@ -1,8 +1,10 @@
 .sf-dropdown-combined-toggle {
+  height: 24px;
+  display: flex;
+  align-items: center;
   color: var(--bs-icon-color);
   padding: 2px 4px;
   border-radius: 3px;
-  line-height: 1.2;
 }
 
 .sf-dropdown-combined-toggle:active,
@@ -11,8 +13,10 @@
   background: var(--bs-hover-bg)!important;
 }
 
-.sf-dropdown-combined-toggle .main-icon {
-  font-size: 1rem;
+.sf-dropdown-combined-toggle .new-icon {
   margin-right: 2px;
 }
 
+.sf-dropdown-combined-toggle .seafile-multicolor-icon-down {
+  transform: translateY(1px);
+}

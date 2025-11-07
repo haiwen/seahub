@@ -12,6 +12,7 @@ import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { checkIsDir } from '../../metadata/utils/row';
 import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 const FaceRecognitionFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -158,31 +159,34 @@ const FaceRecognitionFilesToolbar = ({ repoID }) => {
   return (
     <div className="selected-dirents-toolbar">
       <span className="cur-view-path-btn px-2" onClick={unSelect}>
-        <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+        <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
+          <Icon symbol="x-01" />
+        </span>
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
       {!readOnly && length === 1 && (
         <>
-          <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')}>
-            <span className="sf3-font-move sf3-font" aria-label={gettext('Move')}></span>
+          <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')} aria-label={gettext('Move')}>
+            <Icon symbol="move1" />
           </span>
-          <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')}>
-            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')}></span>
+          <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')} aria-label={gettext('Copy')}>
+            <Icon symbol="copy1" />
           </span>
         </>
       )}
-      <span className="cur-view-path-btn" onClick={handleDownload}>
-        <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')} title={gettext('Download')}></span>
+      <span className="cur-view-path-btn" onClick={handleDownload} title={gettext('Download')} aria-label={gettext('Download')}>
+        <Icon symbol="download" />
       </span>
       {!readOnly &&
-        <span className="cur-view-path-btn" onClick={deleteRecords}>
-          <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')} title={gettext('Delete')}></span>
+        <span className="cur-view-path-btn" onClick={deleteRecords} title={gettext('Delete')} aria-label={gettext('Delete')}>
+          <Icon symbol="delete1" />
         </span>
       }
       <ItemDropdownMenu
         ref={menuRef}
         item={{}}
-        toggleClass="cur-view-path-btn sf3-font-more sf3-font"
+        toggleClass="cur-view-path-btn"
+        toggleChildren={<Icon symbol="more-level" />}
         onMenuItemClick={onMenuItemClick}
         getMenuList={() => toolbarMenuOptions}
       />

@@ -9,6 +9,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import { getValueLength } from './constant';
 import { SEARCH_MASK, SEARCH_CONTAINER } from '../../constants/zIndexes';
+import Icon from '../icon';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -241,7 +242,11 @@ class Search extends Component {
                   onChange={this.onChangeHandler}
                   autoComplete="off"
                 />
-                {this.state.isCloseShow && <i className='search-icon-right input-icon-addon sf3-font sf3-font-x-01' onClick={this.onCloseHandler}></i>}
+                {this.state.isCloseShow && (
+                  <span className="search-icon-right input-icon-addon" onClick={this.onCloseHandler}>
+                    <Icon symbol="x-01" />
+                  </span>
+                )}
               </div>
               <div className="search-result-container dropdown-search-result-container">
                 {this.renderSearchResult()}
@@ -258,7 +263,9 @@ class Search extends Component {
               <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler} style={{ zIndex: SEARCH_MASK }}></div>
               <div className="search-container" style={{ zIndex: SEARCH_CONTAINER }}>
                 <div className="input-icon">
-                  <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+                  <span className="search-icon-left input-icon-addon">
+                    <Icon symbol="search" />
+                  </span>
                   <input
                     type="text"
                     className="form-control search-input"
@@ -270,7 +277,11 @@ class Search extends Component {
                     onChange={this.onChangeHandler}
                     autoComplete="off"
                   />
-                  {this.state.isCloseShow && <i className='search-icon-right input-icon-addon sf3-font sf3-font-x-01' onClick={this.onCloseHandler}></i>}
+                  {this.state.isCloseShow && (
+                    <span className="search-icon-right input-icon-addon" onClick={this.onCloseHandler}>
+                      <Icon symbol="x-01" />
+                    </span>
+                  )}
                 </div>
                 <div className="search-result-container dropdown-search-result-container">
                   {this.renderSearchResult()}

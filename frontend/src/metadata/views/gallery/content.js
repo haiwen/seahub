@@ -7,6 +7,7 @@ import { Utils } from '../../../utils/utils';
 import { GALLERY_DATE_MODE, GALLERY_DEFAULT_GRID_GAP, GALLERY_YEAR_MODE_GRID_GAP } from '../../constants';
 import Image from './image';
 import DayImages from './day-images';
+import Icon from '../../../components/icon';
 
 const Content = ({
   groups,
@@ -158,7 +159,9 @@ const Content = ({
             onKeyDown={Utils.onKeyDown}
           >
             {name || gettext('Empty')}
-            {isDateTagClickable && <i className="metadata-gallery-date-tag-arrow sf3-font-down sf3-font rotate-270" />}
+            {isDateTagClickable && (
+              <Icon symbol="down" className="metadata-gallery-date-tag-arrow rotate-270" />
+            )}
           </div>
         )}
         <div

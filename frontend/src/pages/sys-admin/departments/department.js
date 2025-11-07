@@ -11,6 +11,7 @@ import DeleteRepoDialog from '../../../components/dialog/sysadmin-dialog/sysadmi
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -142,11 +143,13 @@ class Department extends React.Component {
             <DropdownToggle
               tag='span'
               role="button"
-              className='sf3-font-down sf3-font ml-1 sf-dropdown-toggle'
+              className="d-flex align-items-center ml-1 sf-dropdown-toggle"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
-            />
+            >
+              <Icon symbol="down" />
+            </DropdownToggle>
             <DepartmentNodeMenu
               node={currentDepartment}
               toggleAddDepartment={this.props.toggleAddDepartment}

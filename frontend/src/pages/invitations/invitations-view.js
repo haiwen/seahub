@@ -105,7 +105,8 @@ class Item extends React.Component {
                     op={this.toggleRevokeDialog}
                   /> :
                   <OpIcon
-                    className="sf3-font sf3-font-x-01 op-icon"
+                    className="op-icon"
+                    symbol="x-01"
                     title={gettext('Delete')}
                     op={this.deleteItem}
                   />

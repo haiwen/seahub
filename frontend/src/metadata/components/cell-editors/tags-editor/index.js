@@ -14,6 +14,7 @@ import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY, RECENTLY_USED_TAG_IDS } f
 import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getNodesWithAncestors, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '../../../../components/sf-table/utils/tree';
 import TagItem from './tag-item';
 import DeleteTag from './delete-tags';
+import Icon from '../../../../components/icon';
 
 import './index.css';
 
@@ -408,11 +409,9 @@ const TagsEditor = forwardRef(({
           isClearable={true}
           components={{
             ClearIndicator: ({ clearValue }) => (
-              <i
-                className="search-control attr-action-icon sf3-font sf3-font-x-01"
-                aria-label={gettext('Clear')}
-                onClick={clearValue}
-              />
+              <span className="d-flex search-control attr-action-icon" aria-label={gettext('Clear')} onClick={clearValue}>
+                <Icon symbol="x-01" />
+              </span>
             )
           }}
           clearValue={() => setSearchValue('')}

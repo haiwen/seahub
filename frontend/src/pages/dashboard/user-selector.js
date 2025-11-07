@@ -5,6 +5,7 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
+import Icon from '../../components/icon';
 
 import '../../css/files-activities.css';
 
@@ -76,7 +77,7 @@ class UserSelector extends Component {
     return (
       <div className="mt-4 position-relative">
         <OpElement
-          className="cur-activity-modifiers d-inline-block p-2 rounded"
+          className="cur-activity-modifiers d-inline-flex align-items-center p-2 rounded"
           title={gettext('Toggle user selector')}
           op={this.onToggleClick}
         >
@@ -86,7 +87,7 @@ class UserSelector extends Component {
               <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext('Modified by')}
-          <i aria-hidden="true" className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
+          <Icon symbol="down" className="w-3 h-3 ml-2 toggle-icon" />
         </OpElement>
         {isPopoverOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>

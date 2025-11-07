@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
 import { Utils } from '../../utils/utils';
+import OpIcon from '../op-icon';
 
 const LEFT_INDENT = 20;
 
@@ -143,16 +144,13 @@ class TreeNodeView extends React.Component {
           </div>
           <div className="left-icon" style={{ left: leftIndent - 40 }}>
             {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
-              <i
-                className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
+              <OpIcon
+                className={`folder-toggle-icon ${node.isExpanded ? '' : 'rotate-270'}`}
+                symbol="down"
+                title={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
                 onMouseDown={e => e.stopPropagation()}
-                onClick={this.onLoadToggle}
-                role="button"
-                tabIndex={0}
-                onKeyDown={Utils.onKeyDown}
-                aria-label={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
-              >
-              </i>
+                op={this.onLoadToggle}
+              />
             )}
             <i className="tree-node-icon">{icon}</i>
           </div>

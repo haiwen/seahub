@@ -2,12 +2,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import dayjs from 'dayjs';
+import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import Picker from '../../date-and-time-picker';
 import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../../constants';
-import classNames from 'classnames';
+import Icon from '../../icon';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -172,15 +173,7 @@ const FilterByDate = ({ date, onChange }) => {
           'highlighted': value,
         })} onClick={toggle}>
           <div className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</div>
-          <i
-            className="sf3-font sf3-font-down pl-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggle();
-            }}
-            role="button"
-            aria-label={isOpen ? gettext('Collapse') : gettext('Expand')}
-          />
+          <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-date-menu">
@@ -188,15 +181,7 @@ const FilterByDate = ({ date, onChange }) => {
               <Dropdown isOpen={isTypeOpen} toggle={toggleType}>
                 <DropdownToggle tag="div" className="search-filter-toggle filter-by-date-type-toggle">
                   <div className="filter-label">{typeLabel}</div>
-                  <i
-                    className="sf3-font sf3-font-down pl-1"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleType();
-                    }}
-                    role="button"
-                    aria-label={isTypeOpen ? gettext('Collapse') : gettext('Expand')}
-                  />
+                  <Icon symbol="down" className="ml-1" />
                 </DropdownToggle>
                 <DropdownMenu>
                   {typeOptions.map((option) => {
@@ -210,8 +195,8 @@ const FilterByDate = ({ date, onChange }) => {
                   })}
                 </DropdownMenu>
               </Dropdown>
-              <div className="delete-btn" onClick={onClearDate}>
-                <i className="op-icon sf3-font-delete1 sf3-font"></i>
+              <div className="op-icon" onClick={onClearDate}>
+                <Icon symbol="delete1" />
               </div>
             </div>
             {options.map((option, i) => {

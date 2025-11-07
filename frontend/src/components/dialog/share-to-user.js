@@ -12,6 +12,7 @@ import DepartmentDetailDialog from './department-detail-dialog';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import SelectUsersIcon from '../select-members-to-share-with';
+import OpIcon from '../op-icon';
 
 import '../../css/invitations.css';
 import '../../css/share-to-user.css';
@@ -106,16 +107,16 @@ class UserItem extends React.Component {
             />
           </td>
           <td>
-            <span
+            <OpIcon
+              symbol="x-01"
+              className='op-icon'
               tabIndex="0"
               role="button"
-              className='sf3-font sf3-font-x-01 op-icon'
-              onClick={this.deleteShareItem}
+              op={this.deleteShareItem}
               onKeyDown={Utils.onKeyDown}
               title={gettext('Delete')}
               aria-label={gettext('Delete')}
-            >
-            </span>
+            />
           </td>
         </tr>
       );
@@ -172,16 +173,16 @@ class UserItem extends React.Component {
           />
         </td>
         <td>
-          <span
+          <OpIcon
+            symbol="x-01"
+            className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             tabIndex="0"
             role="button"
-            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            onClick={this.deleteShareItem}
+            op={this.deleteShareItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
-          >
-          </span>
+          />
         </td>
       </tr>
     );

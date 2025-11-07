@@ -4,6 +4,7 @@ import { Link } from '@gatsbyjs/reach-router';
 import {
   gettext, siteRoot, canAddRepo, canViewOrg, enableOCM, enableOCMViaWebdav
 } from '../utils/constants';
+import Icon from './icon';
 
 const propTypes = {
   currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
@@ -37,7 +38,9 @@ class FilesSubNav extends React.Component {
                 className={`nav-link ${this.getActiveClass(item.name)}`}
                 onClick={(e) => this.tabItemClick(e, item.name, item.id)}
               >
-                <span className={`${item.parent_group_id == 0 ? 'sf3-font-group' : 'sf3-font-department'} sf3-font nav-icon`} aria-hidden="true"></span>
+                <span className="nav-icon">
+                  <Icon symbol={item.parent_group_id == 0 ? 'group1' : 'department'} />
+                </span>
                 <span className="nav-text ellipsis" title={item.name}>{item.name}</span>
               </Link>
             </li>
@@ -57,7 +60,9 @@ class FilesSubNav extends React.Component {
               className={`nav-link ${this.getActiveClass('my-libs') || this.getActiveClass('deleted') }`}
               onClick={(e) => this.tabItemClick(e, 'my-libs')}
             >
-              <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
+              <span className="nav-icon">
+                <Icon symbol="mine" />
+              </span>
               <span className="nav-text ellipsis" title={gettext('My Libraries')}>{gettext('My Libraries')}</span>
             </Link>
           </li>
@@ -68,7 +73,9 @@ class FilesSubNav extends React.Component {
             className={`nav-link ${this.getActiveClass('shared-libs')}`}
             onClick={(e) => this.tabItemClick(e, 'shared-libs')}
           >
-            <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+            <span className="nav-icon">
+              <Icon symbol="share-with-me" />
+            </span>
             <span className="nav-text ellipsis" title={gettext('Shared with me')}>{gettext('Shared with me')}</span>
           </Link>
         </li>
@@ -79,7 +86,9 @@ class FilesSubNav extends React.Component {
             className={`nav-link ${this.getActiveClass('org')}`}
             onClick={(e) => this.tabItemClick(e, 'org')}
           >
-            <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
+            <span className="nav-icon">
+              <Icon symbol="share-with-all" />
+            </span>
             <span className="nav-text ellipsis" title={gettext('Shared with all')}>{gettext('Shared with all')}</span>
           </Link>
         </li>
@@ -92,7 +101,9 @@ class FilesSubNav extends React.Component {
             title={gettext('Shared from other servers')}
             onClick={(e) => this.tabItemClick(e, 'shared-with-ocm')}
           >
-            <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+            <span className="nav-icon">
+              <Icon symbol="share-with-me" />
+            </span>
             <span className="nav-text">{gettext('Shared from other servers')}</span>
           </Link>
         </li>
@@ -105,7 +116,9 @@ class FilesSubNav extends React.Component {
             title={gettext('Shared from other servers')}
             onClick={(e) => this.tabItemClick(e, 'ocm-via-webdav')}
           >
-            <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+            <span className="nav-icon">
+              <Icon symbol="share-with-me" />
+            </span>
             <span className="nav-text">{gettext('Shared from other servers')}</span>
           </Link>
         </li>

@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import classNames from 'classnames';
 import listener from '../context-menu/globalEventListener';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import DropdownMenuItem from './dropdown-menu-item';
+import Icon from '../icon';
 
 import '../../css/item-dropdown-menu.css';
 
@@ -170,9 +172,8 @@ class ItemDropdownMenu extends React.Component {
   };
 
   render() {
-    let menuList = this.state.menuList;
-    let { toggleClass = 'sf3-font-more sf3-font', toggleChildren, tagName, menuStyle = {} } = this.props;
-    toggleClass = 'sf-dropdown-toggle ' + toggleClass;
+    const { menuList } = this.state;
+    const { toggleClass, toggleChildren, tagName, menuStyle = {} } = this.props;
 
     if (!menuList.length) {
       return '';
@@ -183,7 +184,7 @@ class ItemDropdownMenu extends React.Component {
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.onDropdownToggleClick}>
           <DropdownToggle
             tag="span"
-            className={this.props.toggleClass}
+            className={classNames('more-dropdown-toggle', toggleClass)}
             data-toggle="dropdown"
             title={gettext('More operations')}
             aria-label={gettext('More operations')}
@@ -222,17 +223,19 @@ class ItemDropdownMenu extends React.Component {
         direction={this.mainMenuDirection}
       >
         <DropdownToggle
-          tag={tagName || 'i'}
+          tag={tagName || 'span'}
           role="button"
           tabIndex="0"
-          className={toggleClass}
+          className={classNames('more-dropdown-toggle', toggleClass)}
           title={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
           aria-label={gettext('More operations')}
           onKeyDown={this.onDropdownToggleKeyDown}
           innerRef={this.dropdownRef}
-        />
+        >
+          <Icon symbol="more-level" />
+        </DropdownToggle>
         <ModalPortal>
           <DropdownMenu
             style={menuStyle}
@@ -256,7 +259,7 @@ class ItemDropdownMenu extends React.Component {
                       onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                     >
                       <span className="mr-auto">{menuItem.value}</span>
-                      <i className="sf3-font-down sf3-font rotate-270"></i>
+                      <Icon symbol="down" className="rotate-270" />
                     </DropdownToggle>
                     <DropdownMenu>
                       {menuItem.subOpListHeader && <DropdownItem header>{menuItem.subOpListHeader}</DropdownItem>}

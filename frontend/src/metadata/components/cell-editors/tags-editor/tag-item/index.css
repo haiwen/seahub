@@ -15,8 +15,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #666;
+  color: var(--bs-icon-color);
   z-index: 1;
+}
+
+.sf-metadata-tags-editor .sf-metadata-tags-editor-tag-container .sf-metadata-tags-editor-tree-expand-icon .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
 }
 
 .sf-metadata-tag-color-and-name {

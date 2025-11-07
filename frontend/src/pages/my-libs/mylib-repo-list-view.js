@@ -9,6 +9,7 @@ import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import ContextMenu from '../../components/context-menu/context-menu';
 import { Utils } from '../../utils/utils';
 import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
+import Icon from '../../components/icon';
 
 const propTypes = {
   sortBy: PropTypes.string.isRequired,
@@ -113,7 +114,7 @@ class MylibRepoListView extends React.Component {
   renderPCUI = () => {
     const { inAllLibs, currentViewMode = LIST_MODE } = this.props;
     const showStorageBackend = !inAllLibs && storages.length > 0;
-    const sortIcon = this.props.sortOrder === 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${this.props.sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
     return currentViewMode == LIST_MODE ? (
       <table className={classNames({ 'table-thead-hidden': inAllLibs })}>
@@ -121,11 +122,11 @@ class MylibRepoListView extends React.Component {
           <tr>
             <th width="4%"></th>
             <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-            <th width={showStorageBackend ? '36%' : '35%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
+            <th width={showStorageBackend ? '36%' : '35%'}><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
             <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-            <th width={showStorageBackend ? '15%' : '14%'}><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {this.props.sortBy === 'size' && sortIcon}</a></th>
+            <th width={showStorageBackend ? '15%' : '14%'}><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {this.props.sortBy === 'size' && sortIcon}</a></th>
             {showStorageBackend ? <th width="17%">{gettext('Storage Backend')}</th> : null}
-            <th width={showStorageBackend ? '15%' : '34%'}><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {this.props.sortBy === 'time' && sortIcon}</a></th>
+            <th width={showStorageBackend ? '15%' : '34%'}><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {this.props.sortBy === 'time' && sortIcon}</a></th>
           </tr>
         </thead>
         <tbody>

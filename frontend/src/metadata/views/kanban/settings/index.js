@@ -96,7 +96,7 @@ const Settings = ({
     <div className="sf-metadata-view-kanban-setting-panel">
       <div className="setting-panel-header">
         <h5 className="m-0">{gettext('Settings')}</h5>
-        <OpIcon className='sf3-font sf3-font-x-01 op-icon' op={onClose} title={gettext('Close')} />
+        <OpIcon className="op-icon" symbol="x-01" op={onClose} title={gettext('Close')} />
       </div>
       <div className="setting-panel-body">
         <div className="setting-item">

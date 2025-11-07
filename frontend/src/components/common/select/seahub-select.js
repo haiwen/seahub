@@ -2,12 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 import { MenuSelectStyle } from './seahub-select-style';
+import Icon from '../../icon';
 
 const DropdownIndicator = props => {
   return (
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
-        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+        <span style={{ display: 'flex', alignItems: 'center', marginLeft: '-2px' }} aria-hidden="true">
+          <Icon symbol="down" style={{ width: '12px', height: '12px' }} />
+        </span>
       </components.DropdownIndicator>
     )
   );
@@ -21,7 +24,9 @@ const ClearIndicator = ({ innerProps, ...props }) => {
   props.innerProps = { ...innerProps, onMouseDown };
   return (
     <components.ClearIndicator {...props} >
-      <span className="sf3-font sf3-font-x-01" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+      <span style={{ display: 'flex', alignItems: 'center', marginLeft: '-2px' }} aria-hidden="true">
+        <Icon symbol="x-01" style={{ width: '12px', height: '12px' }} />
+      </span>
     </components.ClearIndicator>
   );
 };

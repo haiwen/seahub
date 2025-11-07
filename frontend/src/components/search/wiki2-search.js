@@ -8,6 +8,8 @@ import { Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import Wiki2SearchResult from './wiki2-search-result';
+import IconBtn from '../icon-btn';
+import Icon from '../icon';
 
 import './wiki2-search.css';
 
@@ -164,7 +166,9 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
         <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
           <ModalBody>
             <div className="wiki2-search-input mb-4 position-relative">
-              <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
+              <span className="d-flex align-items-center search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               <Input
                 type="text"
                 className="form-control search-input"
@@ -176,13 +180,12 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 onKeyDown={onKeyDown}
                 autoFocus={true}
               />
-              <button
-                type="button"
-                className="search-icon-right input-icon-addon sf3-font sf3-font-x-01 mr-2"
+              <IconBtn
+                symbol="x-01"
+                className="search-icon-right input-icon-addon mr-2"
                 onClick={onClearSearch}
                 aria-label={gettext('Close')}
-              >
-              </button>
+              />
             </div>
             <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}

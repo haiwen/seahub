@@ -7,6 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext } from '../../utils/constants';
 import { RepoInfo } from '../../models';
 import CreateFolder from '../dialog/create-folder-dialog';
+import Icon from '../icon';
 
 const LibraryOption = ({ mode, label, currentMode, onUpdateMode }) => {
   return (
@@ -188,7 +189,7 @@ class SelectDirentBody extends React.Component {
               onClick={this.onToggleCreateFolder}
               disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS || mode === MODE_TYPE_MAP.RECENTLY_USED}
             >
-              <i className='sf3-font-new sf3-font mr-2'></i>
+              <Icon symbol="new" className="mr-2" />
               <span>{gettext('New folder')}</span>
             </Button>
             <div className='footer-right-btns'>

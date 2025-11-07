@@ -11,6 +11,7 @@ import Paginator from '../../components/paginator';
 import WikiCleanTrash from '../../components/dialog/wiki-clean-trash';
 import NavItemIcon from './common/nav-item-icon';
 import { formatWithTimezone } from '../../utils/time';
+import Icon from '../../components/icon';
 
 import '../../css/toolbar.css';
 import '../../css/search.css';
@@ -100,7 +101,7 @@ class WikiTrashDialog extends React.Component {
                 }
                 <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleTrashDialog}>
                   <span className="seahub-modal-btn-inner">
-                    <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                    <Icon symbol="x-01" />
                   </span>
                 </button>
               </div>

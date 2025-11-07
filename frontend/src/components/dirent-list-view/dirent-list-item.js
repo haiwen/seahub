@@ -15,6 +15,7 @@ import OpIcon from '../../components/op-icon';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import { Dirent } from '../../models';
 import { formatUnixWithTimezone } from '../../utils/time';
+import Icon from '../icon';
 
 import '../../css/dirent-list-item.css';
 
@@ -697,20 +698,23 @@ class DirentListItem extends React.Component {
               <div className="operations d-flex align-items-center">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
                   <OpIcon
-                    className="op-icon sf3-font sf3-font-download1"
+                    className="op-icon"
+                    symbol="download"
                     title={gettext('Download')}
                     op={this.onItemDownload}
                   />
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
                   <OpIcon
-                    className="op-icon sf3-font-delete1 sf3-font"
+                    className="op-icon"
+                    symbol="delete1"
                     title={gettext('Delete')}
                     op={this.onItemDelete}
                   />
                 )}
                 <ItemDropdownMenu
-                  toggleClass="sf3-font-more sf3-font op-icon ml-0"
+                  toggleClass="op-icon"
+                  toggleChildren={<Icon symbol="more-level" />}
                   item={this.state.dirent}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
@@ -726,20 +730,23 @@ class DirentListItem extends React.Component {
               <div className="operations d-flex align-items-center">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
                   <OpIcon
-                    className="op-icon sf3-font sf3-font-download1"
+                    className="op-icon"
+                    symbol="download"
                     title={gettext('Download')}
                     op={this.onItemDownload}
                   />
                 )}
                 {(dirent.permission === 'rw' || dirent.permission === 'cloud-edit' || (isCustomPermission && canDelete)) && (
                   <OpIcon
-                    className="op-icon sf3-font-delete1 sf3-font"
+                    className="op-icon"
+                    symbol="delete1"
                     title={gettext('Delete')}
                     op={this.onItemDelete}
                   />
                 )}
                 <ItemDropdownMenu
-                  toggleClass="sf3-font-more sf3-font op-icon ml-0"
+                  toggleClass="op-icon"
+                  toggleChildren={<Icon symbol="more-level" />}
                   item={this.state.dirent}
                   isHandleContextMenuEvent={true}
                   getMenuList={this.props.getDirentItemMenuList}
@@ -809,7 +816,8 @@ class DirentListItem extends React.Component {
             <td className="pl-2 pr-2">
               {dirent.starred !== undefined &&
                 <OpIcon
-                  className={`sf3-font ${dirent.starred ? 'sf3-font-star' : 'sf3-font-star-empty'}`}
+                  className="star-icon"
+                  symbol={dirent.starred ? 'starred' : 'star-empty'}
                   title={dirent.starred ? gettext('Unstar') : gettext('Star')}
                   op={this.onItemStarred}
                 />

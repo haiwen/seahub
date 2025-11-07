@@ -58,18 +58,12 @@
 
 .sf-geolocation-editor-container .editor-header .cur-view-path-btn {
   cursor: pointer;
-  font-size: 14px;
   height: 24px;
   min-width: 24px;
   width: fit-content;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-}
-
-.sf-geolocation-editor-container .editor-header .cur-view-path-btn.sf3-font,
-.sf-geolocation-editor-container .editor-header .cur-view-path-btn.iconfont {
-  font-size: 16px;
   color: var(--bs-icon-color);
 }
 
@@ -155,6 +149,11 @@
   border-radius: 0 3px 3px 0;
   box-shadow: 0 0 2px #0000004d;
   cursor: pointer;
+}
+
+.sf-geolocation-editor-container .search-container .search-btn .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .sf-geolocation-editor-container .selection-label-content {

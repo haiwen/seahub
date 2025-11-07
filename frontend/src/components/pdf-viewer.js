@@ -1,5 +1,6 @@
 import React from 'react';
 import { gettext } from '../utils/constants';
+import Icon from './icon';
 
 class PDFViewer extends React.Component {
 
@@ -335,7 +336,9 @@ class PDFViewer extends React.Component {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">{gettext('Decrypt document')}</h5>
-                  <button type="button" id="passwordCancel2" className="align-self-center bg-transparent border-0 sf3-font sf3-font-x-01 modal-close" aria-label={gettext('Close')}></button>
+                  <button type="button" id="passwordCancel2" className="align-self-center bg-transparent border-0 modal-close" aria-label={gettext('Close')}>
+                    <Icon symbol="x-01" />
+                  </button>
                 </div>
                 <div className="modal-body py-6 text-start">
                   <label htmlFor="password" id="passwordText" data-l10n-id="password_label" className="form-label">Enter the password to open this PDF file:</label>
@@ -415,7 +418,9 @@ class PDFViewer extends React.Component {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">{gettext('Print document')}</h5>
-                  <button type="button" id="printCancel2" className="align-self-center bg-transparent border-0 sf3-font sf3-font-x-01 modal-close" aria-label={gettext('Close')}></button>
+                  <button type="button" id="printCancel2" className="align-self-center bg-transparent border-0 modal-close" aria-label={gettext('Close')}>
+                    <Icon symbol="x-01" />
+                  </button>
                 </div>
                 <div className="modal-body py-6">
                   <p className="mb-2">

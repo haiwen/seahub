@@ -23,6 +23,7 @@ import { LIST_MODE } from '../dir-view-mode/constants';
 import TransferDialog from '../dialog/transfer-dialog';
 import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
+import Icon from '../icon';
 
 dayjs.extend(relativeTime);
 
@@ -445,21 +446,24 @@ class SharedRepoListItem extends React.Component {
     }
     const shareOperation = (
       <OpIcon
-        className="op-icon sf3-font-share sf3-font"
+        className="op-icon"
+        symbol="share"
         title={gettext('Share')}
         op={this.onItemShare}
       />
     );
     const unshareOperation = (
       <OpIcon
-        className="op-icon sf2-icon-x3"
+        className="op-icon"
+        symbol="x-01"
         title={gettext('Unshare')}
         op={this.onItemUnshare}
       />
     );
     const deleteOperation = (
       <OpIcon
-        className="op-icon sf3-font-delete1 sf3-font"
+        className="op-icon"
+        symbol="delete1"
         title={gettext('Delete')}
         role="button" aria-label={gettext('Delete')}
         op={this.onItemDeleteToggle}
@@ -477,7 +481,7 @@ class SharedRepoListItem extends React.Component {
               tag="i"
               role="button"
               tabIndex="0"
-              className="op-icon sf3-font-more sf3-font"
+              className="op-icon"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
@@ -486,7 +490,9 @@ class SharedRepoListItem extends React.Component {
               style={{ 'minWidth': '0' }}
               onClick={this.clickOperationMenuToggle}
               onKeyDown={this.onDropdownToggleKeyDown}
-            />
+            >
+              <Icon symbol="more-vertical" className="w-4 h-4" />
+            </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
               {operations.map((item, index) => {
                 if (item == 'Divider') {
@@ -510,7 +516,7 @@ class SharedRepoListItem extends React.Component {
                         onKeyDown={this.toggleAdvancedMenuShown}
                       >
                         {this.translateMenuItem(item)}
-                        <i className="sf3-font-down sf3-font rotate-270"></i>
+                        <Icon symbol="down" className="w-3 h-3 rotate-270" />
                       </DropdownToggle>
                       <DropdownMenu>
                         {advancedOperations.map((item, index) => {
@@ -589,7 +595,8 @@ class SharedRepoListItem extends React.Component {
       >
         <td className="text-center">
           <OpIcon
-            className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+            className="star-icon"
+            symbol={this.state.isStarred ? 'starred' : 'star-empty'}
             title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
             op={this.onToggleStarRepo}
           />
@@ -622,7 +629,8 @@ class SharedRepoListItem extends React.Component {
               <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               {isStarred &&
               <OpIcon
-                className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                className='op-icon library-grid-item-icon'
+                symbol='starred'
                 title={gettext('Unstar')}
                 op={this.onToggleStarRepo}
               />

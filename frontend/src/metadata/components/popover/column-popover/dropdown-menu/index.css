@@ -11,10 +11,6 @@
   background-color: var(--bs-dropdown-tertiary-bg);
 }
 
-.column-type-item:hover .sf3-font-down {
-  color: #666;
-}
-
 .column-type-item .sf-metadata-icon {
   fill: #aaa;
   margin-right: 8px;

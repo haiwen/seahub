@@ -76,9 +76,12 @@
   border: 1px solid var(--bs-border-color);
 }
 
-.permission-editor .sf3-font-down {
-  display: inline-block;
-  transform: translateY(2px);
-  transition: all 0.1s;
-  font-size: 14px !important;
+.permission-editor .seafile-multicolor-icon-down {
+  width: 14px;
+  height: 14px;
+  color: #999;
+}
+
+.permission-editor .seafile-multicolor-icon-down:hover {
+  color: #666;
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ModalPortal from '../../modal-portal';
 import SelectOptionGroup from './select-option-group.js';
+import Icon from '../../icon.js';
 
 import './index.css';
 
@@ -77,14 +78,14 @@ class GroupSelect extends Component {
               {selectedOptions.map(item =>
                 <span key={item.id} className="selected-option-item mr-1 px-1">
                   <span className='selected-option-item-name'>{item.name}</span>
-                  <i className="sf2-icon-close ml-1" onClick={() => {this.props.onDeleteOption(item);}}></i>
+                  <span className="d-flex align-items-center ml-1" onClick={() => {this.props.onDeleteOption(item);}}><Icon symbol="x-01" /></span>
                 </span>
               )}
             </span>
             :
             <span className="select-placeholder">{placeholder}</span>
           }
-          <i className="sf3-font-down sf3-font"></i>
+          <Icon symbol="down" />
         </div>
         {this.state.isShowSelectOptions && !isInModal && (
           <SelectOptionGroup

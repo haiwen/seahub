@@ -6,6 +6,7 @@ import TextTranslation from '../../utils/text-translation';
 import { getFileById, getFileName, getTagFileOperationList } from '../../tag/utils/file';
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
+import Icon from '../icon';
 
 const TagFilesToolbar = ({ currentRepoInfo }) => {
   const [selectedFileIds, setSelectedFileIds] = useState([]);
@@ -111,18 +112,22 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         title={gettext('Unselect')}
         op={unSelect}
       >
-        <span className="sf3-font-x-01 sf3-font mr-2"></span>
+        <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
+          <Icon symbol="x-01" />
+        </span>
         <span>{selectedFilesLen}{' '}{gettext('selected')}</span>
       </OpElement>
       {(selectedFilesLen === 1 && canModify) &&
         <>
           <OpIcon
-            className="cur-view-path-btn sf3-font-move1 sf3-font"
+            className="cur-view-path-btn"
+            symbol="move1"
             title={gettext('Move')}
             op={moveTagFile}
           />
           <OpIcon
-            className="cur-view-path-btn sf3-font-copy1 sf3-font"
+            className="cur-view-path-btn"
+            symbol="copy1"
             title={gettext('Copy')}
             op={copyTagFile}
           />
@@ -131,12 +136,14 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       {canModify &&
         <>
           <OpIcon
-            className="cur-view-path-btn sf3-font-delete1 sf3-font"
+            className="cur-view-path-btn"
+            symbol="delete1"
             title={gettext('Delete')}
             op={deleteTagFiles}
           />
           <OpIcon
-            className="cur-view-path-btn sf3-font-download1 sf3-font"
+            className="cur-view-path-btn"
+            symbol="download"
             title={gettext('Download')}
             op={downloadTagFiles}
           />
@@ -145,7 +152,8 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
       {selectedFilesLen === 1 &&
         <ItemDropdownMenu
           item={{}}
-          toggleClass={'cur-view-path-btn sf3-font-more sf3-font'}
+          toggleClass={'cur-view-path-btn'}
+          toggleChildren={<Icon symbol="more-level" />}
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

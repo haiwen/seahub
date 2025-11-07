@@ -8,6 +8,7 @@ import { useTags } from '../../hooks';
 import { SIDEBAR_INIT_LEFT_INDENT } from '../../constants/sidebar-tree';
 import { getAllChildTagsIdsFromNode } from '../../utils/tree';
 import { Utils } from '../../../utils/utils';
+import Icon from '../../../components/icon';
 
 import './index.css';
 
@@ -107,7 +108,11 @@ const Tag = ({ node, currentPath, leftIndent, selectedNodeKey, expanded, checkNo
           <div className="tag-tree-node-count">{tagCount}</div>
         </div>
         <div className="left-icon" style={{ left: leftIndent - SIDEBAR_INIT_LEFT_INDENT }}>
-          {hasChildren && <i className={classnames('folder-toggle-icon sf3-font sf3-font-down', { 'rotate-270': !expanded })} onClick={onToggleExpanded} aria-hidden="true"></i>}
+          {hasChildren && (
+            <span className="folder-toggle-icon" onClick={onToggleExpanded}>
+              <Icon symbol="down" className={classnames({ 'rotate-270': !expanded })} />
+            </span>
+          )}
           <div className="tree-node-icon">
             <div className="tag-tree-node-color" style={{ backgroundColor: tagColor }}></div>
           </div>

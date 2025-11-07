@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { CAPTURE_INFO_SHOW_KEY } from '../../../../../constants';
+import Icon from '../../../../icon';
 
 import './index.css';
 
@@ -18,7 +19,7 @@ const Collapse = ({ className, title, children, isShow = true }) => {
       <div className="file-details-collapse-header">
         <div className="file-details-collapse-header-title">{title}</div>
         <div className="file-details-collapse-header-operation" onClick={toggleShowChildren}>
-          <i aria-hidden="true" className={`sf3-font sf3-font-down ${showChildren ? '' : 'rotate-90'}`}></i>
+          <Icon symbol="down" className={showChildren ? '' : 'rotate-90'} />
         </div>
       </div>
       {showChildren && (

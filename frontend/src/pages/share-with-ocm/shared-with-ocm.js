@@ -19,6 +19,7 @@ import LibsMobileThead from '../../components/libs-mobile-thead';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
+import Icon from '../../components/icon';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -81,9 +82,7 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       if (isDesktop) {
-        const sortIcon = sortOrder === 'asc'
-          ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span>
-          : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
+        const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
         return currentViewMode == LIST_MODE
           ? (
@@ -92,7 +91,7 @@ class Content extends Component {
                 <tr>
                   <th width="4%"></th>
                   <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                  <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
+                  <th width="35%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {this.props.sortBy === 'name' && sortIcon}</a></th>
                   <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
                   {inAllLibs
                     ? (
@@ -349,9 +348,10 @@ class SharedWithOCM extends Component {
       <>
         {(!Utils.isDesktop() && this.state.items.length > 0) &&
           <span
-            className="sf3-font sf3-font-sort action-icon"
+            className="action-icon"
             onClick={this.toggleSortOptionsDialog}
           >
+            <Icon symbol="sort-mobile" />
           </span>
         }
       </>
@@ -417,11 +417,10 @@ class SharedWithOCM extends Component {
           ? (
             <>
               <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-                <h4 className="sf-heading m-0">
-                  <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+                <h4 className="sf-heading m-0 d-flex align-items-center">
+                  <span className="nav-icon" aria-hidden="true"><Icon symbol="share-with-me" /></span>
                   {gettext('Shared from other servers')}
                 </h4>
-                {/* this.renderSortIconInMobile() */}
               </div>
               {this.renderContent(currentViewMode)}
             </>

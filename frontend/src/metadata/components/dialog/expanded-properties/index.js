@@ -64,7 +64,7 @@ const ExpandedPropertiesDialog = ({ recordId, columns, toggle }) => {
   const closeBtn = (
     <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggle}>
       <span className="seahub-modal-btn-inner">
-        <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+        <Icon symbol="x-01" />
       </span>
     </button>
   );

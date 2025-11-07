@@ -22,6 +22,7 @@ import { GroupsReposManager } from './groups-repos-manager';
 import EventBus from '../../components/common/event-bus';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
+import Icon from '../../components/icon';
 
 import '../../css/files.css';
 
@@ -386,7 +387,7 @@ class Libraries extends Component {
   render() {
     const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
-    const sortIcon = sortOrder === 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
     return (
       <>
@@ -410,10 +411,10 @@ class Libraries extends Component {
                         <tr>
                           <th width="4%"></th>
                           <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                          <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'name')}>{gettext('Name')} {sortBy === 'name' && sortIcon}</a></th>
+                          <th width="35%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'name')}>{gettext('Name')} {sortBy === 'name' && sortIcon}</a></th>
                           <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                          <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'size')}>{gettext('Size')} {sortBy === 'size' && sortIcon}</a></th>
-                          <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'time')}>{gettext('Last Update')} {sortBy === 'time' && sortIcon}</a></th>
+                          <th width="14%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'size')}>{gettext('Size')} {sortBy === 'size' && sortIcon}</a></th>
+                          <th width="17%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.toggleSortOrder.bind(this, 'time')}>{gettext('Last Update')} {sortBy === 'time' && sortIcon}</a></th>
                           <th width="17%">{gettext('Owner')}</th>
                         </tr>
                       </thead>
@@ -424,7 +425,7 @@ class Libraries extends Component {
                     <div className="pb-3">
                       <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
                         <h4 className="sf-heading m-0 d-flex align-items-center">
-                          <span className="sf3-font-mine sf3-font nav-icon" aria-hidden="true"></span>
+                          <span className="nav-icon d-flex align-items-center"><Icon symbol="mine" className="w-4 h-4" /></span>
                           {gettext('My Libraries')}
                           <SingleDropdownToolbar
                             withPlusIcon={true}
@@ -432,7 +433,7 @@ class Libraries extends Component {
                           />
                         </h4>
                         {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
-                          <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
+                          <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" /></span>
                         }
                       </div>
                       {this.state.errorMsg

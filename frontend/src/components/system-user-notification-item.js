@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
 import { notificationAPI } from '../utils/notification-api';
+import Icon from './icon';
 
 import '../css/system-notification.css';
 
@@ -26,7 +27,7 @@ class SystemUserNotificationItem extends React.Component {
       <div id="info-bar" className="d-flex justify-content-between">
         <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{ __html: this.props.msg }}></p>
         <span title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close} role="button">
-          <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+          <Icon symbol="x-01" />
         </span>
       </div>
     );

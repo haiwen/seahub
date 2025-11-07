@@ -9,3 +9,9 @@
   left: 0;
   text-align: center;
 }
+
+.dropdown-item .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
+}

@@ -286,7 +286,8 @@ class MylibRepoListItem extends React.Component {
       >
         <td className="text-center">
           <OpIcon
-            className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+            className="star-icon"
+            symbol={this.state.isStarred ? 'starred' : 'star-empty'}
             title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
             op={this.onToggleStarRepo}
           />
@@ -311,12 +312,14 @@ class MylibRepoListItem extends React.Component {
           {(repo.repo_name && this.state.isOpIconShow) && (
             <div className="d-flex align-items-center">
               <OpIcon
-                className="op-icon sf3-font-share sf3-font"
+                className="op-icon"
+                symbol="share"
                 title={gettext('Share')}
                 op={this.onShareToggle}
               />
               <OpIcon
-                className="op-icon sf3-font-delete1 sf3-font"
+                className="op-icon"
+                symbol="delete1"
                 title={gettext('Delete')}
                 op={this.onDeleteToggle}
               />
@@ -356,7 +359,8 @@ class MylibRepoListItem extends React.Component {
               <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               {isStarred &&
               <OpIcon
-                className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                className="op-icon library-grid-item-icon"
+                symbol="starred"
                 title={gettext('Unstar')}
                 op={this.onToggleStarRepo}
               />
@@ -370,12 +374,14 @@ class MylibRepoListItem extends React.Component {
         {(repo.repo_name && this.state.isOpIconShow) && (
           <div className="flex-shrink-0 d-flex align-items-center">
             <OpIcon
-              className="op-icon sf3-font-share sf3-font"
+              className="op-icon"
+              symbol="share"
               title={gettext('Share')}
               op={this.onShareToggle}
             />
             <OpIcon
-              className="op-icon sf3-font-delete1 sf3-font"
+              className="op-icon"
+              symbol="delete1"
               title={gettext('Delete')}
               op={this.onDeleteToggle}
             />

@@ -10,6 +10,7 @@ import { seafileAPI } from '../../../../../utils/seafile-api';
 import ModalPortal from '../../../../modal-portal';
 import toaster from '../../../../toast';
 import { SEARCH_FILTERS_KEY } from '../../../../../constants';
+import Icon from '../../../../icon';
 
 const FilterByCreator = ({ creatorList, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -95,7 +96,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
           'highlighted': selectedOptions.length > 0,
         })}>
           <div className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</div>
-          <i className="sf3-font sf3-font-down sf3-font pl-1" aria-hidden="true" />
+          <Icon symbol="down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">

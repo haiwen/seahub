@@ -31,15 +31,13 @@
   cursor: default;
 }
 
-.group-select .sf3-font-down {
-  display: inline-block;
+.group-select .seafile-multicolor-icon-down {
+  width: 14px;
+  height: 14px;
   color: #999;
-  transform: translateY(2px);
-  transition: all 0.1s;
-  font-size: 14px !important;
 }
 
-.group-select .sf3-font-down:hover {
+.group-select .seafile-multicolor-icon-down:hover {
   color: #666;
 }
 
@@ -90,7 +88,9 @@
   color: var(--bs-body-color);
 }
 
-.group-select .selected-option-show .selected-option-item .sf2-icon-close {
+.group-select .selected-option-show .selected-option-item .seafile-multicolor-icon-x-01 {
+  width: 12px;
+  height: 12px;
   cursor: pointer;
   color: rgb(103, 103, 103);
 }
