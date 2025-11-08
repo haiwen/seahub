@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { cloudMode, isOrgContext } from '../utils/constants';
+import { cloudMode, gettext, isOrgContext } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
+import OpIcon from './op-icon';
 
 import '../css/select-users-icon.css';
 
@@ -53,7 +54,11 @@ class SelectUsersIcon extends React.Component {
     return (
       <>
         {enableSelectMembersFromDept &&
-          <i role="button" onClick={this.props.onClick} className="sf3-font sf3-font-invite-visitors toggle-detail-btn"></i>
+          <OpIcon
+            className="sf3-font sf3-font-invite-visitors toggle-detail-btn"
+            title={gettext('Select members from department')}
+            op={this.props.onClick}
+          />
         }
       </>
     );

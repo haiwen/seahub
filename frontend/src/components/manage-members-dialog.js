@@ -11,6 +11,7 @@ import Loading from './loading';
 import GroupMembers from './group-members';
 import SelectUsersIcon from './select-members-to-share-with';
 import { eventBus } from './common/event-bus';
+import OpIcon from './op-icon';
 
 import '../css/manage-members-dialog.css';
 
@@ -199,7 +200,7 @@ class ManageMembersDialog extends React.Component {
           {groupMembers.length > 10 &&
             <InputGroup className={`search-group-members rounded ${searchActive ? 'active' : ''}`}>
               <InputGroupText>
-                <i className="sf3-font sf3-font-search" aria-hidden={true}></i>
+                <i className="sf3-font sf3-font-search"></i>
               </InputGroupText>
               <Input
                 type="text"
@@ -212,7 +213,11 @@ class ManageMembersDialog extends React.Component {
               />
               {keyword && (
                 <InputGroupText>
-                  <i className="sf2-icon-x1" aria-hidden={true} onClick={this.clearSearch}></i>
+                  <OpIcon
+                    className="sf2-icon-x1"
+                    title={gettext('Clear')}
+                    op={this.clearSearch}
+                  />
                 </InputGroupText>
               )}
             </InputGroup>
