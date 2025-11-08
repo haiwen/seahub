@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
+import { Utils } from '../../../utils/utils';
 
 const FilterBySuffix = ({ suffixes, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,12 +39,20 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
   return (
     <div className="search-filter filter-by-suffix-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
-          'active': isOpen && inputValue.length > 0,
-          'highlighted': inputValue.length > 0,
-        })} onClick={toggle}>
-          <div className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</div>
-          <i className="sf3-font sf3-font-down pl-1" aria-hidden="true" />
+        <DropdownToggle
+          tag="div"
+          className={classNames('search-filter-toggle', {
+            'active': isOpen && inputValue.length > 0,
+            'highlighted': inputValue.length > 0,
+          })}
+          onClick={toggle}
+          role="button"
+          tabIndex={0}
+          aria-haspopup={true}
+          aria-expanded={isOpen}
+        >
+          <span className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</span>
+          <i className="sf3-font sf3-font-down pl-1"></i>
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">
@@ -62,7 +71,9 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
                 type="button"
                 className="clear-icon-right sf3-font sf3-font-x-01"
                 onClick={handleClearInput}
+                onKeyDown={Utils.onKeyDown}
                 aria-label={gettext('Clear')}
+                title={gettext('Clear')}
               >
               </button>
             )}
