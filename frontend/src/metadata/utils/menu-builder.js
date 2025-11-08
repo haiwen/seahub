@@ -326,6 +326,25 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
       });
     }
 
+    if (isSomeone !== null && !readOnly) {
+      const { canRemovePhotoFromPeople, canAddPhotoToPeople } = faceRecognitionPermission;
+      if (menuOptions.length > 0) {
+        menuOptions.push('Divider');
+      }
+      if (canRemovePhotoFromPeople) {
+        menuOptions.push({
+          key: TextTranslation.REMOVE_FROM_GROUP.key,
+          value: TextTranslation.REMOVE_FROM_GROUP.value
+        });
+      }
+      if (canAddPhotoToPeople) {
+        menuOptions.push({
+          key: TextTranslation.ADD_TO_GROUPS.key,
+          value: TextTranslation.ADD_TO_GROUPS.value
+        });
+      }
+    }
+
     return menuOptions;
   }
 
@@ -386,7 +405,7 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
       });
     }
 
-    if (canAddPhotoToPeople && !isSomeone) {
+    if (canAddPhotoToPeople) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
@@ -420,6 +439,25 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
         subOpList: aiOptions
       });
     }
+
+    if (isSomeone !== null && !readOnly) {
+      const { canRemovePhotoFromPeople, canAddPhotoToPeople } = faceRecognitionPermission;
+      if (menuOptions.length > 0) {
+        menuOptions.push('Divider');
+      }
+      if (canRemovePhotoFromPeople) {
+        menuOptions.push({
+          key: TextTranslation.REMOVE_FROM_GROUP.key,
+          value: TextTranslation.REMOVE_FROM_GROUP.value
+        });
+      }
+      if (canAddPhotoToPeople) {
+        menuOptions.push({
+          key: TextTranslation.ADD_TO_GROUPS.key,
+          value: TextTranslation.ADD_TO_GROUPS.value
+        });
+      }
+    }
     return menuOptions;
   }
 
@@ -447,7 +485,6 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
 
   if (isSomeone !== null && !readOnly) {
     menuOptions.push('Divider');
-
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
     if (canRemovePhotoFromPeople) {
       menuOptions.push({
@@ -456,7 +493,7 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
       });
     }
 
-    if (canAddPhotoToPeople && !isSomeone) {
+    if (canAddPhotoToPeople) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
