@@ -21,7 +21,7 @@ import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
 import { EVENT_BUS_TYPE } from './common/event-bus-type';
 import EventBus from './common/event-bus';
-import OpIcon from '../components/op-icon';
+import OpIcon from './op-icon';
 import Icon from '../components/icon';
 
 const propTypes = {
@@ -47,6 +47,47 @@ class MainSideNav extends React.Component {
     this.filesNavHeight = 0;
     this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
+
+  componentDidMount() {
+    this.setupTooltipDetection();
+  }
+
+  componentWillUnmount() {
+    this.cleanupTooltipDetection();
+  }
+
+  setupTooltipDetection = () => {
+    this.navContainer = document.querySelector('.side-nav');
+
+    this.handleMouseEnter = (e) => {
+      const target = e.target;
+      if (target.classList.contains('nav-text')) {
+        const isTruncated = target.scrollWidth > target.clientWidth;
+        if (isTruncated) {
+          target.setAttribute('title', target.textContent.trim());
+        }
+      }
+    };
+
+    this.handleMouseLeave = (e) => {
+      const target = e.target;
+      if (target.classList.contains('nav-text')) {
+        target.removeAttribute('title');
+      }
+    };
+
+    if (this.navContainer) {
+      this.navContainer.addEventListener('mouseenter', this.handleMouseEnter, true);
+      this.navContainer.addEventListener('mouseleave', this.handleMouseLeave, true);
+    }
+  };
+
+  cleanupTooltipDetection = () => {
+    if (this.navContainer) {
+      this.navContainer.removeEventListener('mouseenter', this.handleMouseEnter, true);
+      this.navContainer.removeEventListener('mouseleave', this.handleMouseLeave, true);
+    }
+  };
 
   toggleWechatDialog = () => {
     this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
@@ -160,7 +201,7 @@ class MainSideNav extends React.Component {
     if (canGenerateShareLink) {
       linksNavItem = (
         <li className={`nav-item ${this.getActiveClass('share-admin-share-links')}`}>
-          <Link to={siteRoot + 'share-admin-share-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-share-links')}`} title={gettext('Links')} onClick={(e) => this.tabItemClick(e, 'share-admin-share-links')}>
+          <Link to={siteRoot + 'share-admin-share-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-share-links')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-share-links')}>
             <span aria-hidden="true" className="sharp">#</span>
             <span className="nav-text">{gettext('Links')}</span>
           </Link>
@@ -169,7 +210,7 @@ class MainSideNav extends React.Component {
     } else if (canGenerateUploadLink) {
       linksNavItem = (
         <li className={`nav-item ${this.getActiveClass('share-admin-upload-links')}`}>
-          <Link to={siteRoot + 'share-admin-upload-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-upload-links')}`} title={gettext('Links')} onClick={(e) => this.tabItemClick(e, 'share-admin-upload-links')}>
+          <Link to={siteRoot + 'share-admin-upload-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-upload-links')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-upload-links')}>
             <span aria-hidden="true" className="sharp">#</span>
             <span className="nav-text">{gettext('Links')}</span>
           </Link>
@@ -184,7 +225,7 @@ class MainSideNav extends React.Component {
       >
         {canAddRepo && canShareRepo && height !== 0 && (
           <li className={`nav-item ${this.getActiveClass('share-admin-libs')}`}>
-            <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
+            <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-libs')}>
               <span aria-hidden="true" className="sharp">#</span>
               <span className="nav-text">{gettext('Libraries')}</span>
             </Link>
@@ -192,7 +233,7 @@ class MainSideNav extends React.Component {
         )}
         {canShareRepo && height !== 0 && (
           <li className={`nav-item ${this.getActiveClass('share-admin-folders')}`}>
-            <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} title={gettext('Folders')} onClick={(e) => this.tabItemClick(e, 'share-admin-folders')}>
+            <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} onClick={(e) => this.tabItemClick(e, 'share-admin-folders')}>
               <span aria-hidden="true" className="sharp">#</span>
               <span className="nav-text">{gettext('Folders')}</span>
             </Link>
@@ -208,7 +249,7 @@ class MainSideNav extends React.Component {
       customNavItems.map((item, idx) => {
         return (
           <li key={idx} className='nav-item'>
-            <a href={item.link} className="nav-link ellipsis" title={item.desc}>
+            <a href={item.link} className="nav-link ellipsis">
               <span className={item.icon} aria-hidden="true"></span>
               <span className="nav-text">{item.desc}</span>
             </a>
@@ -244,13 +285,14 @@ class MainSideNav extends React.Component {
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
               <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
-                  <div className="d-flex align-items-center">
+                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getActiveClass('libraries')}`} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+                  <span className="d-flex align-items-center">
                     <Icon symbol="files1" />
                     <span className="nav-text">{gettext('Files')}</span>
-                  </div>
+                  </span>
                   <OpIcon
-                    className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`}
+                    className={`op-icon ${filesNavUnfolded ? '' : 'rotate-90'}`}
+                    symbol="down"
                     title={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
                     op={this.toggleFilesNav}
                   />
@@ -274,14 +316,14 @@ class MainSideNav extends React.Component {
               </li>
 
               <li className={`nav-item ${this.getActiveClass('starred')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} onClick={(e) => this.tabItemClick(e, 'starred')}>
                   <Icon symbol="starred" />
                   <span className="nav-text">{gettext('Favorites')}</span>
                 </Link>
               </li>
               {showActivity &&
               <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'activities/all'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'activities/all'} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
                   <Icon symbol="activities" />
                   <span className="nav-text">{gettext('Activities')}</span>
                 </Link>
@@ -289,7 +331,7 @@ class MainSideNav extends React.Component {
               }
               {canCreateWiki &&
               <li className={`nav-item ${this.getActiveClass('published')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} onClick={(e) => this.tabItemClick(e, 'published')}>
                   <Icon symbol="wiki" />
                   <span className="nav-text">{gettext('Wikis')}</span>
                 </Link>
@@ -297,7 +339,7 @@ class MainSideNav extends React.Component {
               }
               {canInvitePeople &&
               <li className={`nav-item ${this.getActiveClass('invitations')}`}>
-                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
+                <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} onClick={(e) => this.tabItemClick(e, 'invitations')}>
                   <Icon symbol="invite-visitors" />
                   <span className="nav-text">{gettext('Invite Guest')}</span>
                 </Link>
@@ -305,22 +347,24 @@ class MainSideNav extends React.Component {
               }
               <li id="share-admin-nav" className='nav-item flex-column'>
                 <div
-                  className="nav-link ellipsis"
-                  title={gettext('Share Admin')}
+                  className="nav-link ellipsis justify-content-between"
                   onClick={this.shExtend}
                   tabIndex={0}
                   role="button"
                   onKeyDown={Utils.onKeyDown}
                 >
-                  <div className="d-flex align-items-center overflow-hidden">
+                  <span className="d-flex align-items-center overflow-hidden">
                     <span>
                       <Icon symbol="wrench" />
                     </span>
                     <span className="nav-text">{gettext('Share Admin')}</span>
-                  </div>
-                  <span className="op-icon">
-                    <Icon symbol="down" className={`${this.state.sharedExtended ? '' : 'rotate-90'}`} />
                   </span>
+                  <OpIcon
+                    className={`op-icon ${this.state.sharedExtended ? '' : 'rotate-90'}`}
+                    symbol="down"
+                    title={this.state.sharedExtended ? gettext('Fold') : gettext('Unfold')}
+                    op={this.shExtend}
+                  />
                 </div>
                 {this.renderSharedAdmin()}
               </li>
@@ -333,7 +377,7 @@ class MainSideNav extends React.Component {
             ) : (
               <ul className="nav nav-pills flex-column nav-container">
                 <li className='nav-item'>
-                  <a className={'nav-link'} href={helpLink || siteRoot + 'help/'} title={gettext('Help')}>
+                  <a className={'nav-link'} href={helpLink || siteRoot + 'help/'}>
                     <Icon symbol="help" />
                     <span className="nav-text">{gettext('Help')}</span>
                   </a>

@@ -202,6 +202,7 @@ class MainSideNavFolded extends React.Component {
                     className={`nav-link ellipsis ${this.getActiveClass('invitations')}`}
                     to={siteRoot + 'invitations/'}
                     onClick={(e) => this.tabItemClick(e, 'invitations')}
+                    aria-label={gettext('Invite Guest')}
                   >
                     <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-invitations"><Icon symbol="invite-visitors" /></span>
                     <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
@@ -213,8 +214,9 @@ class MainSideNavFolded extends React.Component {
                 customNavItems.map((item, idx) => {
                   return (
                     <li key={idx} className='nav-item'>
-                      <a href={item.link} className="nav-link ellipsis" title={item.desc} aria-label={item.desc}>
-                        <span className={item.icon} aria-hidden="true" title={item.desc}></span>
+                      <a href={item.link} className="nav-link ellipsis" aria-label={item.desc}>
+                        <span className="d-flex align-items-center" aria-hidden="true" id={`main-side-nav-folded-custom-${idx}`}><span className={item.icon}></span></span>
+                        <Tip target={`main-side-nav-folded-custom-${idx}`} text={item.desc} />
                       </a>
                     </li>
                   );
@@ -227,7 +229,7 @@ class MainSideNavFolded extends React.Component {
                 :
                 <ul className="nav nav-pills flex-column nav-container">
                   <li className='nav-item'>
-                    <a className='nav-link' href={siteRoot + 'help/'} title={gettext('Help')}>
+                    <a className='nav-link' href={siteRoot + 'help/'} aria-label={gettext('Help')}>
                       <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-help"><Icon symbol="help" /></span>
                       <Tip target="main-side-nav-folded-help" text={gettext('Help')} />
                     </a>
@@ -236,7 +238,7 @@ class MainSideNavFolded extends React.Component {
                   <>
                     <li className='nav-item'>
                       <a href={`${siteRoot}terms/`} className="nav-link" aria-label={gettext('Terms')}>
-                        <span className="sf3-font-terms sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-terms"></span>
+                        <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-terms"><Icon symbol="terms" /></span>
                         <Tip target="main-side-nav-folded-terms" text={gettext('Terms')} />
                       </a>
                     </li>
@@ -287,9 +289,11 @@ class MainSideNavFolded extends React.Component {
                 onClick={this.props.toggleFoldSideNav}
                 onKeyDown={Utils.onKeyDown}
                 aria-label={gettext('Unfold the sidebar')}
-                title={gettext('Unfold the sidebar')}
               >
-                <Icon symbol="open-sidebar" className="mr-0" />
+                <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-unfold">
+                  <Icon symbol="open-sidebar" className="mr-0" />
+                </span>
+                <Tip target="main-side-nav-folded-unfold" text={gettext('Unfold the sidebar')} />
               </div>
             </div>
           </div>

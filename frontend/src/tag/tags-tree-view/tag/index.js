@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { getTagColor, getTagName, getTagFilesLinks } from '../../utils/cell';
@@ -49,6 +49,36 @@ const Tag = ({ node, currentPath, leftIndent, selectedNodeKey, expanded, checkNo
     return nodeKey === selectedNodeKey;
   }, [nodeKey, selectedNodeKey]);
 
+  useEffect(() => {
+    const tagTreeView = document.querySelector('.metadata-tree-view-tag');
+    if (!tagTreeView) return;
+
+    const handleMouseEnter = (e) => {
+      const target = e.target;
+      if (target.classList.contains('tag-tree-node-name')) {
+        const isTruncated = target.scrollWidth > target.clientWidth;
+        if (isTruncated) {
+          target.setAttribute('title', target.textContent.trim());
+        }
+      }
+    };
+
+    const handleMouseLeave = (e) => {
+      const target = e.target;
+      if (target.classList.contains('tag-tree-node-name')) {
+        target.removeAttribute('title');
+      }
+    };
+
+    tagTreeView.addEventListener('mouseenter', handleMouseEnter, true);
+    tagTreeView.addEventListener('mouseleave', handleMouseLeave, true);
+
+    return () => {
+      tagTreeView.removeEventListener('mouseenter', handleMouseEnter, true);
+      tagTreeView.removeEventListener('mouseleave', handleMouseLeave, true);
+    };
+  }, []);
+
   const onMouseEnter = useCallback(() => {
     setHighlight(true);
   }, []);
@@ -94,7 +124,6 @@ const Tag = ({ node, currentPath, leftIndent, selectedNodeKey, expanded, checkNo
     <div className="tree-node">
       <div
         className={classnames('tree-node-inner text-nowrap tag-tree-node', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
-        title={`${tagName} (${tagCount})`}
         aria-label={`${tagName} (${tagCount})`}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}

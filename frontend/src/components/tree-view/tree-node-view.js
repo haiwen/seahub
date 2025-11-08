@@ -50,6 +50,47 @@ class TreeNodeView extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.setupTooltipDetection();
+  }
+
+  componentWillUnmount() {
+    this.cleanupTooltipDetection();
+  }
+
+  setupTooltipDetection = () => {
+    this.treeNodeContainer = document.querySelector('.tree-view');
+
+    this.handleMouseEnter = (e) => {
+      const target = e.target;
+      if (target.classList.contains('tree-node-text')) {
+        const isTruncated = target.scrollWidth > target.clientWidth;
+        if (isTruncated) {
+          target.setAttribute('title', target.textContent.trim());
+        }
+      }
+    };
+
+    this.handleMouseLeave = (e) => {
+      const target = e.target;
+      if (target.classList.contains('tree-node-text')) {
+        target.removeAttribute('title');
+      }
+    };
+
+    if (this.treeNodeContainer) {
+      this.treeNodeContainer.addEventListener('mouseenter', this.handleMouseEnter, true);
+      this.treeNodeContainer.addEventListener('mouseleave', this.handleMouseLeave, true);
+    }
+  };
+
+  cleanupTooltipDetection = () => {
+    if (this.treeNodeContainer) {
+      this.treeNodeContainer.removeEventListener('mouseenter', this.handleMouseEnter, true);
+      this.treeNodeContainer.removeEventListener('mouseleave', this.handleMouseLeave, true);
+    }
+  };
+
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (!nextProps.isItemFreezed) {
       this.setState({
@@ -294,7 +335,6 @@ class TreeNodeView extends React.Component {
         <div
           type={type}
           className={`tree-node-inner text-nowrap ${hlClass} ${node.path === '/' ? 'hide' : ''} ${this.state.isNodeDropShow ? 'tree-node-drop' : ''}`}
-          title={node.object.name}
           onMouseEnter={this.onMouseEnter}
           onMouseOver={this.onMouseOver}
           onMouseLeave={this.onMouseLeave}

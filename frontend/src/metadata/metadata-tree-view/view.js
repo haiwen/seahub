@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { baiduMapKey, gettext, googleMapKey } from '../../utils/constants';
@@ -42,6 +42,36 @@ const ViewItem = ({
   const { idViewMap, moveView, modifyViewType } = useMetadata();
 
   const otherViewsName = Object.values(idViewMap).filter(v => v._id !== view._id).map(v => v.name);
+
+  useEffect(() => {
+    const treeViewContainer = document.querySelector('.metadata-tree-view');
+    if (!treeViewContainer) return;
+
+    const handleMouseEnter = (e) => {
+      const target = e.target;
+      if (target.classList.contains('tree-node-text')) {
+        const isTruncated = target.scrollWidth > target.clientWidth;
+        if (isTruncated) {
+          target.setAttribute('title', target.textContent.trim());
+        }
+      }
+    };
+
+    const handleMouseLeave = (e) => {
+      const target = e.target;
+      if (target.classList.contains('tree-node-text')) {
+        target.removeAttribute('title');
+      }
+    };
+
+    treeViewContainer.addEventListener('mouseenter', handleMouseEnter, true);
+    treeViewContainer.addEventListener('mouseleave', handleMouseLeave, true);
+
+    return () => {
+      treeViewContainer.removeEventListener('mouseenter', handleMouseEnter, true);
+      treeViewContainer.removeEventListener('mouseleave', handleMouseLeave, true);
+    };
+  }, []);
 
   const canUpdate = useMemo(() => {
     if (userPerm !== 'rw' && userPerm !== 'admin') return false;
@@ -236,7 +266,6 @@ const ViewItem = ({
     <div className={classnames('tree-node', { 'tree-node-sort': isSortShow })}>
       <div
         className={classnames('tree-node-inner text-nowrap', { 'tree-node-inner-hover': highlight, 'tree-node-hight-light': isSelected })}
-        title={viewName}
         aria-label={viewName}
         onMouseEnter={onMouseEnter}
         onMouseOver={onMouseOver}
