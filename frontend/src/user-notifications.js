@@ -187,16 +187,14 @@ class UserNotificationsDialog extends React.Component {
       <div className="notification-header-close">
         <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu}>
           <DropdownToggle
-            tag="span"
             data-toggle="dropdown"
             aria-expanded={this.state.isItemMenuShow}
-            className="notification-dropdown-toggle"
+            className="notification-dropdown-toggle seahub-modal-btn border-0 p-0 bg-transparent"
+            aria-label={gettext('More operations')}
           >
-            <button type="button" className="close seahub-modal-btn" aria-label={gettext('More')}>
-              <span className="seahub-modal-btn-inner">
-                <i className="sf3-font sf3-font-more" aria-hidden="true"></i>
-              </span>
-            </button>
+            <span className="seahub-modal-btn-inner">
+              <i className="sf3-font sf3-font-more"></i>
+            </span>
           </DropdownToggle>
           <DropdownMenu className="dtable-dropdown-menu large">
             <DropdownItem onClick={this.markAllRead}>{gettext('Mark all read')}</DropdownItem>
@@ -212,7 +210,6 @@ class UserNotificationsDialog extends React.Component {
     );
   };
 
-
   renderNoticeContent = (content) => {
     const { generalNoticeListUnseen, discussionNoticeListUnseen } = this.props;
     let activeTab = this.state.activeTab;
@@ -224,6 +221,7 @@ class UserNotificationsDialog extends React.Component {
               <NavLink
                 className={classname('w-100 mr-0', { 'active': activeTab === 'general' })}
                 onClick={() => this.tabItemClick('general')}
+                onKeyDown={Utils.onKeyDown}
                 tabIndex="0"
                 value="general"
               >
@@ -235,7 +233,8 @@ class UserNotificationsDialog extends React.Component {
               <NavLink
                 className={classname('w-100 mr-0', { 'active': activeTab === 'discussion' })}
                 onClick={() => this.tabItemClick('discussion')}
-                tabIndex="1"
+                onKeyDown={Utils.onKeyDown}
+                tabIndex="0"
                 value="discussion"
               >
                 {gettext('Discussion')}

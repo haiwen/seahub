@@ -28,4 +28,5 @@
 
 .modal .seahub-modal-btn .seahub-modal-btn-inner .sf3-font {
   color: var(--bs-icon-color);
+  font-size: 1rem;
 }
