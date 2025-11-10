@@ -331,13 +331,13 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
       if (menuOptions.length > 0) {
         menuOptions.push('Divider');
       }
-      if (canRemovePhotoFromPeople) {
+      if (isSomeone && canRemovePhotoFromPeople) {
         menuOptions.push({
           key: TextTranslation.REMOVE_FROM_GROUP.key,
           value: TextTranslation.REMOVE_FROM_GROUP.value
         });
       }
-      if (canAddPhotoToPeople) {
+      if (!isSomeone && canAddPhotoToPeople) {
         menuOptions.push({
           key: TextTranslation.ADD_TO_GROUPS.key,
           value: TextTranslation.ADD_TO_GROUPS.value
@@ -398,14 +398,14 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
     menuOptions.push('Divider');
 
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
-    if (canRemovePhotoFromPeople) {
+    if (isSomeone && canRemovePhotoFromPeople) {
       menuOptions.push({
         key: TextTranslation.REMOVE_FROM_GROUP.key,
         value: TextTranslation.REMOVE_FROM_GROUP.value
       });
     }
 
-    if (canAddPhotoToPeople) {
+    if (!isSomeone && canAddPhotoToPeople) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
@@ -445,13 +445,13 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
       if (menuOptions.length > 0) {
         menuOptions.push('Divider');
       }
-      if (canRemovePhotoFromPeople) {
+      if (isSomeone && canRemovePhotoFromPeople) {
         menuOptions.push({
           key: TextTranslation.REMOVE_FROM_GROUP.key,
           value: TextTranslation.REMOVE_FROM_GROUP.value
         });
       }
-      if (canAddPhotoToPeople) {
+      if (!isSomeone && canAddPhotoToPeople) {
         menuOptions.push({
           key: TextTranslation.ADD_TO_GROUPS.key,
           value: TextTranslation.ADD_TO_GROUPS.value
@@ -486,14 +486,14 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
   if (isSomeone !== null && !readOnly) {
     menuOptions.push('Divider');
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
-    if (canRemovePhotoFromPeople) {
+    if (isSomeone && canRemovePhotoFromPeople) {
       menuOptions.push({
         key: TextTranslation.REMOVE_FROM_GROUP.key,
         value: TextTranslation.REMOVE_FROM_GROUP.value
       });
     }
 
-    if (canAddPhotoToPeople) {
+    if (!isSomeone && canAddPhotoToPeople) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
