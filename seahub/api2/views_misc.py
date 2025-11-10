@@ -46,6 +46,10 @@ class ServerInfoView(APIView):
 
         if hasattr(settings, 'DESKTOP_CUSTOM_BRAND'):
             info['desktop-custom-brand'] = getattr(settings, 'DESKTOP_CUSTOM_BRAND')
+            
+        enable_onlyoffice = getattr(settings, 'ENABLE_ONLYOFFICE', False)
+        if enable_onlyoffice:
+            features.append('onlyoffice')
 
         info['features'] = features
         return info
