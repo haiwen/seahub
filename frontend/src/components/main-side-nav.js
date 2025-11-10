@@ -244,13 +244,14 @@ class MainSideNav extends React.Component {
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
               <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                   <div className="d-flex align-items-center">
                     <Icon symbol="files1" />
                     <span className="nav-text">{gettext('Files')}</span>
                   </div>
                   <OpIcon
-                    className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`}
+                    className={`op-icon ${filesNavUnfolded ? '' : 'rotate-90'}`}
+                    symbol="down"
                     title={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
                     op={this.toggleFilesNav}
                   />
@@ -305,7 +306,7 @@ class MainSideNav extends React.Component {
               }
               <li id="share-admin-nav" className='nav-item flex-column'>
                 <div
-                  className="nav-link ellipsis"
+                  className="nav-link ellipsis justify-content-between"
                   title={gettext('Share Admin')}
                   onClick={this.shExtend}
                   tabIndex={0}
