@@ -326,6 +326,25 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
       });
     }
 
+    if (isSomeone !== null && !readOnly) {
+      const { canRemovePhotoFromPeople, canAddPhotoToPeople } = faceRecognitionPermission;
+      if (menuOptions.length > 0) {
+        menuOptions.push('Divider');
+      }
+      if (isSomeone && canRemovePhotoFromPeople) {
+        menuOptions.push({
+          key: TextTranslation.REMOVE_FROM_GROUP.key,
+          value: TextTranslation.REMOVE_FROM_GROUP.value
+        });
+      }
+      if (!isSomeone && canAddPhotoToPeople) {
+        menuOptions.push({
+          key: TextTranslation.ADD_TO_GROUPS.key,
+          value: TextTranslation.ADD_TO_GROUPS.value
+        });
+      }
+    }
+
     return menuOptions;
   }
 
@@ -379,14 +398,14 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
     menuOptions.push('Divider');
 
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
-    if (canRemovePhotoFromPeople) {
+    if (isSomeone && canRemovePhotoFromPeople) {
       menuOptions.push({
         key: TextTranslation.REMOVE_FROM_GROUP.key,
         value: TextTranslation.REMOVE_FROM_GROUP.value
       });
     }
 
-    if (canAddPhotoToPeople && !isSomeone) {
+    if (!isSomeone && canAddPhotoToPeople) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
@@ -420,6 +439,25 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
         subOpList: aiOptions
       });
     }
+
+    if (isSomeone !== null && !readOnly) {
+      const { canRemovePhotoFromPeople, canAddPhotoToPeople } = faceRecognitionPermission;
+      if (menuOptions.length > 0) {
+        menuOptions.push('Divider');
+      }
+      if (isSomeone && canRemovePhotoFromPeople) {
+        menuOptions.push({
+          key: TextTranslation.REMOVE_FROM_GROUP.key,
+          value: TextTranslation.REMOVE_FROM_GROUP.value
+        });
+      }
+      if (!isSomeone && canAddPhotoToPeople) {
+        menuOptions.push({
+          key: TextTranslation.ADD_TO_GROUPS.key,
+          value: TextTranslation.ADD_TO_GROUPS.value
+        });
+      }
+    }
     return menuOptions;
   }
 
@@ -447,16 +485,15 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
 
   if (isSomeone !== null && !readOnly) {
     menuOptions.push('Divider');
-
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
-    if (canRemovePhotoFromPeople) {
+    if (isSomeone && canRemovePhotoFromPeople) {
       menuOptions.push({
         key: TextTranslation.REMOVE_FROM_GROUP.key,
         value: TextTranslation.REMOVE_FROM_GROUP.value
       });
     }
 
-    if (canAddPhotoToPeople && !isSomeone) {
+    if (!isSomeone && canAddPhotoToPeople) {
       menuOptions.push({
         key: TextTranslation.ADD_TO_GROUPS.key,
         value: TextTranslation.ADD_TO_GROUPS.value
