@@ -1331,6 +1331,7 @@ a.table-sort-op:hover {
 
 .show>.btn-secondary.dropdown-toggle.dropdown-item .dropdown-item-icon,
 .dropdown-item:hover .sf3-font,
+.dropdown-item:focus .sf3-font,
 .dropdown-item:hover .dropdown-item-icon,
 .dropdown-item:hover .btn .dropdown-item-icon,
 .dropdown-item:focus .dropdown-item-icon,
