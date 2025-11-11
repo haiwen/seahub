@@ -870,7 +870,7 @@ class SharedDirView extends React.Component {
                         {(canDownload && loginUser && (loginUser !== sharedBy)) &&
                         <OpIcon
                           className="sf3-font-save sf3-font cur-view-path-btn ml-4"
-                          onClick={this.saveSelectedItems}
+                          op={this.saveSelectedItems}
                           title={gettext('Save')}
                         />
                         }
