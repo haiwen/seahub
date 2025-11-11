@@ -16,14 +16,6 @@
   padding: 14px 12px;
 }
 
-.notification-header-close .notification-dropdown-toggle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 24px;
-  width: 24px
-}
-
 .notification-list-content .notification-modal-body {
   height: 100%;
   display: flex;

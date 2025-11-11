@@ -4,6 +4,7 @@ import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap
 import dayjs from 'dayjs';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import OpIcon from '../../../components/op-icon';
 import Picker from '../../date-and-time-picker';
 import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../../constants';
@@ -167,36 +168,35 @@ const FilterByDate = ({ date, onChange }) => {
   return (
     <div className="search-filter filter-by-date-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
-          'active': isOpen && value,
-          'highlighted': value,
-        })} onClick={toggle}>
-          <div className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</div>
-          <i
-            className="sf3-font sf3-font-down pl-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggle();
-            }}
-            role="button"
-            aria-label={isOpen ? gettext('Collapse') : gettext('Expand')}
-          />
+        <DropdownToggle
+          tag="div"
+          className={classNames('search-filter-toggle', {
+            'active': isOpen && value,
+            'highlighted': value,
+          })}
+          onClick={toggle}
+          tabIndex={0}
+          role="button"
+          aria-haspopup={true}
+          aria-expanded={isOpen}
+        >
+          <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
+          <i className="sf3-font sf3-font-down pl-1"></i>
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-date-menu">
             <div className="filter-by-date-menu-toolbar">
               <Dropdown isOpen={isTypeOpen} toggle={toggleType}>
-                <DropdownToggle tag="div" className="search-filter-toggle filter-by-date-type-toggle">
-                  <div className="filter-label">{typeLabel}</div>
-                  <i
-                    className="sf3-font sf3-font-down pl-1"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleType();
-                    }}
-                    role="button"
-                    aria-label={isTypeOpen ? gettext('Collapse') : gettext('Expand')}
-                  />
+                <DropdownToggle
+                  tag="div"
+                  className="search-filter-toggle filter-by-date-type-toggle"
+                  tabIndex={0}
+                  role="button"
+                  aria-haspopup={true}
+                  aria-expanded={isTypeOpen}
+                >
+                  <span className="filter-label">{typeLabel}</span>
+                  <i className="sf3-font sf3-font-down pl-1"></i>
                 </DropdownToggle>
                 <DropdownMenu>
                   {typeOptions.map((option) => {
@@ -210,9 +210,11 @@ const FilterByDate = ({ date, onChange }) => {
                   })}
                 </DropdownMenu>
               </Dropdown>
-              <div className="delete-btn" onClick={onClearDate}>
-                <i className="op-icon sf3-font-delete1 sf3-font"></i>
-              </div>
+              <OpIcon
+                className="op-icon sf3-font-delete1 sf3-font"
+                title={gettext('Delete')}
+                op={onClearDate}
+              />
             </div>
             {options.map((option, i) => {
               const isSelected = option.key === value;

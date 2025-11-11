@@ -90,12 +90,19 @@ const FilterByCreator = ({ creatorList, onChange }) => {
   return (
     <div className="search-filter filter-by-creator-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
-          'active': isOpen && selectedOptions.length > 0,
-          'highlighted': selectedOptions.length > 0,
-        })}>
-          <div className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</div>
-          <i className="sf3-font sf3-font-down sf3-font pl-1" aria-hidden="true" />
+        <DropdownToggle
+          tag="div"
+          className={classNames('search-filter-toggle', {
+            'active': isOpen && selectedOptions.length > 0,
+            'highlighted': selectedOptions.length > 0,
+          })}
+          tabIndex={0}
+          role="button"
+          aria-haspopup={true}
+          aria-expanded={isOpen}
+        >
+          <span className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</span>
+          <i className="sf3-font sf3-font-down sf3-font pl-1"></i>
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">

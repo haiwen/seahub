@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import className from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
 import { gettext } from '../utils/constants';
-import { DropdownMenu, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Button, DropdownMenu, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 
 import '../css/pagination.css';
 
@@ -84,21 +84,23 @@ class Paginator extends Component {
     const { curPerPage, currentPage } = this.props;
     return (
       <div className="my-6 paginator d-flex align-items-center justify-content-center">
-        <button
-          className="btn btn-secondary"
+        <Button
           disabled={currentPage == 1}
           onClick={this.goToPrevious}
+          title={gettext('Previous')}
+          aria-label={gettext('Previous')}
         >
-          <span aria-hidden="true" className="sf3-font sf3-font-down rotate-90 d-inline-block"></span>
-        </button>
+          <i className='sf3-font sf3-font-down rotate-90 d-inline-block'></i>
+        </Button>
         <span className="btn btn-primary mx-4">{currentPage}</span>
-        <button
-          className="btn btn-secondary"
+        <Button
           disabled={!this.props.hasNextPage}
           onClick={this.goToNext}
+          title={gettext('Next')}
+          aria-label={gettext('Next')}
         >
-          <span aria-hidden="true" className="sf3-font sf3-font-down rotate-270 d-inline-block"></span>
-        </button>
+          <i className="sf3-font sf3-font-down rotate-270 d-inline-block"></i>
+        </Button>
 
         <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
           <DropdownToggle

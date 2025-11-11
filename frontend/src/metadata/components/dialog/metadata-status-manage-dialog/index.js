@@ -179,16 +179,15 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
                 <p className="tip">
                   {gettext('Global hidden properties will not be displayed in all views.')}
                 </p>
-                <div
+                <Button
                   ref={hideColumnBtnRef}
                   id="metadata-status-hide-properties-button"
-                  className={classnames('metadata-status-hide-properties-button', { 'disabled': !oldValue })}
+                  className={classnames('border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
                   onClick={onClickHideColumns}
-                  aria-label="hide properties"
                 >
                   <Icon symbol="hide" size={24} />
                   <span className="ml-1">{text}</span>
-                </div>
+                </Button>
                 {isHiddenColumnsVisible && (
                   <HideColumnPopover
                     placement="bottom-start"

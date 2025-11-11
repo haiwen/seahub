@@ -424,7 +424,17 @@ class NoticeItem extends React.Component {
     return this.props.tr ? (
       <tr className='notification-item'>
         <td className="text-center">
-          {!noticeItem.seen && <span className="notification-point" onClick={this.onMarkNotificationRead}></span>}
+          {!noticeItem.seen &&
+          <span
+            className="notification-point"
+            onClick={this.onMarkNotificationRead}
+            tabIndex={0}
+            role="button"
+            aria-label={gettext('Mark notification as read')}
+            onKeyDown={Utils.onKeyDown}
+          >
+          </span>
+          }
         </td>
         <td>
           <img src={avatar_url} width="32" height="32" className="avatar" alt="" />
@@ -438,7 +448,14 @@ class NoticeItem extends React.Component {
         </td>
       </tr>
     ) : (
-      <li className='notification-item' onClick={this.onNoticeItemClick}>
+      <li
+        className='notification-item'
+        onClick={this.onNoticeItemClick}
+        tabIndex={0}
+        role="button"
+        aria-label={gettext('View notification')}
+        onKeyDown={Utils.onKeyDown}
+      >
         <div className="notification-item-header">
           {!noticeItem.seen &&
             <span className="notification-point" onClick={this.onMarkNotificationRead}></span>

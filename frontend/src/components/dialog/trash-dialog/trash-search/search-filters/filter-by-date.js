@@ -117,17 +117,13 @@ const FilterByDate = ({ date, onChange }) => {
             'highlighted': value,
           })}
           onClick={toggle}
+          tabIndex={0}
+          role="button"
+          aria-haspopup={true}
+          aria-expanded={isOpen}
         >
-          <div className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</div>
-          <i
-            className="sf3-font sf3-font-down pl-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggle();
-            }}
-            role="button"
-            aria-label={gettext('Toggle date filter menu')}
-          />
+          <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
+          <i className="sf3-font sf3-font-down pl-1"></i>
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-date-menu">
