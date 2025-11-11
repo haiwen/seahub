@@ -244,7 +244,7 @@ class SharedDirView extends React.Component {
     let opList = [];
     if (showDownloadIcon) {
       opList.push({
-        'icon': 'download1',
+        'icon': 'download',
         'text': gettext('ZIP'),
         'onClick': this.zipDownloadFolder.bind(this, this.state.path)
       });
@@ -349,6 +349,7 @@ class SharedDirView extends React.Component {
                   } else {
                     return (
                       <DropdownItem
+                        className="d-flex align-items-center"
                         key={index}
                         onClick={item.onClick}
                         disabled={item.disabled || false}
