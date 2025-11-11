@@ -280,7 +280,7 @@ const PageItem = ({
               {childNumber > 0 && (customIcon ? (
                 <CustomIcon icon={customIcon} />
               ) : (
-                <NavItemIcon symbol={'file'} disable={true} />
+                <NavItemIcon symbol={'files'} disable={true} />
               ))}
               <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
               {isShowNameEditor && (
