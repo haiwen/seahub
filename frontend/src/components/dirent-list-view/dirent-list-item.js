@@ -793,7 +793,7 @@ class DirentListItem extends React.Component {
             onMouseDown={this.onItemMouseDown}
             onContextMenu={this.onItemContextMenu}
           >
-            <td className={classnames('pl10 pr-2 cursor-pointer', { 'tr-drag-effect': this.state.isDragTipShow })}>
+            <td className={classnames('pl10 pr-2 cursor-pointer', { 'tr-drag-effect': this.state.isDragTipShow })} onClick={this.onItemSelected}>
               <input
                 type="checkbox"
                 className="vam cursor-pointer"
