@@ -269,7 +269,7 @@ const PageItem = ({
               {(!isMouseEntered && childNumber > 0) && (customIcon ? (
                 <CustomIcon icon={customIcon} />
               ) : (
-                <NavItemIcon symbol={'file'} disable={true} />
+                <NavItemIcon symbol={'files'} disable={true} />
               ))}
               {(isMouseEntered && childNumber > 0) && (
                 <div
