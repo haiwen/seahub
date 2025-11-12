@@ -942,6 +942,8 @@ class Search extends Component {
                     title={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
                     aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
                     tabIndex={0}
+                    role="button"
+                    onKeyDown={Utils.onKeyDown}
                     id="search-filter-controller"
                   />
                 )}

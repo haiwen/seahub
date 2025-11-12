@@ -6,6 +6,7 @@ import SeahubModalCloseIcon from '../seahub-modal-close';
 import { NAV_ITEM_MARGIN } from '../../../constants';
 
 import './index.css';
+import { Utils } from '../../../utils/utils';
 
 class NotificationPopover extends React.Component {
 
@@ -78,6 +79,10 @@ class NotificationPopover extends React.Component {
                   className="nav-item mx-3"
                   ref={el => this.itemRefs[0] = el}
                   onClick={() => this.tabItemClick('general')}
+                  tabIndex={0}
+                  role="button"
+                  aria-pressed={currentTab === 'general'}
+                  onKeyDown={Utils.onKeyDown}
                 >
                   <span className={`m-0 nav-link ${currentTab === 'general' ? 'active' : ''}`}>
                     {gettext('General')}
@@ -88,6 +93,10 @@ class NotificationPopover extends React.Component {
                   className="nav-item mx-3"
                   ref={el => this.itemRefs[1] = el}
                   onClick={() => this.tabItemClick('discussion')}
+                  tabIndex={0}
+                  role="button"
+                  aria-pressed={currentTab === 'discussion'}
+                  onKeyDown={Utils.onKeyDown}
                 >
                   <span className={`m-0 nav-link ${currentTab === 'discussion' ? 'active' : ''}`}>
                     {gettext('Discussion')}
@@ -95,9 +104,13 @@ class NotificationPopover extends React.Component {
                   </span>
                 </li>
               </ul>
-              <span className="mark-all-read" onClick={this.props.onMarkAllNotifications}>
+              <button
+                className="mark-all-read border-0 bg-transparent p-0"
+                onClick={this.props.onMarkAllNotifications}
+                onKeyDown={Utils.onKeyDown}
+              >
                 {bodyText}
-              </span>
+              </button>
             </div>
             {currentTab === 'general' &&
             <div className="notification-list-container" onScroll={this.onHandleScroll} ref={ref => this.notificationListRef = ref}>
@@ -113,7 +126,13 @@ class NotificationPopover extends React.Component {
               </div>
             </div>
             }
-            <div className="notification-footer" onClick={this.onNotificationDialogToggle}>{footerText}</div>
+            <button
+              className="notification-footer border-0 bg-transparent d-block w-100"
+              onClick={this.onNotificationDialogToggle}
+              onKeyDown={Utils.onKeyDown}
+            >
+              {footerText}
+            </button>
           </div>
         </div>
       </Popover>

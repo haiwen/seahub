@@ -36,8 +36,15 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
   return (
     <div className="search-filter filter-by-text-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className="search-filter-toggle">
-          <div className="filter-label" title={label}>{label}</div>
+        <DropdownToggle
+          tag="div"
+          className="search-filter-toggle"
+          tabIndex={0}
+          role="button"
+          aria-haspopup={true}
+          aria-expanded={isOpen}
+        >
+          <span className="filter-label" title={label}>{label}</span>
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>

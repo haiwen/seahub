@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
-import { DropdownMenu, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Button, DropdownMenu, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../utils/constants';
 import Icon from './icon';
 
@@ -85,22 +85,23 @@ class Paginator extends Component {
     const { curPerPage, currentPage } = this.props;
     return (
       <div className="my-6 paginator d-flex align-items-center justify-content-center">
-        <button
-          className="btn btn-secondary"
+        <Button
           disabled={currentPage == 1}
           onClick={this.goToPrevious}
+          title={gettext('Previous')}
+          aria-label={gettext('Previous')}
         >
           <Icon symbol="down" className="rotate-90" />
-        </button>
+        </Button>
         <span className="btn btn-primary mx-4">{currentPage}</span>
-        <button
-          className="btn btn-secondary"
+        <Button
           disabled={!this.props.hasNextPage}
           onClick={this.goToNext}
+          title={gettext('Next')}
+          aria-label={gettext('Next')}
         >
           <Icon symbol="down" className="rotate-270" />
-        </button>
-
+       </Button>
         <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
           <DropdownToggle
             tag="button"

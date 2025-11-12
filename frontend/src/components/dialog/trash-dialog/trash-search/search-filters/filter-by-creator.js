@@ -91,10 +91,17 @@ const FilterByCreator = ({ creatorList, onChange }) => {
   return (
     <div className="search-filter filter-by-creator-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
-          'active': isOpen && selectedOptions.length > 0,
-          'highlighted': selectedOptions.length > 0,
-        })}>
+        <DropdownToggle
+          tag="div"
+          className={classNames('search-filter-toggle', {
+            'active': isOpen && selectedOptions.length > 0,
+            'highlighted': selectedOptions.length > 0,
+          })}
+          tabIndex={0}
+          role="button"
+          aria-haspopup={true}
+          aria-expanded={isOpen}
+        >
           <div className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</div>
           <Icon symbol="down" className="ml-1" />
         </DropdownToggle>

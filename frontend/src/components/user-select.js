@@ -209,7 +209,16 @@ class UserSelect extends React.Component {
     return (
       <ClickOutside onClickOutside={this.onClickOutside}>
         <>
-          <div className={classnames('selected-user-item-container form-control d-flex align-items-center', className, { 'focus': this.state.isPopoverOpen })} id="user-select" onClick={this.onTogglePopover}>
+          <div
+            className={classnames('selected-user-item-container form-control d-flex align-items-center', className, { 'focus': this.state.isPopoverOpen })}
+            id="user-select"
+            tabIndex={0}
+            role="button"
+            aria-haspopup="listbox"
+            aria-expanded={this.state.isPopoverOpen}
+            onClick={this.onTogglePopover}
+            onKeyDown={Utils.onKeyDown}
+          >
             {selectedUsers.map((user, index) => {
               return (
                 <UserItem
@@ -253,6 +262,10 @@ class UserSelect extends React.Component {
                         className={classnames('user-item-container', { 'user-item-container-highlight': index === highlightIndex })}
                         ref={ref => this.userItem = ref}
                         onClick={this.onUserClick.bind(this, user)}
+                        tabIndex={0}
+                        role="option"
+                        aria-selected={index === highlightIndex}
+                        onKeyDown={Utils.onKeyDown}
                       >
                         <UserItem user={user} enableDeleteUser={false} />
                         {selectedUsers.find(u => u.email === user.email) && <i className="sf2-icon-tick"></i>}

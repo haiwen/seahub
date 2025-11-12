@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mediaUrl } from '../../../utils/constants';
+import { gettext, mediaUrl } from '../../../utils/constants';
+import { Utils } from '../../../utils/utils';
 import IconBtn from '../../icon-btn';
 
 const UserItem = ({ user, isCancellable, onCancel }) => {
@@ -8,7 +9,17 @@ const UserItem = ({ user, isCancellable, onCancel }) => {
     <div className="user-item">
       <img src={user.avatar_url || `${mediaUrl}avatars/default.png`} alt={user.name} className="user-avatar" />
       <span className="user-name">{user.name}</span>
-      {isCancellable && <IconBtn className="user-remove" onClick={(e) => onCancel(e, user.name)} symbol="x-01" />}
+      {isCancellable && (
+        <IconBtn
+          className="user-remove"
+          onClick={(e) => onCancel(e, user.name)}
+          onKeyDown={Utils.onKeyDown}
+          symbol="x-01"
+          tabIndex="0"
+          role="button"
+          aria-label={gettext('Delete')}
+        />
+      )}
     </div>
   );
 };

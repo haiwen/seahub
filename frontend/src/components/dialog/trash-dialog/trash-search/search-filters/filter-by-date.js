@@ -118,8 +118,12 @@ const FilterByDate = ({ date, onChange }) => {
             'highlighted': value,
           })}
           onClick={toggle}
+          tabIndex={0}
+          role="button"
+          aria-haspopup={true}
+          aria-expanded={isOpen}
         >
-          <div className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</div>
+          <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
           <Icon symbol="down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>

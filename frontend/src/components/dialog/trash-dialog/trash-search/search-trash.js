@@ -145,6 +145,8 @@ class SearchTrash extends Component {
               className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
               onClick={this.handleFiltersShow}
               tabIndex={0}
+              role="button"
+              onKeyDown={Utils.onKeyDown}
               id="search-filter-controller"
             />
           </div>

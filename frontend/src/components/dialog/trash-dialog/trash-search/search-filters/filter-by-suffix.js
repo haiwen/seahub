@@ -7,6 +7,7 @@ import ModalPortal from '../../../../modal-portal';
 import { SEARCH_FILTERS_KEY } from '../../../../../constants';
 import IconBtn from '../../../../icon-btn';
 import Icon from '../../../../icon';
+import { Utils } from '../../../../../utils/utils';
 
 
 const FilterBySuffix = ({ suffixes, onChange }) => {
@@ -43,10 +44,18 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
   return (
     <div className="search-filter filter-by-suffix-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
-        <DropdownToggle tag="div" className={classNames('search-filter-toggle', {
-          'active': isOpen && inputValue.length > 0,
-          'highlighted': inputValue.length > 0,
-        })} onClick={toggle}>
+        <DropdownToggle
+          tag="div"
+          className={classNames('search-filter-toggle', {
+            'active': isOpen && inputValue.length > 0,
+            'highlighted': inputValue.length > 0,
+          })}
+          onClick={toggle}
+          role="button"
+          tabIndex={0}
+          aria-haspopup={true}
+          aria-expanded={isOpen}
+        >
           <div className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</div>
           <Icon symbol="down" className="ml-1" />
         </DropdownToggle>
@@ -67,7 +76,9 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
                 symbol="x-01"
                 className="clear-icon-right"
                 onClick={handleClearInput}
+                onKeyDown={Utils.onKeyDown}
                 aria-label={gettext('Clear')}
+                title={gettext('Clear')}
               />
             )}
           </DropdownMenu>
