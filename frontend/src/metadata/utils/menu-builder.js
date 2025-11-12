@@ -656,10 +656,11 @@ export const buildCardMenuOptions = (records, readOnly, metadataStatus) => {
   }
 
   const menuOptions = [];
+  const isFolder = checkIsDir(records[0]);
 
   menuOptions.push({
-    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+    key: isFolder ? TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key : TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+    value: isFolder ? TextTranslation.OPEN_FOLDER_IN_NEW_TAB.value : TextTranslation.OPEN_FILE_IN_NEW_TAB.value,
   });
 
   menuOptions.push({
