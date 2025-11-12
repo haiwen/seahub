@@ -7,6 +7,7 @@ import { gettext, siteRoot, isPro, otherPermission, canViewSystemInfo, canViewSt
   canViewAdminLog, constanceEnabled, multiTenancy, multiInstitution, sysadminExtraEnabled,
   enableGuestInvitation, enableTermsAndConditions, enableFileScan, enableWorkWeixin, enableDingtalk,
   enableShareLinkReportAbuse, isDBSqlite3 } from '../../utils/constants';
+import Icon from '../../components/icon';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -39,7 +40,9 @@ class SidePanel extends React.Component {
                     to={siteRoot + 'sys/info/'}
                     onClick={() => this.props.tabItemClick('info')}
                   >
-                    <span className="sf2-icon-info" aria-hidden="true"></span>
+                    <span className="d-flex align-items-center">
+                      <Icon symbol="info1" />
+                    </span>
                     <span className="nav-text">{gettext('Info')}</span>
                   </Link>
                 </li>
@@ -50,7 +53,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/statistics/file/'}
                       onClick={() => this.props.tabItemClick('statistic')}
                     >
-                      <span className="sf2-icon-histogram" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="statistic" />
+                      </span>
                       <span className="nav-text">{gettext('Statistic')}</span>
                     </Link>
                   </li>
@@ -62,7 +67,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/devices/desktop/'}
                       onClick={() => this.props.tabItemClick('devices')}
                     >
-                      <span className="sf2-icon-monitor" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="devices" />
+                      </span>
                       <span className="nav-text">{gettext('Devices')}</span>
                     </Link>
                   </li>
@@ -74,7 +81,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/web-settings/'}
                       onClick={() => this.props.tabItemClick('web-settings')}
                     >
-                      <span className="sf2-icon-cog2" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="settings" />
+                      </span>
                       <span className="nav-text">{gettext('Settings')}</span>
                     </Link>
                   </li>
@@ -86,7 +95,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/all-libraries/'}
                       onClick={() => this.props.tabItemClick('libraries')}
                     >
-                      <span className="sf2-icon-library" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="libraries" />
+                      </span>
                       <span className="nav-text">{gettext('Libraries')}</span>
                     </Link>
                   </li>
@@ -98,7 +109,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/users/'}
                       onClick={() => this.props.tabItemClick('users')}
                     >
-                      <span className="sf2-icon-user" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="mine1" />
+                      </span>
                       <span className="nav-text">{gettext('Users')}</span>
                     </Link>
                   </li>
@@ -110,7 +123,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/groups/'}
                       onClick={() => this.props.tabItemClick('groups')}
                     >
-                      <span className="sf2-icon-group" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="groups" />
+                      </span>
                       <span className="nav-text">{gettext('Groups')}</span>
                     </Link>
                   </li>
@@ -122,7 +137,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/departments/'}
                       onClick={() => this.props.tabItemClick('departments')}
                     >
-                      <span className="sf2-icon-organization" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="organization" />
+                      </span>
                       <span className="nav-text">{gettext('Departments')}</span>
                     </Link>
                   </li>
@@ -134,7 +151,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/organizations/'}
                       onClick={() => this.props.tabItemClick('organizations')}
                     >
-                      <span className="sf2-icon-organization" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="organization" />
+                      </span>
                       <span className="nav-text">{gettext('Organizations')}</span>
                     </Link>
                   </li>
@@ -146,7 +165,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/institutions/'}
                       onClick={() => this.props.tabItemClick('institutions')}
                     >
-                      <span className="sf2-icon-organization" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="organization" />
+                      </span>
                       <span className="nav-text">{gettext('Institutions')}</span>
                     </Link>
                   </li>
@@ -158,7 +179,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/notifications/'}
                       onClick={() => this.props.tabItemClick('notifications')}
                     >
-                      <span className="sf2-icon-msgs" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="discussion" />
+                      </span>
                       <span className="nav-text">{gettext('Notifications')}</span>
                     </Link>
                   </li>
@@ -170,7 +193,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/share-links/'}
                       onClick={() => this.props.tabItemClick('links')}
                     >
-                      <span className="sf2-icon-link" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="links" />
+                      </span>
                       <span className="nav-text">{gettext('Links')}</span>
                     </Link>
                   </li>
@@ -182,7 +207,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/logs/login'}
                       onClick={() => this.props.tabItemClick('logs')}
                     >
-                      <span className="sf2-icon-clock" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="activities" />
+                      </span>
                       <span className="nav-text">{gettext('Logs')}</span>
                     </Link>
                   </li>
@@ -194,7 +221,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/file-scan-records/'}
                       onClick={() => this.props.tabItemClick('file-scan-records')}
                     >
-                      <span className="sf2-icon-security" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="anti-virus" />
+                      </span>
                       <span className="nav-text">{gettext('File Scan')}</span>
                     </Link>
                   </li>
@@ -206,7 +235,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/virus-files/all/'}
                       onClick={() => this.props.tabItemClick('virus-files')}
                     >
-                      <span className="sf2-icon-security" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="anti-virus" />
+                      </span>
                       <span className="nav-text">{gettext('Virus Scan')}</span>
                     </Link>
                   </li>
@@ -218,7 +249,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/invitations/'}
                       onClick={() => this.props.tabItemClick('invitations')}
                     >
-                      <span className="sf2-icon-invite" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="invite" />
+                      </span>
                       <span className="nav-text">{gettext('Invitations')}</span>
                     </Link>
                   </li>
@@ -230,7 +263,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/terms-and-conditions/'}
                       onClick={() => this.props.tabItemClick('termsandconditions')}
                     >
-                      <span className="sf2-icon-wiki" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="wiki" />
+                      </span>
                       <span className="nav-text">{gettext('Terms and Conditions')}</span>
                     </Link>
                   </li>
@@ -242,7 +277,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/admin-logs/operation'}
                       onClick={() => this.props.tabItemClick('adminLogs')}
                     >
-                      <span className="sf2-icon-admin-log" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="admin-op-log" />
+                      </span>
                       <span className="nav-text">{gettext('Admin Logs')}</span>
                     </Link>
                   </li>
@@ -254,7 +291,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/work-weixin/'}
                       onClick={() => this.props.tabItemClick('work-weixin')}
                     >
-                      <span className="sf3-font-enterprise-wechat sf3-font" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="enterprise-wechat" />
+                      </span>
                       <span className="nav-text">{'企业微信集成'}</span>
                     </Link>
                   </li>
@@ -267,7 +306,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/dingtalk/'}
                       onClick={() => this.props.tabItemClick('dingtalk')}
                     >
-                      <span className="sf3-font-dingtalk sf3-font" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="dingtalk" />
+                      </span>
                       <span className="nav-text">{'钉钉集成'}</span>
                     </Link>
                   </li>
@@ -280,7 +321,9 @@ class SidePanel extends React.Component {
                       to={siteRoot + 'sys/abuse-reports/'}
                       onClick={() => this.props.tabItemClick('abuse-reports')}
                     >
-                      <span className="sf2-icon-monitor" aria-hidden="true"></span>
+                      <span className="d-flex align-items-center">
+                        <Icon symbol="devices" />
+                      </span>
                       <span className="nav-text">{gettext('Abuse Reports')}</span>
                     </Link>
                   </li>
