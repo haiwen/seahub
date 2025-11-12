@@ -186,7 +186,14 @@ const CustomDropdownMenu = ({ modifiers, onSelect }) => {
   return (
     <DropdownMenu className="sf-metadata-column-type-dropdown-menu" modifiers={modifiers} style={{ zIndex: 1061 }}>
       <div className="search-column-container">
-        <Input onChange={onSearchColumn} placeholder={gettext('Search properties')} value={searchValue} onClick={onSearchClick} ref={inputRef} />
+        <Input
+          onChange={onSearchColumn}
+          placeholder={gettext('Search properties')}
+          value={searchValue}
+          onClick={onSearchClick}
+          ref={inputRef}
+          name="sf-metadata-column-type-search-input"
+        />
       </div>
       {displayColumns.length > 0 && predefinedColumns.length > 0 && (
         <>
