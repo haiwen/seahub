@@ -5,7 +5,7 @@ import ColumnPopover from '@/metadata/components/popover/column-popover';
 import Icon from '@/components/icon';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
-import CustomDropdownMenu from '@/metadata/components/popover/column-popover/dropdown-menu';
+import ColumnTypeDropdownMenu from '@/metadata/components/popover/column-popover/column-type-dropdown-menu';
 
 import './index.css';
 
@@ -92,7 +92,7 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
         >
           <Icon symbol="add-table" />
         </DropdownToggle>
-        <CustomDropdownMenu onSelect={handleSelect} />
+        <ColumnTypeDropdownMenu onSelect={handleSelect} />
       </Dropdown>
       {isColumnPopoverShow && !isColumnMenuOpen && (
         <ColumnPopover

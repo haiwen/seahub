@@ -4,7 +4,7 @@ import Icon from '@/components/icon';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext } from '../../../../utils/constants';
-import CustomDropdownMenu from './dropdown-menu';
+import ColumnTypeDropdownMenu from './column-type-dropdown-menu';
 import ModalPortal from '../../../../components/modal-portal';
 
 const ColumnType = forwardRef(({ column, onChange }, ref) => {
@@ -54,7 +54,7 @@ const ColumnType = forwardRef(({ column, onChange }, ref) => {
             <Icon symbol="down" />
           </DropdownToggle>
           <ModalPortal>
-            <CustomDropdownMenu
+            <ColumnTypeDropdownMenu
               column={column}
               modifiers={[{
                 name: 'offset',
