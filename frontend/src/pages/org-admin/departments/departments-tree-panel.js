@@ -42,10 +42,12 @@ class DepartmentsTreePanel extends Component {
           );
         })}
         <button
-          className='btn btn-secondary btn-block text-start border-0 font-weight-normal new-dept-btn shadow-none'
+          className='btn btn-secondary w-100 h-6 d-flex align-items-center text-start border-0 font-weight-normal new-dept-btn shadow-none'
           onClick={() => {this.props.toggleAddDepartment(null);}}
         >
-          <Icon symbol="new" className="new-dept-btn-icon" />
+          <span className="d-flex align-items-center">
+            <Icon symbol="new" className="new-dept-btn-icon" />
+          </span>
           {gettext('New Department')}
         </button>
       </div>

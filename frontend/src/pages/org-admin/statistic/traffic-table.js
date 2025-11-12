@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../../utils/constants';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   type: PropTypes.string.isRequired,
@@ -18,7 +19,7 @@ class TrafficTable extends React.Component {
 
   render() {
     const { type, sortBy, sortOrder } = this.props;
-    const sortIcon = sortOrder == 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
+    const sortIcon = sortOrder == 'asc' ? <Icon symbol="down" className="rotate-180 d-inline-block" aria-hidden="true" /> : <Icon symbol="down" aria-hidden="true" />;
 
     return (
       <table className="table-hover">

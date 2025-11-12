@@ -7,6 +7,7 @@ import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
+import OpIcon from '../../../components/op-icon';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
@@ -129,12 +130,12 @@ class Item extends Component {
             }
           </td>
           <td>
-            <i
-              className={`op-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`}
+            <OpIcon
+              className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              symbol="delete1"
               title={gettext('Delete')}
-              onClick={this.toggleDeleteDialog}
-            >
-            </i>
+              op={this.toggleDeleteDialog}
+            />
           </td>
         </tr>
         {isDeleteDialogOpen &&

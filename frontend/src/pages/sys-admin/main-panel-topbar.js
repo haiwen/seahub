@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Account from '../../components/common/account';
+import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -16,10 +17,11 @@ class MainPanelTopbar extends Component {
       <div className={`main-panel-north ${this.props.children ? 'border-left-show' : ''}`}>
         <div className="cur-view-toolbar">
           <span
-            className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none"
+            className="side-nav-toggle hidden-md-up d-md-none"
             title={gettext('Side Nav Menu')}
             onClick={this.props.toggleSidePanel}
           >
+            <Icon symbol="menu" />
           </span>
           <div className="operation">
             {this.props.children}

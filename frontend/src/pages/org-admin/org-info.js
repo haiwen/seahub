@@ -4,6 +4,7 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import { mediaUrl, gettext, orgMemberQuotaEnabled, enableSeafileAI } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import MainPanelTopbar from './main-panel-topbar';
+import Icon from '../../components/icon';
 import '../../css/org-admin-info-page.css';
 
 
@@ -112,10 +113,12 @@ class OrgInfo extends Component {
                 <div className="info-content-item">
                   <h4 className="info-content-item-heading">
                     {gettext('Traffic this month')}
-                    <i className="sf3-font-help sf3-font" id="traffic-over-tip-icon"></i>
+                    <span id="traffic-over-tip-icon">
+                      <Icon symbol="help" />
+                    </span>
                     <UncontrolledTooltip
                       placement="right"
-                      target={'#traffic-over-tip-icon'}
+                      target="traffic-over-tip-icon"
                     >
                       {gettext('After exceeding the traffic limit, the file download speed will be restricted.')}
                     </UncontrolledTooltip>

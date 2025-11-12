@@ -11,6 +11,7 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import GroupNav from './group-nav';
+import OpIcon from '../../../components/op-icon';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
@@ -149,13 +150,12 @@ class Item extends Component {
             <UserLink email={item.shared_by} name={item.shared_by_name} />
           </td>
           <td>
-            <i
-              role="button"
-              className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`}
+            <OpIcon
+              className={isOpIconShown ? '' : 'invisible'}
+              symbol="x-01"
               title={gettext('Unshare')}
-              onClick={this.toggleUnshareRepoDialog}
-            >
-            </i>
+              op={this.toggleUnshareRepoDialog}
+            />
           </td>
         </tr>
         {isUnshareRepoDialogOpen &&
