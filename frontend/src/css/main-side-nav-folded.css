@@ -16,9 +16,21 @@
   transition: all 250ms cubic-bezier(0.25, 0.1, 0.25, 0.1);
 }
 
-.side-nav-folded #files-sub-nav {
+.side-nav-folded #files-sub-nav,
+.side-nav-folded #share-admin-sub-nav {
   width: 240px;
   background: var(--bs-body-bg);
-  top: 60px;
   transition: left 250ms cubic-bezier(0.25, 0.1, 0.25, 0.1), opacity 250ms cubic-bezier(0.25, 0.1, 0.25, 0.1);
+}
+
+.side-nav-folded #files-sub-nav {
+  top: 60px;
+}
+
+.side-nav-folded #share-admin-sub-nav {
+  top: 230px;
+}
+
+.side-panel .side-nav-folded .side-nav-con .sharp {
+  width: 1rem;
 }
