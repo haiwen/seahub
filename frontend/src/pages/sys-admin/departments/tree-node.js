@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Dropdown, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import Icon from '../../../components/icon';
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
 
 const departmentsTreeNodePropTypes = {
@@ -127,7 +128,7 @@ class DepartmentsTreeNode extends Component {
         >
           {this.state.isShowTreeIcon ?
             <span className="departments-v2-tree-icon" onClick={(e) => this.toggleChildren(e)}>
-              <i aria-hidden="true" className={`sf3-font sf3-font-down ${isChildrenShow ? '' : 'rotate-270'}`}></i>
+              <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
             </span>
             :
             <span style={{ width: 24 }}></span>
@@ -148,7 +149,7 @@ class DepartmentsTreeNode extends Component {
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
               >
-                <i className="sf3-font sf3-font-more"></i>
+                <Icon symbol="more-level" />
               </DropdownToggle>
               <DepartmentNodeMenu
                 node={node}

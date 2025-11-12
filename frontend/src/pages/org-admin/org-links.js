@@ -9,6 +9,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import MainPanelTopbar from './main-panel-topbar';
 import ViewLinkDialog from '../../components/dialog/view-link-dialog';
+import Icon from '../../components/icon';
 
 dayjs.extend(relativeTime);
 
@@ -206,14 +207,16 @@ class RepoItem extends React.Component {
           {this.state.showMenu &&
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
-                tag="i"
-                className="op-icon sf3-font-more sf3-font"
+                tag="span"
+                className="op-icon"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
                 onClick={this.onDropdownToggleClick}
-              />
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={deleteOrgLink.bind(this, link.token)}>{gettext('Delete')}</DropdownItem>
                 <DropdownItem onClick={this.props.openLinkDialog.bind(this, link)}>{gettext('View Link')}</DropdownItem>

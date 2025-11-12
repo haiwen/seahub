@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Utils } from '../../../utils/utils';
+import OpIcon from '../../../components/op-icon';
 import ModalPortal from '../../../components/modal-portal';
 import DeleteRepoDialog from '../../../components/dialog/org-delete-repo-dialog';
 import { gettext, lang } from '../../../utils/constants';
@@ -44,7 +45,12 @@ class RepoItem extends React.Component {
           <td>{repo.name}</td>
           <td>{Utils.bytesToSize(repo.size)}{' '}</td>
           <td className="cursor-pointer text-center">
-            <span onClick={this.toggleDeleteDialog} className={`sf3-font-delete1 sf3-font op-icon ${highlight ? '' : 'vh'}`} title="Delete"></span>
+            <OpIcon
+              className={`op-icon ${highlight ? '' : 'vh'}`}
+              symbol="delete1"
+              title="Delete"
+              op={this.toggleDeleteDialog}
+            />
           </td>
         </tr>
         {isDeleteDialogOpen && (

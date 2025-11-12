@@ -7,6 +7,7 @@ import classnames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import Loading from '../../../components/loading';
+import OpIcon from '../../../components/op-icon';
 
 dayjs.extend(relativeTime);
 
@@ -69,21 +70,19 @@ class DirentItem extends React.Component {
           </td>
           <td>
             {isOpIconShown && fromSystemRepo &&
-              <i
-                className="op-icon sf3-font-delete1 sf3-font"
+              <OpIcon
+                className="op-icon"
+                symbol="delete1"
                 title={gettext('Delete')}
-                onClick={this.deleteDirent}
-              >
-              </i>
+                op={this.deleteDirent}
+              />
             }
             {isOpIconShown && dirent.is_file &&
-            <i
-              className="op-icon sf3-font sf3-font-download1"
-              title={gettext('Download')}
-              aria-hidden="true"
-              onClick={this.downloadDirent}
-            >
-            </i>
+              <OpIcon
+                symbol="download"
+                title={gettext('Download')}
+                op={this.downloadDirent}
+              />
             }
           </td>
           <td>{dirent.size}</td>

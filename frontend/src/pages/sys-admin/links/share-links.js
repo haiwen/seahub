@@ -10,6 +10,7 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
+import OpIcon from '../../../components/op-icon';
 import UserLink from '../user-link';
 
 dayjs.extend(relativeTime);
@@ -154,12 +155,12 @@ class Item extends Component {
         <td>{item.view_cnt}</td>
         <td>{this.renderExpiration()}</td>
         <td>
-          <i
-            className={`op-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`}
+          <OpIcon
+            className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+            symbol="delete1"
             title={gettext('Remove')}
-            onClick={this.deleteShareLink}
-          >
-          </i>
+            op={this.deleteShareLink}
+          />
         </td>
       </tr>
     );

@@ -14,6 +14,7 @@ import { navigate } from '@gatsbyjs/reach-router';
 import OrgAdminRepo from '../../../models/org-admin-repo';
 import MainPanelTopbar from '../main-panel-topbar';
 import ReposNav from './org-repo-nav';
+import Icon from '../../../components/icon';
 
 
 class Content extends Component {
@@ -229,15 +230,17 @@ class RepoItem extends React.Component {
             {isOperationMenuShow &&
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
-                tag="i"
+                tag="span"
                 role="button"
-                className="op-icon sf3-font-more sf3-font"
+                className="op-icon"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
                 onClick={this.onDropdownToggleClick}
-              />
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
                 <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>

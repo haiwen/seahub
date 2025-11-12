@@ -7,6 +7,7 @@ import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
+import OpIcon from '../../components/op-icon';
 import OrgAdminGroupNav from '../../components/org-admin-group-nav';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import MainPanelTopbar from './main-panel-topbar';
@@ -185,12 +186,12 @@ class Item extends Component {
           <td>{Utils.bytesToSize(repo.size)}</td>
           <td><Link to={`${siteRoot}org/useradmin/info/${encodeURIComponent(repo.shared_by)}/`}>{repo.shared_by_name}</Link></td>
           <td>
-            <i
-              className={`op-icon sf3-font-delete1 sf3-font${isOpIconShown ? '' : ' invisible'}`}
+            <OpIcon
+              className={`op-icon${isOpIconShown ? '' : ' invisible'}`}
+              symbol="delete1"
               title={gettext('Delete')}
-              onClick={this.handleDeleteIconClick}
-            >
-            </i>
+              op={this.handleDeleteIconClick}
+            />
           </td>
         </tr>
         {isDeleteRepoDialogOpen && (

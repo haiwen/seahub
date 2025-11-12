@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { gettext, isPro } from '../../../utils/constants';
+import Icon from '../../../components/icon';
 
 const DingtalkDepartmentsTreeNodePropTypes = {
   index: PropTypes.number,
@@ -86,8 +87,8 @@ class DingtalkDepartmentsTreeNode extends Component {
   render() {
     const { isChildrenShow, department, checkedDepartmentId } = this.props;
     let toggleClass = classNames({
-      'folder-toggle-icon sf3-font sf3-font-down rotate-270': department.children && this.state.isChildrenShow,
-      'folder-toggle-icon sf3-font sf3-font-down': department.children && !this.state.isChildrenShow,
+      'folder-toggle-icon rotate-270': department.children && this.state.isChildrenShow,
+      'folder-toggle-icon': department.children && !this.state.isChildrenShow,
     });
     let nodeInnerClass = classNames({
       'tree-node-inner': true,
@@ -104,7 +105,7 @@ class DingtalkDepartmentsTreeNode extends Component {
             onMouseLeave={this.onMouseLeave}
           >
             <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
-              <i className={toggleClass} aria-hidden="true"></i>
+              <Icon symbol="down" className={toggleClass} aria-hidden="true" />
             </span>
             <span className="tree-node-text">{department.name}</span>
             {isPro &&
@@ -122,7 +123,7 @@ class DingtalkDepartmentsTreeNode extends Component {
                 data-toggle="dropdown"
                 aria-expanded={this.state.dropdownOpen}
               >
-                <i className="sf3-font sf3-font-more"></i>
+                <Icon symbol="more-level" />
               </DropdownToggle>
               <DropdownMenu className="drop-list">
                 <DropdownItem

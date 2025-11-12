@@ -14,6 +14,7 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import OrgUserInfo from '../../models/org-user';
 import { gettext, invitationLink, orgID, siteRoot, orgEnableAdminInviteUser } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Icon from '../../components/icon';
 
 class Search extends React.Component {
 
@@ -48,7 +49,9 @@ class Search extends React.Component {
   render() {
     return (
       <div className="input-icon">
-        <i className="d-flex input-icon-addon sf3-font sf3-font-search"></i>
+        <span className="d-flex input-icon-addon">
+          <Icon symbol="search" />
+        </span>
         <input
           type="text"
           className="form-control search-input h-6 mr-1"
@@ -263,23 +266,23 @@ class OrgUsers extends Component {
   };
 
   render() {
-    const topBtn = 'btn btn-secondary operation-item';
+    const topBtn = 'btn btn-secondary operation-item d-flex align-items-center';
     let topbarChildren = (
       <Fragment>
         <button className="btn btn-secondary operation-item" onClick={this.toggleImportOrgUsersDialog}>
           {gettext('Import users')}
         </button>
         <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser} aria-label={gettext('Add user')}>
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>{gettext('Add user')}
+          <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />{gettext('Add user')}
         </button>
         {orgEnableAdminInviteUser &&
           <button className={topBtn} title={gettext('Invite users')} onClick={this.toggleInviteUserDialog} aria-label={gettext('Invite users')}>
-            <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>{gettext('Invite users')}
+            <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />{gettext('Invite users')}
           </button>
         }
         {invitationLink &&
           <button className={topBtn} title={gettext('Invite users via WeChat')} onClick={this.toggleInviteUserViaWeiXinDialog} aria-label={gettext('Invite users via WeChat')}>
-            <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>{gettext('Invite users via WeChat')}
+            <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />{gettext('Invite users via WeChat')}
           </button>
         }
         {this.state.isImportOrgUsersDialogOpen &&

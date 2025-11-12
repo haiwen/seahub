@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import dayjs from 'dayjs';
 import Loading from '../../../components/loading';
+import Icon from '../../../components/icon';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import { gettext } from '../../../utils/constants';
 import { Tooltip } from 'reactstrap';
@@ -54,15 +55,15 @@ class ComponentMetricsTable extends Component {
                       {metric.name.substring(metric.name.indexOf('_') + 1)}
                       {metric.help && (
                         <>
-                          <i
-                            className="sf3-font-help sf3-font"
+                          <span
                             id={rowId}
                             aria-hidden="true"
                             style={{
                               visibility: hoveredRow === rowId ? 'visible' : 'hidden',
                             }}
                           >
-                          </i>
+                            <Icon symbol="help" />
+                          </span>
                           <Tooltip
                             placement='right'
                             isOpen={tooltipOpen === rowId && hoveredRow === rowId}

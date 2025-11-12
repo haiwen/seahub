@@ -7,6 +7,7 @@ import { siteRoot, gettext, lang } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import OrgLogsFilePermEvent from '../../models/org-logs-perm-audit';
+import Icon from '../../components/icon';
 import '../../css/org-logs.css';
 
 dayjs.locale(lang);
@@ -157,7 +158,9 @@ class PermAuditItem extends React.Component {
         <a href={siteRoot + 'org/useradmin/info/' + permEvent.from_user_email + '/'}>{permEvent.from_user_name}</a>{' '}
         <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
           className={this.state.highlight ? '' : 'vh'} tag="span">
-          <DropdownToggle tag="i" className="op-icon sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
+          <DropdownToggle tag="span" className="op-icon sf-dropdown-toggle">
+            <Icon symbol="more-level" />
+          </DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={this.props.filterUser.bind(this, permEvent.from_user_email)}>
               {gettext('Only Show')}{' '}

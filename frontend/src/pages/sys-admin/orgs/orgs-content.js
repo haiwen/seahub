@@ -7,6 +7,7 @@ import { siteRoot, gettext } from '../../../utils/constants';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
+import OpIcon from '../../../components/op-icon';
 import { systemAdminAPI } from '../../../utils/system-admin-api';
 import Selector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
@@ -277,12 +278,12 @@ class Item extends Component {
             {`${item.last_activity_time ? dayjs(item.last_activity_time).fromNow() : '--'} `}
           </td>
           <td>
-            <i
-              className={`op-icon sf3-font-delete1 sf3-font ${highlighted ? '' : 'invisible'}`}
+            <OpIcon
+              className={`op-icon ${highlighted ? '' : 'invisible'}`}
+              symbol="delete1"
               title={gettext('Delete')}
-              onClick={this.toggleDeleteDialog}
-            >
-            </i>
+              op={this.toggleDeleteDialog}
+            />
           </td>
         </tr>
         {isDeleteDialogOpen &&

@@ -5,6 +5,7 @@ import RoleSelector from '../../../components/single-selector';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool,
@@ -111,13 +112,15 @@ class DepartmentsV2MembersItem extends React.Component {
               direction="down"
             >
               <DropdownToggle
-                tag='i'
+                tag='span'
                 role="button"
-                className='op-icon sf3-font-more sf3-font'
+                className='op-icon'
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
-              />
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem key='delete' onClick={this.toggleDeleteMemberDialog}>{gettext('Delete')}</DropdownItem>
               </DropdownMenu>
