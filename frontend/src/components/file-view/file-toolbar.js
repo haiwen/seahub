@@ -35,6 +35,7 @@ const {
   // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
   canDownloadFile,
   fileDownloadURL,
+  canEditPDF,
 } = window.app.pageOptions;
 
 class FileToolbar extends React.Component {
@@ -167,6 +168,14 @@ class FileToolbar extends React.Component {
               id="seafile-pdf-print"
               icon="print"
               text={gettext('Print')}
+            />
+          )}
+          {(fileType == 'PDF' && canEditPDF) && (
+            <IconButton
+              id="seafile-pdf-edit"
+              icon="edit"
+              text={gettext('Edit')}
+              href={'?edit_pdf=true'}
             />
           )}
           {showLockUnlockBtn && (
