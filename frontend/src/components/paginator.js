@@ -101,7 +101,7 @@ class Paginator extends Component {
           aria-label={gettext('Next')}
         >
           <Icon symbol="down" className="rotate-270" />
-       </Button>
+        </Button>
         <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
           <DropdownToggle
             tag="button"
