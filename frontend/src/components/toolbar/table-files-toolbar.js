@@ -7,6 +7,8 @@ import TextTranslation from '../../utils/text-translation';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
+import OpIcon from '../../components/op-icon';
+import OpElement from '../../components/op-element';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder';
@@ -163,46 +165,42 @@ const TableFilesToolbar = ({ repoID }) => {
 
   return (
     <div className="selected-dirents-toolbar">
-      <span className="cur-view-path-btn px-2" onClick={unSelect}>
-        <span className="sf3-font-x-01 sf3-font mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}></span>
+      <OpElement
+        className="cur-view-path-btn px-2"
+        title={gettext('Unselect')}
+        op={unSelect}
+      >
+        <span className="sf3-font-x-01 sf3-font mr-2"></span>
         <span>{length}{' '}{gettext('selected')}</span>
-      </span>
+      </OpElement>
 
       {!readOnly && (!isMultiple || areRecordsInSameFolder) && (
         <>
-          <span
-            className="cur-view-path-btn"
-            onClick={toggleMoveDialog}
+          <OpIcon
+            className="cur-view-path-btn sf3-font-move1 sf3-font"
             title={gettext('Move')}
-          >
-            <span className="sf3-font-move1 sf3-font" aria-label={gettext('Move')}></span>
-          </span>
-          <span
-            className="cur-view-path-btn"
-            onClick={toggleCopyDialog}
+            op={toggleMoveDialog}
+          />
+          <OpIcon
+            className="cur-view-path-btn sf3-font-copy1 sf3-font"
             title={gettext('Copy')}
-          >
-            <span className="sf3-font-copy1 sf3-font" aria-label={gettext('Copy')}></span>
-          </span>
+            op={toggleCopyDialog}
+          />
         </>
       )}
 
-      <span
-        className="cur-view-path-btn"
-        onClick={downloadRecords}
+      <OpIcon
+        className="cur-view-path-btn sf3-font-download1 sf3-font"
         title={gettext('Download')}
-      >
-        <span className="sf3-font-download1 sf3-font" aria-label={gettext('Download')}></span>
-      </span>
+        op={downloadRecords}
+      />
 
       {!readOnly && (
-        <span
-          className="cur-view-path-btn"
-          onClick={deleteRecords}
+        <OpIcon
+          className="cur-view-path-btn sf3-font-delete1 sf3-font"
           title={gettext('Delete')}
-        >
-          <span className="sf3-font-delete1 sf3-font" aria-label={gettext('Delete')}></span>
-        </span>
+          op={deleteRecords}
+        />
       )}
 
       {length > 0 && (
