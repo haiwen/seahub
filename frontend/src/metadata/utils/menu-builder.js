@@ -614,10 +614,11 @@ export const buildCardToolbarMenuOptions = (records, readOnly, metadataStatus) =
   if (!records || records.length === 0) {
     return [];
   }
+  const isFolder = checkIsDir(records[0]);
   const menuOptions = [
     {
-      key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-      value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
+      key: isFolder ? TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key : TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
+      value: isFolder ? TextTranslation.OPEN_FOLDER_IN_NEW_TAB.value : TextTranslation.OPEN_FILE_IN_NEW_TAB.value,
     },
     {
       key: TextTranslation.OPEN_PARENT_FOLDER.key,
