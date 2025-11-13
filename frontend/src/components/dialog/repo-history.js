@@ -14,6 +14,7 @@ import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { formatWithTimezone } from '../../utils/time';
 
 import '../../css/repo-history.css';
+import OpIcon from '../op-icon';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -268,14 +269,11 @@ class Item extends React.Component {
               return <span key={index} className="commit-label">{item}</span>;
             })}
             {userPerm == 'rw' &&
-            <i
-              role="button"
+            <OpIcon
               className={`sf3-font sf3-font-rename op-icon op-icon-bg-light ${isIconShown ? '' : 'invisible'}`}
               title={gettext('Edit')}
-              aria-label={gettext('Edit')}
-              onClick={this.editLabel}
-            >
-            </i>
+              op={this.editLabel}
+            />
             }
           </td>
           }
