@@ -5,6 +5,7 @@ import { processor } from '@seafile/seafile-editor';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
+import Icon from '../../icon';
 
 const { username } = window.app.pageOptions;
 
@@ -131,16 +132,18 @@ class ReplyItem extends React.Component {
             id={replyOpToolsId}
           >
             <DropdownToggle
-              tag="i"
+              tag="span"
               role="button"
               tabIndex="0"
-              className="seafile-comment-dropdown-btn sf-dropdown-toggle sf3-font-more sf3-font"
+              className="seafile-comment-dropdown-btn sf-dropdown-toggle"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.dropdownOpen}
               aria-haspopup={true}
-            />
+            >
+              <Icon symbol="more-level" />
+            </DropdownToggle>
             <DropdownMenu>
               <DropdownItem
                 onClick={this.toggleShowDeletePopover}
