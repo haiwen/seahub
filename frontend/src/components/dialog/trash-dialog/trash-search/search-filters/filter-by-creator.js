@@ -11,6 +11,8 @@ import ModalPortal from '../../../../modal-portal';
 import toaster from '../../../../toast';
 import { SEARCH_FILTERS_KEY } from '../../../../../constants';
 
+import './filter-by-creator.css';
+
 const FilterByCreator = ({ creatorList, onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
@@ -106,7 +108,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">
-            <div className={classNames('input-container', { 'focus': inputFocus })}>
+            <div className="selected-user-item-container">
               {selectedOptions.map((option) => (
                 <UserItem
                   key={option.name}
@@ -115,6 +117,8 @@ const FilterByCreator = ({ creatorList, onChange }) => {
                   onCancel={handleCancel}
                 />
               ))}
+            </div>
+            <div className={classNames('input-container', { 'focus': inputFocus })}>
               <div className="search-input-wrapper">
                 <input
                   type="text"
@@ -139,7 +143,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
                 toggle={false}
               >
                 {isOpen && <UserItem user={option} />}
-                {selectedOptions.includes(option.name) && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                {selectedOptions.map(item => item.email).includes(option.email) && <i className="dropdown-item-tick sf2-icon-tick"></i>}
               </DropdownItem>
             ))}
           </DropdownMenu>

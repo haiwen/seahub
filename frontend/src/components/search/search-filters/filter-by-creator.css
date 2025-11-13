@@ -1,0 +1,31 @@
+.search-filter-menu.filter-by-creator-menu .dropdown-item:hover {
+  background-color: #F5F5F5;
+}
+
+.search-filter-menu.filter-by-creator-menu .dropdown-item:hover .dropdown-item-tick {
+  color: #666;
+}
+
+.search-filter-menu.filter-by-creator-menu .dropdown-item .user-item {
+  background-color: transparent;
+}
+
+.search-filter-menu.filter-by-creator-menu .selected-user-item-container .user-item .user-avatar,
+.search-filter-menu.filter-by-creator-menu .dropdown-item .user-item .user-avatar {
+  margin-right: 0px;
+}
+
+.search-filter-menu.filter-by-creator-menu .selected-user-item-container {
+  background-color: #f6f6f6;
+  min-height: 34px;
+  border-bottom: 1px solid #dde2ea;
+  margin-top: -8px;
+  padding: 5px 10px 3px;
+}
+
+.search-filter-menu.filter-by-creator-menu .selected-user-item-container .user-item .user-remove {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 3px;
+  margin-left: 5px;
+}
