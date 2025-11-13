@@ -13825,15 +13825,21 @@ function waitForViewerDOM(timeout = 5000) {
     }
 
     // Set up timeout fallback
-    const timeoutId = setTimeout(() => {
+    const elementObservers = [];
+    let bodyObserver = null;
+
+    // Helper function to cleanup observers and timeout
+    const cleanup = () => {
+      clearTimeout(timeoutId);
       bodyObserver?.disconnect();
       elementObservers.forEach(obs => obs?.disconnect());
+    };
+
+    const timeoutId = setTimeout(() => {
+      cleanup();
       console.warn('PDF viewer DOM elements not fully populated within timeout, attempting to initialize anyway');
       resolve(); // Resolve anyway to allow initialization attempt
     }, timeout);
-
-    const elementObservers = [];
-    let bodyObserver = null;
 
     // Observe specific elements for child mutations (React populating containers)
     const observeElements = () => {
@@ -13843,9 +13849,7 @@ function waitForViewerDOM(timeout = 5000) {
         if (element) {
           const observer = new MutationObserver(() => {
             if (checkElementsReady()) {
-              clearTimeout(timeoutId);
-              bodyObserver?.disconnect();
-              elementObservers.forEach(obs => obs?.disconnect());
+              cleanup();
               resolve();
             }
           });
@@ -13873,8 +13877,7 @@ function waitForViewerDOM(timeout = 5000) {
 
           // Check if they're already populated
           if (checkElementsReady()) {
-            clearTimeout(timeoutId);
-            elementObservers.forEach(obs => obs?.disconnect());
+            cleanup();
             resolve();
           }
         }
