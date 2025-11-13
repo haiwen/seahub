@@ -6,6 +6,7 @@ import { SeafileCommentEditor } from '@seafile/comment-editor';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
+import Icon from '../../icon';
 
 const commentItemPropTypes = {
   time: PropTypes.string,
@@ -142,16 +143,18 @@ class CommentItem extends React.Component {
             id={commentOpToolsId}
           >
             <DropdownToggle
-              tag="i"
+              tag="span"
               role="button"
               tabIndex="0"
-              className="seafile-comment-dropdown-btn sf-dropdown-toggle sf3-font-more sf3-font"
+              className="seafile-comment-dropdown-btn sf-dropdown-toggle"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
               aria-expanded={this.state.dropdownOpen}
               aria-haspopup={true}
-            />
+            >
+              <Icon symbol="more-level" />
+            </DropdownToggle>
             <DropdownMenu>
               <DropdownItem
                 onClick={this.toggleShowDeletePopover}

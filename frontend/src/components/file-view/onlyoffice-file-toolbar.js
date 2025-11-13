@@ -55,7 +55,7 @@ class OnlyofficeFileToolbar extends React.Component {
             onClick={this.props.toggleCommentPanel}
             aria-label={gettext('Comment')}
           >
-            <i className="sdocfont sdoc-comments"></i>
+            <Icon symbol="sdoc-comments" />
             {isCommentUpdated && <span className='comment-tip'></span>}
           </Button>
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
