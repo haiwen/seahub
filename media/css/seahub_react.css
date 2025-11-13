@@ -1711,6 +1711,7 @@ a.table-sort-op:hover {
 }
 
 .side-panel .side-nav .side-nav-con #share-admin-nav .nav-item.active::before,
+.side-panel .side-nav .side-nav-con #share-admin-sub-nav .nav-item.active::before,
 .side-panel .side-nav .side-nav-con #files-sub-nav .nav-item.active::before {
   top: 2px;
   height: 24px;
