@@ -613,10 +613,12 @@ class Search extends Component {
               onClick={this.searchAllRepos}
               tabIndex={0}
             >
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
-              <i className="sf3-font sf3-font-enter"></i>
+              <Icon symbol="enter" className="search-types-enter-icon" />
             </div>
           </div>
           {resultItems.length > 0 && (
@@ -652,22 +654,28 @@ class Search extends Component {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
-              {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 0 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
             <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this folder')}</span>
-              {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 1 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
             <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
-              {highlightIndex === 2 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 2 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
           </div>
         );
@@ -675,16 +683,20 @@ class Search extends Component {
         return (
           <div className="search-types">
             <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
-              {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 0 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
             <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
-              {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 1 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
           </div>
         );
@@ -965,14 +977,14 @@ class Search extends Component {
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
-            <i className="search-icon sf3-font sf3-font-search" onClick={this.onSearchToggle}></i>
+            <Icon className="search-icon" symbol="search" onClick={this.onSearchToggle} />
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">
               <div className={`search-mask ${isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler} style={{ zIndex: SEARCH_MASK }}></div>
               <div className="search-container" style={{ zIndex: SEARCH_CONTAINER }}>
                 <div className="input-icon">
-                  <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+                  <Icon className="search-icon-left input-icon-addon" symbol="search" />
                   <input
                     type="text"
                     className="form-control search-input"

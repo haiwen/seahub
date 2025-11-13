@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import NavItemIcon from '../../pages/wiki2/common/nav-item-icon';
 import CustomIcon from '../../pages/wiki2/custom-icon';
 import { gettext } from '../../utils/constants';
+import Icon from '../icon';
 
 import './wiki2-search-result.css';
 
@@ -24,7 +25,9 @@ function Wiki2SearchResult({ result, getCurrentPageId, setCurrentPage, resetToDe
         </span>
         {isCurrentPage ?
           <span className='wiki2-search-result-current'>{gettext('Current page')}</span> :
-          <span className='wiki2-search-result-enter sf3-font sf3-font-enter' style={isHighlight ? { opacity: 1 } : {}}></span>
+          <span className="wiki2-search-result-enter">
+            <Icon symbol="enter" style={isHighlight ? { opacity: 1 } : {}} />
+          </span>
         }
       </div>
       {content ?

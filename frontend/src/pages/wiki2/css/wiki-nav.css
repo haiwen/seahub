@@ -92,6 +92,7 @@
   justify-content: center;
   align-items: center;
   color: #666;
+  font-size: 12px;
 }
 
 .wiki-nav .wiki-page-item-main:has(.wiki-nav-item-icon) .nav-item-icon {
@@ -234,15 +235,24 @@
   font-size: 16px;
 }
 
-.wiki-nav .wiki2-trash {
+.wiki-nav .other-op {
   height: 32px;
   display: flex;
   align-items: center;
   padding-left: 10px;
   cursor: pointer;
+  font-size: 16px;
 }
 
-.wiki-nav .wiki2-trash:hover {
+.wiki-nav .other-op:hover {
   background-color: var(--bs-wiki-nav-hover-bg);
   border-radius: 3px;
+}
+
+.wiki-nav .other-op .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
+}
+
+.wiki-nav .other-op .other-op-label {
+  font-size: 14px;
 }

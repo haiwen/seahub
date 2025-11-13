@@ -9,6 +9,7 @@ import toaster from '../../toast';
 import Loading from '../../loading';
 import CommentItemReadOnly from './comment-item-readonly';
 import CommentBodyHeader from './comment-body-header';
+import Icon from '../../icon';
 
 const { username, repoID, filePath } = window.app.pageOptions;
 
@@ -105,7 +106,7 @@ class CommentList extends React.Component {
           </div>
           <div className="comments-panel-header-right">
             <span className="sdoc-icon-btn" onClick={this.props.toggleCommentList}>
-              <i className="sdocfont sdoc-sm-close"></i>
+              <Icon symbol="x-01" />
             </span>
           </div>
         </div>

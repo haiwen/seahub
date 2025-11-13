@@ -55,6 +55,8 @@
 
 .search-icon-left {
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .search-icon-left .seafile-multicolor-icon {
@@ -505,9 +507,12 @@
   color: var(--bs-body-secondary-color);
 }
 
-.search-types .sf3-font-enter {
+.search-types .sf3-font-enter,
+.search-types .search-types-enter-icon {
   position: absolute;
   right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
   color: #999999;
 }
 

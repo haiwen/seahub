@@ -159,7 +159,9 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
   return (
     <>
       <Button className="wiki2-search border-0 p-0 font-weight-normal" onClick={() => setIsModalOpen(true)}>
-        <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
+        <span className="w-6 h-6 d-flex align-items-center justify-content-center">
+          <Icon symbol="search" aria-hidden="true" />
+        </span>
         <span>{gettext('Search')}</span>
       </Button>
       {isModalOpen &&

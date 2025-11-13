@@ -137,7 +137,7 @@ export default class PageDropdownMenu extends Component {
   renderItem = (onClick, icon, text) => {
     return (
       <DropdownItem onClick={onClick}>
-        <i className={`sf3-font sf3-font-${icon}`} aria-hidden="true" />
+        <Icon symbol={icon} aria-hidden="true" />
         <span className="item-text">{text}</span>
       </DropdownItem>
     );
@@ -194,10 +194,10 @@ export default class PageDropdownMenu extends Component {
               onMouseEnter={this.showImportPageMenu}
             >
               <span>
-                <i className='sf3-font sf3-font-import-sdoc' aria-hidden="true" />
+                <Icon symbol='import-sdoc' aria-hidden="true" />
                 <span>{gettext('Import page')}</span>
               </span>
-              <i className="sf3-font-down sf3-font rotate-270 mr-0" aria-hidden="true"></i>
+              <Icon symbol="down" className="rotate-270 mr-0" aria-hidden="true" />
             </DropdownToggle>
             <DropdownMenu className="ml-0">
               <DropdownItem key="import-docx" onClick={this.importPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
