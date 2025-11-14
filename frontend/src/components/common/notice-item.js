@@ -20,7 +20,6 @@ const MSG_TYPE_REPO_TRANSFER = 'repo_transfer';
 const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
 const MSG_TYPE_FOLDER_UPLOADED = 'folder_uploaded';
 const MSG_TYPE_FILE_COMMENT = 'file_comment';
-// const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
@@ -398,11 +397,6 @@ class NoticeItem extends React.Component {
       }
       return { avatar_url, username, notice };
     }
-
-    // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {
-
-    // }
-
     return { avatar_url: null, notice: null, username: null };
   }
 
