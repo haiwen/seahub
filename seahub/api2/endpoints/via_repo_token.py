@@ -2904,7 +2904,7 @@ class ViaRepoRecentlyDeletedFiles(APIView):
         files = []
         for file in deleted_files:
             data = {}
-            path = '/' + file.get('path').strip('/')
+            path = '/' + file.path.strip('/')
             data['obj_name'] = file.obj_name
             data['path'] = path
             files.append(data)
