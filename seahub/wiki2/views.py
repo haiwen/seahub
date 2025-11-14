@@ -19,7 +19,7 @@ from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
-from seahub.utils.repo import get_repo_owner, is_repo_admin, is_repo_owner, is_group_repo_staff
+from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
 from seahub.settings import SEADOC_SERVER_URL
 from seahub.seadoc.utils import gen_seadoc_access_token
 
@@ -80,16 +80,13 @@ def wiki_view(request, wiki_id, page_id=None):
         publish_url = ''
     
     try:
-        response = ReposView().get(request)
-        all_repos = response.data.get('repos', [])
+        admin_repos = list_user_admin_reops(request)
     except Exception as e:
         logger.error(e)
-        all_repos = []
+        admin_repos = []
     
     display_repos = []
-    for r in all_repos:
-        if not r.get('is_admin'):
-            continue
+    for r in admin_repos:
         if r not in display_repos:
             display_repos.append(r)
     

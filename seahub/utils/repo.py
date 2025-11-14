@@ -13,10 +13,12 @@ from seahub.constants import (
     REPO_STATUS_NORMAL, REPO_STATUS_READ_ONLY, CUSTOM_PERMISSION_PREFIX
 )
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
-from seahub.api2.utils import to_python_boolean
+from seahub.api2.utils import to_python_boolean, is_wiki_repo
+from seahub.group.utils import is_group_admin
+from seahub.repo_metadata.models import RepoMetadata
 from seahub.base.models import RepoSecretKey
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.share.models import CustomSharePermissions
+from seahub.share.models import CustomSharePermissions, ExtraSharePermission, ExtraGroupsSharePermission
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
 
@@ -376,6 +378,95 @@ def repo_has_been_shared_out(request, repo_id):
             has_been_shared_out = True
 
     return has_been_shared_out
+
+def list_user_admin_reops(request):
+    email = request.user.username
+    org_id = None
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+
+    repo_info_list = []
+    if org_id:
+        owned_repos = seafile_api.get_org_owned_repo_list(org_id,
+                                                            email,
+                                                            ret_corrupted=True)
+    else:
+        owned_repos = seafile_api.get_owned_repo_list(email,
+                                                        ret_corrupted=True)
+
+    # owner repos
+    owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
+    for r in owned_repos:
+        # do not return virtual repos
+        if r.is_virtual:
+            continue
+
+        if is_wiki_repo(r):
+            continue
+
+        repo_info = {
+            "repo_id": r.id,
+            "repo_name": r.name,
+            "encrypted": r.encrypted,
+        }
+
+        repo_info_list.append(repo_info)
+
+    # shared repos
+    if org_id:
+        shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                                                                email, -1, -1)
+    else:
+        shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
+
+    repos_with_admin_share_to = ExtraSharePermission.objects.get_repos_with_admin_permission(email)
+
+    shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
+    for r in shared_repos:
+
+        if is_wiki_repo(r):
+            continue
+
+        repo_info = {
+            "repo_id": r.repo_id,
+            "repo_name": r.repo_name,
+            "encrypted": r.encrypted,
+        }
+
+        if r.repo_id in repos_with_admin_share_to:
+            repo_info_list.append(repo_info)
+
+    # group repos
+    if org_id:
+        group_repos = seafile_api.get_org_group_repos_by_user(email, org_id)
+    else:
+        group_repos = seafile_api.get_group_repos_by_user(email)
+
+    group_repos.sort(key=lambda x: x.last_modify, reverse=True)
+
+    for r in group_repos:
+
+        if is_wiki_repo(r):
+            continue
+
+        repo_info = {
+            "repo_id": r.repo_id,
+            "repo_name": r.repo_name,
+            "encrypted": r.encrypted,
+        }
+        group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(r.repo_id)
+        
+        if r.group_id in group_ids:
+            if is_group_admin(email, r.group_id):
+                repo_info_list.append(repo_info)
+    
+    repo_ids = [repo['repo_id'] for repo in repo_info_list]
+    repos_metadata = RepoMetadata.objects.filter(repo_id__in=repo_ids)
+    repo_metadata_dict = {repo_metadata.repo_id: repo_metadata.enabled for repo_metadata in repos_metadata}
+    for repo in repo_info_list:
+        repo['enable_metadata'] = repo_metadata_dict.get(repo['repo_id'], False)
+    
+    return repo_info_list
 
 # TODO
 from seahub.share.utils import is_repo_admin
