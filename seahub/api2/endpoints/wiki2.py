@@ -1851,17 +1851,17 @@ class Wiki2SettingsView(APIView):
         wiki.owner = repo_owner
         
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        enable_link_repos = False
-        linked_repos = []
         try:
             wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
             if not wiki_settings:
+                Wiki2Settings.objects.create(wiki_id=wiki_id, enable_link_repos=True, linked_repos=[])
                 return Response({
-                    'enable_link_repos': False,
+                    'enable_link_repos': True,
                     'linked_repos': []
                 })
         except Exception as e:
@@ -1878,7 +1878,8 @@ class Wiki2SettingsView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         
         enable_link_repos = request.data.get('enable_link_repos', 'false')
@@ -1887,36 +1888,12 @@ class Wiki2SettingsView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         enable_link_repos = to_python_boolean(enable_link_repos)
             
-        linked_repos = request.data.get('linked_repos', [])
         try:
             wiki_settings, created = Wiki2Settings.objects.get_or_create(
                 wiki_id=wiki_id,
-                defaults={'enable_link_repos': False, 'linked_repos': '[]'}
+                defaults={'enable_link_repos': True, 'linked_repos': '[]'}
             )
             wiki_settings.enable_link_repos = enable_link_repos
-            if not enable_link_repos:
-                wiki_settings.set_linked_repos([])
-            
-            if enable_link_repos:
-                for repo_id in linked_repos:
-                    if repo_id == wiki_id:
-                        error_msg = 'Wiki can not be linked to itself.'
-                        return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-                    repo = seafile_api.get_repo(repo_id)
-                    if not repo:
-                        error_msg = f'The repo {repo_id} is not linked to wiki {wiki_id}.'
-                        return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-                    if repo.repo_type == 'wiki':
-                        error_msg = f'The wiki {repo_id} is not linked to wiki {wiki_id}.'
-                        return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-                    permission = check_folder_permission(request, repo_id, '/')
-                    if permission != 'rw':
-                        error_msg = 'Permission denied.'
-                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-                if linked_repos:
-                    wiki_settings.set_linked_repos(linked_repos)
-            else:
-                wiki_settings.set_linked_repos([])
             wiki_settings.save()
         except Exception as e:
             logger.error(e)
@@ -1948,11 +1925,15 @@ class Wiki2LinkedReposView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        repo_admin = is_repo_admin(username, repo_id)
+        if not repo_admin:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         
-        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
-        if not wiki_settings or not wiki_settings.enable_link_repos:
+        wiki_settings, created = Wiki2Settings.objects.get_or_create(
+            wiki_id=wiki_id,
+            defaults={'enable_link_repos': True, 'linked_repos': '[]'}
+        )
+        if not wiki_settings.enable_link_repos:
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
@@ -1969,6 +1950,11 @@ class Wiki2LinkedReposView(APIView):
         if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        linked_repos = wiki_settings.linked_repos
+        if repo_id in linked_repos:
+            error_msg = f'The wiki {repo_id} is already linked to wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         try:
             wiki_settings.add_linked_repo(repo_id)
@@ -1993,7 +1979,8 @@ class Wiki2LinkedReposView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        wiki_permission = check_wiki_permission(wiki, username)
+        if wiki_permission != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         
         wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
@@ -2004,6 +1991,7 @@ class Wiki2LinkedReposView(APIView):
         try:
             wiki_settings.remove_linked_repo(repo_id)
             wiki_settings.save()
+            WikiFileViews.objects.delete_views_by_repo_id(wiki_id, repo_id)
         except Exception as e:
             logger.error(f'Error removing linked repo: {e}')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -2025,7 +2013,8 @@ class Wiki2FileViews(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2066,7 +2055,8 @@ class Wiki2FileViews(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2112,7 +2102,8 @@ class Wiki2FileViews(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2157,7 +2148,8 @@ class Wiki2FileViews(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2202,7 +2194,8 @@ class Wiki2FileView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2239,7 +2232,8 @@ class Wiki2FileViewDuplicateView(APIView):
         wiki.owner = repo_owner
 
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2304,9 +2298,12 @@ class Wiki2FileViewRecords(APIView):
         repo_owner = get_repo_owner(request, wiki_id)
         wiki.owner = repo_owner
         username = request.user.username
-        if not check_wiki_permission(wiki, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        wiki_publish = Wiki2Publish.objects.filter(repo_id=wiki_id).first()
+        if not wiki_publish:
+            permission = check_wiki_permission(wiki, username)
+            if permission != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
         if not wiki_settings or not wiki_settings.enable_link_repos:

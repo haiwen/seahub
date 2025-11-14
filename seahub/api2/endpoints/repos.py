@@ -24,7 +24,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.signals import repo_deleted
 from seahub.thumbnail.utils import remove_thumbnail_by_id
 from seahub.views import check_folder_permission, list_inner_pub_repos
-from seahub.share.models import ExtraSharePermission
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version, gen_inner_file_get_url, gen_file_upload_url, \
@@ -148,7 +148,8 @@ class ReposView(APIView):
                     "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
-                    "enable_onlyoffice": enable_onlyoffice
+                    "enable_onlyoffice": enable_onlyoffice,
+                    "is_admin": True
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -287,6 +288,13 @@ class ReposView(APIView):
                     "salt": r.salt if r.enc_version >= 3 else '',
                     "enable_onlyoffice": enable_onlyoffice
                 }
+                group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(r.repo_id)
+                
+                is_admin = False
+                if r.group_id in group_ids:
+                    if is_group_admin(email, r.group_id):
+                        is_admin = True
+                repo_info['is_admin'] = is_admin
                 repo_info_list.append(repo_info)
 
         if filter_by['public'] and request.user.permissions.can_view_org():
@@ -338,7 +346,8 @@ class ReposView(APIView):
                     "starred": r.repo_id in starred_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
-                    "enable_onlyoffice": enable_onlyoffice
+                    "enable_onlyoffice": enable_onlyoffice,
+                    "is_admin": False
                 }
                 repo_info_list.append(repo_info)
         

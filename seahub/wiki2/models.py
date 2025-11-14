@@ -238,6 +238,8 @@ class WikiFileViewsManager(models.Manager):
 
     def delete_view(self, wiki_id, view_id):
         wiki_views = self.filter(wiki_id=wiki_id).first()
+        if not wiki_views:
+            return
         view_details = json.loads(wiki_views.details)
         views = view_details.get('views', [])
 
@@ -250,6 +252,19 @@ class WikiFileViewsManager(models.Manager):
         wiki_views.save()
         return json.loads(wiki_views.details)
     
+    def delete_views_by_repo_id(self, wiki_id, repo_id):
+        wiki_views = self.filter(wiki_id=wiki_id).first()
+        if not wiki_views:
+            return
+        view_details = json.loads(wiki_views.details)
+        views = view_details.get('views', [])
+        filtered_views = [v for v in views if v.get('linked_repo_id') != repo_id]
+        view_details['views'] = filtered_views
+
+        wiki_views.details = json.dumps(view_details)
+        wiki_views.save()
+        return json.loads(wiki_views.details)
+
     def duplicate_view(self, wiki_id, view_id):
         wiki_views = self.filter(wiki_id=wiki_id).first()
         view_details = json.loads(wiki_views.details)

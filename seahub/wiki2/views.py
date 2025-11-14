@@ -81,10 +81,17 @@ def wiki_view(request, wiki_id, page_id=None):
     
     try:
         response = ReposView().get(request)
-        repos = response.data.get('repos', [])
+        all_repos = response.data.get('repos', [])
     except Exception as e:
         logger.error(e)
-        repos = []
+        all_repos = []
+    
+    display_repos = []
+    for r in all_repos:
+        if r['is_admin'] == False:
+            continue
+        if r['repo_id'] not in display_repos:
+            display_repos.append(r)
     
     settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
     if settings_obj:
@@ -98,12 +105,13 @@ def wiki_view(request, wiki_id, page_id=None):
             "linked_repos": linked_repos
         }
     else:
+        wiki_settings = Wiki2Settings.objects.create(wiki_id=wiki_id, enable_link_repos=True)
         settings = {
-            "enable_link_repos": False,
+            "enable_link_repos": bool(wiki_settings.enable_link_repos),
             "linked_repos": []
         }
-    
-    repos_json = json.dumps(repos)
+
+    repos_json = json.dumps(display_repos)
     settings_json = json.dumps(settings)
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
