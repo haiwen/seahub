@@ -1,0 +1,10 @@
+.react-flow__node .workflow-custom-handle {
+  width: 10px;
+  height: 10px;
+  background-color: var(--bs-workflow-handle-color);
+  border: none;
+}
+
+.react-flow__node .workflow-custom-handle:hover {
+  background-color: var(--bs-workflow-node-border-hover-color);
+}

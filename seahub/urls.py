@@ -225,6 +225,7 @@ from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 from seahub.api2.endpoints.repo_office_suite import OfficeSuiteConfig
 
+from seahub.workflow.views import WorkflowsView, WorkflowDetailView
 
 urlpatterns = [
     path('accounts/', include('seahub.base.registration_urls')),
@@ -265,6 +266,7 @@ urlpatterns = [
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
     re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/download/$', download_file, name='download_file'),
+    re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/workflows/$', repo_workflows_view, name='view_workflows'),
 
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
@@ -272,6 +274,7 @@ urlpatterns = [
     re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/revisions/(?P<revision_id>\d+)/$', view_sdoc_revision, name='view_sdoc_revision'),
     re_path(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
     re_path(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
+    re_path(r'^lib/(?P<repo_id>[-0-9a-f]{36})/workflows/$', repo_workflows_view, name='view_workflows'),
 
     ### share/upload link ###
     re_path(r'^f/(?P<token>[a-f0-9]+)/$', view_shared_file, name='view_shared_file'),
@@ -488,6 +491,10 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
 
 
+    ## user::workflow
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/workflows/$',  WorkflowsView.as_view(), name='api-v2.1-repo-workflows'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/workflows/(?P<workflow_id>\d+)/$',  WorkflowDetailView.as_view(), name='api-v2.1-repo-workflows'),
+
     ## user: repo file comments
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/$', FileCommentsView.as_view(), name='api-v2.1-file-comments'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/(?P<file_uuid>[-0-9a-f]{36})/comments/(?P<comment_id>\d+)/$', FileCommentView.as_view(), name='api-v2.1-file-comment'),
@@ -617,8 +624,6 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     re_path(r'^api/v2.1/import-confluence/$', ImportConfluenceView.as_view(), name='api-v2.1-import-confluence'),
-    ## user::drafts
-
 
     ## user::activities
     re_path(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
@@ -1119,4 +1124,3 @@ if getattr(settings, 'ENABLE_METADATA_MANAGEMENT', False):
         urlpatterns += [
             re_path(r'^api/v2.1/ai/', include('seahub.ai.urls')),
         ]
-

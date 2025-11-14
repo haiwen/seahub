@@ -2038,3 +2038,28 @@ export const getColorScheme = () => {
   if (manualMode) return manualMode;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
+
+export const generatorBase64Code = (keyLength = 4) => {
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+  let key = '';
+  for (let i = 0; i < keyLength; i++) {
+    key += possible.charAt(Math.floor(Math.random() * possible.length));
+  }
+  return key;
+};
+
+export const generatorUniqueBase64Code = (keyLength = 4, base64Codes = []) => {
+  const validBase64Codes = Array.isArray(base64Codes) ? base64Codes : [];
+  let base64Code;
+  let isUnique = false;
+  while (!isUnique) {
+    base64Code = generatorBase64Code(keyLength);
+
+    // eslint-disable-next-line
+    isUnique = !validBase64Codes.includes(base64Code);
+    if (isUnique) {
+      break;
+    }
+  }
+  return base64Code;
+};

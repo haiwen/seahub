@@ -1,0 +1,54 @@
+.react-flow__node .workflow-custom-node-body .seafile-multicolor-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.react-flow__node .custom-node-border-radius {
+  border-radius: 5px;
+}
+
+.react-flow__node .custom-node-bg-color {
+  background-color: #fff;
+}
+
+.react-flow__node .custom-node-border {
+  border: 2px solid var(--bs-workflow-node-border-color);
+}
+
+.react-flow__node .custom-node-border:hover {
+  border-color: var(--bs-workflow-node-border-hover-color);
+}
+
+.react-flow__node.selected .custom-node-border {
+  border-color: var(--bs-workflow-node-selected-border-color);
+}
+
+.react-flow__node .workflow-custom-node-content {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.react-flow__node .workflow-custom-node-body {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding: 10px;
+}
+
+.workflow-custom-node-toolbar {
+  width: 100%;
+  top: 0;
+  padding-bottom: 4px;
+  transform: translateY(-100%);
+}
+
+.workflow-custom-node-toolbar-btn:hover {
+  background-color: var(--bs-hover-bg);
+  cursor: pointer;
+}
+
+.workflow-custom-node-toolbar-btn .seafile-multicolor-icon {
+  fill: var(--bs-icon-color);
+  width: 14px;
+  height: 14px;
+}

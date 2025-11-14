@@ -7,7 +7,8 @@
   align-items: center;
 }
 
-.dir-others .dir-others-item[aria-expanded="true"], /* for 'More' */
+.dir-others .dir-others-item[aria-expanded="true"],
+/* for 'More' */
 .dir-others .dir-others-item:hover {
   background-color: var(--bs-nav-hover-bg);
   border-radius: 0.25rem;
@@ -21,8 +22,16 @@
   white-space: nowrap;
 }
 
+.dir-others .dir-others-item .sf3-font,
 .dir-others .dir-others-item .seafile-multicolor-icon {
   width: 1rem;
   height: 1rem;
   color: var(--bs-icon-color);
+}
+
+.dir-others .dir-others-item>a {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  color: inherit;
 }

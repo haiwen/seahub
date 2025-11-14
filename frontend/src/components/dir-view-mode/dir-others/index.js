@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, isPro } from '../../../utils/constants';
+import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
 import TrashDialog from '../../dialog/trash-dialog';
@@ -11,13 +11,15 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
 import LibraryMoreOperations from './library-more-operations';
 import WatchUnwatchFileChanges from './watch-unwatch-file-changes';
+import DirOthersItemWorkflow from './workflow';
 import Item from './item';
+import { useMetadataStatus } from '../../../hooks';
 
 import './index.css';
 
 const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
-
+  const { enableMetadata } = useMetadataStatus();
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
   let [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   let [activeTab, setActiveTab] = useState(TAB.HISTORY_SETTING);
@@ -59,9 +61,14 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
   const isDepartmentAdmin = owner_email.indexOf('@seafile_group') != -1 && is_admin;
 
   const enableMonitorRepo = isPro && (permission == 'r' || permission == 'rw');
-
   return (
     <TreeSection title={gettext('Others')} className="dir-others">
+      {enableMetadata && (
+        <DirOthersItemWorkflow
+          siteRoot={siteRoot}
+          repoID={repoID}
+        />
+      )}
       {enableMonitorRepo && (
         <WatchUnwatchFileChanges
           repo={currentRepoInfo}
@@ -121,7 +128,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
           toggleDialog={toggleRepoHistoryDialog}
         />
       )}
-    </TreeSection>
+    </TreeSection >
   );
 };
 

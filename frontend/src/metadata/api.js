@@ -243,6 +243,11 @@ class MetadataManagerAPI {
     return this.req.post(url, params);
   };
 
+  getColumnInfo = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
+    return this.req.get(url);
+  };
+
   deleteColumn = (repoID, columnKey) => {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/columns/';
     const params = {
