@@ -88,18 +88,14 @@ def wiki_view(request, wiki_id, page_id=None):
     
     display_repos = []
     for r in all_repos:
-        if r['is_admin'] == False:
+        if not r.get('is_admin'):
             continue
-        if r['repo_id'] not in display_repos:
+        if r not in display_repos:
             display_repos.append(r)
     
     settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
     if settings_obj:
-        try:
-            linked_repos = json.loads(settings_obj.linked_repos) if settings_obj.linked_repos else []
-        except Exception as e:
-            logger.warning(e)
-            linked_repos = []
+        linked_repos = settings_obj.get_linked_repos()
         settings = {
             "enable_link_repos": bool(settings_obj.enable_link_repos),
             "linked_repos": linked_repos
