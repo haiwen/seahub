@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter, Button, FormGroup, Label, Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   executeOperation: PropTypes.func.isRequired,
@@ -41,7 +42,12 @@ class ConfirmUnlinkDevice extends Component {
           <p>{gettext('Are you sure you want to unlink this device?')}</p>
           <FormGroup check>
             <Label check>
-              <Input type="checkbox" checked={this.state.isChecked} onChange={this.onInputChange} />
+              <Input
+                type="checkbox"
+                checked={this.state.isChecked}
+                onChange={this.onInputChange}
+                onKeyDown={Utils.onKeyDown}
+              />
               <span>{gettext('Delete files from this device the next time it comes online.')}</span>
             </Label>
           </FormGroup>
