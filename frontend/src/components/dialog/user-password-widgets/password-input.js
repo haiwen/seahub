@@ -4,6 +4,7 @@ import { FormGroup, Label, InputGroup, Input, Button } from 'reactstrap';
 import classnames from 'classnames';
 import PasswordStrengthChecker from './password-strength-checker';
 import { isMobile } from '../../../utils/utils';
+import Icon from '../../icon';
 
 import '../../../css/password-input.css';
 
@@ -54,7 +55,7 @@ const PasswordInput = ({ value, labelValue, enableCheckStrength = true, onChange
           />
         )}
         <Button onClick={() => setIsShowPassword(!isShowPassword)}>
-          <i className={`password-icon sf3-font sf3-font-eye${isShowPassword ? '' : '-slash'}`} />
+          <Icon symbol={isShowPassword ? 'eye' : 'eye-slash'} className="password-icon" />
         </Button>
       </InputGroup>
     </FormGroup>

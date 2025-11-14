@@ -11,6 +11,7 @@ import toaster from '../toast';
 import SendLink from '../send-link';
 import SharedLink from '../shared-link';
 import SetLinkExpiration from '../set-link-expiration';
+import Icon from '../icon';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -303,8 +304,8 @@ class GenerateUploadLink extends React.Component {
                     <Button
                       aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
                       onClick={this.toggleStoredPasswordVisible}
-                      className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
                     >
+                      <Icon symbol={this.state.storedPasswordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon eye-icon" />
                     </Button>
                   </InputGroup>
                 </dd>
@@ -339,9 +340,10 @@ class GenerateUploadLink extends React.Component {
                       <Button
                         aria-label={gettext('Edit')}
                         title={gettext('Edit')}
-                        className="link-operation-icon sf3-font sf3-font-rename"
+                        className="link-operation-icon"
                         onClick={this.editExpirationToggle}
                       >
+                        <Icon symbol="rename" />
                       </Button>
                     </InputGroup>
                   )}
@@ -386,10 +388,10 @@ class GenerateUploadLink extends React.Component {
               <InputGroup style={{ width: inputWidth }}>
                 <Input id="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
                 <Button onClick={this.togglePasswordVisible}>
-                  <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.passwordVisible ? '' : '-slash'}`}></i>
+                  <Icon symbol={this.state.passwordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
                 </Button>
                 <Button onClick={this.generatePassword}>
-                  <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                  <Icon symbol="magic" className="link-operation-icon" />
                 </Button>
               </InputGroup>
             </FormGroup>

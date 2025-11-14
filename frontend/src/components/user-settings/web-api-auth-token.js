@@ -3,6 +3,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import Icon from '../icon';
 
 class WebAPIAuthToken extends React.Component {
 
@@ -84,8 +85,9 @@ class WebAPIAuthToken extends React.Component {
                   aria-label={isAuthTokenVisible ? gettext('Hide') : gettext('Show')}
                   onKeyDown={this.onIconKeyDown}
                   onClick={this.toggleAuthTokenVisible}
-                  className={`eye-icon sf3-font sf3-font-eye${this.state.isAuthTokenVisible ? '' : '-slash'}`}
+                  className="eye-icon"
                 >
+                  <Icon symbol={this.state.isAuthTokenVisible ? 'eye' : 'eye-slash'} />
                 </span>
               </div>
               <button className="btn btn-outline-primary mt-2" onClick={this.deleteAuthToken}>{gettext('Delete')}</button>

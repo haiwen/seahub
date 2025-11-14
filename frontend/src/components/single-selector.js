@@ -101,7 +101,7 @@ class Selector extends Component {
                     onKeyDown={Utils.onKeyDown}
                   >
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
-                    <i className={`sf2-icon-tick ${item.isSelected ? '' : 'invisible'}`}></i>
+                    <Icon symbol="tick1" className={item.isSelected ? '' : 'invisible'} />
                   </li>
                 );
               })}

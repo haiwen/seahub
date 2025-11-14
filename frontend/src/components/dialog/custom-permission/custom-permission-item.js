@@ -72,12 +72,14 @@ class CustomPermissionItem extends React.Component {
           {this.state.isShowOperations && (
             <Fragment>
               <OpIcon
-                className="sf3-font sf3-font-rename op-icon"
+                symbol="rename"
+                className="op-icon"
                 title={gettext('Edit')}
                 op={this.onEditCustomPermission}
               />
               <OpIcon
-                className="sf3-font sf3-font-delete1 op-icon"
+                symbol="delete1"
+                className="op-icon"
                 title={gettext('Delete')}
                 op={this.onDeleteCustomPermission}
               />

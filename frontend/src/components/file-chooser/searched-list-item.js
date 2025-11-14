@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 import './searched-list-item.css';
 
 const propTypes = {
@@ -34,7 +35,7 @@ class SearchedListItem extends React.Component {
       >
         <td className="text-center searched-item-icon">
           {item.is_dir ?
-            <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
+            <span className="tree-node-icon"><Icon symbol="folder" /></span>
             :
             <img className="item-img" src={Utils.getFileIconUrl(item.name)} alt="" width="24"/>
           }

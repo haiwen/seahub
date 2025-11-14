@@ -73,8 +73,10 @@
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-tag-check-icon {
-  text-align: center;
   width: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sf-metadata-tags-editor .sf-metadata-tags-editor-divider {

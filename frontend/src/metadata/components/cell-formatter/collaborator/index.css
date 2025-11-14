@@ -40,8 +40,9 @@
 }
 
 .sf-metadata-ui.collaborator-item .collaborator-remove {
-  display: inline-block;
   width: 14px;
+  display: inline-flex;
+  align-items: center;
   margin: 0 -2px 0 2px;
   flex-shrink: 0;
 }

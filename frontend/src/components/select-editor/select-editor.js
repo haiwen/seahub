@@ -84,7 +84,7 @@ class SelectEditor extends React.Component {
             role="button"
             aria-label={gettext('Add custom permission')}
           >
-            <i className="sf3-font sf3-font-enlarge" aria-hidden="true"></i>
+            <Icon symbol="new" className="mr-2" aria-hidden="true" />
             <span>{gettext('Add custom permission')}</span>
           </div>
         )

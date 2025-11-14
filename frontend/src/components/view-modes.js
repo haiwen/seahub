@@ -77,7 +77,7 @@ class ViewModes extends React.Component {
               <DropdownItem className='p-0' key={index} onClick={this.props.switchViewMode.bind(this, item.value)}>
                 <div className="view-modes-dropdown-wrapper">
                   <span className='view-modes-dropdown-tick'>
-                    {currentViewMode === item.value && <i className="sf2-icon-tick"></i>}
+                    {currentViewMode === item.value && <Icon symbol="tick1" />}
                   </span>
                   <span className="view-modes-dropdown-content d-flex align-items-center">
                     <Icon symbol={item.icon} className="mr-2" />

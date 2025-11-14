@@ -311,7 +311,7 @@ const PageItem = ({
               op={toggleInsertPage}
               title={gettext('Add page inside')}
             >
-              <Icon symbol="plus_sign" />
+              <Icon symbol="new" />
             </OpIcon>
           </div>
           }

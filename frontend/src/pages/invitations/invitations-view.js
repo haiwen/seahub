@@ -14,6 +14,7 @@ import toaster from '../../components/toast';
 import EmptyTip from '../../components/empty-tip';
 import OpIcon from '../../components/op-icon';
 import MobileItemMenu from '../../components/mobile-item-menu';
+import Icon from '../../components/icon';
 
 import '../../css/invitations.css';
 
@@ -95,12 +96,13 @@ class Item extends React.Component {
             <td>{item.accepter}</td>
             <td>{dayjs(item.invite_time).format('YYYY-MM-DD')}</td>
             <td>{dayjs(item.expire_time).format('YYYY-MM-DD')}</td>
-            <td>{item.accept_time && <i className="sf2-icon-tick invite-accept-icon"></i>}</td>
+            <td>{item.accept_time && <span className="invite-accept-icon"><Icon symbol="tick1" /></span>}</td>
             <td>
               {isOpIconShown && (
                 item.accept_time ?
                   <OpIcon
-                    className="op-icon sf3-font sf3-font-cancel-invitation"
+                    symbol="cancel-invitation"
+                    className="op-icon"
                     title={gettext('Revoke Access')}
                     op={this.toggleRevokeDialog}
                   /> :

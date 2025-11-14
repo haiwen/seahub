@@ -4,6 +4,7 @@ import { Button, Modal, Input, ModalBody, ModalFooter, Label, Form, InputGroup, 
 import { gettext } from '../../utils/constants';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 const propTypes = {
   toggle: PropTypes.func.isRequired,
@@ -148,10 +149,10 @@ class AddOrgUserDialog extends React.Component {
               <InputGroup className="passwd">
                 <Input id="userPwd" innerRef={input => {this.passwdInput = input;}} value={this.state.password || ''} onChange={this.inputPassword} />
                 <Button onClick={this.togglePasswordVisible}>
-                  <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '-slash' : ''}`}></i>
+                  <Icon symbol={this.state.isPasswordVisible ? 'eye-slash' : 'eye'} className="link-operation-icon" />
                 </Button>
                 <Button onClick={this.generatePassword}>
-                  <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                  <Icon symbol="magic" className="link-operation-icon" />
                 </Button>
               </InputGroup>
             </FormGroup>

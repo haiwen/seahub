@@ -11,6 +11,7 @@ import toaster from '../toast';
 import SetLinkExpiration from '../set-link-expiration';
 import UserSelect from '../user-select';
 import BackIcon from '../../components/back-icon';
+import Icon from '../icon';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -316,10 +317,10 @@ class LinkCreation extends React.Component {
                   <InputGroup style={{ width: inputWidth }}>
                     <Input id="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
                     <Button onClick={this.togglePasswordVisible}>
-                      <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
+                      <Icon symbol={this.state.isPasswordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
                     </Button>
                     <Button onClick={this.generatePassword}>
-                      <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                      <Icon symbol="magic" className="link-operation-icon" />
                     </Button>
                   </InputGroup>
                 </FormGroup>

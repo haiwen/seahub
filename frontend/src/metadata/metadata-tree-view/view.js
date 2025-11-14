@@ -68,7 +68,7 @@ const ViewItem = ({
       value.push({
         key: 'move',
         value: gettext('Move'),
-        subOpList: moveableFolders.map((folder) => ({ key: `${MOVE_TO_FOLDER_PREFIX}${folder._id}`, value: folder.name, icon_dom: <i className="sf3-font sf3-font-folder"></i> })),
+        subOpList: moveableFolders.map((folder) => ({ key: `${MOVE_TO_FOLDER_PREFIX}${folder._id}`, value: folder.name, icon_dom: <Icon symbol="folder" /> })),
       });
     }
     const convertableViews = Object.values(VIEW_TYPE).filter(type =>

@@ -89,7 +89,9 @@ class MainPanel extends Component {
           {!username &&
             <Fragment>
               <div className="cur-view-toolbar">
-                <Icon symbol="menu" className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick} />
+                <span className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
+                  <Icon symbol="menu" />
+                </span>
               </div>
               <div className="common-toolbar">
                 {isPro && (
@@ -101,11 +103,15 @@ class MainPanel extends Component {
           {username && (
             <Fragment>
               <div className="cur-view-toolbar">
-                <Icon symbol="menu" className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick} />
+                <span className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
+                  <Icon symbol="menu" />
+                </span>
                 {this.props.permission == 'rw' && (
                   Utils.isDesktop() ?
                     <button className="btn btn-secondary operation-item" title={gettext('Edit')} onClick={this.onEditClick}>{gettext('Edit')}</button> :
-                    <Icon symbol="rename" className="mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick} />
+                    <span className="mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick}>
+                      <Icon symbol="rename" />
+                    </span>
                 )}
               </div>
               <div className="common-toolbar">

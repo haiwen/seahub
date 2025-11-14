@@ -136,7 +136,7 @@ class UploadListItem extends React.Component {
           }
           {this.state.uploadState === UPLOAD_UPLOADED && (
             <div className="d-flex align-items-center">
-              <span className="upload-success-icon sf2-icon-tick mr-2"></span>
+              <span className="upload-success-icon mr-2"><Icon symbol="tick1" /></span>
               <span className="upload-success-msg">{gettext('Uploaded')}</span>
             </div>
           )}

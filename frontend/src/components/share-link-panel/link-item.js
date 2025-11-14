@@ -9,6 +9,7 @@ import toaster from '../toast';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import Icon from '../icon';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
@@ -165,11 +166,17 @@ class LinkItem extends React.Component {
           <td>
             {expire_date ? dayjs(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
-          <td>{item.password && <i className='sf2-icon-tick'></i>}</td>
+          <td>{item.password && <Icon symbol="tick1" />}</td>
           <td>
-            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
-            <a href="#" role="button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
+            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}>
+              <Icon symbol="copy1" />
+            </a>
+            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}>
+              <Icon symbol="delete1" />
+            </a>
+            <a href="#" role="button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}>
+              <Icon symbol="qr-code" />
+            </a>
             {this.qrCodeBtn && (
               <div ref={this.popoverContainerRef}>
                 <Popover className="link-item-qrcode-popover" placement="bottom" isOpen={isQRCodePopoverOpen} target={this.qrCodeBtn}>

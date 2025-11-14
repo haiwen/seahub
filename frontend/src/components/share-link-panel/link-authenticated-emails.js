@@ -8,6 +8,7 @@ import { shareLinkAPI } from '../../utils/share-link-api';
 import BackIcon from '../back-icon';
 import EmptyTip from '../empty-tip';
 import Loading from '../loading';
+import Icon from '../icon';
 
 class EmailItem extends React.Component {
 
@@ -53,12 +54,13 @@ class EmailItem extends React.Component {
           <span
             tabIndex="0"
             role="button"
-            className={`sf2-icon-x3 op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
             onClick={this.deleteItem}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
+            <Icon symbol="x-01" />
           </span>
         </td>
       </tr>

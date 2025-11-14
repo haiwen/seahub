@@ -9,6 +9,7 @@ import Loading from '../../loading';
 import toaster from '../../toast';
 import UserSelect from '../../user-select';
 import SharePermissionEditor from '../../select-editor/share-permission-editor';
+import Icon from '../../icon';
 
 class UserItem extends React.Component {
 
@@ -57,10 +58,13 @@ class UserItem extends React.Component {
         </td>
         <td>
           <span
-            className={`sf2-icon-x3 action-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            role="button"
+            tabIndex="0"
             onClick={this.deleteShareItem}
             title={gettext('Delete')}
           >
+            <Icon symbol="x-01" />
           </span>
         </td>
       </tr>

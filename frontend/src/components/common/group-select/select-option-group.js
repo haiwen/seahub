@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import SearchInput from '../../search-input';
 import Option from './option';
 import KeyCodes from '../../../constants/keyCodes';
+import Icon from '../../icon';
 
 import './select-option-group.css';
 
@@ -152,7 +153,7 @@ class SelectOptionGroup extends Component {
           disableHover={this.state.disableHover}
         >
           <div className='option-label'>{option.label}</div>
-          {isSelected && <i className="sf2-icon-tick text-gray font-weight-bold"></i>}
+          {isSelected && <Icon symbol="tick1" className="text-gray font-weight-bold" />}
         </Option>
       );
     });

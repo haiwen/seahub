@@ -266,7 +266,7 @@ class DepartmentDetailDialog extends React.Component {
         <ModalBody className="department-dialog-content">
           <div className="department-dialog-left-panel">
             <div className="mb-2 position-relative">
-              <i className="sf3-font sf3-font-search input-icon-addon"></i>
+              <span className="input-icon-addon"><Icon symbol="search" /></span>
               <Input
                 bsSize="sm"
                 className="px-6"

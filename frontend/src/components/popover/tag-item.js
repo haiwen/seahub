@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
+import Icon from '../icon';
 
 class TagItem extends React.Component {
 
@@ -66,7 +67,7 @@ class TagItem extends React.Component {
         <div className="tag-item d-flex align-items-center" style={{ backgroundColor: repoTag.color }}>
           <span className="tag-name">{repoTag.name}</span>
         </div>
-        {isTagSelected && <i className="sf2-icon-tick tag-selected-icon"></i>}
+        {isTagSelected && <Icon symbol="tick1" className="tag-selected-icon" />}
       </li>
     );
   }

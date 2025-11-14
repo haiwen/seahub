@@ -10,8 +10,7 @@ const Collaborator = ({ enableDelete = false, collaborator, onDelete }) => {
   if (emial.includes('@seafile_group')) {
     return (
       <div className="sf-metadata-ui collaborator-item" title={collaborator.name}>
-        <span className="sf3-font-department sf3-font nav-icon">
-        </span>
+        <span className="nav-icon"><Icon symbol="department" /></span>
         <span className="collaborator-name">{collaborator.name}</span>
         {enableDelete && (
           <span className="collaborator-remove" onClick={onDelete}>

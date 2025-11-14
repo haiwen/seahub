@@ -7,6 +7,7 @@ import toaster from '../toast';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 import '../../css/group-invite-members-dialog.css';
 
@@ -88,7 +89,7 @@ class GroupInviteMembersDialog extends React.Component {
                   <Button color="primary" onClick={this.copyLink} className="invite-link-copy-btn text-truncate">{gettext('Copy')}</Button>
                 </div>
                 <Button color="primary" outline onClick={this.deleteLink.bind(this, link.token)} className="delete-link-btn ml-2">
-                  <i className="sf3-font-delete1 sf3-font"></i>
+                  <Icon symbol="delete1" />
                 </Button>
               </div>
             </>

@@ -6,6 +6,7 @@ import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import People from './people';
 import { gettext } from '../../../../utils/constants';
 import { useMetadataView } from '../../../hooks/metadata-view';
+import Icon from '../../../../components/icon';
 
 import './index.css';
 
@@ -23,7 +24,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
         label: (
           <>
             <People people={people} />
-            {isSelected && <i className="sf2-icon-tick"></i>}
+            {isSelected && <span className="people-check-icon"><Icon symbol="tick1" /></span>}
           </>
         ),
       };

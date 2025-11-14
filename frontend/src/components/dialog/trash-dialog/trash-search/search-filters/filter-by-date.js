@@ -142,7 +142,7 @@ const FilterByDate = ({ date, onChange }) => {
                   toggle={false}
                 >
                   {option.label}
-                  {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                  {isSelected && <Icon symbol="tick1" className="dropdown-item-tick" />}
                 </DropdownItem>
               );
             })}

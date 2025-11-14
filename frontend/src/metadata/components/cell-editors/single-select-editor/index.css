@@ -99,7 +99,9 @@
 
 .sf-metadata-single-select-editor .single-select-check-icon {
   width: 20px;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .sf-metadata-single-select-editor .single-select-check-icon .seafile-multicolor-icon-check-icon {

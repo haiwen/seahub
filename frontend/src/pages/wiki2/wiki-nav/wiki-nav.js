@@ -225,8 +225,8 @@ class WikiNav extends Component {
                     className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2 justify-content-between"
                     onMouseEnter={this.showImportPageMenu}
                   >
-                    <span>
-                      <Icon symbol='import-sdoc' aria-hidden="true" />
+                    <span className="d-flex align-items-center">
+                      <Icon symbol="import-sdoc" className="mr-2" aria-hidden="true" />
                       <span>{gettext('Import page')}</span>
                     </span>
                     <Icon symbol="down" className="rotate-270 mr-0" aria-hidden="true" />
@@ -244,7 +244,7 @@ class WikiNav extends Component {
               title={gettext('New page')}
               op={this.props.handleAddNewPage}
             >
-              <Icon symbol="plus_sign" />
+              <Icon symbol="new" />
             </OpIcon>
           </div>
           }

@@ -977,7 +977,9 @@ class Search extends Component {
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
-            <Icon className="search-icon" symbol="search" onClick={this.onSearchToggle} />
+            <span className="search-icon" onClick={this.onSearchToggle}>
+              <Icon symbol="search" />
+            </span>
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">

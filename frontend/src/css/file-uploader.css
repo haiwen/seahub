@@ -40,15 +40,16 @@
 }
 
 .uploader-list-header .upload-dialog-op-container {
-  line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .uploader-list-header .upload-dialog-op {
-  display: inline-block;
-  margin: 3px 0 0 4px;
-  font-size: 18px;
-  line-height: 1;
-  color: #b8b8b8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--bs-icon-color);
   cursor: pointer;
 }
 
@@ -103,11 +104,13 @@
 .file-upload-item .upload-success-icon {
   width: 16px;
   height: 16px;
-  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: #fff;
   background: #47b881;
   border-radius: 100%;
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1.1;
   font-weight: bolder;
 }
