@@ -226,6 +226,7 @@ class DateEditor extends Component {
                     tabIndex="-1"
                     readOnly
                     className="ant-calendar-picker-input ant-input form-control"
+                    style={{ visibility: 'hidden' }}
                     value={value ? value.format(this.format) : ''}
                     onMouseDown={this.handleMouseDown}
                   />
