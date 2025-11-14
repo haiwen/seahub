@@ -721,6 +721,8 @@ def view_lib_file(request, repo_id, path):
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, XMIND, 'Unknown'):
         template = 'common_file_view_react.html'
 
+    edit_pdf = request.GET.get('edit_pdf', 'false')
+
     if filetype == SEADOC:
         file_uuid = get_seadoc_file_uuid(repo, path)
         return_dict['file_uuid'] = file_uuid
@@ -762,6 +764,20 @@ def view_lib_file(request, repo_id, path):
         return_dict.update(revision_info)
 
         send_file_access_msg(request, repo, path, 'web')
+        return render(request, template, return_dict)
+
+    if filetype == PDF and not edit_pdf == 'true':
+        return_dict['raw_path'] = raw_path
+        return_dict['enable_pdf_thumbnail'] = settings.ENABLE_PDF_THUMBNAIL
+
+        can_edit_pdf = False
+        if ENABLE_ONLYOFFICE and \
+                parse_repo_perm(permission).can_edit_on_web and \
+                'pdf' in ONLYOFFICE_EDIT_FILE_EXTENSION and \
+                ((not is_locked) or (is_locked and locked_by_online_office)):
+            can_edit_pdf = True
+        return_dict['can_edit_pdf'] = can_edit_pdf
+
         return render(request, template, return_dict)
 
     if filetype == TEXT or fileext in get_conf_text_ext():
@@ -858,12 +874,10 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
 
-    elif filetype in (VIDEO, AUDIO, PDF, SVG):
+    elif filetype in (VIDEO, AUDIO, SVG):
         return_dict['raw_path'] = raw_path
         if filetype == VIDEO:
             return_dict['enable_video_thumbnail'] = settings.ENABLE_VIDEO_THUMBNAIL
-        if filetype == PDF:
-            return_dict['enable_pdf_thumbnail'] = settings.ENABLE_PDF_THUMBNAIL
         if filetype not in FILE_TYPE_FOR_NEW_FILE_LINK:
             send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
@@ -913,7 +927,7 @@ def view_lib_file(request, repo_id, path):
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
-    elif filetype in (DOCUMENT, SPREADSHEET):
+    elif filetype in (DOCUMENT, SPREADSHEET, PDF):
 
         if repo.encrypted:
             return_dict['err'] = _('The library is encrypted, can not open file online.')
