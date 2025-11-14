@@ -125,8 +125,8 @@ PREVIEW_FILEEXT = {
     AUDIO: ('mp3', 'oga', 'ogg', 'wav', 'flac', 'opus'),
     #'3D': ('stl', 'obj'),
     SEADOC: ('sdoc',),
-    TLDRAW: ('draw',),
-    EXCALIDRAW: ('exdraw',),
+    TLDRAW: ('draw','tldr'),
+    EXCALIDRAW: ('exdraw','excalidraw'),
 }
 
 def get_non_sdoc_file_exts():

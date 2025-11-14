@@ -106,7 +106,9 @@ FILEEXT_ICON_MAP = {
     'ico': 'pic.png',
     'psd': 'psd.png',
     'draw': 'draw.png',
+    'tldr': 'draw.png',
     'exdraw': 'draw.png',
+    'excalidraw': 'draw.png',
 
     # zip file
     'zip': 'zip.png',
