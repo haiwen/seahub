@@ -30,11 +30,13 @@ export default function LinkedRepoPanel() {
     const repos = getWikiRepos();
     const { enable_link_repos: isOpen, linked_repos: linkedRepoIds } = wikiSettings;
 
-    const repoList = repos.map(item => {
+    let repoList = repos.map(item => {
       let repo = new Repo(item);
       repo.sharePermission = 'rw';
       return repo;
     });
+
+    repoList = repoList.filter(item => item.enable_metadata);
 
     const options = repoList.map(item => {
       return {
