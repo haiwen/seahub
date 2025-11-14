@@ -2,7 +2,6 @@ import React, { useState, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '@/utils/utils';
 import DeleteFolderDialog from '@/components/dialog/delete-folder-dialog';
-import { useMetadataView } from '../../hooks/metadata-view';
 import { useMetadataStatus } from '../../../hooks/metadata-status';
 import RowUtils from './utils/row-utils';
 import { checkIsDir } from '../../utils/row';
@@ -15,13 +14,12 @@ import TextTranslation from '../../../utils/text-translation';
 import { getColumnByKey } from '../../utils/column';
 
 const ContextMenu = ({
-  isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
+  metadata, isGroupView, selectedRange, selectedPosition, recordMetrics, recordGetterByIndex, onClearSelected, onCopySelected,
   getTableContentRect, getTableCanvasContainerRect, deleteRecords, selectNone, updateRecordDetails,
   updateFaceRecognition, updateRecordDescription, onOCR, generateFileTags
 }) => {
   const currentRecord = useRef(null);
   const [deletedFolderPath, setDeletedFolderPath] = useState('');
-  const { metadata } = useMetadataView();
   const { enableFaceRecognition, enableTags } = useMetadataStatus();
   const repoID = window.sfMetadataStore.repoId;
 

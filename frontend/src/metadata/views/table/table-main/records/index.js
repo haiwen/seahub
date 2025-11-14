@@ -643,12 +643,14 @@ class Records extends Component {
     const { isGroupView } = this.props;
     const { recordMetrics, columnMetrics, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth } = columnMetrics;
+
     const commonProps = {
       ...this.props,
       columns, allColumns, totalWidth, lastFrozenColumnKey, frozenColumnsWidth,
       recordMetrics, colOverScanStartIdx, colOverScanEndIdx,
       contextMenu: (
         <ContextMenu
+          metadata={this.props.metadata}
           isGroupView={isGroupView}
           recordGetterByIndex={this.props.recordGetterByIndex}
           deleteRecords={this.props.deleteRecords}
@@ -673,6 +675,7 @@ class Records extends Component {
       getTableCanvasContainerRect: this.getTableCanvasContainerRect,
       onShowExpandedPropsDialog: this.toggleExpandedPropsDialog,
     };
+
     if (this.props.isGroupView) {
       return (
         <GroupBody
@@ -697,7 +700,7 @@ class Records extends Component {
   render() {
     const {
       recordIds, recordsCount, table, isGroupView, groupOffsetLeft, renameColumn, modifyColumnData,
-      deleteColumn, modifyColumnOrder, insertColumn
+      deleteColumn, modifyColumnOrder, insertColumn, metadata, modifyRecord, updateFileTags
     } = this.props;
     const { recordMetrics, columnMetrics, selectedRange, colOverScanStartIdx, colOverScanEndIdx } = this.state;
     const { columns, totalWidth, lastFrozenColumnKey } = columnMetrics;
@@ -752,6 +755,10 @@ class Records extends Component {
         )}
         {this.state.showExpandedPropsDialog && (
           <ExpandedPropertiesDialog
+            metadata={metadata}
+            modifyRecord={modifyRecord}
+            modifyColumnData={modifyColumnData}
+            updateFileTags={updateFileTags}
             recordId={this.state.expandedRecordId}
             columns={this.props.columns}
             toggle={this.toggleExpandedPropsDialog}
@@ -779,6 +786,7 @@ class Records extends Component {
 }
 
 Records.propTypes = {
+  metadata: PropTypes.object,
   isGroupView: PropTypes.bool,
   columns: PropTypes.array,
   table: PropTypes.object,
@@ -793,7 +801,7 @@ Records.propTypes = {
   searchResult: PropTypes.object,
   getTableContentRect: PropTypes.func,
   scrollToLoadMore: PropTypes.func,
-  updateRecord: PropTypes.func,
+  modifyRecord: PropTypes.func,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
   loadAll: PropTypes.func,
@@ -805,6 +813,7 @@ Records.propTypes = {
   modifyColumnOrder: PropTypes.func,
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
+  updateFileTags: PropTypes.func,
 };
 
 export default Records;

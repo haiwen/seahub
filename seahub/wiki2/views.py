@@ -11,14 +11,15 @@ from seaserv import seafile_api
 from django.http import Http404
 from django.shortcuts import render
 
+from seahub.api2.endpoints.repos import ReposView
 from seahub.wiki2.models import Wiki2 as Wiki
-from seahub.wiki2.models import Wiki2Publish
+from seahub.wiki2.models import Wiki2Publish, WikiFileViews, Wiki2Settings
 from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
-from seahub.utils.repo import get_repo_owner, is_repo_admin, is_repo_owner, is_group_repo_staff
+from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
 from seahub.settings import SEADOC_SERVER_URL
 from seahub.seadoc.utils import gen_seadoc_access_token
 
@@ -34,11 +35,11 @@ def wiki_view(request, wiki_id, page_id=None):
     wiki = Wiki.objects.get(wiki_id=wiki_id)
     if not wiki:
         raise Http404
-    
+
     username = request.user.username
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
-    
+
     file_path = ''
 
     if page_id:
@@ -69,7 +70,7 @@ def wiki_view(request, wiki_id, page_id=None):
         except Exception as e:
             logger.warning(e)
 
-    
+
     is_admin = is_repo_admin(username, repo_id)
     last_modified = datetime.fromtimestamp(last_modified)
     try:
@@ -77,6 +78,35 @@ def wiki_view(request, wiki_id, page_id=None):
         publish_url = publish_config.publish_url
     except Wiki2Publish.DoesNotExist:
         publish_url = ''
+    
+    try:
+        admin_repos = list_user_admin_reops(request)
+    except Exception as e:
+        logger.error(e)
+        admin_repos = []
+    
+    display_repos = []
+    for r in admin_repos:
+        if r.get('encrypted'):
+            continue
+        display_repos.append(r)
+    
+    settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+    if settings_obj:
+        linked_repos = settings_obj.get_linked_repos()
+        settings = {
+            "enable_link_repos": bool(settings_obj.enable_link_repos),
+            "linked_repos": linked_repos
+        }
+    else:
+        wiki_settings = Wiki2Settings.objects.create(wiki_id=wiki_id, enable_link_repos=True)
+        settings = {
+            "enable_link_repos": bool(wiki_settings.enable_link_repos),
+            "linked_repos": []
+        }
+
+    repos_json = json.dumps(display_repos)
+    settings_json = json.dumps(settings)
     return render(request, "wiki/wiki_edit.html", {
         "wiki": wiki,
         "is_admin": is_admin,
@@ -87,7 +117,9 @@ def wiki_view(request, wiki_id, page_id=None):
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": permission,
         "enable_user_clean_trash": config.ENABLE_USER_CLEAN_TRASH,
-        "publish_url": publish_url
+        "publish_url": publish_url,
+        "repos": repos_json,
+        "settings": settings_json
     })
 
 
@@ -160,11 +192,11 @@ def wiki_history_view(request, wiki_id):
     wiki = Wiki.objects.get(wiki_id=wiki_id)
     if not wiki:
         raise Http404
-    
+
     username = request.user.username
     repo_owner = get_repo_owner(request, wiki_id)
     wiki.owner = repo_owner
-    
+
     page_id = request.GET.get('page_id')
 
     if page_id:
@@ -192,4 +224,21 @@ def wiki_history_view(request, wiki_id):
         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
         "seadoc_access_token": gen_seadoc_access_token(file_uuid, file_name, username, permission='rw'),
         "seadoc_server_url": SEADOC_SERVER_URL
+    })
+
+def wiki_repo_view(request, wiki_id, view_id):
+
+    # get wikiView object or 404
+    wikiFileView = WikiFileViews.objects.get_view(wiki_id, view_id)
+    if not wikiFileView:
+        raise Http404
+
+    repo_id = wikiFileView['linked_repo_id']
+    repo = seafile_api.get_repo(repo_id)
+
+    return render(request, "wiki_repo_view.html", {
+        'repo': repo,
+        'wiki_id': wiki_id,
+        'view_id': view_id,
+        'repo_id': repo_id,
     })

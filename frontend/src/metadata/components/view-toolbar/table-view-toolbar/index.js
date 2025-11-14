@@ -5,8 +5,14 @@ import { PRIVATE_COLUMN_KEY } from '../../../constants';
 import { useMetadataStatus } from '../../../../hooks';
 
 const TableViewToolbar = ({
-  readOnly, view, collaborators,
-  modifyFilters, modifySorts, modifyGroupbys, modifyHiddenColumns, modifyColumnOrder
+  readOnly,
+  view,
+  collaborators,
+  modifyFilters,
+  modifySorts,
+  modifyGroupbys,
+  modifyHiddenColumns,
+  modifyColumnOrder
 }) => {
   const { globalHiddenColumns } = useMetadataStatus();
   const viewType = useMemo(() => view.type, [view]);

@@ -22,14 +22,16 @@ from django.utils.translation import gettext as _
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
-from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, is_wiki_repo
+from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
-from seahub.wiki2.models import WikiPageTrash, Wiki2Publish
+from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiFileViews, Wiki2Settings
+from seahub.repo_metadata.models import RepoMetadata
+from seahub.repo_metadata.metadata_server_api import list_metadata_view_records
 from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
@@ -1832,3 +1834,505 @@ class Wiki2ImportPageView(APIView):
             'docUuid': sdoc_uuid_str,
             'task_id': task_id
         })
+
+
+class Wiki2SettingsView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+    
+    def get(self, request, wiki_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+        
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+            if not wiki_settings:
+                Wiki2Settings.objects.create(wiki_id=wiki_id, enable_link_repos=True, linked_repos=[])
+                return Response({
+                    'enable_link_repos': True,
+                    'linked_repos': []
+                })
+        except Exception as e:
+            logger.error(f'Error getting wiki settings: {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        return Response(wiki_settings.to_dict())
+    
+    def put(self, request, wiki_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found.')
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
+        enable_link_repos = request.data.get('enable_link_repos', 'false')
+        if enable_link_repos not in ('true', 'false'):
+            error_msg = 'enable_link_repos invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        enable_link_repos = to_python_boolean(enable_link_repos)
+            
+        try:
+            wiki_settings, created = Wiki2Settings.objects.get_or_create(
+                wiki_id=wiki_id,
+                defaults={'enable_link_repos': True, 'linked_repos': '[]'}
+            )
+            wiki_settings.enable_link_repos = enable_link_repos
+            wiki_settings.save()
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response(wiki_settings.to_dict())
+
+
+class Wiki2LinkedReposView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+    
+    def post(self, request, wiki_id):
+        repo_id = request.data.get('repo_id')
+        if not repo_id:
+            error_msg = 'repo_id is required.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if repo_id == wiki_id:
+            error_msg = 'Wiki can not be linked to itself.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found.')
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        repo_admin = is_repo_admin(username, repo_id)
+        if not repo_admin:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
+        wiki_settings, created = Wiki2Settings.objects.get_or_create(
+            wiki_id=wiki_id,
+            defaults={'enable_link_repos': True, 'linked_repos': '[]'}
+        )
+        if not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = f'Library {repo_id} not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if repo.repo_type == 'wiki':
+            error_msg = f'The wiki {repo_id} is not linked to wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        permission = check_folder_permission(request, repo_id, '/')
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        linked_repos = wiki_settings.linked_repos
+        if repo_id in linked_repos:
+            error_msg = f'The wiki {repo_id} is already linked to wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        try:
+            wiki_settings.add_linked_repo(repo_id)
+            wiki_settings.save()
+        except Exception as e:
+            logger.error(f'Error adding linked repo: {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        
+        return Response({"success": True})
+
+    
+    def delete(self, request, wiki_id):
+        repo_id = request.data.get('repo_id')
+        if not repo_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'repo_id is required.')
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Wiki not found.')
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        wiki_permission = check_wiki_permission(wiki, username)
+        if wiki_permission != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+        
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        try:
+            wiki_settings.remove_linked_repo(repo_id)
+            wiki_settings.save()
+            WikiFileViews.objects.delete_views_by_repo_id(wiki_id, repo_id)
+        except Exception as e:
+            logger.error(f'Error removing linked repo: {e}')
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        
+        return Response({"success": True})
+
+class Wiki2FileViews(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+    
+    def get(self, request, wiki_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            return Response([])
+        try:
+            wiki_views = WikiFileViews.objects.list_views(wiki_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response(wiki_views)
+    
+    def post(self, request, wiki_id):
+        #  Add a wiki view
+        view_name = request.data.get('name')
+        view_type = request.data.get('type', 'table')
+        link_repo_id = request.data.get('link_repo_id')
+        view_data = request.data.get('data', {})
+
+        # check view name
+        if not view_name:
+            error_msg = 'view name is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        if not link_repo_id:
+            error_msg = 'link repo id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        wiki_linked_repos = wiki_settings.get_linked_repos()
+        if link_repo_id not in wiki_linked_repos:
+            error_msg = f'The repo {link_repo_id} is not linked to wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            new_view = WikiFileViews.objects.add_view(wiki_id, view_name, link_repo_id, view_type, view_data)
+            if not new_view:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'add view failed')
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'view': new_view})
+
+    def put(self, request, wiki_id):
+        # Update a wiki view, including rename
+        # by a json data
+        view_id = request.data.get('view_id', None)
+        view_data = request.data.get('view_data', None)
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not view_data:
+            error_msg = 'view_data is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        views = WikiFileViews.objects.filter(
+            wiki_id=wiki_id,
+        ).first()
+        if not views:
+            error_msg = 'The wiki views does not exists.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if view_id not in views.views_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            WikiFileViews.objects.update_view(wiki_id, view_id, view_data)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+    def delete(self, request, wiki_id):
+        # Delete a wiki view
+        view_id = request.data.get('view_id', None)
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        views = WikiFileViews.objects.filter(
+            wiki_id=wiki_id,
+        ).first()
+        if not views:
+            error_msg = 'The wiki views does not exists.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check view exist
+        if view_id not in views.views_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            WikiFileViews.objects.delete_view(wiki_id, view_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+class Wiki2FileView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+    
+    def get(self, request, wiki_id, view_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        try:
+            view = WikiFileViews.objects.get_view(wiki_id, view_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'view': view})
+
+class Wiki2FileViewDuplicateView(APIView):
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+    
+    def post(self, request, wiki_id):
+        view_id = request.data.get('view_id', None)
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if permission != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        try:
+            wiki_file_views = WikiFileViews.objects.filter(wiki_id=wiki_id).first()
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        if view_id not in wiki_file_views.views_ids:
+            error_msg = 'view_id %s does not exists.' % view_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        try:
+            new_view = WikiFileViews.objects.duplicate_view(wiki_id, view_id)
+            if not new_view:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'duplicate view failed')
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'view': new_view})
+
+class Wiki2FileViewRecords(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+    
+    def get(self, request, wiki_id, view_id):
+        start = request.GET.get('start', 0)
+        limit = request.GET.get('limit', 1000)
+        try:
+            start = int(start)
+            limit = int(limit)
+        except:
+            start = 0
+            limit = 1000
+
+        if start < 0:
+            error_msg = 'start invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if limit < 0:
+            error_msg = 'limit invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not view_id:
+            error_msg = 'view_id is invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+        username = request.user.username
+        wiki_publish = Wiki2Publish.objects.filter(repo_id=wiki_id).first()
+        if not wiki_publish:
+            permission = check_wiki_permission(wiki, username)
+            if not permission:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_settings = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
+        if not wiki_settings or not wiki_settings.enable_link_repos:
+            error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            view = WikiFileViews.objects.get_view(wiki_id, view_id)
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        if not view:
+            error_msg = 'Wiki file view %s not found.' % view_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        # metadata enable check
+        repo_id = view.get('linked_repo_id')
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            results = list_metadata_view_records(repo_id, username, view, False, start, limit)
+        except Exception as err:
+            logger.error(err)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response(results)
