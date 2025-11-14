@@ -87,8 +87,9 @@ def wiki_view(request, wiki_id, page_id=None):
     
     display_repos = []
     for r in admin_repos:
-        if r not in display_repos:
-            display_repos.append(r)
+        if r.get('encrypted'):
+            continue
+        display_repos.append(r)
     
     settings_obj = Wiki2Settings.objects.filter(wiki_id=wiki_id).first()
     if settings_obj:

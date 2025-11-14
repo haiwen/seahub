@@ -386,6 +386,7 @@ def list_user_admin_reops(request):
         org_id = request.user.org.org_id
 
     repo_info_list = []
+    repo_set = set() # hold the repo_ids already added
     if org_id:
         owned_repos = seafile_api.get_org_owned_repo_list(org_id,
                                                             email,
@@ -393,79 +394,74 @@ def list_user_admin_reops(request):
     else:
         owned_repos = seafile_api.get_owned_repo_list(email,
                                                         ret_corrupted=True)
-
     # owner repos
-    owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
     for r in owned_repos:
         # do not return virtual repos
+        repo_id = r.id
         if r.is_virtual:
             continue
-
         if is_wiki_repo(r):
+            continue
+        if repo_id in repo_set:
             continue
 
         repo_info = {
-            "repo_id": r.id,
+            "repo_id": repo_id,
             "repo_name": r.name,
             "encrypted": r.encrypted,
         }
-
         repo_info_list.append(repo_info)
-
-    # shared repos
+        repo_set.add(repo_id)
+    
     if org_id:
         shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
                                                                 email, -1, -1)
     else:
         shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
-
     repos_with_admin_share_to = ExtraSharePermission.objects.get_repos_with_admin_permission(email)
-
-    shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
     for r in shared_repos:
-
+        repo_id = r.repo_id
         if is_wiki_repo(r):
             continue
-
+        if repo_id in repo_set:
+            continue
         repo_info = {
-            "repo_id": r.repo_id,
+            "repo_id": repo_id,
             "repo_name": r.repo_name,
             "encrypted": r.encrypted,
         }
-
         if r.repo_id in repos_with_admin_share_to:
             repo_info_list.append(repo_info)
+            repo_set.add(repo_id)
 
     # group repos
     if org_id:
         group_repos = seafile_api.get_org_group_repos_by_user(email, org_id)
     else:
         group_repos = seafile_api.get_group_repos_by_user(email)
-
-    group_repos.sort(key=lambda x: x.last_modify, reverse=True)
-
+        
     for r in group_repos:
-
+        repo_id = r.repo_id
         if is_wiki_repo(r):
             continue
-
+        if repo_id in repo_set:
+            continue
+        if not is_repo_admin(email, r.repo_id):
+            continue
+        
         repo_info = {
-            "repo_id": r.repo_id,
+            "repo_id": repo_id,
             "repo_name": r.repo_name,
             "encrypted": r.encrypted,
         }
-        group_ids = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(r.repo_id)
+        repo_info_list.append(repo_info)
+        repo_set.add(repo_id)
         
-        if r.group_id in group_ids:
-            if is_group_admin(email, r.group_id):
-                repo_info_list.append(repo_info)
-    
     repo_ids = [repo['repo_id'] for repo in repo_info_list]
     repos_metadata = RepoMetadata.objects.filter(repo_id__in=repo_ids)
     repo_metadata_dict = {repo_metadata.repo_id: repo_metadata.enabled for repo_metadata in repos_metadata}
     for repo in repo_info_list:
         repo['enable_metadata'] = repo_metadata_dict.get(repo['repo_id'], False)
-    
     return repo_info_list
 
 # TODO
