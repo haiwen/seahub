@@ -28,6 +28,7 @@ enableVideoThumbnail: {% if enable_video_thumbnail %} true {% else %} false {% e
 
 {% if filetype == 'PDF' %}
 enablePDFThumbnail: {% if enable_pdf_thumbnail %} true {% else %} false {% endif %},
+canEditPDF: {% if can_edit_pdf %} true {% else %} false {% endif %},
 {% endif %}
 
 {% if filetype == 'XMind' %}
