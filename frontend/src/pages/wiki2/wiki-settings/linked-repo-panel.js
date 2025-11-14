@@ -116,7 +116,7 @@ export default function LinkedRepoPanel() {
             <div className='wiki-linked-repos__header'>
               <span className='title'>{gettext('Connected libraries')}</span>
               <span className='operation' onClick={onAddLinkClick}>
-                {gettext('Add Library')}
+                {gettext('Add library')}
               </span>
             </div>
             <div className='wiki-linked-repos__body' ref={linkedRepoRef}>
