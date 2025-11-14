@@ -1,9 +1,7 @@
-import classNames from 'classnames';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ModalBody } from 'reactstrap';
 import wikiAPI from '../../../utils/wiki-api';
 import Loading from '../../../components/loading';
-import Switch from '../../../components/switch';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import WikiRepoListDialog from '../wiki-repo-list';
@@ -16,7 +14,6 @@ const { wikiId } = window.wiki.config;
 
 export default function LinkedRepoPanel() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isChanging, setIsChanging] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const [repoOptions, setRepoOptions] = useState([]);
@@ -66,21 +63,6 @@ export default function LinkedRepoPanel() {
     saveWikiSettingsIntoStorage(newWikiSettings);
   }, []);
 
-  const onValueChange = useCallback(() => {
-    const newValue = !isOpen;
-    setIsChanging(true);
-    wikiAPI.updateWikiSettings(wikiId, newValue).then(res => {
-      setIsOpen(newValue);
-      if (!newValue) {
-        setLinkedRepos([]);
-        saveSettingsIntoLocalStorage(newValue, []);
-      }
-      setIsChanging(false);
-      const message = newValue ? gettext('Related database opened') : gettext('Related database closed');
-      toaster.success(message);
-    });
-  }, [isOpen, saveSettingsIntoLocalStorage]);
-
   const onAddLinkClick = useCallback(() => {
     setIsShowRepoListDialog(true);
   }, []);
@@ -119,7 +101,7 @@ export default function LinkedRepoPanel() {
     setIsShowRepoListDialog(false);
   };
 
-  const tipMessage = gettext('After enabling the associated library function, you can select files, pictures, and videos from the associated library on the page.');
+  const tipMessage = gettext('After connecting libraries. you can list files from them in the Wiki pages.');
 
   if (isLoading) {
     return <Loading />;
@@ -128,22 +110,13 @@ export default function LinkedRepoPanel() {
   return (
     <>
       <ModalBody className="metadata-status-management-dialog">
-        <Switch
-          checked={isOpen}
-          disabled={isChanging}
-          size="large"
-          textPosition="right"
-          className={classNames('change-metadata-status-management w-100', { 'disabled': isChanging })}
-          onChange={onValueChange}
-          placeholder={gettext('Enable related database')}
-        />
         <p className="tip m-0">{tipMessage}</p>
         {isOpen && (
           <div className='wiki-linked-repos'>
             <div className='wiki-linked-repos__header'>
-              <span className='title'>{gettext('Related libraries')}</span>
+              <span className='title'>{gettext('Connected libraries')}</span>
               <span className='operation' onClick={onAddLinkClick}>
-                {gettext('Add Libraries')}
+                {gettext('Add library')}
               </span>
             </div>
             <div className='wiki-linked-repos__body' ref={linkedRepoRef}>

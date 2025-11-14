@@ -44,7 +44,7 @@ const WikiSettingsDialog = ({ toggleDialog }) => {
                     onClick={toggleTab}
                     onKeyDown={onTabKeyDown}
                   >
-                    {gettext('Settings')}
+                    {gettext('Connected libraries')}
                   </NavLink>
                 </NavItem>
               </Nav>
