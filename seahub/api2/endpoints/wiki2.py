@@ -1852,7 +1852,7 @@ class Wiki2SettingsView(APIView):
         
         username = request.user.username
         permission = check_wiki_permission(wiki, username)
-        if permission != 'rw':
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2014,7 +2014,7 @@ class Wiki2FileViews(APIView):
 
         username = request.user.username
         permission = check_wiki_permission(wiki, username)
-        if permission != 'rw':
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2195,7 +2195,7 @@ class Wiki2FileView(APIView):
 
         username = request.user.username
         permission = check_wiki_permission(wiki, username)
-        if permission != 'rw':
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -2301,7 +2301,7 @@ class Wiki2FileViewRecords(APIView):
         wiki_publish = Wiki2Publish.objects.filter(repo_id=wiki_id).first()
         if not wiki_publish:
             permission = check_wiki_permission(wiki, username)
-            if permission != 'rw':
+            if not permission:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
