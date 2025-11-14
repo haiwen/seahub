@@ -147,7 +147,7 @@ class ReposView(APIView):
                     "monitored": r.repo_id in monitored_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
-                    "enable_onlyoffice": enable_onlyoffice,
+                    "enable_onlyoffice": enable_onlyoffice
                 }
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -337,7 +337,7 @@ class ReposView(APIView):
                     "starred": r.repo_id in starred_repo_id_list,
                     "status": normalize_repo_status_code(r.status),
                     "salt": r.salt if r.enc_version >= 3 else '',
-                    "enable_onlyoffice": enable_onlyoffice,
+                    "enable_onlyoffice": enable_onlyoffice
                 }
                 repo_info_list.append(repo_info)
 
