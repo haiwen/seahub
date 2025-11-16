@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@gatsbyjs/reach-router';
 import Logo from '../../components/logo';
 import { gettext, siteRoot, institutionName } from '../../utils/constants';
+import Icon from '../../components/icon';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
@@ -24,7 +25,7 @@ class SidePanel extends React.Component {
               <ul className="nav nav-pills flex-column nav-container">
                 <li className="nav-item">
                   <Link className="nav-link ellipsis active" to={`${siteRoot}inst/useradmin/`}>
-                    <span className="sf2-icon-info" aria-hidden="true"></span>
+                    <Icon symbol="info" />
                     <span className="nav-text">{gettext('Users')}</span>
                   </Link>
                 </li>

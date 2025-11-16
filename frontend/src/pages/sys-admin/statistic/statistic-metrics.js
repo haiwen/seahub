@@ -279,15 +279,6 @@ const style = `
       color: #666;
       font-size: 14px;
     }
-
-    .sf3-font-help {
-      font-size: 14px;
-      color: #666;
-      margin-left: 4px;
-      opacity: 0.7;
-      transition: opacity 0.2s;
-
-    }
   </style>
 `;
 

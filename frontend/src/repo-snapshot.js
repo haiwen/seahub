@@ -310,14 +310,15 @@ class FolderItem extends React.Component {
         <td><a href="#" onClick={this.renderFolder}>{item.name}</a></td>
         <td></td>
         <td>
-          <i
+          <span
             role="button"
-            className={`op-icon sf2-icon-reply ${isIconShown ? '' : 'invisible'}`}
+            className={`op-icon ${isIconShown ? '' : 'invisible'}`}
             onClick={this.restoreItem}
             title={gettext('Restore')}
             aria-label={gettext('Restore')}
           >
-          </i>
+            <Icon symbol="reply" />
+          </span>
         </td>
       </tr>
     ) : (

@@ -110,13 +110,6 @@ class OrgsTrafficExceeded extends Component {
   render() {
     return (
       <Fragment>
-        <style>
-          {`
-            .sf3-font-delete1 {
-              display: none !important;
-            }
-          `}
-        </style>
         <MainPanelTopbar search={this.getSearch()} {...this.props}>
         </MainPanelTopbar>
         <div className="main-panel-center flex-row">

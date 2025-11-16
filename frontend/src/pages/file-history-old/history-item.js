@@ -5,6 +5,7 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, filePath, historyRepoID } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import Icon from '../../components/icon';
 
 dayjs.locale(window.app.config.lang);
 
@@ -118,13 +119,14 @@ class MoreMenu extends React.PureComponent {
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
         <DropdownToggle
-          tag='i'
-          className='sf3-font sf3-font-more op-icon'
+          tag='span'
+          className='op-icon'
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.dropdownOpen}
         >
+          <Icon symbol="more-level" />
         </DropdownToggle>
         <DropdownMenu className="drop-list">
           {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import ModalPortal from '../modal-portal';
 import SelectOptionGroup from './select-option-group.js';
 import { Utils } from '../../utils/utils.js';
+import Icon from '../icon';
 
 // import './index.css';
 
@@ -92,7 +93,7 @@ class RepoSelect extends Component {
             :
             <span className="select-placeholder">{placeholder}</span>
           }
-          <i className="sf3-font-down sf3-font"></i>
+          <Icon symbol="down" />
         </div>
         {this.state.isShowSelectOptions && !isInModal && (
           <SelectOptionGroup

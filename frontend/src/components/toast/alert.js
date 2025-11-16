@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../icon';
 
 const propTypes = {
   intent: PropTypes.string.isRequired,
@@ -11,30 +12,36 @@ const propTypes = {
 
 class Alert extends React.PureComponent {
 
-  getIconClass(intent) {
+  getIconSymbol(intent) {
     switch (intent) {
       case 'success':
-        return 'sf3-font sf3-font-check-circle';
+        return 'check-circle';
       case 'warning':
-        return 'sf3-font sf3-font-exclamation-triangle';
+        return 'exclamation-triangle';
       case 'none':
-        return 'sf3-font sf3-font-exclamation-circle';
+        return 'exclamation-circle';
       case 'danger':
-        return 'sf3-font sf3-font-exclamation-circle';
+        return 'exclamation-circle';
       case 'notify-in-progress':
-        return 'loading-icon';
+        return null; // special case for loading
       default:
-        return 'sf3-font sf3-font-check-circle';
+        return 'check-circle';
     }
   }
 
   render() {
     const { intent, title, children, isRemovable, onRemove } = this.props;
-    const iconClass = this.getIconClass(intent);
+    const iconSymbol = this.getIconSymbol(intent);
+    const isLoading = intent === 'notify-in-progress';
+
     return (
       <div className={`seahub-toast-alert-container ${intent || 'success'}`}>
-        <div className="toast-alert-icon">
-          <i className={iconClass} />
+        <div className="toast-alert-icon d-flex align-items-center justify-content-center">
+          {isLoading ? (
+            <i className="loading-icon" />
+          ) : (
+            <Icon symbol={iconSymbol} />
+          )}
         </div>
         <div className="toast-text-container">
           <p className="toast-text-title">{title}</p>
