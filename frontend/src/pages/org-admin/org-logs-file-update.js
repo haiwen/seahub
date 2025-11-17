@@ -274,7 +274,7 @@ class FileUpdateItem extends React.Component {
         <tr className={this.state.highlight ? 'tr-highlight' : ''}
           onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td>{this.renderUser(fileEvent)}</td>
-          <td>{dayjs(fileEvent.time).format('YYYY-MM-DD HH:mm:ss')}</td>
+          <td>{dayjs(fileEvent.time).fromNow()}</td>
           <td>{this.renderRepo(fileEvent)}</td>
           {this.renderAction(fileEvent)}
         </tr>

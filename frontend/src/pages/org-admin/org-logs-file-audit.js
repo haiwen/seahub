@@ -250,7 +250,7 @@ class FileAuditItem extends React.Component {
           <td>{this.renderUser(fileEvent)}</td>
           <td>{this.renderType(fileEvent.type)}</td>
           <td>{fileEvent.ip}</td>
-          <td>{dayjs(fileEvent.time).format('YYYY-MM-DD HH:mm:ss')}</td>
+          <td>{dayjs(fileEvent.time).fromNow()}</td>
           <td>{this.renderRepo(fileEvent)}</td>
           <td><span title={fileEvent.file_path}>{fileEvent.file_name}</span></td>
         </tr>

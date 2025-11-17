@@ -233,7 +233,7 @@ class PermAuditItem extends React.Component {
           <td>{Utils.sharePerms(permEvent.permission)}</td>
           <td>{this.renderRepo(permEvent)}</td>
           <td>{this.renderFolder(permEvent.folder_name)}</td>
-          <td>{dayjs(permEvent.time).format('YYYY-MM-DD HH:mm:ss')}</td>
+          <td>{dayjs(permEvent.time).fromNow()}</td>
         </tr>
       );
     }
