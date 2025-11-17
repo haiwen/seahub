@@ -20,6 +20,7 @@ from ldap import sasl
 from ldap.controls.libldap import SimplePagedResultsControl
 
 from seaserv import seafile_api, ccnet_api
+from pysearpc import SearpcError
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import is_org_user
@@ -1641,7 +1642,11 @@ class AdminUserShareLinks(APIView):
 
         links_info = []
         for fs in share_links:
-            link_info = get_user_share_link_info(fs)
+            try:
+                link_info = get_user_share_link_info(fs)
+            except SearpcError as e:
+                logger.warning(e)
+                continue
             links_info.append(link_info)
 
         return Response({'share_link_list': links_info})
