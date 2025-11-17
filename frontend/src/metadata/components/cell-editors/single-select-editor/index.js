@@ -30,7 +30,7 @@ const SingleSelectEditor = forwardRef(({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
-  const canEditData = window.sfMetadataContext.canModifyColumnData(column);
+  const canEditData = window.sfMetadataContext ? window.sfMetadataContext.canModifyColumnData(column) : false;
 
   const options = useMemo(() => {
     const options = getColumnOptions(column);
@@ -190,7 +190,7 @@ const SingleSelectEditor = forwardRef(({
     return () => {
       document.removeEventListener('keydown', onHotKey, true);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onHotKey]);
 
   useEffect(() => {

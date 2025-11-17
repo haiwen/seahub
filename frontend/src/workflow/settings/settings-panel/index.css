@@ -1,0 +1,55 @@
+.workflow-settings-panel {
+  position: fixed;
+  top: 50px;
+  right: 0;
+  width: 0;
+  height: calc(100% - 50px);
+  border-left: 1px solid var(--bs-border-secondary-color);
+  transition: width 0.25s ease-in-out 0s;
+  background-color: var(--bs-body-bg);
+  width: 300px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 20;
+}
+
+.workflow-settings-panel.show {
+  transform: translateX(0)
+}
+
+.workflow-settings-panel-header {
+  height: 48px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+}
+
+.workflow-settings-panel-header-title-text {
+  font-size: 16px;
+}
+
+.workflow-settings-panel-header-control {
+  width: 24px;
+  height: 24px;
+}
+
+.workflow-settings-panel-header-control:hover {
+  background-color: var(--bs-hover-bg);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.workflow-settings-panel-header-control .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+  fill: var(--bs-icon-color);
+}
+
+.workflow-settings-panel-header-control .sf3-font {
+  font-size: 16px;
+  color: var(--bs-icon-color);
+}
+
+.workflow-settings-panel-body {
+  flex: 1;
+  overflow: hidden;
+}

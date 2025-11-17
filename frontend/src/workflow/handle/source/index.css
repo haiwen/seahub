@@ -1,0 +1,61 @@
+.react-flow__node .workflow-custom-handle.workflow-source-handle {
+  width: 0;
+  height: 0;
+  min-width: 0;
+  max-height: 0;
+  right: 0;
+}
+
+.workflow-handle-add-wrapper {
+  top: 50%;
+  transform: translate(-6px, -50%);
+}
+
+.workflow-handle-add-wrapper .circle,
+.workflow-handle-add-wrapper .line {
+  background-color: var(--bs-workflow-handle-color);
+}
+
+.workflow-handle-add-wrapper .circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.workflow-handle-add-wrapper .circle:hover {
+  background-color: var(--bs-workflow-node-border-hover-color);
+  cursor: crosshair;
+}
+
+.workflow-handle-add-wrapper .workflow-custom-handle-label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: hsl(220, 3%, 51%);
+  background-color: hsla(220, 47%, 99%, 0.85);
+  font-size: 12px;
+}
+
+.workflow-handle-add-wrapper .line {
+  height: 2px;
+  width: 60px;
+}
+
+.workflow-handle-btn-add-node {
+  border: 2px solid #bdbdbd;
+}
+
+.workflow-handle-btn-add-node:hover {
+  border-color: var(--bs-workflow-node-border-hover-color);
+  cursor: pointer;
+}
+
+.workflow-handle-btn-add-node .sf3-font-new {
+  color: #bdbdbd;
+  font-size: 14px;
+}
+
+.workflow-handle-btn-add-node:hover .sf3-font-new {
+  color: var(--bs-workflow-node-border-hover-color);
+}

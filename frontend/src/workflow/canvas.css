@@ -1,0 +1,112 @@
+[data-bs-theme=light] {
+  /* common */
+  --bs-workflow-btn-border-color: #ff9800;
+  --bs-workflow-btn-border-color-80: #ff980080;
+
+  /* canvas */
+  --bs-workflow-canvas-bg: hsl(220, 50%, 99%);
+  --bs-workflow-canvas-dot-color: #aaa;
+
+  /* node */
+  --bs-workflow-node-border-color: #eaeaea;
+  --bs-workflow-node-border-hover-color: var(--bs-workflow-btn-border-color-80);
+  --bs-workflow-node-selected-border-color: var(--bs-workflow-btn-border-color);
+
+  /* handle */
+  --bs-workflow-handle-color: #bdbdbd;
+
+  /* edge */
+  --bs-workflow-edge-color: #bdbdbd;
+  --bs-workflow-edge-selected-color: #ff9800;
+  --bs-workflow-edge-hover-color: #ff980080;
+}
+
+[data-bs-theme=dark] {
+  /* common */
+  --bs-workflow-btn-border-color: #ff9800;
+  --bs-workflow-btn-border-color-80: #ff980080;
+
+  /* canvas */
+  --bs-workflow-canvas-bg: hsl(220, 50%, 99%);
+  --bs-workflow-canvas-dot-color: #aaa;
+
+  /* node */
+  --bs-workflow-node-border-color: #eaeaea;
+  --bs-workflow-node-border-hover-color: var(--bs-workflow-btn-border-color-80);
+  --bs-workflow-node-selected-border-color: var(--bs-workflow-btn-border-color);
+
+  /* handle */
+  --bs-workflow-handle-color: #bdbdbd;
+
+  /* edge */
+  --bs-workflow-edge-color: #bdbdbd;
+  --bs-workflow-edge-selected-color: #ff9800;
+  --bs-workflow-edge-hover-color: #ff980080;
+}
+
+.workflow-canvas .workflow-canvas-bg {
+  background-color: var(--bs-workflow-canvas-bg);
+}
+
+.workflow-canvas .workflow-custom-control-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.workflow-canvas .workflow-custom-control-button:hover {
+  cursor: pointer;
+}
+
+.workflow-canvas .workflow-custom-control-button svg {
+  width: 16px;
+  height: 16px;
+  max-width: 16px;
+  max-height: 16px;
+  fill: var(--bs-icon-color);
+}
+
+.workflow-canvas .workflow-custom-control-button .sf3-font {
+  font-size: 16px;
+  color: var(--bs-icon-color);
+}
+
+.workflow-canvas .react-flow__attribution {
+  background: none !important;
+}
+
+.workflow-canvas .react-flow__pane.selection {
+  cursor: default !important;
+}
+
+.workflow-canvas .react-flow__node.draggable {
+  cursor: pointer !important;
+}
+
+.workflow-canvas .react-flow__node.draggable.dragging {
+  cursor: grabbing !important;
+}
+
+.workflow-node-button-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 1rem;
+}
+
+.workflow-canvas .workflow-node-button-wrapper .workflow-custom-control-button {
+  border: 1px solid #eaeaea;
+  background-color: #fff;
+}
+
+.workflow-canvas .workflow-node-button-wrapper .workflow-custom-control-button:hover {
+  background-color: var(--bs-hover-bg);
+}

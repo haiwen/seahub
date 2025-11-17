@@ -1,0 +1,16 @@
+.workflow-add-node-placeholder-container {
+  border: 2px dashed #afafaf;
+  background-color: #fff;
+}
+
+.workflow-add-node-placeholder-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 64px;
+  padding: 10px;
+}
+
+.workflow-add-node-placeholder-body .sf3-font-new {
+  color: var(--bs-icon-color);
+}
