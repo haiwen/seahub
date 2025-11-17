@@ -10,6 +10,7 @@ import KeyCodes from '../constants/keyCodes';
 import SearchInput from './search-input';
 import UserItem from '../components/user-item';
 import ClickOutside from './click-outside';
+import Icon from './icon';
 
 import '../css/user-select.css';
 
@@ -268,7 +269,7 @@ class UserSelect extends React.Component {
                         onKeyDown={Utils.onKeyDown}
                       >
                         <UserItem user={user} enableDeleteUser={false} />
-                        {selectedUsers.find(u => u.email === user.email) && <i className="sf2-icon-tick"></i>}
+                        {selectedUsers.find(u => u.email === user.email) && <Icon symbol="tick1" />}
                       </div>
                     );
                   })

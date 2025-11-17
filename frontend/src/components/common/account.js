@@ -4,6 +4,7 @@ import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { siteRoot, isPro, gettext, appAvatarURL, enableSSOToThirdpartWebsite, enableSeafileAI } from '../../utils/constants';
 import toaster from '../toast';
+import Icon from '../icon';
 
 const {
   isOrgContext,
@@ -152,7 +153,9 @@ class Account extends Component {
         <a id="my-info" href="#" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label={gettext('View profile and more')}>
           {this.renderAvatar()}
         </a>
-        <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}></span>
+        <span className="account-toggle mobile-icon d-md-none" role="button" tabIndex="0" aria-label={gettext('View profile and more')} onClick={this.onClickAccount}>
+          <Icon symbol="more-vertical" />
+        </span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo ? '' : 'hide'}`}>
           <div className="sf-popover-con">
             <div className="item o-hidden">

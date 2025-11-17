@@ -20,7 +20,9 @@ class PDFViewer extends React.Component {
               <div id="sidebarHeader" className="px-4 py-2 d-flex justify-content-between align-items-center">
                 <h3 id="thumbnailHeader" className="m-0 title font-weight-normal">{gettext('Thumbnail')}</h3>
                 <h3 id="outlineHeader" className="m-0 title font-weight-normal hidden">{gettext('Outline')}</h3>
-                <button id="close-thumbnail-panel" className="close-thumbnail-panel sf2-icon-x3 border-0 bg-transparent" aria-controls="sidebarContainer"></button>
+                <button id="close-thumbnail-panel" className="close-thumbnail-panel border-0 bg-transparent" aria-controls="sidebarContainer">
+                  <Icon symbol="x-01" />
+                </button>
               </div>
               <div id="toolbarSidebarLeft" className="sf-hide">
                 <div id="sidebarViewButtons" className="splitToolbarButton toggled" role="radiogroup">
@@ -73,15 +75,19 @@ class PDFViewer extends React.Component {
                     <span id="findMsg" className="toolbarLabel d-none"></span>
                   </div>
                   <div className="splitToolbarButton m-0">
-                    <button id="findPrevious" className="hidden border-0 sf3-font sf3-font-down" title="Find the previous occurrence of the phrase" tabIndex="92" data-l10n-id="find_previous">
+                    <button id="findPrevious" className="hidden border-0 d-inline-flex justify-content-center align-items-center" title="Find the previous occurrence of the phrase" tabIndex="92" data-l10n-id="find_previous">
+                      <Icon symbol="down" />
                       <span data-l10n-id="find_previous_label" className="find-label">Previous</span>
                     </button>
                     <div className="splitToolbarButtonSeparator d-none"></div>
-                    <button id="findNext" className="hidden border-0 sf3-font sf3-font-down" title="Find the next occurrence of the phrase" tabIndex="93" data-l10n-id="find_next">
+                    <button id="findNext" className="hidden border-0 d-inline-flex justify-content-center align-items-center" title="Find the next occurrence of the phrase" tabIndex="93" data-l10n-id="find_next">
+                      <Icon symbol="down" />
                       <span data-l10n-id="find_next_label" className="find-label">Next</span>
                     </button>
                   </div>
-                  <button id="findClearQuery" className="hidden border-0 ml-1 sf3-font sf3-font-close"></button>
+                  <button id="findClearQuery" className="hidden border-0 ml-1">
+                    <Icon symbol="x-01" />
+                  </button>
                 </div>
               </div>
 

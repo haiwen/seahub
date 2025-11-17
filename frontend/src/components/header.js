@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Logo from './logo';
 import CommonToolbar from './toolbar/common-toolbar';
+import Icon from './icon';
 
 import '../css/header.css';
 
@@ -33,7 +34,8 @@ class Header extends React.Component {
         </div>
         <div className={`flex-shrink-0 d-flex flex-fill ${children ? 'border-left-show' : ''}`}>
           <div className="cur-view-toolbar">
-            <span title="Side Nav Menu" onClick={onShowSidePanel} className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none">
+            <span title="Side Nav Menu" onClick={onShowSidePanel} className="side-nav-toggle hidden-md-up d-md-none d-flex align-items-center">
+              <Icon symbol="menu" />
             </span>
             {children}
           </div>

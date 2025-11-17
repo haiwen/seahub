@@ -1,7 +1,19 @@
 .web-setting-icon-btn {
+  height: 36px;
   font-size: 1rem;
   line-height: 1.5;
   min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.web-setting-icon-btn .seafile-multicolor-icon {
+  font-size: 16px;
+}
+
+.web-setting-icon-btn .seafile-multicolor-icon-tick {
+  color: #fff;
 }
 
 .web-setting-icon-btn-cancel {

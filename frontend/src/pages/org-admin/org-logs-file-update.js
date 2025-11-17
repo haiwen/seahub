@@ -9,6 +9,7 @@ import toaster from '../../components/toast';
 import OrgLogsFileUpdateEvent from '../../models/org-logs-file-update';
 import ModalPortal from '../../components/modal-portal';
 import FileUpdateDetailDialog from '../../components/dialog/org-logs-file-update-detail';
+import Icon from '../../components/icon';
 import '../../css/org-logs.css';
 
 dayjs.locale(lang);
@@ -210,7 +211,9 @@ class FileUpdateItem extends React.Component {
         <a href={siteRoot + 'org/useradmin/info/' + fileEvent.user_email + '/'}>{fileEvent.user_name}</a>{' '}
         <Dropdown size='sm' isOpen={this.state.userDropdownOpen} toggle={this.toggleUserDropdown}
           className={this.state.highlight ? '' : 'vh'} tag="span">
-          <DropdownToggle tag="i" className="op-icon sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
+          <DropdownToggle tag="span" className="op-icon sf-dropdown-toggle">
+            <Icon symbol="more-level" />
+          </DropdownToggle>
           <DropdownMenu>
             <DropdownItem onClick={this.props.filterUser.bind(this, fileEvent.user_email)}>
               {gettext('Only Show')}{' '}<span className="font-weight-bold">{fileEvent.user_name}</span>
@@ -236,7 +239,9 @@ class FileUpdateItem extends React.Component {
         { fileEvent.repo_name &&
           <Dropdown size='sm' isOpen={this.state.repoDropdownOpen} toggle={this.toggleRepoDropdown}
             className={this.state.highlight ? '' : 'vh'} >
-            <DropdownToggle tag="i" className="op-icon sf-dropdown-toggle sf3-font-more sf3-font"></DropdownToggle>
+            <DropdownToggle tag="span" className="op-icon sf-dropdown-toggle">
+              <Icon symbol="more-level" />
+            </DropdownToggle>
             <DropdownMenu>
               <DropdownItem size='sm' onClick={this.props.filterRepo.bind(this, fileEvent.repo_name)}>
                 {gettext('Only Show')}{' '}

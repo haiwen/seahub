@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { Dropdown, DropdownToggle } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
+import Icon from '../../../components/icon';
 
 const departmentsV2TreeNodePropTypes = {
   node: PropTypes.object,
@@ -132,7 +133,7 @@ class DepartmentsV2TreeNode extends Component {
               aria-label={gettext('Toggle children')}
               title={gettext('Toggle children')}
             >
-              <i aria-hidden="true" className={`sf3-font sf3-font-down ${isChildrenShow ? '' : 'rotate-270'}`}></i>
+              <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
             </span>
             :
             <span style={{ width: 24 }}></span>
@@ -153,7 +154,7 @@ class DepartmentsV2TreeNode extends Component {
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
               >
-                <i className="sf3-font sf3-font-more"></i>
+                <Icon symbol="more-level" />
               </DropdownToggle>
               <DepartmentNodeMenu
                 node={node}

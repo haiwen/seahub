@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { Utils } from '../../../utils/utils';
+import Icon from '../../../components/icon';
 
 export default function LinkedRepoItem({ repoItem, onDeleteLinkedRepo }) {
   const iconUrl = Utils.getLibIconUrl(repoItem);
@@ -15,7 +16,9 @@ export default function LinkedRepoItem({ repoItem, onDeleteLinkedRepo }) {
         <span className='selected-option-item-name'>{repoItem.name}</span>
       </td>
       <td className='repo-op'>
-        <span className='sf3-font sf3-font-delete1' onClick={onDeleteClick}></span>
+        <span className="op-icon" onClick={onDeleteClick}>
+          <Icon symbol="delete1" />
+        </span>
       </td>
     </tr>
   );

@@ -2,7 +2,7 @@
   background-color: #F5F5F5;
 }
 
-.search-filter-menu.filter-by-creator-menu .dropdown-item:hover .dropdown-item-tick {
+.search-filter-menu.filter-by-creator-menu .dropdown-item:hover .dropdown-item-tick .seafile-multicolor-icon {
   color: #666;
 }
 
@@ -24,8 +24,7 @@
 }
 
 .search-filter-menu.filter-by-creator-menu .selected-user-item-container .user-item .user-remove {
+  display: flex;
+  align-items: center;
   color: #666;
-  font-size: 12px;
-  margin-bottom: 3px;
-  margin-left: 5px;
 }

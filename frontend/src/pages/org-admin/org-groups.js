@@ -6,6 +6,7 @@ import { siteRoot, gettext, orgID } from '../../utils/constants';
 import { orgAdminAPI } from '../../utils/org-admin-api';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
+import Icon from '../../components/icon';
 import OrgGroupInfo from '../../models/org-group';
 import MainPanelTopbar from './main-panel-topbar';
 import ChangeGroupDialog from '../../components/dialog/change-group-dialog';
@@ -43,7 +44,9 @@ class Search extends React.Component {
   render() {
     return (
       <div className="input-icon">
-        <i className="d-flex input-icon-addon sf3-font sf3-font-search"></i>
+        <span className="d-flex input-icon-addon">
+          <Icon symbol="search" />
+        </span>
         <input
           type="text"
           className="form-control search-input h-6 mr-1"
@@ -318,14 +321,16 @@ class GroupItem extends React.Component {
           {isOperationMenuShow &&
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
-                tag="i"
-                className="op-icon sf3-font-more sf3-font"
+                tag="span"
+                className="op-icon"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
                 onClick={this.onDropdownToggleClick}
-              />
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
                 <DropdownItem onClick={this.toggleChangeDialog}>{gettext('Change to department')}</DropdownItem>

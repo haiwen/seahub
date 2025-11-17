@@ -8,6 +8,7 @@ import { gettext } from '../../../utils/constants';
 import MemberItem from './member-item';
 import RepoItem from './repo-item';
 import DepartmentNodeMenu from './departments-node-dropdown-menu';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   rootNodes: PropTypes.array,
@@ -119,11 +120,13 @@ class Department extends React.Component {
             <DropdownToggle
               tag='span'
               role="button"
-              className='sf3-font-down sf3-font ml-1 sf-dropdown-toggle'
+              className="ml-1 sf-dropdown-toggle d-flex align-items-center"
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
-            />
+            >
+              <Icon symbol="down" />
+            </DropdownToggle>
             <DepartmentNodeMenu
               node={currentDepartment}
               toggleAddDepartment={this.props.toggleAddDepartment}

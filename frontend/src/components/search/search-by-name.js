@@ -4,6 +4,7 @@ import isHotkey from 'is-hotkey';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SearchFileDialog from '../dialog/search-file-dialog';
+import Icon from '../icon';
 
 import '../../css/search-by-name.css';
 
@@ -48,7 +49,7 @@ class SearchByName extends Component {
     return (
       <>
         <div className="search-by-name">
-          <i className="input-icon-addon sf3-font sf3-font-search"></i>
+          <Icon symbol="search" className="input-icon-addon" />
           <div
             type="text"
             className="form-control search-input"

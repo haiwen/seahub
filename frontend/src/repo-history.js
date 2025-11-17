@@ -304,7 +304,9 @@ class Item extends React.Component {
               return <span key={index} className="commit-label">{item}</span>;
             })}
             {userPerm == 'rw' &&
-            <a href="#" role="button" className={`attr-action-icon sf3-font sf3-font-rename ${isIconShown ? '' : 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}></a>
+            <a href="#" role="button" className={`attr-action-icon ${isIconShown ? '' : 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}>
+              <Icon symbol="rename" />
+            </a>
             }
           </td>
           }

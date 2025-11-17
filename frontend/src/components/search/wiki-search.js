@@ -230,7 +230,9 @@ class Search extends Component {
             <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler} style={{ zIndex: SEARCH_MASK }}></div>
             <div className="search-container" style={{ zIndex: SEARCH_CONTAINER }}>
               <div className="input-icon">
-                <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+                <span className="search-icon-left input-icon-addon">
+                  <Icon symbol="search" />
+                </span>
                 <input
                   type="text"
                   className="form-control search-input"
@@ -256,7 +258,9 @@ class Search extends Component {
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
-            <i className="search-icon sf3-font sf3-font-search" onClick={this.onSearchToggle}></i>
+            <span className="search-icon" onClick={this.onSearchToggle}>
+              <Icon symbol="search" />
+            </span>
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">

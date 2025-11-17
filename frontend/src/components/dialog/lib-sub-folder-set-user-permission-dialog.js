@@ -13,6 +13,7 @@ import BackIcon from '../../components/back-icon';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
 import OpIcon from '../op-icon';
+import Icon from '../icon';
 
 class UserItem extends React.Component {
 
@@ -313,11 +314,11 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
                   selectedUsers={this.state.selectedUsers}
                 />
               </td>
-              {showPath &&
+              {!showPath &&
                 <td>
                   <InputGroup>
                     <Input value={this.state.folderPath} onChange={this.onSetSubFolder} />
-                    <Button className="sf2-icon-plus" onClick={this.toggleFileChooser}></Button>
+                    <Button className="d-flex align-items-center" onClick={this.toggleFileChooser}><Icon symbol="new" /></Button>
                   </InputGroup>
                 </td>
               }

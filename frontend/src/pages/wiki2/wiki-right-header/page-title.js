@@ -7,6 +7,7 @@ import { WIKI_COVER_LIST } from '../constant';
 import PageIcon from './page-icon';
 import { generateARandomEmoji, generateEmojiIcon } from '../utils/emoji-utils';
 import PageTitleEditor from './page-title-editor';
+import Icon from '../../../components/icon';
 
 import './page-title.css';
 
@@ -61,13 +62,13 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
           <div className={classnames('wiki-page-controller', { 'show': isShowController, 'd-none': !isDesktop })}>
             {!currentPageConfig.icon &&
               <div className='wiki-page-controller-item' onClick={handleAddIcon}>
-                <i className='sf3-font sf3-font-icon'></i>
+                <Icon symbol='icon' />
                 <span className='text'>{gettext('Add icon')}</span>
               </div>
             }
             {!currentPageConfig.cover_img_url &&
               <div className='wiki-page-controller-item' onClick={handleAddCover}>
-                <i className='sf3-font sf3-font-image'></i>
+                <Icon symbol='gallery' />
                 <span className='text'>{gettext('Add cover')}</span>
               </div>
             }

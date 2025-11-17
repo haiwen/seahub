@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import ModalPortal from '../modal-portal';
 import SelectOptionGroup from './select-option-group.js';
 import { Utils } from '../../utils/utils.js';
+import Icon from '../icon';
 
 // import './index.css';
 
@@ -20,7 +21,7 @@ class RepoSelect extends Component {
     event.preventDefault();
     if (this.state.isShowSelectOptions) event.stopPropagation();
     let eventClassName = event.target.className;
-    if (eventClassName.indexOf('sf2-icon-close') > -1 || eventClassName === 'option-group-search') return;
+    if (typeof eventClassName === 'string' && (eventClassName.includes('seafile-multicolor-icon-x-') || eventClassName === 'option-group-search')) return;
     if (event.target.value === '') return;
     this.setState({
       isShowSelectOptions: !this.state.isShowSelectOptions
@@ -92,7 +93,7 @@ class RepoSelect extends Component {
             :
             <span className="select-placeholder">{placeholder}</span>
           }
-          <i className="sf3-font-down sf3-font"></i>
+          <Icon symbol="down" />
         </div>
         {this.state.isShowSelectOptions && !isInModal && (
           <SelectOptionGroup

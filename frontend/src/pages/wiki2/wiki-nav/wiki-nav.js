@@ -225,11 +225,11 @@ class WikiNav extends Component {
                     className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2 justify-content-between"
                     onMouseEnter={this.showImportPageMenu}
                   >
-                    <span>
-                      <i className='sf3-font sf3-font-import-sdoc' aria-hidden="true" />
+                    <span className="d-flex align-items-center">
+                      <Icon symbol="import-sdoc" className="mr-2" aria-hidden="true" />
                       <span>{gettext('Import page')}</span>
                     </span>
-                    <i className="sf3-font-down sf3-font rotate-270 mr-0" aria-hidden="true"></i>
+                    <Icon symbol="down" className="rotate-270 mr-0" aria-hidden="true" />
                   </DropdownToggle>
                   <DropdownMenu className="ml-0">
                     <DropdownItem key="import-docx" onClick={this.handleImportPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>
@@ -240,10 +240,12 @@ class WikiNav extends Component {
             </Dropdown>
             }
             <OpIcon
-              className="sf3-font sf3-font-enlarge op-icon mr-0"
+              className="op-icon mr-0"
               title={gettext('New page')}
               op={this.props.handleAddNewPage}
-            />
+            >
+              <Icon symbol="new" />
+            </OpIcon>
           </div>
           }
         </div>
@@ -255,13 +257,13 @@ class WikiNav extends Component {
             <div className="wiki-nav-group-header px-2">
               <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
             </div>
-            <div role='button' tabIndex={0} className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleSettingDialog}>
-              <span className="sf3-font sf3-font-set-up mr-2"></span>
-              <span>{gettext('Settings')}</span>
+            <div role='button' tabIndex={0} className={classNames('other-op wiki2-set-up', { 'mt-0': !pagesLen })} onClick={this.props.toggleSettingDialog}>
+              <span className="d-flex align-items-center mr-2"><Icon symbol="set-up" /></span>
+              <span className="other-op-label">{gettext('Settings')}</span>
             </div>
-            <div role='button' tabIndex={1} className={classNames('wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
-              <span className="sf3-font sf3-font-trash mr-2"></span>
-              <span>{gettext('Trash')}</span>
+            <div role='button' tabIndex={1} className={classNames('other-op wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
+              <span className="d-flex align-items-center mr-2"><Icon symbol="trash" /></span>
+              <span className="other-op-label">{gettext('Trash')}</span>
             </div>
           </>
         }

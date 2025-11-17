@@ -5,6 +5,7 @@ import KeyCodes from '../../constants/keyCodes';
 import SearchInput from '../search-input';
 import Option from './option';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 // import './select-option-group.css';
 
@@ -157,7 +158,7 @@ class SelectOptionGroup extends Component {
             <img src={iconUrl} width={'24px'} alt="" className='mr-2'></img>
             <div className='option-label'>{option.label}</div>
           </div>
-          {isSelected && <i className="sf2-icon-tick text-gray font-weight-bold"></i>}
+          {isSelected && <Icon symbol="tick1" />}
         </Option>
       );
     });

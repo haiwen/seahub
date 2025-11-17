@@ -111,7 +111,7 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
   return (
     <div className='search-container file-chooser-searcher' style={{ zIndex: SEARCH_CONTAINER }}>
       <div className='search-input-container'>
-        <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+        <span className="search-icon-left input-icon-addon"><Icon symbol="search" /></span>
         <Input
           innerRef={inputRef}
           className='search-input'

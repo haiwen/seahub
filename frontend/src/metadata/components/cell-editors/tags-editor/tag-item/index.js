@@ -55,7 +55,7 @@ const TagItem = ({
           <div className="sf-metadata-tag-name">{tagName}</div>
         </div>
         <div className="sf-metadata-tags-editor-tag-check-icon mr-1">
-          {isSelected && <i className="sf2-icon-tick"></i>}
+          {isSelected && <Icon symbol="tick1" />}
         </div>
       </div>
     </div>

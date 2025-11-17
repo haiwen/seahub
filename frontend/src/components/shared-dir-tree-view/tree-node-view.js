@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../op-icon';
+import Icon from '../icon';
 
 const LEFT_INDENT = 20;
 
@@ -62,25 +63,25 @@ class TreeNodeView extends React.Component {
     let icon = '';
     let type = '';
     if (node.object.is_dir) {
-      icon = <i className="sf3-font sf3-font-folder"></i>;
+      icon = <Icon symbol="folder" />;
       type = 'dir';
     } else {
       let index = node.object.file_name.lastIndexOf('.');
       if (index === -1) {
-        icon = <i className="sf3-font sf3-font-file"></i>;
+        icon = <Icon symbol="file" />;
         type = 'file';
       } else {
         let suffix = node.object.file_name.slice(index).toLowerCase();
         if (suffix === '.png' || suffix === '.jpg' || suffix === '.jpeg' || suffix === '.gif' || suffix === '.bmp') {
-          icon = <i className="sf3-font sf3-font-image"></i>;
+          icon = <Icon symbol="gallery" />;
           type = 'image';
         }
         else if (suffix === '.md' || suffix === '.markdown') {
-          icon = <i className="sf3-font sf3-font-files2"></i>;
+          icon = <Icon symbol="files" />;
           type = 'file';
         }
         else {
-          icon = <i className="sf3-font sf3-font-file"></i>;
+          icon = <Icon symbol="file" />;
           type = 'file';
         }
       }

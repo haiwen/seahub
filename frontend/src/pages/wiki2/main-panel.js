@@ -18,6 +18,7 @@ import classnames from 'classnames';
 import wikiAPI from '../../utils/wiki-api';
 import WikiRightPanel from './wiki-right-panel';
 import SDocServerApi from '../../utils/sdoc-server-api';
+import Icon from '../../components/icon';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -256,13 +257,13 @@ class MainPanel extends Component {
         <div className='wiki2-main-panel-north'>
           <div className="d-flex align-items-center flex-fill o-hidden">
             <div className='wiki2-main-panel-north-content'>
-              <i
+              <Icon
                 role="button"
                 aria-label={gettext('Side Nav Menu')}
                 onClick={this.props.mobileOpenSidePanel}
-                className="sf2-icon-menu side-nav-toggle d-md-none"
-              >
-              </i>
+                symbol="menu"
+                className="side-nav-toggle d-md-none"
+              />
               <WikiTopNav
                 config={config}
                 currentPageId={this.props.currentPageId}
@@ -280,16 +281,18 @@ class MainPanel extends Component {
             {menuItems.length > 0 &&
             <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
               <DropdownToggle
-                tag="i"
+                tag="span"
                 tabIndex={0}
                 role="button"
                 id="cur-folder-more-op-toggle"
-                className='wiki2-file-history-button sf3-font-more sf3-font'
+                className='wiki2-file-history-button'
                 data-toggle="dropdown"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 aria-expanded={isDropdownMenuOpen}
-              />
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
               <DropdownMenu>
                 {menuItems.map((menuItem, index) => {
                   if (menuItem.key === 'Freeze page') {

@@ -14,6 +14,7 @@ import toaster from '../../../../components/toast';
 import wikiAPI from '../../../../utils/wiki-api';
 import { Utils } from '../../../../utils/utils';
 import OpIcon from '../../../../components/op-icon';
+import Icon from '../../../../components/icon';
 
 const PageItem = ({
   page,
@@ -274,7 +275,7 @@ const PageItem = ({
                   className="wiki-nav-item-icon"
                   onKeyDown={Utils.onKeyDown}
                 >
-                  <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
+                  <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
                 </div>
               )}
               {childNumber > 0 && (customIcon ? (
@@ -306,10 +307,12 @@ const PageItem = ({
               importPage={importPage}
             />
             <OpIcon
-              className="sf3-font sf3-font-enlarge op-icon mr-0"
+              className="op-icon mr-0"
               op={toggleInsertPage}
               title={gettext('Add page inside')}
-            />
+            >
+              <Icon symbol="new" />
+            </OpIcon>
           </div>
           }
           {isShowInsertPage && (
@@ -390,7 +393,7 @@ const PageItem = ({
                 onClick={() => toggleExpand(page.id)}
                 onKeyDown={Utils.onKeyDown}
               >
-                <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
+                <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
               </div>
             )}
             <span className="wiki-page-title text-truncate">{page.name}</span>

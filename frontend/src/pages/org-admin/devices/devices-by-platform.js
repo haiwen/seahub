@@ -10,6 +10,7 @@ import { Utils } from '../../../utils/utils';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
 import Paginator from '../../../components/paginator';
+import OpIcon from '../../../components/op-icon';
 import SysAdminUnlinkDevice from '../../../components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog';
 import { formatWithTimezone } from '../../../utils/time';
 
@@ -160,12 +161,12 @@ class Item extends Component {
             <span title={formatWithTimezone(item.last_accessed)}>{dayjs(item.last_accessed).fromNow()}</span>
           </td>
           <td>
-            <i
-              className={`sf3-font-delete1 sf3-font op-icon ${isOpIconShown ? '' : 'invisible'}`}
+            <OpIcon
+              className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              symbol="delete1"
               title={gettext('Unlink')}
-              onClick={this.handleUnlink}
-            >
-            </i>
+              op={this.handleUnlink}
+            />
           </td>
         </tr>
         {isUnlinkDeviceDialogOpen &&

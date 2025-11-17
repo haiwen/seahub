@@ -331,7 +331,7 @@ class CopyDirent extends React.Component {
               {(isPro && !showSearchBar) &&
                 <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} title={gettext('Search')} onClick={this.onOpenSearchBar}>
                   <span className="seahub-modal-btn-inner">
-                    <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
+                    <Icon symbol="search" />
                   </span>
                 </button>
               }

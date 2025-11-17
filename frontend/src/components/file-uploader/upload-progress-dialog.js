@@ -4,6 +4,7 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import UploadListItem from './upload-list-item';
 import ForbidUploadListItem from './forbid-upload-list-item';
+import Icon from '../icon';
 
 const propTypes = {
   uploadBitrate: PropTypes.number.isRequired,
@@ -84,8 +85,14 @@ class UploadProgressDialog extends React.Component {
             )}
           </div>
           <div className="upload-dialog-op-container">
-            <span className="sf2-icon-minus upload-dialog-op" onClick={this.onMinimizeUpload}></span>
-            {!isUploading && <span className="sf2-icon-x1 upload-dialog-op" onClick={this.onCloseUpload}></span>}
+            <span className="upload-dialog-op" role="button" tabIndex="0" onClick={this.onMinimizeUpload}>
+              <Icon symbol="minus" />
+            </span>
+            {!isUploading && (
+              <span className="upload-dialog-op op-icon" role="button" tabIndex="0" onClick={this.onCloseUpload}>
+                <Icon symbol="x-01" />
+              </span>
+            )}
           </div>
         </div>
         <div className="uploader-list-content">

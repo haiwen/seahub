@@ -11,6 +11,7 @@ import { siteRoot, gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import Loading from '../../../components/loading';
+import OpIcon from '../../../components/op-icon';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import SysAdminAddInstitutionDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog';
@@ -148,12 +149,12 @@ class Item extends Component {
           <td><Link to={`${siteRoot}sys/institutions/${item.id}/info/`}>{item.name}</Link></td>
           <td>{dayjs(item.ctime).fromNow()}</td>
           <td>
-            <i
-              className={`op-icon sf3-font-delete1 sf3-font ${isOpIconShown ? '' : 'invisible'}`}
+            <OpIcon
+              className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              symbol="delete1"
               title={gettext('Delete')}
-              onClick={this.toggleDeleteDialog}
-            >
-            </i>
+              op={this.toggleDeleteDialog}
+            />
           </td>
         </tr>
         {isDeleteDialogOpen &&

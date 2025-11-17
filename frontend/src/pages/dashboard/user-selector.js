@@ -98,7 +98,8 @@ class UserSelector extends Component {
                     <img src={item.avatar_url} className="avatar w-5 h-5" alt={item.name} />
                     <span className="activity-user-name ml-2">{item.name}</span>
                     <OpIcon
-                      className="sf2-icon-close unselect-activity-user ml-2"
+                      symbol="x-01"
+                      className="unselect-activity-user ml-2"
                       title={gettext('Unselect')}
                       op={(e) => {this.toggleSelectItem(e, item);}}
                     />
@@ -129,7 +130,7 @@ class UserSelector extends Component {
                       <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                       <span className="activity-user-name ml-2">{item.name}</span>
                     </div>
-                    {item.isSelected && <i className="sf2-icon-tick text-gray font-weight-bold"></i>}
+                    {item.isSelected && <Icon symbol="tick1" className="text-gray font-weight-bold" />}
                   </li>
                 );
               })}

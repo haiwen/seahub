@@ -7,6 +7,7 @@ import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
 import toaster from '../../components/toast';
+import OpIcon from '../../components/op-icon';
 import OrgAdminUserNav from '../../components/org-admin-user-nav';
 import DeleteRepoDialog from '../../components/dialog/delete-repo-dialog';
 import MainPanelTopbar from './main-panel-topbar';
@@ -177,13 +178,12 @@ class Item extends Component {
           <td>{Utils.bytesToSize(repo.size)}</td>
           <td title={formatWithTimezone(repo.last_modified)}>{dayjs(repo.last_modified).format('YYYY-MM-DD')}</td>
           <td>
-            <i
-              role="button"
-              className={`op-icon sf3-font-delete1 sf3-font${isOpIconShown ? '' : ' invisible'}`}
+            <OpIcon
+              className={`op-icon${isOpIconShown ? '' : ' invisible'}`}
+              symbol="delete1"
               title={gettext('Delete')}
-              onClick={this.handleDeleteIconClick}
-            >
-            </i>
+              op={this.handleDeleteIconClick}
+            />
           </td>
         </tr>
         {isDeleteRepoDialogOpen && (

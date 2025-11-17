@@ -303,7 +303,9 @@ class MainSideNavFolded extends React.Component {
                   <>
                     <li className='nav-item'>
                       <a href={`${siteRoot}terms/`} className="nav-link" aria-label={gettext('Terms')}>
-                        <span className="sf3-font-terms sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-terms"></span>
+                        <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-terms">
+                          <Icon symbol="terms" />
+                        </span>
                         <Tip target="main-side-nav-folded-terms" text={gettext('Terms')} />
                       </a>
                     </li>

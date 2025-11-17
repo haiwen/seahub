@@ -12,7 +12,6 @@ class FileInfo extends React.PureComponent {
   render() {
     const { fileInfo, isPro, isLocked, mediaUrl } = this.props;
     const starTitle = fileInfo.starred ? gettext('starred') : gettext('unstarred');
-    const starIconClass = `iconfont ${fileInfo.starred ? 'icon-star1 star' : 'icon-star2'}`;
     const modifyTime = dayjs(fileInfo.mtime * 1000).format('YYYY-MM-DD HH:mm');
 
     const lockedText = gettext('locked');
@@ -21,7 +20,8 @@ class FileInfo extends React.PureComponent {
         <div className="file-title">
           <span className='file-name text-truncate'>{fileInfo.name}</span>
           <OpIcon
-            className={`op-icon file-star ${starIconClass}`}
+            className="op-icon file-star"
+            symbol={fileInfo.starred ? 'starred' : 'star-empty'}
             title={starTitle}
             op={this.props.toggleStar}
           />

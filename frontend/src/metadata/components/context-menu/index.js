@@ -3,9 +3,9 @@ import { DropdownItem, Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap
 import PropTypes from 'prop-types';
 import ModalPortal from '../../../components/modal-portal';
 import ContextMenuItem from './context-menu-item';
+import Icon from '../../../components/icon';
 
 import './index.css';
-import Icon from '../../../components/icon';
 
 const ContextMenu = ({
   options,

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Button } from 'reactstrap';
+import Icon from '../../../components/icon';
 import { gettext } from '../../../utils/constants';
 import SettingItemBase from '../../common-admin/web-settings/setting-item-base';
 
@@ -66,8 +67,12 @@ class WebSettingInput extends Component {
         extraContent={
           isBtnsShown ?
             <Fragment>
-              <Button color="primary" className="sf2-icon-tick web-setting-icon-btn web-setting-icon-btn-submit" onMouseDown={this.onSubmit} title={gettext('Submit')}></Button>
-              <Button className="ml-1 sf2-icon-x2 web-setting-icon-btn web-setting-icon-btn-cancel" title={gettext('Cancel')}></Button>
+              <Button color="primary" className="web-setting-icon-btn web-setting-icon-btn-submit" onMouseDown={this.onSubmit} title={gettext('Submit')}>
+                <Icon symbol="tick" />
+              </Button>
+              <Button className="ml-1 web-setting-icon-btn web-setting-icon-btn-cancel" title={gettext('Cancel')}>
+                <Icon symbol="x-02" />
+              </Button>
             </Fragment> : null
         }
       />

@@ -84,7 +84,8 @@ class APITokenItem extends React.Component {
             <span>{item.api_token}</span>
             {this.state.isOperationShow &&
             <OpIcon
-              className="op-icon sf3-font sf3-font-copy1 ml-1"
+              symbol="copy1"
+              className="op-icon ml-1"
               op={this.onCopyAPIToken}
               title={gettext('Copy')}
             />

@@ -9,6 +9,7 @@ import SaveSharedFileDialog from '../dialog/save-shared-file-dialog';
 import AddAbuseReportDialog from '../../components/dialog/add-abuse-report-dialog';
 import toaster from '../toast';
 import Switch from '../switch';
+import Icon from '../icon';
 
 import '../../css/shared-file-view.css';
 
@@ -139,13 +140,15 @@ class SharedFileView extends React.Component {
             <div className="flex-shrink-0 ml-4">
               <Dropdown isOpen={this.state.moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
                 <DropdownToggle
-                  tag="i"
+                  tag="span"
                   role="button"
                   tabIndex={0}
-                  className="sf3-font-more sf3-font op-icon m-0"
+                  className="op-icon m-0"
                   aria-label={gettext('More operations')}
                   title={gettext('More operations')}
-                />
+                >
+                  <Icon symbol="more-level" />
+                </DropdownToggle>
                 <DropdownMenu>
                   {(canDownload && loginUser && (loginUser !== sharedBy)) && (
                     <DropdownItem onClick={this.handleSaveSharedFileDialog}>

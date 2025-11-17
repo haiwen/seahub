@@ -10,6 +10,7 @@ import EmptyTip from '../../components/empty-tip';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
 import { Utils } from '../../utils/utils';
+import Icon from '../../components/icon';
 
 dayjs.extend(relativeTime);
 
@@ -127,7 +128,7 @@ class Item extends Component {
 
   renderDesktopItem = () => {
     const data = this.props.data;
-    let opClasses = 'sf3-font-delete1 sf3-font unlink-device action-icon';
+    let opClasses = 'unlink-device op-icon';
     opClasses += this.state.isOpIconShown ? '' : ' invisible';
     return (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut} onFocus={this.handleMouseOver}>
@@ -136,7 +137,7 @@ class Item extends Component {
         <td>{data.last_login_ip}</td>
         <td>{dayjs(data.last_accessed).fromNow()}</td>
         <td>
-          <a href="#" className={opClasses} title={gettext('Unlink')} role="button" aria-label={gettext('Unlink')} onClick={this.handleClick}></a>
+          <a href="#" className={opClasses} title={gettext('Unlink')} role="button" aria-label={gettext('Unlink')} onClick={this.handleClick}><Icon symbol="delete1" /></a>
         </td>
       </tr>
     );

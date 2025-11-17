@@ -9,6 +9,7 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import OrgUserInfo from '../../models/org-user';
 import { gettext, orgID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Icon from '../../components/icon';
 
 class OrgUsers extends Component {
 
@@ -92,7 +93,7 @@ class OrgUsers extends Component {
   };
 
   render() {
-    const topBtn = 'btn btn-secondary operation-item';
+    const topBtn = 'btn btn-secondary operation-item d-flex align-items-center';
     let topbarChildren;
     topbarChildren = (
       <>
@@ -102,7 +103,7 @@ class OrgUsers extends Component {
           onClick={this.toggleAddOrgAdmin}
           aria-label={gettext('Add admin')}
         >
-          <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>
+          <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />
           {gettext('Add admin')}
         </button>
         {this.state.isShowAddOrgAdminDialog &&

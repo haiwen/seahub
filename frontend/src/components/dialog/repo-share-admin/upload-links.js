@@ -11,6 +11,7 @@ import Loading from '../../loading';
 import toaster from '../../../components/toast';
 import EmptyTip from '../../../components/empty-tip';
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
+import Icon from '../../icon';
 
 const itemPropTypes = {
   item: PropTypes.object.isRequired,
@@ -98,16 +99,17 @@ class Item extends Component {
         </td>
         <td>{item.view_cnt}</td>
         <td>
-          <i
+          <span
             tabIndex="0"
             role="button"
-            className={`sf3-font-delete1 sf3-font op-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
+            className={`op-icon ${this.state.isOperationShow ? '' : 'invisible'}`}
             onClick={this.onDeleteLink}
             onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-          </i>
+            <Icon symbol="delete1" />
+          </span>
         </td>
       </tr>
     );

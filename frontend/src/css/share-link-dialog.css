@@ -19,6 +19,12 @@
   width: 75%;
 }
 
+.share-dialog .share-dialog-content .share-list-container .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-color);
+}
+
 @media (min-width: 768px) {
   .share-dialog .share-dialog-content {
     flex-direction: row;

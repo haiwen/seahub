@@ -50,7 +50,7 @@
   margin-left: .5rem;
 }
 
-.common-toolbar .logout-icon {
+.common-toolbar .logout-icon.sf-icon-color-mode {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,7 +58,8 @@
   height: 32px;
   margin-left: 8px;
   text-decoration: none;
-  color: #ccc;
+  color: var(--bs-icon-secondary-color);
+  font-size: 16px;
 }
 
 .common-toolbar .sf-icon-color-mode {
@@ -69,6 +70,15 @@
 
 .common-toolbar .sf-icon-color-mode:hover {
   background-color: var(--bs-hover-bg);
+}
+
+.common-toolbar .account-toggle.mobile-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  font-size: 16px;
+  color: var(--bs-icon-color);
 }
 /* end common-toolbar */
 

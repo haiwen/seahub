@@ -19,7 +19,7 @@ const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
       <div className={classNames('item-info recently-used', { 'item-active': isSelected })} onClick={handleItemClick}>
         <div className="item-left-icon">
           <i className="tree-node-icon">
-            <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
+            <span className="tree-node-icon"><Icon symbol="folder" /></span>
           </i>
         </div>
         <div className="item-text">

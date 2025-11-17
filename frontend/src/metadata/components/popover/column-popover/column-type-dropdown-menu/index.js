@@ -91,7 +91,7 @@ const ColumnTypeDropdownMenu = ({ modifiers, onSelect }) => {
                 >
                   <Icon symbol="edit" className="sf-metadata-icon" />
                   <span className="mr-auto">{gettext('Custom properties')}</span>
-                  <i className="sf3-font-down sf3-font rotate-270"></i>
+                  <Icon symbol="down" className="rotate-270" />
                 </DropdownToggle>
                 <DropdownMenu>
                   {basicsColumns.map((item, index) => (

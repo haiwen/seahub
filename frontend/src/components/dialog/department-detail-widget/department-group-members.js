@@ -4,6 +4,7 @@ import { Tooltip } from 'reactstrap';
 import { gettext, mediaUrl } from '../../../utils/constants';
 import EmptyTip from '../../empty-tip';
 import Loading from '../../loading';
+import Icon from '../../icon';
 
 const ItemPropTypes = {
   member: PropTypes.object,
@@ -55,7 +56,9 @@ class Item extends Component {
           <td width="12%"><img className="avatar" src={member.avatar_url} alt=""/></td>
           <td width="60%">{member.name}</td>
           <td width="15%" className={this.state.highlight ? 'visible' : 'invisible' } id={`no-select-${index}`}>
-            <i className="sf3-font-help sf3-font"></i>
+            <span className="d-inline-flex align-items-center">
+              <Icon symbol="about" />
+            </span>
             <Tooltip placement='bottom' isOpen={this.state.tooltipOpen} toggle={this.toggleTooltip} target={`no-select-${index}`} delay={{ show: 0, hide: 0 }} fade={false}>
               {tip}
             </Tooltip>

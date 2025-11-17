@@ -4,6 +4,7 @@ import { Input } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
+import Icon from '../../components/icon';
 
 import '../../css/log-filter.css';
 
@@ -103,7 +104,7 @@ class LogRepoSelector extends Component {
               <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext('Libraries')}
-          <i aria-hidden="true" className="sf3-font sf3-font-down ml-2 toggle-icon"></i>
+          <Icon symbol="down" className="ml-2 toggle-icon" />
         </span>
         {isOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.repoSelector = ref}>
@@ -112,7 +113,9 @@ class LogRepoSelector extends Component {
                 <li key={index} className="activity-selected-modifier">
                   <i className="fas fa-folder"></i>
                   <span className="activity-user-name ml-2">{item.name}</span>
-                  <i className="sf2-icon-close unselect-activity-user ml-2" onClick={(e) => {this.toggleSelectItem(e, item);}}></i>
+                  <span className="unselect-activity-user ml-2" onClick={(e) => {this.toggleSelectItem(e, item);}}>
+                    <Icon symbol="x-01" />
+                  </span>
                 </li>
               ))}
             </ul>
@@ -143,7 +146,7 @@ class LogRepoSelector extends Component {
                         <i className="fas fa-folder"></i>
                         <span className="activity-user-name ml-2">{item.name}</span>
                       </div>
-                      {isSelected && <i className="sf2-icon-tick text-gray font-weight-bold"></i>}
+                      {isSelected && <Icon symbol="tick1" className="text-gray font-weight-bold" />}
                     </li>
                   );
                 })

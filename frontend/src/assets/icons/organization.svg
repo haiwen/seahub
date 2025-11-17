@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g>
+	<!-- Top box (root/parent node) -->
+	<path fill="#A3A3A3" d="M7.6,2.6c0-0.5,0.4-1,1-1h6.8c0.5,0,1,0.4,1,1v4.9c0,0.5-0.4,1-1,1H8.5c-0.5,0-1-0.4-1-1V2.6z"/>
+	<!-- Middle box (center child node) -->
+	<path fill="#A3A3A3" d="M8.6,18.7c0-0.7,0.6-1.2,1.4-1.2h4.1c0.8,0,1.4,0.5,1.4,1.2v2.4c0,0.7-0.6,1.2-1.4,1.2H9.9c-0.8,0-1.4-0.5-1.4-1.2V18.7z"/>
+	<!-- Left box (left child node) -->
+	<path fill="#A3A3A3" d="M0.6,18.7c0-0.7,0.5-1.2,1.2-1.2h3.5c0.7,0,1.2,0.5,1.2,1.2v2.4c0,0.7-0.5,1.2-1.2,1.2H1.7c-0.7,0-1.2-0.5-1.2-1.2V18.7z"/>
+	<!-- Right box (right child node) -->
+	<path fill="#A3A3A3" d="M17.5,18.7c0-0.7,0.5-1.2,1.2-1.2h3.5c0.7,0,1.2,0.5,1.2,1.2v2.4c0,0.7-0.5,1.2-1.2,1.2h-3.5c-0.7,0-1.2-0.5-1.2-1.2V18.7z"/>
+	<!-- Connecting lines between nodes -->
+	<polygon fill="#A3A3A3" points="12,12 12,11 11,11 11,12 5.5,12 4.9,12 3,12 3,16 4,16 4,13 11,13 11,16 12,16 12,13 19,13 19,16 20,16 20,12.4 20,12.1 20,12"/>
+</g>
+</svg>

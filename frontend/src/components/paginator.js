@@ -72,7 +72,7 @@ class Paginator extends Component {
     return (
       <DropdownItem onClick={() => {this.resetPerPage(perPage);}} key={perPage} className='paginator-dropdown-item'>
         <span className='paginator-dropdown-tick'>
-          {curPerPage === perPage && <i className="sf2-icon-tick"></i>}
+          {curPerPage === perPage && <Icon symbol="tick1" />}
         </span>
         <span>
           {this.getPerPageText(perPage)}

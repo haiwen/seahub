@@ -9,6 +9,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
+import Icon from '../../components/icon';
 
 dayjs.locale(lang);
 dayjs.extend(relativeTime);
@@ -173,7 +174,8 @@ class DeletedRepoItem extends Component {
         <td>
           <a href="#" onClick={this.restoreDeletedRepo} title={gettext('Restore')}
             role="button" aria-label={gettext('Restore')}
-            className={`sf2-icon-reply action-icon ${this.state.highlight ? '' : 'vh'}`}>
+            className={`action-icon ${this.state.highlight ? '' : 'vh'}`}>
+            <Icon symbol="reply" />
           </a>
         </td>
       </tr>
