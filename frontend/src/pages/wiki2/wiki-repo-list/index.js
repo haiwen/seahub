@@ -55,7 +55,7 @@ class WikiRepoListDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Select libraries')}</SeahubModalHeader>
         <ModalBody className="dialog-list-container wiki-repo-list">
-          <div>{gettext('libraries')}</div>
+          <div>{gettext('Libraries')}</div>
           <RepoSelect
             selectedOptions={this.state.selectedOptions}
             options={currentOptions}
