@@ -6,7 +6,7 @@ export const NODE_TYPE = {
 };
 
 export const TRIGGER_NODE_TYPE = {
-  FILE_UPLOAD: 'file_upload',
+  FILE_ADDED: 'file_added',
 };
 
 export const CONDITION_NODE_TYPE = {

@@ -10,7 +10,7 @@ import { useWorkflows } from '../../hooks/workflows';
 import './index.css';
 
 const SUPPORT_TRIGGER_TYPES = [
-  { config_id: TRIGGER_NODE_TYPE.FILE_UPLOAD, icon_symbol: 'trigger', text: gettext('When a file is added') },
+  { config_id: TRIGGER_NODE_TYPE.FILE_ADDED, icon_symbol: 'trigger', text: gettext('When a file is added') },
 ];
 
 const CONDITION_NODE_TYPES = [

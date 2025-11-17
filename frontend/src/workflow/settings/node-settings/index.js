@@ -19,7 +19,7 @@ const WorkflowNodeSettings = ({ closePanel }) => {
     <WorkflowSettingsPanel title={gettext('Node settings')} closePanel={closePanel}>
       <WorkflowSettingsPanelBody>
         <div className="workflow-node-settings-wrapper">
-          {nodeType === NODE_TYPE.TRIGGER && nodeConfigId === TRIGGER_NODE_TYPE.FILE_UPLOAD && (
+          {nodeType === NODE_TYPE.TRIGGER && nodeConfigId === TRIGGER_NODE_TYPE.FILE_ADDED && (
             <WorkflowTriggerFileUploadSettings key={`node-settings-${editingNodeId}`} />
           )}
           {nodeType === NODE_TYPE.CONDITION && nodeConfigId === CONDITION_NODE_TYPE.IF_ELSE && (

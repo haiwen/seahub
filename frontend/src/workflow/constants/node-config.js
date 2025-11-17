@@ -2,7 +2,7 @@ import { gettext } from '../../utils/constants';
 import { ACTION_NODE_TYPE, CONDITION_NODE_TYPE, TRIGGER_NODE_TYPE } from './node';
 
 export const TYPE_TRIGGER_NODE_CONFIG = {
-  [TRIGGER_NODE_TYPE.FILE_UPLOAD]: {
+  [TRIGGER_NODE_TYPE.FILE_ADDED]: {
     label: gettext('When a file is added'),
     icon_symbol: 'trigger',
   }
