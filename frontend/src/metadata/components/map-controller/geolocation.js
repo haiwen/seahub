@@ -11,7 +11,7 @@ export const createGeolocationControl = ({ map, callback }) => {
 
   const button = document.createElement('div');
   button.className = 'sf-map-control sf-map-geolocation-control d-flex align-items-center justify-content-center';
-  button.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-current-location"></i>';
+  button.innerHTML = '<svg class="sf-map-control-icon" viewBox="0 0 32 32" width="20" height="20"><path fill="currentColor" d="M16,1c8.3,0,15,6.7,15,15s-6.7,15-15,15S1,24.3,1,16S7.7,1,16,1z M17.5,4.7v3c0,0.8-0.7,1.5-1.5,1.5s-1.5-0.7-1.5-1.5v-3c-5,0.7-9,4.7-9.7,9.7h3c0.8,0,1.5,0.7,1.5,1.5c0,0.8-0.7,1.5-1.5,1.5h-3c0.7,5.1,4.7,9.1,9.7,9.8v-3.1c0-0.8,0.7-1.5,1.5-1.5c0.8,0,1.5,0.7,1.5,1.5v3.1c5.1-0.7,9.1-4.7,9.8-9.8h-3.1c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5h3.1C26.6,9.4,22.5,5.4,17.5,4.7z M16,12c2.2,0,4,1.8,4,4s-1.8,4-4,4s-4-1.8-4-4S13.8,12,16,12z"/></svg>';
   container.appendChild(button);
 
   container.addEventListener('click', async (e) => {
@@ -45,7 +45,7 @@ export function createBMapGeolocationControl({ anchor, offset, callback }) {
 
     const locationButton = document.createElement('div');
     locationButton.className = 'sf-map-control sf-map-geolocation-control d-flex align-items-center justify-content-center';
-    locationButton.innerHTML = '<i class="sf-map-control-icon sf3-font sf3-font-current-location"></i>';
+    locationButton.innerHTML = '<svg class="sf-map-control-icon" viewBox="0 0 32 32" width="16" height="16"><path fill="currentColor" d="M16,1c8.3,0,15,6.7,15,15s-6.7,15-15,15S1,24.3,1,16S7.7,1,16,1z M17.5,4.7v3c0,0.8-0.7,1.5-1.5,1.5s-1.5-0.7-1.5-1.5v-3c-5,0.7-9,4.7-9.7,9.7h3c0.8,0,1.5,0.7,1.5,1.5c0,0.8-0.7,1.5-1.5,1.5h-3c0.7,5.1,4.7,9.1,9.7,9.8v-3.1c0-0.8,0.7-1.5,1.5-1.5c0.8,0,1.5,0.7,1.5,1.5v3.1c5.1-0.7,9.1-4.7,9.8-9.8h-3.1c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5h3.1C26.6,9.4,22.5,5.4,17.5,4.7z M16,12c2.2,0,4,1.8,4,4s-1.8,4-4,4s-4-1.8-4-4S13.8,12,16,12z"/></svg>';
     div.appendChild(locationButton);
 
     div.className = className;

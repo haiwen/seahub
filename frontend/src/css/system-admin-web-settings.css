@@ -12,6 +12,10 @@
   font-size: 16px;
 }
 
+.web-setting-icon-btn .seafile-multicolor-icon-tick {
+  color: #fff;
+}
+
 .web-setting-icon-btn-cancel {
   color: #666;
 }

@@ -37,13 +37,16 @@
   background-color: #ccc;
 }
 
-.sf-map-control-container .sf-map-geolocation-control {
+.sf-map-control-container .sf-map-geolocation-control,
+.sf-map-control-container .sf-map-zoom-control {
   width: 30px;
+  height: 30px;
   line-height: 30px;
 }
 
 .sf-map-control-container .sf-map-zoom-control {
-  width: 40px;
+  width: 30px;
+  height: 30px;
 }
 
 .sf-map-control-container.sf-map-control-container-mobile .sf-map-control {

@@ -390,7 +390,7 @@ class GenerateUploadLink extends React.Component {
                 <Button onClick={this.togglePasswordVisible}>
                   <Icon symbol={this.state.passwordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
                 </Button>
-                <Button onClick={this.generatePassword}>
+                <Button className="d-flex align-items-center" onClick={this.generatePassword}>
                   <Icon symbol="magic" className="link-operation-icon" />
                 </Button>
               </InputGroup>

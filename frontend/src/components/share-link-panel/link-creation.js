@@ -316,10 +316,10 @@ class LinkCreation extends React.Component {
                   <span className="tip">{gettext('(at least {passwordMinLength} characters and includes {passwordStrengthLevel} of the following: number, upper letter, lower letter and other symbols)').replace('{passwordMinLength}', shareLinkPasswordMinLength).replace('{passwordStrengthLevel}', shareLinkPasswordStrengthLevel)}</span>
                   <InputGroup style={{ width: inputWidth }}>
                     <Input id="passwd" type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword} />
-                    <Button onClick={this.togglePasswordVisible}>
+                    <Button className="d-flex align-items-center" onClick={this.togglePasswordVisible}>
                       <Icon symbol={this.state.isPasswordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
                     </Button>
-                    <Button onClick={this.generatePassword}>
+                    <Button className="d-flex align-items-center" onClick={this.generatePassword}>
                       <Icon symbol="magic" className="link-operation-icon" />
                     </Button>
                   </InputGroup>

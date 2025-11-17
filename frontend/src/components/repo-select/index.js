@@ -21,7 +21,7 @@ class RepoSelect extends Component {
     event.preventDefault();
     if (this.state.isShowSelectOptions) event.stopPropagation();
     let eventClassName = event.target.className;
-    if (eventClassName.indexOf('sf2-icon-close') > -1 || eventClassName === 'option-group-search') return;
+    if (typeof eventClassName === 'string' && (eventClassName.includes('seafile-multicolor-icon-x-') || eventClassName === 'option-group-search')) return;
     if (event.target.value === '') return;
     this.setState({
       isShowSelectOptions: !this.state.isShowSelectOptions
