@@ -629,8 +629,8 @@ class SharedRepoListItem extends React.Component {
               <Link to={libPath} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               {isStarred &&
               <OpIcon
-                className='op-icon library-grid-item-icon'
-                symbol='starred'
+                className="op-icon library-grid-item-icon"
+                symbol="starred"
                 title={gettext('Unstar')}
                 op={this.onToggleStarRepo}
               />

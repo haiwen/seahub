@@ -105,12 +105,8 @@ class Item extends Component {
           <OpIcon
             symbol="x-01"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            tabIndex="0"
-            role="button"
             op={this.onDeleteLink}
-            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
-            aria-label={gettext('Delete')}
           />
         </td>
       </tr>

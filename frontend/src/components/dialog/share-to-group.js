@@ -71,12 +71,8 @@ class GroupItem extends React.Component {
             <OpIcon
               symbol="x-01"
               className="op-icon"
-              tabIndex="0"
-              role="button"
               op={this.deleteShareItem}
-              onKeyDown={Utils.onKeyDown}
               title={gettext('Delete')}
-              aria-label={gettext('Delete')}
             />
           </td>
         </tr>
@@ -108,12 +104,8 @@ class GroupItem extends React.Component {
           <OpIcon
             symbol="x-01"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            tabIndex="0"
-            role="button"
             op={this.deleteShareItem}
-            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
-            aria-label={gettext('Delete')}
           />
         </td>
       </tr>
