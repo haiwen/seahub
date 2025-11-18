@@ -179,6 +179,10 @@ const DirentsTagsEditor = ({
       placeholder={gettext('Empty')}
       ref={ref}
       onClick={openEditor}
+      tabIndex={0}
+      role="button"
+      aria-label={gettext('Edit tags')}
+      onKeyDown={Utils.onKeyDown}
     >
       {displayTagIds.length > 0 && (<DeleteTag value={displayTagIds} tags={tagsData} onDelete={onDeleteTag} />)}
       {renderEditor()}
