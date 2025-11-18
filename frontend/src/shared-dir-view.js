@@ -1066,6 +1066,7 @@ class Content extends React.Component {
               <th width="3%" className="text-center">
                 <input
                   type="checkbox"
+                  className="form-check-input"
                   checked={isAllItemsSelected}
                   onChange={this.props.toggleAllSelected}
                   onKeyDown={Utils.onKeyDown}
@@ -1186,7 +1187,7 @@ class Item extends React.Component {
         >
           {showDownloadIcon &&
             <td className="text-center">
-              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} onKeyDown={Utils.onKeyDown} />
+              <input type="checkbox" className="form-check-input" checked={item.isSelected} onChange={this.toggleItemSelected} onKeyDown={Utils.onKeyDown} />
             </td>
           }
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
@@ -1237,7 +1238,7 @@ class Item extends React.Component {
         >
           {showDownloadIcon &&
             <td className="text-center">
-              <input type="checkbox" checked={item.isSelected} onChange={this.toggleItemSelected} onKeyDown={Utils.onKeyDown} />
+              <input type="checkbox" className="form-check-input" checked={item.isSelected} onChange={this.toggleItemSelected} onKeyDown={Utils.onKeyDown} />
             </td>
           }
           <td className="text-center">

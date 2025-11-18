@@ -123,7 +123,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
       <td className="pl10 pr-2" role="button" onClick={handleSelected} aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}>
         <input
           type="checkbox"
-          className="vam cursor-pointer position-relative"
+          className="vam cursor-pointer position-relative form-check-input"
           style={{ top: -1 }}
           checked={isSelected}
           aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}

@@ -57,7 +57,7 @@ class SelectAll extends Component {
               (
                 <>
                   <input
-                    className="mobile-select-all-checkbox"
+                    className="mobile-select-all-checkbox form-check-input"
                     name="mobile-select-all-checkbox"
                     type="checkbox"
                     checked={isSelectedAll}
@@ -74,7 +74,7 @@ class SelectAll extends Component {
               (
                 <input
                   id="select-all-checkbox"
-                  className="select-all-checkbox"
+                  className="select-all-checkbox form-check-input"
                   type="checkbox"
                   name={gettext('Select all')}
                   title={gettext('Select all')}

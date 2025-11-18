@@ -263,6 +263,7 @@ class FilterItem extends React.Component {
       return (
         <input
           type="checkbox"
+          className="form-check-input"
           disabled={readOnly}
           checked={filterTerm}
           onChange={this.onFilterTermCheckboxChanged}
