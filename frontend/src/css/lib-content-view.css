@@ -555,3 +555,16 @@
   flex-shrink: 0;
   margin-left: 10px;
 }
+
+.select-all-checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.select-all-checkbox-wrapper .seafile-multicolor-icon-partially-selected {
+  cursor: pointer;
+  font-size: 12px;
+  fill: #2b76f6;
+}

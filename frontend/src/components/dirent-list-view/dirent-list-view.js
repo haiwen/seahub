@@ -653,7 +653,7 @@ class DirentListView extends React.Component {
   };
 
   getHeaders = (isDesktop) => {
-    const { direntList, sortBy, sortOrder, isAllItemSelected } = this.props;
+    const { direntList, sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
     if (!isDesktop) {
       return [
         { isFixed: false, width: 0.12 },
@@ -662,23 +662,36 @@ class DirentListView extends React.Component {
       ];
     }
 
+    const hasSelectedItems = selectedDirentList.length > 0;
+    const isPartiallySelected = hasSelectedItems && !isAllItemSelected;
     const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder == 'asc' ? 'rotate-180' : ''}`} /></span>;
     return [
       { isFixed: true,
         width: 31,
         className: 'pl10 pr-2 cursor-pointer',
         children: (
-          <input
-            type="checkbox"
-            className="vam cursor-pointer"
-            checked={isAllItemSelected}
-            disabled={direntList.length === 0}
-            aria-label={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-            title={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-            onChange={() => {}}
+          <div
+            className="select-all-checkbox-wrapper"
             onClick={this.props.onAllItemSelected}
             onKeyDown={Utils.onKeyDown}
-          />
+            role="button"
+            tabIndex={0}
+            aria-label={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+            title={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
+          >
+            {isPartiallySelected ? (
+              <Icon symbol="partially-selected" />
+            ) : (
+              <input
+                type="checkbox"
+                className="vam cursor-pointer"
+                checked={isAllItemSelected}
+                disabled={direntList.length === 0}
+                onChange={() => {}}
+                readOnly
+              />
+            )}
+          </div>
         ),
       },
       {
