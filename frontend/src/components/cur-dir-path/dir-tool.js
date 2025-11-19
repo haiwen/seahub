@@ -8,7 +8,7 @@ import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-searcher
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/sort-setter';
-import TagFilesViewToolbar from '../../tag/components/toolbar';
+import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 
 const propTypes = {
