@@ -51,10 +51,10 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
   }, [onUpdateSearchStatus, onUpdateSearchResults]);
 
   const handleSearchInputChange = useCallback((e) => {
-    const newValue = e.target.value.trim();
+    const newValue = e.target.value;
     setInputValue(newValue);
 
-    if (newValue.length === 0) {
+    if (newValue.trim().length === 0) {
       onUpdateSearchResults([]);
       return;
     }
@@ -62,7 +62,7 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
     onUpdateSearchStatus(SearchStatus.LOADING);
 
     const queryData = {
-      q: newValue,
+      q: newValue.trim(),
       search_repo: 'all',
       search_ftypes: 'all',
       obj_type: 'dir',
