@@ -13,6 +13,7 @@ const entryFiles = {
   fileHistoryOld: '/file-history-old.js',
   sdocFileHistory: '/pages/sdoc/sdoc-file-history/index.js',
   sdocPublishedRevision: '/pages/sdoc/sdoc-published-revision/index.js',
+  sdocThumbnail: '/pages/sdoc-thumbnail',
   app: '/app.js',
   sharedDirView: '/shared-dir-view.js',
   sharedFileViewMarkdown: '/shared-file-view-markdown.js',
