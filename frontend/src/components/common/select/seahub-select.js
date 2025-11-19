@@ -8,7 +8,7 @@ const DropdownIndicator = props => {
   return (
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
-        <span style={{ display: 'flex', alignItems: 'center', marginLeft: '-2px' }} aria-hidden="true">
+        <span className="d-flex align-items-center" style={{ marginLeft: '-2px' }} aria-hidden="true">
           <Icon symbol="down" style={{ width: '12px', height: '12px' }} />
         </span>
       </components.DropdownIndicator>
@@ -24,7 +24,7 @@ const ClearIndicator = ({ innerProps, ...props }) => {
   props.innerProps = { ...innerProps, onMouseDown };
   return (
     <components.ClearIndicator {...props} >
-      <span style={{ display: 'flex', alignItems: 'center', marginLeft: '-2px' }} aria-hidden="true">
+      <span className="d-flex align-items-center" style={{ marginLeft: '-2px' }} aria-hidden="true">
         <Icon symbol="x-01" style={{ width: '12px', height: '12px' }} />
       </span>
     </components.ClearIndicator>
