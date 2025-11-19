@@ -57,9 +57,6 @@ function set_file_config () {
     if [ -z "${ENABLE_FILESERVER}" ]; then
         export ENABLE_FILESERVER=`awk -F '=' '/\[fileserver\]/{a=1}a==1&&$1~/^use_go_fileserver/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
     fi
-    if [ -z "${ENABLE_SEAFDAV}" ]; then
-        export ENABLE_SEAFDAV=`awk -F '=' '/\[WEBDAV\]/{a=1}a==1&&$1~/^enabled/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafdav.conf`
-    fi
 }
 
 function set_env_config () {
@@ -89,7 +86,7 @@ function set_env_config () {
         export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
         export SITE_ROOT=${SITE_ROOT:-/}
         export ENABLE_FILESERVER=${ENABLE_FILESERVER}
-        export ENABLE_SEAFDAV=${ENABLE_SEAFDAV}
+        export ENABLE_SEAFDAV=${ENABLE_SEAFDAV:-false}
     fi
 }
 
@@ -156,14 +153,6 @@ function start_seafdav() {
     check_python_executable;
     SEAFDAV_HOST="0.0.0.0"
     SEAFDAV_PORT=8080
-    seafdav_host=`awk -F '=' '/\[WEBDAV\]/{a=1}a==1&&$1~/^host/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafdav.conf`
-    seafdav_port=`awk -F '=' '/\[WEBDAV\]/{a=1}a==1&&$1~/^port/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafdav.conf`
-    if [ $seafdav_host ]; then
-        SEAFDAV_HOST=$seafdav_host
-    fi
-    if [ $seafdav_port ]; then
-        SEAFDAV_PORT=$((seafdav_port))
-    fi
     $PYTHON -m wsgidav.server.server_cli \
         --server gunicorn \
         --root / \
