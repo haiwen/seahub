@@ -314,7 +314,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
                   selectedUsers={this.state.selectedUsers}
                 />
               </td>
-              {!showPath &&
+              {showPath &&
                 <td>
                   <InputGroup>
                     <Input value={this.state.folderPath} onChange={this.onSetSubFolder} />
