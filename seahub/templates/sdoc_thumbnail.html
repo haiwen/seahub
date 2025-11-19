@@ -1,0 +1,22 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_style %}
+{% render_bundle 'sdocThumbnail' 'css'%}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    window.app.config.lang = '{{LANGUAGE_CODE}}';
+    window.sdocRevision = {
+        repoID: '{{ repo.id }}',
+        repoName: '{{ repo.name }}',
+        docUuid: '{{ file_uuid }}',
+        domain: '{{ domain }}',
+        protocol: '{{ protocol }}',
+        assetsUrl: '{{ assets_url }}',
+        fileDownloadLink: '{{ file_download_link }}',
+    }
+</script>
+{% render_bundle 'sdocThumbnail' 'js'%}
+{% endblock %}
