@@ -103,7 +103,7 @@ class Item extends Component {
           <OpIcon
             symbol="x-01"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            onClick={this.onDeleteLink}
+            op={this.onDeleteLink}
             title={gettext('Delete')}
           />
         </td>
