@@ -12,7 +12,7 @@ from zipfile import ZipFile, is_zipfile
 from seaserv import seafile_api, USE_GO_FILESERVER
 
 from seahub.tags.models import FileUUIDMap
-from seahub.settings import SEADOC_PRIVATE_KEY
+from seahub.settings import SEADOC_PRIVATE_KEY, JWT_PRIVATE_KEY
 from seahub.utils import normalize_file_path, gen_file_get_url, gen_file_upload_url, gen_inner_file_get_url, \
     get_inner_fileserver_root
 from seahub.utils.auth import AUTHORIZATION_PREFIX
@@ -192,6 +192,12 @@ def can_access_seadoc_asset(request, repo_id, path, file_uuid):
     seadoc_share_session = request.session.get('seadoc_share_session')
     if seadoc_share_session and seadoc_share_session.get('file_uuid') == file_uuid:
         return True
+    
+    thumbnail_access_token = request.COOKIES.get('thumbnail_access_token')
+    if thumbnail_access_token:
+        payload = jwt.decode(thumbnail_access_token, JWT_PRIVATE_KEY, algorithms=['HS256'])
+        if payload.get('file_uuid') == file_uuid:
+            return True
 
     return False
 
