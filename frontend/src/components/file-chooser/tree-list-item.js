@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../icon';
+import { Utils } from '../../utils/utils';
+import { gettext } from '../../utils/constants';
+import OpIcon from '../op-icon';
 
 const propTypes = {
   selectedPath: PropTypes.string,
@@ -118,11 +121,19 @@ class TreeViewItem extends React.Component {
             className={`${(isCurrentRepo && isCurrentPath) ? 'item-active' : ''} item-info`}
             onClick={this.onItemClick}
             style={{ paddingLeft }}
+            tabIndex={0}
+            role="treeitem"
+            aria-selected={isCurrentRepo && isCurrentPath}
+            onKeyDown={Utils.onKeyDown}
           >
             <div className="item-left-icon">
               {
                 node.object.type !== 'file' &&
-                <span className={`icon item-toggle sf3-font ${node.isExpanded ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
+                <OpIcon
+                  className={`icon item-toggle sf3-font ${node.isExpanded ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`}
+                  op={this.onToggleClick}
+                  title={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
+                />
               }
               <i className="tree-node-icon">
                 <span className={`icon sf3-font ${node.object.type === 'dir' ? 'sf3-font-folder' : 'sf3-font-file'}`}></span>

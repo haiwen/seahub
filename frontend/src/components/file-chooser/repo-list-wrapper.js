@@ -7,6 +7,7 @@ import SearchedListView from './searched-list-view';
 import { SearchStatus } from './searcher';
 import { MODE_TYPE_MAP } from '../../constants';
 import Loading from '../loading';
+import OpIcon from '../op-icon';
 
 const RepoListWrapper = (props) => {
   const {
@@ -49,7 +50,11 @@ const RepoListWrapper = (props) => {
           <>
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className={`item-toggle sf3-font ${isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={props.onCurrentRepoToggle}></span>
+                <OpIcon
+                  className={`item-toggle sf3-font ${isCurrentRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`}
+                  op={props.onCurrentRepoToggle}
+                  title={isCurrentRepoShow ? gettext('Fold') : gettext('Unfold')}
+                />
                 <span className="library">{gettext('Current Library')}</span>
               </div>
               {(isCurrentRepoShow && currentRepoInfo) &&
@@ -69,7 +74,11 @@ const RepoListWrapper = (props) => {
             </div>
             <div className="list-view">
               <div className="file-chooser-list-view-header">
-                <span className={`item-toggle sf3-font ${isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`} onClick={props.onOtherRepoToggle}></span>
+                <OpIcon
+                  className={`item-toggle sf3-font ${isOtherRepoShow ? 'sf3-font-down' : 'sf3-font-down rotate-270 d-inline-block'}`}
+                  op={props.onOtherRepoToggle}
+                  title={isOtherRepoShow ? gettext('Fold') : gettext('Unfold')}
+                />
                 <span className="library">{gettext('Other Libraries')}</span>
               </div>
               {isOtherRepoShow &&

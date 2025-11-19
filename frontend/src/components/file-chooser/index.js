@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import toaster from '../toast';
 import Loading from '../loading';
+import OpIcon from '../op-icon';
 import RepoListWrapper from './repo-list-wrapper';
 import SearchedListView from './searched-list-view';
 import RepoInfo from '../../models/repo-info';
@@ -451,7 +452,11 @@ class FileChooser extends React.Component {
           <div className="file-chooser-search-input py-4">
             <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
             {searchInfo.length !== 0 && (
-              <span className="search-control attr-action-icon sf3-font sf3-font-x-01" onClick={this.onCloseSearching}></span>
+              <OpIcon
+                className="search-control attr-action-icon sf3-font sf3-font-x-01"
+                op={this.onCloseSearching}
+                title={gettext('Clear')}
+              />
             )}
           </div>
         )}

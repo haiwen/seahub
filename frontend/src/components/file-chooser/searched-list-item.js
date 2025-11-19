@@ -31,6 +31,9 @@ class SearchedListItem extends React.Component {
         })}
         onClick={this.onClick}
         onDoubleClick={this.searchItemDoubleClick}
+        tabIndex={0}
+        aria-selected={!!(currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path)}
+        onKeyDown={Utils.onKeyDown}
       >
         <td className="text-center searched-item-icon">
           {item.is_dir ?
