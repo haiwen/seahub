@@ -114,7 +114,9 @@ export const Utils = {
     'webp': 'pic.png',
     'jfif': 'pic.png',
     'draw': 'draw.png',
+    'tldr': 'draw.png',
     'exdraw': 'draw.png',
+    'excalidraw': 'draw.png',
 
     // photoshop file
     'psd': 'psd.png',
@@ -245,11 +247,11 @@ export const Utils = {
     }
     const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
 
-    if (enableSeadoc && file_ext == 'exdraw') {
-      return true;
-    } else {
-      return false;
+    if (enableSeadoc) {
+      return ['exdraw', 'excalidraw'].includes(file_ext);
     }
+
+    return false;
   },
 
   // check if a file is a video
