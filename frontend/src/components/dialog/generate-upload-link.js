@@ -373,7 +373,7 @@ class GenerateUploadLink extends React.Component {
               </Label>
             ) : (
               <Label check>
-                <Input type="checkbox" onChange={this.addPassword} />
+                <Input type="checkbox" onChange={this.addPassword} onKeyDown={Utils.onKeyDown} />
                 <span>{gettext('Add password protection')}</span>
               </Label>
             )}

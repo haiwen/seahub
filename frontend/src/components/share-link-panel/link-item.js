@@ -137,7 +137,9 @@ class LinkItem extends React.Component {
     return (
       <Fragment>
         <tr
+          tabIndex={0}
           onClick={this.clickItem}
+          onKeyDown={Utils.onKeyDown}
           onMouseOver={this.onMouseOver}
           onMouseOut={this.onMouseOut}
           className={classnames('cursor-pointer', {
@@ -153,6 +155,7 @@ class LinkItem extends React.Component {
               className="vam"
               onClick={this.onCheckboxClicked}
               onChange={this.toggleSelectLink}
+              onKeyDown={Utils.onKeyDown}
             />
           </td>
           <td title={link}>
