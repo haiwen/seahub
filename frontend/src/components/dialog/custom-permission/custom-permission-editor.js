@@ -128,25 +128,25 @@ class CustomPermissionEditor extends React.Component {
               <div className="permission-options">
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('upload')} checked={permission.upload}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('upload')} checked={permission.upload}/>
                     <span>{gettext('Upload')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('download')} checked={permission.download}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('download')} checked={permission.download}/>
                     <span>{gettext('Download')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('create')} checked={permission.create}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('create')} checked={permission.create}/>
                     <span>{gettext('Create')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
                     <span>{gettext('Modify')}</span>
                     <span id="modify-tip" className="ml-2" style={{ color: '#999' }} aria-hidden="true"><Icon symbol="about" /></span>
                     <Tooltip
@@ -161,25 +161,25 @@ class CustomPermissionEditor extends React.Component {
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('copy')} checked={permission.copy}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('copy')} checked={permission.copy}/>
                     <span>{gettext('Copy')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('delete')} checked={permission.delete}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('delete')} checked={permission.delete}/>
                     <span>{gettext('Delete')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('preview')} checked={permission.preview}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('preview')} checked={permission.preview}/>
                     <span>{gettext('Preview online')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" onChange={this.onChangePermission('download_external_link')} checked={permission.download_external_link}/>
+                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('download_external_link')} checked={permission.download_external_link}/>
                     <span>{gettext('Generate share link')}</span>
                   </Label>
                 </FormGroup>

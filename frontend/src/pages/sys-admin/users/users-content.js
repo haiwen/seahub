@@ -104,7 +104,7 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="3%" className="pl-2">
-                  <input type="checkbox" className="vam" onChange={this.props.toggleSelectAllUsers} checked={isAllUsersSelected} />
+                  <input type="checkbox" className="vam form-check-input" onChange={this.props.toggleSelectAllUsers} checked={isAllUsersSelected} />
                 </th>
                 {columns.map((item, index) => {
                   return <th width={item.width} key={index}>{item.text}</th>;
@@ -460,7 +460,7 @@ class Item extends Component {
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
           <td className="pl-2">
-            <input type="checkbox" className="vam" onChange={this.onUserSelected} checked={item.isSelected} />
+            <input type="checkbox" className="vam form-check-input" onChange={this.onUserSelected} checked={item.isSelected} />
           </td>
           <td>
             <UserLink email={item.email} name={item.name} />

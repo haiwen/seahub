@@ -41,7 +41,7 @@ class ConfirmUnlinkDevice extends Component {
           <p>{gettext('Are you sure you want to unlink this device?')}</p>
           <FormGroup check>
             <Label check>
-              <Input type="checkbox" checked={this.state.isChecked} onChange={this.onInputChange} />
+              <Input type="checkbox" className="form-check-input" checked={this.state.isChecked} onChange={this.onInputChange} />
               <span>{gettext('Delete files from this device the next time it comes online.')}</span>
             </Label>
           </FormGroup>

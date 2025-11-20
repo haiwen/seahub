@@ -28,7 +28,7 @@ const GroupTitle = ({ column, cellValue, originalCellValue }) => {
         return (<CellFormatter value={cellValue} field={column} />);
       }
       case CellType.CHECKBOX: {
-        return <input className="checkbox" type="checkbox" readOnly={true} checked={cellValue} />;
+        return <input className="checkbox form-check-input" type="checkbox" readOnly={true} checked={cellValue} />;
       }
       case CellType.SINGLE_SELECT: {
         const options = getColumnOptions(column);

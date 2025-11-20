@@ -240,7 +240,7 @@ class CreateRepoDialog extends React.Component {
             {enableEncryptedLibrary &&
               <div>
                 <FormGroup check>
-                  <Input type="checkbox" id="encrypt" onChange={this.onEncrypted} />
+                  <Input type="checkbox" className="form-check-input" id="encrypt" onChange={this.onEncrypted} />
                   <Label for="encrypt">{gettext('Encrypt')}</Label>
                 </FormGroup>
                 {!this.state.disabled &&

@@ -29,7 +29,7 @@ class ListInAddressBook extends React.Component {
       <div className="setting-item" id="list-in-address-book">
         <h3 className="setting-item-heading">{gettext('Global Address Book')}</h3>
         <div className="d-flex align-items-center">
-          <input type="checkbox" id="list-in-address-book" name="list_in_address_book" className="mr-1" checked={inputChecked} onChange={this.handleInputChange} />
+          <input type="checkbox" id="list-in-address-book" name="list_in_address_book" className="mr-1 form-check-input" checked={inputChecked} onChange={this.handleInputChange} />
           <label htmlFor="list-in-address-book" className="m-0">{gettext('List your account in global address book, so that others can find you by typing your name.')}</label>
         </div>
       </div>

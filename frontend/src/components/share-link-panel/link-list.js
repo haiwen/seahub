@@ -80,7 +80,7 @@ class LinkList extends React.Component {
               <thead>
                 <tr>
                   <th width="3%" className="text-center">
-                    <input type="checkbox" checked={isAllLinksSelected} className="vam" onChange={this.toggleSelectAllLinks} />
+                    <input type="checkbox" checked={isAllLinksSelected} className="vam form-check-input" onChange={this.toggleSelectAllLinks} />
                   </th>
                   <th width="18%">{gettext('Link')}</th>
                   <th width="25%">{gettext('Permission')}</th>
