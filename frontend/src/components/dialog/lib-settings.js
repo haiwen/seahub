@@ -14,6 +14,7 @@ import {
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { useMetadataStatus } from '../../hooks';
 import Loading from '../../components/loading';
+import { Utils } from '../../utils/utils';
 
 import '../../css/lib-settings.css';
 
@@ -28,12 +29,6 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
   const [isMigrating, setIsMigrating] = useState(false);
   const toggleTab = useCallback((tab) => {
     setActiveTab(tab);
-  }, []);
-
-  const onTabKeyDown = useCallback((e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      e.target.click();
-    }
   }, []);
 
   const { encrypted, is_admin } = currentRepoInfo;
@@ -93,7 +88,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                       className={activeTab === TAB.HISTORY_SETTING ? 'active' : ''}
                       onClick={toggleTab.bind(this, TAB.HISTORY_SETTING)}
                       tabIndex="0"
-                      onKeyDown={onTabKeyDown}
+                      onKeyDown={Utils.onKeyDown}
                     >
                       {gettext('History')}
                     </NavLink>
@@ -109,7 +104,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                       className={activeTab === TAB.AUTO_DEL_SETTING ? 'active' : ''}
                       onClick={toggleTab.bind(this, TAB.AUTO_DEL_SETTING)}
                       tabIndex="0"
-                      onKeyDown={onTabKeyDown}
+                      onKeyDown={Utils.onKeyDown}
                     >
                       {gettext('Auto deletion')}
                     </NavLink>
@@ -126,7 +121,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                         className={activeTab === TAB.EXTENDED_PROPERTIES_SETTING ? 'active' : ''}
                         onClick={toggleTab.bind(this, TAB.EXTENDED_PROPERTIES_SETTING)}
                         tabIndex="0"
-                        onKeyDown={onTabKeyDown}
+                        onKeyDown={Utils.onKeyDown}
                       >
                         {gettext('Extended properties')}
                       </NavLink>
@@ -141,7 +136,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                           className={activeTab === TAB.FACE_RECOGNITION_SETTING ? 'active' : ''}
                           onClick={toggleTab.bind(this, TAB.FACE_RECOGNITION_SETTING)}
                           tabIndex="0"
-                          onKeyDown={onTabKeyDown}
+                          onKeyDown={Utils.onKeyDown}
                         >
                           {gettext('Face recognition')}
                         </NavLink>
@@ -156,7 +151,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                         className={activeTab === TAB.TAGS_SETTING ? 'active' : ''}
                         onClick={toggleTab.bind(this, TAB.TAGS_SETTING)}
                         tabIndex="0"
-                        onKeyDown={onTabKeyDown}
+                        onKeyDown={Utils.onKeyDown}
                       >
                         {gettext('Tags')}
                       </NavLink>

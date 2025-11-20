@@ -84,6 +84,7 @@ class Item extends Component {
             checked={item.isSelected || false}
             className="vam"
             onChange={this.toggleSelectLink}
+            onKeyDown={Utils.onKeyDown}
             aria-label={item.isSelected ? gettext('Unselect this item') : gettext('Select this item')}
           />
         </td>
@@ -253,6 +254,7 @@ class RepoShareAdminShareLinks extends Component {
               checked={isAllLinksSelected}
               className="vam"
               onChange={this.toggleSelectAllLinks}
+              onKeyDown={Utils.onKeyDown}
               aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
             />
           }
