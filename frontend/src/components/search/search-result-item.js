@@ -61,6 +61,10 @@ class SearchResultItem extends React.Component {
         onClick={this.onClickHandler}
         ref={ref => setRef(ref)}
         onMouseEnter={this.onMouseEnter}
+        tabIndex={0}
+        role="option"
+        aria-selected={isHighlight}
+        onKeyDown={Utils.onKeyDown}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">
@@ -74,6 +78,7 @@ class SearchResultItem extends React.Component {
             className="search-icon-right sf3-font sf3-font-x-01"
             onClick={this.deleteItem}
             aria-label={gettext('Delete')}
+            onKeyDown={Utils.onKeyDown}
           >
           </button>
         )}

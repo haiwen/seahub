@@ -4,6 +4,7 @@ import { gettext } from '../../../utils/constants';
 import { getTagColor, getTagId, getTagName } from '../../../tag/utils/cell';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
+import { Utils } from '../../../utils/utils';
 
 import './index.css';
 
@@ -51,7 +52,15 @@ const SearchTags = ({ repoID, tagsData, keyword, onSelectTag }) => {
           const tagName = getTagName(tag);
           const tagColor = getTagColor(tag);
           return (
-            <div className="tag-item" key={tagId} onClick={(e) => handleClick(e, tagId)}>
+            <div
+              className="tag-item"
+              key={tagId}
+              onClick={(e) => handleClick(e, tagId)}
+              tabIndex={0}
+              role="button"
+              aria-label={gettext('Edit tag')}
+              onKeyDown={Utils.onKeyDown}
+            >
               <div className="tag-color" style={{ backgroundColor: tagColor }} />
               <div className="tag-name">{tagName}</div>
             </div>

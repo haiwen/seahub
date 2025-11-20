@@ -611,6 +611,7 @@ class Search extends Component {
               className={classnames('search-types-repos', { 'search-types-highlight': highlightIndex === 0 })}
               onClick={this.searchAllRepos}
               tabIndex={0}
+              onKeyDown={Utils.onKeyDown}
             >
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
@@ -650,19 +651,40 @@ class Search extends Component {
       if (path && path !== '/' && !this.props.isViewFile && !isMetadataView && !isTagView) {
         return (
           <div className="search-types">
-            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+            <div
+              className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`}
+              onClick={this.searchRepo}
+              tabIndex={0}
+              role="button"
+              aria-pressed={highlightIndex === 0}
+              onKeyDown={Utils.onKeyDown}
+            >
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
               {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
-            <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
+            <div
+              className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`}
+              onClick={this.searchFolder}
+              tabIndex={0}
+              role="button"
+              aria-pressed={highlightIndex === 1}
+              onKeyDown={Utils.onKeyDown}
+            >
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this folder')}</span>
               {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
-            <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+            <div
+              className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`}
+              onClick={this.searchAllRepos}
+              tabIndex={0}
+              role="button"
+              aria-pressed={highlightIndex === 2}
+              onKeyDown={Utils.onKeyDown}
+            >
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
@@ -673,13 +695,27 @@ class Search extends Component {
       } else {
         return (
           <div className="search-types">
-            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+            <div
+              className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`}
+              onClick={this.searchRepo}
+              tabIndex={0}
+              role="button"
+              aria-pressed={highlightIndex === 0}
+              onKeyDown={Utils.onKeyDown}
+            >
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
               {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
             </div>
-            <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+            <div
+              className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`}
+              onClick={this.searchAllRepos}
+              tabIndex={0}
+              role="button"
+              aria-pressed={highlightIndex === 1}
+              onKeyDown={Utils.onKeyDown}
+            >
               <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>

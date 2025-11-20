@@ -56,6 +56,8 @@ class SearchByName extends Component {
             onClick={this.toggleDialog}
             role="button"
             title={gettext('Search files in this library')}
+            tabIndex={0}
+            onKeyDown={Utils.onKeyDown}
           >
             {gettext('Search files') + ` (${controlKey} + k)`}
           </div>
