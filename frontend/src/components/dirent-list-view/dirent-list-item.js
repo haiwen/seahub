@@ -796,7 +796,7 @@ class DirentListItem extends React.Component {
             <td className={classnames('pl10 pr-2 cursor-pointer', { 'tr-drag-effect': this.state.isDragTipShow })} onClick={this.onItemSelected}>
               <input
                 type="checkbox"
-                className="vam cursor-pointer position-relative"
+                className="vam cursor-pointer position-relative form-check-input"
                 style={{ top: -1 }}
                 checked={isSelected}
                 aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}

@@ -83,7 +83,7 @@ class ActionsCell extends Component {
           <div className="select-cell-checkbox-container">
             <input
               id={`select-cell-checkbox-${recordId}`}
-              className="select-cell-checkbox"
+              className="select-cell-checkbox form-check-input"
               type='checkbox'
               name='row-selection'
               checked={isSelected || false}

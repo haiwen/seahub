@@ -39,7 +39,7 @@ class SysAdminUnlinkDevice extends React.Component {
           <p>{gettext('Are you sure you want to unlink this device?')}</p>
           {isPro &&
           <div className="d-flex align-items-center">
-            <input id="delete-files" className="mr-1" type="checkbox" checked={inputChecked} onChange={this.handleInputChange} />
+            <input id="delete-files" className="mr-1 form-check-input" type="checkbox" checked={inputChecked} onChange={this.handleInputChange} />
             <label htmlFor="delete-files" className="m-0">{gettext('Delete files from this device the next time it comes online.')}</label>
           </div>
           }

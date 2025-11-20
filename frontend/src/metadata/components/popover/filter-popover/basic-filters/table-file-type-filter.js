@@ -24,7 +24,7 @@ const TableFileTypeFilter = ({ readOnly, value, onChange: onChangeAPI }) => {
         label: (
           <div className="select-basic-filter-option">
             <div className="select-basic-filter-option-checkbox mr-2">
-              <input type="checkbox" checked={value.includes(o.value)} readOnly />
+              <input type="checkbox" className="form-check-input" checked={value.includes(o.value)} readOnly />
             </div>
             <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
           </div>

@@ -76,7 +76,7 @@ class Item extends Component {
           <input
             type="checkbox"
             checked={item.isSelected || false}
-            className="vam"
+            className="vam form-check-input"
             onChange={this.toggleSelectLink}
             aria-label={item.isSelected ? gettext('Unselect this item') : gettext('Select this item')}
           />
@@ -241,7 +241,7 @@ class RepoShareAdminUploadLinks extends Component {
             <input
               type="checkbox"
               checked={isAllLinksSelected}
-              className="vam"
+              className="vam form-check-input"
               onChange={this.toggleSelectAllLinks}
               aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
             />
