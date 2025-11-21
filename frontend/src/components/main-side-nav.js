@@ -246,7 +246,7 @@ class MainSideNav extends React.Component {
               <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
                 <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                   <div className="d-flex align-items-center">
-                    <Icon symbol="files1" />
+                    <Icon symbol="files" />
                     <span className="nav-text">{gettext('Files')}</span>
                   </div>
                   <OpIcon
@@ -276,7 +276,7 @@ class MainSideNav extends React.Component {
 
               <li className={`nav-item ${this.getActiveClass('starred')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
-                  <Icon symbol="starred" />
+                  <Icon symbol="favorites" />
                   <span className="nav-text">{gettext('Favorites')}</span>
                 </Link>
               </li>
@@ -299,7 +299,7 @@ class MainSideNav extends React.Component {
               {canInvitePeople &&
               <li className={`nav-item ${this.getActiveClass('invitations')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
-                  <Icon symbol="invite-visitors" />
+                  <Icon symbol="invite-guests" />
                   <span className="nav-text">{gettext('Invite Guest')}</span>
                 </Link>
               </li>
@@ -314,9 +314,7 @@ class MainSideNav extends React.Component {
                   onKeyDown={Utils.onKeyDown}
                 >
                   <div className="d-flex align-items-center overflow-hidden">
-                    <span>
-                      <Icon symbol="wrench" />
-                    </span>
+                    <Icon symbol="share-admin" />
                     <span className="nav-text">{gettext('Share Admin')}</span>
                   </div>
                   <span className="op-icon">
@@ -349,7 +347,7 @@ class MainSideNav extends React.Component {
                 }
                 <li className='nav-item'>
                   <a href={siteRoot + 'download_client_program/'} className="nav-link">
-                    <Icon symbol="devices" />
+                    <Icon symbol="clients" />
                     <span className="nav-text">{gettext('Clients')}</span>
                   </a>
                 </li>
@@ -393,8 +391,8 @@ class MainSideNav extends React.Component {
               role="button"
               onKeyDown={Utils.onKeyDown}
             >
-              <Icon className="mr-2" symbol="close-sidebar" />
-              <span>{gettext('Fold the sidebar')}</span>
+              <Icon className="mr-2" symbol="fold-sidebar" />
+              <span className="d-inline-flex overflow-hidden text-nowrap">{gettext('Fold the sidebar')}</span>
             </div>
           </div>
         </div>

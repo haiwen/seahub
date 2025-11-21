@@ -61,7 +61,7 @@ class FilesSubNav extends React.Component {
               onClick={(e) => this.tabItemClick(e, 'my-libs')}
             >
               <span className="nav-icon">
-                <Icon symbol="mine" />
+                <Icon symbol="user" />
               </span>
               <span className="nav-text ellipsis" title={gettext('My Libraries')}>{gettext('My Libraries')}</span>
             </Link>

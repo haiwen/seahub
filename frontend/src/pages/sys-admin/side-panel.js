@@ -41,7 +41,7 @@ class SidePanel extends React.Component {
                     onClick={() => this.props.tabItemClick('info')}
                   >
                     <span className="d-flex align-items-center">
-                      <Icon symbol="info1" />
+                      <Icon symbol="about" />
                     </span>
                     <span className="nav-text">{gettext('Info')}</span>
                   </Link>
@@ -110,7 +110,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('users')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="mine1" />
+                        <Icon symbol="user" />
                       </span>
                       <span className="nav-text">{gettext('Users')}</span>
                     </Link>
@@ -138,7 +138,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('departments')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="organization" />
+                        <Icon symbol="department" />
                       </span>
                       <span className="nav-text">{gettext('Departments')}</span>
                     </Link>
@@ -152,7 +152,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('organizations')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="organization" />
+                        <Icon symbol="organizations" />
                       </span>
                       <span className="nav-text">{gettext('Organizations')}</span>
                     </Link>
@@ -166,7 +166,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('institutions')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="organization" />
+                        <Icon symbol="institutions" />
                       </span>
                       <span className="nav-text">{gettext('Institutions')}</span>
                     </Link>
@@ -180,7 +180,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('notifications')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="discussion" />
+                        <Icon symbol="notifications" />
                       </span>
                       <span className="nav-text">{gettext('Notifications')}</span>
                     </Link>
@@ -222,7 +222,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('file-scan-records')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="anti-virus" />
+                        <Icon symbol="file-scan" />
                       </span>
                       <span className="nav-text">{gettext('File Scan')}</span>
                     </Link>
@@ -236,7 +236,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('virus-files')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="anti-virus" />
+                        <Icon symbol="virus-scan" />
                       </span>
                       <span className="nav-text">{gettext('Virus Scan')}</span>
                     </Link>
@@ -250,7 +250,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('invitations')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="invite" />
+                        <Icon symbol="invite-guests" />
                       </span>
                       <span className="nav-text">{gettext('Invitations')}</span>
                     </Link>
@@ -264,7 +264,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('termsandconditions')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="wiki" />
+                        <Icon symbol="terms" />
                       </span>
                       <span className="nav-text">{gettext('Terms and Conditions')}</span>
                     </Link>
@@ -278,7 +278,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('adminLogs')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="admin-op-log" />
+                        <Icon symbol="admin-logs" />
                       </span>
                       <span className="nav-text">{gettext('Admin Logs')}</span>
                     </Link>
@@ -322,7 +322,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('abuse-reports')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="devices" />
+                        <Icon symbol="abuse-reports" />
                       </span>
                       <span className="nav-text">{gettext('Abuse Reports')}</span>
                     </Link>

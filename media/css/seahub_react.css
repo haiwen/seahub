@@ -341,6 +341,9 @@ textarea::placeholder {
 }
 
 .sf-heading .nav-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1rem;
   margin-right: 6px;
   line-height: 1;

@@ -35,7 +35,7 @@ class SidePanel extends React.Component {
               <ul className="nav nav-pills flex-column nav-container">
                 <li className={`nav-item ${this.getActiveClass('info')}`}>
                   <Link className={`nav-link ellipsis ${this.getActiveClass('info')}`} to={siteRoot + 'org/info/'} onClick={() => this.tabItemClick('info')} >
-                    <Icon symbol="info1" />
+                    <Icon symbol="about" />
                     <span className="nav-text">{gettext('Info')}</span>
                   </Link>
                 </li>
@@ -47,7 +47,7 @@ class SidePanel extends React.Component {
                 </li>
                 <li className={`nav-item ${this.getActiveClass('deviceadmin')}`}>
                   <Link className={`nav-link ellipsis ${this.getActiveClass('deviceadmin')}`} to={siteRoot + 'org/deviceadmin/desktop-devices/'} onClick={() => this.tabItemClick('deviceadmin')} >
-                    <Icon symbol="devices" />
+                    <Icon symbol="clients" />
                     <span className="nav-text">{gettext('Devices')}</span>
                   </Link>
                 </li>
@@ -65,7 +65,7 @@ class SidePanel extends React.Component {
                 </li>
                 <li className={`nav-item ${this.getActiveClass('users')}`}>
                   <Link className={`nav-link ellipsis ${this.getActiveClass('users') || this.getActiveClass('admins')}`} to={siteRoot + 'org/useradmin/'} onClick={() => this.tabItemClick('users')} >
-                    <Icon symbol="mine1" />
+                    <Icon symbol="user" />
                     <span className="nav-text">{gettext('Users')}</span>
                   </Link>
                 </li>
@@ -77,7 +77,7 @@ class SidePanel extends React.Component {
                 </li>
                 <li className={`nav-item ${this.getActiveClass('departmentadmin')}`}>
                   <Link className={`nav-link ellipsis ${this.getActiveClass('departmentadmin')}`} to={siteRoot + 'org/departmentadmin/'} onClick={() => this.tabItemClick('departmentadmin')} >
-                    <Icon symbol="organization" />
+                    <Icon symbol="department" />
                     <span className="nav-text">{gettext('Departments')}</span>
                   </Link>
                 </li>
