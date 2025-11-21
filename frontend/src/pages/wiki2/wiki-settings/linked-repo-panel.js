@@ -4,11 +4,11 @@ import wikiAPI from '../../../utils/wiki-api';
 import Loading from '../../../components/loading';
 import { gettext } from '../../../utils/constants';
 import toaster from '../../../components/toast';
-import WikiRepoListDialog from '../wiki-repo-list';
 import { Utils } from '../../../utils/utils';
 import LinkedRepoItem from './linked-repo-item';
 import Repo from '../../../models/repo';
 import { getWikiRepos, getWikiSettings, saveWikiSettingsIntoStorage } from '../utils/wiki-setting';
+import RepoListPopover from '../wiki-repo-popover';
 
 const { wikiId } = window.wiki.config;
 
@@ -19,7 +19,7 @@ export default function LinkedRepoPanel() {
   const [repoOptions, setRepoOptions] = useState([]);
   const [linkedRepos, setLinkedRepos] = useState([]);
 
-  const [isShowRepoListDialog, setIsShowRepoListDialog] = useState(false);
+  const [isShowRepoListPopover, setIsShowRepoListPopover] = useState(false);
   const linkedRepoRef = useRef(null);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export default function LinkedRepoPanel() {
   }, []);
 
   const onAddLinkClick = useCallback(() => {
-    setIsShowRepoListDialog(true);
+    setIsShowRepoListPopover(true);
   }, []);
 
   const onAddLinkedRepo = useCallback((selectedRepo) => {
@@ -74,7 +74,7 @@ export default function LinkedRepoPanel() {
 
       saveSettingsIntoLocalStorage(isOpen, newLinkedRepos);
       setLinkedRepos(newLinkedRepos);
-
+      onPopoverClose();
       setTimeout(() => {
         linkedRepoRef.current.scrollTop = linkedRepoRef.current.scrollHeight;
       }, 300);
@@ -97,8 +97,8 @@ export default function LinkedRepoPanel() {
     });
   }), [isOpen, linkedRepos, saveSettingsIntoLocalStorage]);
 
-  const onDialogClose = () => {
-    setIsShowRepoListDialog(false);
+  const onPopoverClose = () => {
+    setIsShowRepoListPopover(false);
   };
 
   const tipMessage = gettext('After connecting libraries. you can list files from them in the Wiki pages.');
@@ -115,9 +115,19 @@ export default function LinkedRepoPanel() {
           <div className='wiki-linked-repos'>
             <div className='wiki-linked-repos__header'>
               <span className='title'>{gettext('Connected libraries')}</span>
-              <span className='operation' onClick={onAddLinkClick}>
+              <span className='operation' onClick={onAddLinkClick} id="repo-list-btn">
                 {gettext('Add library')}
               </span>
+              {isShowRepoListPopover && (
+                <RepoListPopover
+                  placement="bottom-end"
+                  target="repo-list-btn"
+                  repoOptions={repoOptions}
+                  linkedRepos={linkedRepos}
+                  onAddLinkedRepo={onAddLinkedRepo}
+                  onHidePopover={onPopoverClose}
+                />
+              )}
             </div>
             <div className='wiki-linked-repos__body' ref={linkedRepoRef}>
               <table className='linked-repos-table table-thead-hidden'>
@@ -138,9 +148,6 @@ export default function LinkedRepoPanel() {
           </div>
         )}
       </ModalBody>
-      {isShowRepoListDialog && (
-        <WikiRepoListDialog repoOptions={repoOptions} linkedRepos={linkedRepos} onAddLinkedRepo={onAddLinkedRepo} onDialogClose={onDialogClose} />
-      )}
     </>
   );
 }
