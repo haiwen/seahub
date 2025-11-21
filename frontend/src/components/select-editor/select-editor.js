@@ -28,7 +28,7 @@ const DropdownIndicator = props => {
   return (
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
-        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }}></span>
       </components.DropdownIndicator>
     )
   );
@@ -79,7 +79,6 @@ class SelectEditor extends React.Component {
             className="permission-editor-btn-add-custom-permission"
             onClick={this.props.onAddCustomPermissionToggle}
             role="button"
-            aria-label={gettext('Add custom permission')}
           >
             <i className="sf3-font sf3-font-enlarge" aria-hidden="true"></i>
             <span>{gettext('Add custom permission')}</span>
