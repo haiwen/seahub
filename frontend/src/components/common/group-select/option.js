@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../../utils/utils';
 
 class Option extends Component {
 
@@ -27,7 +28,12 @@ class Option extends Component {
         onClick={this.onSelectOption}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
-      >{this.props.children}
+        tabIndex={0}
+        role="option"
+        aria-selected={this.props.isActive}
+        onKeyDown={Utils.onKeyDown}
+      >
+        {this.props.children}
       </div>
     );
   }
