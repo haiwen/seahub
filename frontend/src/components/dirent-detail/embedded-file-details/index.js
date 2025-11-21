@@ -16,7 +16,7 @@ import { enableSeafileAI } from '../../../utils/constants';
 
 import './index.css';
 
-const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {} }) => {
+const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 300, className, component = {}, setExpanded }) => {
   const { headerComponent } = component;
   const [direntDetail, setDirentDetail] = useState('');
   const [isFetching, setIsFetching] = useState(true);
@@ -76,7 +76,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
         })}
         style={{ width }}
       >
-        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent}>
+        <Header title={dirent?.name || ''} icon={Utils.getDirentIcon(dirent, true)} onClose={onClose} component={headerComponent} setExpanded={setExpanded}>
           {onClose && (
             <>
               {enableSeafileAI && <AIIcon />}

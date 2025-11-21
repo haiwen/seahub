@@ -344,6 +344,10 @@ class DirFiles extends React.Component {
     return [moreOperation];
   };
 
+  setImageIndex = (index) => {
+    this.setState({ imageIndex: index });
+  };
+
   render() {
     const { repoID, currentRepoInfo, userPerm } = this.props;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
@@ -389,6 +393,7 @@ class DirFiles extends React.Component {
               repoInfo={currentRepoInfo}
               imageItems={this.state.imageNodeItems}
               imageIndex={this.state.imageIndex}
+              setImageIndex={index => this.setImageIndex(index)}
               closeImagePopup={this.closeNodeImagePopup}
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}

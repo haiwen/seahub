@@ -121,6 +121,7 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
       repoInfo={repoInfo}
       imageItems={imageItems}
       imageIndex={imageIndex}
+      setImageIndex={index => this.setImageIndex(index)}
       closeImagePopup={closeImagePopup}
       moveToPrevImage={moveToPrevImage}
       moveToNextImage={moveToNextImage}
