@@ -816,6 +816,10 @@ class DirentGridView extends React.Component {
     );
   };
 
+  setImageIndex = (index) => {
+    this.setState({ imageIndex: index });
+  };
+
   render() {
     const { direntList, selectedDirentList, currentRepoInfo, userPerm } = this.props;
     const { encrypted: repoEncrypted } = currentRepoInfo;
@@ -905,6 +909,7 @@ class DirentGridView extends React.Component {
               repoInfo={this.props.currentRepoInfo}
               imageItems={this.state.imageItems}
               imageIndex={this.state.imageIndex}
+              setImageIndex={index => this.setImageIndex(index)}
               closeImagePopup={this.closeImagePopup}
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}

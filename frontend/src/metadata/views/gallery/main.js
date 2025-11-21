@@ -527,6 +527,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
             repoInfo={repoInfo}
             imageItems={images}
             imageIndex={imageIndex}
+            setImageIndex={setImageIndex}
             closeImagePopup={closeImagePopup}
             moveToPrevImage={moveToPrevImage}
             moveToNextImage={moveToNextImage}
