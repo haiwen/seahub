@@ -84,9 +84,7 @@ class GroupItem extends React.Component {
             symbol="x-01"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             op={this.deleteGroupPermissionItem}
-            onKeyDown={Utils.onKeyDown}
             title={gettext('Delete')}
-            aria-label={gettext('Delete')}
           />
         </td>
       </tr>
