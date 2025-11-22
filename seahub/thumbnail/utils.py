@@ -8,6 +8,10 @@ import logging
 import subprocess
 from io import BytesIO
 import zipfile
+
+from seahub.seadoc.views import get_sdoc_html_page
+from seahub.tags.models import FileUUIDMap
+
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
@@ -18,8 +22,8 @@ from PIL import Image
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
-from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
-from seahub.utils.file_types import VIDEO, PDF, SVG
+from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext, normalize_file_path
+from seahub.utils.file_types import VIDEO, PDF, SVG, SEADOC
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
     ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
@@ -138,6 +142,9 @@ def generate_thumbnail(request, repo_id, size, path):
     
     if filetype == SVG:
         return create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size)
+    
+    if filetype == SEADOC:
+        return create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, file_size)
 
     token = seafile_api.get_fileserver_access_token(repo_id,
             file_id, 'view', '', use_onetime=True)
@@ -312,6 +319,41 @@ def create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         logger.error(f"Failed to generate SVG thumbnail for {path}: {str(e)}")
         os.unlink(tmp_png_path)
         return (False, 500)
+    
+def create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, file_size):
+    path = normalize_file_path(path)
+    print(path, 'pppppppppp')
+    repo_id = repo.repo_id
+    file_name = os.path.basename(path)
+    parent_dir = os.path.dirname(path)
+    print(parent_dir, 'parent_dir')
+    print(file_name, 'ffff_name')
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_dir,
+                                                           file_name, False)
+    file_uuid = str(uuid_map.uuid)
+    print(file_uuid, 'file_uuid')
+    sdoc_html_content = get_sdoc_html_page(request, repo_id, file_uuid)
+    tmp_png_path = os.path.join(tempfile.gettempdir(), f"{file_id}.png")
+
+    seadoc_preview_url = f"http://127.0.0.1:8000/repo/{repo_id}/sdoc/{file_uuid}/thumbnail/"
+
+    print(seadoc_preview_url, 'dddddddddddddd')
+    try:
+        t1 = timeit.default_timer()
+        # screenshot_div_from_html(sdoc_html_content, '#sdoc-editor-print-wrapper', tmp_png_path)
+        screenshot_from_url(seadoc_preview_url, tmp_png_path)
+        t2 = timeit.default_timer()
+        logger.debug(f"Convert SDOC [{path}] to PNG takes: {t2 - t1:.2f}s")
+
+        ret = _create_thumbnail_common(tmp_png_path, thumbnail_file, size)
+        os.unlink(tmp_png_path)
+        return ret
+    except Exception as e:
+        raise
+        logger.error(f"Failed to generate SDOC thumbnail for {path}: {str(e)}")
+        os.unlink(tmp_png_path)
+        return (False, 500)
+
 
 def _create_thumbnail_common(fp, thumbnail_file, size):
     """Common logic for creating image thumbnail.
@@ -349,3 +391,61 @@ def remove_thumbnail_by_id(file_id):
     for size_dir in [item for item in os.listdir(THUMBNAIL_ROOT) if os.path.isdir(os.path.join(THUMBNAIL_ROOT, item))]:
         if os.path.exists(os.path.join(THUMBNAIL_ROOT, size_dir, file_id)):
             os.remove(os.path.join(THUMBNAIL_ROOT, size_dir, file_id))
+
+
+def screenshot_from_url(url, save_path, viewport_size=(1920, 1080)):
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        # 启动Chromium浏览器（headless模式，无界面）
+        browser = p.chromium.launch(headless=True)
+        # 新建页面并设置视口大小
+        page = browser.new_page(viewport={"width": viewport_size[0], "height": viewport_size[1]})
+        
+        try:
+            # 访问目标页面，等待网络空闲（确保页面完全渲染）
+            page.goto(url, wait_until="load", timeout=60000)  # 超时设为60秒
+            page.wait_for_timeout(500)
+            
+            # 可选：等待特定元素加载（若sdoc有标志性元素）
+            page.wait_for_selector(".sdoc-thumbnail-container", timeout=30000, state='visible')
+            
+            # 截图生成缩略图（支持png/jpg，jpg可设置quality）
+            page.wait_for_load_state("networkidle")
+            print(page.content(), 'cccccccccccccc')
+            page.screenshot(
+                path=save_path,
+                full_page=True,  # 只截取视口内内容（缩略图核心）
+                #  # 仅jpg有效，质量0-100
+                # clip={"x": 0, "y": 0, "width": 400, "height": 300}  # 可选：裁剪更小区域
+            )
+            print(f"缩略图已保存至：{save_path}")
+        
+        except Exception as e:
+            print(f"生成失败：{e}")
+        finally:
+            # 关闭浏览器
+            browser.close()
+
+
+def screenshot_div_from_html(html, div_selector, save_path):
+    from playwright.sync_api import sync_playwright
+    with sync_playwright() as p:
+        # 启动浏览器（headless模式）
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
+        
+        try:
+            print(html, 'hhhhhhhhhhhh')
+            # 将HTML注入页面（等待资源加载完成）
+            page.set_content(html, wait_until="domcontentloaded")
+            print('222222')
+            # 对div元素执行截图
+            page.screenshot(
+                path=save_path,
+            )
+            print(f"Div截图已保存至：{save_path}")
+        
+        except Exception as e:
+            print(f"截图失败：{e}")
+        finally:
+            browser.close()
