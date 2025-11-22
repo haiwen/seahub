@@ -3,6 +3,7 @@ import json
 from urllib.parse import quote
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import loader
 from django.utils.translation import gettext as _
 
 from seaserv import get_repo, seafile_api
@@ -186,3 +187,45 @@ def sdoc_to_docx(request, repo_id):
     response['Content-Disposition'] = f'attachment; filename={new_file_name}'
     response.write(resp_with_docx_file.content)
     return response
+
+def get_sdoc_html_page(request, repo_id, file_uuid):
+    repo = get_repo(repo_id)
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+    return_dict = {
+        'repo': repo,
+        'file_uuid': file_uuid,
+        'can_compare': True,
+        'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
+        'file_download_link': get_seadoc_download_link(uuid_map)
+    }
+    content = loader.render_to_string('sdoc_thumbnail.html', return_dict, request)
+    return content
+
+
+# @login_required
+def sdoc_thumbnail(request, repo_id, file_uuid):
+    """List file revisions in file version history page.
+    """
+    repo = get_repo(repo_id)
+    if not repo:
+        error_msg = _("Library does not exist")
+        return render_error(request, error_msg)
+
+    # # perm check
+    # if not check_folder_permission(request, repo_id, '/'):
+    #     error_msg = _("Permission denied.")
+    #     return render_error(request, error_msg)
+
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+    return_dict = {
+        'repo': repo,
+        'file_uuid': file_uuid,
+        'can_compare': True,
+        'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
+        'file_download_link': get_seadoc_download_link(uuid_map)
+    }
+
+    return render(request, 'sdoc_thumbnail.html', return_dict)
+
+
+
