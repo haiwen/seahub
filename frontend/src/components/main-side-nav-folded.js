@@ -206,7 +206,7 @@ class MainSideNavFolded extends React.Component {
                     onMouseEnter={this.openSubNav}
                     aria-label={gettext('Libraries')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true"><Icon symbol="files1" /></span>
+                    <span className="d-flex align-items-center" aria-hidden="true"><Icon symbol="files" /></span>
                   </Link>
                 </li>
 
@@ -217,7 +217,7 @@ class MainSideNavFolded extends React.Component {
                     onClick={(e) => this.tabItemClick(e, 'starred')}
                     aria-label={gettext('Favorites')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-starred"><Icon symbol="starred" /></span>
+                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-starred"><Icon symbol="favorites" /></span>
                     <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
                   </Link>
                 </li>
@@ -259,7 +259,7 @@ class MainSideNavFolded extends React.Component {
                     to={siteRoot + 'invitations/'}
                     onClick={(e) => this.tabItemClick(e, 'invitations')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-invitations"><Icon symbol="invite-visitors" /></span>
+                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-invitations"><Icon symbol="invite-guests" /></span>
                     <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
                   </Link>
                 </li>
@@ -271,7 +271,7 @@ class MainSideNavFolded extends React.Component {
                     aria-label={gettext('Share Admin')}
                   >
                     <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-share-admin">
-                      <Icon symbol="wrench" />
+                      <Icon symbol="share-admin" />
                     </span>
                   </span>
                 </li>
@@ -313,7 +313,7 @@ class MainSideNavFolded extends React.Component {
                   }
                   <li className='nav-item'>
                     <a href={siteRoot + 'download_client_program/'} className="nav-link" aria-label={gettext('Clients')}>
-                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-clients"><Icon symbol="devices" /></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-clients"><Icon symbol="clients" /></span>
                       <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
                     </a>
                   </li>
@@ -358,7 +358,7 @@ class MainSideNavFolded extends React.Component {
                 aria-label={gettext('Unfold the sidebar')}
                 title={gettext('Unfold the sidebar')}
               >
-                <Icon symbol="open-sidebar" className="mr-0" />
+                <Icon symbol="unfold-sidebar" className="mr-0" />
               </div>
             </div>
           </div>

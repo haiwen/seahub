@@ -1,22 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#999999;}
-</style>
-<title>files</title>
-<g id="files">
-	<g id="file" transform="translate(4.000000, 1.000000)">
-		<path id="形状" class="st0" d="M20,30H4c-2.3,0-4-1.8-4-4.1V4.1C0,1.8,1.7,0,4,0h9.3c0.4,0,0.7,0.1,0.9,0.4l9.3,9.5
-			c0.3,0.3,0.4,0.5,0.4,1v15C24,28.2,22.3,30,20,30z M4.3,3C3.5,3,3,3.5,3,4.3v21.3C3,26.5,3.5,27,4.3,27h15.4
-			c0.8,0,1.3-0.5,1.3-1.3V11.5L12.8,3H4.3z"/>
-		<path id="路径" class="st0" d="M21.7,13h-9.3c-0.8,0-1.3-0.5-1.3-1.3V2.3C11,1.5,11.5,1,12.3,1s1.3,0.5,1.3,1.3v8h8
-			c0.8,0,1.3,0.5,1.3,1.3S22.5,13,21.7,13L21.7,13z"/>
-		<path id="矩形" class="st0" d="M7.5,16h9c0.8,0,1.5,0.7,1.5,1.5l0,0c0,0.8-0.7,1.5-1.5,1.5h-9C6.7,19,6,18.3,6,17.5l0,0
-			C6,16.7,6.7,16,7.5,16z"/>
-		<path id="矩形备份" class="st0" d="M7.5,21h9c0.8,0,1.5,0.7,1.5,1.5l0,0c0,0.8-0.7,1.5-1.5,1.5h-9C6.7,24,6,23.3,6,22.5l0,0
-			C6,21.7,6.7,21,7.5,21z"/>
-	</g>
-</g>
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.5 6.50195V16.498C17.4998 17.6024 16.6044 18.498 15.5 18.498H4.5C3.39557 18.498 2.50022 17.6024 2.5 16.498V1.50195H12.5L17.5 6.50195ZM5 15.4756H11.25V13.9756H5V15.4756ZM5 12.5H8.75V11H5V12.5ZM12.5 7.45312H16.25L12.5 3.70312V7.45312Z" fill="currentColor" />
 </svg>

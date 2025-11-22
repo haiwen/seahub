@@ -81,7 +81,7 @@ class GroupItem extends React.Component {
       <div className="pb-3">
         <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
           <h4 className="sf-heading m-0 d-flex align-items-center">
-            <span className="nav-icon"><Icon symbol={group.parent_group_id == 0 ? 'group' : 'department'} /></span>
+            <span className="nav-icon"><Icon symbol={group.parent_group_id == 0 ? 'groups' : 'department'} /></span>
             <a href={`${siteRoot}group/${group.id}/`} title={group.name} className="ellipsis">{group.name}</a>
             <GroupOperationMenu
               group={group}

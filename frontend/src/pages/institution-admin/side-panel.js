@@ -25,7 +25,7 @@ class SidePanel extends React.Component {
               <ul className="nav nav-pills flex-column nav-container">
                 <li className="nav-item">
                   <Link className="nav-link ellipsis active" to={`${siteRoot}inst/useradmin/`}>
-                    <Icon symbol="info" />
+                    <Icon symbol="about" />
                     <span className="nav-text">{gettext('Users')}</span>
                   </Link>
                 </li>
