@@ -16,6 +16,7 @@ import TagItem from './tag-item';
 import DeleteTag from './delete-tags';
 
 import './index.css';
+import OpIcon from '../../../../components/op-icon';
 
 const TagsEditor = forwardRef(({
   column,
@@ -342,6 +343,9 @@ const TagsEditor = forwardRef(({
               })}
               title={tagName}
               onClick={() => handleSelectTags(tagId)}
+              tabIndex={0}
+              role="button"
+              onKeyDown={Utils.onKeyDown}
             >
               <span className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
               <span className="sf-metadata-ui-tag-text">{tagName}</span>
@@ -408,10 +412,10 @@ const TagsEditor = forwardRef(({
           isClearable={true}
           components={{
             ClearIndicator: ({ clearValue }) => (
-              <i
+              <OpIcon
                 className="search-control attr-action-icon sf3-font sf3-font-x-01"
-                aria-label={gettext('Clear')}
-                onClick={clearValue}
+                title={gettext('Clear')}
+                op={clearValue}
               />
             )
           }}
