@@ -349,7 +349,6 @@ def create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, 
         os.unlink(tmp_png_path)
         return ret
     except Exception as e:
-        raise
         logger.error(f"Failed to generate SDOC thumbnail for {path}: {str(e)}")
         os.unlink(tmp_png_path)
         return (False, 500)
@@ -403,20 +402,34 @@ def screenshot_from_url(url, save_path, viewport_size=(1920, 1080)):
         
         try:
             # 访问目标页面，等待网络空闲（确保页面完全渲染）
-            page.goto(url, wait_until="load", timeout=60000)  # 超时设为60秒
-            page.wait_for_timeout(500)
+            page.goto(url, wait_until="domcontentloaded", timeout=60000)  # 超时设为60秒
+            # page.wait_for_timeout(500)
+            page.add_style_tag(content="""
+                * {
+                    font-family: 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', 'SimSun', sans-serif !important;
+                }
+            """)
             
             # 可选：等待特定元素加载（若sdoc有标志性元素）
             page.wait_for_selector(".sdoc-thumbnail-container", timeout=30000, state='visible')
             
             # 截图生成缩略图（支持png/jpg，jpg可设置quality）
             page.wait_for_load_state("networkidle")
-            print(page.content(), 'cccccccccccccc')
+            div_locator = page.locator("#sdoc-editor-print-wrapper")
+            div_locator.wait_for(state="visible", timeout=60000)
+            div_box = div_locator.bounding_box()
+            # div_box = div_locator.bounding_box()
+            print(div_box, 'ddddddd')
+            # 定义裁剪区域（按需调整，比如只截取前500px高度）
+            clip_region = {
+                "x": div_box["x"],
+                "y": div_box["y"],
+                "width": div_box["width"],  # 保留完整宽度
+                "height":div_box["width"]               # 自定义高度，避免全屏
+            }
             page.screenshot(
                 path=save_path,
-                full_page=True,  # 只截取视口内内容（缩略图核心）
-                #  # 仅jpg有效，质量0-100
-                # clip={"x": 0, "y": 0, "width": 400, "height": 300}  # 可选：裁剪更小区域
+                clip=clip_region,
             )
             print(f"缩略图已保存至：{save_path}")
         
