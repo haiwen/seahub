@@ -268,6 +268,7 @@ class WOPIFilesView(APIView):
         # new file creation feature is not implemented on wopi host(seahub)
         # hide save as button on view/edit file page
         result['UserCanNotWriteRelative'] = True
+        result['EnableRemoteAIContent'] = True
 
         return HttpResponse(json.dumps(result), status=200,
                             content_type=json_content_type)
