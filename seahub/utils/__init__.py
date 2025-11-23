@@ -127,6 +127,7 @@ PREVIEW_FILEEXT = {
     SEADOC: ('sdoc',),
     TLDRAW: ('draw',),
     EXCALIDRAW: ('exdraw',),
+    TEXT: ('admin', 'txt', 'log', 'csv', 'py', 'c', 'cpp', 'h', 'java', 'js', 'css', 'html', 'htm', 'xml', 'json', 'yml', 'yaml', 'sh', 'rb', 'php', 'go', 'rs', 'swift', 'kt", "kts', 'dart', 'ini', 'cfg', 'conf', 'toml'),
 }
 
 def get_non_sdoc_file_exts():
