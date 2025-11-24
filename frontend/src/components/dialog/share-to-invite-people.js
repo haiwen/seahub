@@ -292,7 +292,7 @@ class ShareToInvitePeople extends React.Component {
     let { sharedItems, isSubmitting } = this.state;
     return (
       <Fragment>
-        <table className="table-thead-hidden w-xs-200">
+        <table className="w-xs-200">
           <thead>
             <tr>
               <th width="50%">{gettext('Invite Guest')}</th>
