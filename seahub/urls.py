@@ -214,7 +214,7 @@ from seahub.api2.endpoints.admin.virus_scan_records import AdminVirusFilesView, 
 from seahub.api2.endpoints.file_participants import FileParticipantsView, FileParticipantView
 from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
-from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx, sdoc_thumbnail
+from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx, sdoc_preview
 from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view, wiki_repo_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
@@ -256,7 +256,7 @@ urlpatterns = [
     re_path(r'^repo/sdoc_revision/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revision, name='sdoc_revision'),
     re_path(r'^repo/sdoc_revisions/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_revisions, name='sdoc_revisions'),
     re_path(r'^repo/sdoc_export_to_docx/(?P<repo_id>[-0-9a-f]{36})/$', sdoc_to_docx, name='sdoc_export_to_docx'),
-    re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/sdoc/(?P<file_uuid>[-0-9a-f]{36})/thumbnail/$', sdoc_thumbnail, name='sdoc_thumbnail'),
+    re_path(r'^repo/(?P<repo_id>[-0-9a-f]{36})/sdoc/(?P<file_uuid>[-0-9a-f]{36})/preview/$', sdoc_preview, name='sdoc_preview'),
     re_path(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     re_path(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
     re_path(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),

@@ -16,7 +16,7 @@ def gen_thumbnail_access_token(file_uuid):
     )
     return access_token
 
-def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper", request=None, file_uuid=None):
+def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper", request=None, file_uuid=None, access_token=None):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context()
@@ -24,7 +24,6 @@ def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper
         parsed_url = urlparse(url)
         cookie_domain = parsed_url.netloc.split(":")[0]
         if request:
-            thumbnail_access_token = gen_thumbnail_access_token(file_uuid)
             playwright_cookies = []
             for cookie_name, cookie_value in request.COOKIES.items():
                 playwright_cookies.append({
@@ -35,13 +34,15 @@ def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper
                 })
             playwright_cookies.append({
                 'name': 'thumbnail_access_token',
-                'value': thumbnail_access_token,
+                'value': access_token,
                 'domain': cookie_domain,
                 'path': "/"
             })
             context.add_cookies(playwright_cookies)
         try:
-            page.goto(url, wait_until="domcontentloaded", timeout=60000)  # 超时设为60秒
+            response = page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            if response.status > 400:
+                return False
             
             page.wait_for_load_state("networkidle")
             
@@ -58,6 +59,8 @@ def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper
                 path=save_path,
                 clip=clip_region,
             )
+            
+            return True
         except Exception as e:
             raise e
         finally:
