@@ -368,7 +368,7 @@ class GenerateUploadLink extends React.Component {
           <Label check>
             {shareLinkForceUsePassword ? (
               <Label check>
-                <Input type="checkbox" checked readOnly disabled />
+                <Input type="checkbox" className="form-check-input" checked readOnly disabled />
                 <span>{gettext('Add password protection')}</span>
               </Label>
             ) : (
@@ -403,9 +403,9 @@ class GenerateUploadLink extends React.Component {
         <FormGroup check>
           <Label check>
             {this.isExpireDaysNoLimit ? (
-              <Input type="checkbox" onChange={this.onExpireChecked} />
+              <Input type="checkbox" className="form-check-input" onChange={this.onExpireChecked} />
             ) : (
-              <Input type="checkbox" checked readOnly disabled />
+              <Input type="checkbox" className="form-check-input" checked readOnly disabled />
             )}
             <span>{gettext('Add auto expiration')}</span>
           </Label>

@@ -166,6 +166,7 @@ class TransferDialog extends React.Component {
                 {gettext('Transfer to user')}
               </NavLink>
             </NavItem>
+            {isPro && canTransferToDept &&
             <NavItem role="tab" aria-selected={activeTab === TRANS_DEPART} aria-controls="transfer-depart-panel">
               <NavLink
                 className={activeTab === TRANS_DEPART ? 'active' : ''}
@@ -176,6 +177,7 @@ class TransferDialog extends React.Component {
                 {gettext('Transfer to department')}
               </NavLink>
             </NavItem>
+            }
           </Nav>
         </div>
         <div className="transfer-dialog-main">

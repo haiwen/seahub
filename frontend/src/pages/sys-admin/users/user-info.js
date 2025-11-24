@@ -179,7 +179,7 @@ class Content extends Component {
                   }
                   <FormGroup check>
                     <Label check>
-                      <Input type="checkbox" checked={user.is_force_2fa} onChange={this.props.toggleForce2fa} />
+                      <Input type="checkbox" className="form-check-input" checked={user.is_force_2fa} onChange={this.props.toggleForce2fa} />
                       <span>{gettext('Force Two-Factor Authentication')}</span>
                     </Label>
                   </FormGroup>

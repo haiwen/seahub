@@ -13780,11 +13780,137 @@ function webViewerLoad() {
   }
   _app.PDFViewerApplication.run(config);
 }
+/**
+ * Wait for required PDF viewer DOM elements to be available before initializing.
+ * This prevents race conditions where viewer.js loads before the DOM is ready.
+ *
+ * @param {number} timeout - Maximum time to wait in milliseconds (default: 5000)
+ * @returns {Promise<void>}
+ */
+function waitForViewerDOM(timeout = 5000) {
+  return new Promise((resolve, reject) => {
+    // Check if required elements exist and are ready for viewer initialization
+    const checkElementsReady = () => {
+      const viewerContainer = document.getElementById('viewerContainer');
+      const viewer = document.getElementById('viewer');
+      const toolbarViewer = document.getElementById('toolbarViewer');
+
+      // Required DOM structure:
+      // - viewerContainer must contain viewer as firstElementChild
+      // - viewer element must exist (can be empty - PDF.js populates it during init)
+      // - toolbarViewer must have toolbar buttons populated
+      return viewerContainer && viewerContainer.firstElementChild &&
+             viewer &&
+             toolbarViewer && toolbarViewer.children.length > 0;
+    };
+
+    // Check if elements exist (even if not yet populated)
+    const getElements = () => {
+      return {
+        viewerContainer: document.getElementById('viewerContainer'),
+        viewer: document.getElementById('viewer'),
+        toolbarViewer: document.getElementById('toolbarViewer')
+      };
+    };
+
+    const elementsExist = () => {
+      const els = getElements();
+      return els.viewerContainer && els.viewer && els.toolbarViewer;
+    };
+
+    // If elements already exist and are populated, resolve immediately
+    if (checkElementsReady()) {
+      resolve();
+      return;
+    }
+
+    // Set up timeout fallback
+    const elementObservers = [];
+    let bodyObserver = null;
+
+    // Helper function to cleanup observers and timeout
+    const cleanup = () => {
+      clearTimeout(timeoutId);
+      bodyObserver?.disconnect();
+      elementObservers.forEach(obs => obs?.disconnect());
+    };
+
+    const timeoutId = setTimeout(() => {
+      cleanup();
+      console.warn('PDF viewer DOM elements not fully populated within timeout, attempting to initialize anyway');
+      resolve(); // Resolve anyway to allow initialization attempt
+    }, timeout);
+
+    // Observe specific elements for child mutations (React populating containers)
+    const observeElements = () => {
+      const els = getElements();
+
+      [els.viewerContainer, els.viewer, els.toolbarViewer].forEach(element => {
+        if (element) {
+          const observer = new MutationObserver(() => {
+            if (checkElementsReady()) {
+              cleanup();
+              resolve();
+            }
+          });
+
+          observer.observe(element, {
+            childList: true,
+            subtree: true
+          });
+
+          elementObservers.push(observer);
+        }
+      });
+    };
+
+    // If elements exist, start observing them directly
+    if (elementsExist()) {
+      observeElements();
+    } else {
+      // Otherwise, watch document.body until elements are created
+      bodyObserver = new MutationObserver(() => {
+        if (elementsExist()) {
+          // Elements now exist, start observing them
+          bodyObserver.disconnect();
+          observeElements();
+
+          // Check if they're already populated
+          if (checkElementsReady()) {
+            cleanup();
+            resolve();
+          }
+        }
+      });
+
+      bodyObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+      });
+    }
+  });
+}
+
+/**
+ * Initialize the PDF viewer when DOM is ready.
+ * Uses MutationObserver to wait for required DOM elements.
+ */
+async function initWhenReady() {
+  try {
+    await waitForViewerDOM();
+    webViewerLoad();
+  } catch (error) {
+    console.error('Error waiting for PDF viewer DOM:', error);
+    // Attempt to load anyway
+    webViewerLoad();
+  }
+}
+
 document.blockUnblockOnload?.(true);
 if (document.readyState === "interactive" || document.readyState === "complete") {
-  webViewerLoad();
+  initWhenReady();
 } else {
-  document.addEventListener("DOMContentLoaded", webViewerLoad, true);
+  document.addEventListener("DOMContentLoaded", initWhenReady, true);
 }
 })();
 

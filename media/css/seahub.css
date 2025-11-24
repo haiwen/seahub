@@ -500,13 +500,15 @@ input:focus,
 button:focus,
 select:focus,
 textarea:focus {
-  border-color: #66afe9;
+  border-color: #1991eb;
   outline: none;
 }
 
 input[type="checkbox"]:focus,
 input[type="radio"]:focus {
-  outline: #66afe9 auto 1px;
+  border-color: #1991eb;
+  box-shadow: 0 0 0 2px rgba(70, 127, 207, .25);
+  outline: none;
 }
 
 input::-webkit-outer-spin-button,

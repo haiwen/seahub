@@ -98,7 +98,7 @@ class VirusFileItem extends Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
         <td className="text-center">
-          <input type="checkbox" checked={virusFile.isSelected} onChange={this.toggleItemSelected} />
+          <input type="checkbox" className="form-check-input" checked={virusFile.isSelected} onChange={this.toggleItemSelected} />
         </td>
         <td>{virusFile.repo_name}</td>
         <td>{virusFile.repo_owner}</td>
@@ -181,7 +181,7 @@ class Content extends Component {
             <thead>
               <tr>
                 <th width="3%" className="text-center">
-                  <input type="checkbox" checked={isAllItemsSelected} onChange={this.props.toggleAllSelected} />
+                  <input type="checkbox" className="form-check-input" checked={isAllItemsSelected} onChange={this.props.toggleAllSelected} />
                 </th>
                 <th width="24%">{gettext('Library')}</th>
                 <th width="25%">{gettext('Owner')}</th>

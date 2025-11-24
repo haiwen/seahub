@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { processor } from '@seafile/seafile-editor';
 import '../../css/notice-item.css';
@@ -20,7 +20,6 @@ const MSG_TYPE_REPO_TRANSFER = 'repo_transfer';
 const MSG_TYPE_FILE_UPLOADED = 'file_uploaded';
 const MSG_TYPE_FOLDER_UPLOADED = 'folder_uploaded';
 const MSG_TYPE_FILE_COMMENT = 'file_comment';
-// const MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted';
 const MSG_TYPE_REPO_MONITOR = 'repo_monitor';
 const MSG_TYPE_DELETED_FILES = 'deleted_files';
 const MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed';
@@ -328,7 +327,7 @@ class NoticeItem extends React.Component {
       const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
       let notice = gettext('Your library {libraryName} has recently deleted a large number of files.');
       notice = notice.replace('{libraryName}', repoLink);
-      return { avatar_url: null, notice };
+      return { avatar_url: `${mediaUrl}/avatars/default.png`, notice };
     }
 
     if (noticeType === MSG_TYPE_FACE_CLUSTER) {
@@ -336,13 +335,13 @@ class NoticeItem extends React.Component {
       const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
       let notice = gettext('Face recognition is done for library {libraryName}.');
       notice = notice.replace('{libraryName}', repoLink);
-      return { avatar_url: null, notice };
+      return { avatar_url: `${mediaUrl}/avatars/default.png`, notice };
     }
 
     if (noticeType === MSG_TYPE_SAML_SSO_FAILED) {
       const { error_msg } = detail;
       let notice = gettext(error_msg);
-      return { avatar_url: null, notice };
+      return { avatar_url: `${mediaUrl}/avatars/default.png`, notice };
     }
 
     if (noticeType === MSG_TYPE_SEADOC_COMMENT) {
@@ -398,11 +397,6 @@ class NoticeItem extends React.Component {
       }
       return { avatar_url, username, notice };
     }
-
-    // if (noticeType === MSG_TYPE_GUEST_INVITATION_ACCEPTED) {
-
-    // }
-
     return { avatar_url: null, notice: null, username: null };
   }
 
@@ -420,6 +414,7 @@ class NoticeItem extends React.Component {
     if (!avatar_url && !notice) {
       return '';
     }
+    const displayName = username || gettext('System');
 
     return this.props.tr ? (
       <tr className='notification-item'>
@@ -436,9 +431,9 @@ class NoticeItem extends React.Component {
           </span>
           }
         </td>
-        <td>
+        <td className="text-truncate">
           <img src={avatar_url} width="32" height="32" className="avatar" alt="" />
-          <span className="ml-2 notification-user-name">{username || gettext('System')}</span>
+          <span className="ml-2 notification-user-name" title={displayName}>{displayName}</span>
         </td>
         <td className="pr-1 pr-md-8">
           <p className="m-0" dangerouslySetInnerHTML={{ __html: notice }}></p>
@@ -463,7 +458,7 @@ class NoticeItem extends React.Component {
           <div className="notification-header-info">
             <div className="notification-user-detail">
               <img className="notification-user-avatar" src={avatar_url} alt="" />
-              <span className="ml-2 notification-user-name">{username || gettext('System')}</span>
+              <span className="ml-2 notification-user-name" title={displayName}>{displayName}</span>
             </div>
             <span className="notification-time">{dayjs(noticeItem.time).fromNow()}</span>
           </div>

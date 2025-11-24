@@ -19,7 +19,8 @@ from seahub.api2.endpoints.utils import get_user_name_dict, \
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.base.models import RepoTransfer, GroupMemberAudit
 from seahub.utils import EVENTS_ENABLED, get_file_audit_events, get_file_update_events, get_perm_audit_events, is_valid_email
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr, \
+    utc_datetime_to_isoformat_timestr
 
 from seahub.organizations.api.permissions import IsOrgAdmin
 from seahub.organizations.api.utils import update_log_perm_audit_type
@@ -85,7 +86,7 @@ class OrgAdminLogsFileAccess(APIView):
             event['user_email'] = ev.user
             event['user_name'] = ev_user_name_dict[ev.user]
             event['user_contact_email'] = ev_user_contact_email_dict[ev.user]
-            event['time'] = datetime_to_isoformat_timestr(ev.timestamp)
+            event['time'] = utc_datetime_to_isoformat_timestr(ev.timestamp)
             event['repo_id'] = ev.repo_id
             event['repo_name'] = ev_repo_dict[ev.repo_id].name if ev_repo_dict[ev.repo_id] else ''
 
@@ -150,7 +151,7 @@ class OrgAdminLogsFileUpdate(APIView):
 
         for ev in events:
             event = {}
-            event['time'] = datetime_to_isoformat_timestr(ev.timestamp)
+            event['time'] = utc_datetime_to_isoformat_timestr(ev.timestamp)
             event['user_email'] = ev.user
             event['user_name'] = ev_user_name_dict[ev.user]
             event['user_contact_email'] = ev_user_contact_email_dict[ev.user]
@@ -252,7 +253,7 @@ class OrgAdminLogsPermAudit(APIView):
 
             event['folder_name'] = os.path.basename(ev.file_path)
             event['folder_path'] = ev.file_path
-            event['time'] = datetime_to_isoformat_timestr(ev.timestamp)
+            event['time'] = utc_datetime_to_isoformat_timestr(ev.timestamp)
 
             event_list.append(event)
 

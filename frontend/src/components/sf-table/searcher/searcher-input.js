@@ -44,6 +44,7 @@ const SFTableSearcherInput = ({ recordsCount, columnsCount, setHasSearchValue, s
   return (
     <input
       className='sf-table-searcher-input form-control'
+      name='sf-table-search-input'
       type='text'
       autoFocus
       value={searchValue}
