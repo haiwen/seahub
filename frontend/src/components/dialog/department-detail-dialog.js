@@ -13,6 +13,7 @@ import SeahubModalHeader from '../common/seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';
 import DepartmentGroupMembers from './department-detail-widget/department-group-members';
 import DepartmentGroupMemberSelected from './department-detail-widget/department-group-member-selected';
+import OpIcon from '../op-icon';
 
 import '../../css/manage-members-dialog.css';
 import '../../css/group-departments.css';
@@ -276,11 +277,11 @@ class DepartmentDetailDialog extends React.Component {
               />
               {keyword &&
                 <span className="input-icon-addon pe-auto">
-                  <i
+                  <OpIcon
                     className="sf3-font sf3-font-x-01 clear-keyword-icon"
-                    onClick={this.clearKeyword}
-                  >
-                  </i>
+                    title={gettext('Clear')}
+                    op={this.clearKeyword}
+                  />
                 </span>
               }
             </div>

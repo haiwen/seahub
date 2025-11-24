@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import NavItemIcon from '../../pages/wiki2/common/nav-item-icon';
 import CustomIcon from '../../pages/wiki2/custom-icon';
 import { gettext } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 import './wiki2-search-result.css';
 
@@ -16,6 +17,10 @@ function Wiki2SearchResult({ result, getCurrentPageId, setCurrentPage, resetToDe
       className={classNames('wiki2-search-result', { 'wiki2-search-result-highlight': isHighlight })}
       onClick={() => { setCurrentPage(page.id); resetToDefault(); }}
       ref={ref => setRef(ref)}
+      tabIndex={0}
+      role="option"
+      aria-selected={isHighlight}
+      onKeyDown={Utils.onKeyDown}
     >
       <div className='wiki2-search-result-top d-flex align-items-center'>
         {page.icon ? <CustomIcon icon={page.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}

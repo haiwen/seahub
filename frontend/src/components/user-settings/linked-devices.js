@@ -10,6 +10,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
 import MobileItemMenu from '../../components/mobile-item-menu';
+import OpIcon from '../op-icon';
 
 dayjs.extend(relativeTime);
 
@@ -138,20 +139,18 @@ class Item extends Component {
         onMouseOver={this.handleMouseOver}
         onMouseOut={this.handleMouseOut}
         onFocus={this.handleMouseOver}
+        tabIndex={0}
       >
         <td>{data.platform}</td>
         <td>{data.device_name}</td>
         <td>{data.last_login_ip}</td>
         <td>{dayjs(data.last_accessed).fromNow()}</td>
         <td>
-          <i
-            role="button"
+          <OpIcon
             className={opClasses}
             title={gettext('Unlink')}
-            aria-label={gettext('Unlink')}
-            onClick={this.handleClick}
-          >
-          </i>
+            op={this.handleClick}
+          />
         </td>
       </tr>
     );

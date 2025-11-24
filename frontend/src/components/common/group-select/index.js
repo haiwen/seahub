@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ModalPortal from '../../modal-portal';
-import SelectOptionGroup from './select-option-group.js';
+import SelectOptionGroup from './select-option-group';
+import { Utils } from '../../../utils/utils';
+import { gettext } from '../../../utils/constants';
+import OpIcon from '../../op-icon';
 
 import './index.css';
 
@@ -70,14 +73,26 @@ class GroupSelect extends Component {
           { 'focus': this.state.isShowSelectOptions },
           className
         )}
-        onClick={this.onSelectToggle}>
+        onClick={this.onSelectToggle}
+        tabIndex={0}
+        role="combobox"
+        aria-expanded={this.state.isShowSelectOptions}
+        aria-haspopup="listbox"
+        aria-label={placeholder}
+        aria-controls="group-select-listbox"
+        onKeyDown={Utils.onKeyDown}
+      >
         <div className="selected-option">
           {selectedOptions.length > 0 ?
             <span className="selected-option-show">
               {selectedOptions.map(item =>
                 <span key={item.id} className="selected-option-item mr-1 px-1">
                   <span className='selected-option-item-name'>{item.name}</span>
-                  <i className="sf2-icon-close ml-1" onClick={() => {this.props.onDeleteOption(item);}}></i>
+                  <OpIcon
+                    className="sf2-icon-close ml-1"
+                    title={gettext('Delete')}
+                    op={() => {this.props.onDeleteOption(item);}}
+                  />
                 </span>
               )}
             </span>

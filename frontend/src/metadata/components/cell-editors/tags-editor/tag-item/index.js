@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
 import { gettext } from '@/utils/constants';
+import { Utils } from '../../../../../utils/utils';
 
 import './index.css';
 
@@ -37,14 +38,18 @@ const TagItem = ({
         onMouseLeave={onMouseLeave}
         role='button'
         aria-label={gettext('Select tag')}
+        tabIndex={0}
+        onKeyDown={Utils.onKeyDown}
       >
         {hasChildren && (
           <span
             className="sf-metadata-tags-editor-tree-expand-icon"
             style={{ left: depth * NODE_ICON_LEFT_INDENT }}
             onClick={onToggleExpand}
+            onKeyDown={Utils.onKeyDown}
             role="button"
-            aria-label={isFolded ? gettext('Expand') : gettext('Collapse')}
+            aria-label={isFolded ? gettext('Unfold') : gettext('Fold')}
+            tabIndex={0}
           >
             <i aria-hidden="true" className={classNames('sf3-font sf3-font-down', { 'rotate-270': isFolded })}></i>
           </span>

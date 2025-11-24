@@ -5,6 +5,7 @@ import Select, { components } from 'react-select';
 import { gettext } from '../../utils/constants';
 import { MenuSelectStyle } from '../common/select';
 import OpIcon from '../../components/op-icon';
+import { Utils } from '../../utils/utils';
 
 import '../../css/select-editor.css';
 
@@ -28,7 +29,7 @@ const DropdownIndicator = props => {
   return (
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
-        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }}></span>
       </components.DropdownIndicator>
     )
   );
@@ -79,7 +80,8 @@ class SelectEditor extends React.Component {
             className="permission-editor-btn-add-custom-permission"
             onClick={this.props.onAddCustomPermissionToggle}
             role="button"
-            aria-label={gettext('Add custom permission')}
+            tabIndex={0}
+            onKeyDown={Utils.onKeyDown}
           >
             <i className="sf3-font sf3-font-enlarge" aria-hidden="true"></i>
             <span>{gettext('Add custom permission')}</span>

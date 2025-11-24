@@ -5,6 +5,8 @@ import ModalPortal from '../modal-portal';
 import SelectOptionGroup from './select-option-group';
 import { getEventClassName } from '../../utils/dom';
 import { Utils } from '../../utils/utils';
+import OpIcon from '../op-icon';
+import { gettext } from '../../utils/constants';
 
 import './index.css';
 
@@ -109,9 +111,11 @@ class CustomizeSelect extends Component {
             (enableDeleteSelected ?
               <span className="selected-option-show-container">
                 <span className='selected-option-show'>{value.label}</span>
-                <span className='selected-option-delete ml-1' onClick={this.props.deleteSelected}>
-                  <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
-                </span>
+                <OpIcon
+                  className='selected-option-delete ml-1 sf3-font sf3-font-x-01'
+                  op={this.props.deleteSelected}
+                  title={gettext('Delete')}
+                />
               </span>
               : <span className="selected-option-show">{value.label}</span>
             )

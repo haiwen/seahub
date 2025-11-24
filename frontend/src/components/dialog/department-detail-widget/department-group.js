@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Loading from '../../loading';
 import { isOrgContext } from '../../../utils/constants';
 import { gettext } from '@/utils/constants';
+import { Utils } from '../../../utils/utils';
+import OpIcon from '../../op-icon';
 
 const ItemPropTypes = {
   department: PropTypes.object,
@@ -63,17 +65,16 @@ class Item extends Component {
           onClick={this.getMembers}
           style={{ paddingLeft: `${this.props.padding}px` }}
           role="button"
-          aria-label={gettext('Get department members')}
+          tabIndex={0}
+          onKeyDown={Utils.onKeyDown}
         >
           {hasChild &&
-            <span
+            <OpIcon
               className={`sf3-font sf3-font-down ${isExpanded ? '' : 'rotate-270'} d-inline-block`}
-              onClick={this.toggleExpanded}
+              title={isExpanded ? gettext('Fold') : gettext('Unfold')}
+              op={this.toggleExpanded}
               style={{ color: '#666' }}
-              role="button"
-              aria-label={gettext('Toggle department group menu')}
-            >
-            </span>
+            />
           }
           <span style={hasChild ? { paddingLeft: '8px' } : { paddingLeft: '20px' }}>{department.name}</span>
         </div>

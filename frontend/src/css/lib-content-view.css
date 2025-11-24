@@ -495,7 +495,6 @@
   padding: 6px 12px;
   border: 0;
   cursor: pointer;
-  box-shadow: none;
   background: transparent;
   color: var(--bs-body-color);
 }

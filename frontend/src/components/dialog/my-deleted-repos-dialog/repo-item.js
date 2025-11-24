@@ -6,6 +6,7 @@ import { seafileAPI } from '../../../utils/seafile-api';
 import { gettext, lang } from '../../../utils/constants';
 import toaster from '../../toast';
 import { Utils } from '../../../utils/utils';
+import OpIcon from '../../op-icon';
 
 dayjs.locale(lang);
 dayjs.extend(relativeTime);
@@ -52,14 +53,11 @@ const RepoItem = ({ repo, filterRestoredRepo }) => {
       <td className="name">{repoName}</td>
       <td className="update">{localTime}</td>
       <td>
-        <i
-          role="button"
-          onClick={restoreDeletedRepo}
+        <OpIcon
           title={gettext('Restore')}
-          aria-label={gettext('Restore')}
           className={`sf2-icon-reply op-icon ${highlight ? '' : 'vh'}`}
-        >
-        </i>
+          op={restoreDeletedRepo}
+        />
       </td>
     </tr>
   );

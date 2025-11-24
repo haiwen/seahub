@@ -4,6 +4,7 @@ import { Tooltip } from 'reactstrap';
 import { gettext, mediaUrl } from '../../../utils/constants';
 import EmptyTip from '../../empty-tip';
 import Loading from '../../loading';
+import { Utils } from '../../../utils/utils';
 
 const ItemPropTypes = {
   member: PropTypes.object,
@@ -50,7 +51,7 @@ class Item extends Component {
           onMouseLeave={this.handleMouseLeave}
         >
           <td width="13%">
-            <input type="checkbox" className="vam form-check-input" checked='checked' disabled/>
+            <input type="checkbox" className="vam form-check-input" checked='checked' disabled />
           </td>
           <td width="12%"><img className="avatar" src={member.avatar_url} alt=""/></td>
           <td width="60%">{member.name}</td>
@@ -73,8 +74,9 @@ class Item extends Component {
           <input
             type="checkbox"
             className="vam form-check-input"
-            onChange={this.onChange}
             checked={(member.email in memberSelected) ? 'checked' : ''}
+            onChange={this.onChange}
+            onKeyDown={Utils.onKeyDown}
           />
         </td>
         <td width="11%"><img className="avatar" src={member.avatar_url} alt=""/></td>
@@ -134,9 +136,25 @@ class DepartmentGroupMembers extends Component {
             {itemsShown.length > 0 && (
               <>
                 {unselectedItems.length > 0
-                  ? <div className='select-all' onClick={this.props.selectAll}>{gettext('Select all')}</div>
+                  ? (
+                    <button
+                      className='select-all btn btn-link p-0 font-weight-normal text-decoration-none'
+                      onClick={this.props.selectAll}
+                      onKeyDown={Utils.onKeyDown}
+                    >
+                      {gettext('Select all')}
+                    </button>
+                  )
                   : itemsShown.length > addedItems.length
-                    ? <div className='select-all' onClick={this.props.unselectAll}>{gettext('Unselect all')}</div>
+                    ? (
+                      <button
+                        className='select-all btn btn-link p-0 font-weight-normal text-decoration-none'
+                        onClick={this.props.unselectAll}
+                        onKeyDown={Utils.onKeyDown}
+                      >
+                        {gettext('Unselect all')}
+                      </button>
+                    )
                     : ''
                 }
               </>

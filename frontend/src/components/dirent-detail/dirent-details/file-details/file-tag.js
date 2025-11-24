@@ -5,6 +5,8 @@ import classnames from 'classnames';
 import { getDirentPath } from '../utils';
 import EditFileTagPopover from '../../../popover/edit-filetag-popover';
 import FileTagList from '../../../file-tag-list';
+import { Utils } from '../../../../utils/utils';
+import { gettext } from '../../../../utils/constants';
 
 const FileTag = ({ repoID, dirent, path, repoTags, fileTagList, onFileTagChanged }) => {
   const [isEditFileTagShow, setEditFileTagShow] = useState(false);
@@ -25,6 +27,10 @@ const FileTag = ({ repoID, dirent, path, repoTags, fileTagList, onFileTagChanged
         className={classnames('sf-metadata-property-detail-tags', { 'tags-empty': !Array.isArray(fileTagList) || fileTagList.length === 0 })}
         id={tagListTitleID}
         onClick={onEditFileTagToggle}
+        tabIndex={0}
+        role="button"
+        aria-label={gettext('Edit tags')}
+        onKeyDown={Utils.onKeyDown}
       >
         <FileTagList fileTagList={fileTagList} />
       </div>

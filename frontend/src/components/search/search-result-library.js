@@ -10,6 +10,10 @@ function SearchResultLibrary(props) {
       className={classnames('search-result-item', { 'search-result-item-highlight': isHighlight })}
       onClick={() => onClick(item)}
       ref={ref => props.setRef(ref)}
+      tabIndex={0}
+      role="option"
+      aria-selected={isHighlight}
+      onKeyDown={Utils.onKeyDown}
     >
       <img className='lib-item-img' src={Utils.getDefaultLibIconUrl()} alt="" />
       <div className="item-content d-flex justify-content-between align-items-center ellipsis">{item.name}</div>

@@ -20,6 +20,7 @@
   color: var(--bs-body-secondary-color);
 }
 
+.dropdown-item:focus .view-modes-dropdown-shortcut,
 .dropdown-item:hover .view-modes-dropdown-shortcut {
   color: #fff;
 }

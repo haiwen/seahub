@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
+import OpIcon from '../../op-icon';
+import { Utils } from '../../../utils/utils';
 
 const ItemPropTypes = {
   member: PropTypes.object,
@@ -24,8 +26,9 @@ class Item extends Component {
     this.setState({ highlight: false });
   };
 
-  removeSelectedMember = (email) => {
-    this.props.removeSelectedMember(email);
+  removeSelectedMember = () => {
+    const { member } = this.props;
+    this.props.removeSelectedMember(member.email);
   };
 
   render() {
@@ -39,11 +42,11 @@ class Item extends Component {
         <td width="17%"><img className="avatar" src={member.avatar_url} alt=""/></td>
         <td width="78%">{member.name}</td>
         <td width="10%">
-          <i
+          <OpIcon
             className="sf3-font sf3-font-close op-icon"
-            name={member.email}
-            onClick={this.removeSelectedMember.bind(this, member.email)}>
-          </i>
+            title={gettext('Delete')}
+            op={this.removeSelectedMember}
+          />
         </td>
       </tr>
     );
@@ -89,12 +92,12 @@ class DepartmentGroupMemberSelected extends Component {
           }
         </div>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.props.toggle} onKeyDown={Utils.onKeyDown}>{gettext('Cancel')}</Button>
           {usedFor === 'add_group_member' &&
-            <Button color="primary" onClick={this.props.addGroupMember}>{gettext('Add')}</Button>
+            <Button color="primary" onClick={this.props.addGroupMember} onKeyDown={Utils.onKeyDown}>{gettext('Add')}</Button>
           }
           {usedFor === 'add_user_share' &&
-            <Button color="primary" onClick={this.props.addUserShares}>{gettext('Add')}</Button>
+            <Button color="primary" onClick={this.props.addUserShares} onKeyDown={Utils.onKeyDown}>{gettext('Add')}</Button>
           }
         </ModalFooter>
       </div>

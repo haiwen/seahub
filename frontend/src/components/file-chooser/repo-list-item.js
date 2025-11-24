@@ -8,6 +8,8 @@ import { Utils } from '../../utils/utils';
 import Dirent from '../../models/dirent';
 import toaster from '../toast';
 import Icon from '../icon';
+import { gettext } from '../../utils/constants';
+import OpIcon from '../op-icon';
 
 const propTypes = {
   isCurrentRepo: PropTypes.bool,
@@ -247,9 +249,20 @@ class RepoListItem extends React.Component {
 
     return (
       <li>
-        <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
+        <div
+          className={`${repoActive ? 'item-active' : ''} item-info`}
+          onClick={this.onRepoItemClick}
+          tabIndex={0}
+          role="treeitem"
+          aria-selected={repoActive}
+          onKeyDown={Utils.onKeyDown}
+        >
           <div className="item-left-icon">
-            <span className={`item-toggle icon sf3-font sf3-font-down ${this.state.isShowChildren ? '' : 'rotate-270 d-inline-block'}`} onClick={this.onToggleClick}></span>
+            <OpIcon
+              className={`item-toggle icon sf3-font sf3-font-down ${this.state.isShowChildren ? '' : 'rotate-270 d-inline-block'}`}
+              op={this.onToggleClick}
+              title={this.state.isShowChildren ? gettext('Fold') : gettext('Unfold')}
+            />
             <i className="tree-node-icon">
               <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
             </i>

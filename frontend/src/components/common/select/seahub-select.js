@@ -7,7 +7,7 @@ const DropdownIndicator = props => {
   return (
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
-        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }}></span>
       </components.DropdownIndicator>
     )
   );
@@ -21,7 +21,7 @@ const ClearIndicator = ({ innerProps, ...props }) => {
   props.innerProps = { ...innerProps, onMouseDown };
   return (
     <components.ClearIndicator {...props} >
-      <span className="sf3-font sf3-font-x-01" style={{ fontSize: '12px', marginLeft: '-2px' }} aria-hidden="true"></span>
+      <span className="sf3-font sf3-font-x-01" style={{ fontSize: '12px', marginLeft: '-2px' }}></span>
     </components.ClearIndicator>
   );
 };

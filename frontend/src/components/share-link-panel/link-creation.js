@@ -304,7 +304,12 @@ class LinkCreation extends React.Component {
               </Label>
             ) : (
               <Label check>
-                <Input type="checkbox" className="form-check-input" checked={this.state.isShowPasswordInput} onChange={this.onPasswordInputChecked} />
+                <Input
+                  type="checkbox"
+                  checked={this.state.isShowPasswordInput}
+                  onChange={this.onPasswordInputChecked}
+                  onKeyDown={Utils.onKeyDown}
+                />
                 <span>{gettext('Add password protection')}</span>
               </Label>
             )}
