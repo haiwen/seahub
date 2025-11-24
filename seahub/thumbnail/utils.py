@@ -7,10 +7,9 @@ import urllib.request, urllib.error, urllib.parse
 import logging
 import subprocess
 from io import BytesIO
-import zipfile
 
-from seahub.seadoc.views import get_sdoc_html_page
 from seahub.tags.models import FileUUIDMap
+from seahub.thumbnail.screenshot import screenshot_from_url
 
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
@@ -26,7 +25,7 @@ from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext, normaliz
 from seahub.utils.file_types import VIDEO, PDF, SVG, SEADOC
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
-    ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
+    ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME, SERVICE_URL
 try:
     from pillow_heif import register_heif_opener
     register_heif_opener()
@@ -322,26 +321,19 @@ def create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     
 def create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, file_size):
     path = normalize_file_path(path)
-    print(path, 'pppppppppp')
     repo_id = repo.repo_id
     file_name = os.path.basename(path)
     parent_dir = os.path.dirname(path)
-    print(parent_dir, 'parent_dir')
-    print(file_name, 'ffff_name')
     uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_dir,
                                                            file_name, False)
     file_uuid = str(uuid_map.uuid)
-    print(file_uuid, 'file_uuid')
-    sdoc_html_content = get_sdoc_html_page(request, repo_id, file_uuid)
     tmp_png_path = os.path.join(tempfile.gettempdir(), f"{file_id}.png")
 
-    seadoc_preview_url = f"http://127.0.0.1:8000/repo/{repo_id}/sdoc/{file_uuid}/thumbnail/"
+    seadoc_preview_url = f"{SERVICE_URL.rstrip('/')}/repo/{repo_id}/sdoc/{file_uuid}/thumbnail/"
 
-    print(seadoc_preview_url, 'dddddddddddddd')
     try:
         t1 = timeit.default_timer()
-        # screenshot_div_from_html(sdoc_html_content, '#sdoc-editor-print-wrapper', tmp_png_path)
-        screenshot_from_url(request, seadoc_preview_url, tmp_png_path)
+        screenshot_from_url(seadoc_preview_url, tmp_png_path, request=request, file_uuid=file_uuid)
         t2 = timeit.default_timer()
         logger.debug(f"Convert SDOC [{path}] to PNG takes: {t2 - t1:.2f}s")
 
@@ -349,7 +341,6 @@ def create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, 
         os.unlink(tmp_png_path)
         return ret
     except Exception as e:
-        raise
         logger.error(f"Failed to generate SDOC thumbnail for {path}: {str(e)}")
         os.unlink(tmp_png_path)
         return (False, 500)
@@ -391,85 +382,3 @@ def remove_thumbnail_by_id(file_id):
     for size_dir in [item for item in os.listdir(THUMBNAIL_ROOT) if os.path.isdir(os.path.join(THUMBNAIL_ROOT, item))]:
         if os.path.exists(os.path.join(THUMBNAIL_ROOT, size_dir, file_id)):
             os.remove(os.path.join(THUMBNAIL_ROOT, size_dir, file_id))
-
-
-def screenshot_from_url(request, url, save_path, viewport_size=(1920, 1080)):
-    from playwright.sync_api import sync_playwright
-    with sync_playwright() as p:
-        # 启动Chromium浏览器（headless模式，无界面）
-        browser = p.chromium.launch(headless=True)
-        # 新建页面并设置视口大小
-        context = browser.new_context() 
-        page = context.new_page()
-
-
-        # handle cookie
-        from urllib.parse import urlparse
-        parsed_url = urlparse(url)
-        cookie_domain = parsed_url.netloc.split(":")[0]  # 提取域名（如192.168.0.64）
-        cookie_path = parsed_url.path.rsplit("/", 1)[0] + "/" if parsed_url.path else "/"  # 提取路径
-        
-        # 2. 转换Django Cookie为Playwright格式（列表+字典）
-        playwright_cookies = []
-        for cookie_name, cookie_value in request.COOKIES.items():
-            playwright_cookies.append({
-                "name": cookie_name,
-                "value": cookie_value,
-                "domain": cookie_domain,  # 必须匹配URL的域名，否则Cookie无效
-                "path": "/",      # Cookie生效路径（通常为/）
-                # "httpOnly": request.COOKIES.get(f"{cookie_name}-HttpOnly", False),  # 可选：HttpOnly标识
-                # "secure": parsed_url.scheme == "https",  # HTTPS时设为True
-            })
-        context.add_cookies(playwright_cookies)
-        print(f"✅ 已注入{len(playwright_cookies)}个Cookie：{[c['name'] for c in playwright_cookies]}")
-        print(f"playwright_all_cookies: {playwright_cookies}")
-    
-        
-        def log_request(req):
-            parsed = urlparse(req.url)
-            path = parsed.path + (f"?{parsed.query}" if parsed.query else "")
-            print(f"\n===== 请求 [{req.method}] {path} =====")
-            print(f"请求头Cookie: {req.headers.get('Cookie', '无')}")
-            print(f"上下文Cookie: {[c['name'] for c in context.cookies(req.url)]}")
-        
-        page.on("request", log_request)
-        page.on("response", lambda res: print("Response: %d %s" % (res.status, res.url)))
-
-        
-        try:
-            # 访问目标页面，等待网络空闲（确保页面完全渲染）
-            page.goto(url, wait_until="domcontentloaded", timeout=60000)  # 超时设为60秒
-            page.add_style_tag(content="""
-                * {
-                    font-family: 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', 'SimSun', sans-serif !important;
-                }
-            """)
-            
-            # 可选：等待特定元素加载（若sdoc有标志性元素）
-            page.wait_for_selector(".sdoc-thumbnail-container", timeout=30000, state='visible')
-            
-            # 截图生成缩略图（支持png/jpg，jpg可设置quality）
-            page.wait_for_load_state("networkidle")
-            div_locator = page.locator("#sdoc-editor-print-wrapper")
-            div_locator.wait_for(state="visible", timeout=60000)
-            div_box = div_locator.bounding_box()
-            # div_box = div_locator.bounding_box()
-            print(div_box, 'ddddddd')
-            # 定义裁剪区域（按需调整，比如只截取前500px高度）
-            clip_region = {
-                "x": div_box["x"],
-                "y": div_box["y"],
-                "width": div_box["width"],  # 保留完整宽度
-                "height":div_box["width"]               # 自定义高度，避免全屏
-            }
-            page.screenshot(
-                path=save_path,
-                clip=clip_region,
-            )
-            print(f"缩略图已保存至：{save_path}")
-        
-        except Exception as e:
-            print(f"生成失败：{e}")
-        finally:
-            # 关闭浏览器
-            browser.close()
