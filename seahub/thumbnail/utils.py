@@ -9,7 +9,7 @@ import subprocess
 from io import BytesIO
 
 from seahub.tags.models import FileUUIDMap
-from seahub.thumbnail.screenshot import screenshot_from_url
+from seahub.thumbnail.screenshot import screenshot_from_url, gen_thumbnail_access_token
 
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
@@ -327,13 +327,17 @@ def create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, 
     uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_dir,
                                                            file_name, False)
     file_uuid = str(uuid_map.uuid)
+    if not file_uuid:
+        return (False, 500)
     tmp_png_path = os.path.join(tempfile.gettempdir(), f"{file_id}.png")
-
-    seadoc_preview_url = f"{SERVICE_URL.rstrip('/')}/repo/{repo_id}/sdoc/{file_uuid}/thumbnail/"
+    access_token = gen_thumbnail_access_token(file_uuid)
+    seadoc_preview_url = f"{SERVICE_URL.rstrip('/')}/repo/{repo_id}/sdoc/{file_uuid}/preview/?access_token={access_token}"
 
     try:
         t1 = timeit.default_timer()
-        screenshot_from_url(seadoc_preview_url, tmp_png_path, request=request, file_uuid=file_uuid)
+        res = screenshot_from_url(seadoc_preview_url, tmp_png_path, request=request, file_uuid=file_uuid, access_token=access_token)
+        if not res:
+            return (False, 500)
         t2 = timeit.default_timer()
         logger.debug(f"Convert SDOC [{path}] to PNG takes: {t2 - t1:.2f}s")
 

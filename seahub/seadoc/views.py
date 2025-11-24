@@ -1,5 +1,7 @@
 import os
 import json
+import logging
+import jwt
 from urllib.parse import quote
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -9,6 +11,7 @@ from django.utils.translation import gettext as _
 from seaserv import get_repo, seafile_api
 
 from seahub.auth.decorators import login_required
+from seahub.settings import JWT_PRIVATE_KEY
 from seahub.utils import render_error, normalize_file_path, gen_file_get_url
 from seahub.views import check_folder_permission, validate_owner, get_seadoc_file_uuid
 from seahub.tags.models import FileUUIDMap
@@ -17,6 +20,8 @@ from seahub.seadoc.models import SeadocRevision
 from seahub.api2.endpoints.utils import sdoc_export_to_docx
 from .utils import is_seadoc_revision, get_seadoc_download_link, gen_path_link
 
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def sdoc_revision(request, repo_id):
@@ -189,12 +194,27 @@ def sdoc_to_docx(request, repo_id):
     return response
 
 
-def sdoc_thumbnail(request, repo_id, file_uuid):
-    """List file revisions in file version history page.
-    """
+def sdoc_preview(request, repo_id, file_uuid):
     repo = get_repo(repo_id)
     if not repo:
         error_msg = _("Library does not exist")
+        logger.warning(f'Sdoc preview failed: {error_msg}')
+        return render_error(request, error_msg)
+    
+    access_token = request.GET.get('access_token')
+    if not access_token:
+        error_msg = 'Token cannot be empty.'
+        logger.warning(f'Sdoc preview failed: {error_msg}')
+        return render_error(request, error_msg)
+    try:
+        payload = jwt.decode(access_token, JWT_PRIVATE_KEY, algorithms=['HS256'])
+        if payload.get('file_uuid') != file_uuid:
+            error_msg = 'Permission denied.'
+            logger.warning(f'Sdoc preview failed: {error_msg}')
+            return render_error(request, error_msg)
+    except:
+        error_msg = 'Token invalid.'
+        logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
 
     uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
@@ -206,7 +226,7 @@ def sdoc_thumbnail(request, repo_id, file_uuid):
         'file_download_link': get_seadoc_download_link(uuid_map)
     }
 
-    return render(request, 'sdoc_thumbnail.html', return_dict)
+    return render(request, 'sdoc_preview.html', return_dict)
 
 
 
