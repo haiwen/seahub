@@ -13,7 +13,7 @@ import SeahubModalHeader from '../common/seahub-modal-header';
 import DepartmentGroup from './department-detail-widget/department-group';
 import DepartmentGroupMembers from './department-detail-widget/department-group-members';
 import DepartmentGroupMemberSelected from './department-detail-widget/department-group-member-selected';
-import OpIcon from '../op-icon.js';
+import OpIcon from '../op-icon';
 
 import '../../css/manage-members-dialog.css';
 import '../../css/group-departments.css';

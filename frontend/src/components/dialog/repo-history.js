@@ -12,9 +12,9 @@ import CommitDetails from '../../components/dialog/commit-details';
 import UpdateRepoCommitLabels from '../../components/dialog/edit-repo-commit-labels';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { formatWithTimezone } from '../../utils/time';
+import OpIcon from '../op-icon';
 
 import '../../css/repo-history.css';
-import OpIcon from '../op-icon';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,

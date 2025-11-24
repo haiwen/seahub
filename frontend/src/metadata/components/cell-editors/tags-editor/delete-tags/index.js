@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import IconBtn from '../../../../../components/icon-btn';
 import { getRowById } from '../../../../../components/sf-table/utils/table';
 import { getTagColor, getTagName } from '../../../../../tag/utils/cell';
-
-import './index.css';
 import { Utils } from '../../../../../utils/utils';
 import { gettext } from '../../../../../utils/constants';
+
+import './index.css';
 
 const DeleteTag = ({ value, tags, onDelete }) => {
   return (

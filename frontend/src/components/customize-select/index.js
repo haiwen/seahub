@@ -5,10 +5,10 @@ import ModalPortal from '../modal-portal';
 import SelectOptionGroup from './select-option-group';
 import { getEventClassName } from '../../utils/dom';
 import { Utils } from '../../utils/utils';
-
-import './index.css';
 import OpIcon from '../op-icon';
 import { gettext } from '../../utils/constants';
+
+import './index.css';
 
 class CustomizeSelect extends Component {
 

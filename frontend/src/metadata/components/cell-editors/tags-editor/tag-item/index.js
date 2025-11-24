@@ -4,9 +4,9 @@ import classNames from 'classnames';
 import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
 import { gettext } from '@/utils/constants';
+import { Utils } from '../../../../../utils/utils';
 
 import './index.css';
-import { Utils } from '../../../../../utils/utils';
 
 const TagItem = ({
   node,
