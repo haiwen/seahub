@@ -99,7 +99,7 @@ select {
 .side-panel .sub-nav .nav-icon .seafile-multicolor-icon {
   width: 16px;
   height: 16px;
-  color: var(--bs-icon-color);
+  color: var(--bs-icon-tertiary-color);
   margin: 0;
 }
 

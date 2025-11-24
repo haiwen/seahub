@@ -52,7 +52,10 @@ class MainSideNav extends React.Component {
     this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
   };
 
-  shExtend = () => {
+  shExtend = (e) => {
+    if (e && e.currentTarget) {
+      e.currentTarget.blur();
+    }
     this.setState({
       sharedExtended: !this.state.sharedExtended,
     });
@@ -92,6 +95,34 @@ class MainSideNav extends React.Component {
 
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
+  };
+
+  getFilesSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const { filesNavUnfolded, groupItems } = this.state;
+    if (currentTab === 'libraries') {
+      return 'active';
+    }
+    if (!filesNavUnfolded) {
+      const filesTabs = ['my-libs', 'shared-libs', 'org', 'shared-with-ocm', 'ocm-via-webdav', 'deleted'];
+      if (filesTabs.includes(currentTab)) {
+        return 'active';
+      }
+      if (groupItems.some(g => g.name === currentTab)) {
+        return 'active';
+      }
+    }
+    return '';
+  };
+
+  getShareAdminSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const { sharedExtended } = this.state;
+    const shareAdminTabs = ['share-admin-share-links', 'share-admin-upload-links', 'share-admin-libs', 'share-admin-folders'];
+    if (!sharedExtended && shareAdminTabs.includes(currentTab)) {
+      return 'active';
+    }
+    return '';
   };
 
   onCreateGroup = (groupData) => {
@@ -221,6 +252,9 @@ class MainSideNav extends React.Component {
   toggleFilesNav = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (e && e.currentTarget) {
+      e.currentTarget.blur();
+    }
     this.setState({
       filesNavUnfolded: !this.state.filesNavUnfolded
     }, () => {
@@ -243,8 +277,8 @@ class MainSideNav extends React.Component {
           <div className={'side-nav-con d-flex flex-column'}>
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
-              <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+              <li id="files" className={`nav-item flex-column ${this.getFilesSectionActiveClass()}`}>
+                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getFilesSectionActiveClass()}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                   <div className="d-flex align-items-center">
                     <Icon symbol="files" />
                     <span className="nav-text">{gettext('Files')}</span>
@@ -304,9 +338,9 @@ class MainSideNav extends React.Component {
                 </Link>
               </li>
               }
-              <li id="share-admin-nav" className='nav-item flex-column'>
+              <li id="share-admin-nav" className={`nav-item flex-column ${this.getShareAdminSectionActiveClass()}`}>
                 <div
-                  className="nav-link ellipsis justify-content-between"
+                  className={`nav-link ellipsis justify-content-between ${this.getShareAdminSectionActiveClass()}`}
                   title={gettext('Share Admin')}
                   onClick={this.shExtend}
                   tabIndex={0}

@@ -347,7 +347,7 @@ textarea::placeholder {
   font-size: 1rem;
   margin-right: 6px;
   line-height: 1;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-tertiary-color);
 }
 
 .sf-heading .sf-dropdown-toggle {
@@ -1692,7 +1692,7 @@ a.table-sort-op:hover {
 .side-panel .side-nav-con .active [class^="sf3-font-"],
 .side-panel .side-nav-con .active .nav-icon,
 .side-panel .side-nav-con .active .sharp {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-tertiary-color);
 }
 
 .side-panel .side-nav .side-nav-con .nav-item {
