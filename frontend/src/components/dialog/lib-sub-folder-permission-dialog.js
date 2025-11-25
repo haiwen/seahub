@@ -8,7 +8,7 @@ import LibSubFolderSetGroupPermissionDialog from './lib-sub-folder-set-group-per
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
 import '../../css/share-link-dialog.css';
-import '../../css/sub-folder-permission.css';
+import '../../css/lib-sub-folder-permission-dialog.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -62,7 +62,7 @@ class LibSubFolderPermissionDialog extends React.Component {
             </NavItem>
           </Nav>
         </div>
-        <div className="share-dialog-main">
+        <div className="share-dialog-main lib-sub-folder-permission-dialog-content">
           <TabContent activeTab={this.state.activeTab}>
             <TabPane tabId="userPermission" role="tabpanel" id="user-perm-panel">
               <LibSubFolderSetUserPermissionDialog
