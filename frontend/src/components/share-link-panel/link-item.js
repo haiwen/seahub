@@ -152,7 +152,7 @@ class LinkItem extends React.Component {
             <input
               type="checkbox"
               checked={isSelected}
-              className="vam form-check-input"
+              className="form-check-input"
               onClick={this.onCheckboxClicked}
               onChange={this.toggleSelectLink}
               onKeyDown={Utils.onKeyDown}

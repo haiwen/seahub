@@ -34,7 +34,7 @@ class DingtalkDepartmentMembersList extends Component {
         <tr key={checkedDepartmentId.toString() + member.userid}>
           <td>
             {!member.email &&
-              <input type="checkbox" className="vam form-check-input" onChange={() => this.props.onUserChecked(member)}
+              <input type="checkbox" className="form-check-input" onChange={() => this.props.onUserChecked(member)}
                 checked={(member.userid in newUsersTempObj) ? 'checked' : ''}>
               </input>}
           </td>
@@ -56,7 +56,7 @@ class DingtalkDepartmentMembersList extends Component {
               <tr>
                 <th width="5%">
                   {canCheckUserIds.length > 0 &&
-                    <input type="checkbox" className="vam form-check-input" checked={this.props.isCheckedAll}
+                    <input type="checkbox" className="form-check-input" checked={this.props.isCheckedAll}
                       onChange={() => this.props.onAllUsersChecked()}>
                     </input>}
                 </th>
