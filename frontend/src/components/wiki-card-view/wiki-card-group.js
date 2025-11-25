@@ -66,7 +66,7 @@ class WikiCardGroup extends Component {
     return (
       <div className='wiki-card-group mb-4'>
         <h4 className="sf-heading">
-          <span className="nav-icon d-flex align-items-center"><Icon symbol={(isDepartment && depIcon) ? 'department' : isDepartment ? 'group' : 'mine'} /></span>
+          <span className="nav-icon d-flex align-items-center"><Icon symbol={(isDepartment && depIcon) ? 'department' : isDepartment ? 'groups' : 'my-libraries'} /></span>
           {title}
         </h4>
         {(wikis.length === 0 && noItemsTip) &&

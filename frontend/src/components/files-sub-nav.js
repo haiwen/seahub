@@ -39,7 +39,7 @@ class FilesSubNav extends React.Component {
                 onClick={(e) => this.tabItemClick(e, item.name, item.id)}
               >
                 <span className="nav-icon">
-                  <Icon symbol={item.parent_group_id == 0 ? 'group1' : 'department'} />
+                  <Icon symbol={item.parent_group_id == 0 ? 'groups' : 'department'} />
                 </span>
                 <span className="nav-text ellipsis" title={item.name}>{item.name}</span>
               </Link>
@@ -61,7 +61,7 @@ class FilesSubNav extends React.Component {
               onClick={(e) => this.tabItemClick(e, 'my-libs')}
             >
               <span className="nav-icon">
-                <Icon symbol="user" />
+                <Icon symbol="my-libraries" />
               </span>
               <span className="nav-text ellipsis" title={gettext('My Libraries')}>{gettext('My Libraries')}</span>
             </Link>

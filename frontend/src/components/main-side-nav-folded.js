@@ -136,6 +136,31 @@ class MainSideNavFolded extends React.Component {
     return this.props.currentTab === tab ? 'active' : '';
   };
 
+  getFilesSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const { groupItems } = this.state;
+    if (currentTab === 'libraries') {
+      return 'active';
+    }
+    const filesTabs = ['my-libs', 'shared-libs', 'org', 'shared-with-ocm', 'ocm-via-webdav', 'deleted'];
+    if (filesTabs.includes(currentTab)) {
+      return 'active';
+    }
+    if (groupItems.some(g => g.name === currentTab)) {
+      return 'active';
+    }
+    return '';
+  };
+
+  getShareAdminSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const shareAdminTabs = ['share-admin-share-links', 'share-admin-upload-links', 'share-admin-libs', 'share-admin-folders'];
+    if (shareAdminTabs.includes(currentTab)) {
+      return 'active';
+    }
+    return '';
+  };
+
   toggleAboutDialog = () => {
     this.setState({ isAboutDialogShow: !this.state.isAboutDialogShow });
   };
@@ -198,10 +223,10 @@ class MainSideNavFolded extends React.Component {
           <div className="side-nav side-nav-folded h-100 position-relative" style={{ zIndex: FOLDED_SIDE_NAV }}>
             <div className='side-nav-con d-flex flex-column'>
               <ul className="nav nav-pills flex-column nav-container">
-                <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
+                <li className={`nav-item flex-column ${this.getFilesSectionActiveClass()}`}>
                   <Link
                     to={ siteRoot + 'libraries/' }
-                    className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
+                    className={`nav-link ellipsis ${this.getFilesSectionActiveClass()}`}
                     onClick={(e) => this.tabItemClick(e, 'libraries')}
                     onMouseEnter={this.openSubNav}
                     aria-label={gettext('Libraries')}
@@ -264,9 +289,9 @@ class MainSideNavFolded extends React.Component {
                   </Link>
                 </li>
                 }
-                <li className={'nav-item flex-column'}>
+                <li className={`nav-item flex-column ${this.getShareAdminSectionActiveClass()}`}>
                   <span
-                    className={'nav-link ellipsis'}
+                    className={`nav-link ellipsis ${this.getShareAdminSectionActiveClass()}`}
                     onMouseEnter={this.openShareAdminSubNav}
                     aria-label={gettext('Share Admin')}
                   >
