@@ -15,12 +15,15 @@
   <div class="custom-mount"></div>
   <script src="{{ MEDIA_URL }}js/web-office-sdk-v1.1.20.umd.js"></script>
   <script>
-    window.onload = function() {
+    window.onload = async function() {
       const jssdk = WebOfficeSDK.config({
         url: '{{wps_weboffice_editor_url|safe}}',
         mount: document.querySelector('.custom-mount'),
-      })
-    }
+      });
+      await jssdk.ready(); // 等待初始化完成
+      const app = jssdk.WordApplication(); // 或 jssdk.Application
+      app.ActiveDocument.TrackRevisions = true; // 启用修订模式
+    };
   </script>
 </body>
 </html>
