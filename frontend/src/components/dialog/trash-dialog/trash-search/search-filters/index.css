@@ -93,6 +93,7 @@
 
 .search-filter-menu .dropdown-item {
   position: relative;
+  padding: 0.25rem 10px;
 }
 
 .search-filter-menu .dropdown-item .dropdown-item-tick {
@@ -106,7 +107,7 @@
   border: 1px solid var(--bs-border-secondary-color);
   border-radius: 4px;
   padding: 4px 6px;
-  margin: 8px 16px;
+  margin: 8px 10px;
   min-height: 28px;
   display: flex;
   flex-wrap: wrap;
