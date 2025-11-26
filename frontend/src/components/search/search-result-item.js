@@ -46,9 +46,9 @@ class SearchResultItem extends React.Component {
 
   render() {
     const { item, onDeleteItem, isHighlight, setRef = (() => {}) } = this.props;
-    let folderIconUrl = item.link_content ? Utils.getFolderIconUrl(false, 192) : Utils.getDefaultLibIconUrl();
+    let folderIconUrl = item.path === '/' ? Utils.getDefaultLibIconUrl() : Utils.getFolderIconUrl(false, 192);
     let fileIconUrl = item.is_dir ? folderIconUrl : Utils.getFileIconUrl(item.name);
-    let showName = item.repo_name + '/' + item.link_content;
+    let showName = item.repo_name + item.path;
     showName = showName.endsWith('/') ? showName.slice(0, showName.length - 1) : showName;
 
     if (item.thumbnail_url) {
@@ -66,7 +66,7 @@ class SearchResultItem extends React.Component {
         aria-selected={isHighlight}
         onKeyDown={Utils.onKeyDown}
       >
-        <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
+        <img className={item.path === '/' ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">
           <div className="item-name ellipsis" title={item.name}>{item.name}</div>
           <div className="item-link ellipsis" title={showName}>{showName}</div>

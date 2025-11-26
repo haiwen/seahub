@@ -147,7 +147,6 @@ class Search extends Component {
       items[i]['repo_id'] = data[i].repo_id;
       items[i]['repo_name'] = data[i].repo_name;
       items[i]['is_dir'] = data[i].is_dir;
-      items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
     }
     return items;
