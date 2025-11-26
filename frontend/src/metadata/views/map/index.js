@@ -225,6 +225,7 @@ const Map = () => {
             repoInfo={repoInfo}
             imageItems={clusterLeaves}
             imageIndex={imageIndex}
+            setImageIndex={setImageIndex}
             closeImagePopup={handleClose}
             moveToPrevImage={moveToPrevImage}
             moveToNextImage={moveToNextImage}

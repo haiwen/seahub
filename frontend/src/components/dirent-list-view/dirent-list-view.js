@@ -652,6 +652,10 @@ class DirentListView extends React.Component {
     });
   };
 
+  setImageIndex = (index) => {
+    this.setState({ imageIndex: index });
+  };
+
   getHeaders = (isDesktop) => {
     const { direntList, sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
     if (!isDesktop) {
@@ -841,6 +845,7 @@ class DirentListView extends React.Component {
                 repoInfo={this.props.currentRepoInfo}
                 imageItems={this.state.imageItems}
                 imageIndex={this.state.imageIndex}
+                setImageIndex={index => this.setImageIndex(index)}
                 closeImagePopup={this.closeImagePopup}
                 moveToPrevImage={this.moveToPrevImage}
                 moveToNextImage={this.moveToNextImage}

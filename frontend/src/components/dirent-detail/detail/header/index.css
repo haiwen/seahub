@@ -59,6 +59,22 @@
   margin-right: 6px;
 }
 
+.detail-header-close {
+  display: flex;
+  margin-right: 15px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.detail-header-close:hover {
+  background-color: #525252;
+}
+
+.detail-header-close .close-button {
+  width: 28px;
+  height: 28px;
+}
+
 .detail-header .detail-title .detail-title-name {
   margin-right: 8px;
   line-height: 1.5rem;
@@ -66,4 +82,3 @@
   font-size: 1rem;
   color: var(--bs-body-color);
 }
-

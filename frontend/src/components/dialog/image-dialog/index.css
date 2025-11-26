@@ -1,15 +1,15 @@
 .lightbox-side-panel {
-  width: 10px;
-  height: calc(100% - 100px);
+  width: 0;
+  height: calc(100% - 64px);
   display: flex;
   flex-direction: column;
-  top: 50px;
+  top: 64px;
   right: 0;
   position: absolute;
   font-size: 1rem;
   color: #fff;
   background-color: #333;
-  border: 1px solid #666;
+  border: none;
   transition: width 0.3s ease;
 }
 

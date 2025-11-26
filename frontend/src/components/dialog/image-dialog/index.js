@@ -1,20 +1,19 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { SYSTEM_FOLDERS } from '../../../constants';
-import Icon from '../../icon';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
 import { Utils } from '../../../utils/utils';
 
-const SIDE_PANEL_COLLAPSED_WIDTH = 10;
 const SIDE_PANEL_EXPANDED_WIDTH = 300;
 
-const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, imageItems, imageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isCustomPermission }) => {
+const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, imageItems, imageIndex, setImageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isCustomPermission }) => {
   const [expanded, setExpanded] = useState(false);
 
   const { enableMetadata, canModify, onOCRByImageDialog } = useMetadataAIOperations();
@@ -66,25 +65,17 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
   const renderSidePanel = () => {
     return (
       <div
-        className="lightbox-side-panel"
-        style={{ width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : SIDE_PANEL_COLLAPSED_WIDTH }}
+        className={classNames('lightbox-side-panel', { 'active': expanded })}
+        style={{ width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : 0 }}
       >
-        <div
-          className="side-panel-controller"
-          onClick={onToggleSidePanel}
-          tabIndex={0}
-          role="button"
-          aria-label={expanded ? gettext('Fold') : gettext('Unfold')}
-          onKeyDown={Utils.onKeyDown}
-        >
-          <Icon className="expand-button" symbol={expanded ? 'right_arrow' : 'left_arrow'} />
-        </div>
         {expanded &&
           <EmbeddedFileDetails
             repoID={repoID}
             repoInfo={repoInfo}
             path={mainImg.parentDir}
             dirent={{ id, name, type: 'file' }}
+            component={{ headerComponent: { showCloseIcon: true } }}
+            setExpanded={setExpanded}
           />
         }
       </div>
@@ -93,6 +84,9 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
 
   return (
     <Lightbox
+      imageItems={imageItems}
+      currentIndex={imageIndex}
+      setImageIndex={setImageIndex}
       wrapperClassName='custom-image-previewer'
       imageTitle={`${name} (${imageIndex + 1}/${imageItemsLength})`}
       mainSrc={mainImg.thumbnail || mainImg.src}
@@ -108,6 +102,8 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       closeLabel={gettext('Close (Esc)')}
       zoomInLabel={gettext('Zoom in')}
       zoomOutLabel={gettext('Zoom out')}
+      metadataLabel={gettext('Metadata')}
+      onClickMetadata={onToggleSidePanel}
       enableRotate={enableRotate}
       onClickDownload={() => downloadImage(imageItems[imageIndex].downloadURL)}
       onClickDelete={onDeleteImage ? () => onDeleteImage(name) : null}
@@ -118,7 +114,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       OCRLabel={gettext('OCR')}
       sidePanel={isCustomPermission ? null : {
         render: renderSidePanel,
-        width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : SIDE_PANEL_COLLAPSED_WIDTH,
+        width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : 0,
       }}
     />
   );
@@ -129,6 +125,7 @@ ImageDialog.propTypes = {
   repoInfo: PropTypes.object.isRequired,
   imageItems: PropTypes.array.isRequired,
   imageIndex: PropTypes.number.isRequired,
+  setImageIndex: PropTypes.func,
   closeImagePopup: PropTypes.func.isRequired,
   moveToPrevImage: PropTypes.func.isRequired,
   moveToNextImage: PropTypes.func.isRequired,
