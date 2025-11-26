@@ -11,7 +11,7 @@
     "@excalidraw/excalidraw": "^0.18.0",
     "@gatsbyjs/reach-router": "2.0.1",
     "@seafile/comment-editor": "0.0.13",
-    "@seafile/react-image-lightbox": "4.0.2",
+    "@seafile/react-image-lightbox": "^5.0.0",
     "@seafile/resumablejs": "1.1.16",
     "@seafile/seafile-calendar": "0.1.1",
     "@seafile/seafile-editor": "2.0.33",
