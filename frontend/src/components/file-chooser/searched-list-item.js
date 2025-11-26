@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../utils/utils';
+
 import './searched-list-item.css';
 
 const propTypes = {
@@ -36,6 +37,7 @@ class SearchedListItem extends React.Component {
         aria-selected={!!(currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path)}
         onKeyDown={Utils.onKeyDown}
       >
+        <td className="searched-item-indent"></td>
         <td className="text-center searched-item-icon">
           {item.is_dir ?
             <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
