@@ -14,7 +14,7 @@ import { PRIVATE_COLUMN_KEY as TAG_PRIVATE_COLUMN_KEY, RECENTLY_USED_TAG_IDS } f
 import { checkIsTreeNodeShown, checkTreeNodeHasChildNodes, getNodesWithAncestors, getTreeNodeDepth, getTreeNodeId, getTreeNodeKey } from '../../../../components/sf-table/utils/tree';
 import TagItem from './tag-item';
 import DeleteTag from './delete-tags';
-import Icon from '../../../../components/icon';
+import OpIcon from '../../../../components/op-icon';
 
 import './index.css';
 
@@ -343,6 +343,9 @@ const TagsEditor = forwardRef(({
               })}
               title={tagName}
               onClick={() => handleSelectTags(tagId)}
+              tabIndex={0}
+              role="button"
+              onKeyDown={Utils.onKeyDown}
             >
               <span className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
               <span className="sf-metadata-ui-tag-text">{tagName}</span>

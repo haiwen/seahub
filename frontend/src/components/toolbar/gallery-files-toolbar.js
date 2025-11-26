@@ -7,6 +7,8 @@ import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { getFileNameFromRecord } from '../../metadata/utils/cell/core';
 import { Utils } from '../../utils/utils';
+import OpIcon from '../../components/op-icon';
+import OpElement from '../../components/op-element';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { checkIsDir } from '../../metadata/utils/row';
 import { useMetadataStatus } from '../../hooks';
@@ -153,7 +155,6 @@ const GalleryFilesToolbar = () => {
         </span>
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
-
       {length === 1 && !readOnly && (
         <>
           <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')} aria-label={gettext('Move')}>

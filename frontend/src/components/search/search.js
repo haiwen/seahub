@@ -612,6 +612,7 @@ class Search extends Component {
               className={classnames('search-types-repos', { 'search-types-highlight': highlightIndex === 0 })}
               onClick={this.searchAllRepos}
               tabIndex={0}
+              onKeyDown={Utils.onKeyDown}
             >
               <span className="search-icon-left input-icon-addon">
                 <Icon symbol="search" />

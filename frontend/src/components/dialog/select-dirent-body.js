@@ -8,10 +8,17 @@ import { gettext } from '../../utils/constants';
 import { RepoInfo } from '../../models';
 import CreateFolder from '../dialog/create-folder-dialog';
 import Icon from '../icon';
+import { Utils } from '../../utils/utils';
 
 const LibraryOption = ({ mode, label, currentMode, onUpdateMode }) => {
   return (
-    <div className={`repo-list-item ${mode === currentMode ? 'active' : ''}`} onClick={() => onUpdateMode(mode)}>
+    <div
+      className={`repo-list-item ${mode === currentMode ? 'active' : ''}`}
+      tabIndex={0}
+      role="button"
+      onClick={() => onUpdateMode(mode)}
+      onKeyDown={Utils.onKeyDown}
+    >
       <span className='library'>{label}</span>
     </div>
   );

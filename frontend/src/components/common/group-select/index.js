@@ -4,6 +4,7 @@ import classnames from 'classnames';
 import ModalPortal from '../../modal-portal';
 import SelectOptionGroup from './select-option-group.js';
 import Icon from '../../icon.js';
+import { Utils } from '../../../utils/utils';
 
 import './index.css';
 
@@ -71,7 +72,15 @@ class GroupSelect extends Component {
           { 'focus': this.state.isShowSelectOptions },
           className
         )}
-        onClick={this.onSelectToggle}>
+        onClick={this.onSelectToggle}
+        tabIndex={0}
+        role="combobox"
+        aria-expanded={this.state.isShowSelectOptions}
+        aria-haspopup="listbox"
+        aria-label={placeholder}
+        aria-controls="group-select-listbox"
+        onKeyDown={Utils.onKeyDown}
+      >
         <div className="selected-option">
           {selectedOptions.length > 0 ?
             <span className="selected-option-show">

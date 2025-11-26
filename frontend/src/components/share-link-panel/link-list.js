@@ -5,6 +5,7 @@ import EmptyTip from '../empty-tip';
 import LinkItem from './link-item';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Loading from '../loading';
+import { Utils } from '../../utils/utils';
 
 const propTypes = {
   shareLinks: PropTypes.array.isRequired,
@@ -80,7 +81,14 @@ class LinkList extends React.Component {
               <thead>
                 <tr>
                   <th width="3%" className="text-center">
-                    <input type="checkbox" checked={isAllLinksSelected} className="vam form-check-input" onChange={this.toggleSelectAllLinks} />
+                    <input
+                      type="checkbox"
+                      checked={isAllLinksSelected}
+                      className="vam form-check-input"
+                      onChange={this.toggleSelectAllLinks}
+                      onKeyDown={Utils.onKeyDown}
+                      aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
+                    />
                   </th>
                   <th width="18%">{gettext('Link')}</th>
                   <th width="25%">{gettext('Permission')}</th>

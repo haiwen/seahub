@@ -6,6 +6,7 @@ import { Transition } from 'react-transition-group';
 import FieldItem from './field-item';
 import { gettext } from '@/utils/constants';
 import Icon from '../../../../components/icon';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -51,8 +52,10 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
       <div
         className="sf-metadata-field-display-setting-header d-flex align-items-center justify-content-between"
         onClick={expandAllFields}
+        onKeyDown={Utils.onKeyDown}
         role="button"
-        aria-label={isCollapsed ? gettext('Expand') : gettext('Collapse')}
+        aria-label={isCollapsed ? gettext('Unfold') : gettext('Fold')}
+        tabIndex={0}
       >
         <Label className="mb-0">{textProperties.titleValue}</Label>
         <div className="sf-metadata-field-display-toggle-btn">
@@ -64,7 +67,13 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
           <div className="sf-metadata-field-display-setting-wrapper" ref={nodeRef} style={{ ...defaultStyle, ...transitionStyles[state] }}>
             <div className={`sf-metadata-field-display-setting-banner ${isCollapsed ? 'd-none' : 'd-flex'} align-items-center justify-content-between h-5 mt-2 mb-2`}>
               <Label className="mb-0">{textProperties.bannerValue}</Label>
-              <span className="show-all-button" onClick={() => onToggleFieldsVisibility(!fieldAllShown)}>
+              <span
+                className="show-all-button"
+                role="button"
+                tabIndex={0}
+                onClick={() => onToggleFieldsVisibility(!fieldAllShown)}
+                onKeyDown={Utils.onKeyDown}
+              >
                 {fieldAllShown ? textProperties.hideValue : textProperties.showValue}
               </span>
             </div>

@@ -9,6 +9,7 @@ import Icon from '../../icon';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
+import { Utils } from '../../../utils/utils';
 
 const SIDE_PANEL_COLLAPSED_WIDTH = 10;
 const SIDE_PANEL_EXPANDED_WIDTH = 300;
@@ -67,9 +68,15 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       <div
         className="lightbox-side-panel"
         style={{ width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : SIDE_PANEL_COLLAPSED_WIDTH }}
-        aria-expanded={expanded}
       >
-        <div className="side-panel-controller" onClick={onToggleSidePanel}>
+        <div
+          className="side-panel-controller"
+          onClick={onToggleSidePanel}
+          tabIndex={0}
+          role="button"
+          aria-label={expanded ? gettext('Fold') : gettext('Unfold')}
+          onKeyDown={Utils.onKeyDown}
+        >
           <Icon className="expand-button" symbol={expanded ? 'right_arrow' : 'left_arrow'} />
         </div>
         {expanded &&

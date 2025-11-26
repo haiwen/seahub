@@ -5,6 +5,7 @@ import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
 import BackIcon from '../../back-icon';
 import Icon from '../../icon';
+import { Utils } from '../../../utils/utils';
 
 class CustomPermissionEditor extends React.Component {
   constructor(props) {
@@ -128,25 +129,45 @@ class CustomPermissionEditor extends React.Component {
               <div className="permission-options">
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('upload')} checked={permission.upload}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.upload}
+                      onChange={this.onChangePermission('upload')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Upload')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('download')} checked={permission.download}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.download}
+                      onChange={this.onChangePermission('download')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Download')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('create')} checked={permission.create}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.create}
+                      onChange={this.onChangePermission('create')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Create')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('modify')} checked={permission.modify}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.modify}
+                      onChange={this.onChangePermission('modify')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Modify')}</span>
                     <span id="modify-tip" className="ml-2" style={{ color: '#999' }} aria-hidden="true"><Icon symbol="about" /></span>
                     <Tooltip
@@ -161,25 +182,45 @@ class CustomPermissionEditor extends React.Component {
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('copy')} checked={permission.copy}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.copy}
+                      onChange={this.onChangePermission('copy')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Copy')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('delete')} checked={permission.delete}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.delete}
+                      onChange={this.onChangePermission('delete')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Delete')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('preview')} checked={permission.preview}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.preview}
+                      onChange={this.onChangePermission('preview')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Preview online')}</span>
                   </Label>
                 </FormGroup>
                 <FormGroup check>
                   <Label check>
-                    <Input type="checkbox" className="form-check-input" onChange={this.onChangePermission('download_external_link')} checked={permission.download_external_link}/>
+                    <Input
+                      type="checkbox"
+                      checked={permission.download_external_link}
+                      onChange={this.onChangePermission('download_external_link')}
+                      onKeyDown={Utils.onKeyDown}
+                    />
                     <span>{gettext('Generate share link')}</span>
                   </Label>
                 </FormGroup>

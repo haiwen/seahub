@@ -85,12 +85,6 @@ class DirOperationToolbar extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, fileType);
   };
 
-  onDropdownToggleKeyDown = (e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      this.toggleDesktopOpMenu();
-    }
-  };
-
   onDropDownMouseMove = (e) => {
     if (this.state.isSubMenuShown && e.target && e.target.className === 'dropdown-item') {
       this.setState({
@@ -111,12 +105,6 @@ class DirOperationToolbar extends React.Component {
       isSubMenuShown: true,
       currentItem: item.text
     });
-  };
-
-  onMenuItemKeyDown = (item, e) => {
-    if (e.key == 'Enter' || e.key == 'Space') {
-      item.onClick();
-    }
   };
 
   onUploadSdoc = (e) => {
@@ -248,7 +236,6 @@ class DirOperationToolbar extends React.Component {
               tabIndex="0"
               className="path-item"
               onClick={this.toggleDesktopOpMenu}
-              onKeyDown={this.onDropdownToggleKeyDown}
               data-toggle="dropdown"
               aria-label={gettext('More operations')}
               aria-expanded={this.state.isDesktopMenuOpen}
@@ -264,13 +251,12 @@ class DirOperationToolbar extends React.Component {
                   return (
                     <Dropdown
                       key={index}
-                      role="button"
+                      role="menuitem"
                       tabIndex="0"
                       direction="right"
                       className="w-100"
                       isOpen={this.state.isSubMenuShown && this.state.currentItem == item.text}
                       toggle={this.toggleSubMenu}
-                      onKeyDown={Utils.onKeyDown}
                       onMouseMove={(e) => {e.stopPropagation();}}
                     >
                       <DropdownToggle
@@ -278,6 +264,9 @@ class DirOperationToolbar extends React.Component {
                         role="button"
                         tabIndex="0"
                         className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center"
+                        onClick={this.toggleSubMenu}
+                        aria-label={item.text}
+                        data-toggle="dropdown"
                         onMouseEnter={this.toggleSubMenuShown.bind(this, item)}
                       >
                         <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" />
@@ -289,7 +278,7 @@ class DirOperationToolbar extends React.Component {
                           if (item == 'Divider') {
                             return <DropdownItem key={index} divider />;
                           } else {
-                            return (<DropdownItem key={index} onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>{item.text}</DropdownItem>);
+                            return (<DropdownItem key={index} onClick={item.onClick}>{item.text}</DropdownItem>);
                           }
                         })}
                       </DropdownMenu>

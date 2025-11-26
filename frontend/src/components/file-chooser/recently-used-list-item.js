@@ -16,7 +16,14 @@ const RecentlyUsedListItem = ({ item, isSelected, onItemClick }) => {
 
   return (
     <li>
-      <div className={classNames('item-info recently-used', { 'item-active': isSelected })} onClick={handleItemClick}>
+      <div
+        className={classNames('item-info recently-used', { 'item-active': isSelected })}
+        onClick={handleItemClick}
+        tabIndex={0}
+        role="treeitem"
+        aria-selected={isSelected}
+        onKeyDown={Utils.onKeyDown}
+      >
         <div className="item-left-icon">
           <i className="tree-node-icon">
             <span className="tree-node-icon"><Icon symbol="folder" /></span>

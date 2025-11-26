@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import classnames from 'classnames';
 import Icon from '../../../../components/icon';
+import { Utils } from '../../../../utils/utils';
 import { DEFAULT_RATE_DATA } from '../../../constants';
 
 const RateItem = ({
@@ -48,6 +49,10 @@ const RateItem = ({
         onMouseLeave={onMouseLeave}
         style={style}
         onClick={onChange}
+        onKeyDown={Utils.onKeyDown}
+        tabIndex={0}
+        role="button"
+        aria-label={`Rate ${index}`}
         className={classnames('sf-metadata-rate-item', { 'active': value >= index })}
         ref={ref}
       >

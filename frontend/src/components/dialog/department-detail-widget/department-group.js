@@ -4,6 +4,7 @@ import Loading from '../../loading';
 import { isOrgContext } from '../../../utils/constants';
 import { gettext } from '@/utils/constants';
 import Icon from '../../icon';
+import { Utils } from '../../../utils/utils';
 
 const ItemPropTypes = {
   department: PropTypes.object,
@@ -64,7 +65,8 @@ class Item extends Component {
           onClick={this.getMembers}
           style={{ paddingLeft: `${this.props.padding}px` }}
           role="button"
-          aria-label={gettext('Get department members')}
+          tabIndex={0}
+          onKeyDown={Utils.onKeyDown}
         >
           {hasChild &&
             <span

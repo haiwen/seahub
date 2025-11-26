@@ -269,7 +269,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
       return (
         <>
           <div className="d-flex align-items-center justify-content-between pb-2 border-bottom">
-            <h6 className="font-weight-normal m-0">
+            <h6 className="font-weight-normal m-0 d-flex align-items-center">
               <BackIcon onClick={this.toggleFileChooser} />
               {gettext('Add Folder')}
             </h6>

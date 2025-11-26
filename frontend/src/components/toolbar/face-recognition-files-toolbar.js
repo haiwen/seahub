@@ -13,6 +13,8 @@ import { checkIsDir } from '../../metadata/utils/row';
 import { getFileNameFromRecord } from '../../metadata/utils/cell';
 import { Utils } from '../../utils/utils';
 import Icon from '../icon';
+import OpIcon from '../../components/op-icon';
+import OpElement from '../../components/op-element';
 
 const FaceRecognitionFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);

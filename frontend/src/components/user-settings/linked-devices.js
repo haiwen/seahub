@@ -139,6 +139,7 @@ class Item extends Component {
         onMouseOver={this.handleMouseOver}
         onMouseOut={this.handleMouseOut}
         onFocus={this.handleMouseOver}
+        tabIndex={0}
       >
         <td>{data.platform}</td>
         <td>{data.device_name}</td>

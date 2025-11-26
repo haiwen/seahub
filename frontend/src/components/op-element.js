@@ -6,7 +6,7 @@ const propTypes = {
   className: PropTypes.string.isRequired,
   op: PropTypes.func,
   title: PropTypes.string.isRequired,
-  children: PropTypes.array
+  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object])
 };
 
 class OpElement extends React.Component {

@@ -62,6 +62,10 @@ class SearchResultItem extends React.Component {
         onClick={this.onClickHandler}
         ref={ref => setRef(ref)}
         onMouseEnter={this.onMouseEnter}
+        tabIndex={0}
+        role="option"
+        aria-selected={isHighlight}
+        onKeyDown={Utils.onKeyDown}
       >
         <img className={item.link_content ? 'item-img' : 'lib-item-img'} src={fileIconUrl} alt="" />
         <div className="item-content">

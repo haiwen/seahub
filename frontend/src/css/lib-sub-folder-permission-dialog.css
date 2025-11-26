@@ -1,0 +1,17 @@
+.share-dialog .share-dialog-content {
+  min-height: 28rem;
+}
+
+.permission-tips {
+  color: var(--bs-body-secondary-color);
+}
+
+.lib-sub-folder-permission-dialog-content .file-chooser-search-input .search-control {
+  position: absolute;
+  top: 29px;
+  right: 16px;
+}
+
+.lib-sub-folder-permission-dialog-content .file-chooser-item .item-info .item-text {
+  width: 100%;
+}

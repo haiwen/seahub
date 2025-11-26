@@ -247,7 +247,14 @@ class RepoListItem extends React.Component {
 
     return (
       <li>
-        <div className={`${repoActive ? 'item-active' : ''} item-info`} onClick={this.onRepoItemClick}>
+        <div
+          className={`${repoActive ? 'item-active' : ''} item-info`}
+          onClick={this.onRepoItemClick}
+          tabIndex={0}
+          role="treeitem"
+          aria-selected={repoActive}
+          onKeyDown={Utils.onKeyDown}
+        >
           <div className="item-left-icon">
             <span className="d-flex justify-content-center align-items-center item-toggle tree-node-icon icon" onClick={this.onToggleClick}>
               <Icon symbol="down" className={this.state.isShowChildren ? '' : 'rotate-270'} />

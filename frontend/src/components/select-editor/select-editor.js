@@ -6,6 +6,7 @@ import { gettext } from '../../utils/constants';
 import { MenuSelectStyle } from '../common/select';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
+import { Utils } from '../../utils/utils';
 
 import '../../css/select-editor.css';
 
@@ -82,7 +83,8 @@ class SelectEditor extends React.Component {
             className="permission-editor-btn-add-custom-permission"
             onClick={this.props.onAddCustomPermissionToggle}
             role="button"
-            aria-label={gettext('Add custom permission')}
+            tabIndex={0}
+            onKeyDown={Utils.onKeyDown}
           >
             <Icon symbol="new" className="mr-2" aria-hidden="true" />
             <span>{gettext('Add custom permission')}</span>

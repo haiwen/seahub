@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, ModalFooter } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Icon from '../../icon';
+import { Utils } from '../../../utils/utils';
 
 const ItemPropTypes = {
   member: PropTypes.object,
@@ -25,8 +26,9 @@ class Item extends Component {
     this.setState({ highlight: false });
   };
 
-  removeSelectedMember = (email) => {
-    this.props.removeSelectedMember(email);
+  removeSelectedMember = () => {
+    const { member } = this.props;
+    this.props.removeSelectedMember(member.email);
   };
 
   render() {
@@ -93,12 +95,12 @@ class DepartmentGroupMemberSelected extends Component {
           }
         </div>
         <ModalFooter>
-          <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
+          <Button color="secondary" onClick={this.props.toggle} onKeyDown={Utils.onKeyDown}>{gettext('Cancel')}</Button>
           {usedFor === 'add_group_member' &&
-            <Button color="primary" onClick={this.props.addGroupMember}>{gettext('Add')}</Button>
+            <Button color="primary" onClick={this.props.addGroupMember} onKeyDown={Utils.onKeyDown}>{gettext('Add')}</Button>
           }
           {usedFor === 'add_user_share' &&
-            <Button color="primary" onClick={this.props.addUserShares}>{gettext('Add')}</Button>
+            <Button color="primary" onClick={this.props.addUserShares} onKeyDown={Utils.onKeyDown}>{gettext('Add')}</Button>
           }
         </ModalFooter>
       </div>

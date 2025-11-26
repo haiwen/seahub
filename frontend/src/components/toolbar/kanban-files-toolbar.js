@@ -7,6 +7,8 @@ import TextTranslation from '../../utils/text-translation';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
+import OpIcon from '../../components/op-icon';
+import OpElement from '../../components/op-element';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { buildKanbanToolbarMenuOptions } from '../../metadata/utils/menu-builder';
@@ -177,14 +179,14 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
 
       {!isMultiple && !readOnly && (
         <>
-          <span
-            className="cur-view-path-btn"
-            onClick={toggleMoveDialog}
+          <OpIcon
+            className="cur-view-path-btn sf3-font-move1 sf3-font"
             title={gettext('Move')}
             aria-label={gettext('Move')}
+            op={toggleMoveDialog}
           >
             <Icon symbol="move1" />
-          </span>
+          </OpIcon>
           <span
             className="cur-view-path-btn"
             onClick={toggleCopyDialog}
@@ -196,24 +198,24 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
         </>
       )}
 
-      <span
-        className="cur-view-path-btn"
-        onClick={downloadRecords}
+      <OpIcon
+        className="cur-view-path-btn sf3-font-download1 sf3-font"
         title={gettext('Download')}
         aria-label={gettext('Download')}
+        op={downloadRecords}
       >
         <Icon symbol="download" />
-      </span>
+      </OpIcon>
 
       {!readOnly && (
-        <span
-          className="cur-view-path-btn"
-          onClick={deleteRecords}
+        <OpIcon
+          className="cur-view-path-btn sf3-font-delete1 sf3-font"
           title={gettext('Delete')}
           aria-label={gettext('Delete')}
+          op={deleteRecords}
         >
           <Icon symbol="delete1" />
-        </span>
+        </OpIcon>
       )}
 
       {length > 0 && (
