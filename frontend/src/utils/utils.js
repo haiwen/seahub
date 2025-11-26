@@ -1894,7 +1894,7 @@ export const Utils = {
     let allSearchesArr = allSearches.split('&');
     allSearchesArr.forEach(item => {
       let itemArr = item.split('=');
-      searchParams[itemArr[0]] = decodeURI(itemArr[1]);
+      searchParams[itemArr[0]] = itemArr[1];
     });
     return searchParams;
   },

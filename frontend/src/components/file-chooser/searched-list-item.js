@@ -23,6 +23,7 @@ class SearchedListItem extends React.Component {
 
   render() {
     let { item, currentItem } = this.props;
+    let { path, repo_name } = item;
     return (
       <tr
         className={classnames('searched-list-item', {
@@ -43,7 +44,7 @@ class SearchedListItem extends React.Component {
           }
         </td>
         <td className='searched-item-link'>
-          <span className="item-link">{item.repo_name}/{item.link_content}</span>
+          <span className="item-link">{repo_name}{path === '/' ? '' : path}</span>
         </td>
       </tr>
     );
