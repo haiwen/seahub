@@ -6,6 +6,7 @@
   height: 20px;
   border-radius: 10px;
   background: #eaeaea;
+  max-width: 100%;
 }
 
 .user-item .user-avatar,
