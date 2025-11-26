@@ -93,6 +93,12 @@
   align-items: center;
   color: #666;
   font-size: 12px;
+  border-radius: 3px;
+}
+
+.wiki-nav .wiki-page-item-main .wiki-nav-item-icon:hover {
+  background-color: #e5e5e5;
+  cursor: pointer;
 }
 
 .wiki-nav .wiki-page-item-main:has(.wiki-nav-item-icon) .nav-item-icon {

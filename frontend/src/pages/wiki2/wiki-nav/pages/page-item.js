@@ -273,6 +273,10 @@ const PageItem = ({
                   tabIndex="0"
                   role="button"
                   className="wiki-nav-item-icon"
+                  onClick={(e) => { 
+                    toggleExpand(page.id); 
+                    e.stopPropagation();
+                  }}
                   onKeyDown={Utils.onKeyDown}
                 >
                   <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
