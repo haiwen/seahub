@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CustomizeSelect from '../../../../../../../components/customize-select';
 import { gettext } from '../../../../../../../utils/constants';
 import { FILTER_PREDICATE_TYPE } from '../../../../../../constants';
+import Icon from '../../../../../../../components/icon';
 
 import './index.css';
 
@@ -44,7 +45,7 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
                 </div>
               </div>
               <div className='collaborator-check-icon'>
-                {isSelected && <i className="sf2-icon-tick"></i>}
+                {isSelected && <Icon symbol="tick1" />}
               </div>
             </div>
           </Fragment>

@@ -8,12 +8,12 @@ import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
-import OpElement from '../../components/op-element';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder';
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../sf-table/utils/column';
+import Icon from '../icon';
 
 const TableFilesToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -165,49 +165,60 @@ const TableFilesToolbar = ({ repoID }) => {
 
   return (
     <div className="selected-dirents-toolbar">
-      <OpElement
-        className="cur-view-path-btn px-2"
-        title={gettext('Unselect')}
-        op={unSelect}
-      >
-        <span className="sf3-font-x-01 sf3-font mr-2"></span>
+      <span className="cur-view-path-btn px-2" onClick={unSelect}>
+        <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
+          <Icon symbol="x-01" />
+        </span>
         <span>{length}{' '}{gettext('selected')}</span>
-      </OpElement>
+      </span>
 
       {!readOnly && (!isMultiple || areRecordsInSameFolder) && (
         <>
           <OpIcon
-            className="cur-view-path-btn sf3-font-move1 sf3-font"
+            className="cur-view-path-btn sf3-font"
             title={gettext('Move')}
+            aria-label={gettext('Move')}
             op={toggleMoveDialog}
-          />
-          <OpIcon
-            className="cur-view-path-btn sf3-font-copy1 sf3-font"
+          >
+            <Icon symbol="move1" />
+          </OpIcon>
+          <span
+            className="cur-view-path-btn"
+            onClick={toggleCopyDialog}
             title={gettext('Copy')}
-            op={toggleCopyDialog}
-          />
+            aria-label={gettext('Copy')}
+          >
+            <Icon symbol="copy1" />
+          </span>
         </>
       )}
 
       <OpIcon
-        className="cur-view-path-btn sf3-font-download1 sf3-font"
+        className="cur-view-path-btn sf3-font"
         title={gettext('Download')}
+        aria-label={gettext('Download')}
         op={downloadRecords}
-      />
+      >
+        <Icon symbol="download" />
+      </OpIcon>
 
       {!readOnly && (
         <OpIcon
-          className="cur-view-path-btn sf3-font-delete1 sf3-font"
+          className="cur-view-path-btn sf3-font"
           title={gettext('Delete')}
+          aria-label={gettext('Delete')}
           op={deleteRecords}
-        />
+        >
+          <Icon symbol="delete1" />
+        </OpIcon>
       )}
 
       {length > 0 && (
         <ItemDropdownMenu
           ref={menuRef}
           item={{}}
-          toggleClass="cur-view-path-btn sf3-font-more sf3-font"
+          toggleClass="cur-view-path-btn"
+          toggleChildren={<Icon symbol="more-level" />}
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

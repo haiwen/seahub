@@ -33,7 +33,9 @@
   border-color: var(--bs-border-color);
 }
 
-.seafile-customize-select .sf3-font-down {
+.seafile-customize-select .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
   color: #999;
 }
 
@@ -55,8 +57,9 @@
   margin-right: 6px;
 }
 
-.seafile-customize-select .selected-option .selected-option-show-container .sf3-font-x-01 {
-  font-size: 12px;
+.seafile-customize-select .selected-option .selected-option-show-container .seafile-multicolor-icon-x-01 {
+  width: 12px;
+  height: 12px;
   color: #999;
 }
 

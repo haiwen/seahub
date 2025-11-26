@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { WIKI_COVER_LIST } from '../constant';
+import Icon from '../../../components/icon';
 
 import './page-cover.css';
 
@@ -54,7 +55,7 @@ function PageCover({ currentPageConfig, onUpdatePage }) {
       {isDesktop && wikiPermission === 'rw' && isShowCoverController && (
         <>
           <button className='wiki-cover-controller-btn border-0 d-flex align-items-center' id='wiki-change-cover-btn'>
-            <i className="sf3-font sf3-font-image mr-1"></i>
+            <Icon symbol="gallery" className="mr-1" />
             {gettext('Change cover')}
           </button>
           <UncontrolledPopover

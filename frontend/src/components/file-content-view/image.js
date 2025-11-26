@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot } from '../../utils/constants';
+import Icon from '../icon';
 
 import '../../css/image-file-view.css';
 
@@ -88,11 +89,13 @@ class FileContent extends React.Component {
     return (
       <div className="file-view-content flex-1 image-file-view d-flex align-items-center justify-content-center">
         {previousImage && (
-          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')} className="sf3-font sf3-font-down rotate-90">
+          <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}>
+            <Icon symbol="down" className="rotate-90" />
           </a>
         )}
         {nextImage && (
-          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')} className="sf3-font sf3-font-down rotate-270">
+          <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}>
+            <Icon symbol="down" className="rotate-270" />
           </a>
         )}
         <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={style} />

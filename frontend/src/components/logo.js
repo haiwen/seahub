@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle, gettext } from '../utils/constants';
+import Icon from './icon';
 
 const propTypes = {
   onCloseSidePanel: PropTypes.func,
@@ -59,11 +60,14 @@ class Logo extends React.Component {
         </a>
         {this.props.showCloseSidePanelIcon &&
           <a
-            className="sf2-icon-x1 sf-popover-close side-panel-close action-icon d-md-none"
+            className="sf-popover-close side-panel-close action-icon d-md-none"
+            role="button"
+            tabIndex="0"
             onClick={this.closeSide}
             title={gettext('Close')}
             aria-label={gettext('Close')}
           >
+            <Icon symbol="x-01" />
           </a>
         }
       </div>

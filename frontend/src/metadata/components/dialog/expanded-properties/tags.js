@@ -4,11 +4,11 @@ import { getCellValueByColumn, getRecordIdFromRecord } from '../../../utils/cell
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { useTags } from '../../../../tag/hooks';
 import TagsEditor from '../../cell-editors/tags-editor';
-import { useMetadataView } from '../../../hooks/metadata-view';
 import FileTagsFormatter from '../../cell-formatter/file-tags';
 import ClickOutside from '../../../../components/click-outside';
+import Icon from '../../../../components/icon';
 
-const Tags = ({ record, column, containerRef }) => {
+const Tags = ({ record, column, updateFileTags, containerRef }) => {
   const [isEditorShown, setIsEditorShown] = useState(false);
   const [editorPosition, setEditorPosition] = useState({ top: 0, left: 0 });
 
@@ -16,7 +16,6 @@ const Tags = ({ record, column, containerRef }) => {
   const editorRef = useRef(null);
 
   const { tagsData } = useTags();
-  const { updateFileTags } = useMetadataView();
 
   const value = useMemo(() => getCellValueByColumn(record, column), [record, column]);
   const tagIds = useMemo(() => {
@@ -55,7 +54,7 @@ const Tags = ({ record, column, containerRef }) => {
     <ClickOutside onClickOutside={() => setIsEditorShown(false)}>
       <div ref={ref} className="form-control position-relative select-option-container" onClick={onEdit}>
         <FileTagsFormatter tagsData={tagsData} value={value} showName={true} />
-        <i className="sf3-font sf3-font-down dropdown-indicator" aria-hidden="true"></i>
+        <Icon symbol="down" className="dropdown-indicator" />
         {isEditorShown && (
           <TagsEditor ref={editorRef} value={value} column={{ ...column, width: 400 }} customStyle={editorPosition} onSelect={onSelect} onDeselect={onDeselect} />
         )}

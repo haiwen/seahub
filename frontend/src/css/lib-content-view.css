@@ -125,8 +125,8 @@
 }
 
 .folder-toggle-icon .seafile-multicolor-icon {
-  width: 1rem;
-  height: 1rem;
+  width: 12px;
+  height: 12px;
 }
 
 .tree-node-drop {
@@ -175,12 +175,23 @@
   text-align: center;
 }
 
-.tree-node-inner .right-icon i {
-  width: 100%;
+.tree-node-inner .right-icon .dropdown {
   height: 100%;
-  vertical-align: middle;
-  font-size: 0.8125rem;
-  line-height: 1.625rem !important;
+  display: flex;
+  align-items: center;
+}
+
+.tree-node-inner .right-icon .more-dropdown-toggle {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tree-node-inner .right-icon .more-dropdown-toggle .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
   color: var(--bs-icon-color);
 }
 
@@ -302,9 +313,28 @@
 }
 
 .dir-view-path .dir-operation .path-item {
+  height: 24px;
   display: inline-flex;
   align-items: center;
   max-width: 252px;
+}
+
+.dir-view-path .dir-operation .dropdown {
+  display: inline-flex;
+  align-items: center;
+}
+
+.dir-view-path .dir-operation .path-item .seafile-multicolor-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--bs-icon-color);
+}
+
+.dir-view-path .dir-operation .path-item .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  margin-left: 2px;
+  transform: translateY(1px);
 }
 
 .dir-view-path .path-item:hover {
@@ -327,28 +357,25 @@
 
 .cur-dir-path:hover .dir-view-path .path-item-refresh {
   display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 }
 
 .dir-view-path .path-item-refresh:hover {
   background: var(--bs-hover-bg);
 }
 
-.dir-view-path .sf3-font-refresh {
+.dir-view-path .seafile-multicolor-icon-refresh {
+  width: 14px;
+  height: 14px;
   transform: rotateY(180deg);
   color: var(--bs-icon-color);
-  cursor: pointer;
-  font-size: 14px;
-  display: inline-block;
 }
 
 .dir-view-path .sf3-font-new,
 .dir-view-path .path-item-dropdown-toggle {
   color: var(--bs-icon-color);
-}
-
-.dir-view-path .path-item-dropdown-toggle {
-  margin-top: 2px;
-  margin-left: 2px;
 }
 
 .dir-view-path .path-item-drop {

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
+import Icon from '../icon';
 
 const propTypes = {
   file: PropTypes.object,
@@ -19,7 +20,9 @@ class ForbidUploadListItem extends React.Component {
         <td>{Utils.bytesToSize(file.size)}</td>
         <td>
           <div className="d-flex align-items-center">
-            <span className="upload-failure-icon sf3-font sf3-font-info mr-2" aria-hidden="true"></span>
+            <span className="d-flex align-items-center upload-failure-icon mr-2" aria-hidden="true">
+              <Icon symbol="info" />
+            </span>
             <span
               className="upload-failure-msg"
               aria-label={gettext('File too large')}

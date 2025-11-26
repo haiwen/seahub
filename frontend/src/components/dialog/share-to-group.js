@@ -12,6 +12,7 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import GroupSelect from '../common/group-select';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
+import OpIcon from '../op-icon';
 
 class GroupItem extends React.Component {
 
@@ -67,16 +68,12 @@ class GroupItem extends React.Component {
             />
           </td>
           <td>
-            <span
-              tabIndex="0"
-              role="button"
-              className="sf3-font sf3-font-x-01 op-icon"
-              onClick={this.deleteShareItem}
-              onKeyDown={Utils.onKeyDown}
+            <OpIcon
+              symbol="x-01"
+              className="op-icon"
+              op={this.deleteShareItem}
               title={gettext('Delete')}
-              aria-label={gettext('Delete')}
-            >
-            </span>
+            />
           </td>
         </tr>
       );
@@ -104,16 +101,12 @@ class GroupItem extends React.Component {
           />
         </td>
         <td>
-          <span
-            tabIndex="0"
-            role="button"
-            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            onClick={this.deleteShareItem}
-            onKeyDown={Utils.onKeyDown}
+          <OpIcon
+            symbol="x-01"
+            className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
+            op={this.deleteShareItem}
             title={gettext('Delete')}
-            aria-label={gettext('Delete')}
-          >
-          </span>
+          />
         </td>
       </tr>
     );

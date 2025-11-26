@@ -8,6 +8,7 @@ import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { getCellValueByColumn } from '../../../utils/cell';
 import { getColumnByKey, getColumnOptions, generateNewOption } from '../../../utils/column';
+import Icon from '../../../../components/icon';
 
 import './index.css';
 
@@ -234,7 +235,7 @@ const SingleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && <i className="sf2-icon-tick"></i>}
+              {isSelected && <Icon symbol="tick1" />}
             </div>
           </div>
         </div>

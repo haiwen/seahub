@@ -10,6 +10,7 @@ import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import Icon from '../../components/icon';
 
 const propTypes = {
   currentNode: PropTypes.object,
@@ -162,14 +163,15 @@ class SidePanel extends Component {
               {(permission && this.state.isMenuIconShow) && (
                 <Dropdown isOpen={this.state.isHeaderMenuShow} toggle={this.toggleOperationMenu}>
                   <DropdownToggle
-                    tag="i"
-                    className="sf3-font sf3-font-more"
+                    tag="span"
                     title={gettext('More operations')}
                     aria-label={gettext('More operations')}
                     data-toggle="dropdown"
                     aria-expanded={this.state.isHeaderMenuShow}
                     onClick={this.onDropdownToggleClick}
-                  />
+                  >
+                    <Icon symbol="more-level" />
+                  </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem onClick={this.onAddFolderToggle.bind(this, 'root')}>{gettext('New Folder')}</DropdownItem>
                     <DropdownItem onClick={this.onAddFileToggle.bind(this, 'root')}>{gettext('New File')}</DropdownItem>

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
 import { Utils } from '../../utils/utils';
+import OpIcon from '../op-icon';
+import Icon from '../icon';
 
 const LEFT_INDENT = 20;
 
@@ -61,25 +63,25 @@ class TreeNodeView extends React.Component {
     let icon = '';
     let type = '';
     if (node.object.is_dir) {
-      icon = <i className="sf3-font sf3-font-folder"></i>;
+      icon = <Icon symbol="folder" />;
       type = 'dir';
     } else {
       let index = node.object.file_name.lastIndexOf('.');
       if (index === -1) {
-        icon = <i className="sf3-font sf3-font-file"></i>;
+        icon = <Icon symbol="file" />;
         type = 'file';
       } else {
         let suffix = node.object.file_name.slice(index).toLowerCase();
         if (suffix === '.png' || suffix === '.jpg' || suffix === '.jpeg' || suffix === '.gif' || suffix === '.bmp') {
-          icon = <i className="sf3-font sf3-font-image"></i>;
+          icon = <Icon symbol="gallery" />;
           type = 'image';
         }
         else if (suffix === '.md' || suffix === '.markdown') {
-          icon = <i className="sf3-font sf3-font-files2"></i>;
+          icon = <Icon symbol="files" />;
           type = 'file';
         }
         else {
-          icon = <i className="sf3-font sf3-font-file"></i>;
+          icon = <Icon symbol="file" />;
           type = 'file';
         }
       }
@@ -143,16 +145,13 @@ class TreeNodeView extends React.Component {
           </div>
           <div className="left-icon" style={{ left: leftIndent - 40 }}>
             {type === 'dir' && (!node.isLoaded || (node.isLoaded && node.hasChildren())) && (
-              <i
-                className={`folder-toggle-icon sf3-font sf3-font-down ${node.isExpanded ? '' : 'rotate-270'}`}
+              <OpIcon
+                className={`folder-toggle-icon ${node.isExpanded ? '' : 'rotate-270'}`}
+                symbol="down"
+                title={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
                 onMouseDown={e => e.stopPropagation()}
-                onClick={this.onLoadToggle}
-                role="button"
-                tabIndex={0}
-                onKeyDown={Utils.onKeyDown}
-                aria-label={node.isExpanded ? gettext('Fold') : gettext('Unfold')}
-              >
-              </i>
+                op={this.onLoadToggle}
+              />
             )}
             <i className="tree-node-icon">{icon}</i>
           </div>

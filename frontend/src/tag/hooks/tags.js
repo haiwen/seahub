@@ -114,7 +114,7 @@ export const TagsProvider = ({ repoID, currentPath, selectTagsView, tagsChangedC
       tag_id: id,
     };
     setDisplayNodeKey(nodeKey || '');
-    selectTagsView(node);
+    selectTagsView && selectTagsView(node);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repoID, selectTagsView]);
 

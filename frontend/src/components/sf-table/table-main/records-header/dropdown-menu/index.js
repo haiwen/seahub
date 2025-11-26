@@ -4,6 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
 import ModalPortal from '../../../../modal-portal';
 import { gettext } from '../../../../../utils/constants';
 import { isMobile } from '../../../../../utils/utils';
+import Icon from '../../../../icon';
 
 import './index.css';
 
@@ -41,7 +42,7 @@ const HeaderDropdownMenu = ({ column, ColumnDropdownMenu, customProps }) => {
         aria-label={gettext('More operations')}
         tabIndex={0}
       >
-        <i className="sf3-font-down sf3-font"></i>
+        <Icon symbol="down" />
       </DropdownToggle>
       {isMenuShow && !isMobile &&
         <ModalPortal>

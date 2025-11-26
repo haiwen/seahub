@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+import Icon from '../icon';
 
 import '../../css/single-dropdown-toolbar.css';
 
@@ -44,15 +45,15 @@ class SingleDropdownToolbar extends React.Component {
           tag="span"
           role="button"
           tabIndex="0"
-          className={`${withPlusIcon ? 'ml-2 sf-dropdown-combined-toggle' : 'ml-1 sf-dropdown-toggle'}`}
+          className={`d-flex align-items-center ${withPlusIcon ? 'ml-2 sf-dropdown-combined-toggle' : 'ml-1 sf-dropdown-toggle'}`}
           onClick={this.toggleDropdownMenu}
           onKeyDown={this.onDropdownToggleKeyDown}
           data-toggle="dropdown"
           aria-label={gettext('Operations')}
           aria-expanded={this.state.isDropdownMenuOpen}
         >
-          {withPlusIcon && <i className="sf3-font-new sf3-font main-icon"></i>}
-          <i className="sf3-font-down sf3-font"></i>
+          {withPlusIcon && <Icon symbol="new" className="w-4 h-4 new-icon" />}
+          <Icon symbol="down" className="w-3 h-3" />
         </DropdownToggle>
         <DropdownMenu className='position-fixed'>
           {opList.map((item, index) => {

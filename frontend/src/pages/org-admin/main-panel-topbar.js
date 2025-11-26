@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Account from '../../components/common/account';
+import Icon from '../../components/icon';
 
 const propTypes = {
   children: PropTypes.any,
@@ -13,8 +14,10 @@ class MainPanelTopbar extends Component {
     return (
       <div className={`main-panel-north ${this.props.children ? 'border-left-show' : ''}`}>
         <div className="cur-view-toolbar">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu"></span>
-          <div className="operation">
+          <span className="side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu">
+            <Icon symbol="menu" />
+          </span>
+          <div className="operation d-flex align-items-center">
             {this.props.children}
           </div>
         </div>

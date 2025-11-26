@@ -5,6 +5,7 @@ import Select, { components } from 'react-select';
 import { gettext } from '../../utils/constants';
 import { MenuSelectStyle } from '../common/select';
 import OpIcon from '../../components/op-icon';
+import Icon from '../icon';
 import { Utils } from '../../utils/utils';
 
 import '../../css/select-editor.css';
@@ -29,7 +30,9 @@ const DropdownIndicator = props => {
   return (
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
-        <span className="sf3-font sf3-font-down" style={{ fontSize: '12px', marginLeft: '-2px' }}></span>
+        <span className="d-flex align-items-center" style={{ marginLeft: '-2px' }} aria-hidden="true">
+          <Icon symbol="down" style={{ width: '14px', height: '14px' }} />
+        </span>
       </components.DropdownIndicator>
     )
   );
@@ -83,7 +86,7 @@ class SelectEditor extends React.Component {
             tabIndex={0}
             onKeyDown={Utils.onKeyDown}
           >
-            <i className="sf3-font sf3-font-enlarge" aria-hidden="true"></i>
+            <Icon symbol="new" className="mr-2" aria-hidden="true" />
             <span>{gettext('Add custom permission')}</span>
           </div>
         )
@@ -153,7 +156,8 @@ class SelectEditor extends React.Component {
           <div className="d-flex align-item-center">
             <span>{this.props.translateOption(currentOption)}</span>
             <OpIcon
-              className={classnames('sf3-font sf3-font-rename op-icon ml-1', { 'invisible': !isEditIconShow })}
+              className={classnames('op-icon ml-1', { 'invisible': !isEditIconShow })}
+              symbol="rename"
               title={gettext('Edit')}
               op={this.onEditPermission}
             />

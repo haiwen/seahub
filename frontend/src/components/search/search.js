@@ -19,6 +19,7 @@ import SearchTags from './search-tags';
 import IconBtn from '../icon-btn';
 import SearchedItemDetails from './details';
 import { CollaboratorsProvider } from '../../metadata';
+import Icon from '../icon';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -613,10 +614,12 @@ class Search extends Component {
               tabIndex={0}
               onKeyDown={Utils.onKeyDown}
             >
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
-              <i className="sf3-font sf3-font-enter"></i>
+              <Icon symbol="enter" className="search-types-enter-icon" />
             </div>
           </div>
           {resultItems.length > 0 && (
@@ -651,75 +654,50 @@ class Search extends Component {
       if (path && path !== '/' && !this.props.isViewFile && !isMetadataView && !isTagView) {
         return (
           <div className="search-types">
-            <div
-              className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`}
-              onClick={this.searchRepo}
-              tabIndex={0}
-              role="button"
-              aria-pressed={highlightIndex === 0}
-              onKeyDown={Utils.onKeyDown}
-            >
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
-              {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 0 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
-            <div
-              className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`}
-              onClick={this.searchFolder}
-              tabIndex={0}
-              role="button"
-              aria-pressed={highlightIndex === 1}
-              onKeyDown={Utils.onKeyDown}
-            >
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+            <div className={`search-types-folder ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchFolder} tabIndex={0}>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this folder')}</span>
-              {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 1 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
-            <div
-              className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`}
-              onClick={this.searchAllRepos}
-              tabIndex={0}
-              role="button"
-              aria-pressed={highlightIndex === 2}
-              onKeyDown={Utils.onKeyDown}
-            >
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+            <div className={`search-types-repos ${highlightIndex === 2 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
-              {highlightIndex === 2 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 2 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
           </div>
         );
       } else {
         return (
           <div className="search-types">
-            <div
-              className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`}
-              onClick={this.searchRepo}
-              tabIndex={0}
-              role="button"
-              aria-pressed={highlightIndex === 0}
-              onKeyDown={Utils.onKeyDown}
-            >
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+            <div className={`search-types-repo ${highlightIndex === 0 ? 'search-types-highlight' : ''}`} onClick={this.searchRepo} tabIndex={0}>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in this library')}</span>
-              {highlightIndex === 0 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 0 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
-            <div
-              className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`}
-              onClick={this.searchAllRepos}
-              tabIndex={0}
-              role="button"
-              aria-pressed={highlightIndex === 1}
-              onKeyDown={Utils.onKeyDown}
-            >
-              <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+            <div className={`search-types-repos ${highlightIndex === 1 ? 'search-types-highlight' : ''}`} onClick={this.searchAllRepos} tabIndex={0}>
+              <span className="search-icon-left input-icon-addon">
+                <Icon symbol="search" />
+              </span>
               {inputValue}
               <span className="search-types-text">{gettext('in all libraries')}</span>
-              {highlightIndex === 1 && <i className="sf3-font sf3-font-enter"></i>}
+              {highlightIndex === 1 && <Icon symbol="enter" className="search-types-enter-icon" />}
             </div>
           </div>
         );
@@ -942,7 +920,9 @@ class Search extends Component {
             <div className={`search-mask ${isMaskShow ? 'show' : 'hide'}`} onClick={this.onCloseHandler} style={isMaskShow ? { zIndex: SEARCH_MASK } : {}}></div>
             <div className={`search-container ${isMaskShow ? 'show' : ''}`} style={isMaskShow ? { zIndex: SEARCH_CONTAINER } : {}}>
               <div className={`input-icon ${isMaskShow ? 'mb-1' : ''}`}>
-                <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+                <span className="search-icon-left input-icon-addon">
+                  <Icon symbol="search" />
+                </span>
                 <input
                   type="text"
                   className="form-control search-input"
@@ -958,11 +938,12 @@ class Search extends Component {
                 {isCloseShow &&
                   <button
                     type="button"
-                    className="search-icon-right sf3-font sf3-font-x-01"
+                    className="search-icon-right"
                     onClick={this.onClearSearch}
                     aria-label={gettext('Clear search')}
                     title={gettext('Clear search')}
                   >
+                    <Icon symbol="x-01" />
                   </button>
                 }
                 {isMaskShow && (
@@ -996,14 +977,16 @@ class Search extends Component {
         </MediaQuery>
         <MediaQuery query="(max-width: 767.8px)">
           <div className="search-icon-container">
-            <i className="search-icon sf3-font sf3-font-search" onClick={this.onSearchToggle}></i>
+            <span className="search-icon" onClick={this.onSearchToggle}>
+              <Icon symbol="search" />
+            </span>
           </div>
           {this.state.isSearchInputShow &&
             <div className="search">
               <div className={`search-mask ${isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler} style={{ zIndex: SEARCH_MASK }}></div>
               <div className="search-container" style={{ zIndex: SEARCH_CONTAINER }}>
                 <div className="input-icon">
-                  <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+                  <Icon className="search-icon-left input-icon-addon" symbol="search" />
                   <input
                     type="text"
                     className="form-control search-input"
@@ -1016,14 +999,13 @@ class Search extends Component {
                     autoComplete="off"
                   />
                   {this.state.isCloseShow &&
-                    <button
-                      type="button"
-                      className="search-icon-right input-icon-addon sf3-font sf3-font-x-01"
+                    <IconBtn
+                      symbol="x-01"
+                      className="search-icon-right input-icon-addon"
                       onClick={this.onClearSearch}
                       aria-label={gettext('Clear search')}
                       title={gettext('Clear search')}
-                    >
-                    </button>
+                    />
                   }
                 </div>
                 <div className="search-result-container dropdown-search-result-container">

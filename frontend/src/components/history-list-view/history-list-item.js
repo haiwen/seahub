@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
+import Icon from '../icon';
 
 import '../../css/history-record-item.css';
 
@@ -92,13 +93,15 @@ class HistoryListItem extends React.Component {
         <div className="history-operation">
           <Dropdown isOpen={this.state.isMenuShow} toggle={this.onToggleClick}>
             <DropdownToggle
-              tag='a'
-              className={`sf3-font sf3-font-more ${(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}`}
+              tag='span'
+              className={(this.state.isShowOperationIcon || isHighlightItem) ? '' : 'invisible'}
               data-toggle="dropdown"
               aria-expanded={this.state.isMenuShow}
               title={gettext('More operations')}
               aria-label={gettext('More operations')}
-            />
+            >
+              <Icon symbol="more-level" />
+            </DropdownToggle>
             <DropdownMenu>
               {(this.props.index !== 0) && <DropdownItem onClick={this.onItemRestore}>{gettext('Restore')}</DropdownItem>}
               <DropdownItem tag='a' href={url} onClick={this.onItemDownLoad}>{gettext('Download')}</DropdownItem>

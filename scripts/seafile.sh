@@ -29,7 +29,6 @@ export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
 export SEAFILE_CONF_DIR=${default_seafile_data_dir}
 export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
 export SEAHUB_DIR=$seahubdir
-export SEAFDAV_CONF=${central_config_dir}/seafdav.conf
 export MARIADB_PLUGIN_DIR=${INSTALLPATH}/seafile/lib/plugin
 
 script_name=$0

@@ -13,6 +13,7 @@ import TrashRepos from './repos/trash-repos';
 import ShareLinks from './links/share-links';
 import UploadLinks from './links/upload-links';
 import LinksNav from './links/links-nav';
+import Icon from '../../components/icon';
 
 const LINKS_PATH_NAME_MAP = {
   'share-links': 'shareLinks',
@@ -175,8 +176,8 @@ const LibrariesAndLinks = ({ ...commonProps }) => {
     <>
       {path === 'all-libraries' && (
         <MainPanelTopbar search={getSearch()} { ...commonProps }>
-          <Button className="btn btn-secondary operation-item" onClick={toggleCreateRepoDialog} aria-label={gettext('New Library')}>
-            <i className="sf3-font sf3-font-enlarge text-secondary mr-1" aria-hidden="true"></i>
+          <Button className="btn btn-secondary operation-item d-flex align-items-center" onClick={toggleCreateRepoDialog} aria-label={gettext('New Library')}>
+            <span className="d-inline-flex align-items-center mr-1"><Icon symbol="new" /></span>
             {gettext('New Library')}
           </Button>
         </MainPanelTopbar>

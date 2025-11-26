@@ -13,6 +13,7 @@ import TextTranslation from '../../utils/text-translation';
 import { validateName } from '../utils/validate';
 import { METADATA_VIEWS_DRAG_DATA_KEY, METADATA_VIEWS_KEY, TREE_NODE_LEFT_INDENT, VIEW_TYPE, VIEWS_TYPE_FOLDER, VIEWS_TYPE_VIEW } from '../constants';
 import { getNewViewMenuItem, KEY_ADD_VIEW_MAP } from '../../components/dir-view-mode/dir-views/new-view-menu';
+import Icon from '../../components/icon';
 
 const ViewsFolder = ({
   leftIndent, folder, currentPath, userPerm, canDeleteView, getFoldersNames, getMoveableFolders, generateNewViewDefaultName,
@@ -303,12 +304,11 @@ const ViewsFolder = ({
           ) : folderName}
         </div>
         <div className="left-icon" style={{ left: leftIndent - 40 }}>
-          <i
-            className={classnames('folder-toggle-icon sf3-font sf3-font-down', { 'rotate-270': !expanded })}
-          >
-          </i>
+          <span className="folder-toggle-icon">
+            <Icon symbol="down" className={classnames({ 'rotate-270': !expanded })} />
+          </span>
           <span className="tree-node-icon">
-            <i className="sf3-font sf3-font-folder"></i>
+            <Icon symbol="folder" />
           </span>
         </div>
         <div className="right-icon">
@@ -316,7 +316,7 @@ const ViewsFolder = ({
             <ItemDropdownMenu
               item={{ name: 'metadata-folder' }}
               menuClassname="metadata-views-dropdown-menu"
-              toggleClass="sf3-font sf3-font-more"
+              toggleChildren={<Icon symbol="more-level" />}
               freezeItem={freezeItem}
               unfreezeItem={unfreezeItem}
               getMenuList={() => folderMoreOperationMenus}

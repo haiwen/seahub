@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../../../../utils/constants';
+import Icon from '../../../../../../components/icon';
 
 const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
   let [isShow, setShow] = useState(false);
@@ -35,11 +36,13 @@ const OpMenu = ({ onRename, onFreezed, onUnFreezed }) => {
         tag="i"
         role="button"
         tabIndex="0"
-        className="sf-dropdown-toggle op-icon sf3-font-more sf3-font face-recognition-more-operations-toggle"
+        className="sf-dropdown-toggle op-icon face-recognition-more-operations-toggle"
         title={gettext('More operations')}
         aria-label={gettext('More operations')}
         data-toggle="dropdown"
-      />
+      >
+        <Icon symbol="more-level" />
+      </DropdownToggle>
       <DropdownMenu>
         <DropdownItem onClick={handleRename}>{gettext('Rename')}</DropdownItem>
       </DropdownMenu>
@@ -54,4 +57,3 @@ OpMenu.propTypes = {
 };
 
 export default OpMenu;
-

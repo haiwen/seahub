@@ -5,6 +5,7 @@ import { getCellValueByColumn } from '../../metadata-details/utils';
 import SelectOption from '../../cell-formatter/select-option';
 import MultipleSelectEditor from '../../cell-editors/multiple-select-editor';
 import { getColumnOptionNamesByIds } from '../../../utils/cell';
+import Icon from '../../../../components/icon';
 
 const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
   const [isEditorShow, setIsEditorShow] = useState(false);
@@ -42,7 +43,7 @@ const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
             return option ? <SelectOption key={optionId} option={option} /> : null;
           })}
         </div>
-        <i className="sf3-font sf3-font-down dropdown-indicator" aria-hidden="true"></i>
+        <Icon symbol="down" className="dropdown-indicator" />
         {isEditorShow && (
           <MultipleSelectEditor
             ref={editorRef}

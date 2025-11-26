@@ -136,8 +136,8 @@ export default class PageDropdownMenu extends Component {
 
   renderItem = (onClick, icon, text) => {
     return (
-      <DropdownItem onClick={onClick}>
-        <i className={`sf3-font sf3-font-${icon}`} aria-hidden="true" />
+      <DropdownItem className="d-flex align-items-center" onClick={onClick}>
+        <Icon symbol={icon} className="mr-2" aria-hidden="true" />
         <span className="item-text">{text}</span>
       </DropdownItem>
     );
@@ -173,10 +173,10 @@ export default class PageDropdownMenu extends Component {
             { name: 'flip', enabled: true, options: { fallbackPlacements: ['top'] } }
           ]}
         >
-          {this.renderItem(this.handleCopyLink, 'link', gettext('Copy link'))}
+          {this.renderItem(this.handleCopyLink, 'link1', gettext('Copy link'))}
           {this.renderItem(this.onRename, 'rename', gettext('Modify name'))}
-          {this.renderItem(this.addPageAbove, 'enlarge', gettext('Add page above'))}
-          {this.renderItem(this.addPageBelow, 'enlarge', gettext('Add page below'))}
+          {this.renderItem(this.addPageAbove, 'new', gettext('Add page above'))}
+          {this.renderItem(this.addPageBelow, 'new', gettext('Add page below'))}
           {this.renderItem(this.duplicatePage, 'copy1', gettext('Duplicate page'))}
           {canDeletePage && this.renderItem(this.onDeletePage, 'delete1', gettext('Delete page'))}
           <Dropdown
@@ -193,11 +193,11 @@ export default class PageDropdownMenu extends Component {
               className="dropdown-item font-weight-normal rounded-0 d-flex align-items-center pr-2 justify-content-between"
               onMouseEnter={this.showImportPageMenu}
             >
-              <span>
-                <i className='sf3-font sf3-font-import-sdoc' aria-hidden="true" />
+              <span className="d-flex align-items-center">
+                <Icon symbol="import-sdoc" className="mr-2" aria-hidden="true" />
                 <span>{gettext('Import page')}</span>
               </span>
-              <i className="sf3-font-down sf3-font rotate-270 mr-0" aria-hidden="true"></i>
+              <Icon symbol="down" className="rotate-270 mr-2" aria-hidden="true" />
             </DropdownToggle>
             <DropdownMenu className="ml-0">
               <DropdownItem key="import-docx" onClick={this.importPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>

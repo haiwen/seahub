@@ -5,6 +5,7 @@ import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import SysAdminUserRoleEditor from '../../../components/select-editor/sysadmin-user-role-editor';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import Icon from '../../icon';
 
 const propTypes = {
   availableRoles: PropTypes.array.isRequired,
@@ -137,9 +138,11 @@ class SysAdminAddUserDialog extends React.Component {
             </FormGroup>
             {showRole &&
             <FormGroup>
-              <Label>
+              <Label className="d-flex align-items-center">
                 {gettext('Role')}
-                <span className="small text-secondary ml-1 sf3-font sf3-font-tips" title={gettext('You can also add a user as a guest, who will not be allowed to create libraries and groups.')}></span>
+                <span className="small text-secondary ml-1 d-inline-flex align-items-center" title={gettext('You can also add a user as a guest, who will not be allowed to create libraries and groups.')}>
+                  <Icon symbol="about" />
+                </span>
               </Label>
               <SysAdminUserRoleEditor
                 isTextMode={false}
@@ -155,10 +158,10 @@ class SysAdminAddUserDialog extends React.Component {
               <InputGroup>
                 <Input autoComplete="new-password" type={isPasswordVisible ? 'text' : 'password'} value={password || ''} onChange={this.inputPassword} />
                 <Button className="mt-0" onClick={this.togglePasswordVisible}>
-                  <i className={`link-operation-icon sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
+                  <Icon symbol={this.state.isPasswordVisible ? 'eye' : 'eye-slash'} className="link-operation-icon" />
                 </Button>
                 <Button className="mt-0" onClick={this.generatePassword}>
-                  <i className="link-operation-icon sf3-font sf3-font-magic"></i>
+                  <Icon symbol="magic" className="link-operation-icon" />
                 </Button>
               </InputGroup>
             </FormGroup>

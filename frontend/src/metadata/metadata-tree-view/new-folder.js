@@ -5,6 +5,7 @@ import InlineNameEditor from './inline-name-editor';
 import { validateName } from '../utils/validate';
 import { useMetadata } from '../hooks';
 import { VIEWS_TYPE_FOLDER } from '../constants';
+import Icon from '../../components/icon';
 
 const NewFolder = ({ closeNewFolder }) => {
   const { navigation, addFolder } = useMetadata();
@@ -38,8 +39,12 @@ const NewFolder = ({ closeNewFolder }) => {
           />
         </div>
         <div className="left-icon">
-          <i className="folder-toggle-icon sf3-font sf3-font-down" aria-hidden="true"></i>
-          <span className="tree-node-icon"><i className="sf3-font sf3-font-folder"></i></span>
+          <span className="folder-toggle-icon">
+            <Icon symbol="down" />
+          </span>
+          <span className="tree-node-icon">
+            <Icon symbol="folder" />
+          </span>
         </div>
       </div>
     </div>

@@ -41,6 +41,13 @@ class ConvertWikiDialog extends React.Component {
         obj.label = departments[i].name;
         options.push(obj);
       }
+      const myWikiOption = {
+        id: '',
+        value: 'My wiki',
+        email: '',
+        label: gettext('My Wikis'),
+      };
+      options.unshift(myWikiOption);
       this.setState({ options });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

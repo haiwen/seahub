@@ -17,6 +17,7 @@ import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import DeletedReposDialog from '../../components/dialog/my-deleted-repos-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import MylibRepoListView from './mylib-repo-list-view';
+import Icon from '../../components/icon';
 
 class MyLibraries extends Component {
   constructor(props) {
@@ -171,7 +172,9 @@ class MyLibraries extends Component {
               ) : (
                 <>
                   {repoList.length > 0 &&
-                    <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>
+                    <span className="action-icon" onClick={this.toggleSortOptionsDialog}>
+                      <Icon symbol="sort" aria-hidden="true" />
+                    </span>
                   }
                 </>
               )}

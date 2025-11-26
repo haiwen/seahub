@@ -7,6 +7,7 @@ import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFoo
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
 import FilesSubNav from '../components/files-sub-nav';
+import ShareAdminSubNav from '../components/share-admin-sub-nav';
 import AboutDialog from './dialog/about-dialog';
 import { seafileAPI } from '../utils/seafile-api';
 import { Utils } from '../utils/utils';
@@ -33,6 +34,7 @@ class MainSideNavFolded extends React.Component {
     this.state = {
       groupItems: [],
       isFilesSubNavShown: false,
+      isShareAdminSubNavShown: false,
       isAboutDialogShow: false,
       isShowWechatDialog: false,
     };
@@ -41,7 +43,7 @@ class MainSideNavFolded extends React.Component {
 
   componentDidMount() {
     document.addEventListener('click', this.handleOutsideClick);
-    this.unsubscribeHeaderEvent = this.props.eventBus.subscribe('top-header-mouse-enter', this.closeSubNav);
+    this.unsubscribeHeaderEvent = this.props.eventBus.subscribe('top-header-mouse-enter', this.closeAllSubNav);
     seafileAPI.listGroups().then(res => {
       this.setState({
         groupItems: res.data.map(item => new Group(item)).sort((a, b) => a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1),
@@ -63,10 +65,18 @@ class MainSideNavFolded extends React.Component {
 
 
   handleOutsideClick = (e) => {
-    const { isFilesSubNavShown } = this.state;
+    const { isFilesSubNavShown, isShareAdminSubNavShown } = this.state;
     if (isFilesSubNavShown && !this.filesSubNav.contains(e.target)) {
       this.closeSubNav();
     }
+    if (isShareAdminSubNavShown && !this.shareAdminSubNav.contains(e.target)) {
+      this.closeShareAdminSubNav();
+    }
+  };
+
+  closeAllSubNav = () => {
+    this.closeSubNav();
+    this.closeShareAdminSubNav();
   };
 
   openSubNav = () => {
@@ -76,12 +86,33 @@ class MainSideNavFolded extends React.Component {
       const top = (60 + (infoBar ? infoBar.clientHeight : 0)) + 'px';
       this.filesSubNav.style.top = top;
     }
-    this.setState({ isFilesSubNavShown: true });
+    this.setState({
+      isFilesSubNavShown: true,
+      isShareAdminSubNavShown: false
+    });
   };
 
   closeSubNav = () => {
     if (!this.state.isFilesSubNavShown) return;
     this.setState({ isFilesSubNavShown: false });
+  };
+
+  openShareAdminSubNav = () => {
+    if (this.state.isShareAdminSubNavShown) return;
+    if (curNoteMsg) {
+      const infoBar = document.getElementById('info-bar');
+      const top = (230 + (infoBar ? infoBar.clientHeight : 0)) + 'px';
+      this.filesSubNav.style.top = top;
+    }
+    this.setState({
+      isShareAdminSubNavShown: true,
+      isFilesSubNavShown: false
+    });
+  };
+
+  closeShareAdminSubNav = () => {
+    if (!this.state.isShareAdminSubNavShown) return;
+    this.setState({ isShareAdminSubNavShown: false });
   };
 
   tabItemClick = (e, param, id) => {
@@ -96,12 +127,38 @@ class MainSideNavFolded extends React.Component {
     }
     this.props.tabItemClick(param, id);
     this.setState({
-      isFilesSubNavShown: false
+      isFilesSubNavShown: false,
+      isShareAdminSubNavShown: false,
     });
   };
 
   getActiveClass = (tab) => {
     return this.props.currentTab === tab ? 'active' : '';
+  };
+
+  getFilesSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const { groupItems } = this.state;
+    if (currentTab === 'libraries') {
+      return 'active';
+    }
+    const filesTabs = ['my-libs', 'shared-libs', 'org', 'shared-with-ocm', 'ocm-via-webdav', 'deleted'];
+    if (filesTabs.includes(currentTab)) {
+      return 'active';
+    }
+    if (groupItems.some(g => g.name === currentTab)) {
+      return 'active';
+    }
+    return '';
+  };
+
+  getShareAdminSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const shareAdminTabs = ['share-admin-share-links', 'share-admin-upload-links', 'share-admin-libs', 'share-admin-folders'];
+    if (shareAdminTabs.includes(currentTab)) {
+      return 'active';
+    }
+    return '';
   };
 
   toggleAboutDialog = () => {
@@ -110,7 +167,7 @@ class MainSideNavFolded extends React.Component {
 
   render() {
     let showActivity = isPro || !isDBSqlite3;
-    const { groupItems, isFilesSubNavShown } = this.state;
+    const { groupItems, isFilesSubNavShown, isShareAdminSubNavShown } = this.state;
     return (
       <Fragment>
         <div className='side-nav-folded-container h-100 position-relative'>
@@ -138,44 +195,68 @@ class MainSideNavFolded extends React.Component {
               </div>
             </div>
           </div>
+          {/* FOLDED SIDE NAV SHARE ADMIN */}
+          <div className="side-nav side-nav-folded position-relative" style={{ zIndex: FOLDED_SIDE_NAV_FILES }}>
+            <div className='side-nav-con p-0'>
+              <div className="nav nav-pills nav-container">
+                <ul
+                  id="share-admin-sub-nav"
+                  className="sub-nav position-fixed rounded border shadow p-4 o-auto"
+                  style={{
+                    'left': isShareAdminSubNavShown ? SIDE_PANEL_FOLDED_WIDTH + 4 : '-240px',
+                    'maxHeight': SUB_NAV_ITEM_HEIGHT * 10 + 16 * 2,
+                    'opacity': isShareAdminSubNavShown ? 1 : 0,
+                  }}
+                  ref={ref => this.shareAdminSubNav = ref}
+                  onMouseLeave={this.closeShareAdminSubNav}
+                >
+                  <ShareAdminSubNav
+                    tabItemClick={this.tabItemClick}
+                    currentTab={this.props.currentTab}
+                  />
+                </ul>
+              </div>
+            </div>
+          </div>
+
           {/* FOLDED SIDE NAVS */}
           <div className="side-nav side-nav-folded h-100 position-relative" style={{ zIndex: FOLDED_SIDE_NAV }}>
             <div className='side-nav-con d-flex flex-column'>
               <ul className="nav nav-pills flex-column nav-container">
-                <li className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
+                <li className={`nav-item flex-column ${this.getFilesSectionActiveClass()}`}>
                   <Link
                     to={ siteRoot + 'libraries/' }
-                    className={`nav-link ellipsis ${this.getActiveClass('libraries')}`}
+                    className={`nav-link ellipsis ${this.getFilesSectionActiveClass()}`}
                     onClick={(e) => this.tabItemClick(e, 'libraries')}
                     onMouseEnter={this.openSubNav}
                     aria-label={gettext('Libraries')}
                   >
-                    <span className="sf3-font-files sf3-font mr-0" aria-hidden="true"></span>
+                    <span className="d-flex align-items-center" aria-hidden="true"><Icon symbol="files" /></span>
                   </Link>
                 </li>
 
-                <li className={`nav-item ${this.getActiveClass('starred')}`} onMouseEnter={this.closeSubNav}>
+                <li className={`nav-item ${this.getActiveClass('starred')}`} onMouseEnter={this.closeAllSubNav}>
                   <Link
                     className={`nav-link ellipsis ${this.getActiveClass('starred')}`}
                     to={siteRoot + 'starred/'}
                     onClick={(e) => this.tabItemClick(e, 'starred')}
                     aria-label={gettext('Favorites')}
                   >
-                    <span className="sf3-font-starred sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-starred"></span>
+                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-starred"><Icon symbol="favorites" /></span>
                     <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
                   </Link>
                 </li>
 
                 {showActivity &&
                 <>
-                  <li className={`nav-item ${this.getActiveClass('dashboard')}`} onMouseEnter={this.closeSubNav}>
+                  <li className={`nav-item ${this.getActiveClass('dashboard')}`} onMouseEnter={this.closeAllSubNav}>
                     <Link
                       className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`}
                       to={siteRoot + 'activities/all/'}
                       onClick={(e) => this.tabItemClick(e, 'dashboard')}
                       aria-label={gettext('Activities')}
                     >
-                      <span className="sf3-font-activities sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-dashboard"></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-dashboard"><Icon symbol="activities" /></span>
                       <Tip target="main-side-nav-folded-dashboard" text={gettext('Activities')} />
                     </Link>
                   </li>
@@ -183,36 +264,47 @@ class MainSideNavFolded extends React.Component {
                 }
 
                 {canCreateWiki &&
-                <li className={`nav-item ${this.getActiveClass('published')}`} onMouseEnter={this.closeSubNav}>
+                <li className={`nav-item ${this.getActiveClass('published')}`} onMouseEnter={this.closeAllSubNav}>
                   <Link
                     className={`nav-link ellipsis ${this.getActiveClass('published')}`}
                     to={siteRoot + 'published/'}
                     onClick={(e) => this.tabItemClick(e, 'published')}
                     aria-label={gettext('Wikis')}
                   >
-                    <span className="sf3-font-wiki sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wikis"></span>
+                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-wikis"><Icon symbol="wiki" /></span>
                     <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
                   </Link>
                 </li>
                 }
 
                 {canInvitePeople &&
-                <li className={`nav-item ${this.getActiveClass('invitations')}`} onMouseEnter={this.closeSubNav}>
+                <li className={`nav-item ${this.getActiveClass('invitations')}`} onMouseEnter={this.closeAllSubNav}>
                   <Link
                     className={`nav-link ellipsis ${this.getActiveClass('invitations')}`}
                     to={siteRoot + 'invitations/'}
                     onClick={(e) => this.tabItemClick(e, 'invitations')}
                   >
-                    <span className="sf3-font-invite-visitors sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-invitations"></span>
+                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-invitations"><Icon symbol="invite-guests" /></span>
                     <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
                   </Link>
                 </li>
                 }
+                <li className={`nav-item flex-column ${this.getShareAdminSectionActiveClass()}`}>
+                  <span
+                    className={`nav-link ellipsis ${this.getShareAdminSectionActiveClass()}`}
+                    onMouseEnter={this.openShareAdminSubNav}
+                    aria-label={gettext('Share Admin')}
+                  >
+                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-share-admin">
+                      <Icon symbol="share-admin" />
+                    </span>
+                  </span>
+                </li>
 
                 {customNavItems &&
                 customNavItems.map((item, idx) => {
                   return (
-                    <li key={idx} className='nav-item'>
+                    <li key={idx} className='nav-item' onMouseEnter={this.closeAllSubNav}>
                       <a href={item.link} className="nav-link ellipsis" title={item.desc} aria-label={item.desc}>
                         <span className={item.icon} aria-hidden="true" title={item.desc}></span>
                       </a>
@@ -226,9 +318,9 @@ class MainSideNavFolded extends React.Component {
                 <div className='side-nav-footer' dangerouslySetInnerHTML={{ __html: sideNavFooterCustomHtml }}></div>
                 :
                 <ul className="nav nav-pills flex-column nav-container">
-                  <li className='nav-item'>
+                  <li className='nav-item' onMouseEnter={this.closeAllSubNav}>
                     <a className='nav-link' href={siteRoot + 'help/'} title={gettext('Help')}>
-                      <span className="sf3-font-help sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-help"></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-help"><Icon symbol="help" /></span>
                       <Tip target="main-side-nav-folded-help" text={gettext('Help')} />
                     </a>
                   </li>
@@ -236,7 +328,9 @@ class MainSideNavFolded extends React.Component {
                   <>
                     <li className='nav-item'>
                       <a href={`${siteRoot}terms/`} className="nav-link" aria-label={gettext('Terms')}>
-                        <span className="sf3-font-terms sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-terms"></span>
+                        <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-terms">
+                          <Icon symbol="terms" />
+                        </span>
                         <Tip target="main-side-nav-folded-terms" text={gettext('Terms')} />
                       </a>
                     </li>
@@ -244,7 +338,7 @@ class MainSideNavFolded extends React.Component {
                   }
                   <li className='nav-item'>
                     <a href={siteRoot + 'download_client_program/'} className="nav-link" aria-label={gettext('Clients')}>
-                      <span className="sf3-font-devices sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-clients"></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-clients"><Icon symbol="clients" /></span>
                       <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
                     </a>
                   </li>
@@ -258,7 +352,7 @@ class MainSideNavFolded extends React.Component {
                       onClick={this.toggleAboutDialog}
                       onKeyDown={Utils.onKeyDown}
                     >
-                      <span className="sf3-font-about sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-about"></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-about"><Icon symbol="about" /></span>
                       <Tip target="main-side-nav-folded-about" text={gettext('About')} />
                     </div>
                   </li>
@@ -273,7 +367,7 @@ class MainSideNavFolded extends React.Component {
                       onClick={this.toggleWechatDialog}
                       onKeyDown={Utils.onKeyDown}
                     >
-                      <span className="sf3-font-hi sf3-font mr-0" aria-hidden="true" id="main-side-nav-folded-wechat"></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-wechat"><Icon symbol="hi" /></span>
                       <Tip target="main-side-nav-folded-wechat" text={`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`} />
                     </div>
                   </li>
@@ -289,7 +383,7 @@ class MainSideNavFolded extends React.Component {
                 aria-label={gettext('Unfold the sidebar')}
                 title={gettext('Unfold the sidebar')}
               >
-                <Icon symbol="open-sidebar" className="mr-0" />
+                <Icon symbol="unfold-sidebar" className="mr-0" />
               </div>
             </div>
           </div>

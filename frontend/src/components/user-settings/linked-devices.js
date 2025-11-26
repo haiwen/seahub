@@ -10,7 +10,7 @@ import { Utils } from '../../utils/utils';
 import toaster from '../../components/toast';
 import ConfirmUnlinkDeviceDialog from '../../components/dialog/confirm-unlink-device';
 import MobileItemMenu from '../../components/mobile-item-menu';
-import OpIcon from '../op-icon';
+import Icon from '../icon';
 
 dayjs.extend(relativeTime);
 
@@ -129,7 +129,7 @@ class Item extends Component {
   renderDesktop = () => {
     const data = this.props.data;
     const { isHighlighted } = this.state;
-    let opClasses = 'sf3-font-delete1 sf3-font unlink-device op-icon';
+    let opClasses = 'unlink-device op-icon';
     opClasses += this.state.isOpIconShown ? '' : ' invisible';
     return (
       <tr
@@ -146,11 +146,15 @@ class Item extends Component {
         <td>{data.last_login_ip}</td>
         <td>{dayjs(data.last_accessed).fromNow()}</td>
         <td>
-          <OpIcon
+          <span
+            role="button"
             className={opClasses}
             title={gettext('Unlink')}
-            op={this.handleClick}
-          />
+            aria-label={gettext('Unlink')}
+            onClick={this.handleClick}
+          >
+            <Icon symbol="delete1" />
+          </span>
         </td>
       </tr>
     );

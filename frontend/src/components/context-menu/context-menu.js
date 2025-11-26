@@ -5,6 +5,7 @@ import listener from './globalEventListener';
 import { hideMenu } from './actions';
 import { callIfExists } from './helpers';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 const propTypes = {
   id: PropTypes.string.isRequired,
@@ -233,7 +234,7 @@ class ContextMenu extends React.Component {
                   onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                 >
                   <span className="mr-auto">{menuItem.value}</span>
-                  <i className="sf3-font-down sf3-font rotate-270"></i>
+                  <Icon symbol="down" className="rotate-270" />
                 </DropdownToggle>
                 <DropdownMenu>
                   {menuItem.subOpList.map((item, index) => {

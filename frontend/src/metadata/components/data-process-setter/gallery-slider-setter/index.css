@@ -63,3 +63,8 @@
 .metadata-slider-container .metadata-slider-icon-button:hover {
   background: #eee;
 }
+
+.metadata-slider-container .metadata-slider-icon-button .seafile-multicolor-icon {
+  width: 14px;
+  height: 14px;
+}

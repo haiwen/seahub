@@ -20,13 +20,16 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
 
   const [isLoading, setLoading] = useState(true);
   const [enableMetadata, setEnableMetadata] = useState(false);
+  const [globalHiddenColumns, setGlobalHiddenColumns] = useState([]);
+
   const [enableTags, setEnableTags] = useState(false);
-  const [showView, setShowView] = useState(false);
   const [tagsLang, setTagsLang] = useState('en');
+
+  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
+
+  const [showView, setShowView] = useState(false);
   const [detailsSettings, setDetailsSettings] = useState({});
   const [isBeingBuilt, setIsBeingBuilt] = useState(false);
-  const [enableFaceRecognition, setEnableFaceRecognition] = useState(false);
-  const [globalHiddenColumns, setGlobalHiddenColumns] = useState([]);
 
   const cancelMetadataURL = useCallback((isSetRoot = false) => {
     // If attribute extension is turned off, unmark the URL
@@ -163,8 +166,8 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         enableMetadataManagement,
         enableMetadata,
         isBeingBuilt,
-        updateEnableMetadata,
         setIsBeingBuilt,
+        updateEnableMetadata,
         enableTags,
         showView,
         tagsLang,

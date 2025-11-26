@@ -4,6 +4,7 @@ import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap
 import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import MobileItemMenu from '../components/mobile-item-menu';
+import Icon from './icon';
 
 const propTypes = {
   isPC: PropTypes.bool,
@@ -203,8 +204,8 @@ class LibraryOperationMenu extends React.Component {
           className={isLibView ? 'd-block' : ''}
         >
           <DropdownToggle
-            tag={isLibView ? 'div' : 'i'}
-            className={isLibView ? 'dir-others-item' : 'op-icon sf3-font-more sf3-font'}
+            tag={isLibView ? 'div' : 'span'}
+            className={isLibView ? 'dir-others-item' : 'op-icon'}
             role="button"
             tabIndex="0"
             title={isLibView ? gettext('More') : gettext('More operations')}
@@ -213,7 +214,7 @@ class LibraryOperationMenu extends React.Component {
             onKeyDown={this.onDropdownToggleKeyDown}
             data-toggle="dropdown"
           >
-            {children}
+            {isLibView ? children : <Icon symbol="more-level" />}
           </DropdownToggle>
           <DropdownMenu onMouseMove={this.onDropDownMouseMove} container={isLibView ? 'body' : ''}>
             {operations.map((item, index) => {
@@ -235,7 +236,7 @@ class LibraryOperationMenu extends React.Component {
                       onMouseEnter={this.toggleAdvancedMenuShown}
                     >
                       {this.translateOperations(item)}
-                      <i className="sf3-font-down sf3-font rotate-270"></i>
+                      <Icon symbol="down" className="rotate-270" />
                     </DropdownToggle>
                     <DropdownMenu>
                       {advancedOperations.map((item, index) => {

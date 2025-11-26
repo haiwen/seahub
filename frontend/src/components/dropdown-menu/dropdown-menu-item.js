@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { DropdownItem } from 'reactstrap';
 import classNames from 'classnames';
+import Icon from '../icon';
 
 const DropdownMenuItem = ({
   menuItem,
@@ -34,7 +35,7 @@ const DropdownMenuItem = ({
       onMouseMove={isSubMenuItem ? undefined : onMouseMove}
     >
       {!isSubMenuItem && menuItem.tick && (
-        <i className="dropdown-item-tick sf2-icon-tick"></i>
+        <span className="dropdown-item-tick"><Icon symbol="tick1" /></span>
       )}
       {menuItem.icon_dom || null}
       {isSubMenuItem ? <span>{menuItem.value}</span> : menuItem.value}

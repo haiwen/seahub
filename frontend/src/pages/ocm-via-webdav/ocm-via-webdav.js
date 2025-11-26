@@ -9,6 +9,7 @@ import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import EmptyTip from '../../components/empty-tip';
 import { formatWithTimezone } from '../../utils/time';
+import Icon from '../../components/icon';
 
 import '../../css/lib-content-view.css';
 
@@ -276,8 +277,8 @@ class Item extends Component {
           }
         </td>
         <td>
-          {item.is_dir ? '' : <i className={`op-icon sf3-font sf3-font-download1 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}></i>}
-          {path ? '' : <i className={`op-icon sf2-icon-x3 ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}></i>}
+          {item.is_dir ? '' : <span className={`op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}><Icon symbol="download" /></span>}
+          {path ? '' : <span className={`op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}><Icon symbol="x-01" /></span>}
         </td>
         <td>{item.shared_by}</td>
         <td title={formatWithTimezone(item.ctime)}>{dayjs(item.ctime).fromNow()}</td>

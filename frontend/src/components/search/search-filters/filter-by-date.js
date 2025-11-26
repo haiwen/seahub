@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import dayjs from 'dayjs';
+import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import OpIcon from '../../../components/op-icon';
 import Picker from '../../date-and-time-picker';
 import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY, SEARCH_FILTER_BY_DATE_TYPE_KEY } from '../../../constants';
-import classNames from 'classnames';
+import Icon from '../../icon';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -181,7 +182,7 @@ const FilterByDate = ({ date, onChange }) => {
           aria-expanded={isOpen}
         >
           <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
-          <i className="sf3-font sf3-font-down pl-1"></i>
+          <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-date-menu">
@@ -196,7 +197,7 @@ const FilterByDate = ({ date, onChange }) => {
                   aria-expanded={isTypeOpen}
                 >
                   <span className="filter-label">{typeLabel}</span>
-                  <i className="sf3-font sf3-font-down pl-1"></i>
+                  <Icon symbol="down" className="ml-1" />
                 </DropdownToggle>
                 <DropdownMenu>
                   {typeOptions.map((option) => {
@@ -204,15 +205,16 @@ const FilterByDate = ({ date, onChange }) => {
                     return (
                       <DropdownItem key={option.key} data-toggle={option.key} onClick={onChangeType}>
                         {option.label}
-                        {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                        {isSelected && <Icon symbol="tick1" className="dropdown-item-tick" />}
                       </DropdownItem>
                     );
                   })}
                 </DropdownMenu>
               </Dropdown>
               <OpIcon
-                className="op-icon sf3-font-delete1 sf3-font"
+                className="op-icon"
                 title={gettext('Delete')}
+                symbol="delete1"
                 op={onClearDate}
               />
             </div>
@@ -230,7 +232,7 @@ const FilterByDate = ({ date, onChange }) => {
                   toggle={false}
                 >
                   {option.label}
-                  {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                  {isSelected && <Icon symbol="tick1" className="dropdown-item-tick" />}
                 </DropdownItem>
               );
             })}

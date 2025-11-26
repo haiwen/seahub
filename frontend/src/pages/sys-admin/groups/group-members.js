@@ -14,6 +14,7 @@ import RoleSelector from '../../../components/single-selector';
 import MainPanelTopbar from '../main-panel-topbar';
 import UserLink from '../user-link';
 import GroupNav from './group-nav';
+import OpIcon from '../../../components/op-icon';
 
 class Content extends Component {
 
@@ -176,13 +177,12 @@ class Item extends Component {
           </td>
           <td>
             {item.role != 'Owner' &&
-            <i
-              role="button"
-              className={`op-icon sf2-icon-x3 ${highlighted ? '' : 'invisible'}`}
-              title={gettext('Remove')}
-              onClick={this.toggleDeleteDialog}
-            >
-            </i>
+              <OpIcon
+                className={highlighted ? '' : 'invisible'}
+                symbol="x-01"
+                title={gettext('Remove')}
+                op={this.toggleDeleteDialog}
+              />
             }
           </td>
         </tr>

@@ -1,0 +1,48 @@
+.repo-list-popover {
+  width: 300px;
+  max-width: 300px;
+}
+
+.repo-list-popover__search {
+  width: 300px;
+  padding: 6px 10px;
+  position: relative;
+}
+
+.repo-list-popover__search .search-icon-left {
+  left: 4px;
+}
+
+.repo-list-popover__search input {
+  height: 31px;
+  padding: 0 0 0 24px;
+}
+
+.repo-list-popover__list {
+  max-height: 252px;
+  overflow-y: auto;
+}
+
+.repo-list-popover__list .repo-list-item {
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  clear: both;
+  display: block;
+  display: flex;
+  font-weight: 400;
+  justify-content: space-between;
+  line-height: 24px;
+  overflow: hidden;
+  padding: 6px 10px;
+  text-align: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.repo-list-popover__list .repo-list-item:hover {
+  background-color: #20a0ff;
+  color: #fff;
+  cursor: pointer;
+}

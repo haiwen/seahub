@@ -9,6 +9,7 @@ import Search from '../../components/search/search';
 import Notification from '../../components/common/notification';
 import Account from '../../components/common/account';
 import SdocWikiPageViewer from '../../components/sdoc-wiki-page-viewer';
+import Icon from '../../components/icon';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -88,7 +89,9 @@ class MainPanel extends Component {
           {!username &&
             <Fragment>
               <div className="cur-view-toolbar">
-                <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+                <span className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
+                  <Icon symbol="menu" />
+                </span>
               </div>
               <div className="common-toolbar">
                 {isPro && (
@@ -100,11 +103,15 @@ class MainPanel extends Component {
           {username && (
             <Fragment>
               <div className="cur-view-toolbar">
-                <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+                <span className="hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}>
+                  <Icon symbol="menu" />
+                </span>
                 {this.props.permission == 'rw' && (
                   Utils.isDesktop() ?
                     <button className="btn btn-secondary operation-item" title={gettext('Edit')} onClick={this.onEditClick}>{gettext('Edit')}</button> :
-                    <span className="sf3-font sf3-font-rename mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick}></span>
+                    <span className="mobile-toolbar-icon" title={gettext('Edit')} onClick={this.onEditClick}>
+                      <Icon symbol="rename" />
+                    </span>
                 )}
               </div>
               <div className="common-toolbar">

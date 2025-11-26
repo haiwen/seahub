@@ -13,6 +13,7 @@ import CommonToolbar from './components/toolbar/common-toolbar';
 import CommitDetails from './components/dialog/commit-details';
 import UpdateRepoCommitLabels from './components/dialog/edit-repo-commit-labels';
 import { formatWithTimezone } from './utils/time';
+import Icon from './components/icon';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -110,7 +111,7 @@ class RepoHistory extends React.Component {
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{ __html: title }} className="d-flex text-nowrap"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
-                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block" aria-hidden="true"></span>
+                  <Icon symbol="down" className="rotate-90" />
                 </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
                 <Content
@@ -303,7 +304,9 @@ class Item extends React.Component {
               return <span key={index} className="commit-label">{item}</span>;
             })}
             {userPerm == 'rw' &&
-            <a href="#" role="button" className={`attr-action-icon sf3-font sf3-font-rename ${isIconShown ? '' : 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}></a>
+            <a href="#" role="button" className={`attr-action-icon ${isIconShown ? '' : 'invisible'}`} title={gettext('Edit')} aria-label={gettext('Edit')} onClick={this.editLabel}>
+              <Icon symbol="rename" />
+            </a>
             }
           </td>
           }

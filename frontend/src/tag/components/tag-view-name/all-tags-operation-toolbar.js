@@ -1,13 +1,14 @@
 import React, { useCallback, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import EditTagDialog from '../../dialog/edit-tag-dialog';
-import { gettext } from '../../../../utils/constants';
-import { useTags } from '../../../hooks';
-import tagsAPI from '../../../api';
-import ImportTagsDialog from '../../../../components/dialog/import-tags-dialog';
-import toaster from '../../../../components/toast';
-import { Utils } from '../../../../utils/utils';
+import EditTagDialog from '../dialog/edit-tag-dialog';
+import { gettext } from '../../../utils/constants';
+import { useTags } from '../../hooks';
+import tagsAPI from '../../api';
+import ImportTagsDialog from '../../../components/dialog/import-tags-dialog';
+import toaster from '../../../components/toast';
+import { Utils } from '../../../utils/utils';
+import Icon from '../../../components/icon';
 
 const AllTagsOperationToolbar = ({ repoID }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -73,16 +74,16 @@ const AllTagsOperationToolbar = ({ repoID }) => {
             aria-label={gettext('More operations')}
             aria-expanded={isMenuOpen}
           >
-            <i className="sf3-font-new sf3-font"></i>
-            <i className="sf3-font-down sf3-font path-item-dropdown-toggle"></i>
+            <Icon symbol="new" />
+            <Icon symbol="down" />
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
-            <DropdownItem onClick={openAddTag}>
-              <i className="sf3-font sf3-font-new mr-2 dropdown-item-icon" aria-hidden="true"></i>
+            <DropdownItem className="d-flex align-items-center" onClick={openAddTag}>
+              <Icon symbol="new" className="mr-2 dropdown-item-icon" />
               {gettext('New tag')}
             </DropdownItem>
-            <DropdownItem onClick={handleImportTags}>
-              <i className="sf3-font-import-sdoc sf3-font mr-2 dropdown-item-icon" aria-hidden="true"></i>
+            <DropdownItem className="d-flex align-items-center" onClick={handleImportTags}>
+              <Icon symbol="import-sdoc" className="mr-2 dropdown-item-icon" />
               {gettext('Import tags')}
             </DropdownItem>
           </DropdownMenu>

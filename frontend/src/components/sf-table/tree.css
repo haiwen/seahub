@@ -30,6 +30,12 @@
   color: #666;
 }
 
+.sf-table-tree .sf-table-record-tree-expand-icon .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
+}
+
 .sf-table-tree .sf-table-record-tree-expand-icon:hover {
   cursor: pointer;
 }

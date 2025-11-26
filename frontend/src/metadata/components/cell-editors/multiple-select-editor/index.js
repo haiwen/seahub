@@ -9,6 +9,7 @@ import { getColumnOptionIdsByNames } from '../../../utils/cell';
 import { getColumnOptions, generateNewOption } from '../../../utils/column';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
+import Icon from '../../../../components/icon';
 
 const MultipleSelectEditor = forwardRef(({
   height,
@@ -235,7 +236,7 @@ const MultipleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && <i className="sf2-icon-tick"></i>}
+              {isSelected && <Icon symbol="tick1" />}
             </div>
           </div>
         </div>

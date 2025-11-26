@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { QRCodeSVG } from 'qrcode.react';
 import { Button, Popover, PopoverBody } from 'reactstrap';
 import { gettext } from '../utils/constants';
+import Icon from './icon';
 
 import '../css/btn-qr-code.css';
 
@@ -30,7 +31,9 @@ class ButtonQR extends React.Component {
     const { isPopoverOpen } = this.state;
     return (
       <div className="ml-2" ref={ref => this.btn = ref}>
-        <Button outline color="primary" className="btn-icon btn-qr-code-icon sf3-font sf3-font-qr-code" onClick={this.togglePopover} type="button"></Button>
+        <Button outline color="primary" className="btn-icon btn-qr-code-icon" onClick={this.togglePopover} type="button">
+          <Icon symbol="qr-code" />
+        </Button>
         {this.btn && (
           <Popover placement="bottom" isOpen={isPopoverOpen} target={this.btn} toggle={this.togglePopover}>
             <PopoverBody>

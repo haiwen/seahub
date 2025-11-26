@@ -41,6 +41,13 @@ class AddWikiDialog extends React.Component {
         obj.label = departments[i].name;
         options.push(obj);
       }
+      const myWikiOption = {
+        id: '',
+        value: 'My wiki',
+        email: '',
+        label: gettext('My Wikis'),
+      };
+      options.unshift(myWikiOption);
       this.setState({ options });
       if (this.props.currentDeptID) {
         const selectedOption = options.find(op => op.id == this.props.currentDeptID);

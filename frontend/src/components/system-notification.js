@@ -1,6 +1,6 @@
 import React from 'react';
 import { curNoteMsg, curNoteID, siteRoot, gettext } from '../utils/constants';
-import OpIcon from './op-icon';
+import Icon from './icon';
 
 import '../css/system-notification.css';
 
@@ -44,11 +44,9 @@ class SystemNotification extends React.Component {
     return (
       <div id="info-bar" className="d-flex justify-content-between">
         <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{ __html: curNoteMsg }}></p>
-        <OpIcon
-          className="sf3-font sf3-font-x-01"
-          title={gettext('Close')}
-          op={this.close}
-        />
+        <span title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close} role="button">
+          <Icon symbol="x-01" />
+        </span>
       </div>
     );
   }

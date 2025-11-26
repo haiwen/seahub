@@ -149,8 +149,8 @@ class Item extends Component {
     data.icon_title = Utils.getLibIconTitle(data);
 
     let iconVisibility = this.state.showOpIcon ? '' : ' invisible';
-    let shareIconClassName = 'op-icon sf3-font-share sf3-font repo-share-btn' + iconVisibility;
-    let leaveShareIconClassName = 'op-icon sf2-icon-x3' + iconVisibility;
+    let shareIconClassName = 'op-icon repo-share-btn' + iconVisibility;
+    let leaveShareIconClassName = 'op-icon' + iconVisibility;
     let shareRepoUrl = this.repoURL = `${siteRoot}library/${data.repo_id}/${Utils.encodePath(data.repo_name)}/`;
 
     if (this.props.isDesktop) {
@@ -166,7 +166,8 @@ class Item extends Component {
             >
               <td className="text-center">
                 <OpIcon
-                  className={`${this.state.isStarred ? 'sf3-font-star' : 'sf3-font-star-empty'} sf3-font`}
+                  className="star-icon"
+                  symbol={this.state.isStarred ? 'starred' : 'star-empty'}
                   title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                   op={this.onToggleStarRepo}
                 />
@@ -180,12 +181,14 @@ class Item extends Component {
                   {(isPro && data.is_admin) &&
                   <OpIcon
                     className={shareIconClassName}
+                    symbol="share"
                     title={gettext('Share')}
                     op={this.share}
                   />
                   }
                   <OpIcon
                     className={leaveShareIconClassName}
+                    symbol="x-01"
                     title={gettext('Leave Share')}
                     op={this.leaveShare}
                   />
@@ -208,7 +211,8 @@ class Item extends Component {
                 <Link to={shareRepoUrl} className="text-truncate library-name" title={data.repo_name}>{data.repo_name}</Link>
                 {isStarred &&
                 <OpIcon
-                  className='op-icon library-grid-item-icon sf3-font-star sf3-font'
+                  className="op-icon library-grid-item-icon"
+                  symbol='starred'
                   title={gettext('Unstar')}
                   op={this.onToggleStarRepo}
                 />

@@ -649,8 +649,16 @@
   "Edit_link": "Edit link",
   "Remove_link": "Remove link",
   "Preview": "Preview",
-  "Go_to_link" : "Go to link",
-  "Link_block" : "Link block",
+  "Go_to_link": "Go to link",
+  "Link_block": "Link block",
   "The_link_address_or_link_block_is_required": "The link address or link block is required",
-  "Comment_filter": "Comment filter"
+  "File_view": "File view",
+  "Linked_repo_tip": "You have not yet linked a database. Please link a database in the settings module before you can use this feature.",
+  "View_name": "View name",
+  "View_type": "View type",
+  "Linked_library": "Linked library",
+  "Insert_file_view": "Insert file view",
+  "The_view_name_is_required": "The view name is required.",
+  "The_view_type_is_required": "The view type is required.",
+  "The_linked_library_is_required": "The linked library is required."
 }

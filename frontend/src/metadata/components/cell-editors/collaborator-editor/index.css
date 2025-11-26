@@ -93,7 +93,9 @@
 
 .sf-metadata-collaborator-editor .collaborator-check-icon {
   width: 20px;
-  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   margin-right: 10px;
 }
 

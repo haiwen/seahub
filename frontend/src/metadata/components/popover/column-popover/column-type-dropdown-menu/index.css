@@ -11,12 +11,12 @@
   background-color: var(--bs-dropdown-tertiary-bg);
 }
 
-.column-type-item:hover .sf3-font-down {
-  color: #666;
-}
-
 .column-type-item .sf-metadata-icon {
   fill: #aaa;
   margin-right: 8px;
   flex-shrink: 0;
+}
+
+.sf-metadata-column-type-dropdown-menu .column-type-item.dropdown-item .seafile-multicolor-icon-down {
+  color: var(--bs-icon-color);
 }

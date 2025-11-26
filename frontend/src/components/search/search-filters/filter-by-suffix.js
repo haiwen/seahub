@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
 import ModalPortal from '../../modal-portal';
 import { SEARCH_FILTERS_KEY } from '../../../constants';
+import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
 
 const FilterBySuffix = ({ suffixes, onChange }) => {
@@ -52,7 +53,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           aria-expanded={isOpen}
         >
           <span className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</span>
-          <i className="sf3-font sf3-font-down pl-1"></i>
+          <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">
@@ -69,12 +70,13 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
             {inputValue.length > 0 && (
               <button
                 type="button"
-                className="clear-icon-right sf3-font sf3-font-x-01"
+                className="clear-icon-right"
                 onClick={handleClearInput}
                 onKeyDown={Utils.onKeyDown}
                 aria-label={gettext('Clear')}
                 title={gettext('Clear')}
               >
+                <Icon symbol="x-01" />
               </button>
             )}
           </DropdownMenu>

@@ -13,6 +13,7 @@ import { userAPI } from '../../utils/user-api';
 import WikiConvertStatusDialog from '../../components/dialog/wiki-convert-status-dialog';
 import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-toolbar';
 import ImportConfluenceDialog from '../../components/dialog/import-confluence-dialog';
+import Icon from '../../components/icon';
 
 
 const propTypes = {
@@ -455,7 +456,7 @@ class Wikis extends Component {
                   text={
                     <>
                       <p className="m-0">{gettext('You can click the "Add Wiki" button below to add a new Wiki.')}</p>
-                      <button className="btn btn-primary mt-6" onClick={this.toggleAddWikiDialog}><i className="sf3-font-new sf3-font mr-2"></i>{gettext('Add Wiki')}</button>
+                      <button className="btn btn-primary mt-6" onClick={this.toggleAddWikiDialog}><Icon symbol="new" className="mr-2" />{gettext('Add Wiki')}</button>
                     </>
                   }
                 />

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { gettext, mediaUrl, siteName, canAddRepo } from '../../utils/constants';
+import Icon from '../icon';
 import '../../css/seahub-modal-header.css';
 
 const propTypes = {
@@ -20,7 +21,7 @@ class GuideForNewDialog extends React.Component {
         <ModalBody>
           <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
             <span className="seahub-modal-btn-inner">
-              <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+              <Icon symbol="x-01" className="w-4 h-4" />
             </span>
           </button>
           <div className="p-2 text-center">

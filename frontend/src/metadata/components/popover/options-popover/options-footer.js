@@ -4,6 +4,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import toaster from '../../../../components/toast';
 import { gettext } from '../../../../utils/constants';
 import { generateOptionID, getColumnOptions } from '../../../utils/column';
+import Icon from '../../../../components/icon';
 
 import './options-footer.css';
 
@@ -103,7 +104,7 @@ export default class OptionFooter extends React.Component {
     const downloadUrl = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(options))}`;
     return (
       <div className='option-editor-footer'>
-        <span aria-hidden="true" className="sf3-font-help sf3-font option-editor-tips" id="edit-option-tip"></span>
+        <span className="option-editor-tips" id="edit-option-tip" aria-hidden="true"><Icon symbol="help" /></span>
         <UncontrolledTooltip delay={{ show: 0, hide: 0 }} target="edit-option-tip" placement="bottom" className="sf-metadata-tooltip">
           {gettext('Use the import/export function to transfer options quickly. (The export is in JSON format.) By pasting cells, copied from a text column, an Excel or a TXT file, you can also add options quickly.')}
         </UncontrolledTooltip>

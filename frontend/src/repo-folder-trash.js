@@ -12,6 +12,7 @@ import toaster from './components/toast';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import CleanTrash from './components/dialog/clean-trash';
 import { formatWithTimezone } from './utils/time';
+import Icon from './components/icon';
 
 import './css/toolbar.css';
 import './css/search.css';
@@ -201,13 +202,13 @@ class RepoFolderTrash extends React.Component {
                 <h2 dangerouslySetInnerHTML={{ __html: title }} className="d-flex mw-100"></h2>
                 <a
                   href="#"
-                  className="go-back"
+                  className="go-back d-flex align-items-center"
                   title={gettext('Back')}
                   onClick={this.goBack}
                   role="button"
                   aria-label={gettext('Back')}
                 >
-                  <span className="sf3-font sf3-font-down rotate-90 d-inline-block" aria-hidden="true"></span>
+                  <Icon symbol="down" className="rotate-90" />
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
                   <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Input } from 'reactstrap';
 import toaster from '../toast';
 import Loading from '../loading';
-import OpIcon from '../op-icon';
 import RepoListWrapper from './repo-list-wrapper';
 import SearchedListView from './searched-list-view';
 import RepoInfo from '../../models/repo-info';
@@ -11,6 +10,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { MODE_TYPE_MAP } from '../../constants';
+import Icon from '../icon';
 
 import '../../css/file-chooser.css';
 
@@ -452,11 +452,9 @@ class FileChooser extends React.Component {
           <div className="file-chooser-search-input py-4">
             <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
             {searchInfo.length !== 0 && (
-              <OpIcon
-                className="search-control attr-action-icon sf3-font sf3-font-x-01"
-                op={this.onCloseSearching}
-                title={gettext('Clear')}
-              />
+              <span className="search-control attr-action-icon" onClick={this.onCloseSearching}>
+                <Icon symbol="x-01" />
+              </span>
             )}
           </div>
         )}

@@ -9,6 +9,7 @@ import Loading from './components/loading';
 import Logo from './components/logo';
 import CommonToolbar from './components/toolbar/common-toolbar';
 import HistoryItem from './pages/file-history-old/history-item';
+import Icon from './components/icon';
 
 import './css/layout.css';
 import './css/toolbar.css';
@@ -239,7 +240,7 @@ class FileHistory extends React.Component {
                 role="button"
                 aria-label={gettext('Back')}
               >
-                <span className="sf3-font sf3-font-down rotate-90 d-inline-block" aria-hidden="true"></span>
+                <Icon symbol="down" className="rotate-90" />
               </a>
               <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
             </Fragment>

@@ -1,0 +1,90 @@
+.option-group {
+  position: absolute;
+  left: 0;
+  min-height: 60px;
+  max-height: 300px;
+  min-width: 100%;
+  max-width: 15rem;
+  padding: 0.5rem 0;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  background: var(--bs-popover-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 3px;
+  z-index: 10001;
+}
+
+[data-bs-theme=dark] .option-group {
+  box-shadow: none;
+}
+
+.option-group .option-group-search {
+  width: 100%;
+  padding: 6px 10px;
+  min-width: 170px;
+}
+
+.option-group-search .form-control {
+  height: 31px;
+}
+
+.option-group .none-search-result {
+  height: 100px;
+  width: 100%;
+  padding: 10px;
+  color: var(--bs-body-secondary-color);
+}
+
+.option-group .option-group-content {
+  max-height: 252px;
+  overflow-y: auto;
+}
+
+.option {
+  display: block;
+  width: 100%;
+  line-height: 24px;
+  padding: 6px 10px;
+  clear: both;
+  font-weight: 400;
+  text-align: inherit;
+  background-color: transparent;
+  border: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.option.option-active {
+  background-color: #20a0ff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.option.option-active .sf2-icon-tick,
+.option.option-active .select-option-name {
+  color: #fff !important;
+}
+
+.option .select-option-name .single-select-option {
+  margin: 0 0 0 12px;
+}
+
+.option .select-option-name .multiple-select-option {
+  margin: 0;
+}
+
+.option-group-selector-single-select .select-option-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.option-group-selector-single-select .option:hover,
+.option-group-selector-single-select .option.option-active,
+.option-group-selector-multiple-select .option:hover,
+.option-group-selector-multiple-select .option.option-active {
+  background-color: #f5f5f5;
+}
