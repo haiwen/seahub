@@ -976,7 +976,6 @@ class Search extends Component {
                     tabIndex={0}
                     role="button"
                     onKeyDown={Utils.onKeyDown}
-                    id="search-filter-controller"
                   />
                 )}
               </div>
