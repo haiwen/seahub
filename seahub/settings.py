@@ -287,6 +287,7 @@ INSTALLED_APPS = [
     'seahub.django_cas_ng',
     'seahub.seadoc',
     'seahub.subscription',
+    'seahub.weboffice',
 ]
 
 

@@ -16,22 +16,14 @@ from seaserv import seafile_api
 from seahub.utils import gen_inner_file_upload_url, gen_file_get_url
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.weboffice.models import WPSFileVersion
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 
-def _get_file_version(file_id):
-    cache_key = f'file_id_{file_id}'
-    if not cache.get(cache_key):
-        cache.set(cache_key, 1)
-    return cache.get(cache_key)
-
-
-def _set_file_version(file_id):
-    cache_key = f'file_id_{file_id}'
-    version = _get_file_version(cache_key) + 1
-    cache.set(cache_key, version)
+def _get_file_version(repo_id, file_path):
+    return WPSFileVersion.objects.get_version(repo_id=repo_id, path=file_path)
 
 
 class WebofficeFileInfoView(APIView):
@@ -80,7 +72,7 @@ class WebofficeFileInfoView(APIView):
             "file": {
                 "id": wps_file_id,  # 文件id,字符串长度不超过64位
                 "name": file_name,  # 文件名必须带后缀
-                "version": _get_file_version(wps_file_id),  # 文档版本号，从1开始累加，位数小于11
+                "version": _get_file_version(repo_id, file_path),  # 文档版本号，从1开始累加，位数小于11
                 "size": dirent.size,  # 文档大小，单位为字节；此处需传文件真实大小，否则会出现异常
                 "creator": email2contact_email(repo_owner),  # 创建者id，字符串长度不超过32位
                 "create_time": dirent.mtime,  # 创建时间，时间戳，单位为秒
@@ -116,7 +108,7 @@ class WebofficeUserInfoView(APIView):
 
         user_list = []
         user_ids = request.data.get('ids', [])
-        for user_id in [user_ids]:
+        for user_id in user_ids:
 
             if not user_id:
                 continue
@@ -190,7 +182,6 @@ class WebofficeFileSaveView(APIView):
                 'target_file': file_path,
             }
             requests.post(update_url, files=files)
-            _set_file_version(wps_file_id)
         except Exception as e:
             logger.error(e)
             error_resp = {
@@ -214,11 +205,14 @@ class WebofficeFileSaveView(APIView):
         file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
         download_url = gen_file_get_url(download_token, file_name)
 
+        WPSFileVersion.objects.create_or_increment_version(repo_id=repo_id,
+                                                           path=file_path)
+
         result = {
             "file": {
                 "id": wps_file_id,  # 文件id，字符串长度小于32
                 "name": file_name,  # 文件名
-                "version": _get_file_version(wps_file_id),  # 当前版本号，位数小于11
+                "version": _get_file_version(repo_id, file_path),  # 当前版本号，位数小于11
                 "size": file_size,  # 文件大小，单位是B
                 "download_url": download_url  # 文件下载地址
             }
