@@ -35,7 +35,7 @@ class ShareRepoListItem extends React.Component {
     let iconUrl = Utils.getLibIconUrl(repo);
     return (
       <tr>
-        <td className="text-center"><input type="checkbox" className="vam form-check-input" name="repo" onChange={this.onRepoSelect} /></td>
+        <td className="text-center"><input type="checkbox" className="form-check-input" name="repo" onChange={this.onRepoSelect} /></td>
         <td className="text-center"><img src={iconUrl} width="24" alt={gettext('icon')} /></td>
         <td className="name">{repo.repo_name}</td>
         <td>{dayjs(repo.last_modified).fromNow()}</td>

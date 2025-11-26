@@ -120,11 +120,10 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
       onMouseLeave={onMouseLeave}
       onContextMenu={handleContextMenu}
     >
-      <td className="pl10 pr-2" role="button" onClick={handleSelected} aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}>
+      <td className="pl10 pr-2" onClick={handleSelected}>
         <input
           type="checkbox"
-          className="vam cursor-pointer position-relative form-check-input"
-          style={{ top: -1 }}
+          className="cursor-pointer form-check-input"
           checked={isSelected}
           aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
           onChange={handleSelected}
@@ -140,7 +139,7 @@ const TagFile = ({ repoID, file, tagsData, isRenaming, onRenameCancel, onRenameC
             alt=""
             onClick={handleClickFileName}
             tabIndex="0"
-            row="button"
+            role="button"
             onKeyDown={Utils.onKeyDown}
           />
         </div>
