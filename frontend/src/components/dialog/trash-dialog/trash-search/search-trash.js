@@ -147,7 +147,6 @@ class SearchTrash extends Component {
               tabIndex={0}
               role="button"
               onKeyDown={Utils.onKeyDown}
-              id="search-filter-controller"
             />
           </div>
           {isFiltersShow && <TrashFilters filters={filters} onChange={this.handleFiltersChange} />}

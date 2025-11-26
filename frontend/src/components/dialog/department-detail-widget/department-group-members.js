@@ -52,7 +52,7 @@ class Item extends Component {
           onMouseLeave={this.handleMouseLeave}
         >
           <td width="13%">
-            <input type="checkbox" className="vam form-check-input" checked='checked' disabled />
+            <input type="checkbox" className="form-check-input" checked='checked' disabled />
           </td>
           <td width="12%"><img className="avatar" src={member.avatar_url} alt=""/></td>
           <td width="60%">{member.name}</td>
@@ -76,7 +76,7 @@ class Item extends Component {
         <td width="13%">
           <input
             type="checkbox"
-            className="vam form-check-input"
+            className="form-check-input"
             checked={(member.email in memberSelected) ? 'checked' : ''}
             onChange={this.onChange}
             onKeyDown={Utils.onKeyDown}

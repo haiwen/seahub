@@ -40,7 +40,7 @@
   color: #666;
 }
 
-.search-trash #search-filter-controller {
+.search-trash .search-filter-controller {
   position: absolute;
   top: 1px;
   right: 4px;
@@ -48,7 +48,7 @@
   cursor: pointer;
 }
 
-.search-trash #search-filter-controller:hover {
+.search-trash .search-filter-controller:hover {
   background-color: var(--bs-hover-bg);
   border-radius: 3px;
 }

@@ -684,7 +684,7 @@ class DirentListView extends React.Component {
             ) : (
               <input
                 type="checkbox"
-                className="vam cursor-pointer form-check-input"
+                className="cursor-pointer form-check-input"
                 checked={isAllItemSelected}
                 disabled={direntList.length === 0}
                 onChange={() => {}}

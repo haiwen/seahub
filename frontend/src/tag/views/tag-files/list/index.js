@@ -124,7 +124,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
           ) : (
             <input
               type="checkbox"
-              className="vam cursor-pointer form-check-input"
+              className="cursor-pointer form-check-input"
               checked={isSelectedAll}
               disabled={tagFiles.rows.length === 0}
               onChange={() => {}}
