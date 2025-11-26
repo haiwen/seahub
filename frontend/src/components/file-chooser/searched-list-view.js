@@ -59,8 +59,9 @@ class SearchedListView extends React.Component {
       <table className="table-thead-hidden file-chooser-table" rules="node" frame="void">
         <thead>
           <tr>
-            <th width="8%"></th>
-            <th width="92%"></th>
+            <th width="2%">{/* indent */}</th>
+            <th width="6%">{/* icon */}</th>
+            <th width="92%">{/* link */}</th>
           </tr>
         </thead>
         <tbody>
