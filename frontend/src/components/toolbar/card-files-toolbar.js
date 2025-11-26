@@ -8,7 +8,6 @@ import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
-import OpElement from '../../components/op-element';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { buildCardToolbarMenuOptions } from '../../metadata/utils/menu-builder';

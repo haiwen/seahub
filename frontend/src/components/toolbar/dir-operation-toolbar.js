@@ -286,7 +286,7 @@ class DirOperationToolbar extends React.Component {
                   );
                 } else {
                   return (
-                    <DropdownItem key={index} className="d-flex align-items-center" onClick={item.onClick} onKeyDown={this.onMenuItemKeyDown.bind(this, item)}>
+                    <DropdownItem key={index} className="d-flex align-items-center" onClick={item.onClick}>
                       <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" />
                       {item.text}
                     </DropdownItem>

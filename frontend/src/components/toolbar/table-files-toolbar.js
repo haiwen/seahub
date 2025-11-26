@@ -8,7 +8,6 @@ import RowUtils from '../../metadata/views/table/utils/row-utils';
 import { checkIsDir } from '../../metadata/utils/row';
 import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
-import OpElement from '../../components/op-element';
 import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder';
@@ -176,7 +175,7 @@ const TableFilesToolbar = ({ repoID }) => {
       {!readOnly && (!isMultiple || areRecordsInSameFolder) && (
         <>
           <OpIcon
-            className="cur-view-path-btn sf3-font-move1 sf3-font"
+            className="cur-view-path-btn sf3-font"
             title={gettext('Move')}
             aria-label={gettext('Move')}
             op={toggleMoveDialog}
@@ -195,7 +194,7 @@ const TableFilesToolbar = ({ repoID }) => {
       )}
 
       <OpIcon
-        className="cur-view-path-btn sf3-font-download1 sf3-font"
+        className="cur-view-path-btn sf3-font"
         title={gettext('Download')}
         aria-label={gettext('Download')}
         op={downloadRecords}
@@ -205,7 +204,7 @@ const TableFilesToolbar = ({ repoID }) => {
 
       {!readOnly && (
         <OpIcon
-          className="cur-view-path-btn sf3-font-delete1 sf3-font"
+          className="cur-view-path-btn sf3-font"
           title={gettext('Delete')}
           aria-label={gettext('Delete')}
           op={deleteRecords}
