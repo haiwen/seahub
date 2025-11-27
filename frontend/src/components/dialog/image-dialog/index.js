@@ -9,7 +9,6 @@ import { SYSTEM_FOLDERS } from '../../../constants';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
-import { Utils } from '../../../utils/utils';
 
 const SIDE_PANEL_EXPANDED_WIDTH = 300;
 
