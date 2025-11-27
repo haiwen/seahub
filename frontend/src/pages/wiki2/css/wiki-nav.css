@@ -195,9 +195,8 @@
   margin: 0.2rem 0;
 }
 
-.page-operation-dropdown-menu .dropdown-item .sf3-font {
-  font-size: 14px;
-  margin-right: 10px;
+.page-operation-dropdown-menu .dropdown-item:hover .seafile-multicolor-icon {
+  color: #fff;
 }
 
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after,
