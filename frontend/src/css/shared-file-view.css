@@ -2,6 +2,10 @@
   height: 100%;
 }
 
+.shared-file-view-top-head {
+  border-left: 1px solid #eee;
+}
+
 .shared-file-view-top-head .shared-file-name {
   font-size: .875rem;
   margin-bottom: .25rem;

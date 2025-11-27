@@ -182,7 +182,7 @@ class SharedFileView extends React.Component {
             <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
           </a>
           {isDesktop && (
-            <div className='shared-file-view-top-head flex-fill d-flex justify-content-between align-items-center ml-6'>
+            <div className='shared-file-view-top-head flex-fill d-flex justify-content-between align-items-center ml-4 pl-4'>
               {this.renderFileViewHeader()}
             </div>
           )}
