@@ -273,8 +273,8 @@ const PageItem = ({
                   tabIndex="0"
                   role="button"
                   className="wiki-nav-item-icon"
-                  onClick={(e) => { 
-                    toggleExpand(page.id); 
+                  onClick={(e) => {
+                    toggleExpand(page.id);
                     e.stopPropagation();
                   }}
                   onKeyDown={Utils.onKeyDown}
