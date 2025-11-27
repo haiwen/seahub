@@ -1759,9 +1759,17 @@ class LibContentView extends React.Component {
         direntList: direntObject.type === 'dir' ? [dirent, ...prevState.direntList] : [...prevState.direntList, dirent]
       }));
     }
-
-    if (this.state.isTreePanelShown && !isExist) {
-      this.addNodeToTree(dirent.name, this.state.path, dirent.type);
+    // Ensure tree reflects new dirents even if repo-update refreshed list earlier.
+    if (this.state.isTreePanelShown) {
+      const parentPath = this.state.path;
+      const nodePath = Utils.joinPath(parentPath, direntObject.name);
+      if (direntObject.type === 'dir') {
+        const tree = this.state.treeData.clone();
+        const nodeExists = !!tree.getNodeByPath(nodePath);
+        if (!nodeExists) {
+          this.addNodeToTree(direntObject.name, parentPath, 'dir');
+        }
+      }
     }
   };
 
