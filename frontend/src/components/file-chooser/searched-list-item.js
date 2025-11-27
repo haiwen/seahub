@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Utils } from '../../utils/utils';
 import Icon from '../icon';
+
 import './searched-list-item.css';
 
 const propTypes = {
@@ -24,6 +25,7 @@ class SearchedListItem extends React.Component {
 
   render() {
     let { item, currentItem } = this.props;
+    let { path, repo_name } = item;
     return (
       <tr
         className={classnames('searched-list-item', {
@@ -36,6 +38,7 @@ class SearchedListItem extends React.Component {
         aria-selected={!!(currentItem && item.repo_id === currentItem.repo_id && item.path === currentItem.path)}
         onKeyDown={Utils.onKeyDown}
       >
+        <td className="searched-item-indent"></td>
         <td className="text-center searched-item-icon">
           {item.is_dir ?
             <span className="tree-node-icon"><Icon symbol="folder" /></span>
@@ -44,7 +47,7 @@ class SearchedListItem extends React.Component {
           }
         </td>
         <td className='searched-item-link'>
-          <span className="item-link">{item.repo_name}/{item.link_content}</span>
+          <span className="item-link">{repo_name}{path === '/' ? '' : path}</span>
         </td>
       </tr>
     );
