@@ -11,11 +11,11 @@ import toaster from '../toast';
 import Switch from '../switch';
 import Icon from '../icon';
 
+import '../../css/header.css';
 import '../../css/shared-file-view.css';
 
 const propTypes = {
-  content: PropTypes.object.isRequired,
-  fileType: PropTypes.string
+  content: PropTypes.object.isRequired
 };
 
 let loginUser = window.app.pageOptions.name;
@@ -116,71 +116,84 @@ class SharedFileView extends React.Component {
     );
   };
 
-  render() {
-    const { fileType } = this.props;
+  renderFileViewHeader = () => {
     return (
-      <div className="shared-file-view-md">
-        <div className="shared-file-view-md-header d-flex">
-          <React.Fragment>
-            <a href={siteRoot}>
-              <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
-            </a>
-          </React.Fragment>
-          { loginUser && <Account /> }
+      <>
+        <div className="text-truncate">
+          <h2 className="shared-file-name ellipsis" title={fileName}>{fileName}</h2>
+          {zipped ?
+            <p className="m-0 d-flex shared-file-path">{gettext('Current path: ')}{this.renderPath()}</p> :
+            <p className="shared-by ellipsis m-0">{gettext('Shared by:')}{'  '}{sharedBy}</p>
+          }
         </div>
-        <div className="shared-file-view-md-main">
-          <div className={`shared-file-view-head ${(fileType == 'md' || fileType == 'pdf') ? 'w-100 px-4' : ''}`}>
-            <div className="text-truncate">
-              <h2 className="ellipsis" title={fileName}>{fileName}</h2>
-              {zipped ?
-                <p className="m-0 d-flex">{gettext('Current path: ')}{this.renderPath()}</p> :
-                <p className="share-by ellipsis">{gettext('Shared by:')}{'  '}{sharedBy}</p>
+        <div className="flex-shrink-0 ml-4">
+          <Dropdown isOpen={this.state.moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
+            <DropdownToggle
+              tag="span"
+              role="button"
+              tabIndex={0}
+              className="op-icon m-0"
+              aria-label={gettext('More operations')}
+              title={gettext('More operations')}
+            >
+              <Icon symbol="more-level" />
+            </DropdownToggle>
+            <DropdownMenu>
+              {(canDownload && loginUser && (loginUser !== sharedBy)) && (
+                <DropdownItem onClick={this.handleSaveSharedFileDialog}>
+                  {gettext('Save as ...')}
+                </DropdownItem>
+              )}
+              {(canDownload && !trafficOverLimit) &&
+              <DropdownItem
+                href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`}
+              >
+                {gettext('Download')} ({Utils.bytesToSize(fileSize)})
+              </DropdownItem>
               }
+              {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) && (
+                <DropdownItem onClick={this.toggleAddAbuseReportDialog}>
+                  {gettext('Report Abuse')}
+                </DropdownItem>
+              )}
+              {this.props.canWrapLine && (
+                <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
+                  <Switch
+                    checked={this.props.lineWrapping}
+                    placeholder={gettext('Line wrapping')}
+                    className="txt-line-wrap-menu w-100"
+                    onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
+                  />
+                </DropdownItem>
+              )}
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+      </>
+    );
+  };
+
+  render() {
+    const isDesktop = Utils.isDesktop();
+    return (
+      <div className="h-100 d-flex flex-column">
+        <div className="top-header d-flex align-items-center flex-shrink-0">
+          <a href={siteRoot} className='mr-auto mr-md-0'>
+            <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
+          </a>
+          {isDesktop && (
+            <div className='shared-file-view-top-head flex-fill d-flex justify-content-between align-items-center ml-4 pl-4'>
+              {this.renderFileViewHeader()}
             </div>
-            <div className="flex-shrink-0 ml-4">
-              <Dropdown isOpen={this.state.moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
-                <DropdownToggle
-                  tag="span"
-                  role="button"
-                  tabIndex={0}
-                  className="op-icon m-0"
-                  aria-label={gettext('More operations')}
-                  title={gettext('More operations')}
-                >
-                  <Icon symbol="more-level" />
-                </DropdownToggle>
-                <DropdownMenu>
-                  {(canDownload && loginUser && (loginUser !== sharedBy)) && (
-                    <DropdownItem onClick={this.handleSaveSharedFileDialog}>
-                      {gettext('Save as ...')}
-                    </DropdownItem>
-                  )}
-                  {(canDownload && !trafficOverLimit) &&
-                    <DropdownItem
-                      href={`${zipped ? '?p=' + encodeURIComponent(filePath) + '&dl=1' : sharedFileDownloadURL}`}
-                    >
-                      {gettext('Download')} ({Utils.bytesToSize(fileSize)})
-                    </DropdownItem>
-                  }
-                  {(enableShareLinkReportAbuse && (loginUser !== sharedBy)) && (
-                    <DropdownItem onClick={this.toggleAddAbuseReportDialog}>
-                      {gettext('Report Abuse')}
-                    </DropdownItem>
-                  )}
-                  {this.props.canWrapLine && (
-                    <DropdownItem id='txt-line-wrap-menu' className='dropdown-item'>
-                      <Switch
-                        checked={this.props.lineWrapping}
-                        placeholder={gettext('Line wrapping')}
-                        className="txt-line-wrap-menu w-100"
-                        onChange={() => this.props.updateLineWrapping(!this.props.lineWrapping)}
-                      />
-                    </DropdownItem>
-                  )}
-                </DropdownMenu>
-              </Dropdown>
+          )}
+          {loginUser && <Account />}
+        </div>
+        <div className="flex-fill d-flex flex-column">
+          {!isDesktop && (
+            <div className={'shared-file-view-head'}>
+              {this.renderFileViewHeader()}
             </div>
-          </div>
+          )}
           {this.props.content}
         </div>
         {this.state.showSaveSharedFileDialog &&
