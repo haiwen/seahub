@@ -42,6 +42,12 @@ def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper
                 'path': "/"
             })
             context.add_cookies(playwright_cookies)
+        
+        # debug 
+        page.on("console", lambda msg: print("Console [%s]: %s" % (msg.type, msg.text)))
+        page.on("request", lambda req: print("Request: %s %s" % (req.method, req.url)))
+        page.on("response", lambda res: print("Response: %d %s" % (res.status, res.url)))
+
         try:
             response = page.goto(url, wait_until="domcontentloaded", timeout=60000)
             if response.status > 400:
