@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext, enableShowContactEmailWhenSearchUser, enableShowLoginIDWhenSearchUser } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 
 import './index.css';
 
@@ -40,8 +41,16 @@ class UserItem extends React.Component {
           {(enableShowLoginIDWhenSearchUser && !enableDeleteUser) && <span className="user-option-email">({login_id})</span>}
         </div>
         {enableDeleteUser && (
-          <span className="user-remove ml-2" onClick={this.onDeleteUser} title={gettext('Remove')}>
-            <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+          <span
+            className="user-remove ml-2"
+            onClick={this.onDeleteUser}
+            title={gettext('Remove')}
+            role="button"
+            tabIndex={0}
+            aria-label={gettext('Remove')}
+            onKeyDown={Utils.onKeyDown}
+          >
+            <i className="sf3-font sf3-font-x-01"></i>
           </span>
         )}
       </div>
