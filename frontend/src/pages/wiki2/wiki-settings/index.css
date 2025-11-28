@@ -83,6 +83,11 @@
   cursor: pointer;
 }
 
+.wiki-linked-repos__header .operation:hover {
+  color: #fff;
+  background-color: #ff9800;
+}
+
 .wiki-linked-repos__body {
   height: 328px;
   overflow: auto;

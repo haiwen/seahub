@@ -42,7 +42,6 @@
 }
 
 .repo-list-popover__list .repo-list-item:hover {
-  background-color: #20a0ff;
-  color: #fff;
+  background-color: #f5f5f5;
   cursor: pointer;
 }
