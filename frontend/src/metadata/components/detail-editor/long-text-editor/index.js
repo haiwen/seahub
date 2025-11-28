@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import LongTextFormatter from '../../cell-formatter/long-text';
 import Editor from '../../cell-editors/long-text-editor';
 import { gettext } from '../../../../utils/constants';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -40,6 +41,10 @@ const LongTextEditor = ({ field, value: oldValue, onChange }) => {
         className="sf-metadata-property-detail-editor sf-metadata-long-text-property-detail-editor"
         placeholder={gettext('Empty')}
         onClick={openEditor}
+        tabIndex={0}
+        role="button"
+        aria-label={gettext('Edit')}
+        onKeyDown={Utils.onKeyDown}
       >
         {!isEmpty && (<LongTextFormatter value={value} className="sf-metadata-property-detail-formatter" />)}
       </div>
