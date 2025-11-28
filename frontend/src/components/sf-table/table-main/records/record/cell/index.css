@@ -43,11 +43,6 @@
   cursor: pointer;
 }
 
-.sf-table-cell .select-cell-checkbox {
-  width: 12px;
-  height: 12px;
-}
-
 .sf-table-cell .file-cell-content {
   flex: 1;
   display: flex;
@@ -70,8 +65,9 @@
 
 .sf-table-cell .select-all-checkbox-container .seafile-multicolor-icon-partially-selected {
   cursor: pointer;
-  font-size: 12px;
   fill: #2b76f6;
+  background-color: #fff;
+  border-radius: .25rem;
 }
 
 .sf-table-cell .header-action-cell-placeholder {
