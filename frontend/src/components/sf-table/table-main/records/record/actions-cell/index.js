@@ -79,7 +79,12 @@ class ActionsCell extends Component {
           </div>
         }
         {!isSelected && <div className="sf-table-column-content row-index text-truncate">{this.getRecordNo()}</div>}
-        <div className="sf-table-column-content actions-checkbox">
+        <label
+          className="sf-table-column-content actions-checkbox"
+          htmlFor={`select-cell-checkbox-${recordId}`}
+          title={gettext('Select')}
+          aria-label={gettext('Select')}
+        >
           <div className="select-cell-checkbox-container">
             <input
               id={`select-cell-checkbox-${recordId}`}
@@ -90,14 +95,8 @@ class ActionsCell extends Component {
               onChange={this.props.onSelectRecord}
               onKeyDown={Utils.onKeyDown}
             />
-            <label
-              htmlFor={`select-cell-checkbox-${recordId}`}
-              title={gettext('Select')}
-              aria-label={gettext('Select')}
-            >
-            </label>
           </div>
-        </div>
+        </label>
         {/* {this.getLockedRowTooltip()} */}
       </div>
     );
