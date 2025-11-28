@@ -15,8 +15,7 @@ from seahub.api2.utils import api_error
 
 from seahub.views.file import send_file_access_msg
 from seahub.share.models import FileShare, check_share_link_access, check_share_link_access_by_scope
-from seahub.utils import is_windows_operating_system, is_pro_version, \
-        normalize_dir_path
+from seahub.utils import is_windows_operating_system, normalize_dir_path
 from seahub.utils.repo import parse_repo_perm
 from seahub.settings import SHARE_LINK_LOGIN_REQUIRED
 
@@ -30,7 +29,7 @@ class ShareLinkZipTaskView(APIView):
     throttle_classes = (ShareLinkZipTaskThrottle, )
 
     def get(self, request, format=None):
-       
+
         # argument check
         share_link_token = request.GET.get('share_link_token', None)
         if not share_link_token:
@@ -53,7 +52,7 @@ class ShareLinkZipTaskView(APIView):
                                                                     share_link_token):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         if not check_share_link_access_by_scope(request, fileshare):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -87,7 +86,7 @@ class ShareLinkZipTaskView(APIView):
 
         # get file server access token
         dir_name = repo.name if real_path == '/' else os.path.basename(real_path.rstrip('/'))
-        
+
         parent_dir = os.path.dirname(real_path.rstrip('/'))
         parent_dir = normalize_dir_path(parent_dir)
         is_windows = 0
@@ -188,7 +187,7 @@ class ShareLinkZipTaskView(APIView):
         if not check_share_link_access_by_scope(request, share_link):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         # check if has download permission for share link creator
         if not parse_repo_perm(seafile_api.check_permission_by_path(
                     repo_id, full_parent_dir, share_link.username)).can_download:
@@ -239,5 +238,12 @@ class ShareLinkZipTaskView(APIView):
         if not zip_token:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if len(dirent_name_list) > 10:
+            send_file_access_msg(request, repo, full_parent_dir, 'share-link')
+        else:
+            for dirent_name in dirent_name_list:
+                full_dirent_path = posixpath.join(full_parent_dir, dirent_name)
+                send_file_access_msg(request, repo, full_dirent_path, 'share-link')
 
         return Response({'zip_token': zip_token})
