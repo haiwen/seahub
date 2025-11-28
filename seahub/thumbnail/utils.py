@@ -7,7 +7,10 @@ import urllib.request, urllib.error, urllib.parse
 import logging
 import subprocess
 from io import BytesIO
-import zipfile
+
+from seahub.tags.models import FileUUIDMap
+from seahub.thumbnail.screenshot import screenshot_from_url, gen_thumbnail_access_token
+
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
@@ -18,11 +21,11 @@ from PIL import Image
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
-from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
-from seahub.utils.file_types import VIDEO, PDF, SVG
+from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext, normalize_file_path
+from seahub.utils.file_types import VIDEO, PDF, SVG, SEADOC
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
-    ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
+    ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME, SERVICE_URL
 try:
     from pillow_heif import register_heif_opener
     register_heif_opener()
@@ -138,6 +141,9 @@ def generate_thumbnail(request, repo_id, size, path):
     
     if filetype == SVG:
         return create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size)
+    
+    if filetype == SEADOC:
+        return create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, file_size)
 
     token = seafile_api.get_fileserver_access_token(repo_id,
             file_id, 'view', '', use_onetime=True)
@@ -312,6 +318,37 @@ def create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         logger.error(f"Failed to generate SVG thumbnail for {path}: {str(e)}")
         os.unlink(tmp_png_path)
         return (False, 500)
+    
+def create_seadoc_thumbnail(request, repo, file_id, path, size, thumbnail_file, file_size):
+    path = normalize_file_path(path)
+    repo_id = repo.repo_id
+    file_name = os.path.basename(path)
+    parent_dir = os.path.dirname(path)
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_dir,
+                                                           file_name, False)
+    file_uuid = str(uuid_map.uuid)
+    if not file_uuid:
+        return (False, 500)
+    tmp_png_path = os.path.join(tempfile.gettempdir(), f"{file_id}.png")
+    access_token = gen_thumbnail_access_token(file_uuid)
+    seadoc_preview_url = f"{SERVICE_URL.rstrip('/')}/repo/{repo_id}/sdoc/{file_uuid}/preview/?access_token={access_token}"
+
+    try:
+        t1 = timeit.default_timer()
+        res = screenshot_from_url(seadoc_preview_url, tmp_png_path, request=request, file_uuid=file_uuid, access_token=access_token)
+        if not res:
+            return (False, 500)
+        t2 = timeit.default_timer()
+        logger.debug(f"Convert SDOC [{path}] to PNG takes: {t2 - t1:.2f}s")
+
+        ret = _create_thumbnail_common(tmp_png_path, thumbnail_file, size)
+        os.unlink(tmp_png_path)
+        return ret
+    except Exception as e:
+        logger.error(f"Failed to generate SDOC thumbnail for {path}: {str(e)}")
+        os.unlink(tmp_png_path)
+        return (False, 500)
+
 
 def _create_thumbnail_common(fp, thumbnail_file, size):
     """Common logic for creating image thumbnail.
