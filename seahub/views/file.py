@@ -1425,6 +1425,17 @@ def view_shared_file(request, fileshare):
             else:
                 ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
+        if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+            wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
+                                                                    repo_id,
+                                                                    path,
+                                                                    can_edit)
+            weboffice_dict = {
+                "wps_weboffice_editor_url": wps_weboffice_editor_url,
+            }
+            return render(request, 'view_file_weboffice.html', weboffice_dict)
+
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(filename, file_size, repo)
     if can_preview:
@@ -1660,6 +1671,17 @@ def view_file_via_shared_dir(request, fileshare):
                         onlyoffice_dict)
             else:
                 ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
+
+        if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+            wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
+                                                                    repo_id,
+                                                                    real_path,
+                                                                    can_edit)
+            weboffice_dict = {
+                "wps_weboffice_editor_url": wps_weboffice_editor_url,
+            }
+            return render(request, 'view_file_weboffice.html', weboffice_dict)
 
     img_prev = None
     img_next = None
