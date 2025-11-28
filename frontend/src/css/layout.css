@@ -20,6 +20,10 @@ select {
   color-scheme: inherit;
 }
 
+.form-check-input:checked[type="checkbox"] {
+  background-size: 16px 16px;
+}
+
 ::-webkit-scrollbar-track {
   background: var(--bs-body-bg, #ffffff);
 }
