@@ -45,7 +45,8 @@ const CardItem = ({
     const fileIconURL = Utils.getFileIconUrl(value);
     if (Utils.imageCheck(value) ||
       Utils.pdfCheck(value) ||
-      Utils.videoCheck(value)) {
+      Utils.videoCheck(value) ||
+      Utils.isEditableSdocFile(value)) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
       const repoID = window.sfMetadataStore.repoId;
       const thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${getFileMTimeFromRecord(record)}`;

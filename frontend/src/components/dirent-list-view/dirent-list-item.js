@@ -6,7 +6,7 @@ import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFT
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
+import { imageThumbnailCenter, videoThumbnailCenter, richTextThumbnailCenter } from '../../utils/thumbnail-center';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import toaster from '../toast';
@@ -162,6 +162,11 @@ class DirentListItem extends React.Component {
     }
     if (Utils.imageCheck(dirent.name) || (enablePDFThumbnail && Utils.pdfCheck(dirent.name))) {
       this.thumbnailCenter = imageThumbnailCenter;
+      return true;
+    }
+
+    if (Utils.isEditableSdocFile(dirent.name)) {
+      this.thumbnailCenter = richTextThumbnailCenter;
       return true;
     }
     return false;

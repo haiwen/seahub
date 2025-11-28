@@ -19,7 +19,10 @@ def gen_thumbnail_access_token(file_uuid):
 def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper", request=None, file_uuid=None, access_token=None):
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
-        context = browser.new_context()
+        context = browser.new_context(viewport={
+                    "width": 1920,
+                    "height": 3000
+                },)
         page = context.new_page()
         parsed_url = urlparse(url)
         cookie_domain = parsed_url.netloc.split(":")[0]
@@ -53,7 +56,7 @@ def screenshot_from_url(url, save_path, div_selector="#sdoc-editor-print-wrapper
                 "x": div_box["x"],
                 "y": div_box["y"],
                 "width": div_box["width"],
-                "height": div_box["width"]
+                "height": min(div_box['height'], div_box["width"] * 1.414 * 3 )
             }
             page.screenshot(
                 path=save_path,

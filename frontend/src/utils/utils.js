@@ -151,7 +151,7 @@ export const Utils = {
       return false;
     }
     const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    return file_ext === 'pdf' || file_ext === 'sdoc';
+    return file_ext === 'pdf';
   },
 
   getShareLinkPermissionList: function (itemType, permission, path, canEdit) {
