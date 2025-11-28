@@ -405,7 +405,12 @@ class GenerateUploadLink extends React.Component {
         <FormGroup check>
           <Label check>
             {this.isExpireDaysNoLimit ? (
-              <Input type="checkbox" className="form-check-input" onChange={this.onExpireChecked} />
+              <Input
+                type="checkbox"
+                className="form-check-input"
+                onChange={this.onExpireChecked}
+                onKeyDown={Utils.onKeyDown}
+              />
             ) : (
               <Input type="checkbox" className="form-check-input" checked readOnly disabled />
             )}

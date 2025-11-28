@@ -9,6 +9,7 @@ import { gettext } from '../../../../utils/constants';
 import { KeyCodes } from '../../../../constants';
 import { getEventClassName } from '../../../../utils/dom';
 import { useTags } from '../../../../tag/hooks';
+import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
@@ -130,6 +131,10 @@ const TagsEditor = ({ record, value, field, updateFileTags }) => {
       placeholder={gettext('Empty')}
       ref={ref}
       onClick={openEditor}
+      tabIndex={0}
+      role="button"
+      aria-label={gettext('Edit tags')}
+      onKeyDown={Utils.onKeyDown}
     >
       {validValue.length > 0 && (<DeleteTag value={validValue} tags={tagsData} onDelete={onDeleteTag} />)}
       {renderEditor()}

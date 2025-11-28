@@ -237,7 +237,15 @@ class Location extends React.Component {
           readonly={false}
         >
           {isValid ? (
-            <div ref={ref => this.editorRef = ref} className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter w-100 cursor-pointer" onClick={this.openEditor}>
+            <div
+              ref={ref => this.editorRef = ref}
+              className="sf-metadata-ui cell-formatter-container geolocation-formatter sf-metadata-geolocation-formatter w-100 cursor-pointer"
+              onClick={this.openEditor}
+              tabIndex={0}
+              role="button"
+              aria-label={gettext('Edit')}
+              onKeyDown={Utils.onKeyDown}
+            >
               {!isLoading && this.mapType && address ? (
                 <span>{address}</span>
               ) : (
@@ -245,7 +253,17 @@ class Location extends React.Component {
               )}
             </div>
           ) : (
-            <div ref={ref => this.editorRef = ref} className="sf-metadata-property-detail-editor sf-metadata-record-cell-empty cursor-pointer" placeholder={gettext('Empty')} onClick={this.openEditor}></div>
+            <div
+              ref={ref => this.editorRef = ref}
+              className="sf-metadata-property-detail-editor sf-metadata-record-cell-empty cursor-pointer"
+              placeholder={gettext('Empty')}
+              onClick={this.openEditor}
+              tabIndex={0}
+              role="button"
+              aria-label={gettext('Edit')}
+              onKeyDown={Utils.onKeyDown}
+            >
+            </div>
           )}
         </DetailItem>
         {isLoading ? (<Loading />) : this.mapType && (
