@@ -17,3 +17,7 @@
 .sf-metadata-result-table-row .sf-metadata-result-table-cell .select-all-checkbox-container {
   width: 40px;
 }
+
+.sf-metadata-result-table-row .sf-metadata-result-table-cell .select-all-checkbox-container .form-check-input {
+  margin: 0;
+}
