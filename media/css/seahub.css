@@ -366,12 +366,6 @@ h1 {
   font-size: 1.9em;
 }
 
-h2 {
-  font-size: 1.5em;
-  color: #222;
-  font-weight: bold;
-}
-
 h3 {
   font-size: 16px;
   color: var(--bs-body-color);
@@ -2905,4 +2899,20 @@ a.sf-popover-item {
   width: 25%;
   margin-right: 2px;
   background-color: #DBDBDB;
+}
+
+/* client-login-confirm-panel */
+.client-login-confirm-panel {
+  margin: 2rem auto;
+}
+
+.client-login-confirm-panel .hd {
+  color: var(--bs-body-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+}
+
+.client-login-confirm-panel .btn {
+  margin-top: 2.5rem;
 }
