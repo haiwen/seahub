@@ -186,7 +186,6 @@ function start_seahub () {
 
 function set_env_config () {
     if [ -z "${JWT_PRIVATE_KEY}" ]; then
-        echo "Cannot find JWT_PRIVATE_KEY value from environment, try to read .env file."
         if [ ! -e "${central_config_dir}/.env" ]; then
             echo "Error: .env file not found."
             echo "Please follow the upgrade manual to set the .env file."
