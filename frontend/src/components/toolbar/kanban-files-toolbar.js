@@ -179,7 +179,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
       {!isMultiple && !readOnly && (
         <>
           <OpIcon
-            className="cur-view-path-btn sf3-font-move1 sf3-font"
+            className="cur-view-path-btn"
             title={gettext('Move')}
             aria-label={gettext('Move')}
             op={toggleMoveDialog}
@@ -196,19 +196,17 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
           </span>
         </>
       )}
-
       <OpIcon
-        className="cur-view-path-btn sf3-font-download1 sf3-font"
+        className="cur-view-path-btn"
         title={gettext('Download')}
         aria-label={gettext('Download')}
         op={downloadRecords}
       >
         <Icon symbol="download" />
       </OpIcon>
-
       {!readOnly && (
         <OpIcon
-          className="cur-view-path-btn sf3-font-delete1 sf3-font"
+          className="cur-view-path-btn"
           title={gettext('Delete')}
           aria-label={gettext('Delete')}
           op={deleteRecords}
@@ -216,7 +214,6 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
           <Icon symbol="delete1" />
         </OpIcon>
       )}
-
       {length > 0 && (
         <ItemDropdownMenu
           ref={menuRef}
