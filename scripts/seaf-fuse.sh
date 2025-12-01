@@ -47,7 +47,9 @@ function set_env_config () {
         fi
 
         # load the .env file
+        set -a
         source "${SEAFILE_CENTRAL_CONF_DIR}/.env"
+        set +a
 
         if [ -z "${JWT_PRIVATE_KEY}" ]; then
             echo "Error: JWT_PRIVATE_KEY not found in .env file."
