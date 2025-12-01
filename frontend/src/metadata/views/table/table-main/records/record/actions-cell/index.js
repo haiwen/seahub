@@ -75,6 +75,8 @@ class ActionsCell extends Component {
         <label
           className='sf-metadata-result-column-content actions-checkbox'
           htmlFor={`select-cell-checkbox-${recordId}`}
+          title={gettext('Select')}
+          aria-label={gettext('Select')}
         >
           <div className='select-cell-checkbox-container'>
             <input
