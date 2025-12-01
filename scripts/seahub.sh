@@ -197,7 +197,9 @@ function set_env_config () {
         fi
 
         # load the .env file
+        set -a
         source "${central_config_dir}/.env"
+        set +a
 
         if [ -z "${JWT_PRIVATE_KEY}" ]; then
             echo "Error: JWT_PRIVATE_KEY not found in .env file."
