@@ -6,6 +6,7 @@ import sys
 import os
 import re
 import copy
+import json
 
 from seaserv import FILE_SERVER_PORT
 
@@ -1309,6 +1310,11 @@ if os.environ.get('ENABLE_SEAFILE_AI'):
 SEAFILE_AI_SECRET_KEY = os.environ.get('SEAFILE_AI_SECRET_KEY', '') or SEAFILE_AI_SECRET_KEY
 SEAFILE_AI_SERVER_URL = os.environ.get('SEAFILE_AI_SERVER_URL', '') or SEAFILE_AI_SERVER_URL
 
+if os.environ.get('CSRF_TRUSTED_ORIGINS'):
+    try:
+        CSRF_TRUSTED_ORIGINS = json.loads(os.environ.get('CSRF_TRUSTED_ORIGINS'))
+    except:
+        pass
 
 SEAFEVENTS_SERVER_URL = 'http://127.0.0.1:8889'
 
