@@ -56,7 +56,7 @@
 }
 
 .sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item:hover {
-  background: var(--bs-tr-hover-bg)
+  background: var(--bs-tr-hover-bg);
 }
 
 .sf-metadata-hide-columns-popover .hide-columns-list .hide-column-item:not(.disabled):hover,

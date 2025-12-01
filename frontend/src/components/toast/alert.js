@@ -37,15 +37,11 @@ class Alert extends React.PureComponent {
     return (
       <div className={`seahub-toast-alert-container ${intent || 'success'}`}>
         <div className="toast-alert-icon d-flex align-items-center justify-content-center">
-          {isLoading ? (
-            <i className="loading-icon" />
-          ) : (
-            <Icon symbol={iconSymbol} />
-          )}
+          {isLoading ? <i className="loading-icon" /> : <Icon symbol={iconSymbol} />}
         </div>
         <div className="toast-text-container">
           <p className="toast-text-title">{title}</p>
-          {children ? <p className="toast-text-child">{children}</p> : null}
+          {children && <p className="toast-text-child">{children}</p>}
         </div>
         {isRemovable && (
           <div onClick={onRemove} className="toast-close">
