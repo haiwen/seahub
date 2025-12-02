@@ -35,17 +35,20 @@ describe('generateUniqueId', () => {
 
 describe('getWikPageLink', () => {
   it('returns the correct URL', () => {
-    const originalLocation = window.location;
-    // Mock window.location
-    delete window.location;
-    window.location = {
-      origin: 'https://cloud.seafile.com',
-      pathname: '/wikis/6cbbded99bd272796a2/7Lj3/'
-    };
+    const serviceURL = 'https://cloud.seafile.com';
+    const url = 'https://cloud.seafile.com/wikis/6cbbded99bd272796a2/7Lj3/';
     const pageId = 'y4Jw';
     const expectedUrl = 'https://cloud.seafile.com/wikis/6cbbded99bd272796a2/y4Jw/';
-    expect(getWikPageLink(pageId)).toBe(expectedUrl);
-    // Restore original window.location
-    window.location = originalLocation;
+    expect(getWikPageLink(serviceURL, url, pageId)).toBe(expectedUrl);
+  });
+});
+
+describe('getWikPageLink', () => {
+  it('returns the correct URL', () => {
+    const serviceURL = 'https://dev.seafile.com/seahub';
+    const url = 'https://dev.seafile.com/seahub/wikis/6cbbded99bd272796a2/7Lj3/';
+    const pageId = 'y4Jw';
+    const expectedUrl = 'https://dev.seafile.com/seahub/wikis/6cbbded99bd272796a2/y4Jw/';
+    expect(getWikPageLink(serviceURL, url, pageId)).toBe(expectedUrl);
   });
 });

@@ -47,13 +47,13 @@ const getCurrentPageConfig = (pages, pageId) => {
   return pages.filter(page => page.id === pageId)[0];
 };
 
-const getWikPageLink = (pageId) => {
-  let { origin, pathname } = window.location;
+const getWikPageLink = (serviceURL, url, pageId) => {
+  let pathname = url.replace(serviceURL, '');
   let pathArr = pathname.split('/');
   // pathname is like `/wikis/${wikiId}/{pageId}/`
   pathArr[3] = pageId;
   pathname = pathArr.join('/');
-  return `${origin}${pathname}`;
+  return `${serviceURL}${pathname}`;
 };
 
 const throttle = (fn, delay) => {

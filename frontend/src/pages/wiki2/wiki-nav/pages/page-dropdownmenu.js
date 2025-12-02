@@ -7,6 +7,8 @@ import { getWikPageLink } from '../../utils';
 import { INSERT_POSITION } from '../constants';
 import Icon from '../../../../components/icon';
 
+const { serviceURL: serviceUrl } = window.app.config;
+
 export default class PageDropdownMenu extends Component {
 
   static propTypes = {
@@ -117,7 +119,8 @@ export default class PageDropdownMenu extends Component {
 
   handleCopyLink = () => {
     const { page } = this.props;
-    const wikiLink = getWikPageLink(page.id);
+    const { href: url } = window.location;
+    const wikiLink = getWikPageLink(serviceUrl, url, page.id);
     const successText = gettext('Copied link to clipboard');
     const failedText = gettext('Copy failed');
 
@@ -130,7 +133,8 @@ export default class PageDropdownMenu extends Component {
 
   handleOpenInNewTab = () => {
     const { page } = this.props;
-    const wikiLink = getWikPageLink(page.id);
+    const { href: url } = window.location;
+    const wikiLink = getWikPageLink(serviceUrl, url, page.id);
     window.open(wikiLink);
   };
 
