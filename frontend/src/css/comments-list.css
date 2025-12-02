@@ -92,6 +92,9 @@
 }
 
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 4px;
   border-radius: 3px;
 }
