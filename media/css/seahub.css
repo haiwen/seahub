@@ -434,19 +434,9 @@ input {
   border: 1px solid #ccc;
 }
 
-input {
-  margin: 3px 0;
-}
-
 input,
 button {
   display: inline-block;
-}
-
-input[type=text],
-input[type=password] {
-  box-sizing: content-box;
-  height: 22px;
 }
 
 select,
@@ -491,7 +481,6 @@ input[type=radio] {
 }
 
 input:focus,
-button:focus,
 select:focus,
 textarea:focus {
   border-color: #1991eb;
@@ -976,6 +965,20 @@ textarea:-moz-placeholder {
   border-left: 2px solid #888;
   padding-left: 1em;
   margin-left: 1em;
+}
+
+.form-label {
+  display: inline-block;
+  margin: 0 0 .5rem 0;
+  font-weight: 400;
+  font-size: 15px;
+}
+
+.seafile-multicolor-icon {
+  fill: currentColor;
+  height: 1em;
+  overflow: hidden;
+  width: 1em;
 }
 
 /**** btn with link styles ****/
@@ -2914,5 +2917,36 @@ a.sf-popover-item {
 }
 
 .client-login-confirm-panel .btn {
+  margin-top: 2.5rem;
+}
+
+/* 'password change form' page and etc. */
+.page-form-panel {
+  margin: 3rem auto;
+}
+
+.page-form-panel .hd {
+  font-size: 1.5rem;
+}
+
+.page-form-panel .tip {
+  color: var(--bs-body-secondary-color);
+  font-size: .875rem;
+}
+
+.page-form-panel .form {
+  width: 466px;
+  margin-top: 2.5rem;
+}
+
+.page-form-panel .password-icon {
+  color: #999;
+}
+
+.page-form-panel .password-icon:hover {
+  color: #666;
+}
+
+.page-form-panel .form-foot {
   margin-top: 2.5rem;
 }
