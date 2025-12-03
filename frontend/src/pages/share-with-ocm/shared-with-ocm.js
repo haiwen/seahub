@@ -409,7 +409,7 @@ class SharedWithOCM extends Component {
   };
 
   render() {
-    const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props;
     const { sortBy, sortOrder, currentViewMode: stateCurrentViewMode } = this.state;
     const currentViewMode = inAllLibs ? propCurrentViewMode : stateCurrentViewMode;
 
