@@ -657,6 +657,7 @@ def view_lib_file(request, repo_id, path):
     mobile_login = request.session.get(SESSION_MOBILE_LOGIN_KEY, False)
     dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
     # basic file info
+    can_download_file = parse_repo_perm(permission).can_download
     return_dict = {
         'is_pro': is_pro_version(),
         'repo': repo,
@@ -677,7 +678,7 @@ def view_lib_file(request, repo_id, path):
         'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
         'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
         'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
-        'can_download_file': parse_repo_perm(permission).can_download,
+        'can_download_file': can_download_file,
         'file_download_url': gen_file_get_url_new(repo_id, path),
         'mobile_login': mobile_login,
     }
@@ -1048,6 +1049,8 @@ def view_lib_file(request, repo_id, path):
         return render(request, 'view_file_cad.html', return_dict)
     else:
         return_dict['err'] = "File preview unsupported"
+        if not can_download_file:
+            return_dict['file_download_url'] = ''
         return render(request, template, return_dict)
 
 
@@ -1092,6 +1095,7 @@ def view_history_file_common(request, repo_id, ret_dict):
             request, repo_id, obj_id, path)
 
     request.user_perm = user_perm
+    can_download_file = parse_repo_perm(user_perm).can_download
     if user_perm:
 
         if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
@@ -1143,6 +1147,8 @@ def view_history_file_common(request, repo_id, ret_dict):
                 handle_textual_file(request, filetype, inner_path, ret_dict)
         else:
             ret_dict['err'] = err_msg
+            if not can_download_file:
+                raw_path = ''
 
     # populate return value dict
     ret_dict['repo'] = repo
@@ -1153,7 +1159,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['fileext'] = fileext
     ret_dict['raw_path'] = raw_path
     ret_dict['enable_watermark'] = ENABLE_WATERMARK
-    ret_dict['can_download_file'] = parse_repo_perm(user_perm).can_download
+    ret_dict['can_download_file'] = can_download_file
     if 'filetype' not in ret_dict:
         ret_dict['filetype'] = filetype
 
@@ -1488,6 +1494,7 @@ def view_shared_file(request, fileshare):
 
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(filename, file_size, repo)
+    shared_file_download_url = gen_file_get_url_by_sharelink(fileshare.token)
     if can_preview:
 
         # send file audit message
@@ -1500,6 +1507,9 @@ def view_shared_file(request, fileshare):
             handle_textual_file(request, filetype, inner_path, ret_dict)
     else:
         ret_dict['err'] = err_msg
+        if not can_download:
+            raw_path = ''
+            shared_file_download_url = ''
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
@@ -1539,7 +1549,7 @@ def view_shared_file(request, fileshare):
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
-            'shared_file_download_url': gen_file_get_url_by_sharelink(fileshare.token)
+            'shared_file_download_url': shared_file_download_url
             }
     if filetype == SEADOC:
         data['file_uuid'] = ret_dict['file_uuid']
@@ -1563,7 +1573,6 @@ def view_shared_file(request, fileshare):
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user
         data['logo_path'] = get_logo_path_by_user(shared_by)
-
     return render(request, template, data)
 
 
@@ -1733,6 +1742,7 @@ def view_file_via_shared_dir(request, fileshare):
     inner_path = gen_inner_file_get_url(access_token, filename)
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(filename, file_size, repo)
+    permissions = fileshare.get_permissions()
     if can_preview:
 
         # send file audit message
@@ -1766,8 +1776,10 @@ def view_file_via_shared_dir(request, fileshare):
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
     else:
         ret_dict['err'] = err_msg
+        if not permissions['can_download']:
+            raw_path = ''
 
-    permissions = fileshare.get_permissions()
+    
 
     # generate dir navigator
     if fileshare.path == '/':
@@ -1823,7 +1835,6 @@ def view_file_via_shared_dir(request, fileshare):
     if not request.user.is_authenticated:
         from seahub.utils import get_logo_path_by_user
         data['logo_path'] = get_logo_path_by_user(shared_by)
-
     return render(request, template, data)
 
 @login_required
