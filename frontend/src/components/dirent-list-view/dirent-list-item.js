@@ -727,7 +727,7 @@ class DirentListItem extends React.Component {
           </> :
           <>
             {this.state.isOperationShow &&
-              <div className="operations d-flex align-items-center">
+              <div className="operations d-flex align-items-center lh-1">
                 {(dirent.permission === 'rw' || dirent.permission === 'r' || (isCustomPermission && canDownload)) && (
                   <OpIcon
                     className="op-icon"

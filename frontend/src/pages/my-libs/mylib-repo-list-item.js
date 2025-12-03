@@ -310,7 +310,7 @@ class MylibRepoListItem extends React.Component {
         </td>
         <td>
           {(repo.repo_name && this.state.isOpIconShow) && (
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center lh-1">
               <OpIcon
                 className="op-icon"
                 symbol="share"
