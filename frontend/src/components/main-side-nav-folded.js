@@ -231,7 +231,9 @@ class MainSideNavFolded extends React.Component {
                     onMouseEnter={this.openSubNav}
                     aria-label={gettext('Libraries')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true"><Icon symbol="files" /></span>
+                    <span className="d-flex align-items-center" aria-hidden="true">
+                      <Icon symbol="libraries" />
+                    </span>
                   </Link>
                 </li>
 
