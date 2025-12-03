@@ -11,7 +11,7 @@ const propTypes = {
   tabItemClick: PropTypes.func.isRequired,
 };
 
-class FilesSubNav extends React.Component {
+class LibrariesSubNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -129,6 +129,6 @@ class FilesSubNav extends React.Component {
   }
 }
 
-FilesSubNav.propTypes = propTypes;
+LibrariesSubNav.propTypes = propTypes;
 
-export default FilesSubNav;
+export default LibrariesSubNav;

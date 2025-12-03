@@ -15,7 +15,7 @@ import Group from '../models/group';
 import toaster from './toast';
 import CreateGroupDialog from '../components/dialog/create-group-dialog';
 import AboutDialog from './dialog/about-dialog';
-import FilesSubNav from '../components/files-sub-nav';
+import LibrariesSubNav from '../components/libraries-sub-nav';
 import { SUB_NAV_ITEM_HEIGHT } from '../constants';
 import { isWorkWeixin } from './wechat/weixin-utils';
 import WechatDialog from './wechat/wechat-dialog';
@@ -97,7 +97,7 @@ class MainSideNav extends React.Component {
     return this.props.currentTab === tab ? 'active' : '';
   };
 
-  getFilesSectionActiveClass = () => {
+  getLibrariesSectionActiveClass = () => {
     const { currentTab } = this.props;
     const { filesNavUnfolded, groupItems } = this.state;
     if (currentTab === 'libraries') {
@@ -249,7 +249,7 @@ class MainSideNav extends React.Component {
     );
   }
 
-  toggleFilesNav = (e) => {
+  toggleLibrariesNav = (e) => {
     e.preventDefault();
     e.stopPropagation();
     if (e && e.currentTarget) {
@@ -277,17 +277,17 @@ class MainSideNav extends React.Component {
           <div className={'side-nav-con d-flex flex-column'}>
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
-              <li id="files" className={`nav-item flex-column ${this.getFilesSectionActiveClass()}`}>
-                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getFilesSectionActiveClass()}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+              <li id="files" className={`nav-item flex-column ${this.getLibrariesSectionActiveClass()}`}>
+                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getLibrariesSectionActiveClass()}`} title={gettext('Libraries')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
                   <div className="d-flex align-items-center">
-                    <Icon symbol="files" />
-                    <span className="nav-text">{gettext('Files')}</span>
+                    <Icon symbol="libraries" />
+                    <span className="nav-text">{gettext('Libraries')}</span>
                   </div>
                   <OpIcon
                     className={`op-icon ${filesNavUnfolded ? '' : 'rotate-90'}`}
                     symbol="down"
                     title={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
-                    op={this.toggleFilesNav}
+                    op={this.toggleLibrariesNav}
                   />
                 </Link>
                 <ul
@@ -297,7 +297,7 @@ class MainSideNav extends React.Component {
                 >
                   {filesNavUnfolded && (
                     <>
-                      <FilesSubNav
+                      <LibrariesSubNav
                         groupItems={groupItems}
                         tabItemClick={this.tabItemClick}
                         currentTab={this.props.currentTab}

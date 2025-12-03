@@ -19,7 +19,7 @@ const propTypes = {
   onRenameRepo: PropTypes.func.isRequired,
   onDeleteRepo: PropTypes.func.isRequired,
   onTransferRepo: PropTypes.func.isRequired,
-  inAllLibs: PropTypes.bool, // for 'My Libraries' in 'Files' page
+  inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
 };
 

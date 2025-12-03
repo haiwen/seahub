@@ -6,7 +6,7 @@ import { gettext, siteRoot, canInvitePeople, canCreateWiki, enableTC, sideNavFoo
   isPro, isDBSqlite3, customNavItems, curNoteMsg, enableShowAbout } from '../utils/constants';
 import { SIDE_PANEL_FOLDED_WIDTH, SUB_NAV_ITEM_HEIGHT } from '../constants';
 import Tip from './side-nav-icon-tip';
-import FilesSubNav from '../components/files-sub-nav';
+import LibrariesSubNav from '../components/libraries-sub-nav';
 import ShareAdminSubNav from '../components/share-admin-sub-nav';
 import AboutDialog from './dialog/about-dialog';
 import { seafileAPI } from '../utils/seafile-api';
@@ -33,7 +33,7 @@ class MainSideNavFolded extends React.Component {
     super(props);
     this.state = {
       groupItems: [],
-      isFilesSubNavShown: false,
+      isLibrariesSubNavShown: false,
       isShareAdminSubNavShown: false,
       isAboutDialogShow: false,
       isShowWechatDialog: false,
@@ -65,8 +65,8 @@ class MainSideNavFolded extends React.Component {
 
 
   handleOutsideClick = (e) => {
-    const { isFilesSubNavShown, isShareAdminSubNavShown } = this.state;
-    if (isFilesSubNavShown && !this.filesSubNav.contains(e.target)) {
+    const { isLibrariesSubNavShown, isShareAdminSubNavShown } = this.state;
+    if (isLibrariesSubNavShown && !this.librariesSubNav.contains(e.target)) {
       this.closeSubNav();
     }
     if (isShareAdminSubNavShown && !this.shareAdminSubNav.contains(e.target)) {
@@ -80,21 +80,21 @@ class MainSideNavFolded extends React.Component {
   };
 
   openSubNav = () => {
-    if (this.state.isFilesSubNavShown) return;
+    if (this.state.isLibrariesSubNavShown) return;
     if (curNoteMsg) {
       const infoBar = document.getElementById('info-bar');
       const top = (60 + (infoBar ? infoBar.clientHeight : 0)) + 'px';
-      this.filesSubNav.style.top = top;
+      this.librariesSubNav.style.top = top;
     }
     this.setState({
-      isFilesSubNavShown: true,
+      isLibrariesSubNavShown: true,
       isShareAdminSubNavShown: false
     });
   };
 
   closeSubNav = () => {
-    if (!this.state.isFilesSubNavShown) return;
-    this.setState({ isFilesSubNavShown: false });
+    if (!this.state.isLibrariesSubNavShown) return;
+    this.setState({ isLibrariesSubNavShown: false });
   };
 
   openShareAdminSubNav = () => {
@@ -102,11 +102,11 @@ class MainSideNavFolded extends React.Component {
     if (curNoteMsg) {
       const infoBar = document.getElementById('info-bar');
       const top = (230 + (infoBar ? infoBar.clientHeight : 0)) + 'px';
-      this.filesSubNav.style.top = top;
+      this.librariesSubNav.style.top = top;
     }
     this.setState({
       isShareAdminSubNavShown: true,
-      isFilesSubNavShown: false
+      isLibrariesSubNavShown: false
     });
   };
 
@@ -127,7 +127,7 @@ class MainSideNavFolded extends React.Component {
     }
     this.props.tabItemClick(param, id);
     this.setState({
-      isFilesSubNavShown: false,
+      isLibrariesSubNavShown: false,
       isShareAdminSubNavShown: false,
     });
   };
@@ -167,11 +167,11 @@ class MainSideNavFolded extends React.Component {
 
   render() {
     let showActivity = isPro || !isDBSqlite3;
-    const { groupItems, isFilesSubNavShown, isShareAdminSubNavShown } = this.state;
+    const { groupItems, isLibrariesSubNavShown, isShareAdminSubNavShown } = this.state;
     return (
       <Fragment>
         <div className='side-nav-folded-container h-100 position-relative'>
-          {/* FOLDED SIDE NAV FILES */}
+          {/* FOLDED SIDE NAV LIBRARIES */}
           <div className="side-nav side-nav-folded position-relative" style={{ zIndex: FOLDED_SIDE_NAV_FILES }}>
             <div className='side-nav-con p-0'>
               <div className="nav nav-pills nav-container">
@@ -179,14 +179,14 @@ class MainSideNavFolded extends React.Component {
                   id="files-sub-nav"
                   className="sub-nav position-fixed rounded border shadow p-4 o-auto"
                   style={{
-                    'left': isFilesSubNavShown ? SIDE_PANEL_FOLDED_WIDTH + 4 : '-240px',
+                    'left': isLibrariesSubNavShown ? SIDE_PANEL_FOLDED_WIDTH + 4 : '-240px',
                     'maxHeight': SUB_NAV_ITEM_HEIGHT * 10 + 16 * 2,
-                    'opacity': isFilesSubNavShown ? 1 : 0,
+                    'opacity': isLibrariesSubNavShown ? 1 : 0,
                   }}
-                  ref={ref => this.filesSubNav = ref}
+                  ref={ref => this.librariesSubNav = ref}
                   onMouseLeave={this.closeSubNav}
                 >
-                  <FilesSubNav
+                  <LibrariesSubNav
                     groupItems={groupItems}
                     tabItemClick={this.tabItemClick}
                     currentTab={this.props.currentTab}

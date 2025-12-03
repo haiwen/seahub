@@ -126,7 +126,7 @@ class SharedWithAll extends React.Component {
   };
 
   renderContent = (currentViewMode) => {
-    const { inAllLibs = false } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false } = this.props;
     const { isLoading, errMessage, repoList } = this.state;
     const emptyTip = inAllLibs
       ? <p className={`libraries-empty-tip-in-${currentViewMode}-mode`}>{gettext('No public libraries')}</p>
@@ -227,7 +227,7 @@ class SharedWithAll extends React.Component {
   };
 
   render() {
-    const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props; // inAllLibs: in 'All Libs'('Files') page
+    const { inAllLibs = false, currentViewMode: propCurrentViewMode } = this.props;
     const { sortBy, sortOrder, currentViewMode: stateCurrentViewMode } = this.state;
     const currentViewMode = inAllLibs ? propCurrentViewMode : stateCurrentViewMode;
 

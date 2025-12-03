@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../utils/constants';
 
 const propTypes = {
-  inAllLibs: PropTypes.bool // for 'Libraries' in 'Files' page
+  inAllLibs: PropTypes.bool
 };
 
 class LibsMobileThead extends React.Component {
