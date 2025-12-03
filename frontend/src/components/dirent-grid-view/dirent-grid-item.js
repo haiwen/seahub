@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import {imageThumbnailCenter, richTextThumbnailCenter, videoThumbnailCenter} from '../../utils/thumbnail-center';
+import { imageThumbnailCenter, richTextThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
