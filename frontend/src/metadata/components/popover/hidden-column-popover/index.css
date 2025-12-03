@@ -66,6 +66,8 @@
 
 .sf-metadata-hide-columns-popover .hide-column-item .hide-column-item-switch {
   flex: 1;
+  display: flex;
+  align-items: center;
   overflow: hidden;
 }
 
@@ -81,6 +83,8 @@
 }
 
 .sf-metadata-hide-columns-popover .hide-column-item .custom-switch .custom-switch-description {
+  display: inline-flex;
+  align-items: center;
   margin-left: 0;
   padding-right: 5px;
   flex: 1;

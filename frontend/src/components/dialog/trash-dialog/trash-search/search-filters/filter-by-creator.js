@@ -10,6 +10,7 @@ import { seafileAPI } from '../../../../../utils/seafile-api';
 import ModalPortal from '../../../../modal-portal';
 import toaster from '../../../../toast';
 import { SEARCH_FILTERS_KEY } from '../../../../../constants';
+import Icon from '../../../../icon';
 
 import './filter-by-creator.css';
 
@@ -103,8 +104,8 @@ const FilterByCreator = ({ creatorList, onChange }) => {
           aria-haspopup={true}
           aria-expanded={isOpen}
         >
-          <span className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</span>
-          <i className="sf3-font sf3-font-down sf3-font pl-1"></i>
+          <div className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</div>
+          <Icon symbol="down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">
@@ -143,7 +144,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
                 toggle={false}
               >
                 {isOpen && <UserItem user={option} />}
-                {selectedOptions.map(item => item.email).includes(option.email) && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                {selectedOptions.map(item => item.email).includes(option.email) && <span className="dropdown-item-tick"><Icon symbol="tick1" /></span>}
               </DropdownItem>
             ))}
           </DropdownMenu>

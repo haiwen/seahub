@@ -13,6 +13,14 @@ body {
   flex-shrink: 0;
 }
 
+.file-view-header .file-title .seafile-multicolor-icon {
+  color: #999;
+}
+
+.file-view-header .image-zoomer .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
+}
+
 .onlyoffice-file-view-header-shown {
   transition: height .3s ease-in-out;
   height: 56px;
@@ -62,9 +70,9 @@ body {
 }
 
 .file-view-header .file-toolbar-btn .seafile-multicolor-icon {
-  fill: #666;
-  width: .875rem;
-  height: .875rem;
+  fill: var(--bs-icon-color);
+  width: 0.875rem;
+  height: 0.875rem;
 }
 
 .file-view-header .file-toolbar-btn:hover {

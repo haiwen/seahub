@@ -5,6 +5,7 @@ import { getCellValueByColumn, getColumnOptionNameById } from '../../../utils/ce
 import SingleSelectEditor from '../../cell-editors/single-select-editor';
 import SelectOption from '../../cell-formatter/select-option';
 import ClickOutside from '../../../../components/click-outside';
+import Icon from '../../../../components/icon';
 
 const SingleSelect = ({ record, column, columns, onCommit, modifyColumnData }) => {
   const [isEditorShow, setIsEditorShow] = useState(false);
@@ -52,7 +53,7 @@ const SingleSelect = ({ record, column, columns, onCommit, modifyColumnData }) =
     <ClickOutside onClickOutside={onClickOutside}>
       <div className="form-control position-relative select-option-container" onClick={onEdit}>
         {option ? <SelectOption option={option} /> : null}
-        <i className="sf3-font sf3-font-down dropdown-indicator" aria-hidden="true"></i>
+        <Icon symbol="down" className="dropdown-indicator" />
         {isEditorShow && (
           <SingleSelectEditor
             ref={editorRef}

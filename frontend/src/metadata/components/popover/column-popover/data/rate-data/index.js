@@ -59,7 +59,10 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
             onClick={openStylePopover}
             ref={selectedBtnRef}
           >
-            <div className="selected-option" style={{ fill: color }}><Icon symbol={type} /><i className="sf3-font sf3-font-down" aria-hidden="true"></i></div>
+            <div className="selected-option" style={{ fill: color }}>
+              <Icon symbol={type} />
+              <Icon symbol="down" />
+            </div>
           </div>
           {isShowStylePopover && (
             <CustomizePopover

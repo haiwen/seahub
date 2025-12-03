@@ -15,6 +15,7 @@ import SetLinkExpiration from '../set-link-expiration';
 import ShareLinkScopeEditor from '../select-editor/share-link-scope-editor';
 import SelectEditor from '../select-editor/select-editor';
 import BackIcon from '../../components/back-icon';
+import Icon from '../icon';
 
 const propTypes = {
   sharedLinkInfo: PropTypes.object.isRequired,
@@ -201,8 +202,9 @@ class LinkDetails extends React.Component {
                   <Button
                     aria-label={this.state.storedPasswordVisible ? gettext('Hide') : gettext('Show')}
                     onClick={this.toggleStoredPasswordVisible}
-                    className={`link-operation-icon eye-icon sf3-font sf3-font-eye${this.state.storedPasswordVisible ? '' : '-slash'}`}
+                    className="link-operation-icon eye-icon"
                   >
+                    <Icon symbol={this.state.storedPasswordVisible ? 'eye' : 'eye-slash'} />
                   </Button>
                 </InputGroup>
               </dd>
@@ -236,9 +238,10 @@ class LinkDetails extends React.Component {
                     <Button
                       aria-label={gettext('Edit')}
                       title={gettext('Edit')}
-                      className="link-operation-icon sf3-font sf3-font-rename"
+                      className="link-operation-icon"
                       onClick={this.editingExpirationToggle}
                     >
+                      <Icon symbol="rename" />
                     </Button>
                   </InputGroup>
                 )}

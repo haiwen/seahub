@@ -14,6 +14,7 @@ import Loading from '../../loading';
 import BackIcon from '../../back-icon';
 import EmptyTip from '../../empty-tip';
 import SearchTrash from './trash-search/search-trash';
+import Icon from '../../icon';
 
 import '../../../css/toolbar.css';
 import '../../../css/search.css';
@@ -243,7 +244,7 @@ class TrashDialog extends React.Component {
                 {isDesktop && (
                   <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} title={gettext('Close')}onClick={toggleTrashDialog}>
                     <span className="seahub-modal-btn-inner">
-                      <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                      <Icon symbol="x-01" />
                     </span>
                   </button>
                 )}

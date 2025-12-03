@@ -5,6 +5,11 @@
   overflow: hidden;
 }
 
+.input-icon-addon .seafile-multicolor-icon-search {
+  width: 16px;
+  height: 16px;
+}
+
 .seafile-multicolor-icon-monitor {
   font-size: 14px;
   fill: #444;

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import DirPath from './dir-path';
+import Icon from '../icon';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -78,7 +79,7 @@ class CurDirPath extends React.Component {
           loadDirentList={this.props.loadDirentList}
         />
         {!this.props.isDesktop && this.props.direntList.length > 0 &&
-        <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+        <span className="action-icon d-flex align-items-center" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" aria-hidden="true" /></span>}
         {this.state.isSortOptionsDialogOpen &&
         <SortOptionsDialog
           toggleDialog={this.toggleSortOptionsDialog}

@@ -58,9 +58,10 @@ const Header = ({ readonly, haveFreezed, value, groupByColumn, cardsQuantity, ta
       <div className="board-header-operation-btn">
         {value && !readonly && <OpMenu onDelete={onDelete} onFreezed={onFreezed} onUnFreezed={handleUnFreezed} />}
         <OpIcon
-          className={classNames('sf3-font sf3-font-down kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
-          title={isCollapsed ? gettext('Unfold') : gettext('Fold')}
+          symbol="down"
+          className={classNames('kanban-header-op-btn kanban-header-collapse-btn', { 'rotate-90': isCollapsed })}
           op={handleCollapse}
+          title={isCollapsed ? gettext('Expand') : gettext('Collapse')}
         />
       </div>
     </div>

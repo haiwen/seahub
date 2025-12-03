@@ -4,6 +4,7 @@ import { Modal, ModalBody, ModalFooter, Alert, Button, Input, InputGroup } from 
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import Icon from '../icon';
 
 const propTypes = {
   setPassword: PropTypes.func.isRequired,
@@ -75,10 +76,10 @@ class SetWebdavPassword extends Component {
           <InputGroup>
             <Input type={this.state.isPasswordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.handleInputChange} autoComplete="new-password"/>
             <Button onClick={this.togglePasswordVisible}>
-              <i className={`sf3-font sf3-font-eye${this.state.isPasswordVisible ? '' : '-slash'}`}></i>
+              <Icon symbol={this.state.isPasswordVisible ? 'eye' : 'eye-slash'} />
             </Button>
             <Button onClick={this.generatePassword}>
-              <i className="sf3-font sf3-font-magic"></i>
+              <Icon symbol="magic" />
             </Button>
           </InputGroup>
           <p className="form-text text-muted m-0">{passwordTip}</p>

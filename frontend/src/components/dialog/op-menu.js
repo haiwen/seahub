@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
@@ -48,13 +49,15 @@ class OpMenu extends React.Component {
     return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle
-          tag="i"
-          className="sf3-font sf3-font-more op-icon"
+          tag="span"
+          className="op-icon"
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isItemMenuShow}
-        />
+        >
+          <Icon symbol="more-level" />
+        </DropdownToggle>
         <DropdownMenu className="my-1 mr-2">
           {operations.map((item, index) => {
             return (<DropdownItem key={index} data-op={item} onClick={this.onMenuItemClick}>{translateOperations(item)}</DropdownItem>);

@@ -44,9 +44,16 @@
   justify-content: space-between;
 }
 
-.sf-metadata-peoples-dialog .sf-metadata-option .people-check-icon {
+.sf-metadata-peoples-dialog .seafile-select-option {
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-peoples-dialog .seafile-select-option .people-check-icon {
   width: 20px;
   height: 20px;
+  position: absolute;
+  right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;

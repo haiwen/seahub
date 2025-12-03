@@ -137,8 +137,16 @@
 .file-chooser-scroll-wrapper .list-view-content .item-toggle {
   width: 1.5rem;
   height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   line-height: 1.5rem !important;
   text-align: center;
+}
+
+.file-chooser-scroll-wrapper .list-view-content .item-toggle .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
 }
 
 .file-chooser-list-view-header {

@@ -14,6 +14,7 @@ import toaster from '../../../../components/toast';
 import wikiAPI from '../../../../utils/wiki-api';
 import { Utils } from '../../../../utils/utils';
 import OpIcon from '../../../../components/op-icon';
+import Icon from '../../../../components/icon';
 
 const PageItem = ({
   page,
@@ -257,8 +258,9 @@ const PageItem = ({
           >
             <div
               className="wiki-page-content"
+              onClick={() => { toggleExpand(page.id); }}
               style={pathStr ? {
-                marginLeft: (pathStr.split('-').length - 1) * 24
+                marginLeft: (pathStr.split('-').length - 1) * 20
               } : {}}
             >
               {childNumber === 0 && (customIcon ? (
@@ -266,22 +268,25 @@ const PageItem = ({
               ) : (
                 <NavItemIcon symbol={'file'} disable={true} />
               ))}
-              {(!isMouseEntered && childNumber > 0) && (customIcon ? (
+              {childNumber > 0 && (
+                <div
+                  tabIndex="0"
+                  role="button"
+                  className="wiki-nav-item-icon"
+                  onClick={(e) => {
+                    toggleExpand(page.id);
+                    e.stopPropagation();
+                  }}
+                  onKeyDown={Utils.onKeyDown}
+                >
+                  <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
+                </div>
+              )}
+              {childNumber > 0 && (customIcon ? (
                 <CustomIcon icon={customIcon} />
               ) : (
                 <NavItemIcon symbol={'files'} disable={true} />
               ))}
-              {(isMouseEntered && childNumber > 0) && (
-                <div
-                  tabIndex="0"
-                  role="button"
-                  className="nav-item-icon"
-                  onClick={() => { toggleExpand(page.id); }}
-                  onKeyDown={Utils.onKeyDown}
-                >
-                  <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
-                </div>
-              )}
               <span className="wiki-page-title text-truncate" title={page.name}>{page.name}</span>
               {isShowNameEditor && (
                 <NameEditPopover
@@ -306,10 +311,12 @@ const PageItem = ({
               importPage={importPage}
             />
             <OpIcon
-              className="sf3-font sf3-font-enlarge op-icon mr-0"
+              className="op-icon mr-0"
               op={toggleInsertPage}
               title={gettext('Add page inside')}
-            />
+            >
+              <Icon symbol="new" />
+            </OpIcon>
           </div>
           }
           {isShowInsertPage && (
@@ -390,7 +397,7 @@ const PageItem = ({
                 onClick={() => toggleExpand(page.id)}
                 onKeyDown={Utils.onKeyDown}
               >
-                <i className={`sf3-font-down sf3-font ${getFoldState(page.id) ? 'rotate-270' : ''}`} aria-hidden="true"></i>
+                <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
               </div>
             )}
             <span className="wiki-page-title text-truncate">{page.name}</span>

@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
+import Icon from '../icon';
 
 const propTypes = {
   resumableFile: PropTypes.object.isRequired,
@@ -127,13 +128,17 @@ class UploadListItem extends React.Component {
           }
           {this.state.uploadState === UPLOAD_UPLOADED && (
             <div className="d-flex align-items-center">
-              <span className="upload-success-icon sf2-icon-tick mr-2"></span>
+              <span className="upload-success-icon mr-2">
+                <Icon symbol="tick1" />
+              </span>
               <span className="upload-success-msg">{gettext('Uploaded')}</span>
             </div>
           )}
           {this.state.uploadState === UPLOAD_ERROR && (
             <div className="d-flex align-items-center" aria-label={gettext('Upload failed')} title={gettext('Upload failed')}>
-              <span className="upload-failure-icon sf3-font sf3-font-info mr-2" aria-hidden="true"></span>
+              <span className="upload-failure-icon mr-2" aria-hidden="true">
+                <Icon symbol="info" />
+              </span>
               <span className="upload-failure-msg" dangerouslySetInnerHTML={{ __html: error }}></span>
             </div>
           )}

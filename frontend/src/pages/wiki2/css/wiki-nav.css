@@ -85,6 +85,26 @@
   overflow: hidden;
 }
 
+.wiki-nav .wiki-page-item-main .wiki-nav-item-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+.wiki-nav .wiki-page-item-main .wiki-nav-item-icon:hover {
+  background-color: #e5e5e5;
+  cursor: pointer;
+}
+
+.wiki-nav .wiki-page-item-main:has(.wiki-nav-item-icon) .nav-item-icon {
+  margin-left: 0px !important;
+}
+
 .wiki-nav .wiki-page-content {
   height: 100%;
   padding-right: 8px;
@@ -175,9 +195,8 @@
   margin: 0.2rem 0;
 }
 
-.page-operation-dropdown-menu .dropdown-item .sf3-font {
-  font-size: 14px;
-  margin-right: 10px;
+.page-operation-dropdown-menu .dropdown-item:hover .seafile-multicolor-icon {
+  color: #fff;
 }
 
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after,
@@ -221,15 +240,24 @@
   font-size: 16px;
 }
 
-.wiki-nav .wiki2-trash {
+.wiki-nav .other-op {
   height: 32px;
   display: flex;
   align-items: center;
   padding-left: 10px;
   cursor: pointer;
+  font-size: 16px;
 }
 
-.wiki-nav .wiki2-trash:hover {
+.wiki-nav .other-op:hover {
   background-color: var(--bs-wiki-nav-hover-bg);
   border-radius: 3px;
+}
+
+.wiki-nav .other-op .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
+}
+
+.wiki-nav .other-op .other-op-label {
+  font-size: 14px;
 }

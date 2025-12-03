@@ -4,11 +4,11 @@ import TextTranslation from '../../utils/text-translation';
 import ViewModes from '../../components/view-modes';
 import SortMenu from '../../components/sort-menu';
 import MetadataViewToolBar from '../../metadata/components/view-toolbar';
-import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-searcher';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
-import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/sort-setter';
-import TagFilesViewToolbar from '../../tag/components/toolbar';
+import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-searcher';
+import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
+import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 
 const propTypes = {
@@ -66,7 +66,8 @@ class DirTool extends React.Component {
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
         {(!isCustomPermission) &&
           <OpIcon
-            className="cur-view-path-btn sf3-font sf3-font-info ml-2"
+            className="cur-view-path-btn ml-2"
+            symbol="info"
             title={propertiesText}
             op={onToggleDetail}
           />

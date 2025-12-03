@@ -6,6 +6,7 @@ import TextTranslation from '../../utils/text-translation';
 import EventBus from '../common/event-bus';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
+import Icon from '../icon';
 
 const AllTagsToolbar = () => {
   const [selectedTagIds, setSelectedTagIds] = useState([]);
@@ -64,13 +65,17 @@ const AllTagsToolbar = () => {
       <OpElement
         className="cur-view-path-btn px-2"
         title={gettext('Unselect')}
-        op={unSelect}>
-        <span className="sf3-font-x-01 sf3-font mr-2"></span>
+        op={unSelect}
+      >
+        <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
+          <Icon symbol="x-01" />
+        </span>
         <span>{length}{' '}{gettext('selected')}</span>
       </OpElement>
       {canDelete &&
         <OpIcon
-          className="cur-view-path-btn sf3-font-delete1 sf3-font"
+          className="cur-view-path-btn"
+          symbol="delete1"
           title={gettext('Delete')}
           op={deleteTags}
         />
@@ -78,7 +83,8 @@ const AllTagsToolbar = () => {
       {length > 0 && (
         <ItemDropdownMenu
           item={{}}
-          toggleClass={'cur-view-path-btn sf3-font-more sf3-font'}
+          toggleClass={'cur-view-path-btn'}
+          toggleChildren={<Icon symbol="more-level" />}
           onMenuItemClick={onMenuItemClick}
           getMenuList={getMenuList}
         />

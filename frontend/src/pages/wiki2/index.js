@@ -19,6 +19,7 @@ import ResizeBar from '../../components/resize-bar';
 import {
   DRAG_HANDLER_HEIGHT, INIT_SIDE_PANEL_RATE, MAX_SIDE_PANEL_RATE_IN_WIKI, MIN_SIDE_PANEL_RATE
 } from '../../components/resize-bar/constants';
+import { initWikiSettingsAndRepos } from './utils/wiki-setting';
 
 import '../../css/layout.css';
 import '../../css/side-panel.css';
@@ -63,6 +64,7 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
+    initWikiSettingsAndRepos();
     this.getWikiConfig();
     window.addEventListener('popstate', this.onPopstate);
   }

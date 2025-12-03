@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '@/utils/constants';
 import { Utils } from '../utils/utils';
+import Icon from './icon';
 
 import '../css/single-selector.css';
 
@@ -82,7 +83,7 @@ class Selector extends Component {
           {customSelectorToggle ? customSelectorToggle : (
             <span className="cur-option">
               {currentSelectedOption ? currentSelectedOption.text : ''}
-              {isDropdownToggleShown && <i className="sf3-font sf3-font-down ml-1 toggle-icon"></i>}
+              {isDropdownToggleShown && <Icon symbol="down" className="toggle-icon ml-1" />}
             </span>
           )}
         </div>
@@ -100,7 +101,7 @@ class Selector extends Component {
                     onKeyDown={Utils.onKeyDown}
                   >
                     <span className="option-item-text flex-shrink-0 mr-3">{item.text}</span>
-                    <i className={`sf2-icon-tick ${item.isSelected ? '' : 'invisible'}`}></i>
+                    <Icon symbol="tick1" className={item.isSelected ? '' : 'invisible'} />
                   </li>
                 );
               })}

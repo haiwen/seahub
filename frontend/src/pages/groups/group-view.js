@@ -16,6 +16,7 @@ import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import GroupOperationMenu from './group-op-menu';
+import Icon from '../../components/icon';
 
 import '../../css/group-view.css';
 
@@ -287,7 +288,7 @@ class GroupView extends React.Component {
                 <Fragment>
                   <div className="sf-heading d-flex align-items-center">
                     {isDepartmentGroup &&
-                    <span className="sf3-font-department sf3-font nav-icon" title={gettext('This is a special group representing a department.')}></span>
+                    <Icon symbol="department" className="nav-icon mr-2" title={gettext('This is a special group representing a department.')} aria-hidden="true" />
                     }
                     <span>{currentGroup.name}</span>
                     <GroupOperationMenu
@@ -322,7 +323,9 @@ class GroupView extends React.Component {
                       </div>
                     )}
                     {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
-                      <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+                      <span className="action-icon" onClick={this.toggleSortOptionsDialog}>
+                        <Icon symbol="sort" aria-hidden="true" />
+                      </span>}
                     {this.state.isSortOptionsDialogOpen &&
                     <SortOptionsDialog
                       sortBy={sortBy}

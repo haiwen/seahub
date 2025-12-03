@@ -6,6 +6,7 @@ import SFTableSearcherInput from './searcher-input';
 import { checkHasSearchResult } from '../utils/search';
 import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 import OpIcon from '../../../components/op-icon';
+import Icon from '../../icon';
 
 const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells, closeSearcher, focusNextMatchedCell, focusPreviousMatchedCell, showResultNavigation = true }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -58,14 +59,14 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
               role="button"
               onClick={focusPreviousMatchedCell ? focusPreviousMatchedCell : () => {}}
             >
-              <i aria-hidden="true" className="sf3-font sf3-font-down rotate-180"></i>
+              <Icon symbol="down" className="rotate-180" />
             </span>
             <span
               role="button"
               className='toolbar-search-btn'
               onClick={focusNextMatchedCell ? focusNextMatchedCell : () => {}}
             >
-              <i aria-hidden="true" className="sf3-font sf3-font-down"></i>
+              <Icon symbol="down" />
             </span>
           </>
         }
@@ -86,14 +87,15 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
     <div className="sf-table-searcher-container">
       {!isSearchActive && (
         <OpIcon
-          className='sf-table-searcher-btn active-search m-0 sf3-font sf3-font-search'
+          className="sf-table-searcher-btn active-search m-0"
+          symbol="search"
           title={gettext('Search')}
           op={onToggleSearch}
         />
       )}
       {isSearchActive && (
         <div className='sf-table-searcher-input-wrapper'>
-          <i className='input-icon-addon sf3-font sf3-font-search' aria-hidden="true" />
+          <span className="input-icon-addon"><Icon symbol="search" /></span>
           <SFTableSearcherInput
             recordsCount={recordsCount}
             columnsCount={columnsCount}
@@ -104,7 +106,8 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
           {renderSearchButtons()}
           <OpIcon
             title={gettext('Close')}
-            className="btn-close-searcher-wrapper input-icon-addon sf3-font sf3-font-x-01"
+            className="btn-close-searcher-wrapper input-icon-addon"
+            symbol="x-01"
             op={handleCloseSearcher}
           />
         </div>

@@ -8,6 +8,7 @@ import Picker from '../../../../date-and-time-picker';
 import ModalPortal from '../../../../modal-portal';
 import { SEARCH_FILTERS_KEY, SEARCH_FILTER_BY_DATE_OPTION_KEY } from '../../../../../constants';
 import classNames from 'classnames';
+import Icon from '../../../../icon';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -123,7 +124,7 @@ const FilterByDate = ({ date, onChange }) => {
           aria-expanded={isOpen}
         >
           <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
-          <i className="sf3-font sf3-font-down pl-1"></i>
+          <Icon symbol="down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-date-menu">
@@ -141,7 +142,7 @@ const FilterByDate = ({ date, onChange }) => {
                   toggle={false}
                 >
                   {option.label}
-                  {isSelected && <i className="dropdown-item-tick sf2-icon-tick"></i>}
+                  {isSelected && <Icon symbol="tick1" className="dropdown-item-tick" />}
                 </DropdownItem>
               );
             })}

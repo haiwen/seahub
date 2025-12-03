@@ -322,6 +322,76 @@ class WikiAPI {
     return this._sendPostRequest(url, formData);
   }
 
+  getWikiSettings(wikiId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/settings/';
+    return this.req.get(url);
+  }
+
+  updateWikiSettings(wikiId, enableLinkRepos) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/settings/';
+    const flag = enableLinkRepos ? 'true' : 'false';
+    const params = {
+      enable_link_repos: flag
+    };
+    return this.req.put(url, params);
+  }
+
+  addWikiLinkedRepo(wikiId, repoId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/linked-repos/';
+    const formData = new FormData();
+    formData.append('repo_id', repoId);
+    return this._sendPostRequest(url, formData);
+  }
+
+  deleteWikiLinkedRepo(wikiId, repoId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/linked-repos/';
+    const params = {
+      repo_id: repoId
+    };
+    return this.req.delete(url, { data: params });
+  }
+
+  addWikiLinkedView(wikiId, params) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    const formData = new FormData();
+    formData.append('name', params.name);
+    formData.append('type', params.type);
+    formData.append('link_repo_id', params.repo_id);
+    return this._sendPostRequest(url, formData);
+  }
+
+  updateWikiLinkedView(wikiId, paramsData) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    const params = {
+      view_id: paramsData.view_id,
+      view_data: paramsData.view_data,
+    };
+    return this.req.put(url, params);
+  }
+
+  deleteWikiLinkedView(wikiId, view_id) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    const params = {
+      view_id: view_id,
+    };
+    return this.req.delete(url, { data: params });
+  }
+
+  listWikiLinkedViews(wikiId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/';
+    return this.req.get(url);
+  }
+
+  listWikiLinkedViewDetail(wikiId, viewId) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/' + viewId + '/';
+    return this.req.get(url);
+  }
+
+  getViewRecords(wikiId, viewId, params) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/views/' + viewId + '/records/';
+    return this.req.get(url, { params: params });
+  }
+
 }
 
 let wikiAPI = new WikiAPI();

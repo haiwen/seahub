@@ -16,6 +16,7 @@ import SysAdminUserSetQuotaDialog from '../../../components/dialog/sysadmin-dial
 import CommonOperationConfirmationDialog from '../../../components/dialog/common-operation-confirmation-dialog';
 import UserLink from '../user-link';
 import SysAdminUserDeactivateDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog';
+import IconBtn from '../../../components/icon-btn';
 
 const { availableRoles, availableAdminRoles, institutions } = window.sysadmin.pageOptions;
 dayjs.extend(relativeTime);
@@ -508,11 +509,7 @@ class Item extends Component {
           }
           <td>
             {`${Utils.bytesToSize(item.quota_usage)} / ${item.quota_total > 0 ? Utils.bytesToSize(item.quota_total) : '--'}`}
-            <i
-              title={gettext('Edit')}
-              className={`sf3-font sf3-font-rename op-icon ml-1 ${isOpIconShown ? '' : 'invisible'}`}
-              onClick={this.toggleSetQuotaDialog}>
-            </i>
+            <IconBtn symbol="rename" title={gettext('Edit')} className={`op-icon ml-1 ${isOpIconShown ? '' : 'invisible'}`} onClick={this.toggleSetQuotaDialog} />
           </td>
           {(multiInstitution && !isAdmin) &&
             <td>

@@ -22,8 +22,10 @@
 }
 
 .search-trash .search-icon-left {
+  height: 100%;
+  display: flex;
+  align-items: center;
   position: absolute;
-  top: 8px;
   left: 12px;
   color: #666;
 }
@@ -31,7 +33,7 @@
 .search-trash .search-icon-right {
   position: absolute;
   top: 1px;
-  right: 32px;
+  right: 40px;
   display: flex;
   justify-content: center;
   align-items: center;

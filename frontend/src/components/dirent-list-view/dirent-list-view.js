@@ -652,6 +652,10 @@ class DirentListView extends React.Component {
     });
   };
 
+  setImageIndex = (index) => {
+    this.setState({ imageIndex: index });
+  };
+
   getHeaders = (isDesktop) => {
     const { direntList, sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
     if (!isDesktop) {
@@ -664,7 +668,7 @@ class DirentListView extends React.Component {
 
     const hasSelectedItems = selectedDirentList.length > 0;
     const isPartiallySelected = hasSelectedItems && !isAllItemSelected;
-    const sortIcon = <span className={`sf3-font sf3-font-down ${sortOrder == 'asc' ? 'rotate-180 d-inline-block' : ''}`}></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder == 'asc' ? 'rotate-180' : ''}`} /></span>;
     return [
       { isFixed: true,
         width: 31,
@@ -703,7 +707,7 @@ class DirentListView extends React.Component {
       {
         isFixed: false,
         width: 0.5,
-        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a>),
+        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a>),
       },
       {
         isFixed: false, width: 0.06, // tag
@@ -714,12 +718,12 @@ class DirentListView extends React.Component {
       {
         isFixed: false,
         width: 0.11,
-        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>)
+        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>)
       },
       {
         isFixed: false,
         width: 0.15,
-        children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a>)
+        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a>)
       }
     ];
   };
@@ -841,6 +845,7 @@ class DirentListView extends React.Component {
                 repoInfo={this.props.currentRepoInfo}
                 imageItems={this.state.imageItems}
                 imageIndex={this.state.imageIndex}
+                setImageIndex={index => this.setImageIndex(index)}
                 closeImagePopup={this.closeImagePopup}
                 moveToPrevImage={this.moveToPrevImage}
                 moveToNextImage={this.moveToNextImage}

@@ -72,7 +72,7 @@ const GallerySliderSetter = ({ viewID }) => {
         title={gettext('Zoom in')}
         onKeyDown={Utils.onKeyDown}
       >
-        <Icon symbol='plus_sign' className='metadata-slider-icon' />
+        <Icon symbol='new' className='metadata-slider-icon' />
       </Button>
     </div>
   );

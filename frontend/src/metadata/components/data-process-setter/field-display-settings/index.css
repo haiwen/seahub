@@ -16,6 +16,11 @@
   cursor: pointer;
 }
 
+.sf-metadata-field-display-setting .sf-metadata-field-display-setting-header .sf-metadata-field-display-toggle-btn .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+}
+
 .sf-metadata-field-display-setting .sf-metadata-field-display-setting-banner .show-all-button {
   color: #FF8000;
   cursor: pointer;

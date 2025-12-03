@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import ModalPortal from '../../modal-portal';
-import SelectOptionGroup from './select-option-group';
+import SelectOptionGroup from './select-option-group.js';
+import Icon from '../../icon.js';
 import { Utils } from '../../../utils/utils';
-import { gettext } from '../../../utils/constants';
-import OpIcon from '../../op-icon';
 
 import './index.css';
 
@@ -22,7 +21,7 @@ class GroupSelect extends Component {
     event.preventDefault();
     if (this.state.isShowSelectOptions) event.stopPropagation();
     let eventClassName = event.target.className;
-    if (eventClassName.indexOf('sf2-icon-close') > -1 || eventClassName === 'option-group-search') return;
+    if (typeof eventClassName === 'string' && (eventClassName.includes('seafile-multicolor-icon-x-') || eventClassName === 'option-group-search')) return;
     if (event.target.value === '') return;
     this.setState({
       isShowSelectOptions: !this.state.isShowSelectOptions
@@ -88,18 +87,14 @@ class GroupSelect extends Component {
               {selectedOptions.map(item =>
                 <span key={item.id} className="selected-option-item mr-1 px-1">
                   <span className='selected-option-item-name'>{item.name}</span>
-                  <OpIcon
-                    className="sf2-icon-close ml-1"
-                    title={gettext('Delete')}
-                    op={() => {this.props.onDeleteOption(item);}}
-                  />
+                  <span className="d-flex align-items-center ml-1" onClick={() => {this.props.onDeleteOption(item);}}><Icon symbol="x-01" /></span>
                 </span>
               )}
             </span>
             :
             <span className="select-placeholder">{placeholder}</span>
           }
-          <i className="sf3-font-down sf3-font"></i>
+          <Icon symbol="down" />
         </div>
         {this.state.isShowSelectOptions && !isInModal && (
           <SelectOptionGroup

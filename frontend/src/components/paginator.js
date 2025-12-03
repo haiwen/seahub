@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import className from 'classnames';
 import { navigate } from '@gatsbyjs/reach-router';
-import { gettext } from '../utils/constants';
 import { Button, DropdownMenu, Dropdown, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext } from '../utils/constants';
+import Icon from './icon';
 
 import '../css/pagination.css';
 
@@ -71,7 +72,7 @@ class Paginator extends Component {
     return (
       <DropdownItem onClick={() => {this.resetPerPage(perPage);}} key={perPage} className='paginator-dropdown-item'>
         <span className='paginator-dropdown-tick'>
-          {curPerPage === perPage && <i className="sf2-icon-tick"></i>}
+          {curPerPage === perPage && <Icon symbol="tick1" />}
         </span>
         <span>
           {this.getPerPageText(perPage)}
@@ -90,7 +91,7 @@ class Paginator extends Component {
           title={gettext('Previous')}
           aria-label={gettext('Previous')}
         >
-          <i className='sf3-font sf3-font-down rotate-90 d-inline-block'></i>
+          <Icon symbol="down" className="rotate-90" />
         </Button>
         <span className="btn btn-primary mx-4">{currentPage}</span>
         <Button
@@ -99,19 +100,20 @@ class Paginator extends Component {
           title={gettext('Next')}
           aria-label={gettext('Next')}
         >
-          <i className="sf3-font sf3-font-down rotate-270 d-inline-block"></i>
+          <Icon symbol="down" className="rotate-270" />
         </Button>
-
         <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
           <DropdownToggle
             tag="button"
             data-toggle="dropdown"
-            className='btn btn-secondary'
+            className="btn btn-secondary d-flex align-items-center"
             aria-expanded={this.state.isMenuShow}
             onClick={this.toggleOperationMenu}
           >
             <span className='pr-3'>{this.getPerPageText(curPerPage)}</span>
-            <span aria-hidden="true" className={className('sf3-font sf3-font-down d-inline-block', { 'rotate-180': this.state.isMenuShow })}></span>
+            <span aria-hidden="true" className={className('d-inline-flex align-items-center', { 'rotate-180': this.state.isMenuShow })}>
+              <Icon symbol="down" />
+            </span>
           </DropdownToggle>
           <DropdownMenu className="paginator-dropdown-menu">
             {PER_PAGES.map(perPage => {

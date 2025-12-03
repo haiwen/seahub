@@ -7,12 +7,11 @@ import TextTranslation from '../../utils/text-translation';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { getFileNameFromRecord } from '../../metadata/utils/cell/core';
 import { Utils } from '../../utils/utils';
-import OpIcon from '../../components/op-icon';
-import OpElement from '../../components/op-element';
 import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
 import { checkIsDir } from '../../metadata/utils/row';
 import { useMetadataStatus } from '../../hooks';
 import { getColumnByKey } from '../../metadata/utils/column';
+import Icon from '../icon';
 
 const GalleryFilesToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
@@ -148,45 +147,36 @@ const GalleryFilesToolbar = () => {
   const length = selectedRecordIds.length;
   return (
     <div className="selected-dirents-toolbar">
-      <OpElement
-        className="cur-view-path-btn px-2"
-        title={gettext('Unselect')}
-        op={unSelect}
-      >
-        <span className="sf3-font-x-01 sf3-font mr-2"></span>
+      <span className="cur-view-path-btn px-2" onClick={unSelect}>
+        <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
+          <Icon symbol="x-01" />
+        </span>
         <span>{length}{' '}{gettext('selected')}</span>
-      </OpElement>
+      </span>
       {length === 1 && !readOnly && (
         <>
-          <OpIcon
-            className="cur-view-path-btn sf3-font-move1 sf3-font"
-            title={gettext('Move')}
-            op={onMoveClick}
-          />
-          <OpIcon
-            className="cur-view-path-btn sf3-font-copy1 sf3-font"
-            title={gettext('Copy')}
-            op={onCopyClick}
-          />
+          <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')} aria-label={gettext('Move')}>
+            <Icon symbol="move1" />
+          </span>
+          <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')} aria-label={gettext('Copy')}>
+            <Icon symbol="copy1" />
+          </span>
         </>
       )}
-      <OpIcon
-        className="cur-view-path-btn sf3-font-download1 sf3-font"
-        title={gettext('Download')}
-        op={onDownloadClick}
-      />
+      <span className="cur-view-path-btn" onClick={onDownloadClick} title={gettext('Download')} aria-label={gettext('Download')}>
+        <Icon symbol="download" />
+      </span>
       {!readOnly && (
-        <OpIcon
-          className="cur-view-path-btn sf3-font-delete1 sf3-font"
-          title={gettext('Delete')}
-          op={onDeleteClick}
-        />
+        <span className="cur-view-path-btn" onClick={onDeleteClick} title={gettext('Delete')} aria-label={gettext('Delete')}>
+          <Icon symbol="delete1" />
+        </span>
       )}
 
       {toolbarMenuOptions.length > 0 && (
         <ItemDropdownMenu
           ref={menuRef}
-          toggleClass="cur-view-path-btn sf3-font-more sf3-font"
+          toggleClass="cur-view-path-btn"
+          toggleChildren={<Icon symbol="more-level" />}
           item={{}}
           freezeItem={() => {}}
           unfreezeItem={() => {}}

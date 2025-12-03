@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../../utils/utils';
 import { siteRoot, gettext } from '../../../utils/constants';
+import OpIcon from '../../../components/op-icon';
 
 const { enableSysAdminViewRepo } = window.sysadmin.pageOptions;
 
@@ -43,7 +44,11 @@ class RepoItem extends React.Component {
         </td>
         <td>{Utils.bytesToSize(repo.size)}</td>
         <td className="cursor-pointer text-center" onClick={this.props.showDeleteRepoDialog.bind(this, repo)}>
-          <span className={`sf3-font-delete1 sf3-font op-icon ${highlight ? '' : 'vh'}`} title={gettext('Delete')}></span>
+          <OpIcon
+            className={`op-icon ${highlight ? '' : 'vh'}`}
+            symbol="delete1"
+            title={gettext('Delete')}
+          />
         </td>
       </tr>
     );

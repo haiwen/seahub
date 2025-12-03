@@ -52,7 +52,10 @@ class MainSideNav extends React.Component {
     this.setState({ isShowWechatDialog: !this.state.isShowWechatDialog });
   };
 
-  shExtend = () => {
+  shExtend = (e) => {
+    if (e && e.currentTarget) {
+      e.currentTarget.blur();
+    }
     this.setState({
       sharedExtended: !this.state.sharedExtended,
     });
@@ -94,6 +97,34 @@ class MainSideNav extends React.Component {
     return this.props.currentTab === tab ? 'active' : '';
   };
 
+  getFilesSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const { filesNavUnfolded, groupItems } = this.state;
+    if (currentTab === 'libraries') {
+      return 'active';
+    }
+    if (!filesNavUnfolded) {
+      const filesTabs = ['my-libs', 'shared-libs', 'org', 'shared-with-ocm', 'ocm-via-webdav', 'deleted'];
+      if (filesTabs.includes(currentTab)) {
+        return 'active';
+      }
+      if (groupItems.some(g => g.name === currentTab)) {
+        return 'active';
+      }
+    }
+    return '';
+  };
+
+  getShareAdminSectionActiveClass = () => {
+    const { currentTab } = this.props;
+    const { sharedExtended } = this.state;
+    const shareAdminTabs = ['share-admin-share-links', 'share-admin-upload-links', 'share-admin-libs', 'share-admin-folders'];
+    if (!sharedExtended && shareAdminTabs.includes(currentTab)) {
+      return 'active';
+    }
+    return '';
+  };
+
   onCreateGroup = (groupData) => {
     const newGroup = new Group(groupData);
     const { groupItems: newList } = this.state;
@@ -127,10 +158,12 @@ class MainSideNav extends React.Component {
               aria-label={gettext('New Group')}
               onKeyDown={Utils.onKeyDown}
             >
-              <span className="nav-link">
-                <i className="sf2-icon-plus nav-icon" aria-hidden="true"></i>
-                {gettext('New Group')}
-              </span>
+              <div className="nav-link" role="button">
+                <span className="nav-icon">
+                  <Icon symbol="new" />
+                </span>
+                <span className="ellipsis">{gettext('New Group')}</span>
+              </div>
             </li>
             {this.state.isCreateGroupDialogOpen &&
             <CreateGroupDialog
@@ -219,6 +252,9 @@ class MainSideNav extends React.Component {
   toggleFilesNav = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    if (e && e.currentTarget) {
+      e.currentTarget.blur();
+    }
     this.setState({
       filesNavUnfolded: !this.state.filesNavUnfolded
     }, () => {
@@ -241,12 +277,15 @@ class MainSideNav extends React.Component {
           <div className={'side-nav-con d-flex flex-column'}>
             <h2 className="mb-2 px-2 font-weight-normal heading">{gettext('Workspace')}</h2>
             <ul className="nav nav-pills flex-column nav-container">
-              <li id="files" className={`nav-item flex-column ${this.getActiveClass('libraries')}`}>
-                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis ${this.getActiveClass('libraries')}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
-                  <span className="sf3-font-files sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Files')}</span>
+              <li id="files" className={`nav-item flex-column ${this.getFilesSectionActiveClass()}`}>
+                <Link to={ siteRoot + 'libraries/' } className={`nav-link ellipsis justify-content-between ${this.getFilesSectionActiveClass()}`} title={gettext('Files')} onClick={(e) => this.tabItemClick(e, 'libraries')}>
+                  <div className="d-flex align-items-center">
+                    <Icon symbol="files" />
+                    <span className="nav-text">{gettext('Files')}</span>
+                  </div>
                   <OpIcon
-                    className={`toggle-icon sf3-font sf3-font-down ${filesNavUnfolded ? '' : 'rotate-90'}`}
+                    className={`op-icon ${filesNavUnfolded ? '' : 'rotate-90'}`}
+                    symbol="down"
                     title={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
                     op={this.toggleFilesNav}
                   />
@@ -271,14 +310,14 @@ class MainSideNav extends React.Component {
 
               <li className={`nav-item ${this.getActiveClass('starred')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={(e) => this.tabItemClick(e, 'starred')}>
-                  <span className="sf3-font-starred sf3-font" aria-hidden="true"></span>
+                  <Icon symbol="favorites" />
                   <span className="nav-text">{gettext('Favorites')}</span>
                 </Link>
               </li>
               {showActivity &&
               <li className={`nav-item ${this.getActiveClass('dashboard')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'activities/all'} title={gettext('Activities')} onClick={(e) => this.tabItemClick(e, 'dashboard')}>
-                  <span className="sf3-font-activities sf3-font" aria-hidden="true"></span>
+                  <Icon symbol="activities" />
                   <span className="nav-text">{gettext('Activities')}</span>
                 </Link>
               </li>
@@ -286,7 +325,7 @@ class MainSideNav extends React.Component {
               {canCreateWiki &&
               <li className={`nav-item ${this.getActiveClass('published')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('published')}`} to={siteRoot + 'published/'} title={gettext('Wikis')} onClick={(e) => this.tabItemClick(e, 'published')}>
-                  <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
+                  <Icon symbol="wiki" />
                   <span className="nav-text">{gettext('Wikis')}</span>
                 </Link>
               </li>
@@ -294,23 +333,27 @@ class MainSideNav extends React.Component {
               {canInvitePeople &&
               <li className={`nav-item ${this.getActiveClass('invitations')}`}>
                 <Link className={`nav-link ellipsis ${this.getActiveClass('invitations')}`} to={siteRoot + 'invitations/'} title={gettext('Invite Guest')} onClick={(e) => this.tabItemClick(e, 'invitations')}>
-                  <span className="sf3-font-invite-visitors sf3-font" aria-hidden="true"></span>
+                  <Icon symbol="invite-guests" />
                   <span className="nav-text">{gettext('Invite Guest')}</span>
                 </Link>
               </li>
               }
-              <li id="share-admin-nav" className='nav-item flex-column'>
+              <li id="share-admin-nav" className={`nav-item flex-column ${this.getShareAdminSectionActiveClass()}`}>
                 <div
-                  className="nav-link ellipsis"
+                  className={`nav-link ellipsis justify-content-between ${this.getShareAdminSectionActiveClass()}`}
                   title={gettext('Share Admin')}
                   onClick={this.shExtend}
                   tabIndex={0}
                   role="button"
                   onKeyDown={Utils.onKeyDown}
                 >
-                  <span className="sf3-font-wrench sf3-font" aria-hidden="true"></span>
-                  <span className="nav-text">{gettext('Share Admin')}</span>
-                  <span className={`toggle-icon sf3-font sf3-font-down ${this.state.sharedExtended ? '' : 'rotate-90'}`}></span>
+                  <div className="d-flex align-items-center overflow-hidden">
+                    <Icon symbol="share-admin" />
+                    <span className="nav-text">{gettext('Share Admin')}</span>
+                  </div>
+                  <span className="op-icon">
+                    <Icon symbol="down" className={`${this.state.sharedExtended ? '' : 'rotate-90'}`} />
+                  </span>
                 </div>
                 {this.renderSharedAdmin()}
               </li>
@@ -324,21 +367,21 @@ class MainSideNav extends React.Component {
               <ul className="nav nav-pills flex-column nav-container">
                 <li className='nav-item'>
                   <a className={'nav-link'} href={helpLink || siteRoot + 'help/'} title={gettext('Help')}>
-                    <span className="sf3-font-help sf3-font" aria-hidden="true"></span>
+                    <Icon symbol="help" />
                     <span className="nav-text">{gettext('Help')}</span>
                   </a>
                 </li>
                 {enableTC &&
                 <li className='nav-item'>
                   <a href={`${siteRoot}terms/`} className="nav-link">
-                    <span className="sf3-font-terms sf3-font" aria-hidden="true"></span>
+                    <Icon symbol="terms" />
                     <span className="nav-text">{gettext('Terms')}</span>
                   </a>
                 </li>
                 }
                 <li className='nav-item'>
                   <a href={siteRoot + 'download_client_program/'} className="nav-link">
-                    <span className="sf3-font-devices sf3-font" aria-hidden="true"></span>
+                    <Icon symbol="clients" />
                     <span className="nav-text">{gettext('Clients')}</span>
                   </a>
                 </li>
@@ -351,7 +394,7 @@ class MainSideNav extends React.Component {
                     role="button"
                     onKeyDown={Utils.onKeyDown}
                   >
-                    <span className="sf3-font-about sf3-font" aria-hidden="true"></span>
+                    <Icon symbol="about" />
                     <span className="nav-text">{gettext('About')}</span>
                   </div>
                 </li>
@@ -365,7 +408,7 @@ class MainSideNav extends React.Component {
                     role="button"
                     onKeyDown={Utils.onKeyDown}
                   >
-                    <span className="sf3-font-hi sf3-font" aria-hidden="true"></span>
+                    <Icon symbol="hi" />
                     <span className="nav-text">
                       {`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
                     </span>
@@ -382,8 +425,8 @@ class MainSideNav extends React.Component {
               role="button"
               onKeyDown={Utils.onKeyDown}
             >
-              <Icon className="mr-2" symbol="close-sidebar" />
-              <span>{gettext('Fold the sidebar')}</span>
+              <Icon className="mr-2" symbol="fold-sidebar" />
+              <span className="d-inline-flex overflow-hidden text-nowrap">{gettext('Fold the sidebar')}</span>
             </div>
           </div>
         </div>

@@ -142,7 +142,7 @@ const UsersLayout = ({ ...commonProps }) => {
         }
       </MainPanelTopbar>
       <UsersNav currentItem={curTab} sortBy={sortBy} sortOrder={sortOrder} sortItems={sortByQuotaUsage} />
-      <div className="d-flex overflow-hidden">
+      <div className="h-100 d-flex overflow-hidden">
         {commonProps.tab === '' && <Users default sortBy={sortBy} sortOrder={sortOrder} {...usersProps} />}
         {commonProps.tab === 'admins' && <AdminUsers path="admins" {...usersProps} />}
         {commonProps.tab === 'ldap-imported' && <LDAPImportedUsers path="ldap-imported" {...usersProps} />}

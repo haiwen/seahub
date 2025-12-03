@@ -22,6 +22,10 @@
   margin-right: 10px;
 }
 
+.sf-md-viewer-topbar {
+  z-index: 103;
+}
+
 .sf-md-viewer-topbar .btn {
   color: #666;
   border: none !important;

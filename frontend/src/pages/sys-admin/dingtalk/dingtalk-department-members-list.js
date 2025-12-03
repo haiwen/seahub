@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Table } from 'reactstrap';
 import { siteRoot } from '../../../utils/constants';
 import Loading from '../../../components/loading';
+import Icon from '../../../components/icon';
 
 const DingtalkDepartmentMembersListPropTypes = {
   isMembersListLoading: PropTypes.bool.isRequired,
@@ -42,7 +43,7 @@ class DingtalkDepartmentMembersList extends Component {
           <td>{member.name}</td>
           <td>{member.mobile}</td>
           <td>{member.contact_email}</td>
-          <td>{member.email && <i className="sf2-icon-tick"></i>}</td>
+          <td>{member.email && <Icon symbol="tick" />}</td>
         </tr>
       );
     });

@@ -5,6 +5,7 @@ import CommonOperationConfirmationDialog from '../../../components/dialog/common
 import RoleSelector from '../../../components/single-selector';
 import { gettext, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool,
@@ -112,13 +113,15 @@ class MemberItem extends React.Component {
               direction="down"
             >
               <DropdownToggle
-                tag='i'
+                tag='span'
                 role="button"
-                className='op-icon sf3-font sf3-font-more'
+                className="op-icon"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
-              />
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={this.toggleDeleteMemberDialog}>{gettext('Delete')}</DropdownItem>
               </DropdownMenu>

@@ -21,6 +21,7 @@ import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpElement from '../../components/op-element';
 import OpIcon from '../../components/op-icon';
+import Icon from '../../components/icon';
 
 import '../../css/share-admin-links.css';
 
@@ -323,13 +324,15 @@ class Item extends Component {
               <div className="d-flex align-items-center">
                 {!item.is_expired &&
                 <OpIcon
-                  className={`sf2-icon-link op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  symbol="link1"
                   title={gettext('View')}
                   op={this.viewLink}
                 />
                 }
                 <OpIcon
-                  className={`sf3-font-delete1 sf3-font op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+                  symbol="delete1"
                   title={gettext('Remove')}
                   op={this.removeLink}
                 />
@@ -567,11 +570,12 @@ class ShareAdminShareLinks extends Component {
                       op={this.cancelSelectAllLinks}
                       title={gettext('Unselect')}
                     >
-                      <span className="sf3-font-x-01 sf3-font mr-2"></span>
+                      <span className="mr-2"><Icon symbol="x-01" /></span>
                       <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
                     </OpElement>
                     <OpIcon
-                      className="cur-view-path-btn ml-4 sf3-font-delete1 sf3-font"
+                      className="cur-view-path-btn ml-4"
+                      symbol="delete1"
                       title={gettext('Delete')}
                       op={this.toggleDeleteShareLinksDialog}
                     />

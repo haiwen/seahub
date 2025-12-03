@@ -6,6 +6,7 @@ import { orgAdminAPI } from '../../utils/org-admin-api';
 import { gettext, orgID, siteRoot } from '../../utils/constants';
 import toaster from '../../components/toast';
 import OrgGroupInfo from '../../models/org-group';
+import Icon from '../../components/icon';
 
 class GroupItem extends React.Component {
 
@@ -101,14 +102,16 @@ class GroupItem extends React.Component {
           {isOperationMenuShow &&
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
-                tag="i"
-                className="op-icon sf3-font-more sf3-font"
+                tag="span"
+                className="op-icon"
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
                 aria-expanded={this.state.isItemMenuShow}
                 onClick={this.onDropdownToggleClick}
-              />
+              >
+                <Icon symbol="more-level" />
+              </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
               </DropdownMenu>

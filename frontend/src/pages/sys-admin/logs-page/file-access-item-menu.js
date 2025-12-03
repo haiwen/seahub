@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../utils/constants';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { gettext } from '../../../utils/constants';
+import Icon from '../../../components/icon';
 
 class FilterMenu extends React.Component {
 
@@ -30,13 +31,15 @@ class FilterMenu extends React.Component {
     return (
       <Dropdown isOpen={this.state.isMenuShown} toggle={this.toggleMenu}>
         <DropdownToggle
-          tag="i"
-          className="sf-dropdown-toggle sf2-icon-caret-down"
+          tag="span"
+          className="sf-dropdown-toggle"
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={this.state.isMenuShown}
-        />
+        >
+          <Icon symbol="down" />
+        </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={this.onItemClick}>{gettext('only show {placeholder}').replace('{placeholder}', filterBy)}</DropdownItem>
         </DropdownMenu>

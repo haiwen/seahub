@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Icon from '../../../components/icon';
 
 const propTypes = {
   node: PropTypes.object.isRequired,
@@ -70,7 +71,9 @@ class NavItem extends React.Component {
       return (
         <div className="pl-4 position-relative">
           <span className="switch-btn" onClick={this.toggleExpanded}>
-            <i className={`sf3-font sf3-font-down ${expanded ? '' : 'rotate-270 d-inline-block'}`} aria-hidden="true"></i>
+            <span className={`${expanded ? '' : 'rotate-270 d-inline-flex align-items-center'}`} aria-hidden="true">
+              <Icon symbol="down" />
+            </span>
           </span>
           {this.renderLink(node)}
           {expanded && node.children.map((child, index) => {

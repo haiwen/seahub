@@ -103,7 +103,7 @@
 }
 
 .notification-dialog-body table td {
-  padding: 0.5rem 0.1875rem;
+  padding: 8px 6px;
   border-bottom: none;
   color: var(--bs-body-color);
   font-size: 14px;

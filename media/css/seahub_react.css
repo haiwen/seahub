@@ -341,6 +341,9 @@ textarea::placeholder {
 }
 
 .sf-heading .nav-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: 1rem;
   margin-right: 6px;
   line-height: 1;
@@ -1203,7 +1206,8 @@ table td {
   font-size: 0;
 }
 
-.table-thead-hidden thead .sf3-font {
+.table-thead-hidden thead .sf3-font,
+.table-thead-hidden thead .seafile-multicolor-icon {
   display: none !important;
 }
 
@@ -1711,6 +1715,7 @@ a.table-sort-op:hover {
 }
 
 .side-panel .side-nav .side-nav-con #share-admin-nav .nav-item.active::before,
+.side-panel .side-nav .side-nav-con #share-admin-sub-nav .nav-item.active::before,
 .side-panel .side-nav .side-nav-con #files-sub-nav .nav-item.active::before {
   top: 2px;
   height: 24px;

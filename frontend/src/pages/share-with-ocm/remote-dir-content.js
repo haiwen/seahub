@@ -7,6 +7,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
+import Icon from '../../components/icon';
 
 dayjs.extend(relativeTime);
 
@@ -63,7 +64,9 @@ class DirentItem extends React.Component {
           </td>
           <td>
             {isOpIconShown && dirent.is_file &&
-            <i role="button" aria-hidden="true" className="op-icon sf3-font sf3-font-download1" title={gettext('Download')} onClick={this.downloadDirent}></i>
+            <span role="button" aria-hidden="true" className="op-icon" title={gettext('Download')} onClick={this.downloadDirent}>
+              <Icon symbol="download" />
+            </span>
             }
           </td>
           <td>{Utils.bytesToSize(dirent.size)}</td>

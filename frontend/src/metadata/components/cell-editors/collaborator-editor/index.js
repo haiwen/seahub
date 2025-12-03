@@ -7,6 +7,7 @@ import { Utils } from '../../../../utils/utils';
 import { KeyCodes } from '../../../../constants';
 import { gettext } from '../../../../utils/constants';
 import { useCollaborators } from '../../../hooks';
+import Icon from '../../../../components/icon';
 
 import './index.css';
 
@@ -232,7 +233,7 @@ const CollaboratorEditor = forwardRef(({
               </span>
             </div>
             <div className="collaborator-check-icon">
-              {isSelected && <i className="sf2-icon-tick"></i>}
+              {isSelected && <Icon symbol="tick1" />}
             </div>
           </div>
         </div>

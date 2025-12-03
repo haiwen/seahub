@@ -5,6 +5,7 @@ import AsyncCollaborator from '../../cell-formatter/async-collaborator';
 import { useCollaborators } from '../../../hooks';
 import CollaboratorEditor from '../../cell-editors/collaborator-editor';
 import ClickOutside from '../../../../components/click-outside';
+import Icon from '../../../../components/icon';
 
 const Collaborator = ({ record, column, columns, onCommit }) => {
   const [isEditorShow, setIsEditorShow] = useState(false);
@@ -35,7 +36,7 @@ const Collaborator = ({ record, column, columns, onCommit }) => {
         {Array.isArray(value) && value.length > 0 && (
           value.map(email => <AsyncCollaborator key={email} value={email} {...props} />)
         )}
-        <i className="sf3-font sf3-font-down dropdown-indicator" aria-hidden="true"></i>
+        <Icon symbol="down" className="dropdown-indicator" />
         {isEditorShow && (
           <CollaboratorEditor
             value={value}

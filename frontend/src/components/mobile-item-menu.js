@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu } from 'reactstrap';
 import { gettext } from '../utils/constants';
+import Icon from './icon';
 
 const propTypes = {
   isOpen: PropTypes.bool,
@@ -31,13 +32,15 @@ class MobileItemMenu extends React.Component {
     return (
       <Dropdown isOpen={isMenuOpen} toggle={toggleMenu}>
         <DropdownToggle
-          tag="i"
-          className="sf-dropdown-toggle sf3-font sf3-font-more ml-0"
+          tag="span"
+          className="sf-dropdown-toggle ml-0 d-flex align-items-center"
           title={gettext('More operations')}
           aria-label={gettext('More operations')}
           data-toggle="dropdown"
           aria-expanded={isMenuOpen}
-        />
+        >
+          <Icon symbol="more-level" />
+        </DropdownToggle>
         <DropdownMenu
           container={document.body}
           className="mobile-dropdown-menu"

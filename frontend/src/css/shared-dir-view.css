@@ -84,7 +84,8 @@ body {
 
 /* toolbar  */
 #shared-dir-view .path-container .path-item {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   min-width: 0;
   padding: 0 6px;
   font-size: 1rem;
@@ -102,12 +103,23 @@ body {
   flex-shrink: 0;
 }
 
-#shared-dir-view .path-item-dropdown-toggle .sf3-font {
-  color: #666;
+#shared-dir-view .path-item-dropdown-toggle .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
+}
+
+#shared-dir-view .path-item-dropdown-toggle .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  transform: translateY(1px);
 }
 
 #shared-dir-view .path-item-dropdown-toggle .main-icon {
   margin-right: 2px;
+}
+
+#shared-dir-view .table-container th .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
 }
 
 @keyframes displaySelectedToolbar {

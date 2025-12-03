@@ -18,6 +18,7 @@ import ShareRepoDialog from '../../components/dialog/share-repo-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
+import Icon from '../../components/icon';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -165,7 +166,7 @@ class SharedWithAll extends React.Component {
   renderSortIconInMobile = () => {
     return (
       <>
-        {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+        {(!Utils.isDesktop() && this.state.repoList.length > 0) && <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" /></span>}
       </>
     );
   };
@@ -234,8 +235,8 @@ class SharedWithAll extends React.Component {
       return (
         <>
           <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-            <h4 className="sf-heading m-0">
-              <span className="sf3-font-share-with-all sf3-font nav-icon" aria-hidden="true"></span>
+            <h4 className="sf-heading m-0 d-flex align-items-center">
+              <span className="nav-icon" aria-hidden="true"><Icon symbol="share-with-all" /></span>
               {gettext('Shared with all')}
             </h4>
             {this.renderSortIconInMobile()}

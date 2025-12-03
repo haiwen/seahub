@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { getTagColor, getTagId, getTagName } from '../../../../../tag/utils/cell';
 import { NODE_CONTENT_LEFT_INDENT, NODE_ICON_LEFT_INDENT } from '../../../../../components/sf-table/constants/tree';
 import { gettext } from '@/utils/constants';
+import Icon from '../../../../../components/icon';
 import { Utils } from '../../../../../utils/utils';
 
 import './index.css';
@@ -51,7 +52,7 @@ const TagItem = ({
             aria-label={isFolded ? gettext('Unfold') : gettext('Fold')}
             tabIndex={0}
           >
-            <i aria-hidden="true" className={classNames('sf3-font sf3-font-down', { 'rotate-270': isFolded })}></i>
+            <Icon symbol="down" className={classNames({ 'rotate-270': isFolded })} />
           </span>
         )}
         <div className="sf-metadata-tag-color-and-name">
@@ -59,7 +60,7 @@ const TagItem = ({
           <div className="sf-metadata-tag-name">{tagName}</div>
         </div>
         <div className="sf-metadata-tags-editor-tag-check-icon mr-1">
-          {isSelected && <i className="sf2-icon-tick"></i>}
+          {isSelected && <Icon symbol="tick1" />}
         </div>
       </div>
     </div>

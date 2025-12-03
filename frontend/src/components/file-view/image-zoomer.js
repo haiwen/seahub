@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import IconButton from '../../components/icon-button';
+import Icon from '../../components/icon';
 import { gettext } from '../../utils/constants';
 
 const SCALE_OPTIONS = [0.15, 0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4];
@@ -130,12 +131,12 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
           tag='div'
           role='button'
           tabIndex="0"
-          className="position-relative"
+          className="position-relative d-flex align-items-center"
           data-toggle="dropdown"
           aria-expanded={isScaleMenuOpen}
         >
           <Input id="cur-scale-input" type="text" value={curScaleText} readOnly={true} tabIndex="-1" />
-          <i id="scale-menu-caret" className="sf3-font-down sf3-font"></i>
+          <Icon id="scale-menu-caret" symbol="down" className="position-absolute end-0 mr-2" />
         </DropdownToggle>
         <DropdownMenu id="scale-menu">
           {SCALE_OPTIONS.map((item, index) => {
@@ -147,7 +148,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
                 onKeyDown={(e) => {onMenuItemKeyDown(e, item);}}
               >
                 {selectedScale == item && (
-                  <i className="dropdown-item-tick sf2-icon-tick"></i>
+                  <Icon className="dropdown-item-tick" symbol="tick1" />
                 )}
                 <span>{`${item * 100}%`}</span>
               </DropdownItem>
@@ -162,7 +163,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
                 onKeyDown={(e) => {onMenuItemKeyDown(e, item.value);}}
               >
                 {selectedScale == item.value && (
-                  <i className="dropdown-item-tick sf2-icon-tick"></i>
+                  <Icon className="dropdown-item-tick" symbol="tick1" />
                 )}
                 <span>{item.text}</span>
               </DropdownItem>

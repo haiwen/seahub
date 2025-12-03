@@ -14,6 +14,7 @@ import PermSelect from '../../components/dialog/perm-select';
 import FixedWidthTable from '../../components/common/fixed-width-table';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
+import Icon from '../../components/icon';
 
 class Content extends Component {
 
@@ -46,7 +47,7 @@ class Content extends Component {
 
     // sort
     const sortByName = sortBy == 'name';
-    const sortIcon = sortOrder == 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder == 'asc' ? 'rotate-180' : ''}`} /></span>;
 
     const isDesktop = Utils.isDesktop();
     return (
@@ -54,7 +55,7 @@ class Content extends Component {
         className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
         headers={isDesktop ? [
           { isFixed: true, width: 40 },
-          { isFixed: false, width: 0.35, children: (<a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
+          { isFixed: false, width: 0.35, children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a>) },
           { isFixed: false, width: 0.3, children: gettext('Share To') },
           { isFixed: false, width: 0.25, children: gettext('Permission') },
           { isFixed: false, width: 0.1 },
@@ -239,7 +240,8 @@ class Item extends Component {
           </td>
           <td>
             <OpIcon
-              className={`sf3-font sf3-font-x-01 op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
+              symbol="x-01"
               title={gettext('Unshare')}
               op={this.unshare}
             />

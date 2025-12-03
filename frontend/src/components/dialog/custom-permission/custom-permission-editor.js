@@ -4,6 +4,7 @@ import { Alert, FormGroup, Input, Label, Tooltip } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import Loading from '../../loading';
 import BackIcon from '../../back-icon';
+import Icon from '../../icon';
 import { Utils } from '../../../utils/utils';
 
 class CustomPermissionEditor extends React.Component {
@@ -168,7 +169,7 @@ class CustomPermissionEditor extends React.Component {
                       onKeyDown={Utils.onKeyDown}
                     />
                     <span>{gettext('Modify')}</span>
-                    <span id="modify-tip" className="sf3-font sf3-font-tips ml-2" style={{ color: '#999' }}></span>
+                    <span id="modify-tip" className="ml-2" style={{ color: '#999' }} aria-hidden="true"><Icon symbol="about" /></span>
                     <Tooltip
                       toggle={this.toggle}
                       delay={{ show: 0, hide: 0 }}

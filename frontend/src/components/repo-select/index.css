@@ -1,0 +1,96 @@
+.group-select {
+  position: relative;
+}
+
+.group-select.custom-select {
+  display: flex;
+  padding: 5px 10px;
+  border-radius: 3px;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  user-select: none;
+  text-align: left;
+  border-color: 1px solid rgba(0, 40, 100, 0.12);
+  height: auto;
+  min-height: 38px;
+  cursor: pointer;
+}
+
+.group-select.custom-select:focus,
+.group-select.custom-select.focus {
+  border-color: #1991eb !important;
+  box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
+}
+
+.group-select.custom-select.disabled:focus,
+.group-select.custom-select.focus.disabled,
+.group-select.custom-select.disabled:hover {
+  border-color: rgba(0, 40, 100, 0.12) !important;
+  box-shadow: unset;
+  cursor: default;
+}
+
+.group-select .sf3-font-down {
+  display: inline-block;
+  color: #999;
+  transform: translateY(2px);
+  transition: all 0.1s;
+  font-size: 14px !important;
+}
+
+.group-select .sf3-font-down:hover {
+  color: #666;
+}
+
+.group-select .selected-option {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bs-popover-bg);
+}
+
+.group-select.selector-collaborator .option-group .option-group-content {
+  padding: 10px;
+}
+
+.group-select.custom-select.selector-collaborator .option-group .option-group-content {
+  padding: 10px 0;
+}
+
+.group-select.custom-select.selector-collaborator .option {
+  padding: 5px 0 5px 10px !important;
+  line-height: 20px;
+}
+
+.group-select .select-placeholder {
+  line-height: 1;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.group-select .selected-option-show {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.group-select .selected-option-show .selected-option-item {
+  background-color: rgb(240, 240, 240);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.group-select .selected-option-show .selected-option-item .selected-option-item-name {
+  font-size: 13px;
+  color: var(--bs-body-color);
+}
+
+.group-select .selected-option-show .selected-option-item .sf2-icon-close {
+  cursor: pointer;
+  color: rgb(103, 103, 103);
+}

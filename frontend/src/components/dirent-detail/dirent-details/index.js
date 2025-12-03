@@ -206,12 +206,8 @@ DirentDetails.propTypes = {
   onFileTagChanged: PropTypes.func.isRequired,
   repoTags: PropTypes.array,
   fileTags: PropTypes.array,
-  enableMetadata: PropTypes.bool,
-  enableFaceRecognition: PropTypes.bool,
-  detailsSettings: PropTypes.object,
   tagsData: PropTypes.object,
   addTag: PropTypes.func,
-  modifyDetailsSettings: PropTypes.func,
   modifyLocalFileTags: PropTypes.func,
 };
 

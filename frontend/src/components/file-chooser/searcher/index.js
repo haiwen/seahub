@@ -5,7 +5,7 @@ import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { SEARCH_CONTAINER } from '../../../constants/zIndexes';
 import { MODE_TYPE_MAP } from '../../../constants';
-import OpIcon from '../../op-icon';
+import Icon from '../../icon';
 
 import './index.css';
 
@@ -110,7 +110,7 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
   return (
     <div className='search-container file-chooser-searcher' style={{ zIndex: SEARCH_CONTAINER }}>
       <div className='search-input-container'>
-        <i className="search-icon-left input-icon-addon sf3-font sf3-font-search"></i>
+        <span className="search-icon-left input-icon-addon"><Icon symbol="search" /></span>
         <Input
           innerRef={inputRef}
           className='search-input'
@@ -122,11 +122,9 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
           autoFocus
         />
         {inputValue.length !== 0 && (
-          <OpIcon
-            className="search-control op-icon op-icon-bg-light m-0 sf3-font sf3-font-x-01"
-            title={gettext('Clear')}
-            op={onCloseSearching}
-          />
+          <span className="search-control op-icon op-icon-bg-light m-0" onClick={onCloseSearching}>
+            <Icon symbol="x-01" />
+          </span>
         )}
       </div>
     </div>

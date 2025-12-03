@@ -64,6 +64,7 @@
   width: calc(100% - 20px);
   height: 20px;
   line-height: 20px;
+  margin-right: 8px;
 }
 
 .sf-metadata-filters-list .seafile-customize-select.disabled .selected-option-show {
@@ -74,10 +75,7 @@
   width: auto;
   overflow-x: auto;
   line-height: 1.5;
-}
-
-.sf-metadata-filters-list .seafile-customize-select .sf3-font-down {
-  margin-left: 0.5rem;
+  justify-content: flex-start;
 }
 
 .sf-metadata-filters-list .selected-conjunction-show {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Icon from '../../components/icon';
 
 const propTypes = {
   placeholder: PropTypes.string.isRequired,
@@ -39,7 +40,9 @@ class Search extends React.Component {
   render() {
     return (
       <div className="input-icon">
-        <i className="d-flex input-icon-addon sf3-font sf3-font-search"></i>
+        <span className="d-flex input-icon-addon">
+          <Icon symbol="search" />
+        </span>
         <input
           type="text"
           className="form-control search-input h-6 mr-1"

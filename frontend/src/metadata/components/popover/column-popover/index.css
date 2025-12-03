@@ -49,6 +49,9 @@
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type-info .seafile-multicolor-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
   flex-shrink: 0;
 }
 
@@ -57,11 +60,6 @@
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-.sf-metadata-column-popover .sf-metadata-column-type .sf3-font-down {
-  transform: rotate(270deg);
-  color: #666;
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon {

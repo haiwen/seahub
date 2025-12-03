@@ -11,6 +11,7 @@ import ReposSortMenu from '../../components/sort-menu';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import Content from './content';
+import Icon from '../../components/icon';
 
 class SharedLibraries extends Component {
   constructor(props) {
@@ -86,7 +87,7 @@ class SharedLibraries extends Component {
   renderSortIconInMobile = () => {
     return (
       <>
-        {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="sf3-font sf3-font-sort action-icon" onClick={this.toggleSortOptionsDialog}></span>}
+        {(!Utils.isDesktop() && this.state.items.length > 0) && <span className="action-icon" onClick={this.toggleSortOptionsDialog}><Icon symbol="sort-mobile" /></span>}
       </>
     );
   };
@@ -116,8 +117,8 @@ class SharedLibraries extends Component {
         {inAllLibs ? (
           <>
             <div className={`d-flex justify-content-between mt-3 py-1 ${currentViewMode == LIST_MODE ? 'sf-border-bottom' : ''}`}>
-              <h4 className="sf-heading m-0">
-                <span className="sf3-font-share-with-me sf3-font nav-icon" aria-hidden="true"></span>
+              <h4 className="sf-heading m-0 d-flex align-items-center">
+                <span className="nav-icon"><Icon symbol="share-with-me" /></span>
                 {gettext('Shared with me')}
               </h4>
               {this.renderSortIconInMobile()}

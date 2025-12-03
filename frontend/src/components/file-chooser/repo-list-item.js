@@ -8,8 +8,6 @@ import { Utils } from '../../utils/utils';
 import Dirent from '../../models/dirent';
 import toaster from '../toast';
 import Icon from '../icon';
-import { gettext } from '../../utils/constants';
-import OpIcon from '../op-icon';
 
 const propTypes = {
   isCurrentRepo: PropTypes.bool,
@@ -258,21 +256,19 @@ class RepoListItem extends React.Component {
           onKeyDown={Utils.onKeyDown}
         >
           <div className="item-left-icon">
-            <OpIcon
-              className={`item-toggle icon sf3-font sf3-font-down ${this.state.isShowChildren ? '' : 'rotate-270 d-inline-block'}`}
-              op={this.onToggleClick}
-              title={this.state.isShowChildren ? gettext('Fold') : gettext('Unfold')}
-            />
-            <i className="tree-node-icon">
-              <span className="icon sf3-font sf3-font-folder tree-node-icon"></span>
-            </i>
+            <span className="d-flex justify-content-center align-items-center item-toggle tree-node-icon icon" onClick={this.onToggleClick}>
+              <Icon symbol="down" className={this.state.isShowChildren ? '' : 'rotate-270'} />
+            </span>
+            <span className="tree-node-icon icon">
+              <Icon symbol="folder" />
+            </span>
           </div>
           <div className="item-text">
             <span className="name user-select-none ellipsis" title={repo.repo_name}>{repo.repo_name}</span>
           </div>
           {repoActive &&
             <div className="item-right-icon">
-              <Icon symbol="check" color="currentColor"/>
+              <Icon symbol="check" />
             </div>
           }
         </div>

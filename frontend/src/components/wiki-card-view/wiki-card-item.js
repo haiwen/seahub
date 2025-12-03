@@ -14,6 +14,7 @@ import wikiAPI from '../../utils/wiki-api';
 import toaster from '../toast';
 import ConvertWikiDialog from '../dialog/convert-wiki-dialog';
 import PublishedWikiExtrance from '../published-wiki-entrance';
+import Icon from '../icon';
 
 dayjs.extend(relativeTime);
 
@@ -151,7 +152,7 @@ class WikiCardItem extends Component {
     const { wiki } = this.props;
     return (
       <div className="wiki-card-item-avatar-container">
-        <span className='sf3-font-department sf3-font nav-icon'></span>
+        <span className="nav-icon"><Icon symbol="department" /></span>
         <span className="wiki-card-item-owner text-truncate" title={wiki.owner_nickname}>{wiki.owner_nickname}</span>
       </div>
     );
@@ -224,7 +225,7 @@ class WikiCardItem extends Component {
           aria-label={gettext('Visit the wiki')}
         >
           <div className="wiki-card-item-top d-flex align-items-center">
-            <span className="sf3-font-wiki sf3-font" aria-hidden="true"></span>
+            <span className="wiki-icon"><Icon symbol="wiki" className="w-5 h-5" /></span>
             {this.state.customUrlString && <PublishedWikiExtrance wikiID={wiki.id} customURLPart={this.state.customUrlString} />}
             {showDropdownMenu &&
               <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleDropDownMenu} onClick={this.onClickDropdown} className="ml-auto">
@@ -232,14 +233,16 @@ class WikiCardItem extends Component {
                   tag="i"
                   role="button"
                   tabIndex="0"
-                  className="sf3-font-more sf3-font op-icon op-icon-bg-light"
+                  className="op-icon op-icon-bg-light"
                   title={gettext('More operations')}
                   aria-label={gettext('More operations')}
                   data-toggle="dropdown"
                   aria-expanded={this.state.isItemMenuShow}
                   aria-haspopup={true}
                   style={{ 'minWidth': '0' }}
-                />
+                >
+                  <Icon symbol="more-level" className="w-4 h-4" />
+                </DropdownToggle>
                 <DropdownMenu className="dtable-dropdown-menu">
                   {showRename &&
                     <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>}

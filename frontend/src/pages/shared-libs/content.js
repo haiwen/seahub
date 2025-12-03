@@ -10,6 +10,7 @@ import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import ContextMenu from '../../components/context-menu/context-menu';
 import { hideMenu, handleContextClick } from '../../components/context-menu/actions';
 import Item from './item';
+import Icon from '../../components/icon';
 
 class Content extends Component {
 
@@ -92,7 +93,7 @@ class Content extends Component {
       const sortByName = sortBy == 'name';
       const sortByTime = sortBy == 'time';
       const sortBySize = sortBy == 'size';
-      const sortIcon = sortOrder == 'asc' ? <span aria-hidden="true" className="sf3-font sf3-font-down rotate-180 d-inline-block"></span> : <span aria-hidden="true" className="sf3-font sf3-font-down"></span>;
+      const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
       const isDesktop = Utils.isDesktop();
       const itemsContent = (

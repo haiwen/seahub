@@ -9,6 +9,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, isPro } from '../../utils/constants';
 import { RepoInfo } from '../../models';
 import toaster from '../toast';
+import Icon from '../icon';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -324,13 +325,13 @@ class CopyDirent extends React.Component {
             <div className="header-buttons">
               <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
                 <span className="seahub-modal-btn-inner">
-                  <i className="sf3-font sf3-font-x-01" aria-hidden="true"></i>
+                  <Icon symbol="x-01" />
                 </span>
               </button>
               {(isPro && !showSearchBar) &&
                 <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Search')} title={gettext('Search')} onClick={this.onOpenSearchBar}>
                   <span className="seahub-modal-btn-inner">
-                    <i className="sf3-font sf3-font-search" aria-hidden="true"></i>
+                    <Icon symbol="search" />
                   </span>
                 </button>
               }

@@ -35,9 +35,9 @@ const updateButtonStates = (map, zoomIn, zoomOut) => {
 export const createZoomControl = ({ map }) => {
   const container = createZoomContainer();
 
-  const zoomInButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>');
+  const zoomInButton = createButton('<svg class="sf-map-control-icon" viewBox="0 0 16 16" width="16" height="16"><path d="M12.4117647,7.4117647 L8.5882353,7.4117647 L8.5882353,3.5882353 C8.5882353,3.23529412 8.35294118,3 8,3 C7.64705882,3 7.4117647,3.23529412 7.4117647,3.5882353 L7.4117647,7.4117647 L3.5882353,7.4117647 C3.23529412,7.4117647 3,7.64705882 3,8 C3,8.35294118 3.23529412,8.5882353 3.5882353,8.5882353 L7.4117647,8.5882353 L7.4117647,12.4117647 C7.4117647,12.7647059 7.64705882,13 8,13 C8.35294118,13 8.5882353,12.7647059 8.5882353,12.4117647 L8.5882353,8.5882353 L12.4117647,8.5882353 C12.7647059,8.5882353 13,8.35294118 13,8 C13,7.64705882 12.7647059,7.4117647 12.4117647,7.4117647 Z" fill="currentColor"></path></svg>');
   const divider = createDivider();
-  const zoomOutButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-out"></i>');
+  const zoomOutButton = createButton('<svg class="sf-map-control-icon" viewBox="0 0 16 16" width="16" height="16"><path d="M12.4117647,7.29411764 L8.5882353,7.29411764 L7.4117647,7.29411764 L3.5882353,7.29411764 C3.23529412,7.29411764 3,7.57647059 3,8 C3,8.42352941 3.23529412,8.70588236 3.5882353,8.70588236 L7.4117647,8.70588236 L8.5882353,8.70588236 L12.4117647,8.70588236 C12.7647059,8.70588236 13,8.42352941 13,8 C13,7.57647059 12.7647059,7.29411764 12.4117647,7.29411764 Z" fill="currentColor"></path></svg>');
 
   container.appendChild(zoomInButton);
   container.appendChild(divider);
@@ -69,9 +69,9 @@ export function createBMapZoomControl({ anchor, offset }) {
   ZoomControl.prototype.initialize = function (map) {
     const container = createZoomContainer();
 
-    const zoomInButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-in"></i>');
+    const zoomInButton = createButton('<svg class="sf-map-control-icon" viewBox="0 0 16 16" width="16" height="16"><path d="M12.4117647,7.4117647 L8.5882353,7.4117647 L8.5882353,3.5882353 C8.5882353,3.23529412 8.35294118,3 8,3 C7.64705882,3 7.4117647,3.23529412 7.4117647,3.5882353 L7.4117647,7.4117647 L3.5882353,7.4117647 C3.23529412,7.4117647 3,7.64705882 3,8 C3,8.35294118 3.23529412,8.5882353 3.5882353,8.5882353 L7.4117647,8.5882353 L7.4117647,12.4117647 C7.4117647,12.7647059 7.64705882,13 8,13 C8.35294118,13 8.5882353,12.7647059 8.5882353,12.4117647 L8.5882353,8.5882353 L12.4117647,8.5882353 C12.7647059,8.5882353 13,8.35294118 13,8 C13,7.64705882 12.7647059,7.4117647 12.4117647,7.4117647 Z" fill="currentColor"></path></svg>');
     const divider = createDivider();
-    const zoomOutButton = createButton('<i class="sf-map-control-icon sf3-font sf3-font-zoom-out"></i>');
+    const zoomOutButton = createButton('<svg class="sf-map-control-icon" viewBox="0 0 16 16" width="16" height="16"><path d="M12.4117647,7.29411764 L8.5882353,7.29411764 L7.4117647,7.29411764 L3.5882353,7.29411764 C3.23529412,7.29411764 3,7.57647059 3,8 C3,8.42352941 3.23529412,8.70588236 3.5882353,8.70588236 L7.4117647,8.70588236 L8.5882353,8.70588236 L12.4117647,8.70588236 C12.7647059,8.70588236 13,8.42352941 13,8 C13,7.57647059 12.7647059,7.29411764 12.4117647,7.29411764 Z" fill="currentColor"></path></svg>');
 
     container.appendChild(zoomInButton);
     container.appendChild(divider);

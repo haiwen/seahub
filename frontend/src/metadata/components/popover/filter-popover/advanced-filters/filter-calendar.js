@@ -14,7 +14,6 @@ import 'dayjs/locale/zh-cn';
 import 'dayjs/locale/en-gb';
 
 import '@seafile/seafile-calendar/assets/index.css';
-import '../../../../../css/metadata-rc-calendar.css';
 
 dayjs.extend(utc);
 dayjs.extend(localeData);

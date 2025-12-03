@@ -333,7 +333,6 @@ class DirFiles extends React.Component {
         <ItemDropdownMenu
           {...props}
           item={{ name: 'files' }}
-          toggleClass="sf3-font sf3-font-more"
           menuStyle={isMobile ? { zIndex: 1050 } : {}}
           getMenuList={this.getMenuList}
           onMenuItemClick={this.onMoreOperationClick}
@@ -342,6 +341,10 @@ class DirFiles extends React.Component {
       </div>
     );
     return [moreOperation];
+  };
+
+  setImageIndex = (index) => {
+    this.setState({ imageIndex: index });
   };
 
   render() {
@@ -389,6 +392,7 @@ class DirFiles extends React.Component {
               repoInfo={currentRepoInfo}
               imageItems={this.state.imageNodeItems}
               imageIndex={this.state.imageIndex}
+              setImageIndex={index => this.setImageIndex(index)}
               closeImagePopup={this.closeNodeImagePopup}
               moveToPrevImage={this.moveToPrevImage}
               moveToNextImage={this.moveToNextImage}

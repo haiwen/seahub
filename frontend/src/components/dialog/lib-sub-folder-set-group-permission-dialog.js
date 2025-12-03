@@ -12,6 +12,8 @@ import toaster from '../../components/toast';
 import BackIcon from '../../components/back-icon';
 import EmptyTip from '../../components/empty-tip';
 import Loading from '../../components/loading';
+import OpIcon from '../op-icon';
+import Icon from '../icon';
 
 class GroupItem extends React.Component {
 
@@ -78,16 +80,12 @@ class GroupItem extends React.Component {
           />
         </td>
         <td>
-          <i
-            tabIndex="0"
-            role="button"
-            className={`sf3-font sf3-font-x-01 op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            onClick={this.deleteGroupPermissionItem}
-            onKeyDown={Utils.onKeyDown}
+          <OpIcon
+            symbol="x-01"
+            className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
+            op={this.deleteGroupPermissionItem}
             title={gettext('Delete')}
-            aria-label={gettext('Delete')}
-          >
-          </i>
+          />
         </td>
       </tr>
     );
@@ -358,7 +356,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
                 <td>
                   <InputGroup>
                     <Input value={this.state.folderPath} onChange={this.onSetSubFolder} />
-                    <Button className="sf2-icon-plus" onClick={this.toggleFileChooser}></Button>
+                    <Button className="d-flex align-items-center" onClick={this.toggleFileChooser}><Icon symbol="new" /></Button>
                   </InputGroup>
                 </td>
               }

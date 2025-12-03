@@ -85,9 +85,9 @@ const HideColumnItem = ({
       onDragEnd={onDragEnd}
     >
       {!readOnly && canReorder && (
-        <div className="drag-hide-column-handle" draggable="true" onDragStart={onDragStart}>
+        <span className="d-flex drag-hide-column-handle" draggable="true" onDragStart={onDragStart}>
           <Icon symbol="drag" />
-        </div>
+        </span>
       )}
       <Switch
         className="hide-column-item-switch"

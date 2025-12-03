@@ -650,7 +650,15 @@
   "Remove_link": "移除链接",
   "Preview": "预览",
   "Go_to_link": "跳转链接",
-  "Link_block" : "链接节点",
+  "Link_block": "链接节点",
   "The_link_address_or_link_block_is_required": "链接地址或链接节点是必填项。",
-  "Comment_filter": "评论过滤"
+  "File_view": "文档视图",
+  "Linked_repo_tip": "您尚未关联资料库，请先在设置模块关联资料库，方可使用该功能。",
+  "Insert_file_view": "插入视图",
+  "View_name": "视图名称",
+  "View_type": "视图类型",
+  "Linked_library": "关联资料库",
+  "The_view_name_is_required": "视图名称是必填项。",
+  "The_view_type_is_required": "视图类型是必填项。",
+  "The_linked_library_is_required": "关联的资料库是必填项。"
 }

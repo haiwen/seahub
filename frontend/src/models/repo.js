@@ -23,6 +23,7 @@ class Repo {
     this.modifier_email = object.modifier_email;
     this.modifier_name = object.modifier_name;
     this.modifier_avatar = object.modifier_avatar;
+    this.enable_metadata = object.enable_metadata || false;
 
     this.type = object.type;
     this.starred = object.starred;
