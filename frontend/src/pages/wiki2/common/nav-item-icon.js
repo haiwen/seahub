@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import FileIcon from '../../../assets/icons/file.svg';
-import FilesIcon from '../../../assets/icons/files.svg';
+import FileIcon from '../../../assets/icons/wiki-file.svg';
+import FilesIcon from '../../../assets/icons/wiki-files.svg';
 
 import '../css/nav-item-icon.css';
 
