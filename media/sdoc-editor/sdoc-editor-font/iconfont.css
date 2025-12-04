@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 5078528 */
-  src: url('iconfont.eot?t=1764751710554'); /* IE9 */
-  src: url('iconfont.eot?t=1764751710554#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1764751710554') format('woff2'),
-       url('iconfont.woff?t=1764751710554') format('woff'),
-       url('iconfont.ttf?t=1764751710554') format('truetype'),
-       url('iconfont.svg?t=1764751710554#sdocfont') format('svg');
+  src: url('iconfont.eot?t=1764832621026'); /* IE9 */
+  src: url('iconfont.eot?t=1764832621026#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1764832621026') format('woff2'),
+       url('iconfont.woff?t=1764832621026') format('woff'),
+       url('iconfont.ttf?t=1764832621026') format('truetype'),
+       url('iconfont.svg?t=1764832621026#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-replace:before {
+  content: "\e6eb";
+}
+
+.sdoc-insert-below:before {
+  content: "\e6ec";
+}
+
+.sdoc-try-again:before {
+  content: "\e6ed";
 }
 
 .sdoc-comments:before {
