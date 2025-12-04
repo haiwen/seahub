@@ -2935,8 +2935,8 @@ a.sf-popover-item {
 }
 
 .page-form-panel .form {
-  width: 466px;
-  margin-top: 2.5rem;
+  max-width: 466px;
+  margin: 2.5rem auto auto;
 }
 
 .page-form-panel .password-icon {
