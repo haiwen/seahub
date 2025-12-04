@@ -1,14 +1,11 @@
 @font-face {
-  font-family: "sdocfont";
-  /* Project id 5080543 */
-  src: url('./seafile-editor-font/iconfont.eot?t=1764817888962');
-  /* IE9 */
-  src: url('./seafile-editor-font/iconfont.eot?t=1764817888962#iefix') format('embedded-opentype'),
-    /* IE6-IE8 */
-    url('./seafile-editor-font/iconfont.woff2?t=1764817888962') format('woff2'),
-    url('./seafile-editor-font/iconfont.woff?t=1764817888962') format('woff'),
-    url('./seafile-editor-font/iconfont.ttf?t=1764817888962') format('truetype'),
-    url('./seafile-editor-font/iconfont.svg?t=1764817888962#sdocfont') format('svg');
+  font-family: "sdocfont"; /* Project id 5080543 */
+  src: url('iconfont.eot?t=1764817888962'); /* IE9 */
+  src: url('iconfont.eot?t=1764817888962#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1764817888962') format('woff2'),
+       url('iconfont.woff?t=1764817888962') format('woff'),
+       url('iconfont.ttf?t=1764817888962') format('truetype'),
+       url('iconfont.svg?t=1764817888962#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -150,3 +147,4 @@
 .sdoc-caret-up:before {
   content: "\e69a";
 }
+
