@@ -234,7 +234,7 @@ class ActivityItem extends Component {
           <ModalPortal>
             <ListCreatedFileDialog
               activity={item}
-              toggleCancel={this.onListCreatedFilesToggle}
+              onListCreatedFilesToggle={this.onListCreatedFilesToggle}
             />
           </ModalPortal>
         }

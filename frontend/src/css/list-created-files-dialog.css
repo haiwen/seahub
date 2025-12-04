@@ -1,0 +1,27 @@
+.list-created-files-dialog .modal-dialog {
+  max-height: 90vh;
+  margin: 1.75rem auto;
+}
+
+.list-created-files-dialog .modal-content {
+  max-height: 90vh;
+  display: block;
+}
+
+.list-created-files-dialog .modal-body {
+  overflow-y: auto;
+  padding: 1rem;
+  max-height: calc(90vh - 120px);
+  min-height: 100px;
+}
+
+@media (max-width: 768px) {
+  .list-created-files-dialog .modal-dialog {
+    max-height: 95vh;
+    margin: 0.5rem;
+  }
+  
+  .list-created-files-dialog .modal-body {
+    max-height: calc(95vh - 100px);
+  }
+}
