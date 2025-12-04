@@ -5,6 +5,7 @@ import FileLoading from '../file-loading';
 import WikiTopNav from '../../top-nav';
 import { getCurrentPageConfig } from '../../utils';
 import RightHeader from '../../wiki-right-header';
+import Icon from '../../../../components/icon';
 
 import './index.css';
 
@@ -53,10 +54,10 @@ const FilePreviewWrapper = ({ docContent, previewDocUuid, setEditor, togglePrevi
                 className='file-preview-full-screen'
                 onClick={openFullscreen}
               >
-                <i className='sdocfont sdoc-fullscreen icon-font'/>
+                <Icon symbol='fullscreen'/>
               </div>
               <div className="sdoc-icon-btn" onClick={togglePreview}>
-                <i className="sdocfont sdoc-sm-close"></i>
+                <Icon symbol='close'/>
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import { Utils } from '../../../utils/utils';
 
 import './plugin-item.css';
+import Icon from '../../../components/icon';
 
 const CommentPlugin = ({ setIsShowRightPanel, unseenNotificationsCount }) => {
 
@@ -19,7 +20,7 @@ const CommentPlugin = ({ setIsShowRightPanel, unseenNotificationsCount }) => {
       tabIndex={0}
       onKeyDown={Utils.onKeyDown}
     >
-      <i className='sdocfont sdoc-comments'></i>
+      <Icon symbol='context-comment' />
       {unseenNotificationsCount > 0 && (
         <span className="sdoc-unread-message-tip"></span>
       )}
