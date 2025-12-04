@@ -46,8 +46,8 @@
   background-color: var(--bs-nav-hover-bg);
 }
 
-.tree-node .sf3-font {
-  color: #666;
+.tree-node .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
 }
 
 .tree-node .departments-v2-tree-icon {
