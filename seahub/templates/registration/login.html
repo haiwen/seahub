@@ -4,7 +4,7 @@
 {% block sub_title %}{% trans "Log In" %} - {% endblock %}
 {% block header_css_class %}hide{% endblock %}
 {% block extra_base_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20250802" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20251201" />
 {% endblock %}
 
 {% block extra_style %}
@@ -82,7 +82,7 @@ html, body, #wrapper { height:100%; }
         {% endif %}
 
         <label class="checkbox-label mt-3 mb-0 remember-me">
-            <input type="checkbox" name="remember_me" class="vam remember-input" />
+            <input type="checkbox" name="remember_me" class="form-check-input remember-input" />
             <span class="vam">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
         </label>
 

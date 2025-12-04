@@ -33,3 +33,7 @@
 .sf-table-row.row-selected .sf-table-column-content.row-index {
   display: none !important;
 }
+
+.actions-checkbox .select-cell-checkbox.form-check-input {
+  margin: 0;
+}

@@ -42,11 +42,6 @@
   cursor: pointer;
 }
 
-.sf-metadata-result-table-cell .select-cell-checkbox {
-  width: 12px;
-  height: 12px;
-}
-
 .sf-metadata-result-table-cell .file-cell-content {
   flex: 1;
   display: flex;
@@ -190,8 +185,10 @@
 
 .sf-metadata-result-table-cell .select-all-checkbox-container .seafile-multicolor-icon-partially-selected {
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
   fill: #2b76f6;
+  background-color: #fff;
+  border-radius: .25rem;
 }
 
 .sf-metadata-result-table-cell .header-action-cell-placeholder {

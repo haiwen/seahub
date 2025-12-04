@@ -72,7 +72,12 @@ class ActionsCell extends Component {
         onMouseLeave={this.onCellMouseLeave}
       >
         {!isSelected && <div className="sf-metadata-result-column-content row-index text-truncate">{index + 1}</div>}
-        <div className='sf-metadata-result-column-content actions-checkbox'>
+        <label
+          className='sf-metadata-result-column-content actions-checkbox'
+          htmlFor={`select-cell-checkbox-${recordId}`}
+          title={gettext('Select')}
+          aria-label={gettext('Select')}
+        >
           <div className='select-cell-checkbox-container'>
             <input
               id={`select-cell-checkbox-${recordId}`}
@@ -86,7 +91,7 @@ class ActionsCell extends Component {
               onKeyDown={Utils.onKeyDown}
             />
           </div>
-        </div>
+        </label>
         <IconBtn
           symbol="expand"
           className="row-expand"
