@@ -7,23 +7,25 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
+import '../../css/list-created-files-dialog.css';
+
 const propTypes = {
   activity: PropTypes.object.isRequired,
-  toggleCancel: PropTypes.func.isRequired,
+  onListCreatedFilesToggle: PropTypes.func.isRequired,
 };
 
 dayjs.extend(relativeTime);
 
-class ListCreatedFileDialog extends React.Component {
+class ListCreatedFilesDialog extends React.Component {
 
-  toggle = (activity) => {
-    this.props.toggleCancel(activity);
+  toggle = () => {
+    this.props.onListCreatedFilesToggle();
   };
 
   render() {
     let activity = this.props.activity;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} className='list-created-files-dialog'>
         <SeahubModalHeader toggle={this.toggle}>{gettext('Created Files')}</SeahubModalHeader>
         <ModalBody>
           <Table>
@@ -53,13 +55,13 @@ class ListCreatedFileDialog extends React.Component {
           </Table>
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle.bind(this, activity)}>{gettext('Close')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
         </ModalFooter>
       </Modal>
     );
   }
 }
 
-ListCreatedFileDialog.propTypes = propTypes;
+ListCreatedFilesDialog.propTypes = propTypes;
 
-export default ListCreatedFileDialog;
+export default ListCreatedFilesDialog;
