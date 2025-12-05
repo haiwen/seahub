@@ -1189,6 +1189,15 @@ def check_metric_auth(auth_header):
     return False
 
 
+def _format_metrics(metric_name: str, metric_value: int, metric_type="gauge", help_txt=""):
+    metrics = [
+        f"# HELP {metric_name} {help_txt}",
+        f"# TYPE {metric_name} {metric_type}",
+        f"{metric_name}{{}} {metric_value}"
+    ]
+    return "\n".join(metrics) + "\n"
+    
+
 def get_metrics(request):
     if not ENABLE_METRIC:
         return Http404
@@ -1196,4 +1205,34 @@ def get_metrics(request):
     if not auth_header or not check_metric_auth(auth_header):
         return HttpResponseForbidden('Invalid Authentication')
     metrics = get_seafevents_metrics()
-    return HttpResponse(metrics, content_type='text/plain')
+    
+    metrics_text = metrics.content.decode()
+    total_repos_count = seafile_api.count_repos()
+    total_files_count = seafile_api.get_total_file_number()
+    
+    active_db_users = ccnet_api.count_emailusers('DB')
+    inactive_db_users = ccnet_api.count_inactive_emailusers('DB')
+    
+    total_users_count = active_db_users + inactive_db_users
+    
+    repos_count_metric = _format_metrics(
+        "seafile_total_repos",
+        total_repos_count,
+        help_txt="Total librarie numbers in seafile"
+    )
+    files_count_metric = _format_metrics(
+        "seafile_total_files",
+        total_files_count,
+        help_txt="Total file numbers in seafile"
+    )
+    
+    users_count_metric = _format_metrics(
+        "seafile_total_users",
+        total_users_count,
+        help_txt="Total user numbers in seafile including active and inactive users"
+    )
+    
+    metrics_text += repos_count_metric
+    metrics_text += files_count_metric
+    metrics_text += users_count_metric
+    return HttpResponse(metrics_text)
