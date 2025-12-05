@@ -64,6 +64,11 @@ body {
   background-color: var(--bs-hover-bg);
 }
 
+.wiki2-main-panel .wiki2-main-panel-north .wiki2-file-history-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 .main-panel-center .cur-view-content {
   padding: 0;
   min-width: 500px;
@@ -169,7 +174,7 @@ body {
   transition: none;
 }
 
-.wiki2-file-history-button .freeze-document-switch  .custom-switch-indicator {
+.wiki2-file-history-button .freeze-document-switch .custom-switch-indicator {
   position: absolute;
   right: 16px;
 }
