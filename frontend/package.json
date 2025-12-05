@@ -15,7 +15,7 @@
     "@seafile/resumablejs": "1.1.16",
     "@seafile/seafile-calendar": "1.0.0",
     "@seafile/seafile-editor": "3.0.2",
-    "@seafile/seafile-sdoc-editor": "3.0.12",
+    "@seafile/seafile-sdoc-editor": "3.0.13",
     "@seafile/stldraw-editor": "1.0.1",
     "@uiw/codemirror-extensions-langs": "^4.19.4",
     "@uiw/codemirror-themes": "^4.23.5",
