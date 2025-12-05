@@ -441,55 +441,6 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
 def password_reset_complete(request, template_name='registration/password_reset_complete.html'):
     return render(request, template_name, {'login_url': settings.LOGIN_URL})
 
-@csrf_protect
-@login_required
-def password_change(request, template_name='registration/password_change_form.html',
-                    post_change_redirect=None, password_change_form=PasswordChangeForm):
-    if post_change_redirect is None:
-        post_change_redirect = reverse('auth_password_change_done')
-        
-    can_change_password = can_user_update_password(request.user)
-
-    if not can_change_password:
-        return render_error(request, _('Unable to change password.'))
-
-    if settings.ENABLE_USER_SET_CONTACT_EMAIL:
-        user_profile = Profile.objects.get_profile_by_user(request.user.username)
-        if user_profile is None or not user_profile.contact_email:
-            # set contact email and password
-            password_change_form = SetContactEmailPasswordForm
-            template_name = 'registration/password_set_form.html'
-
-    if request.user.enc_password == UNUSABLE_PASSWORD:
-        # set password only
-        password_change_form = SetPasswordForm
-        template_name = 'registration/password_set_form.html'
-
-    if request.method == "POST":
-        form = password_change_form(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save()
-
-            if request.session.get('force_passwd_change', False):
-                del request.session['force_passwd_change']
-                UserOptions.objects.unset_force_passwd_change(
-                    request.user.username)
-
-            update_session_auth_hash(request, request.user)
-            return HttpResponseRedirect(post_change_redirect)
-    else:
-        form = password_change_form(user=request.user)
-
-    return render(request, template_name, {
-        'form': form,
-        'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
-        'force_passwd_change': request.session.get('force_passwd_change', False),
-    })
-
-def password_change_done(request, template_name='registration/password_change_done.html'):
-    return render(request, template_name)
-
-
 def multi_adfs_sso(request):
     if not getattr(settings, 'ENABLE_MULTI_ADFS', False):
         return HttpResponseRedirect(settings.LOGIN_URL)
