@@ -121,10 +121,10 @@ class Content extends Component {
               <tr>
                 <th width="4%"></th>
                 <th width="3%"><span className="sr-only">{gettext('Library Type')}</span></th>
-                <th width="35%"><a className="d-block table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
+                <th width="35%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortByName && sortIcon}</a></th>
                 <th width="10%"><span className="sr-only">{gettext('Actions')}</span></th>
-                <th width="14%"><a className="d-block table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
-                <th width="17%"><a className="d-block table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
+                <th width="14%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBySize && sortIcon}</a></th>
+                <th width="17%"><a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortByTime && sortIcon}</a></th>
                 <th width="17%">{gettext('Owner')}</th>
               </tr>
             </thead>
