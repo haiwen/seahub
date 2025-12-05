@@ -15,8 +15,17 @@
   cursor: pointer
 }
 
-.wiki-plugin-operation-btn-container .sdocfont {
+.wiki-plugin-operation-btn-container svg {
+  width: 16px;
+  height: 16px;
   color: #666666;
+  fill: #666;
+  cursor: pointer;
+}
+
+.wiki-plugin-operation-btn-container svg path {
+  color: #666666;
+  fill: #666;
   cursor: pointer;
 }
 
