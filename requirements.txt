@@ -30,4 +30,3 @@ dnspython==2.7.*
 pillow-heif==1.0.*
 redis==6.2.*
 cairosvg==2.8.*
-playwright==1.48.0
