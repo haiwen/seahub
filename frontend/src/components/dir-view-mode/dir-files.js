@@ -309,9 +309,16 @@ class DirFiles extends React.Component {
           // Generate a unique query parameter to bust the cache
           const cacheBuster = new Date().getTime();
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+
+          // Update correct image thumbnail into lightbox component
+          const resArray = newThumbnailSrc.split('/');
+          if (resArray[2] === '256') {
+            resArray[2] = '1024';
+          }
+          const adjustedThumbnailSrc = resArray.join('/');
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageNodeItems];
-            updatedImageItems[imageIndex].thumbnail = newThumbnailSrc;
+            updatedImageItems[imageIndex].thumbnail = adjustedThumbnailSrc;
             return { imageNodeItems: updatedImageItems };
           });
           // Update the thumbnail URL with the cache-busting query parameter

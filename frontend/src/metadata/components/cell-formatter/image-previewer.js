@@ -83,7 +83,14 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
             if (res.data?.encoded_thumbnail_src) {
               const cacheBuster = new Date().getTime();
               const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
-              imageItems[imageIndex].thumbnail = newThumbnailSrc;
+
+              // Update correct image thumbnail into lightbox component
+              const resArray = newThumbnailSrc.split('/');
+              if (resArray[2] === '256') {
+                resArray[2] = '1024';
+              }
+              const adjustedThumbnailSrc = resArray.join('/');
+              imageItems[imageIndex].thumbnail = adjustedThumbnailSrc;
               setImageItems(imageItems);
               table.rows.forEach(row => {
                 if (row.id === imageItem.id) {
