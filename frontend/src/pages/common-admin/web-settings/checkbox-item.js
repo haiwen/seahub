@@ -38,7 +38,7 @@ class CheckboxItem extends Component {
         mainClassName='d-flex'
         mainContent={
           <>
-            <Input className="ml-0" checked={inputChecked} type='checkbox' onChange={this.onInputChange} />
+            <Input className="ml-0 flex-shrink-0" checked={inputChecked} type='checkbox' onChange={this.onInputChange} />
             <p className="ml-2">{helpTip}</p>
           </>
         }
