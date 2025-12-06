@@ -30,6 +30,12 @@ from seahub.auth import views as auth_views
 from seahub.two_factor.views.login import TwoFactorVerifyView
 
 urlpatterns = [
+    path('password/change/',
+        auth_views.password_change,
+        name='auth_password_change'),
+    path('password/change/done/',
+        auth_views.password_change_done,
+        name='auth_password_change_done'),
     path('password/reset/',
         auth_views.password_reset,
         name='auth_password_reset'),
