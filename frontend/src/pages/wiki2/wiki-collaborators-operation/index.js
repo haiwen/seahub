@@ -2,6 +2,7 @@ import React from 'react';
 import { EventBus, SocketManager, context } from '@seafile/sdoc-editor';
 import CollaboratorsPopover from './collaborators-popover.js';
 import { EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
+import Icon from '../../../components/icon.js';
 
 import './index.css';
 
@@ -95,7 +96,7 @@ class CollaboratorsOperation extends React.PureComponent {
     return (
       <>
         <span className='wiki-collaborators-btn-container' id="collaborators">
-          <i className='sdocfont sdoc-user mr-1'></i>
+          <Icon symbol='sdoc-user' />
           {shownCollaborators.length}
         </span>
         <CollaboratorsPopover collaborators={shownCollaborators} />

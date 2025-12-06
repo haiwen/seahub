@@ -250,7 +250,7 @@ class MainPanel extends Component {
   render() {
     const menuItems = this.getMenu();
     const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked } = this.props;
-    const { currentPageConfig = {}, isDropdownMenuOpen, showExportSubmenu, collaborators } = this.state;
+    const { currentPageConfig = {}, isDropdownMenuOpen, showExportSubmenu } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = currentPageLocked || !(permission === 'rw');
     return (
