@@ -19,6 +19,7 @@ import wikiAPI from '../../utils/wiki-api';
 import WikiRightPanel from './wiki-right-panel';
 import SDocServerApi from '../../utils/sdoc-server-api';
 import Icon from '../../components/icon';
+import WikiCollaboratorsOperation from './wiki-collaborators-operation';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -278,6 +279,7 @@ class MainPanel extends Component {
           </div>
           <div className='d-flex align-items-center'>
             {menuItems.length > 0 && <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />}
+            {menuItems.length > 0 && <WikiCollaboratorsOperation />}
             {menuItems.length > 0 &&
             <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
               <DropdownToggle

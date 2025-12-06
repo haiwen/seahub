@@ -1,0 +1,21 @@
+.wiki-collaborators-btn-container {
+  height: 24px;
+  width: 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.wiki-collaborators-btn-container:hover {
+  background-color: #efefef;
+  cursor: pointer
+}
+
+.wiki-collaborators-btn-container .sdocfont {
+  color: #666666;
+  cursor: pointer;
+}
