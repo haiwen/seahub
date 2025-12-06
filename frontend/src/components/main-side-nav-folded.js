@@ -37,6 +37,7 @@ class MainSideNavFolded extends React.Component {
       isShareAdminSubNavShown: false,
       isAboutDialogShow: false,
       isShowWechatDialog: false,
+      showBottomToolbarTip: false,
     };
     this.isWorkWeixin = isWorkWeixin(window.navigator.userAgent.toLowerCase());
   }
@@ -52,11 +53,20 @@ class MainSideNavFolded extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+    // make sure the tip is shown after nav folded animation end
+    this.tipTimeout = setTimeout(() => {
+      this.setState({
+        showBottomToolbarTip: true
+      });
+    }, 500);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.handleOutsideClick);
     this.unsubscribeHeaderEvent();
+    if (this.tipTimeout) {
+      clearTimeout(this.tipTimeout);
+    }
   }
 
   toggleWechatDialog = () => {
@@ -244,7 +254,13 @@ class MainSideNavFolded extends React.Component {
                     onClick={(e) => this.tabItemClick(e, 'starred')}
                     aria-label={gettext('Favorites')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-starred"><Icon symbol="favorites" /></span>
+                    <span
+                      className="d-flex align-items-center"
+                      aria-hidden="true"
+                      id="main-side-nav-folded-starred"
+                    >
+                      <Icon symbol="favorites" />
+                    </span>
                     <Tip target="main-side-nav-folded-starred" text={gettext('Favorites')} />
                   </Link>
                 </li>
@@ -258,7 +274,13 @@ class MainSideNavFolded extends React.Component {
                       onClick={(e) => this.tabItemClick(e, 'dashboard')}
                       aria-label={gettext('Activities')}
                     >
-                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-dashboard"><Icon symbol="activities" /></span>
+                      <span
+                        className="d-flex align-items-center"
+                        aria-hidden="true"
+                        id="main-side-nav-folded-dashboard"
+                      >
+                        <Icon symbol="activities" />
+                      </span>
                       <Tip target="main-side-nav-folded-dashboard" text={gettext('Activities')} />
                     </Link>
                   </li>
@@ -273,7 +295,13 @@ class MainSideNavFolded extends React.Component {
                     onClick={(e) => this.tabItemClick(e, 'published')}
                     aria-label={gettext('Wikis')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-wikis"><Icon symbol="wiki" /></span>
+                    <span
+                      className="d-flex align-items-center"
+                      aria-hidden="true"
+                      id="main-side-nav-folded-wikis"
+                    >
+                      <Icon symbol="wiki" />
+                    </span>
                     <Tip target="main-side-nav-folded-wikis" text={gettext('Wikis')} />
                   </Link>
                 </li>
@@ -286,7 +314,13 @@ class MainSideNavFolded extends React.Component {
                     to={siteRoot + 'invitations/'}
                     onClick={(e) => this.tabItemClick(e, 'invitations')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-invitations"><Icon symbol="invite-guests" /></span>
+                    <span
+                      className="d-flex align-items-center"
+                      aria-hidden="true"
+                      id="main-side-nav-folded-invitations"
+                    >
+                      <Icon symbol="invite-guests" />
+                    </span>
                     <Tip target="main-side-nav-folded-invitations" text={gettext('Invite Guest')} />
                   </Link>
                 </li>
@@ -297,7 +331,11 @@ class MainSideNavFolded extends React.Component {
                     onMouseEnter={this.openShareAdminSubNav}
                     aria-label={gettext('Share Admin')}
                   >
-                    <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-share-admin">
+                    <span
+                      className="d-flex align-items-center"
+                      aria-hidden="true"
+                      id="main-side-nav-folded-share-admin"
+                    >
                       <Icon symbol="share-admin" />
                     </span>
                   </span>
@@ -322,7 +360,9 @@ class MainSideNavFolded extends React.Component {
                 <ul className="nav nav-pills flex-column nav-container">
                   <li className='nav-item' onMouseEnter={this.closeAllSubNav}>
                     <a className='nav-link' href={siteRoot + 'help/'} title={gettext('Help')}>
-                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-help"><Icon symbol="help" /></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-help">
+                        <Icon symbol="help" />
+                      </span>
                       <Tip target="main-side-nav-folded-help" text={gettext('Help')} />
                     </a>
                   </li>
@@ -340,7 +380,9 @@ class MainSideNavFolded extends React.Component {
                   }
                   <li className='nav-item'>
                     <a href={siteRoot + 'download_client_program/'} className="nav-link" aria-label={gettext('Clients')}>
-                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-clients"><Icon symbol="clients" /></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-clients">
+                        <Icon symbol="clients" />
+                      </span>
                       <Tip target="main-side-nav-folded-clients" text={gettext('Clients')} />
                     </a>
                   </li>
@@ -354,7 +396,9 @@ class MainSideNavFolded extends React.Component {
                       onClick={this.toggleAboutDialog}
                       onKeyDown={Utils.onKeyDown}
                     >
-                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-about"><Icon symbol="about" /></span>
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-about">
+                        <Icon symbol="about" />
+                      </span>
                       <Tip target="main-side-nav-folded-about" text={gettext('About')} />
                     </div>
                   </li>
@@ -369,8 +413,13 @@ class MainSideNavFolded extends React.Component {
                       onClick={this.toggleWechatDialog}
                       onKeyDown={Utils.onKeyDown}
                     >
-                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-wechat"><Icon symbol="hi" /></span>
-                      <Tip target="main-side-nav-folded-wechat" text={`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`} />
+                      <span className="d-flex align-items-center" aria-hidden="true" id="main-side-nav-folded-wechat">
+                        <Icon symbol="hi" />
+                      </span>
+                      <Tip
+                        target="main-side-nav-folded-wechat"
+                        text={`加入${this.isWorkWeixin ? '企业' : ''}微信咨询群`}
+                      />
                     </div>
                   </li>
                   }
@@ -382,10 +431,16 @@ class MainSideNavFolded extends React.Component {
                 role="button"
                 onClick={this.props.toggleFoldSideNav}
                 onKeyDown={Utils.onKeyDown}
+                id="side-nav-bottom-toolbar-toggle"
                 aria-label={gettext('Unfold the sidebar')}
-                title={gettext('Unfold the sidebar')}
               >
                 <Icon symbol="unfold-sidebar" className="mr-0" />
+                {this.state.showBottomToolbarTip && (
+                  <Tip
+                    target="side-nav-bottom-toolbar-toggle"
+                    text={gettext('Unfold the sidebar')}
+                  />
+                )}
               </div>
             </div>
           </div>
