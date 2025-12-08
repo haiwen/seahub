@@ -1,10 +1,12 @@
 import React from 'react';
 import { EventBus, SocketManager, context } from '@seafile/sdoc-editor';
 import CollaboratorsPopover from './collaborators-popover.js';
-import { EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import Icon from '../../../components/icon.js';
+import SDocServerApi from '../../../utils/sdoc-server-api.js';
 
 import './index.css';
+
+const sdocServer = window.wiki.config.seadocServerUrl;
 
 class CollaboratorsOperation extends React.PureComponent {
 
@@ -19,14 +21,22 @@ class CollaboratorsOperation extends React.PureComponent {
 
   componentDidMount() {
     const eventBus = EventBus.getInstance();
-    this.unsubscribeTransferCollaborators = eventBus.subscribe(EXTERNAL_EVENT.TRANSFER_REALTIME_COLLABORATORS, this.getCollaborators);
     this.unsubscribeJoinEvent = eventBus.subscribe('join-room', this.onUserJoinRoom);
     this.unsubscribeLeaveEvent = eventBus.subscribe('leave-room', this.onUserLeaveRoom);
     this.unsubscribeUpdatedEvent = eventBus.subscribe('user-updated', this.onUserUpdated);
   }
 
+  componentDidUpdate(prevProps) {
+    const { token, docUuid, isOpenSocket } = this.props;
+    if ((token !== prevProps.token || docUuid !== prevProps.docUuid) && isOpenSocket && token && docUuid) {
+      const sdocServerApi = new SDocServerApi({ accessToken: token, docUuid, sdocServer });
+      sdocServerApi.getCollaborator().then(res => {
+        this.getCollaborators(res.data?.collaborators);
+      });
+    }
+  }
+
   componentWillUnmount() {
-    this.unsubscribeTransferCollaborators();
     this.unsubscribeJoinEvent();
     this.unsubscribeLeaveEvent();
     this.unsubscribeUpdatedEvent();
@@ -65,7 +75,6 @@ class CollaboratorsOperation extends React.PureComponent {
 
   onUserUpdated = (userInfo) => {
     const { shownCollaborators } = this.state;
-    console.log(44, userInfo, shownCollaborators)
     const newCollaborators = shownCollaborators.map(item => {
       if (item.username === userInfo.username) {
         item.name = userInfo.name;

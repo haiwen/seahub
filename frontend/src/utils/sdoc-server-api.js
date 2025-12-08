@@ -23,6 +23,12 @@ class SDocServerApi {
     return axios.post(url, formData, { headers: { Authorization: `Token ${accessToken}` } });
   }
 
+  getCollaborator() {
+    const { server, docUuid, accessToken } = this;
+    const url = `${server}/api/v1/docs/${docUuid}/collaborators/`;
+    return axios.get(url, { headers: { Authorization: `Token ${accessToken}` } });
+  }
+
 }
 
 export default SDocServerApi;
