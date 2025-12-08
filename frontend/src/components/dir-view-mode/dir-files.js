@@ -7,7 +7,7 @@ import ImageDialog from '../dialog/image-dialog';
 import toaster from '../toast';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY } from '../../utils/constants';
-import { isMobile, Utils } from '../../utils/utils';
+import { isMobile, updateImageThumbnail, Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../tree-section';
 import imageAPI from '../../utils/image-api';
@@ -311,11 +311,7 @@ class DirFiles extends React.Component {
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
 
           // Update correct image thumbnail into lightbox component
-          const resArray = newThumbnailSrc.split('/');
-          if (resArray[2] === '256') {
-            resArray[2] = '1024';
-          }
-          const adjustedThumbnailSrc = resArray.join('/');
+          const adjustedThumbnailSrc = updateImageThumbnail(newThumbnailSrc);
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageNodeItems];
             updatedImageItems[imageIndex].thumbnail = adjustedThumbnailSrc;

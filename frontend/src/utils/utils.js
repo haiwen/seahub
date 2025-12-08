@@ -2038,3 +2038,12 @@ export const getColorScheme = () => {
   if (manualMode) return manualMode;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 };
+
+export const updateImageThumbnail = (newThumbnailSrc) => {
+  const resArray = newThumbnailSrc?.split('/');
+  if (resArray[2] === '256') {
+    resArray[2] = '1024';
+  }
+  const adjustedThumbnailSrc = resArray.join('/');
+  return adjustedThumbnailSrc;
+}
