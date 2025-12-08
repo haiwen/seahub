@@ -2871,14 +2871,12 @@ a.sf-popover-item {
 
 /* client-login-confirm-panel */
 .client-login-confirm-panel {
-  margin: 2rem auto;
+  margin: 1.5rem auto 2rem;
 }
 
 .client-login-confirm-panel .hd {
-  color: var(--bs-body-color);
   font-size: 1.5rem;
-  font-weight: 600;
-  margin-top: 2.5rem;
+  margin: 2.5rem 0 .5rem;
 }
 
 .client-login-confirm-panel .btn {
