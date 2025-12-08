@@ -2744,7 +2744,7 @@ class SdocParticipantsView(APIView):
                 continue
 
             # permission check
-            if not seafile_api.check_permission_by_path(repo_id, '/', user.username):
+            if not check_folder_permission(request, repo_id, '/'):
                 error_dic = {'email': email, 'error_msg': _('Permission denied.'), 'error_code': 403}
                 failed.append(error_dic)
                 continue

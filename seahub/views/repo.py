@@ -277,8 +277,8 @@ def view_shared_dir(request, fileshare):
     if not repo:
         raise Http404
 
-    if repo.encrypted or not \
-            seafile_api.check_permission_by_path(repo_id, '/', username):
+    permission = check_folder_permission(request, repo_id, '/')
+    if repo.encrypted or not permission:
         return render_error(request, _('Permission denied'))
 
     # Check path still exist, otherwise show error

@@ -35,6 +35,7 @@ from seahub.utils import gen_inner_file_upload_url, is_pro_version, \
         normalize_file_path, check_filename_with_rename, \
         gen_inner_file_get_url, get_service_url
 from seahub.utils.file_op import if_locked_by_online_office
+from seahub.views import check_folder_permission
 
 
 # Get an instance of a logger
@@ -410,7 +411,7 @@ class OnlyofficeGetHistoryFileAccessToken(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
-        if not seafile_api.check_permission_by_path(repo_id, '/', username):
+        if not check_folder_permission(request, repo_id, '/'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
