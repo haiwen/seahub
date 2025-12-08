@@ -249,7 +249,8 @@ class MainPanel extends Component {
 
   render() {
     const menuItems = this.getMenu();
-    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked } = this.props;
+    const isOpenSocket = window.seafile.isOpenSocket;
+    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked, seadoc_access_token } = this.props;
     const { currentPageConfig = {}, isDropdownMenuOpen, showExportSubmenu } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = currentPageLocked || !(permission === 'rw');
@@ -279,7 +280,7 @@ class MainPanel extends Component {
           </div>
           <div className='d-flex align-items-center'>
             {menuItems.length > 0 && <CommentPlugin unseenNotificationsCount={this.state.unseenNotificationsCount} setIsShowRightPanel={this.setIsShowRightPanel} />}
-            {menuItems.length > 0 && <WikiCollaboratorsOperation />}
+            {menuItems.length > 0 && <WikiCollaboratorsOperation isOpenSocket={isOpenSocket} docUuid={this.state.docUuid} token={seadoc_access_token} />}
             {menuItems.length > 0 &&
             <Dropdown isOpen={isDropdownMenuOpen} toggle={this.toggleDropdownMenu} className='wiki2-file-history-button'>
               <DropdownToggle
