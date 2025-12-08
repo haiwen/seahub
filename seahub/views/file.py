@@ -91,6 +91,8 @@ from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     SHARE_LINK_EXPIRE_DAYS_DEFAULT, ENABLE_SHARE_LINK_REPORT_ABUSE, SEADOC_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, ENABLE_MULTIPLE_OFFICE_SUITE, \
     OFFICE_SUITE_LIST
+from seahub.constants import PERMISSION_INVISIBLE
+
 
 
 # wopi
@@ -156,10 +158,10 @@ def get_office_feature_by_repo(repo):
     enable_onlyoffice, enable_office_app = False, False
     if not ENABLE_MULTIPLE_OFFICE_SUITE:
         return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
-    
+
     if not OFFICE_SUITE_LIST:
         return ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP
-    
+
     org_id = get_org_id_by_repo_id(repo.repo_id)
     if org_id > 0:
         repo_owner = seafile_api.get_org_repo_owner(repo.repo_id)
@@ -537,7 +539,7 @@ def convert_repo_path_when_can_not_view_file(request, repo_id, path):
 @login_required
 @repo_passwd_set_required
 def view_lib_file(request, repo_id, path):
-    
+
     # resource check
     repo = seafile_api.get_repo(repo_id)
     if not repo:
@@ -547,7 +549,7 @@ def view_lib_file(request, repo_id, path):
     file_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not file_id:
         return render_error(request, _('File does not exist'))
-    
+
     ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # permission check
@@ -845,7 +847,7 @@ def view_lib_file(request, repo_id, path):
         return_dict['can_edit_file'] = can_edit_file
 
         return render(request, template, return_dict)
-    
+
     if filetype == TLDRAW:
 
         mode = request.GET.get('mode', '')
@@ -1284,12 +1286,13 @@ def view_shared_file(request, fileshare):
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _('File does not exist'))
-    
+
     ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
     # permission check
     shared_by = fileshare.username
-    if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
+    permission = seafile_api.check_permission_by_path(repo_id, '/', shared_by)
+    if not permission or permission == PERMISSION_INVISIBLE:
         return render_error(request, _('Permission denied'))
 
     # Increase file shared link view_cnt, this operation should be atomic
@@ -1552,7 +1555,8 @@ def view_file_via_shared_dir(request, fileshare):
 
     # permission check
     shared_by = fileshare.username
-    if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
+    permission = seafile_api.check_permission_by_path(repo_id, '/', shared_by)
+    if not permission or permission == PERMISSION_INVISIBLE:
         return render_error(request, _('Permission denied'))
 
     if not request.user.is_authenticated:
@@ -1783,7 +1787,7 @@ def view_raw_file(request, repo_id, file_path):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
-        
+
 
     file_path = file_path.rstrip('/')
     if file_path[0] != '/':
@@ -1847,7 +1851,7 @@ def download_file(request, repo_id, obj_id):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
-    
+
     if repo.encrypted and not seafile_api.is_password_set(repo_id, username):
         reverse_url = reverse('lib_view', args=[repo_id, repo.name, ''])
         return HttpResponseRedirect(reverse_url)
