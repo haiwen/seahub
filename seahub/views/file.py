@@ -1246,7 +1246,8 @@ def view_shared_file(request, fileshare):
 
     # permission check
     shared_by = fileshare.username
-    if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
+    permission = check_folder_permission(request, repo_id, '/')
+    if not permission:
         return render_error(request, _('Permission denied'))
 
     # Increase file shared link view_cnt, this operation should be atomic
@@ -1489,7 +1490,8 @@ def view_file_via_shared_dir(request, fileshare):
 
     # permission check
     shared_by = fileshare.username
-    if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
+    permission = check_folder_permission(request, repo_id, '/')
+    if not permission:
         return render_error(request, _('Permission denied'))
 
     if not request.user.is_authenticated:

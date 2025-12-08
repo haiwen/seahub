@@ -616,10 +616,7 @@ class ShareLink(APIView):
             file_path = normalize_file_path(fs.path)
             folder_path = os.path.dirname(file_path)
 
-        username = request.user.username
-        repo_folder_permission = seafile_api.check_permission_by_path(repo_id,
-                                                                      folder_path,
-                                                                      username)
+        repo_folder_permission = check_folder_permission(request, repo_id, folder_path)
         if not repo_folder_permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
