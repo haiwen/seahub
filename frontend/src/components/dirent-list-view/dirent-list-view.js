@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { updateImageThumbnail, Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
@@ -260,9 +260,12 @@ class DirentListView extends React.Component {
           // Generate a unique query parameter to bust the cache
           const cacheBuster = new Date().getTime();
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+
+          // Update correct image thumbnail into lightbox component
+          const adjustedThumbnailSrc = updateImageThumbnail(newThumbnailSrc);
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageItems];
-            updatedImageItems[imageIndex].thumbnail = newThumbnailSrc;
+            updatedImageItems[imageIndex].thumbnail = adjustedThumbnailSrc;
             return { imageItems: updatedImageItems };
           });
           // Update the thumbnail URL with the cache-busting query parameter

@@ -7,7 +7,7 @@ import ImageDialog from '../dialog/image-dialog';
 import toaster from '../toast';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { fileServerRoot, gettext, siteRoot, thumbnailSizeForOriginal, thumbnailDefaultSize, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY } from '../../utils/constants';
-import { isMobile, Utils } from '../../utils/utils';
+import { isMobile, updateImageThumbnail, Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import TreeSection from '../tree-section';
 import imageAPI from '../../utils/image-api';
@@ -309,9 +309,12 @@ class DirFiles extends React.Component {
           // Generate a unique query parameter to bust the cache
           const cacheBuster = new Date().getTime();
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+
+          // Update correct image thumbnail into lightbox component
+          const adjustedThumbnailSrc = updateImageThumbnail(newThumbnailSrc);
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageNodeItems];
-            updatedImageItems[imageIndex].thumbnail = newThumbnailSrc;
+            updatedImageItems[imageIndex].thumbnail = adjustedThumbnailSrc;
             return { imageNodeItems: updatedImageItems };
           });
           // Update the thumbnail URL with the cache-busting query parameter
