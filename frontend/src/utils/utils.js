@@ -2044,6 +2044,9 @@ export const updateImageThumbnail = (newThumbnailSrc) => {
   if (resArray[2] === '256') {
     resArray[2] = '1024';
   }
-  const adjustedThumbnailSrc = resArray.join('/');
+  let adjustedThumbnailSrc = resArray.join('/');
+  if (!adjustedThumbnailSrc.startsWith('/')) {
+    adjustedThumbnailSrc = '/' + adjustedThumbnailSrc;
+  }
   return adjustedThumbnailSrc;
 }
