@@ -7,6 +7,7 @@ const esES = require('@seafile/seafile-calendar/lib/locale/es_ES');
 const plPL = require('@seafile/seafile-calendar/lib/locale/pl_PL');
 const csCZ = require('@seafile/seafile-calendar/lib/locale/cs_CZ');
 const ruRU = require('@seafile/seafile-calendar/lib/locale/ru_RU');
+const { enhanceLocaleWithPlatformKeys } = require('@seafile/seafile-calendar/lib/util/platform');
 
 function translateCalendar() {
   const locale = window.app.config ? window.app.config.lang : 'en';
@@ -48,7 +49,8 @@ function translateCalendar() {
     default:
       language = enUS;
   }
-  return language;
+  // Enhance locale with platform-specific modifier keys (Control -> Command on Mac)
+  return enhanceLocaleWithPlatformKeys(language);
 }
 
 
