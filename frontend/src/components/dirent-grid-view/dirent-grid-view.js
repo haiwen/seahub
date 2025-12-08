@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { updateImageThumbnail, Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
@@ -648,11 +648,7 @@ class DirentGridView extends React.Component {
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
 
           // Update correct image thumbnail into lightbox component
-          const resArray = newThumbnailSrc.split('/');
-          if (resArray[2] === '256') {
-            resArray[2] = '1024';
-          }
-          const adjustedThumbnailSrc = resArray.join('/');
+          const adjustedThumbnailSrc = updateImageThumbnail(newThumbnailSrc);
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageItems];
             updatedImageItems[imageIndex].thumbnail = adjustedThumbnailSrc;
