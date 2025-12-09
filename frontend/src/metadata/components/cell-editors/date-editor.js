@@ -114,9 +114,12 @@ class DateEditor extends Component {
     const directionKeyCodes = [37, 38, 39, 40];
     if (directionKeyCodes.includes(e.keyCode)) {
       e.stopPropagation();
-    } else if (e.keyCode === 13) {
+    } else if (e.keyCode === 13) { // Enter key
       e.preventDefault();
       this.onBlur('enter');
+    } else if (e.keyCode === 32) { // Space key
+      e.stopPropagation();
+      e.preventDefault();
     }
   };
 
