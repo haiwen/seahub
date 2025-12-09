@@ -16,7 +16,7 @@ class CollaboratorsOperation extends React.PureComponent {
     this.currentUser = userInfo;
     this.state = {
       shownCollaborators: []
-    }
+    };
   }
 
   componentDidMount() {
@@ -59,7 +59,7 @@ class CollaboratorsOperation extends React.PureComponent {
     let newCollaborators = shownCollaborators.slice();
     if (!newCollaborators.find(user => user.username === userInfo.username)) {
       newCollaborators.push(userInfo);
-      this.setState({ shownCollaborators: newCollaborators});
+      this.setState({ shownCollaborators: newCollaborators });
     }
   };
 
@@ -69,7 +69,7 @@ class CollaboratorsOperation extends React.PureComponent {
     let newCollaborators = shownCollaborators.slice();
     if (newCollaborators.find(user => user.username === username)) {
       newCollaborators = newCollaborators.filter(user => user.username !== username);
-      this.setState({ shownCollaborators: newCollaborators});
+      this.setState({ shownCollaborators: newCollaborators });
     }
   };
 
@@ -81,7 +81,7 @@ class CollaboratorsOperation extends React.PureComponent {
       }
       return item;
     });
-    this.setState({ shownCollaborators: newCollaborators});
+    this.setState({ shownCollaborators: newCollaborators });
   };
 
   onRename = (newName) => {
@@ -96,7 +96,7 @@ class CollaboratorsOperation extends React.PureComponent {
       }
       return item;
     });
-    this.setState({ shownCollaborators: newCollaborators});
+    this.setState({ shownCollaborators: newCollaborators });
   };
 
   render() {
