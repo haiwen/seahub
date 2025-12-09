@@ -6,11 +6,12 @@ import './index.css';
 
 const Collaborator = ({ enableDelete = false, collaborator, onDelete }) => {
   if (!collaborator) return null;
-  const emial = collaborator.email;
-  if (emial.includes('@seafile_group')) {
+  if (collaborator.email.includes('@seafile_group')) {
     return (
       <div className="sf-metadata-ui collaborator-item" title={collaborator.name}>
-        <span className="nav-icon"><Icon symbol="department" /></span>
+        <span className="department-icon-container">
+          <Icon symbol="department" />
+        </span>
         <span className="collaborator-name">{collaborator.name}</span>
         {enableDelete && (
           <span className="collaborator-remove" onClick={onDelete}>

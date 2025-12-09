@@ -1,5 +1,5 @@
 // CellMasks should render in front of the cells
-// Unfrozen cells do not have a zIndex specifed
+// Unfrozen cells do not have a zIndex specified
 export const CELL_MASK = 1;
 export const TABLE_MAIN_INTERVAL = 1;
 export const RESIZE_HANDLE = 1;

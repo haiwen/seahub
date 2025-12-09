@@ -354,11 +354,11 @@ function onMouseDown(event) {
 
       if (startDrag) {
         container.layout.invalidate();
-        Utils.addClass(window.document.body, constants.disbaleTouchActions);
+        Utils.addClass(window.document.body, constants.disableTouchActions);
         Utils.addClass(window.document.body, constants.noUserSelectClass);
 
         const onMouseUp = () => {
-          Utils.removeClass(window.document.body, constants.disbaleTouchActions);
+          Utils.removeClass(window.document.body, constants.disableTouchActions);
           Utils.removeClass(window.document.body, constants.noUserSelectClass);
           window.document.removeEventListener('mouseup', onMouseUp);
         };
