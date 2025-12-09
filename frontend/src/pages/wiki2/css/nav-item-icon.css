@@ -27,3 +27,20 @@
 .nav-item-icon:hover:not(.nav-item-icon-disable) {
   background-color: #DFDFDD;
 }
+
+
+.wiki-nav-body .dropdown-item .seafile-multicolor-icon {
+  fill: #666666 !important;
+}
+
+.wiki-nav-body .dropdown-item .seafile-multicolor-icon path {
+  fill: #666666 !important;
+}
+
+.wiki-nav-body .dropdown-item:hover .seafile-multicolor-icon {
+  fill: #fff !important;
+}
+
+.wiki-nav-body .dropdown-item:hover .seafile-multicolor-icon path {
+  fill: #fff !important;
+}
