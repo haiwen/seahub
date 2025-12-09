@@ -174,7 +174,9 @@ def oauth_callback(request):
         logger.error('oauth user uid and email not found.')
         logger.error('user_info_json: %s' % user_info_json)
         return render_error(request, _('Error, please contact administrator.'))
-
+    
+    logger.info(f"oauth_user_info: {oauth_user_info}")
+    logger.info(f"oauth_user_info_uid: {uid}")
     # compatible with old users via email
     old_email = oauth_user_info.get('email', '')
 
