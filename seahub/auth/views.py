@@ -200,6 +200,8 @@ def login(request, template_name='registration/login.html',
                  getattr(settings, 'ENABLE_CAS', False) or \
                  getattr(settings, 'ENABLE_REMOTE_USER_AUTHENTICATION', False)
 
+    logger.error(enable_sso)
+
     login_bg_image_path = get_login_bg_image_path()
 
     return render(request, template_name, {
