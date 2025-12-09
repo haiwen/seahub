@@ -4,7 +4,7 @@ import toaster from '../../../components/toast';
 import ImageDialog from '../../../components/dialog/image-dialog';
 import imageAPI from '../../../utils/image-api';
 import { seafileAPI } from '../../../utils/seafile-api';
-import { Utils } from '../../../utils/utils';
+import { updateImageThumbnail, Utils } from '../../../utils/utils';
 import { siteRoot, thumbnailSizeForOriginal, fileServerRoot, thumbnailDefaultSize } from '../../../utils/constants';
 import { getFileNameFromRecord, getParentDirFromRecord, getRecordIdFromRecord, getFileMTimeFromRecord } from '../../utils/cell';
 
@@ -83,7 +83,10 @@ const ImagePreviewer = ({ record, table, repoID, repoInfo, closeImagePopup, dele
             if (res.data?.encoded_thumbnail_src) {
               const cacheBuster = new Date().getTime();
               const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
-              imageItems[imageIndex].thumbnail = newThumbnailSrc;
+
+              // Update correct image thumbnail into lightbox component
+              const adjustedThumbnailSrc = updateImageThumbnail(newThumbnailSrc);
+              imageItems[imageIndex].thumbnail = adjustedThumbnailSrc;
               setImageItems(imageItems);
               table.rows.forEach(row => {
                 if (row.id === imageItem.id) {

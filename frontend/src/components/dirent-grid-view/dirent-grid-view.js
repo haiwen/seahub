@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { updateImageThumbnail, Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
@@ -646,9 +646,12 @@ class DirentGridView extends React.Component {
           // Generate a unique query parameter to bust the cache
           const cacheBuster = new Date().getTime();
           const newThumbnailSrc = `${res.data.encoded_thumbnail_src}?t=${cacheBuster}`;
+
+          // Update correct image thumbnail into lightbox component
+          const adjustedThumbnailSrc = updateImageThumbnail(newThumbnailSrc);
           this.setState((prevState) => {
             const updatedImageItems = [...prevState.imageItems];
-            updatedImageItems[imageIndex].thumbnail = newThumbnailSrc;
+            updatedImageItems[imageIndex].thumbnail = adjustedThumbnailSrc;
             return { imageItems: updatedImageItems };
           });
           // Update the thumbnail URL with the cache-busting query parameter
