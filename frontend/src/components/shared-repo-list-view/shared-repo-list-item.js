@@ -473,12 +473,12 @@ class SharedRepoListItem extends React.Component {
     if (this.isDepartmentOwnerGroupMember) {
       const advancedOperations = this.getAdvancedOperations();
       return (
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center lh-1">
           {shareOperation}
           {deleteOperation}
           <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
             <DropdownToggle
-              tag="i"
+              tag="span"
               role="button"
               tabIndex="0"
               className="op-icon"
@@ -491,7 +491,7 @@ class SharedRepoListItem extends React.Component {
               onClick={this.clickOperationMenuToggle}
               onKeyDown={this.onDropdownToggleKeyDown}
             >
-              <Icon symbol="more-vertical" className="w-4 h-4" />
+              <Icon symbol="more-level" className="w-4 h-4" />
             </DropdownToggle>
             <DropdownMenu onMouseMove={this.onDropDownMouseMove}>
               {operations.map((item, index) => {
@@ -535,7 +535,7 @@ class SharedRepoListItem extends React.Component {
       );
     } else {
       return (
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center lh-1">
           {operations.map(item => {
             switch (item) {
               case 'Share':
