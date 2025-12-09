@@ -68,7 +68,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 4px;
+  margin: 0 4px;
 }
 
 .sf-metadata-ui.collaborator-item .department-icon-container .seafile-multicolor-icon {
