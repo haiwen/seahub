@@ -242,6 +242,9 @@ class PopupEditorContainer extends React.Component {
     }
 
     if (!hasChanged || !this.isNewValueValid(updated)) {
+      if (closeEditor && typeof this.editor.onClose === 'function') {
+        this.editor.onClose();
+      }
       this.isClosed = true;
       this.props.onCommitCancel();
       return;
