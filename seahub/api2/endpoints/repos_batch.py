@@ -341,7 +341,7 @@ class ReposBatchView(APIView):
 
                         if is_org_context(request):
                             # when calling seafile API to share authority related functions,
-                            # change the uesrname to repo owner.
+                            # change the username to repo owner.
                             org_id = request.user.org.org_id
                             seafile_api.org_remove_share(org_id, repo_id, repo_owner, to_username)
                         else:

@@ -230,7 +230,7 @@ def check_group_share_in_permission(repo_id, group_id, is_org=False):
 
 def has_shared_to_user(repo_id, path, username, org_id=None):
     if is_valid_org_id(org_id):
-        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+        # when calling seafile API to share authority related functions, change the username to repo owner.
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
         if path == '/':
             share_items = seafile_api.list_org_repo_shared_to(org_id,
@@ -252,7 +252,7 @@ def has_shared_to_user(repo_id, path, username, org_id=None):
 
 def has_shared_to_group(repo_id, path, gid, org_id=None):
     if is_valid_org_id(org_id):
-        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+        # when calling seafile API to share authority related functions, change the username to repo owner.
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
         if path == '/':
             share_items = seafile_api.list_org_repo_shared_group(org_id,
