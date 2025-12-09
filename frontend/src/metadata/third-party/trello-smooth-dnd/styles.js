@@ -1,4 +1,4 @@
-import { containerClass, disbaleTouchActions, dropPlaceholderFlexContainerClass, dropPlaceholderInnerClass, dropPlaceholderWrapperClass, ghostClass, noUserSelectClass, stretcherElementClass, wrapperClass, dropPlaceholderDefaultClass } from './constants';
+import { containerClass, disableTouchActions, dropPlaceholderFlexContainerClass, dropPlaceholderInnerClass, dropPlaceholderWrapperClass, ghostClass, noUserSelectClass, stretcherElementClass, wrapperClass, dropPlaceholderDefaultClass } from './constants';
 
 const verticalWrapperClass = {
   'overflow': 'hidden',
@@ -44,7 +44,7 @@ const css = {
   [`.${ghostClass} *`]: {
     'pointer-events': 'none'
   },
-  [`.${disbaleTouchActions} *`]: {
+  [`.${disableTouchActions} *`]: {
     'touch-action': 'none',
     '-ms-touch-action': 'none'
   },

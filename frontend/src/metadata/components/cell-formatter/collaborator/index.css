@@ -60,8 +60,19 @@
   cursor: pointer;
 }
 
-.sf-metadata-ui.collaborator-item .sf3-font-department {
-  font-size: 12px;
-  color: #666;
-  margin: 0 4px;
+.sf-metadata-ui.collaborator-item .department-icon-container {
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: #666;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 4px;
+}
+
+.sf-metadata-ui.collaborator-item .department-icon-container .seafile-multicolor-icon {
+  color: #fff;
+  width: 8px;
+  height: 8px;
 }
