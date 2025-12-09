@@ -25,7 +25,7 @@ class CollaboratorsPopover extends React.PureComponent {
         fade={false}
         security='fixed'
       >
-        <PopoverHeader className='popover-header'>{t('Online_members')}{' '}({collaborators.length})</PopoverHeader>
+        <PopoverHeader className='popover-header'>{t('Online members')}{' '}({collaborators.length})</PopoverHeader>
         <PopoverBody className="popover-container">
           <div className="content-list">
             {collaborators.map((item, index) => {
