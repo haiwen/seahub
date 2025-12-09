@@ -48,10 +48,7 @@ class CollaboratorsOperation extends React.PureComponent {
       collaborators.splice(currentUserIndex, 1);
     }
     collaborators.unshift(this.currentUser);
-
-    this.setState(prevState => ({
-      shownCollaborators: [...prevState.shownCollaborators, ...collaborators]
-    }));
+    this.setState({ shownCollaborators: collaborators });
   };
 
   onUserJoinRoom = (userInfo) => {
