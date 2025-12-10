@@ -22,7 +22,9 @@ export default function SdocThumbnail() {
 
   useEffect(() => {
     axios.get(fileDownloadLink).then(res => {
-      setContent(res.data);
+      let document = res.data;
+      document.elements = document.elements ? document.elements : document.children;
+      setContent(document);
       setIsLoading(false);
     });
   }, []);
