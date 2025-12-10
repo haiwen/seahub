@@ -1565,11 +1565,8 @@ class LibContentView extends React.Component {
 
       this.setState(prevState => {
         const newDirentList = prevState.direntList.map(dirent => {
-          const isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
-          return new Dirent({
-            ...dirent,
-            isSelected: isSelected,
-          });
+          dirent.isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
+          return dirent;
         });
 
         const updatedSelectedDirents = newSelectedDirentList.map(selected =>
@@ -1585,25 +1582,24 @@ class LibContentView extends React.Component {
         };
       });
     } else {
-      this.setState(prevState => ({
-        direntList: prevState.direntList.map(dirent => new Dirent({ ...dirent, isSelected: false })),
+      this.setState({
+        direntList: direntList.map(dirent => {
+          dirent.isSelected = false;
+          return dirent;
+        }),
         isDirentSelected: false,
         isAllDirentSelected: false,
         selectedDirentList: [],
         lastSelectedIndex: null,
-      }));
+      });
     }
   };
 
   onSelectedDirentListUpdate = (newSelectedDirentList, lastSelectedIndex = null) => {
     this.setState({
       direntList: this.state.direntList.map(dirent => {
-        return new Dirent({
-          ...dirent,
-          isSelected: newSelectedDirentList.some(
-            selected => selected.name === dirent.name
-          )
-        });
+        dirent.isSelected = newSelectedDirentList.some(selectedDirent => selectedDirent.name === dirent.name);
+        return dirent;
       }),
       isDirentSelected: newSelectedDirentList.length > 0,
       selectedDirentList: newSelectedDirentList,
