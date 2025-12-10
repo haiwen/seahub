@@ -16,14 +16,21 @@ window.seafile = {
   assetsUrl,
 };
 
+const formatDocument = (document) => {
+  document.elements = document.elements ? document.elements : document.children;
+  if (!Array.isArray(document.elements)) {
+    document.elements = [{ type: 'paragraph', children: [{ text: '' }] }];
+  }
+  return document;
+};
+
 export default function SdocThumbnail() {
   const [isLoading, setIsLoading] = useState(true);
   const [content, setContent] = useState(null);
 
   useEffect(() => {
     axios.get(fileDownloadLink).then(res => {
-      let document = res.data;
-      document.elements = document.elements ? document.elements : document.children;
+      const document = formatDocument(res.data);
       setContent(document);
       setIsLoading(false);
     });
