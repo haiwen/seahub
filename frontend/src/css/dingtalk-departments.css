@@ -48,11 +48,22 @@
   padding-right: 0.5rem;
 }
 
-.tree-node-inner .sf3-font-down {
-  position: absolute;
-  top: 15%;
-  left: 0.3rem;
-  color: #999;
+.tree-view .tree-node-icon {
+  padding: 0 5px;
+}
+
+.tree-node-inner .tree-node-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tree-node-inner .tree-node-icon .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
+}
+
+.tree-view .department-children .tip {
+  font-size: 12px;
 }
 
 .tree-node-inner-hover {
@@ -77,10 +88,6 @@
   border-radius: 2px;
   background-color: #ff9800;
   z-index: 0;
-}
-
-.tree-view .tree-node-icon {
-  padding-right: 1.5rem;
 }
 
 .tree-view .tree-node-text {
