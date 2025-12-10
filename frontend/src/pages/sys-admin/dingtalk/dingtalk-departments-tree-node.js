@@ -86,26 +86,25 @@ class DingtalkDepartmentsTreeNode extends Component {
 
   render() {
     const { isChildrenShow, department, checkedDepartmentId } = this.props;
-    let toggleClass = classNames({
-      'folder-toggle-icon rotate-270': department.children && this.state.isChildrenShow,
-      'folder-toggle-icon': department.children && !this.state.isChildrenShow,
-    });
-    let nodeInnerClass = classNames({
-      'tree-node-inner': true,
-      'tree-node-inner-hover': this.state.active,
-      'tree-node-hight-light': checkedDepartmentId === department.id
-    });
     return (
       <Fragment>
         {isChildrenShow &&
           <div
-            className={nodeInnerClass}
+            className={classNames({
+              'tree-node-inner': true,
+              'tree-node-inner-hover': this.state.active,
+              'tree-node-hight-light': checkedDepartmentId === department.id
+            })}
             onClick={() => this.changeDept(department.id)}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
           >
             <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
-              <Icon symbol="down" className={toggleClass} aria-hidden="true" />
+              <Icon
+                symbol="down"
+                aria-hidden="true"
+                className={classNames({'rotate-270': !this.state.isChildrenShow })} 
+              />
             </span>
             <span className="tree-node-text">{department.name}</span>
             {isPro &&
@@ -138,7 +137,7 @@ class DingtalkDepartmentsTreeNode extends Component {
         }
         {this.state.isChildrenShow &&
           <div className="department-children">
-            {department.children && this.renderTreeNodes(department.children)}
+            {department.children ? this.renderTreeNodes(department.children) : <span className="ml-2 tip">{'(' + gettext('No sub-departments') + ')'}</span>}
           </div>
         }
       </Fragment>
