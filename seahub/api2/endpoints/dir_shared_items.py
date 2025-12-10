@@ -393,7 +393,7 @@ class DirSharedItemsEndpoint(APIView):
                         repo_owner = seafile_api.get_org_repo_owner(repo_id)
                         # can't share to owner
                         if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
+                            error_msg = _('Library can not be shared to owner')
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
@@ -409,7 +409,7 @@ class DirSharedItemsEndpoint(APIView):
                         repo_owner = seafile_api.get_repo_owner(repo_id)
                         # can't share to owner
                         if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
+                            error_msg = _('Library can not be shared to owner')
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
