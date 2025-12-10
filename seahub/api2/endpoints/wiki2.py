@@ -304,6 +304,7 @@ class Wikis2View(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             wiki_info['owner_nickname'] = group_id_to_name(group_id)
             wiki_info['group_admins'] = group_ids_admins_map[group_id]
+            wiki_info['group_name'] = group_id_to_name(group_id)
 
         return Response(wiki_info)
 

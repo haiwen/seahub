@@ -180,12 +180,23 @@ class Wikis extends Component {
       new_wiki['version'] = 'v2';
       new_wiki['admins'] = new_wiki.group_admins;
       if (currentDeptID) {
-        groupWikis.filter(group => {
-          if (group.group_id === currentDeptID) {
-            group.wiki_info.push(new_wiki);
-          }
-          return group;
-        });
+        if (groupWikis.find(group => group.group_id === currentDeptID)) {
+          groupWikis.filter(group => {
+            if (group.group_id === currentDeptID) {
+              group.wiki_info.push(new_wiki);
+            }
+            return group;
+          });
+        } else {
+          groupWikis.push({
+            group_id: currentDeptID,
+            wiki_info: [new_wiki],
+            group_admins: new_wiki.group_admins,
+            group_name: new_wiki.group_name,
+            owner: new_wiki.owner,
+            owner_nickname: new_wiki.owner_nickname,
+          });
+        }
         this.setState({
           currentDeptID: '',
           groupWikis,
