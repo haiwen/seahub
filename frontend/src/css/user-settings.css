@@ -56,6 +56,6 @@ body {
 .language-selector {
   width: 260px;
 }
-.btn {
+.setting-item .btn {
   min-width: 60px;
 }

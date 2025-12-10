@@ -2,12 +2,25 @@
 {% load i18n %}
 
 {% block main_content %}
-<div class="new-narrow-panel">
-    <h2 class="hd">{% trans "Client Login Confirm" %}</h2>
-    <form action="" method="post" class="con">{% csrf_token %}
-    <label>{% trans "Do you want to login to your client?" %}</label><br />
-    <input type="submit" value="{% trans "Yes" %}" class="submit" />
+<div class="client-login-confirm-panel text-center invisible">
+  <img src="{{MEDIA_URL}}img/client-login-confirm.png" alt="" width="487" height="320" class="mw-100" />
+  <h2 class="hd">{% trans "Client Login Confirm" %}</h2>
+  <p class="m-0">{% trans "Do you want to login to your client?" %}</p>
+  <form action="" method="post">{% csrf_token %}
+    <button type="submit" class="btn btn-primary">{% trans "Yes" %}</button>
   </form>
 </div>
 {% endblock %}
 
+{% block extra_script %}
+<script type="text/javascript">
+  // set the panel's position
+  var $panel = $('.client-login-confirm-panel');
+  var panelContainerHeight = $('#main').height();
+  var panelHeight = $panel.height();
+  if (panelContainerHeight > (panelHeight + parseInt($panel.css('margin-top')) + parseInt($panel.css('margin-bottom')))) {
+    $panel.css('margin-top', (panelContainerHeight - panelHeight) * 0.4 + 'px');
+  }
+  $panel.removeClass('invisible');
+</script>
+{% endblock %}

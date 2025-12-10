@@ -4,28 +4,67 @@
 {% block sub_title %}{% trans "Create Account" %} - {% endblock %}
 
 {% block main_content %}
-<div class="new-narrow-panel">
-    <h2 class="hd">{% trans "Set your password" %}</h2>
-    <form action="" method="post" class="con">{% csrf_token %}
-        <label>{% trans "Email" %} </label><br />
-        <input type="text" disabled="disabled" value="{{ iv.accepter }}" class="input input-disabled" /><br />
-
-        <label for="password">{% trans "Password" %}</label>
-        <input type="password" name="password" id="password" value="" class="input" autocomplete="off" />
-
-        <p class="error hide"></p>
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
-    </form>
+<div class="page-form-panel invisible">
+  <h2 class="hd text-center">{% trans "Set your password" %}</h2>
+  <form action="" method="post" class="form">{% csrf_token %}
+    <div class="mb-3">
+      <label class="form-label">{% trans "Email" %} </label>
+      <input type="text" disabled="disabled" value="{{ iv.accepter }}" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">{% trans "Password" %}</label>
+      <div class="input-group">
+        <input type="password" name="password" id="password" value="" required="" class="form-control" autocomplete="off" />
+        <button type="button" class="btn btn-secondary"></button>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="password2" class="form-label">{% trans "Confirm Password" %}</label>
+      <div class="input-group">
+        <input type="password" name="password2" required="" id="password2" class="form-control" />
+        <button type="button" class="btn btn-secondary"></button>
+      </div>
+    </div>
+    <p class="error hide"></p>
+    <div class="form-foot text-center">
+      <button type="submit" class="btn btn-primary">{% trans "Submit" %}</button>
+    </div>
+  </form>
 </div>
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.popover.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}bootstrap/bootstrap.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/icons.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/form-panel-page.js"></script>
 <script type="text/javascript">
-$('form').on('submit', function() {
-    if (!$('[name="password"]', $(this)).val().trim()) {
-        $('.error').html("{% trans "It is required." %}").show();
-        return false;
+  {% include "snippets/password_strength_js.html" %}
+  $(function () {
+    setupPasswordField("password", passwd_tip, template);
+  });
+
+  $('form').on('submit', function() {
+    var pwd1 = $('input[name="password"]').val().trim(),
+        pwd2 = $('input[name="password2"]').val().trim();
+
+    if (!pwd1) {
+      $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
+      return false;
     }
-});
+
+    if (!pwd2) {
+      $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
+      return false;
+    }
+    if (pwd1 != pwd2) {
+      $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
+      return false;
+    }
+    if (!checkPasswordStrength(pwd1, {{strong_pwd_required}})) {
+      $('.error').html(passwd_tip).removeClass('hide');
+      return false;
+    }
+  });
 </script>
 {% endblock %}
