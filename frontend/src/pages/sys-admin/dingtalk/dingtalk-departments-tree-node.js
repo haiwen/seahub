@@ -103,7 +103,7 @@ class DingtalkDepartmentsTreeNode extends Component {
               <Icon
                 symbol="down"
                 aria-hidden="true"
-                className={classNames({'rotate-270': !this.state.isChildrenShow })} 
+                className={classNames({ 'rotate-270': !this.state.isChildrenShow })}
               />
             </span>
             <span className="tree-node-text">{department.name}</span>
