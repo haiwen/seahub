@@ -46,4 +46,6 @@ const imageThumbnailCenter = new ThumbnailCenter();
 
 const videoThumbnailCenter = new ThumbnailCenter();
 
-export { imageThumbnailCenter, videoThumbnailCenter };
+const richTextThumbnailCenter = new ThumbnailCenter();
+
+export { imageThumbnailCenter, videoThumbnailCenter, richTextThumbnailCenter };
