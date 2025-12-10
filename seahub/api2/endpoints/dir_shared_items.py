@@ -495,7 +495,7 @@ class DirSharedItemsEndpoint(APIView):
                         if org_id != ccnet_api.get_org_id_by_group(gid):
                             result['failed'].append({
                                 'group_name': group.group_name,
-                                'error_msg': "Current user's ornganization is not the same as the group's"
+                                'error_msg': "Current user's organization is not the same as the group's"
                                 })
                             continue
 

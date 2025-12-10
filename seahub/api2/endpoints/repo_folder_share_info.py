@@ -61,7 +61,7 @@ class RepoFolderShareInfo(APIView):
         if not is_repo_admin(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        # get share inifo
+        # get share info
         share_info_list = []
         try:
             seafile_db = SeafileDB()
