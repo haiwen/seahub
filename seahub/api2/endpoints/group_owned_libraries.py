@@ -50,6 +50,7 @@ from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
         ENCRYPTED_LIBRARY_VERSION, ENCRYPTED_LIBRARY_PWD_HASH_ALGO, \
         ENCRYPTED_LIBRARY_PWD_HASH_PARAMS
 from seahub.base.models import RepoTransfer
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 logger = logging.getLogger(__name__)
 
@@ -991,11 +992,14 @@ class GroupOwnedLibraryUserShare(APIView):
 
             share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
 
+            avatar_url, _, _ = api_avatar_url(to_user)
+            
             result['success'].append({
                 "user_email": to_user,
                 "user_name": email2nickname(to_user),
                 "user_contact_email": email2contact_email(to_user),
                 "permission": permission,
+                "avatar_url": avatar_url,
             })
 
             # send a signal when sharing repo successful

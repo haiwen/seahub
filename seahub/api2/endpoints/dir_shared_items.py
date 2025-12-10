@@ -56,7 +56,7 @@ class DirSharedItemsEndpoint(APIView):
     def list_user_shared_items(self, request, repo_id, path):
 
         if is_org_context(request):
-            # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+            # when calling seafile API to share authority related functions, change the username to repo owner.
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
             org_id = request.user.org.org_id
             if path == '/':
@@ -96,7 +96,7 @@ class DirSharedItemsEndpoint(APIView):
 
     def list_group_shared_items(self, request, repo_id, path):
         if is_org_context(request):
-            # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+            # when calling seafile API to share authority related functions, change the username to repo owner.
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
             org_id = request.user.org.org_id
             if path == '/':
@@ -259,7 +259,7 @@ class DirSharedItemsEndpoint(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid user, should be registered')
 
             if is_org_context(request):
-                # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                # when calling seafile API to share authority related functions, change the username to repo owner.
                 repo_owner = seafile_api.get_org_repo_owner(repo_id)
                 org_id = request.user.org.org_id
 
@@ -296,7 +296,7 @@ class DirSharedItemsEndpoint(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, 'Group %s not found.' % gid)
 
             if is_org_context(request):
-                # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                # when calling seafile API to share authority related functions, change the username to repo owner.
                 repo_owner = seafile_api.get_org_repo_owner(repo_id)
                 org_id = request.user.org.org_id
 
@@ -389,11 +389,11 @@ class DirSharedItemsEndpoint(APIView):
                             continue
 
                         # when calling seafile API to share authority related functions,
-                        # change the uesrname to repo owner.
+                        # change the username to repo owner.
                         repo_owner = seafile_api.get_org_repo_owner(repo_id)
                         # can't share to owner
                         if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
+                            error_msg = _('Library can not be shared to owner')
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
@@ -409,7 +409,7 @@ class DirSharedItemsEndpoint(APIView):
                         repo_owner = seafile_api.get_repo_owner(repo_id)
                         # can't share to owner
                         if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
+                            error_msg = _('Library can not be shared to owner')
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
                         share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
@@ -490,7 +490,7 @@ class DirSharedItemsEndpoint(APIView):
                     org_id = None
                     if is_org_context(request):
                         # when calling seafile API to share authority related functions,
-                        # change the uesrname to repo owner.
+                        # change the username to repo owner.
                         org_id = request.user.org.org_id
                         if org_id != ccnet_api.get_org_id_by_group(gid):
                             result['failed'].append({
@@ -572,7 +572,7 @@ class DirSharedItemsEndpoint(APIView):
             permission = check_user_share_out_permission(repo_id, path, shared_to, is_org_context(request))
 
             if is_org_context(request):
-                # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                # when calling seafile API to share authority related functions, change the username to repo owner.
                 org_id = request.user.org.org_id
                 if path == '/':
                     seaserv.seafserv_threaded_rpc.org_remove_share(
@@ -619,7 +619,7 @@ class DirSharedItemsEndpoint(APIView):
             permission = check_group_share_out_permission(repo_id, path, group_id, is_org)
 
             if is_org:
-                # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                # when calling seafile API to share authority related functions, change the username to repo owner.
                 org_id = request.user.org.org_id
                 if path == '/':
                     seaserv.del_org_group_repo(repo_id, org_id, group_id)

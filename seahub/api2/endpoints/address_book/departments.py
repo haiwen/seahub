@@ -20,7 +20,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 logger = logging.getLogger(__name__)
 
 
-def get_address_book_group_memeber_info(group_member_obj, avatar_size=80):
+def get_address_book_group_member_info(group_member_obj, avatar_size=80):
     email = group_member_obj.user_name
     avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
     is_admin = bool(group_member_obj.is_staff)
@@ -112,7 +112,7 @@ class AddressBookDepartmentMembers(APIView):
             return_results = []
             members = ccnet_api.get_group_members(department_id)
             for m in members:
-                member_info = get_address_book_group_memeber_info(m)
+                member_info = get_address_book_group_member_info(m)
                 if m.user_name == '':
                     continue
                 return_results.append(member_info)

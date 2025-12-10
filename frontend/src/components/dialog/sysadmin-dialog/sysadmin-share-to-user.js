@@ -184,9 +184,8 @@ class SysAdminShareToUser extends React.Component {
       });
     }).catch(error => {
       if (error.response) {
-        let message = gettext('Library can not be shared to owner.');
         let errMessage = [];
-        errMessage.push(message);
+        errMessage.push(Utils.getErrorMsg(error));
         this.setState({
           errorMsg: errMessage,
           selectedUsers: [],
@@ -195,11 +194,11 @@ class SysAdminShareToUser extends React.Component {
     });
   };
 
-  deleteShareItem = (useremail) => {
+  deleteShareItem = (userEmail) => {
     let repoID = this.props.repoID;
-    systemAdminAPI.sysAdminDeleteRepoSharedItem(repoID, 'user', useremail).then(res => {
+    systemAdminAPI.sysAdminDeleteRepoSharedItem(repoID, 'user', userEmail).then(res => {
       this.setState({
-        sharedItems: this.state.sharedItems.filter(item => { return item.user_email !== useremail; })
+        sharedItems: this.state.sharedItems.filter(item => { return item.user_email !== userEmail; })
       });
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);

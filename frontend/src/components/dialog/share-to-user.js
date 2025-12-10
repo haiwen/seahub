@@ -321,7 +321,7 @@ class ShareToUser extends React.Component {
         // todo modify api
         let items = res.data.success.map(item => {
           let sharedItem = {
-            'user_info': { 'nickname': item.user_name, 'name': item.user_email },
+            'user_info': { 'nickname': item.user_name, 'name': item.user_email, 'avatar_url': item.avatar_url },
             'permission': item.permission,
             'share_type': 'user',
           };
@@ -335,9 +335,8 @@ class ShareToUser extends React.Component {
         });
       }).catch(error => {
         if (error.response) {
-          let message = gettext('Library can not be shared to owner.');
           let errMessage = [];
-          errMessage.push(message);
+          errMessage.push(Utils.getErrorMsg(error));
           this.setState({
             errorMsg: errMessage,
             selectedUsers: [],
@@ -360,9 +359,8 @@ class ShareToUser extends React.Component {
         });
       }).catch(error => {
         if (error.response) {
-          let message = gettext('Library can not be shared to owner.');
           let errMessage = [];
-          errMessage.push(message);
+          errMessage.push(Utils.getErrorMsg(error));
           this.setState({
             errorMsg: errMessage,
             selectedUsers: [],
@@ -464,9 +462,8 @@ class ShareToUser extends React.Component {
         });
       }).catch(error => {
         if (error.response) {
-          let message = gettext('Library can not be shared to owner.');
           let errMessage = [];
-          errMessage.push(message);
+          errMessage.push(Utils.getErrorMsg(error));
           this.setState({
             errorMsg: errMessage,
             selectedUsers: [],
@@ -489,9 +486,8 @@ class ShareToUser extends React.Component {
         });
       }).catch(error => {
         if (error.response) {
-          let message = gettext('Library can not be shared to owner.');
           let errMessage = [];
-          errMessage.push(message);
+          errMessage.push(Utils.getErrorMsg(error));
           this.setState({
             errorMsg: errMessage,
             selectedUsers: [],

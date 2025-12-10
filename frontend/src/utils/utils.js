@@ -2049,4 +2049,4 @@ export const updateImageThumbnail = (newThumbnailSrc) => {
     adjustedThumbnailSrc = '/' + adjustedThumbnailSrc;
   }
   return adjustedThumbnailSrc;
-}
+};

@@ -129,7 +129,7 @@ class AdminAddressBookGroup(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser, IsProVersion)
 
-    def _get_address_book_group_memeber_info(self, request, group_member_obj):
+    def _get_address_book_group_member_info(self, request, group_member_obj):
 
         email = group_member_obj.user_name
         avatar_url, is_default, date_uploaded = api_avatar_url(email)
@@ -188,7 +188,7 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for m in members:
-            member_info = self._get_address_book_group_memeber_info(request, m)
+            member_info = self._get_address_book_group_member_info(request, m)
             if member_info['role'] == 'Owner':
                 continue
             ret_members.append(member_info)
