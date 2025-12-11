@@ -8,12 +8,13 @@ import i18n from '../../_i18n/i18n-sdoc-editor';
 
 import './index.css';
 
-const { serviceURL } = window.app.config;
+const { serviceURL, siteRoot } = window.app.config;
 const { fileDownloadLink, assetsUrl } = window.thumbnail;
 
 window.seafile = {
   serviceUrl: serviceURL,
   assetsUrl,
+  siteRoot,
 };
 
 const formatDocument = (document) => {
