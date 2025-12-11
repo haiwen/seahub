@@ -17,10 +17,6 @@ body {
   color: #999;
 }
 
-.file-view-header .image-zoomer .seafile-multicolor-icon {
-  color: var(--bs-icon-color);
-}
-
 .onlyoffice-file-view-header-shown {
   transition: height .3s ease-in-out;
   height: 56px;

@@ -136,7 +136,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
           aria-expanded={isScaleMenuOpen}
         >
           <Input id="cur-scale-input" type="text" value={curScaleText} readOnly={true} tabIndex="-1" />
-          <Icon id="scale-menu-caret" symbol="down" className="position-absolute end-0 mr-2" />
+          <Icon id="scale-menu-caret" symbol="down" />
         </DropdownToggle>
         <DropdownMenu id="scale-menu">
           {SCALE_OPTIONS.map((item, index) => {
@@ -148,7 +148,9 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
                 onKeyDown={(e) => {onMenuItemKeyDown(e, item);}}
               >
                 {selectedScale == item && (
-                  <Icon className="dropdown-item-tick" symbol="tick1" />
+                  <span className="dropdown-item-tick">
+                    <Icon symbol="tick1" />
+                  </span>
                 )}
                 <span>{`${item * 100}%`}</span>
               </DropdownItem>
@@ -163,7 +165,9 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
                 onKeyDown={(e) => {onMenuItemKeyDown(e, item.value);}}
               >
                 {selectedScale == item.value && (
-                  <Icon className="dropdown-item-tick" symbol="tick1" />
+                  <span className="dropdown-item-tick">
+                    <Icon symbol="tick1" />
+                  </span>
                 )}
                 <span>{item.text}</span>
               </DropdownItem>

@@ -11,13 +11,13 @@ iconModules.keys().forEach(key => {
 });
 
 const Icon = (props) => {
-  const { className, symbol, style } = props;
-  const iconClass = classnames('seafile-multicolor-icon', className, `seafile-multicolor-icon-${symbol}`);
+  const { className, symbol, style, ...otherProps } = props;
+  const iconClass = classnames('seafile-multicolor-icon', `seafile-multicolor-icon-${symbol}`, className);
   const IconComponent = icons[symbol];
   if (!IconComponent) {
     return null;
   }
-  return <IconComponent className={iconClass} style={style} aria-hidden="true" />;
+  return <IconComponent className={iconClass} style={style} aria-hidden="true" {...otherProps} />;
 };
 
 Icon.propTypes = {
