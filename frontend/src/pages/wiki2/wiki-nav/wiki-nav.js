@@ -5,6 +5,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PageItem from './pages/page-item';
+import PageDragLayer from './pages/page-drag-layer';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
@@ -277,6 +278,10 @@ class WikiNav extends Component {
         <div className='wiki-nav'>
           {this.renderStructureBody()}
         </div>
+        <PageDragLayer
+          pages={this.props.pages}
+          getFoldState={this.getFoldState}
+        />
       </DndProvider>
     );
   }
