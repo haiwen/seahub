@@ -199,27 +199,184 @@
   color: #fff;
 }
 
+.wiki-nav .wiki-page-item-wrapper {
+  position: relative;
+}
+
+.wiki-nav .wiki-page-item-wrapper.wiki-page-wrapper-highlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(33, 150, 243, 0.1);
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wiki-page-drag-layer {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.wiki-drag-ghost-wrapper {
+  position: absolute;
+  transform: translate(-10px, -10px);
+  background-color: transparent;
+  padding: 4px 8px;
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-item-wrapper {
+  --depth: 0;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-content {
+  margin-left: calc(var(--depth, 0) * 20px);
+}
+
+/* Ghost uses same structure as original - no special item class needed */
+.wiki-drag-ghost-wrapper .wiki-page-item-wrapper {
+  position: relative;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-item {
+  background-color: transparent !important;
+  cursor: grabbing !important;
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 32px;
+  padding: 0 8px 0 0;
+  font-size: 14px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-item:hover {
+  background-color: transparent !important;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-item-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  overflow: hidden;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-content {
+  height: 100%;
+  padding-right: 8px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-content .dtable-font {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.wiki-drag-ghost-wrapper .wiki-page-content .wiki-page-title {
+  height: 32px;
+  line-height: 32px;
+  flex: 1;
+}
+
+/* Wiki nav item icon (expand/collapse arrow) */
+.wiki-drag-ghost-wrapper .wiki-nav-item-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  font-size: 12px;
+  border-radius: 3px;
+}
+
+/* Nav item icon (file/folder icon) - override default margin-left when after wiki-nav-item-icon */
+.wiki-drag-ghost-wrapper .nav-item-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 6px;
+}
+
+/* When there's NO expand arrow, add the left margin */
+.wiki-drag-ghost-wrapper .wiki-page-content > .nav-item-icon:first-child {
+  margin-left: 22px;
+}
+
+/* When there IS an expand arrow, no left margin needed */
+.wiki-drag-ghost-wrapper .wiki-page-content:has(.wiki-nav-item-icon) .nav-item-icon {
+  margin-left: 0;
+}
+
+.wiki-drag-ghost-wrapper .nav-item-icon .seafile-multicolor-icon {
+  color: #666666;
+  height: 16px;
+  width: 16px;
+}
+
+.wiki-drag-ghost-wrapper .nav-item-icon .seafile-multicolor-icon path {
+  fill: #666666;
+}
+
+/* Hide operation buttons in ghost */
+.wiki-drag-ghost-wrapper .op-icon,
+.wiki-drag-ghost-wrapper .page-operation-dropdown {
+  display: none !important;
+}
+
+/* Ensure all children are visible in ghost */
+.wiki-drag-ghost-wrapper .page-children {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+.wiki-nav .wiki-page-item {
+  position: relative;
+  z-index: auto;
+}
+
+.wiki-nav .page-children {
+  position: relative;
+  z-index: auto;
+}
+
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after,
 .wiki-nav .wiki-page-item.page-can-drop-top::after {
   content: '';
-  width: 100%;
-  height: 5px;
+  height: 4px;
   position: absolute;
-  left: 0;
-  background-color: rgb(200, 220, 240) !important;
+  left: var(--drop-indicator-left, 0px);
+  right: 8px;
+  background-color: rgb(200, 220, 240);
+  z-index: 100;
 }
 
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after {
-  top: 32px;
+  bottom: -2px;
 }
 
 .wiki-nav .wiki-page-item.page-can-drop-top::after {
-  top: 0;
-}
-
-.wiki-nav .wiki-page-item.dragged-page-over {
-  border-radius: 3px;
-  background-color: rgb(200, 220, 240) !important;
+  top: -2px;
 }
 
 .wiki-nav,
