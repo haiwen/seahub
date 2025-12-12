@@ -417,7 +417,6 @@ class RecordsBody extends Component {
   getCellMetaData = () => {
     if (!this.cellMetaData) {
       this.cellMetaData = {
-        CellOperationBtn: this.props.CellOperationBtn,
         onCellClick: this.onCellClick,
         onCellDoubleClick: this.onCellDoubleClick,
         onCellMouseDown: this.onCellMouseDown,
@@ -597,7 +596,6 @@ RecordsBody.propTypes = {
   recordIds: PropTypes.array,
   recordsCount: PropTypes.number,
   columns: PropTypes.array.isRequired,
-  CellOperationBtn: PropTypes.object,
   colOverScanStartIdx: PropTypes.number,
   colOverScanEndIdx: PropTypes.number,
   lastFrozenColumnKey: PropTypes.string,

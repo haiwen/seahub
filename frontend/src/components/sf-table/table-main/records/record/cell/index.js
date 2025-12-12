@@ -49,8 +49,6 @@ const Cell = React.memo(({
       'table-last--frozen': isLastFrozenCell,
       'cell-selected': isCellSelected,
       'name-cell': isNameColumn,
-      // 'dragging-file-to-cell': ,
-      // 'row-comment-cell': ,
     });
   }, [cellEditable, column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected, isNameColumn]);
 
@@ -197,7 +195,6 @@ const Cell = React.memo(({
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
       {renderCellContent()}
-      {(isCellSelected && isValidElement(cellMetaData.CellOperationBtn)) && cloneElement(cellMetaData.CellOperationBtn, { record, column })}
     </div>
   );
 }, (props, nextProps) => {

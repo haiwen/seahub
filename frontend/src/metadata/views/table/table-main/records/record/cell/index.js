@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from './formatter';
-import CellOperationBtn from './operation-btn';
 import { Utils } from '../../../../../../../utils/utils';
 import ObjectUtils from '../../../../../../../utils/object';
 import { isCellValueChanged, getCellValueByColumn } from '../../../../../../utils/cell';
@@ -44,10 +43,9 @@ const Cell = React.memo(({
       'last-cell': isLastCell,
       'table-last--frozen': isLastFrozenCell,
       'cell-selected': isCellSelected,
-      // 'dragging-file-to-cell': ,
-      // 'row-comment-cell': ,
     });
   }, [canEditable, column, highlightClassName, isLastCell, isLastFrozenCell, isCellSelected]);
+
   const style = useMemo(() => {
     const { left, width } = column;
     let value = {
@@ -174,14 +172,19 @@ const Cell = React.memo(({
 
   return (
     <div key={`${record._id}-${column.key}`} {...containerProps}>
-      <Formatter isCellSelected={isCellSelected} value={cellValue} field={column} onChange={modifyRecord} record={record} tagsData={tagsData} onFileNameClick={onFileNameClick} />
-      {isCellSelected && (<CellOperationBtn record={record} column={column}/>)}
+      <Formatter
+        isCellSelected={isCellSelected}
+        value={cellValue}
+        field={column}
+        onChange={modifyRecord}
+        record={record}
+        tagsData={tagsData}
+        onFileNameClick={onFileNameClick}
+      />
     </div>
   );
 }, (props, nextProps) => {
-  const {
-    record: oldRecord, column, isCellSelected, isLastCell, highlightClassName,
-    height, bgColor } = props;
+  const { record: oldRecord, column, isCellSelected, isLastCell, highlightClassName, height, bgColor } = props;
   const { record: newRecord, highlightClassName: newHighlightClassName, height: newHeight, column: newColumn, bgColor: newBgColor } = nextProps;
   // the modification of column is not currently supported, only the modification of cell data is considered
   const oldValue = oldRecord[column.name] || oldRecord[column.key];
