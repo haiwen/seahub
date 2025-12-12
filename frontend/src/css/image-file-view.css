@@ -74,7 +74,7 @@
   position: absolute;
   right: 12px;
   top: 9px;
-  font-size: 9px;
+  font-size: 11px;
   line-height: 1;
-  color: #666;
+  color: var(--bs-icon-color);
 }
