@@ -1,5 +1,5 @@
 import React from 'react';
-import { EventBus, SocketManager, context } from '@seafile/sdoc-editor';
+import { EventBus, SocketManager } from '@seafile/sdoc-editor';
 import CollaboratorsPopover from './collaborators-popover.js';
 import Icon from '../../../components/icon.js';
 import SDocServerApi from '../../../utils/sdoc-server-api.js';
@@ -8,11 +8,19 @@ import './index.css';
 
 const sdocServer = window.wiki.config.seadocServerUrl;
 
+const { name, username } = window.app.pageOptions;
+const { avatarURL } = window.app.config;
+
+const userInfo = {
+  name,
+  username,
+  avatar_url: avatarURL,
+};
+
 class CollaboratorsOperation extends React.PureComponent {
 
   constructor(props) {
     super(props);
-    const userInfo = context.getUserInfo();
     this.currentUser = userInfo;
     this.state = {
       shownCollaborators: []
