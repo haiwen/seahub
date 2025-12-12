@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 5078528 */
-  src: url('iconfont.eot?t=1764992123473'); /* IE9 */
-  src: url('iconfont.eot?t=1764992123473#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1764992123473') format('woff2'),
-       url('iconfont.woff?t=1764992123473') format('woff'),
-       url('iconfont.ttf?t=1764992123473') format('truetype'),
-       url('iconfont.svg?t=1764992123473#sdocfont') format('svg');
+  src: url('iconfont.eot?t=1765520198941'); /* IE9 */
+  src: url('iconfont.eot?t=1765520198941#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1765520198941') format('woff2'),
+       url('iconfont.woff?t=1765520198941') format('woff'),
+       url('iconfont.ttf?t=1765520198941') format('truetype'),
+       url('iconfont.svg?t=1765520198941#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-filter1:before {
+  content: "\e6f2";
 }
 
 .sdoc-revise:before {
@@ -410,10 +414,6 @@
 
 .sdoc-copy:before {
   content: "\e695";
-}
-
-.sdoc-filter1:before {
-  content: "\e68f";
 }
 
 .sdoc-exclamation-circle:before {
