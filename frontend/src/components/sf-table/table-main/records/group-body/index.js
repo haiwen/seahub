@@ -299,7 +299,6 @@ class GroupBody extends Component {
   getCellMetaData = () => {
     if (!this.cellMetaData) {
       this.cellMetaData = {
-        CellOperationBtn: this.props.CellOperationBtn,
         onCellClick: this.onCellClick,
         onCellDoubleClick: this.onCellDoubleClick,
         onCellMouseDown: this.onCellMouseDown,

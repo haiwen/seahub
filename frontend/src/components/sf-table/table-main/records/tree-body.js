@@ -231,7 +231,6 @@ class TreeBody extends Component {
   getCellMetaData = () => {
     if (!this.cellMetaData) {
       this.cellMetaData = {
-        CellOperationBtn: this.props.CellOperationBtn,
         onCellClick: this.onCellClick,
         onCellDoubleClick: this.onCellDoubleClick,
         onCellMouseDown: this.onCellMouseDown,
@@ -698,7 +697,6 @@ TreeBody.propTypes = {
   recordDragDropEvents: PropTypes.object,
   draggingRecordSource: PropTypes.object,
   columns: PropTypes.array.isRequired,
-  CellOperationBtn: PropTypes.object,
   colOverScanStartIdx: PropTypes.number,
   colOverScanEndIdx: PropTypes.number,
   lastFrozenColumnKey: PropTypes.string,
