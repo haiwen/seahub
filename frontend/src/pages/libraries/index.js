@@ -6,6 +6,7 @@ import { gettext, canAddRepo, canViewOrg, enableOCM } from '../../utils/constant
 import Repo from '../../models/repo';
 import Group from '../../models/group';
 import toaster from '../../components/toast';
+import ModalPortal from '../../components/modal-portal';
 import Loading from '../../components/loading';
 import ViewModes from '../../components/view-modes';
 import ReposSortMenu from '../../components/sort-menu';
@@ -13,6 +14,7 @@ import SingleDropdownToolbar from '../../components/toolbar/single-dropdown-tool
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import GuideForNewDialog from '../../components/dialog/guide-for-new-dialog';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
+import DeletedReposDialog from '../../components/dialog/my-deleted-repos-dialog';
 import MylibRepoListView from '../../pages/my-libs/mylib-repo-list-view';
 import SharedLibraries from '../../pages/shared-libs';
 import SharedWithAll from '../../pages/shared-with-all';
@@ -40,6 +42,7 @@ class Libraries extends Component {
       sharedRepoList: [],
       publicRepoList: [],
       isCreateRepoDialogOpen: false,
+      isDeletedReposDialogOpen: false,
       currentViewMode: localStorage.getItem('sf_repo_list_view_mode') || LIST_MODE,
       sortBy: localStorage.getItem('sf_repos_sort_by') || 'name', // 'name' or 'time'
       sortOrder: localStorage.getItem('sf_repos_sort_order') || 'asc', // 'asc' or 'desc'
@@ -375,6 +378,12 @@ class Libraries extends Component {
     });
   };
 
+  toggleDeletedReposDialog = () => {
+    this.setState({
+      isDeletedReposDialogOpen: !this.state.isDeletedReposDialogOpen
+    });
+  };
+
   switchViewMode = (newMode) => {
     this.setState({
       currentViewMode: newMode
@@ -428,7 +437,10 @@ class Libraries extends Component {
                           {gettext('My Libraries')}
                           <SingleDropdownToolbar
                             withPlusIcon={true}
-                            opList={[{ 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog }]}
+                            opList={[
+                              { 'text': gettext('New Library'), 'onClick': this.toggleCreateRepoDialog },
+                              { 'text': gettext('Deleted Libraries'), 'onClick': this.toggleDeletedReposDialog }
+                            ]}
                           />
                         </h4>
                         {(!Utils.isDesktop() && this.state.repoList.length > 0) &&
@@ -528,6 +540,13 @@ class Libraries extends Component {
               onCreateRepo={this.onCreateRepo}
               onCreateToggle={this.toggleCreateRepoDialog}
             />
+          )}
+          {this.state.isDeletedReposDialogOpen && (
+            <ModalPortal>
+              <DeletedReposDialog
+                toggleDialog={this.toggleDeletedReposDialog}
+              />
+            </ModalPortal>
           )}
         </div>
       </>
