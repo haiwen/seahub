@@ -243,7 +243,6 @@
   margin-left: calc(var(--depth, 0) * 20px);
 }
 
-/* Ghost uses same structure as original - no special item class needed */
 .wiki-drag-ghost-wrapper .wiki-page-item-wrapper {
   position: relative;
 }
@@ -295,7 +294,6 @@
   flex: 1;
 }
 
-/* Wiki nav item icon (expand/collapse arrow) */
 .wiki-drag-ghost-wrapper .wiki-nav-item-icon {
   width: 22px;
   height: 22px;
@@ -307,7 +305,6 @@
   border-radius: 3px;
 }
 
-/* Nav item icon (file/folder icon) - override default margin-left when after wiki-nav-item-icon */
 .wiki-drag-ghost-wrapper .nav-item-icon {
   width: 20px;
   height: 20px;
@@ -318,12 +315,10 @@
   margin-right: 6px;
 }
 
-/* When there's NO expand arrow, add the left margin */
 .wiki-drag-ghost-wrapper .wiki-page-content > .nav-item-icon:first-child {
   margin-left: 22px;
 }
 
-/* When there IS an expand arrow, no left margin needed */
 .wiki-drag-ghost-wrapper .wiki-page-content:has(.wiki-nav-item-icon) .nav-item-icon {
   margin-left: 0;
 }
@@ -338,13 +333,11 @@
   fill: #666666;
 }
 
-/* Hide operation buttons in ghost */
 .wiki-drag-ghost-wrapper .op-icon,
 .wiki-drag-ghost-wrapper .page-operation-dropdown {
   display: none !important;
 }
 
-/* Ensure all children are visible in ghost */
 .wiki-drag-ghost-wrapper .page-children {
   height: auto !important;
   overflow: visible !important;

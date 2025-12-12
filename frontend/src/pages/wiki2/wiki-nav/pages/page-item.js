@@ -67,7 +67,7 @@ const PageItem = ({
     }),
   }), [page, pageIndex]);
 
-  // Hide the native drag preview (we'll use custom DragLayer instead)
+  // Hide the native drag preview (use custom DragLayer instead)
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
