@@ -38,3 +38,10 @@
   width: 16px;
   height: 16px;
 }
+
+/* Dark mode: add white background to thumbnails to ensure visibility of dark content in SVG files */
+[data-bs-theme="dark"] .dir-icon .thumbnail {
+  background-color: white;
+  padding: 2px;
+  border-radius: 2px;
+}
