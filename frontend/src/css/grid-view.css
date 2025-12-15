@@ -92,3 +92,9 @@
   background-color: rgba(0, 120, 215, 0.3);
   border: 1px solid rgba(0, 120, 215, 0.8);
 }
+
+[data-bs-theme="dark"] .grid-item .grid-file-img-link .thumbnail {
+  background-color: white;
+  padding: 2px;
+  border-radius: 2px;
+}
