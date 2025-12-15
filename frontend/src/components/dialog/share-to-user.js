@@ -534,7 +534,7 @@ class ShareToUser extends React.Component {
       );
     }
     return (
-      <div className="share-link-container">
+      <div className="share-link-container h-100 d-flex flex-column">
         <table>
           {thead}
           <tbody>
@@ -585,13 +585,13 @@ class ShareToUser extends React.Component {
             }
           </tbody>
         </table>
-        <div className="share-list-container">
+        <div className="share-list-container flex-fill">
           {this.state.isLoading ? (
             <Loading />
           ) : (
             <>
               {sharedItems.length === 0 ? (
-                <EmptyTip text={gettext('No share link')} />
+                <EmptyTip text={gettext('No items')} className="h-100 m-0" />
               ) : (
                 <table className="table-thead-hidden">
                   {thead}
