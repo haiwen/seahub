@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from './formatter';
@@ -27,6 +27,7 @@ const CardItem = ({
   onSelectCard,
   onContextMenu,
 }) => {
+  const [isUsingIcon, setIsUsingIcon] = useState(false);
   const imgRef = useRef(null);
 
   const fileNameValue = getCellValueByColumn(record, fileNameColumn);
@@ -36,6 +37,22 @@ const CardItem = ({
   // for the big image
   const parentDir = useMemo(() => getParentDirFromRecord(record), [record]);
   const isDir = useMemo(() => checkIsDir(record), [record]);
+
+  const shouldUseThumbnail = useMemo(() => {
+    if (isDir) return false;
+    const value = fileNameValue;
+    return Utils.imageCheck(value) ||
+      Utils.pdfCheck(value) ||
+      Utils.videoCheck(value) ||
+      Utils.isEditableSdocFile(value);
+  }, [isDir, fileNameValue]);
+
+  const isDocumentFile = useMemo(() => {
+    if (!shouldUseThumbnail || isUsingIcon) return false;
+    const value = fileNameValue;
+    return Utils.pdfCheck(value) || Utils.isEditableSdocFile(value);
+  }, [shouldUseThumbnail, fileNameValue, isUsingIcon]);
+
   const imageURLs = useMemo(() => {
     if (isDir) {
       const iconURL = Utils.getFolderIconUrl();
@@ -43,19 +60,17 @@ const CardItem = ({
     }
     const value = fileNameValue;
     const fileIconURL = Utils.getFileIconUrl(value);
-    if (Utils.imageCheck(value) ||
-      Utils.pdfCheck(value) ||
-      Utils.videoCheck(value) ||
-      Utils.isEditableSdocFile(value)) {
+    if (shouldUseThumbnail) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
       const repoID = window.sfMetadataStore.repoId;
       const thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${getFileMTimeFromRecord(record)}`;
       return { URL: thumbnailURL, iconURL: fileIconURL };
     }
     return { URL: fileIconURL, iconURL: fileIconURL };
-  }, [isDir, fileNameValue, parentDir, record]);
+  }, [isDir, fileNameValue, parentDir, record, shouldUseThumbnail]);
 
   const onLoadError = useCallback(() => {
+    setIsUsingIcon(true);
     imgRef.current.src = imageURLs.iconURL;
   }, [imageURLs]);
 
@@ -84,7 +99,16 @@ const CardItem = ({
       onKeyDown={Utils.onKeyDown}
     >
       <div className="sf-metadata-card-item-image-container">
-        <img loading="lazy" className="sf-metadata-card-item-image" ref={imgRef} src={imageURLs.URL} onError={onLoadError} alt="" />
+        <img
+          loading="lazy"
+          className={classnames('sf-metadata-card-item-image', {
+            'sf-metadata-card-item-image-document': isDocumentFile
+          })}
+          ref={imgRef}
+          src={imageURLs.URL}
+          onError={onLoadError}
+          alt=""
+        />
       </div>
       <div className="sf-metadata-card-item-text-container">
         <Formatter
