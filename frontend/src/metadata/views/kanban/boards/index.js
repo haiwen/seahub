@@ -30,7 +30,7 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
 
-  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail, updateSelectedRecordIds } = useMetadataView();
+  const { isDirentDetailShow, metadata, store, updateCurrentDirent, updateSelectedRecordIds } = useMetadataView();
   const { collaborators } = useCollaborators();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
