@@ -428,7 +428,7 @@ class ShareToGroup extends React.Component {
       );
     }
     return (
-      <Fragment>
+      <div className='h-100 d-flex flex-column'>
         <table>
           {thead}
           <tbody>
@@ -473,13 +473,13 @@ class ShareToGroup extends React.Component {
             }
           </tbody>
         </table>
-        <div className="share-list-container">
+        <div className="share-list-container flex-fill">
           {this.state.isLoading ? (
             <Loading />
           ) : (
             <>
               {this.state.sharedItems.length === 0 ? (
-                <EmptyTip text={gettext('No share link')} />
+                <EmptyTip text={gettext('No items')} className="h-100 m-0" />
               ) : (
                 <table className="table-thead-hidden">
                   {thead}
@@ -495,7 +495,7 @@ class ShareToGroup extends React.Component {
             </>
           )}
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
