@@ -108,8 +108,7 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
     if (selectedCard === recordId) return;
     handleUpdateCurrentDirent(record);
     onCloseSettings();
-    showDirentDetail();
-  }, [selectedCard, onCloseSettings, showDirentDetail, handleUpdateCurrentDirent]);
+  }, [selectedCard, onCloseSettings, handleUpdateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
     setSelectedCard(null);

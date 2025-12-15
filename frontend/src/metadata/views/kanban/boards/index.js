@@ -218,8 +218,7 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
     updateSelectedRecordIds([recordId]);
     handleUpdateCurrentDirent(record);
     onCloseSettings();
-    showDirentDetail();
-  }, [selectedCard, onCloseSettings, showDirentDetail, handleUpdateCurrentDirent, updateSelectedRecordIds]);
+  }, [selectedCard, onCloseSettings, handleUpdateCurrentDirent, updateSelectedRecordIds]);
 
   const handleClickOutside = useCallback((event) => {
     if (isDragging) return;
