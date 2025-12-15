@@ -61,7 +61,6 @@
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-  background-color: var(--bs-body-bg);
 }
 
 .wiki-nav .wiki-page-item.selected-page {
@@ -203,23 +202,18 @@
   position: relative;
 }
 
-.wiki-nav .wiki-page-item-wrapper.wiki-page-wrapper-highlight::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(33, 150, 243, 0.1);
-  border-radius: 3px;
-  pointer-events: none;
-  z-index: 1;
+.wiki-nav .wiki-page-item-wrapper.wiki-page-wrapper-highlight {
+  background-color: rgb(200, 220, 240);
+}
+
+.wiki-nav .wiki-page-item-wrapper.wiki-page-wrapper-highlight .wiki-page-item.selected-page {
+  background-color: transparent;
 }
 
 .wiki-page-drag-layer {
   position: fixed;
   pointer-events: none;
-  z-index: 10000;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -249,7 +243,6 @@
 
 .wiki-drag-ghost-wrapper .wiki-page-item {
   background-color: transparent !important;
-  cursor: grabbing !important;
   position: relative;
   display: flex;
   width: 100%;
@@ -259,10 +252,6 @@
   align-items: center;
   justify-content: center;
   border-radius: 3px;
-}
-
-.wiki-drag-ghost-wrapper .wiki-page-item:hover {
-  background-color: transparent !important;
 }
 
 .wiki-drag-ghost-wrapper .wiki-page-item-main {
@@ -345,12 +334,10 @@
 
 .wiki-nav .wiki-page-item {
   position: relative;
-  z-index: auto;
 }
 
 .wiki-nav .page-children {
   position: relative;
-  z-index: auto;
 }
 
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after,
@@ -361,7 +348,7 @@
   left: var(--drop-indicator-left, 0px);
   right: 8px;
   background-color: rgb(200, 220, 240);
-  z-index: 100;
+  z-index: 1;
 }
 
 .wiki-nav .wiki-page-item.page-can-drop-bottom::after {

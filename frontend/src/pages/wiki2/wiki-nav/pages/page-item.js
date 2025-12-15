@@ -140,7 +140,7 @@ const PageItem = ({
       });
     },
     collect: (monitor) => ({
-      isOver: monitor.isOver(),
+      isOver: monitor.isOver({ shallow: true }),
       canDrop: monitor.canDrop()
     })
   }));
