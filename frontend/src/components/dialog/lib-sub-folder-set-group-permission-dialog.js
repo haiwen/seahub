@@ -335,7 +335,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
       </thead>
     );
     return (
-      <Fragment>
+      <div className='h-100 d-flex flex-column'>
         <p className="small permission-tips">{gettext('Folder permission is only effective after the library is shared to users or groups. It is used to fine tune sub-folder permissions.')}</p>
         <table className="w-xs-250">
           {thead}
@@ -385,13 +385,13 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
             }
           </tbody>
         </table>
-        <div className="share-list-container">
+        <div className="share-list-container flex-fill">
           {this.state.isLoading ? (
             <Loading />
           ) : (
             <>
               {this.state.groupPermissionItems.length === 0 ? (
-                <EmptyTip text={gettext('No results')} />
+                <EmptyTip text={gettext('No results')} className="h-100 m-0" />
               ) : (
                 <table className="table-thead-hidden w-xs-250">
                   {thead}
@@ -415,7 +415,7 @@ class LibSubFolderSetGroupPermissionDialog extends React.Component {
             </>
           )}
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
