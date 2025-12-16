@@ -280,10 +280,7 @@ class ShareToOtherServer extends React.Component {
               ? <Loading />
               : ocmShares.length === 0
                 ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
-                : <ShareList
-                    items={ocmShares}
-                    deleteShareItem={this.deleteShareItem}
-                  />
+                : <ShareList items={ocmShares} deleteShareItem={this.deleteShareItem} />
           }
         </div>
       </div>
