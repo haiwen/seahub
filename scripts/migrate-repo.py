@@ -11,26 +11,39 @@ from migrate import ObjMigrateWorker
 from seafobj.objstore_factory import objstore_factory
 from seaserv import seafile_api as api
 from seaserv import REPO_STATUS_READ_ONLY, REPO_STATUS_NORMAL
+from seafobj import fs_mgr, commit_mgr
+import argparse
+
+ZERO_OBJ_ID = '0000000000000000000000000000000000000000'
 
 logging.basicConfig(format='%(asctime)s %(message)s', level=logging.INFO)
 
 def main(argv):
-    if len(argv) == 4:
-        all_migrate = False
-        repo_id = argv[1]
-        orig_storage_id = argv[2]
-        dest_storage_id = argv[3]
-    elif len(argv) == 3:
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("repo_id", nargs="?", default=None)
+    parser.add_argument("orig_storage_id")
+    parser.add_argument("dest_storage_id")
+    parser.add_argument("--list-src-by-commit", action="store_true", help="list src objects by commit")
+
+    args = parser.parse_args()
+
+    repo_id = args.repo_id
+    orig_storage_id = args.orig_storage_id
+    dest_storage_id = args.dest_storage_id
+    list_src = args.list_src_by_commit
+
+    if repo_id is None:
         all_migrate = True
-        orig_storage_id = argv[1]
-        dest_storage_id = argv[2]
+    else:
+        all_migrate = False
 
     if all_migrate:
-        migrate_repos(orig_storage_id, dest_storage_id)
+        migrate_repos(orig_storage_id, dest_storage_id, list_src)
     else:
-        migrate_repo(repo_id, orig_storage_id, dest_storage_id)
+        migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src)
 
-def parse_seafile_config(storage_id):
+def parse_seafile_db_config():
     env = os.environ
     seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
     cp = configparser.ConfigParser()
@@ -41,11 +54,14 @@ def parse_seafile_config(storage_id):
     passwd = cp.get('database', 'password')
     db_name = cp.get('database', 'db_name')
 
-    is_default = is_default_storage(cp, storage_id)
+    return host, port, user, passwd, db_name
 
-    return host, port, user, passwd, db_name, is_default
+def is_default_storage(orig_storage_id):
+    env = os.environ
+    seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
+    cp = configparser.ConfigParser()
+    cp.read(seafile_conf)
 
-def is_default_storage(cp, orig_storage_id):
     json_file = cp.get('storage', 'storage_classes_file')
     f = open(json_file)
     json_cfg = json.load(f)
@@ -114,7 +130,8 @@ def get_existing_repo_ids (url):
     return results
 
 def get_repo_ids(storage_id, dest_storage_id):
-    host, port, user, passwd, db_name, is_default = parse_seafile_config(storage_id)
+    host, port, user, passwd, db_name = parse_seafile_db_config()
+    is_default = is_default_storage(storage_id)
     url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
 
     if is_default:
@@ -156,10 +173,19 @@ def get_repo_ids(storage_id, dest_storage_id):
 
     return ret_repo_ids
 
-def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
+def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src):
     api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
     dtypes = ['commits', 'fs', 'blocks']
     workers = []
+    repo_objs = None
+    if list_src:
+        repo_objs = RepoObjects(repo_id)
+        try:
+            repo_objs.traverse()
+        except Exception as e:
+            logging.warning('Failed to traverse repo objects %s: %s.\n', repo_id, e)
+            api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
+            sys.exit(1)
     for dtype in dtypes:
         obj_stores = objstore_factory.get_obj_stores(dtype)
         #If these storage ids passed in do not exist in conf, stop migrate this repo.
@@ -172,7 +198,7 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
         dest_store = obj_stores[dest_storage_id]
         
         try:
-            worker = ObjMigrateWorker (orig_store, dest_store, dtype, repo_id)
+            worker = ObjMigrateWorker (orig_store, dest_store, dtype, repo_id, repo_objs=repo_objs)
             worker.start()
             workers.append(worker)
         except:
@@ -199,7 +225,7 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id):
     api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
     logging.info('The process of migrating repo [%s] is over.\n', repo_id)
 
-def migrate_repos(orig_storage_id, dest_storage_id):
+def migrate_repos(orig_storage_id, dest_storage_id, list_src):
     repo_ids = get_repo_ids(orig_storage_id, dest_storage_id)
 
     pending_repos = {}
@@ -207,6 +233,16 @@ def migrate_repos(orig_storage_id, dest_storage_id):
         api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
         dtypes = ['commits', 'fs', 'blocks']
         workers = []
+        repo_objs = None
+        if list_src:
+            repo_objs = RepoObjects(repo_id)
+            try:
+                repo_objs.traverse()
+            except Exception as e:
+                logging.warning('Failed to traverse repo objects %s: %s.\n', repo_id, e)
+                api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
+                pending_repos[repo_id] = repo_id
+                continue
         for dtype in dtypes:
             obj_stores = objstore_factory.get_obj_stores(dtype)
             #If these storage ids passed in do not exist in conf, stop migrate this repo.
@@ -219,7 +255,7 @@ def migrate_repos(orig_storage_id, dest_storage_id):
             dest_store = obj_stores[dest_storage_id]
             
             try:
-                worker = ObjMigrateWorker (orig_store, dest_store, dtype, repo_id)
+                worker = ObjMigrateWorker (orig_store, dest_store, dtype, repo_id, repo_objs=repo_objs)
                 worker.start()
                 workers.append(worker)
             except:
@@ -254,6 +290,118 @@ def migrate_repos(orig_storage_id, dest_storage_id):
         logging.info('The following repos were not migrated successfully and need to be migrated again:\n')
         for r in pending_repos:
             logging.info('%s\n', r)
+
+class RepoObjects(object):
+    def __init__(self, repo_id):
+        self.repo_id = repo_id
+        self.commit_keys = set()
+        self.fs_keys = set()
+        self.block_keys = set()
+        self.virt_repo_ids = set()
+        self.get_virt_repo_ids()
+
+    def get_virt_repo_ids(self):
+        host, port, user, passwd, db_name = parse_seafile_db_config()
+        url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
+        sql = 'SELECT repo_id FROM VirtualRepo WHERE origin_repo=\"%s\"'%(self.repo_id)
+
+        engine = create_engine(url, echo=False)
+        session = sessionmaker(engine)()
+        result_proxy = session.execute(text(sql))
+        results = result_proxy.fetchall()
+        for r in results:
+            repo_id = r[0]
+            self.virt_repo_ids.add(repo_id)
+
+    def traverse(self):
+        repo = api.get_repo(self.repo_id)
+        if repo is None:
+            raise Exception("Failed to get repo %s" % self.repo_id)
+
+        # When the migrated repo is a virtual repo, only commit objects are migrated.
+        # When the migrated repo is a parent repo, the fs and blocks objects of its virtual repos are migrated as well.
+        self.traverse_repo(repo)
+        for virt_repo_id in self.virt_repo_ids:
+            self.traverse_virt_repo(virt_repo_id, repo.version)
+
+    def traverse_repo(self, repo):
+        page = 0
+        limit = 100
+        while True:
+            start = page * limit
+            commits = api.get_commit_list(self.repo_id, start, limit)
+
+            for commit in commits:
+                if commit.id in self.commit_keys:
+                    continue
+                self.commit_keys.add(commit.id)
+                if repo.is_virtual:
+                    continue
+                self.traverse_dir(repo.version, commit.root_id)
+
+            if len(commits) == limit:
+                page = page + 1
+            else:
+                logging.info('Successfully traversed %d commits, %d fs and %d blocks in repo %s.\n', len(self.commit_keys), len(self.fs_keys), len(self.block_keys), self.repo_id)
+                return
+
+    def traverse_virt_repo(self, repo_id, version):
+        page = 0
+        limit = 100
+        virt_commit_keys = set() 
+        while True:
+            start = page * limit
+            commits = api.get_commit_list(repo_id, start, limit)
+
+            for commit in commits:
+                if commit.id in virt_commit_keys:
+                    continue
+                virt_commit_keys.add(commit.id)
+                self.traverse_dir(version, commit.root_id)
+
+            if len(commits) == limit:
+                page = page + 1
+            else:
+                logging.info('Successfully traversed %d commits in virtual repo %s.\n', len(virt_commit_keys), repo_id)
+                return
+
+    def traverse_dir(self, version, root_id):
+        if root_id == ZERO_OBJ_ID:
+            return
+        if root_id in self.fs_keys:
+            return
+        self.fs_keys.add(root_id)
+
+        seafdir = fs_mgr.load_seafdir(self.repo_id, version, root_id)
+        for d in seafdir.get_files_list():
+            if d.id == ZERO_OBJ_ID:
+                continue
+            if d.id in self.fs_keys:
+                continue
+            self.fs_keys.add(d.id)
+
+            file = fs_mgr.load_seafile(self.repo_id, version, d.id)
+            for blk_id in file.blocks:
+                if blk_id in self.block_keys:
+                    continue
+                self.block_keys.add(blk_id)
+
+        for d in seafdir.get_subdirs_list():
+            self.traverse_dir (version, d.id)
+
+    def list_objs(self, dtype):
+        if dtype == 'commits':
+            for key in self.commit_keys:
+                obj = [self.repo_id, key, 0]
+                yield obj
+        elif dtype == 'fs':
+            for key in self.fs_keys:
+                obj = [self.repo_id, key, 0]
+                yield obj
+        elif dtype == 'blocks':
+            for key in self.block_keys:
+                obj = [self.repo_id, key, 0]
+                yield obj
 
 if __name__ == '__main__':
     main(sys.argv)

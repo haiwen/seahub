@@ -67,7 +67,7 @@ then
     done
 fi
 
-if [ $# -ne 3 ] && [ $# -ne 2 ];
+if [ $# -ne 4 ] && [ $# -ne 3 ] && [ $# -ne 2 ];
 then
     usage;
     exit 1;
