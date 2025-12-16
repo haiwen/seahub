@@ -1,9 +1,9 @@
 .lightbox-side-panel {
   width: 0;
-  height: calc(100% - 64px);
+  height: calc(100% - 48px);
   display: flex;
   flex-direction: column;
-  top: 64px;
+  top: 48px;
   right: 0;
   position: absolute;
   font-size: 1rem;

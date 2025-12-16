@@ -102,6 +102,13 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       zoomInLabel={gettext('Zoom in')}
       zoomOutLabel={gettext('Zoom out')}
       metadataLabel={gettext('Metadata')}
+      zoomInTip={gettext('Enlarge: ⌘ + Wheel')}
+      zoomOutTip={gettext('Shrink: ⌘ + Wheel')}
+      rotateTip={gettext('Rotate')}
+      deleteTip={gettext('Delete')}
+      downloadImageTip={gettext('Download')}
+      openMetadataTip={gettext('Open metadata')}
+      closeMetadataTip={gettext('Close metadata')}
       onClickMetadata={onToggleSidePanel}
       enableRotate={enableRotate}
       onClickDownload={() => downloadImage(imageItems[imageIndex].downloadURL)}
