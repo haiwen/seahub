@@ -1832,6 +1832,9 @@ class LibContentView extends React.Component {
         if (item.name === oldName) {
           item.name = newName;
         }
+        if (Utils.isSdocFile(direntPath)) {
+          item.encoded_thumbnail_src = null;
+        }
         return item;
       });
       this.setState({ direntList: direntList });

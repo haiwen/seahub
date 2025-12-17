@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { DropdownItem } from 'reactstrap';
+import urlJoin from 'url-join';
 import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -94,7 +95,7 @@ class DirentListItem extends React.Component {
       this.isGeneratingThumbnail = true;
       this.thumbnailCenter.createThumbnail({
         repoID,
-        path: [path, dirent.name].join('/'),
+        path: urlJoin(path, dirent.name),
         callback: this.updateDirentThumbnail,
       });
     }
@@ -103,19 +104,18 @@ class DirentListItem extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.dirent && this.state.dirent) {
       if (nextProps.dirent.name !== this.state.dirent.name) {
-        this.setState({
-          dirent: nextProps.dirent,
-        }, () => {
+        this.setState({ dirent: nextProps.dirent }, () => {
           if (this.checkGenerateThumbnail(nextProps.dirent)) {
             const { repoID, path } = nextProps;
             this.isGeneratingThumbnail = true;
             this.thumbnailCenter.createThumbnail({
               repoID,
-              path: [path, nextProps.dirent.name].join('/'),
+              path: urlJoin(path, nextProps.dirent.name),
               callback: this.updateDirentThumbnail,
             });
           }
         });
+        return;
       }
 
       if (
