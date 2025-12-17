@@ -30,7 +30,7 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
   const currentImageRef = useRef(null);
   const containerRef = useRef(null);
 
-  const { isDirentDetailShow, metadata, store, updateCurrentDirent, showDirentDetail, updateSelectedRecordIds } = useMetadataView();
+  const { isDirentDetailShow, metadata, store, updateCurrentDirent, updateSelectedRecordIds } = useMetadataView();
   const { collaborators } = useCollaborators();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -218,8 +218,7 @@ const Boards = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSettings
     updateSelectedRecordIds([recordId]);
     handleUpdateCurrentDirent(record);
     onCloseSettings();
-    showDirentDetail();
-  }, [selectedCard, onCloseSettings, showDirentDetail, handleUpdateCurrentDirent, updateSelectedRecordIds]);
+  }, [selectedCard, onCloseSettings, handleUpdateCurrentDirent, updateSelectedRecordIds]);
 
   const handleClickOutside = useCallback((event) => {
     if (isDragging) return;

@@ -35,7 +35,7 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { isDirentDetailShow, metadata, updateCurrentDirent, showDirentDetail, updateSelectedRecordIds } = useMetadataView();
+  const { isDirentDetailShow, metadata, updateCurrentDirent, updateSelectedRecordIds } = useMetadataView();
   const { tagsData } = useTags();
 
   const repoID = window.sfMetadataContext.getSetting('repoID');
@@ -108,8 +108,7 @@ const CardItems = ({ modifyRecord, deleteRecords, modifyColumnData, onCloseSetti
     if (selectedCard === recordId) return;
     handleUpdateCurrentDirent(record);
     onCloseSettings();
-    showDirentDetail();
-  }, [selectedCard, onCloseSettings, showDirentDetail, handleUpdateCurrentDirent]);
+  }, [selectedCard, onCloseSettings, handleUpdateCurrentDirent]);
 
   const handleClickOutside = useCallback((event) => {
     setSelectedCard(null);
