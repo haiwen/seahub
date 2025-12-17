@@ -1070,7 +1070,6 @@ export const MetadataViewProvider = ({
         updateSearchState,
         isDirentDetailShow: params.isDirentDetailShow,
         updateCurrentDirent: params.updateCurrentDirent,
-        showDirentDetail: params.showDirentDetail,
         deleteFilesCallback: deleteFilesCallback,
         renameFileCallback: renameFileCallback,
         modifySettings,
