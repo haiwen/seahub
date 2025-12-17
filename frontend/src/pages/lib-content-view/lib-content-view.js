@@ -218,6 +218,18 @@ class LibContentView extends React.Component {
           isSessionExpired: false,
           currentDirent: null,
         });
+
+        // Synchronize tree panel with updated directory list
+        if (this.state.isTreePanelShown && this.isTreeReady(this.state.path)) {
+          const currentPath = this.state.path;
+          const tree = this.state.treeData.clone();
+          const currentNode = tree.getNodeByPath(currentPath);
+
+          if (currentNode && currentNode.isLoaded) {
+            this.addResponseListToNode(dirent_list, currentNode);
+            this.setState({ treeData: tree });
+          }
+        }
       });
     }
   };
