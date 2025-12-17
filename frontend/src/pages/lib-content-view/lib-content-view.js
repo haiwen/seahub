@@ -205,6 +205,9 @@ class LibContentView extends React.Component {
         }
       }
     } else if (noticeData.type === 'repo-update') {
+      const { repo_id } = noticeData.content;
+      if (repo_id === this.props.repoID) return;
+
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
@@ -1819,6 +1822,9 @@ class LibContentView extends React.Component {
       let direntList = this.state.direntList.map(item => {
         if (item.name === oldName) {
           item.name = newName;
+        }
+        if (Utils.isSdocFile(direntPath)) {
+          item.encoded_thumbnail_src = null;
         }
         return item;
       });

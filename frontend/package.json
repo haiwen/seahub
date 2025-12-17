@@ -57,6 +57,7 @@
     "socket.io-client": "^4.8.1",
     "svgo-loader": "^3.0.1",
     "unified": "^7.0.0",
+    "url-join": "5.0.0",
     "url-parse": "^1.4.3",
     "uuid": "9.0.1",
     "video.js": "^8.22.0",
