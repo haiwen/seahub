@@ -180,7 +180,7 @@ const TableFilesToolbar = ({ repoID }) => {
             aria-label={gettext('Move')}
             op={toggleMoveDialog}
           >
-            <Icon symbol="move1" />
+            <Icon symbol="move" />
           </OpIcon>
           <span
             className="cur-view-path-btn"
@@ -188,7 +188,7 @@ const TableFilesToolbar = ({ repoID }) => {
             title={gettext('Copy')}
             aria-label={gettext('Copy')}
           >
-            <Icon symbol="copy1" />
+            <Icon symbol="copy" />
           </span>
         </>
       )}

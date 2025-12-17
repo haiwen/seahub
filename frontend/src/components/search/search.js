@@ -947,7 +947,7 @@ class Search extends Component {
                 }
                 {isMaskShow && (
                   <IconBtn
-                    symbol="filter-circled"
+                    symbol="search-filter"
                     size={20}
                     className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
                     onClick={this.handleFiltersShow}

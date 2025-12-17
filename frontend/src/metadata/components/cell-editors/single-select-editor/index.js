@@ -235,7 +235,7 @@ const SingleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && <Icon symbol="tick1" />}
+              {isSelected && <Icon symbol="tick" />}
             </div>
           </div>
         </div>

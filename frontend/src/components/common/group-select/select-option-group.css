@@ -64,7 +64,8 @@
 }
 
 .option.option-active .sf2-icon-tick,
-.option.option-active .select-option-name {
+.option.option-active .select-option-name,
+.option.option-active .seafile-multicolor-icon {
   color: #fff !important;
 }
 

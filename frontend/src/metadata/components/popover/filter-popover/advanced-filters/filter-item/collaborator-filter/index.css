@@ -10,3 +10,7 @@
 .sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option .collaborator .collaborator-name {
   color: var(--bs-body-color);
 }
+
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option-active .collaborator .collaborator-name {
+  color: #fff;
+}

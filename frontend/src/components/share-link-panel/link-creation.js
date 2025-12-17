@@ -285,7 +285,7 @@ class LinkCreation extends React.Component {
     return (
       <Fragment>
         <div className="d-flex align-items-center pb-2 border-bottom">
-          <h6 className="font-weight-normal m-0">
+          <h6 className="font-weight-normal m-0 d-flex align-items-center">
             <BackIcon onClick={this.goBack} />
             {type === 'batch' ? gettext('Generate links in batch') : gettext('Generate Link')}
           </h6>

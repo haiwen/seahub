@@ -16,7 +16,7 @@ const ExtensionPrompts = ({ onExtendedProperties }) => {
       onClick={handlePromptsClick}
     >
       <div className='extension-prompts-icon-wrapper'>
-        <Icon symbol="bell" className='extension-prompts-icon' aria-label={gettext('Bell Icon')} />
+        <Icon symbol="megaphone" className='extension-prompts-icon' aria-label={gettext('Megaphone Icon')} />
       </div>
       <div className='extension-prompts-content'>
         <p>

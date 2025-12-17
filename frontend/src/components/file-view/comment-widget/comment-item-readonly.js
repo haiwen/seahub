@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { processor } from '@seafile/seafile-editor';
+import Icon from '../../icon';
 
 const commentItemPropTypes = {
   time: PropTypes.string,
@@ -76,7 +77,7 @@ class CommentItemReadOnly extends React.Component {
         {replies.length > 0 &&
           <div className="comment-footer">
             <span className="comments-count">
-              <i className="sdocfont sdoc-comments"></i>
+              <Icon symbol="comment" />
               <span className="comments-count-number">{replies.length}</span>
             </span>
             <div className="comment-author">

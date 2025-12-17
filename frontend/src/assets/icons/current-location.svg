@@ -1,12 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#212529;}
-</style>
-<path class="st0" d="M16,1c8.3,0,15,6.7,15,15s-6.7,15-15,15S1,24.3,1,16S7.7,1,16,1z M17.5,4.7v3c0,0.8-0.7,1.5-1.5,1.5
-	s-1.5-0.7-1.5-1.5v-3c-5,0.7-9,4.7-9.7,9.7h3c0.8,0,1.5,0.7,1.5,1.5c0,0.8-0.7,1.5-1.5,1.5h-3c0.7,5.1,4.7,9.1,9.7,9.8v-3.1
-	c0-0.8,0.7-1.5,1.5-1.5c0.8,0,1.5,0.7,1.5,1.5v3.1c5.1-0.7,9.1-4.7,9.8-9.8h-3.1c-0.8,0-1.5-0.7-1.5-1.5s0.7-1.5,1.5-1.5h3.1
-	C26.6,9.4,22.5,5.4,17.5,4.7z M16,12c2.2,0,4,1.8,4,4s-1.8,4-4,4s-4-1.8-4-4S13.8,12,16,12z"/>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M27.5 16C27.5 9.64873 22.3513 4.5 16 4.5C9.64873 4.5 4.5 9.64873 4.5 16C4.5 22.3513 9.64873 27.5 16 27.5C22.3513 27.5 27.5 22.3513 27.5 16ZM30.5 16C30.5 24.0081 24.0081 30.5 16 30.5C7.99187 30.5 1.5 24.0081 1.5 16C1.5 7.99187 7.99187 1.5 16 1.5C24.0081 1.5 30.5 7.99187 30.5 16Z" fill="currentColor"/>
+<path d="M20 16C20 18.2091 18.2091 20 16 20C13.7909 20 12 18.2091 12 16C12 13.7909 13.7909 12 16 12C18.2091 12 20 13.7909 20 16Z" fill="currentColor"/>
+<path d="M8 14.5V17.5H3V14.5H8Z" fill="currentColor"/>
+<path d="M29 14.5V17.5H24V14.5H29Z" fill="currentColor"/>
+<path d="M14.4902 24.01H17.4902V29.01H14.4902V24.01Z" fill="currentColor"/>
+<path d="M14.4902 3.01001L17.4902 3.01001V8.01001H14.4902V3.01001Z" fill="currentColor"/>
 </svg>

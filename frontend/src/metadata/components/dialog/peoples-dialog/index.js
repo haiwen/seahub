@@ -24,7 +24,7 @@ const PeoplesDialog = ({ selectedImages, onToggle, onSubmit }) => {
         label: (
           <>
             <People people={people} />
-            {isSelected && <span className="people-check-icon"><Icon symbol="tick1" /></span>}
+            {isSelected && <span className="people-check-icon"><Icon symbol="tick" /></span>}
           </>
         ),
       };

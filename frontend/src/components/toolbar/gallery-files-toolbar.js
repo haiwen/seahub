@@ -156,10 +156,10 @@ const GalleryFilesToolbar = () => {
       {length === 1 && !readOnly && (
         <>
           <span className="cur-view-path-btn" onClick={onMoveClick} title={gettext('Move')} aria-label={gettext('Move')}>
-            <Icon symbol="move1" />
+            <Icon symbol="move" />
           </span>
           <span className="cur-view-path-btn" onClick={onCopyClick} title={gettext('Copy')} aria-label={gettext('Copy')}>
-            <Icon symbol="copy1" />
+            <Icon symbol="copy" />
           </span>
         </>
       )}

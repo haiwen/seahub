@@ -23,12 +23,12 @@
 .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon {
   margin-right: 6px;
   font-size: 14px;
-  fill: #999;
+  color: #999;
   flex-shrink: 0;
 }
 
 [data-bs-theme=dark] .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon {
-  fill: rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, .5);
 }
 
 .dirent-detail-item .dirent-detail-item-name .seafile-multicolor-icon-tag {

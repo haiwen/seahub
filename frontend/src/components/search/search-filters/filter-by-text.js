@@ -54,7 +54,7 @@ const FilterByText = ({ searchFilenameOnly, onChange }) => {
               return (
                 <DropdownItem key={option.key} data-toggle={option.key} onClick={onOptionClick}>
                   {option.label}
-                  {isSelected && <Icon symbol="tick1" className="dropdown-item-tick" />}
+                  {isSelected && <Icon symbol="tick" className="dropdown-item-tick" />}
                 </DropdownItem>
               );
             })}

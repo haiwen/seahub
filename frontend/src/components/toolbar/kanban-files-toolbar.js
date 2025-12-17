@@ -184,7 +184,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
             aria-label={gettext('Move')}
             op={toggleMoveDialog}
           >
-            <Icon symbol="move1" />
+            <Icon symbol="move" />
           </OpIcon>
           <span
             className="cur-view-path-btn"
@@ -192,7 +192,7 @@ const KanbanFilesToolbar = ({ repoID, updateCurrentDirent }) => {
             title={gettext('Copy')}
             aria-label={gettext('Copy')}
           >
-            <Icon symbol="copy1" />
+            <Icon symbol="copy" />
           </span>
         </>
       )}

@@ -184,7 +184,7 @@ const CardFilesToolbar = ({ repoID, updateCurrentDirent }) => {
             op={toggleMoveDialog}
             aria-label={gettext('Move')}
           >
-            <Icon symbol="move1" />
+            <Icon symbol="move" />
           </OpIcon>
           <span
             className="cur-view-path-btn"
@@ -192,7 +192,7 @@ const CardFilesToolbar = ({ repoID, updateCurrentDirent }) => {
             title={gettext('Copy')}
             aria-label={gettext('Copy')}
           >
-            <Icon symbol="copy1" />
+            <Icon symbol="copy" />
           </span>
         </>
       )}

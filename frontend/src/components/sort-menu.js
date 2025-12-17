@@ -69,7 +69,7 @@ class SortMenu extends React.Component {
           {sortOptions.map((item, index) => {
             return (
               <DropdownItem key={index} onClick={this.props.onSelectSortOption.bind(this, item)} className="pl-5 position-relative">
-                {item.isSelected && <span className="dropdown-item-tick"><Icon symbol="tick1" /></span>}
+                {item.isSelected && <span className="dropdown-item-tick"><Icon symbol="tick" /></span>}
                 {item.text}
               </DropdownItem>
             );

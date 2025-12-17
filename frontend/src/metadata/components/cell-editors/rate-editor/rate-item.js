@@ -33,11 +33,11 @@ const RateItem = ({
   if (!isShowRateItem && index > value) return null;
 
   const { color, type } = field.data || DEFAULT_RATE_DATA;
-  let style = { fill: value >= index ? color : '#eee' };
+  let style = { color: value >= index ? color : '#eee' };
 
   if (enterIndex >= index) {
     style = {
-      fill: color,
+      color: color,
       opacity: value >= index ? 1 : 0.4
     };
   }

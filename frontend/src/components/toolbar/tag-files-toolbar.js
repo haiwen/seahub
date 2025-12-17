@@ -121,13 +121,13 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         <>
           <OpIcon
             className="cur-view-path-btn"
-            symbol="move1"
+            symbol="move"
             title={gettext('Move')}
             op={moveTagFile}
           />
           <OpIcon
             className="cur-view-path-btn"
-            symbol="copy1"
+            symbol="copy"
             title={gettext('Copy')}
             op={copyTagFile}
           />

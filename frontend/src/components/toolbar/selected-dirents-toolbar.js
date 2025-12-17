@@ -366,7 +366,7 @@ class SelectedDirentsToolbar extends React.Component {
         {canModify &&
           <OpIcon
             className="cur-view-path-btn"
-            symbol="move1"
+            symbol="move"
             title={gettext('Move')}
             op={this.onMove}
           />
@@ -374,7 +374,7 @@ class SelectedDirentsToolbar extends React.Component {
         {canCopy &&
           <OpIcon
             className="cur-view-path-btn"
-            symbol="copy1"
+            symbol="copy"
             title={gettext('Copy')}
             op={this.onCopy}
           />
