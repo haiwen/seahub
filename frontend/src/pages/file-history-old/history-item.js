@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { Utils } from '../../utils/utils';
@@ -12,9 +12,7 @@ const propTypes = {
   item: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   canDownload: PropTypes.bool.isRequired,
-  canCompare: PropTypes.bool.isRequired,
   onItemRestore: PropTypes.func.isRequired,
-  snapshotURL: PropTypes.string.isRequired,
 };
 
 class HistoryItem extends React.Component {
@@ -45,43 +43,41 @@ class HistoryItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let downloadUrl = URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id });
-    let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.creator_email)}/`;
-    let viewUrl = `${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
-    let diffUrl = `${siteRoot}repo/text_diff/${historyRepoID}/?commit=${item.commit_id}&p=${Utils.encodePath(filePath)}`;
-    const snapshotURL = `${siteRoot}repo/${historyRepoID}/snapshot/?commit_id=${item.commit_id}`;
     return (
-      <Fragment>
-        <tr
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-          className={this.state.active ? 'tr-highlight' : ''}
-        >
-          <td>
-            <span>{dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</span>
-            {this.props.index === 0 && <span className="ml-1">{gettext('(current version)')}</span>}
-          </td>
-          <td>
-            <img className="avatar" src={item.creator_avatar_url} alt=''></img>{' '}
-            <a href={userProfileURL} target='_blank' className="username" rel="noreferrer">{item.creator_name}</a>
-          </td>
-          <td>{Utils.bytesToSize(item.size)}</td>
-          <td>
-            {this.state.active &&
-              <MoreMenu
-                index={this.props.index}
-                downloadUrl={downloadUrl}
-                viewUrl={viewUrl}
-                diffUrl={diffUrl}
-                snapshotURL={snapshotURL}
-                onItemRestore={this.onItemRestore}
-                canDownload={this.props.canDownload}
-                canCompare={this.props.canCompare}
-              />
-            }
-          </td>
-        </tr>
-      </Fragment>
+      <tr
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        className={this.state.active ? 'tr-highlight' : ''}
+      >
+        <td>
+          <span>{dayjs(item.ctime).format('YYYY-MM-DD HH:mm:ss')}</span>
+          {this.props.index === 0 && <span className="ml-1">{gettext('(current version)')}</span>}
+        </td>
+        <td>
+          <img className="avatar" src={item.creator_avatar_url} alt=''></img>{' '}
+          <a
+            href={`${siteRoot}profile/${encodeURIComponent(item.creator_email)}/`}
+            target='_blank'
+            className="username"
+            rel="noreferrer"
+          >
+            {item.creator_name}
+          </a>
+        </td>
+        <td>{Utils.bytesToSize(item.size)}</td>
+        <td>
+          {this.state.active &&
+            <MoreMenu
+              index={this.props.index}
+              downloadUrl={URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id })}
+              viewUrl={`${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${Utils.encodePath(filePath)}`}
+              snapshotURL={`${siteRoot}repo/${historyRepoID}/snapshot/?commit_id=${item.commit_id}`}
+              onItemRestore={this.onItemRestore}
+              canDownload={this.props.canDownload}
+            />
+          }
+        </td>
+      </tr>
     );
   }
 }
@@ -93,10 +89,8 @@ const MoreMenuPropTypes = {
   index: PropTypes.number.isRequired,
   downloadUrl: PropTypes.string.isRequired,
   viewUrl: PropTypes.string.isRequired,
-  diffUrl: PropTypes.string.isRequired,
   onItemRestore: PropTypes.func.isRequired,
   canDownload: PropTypes.bool.isRequired,
-  canCompare: PropTypes.bool.isRequired,
   snapshotURL: PropTypes.string.isRequired,
 };
 
@@ -130,7 +124,6 @@ class MoreMenu extends React.PureComponent {
           {index !== 0 && <a href="#" onClick={onItemRestore}><DropdownItem>{gettext('Restore')}</DropdownItem></a>}
           {canDownload && <a href={downloadUrl}><DropdownItem>{gettext('Download')}</DropdownItem></a>}
           <a href={viewUrl}><DropdownItem>{gettext('View')}</DropdownItem></a>
-          {/* canCompare && <a href={diffUrl}><DropdownItem>{gettext('Diff')}</DropdownItem></a>*/}
           {index != 0 && <DropdownItem tag="a" href={snapshotURL} target="_blank">{gettext('View Related Snapshot')}</DropdownItem>}
         </DropdownMenu>
       </Dropdown>
