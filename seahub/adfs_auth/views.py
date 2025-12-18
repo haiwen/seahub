@@ -276,9 +276,9 @@ def _handle_acs_in_org(request, org_id):
     
     saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
     if not saml_user and SSO_LDAP_USE_SAME_UID:
-        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
         if saml_user:
-            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, uid)
     
     if saml_user:
         username = saml_user.username
@@ -475,9 +475,9 @@ def _handle_acs(request):
     
     saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
     if not saml_user and SSO_LDAP_USE_SAME_UID:
-        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
         if saml_user:
-            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, uid)
     
     if saml_user:
         username = saml_user.username
