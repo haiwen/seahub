@@ -291,7 +291,7 @@ class ShareToInvitePeople extends React.Component {
   render() {
     let { sharedItems, isSubmitting } = this.state;
     return (
-      <Fragment>
+      <div className='h-100 d-flex flex-column'>
         <table className="w-xs-200">
           <thead>
             <tr>
@@ -334,13 +334,13 @@ class ShareToInvitePeople extends React.Component {
             }
           </tbody>
         </table>
-        <div className="share-list-container">
+        <div className="share-list-container flex-fill">
           {this.state.isLoading ? (
             <Loading />
           ) : (
             <>
               {sharedItems.length === 0 ? (
-                <EmptyTip text={gettext('No results')} />
+                <EmptyTip text={gettext('No items')} className="h-100 m-0" />
               ) : (
                 <table className="w-xs-200">
                   <thead>
@@ -363,7 +363,7 @@ class ShareToInvitePeople extends React.Component {
             </>
           )}
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

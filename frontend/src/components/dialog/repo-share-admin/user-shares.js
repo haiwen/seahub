@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { Link } from '@gatsbyjs/reach-router';
@@ -165,35 +165,43 @@ class RepoShareAdminUserShares extends Component {
     const { repo } = this.props;
     const isRepoOwner = repo.owner_email === username;
     return (
-      <Fragment>
-        {loading && <Loading />}
-        {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
-        {!loading && !errorMsg && !items.length && <EmptyTip text={gettext('No user shares')}/>}
-        {!loading && !errorMsg && items.length > 0 &&
-        <table className="table-hover">
-          <thead>
-            <tr>
-              <th width="30%">{gettext('Name')}</th>
-              <th width="30%">{gettext('User')}</th>
-              <th width="30%">{gettext('Permission')}</th>
-              <th width="10%"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item, index) => {
-              return (
-                <Item
-                  key={index}
-                  item={item}
-                  deleteItem={this.deleteItem}
-                  isRepoOwner={isRepoOwner}
-                />
-              );
-            })}
-          </tbody>
-        </table>
-        }
-      </Fragment>
+      <div className="h-100 d-flex flex-column">
+        <div className="d-flex justify-content-between align-items-center pb-2 mt-1 pr-1 border-bottom">
+          <h6 className="font-weight-normal m-0">{gettext('User Shares')}</h6>
+        </div>
+        <div className='flex-fill'>
+          {loading
+            ? <Loading />
+            : errorMsg
+              ? <p className="error text-center mt-8">{errorMsg}</p>
+              : items.length == 0
+                ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
+                :
+                <table className="table-hover">
+                  <thead>
+                    <tr>
+                      <th width="30%">{gettext('Name')}</th>
+                      <th width="30%">{gettext('User')}</th>
+                      <th width="30%">{gettext('Permission')}</th>
+                      <th width="10%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items.map((item, index) => {
+                      return (
+                        <Item
+                          key={index}
+                          item={item}
+                          deleteItem={this.deleteItem}
+                          isRepoOwner={isRepoOwner}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+          }
+        </div>
+      </div>
     );
   }
 }

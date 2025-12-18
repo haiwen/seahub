@@ -83,7 +83,7 @@ class ShareList extends React.Component {
 
   render() {
     return (
-      <div className="share-list-container">
+      <>
         <table className="table-thead-hidden">
           <thead>
             <tr>
@@ -105,7 +105,7 @@ class ShareList extends React.Component {
             })}
           </tbody>
         </table>
-      </div>
+      </>
     );
   }
 }
@@ -226,7 +226,7 @@ class ShareToOtherServer extends React.Component {
       btnDisabled, isSubmitting
     } = this.state;
     return (
-      <Fragment>
+      <div className="h-100 d-flex flex-column">
         <table>
           <thead>
             <tr>
@@ -273,23 +273,17 @@ class ShareToOtherServer extends React.Component {
             </tr>
           </tbody>
         </table>
-        {errorMsg ? (
-          <p className="error text-center mt-4">{errorMsg}</p>
-        ) : this.state.isLoading ? (
-          <Loading />
-        ) : (
-          <>
-            {ocmShares.length === 0 ? (
-              <EmptyTip text={gettext('No results')} />
-            ) : (
-              <ShareList
-                items={ocmShares}
-                deleteShareItem={this.deleteShareItem}
-              />
-            )}
-          </>
-        )}
-      </Fragment>
+        <div className='share-list-container flex-fill'>
+          {errorMsg
+            ? <p className="error text-center mt-4">{errorMsg}</p>
+            : this.state.isLoading
+              ? <Loading />
+              : ocmShares.length === 0
+                ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
+                : <ShareList items={ocmShares} deleteShareItem={this.deleteShareItem} />
+          }
+        </div>
+      </div>
     );
   }
 }

@@ -55,7 +55,7 @@ class LinkList extends React.Component {
     const isAllLinksSelected = shareLinks.length == selectedLinks.length;
 
     return (
-      <Fragment>
+      <div className="h-100 d-flex flex-column">
         <div className="d-flex justify-content-between align-items-center pb-2 mt-1 pr-1 border-bottom">
           <h6 className="font-weight-normal m-0">{gettext('Share Link')}</h6>
           <div className="d-flex">
@@ -73,37 +73,24 @@ class LinkList extends React.Component {
             )}
           </div>
         </div>
-        {shareLinks.length == 0 ? (
-          <EmptyTip text={gettext('No share links')} className='m-0' />
-        ) : (
-          <div className='share-list-container share-link-list'>
-            <table className="table-place-header">
-              <thead>
-                <tr>
-                  <th width="3%" className="text-center">
-                    <input
-                      type="checkbox"
-                      checked={isAllLinksSelected}
-                      className="form-check-input"
-                      onChange={this.toggleSelectAllLinks}
-                      onKeyDown={Utils.onKeyDown}
-                      aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
-                    />
-                  </th>
-                  <th width="18%">{gettext('Link')}</th>
-                  <th width="25%">{gettext('Permission')}</th>
-                  <th width="20%">{gettext('Access scope')}</th>
-                  <th width="20%">{gettext('Expiration')}</th>
-                  <th width="11%">{gettext('Password')}</th>
-                  <th width="14%"></th>
-                </tr>
-              </thead>
-            </table>
-            <div className='table-real-container' onScroll={handleScroll}>
-              <table className="table-real-content table-thead-hidden">
+        <div className='share-list-container share-link-list flex-fill'>
+          {shareLinks.length == 0 ? (
+            <EmptyTip text={gettext('No items')} className="h-100 m-0" />
+          ) : (
+            <>
+              <table className="table-place-header">
                 <thead>
                   <tr>
-                    <th width="3%" className="text-center"></th>
+                    <th width="3%" className="text-center">
+                      <input
+                        type="checkbox"
+                        checked={isAllLinksSelected}
+                        className="form-check-input"
+                        onChange={this.toggleSelectAllLinks}
+                        onKeyDown={Utils.onKeyDown}
+                        aria-label={isAllLinksSelected ? gettext('Unselect items') : gettext('Select items')}
+                      />
+                    </th>
                     <th width="18%">{gettext('Link')}</th>
                     <th width="25%">{gettext('Permission')}</th>
                     <th width="20%">{gettext('Access scope')}</th>
@@ -112,25 +99,40 @@ class LinkList extends React.Component {
                     <th width="14%"></th>
                   </tr>
                 </thead>
-                <tbody>
-                  {shareLinks.map((item, index) => {
-                    return (
-                      <LinkItem
-                        key={index}
-                        item={item}
-                        permissionOptions={permissionOptions}
-                        showLinkDetails={this.props.showLinkDetails}
-                        toggleSelectLink={this.props.toggleSelectLink}
-                        deleteLink={this.props.deleteLink}
-                      />
-                    );
-                  })}
-                </tbody>
               </table>
-              {isLoadingMore && <Loading />}
-            </div>
-          </div>
-        )}
+              <div className='table-real-container' onScroll={handleScroll}>
+                <table className="table-real-content table-thead-hidden">
+                  <thead>
+                    <tr>
+                      <th width="3%" className="text-center"></th>
+                      <th width="18%">{gettext('Link')}</th>
+                      <th width="25%">{gettext('Permission')}</th>
+                      <th width="20%">{gettext('Access scope')}</th>
+                      <th width="20%">{gettext('Expiration')}</th>
+                      <th width="11%">{gettext('Password')}</th>
+                      <th width="14%"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shareLinks.map((item, index) => {
+                      return (
+                        <LinkItem
+                          key={index}
+                          item={item}
+                          permissionOptions={permissionOptions}
+                          showLinkDetails={this.props.showLinkDetails}
+                          toggleSelectLink={this.props.toggleSelectLink}
+                          deleteLink={this.props.deleteLink}
+                        />
+                      );
+                    })}
+                  </tbody>
+                </table>
+                {isLoadingMore && <Loading />}
+              </div>
+            </>
+          )}
+        </div>
         {this.state.isDeleteShareLinksDialogOpen && (
           <CommonOperationConfirmationDialog
             title={gettext('Delete share links')}
@@ -140,7 +142,7 @@ class LinkList extends React.Component {
             toggleDialog={this.toggleDeleteShareLinksDialog}
           />
         )}
-      </Fragment>
+      </div>
     );
   }
 }
