@@ -28,7 +28,10 @@ const CardItem = ({
   onContextMenu,
 }) => {
   const [isUsingIcon, setIsUsingIcon] = useState(false);
+  const [showScrollbar, setShowScrollbar] = useState(false);
   const imgRef = useRef(null);
+  const containerRef = useRef(null);
+  const hoverTimerRef = useRef(null);
 
   const fileNameValue = getCellValueByColumn(record, fileNameColumn);
   const mtimeValue = getCellValueByColumn(record, mtimeColumn);
@@ -89,6 +92,32 @@ const CardItem = ({
     onOpenFile(record);
   }, [record, onOpenFile]);
 
+  const handleImageContainerMouseEnter = useCallback(() => {
+    if (!isDocumentFile) return;
+
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current);
+    }
+
+    hoverTimerRef.current = setTimeout(() => {
+      setShowScrollbar(true);
+    }, 500);
+  }, [isDocumentFile]);
+
+  const handleImageContainerMouseLeave = useCallback(() => {
+    if (hoverTimerRef.current) {
+      clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = null;
+    }
+    setShowScrollbar(false);
+  }, []);
+
+  const handleImageContainerScroll = useCallback((event) => {
+    event.stopPropagation();
+  }, []);
+
+  const scrollable = isDocumentFile && !isUsingIcon;
+
   return (
     <article
       data-id={record._id}
@@ -98,17 +127,38 @@ const CardItem = ({
       tabIndex="0"
       onKeyDown={Utils.onKeyDown}
     >
-      <div className="sf-metadata-card-item-image-container">
-        <img
-          loading="lazy"
-          className={classnames('sf-metadata-card-item-image', {
-            'sf-metadata-card-item-image-document': isDocumentFile
-          })}
-          ref={imgRef}
-          src={imageURLs.URL}
-          onError={onLoadError}
-          alt=""
-        />
+      <div
+        ref={containerRef}
+        className="sf-metadata-card-item-image-container"
+        onMouseEnter={handleImageContainerMouseEnter}
+        onMouseLeave={handleImageContainerMouseLeave}
+      >
+        {scrollable ? (
+          <div
+            className={classnames('sf-metadata-card-item-image-scroll-wrapper', {
+              'show-scrollbar': showScrollbar
+            })}
+            onScroll={handleImageContainerScroll}
+          >
+            <img
+              loading="lazy"
+              className="sf-metadata-card-item-doc-thumbnail"
+              ref={imgRef}
+              src={imageURLs.URL}
+              onError={onLoadError}
+              alt=""
+            />
+          </div>
+        ) : (
+          <img
+            loading="lazy"
+            className="sf-metadata-card-item-image"
+            ref={imgRef}
+            src={imageURLs.URL}
+            onError={onLoadError}
+            alt=""
+          />
+        )}
       </div>
       <div className="sf-metadata-card-item-text-container">
         <Formatter

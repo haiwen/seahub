@@ -26,6 +26,7 @@
   width: 100%;
   overflow: hidden;
   min-height: 150px;
+  padding: 16px 16px 0;
   border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
@@ -37,22 +38,42 @@
 }
 
 .sf-metadata-card-item-image-container .sf-metadata-card-item-image {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
-  padding: 16px 16px 0;
+  position: absolute;
+  top: 0;
+  left: 0;
   object-fit: contain;
   object-position: center;
 }
 
-.sf-metadata-card-item-image-container .sf-metadata-card-item-image-document {
-  object-fit: cover;
-  object-position: top center;
+.sf-metadata-card-item-image-scroll-wrapper {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  right: 4px;
+  bottom: 0;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-color: transparent transparent;
+  scrollbar-width: thin;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper.show-scrollbar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper .sf-metadata-card-item-doc-thumbnail {
+  width: 100%;
+  height: auto;
+  padding-bottom: 16px;
+  position: relative;
+  object-fit: contain;
+  object-position: center;
 }
 
 .sf-metadata-card-item-text-container {
-  padding: 16px;
+  padding: 12px 16px 16px;
   background-color: var(--bs-body-bg);
 }
 
@@ -117,7 +138,7 @@
 }
 
 .sf-metadata-card-item .file-name-formatter {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .sf-metadata-card-item .file-name-formatter .sf-metadata-file-icon {
