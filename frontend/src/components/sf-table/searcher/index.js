@@ -107,7 +107,7 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
           <OpIcon
             title={gettext('Close')}
             className="btn-close-searcher-wrapper input-icon-addon"
-            symbol="x-01"
+            symbol="close"
             op={handleCloseSearcher}
           />
         </div>

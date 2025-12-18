@@ -48,7 +48,7 @@ class Item extends Component {
             tabIndex="0"
             name={member.email}
             onClick={this.removeSelectedMember.bind(this, member.email)}>
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </span>
         </td>
       </tr>

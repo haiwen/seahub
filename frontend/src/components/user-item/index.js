@@ -42,7 +42,7 @@ class UserItem extends React.Component {
         </div>
         {enableDeleteUser && (
           <span className="user-remove ml-2" onClick={this.onDeleteUser} title={gettext('Remove')}>
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </span>
         )}
       </div>

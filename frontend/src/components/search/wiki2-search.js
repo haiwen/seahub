@@ -183,7 +183,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 autoFocus={true}
               />
               <IconBtn
-                symbol="x-01"
+                symbol="close"
                 className="search-icon-right input-icon-addon mr-2"
                 onClick={onClearSearch}
                 aria-label={gettext('Close')}

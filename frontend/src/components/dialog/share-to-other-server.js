@@ -64,7 +64,7 @@ class ShareItem extends React.Component {
         <td>{Utils.sharePerms(item.permission)}</td>
         <td>
           <OpIcon
-            symbol="x-01"
+            symbol="close"
             className={`op-icon ${isOperationShow && !isOpFrozen ? '' : 'd-none'}`}
             op={this.deleteShareItem}
             title={gettext('Delete')}

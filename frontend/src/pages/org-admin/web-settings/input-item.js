@@ -74,7 +74,7 @@ class WebSettingInput extends Component {
                 <Icon symbol="check" />
               </Button>
               <Button className="ml-1 web-setting-icon-btn web-setting-icon-btn-cancel" title={gettext('Cancel')}>
-                <Icon symbol="x-01" />
+                <Icon symbol="close" />
               </Button>
             </Fragment> : null
         }

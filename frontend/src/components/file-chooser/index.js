@@ -452,7 +452,7 @@ class FileChooser extends React.Component {
             <Input className="search-input" placeholder={gettext('Search')} type='text' value={searchInfo} onChange={this.onSearchInfoChanged}></Input>
             {searchInfo.length !== 0 && (
               <span className="search-control attr-action-icon" onClick={this.onCloseSearching}>
-                <Icon symbol="x-01" />
+                <Icon symbol="close" />
               </span>
             )}
           </div>

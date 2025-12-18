@@ -130,7 +130,7 @@ class SearchTrash extends Component {
             />
             {value && (
               <IconBtn
-                symbol="x-01"
+                symbol="close"
                 className="search-icon-right"
                 onClick={this.onClearSearch}
                 aria-label={gettext('Clear search')}

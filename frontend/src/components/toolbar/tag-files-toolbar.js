@@ -113,7 +113,7 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         op={unSelect}
       >
         <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
-          <Icon symbol="x-01" />
+          <Icon symbol="close" />
         </span>
         <span>{selectedFilesLen}{' '}{gettext('selected')}</span>
       </OpElement>

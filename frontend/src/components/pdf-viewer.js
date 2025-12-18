@@ -21,7 +21,7 @@ class PDFViewer extends React.Component {
                 <h3 id="thumbnailHeader" className="m-0 title font-weight-normal">{gettext('Thumbnail')}</h3>
                 <h3 id="outlineHeader" className="m-0 title font-weight-normal hidden">{gettext('Outline')}</h3>
                 <button id="close-thumbnail-panel" className="close-thumbnail-panel border-0 bg-transparent" aria-controls="sidebarContainer">
-                  <Icon symbol="x-01" />
+                  <Icon symbol="close" />
                 </button>
               </div>
               <div id="toolbarSidebarLeft" className="sf-hide">
@@ -86,7 +86,7 @@ class PDFViewer extends React.Component {
                     </button>
                   </div>
                   <button id="findClearQuery" className="hidden border-0 ml-1">
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </button>
                 </div>
               </div>
@@ -343,7 +343,7 @@ class PDFViewer extends React.Component {
                 <div className="modal-header">
                   <h5 className="modal-title">{gettext('Decrypt document')}</h5>
                   <button type="button" id="passwordCancel2" className="align-self-center bg-transparent border-0 modal-close" aria-label={gettext('Close')}>
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </button>
                 </div>
                 <div className="modal-body py-6 text-start">
@@ -425,7 +425,7 @@ class PDFViewer extends React.Component {
                 <div className="modal-header">
                   <h5 className="modal-title">{gettext('Print document')}</h5>
                   <button type="button" id="printCancel2" className="align-self-center bg-transparent border-0 modal-close" aria-label={gettext('Close')}>
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </button>
                 </div>
                 <div className="modal-body py-6">

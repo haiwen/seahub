@@ -173,7 +173,7 @@ const GroupbyItem = ({ showDragBtn, index, readOnly, groupby, columns, onDelete,
           title={gettext('Delete')}
           op={deleteGroupby}
         >
-          <Icon className="sf-metadata-icon" symbol="fork-number"/>
+          <Icon className="sf-metadata-icon" symbol="close"/>
         </OpElement>
       )}
       <div className="condition">

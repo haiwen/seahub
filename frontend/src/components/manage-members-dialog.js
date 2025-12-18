@@ -215,7 +215,7 @@ class ManageMembersDialog extends React.Component {
               {keyword && (
                 <InputGroupText>
                   <OpIcon
-                    symbol="x-01"
+                    symbol="close"
                     title={gettext('Clear')}
                     op={this.clearSearch}
                   />

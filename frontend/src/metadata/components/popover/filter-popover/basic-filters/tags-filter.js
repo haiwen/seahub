@@ -117,7 +117,7 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
             onKeyDown={Utils.onKeyDown}
             aria-label={gettext('Delete')}
           >
-            <Icon className="sf-metadata-icon" symbol="fork-number" />
+            <Icon className="sf-metadata-icon" symbol="close" />
           </div>
         </div>
       );

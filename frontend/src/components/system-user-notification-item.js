@@ -27,7 +27,7 @@ class SystemUserNotificationItem extends React.Component {
       <div id="info-bar" className="d-flex justify-content-between">
         <p id="info-bar-info" className="m-0" dangerouslySetInnerHTML={{ __html: this.props.msg }}></p>
         <span title={gettext('Close')} aria-label={gettext('Close')} onClick={this.close} role="button">
-          <Icon symbol="x-01" />
+          <Icon symbol="close" />
         </span>
       </div>
     );

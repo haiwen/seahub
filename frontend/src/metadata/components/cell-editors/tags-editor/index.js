@@ -413,7 +413,7 @@ const TagsEditor = forwardRef(({
           components={{
             ClearIndicator: ({ clearValue }) => (
               <span className="d-flex search-control attr-action-icon" aria-label={gettext('Clear')} onClick={clearValue}>
-                <Icon symbol="x-01" />
+                <Icon symbol="close" />
               </span>
             )
           }}

@@ -203,7 +203,7 @@ class Item extends Component {
             <td><Link to={shareRepoUrl}>{item.repo_name}</Link></td>
             <td>
               <OpIcon
-                symbol="x-01"
+                symbol="close"
                 className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                 title={gettext('Leave Share')}
                 op={this.leaveShare}
@@ -237,7 +237,7 @@ class Item extends Component {
             </div>
             <div className="flex-shrink-0">
               <OpIcon
-                symbol="x-01"
+                symbol="close"
                 className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
                 title={gettext('Leave Share')}
                 op={this.leaveShare}

@@ -204,7 +204,7 @@ class UserNotificationsDialog extends React.Component {
         </Dropdown>
         <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} onClick={this.toggle}>
           <span className="seahub-modal-btn-inner">
-            <Icon symbol="x-01" className="w-4 h-4" />
+            <Icon symbol="close" className="w-4 h-4" />
           </span>
         </button>
       </div>

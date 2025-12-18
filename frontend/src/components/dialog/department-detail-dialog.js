@@ -277,7 +277,7 @@ class DepartmentDetailDialog extends React.Component {
               />
               {keyword &&
                 <span className="input-icon-addon pe-auto" onClick={this.clearKeyword}>
-                  <Icon symbol="x-01" className="clear-keyword-icon" />
+                  <Icon symbol="close" className="clear-keyword-icon" />
                 </span>
               }
             </div>

@@ -81,7 +81,7 @@ class GroupItem extends React.Component {
         </td>
         <td>
           <OpIcon
-            symbol="x-01"
+            symbol="close"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             op={this.deleteGroupPermissionItem}
             title={gettext('Delete')}

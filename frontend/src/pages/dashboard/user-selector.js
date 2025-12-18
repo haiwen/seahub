@@ -98,7 +98,7 @@ class UserSelector extends Component {
                     <img src={item.avatar_url} className="avatar w-5 h-5" alt={item.name} />
                     <span className="activity-user-name ml-2">{item.name}</span>
                     <OpIcon
-                      symbol="x-01"
+                      symbol="close"
                       className="unselect-activity-user ml-2"
                       title={gettext('Unselect')}
                       op={(e) => {this.toggleSelectItem(e, item);}}

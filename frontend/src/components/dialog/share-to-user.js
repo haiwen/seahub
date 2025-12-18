@@ -108,7 +108,7 @@ class UserItem extends React.Component {
           </td>
           <td>
             <OpIcon
-              symbol="x-01"
+              symbol="close"
               className='op-icon'
               op={this.deleteShareItem}
               title={gettext('Delete')}
@@ -170,7 +170,7 @@ class UserItem extends React.Component {
         </td>
         <td>
           <OpIcon
-            symbol="x-01"
+            symbol="close"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             op={this.deleteShareItem}
             title={gettext('Delete')}

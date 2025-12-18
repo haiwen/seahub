@@ -455,7 +455,7 @@ class SharedRepoListItem extends React.Component {
     const unshareOperation = (
       <OpIcon
         className="op-icon"
-        symbol="x-01"
+        symbol="close"
         title={gettext('Unshare')}
         op={this.onItemUnshare}
       />

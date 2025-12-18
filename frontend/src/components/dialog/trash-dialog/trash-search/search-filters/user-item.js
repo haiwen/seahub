@@ -13,7 +13,7 @@ const UserItem = ({ user, isCancellable, onCancel }) => {
         <IconBtn
           className="user-remove"
           onClick={(e) => onCancel(e, user.name)}
-          symbol="x-01"
+          symbol="close"
           tabIndex={0}
           aria-label={gettext('Delete')}
           onKeyDown={Utils.onKeyDown}

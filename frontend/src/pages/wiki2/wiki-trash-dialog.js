@@ -101,7 +101,7 @@ class WikiTrashDialog extends React.Component {
                 }
                 <button type="button" className="close seahub-modal-btn" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleTrashDialog}>
                   <span className="seahub-modal-btn-inner">
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </span>
                 </button>
               </div>

@@ -64,7 +64,7 @@ class UserItem extends React.Component {
             onClick={this.deleteShareItem}
             title={gettext('Delete')}
           >
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </span>
         </td>
       </tr>

@@ -204,7 +204,7 @@ class SortPopover extends Component {
             onKeyDown={Utils.onKeyDown}
             aria-label={gettext('Delete')}
           >
-            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon className="sf-metadata-icon" symbol="fork-number"/>}
+            {!(viewType === VIEW_TYPE.GALLERY && index === 0) && <Icon className="sf-metadata-icon" symbol="close"/>}
           </div>
         }
         <div className="condition">

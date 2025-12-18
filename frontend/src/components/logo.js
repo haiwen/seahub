@@ -67,7 +67,7 @@ class Logo extends React.Component {
             title={gettext('Close')}
             aria-label={gettext('Close')}
           >
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </a>
         }
       </div>

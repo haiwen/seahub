@@ -587,7 +587,7 @@ class FilterItem extends React.Component {
             onClick={this.onDeleteFilter}
             onKeyDown={Utils.onKeyDown}
           >
-            <Icon className="sf-metadata-icon" symbol="fork-number" />
+            <Icon className="sf-metadata-icon" symbol="close" />
           </div>
         )}
         <div className="condition">

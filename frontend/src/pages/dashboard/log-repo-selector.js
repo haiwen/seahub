@@ -114,7 +114,7 @@ class LogRepoSelector extends Component {
                   <i className="fas fa-folder"></i>
                   <span className="activity-user-name ml-2">{item.name}</span>
                   <span className="unselect-activity-user ml-2" onClick={(e) => {this.toggleSelectItem(e, item);}}>
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </span>
                 </li>
               ))}

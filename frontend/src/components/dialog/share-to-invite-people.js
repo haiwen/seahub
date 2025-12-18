@@ -75,7 +75,7 @@ class UserItem extends React.Component {
         <td className="name">{item.inviter_name}</td>
         <td>
           <OpIcon
-            symbol="x-01"
+            symbol="close"
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
             op={this.deleteShareItem}
             title={gettext('Delete')}

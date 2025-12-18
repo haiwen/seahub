@@ -22,7 +22,7 @@ const People = ({ people, isCancellable, onDelete }) => {
         <img className="collaborator-avatar-icon" src={defaultURL || similarPhotoURL} alt={name} onError={onImgLoadError} />
       </span>
       <span className="collaborator-name">{name}</span>
-      {isCancellable && <IconBtn className="collaborator-remove" onClick={(event) => onDelete(event, people)} symbol="x-01" />}
+      {isCancellable && <IconBtn className="collaborator-remove" onClick={(event) => onDelete(event, people)} symbol="close" />}
     </div>
   );
 };

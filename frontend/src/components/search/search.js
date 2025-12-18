@@ -942,7 +942,7 @@ class Search extends Component {
                     aria-label={gettext('Clear search')}
                     title={gettext('Clear search')}
                   >
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </button>
                 }
                 {isMaskShow && (
@@ -999,7 +999,7 @@ class Search extends Component {
                   />
                   {this.state.isCloseShow &&
                     <IconBtn
-                      symbol="x-01"
+                      symbol="close"
                       className="search-icon-right input-icon-addon"
                       onClick={this.onClearSearch}
                       aria-label={gettext('Clear search')}

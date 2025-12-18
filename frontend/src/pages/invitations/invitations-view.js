@@ -108,7 +108,7 @@ class Item extends React.Component {
                   /> :
                   <OpIcon
                     className="op-icon"
-                    symbol="x-01"
+                    symbol="close"
                     title={gettext('Delete')}
                     op={this.deleteItem}
                   />

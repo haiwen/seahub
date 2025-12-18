@@ -335,7 +335,7 @@ class SelectedDirentsToolbar extends React.Component {
           op={this.props.unSelectDirent}
         >
           <span className="d-flex align-items-center justify-content-center mr-2">
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </span>
           <span>{selectedLen}{' '}{gettext('selected')}</span>
         </OpElement>

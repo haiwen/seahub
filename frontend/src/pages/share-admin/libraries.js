@@ -241,7 +241,7 @@ class Item extends Component {
           <td>
             <OpIcon
               className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-              symbol="x-01"
+              symbol="close"
               title={gettext('Unshare')}
               op={this.unshare}
             />
