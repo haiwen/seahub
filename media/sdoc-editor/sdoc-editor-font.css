@@ -1,14 +1,14 @@
 @font-face {
   font-family: "sdocfont";
   /* Project id 5078528 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1765520198941');
+  src: url('./sdoc-editor-font/iconfont.eot?t=1766050330056');
   /* IE9 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1765520198941#iefix') format('embedded-opentype'),
+  src: url('./sdoc-editor-font/iconfont.eot?t=1766050330056#iefix') format('embedded-opentype'),
     /* IE6-IE8 */
-    url('./sdoc-editor-font/iconfont.woff2?t=1765520198941') format('woff2'),
-    url('./sdoc-editor-font/iconfont.woff?t=1765520198941') format('woff'),
-    url('./sdoc-editor-font/iconfont.ttf?t=1765520198941') format('truetype'),
-    url('./sdoc-editor-font/iconfont.svg?t=1765520198941#sdocfont') format('svg');
+    url('./sdoc-editor-font/iconfont.woff2?t=1766050330056') format('woff2'),
+    url('./sdoc-editor-font/iconfont.woff?t=1766050330056') format('woff'),
+    url('./sdoc-editor-font/iconfont.ttf?t=1766050330056') format('truetype'),
+    url('./sdoc-editor-font/iconfont.svg?t=1766050330056#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -107,7 +107,7 @@
   content: "\e6e5";
 }
 
-.sdoc-Transform-to:before {
+.sdoc-transform-to:before {
   content: "\e6e6";
 }
 
