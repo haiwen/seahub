@@ -31,7 +31,7 @@ def main(argv):
     repo_id = args.repo_id
     orig_storage_id = args.orig_storage_id
     dest_storage_id = args.dest_storage_id
-    list_src = args.list_src_by_commit
+    list_src_by_commit = args.list_src_by_commit
 
     if repo_id is None:
         all_migrate = True
@@ -39,9 +39,9 @@ def main(argv):
         all_migrate = False
 
     if all_migrate:
-        migrate_repos(orig_storage_id, dest_storage_id, list_src)
+        migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit)
     else:
-        migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src)
+        migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit)
 
 def parse_seafile_db_config():
     env = os.environ
@@ -173,12 +173,12 @@ def get_repo_ids(storage_id, dest_storage_id):
 
     return ret_repo_ids
 
-def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src):
+def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit):
     api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
     dtypes = ['commits', 'fs', 'blocks']
     workers = []
     repo_objs = None
-    if list_src:
+    if list_src_by_commit:
         repo_objs = RepoObjects(repo_id)
         try:
             repo_objs.traverse()
@@ -223,9 +223,12 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src):
         return
 
     api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
+    if list_src_by_commit:
+        # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
+        api.set_repo_valid_since (repo_id, repo_objs.timestamp)
     logging.info('The process of migrating repo [%s] is over.\n', repo_id)
 
-def migrate_repos(orig_storage_id, dest_storage_id, list_src):
+def migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit):
     repo_ids = get_repo_ids(orig_storage_id, dest_storage_id)
 
     pending_repos = {}
@@ -234,7 +237,7 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src):
         dtypes = ['commits', 'fs', 'blocks']
         workers = []
         repo_objs = None
-        if list_src:
+        if list_src_by_commit:
             repo_objs = RepoObjects(repo_id)
             try:
                 repo_objs.traverse()
@@ -284,6 +287,9 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src):
             return
 
         api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
+        if list_src_by_commit:
+            # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
+            api.set_repo_valid_since (repo_id, repo_objs.timestamp)
         logging.info('The process of migrating repo [%s] is over.\n', repo_id)
 
     if len(pending_repos) != 0:
@@ -291,9 +297,11 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src):
         for r in pending_repos:
             logging.info('%s\n', r)
 
+# RepoObjects traverses commits, fs and block objects in the source storage starting from the repo’s HEAD commit.
 class RepoObjects(object):
     def __init__(self, repo_id):
         self.repo_id = repo_id
+        self.timestamp = 0
         self.commit_keys = set()
         self.fs_keys = set()
         self.block_keys = set()
@@ -334,6 +342,10 @@ class RepoObjects(object):
             for commit in commits:
                 if commit.id in self.commit_keys:
                     continue
+                if self.timestamp == 0:
+                    self.timestamp = commit.ctime
+                if commit.ctime < self.timestamp:
+                    self.timestamp = commit.ctime
                 self.commit_keys.add(commit.id)
                 if repo.is_virtual:
                     continue

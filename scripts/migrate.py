@@ -78,6 +78,7 @@ class ObjMigrateWorker(Thread):
         self.fd = None
         self.exception = None
         self.decrypt = decrypt
+        # set repo_objs when list src objects by commit.
         self.repo_objs = repo_objs
     
     def run(self):
