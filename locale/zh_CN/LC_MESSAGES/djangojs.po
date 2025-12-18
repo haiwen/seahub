@@ -2100,12 +2100,12 @@ msgstr "关闭(Esc)"
 #: frontend/src/components/dialog/image-dialog/index.js:102
 #: frontend/src/components/file-view/image-zoomer.js:177
 msgid "Zoom in"
-msgstr "缩小"
+msgstr "放大"
 
 #: frontend/src/components/dialog/image-dialog/index.js:103
 #: frontend/src/components/file-view/image-zoomer.js:119
 msgid "Zoom out"
-msgstr "放大"
+msgstr "缩小"
 
 #: frontend/src/components/dialog/image-dialog/index.js:108
 msgid "View original image"
