@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
 import { Utils } from './utils/utils';
 import { seafileAPI } from './utils/seafile-api';
-import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload, canCompare } from './utils/constants';
+import { gettext, PER_PAGE, filePath, fileName, historyRepoID, useNewAPI, canDownload } from './utils/constants';
 import editUtilities from './utils/editor-utilities';
 import Loading from './components/loading';
 import Logo from './components/logo';
@@ -263,7 +263,6 @@ class FileHistory extends React.Component {
                           item={item}
                           index={index}
                           canDownload={canDownload}
-                          canCompare={canCompare}
                           onItemRestore={this.onItemRestore}
                         />
                       );

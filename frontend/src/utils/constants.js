@@ -167,7 +167,6 @@ export const filePath = window.fileHistory ? window.fileHistory.pageOptions.file
 export const fileName = window.fileHistory ? window.fileHistory.pageOptions.fileName : '';
 export const useNewAPI = window.fileHistory ? window.fileHistory.pageOptions.use_new_api : '';
 export const canDownload = window.fileHistory ? window.fileHistory.pageOptions.can_download_file : '';
-export const canCompare = window.fileHistory ? window.fileHistory.pageOptions.can_compare : '';
 
 // org admin
 export const orgID = window.org ? window.org.pageOptions.orgID : '';
