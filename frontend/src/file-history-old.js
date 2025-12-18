@@ -146,7 +146,6 @@ class FileHistory extends React.Component {
         });
       } else {
         let commitID = this.state.nextCommit;
-        let filePath = this.state.filePath;
         let oldFilePath = this.state.oldFilePath;
         this.setState({ isReloadingData: true });
         if (oldFilePath) {
@@ -154,8 +153,9 @@ class FileHistory extends React.Component {
             this.updateOldRecords(res.data, oldFilePath);
           });
         } else {
-          seafileAPI.listOldFileHistoryRecords(historyRepoID, filePath, commitID).then((res) => {
-            this.updateOldRecords(res.data, filePath);
+          const newPath = this.state.filePath || filePath;
+          seafileAPI.listOldFileHistoryRecords(historyRepoID, newPath, commitID).then((res) => {
+            this.updateOldRecords(res.data, newPath);
           });
         }
       }
