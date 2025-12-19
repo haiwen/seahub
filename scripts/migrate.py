@@ -80,6 +80,7 @@ class ObjMigrateWorker(Thread):
         self.decrypt = decrypt
         # set repo_objs when list src objects by commit.
         self.repo_objs = repo_objs
+        # virt_repo_ids is used to migrate virtual repo's commit.
         self.virt_repo_ids = virt_repo_ids
     
     def run(self):

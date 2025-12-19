@@ -356,10 +356,7 @@ class RepoObjects(object):
         if repo is None:
             raise Exception("Failed to get repo %s" % self.repo_id)
 
-        # When the migrated repo is a virtual repo, only commit objects are migrated.
-        # When the migrated repo is a parent repo, the fs and blocks objects of its virtual repos are migrated as well.
-        # Because virtual repos and their origin repos share fs and block objects, we do not migrate fs and block objects when migrating a virtual repo.
-        # Instead, fs and block objects for both the origin repo and its virtual repos are migrated when the origin repo is migrated.
+        # The fs and block objects for both the origin repo and its virtual repos are migrated when the origin repo is migrated.
         # This avoids the situation where, after a virtual repo has been migrated but the origin repo has not, the virutal repo’s fs and block objects are still written to the origin repo’s storage.
         self.traverse_repo(repo)
         for virt_repo_id in self.virt_repo_ids:
