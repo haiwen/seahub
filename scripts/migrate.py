@@ -63,7 +63,7 @@ class Task(object):
         self.obj_id = obj_id
 
 class ObjMigrateWorker(Thread):
-    def __init__(self, orig_store, dest_store, dtype, repo_id = None, decrypt = False):
+    def __init__(self, orig_store, dest_store, dtype, repo_id = None, decrypt = False, repo_objs = None):
         Thread.__init__(self)
         self.lock = threading.Lock()
         self.dtype = dtype
@@ -78,6 +78,8 @@ class ObjMigrateWorker(Thread):
         self.fd = None
         self.exception = None
         self.decrypt = decrypt
+        # set repo_objs when list src objects by commit.
+        self.repo_objs = repo_objs
     
     def run(self):
         try:
@@ -186,7 +188,10 @@ class ObjMigrateWorker(Thread):
 
     def migrate(self):
         try:
-            obj_list = self.orig_store.list_objs(self.repo_id)
+            if self.repo_objs is None:
+                obj_list = self.orig_store.list_objs(self.repo_id)
+            else:
+                obj_list = self.repo_objs.list_objs(self.dtype)
         except Exception as e:
             logging.warning('[%s] Failed to list all objects: %s' % (self.dtype, e))
             raise
