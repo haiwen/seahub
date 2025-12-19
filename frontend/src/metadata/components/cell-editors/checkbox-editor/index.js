@@ -33,7 +33,7 @@ const CheckboxEditor = ({
   return (
     <div className="sf-metadata-checkbox-editor" onClick={onClickContainer}>
       <div className="sf-metadata-checkbox-editor-content" onClick={onChangeValue}>
-        {value && (<Icon symbol="check-mark" />)}
+        {value && (<Icon symbol="check" />)}
       </div>
     </div>
   );

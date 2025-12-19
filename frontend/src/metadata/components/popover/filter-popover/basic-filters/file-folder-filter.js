@@ -21,7 +21,7 @@ const FileOrFolderFilter = ({ readOnly, value = 'all', onChange: onChangeAPI }) 
           <div className="select-basic-filter-option">
             <div className="select-basic-filter-option-name" title={name} aria-label={name}>{name}</div>
             <div className="select-basic-filter-option-check-icon">
-              {value === o.value && (<Icon symbol="tick" />)}
+              {value === o.value && (<Icon symbol="check-thin" />)}
             </div>
           </div>
         )

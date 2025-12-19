@@ -9,7 +9,7 @@ const CheckboxFormatter = ({ value, className, children: emptyFormatter }) => {
   if (!value) return emptyFormatter;
   return (
     <div className={classnames('sf-metadata-ui cell-formatter-container checkbox-formatter', className)}>
-      <Icon symbol="check-mark"/>
+      <Icon symbol="check"/>
     </div>
   );
 };

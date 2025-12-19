@@ -146,7 +146,7 @@ class LogRepoSelector extends Component {
                         <i className="fas fa-folder"></i>
                         <span className="activity-user-name ml-2">{item.name}</span>
                       </div>
-                      {isSelected && <Icon symbol="tick" className="text-gray font-weight-bold" />}
+                      {isSelected && <Icon symbol="check-thin" className="text-gray font-weight-bold" />}
                     </li>
                   );
                 })

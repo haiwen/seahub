@@ -45,7 +45,7 @@ const CollaboratorFilter = ({ readOnly, filterIndex, filterTerm, collaborators, 
                 </div>
               </div>
               <div className='collaborator-check-icon'>
-                {isSelected && <Icon symbol="tick" />}
+                {isSelected && <Icon symbol="check-thin" />}
               </div>
             </div>
           </Fragment>

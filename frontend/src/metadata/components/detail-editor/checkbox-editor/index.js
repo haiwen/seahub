@@ -14,7 +14,7 @@ const CheckboxEditor = ({ value, onChange: onChangeAPI }) => {
   return (
     <div className="sf-metadata-property-detail-editor sf-metadata-checkbox-property-detail-editor">
       <div className="sf-metadata-checkbox-property-detail-editor-content" onClick={onChange}>
-        {value && (<Icon symbol="check-mark" />)}
+        {value && (<Icon symbol="check" />)}
       </div>
     </div>
   );

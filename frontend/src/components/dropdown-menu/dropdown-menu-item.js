@@ -35,7 +35,7 @@ const DropdownMenuItem = ({
       onMouseMove={isSubMenuItem ? undefined : onMouseMove}
     >
       {!isSubMenuItem && menuItem.tick && (
-        <span className="dropdown-item-tick"><Icon symbol="tick" /></span>
+        <span className="dropdown-item-tick"><Icon symbol="check-thin" /></span>
       )}
       {menuItem.icon_dom || null}
       {isSubMenuItem ? <span>{menuItem.value}</span> : menuItem.value}

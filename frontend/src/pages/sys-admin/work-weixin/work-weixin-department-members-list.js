@@ -43,7 +43,7 @@ class WorkWeixinDepartmentMembersList extends Component {
           <td>{member.name}</td>
           <td>{member.mobile}</td>
           <td>{member.contact_email}</td>
-          <td>{member.email && <Icon symbol="tick" />}</td>
+          <td>{member.email && <Icon symbol="check-thin" />}</td>
         </tr>
       );
     });

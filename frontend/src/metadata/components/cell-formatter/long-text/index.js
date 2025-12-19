@@ -53,7 +53,7 @@ const LongTextFormatter = ({ value: oldValue, className, previewClassName, child
     if (!checkList || checkList.total === 0) return null;
     return (
       <span className={classnames('sf-metadata-long-text-check-list', { 'completed': checkList.completed === checkList.total })}>
-        <Icon symbol="check-square-solid" />
+        <Icon symbol="checkbox-fill" />
         {`${checkList.completed}/${checkList.total}`}
       </span>
     );

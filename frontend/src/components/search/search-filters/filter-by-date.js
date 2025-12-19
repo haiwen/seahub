@@ -205,7 +205,7 @@ const FilterByDate = ({ date, onChange }) => {
                     return (
                       <DropdownItem key={option.key} data-toggle={option.key} onClick={onChangeType}>
                         {option.label}
-                        {isSelected && <Icon symbol="tick" className="dropdown-item-tick" />}
+                        {isSelected && <Icon symbol="check-thin" className="dropdown-item-tick" />}
                       </DropdownItem>
                     );
                   })}
@@ -232,7 +232,7 @@ const FilterByDate = ({ date, onChange }) => {
                   toggle={false}
                 >
                   {option.label}
-                  {isSelected && <Icon symbol="tick" className="dropdown-item-tick" />}
+                  {isSelected && <Icon symbol="check-thin" className="dropdown-item-tick" />}
                 </DropdownItem>
               );
             })}

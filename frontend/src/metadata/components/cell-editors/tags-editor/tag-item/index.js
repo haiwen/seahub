@@ -60,7 +60,7 @@ const TagItem = ({
           <div className="sf-metadata-tag-name">{tagName}</div>
         </div>
         <div className="sf-metadata-tags-editor-tag-check-icon mr-1">
-          {isSelected && <Icon symbol="tick" />}
+          {isSelected && <Icon symbol="check-thin" />}
         </div>
       </div>
     </div>

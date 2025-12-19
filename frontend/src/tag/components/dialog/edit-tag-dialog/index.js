@@ -87,7 +87,7 @@ const EditTagDialog = ({ tags, tag, title, onSubmit, onToggle }) => {
                     <IconBtn
                       className={classnames('sf-metadata-edit-tag-color-container', { 'selected': isSelected })}
                       style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
-                      symbol="check-mark"
+                      symbol="check"
                       iconStyle={{ fill: textColor || '#666' }}
                     />
                   </label>

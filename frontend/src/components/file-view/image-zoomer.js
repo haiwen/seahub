@@ -149,7 +149,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
               >
                 {selectedScale == item && (
                   <span className="dropdown-item-tick">
-                    <Icon symbol="tick" />
+                    <Icon symbol="check-thin" />
                   </span>
                 )}
                 <span>{`${item * 100}%`}</span>
@@ -166,7 +166,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
               >
                 {selectedScale == item.value && (
                   <span className="dropdown-item-tick">
-                    <Icon symbol="tick" />
+                    <Icon symbol="check-thin" />
                   </span>
                 )}
                 <span>{item.text}</span>
