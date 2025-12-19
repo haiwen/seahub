@@ -213,7 +213,7 @@ class DirentListView extends React.Component {
     this.setState({
       isImagePopupOpen: true,
       imageItems: imageItems,
-      imageIndex: items.findIndex((item) => item.id === curItem.id),
+      imageIndex: items.findIndex((item) => item.name === curItem.name),
     });
   };
 
