@@ -3,13 +3,17 @@
 
 {% block main_content %}
 <div class="tfa-panel text-center">
-  <h2 class="hd fw-normal mb-4">{% trans "Disable Two-Factor Authentication" %}</h2>
+  <h2 class="hd">{% trans "Disable Two-Factor Authentication" %}</h2>
   <div class="con">
     <p>{% blocktrans %}You are about to disable two-factor authentication. This compromises your account security, are you sure?{% endblocktrans %}</p>
     <form method="post" action="" class="mt-5">{% csrf_token %}
-      <button type="submit" class="btn btn-primary btn-block">{% trans "Disable" %}</button>
-      <a href="{% url 'edit_profile'%}" class="btn btn-secondary btn-block mt-3">{% trans "Cancel" %}</a>
+      <a href="{% url 'edit_profile'%}" class="btn btn-secondary">{% trans "Cancel" %}</a>
+      <button type="submit" class="btn btn-primary ml-1">{% trans "Disable" %}</button>
     </form>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/2fa-page.js"></script>
 {% endblock %}
