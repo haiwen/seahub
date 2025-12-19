@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block main_content %}
+<div class="tfa-panel text-center">
+  <h2 class="hd fw-normal mb-4">{% trans "Disable Two-Factor Authentication" %}</h2>
+  <div class="con">
+    <p>{% blocktrans %}You are about to disable two-factor authentication. This compromises your account security, are you sure?{% endblocktrans %}</p>
+    <form method="post" action="" class="mt-5">{% csrf_token %}
+      <button type="submit" class="btn btn-primary btn-block">{% trans "Disable" %}</button>
+      <a href="{% url 'edit_profile'%}" class="btn btn-secondary btn-block mt-3">{% trans "Cancel" %}</a>
+    </form>
+  </div>
+</div>
+{% endblock %}
