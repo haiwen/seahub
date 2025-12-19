@@ -4,7 +4,7 @@
   background: #f9f9f9;
   border: 1px solid var(--bs-border-secondary-color);
   border-radius: 6px;
-  box-shadow: 0 0 3px #0000001f;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -26,6 +26,7 @@
   width: 100%;
   overflow: hidden;
   min-height: 150px;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 /* Use pseudo-element to establish aspect ratio (3:2) so height is always reserved */
@@ -36,15 +37,73 @@
 }
 
 .sf-metadata-card-item-image-container .sf-metadata-card-item-image {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
   object-fit: contain;
+  object-position: center;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 16px 6px 0 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper.show-scrollbar {
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  background-clip: padding-box;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+[data-bs-theme="dark"] .sf-metadata-card-item-image-scroll-wrapper.show-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid transparent;
+  background-clip: padding-box;
+}
+
+.sf-metadata-card-item-image-scroll-wrapper .sf-metadata-card-item-doc-thumbnail {
+  width: 100%;
+  height: auto;
+  display: block;
+  padding-bottom: 16px;
+  object-fit: contain;
+  object-position: top center;
 }
 
 .sf-metadata-card-item-text-container {
-  padding: 10px;
+  padding: 12px 16px 16px;
   background-color: var(--bs-body-bg);
 }
 
@@ -56,11 +115,13 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .collaborator-item {
   color: var(--bs-body-color);
   background-color: transparent;
+  padding: 0;
 }
 
 .sf-metadata-card-item-text-container .sf-metadata-card-last-modified-info .ctime-formatter {
@@ -92,7 +153,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 1.2;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .sf-metadata-card-item .sf-metadata-date-formatter,
@@ -107,15 +168,7 @@
 }
 
 .sf-metadata-card-item .file-name-formatter {
-  margin-bottom: 10px;
-}
-
-.sf-metadata-card-item .file-name-formatter:not(.sf-metadata-image-file-formatter) {
-  margin-left: -4px;
-}
-
-.sf-metadata-card-item .sf-metadata-special-file-name-formatter:not(.sf-metadata-image-file-formatter) {
-  margin-left: -2px;
+  margin-bottom: 8px;
 }
 
 .sf-metadata-card-item .file-name-formatter .sf-metadata-file-icon {
