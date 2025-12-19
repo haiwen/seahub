@@ -217,15 +217,16 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit):
             api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
             sys.exit(1)
 
+    if list_src_by_commit:
+        # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
+        api.set_repo_valid_since (repo_id, repo_objs.timestamp)
+
     if api.update_repo_storage_id(repo_id, dest_storage_id) < 0:
         logging.warning('Failed to update repo [%s] storage_id.\n', repo_id)
         api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
         return
 
     api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
-    if list_src_by_commit:
-        # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
-        api.set_repo_valid_since (repo_id, repo_objs.timestamp)
     logging.info('The process of migrating repo [%s] is over.\n', repo_id)
 
 def migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit):
@@ -281,15 +282,16 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit):
             logging.info('The process of migrating repo [%s] is failed.\n', repo_id)
             continue
 
+        if list_src_by_commit:
+            # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
+            api.set_repo_valid_since (repo_id, repo_objs.timestamp)
+
         if api.update_repo_storage_id(repo_id, dest_storage_id) < 0:
             logging.warning('Failed to update repo [%s] storage_id.\n', repo_id)
             api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
             return
 
         api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
-        if list_src_by_commit:
-            # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
-            api.set_repo_valid_since (repo_id, repo_objs.timestamp)
         logging.info('The process of migrating repo [%s] is over.\n', repo_id)
 
     if len(pending_repos) != 0:
@@ -328,6 +330,9 @@ class RepoObjects(object):
 
         # When the migrated repo is a virtual repo, only commit objects are migrated.
         # When the migrated repo is a parent repo, the fs and blocks objects of its virtual repos are migrated as well.
+        # Because virtual repos and their origin repos share fs and block objects, we do not migrate fs and block objects when migrating a virtual repo.
+        # Instead, fs and block objects for both the origin repo and its virtual repos are migrated when the origin repo is migrated.
+        # This avoids the situation where, after a virtual repo has been migrated but the origin repo has not, the virutal repo’s fs and block objects are still written to the origin repo’s storage.
         self.traverse_repo(repo)
         for virt_repo_id in self.virt_repo_ids:
             self.traverse_virt_repo(virt_repo_id, repo.version)
