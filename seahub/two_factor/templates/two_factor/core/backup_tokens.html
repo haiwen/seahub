@@ -2,8 +2,8 @@
 {% load i18n %}
 
 {% block main_content %}
-<div class="tfa-panel">
-  <h2 class="hd fw-normal mb-4">{% trans "Backup Tokens" %}</h2>
+<div class="tfa-panel invisible">
+  <h2 class="hd text-center">{% trans "Backup Tokens" %}</h2>
   <div class="con">
     <p>{% blocktrans %}Backup tokens can be used when your primary and backup
     phone numbers aren't available. The backup tokens below can be used
@@ -12,20 +12,34 @@
     below will be valid.{% endblocktrans %}</p>
 
     {% if device.token_set.count %}
-    <ul class="two-factor-auth-backup-token-list">
-      {% for token in device.token_set.all %}
-      <li>{{ token.token }}</li>
-      {% endfor %}
-    </ul>
+    <div class="two-factor-auth-backup-token-list-container my-5 px-5 pb-5">
+      <h3 class="token-list-hd mb-5 d-flex align-items-center">Backup Tokens List</h3>
+      <ul class="two-factor-auth-backup-token-list">
+        {% for token in device.token_set.all %}
+        <li>{{ token.token }}</li>
+        {% endfor %}
+      </ul>
+    </div>
     <p>{% blocktrans %}Print these tokens and keep them somewhere safe.{% endblocktrans %}</p>
     {% else %}
-    <p>{% trans "You don't have any backup codes yet." %}</p>
+    <div class="two-factor-auth-backup-token-list-container my-5 p-5">
+      <p class="m-0">{% trans "You don't have any backup codes yet." %}</p>
+    </div>
     {% endif %}
 
-    <form method="post" class="mt-5">{% csrf_token %}{{ form }}
-      <button type="submit" class="btn btn-primary btn-block">{% trans "Generate Tokens" %}</button>
-      <a href="{{ SITE_ROOT }}profile/" class="btn btn-secondary btn-block mt-3">{% trans "Back" %}</a>
+    <form method="post" class="two-factor-auth-backup-token-form">
+      {% csrf_token %}{{ form }}
+      <a href="{{ SITE_ROOT }}profile/" class="btn btn-secondary">{% trans "Cancel" %}</a>
+      <button type="submit" class="btn btn-primary ml-1">{% trans "Generate Tokens" %}</button>
     </form>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/2fa-page.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/token-icon.js"></script>
+<script type="text/javascript">
+  $('.token-list-hd').prepend(tokenIcon);
+</script>
 {% endblock %}
