@@ -421,6 +421,11 @@ def _handle_acs(request):
     
     # saml2 connect
     relay_state = request.POST.get('RelayState', '/saml2/complete/')
+    if not url_has_allowed_host_and_scheme(url=relay_state,
+                                           allowed_hosts=request.get_host()):
+        logger.warning('Unsafe RelayState "%s" received; using default redirect URL instead.', relay_state)
+        relay_state = '/saml2/complete/'
+
     is_saml2_connect = parse_qs(urlparse(unquote(relay_state)).query).get('is_saml2_connect', [''])[0]
     if is_saml2_connect == 'true':
         if not request.user.is_authenticated:
@@ -545,6 +550,12 @@ def _handle_acs(request):
     if not relay_state:
         logger.warning('The RelayState parameter exists but is empty')
         relay_state = default_relay_state
+
+    if not url_has_allowed_host_and_scheme(url=relay_state,
+                                           allowed_hosts=request.get_host()):
+        logger.warning('Unsafe RelayState "%s" received; using default redirect URL instead.', relay_state)
+        relay_state = default_relay_state
+
     logger.debug('Redirecting to the RelayState: %s', relay_state)
     
     api_token = get_api_token(request)
