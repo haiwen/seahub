@@ -181,11 +181,6 @@ export const buildTableMenuOptions = (records, readOnly, metadataStatus, isMulti
       value: TextTranslation.COPY_SELECTED.value
     });
 
-    addOptionIfEnabled(TextTranslation.DELETE_SELECTED.key, {
-      key: TextTranslation.DELETE_SELECTED.key,
-      value: TextTranslation.DELETE_SELECTED.value
-    });
-
     const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus, isMultiple);
     if (aiOptions.length > 0) {
       menuOptions.push('Divider');
