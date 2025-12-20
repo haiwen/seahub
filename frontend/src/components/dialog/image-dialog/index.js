@@ -6,6 +6,7 @@ import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { SYSTEM_FOLDERS } from '../../../constants';
+import { Utils } from '../../../utils/utils';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
@@ -81,6 +82,8 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
     );
   };
 
+  const shortcutMain = Utils.isMac() ? '⌘' : 'Ctrl';
+
   return (
     <Lightbox
       imageItems={imageItems}
@@ -102,6 +105,13 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       zoomInLabel={gettext('Zoom in')}
       zoomOutLabel={gettext('Zoom out')}
       metadataLabel={gettext('Metadata')}
+      zoomInTip={gettext('Enlarge: {Ctrl} + Wheel').replace('{Ctrl}', shortcutMain)}
+      zoomOutTip={gettext('Shrink: {Ctrl} + Wheel').replace('{Ctrl}', shortcutMain)}
+      rotateTip={gettext('Rotate')}
+      deleteTip={gettext('Delete')}
+      downloadImageTip={gettext('Download')}
+      openMetadataTip={gettext('Open metadata')}
+      closeMetadataTip={gettext('Close metadata')}
       onClickMetadata={onToggleSidePanel}
       enableRotate={enableRotate}
       onClickDownload={() => downloadImage(imageItems[imageIndex].downloadURL)}

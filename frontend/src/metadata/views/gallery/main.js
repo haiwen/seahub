@@ -236,7 +236,7 @@ const Main = ({ isLoadingMore, metadata, onDelete, onLoadMore, duplicateRecord, 
     const record = getRowById(metadata, image.id);
     if (!canPreview) return;
     openFile(repoID, record, () => {
-      const index = images.findIndex(item => item.id === image.id);
+      const index = images.findIndex(item => item.name === image.name);
       setImageIndex(index);
       setIsImagePopupOpen(true);
     });
