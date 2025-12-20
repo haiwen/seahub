@@ -1,8 +1,8 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M14 2V14H2V2H14ZM5 11H11V5H5V11Z" fill="currentColor"/>
-<path d="M14 18V30H2V18H14ZM5 27H11V21H5V27Z" fill="currentColor"/>
-<path d="M30 2.5V5.5H17V2.5H30Z" fill="currentColor"/>
-<path d="M30 9.5V12.5H17V9.5H30Z" fill="currentColor"/>
-<path d="M30 19.5V22.5H17V19.5H30Z" fill="currentColor"/>
-<path d="M30 26.5V29.5H17V26.5H30Z" fill="currentColor"/>
+<path d="M3 25.001C4.10457 25.001 5 25.8964 5 27.001C5 28.1055 4.10457 29.001 3 29.001C1.89543 29.001 1 28.1055 1 27.001C1 25.8964 1.89543 25.001 3 25.001Z" fill="currentcolor"/>
+<path d="M31 28.499H8V25.499H31V28.499Z" fill="currentcolor"/>
+<path d="M3 14.001C4.10457 14.001 5 14.8964 5 16.001C5 17.1055 4.10457 18.001 3 18.001C1.89543 18.001 1 17.1055 1 16.001C1 14.8964 1.89543 14.001 3 14.001Z" fill="currentcolor"/>
+<path d="M31 17.499H8V14.499H31V17.499Z" fill="currentcolor"/>
+<path d="M3 2.99902C4.10457 2.99902 5 3.89445 5 4.99902C5 6.10359 4.10457 6.99902 3 6.99902C1.89543 6.99902 1 6.10359 1 4.99902C1 3.89445 1.89543 2.99902 3 2.99902Z" fill="currentcolor"/>
+<path d="M31 6.49902H8V3.49902H31V6.49902Z" fill="currentcolor"/>
 </svg>
