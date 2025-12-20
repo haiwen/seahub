@@ -88,6 +88,7 @@ class WikiCardView extends Component {
         title={gettext('My Wikis')}
         isDepartment={false}
         isShowAvatar={false}
+        isMyWikis={true}
         toggleAddWikiDialog={canCreateWiki ? toggleAddWikiDialog.bind(this, null) : null}
       />
     );
@@ -101,6 +102,7 @@ class WikiCardView extends Component {
         title={gettext('Shared with me')}
         isDepartment={false}
         isShowAvatar={false}
+        isMyWikis={false}
         sidePanelRate={sidePanelRate}
         isSidePanelFolded={isSidePanelFolded}
         toggleAddWikiDialog={null}
