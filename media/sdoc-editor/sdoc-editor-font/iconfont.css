@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 5078528 */
-  src: url('iconfont.eot?t=1766200055796'); /* IE9 */
-  src: url('iconfont.eot?t=1766200055796#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1766200055796') format('woff2'),
-       url('iconfont.woff?t=1766200055796') format('woff'),
-       url('iconfont.ttf?t=1766200055796') format('truetype'),
-       url('iconfont.svg?t=1766200055796#sdocfont') format('svg');
+  src: url('iconfont.eot?t=1766214877978'); /* IE9 */
+  src: url('iconfont.eot?t=1766214877978#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1766214877978') format('woff2'),
+       url('iconfont.woff?t=1766214877978') format('woff'),
+       url('iconfont.ttf?t=1766214877978') format('truetype'),
+       url('iconfont.svg?t=1766214877978#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-presentation:before {
+  content: "\e6c1";
+}
+
+.sdoc-sm-close:before {
+  content: "\e6f7";
+}
+
+.sdoc-filter1:before {
+  content: "\e6ea";
+}
+
+.sdoc-sort:before {
+  content: "\e6f6";
 }
 
 .sdoc-jump-to:before {
@@ -34,10 +50,6 @@
 
 .sdoc-increase-font-size:before {
   content: "\e6f4";
-}
-
-.sdoc-filter1:before {
-  content: "\e6f2";
 }
 
 .sdoc-revise:before {
@@ -78,10 +90,6 @@
 
 .sdoc-comments:before {
   content: "\e6e8";
-}
-
-.sdoc-sm-close:before {
-  content: "\e6ea";
 }
 
 .sdoc-more:before {
@@ -170,10 +178,6 @@
 
 .sdoc-unstarred:before {
   content: "\e6c0";
-}
-
-.sdoc-presentation:before {
-  content: "\e6c1";
 }
 
 .sdoc-left-slide:before {

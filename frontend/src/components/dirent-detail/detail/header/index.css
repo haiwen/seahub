@@ -18,8 +18,8 @@
 
 .detail-header .detail-control {
   min-width: 0;
-  height: 32px;
-  width: 32px;
+  height: 24px;
+  width: 24px;
   border-radius: 3px;
   display: flex;
   align-items: center;
