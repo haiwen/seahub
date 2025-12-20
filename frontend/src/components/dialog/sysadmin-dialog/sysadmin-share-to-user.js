@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { isPro, gettext } from '../../../utils/constants';
 import { Button } from 'reactstrap';
@@ -233,7 +233,7 @@ class SysAdminShareToUser extends React.Component {
   render() {
     let { sharedItems } = this.state;
     return (
-      <Fragment>
+      <div className="h-100 d-flex flex-column">
         <table>
           <thead>
             <tr>
@@ -284,14 +284,12 @@ class SysAdminShareToUser extends React.Component {
             }
           </tbody>
         </table>
-        <div className="share-list-container">
-          {this.state.isLoading ? (
-            <Loading />
-          ) : (
-            <>
-              {this.state.sharedItems.length === 0 ? (
-                <EmptyTip text={gettext('No share link')} className="mt-8 mb-8" />
-              ) : (
+        <div className="share-list-container flex-fill">
+          {this.state.isLoading
+            ? <Loading />
+            : this.state.sharedItems.length === 0
+              ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
+              : (
                 <table className="table-thead-hidden">
                   <thead>
                     <tr>
@@ -307,11 +305,10 @@ class SysAdminShareToUser extends React.Component {
                     onChangeUserPermission={this.onChangeUserPermission}
                   />
                 </table>
-              )}
-            </>
-          )}
+              )
+          }
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

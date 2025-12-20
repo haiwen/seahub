@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button } from 'reactstrap';
@@ -184,7 +184,7 @@ class LinkAuthenticatedEmails extends React.Component {
       </thead>
     );
     return (
-      <Fragment>
+      <div className="h-100 d-flex flex-column">
         <div className="d-flex align-items-center pb-2 border-bottom">
           <h6 className="font-weight-normal m-0">
             <BackIcon onClick={this.goBack} />
@@ -206,14 +206,12 @@ class LinkAuthenticatedEmails extends React.Component {
             </tr>
           </tbody>
         </table>
-        <div className="share-list-container">
-          {this.state.isLoading ? (
-            <Loading />
-          ) : (
-            <>
-              {authEmails.length === 0 ? (
-                <EmptyTip text={gettext('No results')} />
-              ) : (
+        <div className="share-list-container flex-fill">
+          {this.state.isLoading
+            ? <Loading />
+            : authEmails.length == 0
+              ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
+              : (
                 <table className="table-thead-hidden w-xs-200">
                   {thead}
                   <tbody>
@@ -229,11 +227,10 @@ class LinkAuthenticatedEmails extends React.Component {
                     })}
                   </tbody>
                 </table>
-              )}
-            </>
-          )}
+              )
+          }
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

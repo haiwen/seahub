@@ -276,9 +276,9 @@ def _handle_acs_in_org(request, org_id):
     
     saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
     if not saml_user and SSO_LDAP_USE_SAME_UID:
-        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
         if saml_user:
-            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, uid)
     
     if saml_user:
         username = saml_user.username
@@ -299,7 +299,9 @@ def _handle_acs_in_org(request, org_id):
         else:
             username = None
             is_new_user = True
-            _handle_user_over_limit(request, org)
+            over_limit_resp = _handle_user_over_limit(request, org)
+            if over_limit_resp:
+                return over_limit_resp
     
     if username and not ccnet_api.org_user_exists(org_id, username):
         return render_error(request, _('User not found in Team.'))
@@ -334,7 +336,7 @@ def _handle_acs_in_org(request, org_id):
     if not user.is_active:
         logger.error('ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username)
         # send error msg to admin
-        error_msg = 'ADFS/SAML single sign-on failed: user % is deactivated.' % user.username
+        error_msg = 'ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username
         org_admins = get_org_admins(org)
         _send_error_notifications(org_admins, error_msg)
         return HttpResponseForbidden(_('Login failed: user is deactivated. '
@@ -473,9 +475,9 @@ def _handle_acs(request):
     
     saml_user = SocialAuthUser.objects.get_by_provider_and_uid(SAML_PROVIDER_IDENTIFIER, uid)
     if not saml_user and SSO_LDAP_USE_SAME_UID:
-        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, name_id)
+        saml_user = SocialAuthUser.objects.get_by_provider_and_uid(LDAP_PROVIDER, uid)
         if saml_user:
-            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, name_id)
+            SocialAuthUser.objects.add(saml_user.username, SAML_PROVIDER_IDENTIFIER, uid)
     
     if saml_user:
         username = saml_user.username
@@ -497,7 +499,9 @@ def _handle_acs(request):
             username = None
             is_new_user = True
             # check user number limit by license
-            _handle_user_over_limit(request)
+            over_limit_resp = _handle_user_over_limit(request)
+            if over_limit_resp:
+                return over_limit_resp
     
     logger.debug('Trying to authenticate the user')
     user = auth.authenticate(saml_username=username,
@@ -529,7 +533,7 @@ def _handle_acs(request):
     if not user.is_active:
         logger.error('ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username)
         # send error msg to admin
-        error_msg = 'ADFS/SAML single sign-on failed: user % is deactivated.' % user.username
+        error_msg = 'ADFS/SAML single sign-on failed: user %s is deactivated.' % user.username
         admins = User.objects.get_superusers()
         _send_error_notifications(admins, error_msg)
         return HttpResponseForbidden(_('Login failed: user is deactivated. '

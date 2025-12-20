@@ -300,7 +300,7 @@ class RepoShareAdminUploadLinks extends Component {
     const selectedLinks = items.filter(item => item.isSelected);
     const isAllLinksSelected = items.length == selectedLinks.length;
     return (
-      <Fragment>
+      <div className="h-100 d-flex flex-column">
         <div className="d-flex justify-content-between align-items-center pb-2 mt-1 pr-1 border-bottom">
           <h6 className="font-weight-normal m-0">{gettext('Upload Links')}</h6>
           <div className="d-flex">
@@ -312,37 +312,41 @@ class RepoShareAdminUploadLinks extends Component {
             )}
           </div>
         </div>
-        {loading && <Loading />}
-        {!loading && errorMsg && <p className="error text-center mt-8">{errorMsg}</p>}
-        {!loading && !errorMsg && !items.length &&
-        <EmptyTip text={gettext('No upload links')}/>
-        }
-        {!loading && !errorMsg && items.length > 0 && (
-          <>
-            <table>
-              <thead>{this.getTheadContent(true, isAllLinksSelected)}</thead>
-              <tbody></tbody>
-            </table>
-            <div className='table-real-container' onScroll={this.handleScroll}>
-              <table className="table-hover table-thead-hidden">
-                <thead>{this.getTheadContent(false)}</thead>
-                <tbody>
-                  {items.map((item, index) => {
-                    return (
-                      <Item
-                        key={index}
-                        item={item}
-                        deleteItem={this.deleteItem}
-                        toggleSelectLink={this.toggleSelectLink}
-                      />
-                    );
-                  })}
-                </tbody>
-              </table>
-              {isLoadingMore && <Loading />}
-            </div>
-          </>
-        )}
+        <div className='flex-fill'>
+          {loading
+            ? <Loading />
+            : errorMsg
+              ? <p className="error text-center mt-8">{errorMsg}</p>
+              : items.length == 0
+                ? <EmptyTip text={gettext('No items')} className="h-100 m-0" />
+                : (
+                  <>
+                    <table>
+                      <thead>{this.getTheadContent(true, isAllLinksSelected)}</thead>
+                      <tbody></tbody>
+                    </table>
+                    <div className='table-real-container' onScroll={this.handleScroll}>
+                      <table className="table-hover table-thead-hidden">
+                        <thead>{this.getTheadContent(false)}</thead>
+                        <tbody>
+                          {items.map((item, index) => {
+                            return (
+                              <Item
+                                key={index}
+                                item={item}
+                                deleteItem={this.deleteItem}
+                                toggleSelectLink={this.toggleSelectLink}
+                              />
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                      {isLoadingMore && <Loading />}
+                    </div>
+                  </>
+                )
+          }
+        </div>
         {isDeleteUploadLinksDialogOpen && (
           <CommonOperationConfirmationDialog
             title={gettext('Delete upload links')}
@@ -352,7 +356,7 @@ class RepoShareAdminUploadLinks extends Component {
             toggleDialog={this.toggleDeleteUploadLinksDialog}
           />
         )}
-      </Fragment>
+      </div>
     );
   }
 }

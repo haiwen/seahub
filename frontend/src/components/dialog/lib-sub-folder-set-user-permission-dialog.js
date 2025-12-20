@@ -356,7 +356,7 @@ class LibSubFolderSetUserPermissionDialog extends React.Component {
           ) : (
             <>
               {userFolderPermItems.length === 0 ? (
-                <EmptyTip text={gettext('No results')} className="h-100 m-0" />
+                <EmptyTip text={gettext('No items')} className="h-100 m-0" />
               ) : (
                 <table className="table-thead-hidden w-xs-250">
                   {thead}
