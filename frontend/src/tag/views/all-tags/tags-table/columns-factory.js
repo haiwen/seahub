@@ -4,8 +4,8 @@ import { createColumnEditor } from './editors/editor-factory';
 import { createColumnFormatter } from './formatter/formatter-factory';
 
 const KEY_COLUMN_ICON_NAME = {
-  [PRIVATE_COLUMN_KEY.TAG_NAME]: 'tag',
-  [PRIVATE_COLUMN_KEY.PARENT_LINKS]: 'tag',
+  [PRIVATE_COLUMN_KEY.TAG_NAME]: 'tag-filled',
+  [PRIVATE_COLUMN_KEY.PARENT_LINKS]: 'tag-filled',
   [PRIVATE_COLUMN_KEY.SUB_LINKS]: 'number',
   [PRIVATE_COLUMN_KEY.TAG_FILE_LINKS]: 'number',
 };
