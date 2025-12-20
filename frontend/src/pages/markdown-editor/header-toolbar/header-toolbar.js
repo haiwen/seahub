@@ -103,7 +103,7 @@ class HeaderToolbar extends React.Component {
         width: 300,
         component: {
           headerComponent: {
-            closeIcon: (<i className="iconfont icon-x"></i>)
+            closeIcon: (<Icon symbol="md-close" className="detail-control-icon" />)
           }
         }
       }
