@@ -105,8 +105,8 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
       zoomInLabel={gettext('Zoom in')}
       zoomOutLabel={gettext('Zoom out')}
       metadataLabel={gettext('Metadata')}
-      zoomInTip={gettext(`Enlarge: ${shortcutMain} + Wheel`)}
-      zoomOutTip={gettext(`Shrink: ${shortcutMain} + Wheel`)}
+      zoomInTip={gettext('Enlarge: Ctrl + Wheel').replace('Ctrl', shortcutMain)}
+      zoomOutTip={gettext('Shrink: Ctrl + Wheel').replace('Ctrl', shortcutMain)}
       rotateTip={gettext('Rotate')}
       deleteTip={gettext('Delete')}
       downloadImageTip={gettext('Download')}
