@@ -20,6 +20,7 @@ const propTypes = {
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
   noItemsTip: PropTypes.string,
+  isMyWikis: PropTypes.bool,
 };
 
 class WikiCardGroup extends Component {
@@ -53,7 +54,7 @@ class WikiCardGroup extends Component {
   };
 
   render() {
-    const { wikis, title, isDepartment, toggleAddWikiDialog, group, noItemsTip } = this.props;
+    const { wikis, title, isDepartment, toggleAddWikiDialog, group, noItemsTip, isMyWikis } = this.props;
     const containerWidth = this.getContainerWidth();
     const numberOfWiki = Math.floor(containerWidth / 180);
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
@@ -63,10 +64,20 @@ class WikiCardGroup extends Component {
       isGroup = true;
       depIcon = group.owner === 'system admin';
     }
+
+    let iconSymbol = 'share-with-me';
+    if (isDepartment && depIcon) {
+      iconSymbol = 'department';
+    } else if (isDepartment) {
+      iconSymbol = 'groups';
+    } else if (isMyWikis) {
+      iconSymbol = 'my-libraries';
+    }
+
     return (
       <div className='wiki-card-group mb-4'>
         <h4 className="sf-heading">
-          <span className="nav-icon d-flex align-items-center"><Icon symbol={(isDepartment && depIcon) ? 'department' : isDepartment ? 'groups' : 'my-libraries'} /></span>
+          <span className="nav-icon d-flex align-items-center"><Icon symbol={iconSymbol} /></span>
           {title}
         </h4>
         {(wikis.length === 0 && noItemsTip) &&
