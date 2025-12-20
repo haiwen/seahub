@@ -87,6 +87,10 @@
   cursor: inherit;
 }
 
+.sf-metadata-table-view-basic-filter-file-type-select .select-basic-filter-option .select-basic-filter-option-checkbox .form-check-input {
+  margin-top: 0px;
+}
+
 .sf-metadata-basic-filters-select .select-basic-filter-display-name:hover {
   cursor: pointer;
 }
