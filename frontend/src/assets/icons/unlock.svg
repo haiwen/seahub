@@ -1,14 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#999999;}
-</style>
-<title>unlock</title>
-<g id="unlock">
-	<path id="形状结合" class="st0" d="M8,8c0-4.4,3.6-8,8-8c4.1,0,7.6,3,8,6.9c0.1,0.6-0.2,1.8-1.5,1.8c-1.3,0-1.6-1-1.7-1.6
-		C20.3,4.8,18.3,3,16,3c-2.8,0-5,2.5-5,5.6V12h14.3c2,0,3.7,1.8,3.7,4v12c0,2.2-1.7,4-3.7,4H6.7c-2,0-3.7-1.8-3.7-4V16
-		c0-2.2,1.7-4,3.7-4H8V8z M25,15H7c-0.6,0-1,0.4-1,1v12c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V16C26,15.4,25.6,15,25,15z"/>
-</g>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M18 24H15V18H18V24Z" fill="currentColor"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M16.2441 0.494141C20.2535 0.502251 23.4995 3.75447 23.5 7.76367V7.99414H20.5V7.76367C20.4995 5.40902 18.593 3.49902 16.2383 3.49414C13.8767 3.48937 11.9595 5.40221 11.959 7.76367V12H28.5V19.0059C28.4999 25.9094 22.9035 31.5059 16 31.5059C9.09648 31.5059 3.50007 25.9094 3.5 19.0059V12H8.95898V7.76367C8.95947 3.74298 12.2233 0.486012 16.2441 0.494141ZM6.5 19.0059C6.50007 24.2525 10.7533 28.5059 16 28.5059C21.2467 28.5059 25.4999 24.2525 25.5 19.0059V15H6.5V19.0059Z" fill="currentColor"/>
 </svg>

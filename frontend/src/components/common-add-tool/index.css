@@ -22,11 +22,11 @@
   font-size: 12px;
   font-weight: 600;
   transform: none;
-  fill: #666;
+  color: #666;
 }
 
 [data-bs-theme=dark] .add-item-btn .seafile-multicolor-icon-add-table {
-  fill: rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, .5);
 }
 
 .add-item-btn .description {

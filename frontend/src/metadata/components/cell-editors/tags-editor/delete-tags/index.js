@@ -23,7 +23,7 @@ const DeleteTag = ({ value, tags, onDelete }) => {
             <IconBtn
               className="sf-metadata-delete-select-remove"
               onClick={(event) => onDelete(tagId, event)}
-              symbol="x-01"
+              symbol="close"
               tabIndex={0}
               role="button"
               aria-label={gettext('Delete')}

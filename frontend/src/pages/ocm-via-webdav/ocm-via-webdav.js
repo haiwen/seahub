@@ -278,7 +278,7 @@ class Item extends Component {
         </td>
         <td>
           {item.is_dir ? '' : <span className={`op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Download')} onClick={this.downloadFile}><Icon symbol="download" /></span>}
-          {path ? '' : <span className={`op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}><Icon symbol="x-01" /></span>}
+          {path ? '' : <span className={`op-icon ${isOpIconShown ? '' : 'invisible'}`} title={gettext('Leave Share')} onClick={this.leaveShare}><Icon symbol="close" /></span>}
         </td>
         <td>{item.shared_by}</td>
         <td title={formatWithTimezone(item.ctime)}>{dayjs(item.ctime).fromNow()}</td>

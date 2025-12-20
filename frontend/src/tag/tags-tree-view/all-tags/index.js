@@ -28,7 +28,7 @@ const AllTags = ({ currentPath, selectAllTags }) => {
       <div className="tree-node-text">{gettext('All tags')}</div>
       <div className="left-icon">
         <div className="tree-node-icon">
-          <Icon symbol="tag" className="metadata-views-icon" />
+          <Icon symbol="tag-stroked" className="metadata-views-icon" />
         </div>
       </div>
     </div>

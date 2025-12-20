@@ -166,7 +166,7 @@ class Member extends React.PureComponent {
           {(deleteAuthority && this.state.highlight) &&
           <OpIcon
             className="op-icon"
-            symbol="x-01"
+            symbol="close"
             title={gettext('Delete')}
             op={this.deleteMember}
           />

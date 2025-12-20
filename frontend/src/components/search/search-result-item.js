@@ -75,7 +75,7 @@ class SearchResultItem extends React.Component {
         </div>
         {isHighlight && onDeleteItem && (
           <IconBtn
-            symbol="x-01"
+            symbol="close"
             className="search-icon-right"
             onClick={this.deleteItem}
             aria-label={gettext('Delete')}

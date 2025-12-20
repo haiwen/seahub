@@ -123,7 +123,7 @@ const Searcher = ({ onUpdateMode, onUpdateSearchStatus, onUpdateSearchResults, o
         />
         {inputValue.length !== 0 && (
           <span className="search-control op-icon op-icon-bg-light m-0" onClick={onCloseSearching}>
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </span>
         )}
       </div>

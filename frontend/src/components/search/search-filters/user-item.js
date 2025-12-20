@@ -14,7 +14,7 @@ const UserItem = ({ user, isCancellable, onCancel }) => {
           className="user-remove"
           onClick={(e) => onCancel(e, user.name)}
           onKeyDown={Utils.onKeyDown}
-          symbol="x-01"
+          symbol="close"
           tabIndex="0"
           role="button"
           aria-label={gettext('Delete')}

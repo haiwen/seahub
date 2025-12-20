@@ -73,7 +73,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
             />
             {inputValue.length > 0 && (
               <IconBtn
-                symbol="x-01"
+                symbol="close"
                 className="clear-icon-right"
                 onClick={handleClearInput}
                 onKeyDown={Utils.onKeyDown}

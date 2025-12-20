@@ -176,7 +176,7 @@ class TaggedFile extends React.Component {
         }
         <td>
           {!shareLinkToken &&
-            <a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={`action-icon${this.state.active ? '' : ' invisible'}`} onClick={this.deleteFile}><Icon symbol="x-01" /></a>
+            <a href="#" role="button" aria-label={gettext('Delete')} title={gettext('Delete')} className={`action-icon${this.state.active ? '' : ' invisible'}`} onClick={this.deleteFile}><Icon symbol="close" /></a>
           }
           {(shareLinkToken && enableFileDownload) &&
             <a className={`action-icon${this.state.active ? '' : ' invisible'}`} href={`${href}&dl=1`} title={gettext('Download')} aria-label={gettext('Download')}><Icon symbol="download" /></a>

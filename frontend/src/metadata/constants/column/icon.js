@@ -18,7 +18,7 @@ const COLUMNS_ICON_CONFIG = {
   [CellType.GEOLOCATION]: 'location',
   [CellType.RATE]: 'rate',
   [CellType.LINK]: 'link',
-  [CellType.TAGS]: 'tag',
+  [CellType.TAGS]: 'tag-filled',
 };
 
 const COLUMNS_ICON_NAME = {

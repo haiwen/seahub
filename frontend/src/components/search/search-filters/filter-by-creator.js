@@ -144,7 +144,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
                 toggle={false}
               >
                 {isOpen && <UserItem user={option} />}
-                {selectedOptions.map(item => item.email).includes(option.email) && <span className="dropdown-item-tick"><Icon symbol="tick1" /></span>}
+                {selectedOptions.map(item => item.email).includes(option.email) && <span className="dropdown-item-tick"><Icon symbol="check-thin" /></span>}
               </DropdownItem>
             ))}
           </DropdownMenu>

@@ -25,7 +25,7 @@ const ClearIndicator = ({ innerProps, ...props }) => {
   return (
     <components.ClearIndicator {...props} >
       <span className="d-flex align-items-center" style={{ marginLeft: '-2px' }} aria-hidden="true">
-        <Icon symbol="x-01" style={{ width: '12px', height: '12px' }} />
+        <Icon symbol="close" style={{ width: '12px', height: '12px' }} />
       </span>
     </components.ClearIndicator>
   );

@@ -1,9 +1,9 @@
 .sf-table-header-cell .sf-table-column-icon {
-  fill: #aaa;
+  color: #aaa;
 }
 
 .sf-table-header-cell .seafile-multicolor-icon-drop-down {
-  fill: #aaa;
+  color: #aaa;
   font-size: 12px;
   transform: scale(.8);
 }

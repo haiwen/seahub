@@ -70,7 +70,7 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
                       className={classnames('sf-metadata-edit-option-color-item-container', { 'selected': isSelected })}
                       id={target}
                       style={{ backgroundColor: optionColor || null, borderColor: borderColor }}
-                      symbol="check-mark"
+                      symbol="check"
                       iconStyle={{ fill: textColor || '#666' }}
                     />
                   </label>

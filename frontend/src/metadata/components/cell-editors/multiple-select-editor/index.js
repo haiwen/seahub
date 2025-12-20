@@ -236,7 +236,7 @@ const MultipleSelectEditor = forwardRef(({
               </span>
             </div>
             <div className="single-select-check-icon">
-              {isSelected && <Icon symbol="tick1" />}
+              {isSelected && <Icon symbol="check-thin" />}
             </div>
           </div>
         </div>

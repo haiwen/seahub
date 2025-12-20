@@ -335,7 +335,7 @@ class SelectedDirentsToolbar extends React.Component {
           op={this.props.unSelectDirent}
         >
           <span className="d-flex align-items-center justify-content-center mr-2">
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </span>
           <span>{selectedLen}{' '}{gettext('selected')}</span>
         </OpElement>
@@ -366,7 +366,7 @@ class SelectedDirentsToolbar extends React.Component {
         {canModify &&
           <OpIcon
             className="cur-view-path-btn"
-            symbol="move1"
+            symbol="move"
             title={gettext('Move')}
             op={this.onMove}
           />
@@ -374,7 +374,7 @@ class SelectedDirentsToolbar extends React.Component {
         {canCopy &&
           <OpIcon
             className="cur-view-path-btn"
-            symbol="copy1"
+            symbol="copy"
             title={gettext('Copy')}
             op={this.onCopy}
           />

@@ -565,7 +565,7 @@
 .select-all-checkbox-wrapper .seafile-multicolor-icon-partially-selected {
   cursor: pointer;
   font-size: 14px;
-  fill: #2b76f6;
+  color: #2b76f6;
   background-color: #fff;
   border-radius: .25rem;
 }

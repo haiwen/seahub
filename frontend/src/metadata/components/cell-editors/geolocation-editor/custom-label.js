@@ -6,7 +6,7 @@ const generateLabelContent = (info, isBMap = false) => {
   const { address } = location_translated;
   const tagContent = Array.isArray(tag) && tag.length > 0 ? tag[0] : '';
 
-  const icon = <Icon symbol="x-01" />;
+  const icon = <Icon symbol="close" />;
   if (isBMap) {
     return `
       <div

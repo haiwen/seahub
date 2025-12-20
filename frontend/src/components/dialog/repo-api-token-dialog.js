@@ -84,7 +84,7 @@ class APITokenItem extends React.Component {
             <span>{item.api_token}</span>
             {this.state.isOperationShow &&
             <OpIcon
-              symbol="copy1"
+              symbol="copy"
               className="op-icon ml-1"
               op={this.onCopyAPIToken}
               title={gettext('Copy')}
@@ -95,7 +95,7 @@ class APITokenItem extends React.Component {
         <td>
           <OpIcon
             className={`op-icon ${this.state.isOperationShow ? '' : 'd-none'}`}
-            symbol="x-01"
+            symbol="close"
             op={this.onDeleteAPIToken}
             title={gettext('Delete')}
           />

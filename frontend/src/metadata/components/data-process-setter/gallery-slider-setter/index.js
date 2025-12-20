@@ -51,7 +51,7 @@ const GallerySliderSetter = ({ viewID }) => {
         title={gettext('Zoom out')}
         onKeyDown={Utils.onKeyDown}
       >
-        <Icon symbol='minus_sign' className='metadata-slider-icon' />
+        <Icon symbol="minus-sign" className="metadata-slider-icon" />
       </Button>
       <Input
         type="range"
@@ -72,7 +72,7 @@ const GallerySliderSetter = ({ viewID }) => {
         title={gettext('Zoom in')}
         onKeyDown={Utils.onKeyDown}
       >
-        <Icon symbol='new' className='metadata-slider-icon' />
+        <Icon symbol="plus-sign" className="metadata-slider-icon" />
       </Button>
     </div>
   );

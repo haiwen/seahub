@@ -14,7 +14,7 @@ const CheckBox = ({ record, column, onCommit }) => {
   return (
     <div className="form-control shrink sf-metadata-checkbox-editor">
       <div className="sf-metadata-checkbox-editor-content" onClick={onChange}>
-        {value && <Icon symbol="check-mark" />}
+        {value && <Icon symbol="check" />}
       </div>
     </div>
   );

@@ -67,7 +67,7 @@ class AboutDialog extends React.Component {
           <ModalBody>
             <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleDialog}>
               <span className="seahub-modal-btn-inner">
-                <Icon symbol="x-01" className="w-4 h-4" />
+                <Icon symbol="close" className="w-4 h-4" />
               </span>
             </button>
             <div className="about-content" dangerouslySetInnerHTML={{ __html: aboutDialogCustomHtml }}></div>
@@ -80,7 +80,7 @@ class AboutDialog extends React.Component {
           <ModalBody>
             <button type="button" className="close seahub-modal-btn p-0" aria-label={gettext('Close')} title={gettext('Close')} onClick={toggleDialog}>
               <span className="seahub-modal-btn-inner">
-                <Icon symbol="x-01" className="w-4 h-4" />
+                <Icon symbol="close" className="w-4 h-4" />
               </span>
             </button>
             <div className="about-content">

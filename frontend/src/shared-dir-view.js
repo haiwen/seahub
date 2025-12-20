@@ -865,7 +865,7 @@ class SharedDirView extends React.Component {
                           title={gettext('Unselect')}
                           op={this.unselectItems}
                         >
-                          <Icon symbol="x-01" className="mr-2" />
+                          <Icon symbol="close" className="mr-2" />
                           <span>{`${selectedItemsLength} ${gettext('selected')}`}</span>
                         </OpElement>
                         <OpIcon

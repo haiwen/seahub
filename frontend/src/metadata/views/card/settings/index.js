@@ -76,7 +76,7 @@ const Settings = ({
     <div className="sf-metadata-view-card-setting-panel">
       <div className="setting-panel-header">
         <h5 className="m-0">{gettext('Settings')}</h5>
-        <OpIcon className="op-icon" symbol="x-01" op={onClose} title={gettext('Close')} />
+        <OpIcon className="op-icon" symbol="close" op={onClose} title={gettext('Close')} />
       </div>
       <div className="setting-panel-body">
         <div className="setting-item">

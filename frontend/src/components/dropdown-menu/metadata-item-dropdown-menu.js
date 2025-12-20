@@ -273,7 +273,7 @@ class ItemDropdownMenu extends React.Component {
                     onMouseMove={this.onDropDownMouseMove}
                   >
                     {menuItem.key === 'Display files' && this.props.isDisplayFiles && (
-                      <Icon symbol="tick1" className="dropdown-item-tick" />
+                      <Icon symbol="check-thin" className="dropdown-item-tick" />
                     )}
                     {menuItem.icon_dom || null}
                     {menuItem.value}

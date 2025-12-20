@@ -179,7 +179,7 @@ class Item extends Component {
             {item.role != 'Owner' &&
               <OpIcon
                 className={highlighted ? '' : 'invisible'}
-                symbol="x-01"
+                symbol="close"
                 title={gettext('Remove')}
                 op={this.toggleDeleteDialog}
               />

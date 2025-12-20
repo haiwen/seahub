@@ -76,7 +76,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
                 aria-label={gettext('Clear')}
                 title={gettext('Clear')}
               >
-                <Icon symbol="x-01" />
+                <Icon symbol="close" />
               </button>
             )}
           </DropdownMenu>

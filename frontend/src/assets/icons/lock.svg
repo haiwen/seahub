@@ -2,13 +2,7 @@
 <!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#999999;}
-</style>
-<title>lock</title>
-<g id="lock">
-	<path id="形状结合" class="st0" d="M16,0c4.6,0,8,4,8,9v3h1.3c2,0,3.7,1.8,3.7,4v12c0,2.2-1.7,4-3.7,4H6.7c-2,0-3.7-1.8-3.7-4
-		V16c0-2.2,1.7-4,3.7-4H8V9C8,4,11.4,0,16,0z M25,15H7c-0.6,0-1,0.4-1,1v12c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V16
-		C26,15.4,25.6,15,25,15z M16,3c-2.8,0-5,2.5-5,5.6V12h10V8.6C21,5.5,18.8,3,16,3z"/>
-</g>
+<path id="形状结合" class="st0" d="M16,0c4.6,0,8,4,8,9v3h1.3c2,0,3.7,1.8,3.7,4v12c0,2.2-1.7,4-3.7,4H6.7c-2,0-3.7-1.8-3.7-4
+V16c0-2.2,1.7-4,3.7-4H8V9C8,4,11.4,0,16,0z M25,15H7c-0.6,0-1,0.4-1,1v12c0,0.6,0.4,1,1,1h18c0.6,0,1-0.4,1-1V16
+C26,15.4,25.6,15,25,15z M16,3c-2.8,0-5,2.5-5,5.6V12h10V8.6C21,5.5,18.8,3,16,3z" fill="currentColor"/>
 </svg>

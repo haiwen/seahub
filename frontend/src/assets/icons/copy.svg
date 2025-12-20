@@ -1,17 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#949494;}
-</style>
-<title>copy</title>
-<desc>Created with Sketch.</desc>
-<g id="copy">
-	<g id="_x31_复制" transform="translate(2.000000, 2.000000)">
-		<path id="路径" class="st0" d="M21,23v3c0,1-1,2-2,2H2.6C1.3,28,0,26.6,0,25.4V9.2C0,8,1.1,7,2.2,7H5v14c0,1.1,0.6,2,1.9,2
-			C7.5,23,20.9,23,21,23z"/>
-		<path id="矩形" class="st0" d="M9,0h17c1.1,0,2,0.9,2,2v17c0,1.1-0.9,2-2,2H9c-1.1,0-2-0.9-2-2V2C7,0.9,7.9,0,9,0z"/>
-	</g>
-</g>
-</svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1762151401551" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="29207" xmlns:xlink="http://www.w3.org/1999/xlink" width="200" height="200"><path d="M704 256c35.2 0 64 28.8 64 64v352h96c16 0 28.8-12.8 32-28.8V160c0-19.2-12.8-32-32-32H384c-19.2 0-32 12.8-32 32v96h352z m-44.8 96H140.8c-6.4 0-12.8 6.4-12.8 12.8v518.4c0 6.4 6.4 12.8 12.8 12.8h518.4c9.6 0 12.8-6.4 12.8-12.8V364.8c0-6.4-6.4-12.8-12.8-12.8zM256 96c0-35.2 28.8-64 64-64h608c35.2 0 64 28.8 64 64v608c0 35.2-28.8 64-64 64h-160v160c0 35.2-25.6 60.8-60.8 64H96c-35.2 0-64-28.8-64-64V320c0-35.2 28.8-64 64-64h160V96z" fill="currentColor" p-id="29208"></path></svg>

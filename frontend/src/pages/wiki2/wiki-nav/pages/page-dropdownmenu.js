@@ -181,7 +181,7 @@ export default class PageDropdownMenu extends Component {
           {this.renderItem(this.onRename, 'rename', gettext('Modify name'))}
           {this.renderItem(this.addPageAbove, 'new', gettext('Add page above'))}
           {this.renderItem(this.addPageBelow, 'new', gettext('Add page below'))}
-          {this.renderItem(this.duplicatePage, 'copy1', gettext('Duplicate page'))}
+          {this.renderItem(this.duplicatePage, 'copy', gettext('Duplicate page'))}
           {canDeletePage && this.renderItem(this.onDeletePage, 'delete1', gettext('Delete page'))}
           <Dropdown
             direction="right"

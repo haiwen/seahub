@@ -169,10 +169,10 @@ class LinkItem extends React.Component {
           <td>
             {expire_date ? dayjs(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
-          <td>{item.password && <Icon symbol="tick1" />}</td>
+          <td>{item.password && <Icon symbol="check-thin" />}</td>
           <td>
             <a href="#" role="button" onClick={this.onCopyIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}>
-              <Icon symbol="copy1" />
+              <Icon symbol="copy" />
             </a>
             <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}>
               <Icon symbol="delete1" />

@@ -188,7 +188,7 @@ class Item extends Component {
                   }
                   <OpIcon
                     className={leaveShareIconClassName}
-                    symbol="x-01"
+                    symbol="close"
                     title={gettext('Leave Share')}
                     op={this.leaveShare}
                   />

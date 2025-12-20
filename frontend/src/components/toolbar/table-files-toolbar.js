@@ -167,7 +167,7 @@ const TableFilesToolbar = ({ repoID }) => {
     <div className="selected-dirents-toolbar">
       <span className="cur-view-path-btn px-2" onClick={unSelect}>
         <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
-          <Icon symbol="x-01" />
+          <Icon symbol="close" />
         </span>
         <span>{length}{' '}{gettext('selected')}</span>
       </span>
@@ -180,7 +180,7 @@ const TableFilesToolbar = ({ repoID }) => {
             aria-label={gettext('Move')}
             op={toggleMoveDialog}
           >
-            <Icon symbol="move1" />
+            <Icon symbol="move" />
           </OpIcon>
           <span
             className="cur-view-path-btn"
@@ -188,7 +188,7 @@ const TableFilesToolbar = ({ repoID }) => {
             title={gettext('Copy')}
             aria-label={gettext('Copy')}
           >
-            <Icon symbol="copy1" />
+            <Icon symbol="copy" />
           </span>
         </>
       )}

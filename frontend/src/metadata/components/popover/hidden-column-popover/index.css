@@ -110,11 +110,11 @@
 .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
   font-size: 12px;
   margin-right: 10px;
-  fill: #aaa;
+  color: #aaa;
 }
 
 [data-bs-theme=dark] .sf-metadata-hide-columns-popover .hide-column-item .seafile-multicolor-icon {
-  fill: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .sf-metadata-hide-columns-popover .sf-metadata-hide-columns-operations {

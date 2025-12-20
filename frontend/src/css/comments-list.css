@@ -173,6 +173,7 @@
   align-items: center;
   display: flex;
   position: relative;
+  font-size: 16px;
 }
 
 .seafile-comment-item .comment-footer .comments-count .comments-count-number {

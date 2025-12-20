@@ -113,7 +113,7 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         op={unSelect}
       >
         <span className="d-flex mr-2" aria-label={gettext('Unselect')} title={gettext('Unselect')}>
-          <Icon symbol="x-01" />
+          <Icon symbol="close" />
         </span>
         <span>{selectedFilesLen}{' '}{gettext('selected')}</span>
       </OpElement>
@@ -121,13 +121,13 @@ const TagFilesToolbar = ({ currentRepoInfo }) => {
         <>
           <OpIcon
             className="cur-view-path-btn"
-            symbol="move1"
+            symbol="move"
             title={gettext('Move')}
             op={moveTagFile}
           />
           <OpIcon
             className="cur-view-path-btn"
-            symbol="copy1"
+            symbol="copy"
             title={gettext('Copy')}
             op={copyTagFile}
           />

@@ -86,7 +86,7 @@ class UploadProgressDialog extends React.Component {
             </span>
             {!isUploading && (
               <span className="upload-dialog-op" role="button" tabIndex="0" onClick={this.onCloseUpload}>
-                <Icon symbol="x-01" />
+                <Icon symbol="close" />
               </span>
             )}
           </div>

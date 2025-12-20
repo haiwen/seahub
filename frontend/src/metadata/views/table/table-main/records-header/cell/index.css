@@ -1,9 +1,9 @@
 .sf-metadata-record-header-cell .sf-metadata-column-icon {
-  fill: #aaa;
+  color: #aaa;
 }
 
 [data-bs-theme=dark] .sf-metadata-record-header-cell .sf-metadata-column-icon {
-  fill: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .sf-metadata-record-header-cell .sf-metadata-result-table-cell.column.name-column {

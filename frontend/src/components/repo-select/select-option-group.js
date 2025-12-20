@@ -158,7 +158,7 @@ class SelectOptionGroup extends Component {
             <img src={iconUrl} width={'24px'} alt="" className='mr-2'></img>
             <div className='option-label'>{option.label}</div>
           </div>
-          {isSelected && <Icon symbol="tick1" />}
+          {isSelected && <Icon symbol="check-thin" />}
         </Option>
       );
     });

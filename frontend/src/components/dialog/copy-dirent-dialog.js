@@ -325,7 +325,7 @@ class CopyDirent extends React.Component {
             <div className="header-buttons">
               <button type="button" className="close seahub-modal-btn" data-dismiss="modal" aria-label={gettext('Close')} title={gettext('Close')} onClick={this.toggle}>
                 <span className="seahub-modal-btn-inner">
-                  <Icon symbol="x-01" />
+                  <Icon symbol="close" />
                 </span>
               </button>
               {(isPro && !showSearchBar) &&

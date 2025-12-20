@@ -942,12 +942,12 @@ class Search extends Component {
                     aria-label={gettext('Clear search')}
                     title={gettext('Clear search')}
                   >
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </button>
                 }
                 {isMaskShow && (
                   <IconBtn
-                    symbol="filter-circled"
+                    symbol="search-filter"
                     size={20}
                     className={classnames('search-icon-right input-icon-addon search-filter-controller', { 'active': isFilterControllerActive })}
                     onClick={this.handleFiltersShow}
@@ -999,7 +999,7 @@ class Search extends Component {
                   />
                   {this.state.isCloseShow &&
                     <IconBtn
-                      symbol="x-01"
+                      symbol="close"
                       className="search-icon-right input-icon-addon"
                       onClick={this.onClearSearch}
                       aria-label={gettext('Clear search')}

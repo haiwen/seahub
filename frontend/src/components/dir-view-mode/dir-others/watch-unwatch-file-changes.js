@@ -59,7 +59,13 @@ class WatchUnwatchFileChanges extends React.Component {
         onClick={clickHandler}
         onKeyDown={Utils.onKeyDown}
       >
-        <span className="d-flex align-items-center"><Icon symbol="monitor" /></span>
+        <span className="d-flex align-items-center">
+          {monitored ? (
+            <Icon symbol="monitor-on" />
+          ) : (
+            <Icon symbol="monitor-off" />
+          )}
+        </span>
         <span className="dir-others-item-text">{monitorText}</span>
       </div>
     );

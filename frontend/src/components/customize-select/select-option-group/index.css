@@ -36,7 +36,9 @@
 }
 
 .seafile-select-option {
-  display: block;
+  position: relative;
+  display: flex;
+  align-items: center;
   width: 100%;
   line-height: 24px;
   padding: 0.25rem 10px;
@@ -56,9 +58,10 @@
   cursor: pointer;
 }
 
-.seafile-select-option .sf2-icon-tick {
+.seafile-select-option .seafile-multicolor-icon-tick {
   right: 10px;
   position: absolute;
+  color: inherit;
 }
 
 .seafile-select-option.seafile-select-option-active .select-option-name {
@@ -67,7 +70,7 @@
 
 .seafile-select-option:hover .header-icon .seafile-multicolor-icon,
 .seafile-select-option.seafile-select-option-active .header-icon .seafile-multicolor-icon {
-  fill: #fff;
+  color: #fff;
 }
 
 .seafile-select-option:not(.seafile-select-option-active):hover .header-icon .seafile-multicolor-icon {

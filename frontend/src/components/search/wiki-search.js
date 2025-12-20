@@ -245,7 +245,7 @@ class Search extends Component {
                 />
                 {this.state.isCloseShow && (
                   <span className="search-icon-right input-icon-addon" onClick={this.onCloseHandler}>
-                    <Icon symbol="x-01" />
+                    <Icon symbol="close" />
                   </span>
                 )}
               </div>
@@ -282,7 +282,7 @@ class Search extends Component {
                   />
                   {this.state.isCloseShow && (
                     <span className="search-icon-right input-icon-addon" onClick={this.onCloseHandler}>
-                      <Icon symbol="x-01" />
+                      <Icon symbol="close" />
                     </span>
                   )}
                 </div>

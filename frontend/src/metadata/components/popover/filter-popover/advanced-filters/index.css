@@ -319,7 +319,7 @@
 .sf-metadata-filter-header-icon .seafile-multicolor-icon,
 .sf-metadata-select-icon .seafile-multicolor-icon {
   font-size: 14px;
-  fill: #aaa;
+  color: #aaa;
   cursor: default;
 }
 
@@ -330,7 +330,7 @@
 .seafile-select-option:hover .sf-metadata-filter-header-icon .seafile-multicolor-icon,
 .seafile-select-option.seafile-select-option-active .sf-metadata-filter-header-icon .seafile-multicolor-icon,
 .sf-metadata-setting-selector__menu .sf-metadata-setting-selector__option--is-selected .seafile-multicolor-icon {
-  fill: #fff;
+  color: #fff;
 }
 
 .seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .sf2-icon-tick {
@@ -338,5 +338,5 @@
 }
 
 .seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .seafile-multicolor-icon {
-  fill: #aaa;
+  color: #aaa;
 }

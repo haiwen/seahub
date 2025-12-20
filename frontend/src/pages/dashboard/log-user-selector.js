@@ -146,7 +146,7 @@ class LogUserSelector extends Component {
                     <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                     <span className="activity-user-name ml-2">{item.name}</span>
                     <span className="unselect-activity-user ml-2" onClick={(e) => {this.toggleSelectItem(e, item);}}>
-                      <Icon symbol="x-01" />
+                      <Icon symbol="close" />
                     </span>
                   </li>
                 );
@@ -182,7 +182,7 @@ class LogUserSelector extends Component {
                         <img src={item.avatar_url} className="avatar w-5 h-5" alt="" />
                         <span className="activity-user-name ml-2">{item.name}</span>
                       </div>
-                      {isSelected && <Icon symbol="tick1" className="text-gray font-weight-bold" />}
+                      {isSelected && <Icon symbol="check-thin" className="text-gray font-weight-bold" />}
                     </li>
                   );
                 })

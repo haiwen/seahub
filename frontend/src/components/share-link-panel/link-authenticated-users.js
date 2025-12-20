@@ -67,7 +67,7 @@ class UserItem extends React.Component {
             title={gettext('Delete')}
             aria-label={gettext('Delete')}
           >
-            <Icon symbol="x-01" />
+            <Icon symbol="close" />
           </span>
         </td>
       </tr>

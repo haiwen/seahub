@@ -106,7 +106,7 @@ class CommentList extends React.Component {
           </div>
           <div className="comments-panel-header-right">
             <span className="sdoc-icon-btn" onClick={this.props.toggleCommentList}>
-              <Icon symbol="x-01" />
+              <Icon symbol="close" />
             </span>
           </div>
         </div>

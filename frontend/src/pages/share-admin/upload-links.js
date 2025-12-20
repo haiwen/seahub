@@ -398,7 +398,7 @@ class ShareAdminUploadLinks extends Component {
                       title={gettext('Unselect')}
                       op={this.cancelSelectAllLinks}
                     >
-                      <span className="mr-2"><Icon symbol="x-01" /></span>
+                      <span className="mr-2"><Icon symbol="close" /></span>
                       <span>{`${selectedLinksLen} ${gettext('selected')}`}</span>
                     </OpElement>
                     <OpIcon

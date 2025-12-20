@@ -130,7 +130,7 @@ class SearchTrash extends Component {
             />
             {value && (
               <IconBtn
-                symbol="x-01"
+                symbol="close"
                 className="search-icon-right"
                 onClick={this.onClearSearch}
                 aria-label={gettext('Clear search')}
@@ -138,7 +138,7 @@ class SearchTrash extends Component {
               />
             )}
             <IconBtn
-              symbol="filter-circled"
+              symbol="search-filter"
               title={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
               aria-label={isFiltersShow ? gettext('Hide advanced search') : gettext('Show advanced search')}
               size={20}

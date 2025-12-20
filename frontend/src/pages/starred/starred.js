@@ -250,7 +250,7 @@ class Item extends Component {
         <td>
           <OpIcon
             className={`op-icon ${this.state.showOpIcon ? '' : 'invisible'}`}
-            symbol="x-01"
+            symbol="close"
             title={gettext('Unstar')}
             op={this.unstar}
           />

@@ -152,7 +152,7 @@ class Item extends Component {
           <td>
             <OpIcon
               className={isOpIconShown ? '' : 'invisible'}
-              symbol="x-01"
+              symbol="close"
               title={gettext('Unshare')}
               op={this.toggleUnshareRepoDialog}
             />
