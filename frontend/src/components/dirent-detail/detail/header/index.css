@@ -18,8 +18,8 @@
 
 .detail-header .detail-control {
   min-width: 0;
-  height: 24px;
-  width: 24px;
+  height: 32px;
+  width: 32px;
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -35,18 +35,19 @@
 }
 
 .detail-header .detail-control:hover {
-  background-color: var(--bs-hover-bg)!important;
+  background-color: var(--bs-hover-bg) !important;
 }
 
-.detail-header .detail-control:hover i {
-  fill: var(--bs-icon-hover-color);
+.detail-header .detail-control-icon path {
+  fill: #999;
 }
 
 .detail-header .detail-title {
   display: flex;
   flex: 1;
   align-items: center;
-  width: 0; /* prevent strut flex layout */
+  width: 0;
+  /* prevent strut flex layout */
 }
 
 .detail-header .detail-title .detail-header-icon-container {

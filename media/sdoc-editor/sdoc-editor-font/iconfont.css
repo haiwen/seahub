@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 5078528 */
-  src: url('iconfont.eot?t=1766129759875'); /* IE9 */
-  src: url('iconfont.eot?t=1766129759875#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1766129759875') format('woff2'),
-       url('iconfont.woff?t=1766129759875') format('woff'),
-       url('iconfont.ttf?t=1766129759875') format('truetype'),
-       url('iconfont.svg?t=1766129759875#sdocfont') format('svg');
+  src: url('iconfont.eot?t=1766200055796'); /* IE9 */
+  src: url('iconfont.eot?t=1766200055796#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1766200055796') format('woff2'),
+       url('iconfont.woff?t=1766200055796') format('woff'),
+       url('iconfont.ttf?t=1766200055796') format('truetype'),
+       url('iconfont.svg?t=1766200055796#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-jump-to:before {
+  content: "\e6f5";
 }
 
 .sdoc-subscripts:before {
@@ -326,10 +330,6 @@
 
 .sdoc-list-ol:before {
   content: "\e68d";
-}
-
-.sdoc-jump-to:before {
-  content: "\e69a";
 }
 
 .sdoc-all-read:before {
