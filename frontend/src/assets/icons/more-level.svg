@@ -1,2 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg t="1761794364579" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7661" id="mx_n_1761794364580" data-spm-anchor-id="a313x.manage_type_myprojects.0.i11.69513a812OhUPU" width="200" height="200"><path d="M768 512c0 54.4 41.6 96 96 96s96-41.6 96-96-41.6-96-96-96-96 41.6-96 96z m-352 0c0 54.4 41.6 96 96 96s96-41.6 96-96-41.6-96-96-96-96 41.6-96 96z m-352 6.4c0 54.4 41.6 96 96 96s96-41.6 96-96-41.6-96-96-96-96 44.8-96 96z" fill="currentColor" p-id="7662" data-spm-anchor-id="a313x.manage_type_myprojects.0.i10.69513a812OhUPU" class="selected"></path></svg>
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.00024 16C9.00024 17.6569 7.6571 19 6.00024 19C4.34339 19 3.00024 17.6569 3.00024 16C3.00024 14.3431 4.34339 13 6.00024 13C7.6571 13 9.00024 14.3431 9.00024 16Z" fill="currentColor"/>
+<circle cx="15.9998" cy="16" r="3" fill="currentColor"/>
+<path d="M28.9998 16C28.9998 17.6569 27.6566 19 25.9998 19C24.3429 19 22.9998 17.6569 22.9998 16C22.9998 14.3431 24.3429 13 25.9998 13C27.6566 13 28.9998 14.3431 28.9998 16Z" fill="currentColor"/>
+</svg>
