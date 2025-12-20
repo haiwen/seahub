@@ -366,6 +366,10 @@ img[src=""],img:not([src]) { /* for first loading img*/
   text-align: center;
 }
 
+.dir-tool .dropdown {
+  line-height: 1;
+}
+
 .dir-tool .seafile-multicolor-icon {
   width: 16px;
   height: 16px;

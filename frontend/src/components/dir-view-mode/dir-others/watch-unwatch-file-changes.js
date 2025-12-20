@@ -61,9 +61,9 @@ class WatchUnwatchFileChanges extends React.Component {
       >
         <span className="d-flex align-items-center">
           {monitored ? (
-            <Icon symbol="monitor-on" />
-          ) : (
             <Icon symbol="monitor-off" />
+          ) : (
+            <Icon symbol="monitor-on" />
           )}
         </span>
         <span className="dir-others-item-text">{monitorText}</span>
