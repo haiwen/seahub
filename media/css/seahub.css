@@ -2789,34 +2789,53 @@ a.sf-popover-item {
 
 /* two-factor-auth */
 .tfa-panel {
-  background: #fff;
-  border-radius: 3px;
-  box-shadow: 0 0 10px rgba(0,0,0, 0.1);
-  padding: 30px 25px 40px;
-  width: 336px;
-  margin: 5rem auto;
+  margin: 1rem auto;
+}
+@media (min-width: 504px) {
+  .tfa-panel {
+    width: 480px;
+  }
 }
 
 .tfa-panel .hd {
-  font-size: 1rem;
-  text-align: center;
+  font-size: 1.5rem;
+  font-weight: normal;
+  margin-bottom: .5rem;
 }
 
 .tfa-panel .con {
   font-size: .875rem;
-  color: #666;
-}
-
-.tfa-panel .qr-code-image {
-  margin: 6px 0 20px;
 }
 
 .two-factor-auth-wizard-btns {
-  margin-top: 1.25rem;
+  margin-top: 2.5rem;
 }
 
-.two-factor-auth-backup-token-list {
-  margin-bottom: 1rem;
+.two-factor-auth-wizard-btns .btn {
+  min-width: 71px;
+}
+
+.two-factor-auth-backup-token-list-container {
+  background-color: #f8f8f8;
+  border-radius: 8px;
+}
+
+.two-factor-auth-backup-token-list-container .token-list-hd {
+  font-size: .75rem;
+  height: 2.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.two-factor-auth-backup-token-list-container .token-list-hd .token-icon {
+  color: #444;
+  width: 16px;
+  height: 16px;
+  margin-right: .5rem;
+}
+
+.two-factor-auth-backup-token-form {
+  text-align: center;
+  margin-top: 2.5rem;
 }
 
 /* terms & conditions */
