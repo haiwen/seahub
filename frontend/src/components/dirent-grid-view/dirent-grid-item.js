@@ -35,6 +35,7 @@ class DirentGridItem extends React.Component {
       showVideoPreview: false,
       isMuted: true,
       videoProgress: 0,
+      videoReady: false,
     };
     const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
     this.canPreview = true;
@@ -304,13 +305,13 @@ class DirentGridItem extends React.Component {
     this.setState({
       isHovering: false,
       showVideoPreview: false,
-      videoProgress: 0
+      videoProgress: 0,
+      videoReady: false
     });
   };
 
   getVideoElement = () => {
-    const videoPreview = document.querySelector('.grid-video-preview video');
-    return videoPreview;
+    return this.videoPlayerRef.current;
   };
 
   handleVideoTimeUpdate = (e) => {
@@ -331,13 +332,16 @@ class DirentGridItem extends React.Component {
     }
   };
 
+  handleVideoPlaying = () => {
+    if (this.state.showVideoPreview) {
+      this.setState({ videoReady: true });
+    }
+  };
+
   handleToggleMute = (e) => {
     e.stopPropagation();
-    const videoEl = this.getVideoElement();
-    if (videoEl) {
-      videoEl.muted = !videoEl.muted;
-      this.setState({ isMuted: videoEl.muted });
-    }
+    e.preventDefault();
+    this.setState({ isMuted: !this.state.isMuted });
   };
 
   getVideoSrc = () => {
@@ -416,6 +420,7 @@ class DirentGridItem extends React.Component {
     let { is_freezed, is_locked, lock_owner_name, isSelected } = dirent;
     const showName = this.getRenderedText(dirent);
     const isVideo = Utils.videoCheck(dirent.name);
+    const shouldHideBasePreview = isVideo && showVideoPreview && this.state.videoReady;
 
     return (
       <>
@@ -431,7 +436,7 @@ class DirentGridItem extends React.Component {
             ref={this.ref}
             className={classnames('grid-file-img-link', {
               'grid-drop-show': isGridDropTipShow,
-              'video-preview-container': isVideo && showVideoPreview
+              'video-preview-container': isVideo
             })}
             draggable={this.canDrag}
             onDragStart={this.onGridItemDragStart}
@@ -440,17 +445,43 @@ class DirentGridItem extends React.Component {
             onDragLeave={this.onGridItemDragLeave}
             onDrop={this.onGridItemDragDrop}
           >
-            {isVideo && showVideoPreview ? (
-              <div className="grid-video-preview">
+            {(this.canPreview && dirent.encoded_thumbnail_src) ?
+              <img
+                src={`${siteRoot}${dirent.encoded_thumbnail_src || ''}?mtime=${dirent.mtime}`}
+                className={classnames('thumbnail', 'grid-preview-thumb', { 'grid-preview-thumb--hidden': shouldHideBasePreview })}
+                tabIndex="0"
+                onClick={this.onItemClick}
+                onKeyDown={Utils.onKeyDown}
+                alt={dirent.name}
+                draggable={false}
+              /> :
+              <img
+                src={Utils.getDirentIcon(dirent, true)}
+                width="80"
+                height="80"
+                alt=""
+                draggable={false}
+                className={classnames('grid-preview-thumb', 'grid-preview-icon', { 'grid-preview-thumb--hidden': shouldHideBasePreview })}
+              />
+            }
+            {isVideo && (isHovering || showVideoPreview) && (
+              <div
+                className={classnames('grid-video-preview', {
+                  'grid-video-preview--active': showVideoPreview,
+                  'grid-video-preview--ready': this.state.videoReady
+                })}
+              >
                 <video
+                  key="grid-video-preview"
                   ref={this.videoPlayerRef}
-                  src={this.getVideoSrc()}
-                  autoPlay
-                  muted
+                  src={showVideoPreview ? this.getVideoSrc() : undefined}
+                  autoPlay={showVideoPreview}
+                  muted={this.state.isMuted}
                   loop
                   playsInline
-                  preload="auto"
+                  preload={showVideoPreview ? 'auto' : 'none'}
                   onLoadedMetadata={this.handleVideoLoadedMetadata}
+                  onPlaying={this.handleVideoPlaying}
                   onTimeUpdate={this.handleVideoTimeUpdate}
                 />
                 <div className="custom-video-controls">
@@ -469,21 +500,6 @@ class DirentGridItem extends React.Component {
                   </button>
                 </div>
               </div>
-            ) : (
-              <>
-                {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  <img
-                    src={`${siteRoot}${dirent.encoded_thumbnail_src || ''}?mtime=${dirent.mtime}`}
-                    className="thumbnail"
-                    tabIndex="0"
-                    onClick={this.onItemClick}
-                    onKeyDown={Utils.onKeyDown}
-                    alt={dirent.name}
-                    draggable={false}
-                  /> :
-                  <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' draggable={false} />
-                }
-              </>
             )}
             {isVideo && isHovering && !showVideoPreview && (
               <div className="grid-video-hover-overlay">

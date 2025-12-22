@@ -26,6 +26,9 @@
 .grid-file-img-link {
   width: 96px;
   height: 96px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto 6px;
   position: relative;
   border-radius: 3px;
@@ -101,20 +104,49 @@
   display: none;
 }
 
+.grid-preview-thumb {
+  transition: opacity 0.2s ease;
+}
+
+.grid-preview-thumb--hidden {
+  opacity: 0;
+}
+
+.grid-preview-icon {
+  display: inline-block;
+}
+
 .grid-video-preview {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 2;
 }
 
 .grid-video-preview video {
-  width: 96px;
-  height: 96px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   background-color: transparent;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.grid-video-preview--active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.grid-video-preview--ready video {
+  opacity: 1;
 }
 
 .custom-video-controls {
@@ -174,7 +206,7 @@
   align-items: center;
   justify-content: center;
   transition: opacity 0.2s;
-  z-index: 1;
+  z-index: 3;
   border-radius: 3px;
 }
 
