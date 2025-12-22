@@ -38,3 +38,7 @@ gettext('User {user_link} has added you to {group_link}');
 gettext('No user shares');
 gettext('No group shares');
 gettext('Face recognition is done for library {libraryName}.');
+gettext('A folder named {upload_folder_link} is uploaded to {uploaded_link}.');
+gettext('A folder named {upload_folder_link} is uploaded.');
+gettext('A file named {upload_file_link} is uploaded to {uploaded_link}.');
+gettext('A file named {upload_file_link} is uploaded.');
