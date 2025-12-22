@@ -36,6 +36,7 @@ class DirentGridItem extends React.Component {
       isMuted: true,
       videoProgress: 0,
       videoReady: false,
+      videoDimensions: null, // { width, height }
     };
     const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
     this.canPreview = true;
@@ -49,6 +50,7 @@ class DirentGridItem extends React.Component {
     this.videoPlayerRef = React.createRef();
     this.clickTimeout = null;
     this.hoverTimer = null;
+    this.metadataVideo = null;
     this.isGeneratingThumbnail = false;
     this.thumbnailCenter = null;
   }
@@ -108,6 +110,12 @@ class DirentGridItem extends React.Component {
     }
     if (this.hoverTimer) {
       clearTimeout(this.hoverTimer);
+    }
+    if (this.metadataVideo) {
+      this.metadataVideo.onloadedmetadata = null;
+      this.metadataVideo.onerror = null;
+      this.metadataVideo.src = '';
+      this.metadataVideo = null;
     }
     if (this.videoPlayerRef.current?.player) {
       try {
@@ -283,6 +291,32 @@ class DirentGridItem extends React.Component {
     if (!Utils.videoCheck(dirent.name) || !this.canPreview) return;
     this.setState({ isHovering: true });
 
+    // Preload video metadata to get dimensions
+    if (!this.metadataVideo) {
+      this.metadataVideo = document.createElement('video');
+      this.metadataVideo.preload = 'metadata';
+      this.metadataVideo.src = this.getVideoSrc();
+      this.metadataVideo.onloadedmetadata = () => {
+        const maxSize = 96;
+        const videoWidth = this.metadataVideo.videoWidth;
+        const videoHeight = this.metadataVideo.videoHeight;
+        const aspectRatio = videoWidth / videoHeight;
+
+        let displayWidth; let displayHeight;
+        if (aspectRatio > 1) {
+          // Landscape
+          displayWidth = Math.min(videoWidth, maxSize);
+          displayHeight = displayWidth / aspectRatio;
+        } else {
+          // Portrait
+          displayHeight = Math.min(videoHeight, maxSize);
+          displayWidth = displayHeight * aspectRatio;
+        }
+
+        this.setState({ videoDimensions: { width: displayWidth, height: displayHeight } });
+      };
+    }
+
     this.hoverTimer = setTimeout(() => {
       this.setState({ showVideoPreview: true });
     }, 500);
@@ -291,7 +325,6 @@ class DirentGridItem extends React.Component {
   onGridItemMouseLeave = () => {
     if (this.hoverTimer) {
       clearTimeout(this.hoverTimer);
-      this.hoverTimer = null;
     }
 
     const video = this.getVideoElement();
@@ -299,8 +332,6 @@ class DirentGridItem extends React.Component {
       video.pause();
       video.currentTime = 0;
     }
-
-    this.videoSrcCache = null;
 
     this.setState({
       isHovering: false,
@@ -321,14 +352,12 @@ class DirentGridItem extends React.Component {
   };
 
   handleVideoLoadedMetadata = () => {
+    if (!this.state.showVideoPreview) return;
     const video = this.getVideoElement();
-    if (video) {
-      if (video.paused) {
-        video.play().then(() => {
-        }).catch(err => {
-          // ignore
-        });
-      }
+    if (video && video.paused) {
+      video.play().catch(() => {
+        // ignore autoplay errors
+      });
     }
   };
 
@@ -345,13 +374,9 @@ class DirentGridItem extends React.Component {
   };
 
   getVideoSrc = () => {
-    if (this.videoSrcCache) {
-      return this.videoSrcCache;
-    }
     const { repoID, dirent, path } = this.props;
     const filePath = Utils.encodePath(Utils.joinPath(path, dirent.name));
-    this.videoSrcCache = `${fileServerRoot}repos/${repoID}/files${filePath}?op=download`;
-    return this.videoSrcCache;
+    return `${fileServerRoot}repos/${repoID}/files${filePath}?op=download`;
   };
 
   getTextRenderWidth = (text, font) => {
@@ -471,38 +496,48 @@ class DirentGridItem extends React.Component {
                   'grid-video-preview--ready': this.state.videoReady
                 })}
               >
-                <video
-                  key="grid-video-preview"
-                  ref={this.videoPlayerRef}
-                  src={showVideoPreview ? this.getVideoSrc() : undefined}
-                  autoPlay={showVideoPreview}
-                  muted={this.state.isMuted}
-                  loop
-                  playsInline
-                  preload={showVideoPreview ? 'auto' : 'none'}
-                  onLoadedMetadata={this.handleVideoLoadedMetadata}
-                  onPlaying={this.handleVideoPlaying}
-                  onTimeUpdate={this.handleVideoTimeUpdate}
-                />
-                <div className="custom-video-controls">
-                  <div className="custom-progress-bar">
-                    <div
-                      className="custom-progress-filled"
-                      style={{ width: `${this.state.videoProgress}%` }}
-                    />
-                  </div>
-                  <button
-                    className="custom-volume-btn"
-                    onClick={this.handleToggleMute}
-                    aria-label={this.state.isMuted ? 'Unmute' : 'Mute'}
-                  >
-                    <Icon symbol={this.state.isMuted ? 'mute' : 'unmute'} />
-                  </button>
+                <div className="video-wrapper">
+                  <video
+                    key="grid-video-preview"
+                    ref={this.videoPlayerRef}
+                    src={showVideoPreview ? this.getVideoSrc() : undefined}
+                    autoPlay={showVideoPreview}
+                    muted={this.state.isMuted}
+                    loop
+                    playsInline
+                    preload={showVideoPreview ? 'auto' : 'none'}
+                    onLoadedMetadata={this.handleVideoLoadedMetadata}
+                    onPlaying={this.handleVideoPlaying}
+                    onTimeUpdate={this.handleVideoTimeUpdate}
+                  />
+                  {this.state.videoReady && (
+                    <div className="custom-video-controls">
+                      <div className="custom-progress-bar">
+                        <div
+                          className="custom-progress-filled"
+                          style={{ width: `${this.state.videoProgress}%` }}
+                        />
+                      </div>
+                      <button
+                        className="custom-volume-btn"
+                        onClick={this.handleToggleMute}
+                        aria-label={this.state.isMuted ? 'Unmute' : 'Mute'}
+                      >
+                        <Icon symbol={this.state.isMuted ? 'mute' : 'unmute'} />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
-            {isVideo && isHovering && !showVideoPreview && (
-              <div className="grid-video-hover-overlay">
+            {isVideo && isHovering && !showVideoPreview && this.state.videoDimensions && (
+              <div
+                className="grid-video-hover-overlay"
+                style={{
+                  width: `${this.state.videoDimensions.width}px`,
+                  height: `${this.state.videoDimensions.height}px`,
+                }}
+              >
                 <Icon symbol="play-filled" className="grid-video-play" />
               </div>
             )}
