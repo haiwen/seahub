@@ -578,12 +578,15 @@ class SystemAdminAPI {
     return this.req.delete(url);
   }
 
-  sysAdminListOrgs(page, perPage) {
+  sysAdminListOrgs(page, perPage, isActive) {
     const url = this.server + '/api/v2.1/admin/organizations/';
     let params = {
       page: page,
       per_page: perPage
     };
+    if (isActive) {
+      params.is_active = isActive;
+    }
     return this.req.get(url, { params: params });
   }
 

@@ -8,6 +8,7 @@ import toaster from '../../../components/toast';
 import SysAdminAddOrgDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-add-org-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
 import Search from '../search';
+import OrgsFilterBar from './orgs-filter-bar';
 import Content from './orgs-content';
 import OrgsNav from '../orgs/orgs-nav';
 
@@ -23,24 +24,26 @@ class Orgs extends Component {
       currentPage: 1,
       perPage: 100,
       hasNextPage: false,
+      isActive: '',
       isAddOrgDialogOpen: false
     };
   }
 
   componentDidMount() {
     let urlParams = (new URL(window.location)).searchParams;
-    const { currentPage, perPage } = this.state;
+    const { currentPage, perPage, isActive } = this.state;
     this.setState({
       perPage: parseInt(urlParams.get('per_page') || perPage),
-      currentPage: parseInt(urlParams.get('page') || currentPage)
+      currentPage: parseInt(urlParams.get('page') || currentPage),
+      isActive: urlParams.get('is_active') || isActive
     }, () => {
       this.getItemsByPage(this.state.currentPage);
     });
   }
 
   getItemsByPage = (page) => {
-    const { perPage } = this.state;
-    systemAdminAPI.sysAdminListOrgs(page, perPage).then((res) => {
+    const { perPage, isActive } = this.state;
+    systemAdminAPI.sysAdminListOrgs(page, perPage, isActive).then((res) => {
       this.setState({
         loading: false,
         orgList: res.data.organizations,
@@ -139,8 +142,17 @@ class Orgs extends Component {
     navigate(`${siteRoot}sys/search-organizations/?query=${encodeURIComponent(keyword)}`);
   };
 
+  // isActive: '1', '0', '' (active, inactive, all)
+  onStatusChange = (isActive) => {
+    this.setState({
+      isActive: isActive
+    }, () => {
+      this.getItemsByPage(1);
+    });
+  };
+
   render() {
-    const { isAddOrgDialogOpen } = this.state;
+    const { isAddOrgDialogOpen, isActive } = this.state;
     return (
       <Fragment>
         <MainPanelTopbar search={this.getSearch()} {...this.props}>
@@ -150,6 +162,10 @@ class Orgs extends Component {
           <div className="cur-view-container">
             <OrgsNav currentItem="organizations" />
             <div className="cur-view-content">
+              <OrgsFilterBar
+                isActive={isActive}
+                onStatusChange={this.onStatusChange}
+              />
               <Content
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
