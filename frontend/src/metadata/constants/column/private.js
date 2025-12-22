@@ -4,6 +4,7 @@ export const PRIVATE_COLUMN_KEY = {
   // base key
   CTIME: '_ctime',
   MTIME: '_mtime',
+  DTIME: '_dtime',
   CREATOR: '_creator',
   LAST_MODIFIER: '_last_modifier',
 
