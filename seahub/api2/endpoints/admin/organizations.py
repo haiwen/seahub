@@ -114,14 +114,14 @@ def get_org_detailed_info(org):
         org_info['enable_sso'] = True
         org_setting = OrgAdminSettings.objects.filter(org_id=org_id, key='force_adfs_login').first()
         org_info['force_adfs_login'] = org_setting and int(org_setting.value) or 0
-    
+
     if ENABLE_MULTI_ADFS:
         org_saml_config = OrgSAMLConfig.objects.get_config_by_org_id(org_id)
         if org_saml_config:
             org_info['enable_saml_login'] = True
             org_info['metadata_url'] = org_saml_config.metadata_url
             org_info['domain'] = org_saml_config.domain
-    
+
     return org_info
 
 
@@ -189,13 +189,38 @@ class AdminOrganizations(APIView):
 
         start = (page - 1) * per_page
 
-        try:
-            orgs = ccnet_api.get_all_orgs(start, per_page)
-            total_count = ccnet_api.count_orgs()
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        is_active = request.GET.get('is_active', None)
+        if is_active is not None:
+
+            is_active = is_active.lower()
+            is_active = str(is_active)
+            if is_active not in ('true', 'false', '1', '0'):
+                error_msg = "is_active invalid."
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            all_orgs = ccnet_api.get_all_orgs(-1, -1)
+            inactive_org_ids = list(OrgSettings.objects.filter(is_active=False).values_list('org_id', flat=True))
+
+            index_start = (page - 1) * per_page
+            index_end = index_start + per_page
+
+            if is_active in ('true', '1'):
+                all_active_orgs = [org for org in all_orgs if org.org_id not in inactive_org_ids]
+                orgs = all_active_orgs[index_start:index_end]
+                total_count = len(all_active_orgs)
+            else:
+                all_inactive_orgs = [org for org in all_orgs if org.org_id in inactive_org_ids]
+                orgs = all_inactive_orgs[index_start:index_end]
+                total_count = len(all_inactive_orgs)
+
+        else:
+            try:
+                orgs = ccnet_api.get_all_orgs(start, per_page)
+                total_count = ccnet_api.count_orgs()
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         result = []
         org_ids = [org.org_id for org in orgs]
@@ -442,12 +467,12 @@ class AdminOrganization(APIView):
                     }
                     send_html_email(subject, email_template, con_context,
                                     from_email, [email2contact_email(email)])
-                    
+
         force_adfs_login = request.data.get('force_adfs_login', None)
         if force_adfs_login is not None:
             OrgAdminSettings.objects.update_or_create(org_id=org_id, key='force_adfs_login',
-                                                              defaults={'value': force_adfs_login})
-            
+                                                      defaults={'value': force_adfs_login})
+
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
         return Response(org_info)
@@ -490,10 +515,10 @@ class AdminOrganization(APIView):
 
             # remove org repos
             seafile_api.remove_org_repo_by_org_id(org_id)
-            
+
             # remove org
             ccnet_api.remove_org(org_id)
-            
+
             # handle signal
             org_deleted.send(sender=None, org_id=org_id)
         except Exception as e:
@@ -615,7 +640,6 @@ class TrafficExceededOrganizations(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
 
         result = []
         limit_data = {}
