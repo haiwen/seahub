@@ -759,45 +759,34 @@ class ItemsSearch(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
-        """search items"""
-        QUERY_TYPES = [
-            'library',
-        ]
-
+        """search repos"""
         query_str = request.GET.get('query_str', '')
-        query_type = request.GET.get('query_type', '')
-
         if not query_str:
             error_msg = 'query invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if query_type not in QUERY_TYPES:
-            error_msg = 'query type invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
 
-        if query_type == 'library':
-            cache_key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
-            all_repos = cache.get(cache_key, [])
-            if not all_repos:
-                all_repos = get_search_repos(username, org_id)
-                cache.set(cache_key, all_repos, RELATED_REPOS_CACHE_TIMEOUT)
+        cache_key = normalize_cache_key(username, RELATED_REPOS_PREFIX)
+        all_repos = cache.get(cache_key, [])
+        if not all_repos:
+            all_repos = get_search_repos(username, org_id)
+            cache.set(cache_key, all_repos, RELATED_REPOS_CACHE_TIMEOUT)
 
-            # Iterator avoids loading all memory at once
-            safe_pattern = re.escape(query_str)
-            query_result = [
-                {
-                    "fullpath": "/",
-                    "is_dir": True,
-                    "repo_name": repo_info[3],
-                    "repo_id": repo_info[0],
-                    "name": repo_info[3]
-                }
-                for repo_info in all_repos
-                if re.search(safe_pattern, repo_info[3], re.IGNORECASE)
-            ]
+        # Iterator avoids loading all memory at once
+        safe_pattern = re.escape(query_str)
+        query_result = [
+            {
+                "fullpath": "/",
+                "is_dir": True,
+                "repo_name": repo_info[3],
+                "repo_id": repo_info[0],
+                "name": repo_info[3]
+            }
+            for repo_info in all_repos
+            if re.search(safe_pattern, repo_info[3], re.IGNORECASE)
+        ]
         return Response({'results': query_result})
 
 

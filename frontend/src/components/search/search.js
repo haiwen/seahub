@@ -426,12 +426,14 @@ class Search extends Component {
 
     this.source = seafileAPI.getSource();
 
-    const query_type = 'library';
-    let results = [];
-    searchAPI.searchItems(query_str, query_type, this.source.token).then(res => {
-      results = [...results, ...this.formatResultItems(res.data.results)];
+    if (query_str.trim() === '') return;
+    this.setState({
+      isLoading: true,
+      resultItems: [],
+    });
+    searchAPI.searchRepos(query_str.trim()).then(res => {
       this.setState({
-        resultItems: results,
+        resultItems: this.formatResultItems(res.data.results),
         isLoading: false,
       });
     }).catch(error => {
