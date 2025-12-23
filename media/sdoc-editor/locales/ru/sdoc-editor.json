@@ -613,7 +613,7 @@
   "Add_video_link": "Добавить ссылку на видео",
   "Link_video_file": "Ссылка на видеофайл",
   "Select_video_file": "Выбрать видео файл",
-  "Support_Youtube_Tencent_Bilibili_and_more": "Поддержка Youtube, Tencent, Bilibili и других",
+  "Support_YouTube_Bilibili_and_more": "Support YouTube, Bilibili and more",
   "Image_cannot_be_copied_Please_download_the_source_image": "Изображение не может быть скопировано. Скачайте исходное изображение,",
   "And_select_insert_-_image_to_upload": "и выбрать 「вставить」 - 「изображение」 для загрузки.",
   "Image_copy_error": "Ошибка копирования изображения",
@@ -651,5 +651,6 @@
   "Preview": "Предпросмотр",
   "Go_to_link" : "Перейти по ссылке",
   "Link_block" : "Блок ссылок",
-  "The_link_address_or_link_block_is_required": "Требуется указать адрес ссылки или блок ссылок"
+  "The_link_address_or_link_block_is_required": "Требуется указать адрес ссылки или блок ссылок",
+  "Comment_filter": "Comment filter"
 }

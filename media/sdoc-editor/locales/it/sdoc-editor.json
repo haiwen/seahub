@@ -613,7 +613,7 @@
   "Add_video_link": "Aggiungi collegamento video",
   "Link_video_file": "Collega al file video",
   "Select_video_file": "Seleziona il file video",
-  "Support_Youtube_Tencent_Bilibili_and_more": "Supporta YouTube, Tencent, Bilibili e altro ancora",
+  "Support_YouTube_Bilibili_and_more": "Support YouTube, Bilibili and more",
   "Image_cannot_be_copied_Please_download_the_source_image": "L'immagine non può essere copiata. Scarica l'immagine originale",
   "And_select_insert_-_image_to_upload": "E seleziona Inserisci - Immagine per caricarla",
   "Image_copy_error": "Errore durante la copia dell'immagine",
@@ -649,7 +649,8 @@
   "Edit_link": "Modifica collegamento",
   "Remove_link": "Rimuovi collegamento",
   "Preview": "Anteprima",
-  "Go_to_link" : "Go to link",
-  "Link_block" : "Link block",
-  "The_link_address_or_link_block_is_required": "The link address or link block is required"
+  "Go_to_link" : "Vai al link",
+  "Link_block" : "Blocco link",
+  "The_link_address_or_link_block_is_required": "L'indirizzo del link o il blocco di link è necessario",
+  "Comment_filter": "Comment filter"
 }

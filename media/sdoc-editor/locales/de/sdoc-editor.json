@@ -613,7 +613,7 @@
   "Add_video_link": "Videolink hinzufügen",
   "Link_video_file": "Video verlinken",
   "Select_video_file": "Videodatei auswählen",
-  "Support_Youtube_Tencent_Bilibili_and_more": "Unterstützt Youtube, Tencent, Bilibili und andere",
+  "Support_YouTube_Bilibili_and_more": "Support YouTube, Bilibili and more",
   "Image_cannot_be_copied_Please_download_the_source_image": "Das Bild kann nicht kopiert werden. Laden Sie das Bild herunter.",
   "And_select_insert_-_image_to_upload": "und wählen Sie 「insert」 - 「image」 für den Upload.",
   "Image_copy_error": "Fehler beim Kopieren des Bildes",
@@ -649,7 +649,8 @@
   "Edit_link": "Link bearbeiten",
   "Remove_link": "Link entfernen",
   "Preview": "Vorschau",
-  "Go_to_link" : "Go to link",
-  "Link_block" : "Link block",
-  "The_link_address_or_link_block_is_required": "The link address or link block is required"
+  "Go_to_link" : "Gehen Sie zum Link",
+  "Link_block" : "Verknüpfungsblock",
+  "The_link_address_or_link_block_is_required": "Die Linkadresse oder Linkblock ist erforderlich",
+  "Comment_filter": "Comment filter"
 }

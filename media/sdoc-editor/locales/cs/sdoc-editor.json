@@ -613,7 +613,7 @@
   "Add_video_link": "Add video link",
   "Link_video_file": "Link video file",
   "Select_video_file": "Select video file",
-  "Support_Youtube_Tencent_Bilibili_and_more": "Support Youtube, Tencent, Bilibili and more",
+  "Support_YouTube_Bilibili_and_more": "Support YouTube, Bilibili and more",
   "Image_cannot_be_copied_Please_download_the_source_image": "Image cannot be copied. Please download the source image,",
   "And_select_insert_-_image_to_upload": "and select 「insert」 - 「image」 to upload.",
   "Image_copy_error": "Image copy error",
@@ -651,5 +651,6 @@
   "Preview": "Preview",
   "Go_to_link" : "Go to link",
   "Link_block" : "Link block",
-  "The_link_address_or_link_block_is_required": "The link address or link block is required"
+  "The_link_address_or_link_block_is_required": "The link address or link block is required",
+  "Comment_filter": "Comment filter"
 }
