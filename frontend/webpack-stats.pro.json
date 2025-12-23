@@ -1,1059 +1,1517 @@
 {
   "status": "done",
   "assets": {
-    "static/css/app.b0b3ff68.css": {
-      "name": "static/css/app.b0b3ff68.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/app.b0b3ff68.css"
+    "static/css/app.74302d57.css": {
+      "name": "static/css/app.74302d57.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/app.74302d57.css"
     },
-    "static/css/commons.c9b34160.css": {
-      "name": "static/css/commons.c9b34160.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/commons.c9b34160.css"
+    "static/css/commons.37f2317b.css": {
+      "name": "static/css/commons.37f2317b.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/commons.37f2317b.css"
     },
-    "static/css/draft.299cd106.css": {
-      "name": "static/css/draft.299cd106.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/draft.299cd106.css"
+    "static/css/excalidrawEditor.a99ce8ef.css": {
+      "name": "static/css/excalidrawEditor.a99ce8ef.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/excalidrawEditor.a99ce8ef.css"
     },
-    "static/css/fileHistory.cc85122e.css": {
-      "name": "static/css/fileHistory.cc85122e.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/fileHistory.cc85122e.css"
+    "static/css/fileHistory.621ee70b.css": {
+      "name": "static/css/fileHistory.621ee70b.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistory.621ee70b.css"
     },
-    "static/css/fileHistoryOld.56e922f5.css": {
-      "name": "static/css/fileHistoryOld.56e922f5.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/fileHistoryOld.56e922f5.css"
+    "static/css/fileHistoryOld.89615757.css": {
+      "name": "static/css/fileHistoryOld.89615757.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileHistoryOld.89615757.css"
     },
-    "static/css/fileView.de4c4c69.css": {
-      "name": "static/css/fileView.de4c4c69.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/fileView.de4c4c69.css"
+    "static/css/fileView.57f04cdd.css": {
+      "name": "static/css/fileView.57f04cdd.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/fileView.57f04cdd.css"
     },
-    "static/css/historyTrashFileView.d1388ed1.css": {
-      "name": "static/css/historyTrashFileView.d1388ed1.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/historyTrashFileView.d1388ed1.css"
+    "static/css/historyTrashFileView.951601d0.css": {
+      "name": "static/css/historyTrashFileView.951601d0.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/historyTrashFileView.951601d0.css"
     },
-    "static/css/markdownEditor.d9845dea.css": {
-      "name": "static/css/markdownEditor.d9845dea.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/markdownEditor.d9845dea.css"
+    "static/css/markdownEditor.2fbe6ae5.css": {
+      "name": "static/css/markdownEditor.2fbe6ae5.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/markdownEditor.2fbe6ae5.css"
     },
-    "static/css/orgAdmin.4879b268.css": {
-      "name": "static/css/orgAdmin.4879b268.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/orgAdmin.4879b268.css"
+    "static/css/orgAdmin.ca07dc9e.css": {
+      "name": "static/css/orgAdmin.ca07dc9e.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/orgAdmin.ca07dc9e.css"
     },
-    "static/css/plainMarkdownEditor.d56fc625.css": {
-      "name": "static/css/plainMarkdownEditor.d56fc625.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/plainMarkdownEditor.d56fc625.css"
+    "static/css/plainMarkdownEditor.5e84d156.css": {
+      "name": "static/css/plainMarkdownEditor.5e84d156.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/plainMarkdownEditor.5e84d156.css"
     },
-    "static/css/repoFolderTrash.7c99f0ca.css": {
-      "name": "static/css/repoFolderTrash.7c99f0ca.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/repoFolderTrash.7c99f0ca.css"
+    "static/css/repoFolderTrash.197d1545.css": {
+      "name": "static/css/repoFolderTrash.197d1545.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoFolderTrash.197d1545.css"
     },
-    "static/css/repoHistory.79336166.css": {
-      "name": "static/css/repoHistory.79336166.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/repoHistory.79336166.css"
+    "static/css/repoHistory.d3ff981a.css": {
+      "name": "static/css/repoHistory.d3ff981a.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoHistory.d3ff981a.css"
     },
-    "static/css/repoSnapshot.08027567.css": {
-      "name": "static/css/repoSnapshot.08027567.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/repoSnapshot.08027567.css"
+    "static/css/repoSnapshot.48530cc5.css": {
+      "name": "static/css/repoSnapshot.48530cc5.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/repoSnapshot.48530cc5.css"
     },
-    "static/css/sdocFileHistory.556eb6c1.css": {
-      "name": "static/css/sdocFileHistory.556eb6c1.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sdocFileHistory.556eb6c1.css"
+    "static/css/sdocFileHistory.33455b6f.css": {
+      "name": "static/css/sdocFileHistory.33455b6f.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sdocFileHistory.33455b6f.css"
     },
-    "static/css/sdocPublishedRevision.e2c2a2fa.css": {
-      "name": "static/css/sdocPublishedRevision.e2c2a2fa.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sdocPublishedRevision.e2c2a2fa.css"
+    "static/css/sdocPublishedRevision.1310facc.css": {
+      "name": "static/css/sdocPublishedRevision.1310facc.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sdocPublishedRevision.1310facc.css"
     },
-    "static/css/settings.7199ead5.css": {
-      "name": "static/css/settings.7199ead5.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/settings.7199ead5.css"
+    "static/css/settings.32ef0882.css": {
+      "name": "static/css/settings.32ef0882.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/settings.32ef0882.css"
     },
-    "static/css/sharedDirView.35e07ad8.css": {
-      "name": "static/css/sharedDirView.35e07ad8.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedDirView.35e07ad8.css"
+    "static/css/sharedDirView.5a06e837.css": {
+      "name": "static/css/sharedDirView.5a06e837.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedDirView.5a06e837.css"
     },
-    "static/css/sharedFileViewAudio.48b683a3.css": {
-      "name": "static/css/sharedFileViewAudio.48b683a3.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewAudio.48b683a3.css"
+    "static/css/sharedFileViewAudio.2c4786bb.css": {
+      "name": "static/css/sharedFileViewAudio.2c4786bb.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewAudio.2c4786bb.css"
     },
-    "static/css/sharedFileViewImage.546a26eb.css": {
-      "name": "static/css/sharedFileViewImage.546a26eb.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewImage.546a26eb.css"
+    "static/css/sharedFileViewExdraw.f795b566.css": {
+      "name": "static/css/sharedFileViewExdraw.f795b566.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewExdraw.f795b566.css"
     },
-    "static/css/sharedFileViewMarkdown.dea7f1ae.css": {
-      "name": "static/css/sharedFileViewMarkdown.dea7f1ae.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewMarkdown.dea7f1ae.css"
+    "static/css/sharedFileViewImage.37f6b169.css": {
+      "name": "static/css/sharedFileViewImage.37f6b169.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewImage.37f6b169.css"
     },
-    "static/css/sharedFileViewSdoc.e2c2a2fa.css": {
-      "name": "static/css/sharedFileViewSdoc.e2c2a2fa.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewSdoc.e2c2a2fa.css"
+    "static/css/sharedFileViewMarkdown.d5d17faa.css": {
+      "name": "static/css/sharedFileViewMarkdown.d5d17faa.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewMarkdown.d5d17faa.css"
     },
-    "static/css/sharedFileViewSpreadsheet.aea7959b.css": {
-      "name": "static/css/sharedFileViewSpreadsheet.aea7959b.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.aea7959b.css"
+    "static/css/sharedFileViewSdoc.b26bae39.css": {
+      "name": "static/css/sharedFileViewSdoc.b26bae39.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSdoc.b26bae39.css"
+    },
+    "static/css/sharedFileViewSpreadsheet.681fc15c.css": {
+      "name": "static/css/sharedFileViewSpreadsheet.681fc15c.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSpreadsheet.681fc15c.css"
     },
     "static/css/sharedFileViewSVG.e2d59eb8.css": {
       "name": "static/css/sharedFileViewSVG.e2d59eb8.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewSVG.e2d59eb8.css"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewSVG.e2d59eb8.css"
     },
-    "static/css/sharedFileViewText.c88e34ff.css": {
-      "name": "static/css/sharedFileViewText.c88e34ff.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewText.c88e34ff.css"
+    "static/css/sharedFileViewText.18c4a07b.css": {
+      "name": "static/css/sharedFileViewText.18c4a07b.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewText.18c4a07b.css"
     },
-    "static/css/sharedFileViewVideo.48a9c811.css": {
-      "name": "static/css/sharedFileViewVideo.48a9c811.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sharedFileViewVideo.48a9c811.css"
+    "static/css/sharedFileViewVideo.0f8e6fb7.css": {
+      "name": "static/css/sharedFileViewVideo.0f8e6fb7.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sharedFileViewVideo.0f8e6fb7.css"
     },
-    "static/css/subscription.39e7e396.css": {
-      "name": "static/css/subscription.39e7e396.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/subscription.39e7e396.css"
+    "static/css/subscription.a4ff7f78.css": {
+      "name": "static/css/subscription.a4ff7f78.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/subscription.a4ff7f78.css"
     },
-    "static/css/sysAdmin.487d63db.css": {
-      "name": "static/css/sysAdmin.487d63db.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/sysAdmin.487d63db.css"
+    "static/css/sysAdmin.356712f2.css": {
+      "name": "static/css/sysAdmin.356712f2.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/sysAdmin.356712f2.css"
     },
-    "static/css/TCAccept.b6a1c3b5.css": {
-      "name": "static/css/TCAccept.b6a1c3b5.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/TCAccept.b6a1c3b5.css"
+    "static/css/TCAccept.9d2e820e.css": {
+      "name": "static/css/TCAccept.9d2e820e.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCAccept.9d2e820e.css"
     },
-    "static/css/TCView.b6a1c3b5.css": {
-      "name": "static/css/TCView.b6a1c3b5.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/TCView.b6a1c3b5.css"
+    "static/css/TCView.9d2e820e.css": {
+      "name": "static/css/TCView.9d2e820e.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/TCView.9d2e820e.css"
     },
-    "static/css/uploadLink.e5a87aa8.css": {
-      "name": "static/css/uploadLink.e5a87aa8.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/uploadLink.e5a87aa8.css"
+    "static/css/tldrawEditor.b16d65e0.css": {
+      "name": "static/css/tldrawEditor.b16d65e0.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/tldrawEditor.b16d65e0.css"
     },
-    "static/css/viewFileSdoc.23f4bf46.css": {
-      "name": "static/css/viewFileSdoc.23f4bf46.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/viewFileSdoc.23f4bf46.css"
+    "static/css/uploadLink.f237c229.css": {
+      "name": "static/css/uploadLink.f237c229.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/uploadLink.f237c229.css"
     },
-    "static/css/viewFileSpreadsheet.aea7959b.css": {
-      "name": "static/css/viewFileSpreadsheet.aea7959b.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.aea7959b.css"
+    "static/css/viewFileSdoc.2bf59ef6.css": {
+      "name": "static/css/viewFileSdoc.2bf59ef6.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileSdoc.2bf59ef6.css"
     },
-    "static/css/viewFileText.7c2d8249.css": {
-      "name": "static/css/viewFileText.7c2d8249.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/viewFileText.7c2d8249.css"
+    "static/css/viewFileSpreadsheet.681fc15c.css": {
+      "name": "static/css/viewFileSpreadsheet.681fc15c.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileSpreadsheet.681fc15c.css"
     },
-    "static/css/wiki.67d951c2.css": {
-      "name": "static/css/wiki.67d951c2.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/wiki.67d951c2.css"
+    "static/css/viewFileText.f17aa66e.css": {
+      "name": "static/css/viewFileText.f17aa66e.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/viewFileText.f17aa66e.css"
     },
-    "static/css/wiki2.e7621877.css": {
-      "name": "static/css/wiki2.e7621877.css",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/css/wiki2.e7621877.css"
+    "static/css/wiki.d90dcad4.css": {
+      "name": "static/css/wiki.d90dcad4.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/wiki.d90dcad4.css"
+    },
+    "static/css/wiki2.f3acef30.css": {
+      "name": "static/css/wiki2.f3acef30.css",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/css/wiki2.f3acef30.css"
+    },
+    "static/js/1017.1de27ab4.chunk.js": {
+      "name": "static/js/1017.1de27ab4.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1017.1de27ab4.chunk.js"
     },
     "static/js/1082.e17b4811.chunk.js": {
       "name": "static/js/1082.e17b4811.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/1082.e17b4811.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1082.e17b4811.chunk.js"
+    },
+    "static/js/1164.5390a214.chunk.js": {
+      "name": "static/js/1164.5390a214.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1164.5390a214.chunk.js"
     },
     "static/js/1284.2b99ba15.chunk.js": {
       "name": "static/js/1284.2b99ba15.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/1284.2b99ba15.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1284.2b99ba15.chunk.js"
+    },
+    "static/js/1398.5c5807d9.chunk.js": {
+      "name": "static/js/1398.5c5807d9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1398.5c5807d9.chunk.js"
+    },
+    "static/js/1404.6b2ecaf8.chunk.js": {
+      "name": "static/js/1404.6b2ecaf8.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1404.6b2ecaf8.chunk.js"
     },
     "static/js/1431.8be94882.chunk.js": {
       "name": "static/js/1431.8be94882.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/1431.8be94882.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1431.8be94882.chunk.js"
     },
     "static/js/1507.89f63b8b.chunk.js": {
       "name": "static/js/1507.89f63b8b.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/1507.89f63b8b.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1507.89f63b8b.chunk.js"
+    },
+    "static/js/1525.0374ca46.chunk.js": {
+      "name": "static/js/1525.0374ca46.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1525.0374ca46.chunk.js"
+    },
+    "static/js/1567.e7bfd7c3.chunk.js": {
+      "name": "static/js/1567.e7bfd7c3.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1567.e7bfd7c3.chunk.js"
+    },
+    "static/js/1568.18f2c1b1.chunk.js": {
+      "name": "static/js/1568.18f2c1b1.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1568.18f2c1b1.chunk.js"
+    },
+    "static/js/1655.6cd0649b.chunk.js": {
+      "name": "static/js/1655.6cd0649b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1655.6cd0649b.chunk.js"
+    },
+    "static/js/1693.5283cfa6.chunk.js": {
+      "name": "static/js/1693.5283cfa6.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1693.5283cfa6.chunk.js"
     },
     "static/js/1739.645ec20e.chunk.js": {
       "name": "static/js/1739.645ec20e.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/1739.645ec20e.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1739.645ec20e.chunk.js"
     },
-    "static/js/1799.88adfee8.chunk.js": {
-      "name": "static/js/1799.88adfee8.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/1799.88adfee8.chunk.js"
+    "static/js/1753.5cff00dd.chunk.js": {
+      "name": "static/js/1753.5cff00dd.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1753.5cff00dd.chunk.js"
+    },
+    "static/js/1788.3dad49af.chunk.js": {
+      "name": "static/js/1788.3dad49af.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1788.3dad49af.chunk.js"
+    },
+    "static/js/1799.c71ee952.chunk.js": {
+      "name": "static/js/1799.c71ee952.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1799.c71ee952.chunk.js"
     },
     "static/js/1817.15bbe3c5.chunk.js": {
       "name": "static/js/1817.15bbe3c5.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/1817.15bbe3c5.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1817.15bbe3c5.chunk.js"
+    },
+    "static/js/1876.43e27a07.chunk.js": {
+      "name": "static/js/1876.43e27a07.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1876.43e27a07.chunk.js"
     },
     "static/js/194.a8da8733.chunk.js": {
       "name": "static/js/194.a8da8733.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/194.a8da8733.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/194.a8da8733.chunk.js"
+    },
+    "static/js/196.e2f30d43.chunk.js": {
+      "name": "static/js/196.e2f30d43.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/196.e2f30d43.chunk.js"
+    },
+    "static/js/1999.355a7e47.chunk.js": {
+      "name": "static/js/1999.355a7e47.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/1999.355a7e47.chunk.js"
     },
     "static/js/2002.150d997b.chunk.js": {
       "name": "static/js/2002.150d997b.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2002.150d997b.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2002.150d997b.chunk.js"
     },
     "static/js/2029.0d08056e.chunk.js": {
       "name": "static/js/2029.0d08056e.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2029.0d08056e.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2029.0d08056e.chunk.js"
     },
     "static/js/2077.bfe07702.chunk.js": {
       "name": "static/js/2077.bfe07702.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2077.bfe07702.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2077.bfe07702.chunk.js"
     },
     "static/js/2083.0f8488f7.chunk.js": {
       "name": "static/js/2083.0f8488f7.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2083.0f8488f7.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2083.0f8488f7.chunk.js"
     },
     "static/js/2092.8d19e763.chunk.js": {
       "name": "static/js/2092.8d19e763.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2092.8d19e763.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2092.8d19e763.chunk.js"
     },
     "static/js/2134.370f4699.chunk.js": {
       "name": "static/js/2134.370f4699.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2134.370f4699.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2134.370f4699.chunk.js"
+    },
+    "static/js/2203.d08b722c.chunk.js": {
+      "name": "static/js/2203.d08b722c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2203.d08b722c.chunk.js"
+    },
+    "static/js/2218.46418df2.chunk.js": {
+      "name": "static/js/2218.46418df2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2218.46418df2.chunk.js"
     },
     "static/js/2235.ad3dd60e.chunk.js": {
       "name": "static/js/2235.ad3dd60e.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2235.ad3dd60e.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2235.ad3dd60e.chunk.js"
     },
     "static/js/2237.235a28f5.chunk.js": {
       "name": "static/js/2237.235a28f5.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2237.235a28f5.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2237.235a28f5.chunk.js"
     },
     "static/js/2265.12e08ce7.chunk.js": {
       "name": "static/js/2265.12e08ce7.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2265.12e08ce7.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2265.12e08ce7.chunk.js"
     },
     "static/js/2272.988336e5.chunk.js": {
       "name": "static/js/2272.988336e5.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2272.988336e5.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2272.988336e5.chunk.js"
     },
     "static/js/2280.697b3445.chunk.js": {
       "name": "static/js/2280.697b3445.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2280.697b3445.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2280.697b3445.chunk.js"
+    },
+    "static/js/2301.88879c7d.chunk.js": {
+      "name": "static/js/2301.88879c7d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2301.88879c7d.chunk.js"
     },
     "static/js/233.c7382c95.chunk.js": {
       "name": "static/js/233.c7382c95.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/233.c7382c95.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/233.c7382c95.chunk.js"
+    },
+    "static/js/2337.3d00b0ae.chunk.js": {
+      "name": "static/js/2337.3d00b0ae.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2337.3d00b0ae.chunk.js"
     },
     "static/js/2378.61ab4198.chunk.js": {
       "name": "static/js/2378.61ab4198.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2378.61ab4198.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2378.61ab4198.chunk.js"
+    },
+    "static/js/2402.36a2c649.chunk.js": {
+      "name": "static/js/2402.36a2c649.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2402.36a2c649.chunk.js"
     },
     "static/js/2405.f6d72ea3.chunk.js": {
       "name": "static/js/2405.f6d72ea3.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2405.f6d72ea3.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2405.f6d72ea3.chunk.js"
+    },
+    "static/js/2415.d9a57641.chunk.js": {
+      "name": "static/js/2415.d9a57641.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2415.d9a57641.chunk.js"
     },
     "static/js/2468.eb7ac683.chunk.js": {
       "name": "static/js/2468.eb7ac683.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2468.eb7ac683.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2468.eb7ac683.chunk.js"
     },
     "static/js/2504.44c93a0b.chunk.js": {
       "name": "static/js/2504.44c93a0b.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2504.44c93a0b.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2504.44c93a0b.chunk.js"
+    },
+    "static/js/2519.63b281a9.chunk.js": {
+      "name": "static/js/2519.63b281a9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2519.63b281a9.chunk.js"
+    },
+    "static/js/2613.3d26be5c.chunk.js": {
+      "name": "static/js/2613.3d26be5c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2613.3d26be5c.chunk.js"
     },
     "static/js/2638.fca656d8.chunk.js": {
       "name": "static/js/2638.fca656d8.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2638.fca656d8.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2638.fca656d8.chunk.js"
+    },
+    "static/js/2682.d968996e.chunk.js": {
+      "name": "static/js/2682.d968996e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2682.d968996e.chunk.js"
     },
     "static/js/279.edf61df2.chunk.js": {
       "name": "static/js/279.edf61df2.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/279.edf61df2.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/279.edf61df2.chunk.js"
     },
     "static/js/2879.8fc2be8b.chunk.js": {
       "name": "static/js/2879.8fc2be8b.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2879.8fc2be8b.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2879.8fc2be8b.chunk.js"
+    },
+    "static/js/2921.ec884d68.chunk.js": {
+      "name": "static/js/2921.ec884d68.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2921.ec884d68.chunk.js"
     },
     "static/js/2943.4b999148.chunk.js": {
       "name": "static/js/2943.4b999148.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2943.4b999148.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2943.4b999148.chunk.js"
     },
     "static/js/2977.a70d421a.chunk.js": {
       "name": "static/js/2977.a70d421a.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/2977.a70d421a.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/2977.a70d421a.chunk.js"
     },
     "static/js/298.84e66bd0.chunk.js": {
       "name": "static/js/298.84e66bd0.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/298.84e66bd0.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/298.84e66bd0.chunk.js"
     },
     "static/js/3032.cd86dfed.chunk.js": {
       "name": "static/js/3032.cd86dfed.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3032.cd86dfed.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3032.cd86dfed.chunk.js"
     },
-    "static/js/3219.cb42f8b1.chunk.js": {
-      "name": "static/js/3219.cb42f8b1.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3219.cb42f8b1.chunk.js"
+    "static/js/3134.8f9929ec.chunk.js": {
+      "name": "static/js/3134.8f9929ec.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3134.8f9929ec.chunk.js"
+    },
+    "static/js/3176.b3c084dc.chunk.js": {
+      "name": "static/js/3176.b3c084dc.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3176.b3c084dc.chunk.js"
+    },
+    "static/js/3201.4d87a948.chunk.js": {
+      "name": "static/js/3201.4d87a948.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3201.4d87a948.chunk.js"
+    },
+    "static/js/3205.bedcb567.chunk.js": {
+      "name": "static/js/3205.bedcb567.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3205.bedcb567.chunk.js"
+    },
+    "static/js/3217.9a573a5d.chunk.js": {
+      "name": "static/js/3217.9a573a5d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3217.9a573a5d.chunk.js"
+    },
+    "static/js/3219.21915db1.chunk.js": {
+      "name": "static/js/3219.21915db1.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3219.21915db1.chunk.js"
     },
     "static/js/3286.f34d0dc2.chunk.js": {
       "name": "static/js/3286.f34d0dc2.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3286.f34d0dc2.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3286.f34d0dc2.chunk.js"
     },
-    "static/js/3287.f0676d36.chunk.js": {
-      "name": "static/js/3287.f0676d36.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3287.f0676d36.chunk.js"
+    "static/js/3287.613756c8.chunk.js": {
+      "name": "static/js/3287.613756c8.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3287.613756c8.chunk.js"
     },
     "static/js/3319.060859db.chunk.js": {
       "name": "static/js/3319.060859db.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3319.060859db.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3319.060859db.chunk.js"
     },
     "static/js/3338.64dce22c.chunk.js": {
       "name": "static/js/3338.64dce22c.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3338.64dce22c.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3338.64dce22c.chunk.js"
     },
-    "static/js/3605.a68fa6d6.chunk.js": {
-      "name": "static/js/3605.a68fa6d6.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3605.a68fa6d6.chunk.js"
+    "static/js/3403.3e791c31.chunk.js": {
+      "name": "static/js/3403.3e791c31.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3403.3e791c31.chunk.js"
+    },
+    "static/js/3503.74d45466.chunk.js": {
+      "name": "static/js/3503.74d45466.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3503.74d45466.chunk.js"
+    },
+    "static/js/3539.56dc97ca.chunk.js": {
+      "name": "static/js/3539.56dc97ca.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3539.56dc97ca.chunk.js"
+    },
+    "static/js/3585.fd5196d0.chunk.js": {
+      "name": "static/js/3585.fd5196d0.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3585.fd5196d0.chunk.js"
+    },
+    "static/js/3605.169c70bf.chunk.js": {
+      "name": "static/js/3605.169c70bf.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3605.169c70bf.chunk.js"
     },
     "static/js/3642.32b7e716.chunk.js": {
       "name": "static/js/3642.32b7e716.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3642.32b7e716.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3642.32b7e716.chunk.js"
     },
     "static/js/3646.986fc163.chunk.js": {
       "name": "static/js/3646.986fc163.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3646.986fc163.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3646.986fc163.chunk.js"
+    },
+    "static/js/3651.4b8e84b1.chunk.js": {
+      "name": "static/js/3651.4b8e84b1.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3651.4b8e84b1.chunk.js"
+    },
+    "static/js/372.a65661ce.chunk.js": {
+      "name": "static/js/372.a65661ce.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/372.a65661ce.chunk.js"
+    },
+    "static/js/372.a65661ce.chunk.js.LICENSE.txt": {
+      "name": "static/js/372.a65661ce.chunk.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/372.a65661ce.chunk.js.LICENSE.txt"
     },
     "static/js/3750.f172c917.chunk.js": {
       "name": "static/js/3750.f172c917.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3750.f172c917.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3750.f172c917.chunk.js"
+    },
+    "static/js/3805.dad0b5c4.chunk.js": {
+      "name": "static/js/3805.dad0b5c4.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3805.dad0b5c4.chunk.js"
+    },
+    "static/js/3878.ce8cbd5c.chunk.js": {
+      "name": "static/js/3878.ce8cbd5c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3878.ce8cbd5c.chunk.js"
     },
     "static/js/3925.59fbf849.chunk.js": {
       "name": "static/js/3925.59fbf849.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/3925.59fbf849.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/3925.59fbf849.chunk.js"
+    },
+    "static/js/4020.563d593a.chunk.js": {
+      "name": "static/js/4020.563d593a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4020.563d593a.chunk.js"
     },
     "static/js/4092.f09c6772.chunk.js": {
       "name": "static/js/4092.f09c6772.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/4092.f09c6772.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4092.f09c6772.chunk.js"
     },
     "static/js/4222.b9d0e198.chunk.js": {
       "name": "static/js/4222.b9d0e198.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/4222.b9d0e198.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4222.b9d0e198.chunk.js"
     },
-    "static/js/4312.7db2cbc5.chunk.js": {
-      "name": "static/js/4312.7db2cbc5.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/4312.7db2cbc5.chunk.js"
+    "static/js/4237.2302ba6a.chunk.js": {
+      "name": "static/js/4237.2302ba6a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4237.2302ba6a.chunk.js"
+    },
+    "static/js/4312.db244845.chunk.js": {
+      "name": "static/js/4312.db244845.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4312.db244845.chunk.js"
     },
     "static/js/4449.4fbcf7f1.chunk.js": {
       "name": "static/js/4449.4fbcf7f1.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/4449.4fbcf7f1.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4449.4fbcf7f1.chunk.js"
     },
-    "static/js/4482.bd25cda4.chunk.js": {
-      "name": "static/js/4482.bd25cda4.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/4482.bd25cda4.chunk.js"
+    "static/js/4482.bf6d962f.chunk.js": {
+      "name": "static/js/4482.bf6d962f.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4482.bf6d962f.chunk.js"
+    },
+    "static/js/4493.a1527cbd.chunk.js": {
+      "name": "static/js/4493.a1527cbd.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4493.a1527cbd.chunk.js"
+    },
+    "static/js/4576.c2d12dbb.chunk.js": {
+      "name": "static/js/4576.c2d12dbb.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4576.c2d12dbb.chunk.js"
+    },
+    "static/js/4584.27e8907a.chunk.js": {
+      "name": "static/js/4584.27e8907a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4584.27e8907a.chunk.js"
+    },
+    "static/js/4601.161a7549.chunk.js": {
+      "name": "static/js/4601.161a7549.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4601.161a7549.chunk.js"
     },
     "static/js/4725.d3cc6ee2.chunk.js": {
       "name": "static/js/4725.d3cc6ee2.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/4725.d3cc6ee2.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4725.d3cc6ee2.chunk.js"
+    },
+    "static/js/4844.8a171a4a.chunk.js": {
+      "name": "static/js/4844.8a171a4a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4844.8a171a4a.chunk.js"
+    },
+    "static/js/4876.8148a5a7.chunk.js": {
+      "name": "static/js/4876.8148a5a7.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4876.8148a5a7.chunk.js"
+    },
+    "static/js/4886.bfe52054.chunk.js": {
+      "name": "static/js/4886.bfe52054.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/4886.bfe52054.chunk.js"
     },
     "static/js/5053.05085b85.chunk.js": {
       "name": "static/js/5053.05085b85.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5053.05085b85.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5053.05085b85.chunk.js"
     },
     "static/js/5110.e9f5e0df.chunk.js": {
       "name": "static/js/5110.e9f5e0df.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5110.e9f5e0df.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5110.e9f5e0df.chunk.js"
     },
     "static/js/5112.39543189.chunk.js": {
       "name": "static/js/5112.39543189.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5112.39543189.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5112.39543189.chunk.js"
     },
-    "static/js/5143.b22d1977.chunk.js": {
-      "name": "static/js/5143.b22d1977.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5143.b22d1977.chunk.js"
+    "static/js/5143.ef7d6019.chunk.js": {
+      "name": "static/js/5143.ef7d6019.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5143.ef7d6019.chunk.js"
     },
     "static/js/5149.a9440257.chunk.js": {
       "name": "static/js/5149.a9440257.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5149.a9440257.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5149.a9440257.chunk.js"
     },
-    "static/js/5179.332760ae.chunk.js": {
-      "name": "static/js/5179.332760ae.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5179.332760ae.chunk.js"
+    "static/js/5167.e5f7b096.chunk.js": {
+      "name": "static/js/5167.e5f7b096.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5167.e5f7b096.chunk.js"
+    },
+    "static/js/5179.a3456aff.chunk.js": {
+      "name": "static/js/5179.a3456aff.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5179.a3456aff.chunk.js"
+    },
+    "static/js/5208.0e79926f.chunk.js": {
+      "name": "static/js/5208.0e79926f.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5208.0e79926f.chunk.js"
     },
     "static/js/5250.108f3c6d.chunk.js": {
       "name": "static/js/5250.108f3c6d.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5250.108f3c6d.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5250.108f3c6d.chunk.js"
     },
-    "static/js/5306.85568d11.chunk.js": {
-      "name": "static/js/5306.85568d11.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5306.85568d11.chunk.js"
+    "static/js/5306.fe4ab8fe.chunk.js": {
+      "name": "static/js/5306.fe4ab8fe.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5306.fe4ab8fe.chunk.js"
     },
     "static/js/5389.d9eac3d9.chunk.js": {
       "name": "static/js/5389.d9eac3d9.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5389.d9eac3d9.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5389.d9eac3d9.chunk.js"
     },
     "static/js/5500.5495be7d.chunk.js": {
       "name": "static/js/5500.5495be7d.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5500.5495be7d.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5500.5495be7d.chunk.js"
     },
-    "static/js/5648.c58151c4.chunk.js": {
-      "name": "static/js/5648.c58151c4.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5648.c58151c4.chunk.js"
+    "static/js/5594.755611cc.chunk.js": {
+      "name": "static/js/5594.755611cc.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5594.755611cc.chunk.js"
     },
-    "static/js/5682.ebabe68b.chunk.js": {
-      "name": "static/js/5682.ebabe68b.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5682.ebabe68b.chunk.js"
+    "static/js/5648.d21b321d.chunk.js": {
+      "name": "static/js/5648.d21b321d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5648.d21b321d.chunk.js"
+    },
+    "static/js/5682.e3b91baa.chunk.js": {
+      "name": "static/js/5682.e3b91baa.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5682.e3b91baa.chunk.js"
+    },
+    "static/js/5697.b035c102.chunk.js": {
+      "name": "static/js/5697.b035c102.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5697.b035c102.chunk.js"
+    },
+    "static/js/5706.ffcf9f68.chunk.js": {
+      "name": "static/js/5706.ffcf9f68.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5706.ffcf9f68.chunk.js"
     },
     "static/js/5784.7980842d.chunk.js": {
       "name": "static/js/5784.7980842d.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5784.7980842d.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5784.7980842d.chunk.js"
     },
-    "static/js/5807.3994e563.chunk.js": {
-      "name": "static/js/5807.3994e563.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/5807.3994e563.chunk.js"
+    "static/js/5807.0fe1c9e9.chunk.js": {
+      "name": "static/js/5807.0fe1c9e9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5807.0fe1c9e9.chunk.js"
+    },
+    "static/js/5871.93513855.chunk.js": {
+      "name": "static/js/5871.93513855.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5871.93513855.chunk.js"
+    },
+    "static/js/5935.27fde925.chunk.js": {
+      "name": "static/js/5935.27fde925.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5935.27fde925.chunk.js"
+    },
+    "static/js/5995.6137b73b.chunk.js": {
+      "name": "static/js/5995.6137b73b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/5995.6137b73b.chunk.js"
     },
     "static/js/6011.e49bb0ff.chunk.js": {
       "name": "static/js/6011.e49bb0ff.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6011.e49bb0ff.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6011.e49bb0ff.chunk.js"
     },
     "static/js/6052.7fb24a8a.chunk.js": {
       "name": "static/js/6052.7fb24a8a.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6052.7fb24a8a.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6052.7fb24a8a.chunk.js"
+    },
+    "static/js/6068.220bd50c.chunk.js": {
+      "name": "static/js/6068.220bd50c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6068.220bd50c.chunk.js"
     },
     "static/js/6082.e4951c67.chunk.js": {
       "name": "static/js/6082.e4951c67.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6082.e4951c67.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6082.e4951c67.chunk.js"
     },
     "static/js/6296.8c9b79fb.chunk.js": {
       "name": "static/js/6296.8c9b79fb.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6296.8c9b79fb.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6296.8c9b79fb.chunk.js"
     },
     "static/js/6361.637866c4.chunk.js": {
       "name": "static/js/6361.637866c4.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6361.637866c4.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6361.637866c4.chunk.js"
     },
-    "static/js/6550.cdcaaf65.chunk.js": {
-      "name": "static/js/6550.cdcaaf65.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6550.cdcaaf65.chunk.js"
+    "static/js/6429.62e890c9.chunk.js": {
+      "name": "static/js/6429.62e890c9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6429.62e890c9.chunk.js"
+    },
+    "static/js/6487.b16ba3d3.chunk.js": {
+      "name": "static/js/6487.b16ba3d3.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6487.b16ba3d3.chunk.js"
+    },
+    "static/js/6525.36ba7b25.chunk.js": {
+      "name": "static/js/6525.36ba7b25.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6525.36ba7b25.chunk.js"
+    },
+    "static/js/6550.9d7d72b4.chunk.js": {
+      "name": "static/js/6550.9d7d72b4.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6550.9d7d72b4.chunk.js"
     },
     "static/js/6555.458955aa.chunk.js": {
       "name": "static/js/6555.458955aa.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6555.458955aa.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6555.458955aa.chunk.js"
+    },
+    "static/js/6587.62c6a227.chunk.js": {
+      "name": "static/js/6587.62c6a227.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6587.62c6a227.chunk.js"
+    },
+    "static/js/6655.088b113f.chunk.js": {
+      "name": "static/js/6655.088b113f.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6655.088b113f.chunk.js"
     },
     "static/js/6684.161a2499.chunk.js": {
       "name": "static/js/6684.161a2499.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6684.161a2499.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6684.161a2499.chunk.js"
     },
     "static/js/6722.443426aa.chunk.js": {
       "name": "static/js/6722.443426aa.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6722.443426aa.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6722.443426aa.chunk.js"
     },
     "static/js/6919.a52c30ba.chunk.js": {
       "name": "static/js/6919.a52c30ba.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/6919.a52c30ba.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6919.a52c30ba.chunk.js"
+    },
+    "static/js/6930.1dd8243b.chunk.js": {
+      "name": "static/js/6930.1dd8243b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6930.1dd8243b.chunk.js"
+    },
+    "static/js/6967.bb1ea5bb.chunk.js": {
+      "name": "static/js/6967.bb1ea5bb.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/6967.bb1ea5bb.chunk.js"
+    },
+    "static/js/7129.09980f49.chunk.js": {
+      "name": "static/js/7129.09980f49.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7129.09980f49.chunk.js"
+    },
+    "static/js/7177.a47c460e.chunk.js": {
+      "name": "static/js/7177.a47c460e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7177.a47c460e.chunk.js"
+    },
+    "static/js/7220.a2786363.chunk.js": {
+      "name": "static/js/7220.a2786363.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7220.a2786363.chunk.js"
+    },
+    "static/js/7234.69ffa8ed.chunk.js": {
+      "name": "static/js/7234.69ffa8ed.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7234.69ffa8ed.chunk.js"
     },
     "static/js/7334.3dd2402a.chunk.js": {
       "name": "static/js/7334.3dd2402a.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7334.3dd2402a.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7334.3dd2402a.chunk.js"
+    },
+    "static/js/7370.e4f1122c.chunk.js": {
+      "name": "static/js/7370.e4f1122c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7370.e4f1122c.chunk.js"
+    },
+    "static/js/7371.5699e002.chunk.js": {
+      "name": "static/js/7371.5699e002.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7371.5699e002.chunk.js"
+    },
+    "static/js/7473.5f0323c7.chunk.js": {
+      "name": "static/js/7473.5f0323c7.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7473.5f0323c7.chunk.js"
     },
     "static/js/7530.3aa7111a.chunk.js": {
       "name": "static/js/7530.3aa7111a.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7530.3aa7111a.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7530.3aa7111a.chunk.js"
+    },
+    "static/js/7587.4435138c.chunk.js": {
+      "name": "static/js/7587.4435138c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7587.4435138c.chunk.js"
+    },
+    "static/js/7587.4435138c.chunk.js.LICENSE.txt": {
+      "name": "static/js/7587.4435138c.chunk.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7587.4435138c.chunk.js.LICENSE.txt"
     },
     "static/js/7601.348505d0.chunk.js": {
       "name": "static/js/7601.348505d0.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7601.348505d0.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7601.348505d0.chunk.js"
+    },
+    "static/js/761.4862ebe9.chunk.js": {
+      "name": "static/js/761.4862ebe9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/761.4862ebe9.chunk.js"
+    },
+    "static/js/764.8c2b2be1.chunk.js": {
+      "name": "static/js/764.8c2b2be1.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/764.8c2b2be1.chunk.js"
     },
     "static/js/7702.5a8c1b09.chunk.js": {
       "name": "static/js/7702.5a8c1b09.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7702.5a8c1b09.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7702.5a8c1b09.chunk.js"
     },
-    "static/js/7728.d58677ad.chunk.js": {
-      "name": "static/js/7728.d58677ad.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7728.d58677ad.chunk.js"
+    "static/js/7728.16c69a26.chunk.js": {
+      "name": "static/js/7728.16c69a26.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7728.16c69a26.chunk.js"
+    },
+    "static/js/7734.6bb8826c.chunk.js": {
+      "name": "static/js/7734.6bb8826c.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7734.6bb8826c.chunk.js"
+    },
+    "static/js/7780.7988fd72.chunk.js": {
+      "name": "static/js/7780.7988fd72.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7780.7988fd72.chunk.js"
+    },
+    "static/js/7795.92be2f9a.chunk.js": {
+      "name": "static/js/7795.92be2f9a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7795.92be2f9a.chunk.js"
     },
     "static/js/78.2323c278.chunk.js": {
       "name": "static/js/78.2323c278.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/78.2323c278.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/78.2323c278.chunk.js"
+    },
+    "static/js/7803.cfb4acb1.chunk.js": {
+      "name": "static/js/7803.cfb4acb1.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7803.cfb4acb1.chunk.js"
+    },
+    "static/js/786.a092d26a.chunk.js": {
+      "name": "static/js/786.a092d26a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/786.a092d26a.chunk.js"
     },
     "static/js/7881.27c93a8d.chunk.js": {
       "name": "static/js/7881.27c93a8d.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7881.27c93a8d.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7881.27c93a8d.chunk.js"
     },
     "static/js/7926.c372e3fb.chunk.js": {
       "name": "static/js/7926.c372e3fb.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7926.c372e3fb.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7926.c372e3fb.chunk.js"
+    },
+    "static/js/7954.af12677e.chunk.js": {
+      "name": "static/js/7954.af12677e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7954.af12677e.chunk.js"
     },
     "static/js/7969.3156b7ef.chunk.js": {
       "name": "static/js/7969.3156b7ef.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/7969.3156b7ef.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/7969.3156b7ef.chunk.js"
+    },
+    "static/js/8064.1f16e32f.chunk.js": {
+      "name": "static/js/8064.1f16e32f.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8064.1f16e32f.chunk.js"
+    },
+    "static/js/8064.1f16e32f.chunk.js.LICENSE.txt": {
+      "name": "static/js/8064.1f16e32f.chunk.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8064.1f16e32f.chunk.js.LICENSE.txt"
     },
     "static/js/8116.78dfdd7e.chunk.js": {
       "name": "static/js/8116.78dfdd7e.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8116.78dfdd7e.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8116.78dfdd7e.chunk.js"
     },
     "static/js/8197.c5d1369a.chunk.js": {
       "name": "static/js/8197.c5d1369a.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8197.c5d1369a.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8197.c5d1369a.chunk.js"
+    },
+    "static/js/8366.d48a73ef.chunk.js": {
+      "name": "static/js/8366.d48a73ef.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8366.d48a73ef.chunk.js"
+    },
+    "static/js/8387.f660a070.chunk.js": {
+      "name": "static/js/8387.f660a070.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8387.f660a070.chunk.js"
     },
     "static/js/8411.9348d010.chunk.js": {
       "name": "static/js/8411.9348d010.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8411.9348d010.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8411.9348d010.chunk.js"
+    },
+    "static/js/8431.b5366568.chunk.js": {
+      "name": "static/js/8431.b5366568.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8431.b5366568.chunk.js"
     },
     "static/js/8466.691d633d.chunk.js": {
       "name": "static/js/8466.691d633d.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8466.691d633d.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8466.691d633d.chunk.js"
+    },
+    "static/js/8521.f67e5e5e.chunk.js": {
+      "name": "static/js/8521.f67e5e5e.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8521.f67e5e5e.chunk.js"
+    },
+    "static/js/8585.9145f29f.chunk.js": {
+      "name": "static/js/8585.9145f29f.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8585.9145f29f.chunk.js"
     },
     "static/js/8590.bf239b32.chunk.js": {
       "name": "static/js/8590.bf239b32.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8590.bf239b32.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8590.bf239b32.chunk.js"
+    },
+    "static/js/8604.05c55a85.chunk.js": {
+      "name": "static/js/8604.05c55a85.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8604.05c55a85.chunk.js"
+    },
+    "static/js/8644.a9ce4913.chunk.js": {
+      "name": "static/js/8644.a9ce4913.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8644.a9ce4913.chunk.js"
+    },
+    "static/js/8711.e626b573.chunk.js": {
+      "name": "static/js/8711.e626b573.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8711.e626b573.chunk.js"
     },
     "static/js/8836.fd3c5cf2.chunk.js": {
       "name": "static/js/8836.fd3c5cf2.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8836.fd3c5cf2.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8836.fd3c5cf2.chunk.js"
     },
-    "static/js/8868.3d4e1b75.chunk.js": {
-      "name": "static/js/8868.3d4e1b75.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8868.3d4e1b75.chunk.js"
+    "static/js/8868.a341089b.chunk.js": {
+      "name": "static/js/8868.a341089b.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8868.a341089b.chunk.js"
     },
-    "static/js/8883.73aaf63a.chunk.js": {
-      "name": "static/js/8883.73aaf63a.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/8883.73aaf63a.chunk.js"
+    "static/js/8883.88851f74.chunk.js": {
+      "name": "static/js/8883.88851f74.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8883.88851f74.chunk.js"
+    },
+    "static/js/8964.982ee6c3.chunk.js": {
+      "name": "static/js/8964.982ee6c3.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/8964.982ee6c3.chunk.js"
+    },
+    "static/js/9001.85d7dcf7.chunk.js": {
+      "name": "static/js/9001.85d7dcf7.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9001.85d7dcf7.chunk.js"
     },
     "static/js/9011.7831b91c.chunk.js": {
       "name": "static/js/9011.7831b91c.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9011.7831b91c.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9011.7831b91c.chunk.js"
+    },
+    "static/js/9036.568835c9.chunk.js": {
+      "name": "static/js/9036.568835c9.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9036.568835c9.chunk.js"
+    },
+    "static/js/9052.4b7e696a.chunk.js": {
+      "name": "static/js/9052.4b7e696a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9052.4b7e696a.chunk.js"
     },
     "static/js/9072.75c60489.chunk.js": {
       "name": "static/js/9072.75c60489.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9072.75c60489.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9072.75c60489.chunk.js"
+    },
+    "static/js/9094.99900ff2.chunk.js": {
+      "name": "static/js/9094.99900ff2.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9094.99900ff2.chunk.js"
+    },
+    "static/js/9094.99900ff2.chunk.js.LICENSE.txt": {
+      "name": "static/js/9094.99900ff2.chunk.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9094.99900ff2.chunk.js.LICENSE.txt"
     },
     "static/js/9107.cfab64d6.chunk.js": {
       "name": "static/js/9107.cfab64d6.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9107.cfab64d6.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9107.cfab64d6.chunk.js"
+    },
+    "static/js/9217.88e48112.chunk.js": {
+      "name": "static/js/9217.88e48112.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9217.88e48112.chunk.js"
     },
     "static/js/9273.3f8d6124.chunk.js": {
       "name": "static/js/9273.3f8d6124.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9273.3f8d6124.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9273.3f8d6124.chunk.js"
+    },
+    "static/js/9316.3c82270a.chunk.js": {
+      "name": "static/js/9316.3c82270a.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9316.3c82270a.chunk.js"
+    },
+    "static/js/9346.800e2de3.chunk.js": {
+      "name": "static/js/9346.800e2de3.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9346.800e2de3.chunk.js"
+    },
+    "static/js/9352.bca7b230.chunk.js": {
+      "name": "static/js/9352.bca7b230.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9352.bca7b230.chunk.js"
     },
     "static/js/9431.412046d8.chunk.js": {
       "name": "static/js/9431.412046d8.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9431.412046d8.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9431.412046d8.chunk.js"
     },
-    "static/js/9478.e0af85a2.chunk.js": {
-      "name": "static/js/9478.e0af85a2.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9478.e0af85a2.chunk.js"
+    "static/js/9478.342016f4.chunk.js": {
+      "name": "static/js/9478.342016f4.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9478.342016f4.chunk.js"
     },
-    "static/js/9493.b333bf9b.chunk.js": {
-      "name": "static/js/9493.b333bf9b.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9493.b333bf9b.chunk.js"
+    "static/js/9493.6ede9133.chunk.js": {
+      "name": "static/js/9493.6ede9133.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9493.6ede9133.chunk.js"
+    },
+    "static/js/9512.154192bc.chunk.js": {
+      "name": "static/js/9512.154192bc.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9512.154192bc.chunk.js"
     },
     "static/js/9538.8493c862.chunk.js": {
       "name": "static/js/9538.8493c862.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9538.8493c862.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9538.8493c862.chunk.js"
     },
-    "static/js/959.d6a4a2c0.chunk.js": {
-      "name": "static/js/959.d6a4a2c0.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/959.d6a4a2c0.chunk.js"
+    "static/js/959.972ef859.chunk.js": {
+      "name": "static/js/959.972ef859.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/959.972ef859.chunk.js"
+    },
+    "static/js/9605.ef1778b7.chunk.js": {
+      "name": "static/js/9605.ef1778b7.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9605.ef1778b7.chunk.js"
+    },
+    "static/js/966.4fa53747.chunk.js": {
+      "name": "static/js/966.4fa53747.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/966.4fa53747.chunk.js"
     },
     "static/js/9675.601c5a98.chunk.js": {
       "name": "static/js/9675.601c5a98.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9675.601c5a98.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9675.601c5a98.chunk.js"
+    },
+    "static/js/9743.f3212380.chunk.js": {
+      "name": "static/js/9743.f3212380.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9743.f3212380.chunk.js"
+    },
+    "static/js/9977.37c3bf3d.chunk.js": {
+      "name": "static/js/9977.37c3bf3d.chunk.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9977.37c3bf3d.chunk.js"
     },
     "static/js/9984.86960be9.chunk.js": {
       "name": "static/js/9984.86960be9.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9984.86960be9.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9984.86960be9.chunk.js"
     },
     "static/js/9997.5762e075.chunk.js": {
       "name": "static/js/9997.5762e075.chunk.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/9997.5762e075.chunk.js"
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/9997.5762e075.chunk.js"
     },
-    "static/js/app.49c1827d.js": {
-      "name": "static/js/app.49c1827d.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/app.49c1827d.js"
+    "static/js/app.8089583c.js": {
+      "name": "static/js/app.8089583c.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/app.8089583c.js"
     },
-    "static/js/app.49c1827d.js.LICENSE.txt": {
-      "name": "static/js/app.49c1827d.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/app.49c1827d.js.LICENSE.txt"
+    "static/js/app.8089583c.js.LICENSE.txt": {
+      "name": "static/js/app.8089583c.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/app.8089583c.js.LICENSE.txt"
     },
-    "static/js/commons.dc121a38.js": {
-      "name": "static/js/commons.dc121a38.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/commons.dc121a38.js"
+    "static/js/commons.2982b0c0.js": {
+      "name": "static/js/commons.2982b0c0.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/commons.2982b0c0.js"
     },
-    "static/js/commons.dc121a38.js.LICENSE.txt": {
-      "name": "static/js/commons.dc121a38.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/commons.dc121a38.js.LICENSE.txt"
+    "static/js/commons.2982b0c0.js.LICENSE.txt": {
+      "name": "static/js/commons.2982b0c0.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/commons.2982b0c0.js.LICENSE.txt"
     },
-    "static/js/draft.5aa48a0a.js": {
-      "name": "static/js/draft.5aa48a0a.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/draft.5aa48a0a.js"
+    "static/js/excalidrawEditor.fd636996.js": {
+      "name": "static/js/excalidrawEditor.fd636996.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/excalidrawEditor.fd636996.js"
     },
-    "static/js/fileHistory.f83d2f3b.js": {
-      "name": "static/js/fileHistory.f83d2f3b.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/fileHistory.f83d2f3b.js"
+    "static/js/excalidrawEditor.fd636996.js.LICENSE.txt": {
+      "name": "static/js/excalidrawEditor.fd636996.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/excalidrawEditor.fd636996.js.LICENSE.txt"
     },
-    "static/js/fileHistoryOld.32df1cc9.js": {
-      "name": "static/js/fileHistoryOld.32df1cc9.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/fileHistoryOld.32df1cc9.js"
+    "static/js/fileHistory.c83d615e.js": {
+      "name": "static/js/fileHistory.c83d615e.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistory.c83d615e.js"
     },
-    "static/js/fileView.2e5e064e.js": {
-      "name": "static/js/fileView.2e5e064e.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/fileView.2e5e064e.js"
+    "static/js/fileHistoryOld.01f43b0f.js": {
+      "name": "static/js/fileHistoryOld.01f43b0f.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileHistoryOld.01f43b0f.js"
     },
-    "static/js/fileView.2e5e064e.js.LICENSE.txt": {
-      "name": "static/js/fileView.2e5e064e.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/fileView.2e5e064e.js.LICENSE.txt"
+    "static/js/fileView.198e3e57.js": {
+      "name": "static/js/fileView.198e3e57.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileView.198e3e57.js"
     },
-    "static/js/historyTrashFileView.ff429995.js": {
-      "name": "static/js/historyTrashFileView.ff429995.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/historyTrashFileView.ff429995.js"
+    "static/js/fileView.198e3e57.js.LICENSE.txt": {
+      "name": "static/js/fileView.198e3e57.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/fileView.198e3e57.js.LICENSE.txt"
     },
-    "static/js/historyTrashFileView.ff429995.js.LICENSE.txt": {
-      "name": "static/js/historyTrashFileView.ff429995.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/historyTrashFileView.ff429995.js.LICENSE.txt"
+    "static/js/historyTrashFileView.0e93ec94.js": {
+      "name": "static/js/historyTrashFileView.0e93ec94.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/historyTrashFileView.0e93ec94.js"
     },
-    "static/js/institutionAdmin.d203d7e4.js": {
-      "name": "static/js/institutionAdmin.d203d7e4.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/institutionAdmin.d203d7e4.js"
+    "static/js/historyTrashFileView.0e93ec94.js.LICENSE.txt": {
+      "name": "static/js/historyTrashFileView.0e93ec94.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/historyTrashFileView.0e93ec94.js.LICENSE.txt"
     },
-    "static/js/markdownEditor.4e5da8ce.js": {
-      "name": "static/js/markdownEditor.4e5da8ce.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/markdownEditor.4e5da8ce.js"
+    "static/js/institutionAdmin.41424638.js": {
+      "name": "static/js/institutionAdmin.41424638.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/institutionAdmin.41424638.js"
     },
-    "static/js/markdownEditor.4e5da8ce.js.LICENSE.txt": {
-      "name": "static/js/markdownEditor.4e5da8ce.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/markdownEditor.4e5da8ce.js.LICENSE.txt"
+    "static/js/markdownEditor.909dada6.js": {
+      "name": "static/js/markdownEditor.909dada6.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/markdownEditor.909dada6.js"
     },
-    "static/js/orgAdmin.cde70064.js": {
-      "name": "static/js/orgAdmin.cde70064.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/orgAdmin.cde70064.js"
+    "static/js/markdownEditor.909dada6.js.LICENSE.txt": {
+      "name": "static/js/markdownEditor.909dada6.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/markdownEditor.909dada6.js.LICENSE.txt"
     },
-    "static/js/orgAdmin.cde70064.js.LICENSE.txt": {
-      "name": "static/js/orgAdmin.cde70064.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/orgAdmin.cde70064.js.LICENSE.txt"
+    "static/js/orgAdmin.6db46e4b.js": {
+      "name": "static/js/orgAdmin.6db46e4b.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/orgAdmin.6db46e4b.js"
     },
-    "static/js/plainMarkdownEditor.e9ae6949.js": {
-      "name": "static/js/plainMarkdownEditor.e9ae6949.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/plainMarkdownEditor.e9ae6949.js"
+    "static/js/plainMarkdownEditor.739b07ff.js": {
+      "name": "static/js/plainMarkdownEditor.739b07ff.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/plainMarkdownEditor.739b07ff.js"
     },
-    "static/js/plainMarkdownEditor.e9ae6949.js.LICENSE.txt": {
-      "name": "static/js/plainMarkdownEditor.e9ae6949.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/plainMarkdownEditor.e9ae6949.js.LICENSE.txt"
+    "static/js/plainMarkdownEditor.739b07ff.js.LICENSE.txt": {
+      "name": "static/js/plainMarkdownEditor.739b07ff.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/plainMarkdownEditor.739b07ff.js.LICENSE.txt"
     },
-    "static/js/repoFolderTrash.65a0f708.js": {
-      "name": "static/js/repoFolderTrash.65a0f708.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/repoFolderTrash.65a0f708.js"
+    "static/js/repoFolderTrash.bb67ecac.js": {
+      "name": "static/js/repoFolderTrash.bb67ecac.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoFolderTrash.bb67ecac.js"
     },
-    "static/js/repoHistory.3eccd005.js": {
-      "name": "static/js/repoHistory.3eccd005.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/repoHistory.3eccd005.js"
+    "static/js/repoHistory.f80abc8a.js": {
+      "name": "static/js/repoHistory.f80abc8a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoHistory.f80abc8a.js"
     },
-    "static/js/repoSnapshot.44ffe258.js": {
-      "name": "static/js/repoSnapshot.44ffe258.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/repoSnapshot.44ffe258.js"
+    "static/js/repoSnapshot.cfc7c164.js": {
+      "name": "static/js/repoSnapshot.cfc7c164.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/repoSnapshot.cfc7c164.js"
     },
-    "static/js/runtime.10358ed3.js": {
-      "name": "static/js/runtime.10358ed3.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/runtime.10358ed3.js"
+    "static/js/runtime.741213bb.js": {
+      "name": "static/js/runtime.741213bb.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/runtime.741213bb.js"
     },
-    "static/js/sdocFileHistory.cdcd3e8f.js": {
-      "name": "static/js/sdocFileHistory.cdcd3e8f.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sdocFileHistory.cdcd3e8f.js"
+    "static/js/sdocFileHistory.17b9ef49.js": {
+      "name": "static/js/sdocFileHistory.17b9ef49.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocFileHistory.17b9ef49.js"
     },
-    "static/js/sdocFileHistory.cdcd3e8f.js.LICENSE.txt": {
-      "name": "static/js/sdocFileHistory.cdcd3e8f.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sdocFileHistory.cdcd3e8f.js.LICENSE.txt"
+    "static/js/sdocFileHistory.17b9ef49.js.LICENSE.txt": {
+      "name": "static/js/sdocFileHistory.17b9ef49.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocFileHistory.17b9ef49.js.LICENSE.txt"
     },
-    "static/js/sdocPublishedRevision.18133482.js": {
-      "name": "static/js/sdocPublishedRevision.18133482.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.18133482.js"
+    "static/js/sdocPublishedRevision.38020c78.js": {
+      "name": "static/js/sdocPublishedRevision.38020c78.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.38020c78.js"
     },
-    "static/js/sdocPublishedRevision.18133482.js.LICENSE.txt": {
-      "name": "static/js/sdocPublishedRevision.18133482.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.18133482.js.LICENSE.txt"
+    "static/js/sdocPublishedRevision.38020c78.js.LICENSE.txt": {
+      "name": "static/js/sdocPublishedRevision.38020c78.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sdocPublishedRevision.38020c78.js.LICENSE.txt"
     },
-    "static/js/search.7a19ee66.js": {
-      "name": "static/js/search.7a19ee66.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/search.7a19ee66.js"
+    "static/js/settings.585feb30.js": {
+      "name": "static/js/settings.585feb30.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/settings.585feb30.js"
     },
-    "static/js/settings.58fae117.js": {
-      "name": "static/js/settings.58fae117.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/settings.58fae117.js"
+    "static/js/sharedDirView.51946019.js": {
+      "name": "static/js/sharedDirView.51946019.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedDirView.51946019.js"
     },
-    "static/js/sharedDirView.6b7df001.js": {
-      "name": "static/js/sharedDirView.6b7df001.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedDirView.6b7df001.js"
+    "static/js/sharedFileViewAudio.3f3039c6.js": {
+      "name": "static/js/sharedFileViewAudio.3f3039c6.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.3f3039c6.js"
     },
-    "static/js/sharedFileViewAudio.e2cecc6e.js": {
-      "name": "static/js/sharedFileViewAudio.e2cecc6e.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.e2cecc6e.js"
+    "static/js/sharedFileViewAudio.3f3039c6.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewAudio.3f3039c6.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.3f3039c6.js.LICENSE.txt"
     },
-    "static/js/sharedFileViewAudio.e2cecc6e.js.LICENSE.txt": {
-      "name": "static/js/sharedFileViewAudio.e2cecc6e.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewAudio.e2cecc6e.js.LICENSE.txt"
+    "static/js/sharedFileViewDocument.5b24edf1.js": {
+      "name": "static/js/sharedFileViewDocument.5b24edf1.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.5b24edf1.js"
     },
-    "static/js/sharedFileViewDocument.12d527a2.js": {
-      "name": "static/js/sharedFileViewDocument.12d527a2.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewDocument.12d527a2.js"
+    "static/js/sharedFileViewExdraw.a0837438.js": {
+      "name": "static/js/sharedFileViewExdraw.a0837438.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewExdraw.a0837438.js"
     },
-    "static/js/sharedFileViewImage.63eab097.js": {
-      "name": "static/js/sharedFileViewImage.63eab097.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewImage.63eab097.js"
+    "static/js/sharedFileViewExdraw.a0837438.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewExdraw.a0837438.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewExdraw.a0837438.js.LICENSE.txt"
     },
-    "static/js/sharedFileViewMarkdown.cb87a669.js": {
-      "name": "static/js/sharedFileViewMarkdown.cb87a669.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.cb87a669.js"
+    "static/js/sharedFileViewImage.5fafe65a.js": {
+      "name": "static/js/sharedFileViewImage.5fafe65a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewImage.5fafe65a.js"
     },
-    "static/js/sharedFileViewMarkdown.cb87a669.js.LICENSE.txt": {
-      "name": "static/js/sharedFileViewMarkdown.cb87a669.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.cb87a669.js.LICENSE.txt"
+    "static/js/sharedFileViewMarkdown.28d16237.js": {
+      "name": "static/js/sharedFileViewMarkdown.28d16237.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.28d16237.js"
     },
-    "static/js/sharedFileViewPDF.020ab7eb.js": {
-      "name": "static/js/sharedFileViewPDF.020ab7eb.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.020ab7eb.js"
+    "static/js/sharedFileViewMarkdown.28d16237.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewMarkdown.28d16237.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewMarkdown.28d16237.js.LICENSE.txt"
     },
-    "static/js/sharedFileViewSdoc.0a695b58.js": {
-      "name": "static/js/sharedFileViewSdoc.0a695b58.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.0a695b58.js"
+    "static/js/sharedFileViewPDF.c7afb061.js": {
+      "name": "static/js/sharedFileViewPDF.c7afb061.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewPDF.c7afb061.js"
     },
-    "static/js/sharedFileViewSdoc.0a695b58.js.LICENSE.txt": {
-      "name": "static/js/sharedFileViewSdoc.0a695b58.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.0a695b58.js.LICENSE.txt"
+    "static/js/sharedFileViewSdoc.c44e0e95.js": {
+      "name": "static/js/sharedFileViewSdoc.c44e0e95.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.c44e0e95.js"
     },
-    "static/js/sharedFileViewSpreadsheet.f8a1d57a.js": {
-      "name": "static/js/sharedFileViewSpreadsheet.f8a1d57a.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.f8a1d57a.js"
+    "static/js/sharedFileViewSdoc.c44e0e95.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewSdoc.c44e0e95.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSdoc.c44e0e95.js.LICENSE.txt"
     },
-    "static/js/sharedFileViewSVG.50d9031b.js": {
-      "name": "static/js/sharedFileViewSVG.50d9031b.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.50d9031b.js"
+    "static/js/sharedFileViewSpreadsheet.f9b3db05.js": {
+      "name": "static/js/sharedFileViewSpreadsheet.f9b3db05.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSpreadsheet.f9b3db05.js"
     },
-    "static/js/sharedFileViewText.97f5aedf.js": {
-      "name": "static/js/sharedFileViewText.97f5aedf.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewText.97f5aedf.js"
+    "static/js/sharedFileViewSVG.464c73aa.js": {
+      "name": "static/js/sharedFileViewSVG.464c73aa.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewSVG.464c73aa.js"
     },
-    "static/js/sharedFileViewText.97f5aedf.js.LICENSE.txt": {
-      "name": "static/js/sharedFileViewText.97f5aedf.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewText.97f5aedf.js.LICENSE.txt"
+    "static/js/sharedFileViewText.d2060e8f.js": {
+      "name": "static/js/sharedFileViewText.d2060e8f.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewText.d2060e8f.js"
     },
-    "static/js/sharedFileViewUnknown.c2574eee.js": {
-      "name": "static/js/sharedFileViewUnknown.c2574eee.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.c2574eee.js"
+    "static/js/sharedFileViewText.d2060e8f.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewText.d2060e8f.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewText.d2060e8f.js.LICENSE.txt"
     },
-    "static/js/sharedFileViewVideo.e3da2124.js": {
-      "name": "static/js/sharedFileViewVideo.e3da2124.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.e3da2124.js"
+    "static/js/sharedFileViewUnknown.74f41017.js": {
+      "name": "static/js/sharedFileViewUnknown.74f41017.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewUnknown.74f41017.js"
     },
-    "static/js/sharedFileViewVideo.e3da2124.js.LICENSE.txt": {
-      "name": "static/js/sharedFileViewVideo.e3da2124.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.e3da2124.js.LICENSE.txt"
+    "static/js/sharedFileViewVideo.e40ce4a2.js": {
+      "name": "static/js/sharedFileViewVideo.e40ce4a2.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.e40ce4a2.js"
     },
-    "static/js/subscription.05249984.js": {
-      "name": "static/js/subscription.05249984.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/subscription.05249984.js"
+    "static/js/sharedFileViewVideo.e40ce4a2.js.LICENSE.txt": {
+      "name": "static/js/sharedFileViewVideo.e40ce4a2.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sharedFileViewVideo.e40ce4a2.js.LICENSE.txt"
     },
-    "static/js/sysAdmin.12f25aca.js": {
-      "name": "static/js/sysAdmin.12f25aca.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sysAdmin.12f25aca.js"
+    "static/js/subscription.3d712fc3.js": {
+      "name": "static/js/subscription.3d712fc3.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/subscription.3d712fc3.js"
     },
-    "static/js/sysAdmin.12f25aca.js.LICENSE.txt": {
-      "name": "static/js/sysAdmin.12f25aca.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/sysAdmin.12f25aca.js.LICENSE.txt"
+    "static/js/sysAdmin.74a78e97.js": {
+      "name": "static/js/sysAdmin.74a78e97.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/sysAdmin.74a78e97.js"
     },
-    "static/js/TCAccept.91ae9f73.js": {
-      "name": "static/js/TCAccept.91ae9f73.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/TCAccept.91ae9f73.js"
+    "static/js/TCAccept.59909828.js": {
+      "name": "static/js/TCAccept.59909828.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCAccept.59909828.js"
     },
-    "static/js/TCView.e821a5ff.js": {
-      "name": "static/js/TCView.e821a5ff.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/TCView.e821a5ff.js"
+    "static/js/TCView.f6968e63.js": {
+      "name": "static/js/TCView.f6968e63.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/TCView.f6968e63.js"
     },
-    "static/js/uploadLink.d0bf453a.js": {
-      "name": "static/js/uploadLink.d0bf453a.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/uploadLink.d0bf453a.js"
+    "static/js/tldrawEditor.bbf313cb.js": {
+      "name": "static/js/tldrawEditor.bbf313cb.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/tldrawEditor.bbf313cb.js"
     },
-    "static/js/viewFileCollaboraOnline.30438ef7.js": {
-      "name": "static/js/viewFileCollaboraOnline.30438ef7.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileCollaboraOnline.30438ef7.js"
+    "static/js/tldrawEditor.bbf313cb.js.LICENSE.txt": {
+      "name": "static/js/tldrawEditor.bbf313cb.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/tldrawEditor.bbf313cb.js.LICENSE.txt"
     },
-    "static/js/viewFileDocument.99b2187a.js": {
-      "name": "static/js/viewFileDocument.99b2187a.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileDocument.99b2187a.js"
+    "static/js/uploadLink.6b11c538.js": {
+      "name": "static/js/uploadLink.6b11c538.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/uploadLink.6b11c538.js"
     },
-    "static/js/viewFileOnlyoffice.f4df1717.js": {
-      "name": "static/js/viewFileOnlyoffice.f4df1717.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileOnlyoffice.f4df1717.js"
+    "static/js/viewFileCollaboraOnline.25137240.js": {
+      "name": "static/js/viewFileCollaboraOnline.25137240.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileCollaboraOnline.25137240.js"
     },
-    "static/js/viewFileSdoc.1dd57fca.js": {
-      "name": "static/js/viewFileSdoc.1dd57fca.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileSdoc.1dd57fca.js"
+    "static/js/viewFileDocument.dee74adc.js": {
+      "name": "static/js/viewFileDocument.dee74adc.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileDocument.dee74adc.js"
     },
-    "static/js/viewFileSdoc.1dd57fca.js.LICENSE.txt": {
-      "name": "static/js/viewFileSdoc.1dd57fca.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileSdoc.1dd57fca.js.LICENSE.txt"
+    "static/js/viewFileOnlyoffice.ae6e9897.js": {
+      "name": "static/js/viewFileOnlyoffice.ae6e9897.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileOnlyoffice.ae6e9897.js"
     },
-    "static/js/viewFileSpreadsheet.026b6368.js": {
-      "name": "static/js/viewFileSpreadsheet.026b6368.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.026b6368.js"
+    "static/js/viewFileSdoc.1f79dc3c.js": {
+      "name": "static/js/viewFileSdoc.1f79dc3c.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSdoc.1f79dc3c.js"
     },
-    "static/js/viewFileText.bf076f2f.js": {
-      "name": "static/js/viewFileText.bf076f2f.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileText.bf076f2f.js"
+    "static/js/viewFileSdoc.1f79dc3c.js.LICENSE.txt": {
+      "name": "static/js/viewFileSdoc.1f79dc3c.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSdoc.1f79dc3c.js.LICENSE.txt"
     },
-    "static/js/viewFileText.bf076f2f.js.LICENSE.txt": {
-      "name": "static/js/viewFileText.bf076f2f.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/viewFileText.bf076f2f.js.LICENSE.txt"
+    "static/js/viewFileSpreadsheet.1612d3aa.js": {
+      "name": "static/js/viewFileSpreadsheet.1612d3aa.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileSpreadsheet.1612d3aa.js"
     },
-    "static/js/wiki.c199dfe7.js": {
-      "name": "static/js/wiki.c199dfe7.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/wiki.c199dfe7.js"
+    "static/js/viewFileText.5fbd2f0a.js": {
+      "name": "static/js/viewFileText.5fbd2f0a.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileText.5fbd2f0a.js"
     },
-    "static/js/wiki.c199dfe7.js.LICENSE.txt": {
-      "name": "static/js/wiki.c199dfe7.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/wiki.c199dfe7.js.LICENSE.txt"
+    "static/js/viewFileText.5fbd2f0a.js.LICENSE.txt": {
+      "name": "static/js/viewFileText.5fbd2f0a.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/viewFileText.5fbd2f0a.js.LICENSE.txt"
     },
-    "static/js/wiki2.3268bb76.js": {
-      "name": "static/js/wiki2.3268bb76.js",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/wiki2.3268bb76.js"
+    "static/js/wiki.70818ab2.js": {
+      "name": "static/js/wiki.70818ab2.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki.70818ab2.js"
     },
-    "static/js/wiki2.3268bb76.js.LICENSE.txt": {
-      "name": "static/js/wiki2.3268bb76.js.LICENSE.txt",
-      "path": "/Users/ygx/work/sea/docker/seafile-dev/data/dev/seahub/frontend/build/frontend/static/js/wiki2.3268bb76.js.LICENSE.txt"
+    "static/js/wiki.70818ab2.js.LICENSE.txt": {
+      "name": "static/js/wiki.70818ab2.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki.70818ab2.js.LICENSE.txt"
+    },
+    "static/js/wiki2.e46fe40e.js": {
+      "name": "static/js/wiki2.e46fe40e.js",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki2.e46fe40e.js"
+    },
+    "static/js/wiki2.e46fe40e.js.LICENSE.txt": {
+      "name": "static/js/wiki2.e46fe40e.js.LICENSE.txt",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/js/wiki2.e46fe40e.js.LICENSE.txt"
+    },
+    "static/media/Assistant-Bold.14280543a73d6738a929.woff2": {
+      "name": "static/media/Assistant-Bold.14280543a73d6738a929.woff2",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/media/Assistant-Bold.14280543a73d6738a929.woff2"
+    },
+    "static/media/Assistant-Medium.0196e01373538d8ddd9b.woff2": {
+      "name": "static/media/Assistant-Medium.0196e01373538d8ddd9b.woff2",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/media/Assistant-Medium.0196e01373538d8ddd9b.woff2"
+    },
+    "static/media/Assistant-Regular.667df7ca125d6b63b135.woff2": {
+      "name": "static/media/Assistant-Regular.667df7ca125d6b63b135.woff2",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/media/Assistant-Regular.667df7ca125d6b63b135.woff2"
+    },
+    "static/media/Assistant-SemiBold.590ad9e4bfdad16dca50.woff2": {
+      "name": "static/media/Assistant-SemiBold.590ad9e4bfdad16dca50.woff2",
+      "path": "/home/runner/work/seahub/seahub/frontend/build/frontend/static/media/Assistant-SemiBold.590ad9e4bfdad16dca50.woff2"
     }
   },
   "chunks": {
     "app": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/app.b0b3ff68.css",
-      "static/js/app.49c1827d.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/app.74302d57.css",
+      "static/js/app.8089583c.js"
     ],
-    "draft": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/draft.299cd106.css",
-      "static/js/draft.5aa48a0a.js"
+    "excalidrawEditor": [
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/excalidrawEditor.a99ce8ef.css",
+      "static/js/excalidrawEditor.fd636996.js"
     ],
     "fileHistory": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/fileHistory.cc85122e.css",
-      "static/js/fileHistory.f83d2f3b.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/fileHistory.621ee70b.css",
+      "static/js/fileHistory.c83d615e.js"
     ],
     "fileHistoryOld": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/fileHistoryOld.56e922f5.css",
-      "static/js/fileHistoryOld.32df1cc9.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/fileHistoryOld.89615757.css",
+      "static/js/fileHistoryOld.01f43b0f.js"
     ],
     "fileView": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/fileView.de4c4c69.css",
-      "static/js/fileView.2e5e064e.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/fileView.57f04cdd.css",
+      "static/js/fileView.198e3e57.js"
     ],
     "historyTrashFileView": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/historyTrashFileView.d1388ed1.css",
-      "static/js/historyTrashFileView.ff429995.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/historyTrashFileView.951601d0.css",
+      "static/js/historyTrashFileView.0e93ec94.js"
     ],
     "institutionAdmin": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/institutionAdmin.d203d7e4.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/js/institutionAdmin.41424638.js"
     ],
     "markdownEditor": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/markdownEditor.d9845dea.css",
-      "static/js/markdownEditor.4e5da8ce.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/markdownEditor.2fbe6ae5.css",
+      "static/js/markdownEditor.909dada6.js"
     ],
     "orgAdmin": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/orgAdmin.4879b268.css",
-      "static/js/orgAdmin.cde70064.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/orgAdmin.ca07dc9e.css",
+      "static/js/orgAdmin.6db46e4b.js"
     ],
     "plainMarkdownEditor": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/plainMarkdownEditor.d56fc625.css",
-      "static/js/plainMarkdownEditor.e9ae6949.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/plainMarkdownEditor.5e84d156.css",
+      "static/js/plainMarkdownEditor.739b07ff.js"
     ],
     "repoFolderTrash": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/repoFolderTrash.7c99f0ca.css",
-      "static/js/repoFolderTrash.65a0f708.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/repoFolderTrash.197d1545.css",
+      "static/js/repoFolderTrash.bb67ecac.js"
     ],
     "repoHistory": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/repoHistory.79336166.css",
-      "static/js/repoHistory.3eccd005.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/repoHistory.d3ff981a.css",
+      "static/js/repoHistory.f80abc8a.js"
     ],
     "repoSnapshot": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/repoSnapshot.08027567.css",
-      "static/js/repoSnapshot.44ffe258.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/repoSnapshot.48530cc5.css",
+      "static/js/repoSnapshot.cfc7c164.js"
     ],
     "sdocFileHistory": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/sdocFileHistory.556eb6c1.css",
-      "static/js/sdocFileHistory.cdcd3e8f.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/sdocFileHistory.33455b6f.css",
+      "static/js/sdocFileHistory.17b9ef49.js"
     ],
     "sdocPublishedRevision": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/sdocPublishedRevision.e2c2a2fa.css",
-      "static/js/sdocPublishedRevision.18133482.js"
-    ],
-    "search": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/search.7a19ee66.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/sdocPublishedRevision.1310facc.css",
+      "static/js/sdocPublishedRevision.38020c78.js"
     ],
     "settings": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/settings.7199ead5.css",
-      "static/js/settings.58fae117.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/settings.32ef0882.css",
+      "static/js/settings.585feb30.js"
     ],
     "sharedDirView": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/sharedDirView.35e07ad8.css",
-      "static/js/sharedDirView.6b7df001.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/sharedDirView.5a06e837.css",
+      "static/js/sharedDirView.51946019.js"
     ],
     "sharedFileViewAudio": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/sharedFileViewAudio.48b683a3.css",
-      "static/js/sharedFileViewAudio.e2cecc6e.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/sharedFileViewAudio.2c4786bb.css",
+      "static/js/sharedFileViewAudio.3f3039c6.js"
     ],
     "sharedFileViewDocument": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/sharedFileViewDocument.12d527a2.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/js/sharedFileViewDocument.5b24edf1.js"
+    ],
+    "sharedFileViewExdraw": [
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/sharedFileViewExdraw.f795b566.css",
+      "static/js/sharedFileViewExdraw.a0837438.js"
     ],
     "sharedFileViewImage": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/sharedFileViewImage.546a26eb.css",
-      "static/js/sharedFileViewImage.63eab097.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/sharedFileViewImage.37f6b169.css",
+      "static/js/sharedFileViewImage.5fafe65a.js"
     ],
     "sharedFileViewMarkdown": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/sharedFileViewMarkdown.dea7f1ae.css",
-      "static/js/sharedFileViewMarkdown.cb87a669.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/sharedFileViewMarkdown.d5d17faa.css",
+      "static/js/sharedFileViewMarkdown.28d16237.js"
     ],
     "sharedFileViewPDF": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/sharedFileViewPDF.020ab7eb.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/js/sharedFileViewPDF.c7afb061.js"
     ],
     "sharedFileViewSdoc": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/sharedFileViewSdoc.e2c2a2fa.css",
-      "static/js/sharedFileViewSdoc.0a695b58.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/sharedFileViewSdoc.b26bae39.css",
+      "static/js/sharedFileViewSdoc.c44e0e95.js"
     ],
     "sharedFileViewSpreadsheet": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/sharedFileViewSpreadsheet.aea7959b.css",
-      "static/js/sharedFileViewSpreadsheet.f8a1d57a.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/sharedFileViewSpreadsheet.681fc15c.css",
+      "static/js/sharedFileViewSpreadsheet.f9b3db05.js"
     ],
     "sharedFileViewSVG": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
       "static/css/sharedFileViewSVG.e2d59eb8.css",
-      "static/js/sharedFileViewSVG.50d9031b.js"
+      "static/js/sharedFileViewSVG.464c73aa.js"
     ],
     "sharedFileViewText": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/sharedFileViewText.c88e34ff.css",
-      "static/js/sharedFileViewText.97f5aedf.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/sharedFileViewText.18c4a07b.css",
+      "static/js/sharedFileViewText.d2060e8f.js"
     ],
     "sharedFileViewUnknown": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/sharedFileViewUnknown.c2574eee.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/js/sharedFileViewUnknown.74f41017.js"
     ],
     "sharedFileViewVideo": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/sharedFileViewVideo.48a9c811.css",
-      "static/js/sharedFileViewVideo.e3da2124.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/sharedFileViewVideo.0f8e6fb7.css",
+      "static/js/sharedFileViewVideo.e40ce4a2.js"
     ],
     "subscription": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/subscription.39e7e396.css",
-      "static/js/subscription.05249984.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/subscription.a4ff7f78.css",
+      "static/js/subscription.3d712fc3.js"
     ],
     "sysAdmin": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/sysAdmin.487d63db.css",
-      "static/js/sysAdmin.12f25aca.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/sysAdmin.356712f2.css",
+      "static/js/sysAdmin.74a78e97.js"
     ],
     "TCAccept": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/TCAccept.b6a1c3b5.css",
-      "static/js/TCAccept.91ae9f73.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/TCAccept.9d2e820e.css",
+      "static/js/TCAccept.59909828.js"
     ],
     "TCView": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/TCView.b6a1c3b5.css",
-      "static/js/TCView.e821a5ff.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/TCView.9d2e820e.css",
+      "static/js/TCView.f6968e63.js"
+    ],
+    "tldrawEditor": [
+      "static/js/runtime.741213bb.js",
+      "static/css/tldrawEditor.b16d65e0.css",
+      "static/js/tldrawEditor.bbf313cb.js"
     ],
     "uploadLink": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/uploadLink.e5a87aa8.css",
-      "static/js/uploadLink.d0bf453a.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/uploadLink.f237c229.css",
+      "static/js/uploadLink.6b11c538.js"
     ],
     "viewFileCollaboraOnline": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/viewFileCollaboraOnline.30438ef7.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/js/viewFileCollaboraOnline.25137240.js"
     ],
     "viewFileDocument": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/viewFileDocument.99b2187a.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/js/viewFileDocument.dee74adc.js"
     ],
     "viewFileOnlyoffice": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/js/viewFileOnlyoffice.f4df1717.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/js/viewFileOnlyoffice.ae6e9897.js"
     ],
     "viewFileSdoc": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/viewFileSdoc.23f4bf46.css",
-      "static/js/viewFileSdoc.1dd57fca.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/viewFileSdoc.2bf59ef6.css",
+      "static/js/viewFileSdoc.1f79dc3c.js"
     ],
     "viewFileSpreadsheet": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/viewFileSpreadsheet.aea7959b.css",
-      "static/js/viewFileSpreadsheet.026b6368.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/viewFileSpreadsheet.681fc15c.css",
+      "static/js/viewFileSpreadsheet.1612d3aa.js"
     ],
     "viewFileText": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/viewFileText.7c2d8249.css",
-      "static/js/viewFileText.bf076f2f.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/viewFileText.f17aa66e.css",
+      "static/js/viewFileText.5fbd2f0a.js"
     ],
     "wiki": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/commons.c9b34160.css",
-      "static/js/commons.dc121a38.js",
-      "static/css/wiki.67d951c2.css",
-      "static/js/wiki.c199dfe7.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/commons.37f2317b.css",
+      "static/js/commons.2982b0c0.js",
+      "static/css/wiki.d90dcad4.css",
+      "static/js/wiki.70818ab2.js"
     ],
     "wiki2": [
-      "static/js/runtime.10358ed3.js",
-      "static/css/wiki2.e7621877.css",
-      "static/js/wiki2.3268bb76.js"
+      "static/js/runtime.741213bb.js",
+      "static/css/wiki2.f3acef30.css",
+      "static/js/wiki2.e46fe40e.js"
     ]
   }
 }
