@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 11:14+0800\n"
+"POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2014-2016\n"
 "Language-Team: Icelandic (http://app.transifex.com/haiwen/seahub/language/is/)\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "ADFS/SAML login relevant settings invalid."
 msgstr ""
 
-#: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:562
-#: seahub/adfs_auth/views.py:591 seahub/adfs_auth/views.py:631
-#: seahub/adfs_auth/views.py:651 seahub/adfs_auth/views.py:668
-#: seahub/adfs_auth/views.py:672 seahub/adfs_auth/views.py:702
-#: seahub/adfs_auth/views.py:727 seahub/adfs_auth/views.py:731
-#: seahub/adfs_auth/views.py:799 seahub/adfs_auth/views.py:803
+#: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:570
+#: seahub/adfs_auth/views.py:599 seahub/adfs_auth/views.py:639
+#: seahub/adfs_auth/views.py:659 seahub/adfs_auth/views.py:676
+#: seahub/adfs_auth/views.py:680 seahub/adfs_auth/views.py:710
+#: seahub/adfs_auth/views.py:735 seahub/adfs_auth/views.py:739
+#: seahub/adfs_auth/views.py:807 seahub/adfs_auth/views.py:811
 msgid "Internal server error. Please contact system administrator."
 msgstr ""
 
@@ -41,13 +41,13 @@ msgid ""
 msgstr ""
 
 #: seahub/adfs_auth/views.py:126 seahub/adfs_auth/views.py:142
-#: seahub/api2/endpoints/admin/users.py:793
-#: seahub/api2/endpoints/admin/users.py:1279 seahub/base/accounts.py:1242
+#: seahub/api2/endpoints/admin/users.py:794
+#: seahub/api2/endpoints/admin/users.py:1280 seahub/base/accounts.py:1242
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
 msgstr ""
 
-#: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:424
+#: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:429
 msgid "Failed to bind SAML, please login first."
 msgstr ""
 
@@ -58,34 +58,34 @@ msgid ""
 "ADFS/SAML service"
 msgstr ""
 
-#: seahub/adfs_auth/views.py:302 seahub/adfs_auth/views.py:497
+#: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
 msgstr ""
 
-#: seahub/adfs_auth/views.py:337 seahub/adfs_auth/views.py:531
+#: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
 msgstr ""
 
-#: seahub/adfs_auth/views.py:587 seahub/adfs_auth/views.py:647
-#: seahub/adfs_auth/views.py:698
+#: seahub/adfs_auth/views.py:595 seahub/adfs_auth/views.py:655
+#: seahub/adfs_auth/views.py:706
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
 msgstr ""
 
-#: seahub/adfs_auth/views.py:735
+#: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a password first."
 msgstr ""
 
-#: seahub/adfs_auth/views.py:738
+#: seahub/adfs_auth/views.py:746
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
 msgstr ""
 
-#: seahub/adfs_auth/views.py:743
+#: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
 msgstr ""
 
@@ -105,8 +105,8 @@ msgid "Login id can't be empty"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:227
-#: seahub/api2/endpoints/admin/users.py:878
-#: seahub/api2/endpoints/admin/users.py:1307
+#: seahub/api2/endpoints/admin/users.py:879
+#: seahub/api2/endpoints/admin/users.py:1308
 #, python-format
 msgid "Login id %s already exists."
 msgstr ""
@@ -120,10 +120,10 @@ msgid "Space quota can't be empty"
 msgstr "Geymslukvóta má ekki vanta"
 
 #: seahub/api2/endpoints/admin/account.py:256
-#: seahub/api2/endpoints/admin/users.py:1355
-#: seahub/api2/endpoints/admin/users.py:1359
-#: seahub/api2/endpoints/admin/users.py:1372
-#: seahub/api2/endpoints/admin/users.py:1376
+#: seahub/api2/endpoints/admin/users.py:1356
+#: seahub/api2/endpoints/admin/users.py:1360
+#: seahub/api2/endpoints/admin/users.py:1373
+#: seahub/api2/endpoints/admin/users.py:1377
 #: seahub/institutions/api_views.py:174
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr ""
@@ -132,7 +132,7 @@ msgstr ""
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:275
 #: seahub/api2/endpoints/groups.py:220 seahub/api2/endpoints/groups.py:293
-#: seahub/api2/views.py:4776 seahub/group/forms.py:36
+#: seahub/api2/views.py:4765 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
@@ -183,12 +183,12 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr "Ekki er hægt að eyða kerfissafni."
 
-#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1945
+#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1934
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1950
+#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1939
 msgid "Library can not be transferred to owner."
 msgstr ""
 
@@ -200,8 +200,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
-#: seahub/api2/endpoints/share_links.py:577
-#: seahub/api2/endpoints/share_links.py:796
+#: seahub/api2/endpoints/share_links.py:593
+#: seahub/api2/endpoints/share_links.py:812
 msgid "There is an associated published library."
 msgstr ""
 
@@ -334,96 +334,96 @@ msgstr ""
 msgid "Space Quota"
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:654
-#: seahub/api2/endpoints/admin/users.py:691
+#: seahub/api2/endpoints/admin/users.py:655
+#: seahub/api2/endpoints/admin/users.py:692
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:892
+#: seahub/api2/endpoints/admin/users.py:893
 #, python-format
 msgid "Successfully added user %(user)s."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:896
+#: seahub/api2/endpoints/admin/users.py:897
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:552
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Þér hefur verið boðið í %s"
 
-#: seahub/api2/endpoints/admin/users.py:900
+#: seahub/api2/endpoints/admin/users.py:901
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:903
+#: seahub/api2/endpoints/admin/users.py:904
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1415
+#: seahub/api2/endpoints/admin/users.py:1416
 msgid "Edit succeeded"
 msgstr "Breyting tókst"
 
-#: seahub/api2/endpoints/admin/users.py:1418 seahub/views/sysadmin.py:453
+#: seahub/api2/endpoints/admin/users.py:1419 seahub/views/sysadmin.py:453
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Reikningurinn þinn á %s hefur verið virkjaður"
 
-#: seahub/api2/endpoints/admin/users.py:1423
+#: seahub/api2/endpoints/admin/users.py:1424
 msgid "Edit succeeded, an email has been sent."
 msgstr "Breyting tókst, tölvupóstur hefur verið sendur."
 
-#: seahub/api2/endpoints/admin/users.py:1426
+#: seahub/api2/endpoints/admin/users.py:1427
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "Breyting tókst, en ekki tókst að senda tölvupóst, vinsamlegast athugið tölvupóststillingarnar þínar."
 
-#: seahub/api2/endpoints/admin/users.py:1494 seahub/auth/forms.py:167
+#: seahub/api2/endpoints/admin/users.py:1495 seahub/auth/forms.py:167
 #: seahub/auth/views.py:365
 msgid "Unable to reset password."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1512 seahub/auth/forms.py:195
+#: seahub/api2/endpoints/admin/users.py:1513 seahub/auth/forms.py:195
 #: seahub/organizations/api/admin/user_set_password.py:74
 #, python-format
 msgid "Reset Password on %s"
 msgstr "Endursetja Lykilorð á %s"
 
-#: seahub/api2/endpoints/admin/users.py:1516
+#: seahub/api2/endpoints/admin/users.py:1517
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1534 seahub/views/sysadmin.py:494
+#: seahub/api2/endpoints/admin/users.py:1535 seahub/views/sysadmin.py:494
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Lykilorðið hefur verið endursett á %s"
 
-#: seahub/api2/endpoints/admin/users.py:1536
+#: seahub/api2/endpoints/admin/users.py:1537
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/users.py:1540 seahub/views/sysadmin.py:524
+#: seahub/api2/endpoints/admin/users.py:1541 seahub/views/sysadmin.py:524
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Tókst að endurstilla lykilorðið í  %(passwd)s, en mistókst að senda tölvupóst til %(user)s, vinsamlegast athugaðu netfangs stillinguna."
 
-#: seahub/api2/endpoints/admin/users.py:1543
+#: seahub/api2/endpoints/admin/users.py:1544
 #: seahub/organizations/api/admin/user_set_password.py:88
 #: seahub/views/sysadmin.py:528
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Tókst að endurstilla lykilorðið í %(passwd)s fyrir notandann %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1546 seahub/views/sysadmin.py:531
+#: seahub/api2/endpoints/admin/users.py:1547 seahub/views/sysadmin.py:531
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -448,19 +448,19 @@ msgstr ""
 #: seahub/api2/endpoints/repo_set_password.py:72
 #: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:102
-#: seahub/api2/endpoints/share_links.py:590
+#: seahub/api2/endpoints/share_links.py:606
 #: seahub/api2/endpoints/subscription.py:52
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
 #: seahub/api2/endpoints/wiki2.py:463 seahub/api2/endpoints/wiki2.py:491
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4110
-#: seahub/notifications/models.py:592 seahub/notifications/models.py:633
-#: seahub/notifications/models.py:675 seahub/notifications/models.py:726
-#: seahub/notifications/models.py:782 seahub/notifications/models.py:812
-#: seahub/notifications/models.py:834 seahub/notifications/models.py:860
-#: seahub/notifications/models.py:877 seahub/notifications/models.py:894
-#: seahub/notifications/models.py:923 seahub/seadoc/apis.py:2793
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4099
+#: seahub/notifications/models.py:594 seahub/notifications/models.py:635
+#: seahub/notifications/models.py:677 seahub/notifications/models.py:728
+#: seahub/notifications/models.py:784 seahub/notifications/models.py:814
+#: seahub/notifications/models.py:836 seahub/notifications/models.py:862
+#: seahub/notifications/models.py:879 seahub/notifications/models.py:896
+#: seahub/notifications/models.py:925 seahub/seadoc/apis.py:2793
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
 #: seahub/utils/__init__.py:171 seahub/views/__init__.py:834
 #: seahub/views/ajax.py:398 seahub/views/ajax.py:402 seahub/wiki/views.py:210
@@ -483,11 +483,11 @@ msgstr "Ekki leyfileg viðtökuslóð"
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
 #: seahub/api2/endpoints/repos_batch.py:494
-#: seahub/api2/endpoints/wiki2.py:1784 seahub/api2/views.py:2038
-#: seahub/api2/views.py:2078 seahub/api2/views.py:2140
-#: seahub/api2/views.py:2184 seahub/api2/views.py:2230
-#: seahub/api2/views.py:2279 seahub/api2/views.py:2692
-#: seahub/api2/views.py:2800 seahub/seadoc/apis.py:417
+#: seahub/api2/endpoints/wiki2.py:1784 seahub/api2/views.py:2027
+#: seahub/api2/views.py:2067 seahub/api2/views.py:2129
+#: seahub/api2/views.py:2173 seahub/api2/views.py:2219
+#: seahub/api2/views.py:2268 seahub/api2/views.py:2681
+#: seahub/api2/views.py:2789 seahub/seadoc/apis.py:417
 #: seahub/seadoc/apis.py:541 seahub/seadoc/apis.py:635
 #: seahub/seadoc/apis.py:3148
 msgid "Out of quota."
@@ -526,14 +526,14 @@ msgstr ""
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
 #: seahub/api2/endpoints/via_repo_token.py:853
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:2086 seahub/seadoc/apis.py:3155
+#: seahub/api2/views.py:2075 seahub/seadoc/apis.py:3155
 msgid "The number of files in library exceeds the limit"
 msgstr ""
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
-#: seahub/api2/endpoints/share_links.py:570
+#: seahub/api2/endpoints/share_links.py:586
 #: seahub/api2/endpoints/subscription.py:36
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
@@ -559,7 +559,7 @@ msgstr ""
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:878
+#: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:894
 msgid "You can not refresh this file's lock."
 msgstr ""
 
@@ -583,7 +583,7 @@ msgstr "Notandi %s er þegar meðlimur hóps."
 
 #: seahub/api2/endpoints/group_members.py:115
 #: seahub/api2/endpoints/group_members.py:366
-#: seahub/api2/endpoints/group_members.py:525 seahub/api2/views.py:1940
+#: seahub/api2/endpoints/group_members.py:525 seahub/api2/views.py:1929
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
@@ -657,28 +657,28 @@ msgstr "Tókst ekki að senda tölvupóst, tölvupóstþjónustan er líklegast 
 
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
-#: seahub/api2/endpoints/share_links.py:339
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4263
-#: seahub/api2/views.py:4383
+#: seahub/api2/endpoints/share_links.py:355
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4252
+#: seahub/api2/views.py:4372
 msgid "Password is required."
 msgstr "Lykilorðs er krafist."
 
 #: seahub/api2/endpoints/multi_share_links.py:110
-#: seahub/api2/endpoints/share_links.py:345
+#: seahub/api2/endpoints/share_links.py:361
 #: seahub/api2/endpoints/upload_links.py:176
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
 msgstr "Lykilorð er of stutt."
 
 #: seahub/api2/endpoints/multi_share_links.py:114
-#: seahub/api2/endpoints/share_links.py:349
+#: seahub/api2/endpoints/share_links.py:365
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
 msgstr ""
 
 #: seahub/api2/endpoints/multi_share_links.py:118
-#: seahub/api2/endpoints/share_links.py:353
+#: seahub/api2/endpoints/share_links.py:369
 #: seahub/api2/endpoints/upload_links.py:184
 #: seahub/api2/endpoints/webdav_secret.py:52
 msgid ""
@@ -688,28 +688,28 @@ msgstr ""
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
-#: seahub/api2/endpoints/share_links.py:376
-#: seahub/api2/endpoints/share_links.py:714
+#: seahub/api2/endpoints/share_links.py:392
+#: seahub/api2/endpoints/share_links.py:730
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3671
+#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3660
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
 
 #: seahub/api2/endpoints/multi_share_links.py:146
 #: seahub/api2/endpoints/multi_share_links.py:382
-#: seahub/api2/endpoints/share_links.py:382
-#: seahub/api2/endpoints/share_links.py:720
+#: seahub/api2/endpoints/share_links.py:398
+#: seahub/api2/endpoints/share_links.py:736
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3677
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3666
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
 
 #: seahub/api2/endpoints/multi_share_links.py:166
 #: seahub/api2/endpoints/multi_share_links.py:404
-#: seahub/api2/endpoints/share_links.py:404
-#: seahub/api2/endpoints/share_links.py:744
+#: seahub/api2/endpoints/share_links.py:420
+#: seahub/api2/endpoints/share_links.py:760
 #: seahub/api2/endpoints/upload_links.py:235
 #: seahub/api2/endpoints/upload_links.py:421
 #, python-format
@@ -718,8 +718,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/multi_share_links.py:175
 #: seahub/api2/endpoints/multi_share_links.py:413
-#: seahub/api2/endpoints/share_links.py:413
-#: seahub/api2/endpoints/share_links.py:753
+#: seahub/api2/endpoints/share_links.py:429
+#: seahub/api2/endpoints/share_links.py:769
 #: seahub/api2/endpoints/upload_links.py:244
 #: seahub/api2/endpoints/upload_links.py:430
 #, python-format
@@ -754,11 +754,11 @@ msgstr ""
 msgid "New password of library %s"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4107
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4096
 msgid "Wrong password"
 msgstr "Rangt lykilorð"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4113
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4102
 msgid "Decrypt library error"
 msgstr "Villa í dulkóðuðu safni"
 
@@ -786,7 +786,7 @@ msgid "Can't delete folder %s, please check its permission."
 msgstr ""
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
-#: seahub/notifications/models.py:963
+#: seahub/notifications/models.py:965
 msgid "file"
 msgstr "skrá"
 
@@ -796,7 +796,7 @@ msgid "A file is shared to you on %s"
 msgstr "Skrá er deilt með þér á %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-#: seahub/notifications/models.py:963
+#: seahub/notifications/models.py:965
 msgid "folder"
 msgstr ""
 
@@ -829,8 +829,8 @@ msgstr ""
 msgid "Email %s is invalid."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:482
-#: seahub/api2/endpoints/share_links.py:491
+#: seahub/api2/endpoints/share_links.py:498
+#: seahub/api2/endpoints/share_links.py:507
 #, python-format
 msgid "Share link %s already exists."
 msgstr ""
@@ -917,11 +917,11 @@ msgstr ""
 msgid "Name is required."
 msgstr "Nafn er áskilið"
 
-#: seahub/api2/utils.py:337
+#: seahub/api2/utils.py:338
 msgid "A share link for you"
 msgstr ""
 
-#: seahub/api2/views.py:1936
+#: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
 msgstr ""
@@ -1562,9 +1562,9 @@ msgstr "%(site_name)s teymið"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
 #: seahub/views/__init__.py:463 seahub/views/ajax.py:378
-#: seahub/views/ajax.py:424 seahub/views/file.py:1280
-#: seahub/views/file.py:1308 seahub/views/file.py:1565
-#: seahub/views/file.py:1605 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:424 seahub/views/file.py:1300
+#: seahub/views/file.py:1328 seahub/views/file.py:1588
+#: seahub/views/file.py:1628 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:384
 msgid "Permission denied"
@@ -1773,31 +1773,31 @@ msgstr "Ný athugasemd á %s"
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr ""
 
-#: seahub/notifications/models.py:610
+#: seahub/notifications/models.py:612
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "Skrá með nafninu <a href='%(file_link)s'>%(file_name)s</a> er hlaðið upp á þjóninn <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:617
+#: seahub/notifications/models.py:619
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
 msgstr ""
 
-#: seahub/notifications/models.py:652
+#: seahub/notifications/models.py:654
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
 msgstr ""
 
-#: seahub/notifications/models.py:659
+#: seahub/notifications/models.py:661
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
 msgstr ""
 
-#: seahub/notifications/models.py:793
+#: seahub/notifications/models.py:795
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -1805,35 +1805,35 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "Notandinn <a href='%(user_profile)s'>%(username)s</a> óskar eftir því að ganga í hópinn <a href='%(href)s'>%(group_name)s</a>, staðfestingarskilaboð: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:822
+#: seahub/notifications/models.py:824
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
 msgstr "Notandinn <a href='%(user_profile)s'>%(group_staff)s</a> hefur bætt þér í hópinn <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:848
+#: seahub/notifications/models.py:850
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
 msgstr ""
 
-#: seahub/notifications/models.py:865
+#: seahub/notifications/models.py:867
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
 msgstr ""
 
-#: seahub/notifications/models.py:882
+#: seahub/notifications/models.py:884
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
 msgstr ""
 
-#: seahub/notifications/models.py:905
+#: seahub/notifications/models.py:907
 #: seahub/notifications/templates/notifications/notice_email.html:66
 #, python-format
 msgid ""
@@ -1841,7 +1841,7 @@ msgid ""
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
 msgstr ""
 
-#: seahub/notifications/models.py:929
+#: seahub/notifications/models.py:931
 #, python-format
 #| msgid ""
 #| ")s has transfered a library named <a href=\"%(repo_url)s\">epo_name)s</a> "
@@ -1851,62 +1851,67 @@ msgid ""
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
 msgstr ""
 
-#: seahub/notifications/models.py:1002
+#: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1004
+#: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1009
+#: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1011
+#: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1015
+#: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1019
+#: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1024
+#: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1026
+#: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1030
+#: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
 msgstr ""
 
-#: seahub/notifications/models.py:1033
+#: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
+msgstr ""
+
+#: seahub/notifications/models.py:1046
+#, python-brace-format
+msgid "Face recognition is done for library {repo_name}."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
@@ -2283,7 +2288,7 @@ msgstr "Get ekki sett dulkóðað safn sem sjálfgefið safn."
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Tókst að setja \"%s\" sem sjálfgefna safnið þitt."
 
-#: seahub/repo_metadata/apis.py:159
+#: seahub/repo_metadata/apis.py:160
 #, python-format
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
@@ -3148,9 +3153,9 @@ msgid "Bad upload link token."
 msgstr "Slæmt tákn í upphleðsluhlekk"
 
 #: seahub/views/ajax.py:335 seahub/views/file.py:547 seahub/views/file.py:579
-#: seahub/views/file.py:1300 seahub/views/file.py:1599
-#: seahub/views/file.py:2174 seahub/views/file.py:2179
-#: seahub/views/file.py:2186
+#: seahub/views/file.py:1320 seahub/views/file.py:1622
+#: seahub/views/file.py:2199 seahub/views/file.py:2204
+#: seahub/views/file.py:2211
 msgid "File does not exist"
 msgstr "Skrá er ekki til"
 
@@ -3178,62 +3183,62 @@ msgstr "Kóðunin sem þú valdir á ekki við."
 msgid "Unknown file encoding"
 msgstr "Óþekkt skráargerð"
 
-#: seahub/views/file.py:381 seahub/views/file.py:801 seahub/views/file.py:956
-#: seahub/views/file.py:992
+#: seahub/views/file.py:381 seahub/views/file.py:818 seahub/views/file.py:971
+#: seahub/views/file.py:1007
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Skráarstærð yfir %s, ekki hægt að opna í vafra."
 
-#: seahub/views/file.py:397 seahub/views/file.py:797
+#: seahub/views/file.py:397 seahub/views/file.py:814
 msgid "The library is encrypted, can not open file online."
 msgstr "Þetta safn er dulkóðað, get ekki opnað skrár innan kerfis."
 
 #: seahub/views/file.py:534 seahub/views/file.py:556 seahub/views/file.py:561
-#: seahub/views/file.py:615 seahub/views/file.py:1151
-#: seahub/views/file.py:1177 seahub/views/file.py:1207
-#: seahub/views/file.py:1356 seahub/views/file.py:1641
-#: seahub/views/file.py:2138
+#: seahub/views/file.py:615 seahub/views/file.py:1171
+#: seahub/views/file.py:1197 seahub/views/file.py:1227
+#: seahub/views/file.py:1376 seahub/views/file.py:1664
+#: seahub/views/file.py:2163
 msgid "Unable to view file"
 msgstr "Getur ekki skoðað skrá"
 
-#: seahub/views/file.py:827 seahub/views/file.py:1101
-#: seahub/views/file.py:1453 seahub/views/file.py:1698
+#: seahub/views/file.py:844 seahub/views/file.py:1119
+#: seahub/views/file.py:1473 seahub/views/file.py:1721
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:862 seahub/views/file.py:1117
-#: seahub/views/file.py:1473 seahub/views/file.py:1714
+#: seahub/views/file.py:879 seahub/views/file.py:1135
+#: seahub/views/file.py:1493 seahub/views/file.py:1737
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:1243
+#: seahub/views/file.py:1263
 msgid "Unable to download file, invalid file path"
 msgstr "Gat ekki niðurhalað skrá, röng skráarslóð"
 
-#: seahub/views/file.py:1252
+#: seahub/views/file.py:1272
 msgid "Unable to download file, wrong file path"
 msgstr "Gat ekki niðurhalað skrá, röng skráarslóð"
 
-#: seahub/views/file.py:1259
+#: seahub/views/file.py:1279
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1498 seahub/views/file.py:1767
+#: seahub/views/file.py:1522 seahub/views/file.py:1793
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
 msgstr ""
 
-#: seahub/views/file.py:1907 seahub/views/file.py:1912
+#: seahub/views/file.py:1932 seahub/views/file.py:1937
 msgid "Unable to download file"
 msgstr "Get ekki halað niður skrá"
 
-#: seahub/views/file.py:2160
+#: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
 msgstr ""
 
-#: seahub/views/file.py:2167
+#: seahub/views/file.py:2192
 msgid "The original file does not exist"
 msgstr ""
 

@@ -6,6 +6,7 @@
 # Translators:
 # eddelac <edg.delac@gmail.com>, 2024
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2024
+# Seafile Info <info@seafile.com>, 2025
 # 
 #, fuzzy
 msgid ""
@@ -14,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
 "Language-Team: Spanish (Mexico) (https://app.transifex.com/haiwen/teams/5086/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2334,7 +2335,7 @@ msgstr ""
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Icono"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53

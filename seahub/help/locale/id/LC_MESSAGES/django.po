@@ -1181,42 +1181,42 @@ msgstr ""
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Dokumen Microsoft Office: .doc, .docx (Hanya Server Edisi Pro)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (Hanya Server Edisi Pro)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (Hanya Server Edisi Pro)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "File LibreOffice"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "File PDF"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "File Markdown: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Berbagai file kode sumber"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "File teks: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1224,34 +1224,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Perhatikan bahwa administrator sistem Seafile Anda mungkin belum "
+"mengaktifkan fitur pencarian teks lengkap. Dalam hal ini, Anda hanya dapat "
+"mencari nama file dan folder."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Membuat grup adalah cara yang nyaman untuk berbagi file ke banyak orang. Di "
+"Seafile, Anda dapat membuat dan mengelola grup dengan mudah."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Berikut cara kerja grup di Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Setiap grup memiliki pemilik. Pemilik adalah pembuat grup secara default. "
+"Dia dapat mentransfer kepemilikan grup ke anggota lain."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Setiap grup dapat memiliki beberapa admin. Pemilik grup dan admin grup dapat"
+" menambahkan lebih banyak admin grup."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Admin grup dapat menambahkan/menghapus anggota dalam grup. Dan dia juga "
+"dapat membatalkan berbagi perpustakaan dalam grup."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1259,6 +1270,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Klik tab \"Dibagikan dengan grup\" di panel kiri, dan Anda akan melihat "
+"semua grup yang Anda ikuti. Mengklik grup mana pun, Anda akan melihat "
+"perpustakaan yang dibagikan ke grup ini."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1266,6 +1280,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Untuk membuat grup baru, klik tab \"Dibagikan dengan grup\" di panel kiri. "
+"Kemudian klik \"Semua Grup\". Di halaman tersebut, Anda dapat mengklik "
+"tombol \"Grup Baru\" untuk membuat grup."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1273,10 +1290,12 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Lihat <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">berbagi file "
+"dan folder</a> tentang cara berbagi perpustakaan atau folder ke grup."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
-msgstr ""
+msgstr "Mengecualikan file/folder dari sinkronisasi"
 
 #: templates/help/ignore.html:8
 msgid ""
@@ -1286,14 +1305,19 @@ msgid ""
 "should not sync. Each line in a ignore.txt file specifies a pattern. The "
 "following pattern format are supported."
 msgstr ""
+"Terkadang Anda tidak ingin menyinkronkan beberapa file atau folder di dalam "
+"perpustakaan. Untuk mencapai ini, buat file seafile-ignore.txt di folder "
+"root perpustakaan. File khusus ini menentukan file dan folder yang tidak "
+"boleh disinkronkan oleh Seafile. Setiap baris dalam file ignore.txt "
+"menentukan pola. Format pola berikut didukung."
 
 #: templates/help/ignore.html:10
 msgid "A blank line matches no files."
-msgstr ""
+msgstr "Baris kosong tidak cocok dengan file apa pun."
 
 #: templates/help/ignore.html:11
 msgid "A line starting with # serves as a comment."
-msgstr ""
+msgstr "Baris yang dimulai dengan # berfungsi sebagai komentar."
 
 #: templates/help/ignore.html:12
 msgid ""
@@ -1303,6 +1327,11 @@ msgid ""
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
 msgstr ""
+"Seafile mendukung wildcard dalam pola. Misalnya, \"foo/*\" cocok dengan "
+"\"foo/1\" dan \"foo/hello\". \"foo/?\" cocok dengan \"foo/1\" tetapi tidak "
+"dengan \"foo/hello\". Perhatikan bahwa karakter wildcard * secara rekursif "
+"cocok dengan semua jalur di bawah folder. Misalnya, \"foo/*.html\" cocok "
+"dengan \"foo/a.html\" dan \"foo/templates/b.html\"."
 
 #: templates/help/ignore.html:13
 msgid ""
@@ -1310,6 +1339,10 @@ msgid ""
 "words, \"foo/\" will match a folder \"foo\" and paths underneath it, but "
 "will not match a regular file or a symbolic link \"foo\"."
 msgstr ""
+"Jika pola diakhiri dengan garis miring, itu hanya akan cocok dengan folder. "
+"Dengan kata lain, \"foo/\" akan cocok dengan folder \"foo\" dan jalur di "
+"bawahnya, tetapi tidak akan cocok dengan file reguler atau tautan simbolik "
+"\"foo\"."
 
 #: templates/help/ignore.html:14
 msgid ""
@@ -2101,7 +2134,7 @@ msgstr ""
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
 msgid "Details"
-msgstr ""
+msgstr "Detail"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"

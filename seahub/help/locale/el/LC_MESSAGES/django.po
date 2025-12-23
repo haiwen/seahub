@@ -1915,7 +1915,7 @@ msgstr ""
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Εικονίδιο"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53

@@ -492,7 +492,7 @@ msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 för Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -501,10 +501,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (och senare versioner) är omslagd med djupare integration till "
+"Windows 10-operativsystemet. Det stöder Windows 10 1709 version (2017 Fall "
+"Update for Windows 10) och senare versioner. Vi rekommenderar att Windows 10"
+" användare uppgraderar till SeaDrive 2.0 för en mer native virtuell "
+"drivrutin upplevelse."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Installera och komma åt den virtuella drivrutinen"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -515,40 +520,57 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"Du kan ladda ner SeaDrive 2.0 från officiell Seafile-webbplats. Efter "
+"installation och inloggning i ditt Seafile-konto kommer SeaDrive att starta "
+"att ladda ner katalog- och fillistor från servern (som i SeaDrive 1.0.x). "
+"Det kan ta några minuter, beroende på hur många filer som är tillgängliga i "
+"ditt Seafile-konto. Laddningen är progresiv, så under tiden kan du redan "
+"komma åt några filer i den virtuella drivrutinen."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Du kan komma åt den virtuella drivrutinen genom att öppna Windows-"
+"filutforskaren. Det finns en \"seadrive\"-nod i navigeringsfönstret i "
+"Windows-filutforskaren."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Komma åt filer i den virtuella drivrutinen"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"Katalogen är delade i 4 kategorier i den virtuella drivrutinen: Mina "
+"katalogen, Delt med mig, Delt med grupper och Delt med alla."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Filstatusikonerna är mer integrerade i Windows-filutforskaren. De är lite "
+"användningsmässigt olika från version 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Filer i den virtuella drivrutinen skapas som \"placeringsfiler\" i det "
+"lokala filsystemet. De kan vara i 3 tillstånd:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Placeringsfil</b>: En tom representering av filen och kan endast öppnas "
+"när det finns nätverksanslutning."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -558,12 +580,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Fullständig fil</b>: Filen har laddats ner och sparats lokalt. Laddningen"
+" er automatisk när en placeringsfil öppnas för första gången. Dessa filer är"
+" tillgängliga närsomhelst du öppnar SeaDrive oavsett nätverksanslutning. "
+"Operativsystemet kanske väljer att rensa en fullständig fil när mer "
+"diskutrymme är behövs."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Fästa fullständig fil</b>: Filen har laddats ner och sparats lokalt. Den "
+"är säker att komma åt offline."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -610,6 +639,10 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Någon annan applikation kanske försöker ladda ner en fil i den virtuella "
+"enheten (t.ex. en antivirusprogramvara). Du kommer att bli varna av "
+"operativsystemet om detta och du kan välja att avbryta nedladdningen eller "
+"neka applikationen från att automatiskt ladda ner filer i framtiden."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
@@ -913,7 +946,7 @@ msgstr ""
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Automatisk låsning av Office filer"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -931,7 +964,7 @@ msgstr ""
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Detaljer om fil låsning"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
@@ -940,6 +973,7 @@ msgstr ""
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
 msgstr ""
+"Observera att en låst fil kan endast låsa upp av den användare som låst den."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -954,10 +988,12 @@ msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Observera att när en låst fil flyttas eller omdirigeras inom samma katalog, "
+"fortsätter filen att vara låst efter operationen."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Hitta äldre versioner av filer"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -966,10 +1002,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Observera att Seafile spårar ändringshistoriken för alla filer. Varje gång "
+"en fil ändras, skapas en ny version, medan den gamla versionen är kvar för "
+"en konfigurerbar period. När du vill komma åt en äldre version av en fil, "
+"funktionen för filhistorik blir mycket praktisk."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Hitta alla versioner av en fil"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -977,16 +1017,23 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"Observera att i Seafile Web App, navigerar du till katalogen som innehåller "
+"filen. Flytta musen över raden för filen. Ett operationsmeny kommer att "
+"visa. Du kan klicka på \"History\" knappen i menyn."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Observera att en lista över alla versioner av filen visas i tidsskeden, från"
+" nyare till äldre. Listan innehåller också filens namnändringshistorik."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
 msgstr ""
+"Observera att du kan ladda ner, återställa eller visa alla versioner av "
+"filen."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -995,10 +1042,15 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Observera att du kan konfigurera retentionsperioden för filversioner: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">inställningsperiod för "
+"filhistorik</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
 msgstr ""
+"Observera att du kan använda katalogrättigheter för att hantera åtkomst till"
+" underordnade kataloger."
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -1009,6 +1061,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Observera att för delade kataloger eller kataloger, du kan ställa in "
+"rättigheter för underordnade kataloger för en person eller en grupp. "
+"Tillgängliga rättigheter är samma som de beskrivna i <a "
+"href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">delning av "
+"kataloger</a>. Här är några användningsfall:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -1016,6 +1073,9 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Observera att du kan tillåta en specifik medlem i gruppen att ändra filer i "
+"en underkatalog. Du kan ge skrivrättigheter för denna underkatalog till "
+"denna person."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -1024,6 +1084,8 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Observera att du kan ge skrivrättigheter för en underkatalog endast till "
+"gruppen som är ansvarig för den underkatalogen."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -1032,17 +1094,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Observera att endast katalogrättigheter gäller för kataloger och kataloger "
+"du delar med andra. För att effektivt ställa in katalogrättigheter för "
+"underkataloger, bör du först dela den överordnade katalogen eller katalogen;"
+" annars gäller inte katalogrättigheter."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
-msgstr ""
+msgstr "Observera att katalogrättigheter stöder hierarkiska rättigheter:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
 msgstr ""
+"Observera att underkataloger automatiskt ärver katalogrättigheter från "
+"överordnade kataloger."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -1052,10 +1120,16 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Observera att rättigheter som ställs in på underkataloger överträdar "
+"rättigheter som ställs in på överordnade kataloger. Till exempel, du ställer"
+" in \"läsa och skriva\" rättigheter på katalog \"mötesfiler\" för användare "
+"A, och du ställer in \"läsa endast\" rättigheter på underkatalog "
+"\"mötesfiler/today\" för användare A. Då har användare A endast \"läsa "
+"endast\" rättigheter till \"mötesfiler/today\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Observera att endas"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -1380,14 +1454,16 @@ msgid ""
 "Then you add some files into the library. They will be automatically synced "
 "with cloud platform."
 msgstr ""
+"Sedan lägger du till några filer i katalogen. Dessa filer kommer automatiskt"
+" synkas med molnplattformen."
 
 #: templates/help/install_sync.html:26
 msgid "4. (Optional) Create a library"
-msgstr ""
+msgstr "4. (Valfritt) Skapa en katalog"
 
 #: templates/help/install_sync.html:28
 msgid "You can also create a library from a local folder."
-msgstr ""
+msgstr "Du kan också skapa en katalog från en lokal mapp."
 
 #: templates/help/install_sync.html:34
 msgid "5. Browse files on the cloud"
@@ -1408,6 +1484,8 @@ msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile är en företagsfilhostningsplattform med hög tillförlitlighet och "
+"prestanda."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1418,6 +1496,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile innehåller en webbgränssnitt för att hantera och dela filer. Det har"
+" två typer av skrivbordsklienter, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">fil synkroniseringsklienten</a> och"
+" <a href=\"%(SITE_ROOT)shelp/using_drive_client\"> drivklienten</a>. Det har"
+" också mobilklienter för Android och iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1425,6 +1508,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Du kan ladda ner klienterna på <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile "
+"webbplats</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1432,6 +1518,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Om denna manual inte innehåller den information du behöver, kan du hitta "
+"hjälp i vår forum: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1441,18 +1530,27 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile använder \"kataloger\" för att organisera dina filer. En katalog är "
+"en toppnivåbehållare för en uppsättning filer och mappar. Du kan skapa en "
+"katalog för varje projekt du arbetar på, eller för varje typ av dokument du "
+"vill spara i Seafile. En katalog fungerar mest som en toppnivåmapp. Men den "
+"har också några specialegenskaper:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Varje katalog håller sin egen filändringshistorik. Det finns ingen globalt "
+"filändringshistorik över alla kataloger."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Varje katalog kan synkas separaterat med skrivbordsklienter. Du kan välja "
+"vilka kataloger som ska synkas."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1461,12 +1559,18 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"När du loggar in på Seafile-webbappen för första gången, skapar Seafile "
+"automatiskt en standardkatalog namngiven \"Min katalog\" för dig. Du kan "
+"skapa fler kataloger också. Här är hur det ser ut när du har skapat några "
+"kataloger."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Du kan navigera in i en katalog och hantera dina filer och mappar. Du kan "
+"ladda upp, ladda ner, omdöma, flytta, kopiera och ta bort filer."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1475,6 +1579,10 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"<a href=\"%(SITE_ROOT)shelp/install_sync/\">När du har synkroniserat en "
+"katalog med skrivbordsklienten</a>, kan du utföra vilkortsfiloperationer "
+"inom den lokala katalogmappen. Operationerna kommer att laddas upp till "
+"servern."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1483,6 +1591,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile spårar ändringshistorik för hela katalogen. Varje gång en "
+"filoperation applies to a library (filuppdatering, fil borttagning etc.), "
+"Seafile skapar en \"snapshot\" av tidigare tillståndet för katalogen. "
+"Snapshot innehåller kompletta fil- och mappstruktur för katalogen."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1493,10 +1605,15 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"Om du har ändrat många filer i katalogen och vill återställa alla dessa "
+"ändringar kan det vara svårt. I det här fallet blir snapshotfunktionen "
+"mycket handy. Du kan återställa hela katalogen till ett tidigare tillstånd. "
+"Alla filer i katalogen kommer att återställas till det tidigare tillståndet,"
+" samtidigt. Det fungerar som en \"tidsmaskin\" för katalogen."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "För att visa ändringshistorik och snapshot för en katalog:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1504,12 +1621,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"Du kan navigera in i en katalog och klicka på \"History\"-ikonet i "
+"toppfältet för att visa ändringshistorik för katalogen. Alla ändringsrecords"
+" för katalogen kommer att visas i en lista."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Klicka på \"view snapshot\"-länken på en ändringsrecord. Du kommer att se "
+"katalogen tillståndet på det tidpunkten."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1518,6 +1640,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Du kan konfigurera retentionsperioden för ändringshistorik för en katalog: "
+"<a href=\"%(SITE_ROOT)shelp/setting_library_history/\">inställningsperiod "
+"för ändringshistorik</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1527,6 +1652,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Seafile är ett verktyg för att fånga och lagra små strukturerade data i en "
+"enkel att använda form – det är vad Seafile’s wikis är för. Wiki-sidor är "
+"skrivna i Markdown (MD), en enkel markuppsättningsspråk, för att säkerställa"
+"  plattformsoberoende kompatibilitet. MD-filer lagrar textuella, tabellära "
+"och grafiska information; Du kan också lägga till länkar till andra dokument"
+" i en Markdown-fil."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1535,10 +1666,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Du kan hantera en standardkatalog i Seafile som en Wiki, med \"Column View\""
+" intridad i version 7.0. Eftersom Seafile implementerar wikis som standard "
+"Seafile-kataloger kan de synkroniseras och delas med andra användare precis "
+"som alla andra ordinarie kataloger."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Kolumnvy"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1549,10 +1684,15 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Seafile’s Column View gör det möjligt för användare att hantera filer i en "
+"katalog som en Wiki-miljö. Användare kan bläddra i den och flytta filer och "
+"mappar lätt och enkelt genom att dra och släppa. Åtgärder som omdömen, "
+"flytta, och öppna via klient är tillgängliga i ett högerklickbart "
+"kontextmeny."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "Markdown-redigerare"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1568,12 +1708,23 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Wiki-sidor i Seafile sparas som vanliga dokument i Markdown-format. För att "
+"skapa en ny Wiki-sida i en katalog, skapa bara ett nytt Markdown-dokument. "
+"MD-filer kan redigeras direkt från Seafile’s webbgränssnitt med den online "
+"MD-redigeraren. Webbgränssnittet erbjuder en smidig användarupplevelse och "
+"rikta formateringsalternativ för text, bilder och tabeller. Bilder kan "
+"importeras till MD-filer från kataloger och lokalt lagringsutrymme samt "
+"genom hyperlänkar. Grundläggande bildredigeringsfunktioner som skalning kan "
+"också utföras i WYSIWYG-gränssnittet."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Du kan enkelt komma åt ändringshistoriken för en Markdown-fil genom att "
+"klicka på \"Filhistorik\"-knappen i menyn högst upp i "
+"redigeringsgränssnittet."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1581,6 +1732,9 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Du kan öppna en dold sidobarn på höger sida av Markdown-redigeraren. "
+"Innehållet i sidobarnet inkluderar tabell of contents, filinformation och "
+"samarbetskommentering."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
@@ -1608,7 +1762,7 @@ msgstr ""
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Återställ borttagna filer och mappar"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1616,16 +1770,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Varje katalog i Seafile spårar dina fil borttagningsoperationer automatiskt."
+" Manchmal hittar du filer som är borttagna av misstag. Du kan hitta dina "
+"borttagna filer i papperskorgen för varje katalog."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Återställ borttagna filer och mappar"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"Navigera till den överordnade mappen innehållande den borttagna filen eller "
+"mappen."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1633,6 +1792,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Klicka på \"papperskorg\"-ikonen i biblioteksåtgärdsfältet. De borttagna "
+"filerna och mapparna kommer att visas i ordning av borttagning. I botten av "
+"listan kan du klicka på \"mer\"-knappen för att ladda fler borttagna filer."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1640,6 +1802,8 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"Om en fil eller mappens överordnade mapp har been borttagna, kommer den att "
+"återställas till biblioteksrotmappen."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1647,6 +1811,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Observera att papperskorgen endast innehåller filer och undermappar som "
+"borttagna under den aktuella mappen. Filer borttagna i undermappar av den "
+"aktuella mappen ingår också i listan."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1655,6 +1822,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Du kan konfigurera kvarhållningsperioden för borttagna filer: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">ställa in "
+"kvarhållningsperiod för historik</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1663,6 +1833,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Du kanske har några mycket stora kataloger på Seafile-servern. Och du är "
+"nuvarande bara intresserad av en undermapp inom en katalog. Då kan du välja "
+"att synkronisera en undermapp i en katalog, istället för att synkronisera "
+"hela katalogen."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1908,16 +2082,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Du kan använda uppladdningslänkar för att samla in filer från andra. Du kan "
+"endast skapa uppladdningslänkar för mappar. Andra användare kan inte se "
+"filerna i mapparna. De kan endast ladda upp filer till dem."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Så här skapar du en uppladdningslänk i Seafile web app:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Navigera till föräldermappen som innehåller mappen. Håll musen över mappen "
+"och klicka på ikonen \"Dela\" som visas."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1925,10 +2104,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Ett popup-fönster med delningsalternativ kommer att visas. Klicka på fliken "
+"\"Uppladdningslänk\"i vänster panel. Klicka sedan på knappen \"Generera\" "
+"för att skapa en länk. Du kan använda lösenord för att skydda din länk."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Delning av bibliotek eller mappar"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1936,62 +2118,78 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Du kan dela ett bibliotek eller en mapp med andra registrerade Seafile-"
+"användare. De delade biblioteken eller mapparna kan nås av andra med web-"
+"appen och Seafile-klienterna."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
 msgstr ""
+"Du kan välja om du vill dela med en användare, en grupp eller hela "
+"organisationen."
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Du kan dela med en användare, en grupp eller hela organisationen."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Du kan dela med en grupp."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Du kan också dela med hela organisationen om du använder en privat server."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Du kan också sätta behörigheter för delningen."
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Read-Write: användare kan läsa, skriva, ladda upp, ladda ner och synka "
+"filer."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
-msgstr ""
+msgstr "Read-only: användare kan läsa, ladda ner och synka filer."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Admin: förutom skrivbehörigheten kan användare också dela biblioteket."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Online Read-Write: användare kan visa och redigera filer online via en web-"
+"bläsare. Filerna kan inte laddas ner."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Online Read-only: användare kan endast visa filer online via en web-bläsare."
+" Filerna kan inte laddas ner."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
 msgstr ""
+"Du kan dela ett bibliotek eller en mapp med en användare eller en grupp."
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Håll musen över biblioteket eller mappen och klicka på ikonen \"Dela\" som "
+"visas."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1999,6 +2197,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Ett popup-fönster med delningsalternativ kommer att visas. Klicka på fliken "
+"\"Dela med användare\" eller \"Dela med grupp\" i vänster panel. Välj den "
+"användare eller gruppen. Klicka sedan på knappen \"Skicka\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -2007,6 +2208,11 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Efter att du har delat ett bibliotek eller en mapp med en användare eller en"
+" grupp, kan användaren eller gruppmedlemmen se det genom att klicka på "
+"fliken \"Delt med mig\" i vänster panel i Seafile-webappen. Om du delar det "
+"med en grupp så kan endast gruppmedlemmarna se det genom att navigera in i "
+"gruppen."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -2015,10 +2221,15 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Efter att du har klickat på fliken \"Delt med alla\" i vänster panel i "
+"Seafile-webappen, kommer ett popup-fönster med delningsalternativ att visas."
+" Klicka på knappen \"Lägg till bibliotek\" för att välja ett bibliotek att "
+"dela. Du kan välja att dela ett befintligt bibliotek eller skapa ett nytt "
+"bibliotek och dela det."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Intern länk"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -2028,6 +2239,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"Endast inloggade användare som har läsbehörighet till filen eller mappen kan"
+" komma åt den här länken. Den används för interna fildelningar. Det är en "
+"enkel metod för att dela filer bland teammedlemmar som har åtkomst till en "
+"gemensam katalog. Du kan bara kopiera länken och klistra in den i ett "
+"e-postprogram eller en IM-verktyg."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -2047,7 +2263,7 @@ msgstr ""
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Synkronisera med en existerande mapp"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format

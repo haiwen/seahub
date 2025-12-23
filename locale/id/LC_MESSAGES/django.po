@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-17 11:14+0800\n"
+"POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Indonesian (http://app.transifex.com/haiwen/seahub/language/id/)\n"
@@ -20,192 +20,192 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:56
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr ""
+msgstr "Pengaturan login ADFS/SAML yang relevan tidak valid."
 
-#: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:562
-#: seahub/adfs_auth/views.py:591 seahub/adfs_auth/views.py:631
-#: seahub/adfs_auth/views.py:651 seahub/adfs_auth/views.py:668
-#: seahub/adfs_auth/views.py:672 seahub/adfs_auth/views.py:702
-#: seahub/adfs_auth/views.py:727 seahub/adfs_auth/views.py:731
-#: seahub/adfs_auth/views.py:799 seahub/adfs_auth/views.py:803
+#: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:570
+#: seahub/adfs_auth/views.py:599 seahub/adfs_auth/views.py:639
+#: seahub/adfs_auth/views.py:659 seahub/adfs_auth/views.py:676
+#: seahub/adfs_auth/views.py:680 seahub/adfs_auth/views.py:710
+#: seahub/adfs_auth/views.py:735 seahub/adfs_auth/views.py:739
+#: seahub/adfs_auth/views.py:807 seahub/adfs_auth/views.py:811
 msgid "Internal server error. Please contact system administrator."
-msgstr ""
+msgstr "Kesalahan server internal. Silakan hubungi administrator sistem."
 
 #: seahub/adfs_auth/views.py:60
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr ""
+msgstr "Login gagal: Respons buruk dari layanan ADFS/SAML. Silakan laporkan ke administrator organisasi (perusahaan) Anda."
 
 #: seahub/adfs_auth/views.py:126 seahub/adfs_auth/views.py:142
-#: seahub/api2/endpoints/admin/users.py:793
-#: seahub/api2/endpoints/admin/users.py:1279 seahub/base/accounts.py:1242
+#: seahub/api2/endpoints/admin/users.py:794
+#: seahub/api2/endpoints/admin/users.py:1280 seahub/base/accounts.py:1242
 #: seahub/forms.py:30 seahub/institutions/api_views.py:202
 msgid "The number of users exceeds the limit."
-msgstr ""
+msgstr "Jumlah pengguna melebihi batas."
 
-#: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:424
+#: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:429
 msgid "Failed to bind SAML, please login first."
-msgstr ""
+msgstr "Gagal mengikat SAML, silakan login terlebih dahulu."
 
 #: seahub/adfs_auth/views.py:274
 #, python-format
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Login gagal: Email %s tidak konsisten dengan email %s dari layanan ADFS/SAML"
 
-#: seahub/adfs_auth/views.py:302 seahub/adfs_auth/views.py:497
+#: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "Pengguna tidak ditemukan di Tim."
 
-#: seahub/adfs_auth/views.py:337 seahub/adfs_auth/views.py:531
+#: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Login gagal: pengguna dinonaktifkan. Silakan laporkan ke administrator organisasi (perusahaan) Anda."
 
-#: seahub/adfs_auth/views.py:587 seahub/adfs_auth/views.py:647
-#: seahub/adfs_auth/views.py:698
+#: seahub/adfs_auth/views.py:595 seahub/adfs_auth/views.py:655
+#: seahub/adfs_auth/views.py:706
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr ""
-
-#: seahub/adfs_auth/views.py:735
-msgid "Failed to unbind SAML, please set a password first."
-msgstr ""
-
-#: seahub/adfs_auth/views.py:738
-#| msgid "Failed to bind SAML, please login first."
-msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "Login gagal: Kesalahan layanan ADFS/SAML. Silakan laporkan ke administrator organisasi (perusahaan) Anda."
 
 #: seahub/adfs_auth/views.py:743
+msgid "Failed to unbind SAML, please set a password first."
+msgstr "Gagal melepaskan SAML, silakan atur kata sandi terlebih dahulu."
+
+#: seahub/adfs_auth/views.py:746
+#| msgid "Failed to bind SAML, please login first."
+msgid "Failed to unbind SAML, the user is forced login by SSO."
+msgstr "Gagal melepaskan SAML, pengguna dipaksa login oleh SSO."
+
+#: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr ""
+msgstr "Gagal melepaskan SAML, silakan atur email kontak terlebih dahulu."
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:380
 msgid "Name is too long (maximum is 64 characters)"
-msgstr ""
+msgstr "Nama terlalu panjang (maksimum 64 karakter)"
 
 #: seahub/api2/endpoints/admin/account.py:208
 #: seahub/api2/endpoints/user.py:105 seahub/api2/views.py:384
 #: seahub/forms.py:44 seahub/profile/forms.py:27
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "Nama tidak boleh mengandung '/'."
 
 #: seahub/api2/endpoints/admin/account.py:223
 msgid "Login id can't be empty"
-msgstr ""
+msgstr "ID login tidak boleh kosong"
 
 #: seahub/api2/endpoints/admin/account.py:227
-#: seahub/api2/endpoints/admin/users.py:878
-#: seahub/api2/endpoints/admin/users.py:1307
+#: seahub/api2/endpoints/admin/users.py:879
+#: seahub/api2/endpoints/admin/users.py:1308
 #, python-format
 msgid "Login id %s already exists."
-msgstr ""
+msgstr "ID login %s sudah ada."
 
 #: seahub/api2/endpoints/admin/account.py:234
 msgid "Department is too long (maximum is 512 characters)"
-msgstr ""
+msgstr "Departemen terlalu panjang (maksimum 512 karakter)"
 
 #: seahub/api2/endpoints/admin/account.py:250 seahub/forms.py:155
 msgid "Space quota can't be empty"
-msgstr ""
+msgstr "Kuota ruang tidak boleh kosong"
 
 #: seahub/api2/endpoints/admin/account.py:256
-#: seahub/api2/endpoints/admin/users.py:1355
-#: seahub/api2/endpoints/admin/users.py:1359
-#: seahub/api2/endpoints/admin/users.py:1372
-#: seahub/api2/endpoints/admin/users.py:1376
+#: seahub/api2/endpoints/admin/users.py:1356
+#: seahub/api2/endpoints/admin/users.py:1360
+#: seahub/api2/endpoints/admin/users.py:1373
+#: seahub/api2/endpoints/admin/users.py:1377
 #: seahub/institutions/api_views.py:174
 msgid "Must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Harus berupa bilangan bulat yang lebih besar dari atau sama dengan 0."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:82
 #: seahub/api2/endpoints/admin/groups.py:135
 #: seahub/api2/endpoints/admin/groups.py:275
 #: seahub/api2/endpoints/groups.py:220 seahub/api2/endpoints/groups.py:293
-#: seahub/api2/views.py:4776 seahub/group/forms.py:36
+#: seahub/api2/views.py:4765 seahub/group/forms.py:36
 msgid ""
 "Name can only contain letters, numbers, spaces, hyphen, dot, single quote, "
 "brackets or underscore."
-msgstr ""
+msgstr "Nama hanya boleh berisi huruf, angka, spasi, tanda hubung, titik, tanda kutip tunggal, kurung, atau garis bawah."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:87
 #: seahub/api2/endpoints/admin/groups.py:142
 #: seahub/api2/endpoints/admin/groups.py:279
 #: seahub/api2/endpoints/groups.py:225 seahub/api2/endpoints/groups.py:298
 msgid "There is already a group with that name."
-msgstr ""
+msgstr "Sudah ada grup dengan nama tersebut."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:235
 msgid "There are libraries in this department."
-msgstr ""
+msgstr "Ada perpustakaan di departemen ini."
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:239
 msgid "There are sub-departments in this department."
-msgstr ""
+msgstr "Ada sub-departemen di departemen ini."
 
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/api2/endpoints/admin/default_library.py:33
 #: seahub/views/__init__.py:558 seahub/views/__init__.py:559
 #: seahub/views/__init__.py:563 seahub/views/__init__.py:564
 msgid "My Library"
-msgstr ""
+msgstr "Perpustakaan Saya"
 
 #: seahub/api2/endpoints/admin/groups.py:223
 #: seahub/api2/endpoints/groups.py:324
 #, python-format
 msgid "User %s is already group owner."
-msgstr ""
+msgstr "Pengguna %s sudah menjadi pemilik grup."
 
 #: seahub/api2/endpoints/admin/institution_users.py:169
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
-msgstr ""
+msgstr "Gagal menambahkan %s ke institusi: pengguna sudah termasuk dalam institusi"
 
 #: seahub/api2/endpoints/admin/institution_users.py:174
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr ""
+msgstr "Gagal menambahkan %s ke institusi: pengguna sudah termasuk dalam institusi ini"
 
 #: seahub/api2/endpoints/admin/libraries.py:268 seahub/views/sysadmin.py:712
 msgid "System library can not be deleted."
-msgstr ""
+msgstr "Perpustakaan sistem tidak dapat dihapus."
 
-#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1945
+#: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1934
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr ""
+msgstr "Transfer gagal: peran %s adalah %s, tidak dapat menambahkan perpustakaan."
 
-#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1950
+#: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1939
 msgid "Library can not be transferred to owner."
-msgstr ""
+msgstr "Perpustakaan tidak dapat ditransfer ke pemilik."
 
 #: seahub/api2/endpoints/admin/organizations.py:431
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Tim Anda {org.org_name} telah dinonaktifkan"
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
-#: seahub/api2/endpoints/share_links.py:577
-#: seahub/api2/endpoints/share_links.py:796
+#: seahub/api2/endpoints/share_links.py:593
+#: seahub/api2/endpoints/share_links.py:812
 msgid "There is an associated published library."
-msgstr ""
+msgstr "Ada perpustakaan yang dipublikasikan terkait."
 
 #: seahub/api2/endpoints/admin/shares.py:185
 #, python-format
 msgid "User %s is already library owner."
-msgstr ""
+msgstr "Pengguna %s sudah menjadi pemilik perpustakaan."
 
 #: seahub/api2/endpoints/admin/shares.py:193
 #: seahub/api2/endpoints/invitations.py:51
@@ -213,7 +213,7 @@ msgstr ""
 #: seahub/api2/endpoints/repo_share_invitations.py:156
 #, python-format
 msgid "Email %s invalid."
-msgstr ""
+msgstr "Email %s tidak valid."
 
 #: seahub/api2/endpoints/admin/shares.py:211
 #: seahub/api2/endpoints/admin/shares.py:268
@@ -224,7 +224,7 @@ msgstr ""
 #: seahub/api2/endpoints/repo_share_invitations.py:190
 #, python-format
 msgid "This item has been shared to %s."
-msgstr ""
+msgstr "Item ini telah dibagikan ke %s."
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:45
@@ -232,7 +232,7 @@ msgstr ""
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/organizations/api/admin/statistics.py:336
 msgid "Time"
-msgstr ""
+msgstr "Waktu"
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_file_access_log.py:58
@@ -240,43 +240,43 @@ msgstr ""
 #: seahub/notifications/templates/notifications/file_updates_email.html:19
 #: seahub/organizations/api/admin/statistics.py:336
 msgid "User"
-msgstr ""
+msgstr "Pengguna"
 
 #: seahub/api2/endpoints/admin/statistics.py:399
 #: seahub/base/management/commands/export_user_traffic_report.py:45
 #: seahub/organizations/api/admin/statistics.py:336
 msgid "Web Download"
-msgstr ""
+msgstr "Unduh Web"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Sync Download"
-msgstr ""
+msgstr "Unduh Sinkronisasi"
 
 #: seahub/api2/endpoints/admin/statistics.py:400
 #: seahub/base/management/commands/export_user_traffic_report.py:46
 #: seahub/organizations/api/admin/statistics.py:337
 msgid "Link Download"
-msgstr ""
+msgstr "Unduh Tautan"
 
 #: seahub/api2/endpoints/admin/statistics.py:401
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:338
 msgid "Web Upload"
-msgstr ""
+msgstr "Unggah Web"
 
 #: seahub/api2/endpoints/admin/statistics.py:401
 #: seahub/base/management/commands/export_user_traffic_report.py:47
 #: seahub/organizations/api/admin/statistics.py:338
 msgid "Sync Upload"
-msgstr ""
+msgstr "Unggah Sinkronisasi"
 
 #: seahub/api2/endpoints/admin/statistics.py:402
 #: seahub/base/management/commands/export_user_traffic_report.py:48
 #: seahub/organizations/api/admin/statistics.py:339
 msgid "Link Upload"
-msgstr ""
+msgstr "Unggah Tautan"
 
 #: seahub/api2/endpoints/admin/statistics.py:447
 #: seahub/base/management/commands/export_user_storage_report.py:41
@@ -288,7 +288,7 @@ msgstr ""
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 #: seahub/views/sysadmin.py:785 seahub/views/sysadmin.py:800
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: seahub/api2/endpoints/admin/statistics.py:447
 #: seahub/base/management/commands/export_user_storage_report.py:41
@@ -300,7 +300,7 @@ msgstr ""
 #: seahub/views/sysadmin.py:656 seahub/views/sysadmin.py:787
 #: seahub/views/sysadmin.py:802
 msgid "Name"
-msgstr ""
+msgstr "Nama"
 
 #: seahub/api2/endpoints/admin/statistics.py:447 seahub/auth/forms.py:294
 #: seahub/base/management/commands/export_user_storage_report.py:41
@@ -310,7 +310,7 @@ msgstr ""
 #: seahub/templates/registration/password_set_form.html:17
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Contact Email"
-msgstr ""
+msgstr "Email Kontak"
 
 #: seahub/api2/endpoints/admin/statistics.py:448
 #: seahub/base/management/commands/export_user_storage_report.py:42
@@ -319,7 +319,7 @@ msgstr ""
 #: seahub/organizations/api/admin/statistics.py:383
 #: seahub/views/sysadmin.py:177 seahub/views/sysadmin.py:181
 msgid "Space Usage"
-msgstr ""
+msgstr "Penggunaan Ruang"
 
 #: seahub/api2/endpoints/admin/statistics.py:448
 #: seahub/base/management/commands/export_user_storage_report.py:42
@@ -329,112 +329,112 @@ msgstr ""
 #: seahub/views/sysadmin.py:177 seahub/views/sysadmin.py:181
 #: seahub/views/sysadmin.py:789 seahub/views/sysadmin.py:803
 msgid "Space Quota"
-msgstr ""
+msgstr "Kuota Ruang"
 
-#: seahub/api2/endpoints/admin/users.py:654
-#: seahub/api2/endpoints/admin/users.py:691
+#: seahub/api2/endpoints/admin/users.py:655
+#: seahub/api2/endpoints/admin/users.py:692
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
-msgstr ""
+msgstr "Ada lebih dari 500 pengguna, dan pengurutan tidak ditawarkan."
 
-#: seahub/api2/endpoints/admin/users.py:892
+#: seahub/api2/endpoints/admin/users.py:893
 #, python-format
 msgid "Successfully added user %(user)s."
-msgstr ""
+msgstr "Berhasil menambahkan pengguna %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:896
+#: seahub/api2/endpoints/admin/users.py:897
 #: seahub/api2/endpoints/admin/users_batch.py:390 seahub/views/sysadmin.py:552
 #, python-format
 msgid "You are invited to join %s"
-msgstr ""
+msgstr "Anda diundang untuk bergabung dengan %s"
 
-#: seahub/api2/endpoints/admin/users.py:900
+#: seahub/api2/endpoints/admin/users.py:901
 #, python-format
 msgid "Successfully added user %(user)s. An email notification has been sent."
-msgstr ""
+msgstr "Berhasil menambahkan pengguna %(user)s. Notifikasi email telah dikirim."
 
-#: seahub/api2/endpoints/admin/users.py:903
+#: seahub/api2/endpoints/admin/users.py:904
 #, python-format
 msgid ""
 "Successfully added user %(user)s. But email notification can not be sent, "
 "because Email service is not properly configured."
-msgstr ""
+msgstr "Berhasil menambahkan pengguna %(user)s. Tetapi notifikasi email tidak dapat dikirim, karena layanan Email tidak dikonfigurasi dengan benar."
 
-#: seahub/api2/endpoints/admin/users.py:1415
+#: seahub/api2/endpoints/admin/users.py:1416
 msgid "Edit succeeded"
-msgstr ""
+msgstr "Edit berhasil"
 
-#: seahub/api2/endpoints/admin/users.py:1418 seahub/views/sysadmin.py:453
+#: seahub/api2/endpoints/admin/users.py:1419 seahub/views/sysadmin.py:453
 #, python-format
 msgid "Your account on %s is activated"
-msgstr ""
+msgstr "Akun Anda di %s telah diaktifkan"
 
-#: seahub/api2/endpoints/admin/users.py:1423
+#: seahub/api2/endpoints/admin/users.py:1424
 msgid "Edit succeeded, an email has been sent."
-msgstr ""
+msgstr "Edit berhasil, email telah dikirim."
 
-#: seahub/api2/endpoints/admin/users.py:1426
+#: seahub/api2/endpoints/admin/users.py:1427
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
-msgstr ""
+msgstr "Edit berhasil, tetapi gagal mengirim email, silakan periksa konfigurasi email Anda."
 
-#: seahub/api2/endpoints/admin/users.py:1494 seahub/auth/forms.py:167
+#: seahub/api2/endpoints/admin/users.py:1495 seahub/auth/forms.py:167
 #: seahub/auth/views.py:365
 msgid "Unable to reset password."
-msgstr ""
+msgstr "Tidak dapat mengatur ulang kata sandi."
 
-#: seahub/api2/endpoints/admin/users.py:1512 seahub/auth/forms.py:195
+#: seahub/api2/endpoints/admin/users.py:1513 seahub/auth/forms.py:195
 #: seahub/organizations/api/admin/user_set_password.py:74
 #, python-format
 msgid "Reset Password on %s"
-msgstr ""
+msgstr "Atur Ulang Kata Sandi di %s"
 
-#: seahub/api2/endpoints/admin/users.py:1516
+#: seahub/api2/endpoints/admin/users.py:1517
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "Tautan pengaturan ulang kata sandi telah dikirim ke {contact_email}."
 
-#: seahub/api2/endpoints/admin/users.py:1534 seahub/views/sysadmin.py:494
+#: seahub/api2/endpoints/admin/users.py:1535 seahub/views/sysadmin.py:494
 #, python-format
 msgid "Password has been reset on %s"
-msgstr ""
+msgstr "Kata sandi telah diatur ulang di %s"
 
-#: seahub/api2/endpoints/admin/users.py:1536
+#: seahub/api2/endpoints/admin/users.py:1537
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr ""
+msgstr "Berhasil mengatur ulang kata sandi, email telah dikirim ke %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1540 seahub/views/sysadmin.py:524
+#: seahub/api2/endpoints/admin/users.py:1541 seahub/views/sysadmin.py:524
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
-msgstr ""
+msgstr "Berhasil mengatur ulang kata sandi ke %(passwd)s, tetapi gagal mengirim email ke %(user)s, silakan periksa konfigurasi email Anda."
 
-#: seahub/api2/endpoints/admin/users.py:1543
+#: seahub/api2/endpoints/admin/users.py:1544
 #: seahub/organizations/api/admin/user_set_password.py:88
 #: seahub/views/sysadmin.py:528
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
-msgstr ""
+msgstr "Berhasil mengatur ulang kata sandi ke %(passwd)s untuk pengguna %(user)s."
 
-#: seahub/api2/endpoints/admin/users.py:1546 seahub/views/sysadmin.py:531
+#: seahub/api2/endpoints/admin/users.py:1547 seahub/views/sysadmin.py:531
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
-msgstr ""
+msgstr "Berhasil mengatur ulang kata sandi ke %(passwd)s untuk pengguna %(user)s. Tetapi notifikasi email tidak dapat dikirim, karena layanan Email tidak dikonfigurasi dengan benar."
 
 #: seahub/api2/endpoints/admin/users_batch.py:173
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "harus berupa bilangan bulat yang lebih besar dari atau sama dengan 0."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:201
 msgid "Virus file is not found."
-msgstr ""
+msgstr "File virus tidak ditemukan."
 
 #: seahub/api2/endpoints/admin/virus_scan_records.py:219
 #: seahub/api2/endpoints/admin/virus_scan_records.py:234
@@ -445,25 +445,25 @@ msgstr ""
 #: seahub/api2/endpoints/repo_set_password.py:72
 #: seahub/api2/endpoints/repo_share_invitations.py:201
 #: seahub/api2/endpoints/send_upload_link_email.py:102
-#: seahub/api2/endpoints/share_links.py:590
+#: seahub/api2/endpoints/share_links.py:606
 #: seahub/api2/endpoints/subscription.py:52
 #: seahub/api2/endpoints/subscription.py:92
 #: seahub/api2/endpoints/subscription.py:129
 #: seahub/api2/endpoints/upload_links.py:329
 #: seahub/api2/endpoints/wiki2.py:463 seahub/api2/endpoints/wiki2.py:491
-#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4110
-#: seahub/notifications/models.py:592 seahub/notifications/models.py:633
-#: seahub/notifications/models.py:675 seahub/notifications/models.py:726
-#: seahub/notifications/models.py:782 seahub/notifications/models.py:812
-#: seahub/notifications/models.py:834 seahub/notifications/models.py:860
-#: seahub/notifications/models.py:877 seahub/notifications/models.py:894
-#: seahub/notifications/models.py:923 seahub/seadoc/apis.py:2793
+#: seahub/api2/endpoints/wiki_pages.py:135 seahub/api2/views.py:4099
+#: seahub/notifications/models.py:594 seahub/notifications/models.py:635
+#: seahub/notifications/models.py:677 seahub/notifications/models.py:728
+#: seahub/notifications/models.py:784 seahub/notifications/models.py:814
+#: seahub/notifications/models.py:836 seahub/notifications/models.py:862
+#: seahub/notifications/models.py:879 seahub/notifications/models.py:896
+#: seahub/notifications/models.py:925 seahub/seadoc/apis.py:2793
 #: seahub/share/views.py:230 seahub/subscription/views.py:90
 #: seahub/utils/__init__.py:171 seahub/views/__init__.py:834
 #: seahub/views/ajax.py:398 seahub/views/ajax.py:402 seahub/wiki/views.py:210
 #: seahub/wiki/views.py:217 seahub/wiki/views.py:226
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Kesalahan Server Internal"
 
 #: seahub/api2/endpoints/copy_move_task.py:81
 #: seahub/api2/endpoints/move_folder_merge.py:137
@@ -475,25 +475,25 @@ msgstr ""
 #: seahub/api2/endpoints/move_folder_merge.py:133
 #: seahub/api2/endpoints/via_repo_token.py:1269
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Jalur tujuan tidak valid"
 
 #: seahub/api2/endpoints/copy_move_task.py:148
 #: seahub/api2/endpoints/move_folder_merge.py:176
 #: seahub/api2/endpoints/repos_batch.py:494
-#: seahub/api2/endpoints/wiki2.py:1784 seahub/api2/views.py:2038
-#: seahub/api2/views.py:2078 seahub/api2/views.py:2140
-#: seahub/api2/views.py:2184 seahub/api2/views.py:2230
-#: seahub/api2/views.py:2279 seahub/api2/views.py:2692
-#: seahub/api2/views.py:2800 seahub/seadoc/apis.py:417
+#: seahub/api2/endpoints/wiki2.py:1784 seahub/api2/views.py:2027
+#: seahub/api2/views.py:2067 seahub/api2/views.py:2129
+#: seahub/api2/views.py:2173 seahub/api2/views.py:2219
+#: seahub/api2/views.py:2268 seahub/api2/views.py:2681
+#: seahub/api2/views.py:2789 seahub/seadoc/apis.py:417
 #: seahub/seadoc/apis.py:541 seahub/seadoc/apis.py:635
 #: seahub/seadoc/apis.py:3148
 msgid "Out of quota."
-msgstr ""
+msgstr "Kuota habis."
 
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Tidak dapat memindahkan folder %(src)s ke subfoldernya %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
@@ -503,34 +503,34 @@ msgstr ""
 #: seahub/api2/endpoints/via_repo_token.py:1153
 #: seahub/api2/endpoints/wiki2.py:804
 msgid "File is locked"
-msgstr ""
+msgstr "Berkas terkunci"
 
 #: seahub/api2/endpoints/copy_move_task.py:247
 msgid "Cancel failed"
-msgstr ""
+msgstr "Pembatalan gagal"
 
 #: seahub/api2/endpoints/dir_shared_items.py:356
 #: seahub/api2/endpoints/group_owned_libraries.py:952
 msgid "username invalid."
-msgstr ""
+msgstr "nama pengguna tidak valid."
 
 #: seahub/api2/endpoints/dir_shared_items.py:365
 #: seahub/api2/endpoints/group_owned_libraries.py:961
 #, python-format
 msgid "User %s not found."
-msgstr ""
+msgstr "Pengguna %s tidak ditemukan."
 
 #: seahub/api2/endpoints/file.py:204 seahub/api2/endpoints/upload_links.py:534
 #: seahub/api2/endpoints/via_repo_token.py:853
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
-#: seahub/api2/views.py:2086 seahub/seadoc/apis.py:3155
+#: seahub/api2/views.py:2075 seahub/seadoc/apis.py:3155
 msgid "The number of files in library exceeds the limit"
-msgstr ""
+msgstr "Jumlah berkas di perpustakaan melebihi batas"
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
 #: seahub/api2/endpoints/file_tag.py:203 seahub/api2/endpoints/file_tag.py:216
-#: seahub/api2/endpoints/share_links.py:570
+#: seahub/api2/endpoints/share_links.py:586
 #: seahub/api2/endpoints/subscription.py:36
 #: seahub/api2/endpoints/subscription.py:72
 #: seahub/api2/endpoints/subscription.py:112
@@ -545,93 +545,93 @@ msgstr ""
 #: seahub/views/ajax.py:83 seahub/views/ajax.py:113 seahub/views/ajax.py:119
 #: seahub/views/sso.py:250
 msgid "Permission denied."
-msgstr ""
+msgstr "Izin ditolak."
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "Ekstensi berkas tidak ada dalam daftar putih"
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1170
 msgid "File is not locked."
-msgstr ""
+msgstr "Berkas tidak terkunci."
 
-#: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:878
+#: seahub/api2/endpoints/file.py:803 seahub/api2/endpoints/share_links.py:894
 msgid "You can not refresh this file's lock."
-msgstr ""
+msgstr "Anda tidak dapat memperbarui kunci berkas ini."
 
 #: seahub/api2/endpoints/file_participants.py:120 seahub/seadoc/apis.py:2784
 msgid "The participant already exists."
-msgstr ""
+msgstr "Peserta sudah ada."
 
 #: seahub/api2/endpoints/file_tag.py:256 seahub/api2/endpoints/file_tag.py:280
 #: seahub/api2/endpoints/file_tag.py:300
 #: seahub/api2/endpoints/revision_tag.py:55
 #: seahub/api2/endpoints/revision_tag.py:109
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
-msgstr ""
+msgstr "Tag hanya dapat berisi huruf, angka, titik, tanda hubung atau garis bawah."
 
 #: seahub/api2/endpoints/group_members.py:109
 #: seahub/api2/endpoints/group_members.py:357
 #: seahub/api2/endpoints/group_members.py:516
 #, python-format
 msgid "User %s is already a group member."
-msgstr ""
+msgstr "Pengguna %s sudah menjadi anggota grup."
 
 #: seahub/api2/endpoints/group_members.py:115
 #: seahub/api2/endpoints/group_members.py:366
-#: seahub/api2/endpoints/group_members.py:525 seahub/api2/views.py:1940
+#: seahub/api2/endpoints/group_members.py:525 seahub/api2/views.py:1929
 #: seahub/organizations/api/admin/user_repos.py:50
 #: seahub/organizations/api/admin/user_repos.py:103
 #: seahub/organizations/api/admin/users.py:339
 #, python-format
 msgid "User %s not found in organization."
-msgstr ""
+msgstr "Pengguna %s tidak ditemukan di organisasi."
 
 #: seahub/api2/endpoints/group_members.py:118
 #: seahub/api2/endpoints/group_members.py:374
 #: seahub/api2/endpoints/group_members.py:533
 #, python-format
 msgid "User %s is an organization user."
-msgstr ""
+msgstr "Pengguna %s adalah pengguna organisasi."
 
 #: seahub/api2/endpoints/group_members.py:437 seahub/group/error_msg.py:17
 #: seahub/group/error_msg.py:23 seahub/views/file.py:553
 msgid "Group does not exist"
-msgstr ""
+msgstr "Grup tidak ada"
 
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "Email atau ID Masuk"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
 #: seahub/views/sysadmin.py:665 seahub/views/sysadmin.py:813
 msgid "Failed to export Excel"
-msgstr ""
+msgstr "Gagal mengekspor Excel"
 
 #: seahub/api2/endpoints/group_owned_libraries.py:398
 #: seahub/api2/endpoints/group_owned_libraries.py:674
 msgid "Permission already exists."
-msgstr ""
+msgstr "Izin sudah ada."
 
 #: seahub/api2/endpoints/invitation.py:110
 #, python-format
 msgid "%(user)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(user)s mencabut akses Anda ke %(site_name)s."
 
 #: seahub/api2/endpoints/invitations.py:55
 #: seahub/api2/endpoints/invitations.py:119
 #: seahub/api2/endpoints/repo_share_invitations.py:163
 msgid "The email address is not allowed to be invited as a guest."
-msgstr ""
+msgstr "Alamat email tidak diizinkan untuk diundang sebagai tamu."
 
 #: seahub/api2/endpoints/invitations.py:60
 #: seahub/api2/endpoints/invitations.py:128
 #, python-format
 msgid "%s is already invited."
-msgstr ""
+msgstr "%s sudah diundang."
 
 #: seahub/api2/endpoints/invitations.py:68
 #: seahub/api2/endpoints/invitations.py:140
@@ -640,7 +640,7 @@ msgstr ""
 #: seahub/organizations/api/admin/users.py:270
 #, python-format
 msgid "User %s already exists."
-msgstr ""
+msgstr "Pengguna %s sudah ada."
 
 #: seahub/api2/endpoints/invitations.py:154
 #: seahub/api2/endpoints/repo_share_invitations.py:215
@@ -650,78 +650,78 @@ msgstr ""
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
-msgstr ""
+msgstr "Gagal mengirim email, layanan email tidak dikonfigurasi dengan benar, silakan hubungi administrator."
 
 #: seahub/api2/endpoints/multi_share_links.py:105
 #: seahub/api2/endpoints/multi_share_links.py:353
-#: seahub/api2/endpoints/share_links.py:339
-#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4263
-#: seahub/api2/views.py:4383
+#: seahub/api2/endpoints/share_links.py:355
+#: seahub/api2/endpoints/upload_links.py:170 seahub/api2/views.py:4252
+#: seahub/api2/views.py:4372
 msgid "Password is required."
-msgstr ""
+msgstr "Kata sandi diperlukan."
 
 #: seahub/api2/endpoints/multi_share_links.py:110
-#: seahub/api2/endpoints/share_links.py:345
+#: seahub/api2/endpoints/share_links.py:361
 #: seahub/api2/endpoints/upload_links.py:176
 #: seahub/api2/endpoints/webdav_secret.py:60
 msgid "Password is too short."
-msgstr ""
+msgstr "Kata sandi terlalu pendek."
 
 #: seahub/api2/endpoints/multi_share_links.py:114
-#: seahub/api2/endpoints/share_links.py:349
+#: seahub/api2/endpoints/share_links.py:365
 #: seahub/api2/endpoints/upload_links.py:180
 #: seahub/api2/endpoints/webdav_secret.py:64
 msgid "Password is too weak."
-msgstr ""
+msgstr "Kata sandi terlalu lemah."
 
 #: seahub/api2/endpoints/multi_share_links.py:118
-#: seahub/api2/endpoints/share_links.py:353
+#: seahub/api2/endpoints/share_links.py:369
 #: seahub/api2/endpoints/upload_links.py:184
 #: seahub/api2/endpoints/webdav_secret.py:52
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr ""
+msgstr "Kata sandi hanya dapat berisi angka, huruf besar, huruf kecil dan simbol lainnya."
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
-#: seahub/api2/endpoints/share_links.py:376
-#: seahub/api2/endpoints/share_links.py:714
+#: seahub/api2/endpoints/share_links.py:392
+#: seahub/api2/endpoints/share_links.py:730
 #: seahub/api2/endpoints/upload_links.py:207
-#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3671
+#: seahub/api2/endpoints/upload_links.py:391 seahub/api2/views.py:3660
 #, python-format
 msgid "Expire days should be greater or equal to %s"
-msgstr ""
+msgstr "Hari kedaluwarsa harus lebih besar atau sama dengan %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:146
 #: seahub/api2/endpoints/multi_share_links.py:382
-#: seahub/api2/endpoints/share_links.py:382
-#: seahub/api2/endpoints/share_links.py:720
+#: seahub/api2/endpoints/share_links.py:398
+#: seahub/api2/endpoints/share_links.py:736
 #: seahub/api2/endpoints/upload_links.py:213
-#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3677
+#: seahub/api2/endpoints/upload_links.py:397 seahub/api2/views.py:3666
 #, python-format
 msgid "Expire days should be less than or equal to %s"
-msgstr ""
+msgstr "Hari kedaluwarsa harus kurang dari atau sama dengan %s"
 
 #: seahub/api2/endpoints/multi_share_links.py:166
 #: seahub/api2/endpoints/multi_share_links.py:404
-#: seahub/api2/endpoints/share_links.py:404
-#: seahub/api2/endpoints/share_links.py:744
+#: seahub/api2/endpoints/share_links.py:420
+#: seahub/api2/endpoints/share_links.py:760
 #: seahub/api2/endpoints/upload_links.py:235
 #: seahub/api2/endpoints/upload_links.py:421
 #, python-format
 msgid "Expiration time should be later than %s."
-msgstr ""
+msgstr "Waktu kedaluwarsa harus lebih lambat dari %s."
 
 #: seahub/api2/endpoints/multi_share_links.py:175
 #: seahub/api2/endpoints/multi_share_links.py:413
-#: seahub/api2/endpoints/share_links.py:413
-#: seahub/api2/endpoints/share_links.py:753
+#: seahub/api2/endpoints/share_links.py:429
+#: seahub/api2/endpoints/share_links.py:769
 #: seahub/api2/endpoints/upload_links.py:244
 #: seahub/api2/endpoints/upload_links.py:430
 #, python-format
 msgid "Expiration time should be earlier than %s."
-msgstr ""
+msgstr "Waktu kedaluwarsa harus lebih awal dari %s."
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/seadoc/apis.py:688
@@ -732,36 +732,36 @@ msgstr "Kesalahan"
 
 #: seahub/api2/endpoints/repo_commit_revert.py:66
 msgid "This library has not been decrypted."
-msgstr ""
+msgstr "Perpustakaan ini belum didekripsi."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:45
 #: seahub/api2/endpoints/user.py:90 seahub/api2/endpoints/user.py:97
 #: seahub/api2/endpoints/user.py:113 seahub/group/views.py:187
 #: seahub/organizations/api/admin/users.py:783
 msgid "Feature disabled."
-msgstr ""
+msgstr "Fitur dinonaktifkan."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:75
 #: seahub/api2/endpoints/repo_set_password.py:171
 msgid "Can not reset this library's password."
-msgstr ""
+msgstr "Tidak dapat mengatur ulang kata sandi perpustakaan ini."
 
 #: seahub/api2/endpoints/repo_send_new_password.py:82
 #, python-format
 msgid "New password of library %s"
-msgstr ""
+msgstr "Kata sandi baru perpustakaan %s"
 
-#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4107
+#: seahub/api2/endpoints/repo_set_password.py:69 seahub/api2/views.py:4096
 msgid "Wrong password"
-msgstr ""
+msgstr "Kata sandi salah"
 
-#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4113
+#: seahub/api2/endpoints/repo_set_password.py:75 seahub/api2/views.py:4102
 msgid "Decrypt library error"
-msgstr ""
+msgstr "Kesalahan dekripsi perpustakaan"
 
 #: seahub/api2/endpoints/repo_set_password.py:138
 msgid "Wrong old password"
-msgstr ""
+msgstr "Kata sandi lama salah"
 
 #: seahub/api2/endpoints/repos_batch.py:1298
 #: seahub/api2/endpoints/repos_batch.py:1557
@@ -769,68 +769,68 @@ msgstr ""
 #: seahub/api2/endpoints/repos_batch.py:1730
 #, python-format
 msgid "File %s is locked."
-msgstr ""
+msgstr "Berkas %s terkunci."
 
 #: seahub/api2/endpoints/repos_batch.py:1308
 #: seahub/api2/endpoints/repos_batch.py:1567
 #, python-format
 msgid "Can't move folder %s, please check its permission."
-msgstr ""
+msgstr "Tidak dapat memindahkan folder %s, silakan periksa izinnya."
 
 #: seahub/api2/endpoints/repos_batch.py:1657
 #, python-format
 msgid "Can't delete folder %s, please check its permission."
-msgstr ""
+msgstr "Tidak dapat menghapus folder %s, silakan periksa izinnya."
 
 #: seahub/api2/endpoints/send_share_link_email.py:97
-#: seahub/notifications/models.py:963
+#: seahub/notifications/models.py:965
 msgid "file"
-msgstr ""
+msgstr "berkas"
 
 #: seahub/api2/endpoints/send_share_link_email.py:98
 #, python-format
 msgid "A file is shared to you on %s"
-msgstr ""
+msgstr "Sebuah berkas dibagikan kepada Anda di %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:100
-#: seahub/notifications/models.py:963
+#: seahub/notifications/models.py:965
 msgid "folder"
-msgstr ""
+msgstr "folder"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "Sebuah folder dibagikan kepada Anda di %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
-msgstr ""
+msgstr "email tidak valid."
 
 #: seahub/api2/endpoints/send_upload_link_email.py:92
 #, python-format
 msgid "An upload link is shared to you on %s"
-msgstr ""
+msgstr "Tautan unggah dibagikan kepada Anda di %s"
 
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "Pengguna %s tidak ada."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "Email %s sudah ada."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "Email %s tidak valid."
 
-#: seahub/api2/endpoints/share_links.py:482
-#: seahub/api2/endpoints/share_links.py:491
+#: seahub/api2/endpoints/share_links.py:498
+#: seahub/api2/endpoints/share_links.py:507
 #, python-format
 msgid "Share link %s already exists."
-msgstr ""
+msgstr "Tautan berbagi %s sudah ada."
 
 #: seahub/api2/endpoints/subscription.py:32
 #: seahub/api2/endpoints/subscription.py:68
@@ -845,16 +845,16 @@ msgstr ""
 #: seahub/work_weixin/views.py:152 seahub/work_weixin/views.py:172
 #: seahub/work_weixin/views.py:233
 msgid "Feature is not enabled."
-msgstr ""
+msgstr "Fitur tidak diaktifkan."
 
 #: seahub/api2/endpoints/user.py:119
 #, python-format
 msgid "Contact email %s already exists."
-msgstr ""
+msgstr "Email kontak %s sudah ada."
 
 #: seahub/api2/endpoints/user.py:133
 msgid "telephone is too long (maximum is 100 characters)."
-msgstr ""
+msgstr "telepon terlalu panjang (maksimum 100 karakter)."
 
 #: seahub/api2/endpoints/user_avatar.py:41
 #: seahub/organizations/api/admin/logo.py:56 seahub/utils/error_msg.py:8
@@ -862,7 +862,7 @@ msgstr ""
 msgid ""
 "%(ext)s is an invalid file extension. Authorized extensions are : "
 "%(valid_exts_list)s"
-msgstr ""
+msgstr "%(ext)s adalah ekstensi file yang tidak valid. Ekstensi yang diizinkan adalah: %(valid_exts_list)s"
 
 #: seahub/api2/endpoints/user_avatar.py:45
 #: seahub/organizations/api/admin/logo.py:64 seahub/utils/error_msg.py:13
@@ -870,67 +870,67 @@ msgstr ""
 msgid ""
 "Your file is too big (%(size)s), the maximum allowed size is "
 "%(max_valid_size)s"
-msgstr ""
+msgstr "File Anda terlalu besar (%(size)s), ukuran maksimum yang diizinkan adalah %(max_valid_size)s"
 
 #: seahub/api2/endpoints/user_avatar.py:51 seahub/avatar/forms.py:43
 #, python-format
 msgid ""
 "You already have %(nb_avatars)d avatars, and the maximum allowed is "
 "%(nb_max_avatars)d."
-msgstr ""
+msgstr "Anda sudah memiliki %(nb_avatars)d avatar, dan jumlah maksimum yang diizinkan adalah %(nb_max_avatars)d."
 
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "Panjang kata sandi WebDAV harus kurang dari 30."
 
 #: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
 #: seahub/api2/endpoints/wikis.py:219
 msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
-msgstr ""
+msgstr "Nama hanya boleh berisi huruf, angka, spasi, tanda hubung atau garis bawah."
 
 #: seahub/api2/endpoints/wiki2.py:1335
 msgid "URL is invalid"
-msgstr ""
+msgstr "URL tidak valid"
 
 #: seahub/api2/endpoints/wiki2.py:1339
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "Bagian kustom URL harus memiliki 5-30 karakter."
 
 #: seahub/api2/endpoints/wiki2.py:1361
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "Domain kustom ini sudah digunakan dan tidak dapat digunakan untuk wiki Anda"
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
 msgid "%s is taken by others, please try another name."
-msgstr ""
+msgstr "%s sudah digunakan oleh orang lain, silakan coba nama lain."
 
 #: seahub/api2/endpoints/wikis.py:206
 msgid "Wiki not found."
-msgstr ""
+msgstr "Wiki tidak ditemukan."
 
 #: seahub/api2/endpoints/wikis.py:215
 msgid "Name is required."
-msgstr ""
+msgstr "Nama diperlukan."
 
-#: seahub/api2/utils.py:337
+#: seahub/api2/utils.py:338
 msgid "A share link for you"
-msgstr ""
+msgstr "Tautan berbagi untuk Anda"
 
-#: seahub/api2/views.py:1936
+#: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Kesalahan izin: Anda bukan admin departemen"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
-msgstr ""
+msgstr "Silakan masuk."
 
 #: seahub/auth/forms.py:34 seahub/templates/registration/login.html:50
 #: seahub/templates/registration/multi_adfs_sso.html:52
 msgid "Email or Username"
-msgstr ""
+msgstr "Email atau Nama Pengguna"
 
 #: seahub/auth/forms.py:35 seahub/auth/forms.py:268
 #: seahub/base/accounts.py:1230
@@ -949,179 +949,179 @@ msgstr "Kata sandi"
 #: seahub/auth/forms.py:73 seahub/auth/forms.py:74 seahub/auth/forms.py:114
 #: seahub/auth/forms.py:115
 msgid "This account is inactive."
-msgstr ""
+msgstr "Akun ini tidak aktif."
 
 #: seahub/auth/forms.py:92
 msgid ""
 "Please enter a correct email/username and password. Note that both fields "
 "are case-sensitive."
-msgstr ""
+msgstr "Silakan masukkan email/nama pengguna dan kata sandi yang benar. Perhatikan bahwa kedua bidang peka huruf besar/kecil."
 
 #: seahub/auth/forms.py:98
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
-msgstr ""
+msgstr "Alamat email tersebut tidak memiliki akun pengguna terkait. Apakah Anda yakin sudah mendaftar?"
 
 #: seahub/auth/forms.py:119 seahub/auth/forms.py:120
 #: seahub/templates/registration/login.html:76
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Silakan gunakan Single Sign-On untuk masuk."
 
 #: seahub/auth/forms.py:125
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
-msgstr ""
+msgstr "Browser web Anda tampaknya tidak mengaktifkan cookie. Cookie diperlukan untuk masuk."
 
 #: seahub/auth/forms.py:143
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: seahub/auth/forms.py:163
 msgid "Can not reset password, please contact LDAP admin."
-msgstr ""
+msgstr "Tidak dapat mengatur ulang kata sandi, silakan hubungi admin LDAP."
 
 #: seahub/auth/forms.py:205
 msgid "New password"
-msgstr ""
+msgstr "Kata sandi baru"
 
 #: seahub/auth/forms.py:206
 msgid "New password confirmation"
-msgstr ""
+msgstr "Konfirmasi kata sandi baru"
 
 #: seahub/auth/forms.py:233 seahub/auth/forms.py:280
 #: seahub/base/accounts.py:1285 seahub/organizations/forms.py:71
 msgid "The two password fields didn't match."
-msgstr ""
+msgstr "Kedua bidang kata sandi tidak cocok."
 
 #: seahub/auth/forms.py:248
 msgid "Old password"
-msgstr ""
+msgstr "Kata sandi lama"
 
 #: seahub/auth/forms.py:256
 msgid "Your old password was entered incorrectly. Please enter it again."
-msgstr ""
+msgstr "Kata sandi lama Anda dimasukkan dengan salah. Silakan masukkan lagi."
 
 #: seahub/auth/forms.py:269 seahub/base/accounts.py:1232
 msgid "Password (again)"
-msgstr ""
+msgstr "Kata sandi (lagi)"
 
 #: seahub/auth/forms.py:300 seahub/forms.py:35 seahub/invitations/views.py:39
 #: seahub/invitations/views.py:54 seahub/organizations/forms.py:49
 #: seahub/profile/forms.py:46
 msgid "A user with this email already exists."
-msgstr ""
+msgstr "Pengguna dengan email ini sudah ada."
 
 #: seahub/auth/views.py:157
 msgid "This account has been frozen due to too many failed login attempts."
-msgstr ""
+msgstr "Akun ini telah dibekukan karena terlalu banyak percobaan masuk yang gagal."
 
 #: seahub/auth/views.py:323
 msgid "Logged out"
-msgstr ""
+msgstr "Telah keluar"
 
 #: seahub/auth/views.py:386
 msgid "Failed to send email, please contact administrator."
-msgstr ""
+msgstr "Gagal mengirim email, silakan hubungi administrator."
 
 #: seahub/auth/views.py:454
 msgid "Unable to change password."
-msgstr ""
+msgstr "Tidak dapat mengubah kata sandi."
 
 #: seahub/auth/views.py:537
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr ""
+msgstr "Tim {domain} tidak memiliki izin untuk menggunakan ADFS/SAML SSO."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
 msgid "Avatar for %s"
-msgstr ""
+msgstr "Avatar untuk %s"
 
 #: seahub/avatar/views.py:77
 msgid "Successfully uploaded a new avatar."
-msgstr ""
+msgstr "Berhasil mengunggah avatar baru."
 
 #: seahub/avatar/views.py:111
 msgid "Successfully updated your avatar."
-msgstr ""
+msgstr "Berhasil memperbarui avatar Anda."
 
 #: seahub/avatar/views.py:151
 msgid "Successfully deleted the requested avatars."
-msgstr ""
+msgstr "Berhasil menghapus avatar yang diminta."
 
 #: seahub/base/accounts.py:705 seahub/base/accounts.py:736
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
-msgstr ""
+msgstr "Akun %(account)s dibekukan di %(site)s."
 
 #: seahub/base/accounts.py:1220
 msgid "Email address"
-msgstr ""
+msgstr "Alamat email"
 
 #: seahub/base/accounts.py:1226
 msgid "Username"
-msgstr ""
+msgstr "Nama pengguna"
 
 #: seahub/base/accounts.py:1227
 msgid "This value must be of length 40"
-msgstr ""
+msgstr "Nilai ini harus memiliki panjang 40"
 
 #: seahub/base/accounts.py:1246
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Masukkan alamat email yang valid."
 
 #: seahub/base/accounts.py:1257
 msgid "Invalid user id."
-msgstr ""
+msgstr "ID pengguna tidak valid."
 
 #: seahub/base/accounts.py:1307
 msgid "name"
-msgstr ""
+msgstr "nama"
 
 #: seahub/base/accounts.py:1310
 msgid "department"
-msgstr ""
+msgstr "departemen"
 
 #: seahub/base/accounts.py:1313
 msgid "telephone"
-msgstr ""
+msgstr "telepon"
 
 #: seahub/base/accounts.py:1316
 msgid "note"
-msgstr ""
+msgstr "catatan"
 
 #: seahub/base/decorators.py:57
 msgid "Files in this library can not be viewed online."
-msgstr ""
+msgstr "File di perpustakaan ini tidak dapat dilihat secara online."
 
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr ""
+msgstr "Kuota Anda hampir penuh di %s"
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "Kuota tim hampir penuh di %s"
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
-msgstr ""
+msgstr "Masukkan alamat email yang valid."
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Type"
-msgstr ""
+msgstr "Tipe"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Device"
-msgstr ""
+msgstr "Perangkat"
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Date"
@@ -1129,76 +1129,76 @@ msgstr "Tanggal"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Name"
-msgstr ""
+msgstr "Nama Perpustakaan"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library ID"
-msgstr ""
+msgstr "ID Perpustakaan"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Owner"
-msgstr ""
+msgstr "Pemilik Perpustakaan"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "File Path"
-msgstr ""
+msgstr "Jalur File"
 
 #: seahub/base/management/commands/export_file_access_log.py:85
 #: seahub/base/templatetags/seahub_tags.py:142
 msgid "Deleted"
-msgstr ""
+msgstr "Dihapus"
 
 #: seahub/base/management/commands/export_file_access_log.py:88
 #: seahub/templates/snippets/add_watermark.html:10
 msgid "Anonymous User"
-msgstr ""
+msgstr "Pengguna Anonim"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:788
 msgid "Role"
-msgstr ""
+msgstr "Peran"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:178 seahub/views/sysadmin.py:182
 #: seahub/views/sysadmin.py:656
 msgid "Create At"
-msgstr ""
+msgstr "Dibuat Pada"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:178 seahub/views/sysadmin.py:182
 msgid "Last Login"
-msgstr ""
+msgstr "Login Terakhir"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/institutions/views.py:187 seahub/views/sysadmin.py:178
 #: seahub/views/sysadmin.py:182
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:178 seahub/views/sysadmin.py:182
 msgid "LDAP(imported)"
-msgstr ""
+msgstr "LDAP(diimpor)"
 
 #: seahub/base/management/commands/export_users.py:118
 #: seahub/views/sysadmin.py:238
 msgid "Active"
-msgstr ""
+msgstr "Aktif"
 
 #: seahub/base/management/commands/export_users.py:120
 #: seahub/views/sysadmin.py:240
 msgid "Inactive"
-msgstr ""
+msgstr "Tidak aktif"
 
 #: seahub/base/management/commands/export_users.py:126
 #: seahub/base/management/commands/export_users.py:127
@@ -1210,7 +1210,7 @@ msgstr ""
 #: seahub/base/management/commands/export_users.py:132
 #: seahub/views/sysadmin.py:252
 msgid "Guest"
-msgstr ""
+msgstr "Tamu"
 
 #: seahub/base/management/commands/export_users.py:134
 #: seahub/base/management/commands/export_users.py:138
@@ -1231,7 +1231,7 @@ msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
-msgstr ""
+msgstr "Ditambahkan"
 
 #: seahub/base/templatetags/seahub_tags.py:143
 msgid "Removed"
@@ -1239,7 +1239,7 @@ msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:144
 msgid "Modified"
-msgstr ""
+msgstr "Dimodifikasi"
 
 #: seahub/base/templatetags/seahub_tags.py:145
 msgid "Renamed"
@@ -1260,12 +1260,12 @@ msgstr ""
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:172
 msgid "Renamed folder"
-msgstr ""
+msgstr "Folder dinamai ulang"
 
 #: seahub/base/templatetags/seahub_tags.py:150
 #: seahub/notifications/management/commands/send_file_updates.py:177
 msgid "Moved folder"
-msgstr ""
+msgstr "Folder dipindahkan"
 
 #: seahub/base/templatetags/seahub_tags.py:151
 msgid "Added or modified"
@@ -1301,7 +1301,7 @@ msgstr ""
 #: seahub/base/templatetags/seahub_tags.py:250
 #: seahub/notifications/management/commands/send_file_updates.py:112
 msgid "Created library"
-msgstr ""
+msgstr "Perpustakaan dibuat"
 
 #: seahub/base/templatetags/seahub_tags.py:330
 #: seahub/base/templatetags/seahub_tags.py:366
@@ -1334,11 +1334,11 @@ msgstr[0] ""
 
 #: seahub/base/templatetags/seahub_tags.py:503
 msgid "Read-Write"
-msgstr ""
+msgstr "Baca-Tulis"
 
 #: seahub/base/templatetags/seahub_tags.py:505
 msgid "Read-Only"
-msgstr ""
+msgstr "Hanya-Baca"
 
 #: seahub/base/templatetags/seahub_tags.py:529
 #: seahub/base/templatetags/seahub_tags.py:541
@@ -1350,31 +1350,31 @@ msgstr[0] ""
 #: seahub/base/templatetags/seahub_tags.py:543
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%s KB"
 
 #: seahub/base/templatetags/seahub_tags.py:545
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%s MB"
 
 #: seahub/base/templatetags/seahub_tags.py:547
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%s GB"
 
 #: seahub/base/templatetags/seahub_tags.py:549
 #, python-format
 msgid "%s TB"
-msgstr ""
+msgstr "%s TB"
 
 #: seahub/base/templatetags/seahub_tags.py:551
 #, python-format
 msgid "%s PB"
-msgstr ""
+msgstr "%s PB"
 
 #: seahub/contacts/models.py:78
 msgid "Email is required."
-msgstr ""
+msgstr "Email diperlukan."
 
 #: seahub/dingtalk/views.py:52 seahub/dingtalk/views.py:76
 #: seahub/dingtalk/views.py:85 seahub/dingtalk/views.py:107
@@ -1395,217 +1395,217 @@ msgstr ""
 #: seahub/work_weixin/views.py:178 seahub/work_weixin/views.py:183
 #: seahub/work_weixin/views.py:193 seahub/work_weixin/views.py:197
 msgid "Error, please contact administrator."
-msgstr ""
+msgstr "Kesalahan, silakan hubungi administrator."
 
 #: seahub/dingtalk/views.py:127 seahub/dingtalk/views.py:374
 #: seahub/weixin/views.py:111
 #, python-format
 msgid "User %s not found or inactive."
-msgstr ""
+msgstr "Pengguna %s tidak ditemukan atau tidak aktif."
 
 #: seahub/forms.py:59
 msgid "The two passwords didn't match."
-msgstr ""
+msgstr "Kedua kata sandi tidak cocok."
 
 #: seahub/forms.py:68
 msgid "Name can't be empty"
-msgstr ""
+msgstr "Nama tidak boleh kosong"
 
 #: seahub/forms.py:69
 msgid "Name is too long (maximum is 255 characters)"
-msgstr ""
+msgstr "Nama terlalu panjang (maksimum 255 karakter)"
 
 #: seahub/forms.py:72
 msgid "Description can't be empty"
-msgstr ""
+msgstr "Deskripsi tidak boleh kosong"
 
 #: seahub/forms.py:73
 msgid "Description is too long (maximum is 100 characters)"
-msgstr ""
+msgstr "Deskripsi terlalu panjang (maksimum 100 karakter)"
 
 #: seahub/forms.py:83 seahub/forms.py:169
 #, python-format
 msgid "Name %s is not valid"
-msgstr ""
+msgstr "Nama %s tidak valid"
 
 #: seahub/forms.py:97 seahub/share/views.py:200 seahub/views/ajax.py:305
 #: seahub/views/ajax.py:309 seahub/views/ajax.py:313 seahub/views/ajax.py:324
 #: seahub/views/ajax.py:444
 msgid "Argument missing"
-msgstr ""
+msgstr "Argumen hilang"
 
 #: seahub/forms.py:111
 msgid "Oldname is required"
-msgstr ""
+msgstr "Nama lama diperlukan"
 
 #: seahub/forms.py:114 seahub/forms.py:135
 msgid "It's too long."
-msgstr ""
+msgstr "Terlalu panjang."
 
 #: seahub/forms.py:115 seahub/forms.py:136
 msgid "It's required."
-msgstr ""
+msgstr "Diperlukan."
 
 #: seahub/forms.py:122 seahub/forms.py:143
 #, python-format
 msgid "Name \"%s\" is not valid"
-msgstr ""
+msgstr "Nama \"%s\" tidak valid"
 
 #: seahub/forms.py:162
 msgid "Library name is required"
-msgstr ""
+msgstr "Nama perpustakaan diperlukan"
 
 #: seahub/forms.py:164
 msgid "Please enter a number"
-msgstr ""
+msgstr "Silakan masukkan angka"
 
 #: seahub/forms.py:184
 msgid "Name is required"
-msgstr ""
+msgstr "Nama diperlukan"
 
 #: seahub/forms.py:185
 msgid "Please enter a valid number"
-msgstr ""
+msgstr "Silakan masukkan angka yang valid"
 
 #: seahub/forms.py:186
 msgid "Text is required"
-msgstr ""
+msgstr "Teks diperlukan"
 
 #: seahub/group/error_msg.py:8
 msgid "The group has already created"
-msgstr ""
+msgstr "Grup sudah dibuat"
 
 #: seahub/group/error_msg.py:9
 msgid "Failed to create group"
-msgstr ""
+msgstr "Gagal membuat grup"
 
 #: seahub/group/error_msg.py:12
 msgid "The group has already created in this org."
-msgstr ""
+msgstr "Grup sudah dibuat di organisasi ini."
 
 #: seahub/group/error_msg.py:13
 msgid "Failed to create org group."
-msgstr ""
+msgstr "Gagal membuat grup organisasi."
 
 #: seahub/group/error_msg.py:16
 msgid "Permission error: only group staff can add member"
-msgstr ""
+msgstr "Kesalahan izin: hanya staf grup yang dapat menambahkan anggota"
 
 #: seahub/group/error_msg.py:18
 msgid "Group is full"
-msgstr ""
+msgstr "Grup penuh"
 
 #: seahub/group/error_msg.py:19
 msgid "Failed to add member to group"
-msgstr ""
+msgstr "Gagal menambahkan anggota ke grup"
 
 #: seahub/group/error_msg.py:22
 msgid "Only group staff can remove member"
-msgstr ""
+msgstr "Hanya staf grup yang dapat menghapus anggota"
 
 #: seahub/group/error_msg.py:24
 msgid "Can not remove myself"
-msgstr ""
+msgstr "Tidak dapat menghapus diri sendiri"
 
 #: seahub/group/forms.py:29
 msgid "Group name can't be empty"
-msgstr ""
+msgstr "Nama grup tidak boleh kosong"
 
 #: seahub/group/forms.py:30
 msgid "Group name is too long (maximum is 255 characters)"
-msgstr ""
+msgstr "Nama grup terlalu panjang (maksimum 255 karakter)"
 
 #: seahub/group/forms.py:46
 msgid "Verification message can't be empty"
-msgstr ""
+msgstr "Pesan verifikasi tidak boleh kosong"
 
 #: seahub/group/forms.py:47
 msgid "Verification message is too long (maximun is 255 characters)"
-msgstr ""
+msgstr "Pesan verifikasi terlalu panjang (maksimum 255 karakter)"
 
 #: seahub/group/templates/group/add_member_email.html:8
 msgid "Hi, "
-msgstr ""
+msgstr "Halo, "
 
 #: seahub/group/templates/group/add_member_email.html:11
 #, python-format
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr ""
+msgstr "%(escaped_nickname)s mengundang Anda untuk bergabung dengan grup %(grp_name)s di %(site_name)s: "
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
 msgid ""
 "%(user)s want to join to Group \"%(group_name)s\", here is the verification "
 "message: "
-msgstr ""
+msgstr "%(user)s ingin bergabung dengan Grup \"%(group_name)s\", berikut adalah pesan verifikasi: "
 
 #: seahub/group/templates/group/group_join_email.html:6
 #: seahub/templates/email_base.html:10
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Terima kasih telah menggunakan situs kami!"
 
 #: seahub/group/templates/group/group_join_email.html:8
 #: seahub/templates/email_base.html:15
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "Tim %(site_name)s"
 
 #: seahub/group/views.py:110 seahub/share/views.py:137
 #: seahub/views/__init__.py:463 seahub/views/ajax.py:378
-#: seahub/views/ajax.py:424 seahub/views/file.py:1280
-#: seahub/views/file.py:1308 seahub/views/file.py:1565
-#: seahub/views/file.py:1605 seahub/views/repo.py:115 seahub/views/repo.py:172
+#: seahub/views/ajax.py:424 seahub/views/file.py:1300
+#: seahub/views/file.py:1328 seahub/views/file.py:1588
+#: seahub/views/file.py:1628 seahub/views/repo.py:115 seahub/views/repo.py:172
 #: seahub/views/repo.py:230 seahub/views/repo.py:258 seahub/views/repo.py:287
 #: seahub/views/repo.py:384
 msgid "Permission denied"
-msgstr ""
+msgstr "Izin ditolak"
 
 #: seahub/group/views.py:178
 #, python-format
 msgid "You are invited to join a group on %s"
-msgstr ""
+msgstr "Anda diundang untuk bergabung dengan grup di %s"
 
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "Tautan undangan grup tidak ada"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "Tautan undangan grup rusak"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
-msgstr ""
+msgstr "Pemilik"
 
 #: seahub/institutions/views.py:189
 msgid "Member"
-msgstr ""
+msgstr "Anggota"
 
 #: seahub/institutions/views.py:222 seahub/views/sysadmin.py:371
 msgid "Failed to delete: the user does not exist"
-msgstr ""
+msgstr "Gagal menghapus: pengguna tidak ada"
 
 #: seahub/institutions/views.py:226
 msgid "Failed to delete: the user is system administrator"
-msgstr ""
+msgstr "Gagal menghapus: pengguna adalah administrator sistem"
 
 #: seahub/institutions/views.py:230 seahub/views/sysadmin.py:361
 #, python-format
 msgid "Successfully deleted %s"
-msgstr ""
+msgstr "Berhasil menghapus %s"
 
 #: seahub/invitations/models.py:96
 #, python-format
 msgid "You are invited to join %(site_name)s."
-msgstr ""
+msgstr "Anda diundang untuk bergabung dengan %(site_name)s."
 
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr ""
+msgstr "Anda diundang untuk bergabung dengan tim {org_name}."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1629,33 +1629,33 @@ msgstr ""
 #: seahub/templates/team_quota_full.html:9
 #: seahub/templates/user_quota_full.html:9
 msgid "Hi,"
-msgstr ""
+msgstr "Halo,"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:13
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr ""
+msgstr "Anda diundang untuk bergabung dengan tim %(org_name)s. Silakan klik tautan di bawah:"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
 msgid ""
 "%(inviter_name)s invited you to join %(site_name)s. Please click the link "
 "below:"
-msgstr ""
+msgstr "%(inviter_name)s mengundang Anda untuk bergabung dengan %(site_name)s. Silakan klik tautan di bawah:"
 
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(inviter)s mencabut akses Anda ke %(site_name)s."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
-msgstr ""
+msgstr "Buat Akun"
 
 #: seahub/invitations/templates/invitations/token_view.html:8
 msgid "Set your password"
-msgstr ""
+msgstr "Atur kata sandi Anda"
 
 #: seahub/invitations/templates/invitations/token_view.html:17
 #: seahub/options/templates/options/set_user_options.html:14
@@ -1672,14 +1672,14 @@ msgstr "Kirim"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 msgid "It is required."
-msgstr ""
+msgstr "Diperlukan."
 
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:68
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:83
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:104
 #, python-format
 msgid "Virus detected on %s"
-msgstr ""
+msgstr "Virus terdeteksi di %s"
 
 #: seahub/notifications/management/commands/send_dingtalk_notifications.py:185
 #: seahub/notifications/templates/notifications/notice_email.html:9
@@ -1694,15 +1694,15 @@ msgstr[0] ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:115
 msgid "Renamed library"
-msgstr ""
+msgstr "Perpustakaan diubah namanya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:118
 msgid "Deleted library"
-msgstr ""
+msgstr "Perpustakaan dihapus"
 
 #: seahub/notifications/management/commands/send_file_updates.py:121
 msgid "Restored library"
-msgstr ""
+msgstr "Perpustakaan dipulihkan"
 
 #: seahub/notifications/management/commands/send_file_updates.py:125
 msgid "Removed all items from trash."
@@ -1715,124 +1715,124 @@ msgstr ""
 
 #: seahub/notifications/management/commands/send_file_updates.py:135
 msgid "Created file"
-msgstr ""
+msgstr "Berkas dibuat"
 
 #: seahub/notifications/management/commands/send_file_updates.py:138
 msgid "Deleted file"
-msgstr ""
+msgstr "Berkas dihapus"
 
 #: seahub/notifications/management/commands/send_file_updates.py:141
 msgid "Restored file"
-msgstr ""
+msgstr "Berkas dipulihkan"
 
 #: seahub/notifications/management/commands/send_file_updates.py:144
 msgid "Renamed file"
-msgstr ""
+msgstr "Berkas diubah namanya"
 
 #: seahub/notifications/management/commands/send_file_updates.py:150
 msgid "Moved file"
-msgstr ""
+msgstr "Berkas dipindahkan"
 
 #: seahub/notifications/management/commands/send_file_updates.py:156
 msgid "Updated file"
-msgstr ""
+msgstr "Berkas diperbarui"
 
 #: seahub/notifications/management/commands/send_file_updates.py:163
 msgid "Created folder"
-msgstr ""
+msgstr "Folder dibuat"
 
 #: seahub/notifications/management/commands/send_file_updates.py:166
 msgid "Deleted folder"
-msgstr ""
+msgstr "Folder dihapus"
 
 #: seahub/notifications/management/commands/send_file_updates.py:169
 msgid "Restored folder"
-msgstr ""
+msgstr "Folder dipulihkan"
 
 #: seahub/notifications/management/commands/send_file_updates.py:278
 #, python-format
 msgid "New file updates on %s"
-msgstr ""
+msgstr "Pembaruan file baru di %s"
 
 #: seahub/notifications/management/commands/send_notices.py:461
 #, python-format
 msgid "New notice on %s"
-msgstr ""
+msgstr "Pemberitahuan baru di %s"
 
 #: seahub/notifications/management/commands/send_notices_to_social_account.py:252
 #, python-format
 msgid "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr ""
+msgstr "Anda memiliki %(num)s pemberitahuan baru di %(site_name)s:\n"
 
-#: seahub/notifications/models.py:610
+#: seahub/notifications/models.py:612
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "File bernama <a href='%(file_link)s'>%(file_name)s</a> diunggah ke <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:617
+#: seahub/notifications/models.py:619
 #, python-format
 msgid "A file named <strong>%(file_name)s</strong> is uploaded"
-msgstr ""
+msgstr "File bernama <strong>%(file_name)s</strong> diunggah"
 
-#: seahub/notifications/models.py:652
+#: seahub/notifications/models.py:654
 #, python-format
 msgid ""
 "A folder named <a href='%(folder_link)s'>%(folder_name)s</a> is uploaded to "
 "<a href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "Folder bernama <a href='%(folder_link)s'>%(folder_name)s</a> diunggah ke <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:659
+#: seahub/notifications/models.py:661
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Folder bernama <strong>%(folder_name)s</strong> diunggah"
 
-#: seahub/notifications/models.py:793
+#: seahub/notifications/models.py:795
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
 "href='%(href)s'>%(group_name)s</a>, verification message: "
 "%(join_request_msg)s"
-msgstr ""
+msgstr "Pengguna <a href='%(user_profile)s'>%(username)s</a> telah meminta untuk bergabung dengan grup <a href='%(href)s'>%(group_name)s</a>, pesan verifikasi: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:822
+#: seahub/notifications/models.py:824
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
-msgstr ""
+msgstr "Pengguna <a href='%(user_profile)s'>%(group_staff)s</a> telah menambahkan Anda ke grup <a href='%(href)s'>%(group_name)s</a>"
 
-#: seahub/notifications/models.py:848
+#: seahub/notifications/models.py:850
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "File <a href='%(file_url)s'>%(file_name)s</a> memiliki komentar baru dari pengguna %(author)s"
 
-#: seahub/notifications/models.py:865
+#: seahub/notifications/models.py:867
 #, python-format
 msgid ""
 "<a href='%(file_url)s'>Draft #%(draft_id)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "<a href='%(file_url)s'>Draft #%(draft_id)s</a> memiliki komentar baru dari pengguna %(author)s"
 
-#: seahub/notifications/models.py:882
+#: seahub/notifications/models.py:884
 #, python-format
 msgid ""
 "%(from_user)s has sent you a request for <a href='%(file_url)s'>draft "
 "#%(draft_id)s</a>"
-msgstr ""
+msgstr "%(from_user)s telah mengirimkan permintaan untuk <a href='%(file_url)s'>draft #%(draft_id)s</a> kepada Anda"
 
-#: seahub/notifications/models.py:905
+#: seahub/notifications/models.py:907
 #: seahub/notifications/templates/notifications/notice_email.html:66
 #, python-format
 msgid ""
 "Guest %(user)s accepted your <a "
 "href=\"%(url_base)s%(inv_url)s\">invitation</a> at %(time)s."
-msgstr ""
+msgstr "Tamu %(user)s menerima <a href=\"%(url_base)s%(inv_url)s\">undangan</a> Anda pada %(time)s."
 
-#: seahub/notifications/models.py:929
+#: seahub/notifications/models.py:931
 #, python-format
 #| msgid ""
 #| ")s has transfered a library named <a href=\"%(repo_url)s\">epo_name)s</a> "
@@ -1840,64 +1840,69 @@ msgstr ""
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
-
-#: seahub/notifications/models.py:1002
-#, python-brace-format
-msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "%(user)s telah mentransfer perpustakaan bernama <a href=\"%(repo_url)s\">%(repo_name)s</a> kepada Anda."
 
 #: seahub/notifications/models.py:1004
+#, python-brace-format
+msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
+msgstr "{name} membuat {obj_type} {obj_link} di perpustakaan {repo_link}."
+
+#: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
-
-#: seahub/notifications/models.py:1009
-#, python-brace-format
-msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr ""
+msgstr "{name} membuat {obj_type} {obj_link} dan {obj_path_count_minus_one} {obj_type} lainnya di perpustakaan {repo_link}."
 
 #: seahub/notifications/models.py:1011
+#, python-brace-format
+msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
+msgstr "{name} menghapus {obj_type} {obj_name} di perpustakaan {repo_link}."
+
+#: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} menghapus {obj_type} {obj_name} dan {obj_path_count_minus_one} {obj_type} lainnya di perpustakaan {repo_link}."
 
-#: seahub/notifications/models.py:1015
+#: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} memulihkan {obj_type} {obj_link} di perpustakaan {repo_link}."
 
-#: seahub/notifications/models.py:1019
+#: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr ""
-
-#: seahub/notifications/models.py:1024
-#, python-brace-format
-msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} mengganti nama {obj_type} {old_obj_name} menjadi {obj_link} di perpustakaan {repo_link}."
 
 #: seahub/notifications/models.py:1026
+#, python-brace-format
+msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
+msgstr "{name} memindahkan {obj_type} {obj_link} di perpustakaan {repo_link}."
+
+#: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} memindahkan {obj_type} {obj_link} dan {obj_path_count_minus_one} {obj_type} lainnya di perpustakaan {repo_link}."
 
-#: seahub/notifications/models.py:1030
+#: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} memperbarui {obj_type} {obj_link} di perpustakaan {repo_link}."
 
-#: seahub/notifications/models.py:1033
+#: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
+msgstr "{name} {op_type} {obj_type} {obj_link} di perpustakaan {repo_link}."
+
+#: seahub/notifications/models.py:1046
+#, python-brace-format
+msgid "Face recognition is done for library {repo_name}."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
@@ -1912,32 +1917,32 @@ msgstr[0] ""
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:20
 msgid "Operation"
-msgstr ""
+msgstr "Operasi"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 msgid "File"
-msgstr ""
+msgstr "Berkas"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:21
 msgid "Library"
-msgstr ""
+msgstr "Perpustakaan"
 
 #: seahub/notifications/templates/notifications/notice_email.html:7
 #, python-format
 msgid "Hi, %(name)s"
-msgstr ""
+msgstr "Halo, %(name)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:19
 msgid "Message"
-msgstr ""
+msgstr "Pesan"
 
 #: seahub/notifications/templates/notifications/notice_email.html:45
 #, python-format
 msgid ""
 "You have received a <a href=\"%(url_base)s%(msg_url)s\">new message</a> from"
 " %(user)s."
-msgstr ""
+msgstr "Anda telah menerima <a href=\"%(url_base)s%(msg_url)s\">pesan baru</a> dari %(user)s."
 
 #: seahub/notifications/templates/notifications/notice_email.html:51
 #, python-format
@@ -1945,7 +1950,7 @@ msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
 "uploaded to your folder <a "
 "href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
-msgstr ""
+msgstr "File bernama <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> diunggah ke folder Anda <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:54
 #, python-format
@@ -1953,7 +1958,7 @@ msgid ""
 "A folder named <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> is"
 " uploaded to your folder <a "
 "href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
-msgstr ""
+msgstr "Folder bernama <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a> diunggah ke folder Anda <a href=\"%(url_base)s%(parent_dir_url)s\">%(parent_dir_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:57
 #, python-format
@@ -1961,21 +1966,21 @@ msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verification "
 "message: %(msg)s"
-msgstr ""
+msgstr "Pengguna <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> telah meminta untuk bergabung dengan grup <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, pesan verifikasi: %(msg)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:60
 #, python-format
 msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has added you to "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
-msgstr ""
+msgstr "Pengguna <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> telah menambahkan Anda ke grup <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
 
 #: seahub/notifications/templates/notifications/notice_email.html:63
 #, python-format
 msgid ""
 "File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> has a new "
 "comment from user %(author)s"
-msgstr ""
+msgstr "File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> memiliki komentar baru dari pengguna %(author)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:69
 #, python-format
@@ -1983,18 +1988,18 @@ msgid ""
 "A large number of files in your library <a "
 "href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> has been deleted "
 "recently."
-msgstr ""
+msgstr "Sejumlah besar file di perpustakaan Anda <a href=\"%(url_base)s%(repo_url)s\">%(repo_name)s</a> telah dihapus baru-baru ini."
 
 #: seahub/notifications/templates/notifications/notice_email.html:84
 msgid "Go check out at the following page:"
-msgstr ""
+msgstr "Periksa di halaman berikut:"
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_msg.html:1
 #, python-format
 msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s telah membagikan folder bernama <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> kepada Anda."
 
 #: seahub/notifications/templates/notifications/notice_msg/folder_share_to_group_msg.html:1
 #, python-format
@@ -2002,14 +2007,14 @@ msgid ""
 "%(user)s has shared a folder named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s telah membagikan folder bernama <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> ke grup <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_msg.html:1
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s telah membagikan perpustakaan bernama <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> kepada Anda."
 
 #: seahub/notifications/templates/notifications/notice_msg/repo_share_to_group_msg.html:1
 #, python-format
@@ -2017,32 +2022,32 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s telah membagikan perpustakaan bernama <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> ke grup <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "Virus terdeteksi di perpustakaan %(repo_name)s selama pemindaian rutin: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Virus terdeteksi pada pemindaian rutin:"
 
 #: seahub/notifications/utils.py:471
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s menambahkan komentar baru di dokumen %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:478 seahub/notifications/utils.py:498
 msgid "Details"
-msgstr ""
+msgstr "Detail"
 
 #: seahub/notifications/utils.py:484
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s menambahkan balasan baru di dokumen %(sdoc_name)s"
 
 #: seahub/notifications/utils.py:490
 #, python-format
@@ -2050,59 +2055,59 @@ msgstr ""
 msgid ""
 "%(author)s has marked the comment \"%(resolve_comment)s\" as resolved in "
 "document %(sdoc_name)s\n"
-msgstr ""
+msgstr "%(author)s telah menandai komentar \"%(resolve_comment)s\" sebagai terselesaikan di dokumen %(sdoc_name)s\n"
 
 #: seahub/oauth/views.py:225
 #: seahub/templates/remote_user/create_unknown_user_false.html:8
 #: seahub/work_weixin/views.py:111
 msgid ""
 "Error, new user registration is not allowed, please contact administrator."
-msgstr ""
+msgstr "Kesalahan, pendaftaran pengguna baru tidak diizinkan, silakan hubungi administrator."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
-msgstr ""
+msgstr "Silakan pilih cara melihat perpustakaan terenkripsi secara online:"
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Send passwords to the server."
-msgstr ""
+msgstr "Kirim kata sandi ke server."
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Files will be decrypted in the server before being sent to you."
-msgstr ""
+msgstr "File akan didekripsi di server sebelum dikirim kepada Anda."
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Save passwords in your browser."
-msgstr ""
+msgstr "Simpan kata sandi di browser Anda."
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Files will be decrypted in your browser when you download them."
-msgstr ""
+msgstr "File akan didekripsi di browser Anda saat Anda mengunduhnya."
 
 #: seahub/options/templates/options/set_user_options.html:13
 msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
-msgstr ""
+msgstr "Tip: cara yang terakhir lebih aman, tetapi tidak didukung dengan baik oleh semua browser. Kami menyarankan Anda menggunakan versi terbaru Chrome atau Firefox."
 
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
-msgstr ""
+msgstr "Gagal. Anda hanya dapat mengundang {org_members_quota} anggota."
 
 #: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
-msgstr ""
+msgstr "Jumlah pengguna melebihi batas"
 
 #: seahub/organizations/api/admin/users.py:832
 #, python-brace-format
 msgid "User {email} already exists."
-msgstr ""
+msgstr "Pengguna {email} sudah ada."
 
 #: seahub/organizations/forms.py:41 seahub/share/views.py:354
 #: seahub/share/views.py:367
 msgid "Email address is not valid"
-msgstr ""
+msgstr "Alamat email tidak valid"
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:12
 #, python-format
@@ -2112,14 +2117,14 @@ msgstr ""
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "Anda menerima email ini karena tim %(org_name)s Anda telah dinonaktifkan."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nJika Anda ingin terus menggunakan situs kami, klik <a href=\"%(link)s\">di sini</a>. Jika tidak, akun Anda akan dihapus dalam 60 hari.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2131,29 +2136,29 @@ msgstr ""
 #: seahub/templates/registration/registration_form.html:14
 #: seahub/templates/registration/registration_form.html:24
 msgid "Signup"
-msgstr ""
+msgstr "Daftar"
 
 #: seahub/organizations/templates/organizations/org_register.html:16
 #: seahub/templates/registration/registration_form.html:17
 msgid "Welcome back, you are already signed in."
-msgstr ""
+msgstr "Selamat datang kembali, Anda sudah masuk."
 
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "Anda akan diarahkan ke halaman beranda dalam 5 detik."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
-msgstr ""
+msgstr "Nama Organisasi"
 
 #: seahub/organizations/templates/organizations/org_register.html:39
 msgid "Admin Name"
-msgstr ""
+msgstr "Nama Admin"
 
 #: seahub/organizations/templates/organizations/org_register.html:44
 msgid "Admin Email"
-msgstr ""
+msgstr "Email Admin"
 
 #: seahub/organizations/templates/organizations/org_register.html:52
 #: seahub/templates/registration/password_change_form.html:21
@@ -2162,12 +2167,12 @@ msgstr ""
 #: seahub/templates/sysadmin/sudo_mode.html:4
 #: seahub/templates/sysadmin/sudo_mode.html:52
 msgid "Confirm Password"
-msgstr ""
+msgstr "Konfirmasi Kata Sandi"
 
 #: seahub/organizations/templates/organizations/org_register.html:87
 #: seahub/templates/registration/registration_form.html:89
 msgid "Email cannot be blank"
-msgstr ""
+msgstr "Email tidak boleh kosong"
 
 #: seahub/organizations/templates/organizations/org_register.html:91
 #: seahub/templates/registration/login.html:210
@@ -2177,7 +2182,7 @@ msgstr ""
 #: seahub/templates/registration/registration_form.html:93
 #: seahub/templates/sysadmin/sudo_mode.html:85
 msgid "Password cannot be blank"
-msgstr ""
+msgstr "Kata sandi tidak boleh kosong"
 
 #: seahub/organizations/templates/organizations/org_register.html:95
 #: seahub/templates/registration/password_change_form.html:56
@@ -2185,7 +2190,7 @@ msgstr ""
 #: seahub/templates/registration/password_set_form.html:54
 #: seahub/templates/registration/registration_form.html:97
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Silakan masukkan kata sandi lagi"
 
 #: seahub/organizations/templates/organizations/org_register.html:99
 #: seahub/templates/registration/password_change_form.html:60
@@ -2193,12 +2198,12 @@ msgstr ""
 #: seahub/templates/registration/password_set_form.html:58
 #: seahub/templates/registration/registration_form.html:101
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Kata sandi tidak cocok"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:4
 #: seahub/templates/snippets/admin_paginator.html:4
 msgid "Previous"
-msgstr ""
+msgstr "Sebelumnya"
 
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:7
 #: seahub/templates/snippets/admin_paginator.html:7
@@ -2209,32 +2214,32 @@ msgstr "Selanjutnya"
 #: seahub/organizations/templates/organizations/sysadmin_log_paginator.html:12
 #: seahub/templates/snippets/admin_paginator.html:12
 msgid "Per page: "
-msgstr ""
+msgstr "Per halaman: "
 
 #: seahub/organizations/views.py:325 seahub/organizations/views.py:355
 #: seahub/thumbnail/views.py:160
 msgid "Invalid token."
-msgstr ""
+msgstr "Token tidak valid."
 
 #: seahub/organizations/views.py:358
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Token kedaluwarsa."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
-msgstr ""
+msgstr "Pengaturan"
 
 #: seahub/profile/templates/profile/set_profile_react.html:21
 msgctxt "true name"
 msgid "Name:"
-msgstr ""
+msgstr "Nama:"
 
 #: seahub/profile/templates/profile/set_profile_react.html:27
 #: seahub/templates/registration/password_set_form.html:4
 #: seahub/templates/registration/password_set_form.html:13
 msgid "Set Password"
-msgstr ""
+msgstr "Atur Kata Sandi"
 
 #: seahub/profile/templates/profile/set_profile_react.html:27
 msgid "Update"
@@ -2242,134 +2247,134 @@ msgstr "Perbarui"
 
 #: seahub/profile/templates/profile/user_profile.html:4
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: seahub/profile/views.py:54
 msgid "Successfully edited profile."
-msgstr ""
+msgstr "Berhasil mengedit profil."
 
 #: seahub/profile/views.py:58
 msgid "Failed to edit profile"
-msgstr ""
+msgstr "Gagal mengedit profil"
 
 #: seahub/profile/views.py:261
 msgid "Has not accepted invitation yet"
-msgstr ""
+msgstr "Belum menerima undangan"
 
 #: seahub/profile/views.py:288
 msgid "Demo account can not be deleted."
-msgstr ""
+msgstr "Akun demo tidak dapat dihapus."
 
 #: seahub/profile/views.py:319
 msgid "Failed to set default library."
-msgstr ""
+msgstr "Gagal mengatur perpustakaan default."
 
 #: seahub/profile/views.py:323
 msgid "Can not set encrypted library as default library."
-msgstr ""
+msgstr "Tidak dapat mengatur perpustakaan terenkripsi sebagai perpustakaan default."
 
 #: seahub/profile/views.py:328
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
-msgstr ""
+msgstr "Berhasil mengatur \"%s\" sebagai perpustakaan default Anda."
 
-#: seahub/repo_metadata/apis.py:159
+#: seahub/repo_metadata/apis.py:160
 #, python-format
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr ""
+msgstr "Fitur metadata tidak didukung untuk perpustakaan yang berisi lebih dari %s file"
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
 #: seahub/views/__init__.py:497 seahub/views/__init__.py:633
 #: seahub/views/__init__.py:798 seahub/views/ajax.py:373
 msgid "Library does not exist"
-msgstr ""
+msgstr "Perpustakaan tidak ada"
 
 #: seahub/seadoc/views.py:152
 msgid "File path invalid."
-msgstr ""
+msgstr "Jalur file tidak valid."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "Kode verifikasi tidak valid, silakan coba lagi."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
-msgstr ""
+msgstr "Tautan tidak ada."
 
 #: seahub/share/decorators.py:84
 msgid "Link is expired."
-msgstr ""
+msgstr "Tautan kedaluwarsa."
 
 #: seahub/share/decorators.py:125
 msgid "The number of share link exceeds the limit."
-msgstr ""
+msgstr "Jumlah tautan berbagi melebihi batas."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
-msgstr ""
+msgstr "Kata sandi tidak boleh kosong"
 
 #: seahub/share/models.py:134
 msgid "Please enter a correct password."
-msgstr ""
+msgstr "Silakan masukkan kata sandi yang benar."
 
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "Kode verifikasi adalah %(code)s. Berlaku selama satu jam."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
 msgid ""
 "\n"
 "    %(shared_from)s shared a file link with you.\n"
-msgstr ""
+msgstr "\n%(shared_from)s membagikan tautan file dengan Anda.\n"
 
 #: seahub/share/templates/share/share_link_email.html:14
 #, python-format
 msgid ""
 "\n"
 "You can click <a href=%(url)s>here</a> to verify your email address and visit it.\n"
-msgstr ""
+msgstr "\nAnda dapat klik <a href=%(url)s>di sini</a> untuk memverifikasi alamat email Anda dan mengunjunginya.\n"
 
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
 msgid "Email address verification"
-msgstr ""
+msgstr "Verifikasi alamat email"
 
 #: seahub/share/templates/share/share_link_email_audit.html:40
 msgid "Please provide your email address to continue."
-msgstr ""
+msgstr "Silakan berikan alamat email Anda untuk melanjutkan."
 
 #: seahub/share/templates/share/share_link_email_audit.html:43
 msgid "Enter your email address"
-msgstr ""
+msgstr "Masukkan alamat email Anda"
 
 #: seahub/share/templates/share/share_link_email_audit.html:44
 msgid "Get code"
-msgstr ""
+msgstr "Dapatkan kode"
 
 #: seahub/share/templates/share/share_link_email_audit.html:46
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "Tempel kode verifikasi di sini"
 
 #: seahub/share/templates/share/share_link_email_audit.html:79
 msgid "Resend"
-msgstr ""
+msgstr "Kirim ulang"
 
 #: seahub/share/templates/share/share_link_email_audit.html:107
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "Kode verifikasi telah dikirim ke alamat email."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "Silakan pilih folder."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
-msgstr ""
+msgstr "Berhasil disimpan."
 
 #: seahub/share/views.py:187
 msgid "Preview and download"
@@ -2381,19 +2386,19 @@ msgstr "Hanya pratinjau"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
-msgstr ""
+msgstr "Unduh dan unggah"
 
 #: seahub/share/views.py:190
 msgid "Edit on cloud and download"
-msgstr ""
+msgstr "Edit di cloud dan unduh"
 
 #: seahub/share/views.py:191
 msgid "Edit on cloud only"
-msgstr ""
+msgstr "Hanya edit di cloud"
 
 #: seahub/share/views.py:223
 msgid "Share Link"
-msgstr ""
+msgstr "Tautan Berbagi"
 
 #: seahub/share/views.py:223 seahub/views/sysadmin.py:656
 msgid "Creator"
@@ -2401,92 +2406,92 @@ msgstr "Pencipta"
 
 #: seahub/share/views.py:224
 msgid "Permission"
-msgstr ""
+msgstr "Izin"
 
 #: seahub/share/views.py:224
 msgid "Expiration"
-msgstr ""
+msgstr "Kedaluwarsa"
 
 #: seahub/share/views.py:254 seahub/thumbnail/views.py:42
 #: seahub/thumbnail/views.py:167 seahub/views/ajax.py:140
 #: seahub/views/ajax.py:415
 msgid "Library does not exist."
-msgstr ""
+msgstr "Perpustakaan tidak ada."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:383
 msgid "Folder does not exist."
-msgstr ""
+msgstr "Folder tidak ada."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
-msgstr ""
+msgstr "Hanya pemilik perpustakaan yang memiliki izin untuk membagikannya."
 
 #: seahub/share/views.py:344
 msgid "Please check the email(s) you entered"
-msgstr ""
+msgstr "Silakan periksa email yang Anda masukkan"
 
 #: seahub/share/views.py:360
 msgid "Share link is not found"
-msgstr ""
+msgstr "Tautan berbagi tidak ditemukan"
 
 #: seahub/share/views.py:375
 msgid "Verification code"
-msgstr ""
+msgstr "Kode verifikasi"
 
 #: seahub/share/views.py:386
 msgid "Failed to send a verification code, please try again later."
-msgstr ""
+msgstr "Gagal mengirim kode verifikasi, silakan coba lagi nanti."
 
 #: seahub/templates/404.html:7
 msgid "Sorry, but the requested page could not be found."
-msgstr ""
+msgstr "Maaf, tetapi halaman yang diminta tidak dapat ditemukan."
 
 #: seahub/templates/base.html:8 seahub/templates/base_for_react.html:9
 msgid "File, Collaboration, Team, Organization"
-msgstr ""
+msgstr "File, Kolaborasi, Tim, Organisasi"
 
 #: seahub/templates/base.html:35
 msgid "Close"
-msgstr ""
+msgstr "Tutup"
 
 #: seahub/templates/base.html:52
 msgid "Language"
-msgstr ""
+msgstr "Bahasa"
 
 #: seahub/templates/choose_register.html:9
 msgid "Create a personal account"
-msgstr ""
+msgstr "Buat akun pribadi"
 
 #: seahub/templates/choose_register.html:10
 msgid "Create an organization account"
-msgstr ""
+msgstr "Buat akun organisasi"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "Klien telah masuk. Silakan buka klien untuk mengonfirmasi."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "Konfirmasi Masuk Klien"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr ""
+msgstr "Apakah Anda ingin masuk ke klien Anda?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
-msgstr ""
+msgstr "Perpustakaan ini terenkripsi. Silakan masukkan kata sandi jika ingin menelusurinya secara online. Kata sandi akan disimpan di server hanya selama 1 jam."
 
 #: seahub/templates/decrypt_repo_form.html:26
 #: seahub/templates/share_access_validation.html:40
 msgid "Please enter the password."
-msgstr ""
+msgstr "Silakan masukkan kata sandi."
 
 #: seahub/templates/download.html:4
 msgid "Download"
-msgstr ""
+msgstr "Unduh"
 
 #: seahub/templates/error.html:11
 #, python-format
@@ -2500,7 +2505,7 @@ msgstr ""
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
-msgstr ""
+msgstr "Unggah Folder"
 
 #: seahub/templates/i18n.html:7
 msgid "Add auto expiration"
@@ -2508,23 +2513,23 @@ msgstr "Tambahkan kedaluwarsa otomatis"
 
 #: seahub/templates/i18n.html:8
 msgid "Days"
-msgstr ""
+msgstr "Hari"
 
 #: seahub/templates/i18n.html:9
 msgid "Shared Links"
-msgstr ""
+msgstr "Tautan Berbagi"
 
 #: seahub/templates/i18n.html:10
 msgid "View and manage all the shared links in this library."
-msgstr ""
+msgstr "Lihat dan kelola semua tautan berbagi di perpustakaan ini."
 
 #: seahub/templates/i18n.html:11
 msgid "Owned Libs"
-msgstr ""
+msgstr "Perpustakaan Milik Sendiri"
 
 #: seahub/templates/i18n.html:12
 msgid "Shared Libs"
-msgstr ""
+msgstr "Perpustakaan Berbagi"
 
 #: seahub/templates/onlyoffice_file_view_react.html:86
 #: seahub/templates/onlyoffice_file_view_react.html:181
@@ -2535,7 +2540,7 @@ msgstr ""
 #: seahub/templates/view_file_onlyoffice.html:184
 #: seahub/templates/view_file_onlyoffice.html:207
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Gagal. Silakan periksa jaringan."
 
 #: seahub/templates/registration/activation_email.html:12
 #, python-format
@@ -2543,35 +2548,35 @@ msgid ""
 "You (or someone pretending to be you) have asked to register an account at "
 "%(site_name)s. If this wasn't you, please ignore this email and your address"
 " will be removed from our records."
-msgstr ""
+msgstr "Anda (atau seseorang yang berpura-pura menjadi Anda) telah meminta untuk mendaftar akun di %(site_name)s. Jika ini bukan Anda, silakan abaikan email ini dan alamat Anda akan dihapus dari catatan kami."
 
 #: seahub/templates/registration/activation_email.html:14
 #, python-format
 msgid ""
 "To activate this account, please click the following link within the next "
 "%(expiration_days)s days: "
-msgstr ""
+msgstr "Untuk mengaktifkan akun ini, silakan klik tautan berikut dalam %(expiration_days)s hari ke depan: "
 
 #: seahub/templates/registration/activation_email.html:18
 #: seahub/templates/registration/registration_form.html:58
 msgid "Sign Up"
-msgstr ""
+msgstr "Daftar"
 
 #: seahub/templates/registration/logged_out.html:4
 #: seahub/templates/registration/logout.html:4
 msgid "Log Out"
-msgstr ""
+msgstr "Keluar"
 
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr ""
+msgstr "Terima kasih atas partisipasi Anda! "
 
 #: seahub/templates/registration/logged_out.html:8
 #: seahub/templates/registration/logout.html:8
 #: seahub/templates/registration/password_change_done.html:10
 msgid "Log in again"
-msgstr ""
+msgstr "Masuk lagi"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:48
@@ -2584,7 +2589,7 @@ msgstr ""
 #: seahub/templates/sysadmin/user_add_email.html:23
 #: seahub/templates/sysadmin/user_batch_add_email.html:19
 msgid "Log In"
-msgstr ""
+msgstr "Masuk"
 
 #: seahub/templates/registration/login.html:58
 msgid "Refresh"
@@ -2592,71 +2597,71 @@ msgstr "Segarkan"
 
 #: seahub/templates/registration/login.html:78
 msgid "Incorrect email or password"
-msgstr ""
+msgstr "Email atau kata sandi salah"
 
 #: seahub/templates/registration/login.html:86
 #, python-format
 msgid "Remember me for %(remember_days)s days "
-msgstr ""
+msgstr "Ingat saya selama %(remember_days)s hari "
 
 #: seahub/templates/registration/login.html:93
 #: seahub/templates/registration/login.html:97
 msgid "Single Sign-On"
-msgstr ""
+msgstr "Single Sign-On"
 
 #: seahub/templates/registration/login.html:104
 msgid "Login with"
-msgstr ""
+msgstr "Masuk dengan"
 
 #: seahub/templates/registration/login.html:130
 msgid "Forgot password?"
-msgstr ""
+msgstr "Lupa kata sandi?"
 
 #: seahub/templates/registration/login.html:198
 msgid "Failed to refresh the CAPTCHA, please try again later."
-msgstr ""
+msgstr "Gagal menyegarkan CAPTCHA, silakan coba lagi nanti."
 
 #: seahub/templates/registration/login.html:206
 #: seahub/templates/registration/multi_adfs_sso.html:104
 msgid "Email or username cannot be blank"
-msgstr ""
+msgstr "Email atau nama pengguna tidak boleh kosong"
 
 #: seahub/templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
-msgstr ""
+msgstr "Perubahan Kata Sandi Berhasil"
 
 #: seahub/templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr ""
+msgstr "Kata sandi Anda telah berhasil diubah."
 
 #: seahub/templates/registration/password_change_form.html:3
 #: seahub/templates/registration/password_change_form.html:12
 msgid "Password Modification"
-msgstr ""
+msgstr "Modifikasi Kata Sandi"
 
 #: seahub/templates/registration/password_change_form.html:15
 msgid "Please update your password before continue."
-msgstr ""
+msgstr "Silakan perbarui kata sandi Anda sebelum melanjutkan."
 
 #: seahub/templates/registration/password_change_form.html:17
 msgid "Current Password"
-msgstr ""
+msgstr "Kata Sandi Saat Ini"
 
 #: seahub/templates/registration/password_change_form.html:19
 msgid "New Password"
-msgstr ""
+msgstr "Kata Sandi Baru"
 
 #: seahub/templates/registration/password_change_form.html:48
 msgid "Current password cannot be blank"
-msgstr ""
+msgstr "Kata sandi saat ini tidak boleh kosong"
 
 #: seahub/templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
-msgstr ""
+msgstr "Berhasil mengatur ulang kata sandi"
 
 #: seahub/templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr ""
+msgstr "Berhasil mengatur ulang kata sandi."
 
 #: seahub/templates/registration/password_reset_confirm.html:4
 #: seahub/templates/registration/password_reset_done.html:4
@@ -2664,312 +2669,312 @@ msgstr ""
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:50
 msgid "Password Reset"
-msgstr ""
+msgstr "Atur Ulang Kata Sandi"
 
 #: seahub/templates/registration/password_reset_confirm.html:17
 msgid "Reset Password"
-msgstr ""
+msgstr "Atur Ulang Kata Sandi"
 
 #: seahub/templates/registration/password_reset_confirm.html:19
 msgid "New Password: "
-msgstr ""
+msgstr "Kata Sandi Baru: "
 
 #: seahub/templates/registration/password_reset_confirm.html:23
 msgid "Confirm Password: "
-msgstr ""
+msgstr "Konfirmasi Kata Sandi: "
 
 #: seahub/templates/registration/password_reset_confirm.html:35
 msgid "Failed to reset password: this link is no longer available."
-msgstr ""
+msgstr "Gagal mengatur ulang kata sandi: tautan ini tidak lagi tersedia."
 
 #: seahub/templates/registration/password_reset_done.html:46
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Jika alamat email Anda ada di database kami, Anda akan menerima pesan segera."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
-msgstr ""
+msgstr "Kembali ke halaman masuk"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
 msgid ""
 "To reset the password of your account %(account)s on %(site_name)s, please "
 "click the following link: "
-msgstr ""
+msgstr "Untuk mengatur ulang kata sandi akun %(account)s Anda di %(site_name)s, silakan klik tautan berikut: "
 
 #: seahub/templates/registration/password_reset_email.html:20
 msgid "If you did not request it, just skip it."
-msgstr ""
+msgstr "Jika Anda tidak memintanya, cukup lewati."
 
 #: seahub/templates/registration/password_reset_form.html:52
 msgid "We will send you an email to set new password"
-msgstr ""
+msgstr "Kami akan mengirimkan email kepada Anda untuk mengatur kata sandi baru"
 
 #: seahub/templates/registration/password_reset_form.html:53
 msgid "Your email used in login"
-msgstr ""
+msgstr "Email Anda yang digunakan untuk masuk"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
 msgid ""
 "You're receiving this e-mail because you are the admin of %(site_name)s, and"
 " a new user %(reg_email)s is joined."
-msgstr ""
+msgstr "Anda menerima email ini karena Anda adalah admin %(site_name)s, dan pengguna baru %(reg_email)s telah bergabung."
 
 #: seahub/templates/registration/register_complete_email.html:3
 msgid "Please click the following link to view the new account:"
-msgstr ""
+msgstr "Silakan klik tautan berikut untuk melihat akun baru:"
 
 #: seahub/templates/registration/register_complete_email_subject.html:1
 #, python-format
 msgid "New account created on %(site_name)s"
-msgstr ""
+msgstr "Akun baru dibuat di %(site_name)s"
 
 #: seahub/templates/registration/registration_complete.html:4
 #: seahub/templates/shibboleth/complete.html:4
 msgid "Registration complete"
-msgstr ""
+msgstr "Pendaftaran selesai"
 
 #: seahub/templates/registration/registration_complete.html:10
 msgid ""
 "An activation email has been sent. Please check your email and click on the "
 "link to activate your account."
-msgstr ""
+msgstr "Email aktivasi telah dikirim. Silakan periksa email Anda dan klik tautan untuk mengaktifkan akun Anda."
 
 #: seahub/templates/registration/registration_complete.html:12
 msgid ""
 "Registration complete, please wait for administrator to activate your "
 "account."
-msgstr ""
+msgstr "Pendaftaran selesai, silakan tunggu administrator untuk mengaktifkan akun Anda."
 
 #: seahub/templates/registration/registration_complete.html:15
 msgid "Signup function is not enabled."
-msgstr ""
+msgstr "Fungsi pendaftaran tidak diaktifkan."
 
 #: seahub/templates/registration/registration_form.html:43
 msgid "Department"
-msgstr ""
+msgstr "Departemen"
 
 #: seahub/templates/registration/registration_form.html:48
 msgid "Telephone"
-msgstr ""
+msgstr "Telepon"
 
 #: seahub/templates/registration/registration_form.html:53
 msgid "Note"
-msgstr ""
+msgstr "Catatan"
 
 #: seahub/templates/remote_user/not_active.html:6
 #: seahub/templates/shibboleth/complete.html:8 seahub/work_weixin/views.py:132
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
-msgstr ""
+msgstr "Akun Anda berhasil dibuat, silakan tunggu administrator untuk mengaktifkan akun Anda."
 
 #: seahub/templates/repo_folder_trash_react.html:5
 msgid "Trash"
-msgstr ""
+msgstr "Sampah"
 
 #: seahub/templates/repo_history_react.html:5
 msgid "History"
-msgstr ""
+msgstr "Riwayat"
 
 #: seahub/templates/repo_snapshot_react.html:5
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "Silakan masukkan kata sandi jika ingin menelusuri file/folder yang dibagikan."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(escaped_file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s membagikan %(file_shared_type)s <span style=\"font-weight:bold;\">%(escaped_file_shared_name)s</span> kepada Anda di %(site_name)s:"
 
 #: seahub/templates/shared_link_email.html:17
 #: seahub/templates/shared_upload_link_email.html:20
 #: seahub/templates/sysadmin/user_add_email.html:20
 #: seahub/templates/sysadmin/user_batch_add_email.html:16
 msgid "Password:"
-msgstr ""
+msgstr "Kata sandi:"
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s membagikan tautan unggah kepada Anda di %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
-msgstr ""
+msgstr "Anda dapat pergi ke halaman berikut dan mengunggah file Anda:"
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Kekuatan kata sandi harus kuat atau sangat kuat"
 
 #: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr ""
+msgstr "Kekuatan kata sandi"
 
 #: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "Kata sandi harus mengandung berbagai jenis karakter untuk membuatnya kuat: huruf besar, huruf kecil, angka, dan karakter khusus."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
 msgid "Privacy Policy"
-msgstr ""
+msgstr "Kebijakan Privasi"
 
 #: seahub/templates/snippets/policy_service_link.html:7
 #: seahub/templates/snippets/policy_service_link.html:11
 msgid "Terms of Service"
-msgstr ""
+msgstr "Syarat Layanan"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Folder"
-msgstr ""
+msgstr "Folder"
 
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
 #: seahub/templates/snippets/repo_dir_trash_tr.html:26
 msgid "Restore"
-msgstr ""
+msgstr "Pulihkan"
 
 #: seahub/templates/snippets/reset_repo_password.html:10
 #, python-format
 msgid ""
 "The new password of library %(repo_name)s is %(password)s. Please change it "
 "as soon as possible."
-msgstr ""
+msgstr "Kata sandi baru perpustakaan %(repo_name)s adalah %(password)s. Silakan ubah sesegera mungkin."
 
 #: seahub/templates/sysadmin/short_time_linving_password_reset_link.html:13
 #, python-format
 msgid ""
 "Administrator on %(site_name)s is resetting your password for %(account)s, "
 "please click the following link to continue: "
-msgstr ""
+msgstr "Administrator di %(site_name)s sedang mengatur ulang kata sandi Anda untuk %(account)s, silakan klik tautan berikut untuk melanjutkan: "
 
 #: seahub/templates/sysadmin/sudo_mode.html:39
 msgid "Confirm password to continue"
-msgstr ""
+msgstr "Konfirmasi kata sandi untuk melanjutkan"
 
 #: seahub/templates/sysadmin/sudo_mode.html:40
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr ""
+msgstr "Anda memasuki area admin, kami tidak akan meminta kata sandi Anda lagi selama beberapa jam."
 
 #: seahub/templates/sysadmin/sudo_mode.html:47
 msgid "Incorrect password"
-msgstr ""
+msgstr "Kata sandi salah"
 
 #: seahub/templates/sysadmin/user_activation_email.html:12
 #, python-format
 msgid "Your account %(username)s on %(site_name)s has been activated."
-msgstr ""
+msgstr "Akun %(username)s Anda di %(site_name)s telah diaktifkan."
 
 #: seahub/templates/sysadmin/user_add_email.html:11
 #, python-format
 msgid ""
 "%(nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(nickname)s mengundang Anda untuk bergabung dengan organisasi \"%(org_name)s\" di %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
 #, python-format
 msgid "%(nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(nickname)s mengundang Anda untuk bergabung dengan %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:18
 #: seahub/templates/sysadmin/user_batch_add_email.html:14
 msgid "Here is your account information:"
-msgstr ""
+msgstr "Berikut adalah informasi akun Anda:"
 
 #: seahub/templates/sysadmin/user_add_email.html:19
 #: seahub/templates/sysadmin/user_batch_add_email.html:15
 msgid "Email:"
-msgstr ""
+msgstr "Email:"
 
 #: seahub/templates/sysadmin/user_freeze_email.html:12
 #, python-format
 msgid ""
 "Account %(user)s froze due to excessive failed logins. Please check at:"
-msgstr ""
+msgstr "Akun %(user)s dibekukan karena terlalu banyak percobaan masuk yang gagal. Silakan periksa di:"
 
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
 msgid ""
 "Your password on %(site_name)s has been reset. Now it is %(password)s. "
 "Please change it as soon as possible. "
-msgstr ""
+msgstr "Kata sandi Anda di %(site_name)s telah diatur ulang. Sekarang adalah %(password)s. Silakan ubah sesegera mungkin. "
 
 #: seahub/templates/team_quota_full.html:12
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Kuota tim hampir penuh di %(site_name)s."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
 msgid "Used:"
-msgstr ""
+msgstr "Digunakan:"
 
 #: seahub/templates/text_diff.html:12
 msgid "modification details"
-msgstr ""
+msgstr "detail modifikasi"
 
 #: seahub/templates/text_diff.html:15
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
 msgid "Back"
-msgstr ""
+msgstr "Kembali"
 
 #: seahub/templates/text_diff.html:21
 msgid "Current Path:"
-msgstr ""
+msgstr "Jalur Saat Ini:"
 
 #: seahub/templates/text_diff.html:33
 msgid "It's a newly-created blank file."
-msgstr ""
+msgstr "Ini adalah file kosong yang baru dibuat."
 
 #: seahub/templates/text_diff.html:40
 msgid "before modification"
-msgstr ""
+msgstr "sebelum modifikasi"
 
 #: seahub/templates/text_diff.html:42
 msgid "after modification"
-msgstr ""
+msgstr "setelah modifikasi"
 
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Kuota Anda hampir penuh di %(site_name)s."
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
-msgstr ""
+msgstr "Terakhir diubah oleh"
 
 #: seahub/thumbnail/views.py:48 seahub/thumbnail/views.py:178
 #: seahub/views/__init__.py:495
 msgid "Invalid arguments."
-msgstr ""
+msgstr "Argumen tidak valid."
 
 #: seahub/thumbnail/views.py:65 seahub/thumbnail/views.py:191
 msgid "Failed to create thumbnail."
-msgstr ""
+msgstr "Gagal membuat thumbnail."
 
 #: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
 #: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
 #: seahub/two_factor/forms.py:297
 #: seahub/two_factor/templates/two_factor/core/setup.html:59
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 #: seahub/two_factor/templates/two_factor/profile/disable.html:11
@@ -2978,7 +2983,7 @@ msgstr "Batal"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
 msgid "Backup Tokens"
-msgstr ""
+msgstr "Token Cadangan"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
 #| msgid ""
@@ -2993,70 +2998,70 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr ""
+msgstr "Token cadangan dapat digunakan ketika nomor telepon utama dan cadangan Anda tidak tersedia. Token cadangan di bawah ini dapat digunakan untuk verifikasi masuk. Jika Anda telah menggunakan semua token cadangan, Anda dapat menghasilkan set token cadangan baru. Hanya token cadangan yang ditampilkan di bawah yang akan valid."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."
-msgstr ""
+msgstr "Cetak token ini dan simpan di tempat yang aman."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
 msgid "You don't have any backup codes yet."
-msgstr ""
+msgstr "Anda belum memiliki kode cadangan."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Generate Tokens"
-msgstr ""
+msgstr "Hasilkan Token"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Autentikasi Dua Faktor"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:19
 msgid ""
 "Open the two-factor authentication app on your device to view your "
 "authentication token and verify your identify."
-msgstr ""
+msgstr "Buka aplikasi autentikasi dua faktor di perangkat Anda untuk melihat token autentikasi dan memverifikasi identitas Anda."
 
 #: seahub/two_factor/templates/two_factor/core/login.html:22
 msgid "Authentication token"
-msgstr ""
+msgstr "Token autentikasi"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:27
 #, python-format
 msgid "Remember this computer for %(remember_days)s days"
-msgstr ""
+msgstr "Ingat komputer ini selama %(remember_days)s hari"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:32
 #: seahub/two_factor/templates/two_factor/core/login.html:52
 msgid "Incorrect code"
-msgstr ""
+msgstr "Kode salah"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:36
 #: seahub/two_factor/templates/two_factor/core/login.html:57
 msgid "Verify"
-msgstr ""
+msgstr "Verifikasi"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:41
 msgid "Don't have your phone?"
-msgstr ""
+msgstr "Tidak membawa telepon?"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:42
 msgid "Enter a two-factor backup code"
-msgstr ""
+msgstr "Masukkan kode cadangan dua faktor"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:48
 msgid "Backup code"
-msgstr ""
+msgstr "Kode cadangan"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:49
 msgid ""
 "You can enter one of your backup codes in case you lost access to your "
 "mobile device."
-msgstr ""
+msgstr "Anda dapat memasukkan salah satu kode cadangan Anda jika kehilangan akses ke perangkat seluler."
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Aktifkan Autentikasi Dua Faktor"
 
 #: seahub/two_factor/templates/two_factor/core/setup.html:15
 msgid ""
@@ -3064,11 +3069,11 @@ msgid ""
 "        smartphone to scan the QR code below. For example, use Google\n"
 "        Authenticator. Then, enter the token generated by the app.\n"
 "        "
-msgstr ""
+msgstr "Untuk mulai menggunakan generator token, silakan gunakan smartphone Anda untuk memindai kode QR di bawah. Misalnya, gunakan Google Authenticator. Kemudian, masukkan token yang dihasilkan oleh aplikasi."
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgstr "Nonaktifkan Autentikasi Dua Faktor"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:8
 #| msgid ""
@@ -3077,196 +3082,196 @@ msgstr ""
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "Anda akan menonaktifkan autentikasi dua faktor. Ini membahayakan keamanan akun Anda, apakah Anda yakin?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"
-msgstr ""
+msgstr "Nonaktifkan"
 
 #: seahub/utils/__init__.py:158
 msgid "permission error"
-msgstr ""
+msgstr "kesalahan izin"
 
 #: seahub/views/__init__.py:314
 msgid "Unable to view recycle page"
-msgstr ""
+msgstr "Tidak dapat melihat halaman daur ulang"
 
 #: seahub/views/__init__.py:369
 msgid "Unable to view library modification"
-msgstr ""
+msgstr "Tidak dapat melihat modifikasi perpustakaan"
 
 #: seahub/views/__init__.py:488
 msgid "Please specify history ID"
-msgstr ""
+msgstr "Silakan tentukan ID riwayat"
 
 #: seahub/views/__init__.py:492
 msgid "Successfully restored the library."
-msgstr ""
+msgstr "Berhasil memulihkan perpustakaan."
 
 #: seahub/views/__init__.py:499
 msgid "History you specified does not exist"
-msgstr ""
+msgstr "Riwayat yang Anda tentukan tidak ada"
 
 #: seahub/views/__init__.py:501
 msgid "Unknown error"
-msgstr ""
+msgstr "Kesalahan tidak diketahui"
 
 #: seahub/views/__init__.py:805 seahub/views/repo.py:291
 #, python-format
 msgid "\"%s\" does not exist."
-msgstr ""
+msgstr "\"%s\" tidak ada."
 
 #: seahub/views/__init__.py:837
 #, python-format
 msgid "Unable to download \"%s\""
-msgstr ""
+msgstr "Tidak dapat mengunduh \"%s\""
 
 #: seahub/views/ajax.py:161 seahub/views/ajax.py:438
 msgid "Library is encrypted."
-msgstr ""
+msgstr "Perpustakaan terenkripsi."
 
 #: seahub/views/ajax.py:167
 msgid "Error: no head commit id"
-msgstr ""
+msgstr "Kesalahan: tidak ada ID commit head"
 
 #: seahub/views/ajax.py:318
 msgid "Wrong repo id"
-msgstr ""
+msgstr "ID repo salah"
 
 #: seahub/views/ajax.py:329 seahub/views/ajax.py:361
 msgid "Bad upload link token."
-msgstr ""
+msgstr "Token tautan unggah buruk."
 
 #: seahub/views/ajax.py:335 seahub/views/file.py:547 seahub/views/file.py:579
-#: seahub/views/file.py:1300 seahub/views/file.py:1599
-#: seahub/views/file.py:2174 seahub/views/file.py:2179
-#: seahub/views/file.py:2186
+#: seahub/views/file.py:1320 seahub/views/file.py:1622
+#: seahub/views/file.py:2199 seahub/views/file.py:2204
+#: seahub/views/file.py:2211
 msgid "File does not exist"
-msgstr ""
+msgstr "File tidak ada"
 
 #: seahub/views/ajax.py:368
 msgid "Bad repo id in upload link."
-msgstr ""
+msgstr "ID repo buruk di tautan unggah."
 
 #: seahub/views/ajax.py:460
 msgid "No conflict in the merge."
-msgstr ""
+msgstr "Tidak ada konflik dalam penggabungan."
 
 #: seahub/views/file.py:237
 msgid "HTTPError: failed to open file online"
-msgstr ""
+msgstr "HTTPError: gagal membuka file online"
 
 #: seahub/views/file.py:241
 msgid "URLError: failed to open file online"
-msgstr ""
+msgstr "URLError: gagal membuka file online"
 
 #: seahub/views/file.py:248
 msgid "The encoding you chose is not proper."
-msgstr ""
+msgstr "Encoding yang Anda pilih tidak tepat."
 
 #: seahub/views/file.py:265 seahub/views/file.py:268
 msgid "Unknown file encoding"
-msgstr ""
+msgstr "Encoding file tidak diketahui"
 
-#: seahub/views/file.py:381 seahub/views/file.py:801 seahub/views/file.py:956
-#: seahub/views/file.py:992
+#: seahub/views/file.py:381 seahub/views/file.py:818 seahub/views/file.py:971
+#: seahub/views/file.py:1007
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
-msgstr ""
+msgstr "Ukuran file melebihi %s, tidak dapat dibuka online."
 
-#: seahub/views/file.py:397 seahub/views/file.py:797
+#: seahub/views/file.py:397 seahub/views/file.py:814
 msgid "The library is encrypted, can not open file online."
-msgstr ""
+msgstr "Perpustakaan terenkripsi, tidak dapat membuka file online."
 
 #: seahub/views/file.py:534 seahub/views/file.py:556 seahub/views/file.py:561
-#: seahub/views/file.py:615 seahub/views/file.py:1151
-#: seahub/views/file.py:1177 seahub/views/file.py:1207
-#: seahub/views/file.py:1356 seahub/views/file.py:1641
-#: seahub/views/file.py:2138
+#: seahub/views/file.py:615 seahub/views/file.py:1171
+#: seahub/views/file.py:1197 seahub/views/file.py:1227
+#: seahub/views/file.py:1376 seahub/views/file.py:1664
+#: seahub/views/file.py:2163
 msgid "Unable to view file"
-msgstr ""
+msgstr "Tidak dapat melihat file"
 
-#: seahub/views/file.py:827 seahub/views/file.py:1101
-#: seahub/views/file.py:1453 seahub/views/file.py:1698
+#: seahub/views/file.py:844 seahub/views/file.py:1119
+#: seahub/views/file.py:1473 seahub/views/file.py:1721
 msgid "Error when prepare Office Online file preview page."
-msgstr ""
+msgstr "Kesalahan saat menyiapkan halaman pratinjau file Office Online."
 
-#: seahub/views/file.py:862 seahub/views/file.py:1117
-#: seahub/views/file.py:1473 seahub/views/file.py:1714
+#: seahub/views/file.py:879 seahub/views/file.py:1135
+#: seahub/views/file.py:1493 seahub/views/file.py:1737
 msgid "Error when prepare OnlyOffice file preview page."
-msgstr ""
+msgstr "Kesalahan saat menyiapkan halaman pratinjau file OnlyOffice."
 
-#: seahub/views/file.py:1243
+#: seahub/views/file.py:1263
 msgid "Unable to download file, invalid file path"
-msgstr ""
+msgstr "Tidak dapat mengunduh file, jalur file tidak valid"
 
-#: seahub/views/file.py:1252
+#: seahub/views/file.py:1272
 msgid "Unable to download file, wrong file path"
-msgstr ""
+msgstr "Tidak dapat mengunduh file, jalur file salah"
 
-#: seahub/views/file.py:1259
+#: seahub/views/file.py:1279
 msgid "Unable to download file."
-msgstr ""
+msgstr "Tidak dapat mengunduh file."
 
-#: seahub/views/file.py:1498 seahub/views/file.py:1767
+#: seahub/views/file.py:1522 seahub/views/file.py:1793
 #: seahub/views/repo.py:325
 #, python-format
 msgid "Share link for %s."
-msgstr ""
+msgstr "Tautan berbagi untuk %s."
 
-#: seahub/views/file.py:1907 seahub/views/file.py:1912
+#: seahub/views/file.py:1932 seahub/views/file.py:1937
 msgid "Unable to download file"
-msgstr ""
+msgstr "Tidak dapat mengunduh file"
 
-#: seahub/views/file.py:2160
+#: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "revisi tidak ditemukan"
 
-#: seahub/views/file.py:2167
+#: seahub/views/file.py:2192
 msgid "The original file does not exist"
-msgstr ""
+msgstr "File asli tidak ada"
 
 #: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
-msgstr ""
+msgstr "Pengguna {token.user} tidak ditemukan"
 
 #: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
-msgstr ""
+msgstr "Pengguna {token.user} tidak aktif"
 
 #: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr ""
+msgstr "Tautan ini sudah dikunjungi, silakan klik tombol masuk di klien lagi"
 
 #: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
-msgstr ""
+msgstr "Tautan tidak valid, silakan klik tombol masuk di klien lagi"
 
 #: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
-msgstr ""
+msgstr "Waktu masuk habis, silakan klik tombol masuk di klien lagi"
 
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Login ID"
-msgstr ""
+msgstr "ID Masuk"
 
 #: seahub/views/sysadmin.py:310 seahub/views/sysadmin.py:336
 msgid "Failed to set quota: internal server error"
-msgstr ""
+msgstr "Gagal mengatur kuota: kesalahan server internal"
 
 #: seahub/views/sysadmin.py:357
 msgid "Failed to delete: the user is an organization creator"
-msgstr ""
+msgstr "Gagal menghapus: pengguna adalah pembuat organisasi"
 
 #: seahub/views/sysadmin.py:402
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
-msgstr ""
+msgstr "Berhasil mencabut izin admin %s"
 
 #: seahub/views/sysadmin.py:404
 msgid "Failed to revoke admin: the user does not exist"
@@ -3291,7 +3296,7 @@ msgstr ""
 #: seahub/views/sysadmin.py:610 seahub/views/sysadmin.py:623
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
-msgstr ""
+msgstr "Berhasil menambahkan pengguna %s. Notifikasi email telah dikirim."
 
 #: seahub/views/sysadmin.py:613 seahub/views/sysadmin.py:626
 #, python-format
@@ -3303,14 +3308,14 @@ msgstr ""
 #: seahub/views/sysadmin.py:615 seahub/views/sysadmin.py:628
 #, python-format
 msgid "Successfully added user %s."
-msgstr ""
+msgstr "Berhasil menambahkan pengguna %s."
 
 #: seahub/views/sysadmin.py:630
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
-msgstr ""
+msgstr "Berhasil menambahkan pengguna %s. Tetapi notifikasi email tidak dapat dikirim, karena layanan Email tidak dikonfigurasi dengan benar."
 
 #: seahub/views/sysadmin.py:685
 msgid "Input should be a number"
@@ -3318,7 +3323,7 @@ msgstr ""
 
 #: seahub/views/sysadmin.py:691
 msgid "Success"
-msgstr ""
+msgstr "Berhasil"
 
 #: seahub/views/sysadmin.py:695
 msgid "Input number should be greater than 0"
@@ -3331,7 +3336,7 @@ msgstr ""
 #: seahub/views/sysadmin.py:766
 #, python-format
 msgid "Successfully set %s as admin."
-msgstr ""
+msgstr "Berhasil mengatur %s sebagai admin."
 
 #: seahub/views/sysadmin.py:768
 #, python-format
@@ -3342,7 +3347,7 @@ msgstr ""
 #: seahub/views/sysadmin.py:789 seahub/views/sysadmin.py:802
 #: seahub/views/sysadmin.py:803
 msgid "Optional"
-msgstr ""
+msgstr "Opsional"
 
 #: seahub/wiki/views.py:159
 msgid "Unable to view Wiki"
