@@ -198,21 +198,9 @@ class AdminOrganizations(APIView):
                 error_msg = "is_active invalid."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            all_orgs = ccnet_api.get_all_orgs(-1, -1)
-            inactive_org_ids = list(OrgSettings.objects.filter(is_active=False).values_list('org_id', flat=True))
-
-            index_start = (page - 1) * per_page
-            index_end = index_start + per_page
-
-            if is_active in ('true', '1'):
-                all_active_orgs = [org for org in all_orgs if org.org_id not in inactive_org_ids]
-                orgs = all_active_orgs[index_start:index_end]
-                total_count = len(all_active_orgs)
-            else:
-                all_inactive_orgs = [org for org in all_orgs if org.org_id in inactive_org_ids]
-                orgs = all_inactive_orgs[index_start:index_end]
-                total_count = len(all_inactive_orgs)
-
+            ccnet_db = CcnetDB()
+            total_count, org_ids = ccnet_db.get_org_ids_by_is_active(is_active, page, per_page)
+            orgs = [ccnet_api.get_org_by_id(org_id) for org_id in org_ids]
         else:
             try:
                 orgs = ccnet_api.get_all_orgs(start, per_page)
