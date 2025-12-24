@@ -74,7 +74,7 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
             path={mainImg.parentDir}
             dirent={{ id, name, type: 'file' }}
             component={{ headerComponent: { showCloseIcon: true } }}
-            setExpanded={setExpanded}
+            isLightbox={true}
           />
         }
       </div>
