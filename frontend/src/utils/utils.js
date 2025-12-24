@@ -88,6 +88,8 @@ export const Utils = {
     'flv': 'video.png',
     'wmv': 'video.png',
     'rmvb': 'video.png',
+    'm4v': 'video.png',
+    'mkv': 'video.png',
 
     // music file
     'mp3': 'music.png',
@@ -259,7 +261,7 @@ export const Utils = {
       return false;
     }
     const file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
-    return ['mp4', 'ogv', 'webm', 'mov'].includes(file_ext);
+    return ['mp4', 'ogv', 'webm', 'mov', 'm4v', 'mkv'].includes(file_ext);
   },
 
   checkDuplicatedNameInList: function (list, targetName) {
