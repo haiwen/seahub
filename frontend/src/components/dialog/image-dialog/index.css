@@ -48,15 +48,6 @@
   opacity: 1;
 }
 
-.lightbox-side-panel .detail-header {
-  width: 100%;
-  height: fit-content;
-  display: flex;
-  padding: 20px 16px;
-  border: none;
-  font-size: 1rem;
-}
-
 .lightbox-side-panel .detail-header .detail-title .detail-title-name,
 .lightbox-side-panel .file-details-collapse .file-details-collapse-header .file-details-collapse-header-title,
 .lightbox-side-panel .dirent-detail-item .dirent-detail-item-name,
@@ -66,7 +57,7 @@
 
 .lightbox-side-panel .detail-body {
   scrollbar-color: #666 #333;
-  padding: 0 16px 8px;
+  padding: 8px 16px;
 }
 
 .lightbox-side-panel .dirent-detail-item-value .sf-metadata-ui.collaborator-item {

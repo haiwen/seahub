@@ -6,13 +6,13 @@ import Icon from '../../../icon';
 
 import './index.css';
 
-const Header = ({ title, icon, iconSize = 32, onClose, children, component = {}, setExpanded }) => {
+const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} }) => {
   const { closeIcon, showCloseIcon } = component;
   return (
     <div className="detail-header">
       <div className="detail-title dirent-title">
         {showCloseIcon && (
-          <div className="detail-header-close" onClick={() => setExpanded && setExpanded(false)}>
+          <div className="detail-header-close">
             <Icon className="close-button" symbol='right_arrow' />
           </div>
         )}
