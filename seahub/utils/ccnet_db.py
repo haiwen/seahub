@@ -399,7 +399,6 @@ class CcnetDB:
                     ORDER BY o.org_id ASC
                     LIMIT {per_page} OFFSET {offset}
                 """
-                print(list_sql)
                 cursor.execute(list_sql)
 
             else:
