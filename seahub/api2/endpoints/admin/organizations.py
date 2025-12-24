@@ -12,6 +12,7 @@ from rest_framework import status
 
 from seaserv import ccnet_api, seafile_api
 
+from seahub.constants import DEFAULT_ORG
 from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT, \
         ORG_ENABLE_REACTIVATE
@@ -199,8 +200,51 @@ class AdminOrganizations(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             ccnet_db = CcnetDB()
-            total_count, org_ids = ccnet_db.get_org_ids_by_is_active(is_active, page, per_page)
-            orgs = [ccnet_api.get_org_by_id(org_id) for org_id in org_ids]
+            total_count, orgs = ccnet_db.get_orgs_by_is_active(is_active, page, per_page)
+
+            org_ids = [org.org_id for org in orgs]
+            orgs_last_activity = OrgLastActivityTime.objects.filter(org_id__in=org_ids)
+            orgs_last_activity_dict = {org.org_id: org.timestamp for org in orgs_last_activity}
+
+            result = []
+            for org in orgs:
+
+                org_id = org.org_id
+
+                org_info = {}
+                org_info['org_id'] = org_id
+                org_info['org_name'] = org.org_name
+                org_info['ctime'] = timestamp_to_isoformat_timestr(org.ctime)
+                org_info['org_url_prefix'] = org.url_prefix
+
+                if not org.role:
+                    role = DEFAULT_ORG
+                elif org.role in get_available_roles():
+                    role = org.role
+                else:
+                    logger.warning('Role %s is not valid' % org.role)
+                    role = DEFAULT_ORG
+
+                org_info['role'] = role
+                org_info['is_active'] = True if org.is_active else False
+
+                creator = org.creator
+                org_info['creator_email'] = creator
+                org_info['creator_name'] = email2nickname(creator)
+                org_info['creator_contact_email'] = email2contact_email(creator)
+
+                org_info['quota'] = seafile_api.get_org_quota(org_id)
+                org_info['quota_usage'] = seafile_api.get_org_quota_usage(org_id)
+
+                if ORG_MEMBER_QUOTA_ENABLED:
+                    org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
+
+                if org_id in orgs_last_activity_dict:
+                    org_info['last_activity_time'] = datetime_to_isoformat_timestr(orgs_last_activity_dict[org_id])
+                else:
+                    org_info['last_activity_time'] = None
+
+                result.append(org_info)
         else:
             try:
                 orgs = ccnet_api.get_all_orgs(start, per_page)
@@ -210,18 +254,19 @@ class AdminOrganizations(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        result = []
-        org_ids = [org.org_id for org in orgs]
-        orgs_last_activity = OrgLastActivityTime.objects.filter(org_id__in=org_ids)
-        orgs_last_activity_dict = {org.org_id: org.timestamp for org in orgs_last_activity}
-        for org in orgs:
-            org_info = get_org_info(org)
-            org_id = org_info['org_id']
-            if org_id in orgs_last_activity_dict:
-                org_info['last_activity_time'] = datetime_to_isoformat_timestr(orgs_last_activity_dict[org_id])
-            else:
-                org_info['last_activity_time'] = None
-            result.append(org_info)
+            result = []
+            org_ids = [org.org_id for org in orgs]
+            orgs_last_activity = OrgLastActivityTime.objects.filter(org_id__in=org_ids)
+            orgs_last_activity_dict = {org.org_id: org.timestamp for org in orgs_last_activity}
+            for org in orgs:
+                org_info = get_org_info(org)
+                org_id = org_info['org_id']
+                if org_id in orgs_last_activity_dict:
+                    org_info['last_activity_time'] = datetime_to_isoformat_timestr(orgs_last_activity_dict[org_id])
+                else:
+                    org_info['last_activity_time'] = None
+
+                result.append(org_info)
 
         return Response({'organizations': result, 'total_count': total_count})
 

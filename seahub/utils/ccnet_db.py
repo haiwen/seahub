@@ -33,6 +33,18 @@ class CcnetUsers(object):
         self.passwd = kwargs.get('passwd')
 
 
+class CcnetOrg(object):
+
+    def __init__(self, **kwargs):
+        self.org_id = kwargs.get('org_id')
+        self.org_name = kwargs.get('org_name')
+        self.ctime = kwargs.get('ctime')
+        self.creator = kwargs.get('creator')
+        self.url_prefix = kwargs.get('url_prefix')
+        self.role = kwargs.get('role')
+        self.is_active = kwargs.get('is_active')
+
+
 class CcnetGroupMembers(object):
     def __init__(self, **kwargs):
         self.group_id = kwargs.get('group_id')
@@ -356,7 +368,7 @@ class CcnetDB:
 
         return users, total_count
 
-    def get_org_ids_by_is_active(self, is_active, page, per_page):
+    def get_orgs_by_is_active(self, is_active, page, per_page):
 
         offset = (page - 1) * per_page
 
@@ -379,15 +391,16 @@ class CcnetDB:
 
                 list_sql = f"""
                     SELECT o.org_id, o.org_name, o.url_prefix,
-                           o.creator, o.ctime, 1 AS is_active
+                           o.creator, o.ctime, s.role, 1 AS is_active
                     FROM `{ccnet_db}`.`organization` o
                     LEFT JOIN `{seahub_db}`.`organizations_orgsettings` s
                            ON o.org_id = s.org_id
                     WHERE s.org_id IS NULL OR s.is_active = 1
                     ORDER BY o.org_id ASC
-                    LIMIT %s OFFSET %s
+                    LIMIT {per_page} OFFSET {offset}
                 """
-                cursor.execute(list_sql, [per_page, offset])
+                print(list_sql)
+                cursor.execute(list_sql)
 
             else:
 
@@ -403,17 +416,30 @@ class CcnetDB:
 
                 list_sql = f"""
                     SELECT o.org_id, o.org_name, o.url_prefix,
-                           o.creator, o.ctime, 0 AS is_active
+                           o.creator, o.ctime, s.role, 0 AS is_active
                     FROM `{ccnet_db}`.`organization` o
                     LEFT JOIN `{seahub_db}`.`organizations_orgsettings` s
                            ON o.org_id = s.org_id
                     WHERE s.org_id IS NOT NULL AND s.is_active = 0
                     ORDER BY o.org_id ASC
-                    LIMIT %s OFFSET %s
+                    LIMIT {per_page} OFFSET {offset}
                 """
-                cursor.execute(list_sql, [per_page, offset])
+                cursor.execute(list_sql)
 
             rows = cursor.fetchall()
 
-        org_ids = [r[0] for r in rows]
-        return total_count, org_ids
+        orgs = []
+        for row in rows:
+            params = {
+                'org_id': row[0],
+                'org_name': row[1],
+                'url_prefix': row[2],
+                'creator': row[3],
+                'ctime': row[4],
+                'role': row[5],
+                'is_active': row[6],
+            }
+            org = CcnetOrg(**params)
+            orgs.append(org)
+
+        return total_count, orgs
