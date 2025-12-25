@@ -67,8 +67,8 @@ body {
 
 .file-view-header .file-toolbar-btn .seafile-multicolor-icon {
   color: var(--bs-icon-color);
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 1rem;
+  height: 1rem;
 }
 
 .file-view-header .file-toolbar-btn:hover {
