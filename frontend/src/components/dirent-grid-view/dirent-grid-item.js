@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import urlJoin from 'url-join';
-import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { imageThumbnailCenter, richTextThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
+import Icon from '../icon';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -30,6 +31,12 @@ class DirentGridItem extends React.Component {
     this.state = {
       dirent,
       isGridDropTipShow: false,
+      isHovering: false,
+      showVideoPreview: false,
+      isMuted: true,
+      videoProgress: 0,
+      videoReady: false,
+      videoDimensions: null, // { width, height }
     };
     const { isCustomPermission, customPermission } = Utils.getUserPermission(dirent.permission);
     this.canPreview = true;
@@ -40,7 +47,10 @@ class DirentGridItem extends React.Component {
       this.canDrag = modify;
     }
     this.ref = React.createRef();
+    this.videoPlayerRef = React.createRef();
     this.clickTimeout = null;
+    this.hoverTimer = null;
+    this.metadataVideo = null;
     this.isGeneratingThumbnail = false;
     this.thumbnailCenter = null;
   }
@@ -77,7 +87,7 @@ class DirentGridItem extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.dirent !== this.props.dirent) {
       this.setState({ dirent: this.props.dirent });
     }
@@ -97,6 +107,22 @@ class DirentGridItem extends React.Component {
   componentWillUnmount() {
     if (this.clickTimeout) {
       clearTimeout(this.clickTimeout);
+    }
+    if (this.hoverTimer) {
+      clearTimeout(this.hoverTimer);
+    }
+    if (this.metadataVideo) {
+      this.metadataVideo.onloadedmetadata = null;
+      this.metadataVideo.onerror = null;
+      this.metadataVideo.src = '';
+      this.metadataVideo = null;
+    }
+    if (this.videoPlayerRef.current?.player) {
+      try {
+        this.videoPlayerRef.current.player.dispose();
+      } catch (e) {
+        // ignore
+      }
     }
     if (this.isGeneratingThumbnail) {
       const { dirent } = this.state;
@@ -259,6 +285,100 @@ class DirentGridItem extends React.Component {
     this.props.onGridItemContextMenu(event, this.state.dirent);
   };
 
+  onGridItemMouseEnter = (e) => {
+    const { dirent } = this.state;
+
+    if (!Utils.videoCheck(dirent.name) || !this.canPreview) return;
+    this.setState({ isHovering: true });
+
+    // Preload video metadata to get dimensions
+    if (!this.metadataVideo) {
+      this.metadataVideo = document.createElement('video');
+      this.metadataVideo.preload = 'metadata';
+      this.metadataVideo.src = this.getVideoSrc();
+      this.metadataVideo.onloadedmetadata = () => {
+        const maxSize = 96;
+        const videoWidth = this.metadataVideo.videoWidth;
+        const videoHeight = this.metadataVideo.videoHeight;
+        const aspectRatio = videoWidth / videoHeight;
+
+        let displayWidth; let displayHeight;
+        if (aspectRatio > 1) {
+          // Landscape
+          displayWidth = Math.min(videoWidth, maxSize);
+          displayHeight = displayWidth / aspectRatio;
+        } else {
+          // Portrait
+          displayHeight = Math.min(videoHeight, maxSize);
+          displayWidth = displayHeight * aspectRatio;
+        }
+
+        this.setState({ videoDimensions: { width: displayWidth, height: displayHeight } });
+      };
+    }
+
+    this.hoverTimer = setTimeout(() => {
+      this.setState({ showVideoPreview: true });
+    }, 500);
+  };
+
+  onGridItemMouseLeave = () => {
+    if (this.hoverTimer) {
+      clearTimeout(this.hoverTimer);
+    }
+
+    const video = this.getVideoElement();
+    if (video) {
+      video.pause();
+      video.currentTime = 0;
+    }
+
+    this.setState({
+      isHovering: false,
+      showVideoPreview: false,
+      videoProgress: 0,
+      videoReady: false
+    });
+  };
+
+  getVideoElement = () => {
+    return this.videoPlayerRef.current;
+  };
+
+  handleVideoTimeUpdate = (e) => {
+    const video = e.target;
+    const progress = (video.currentTime / video.duration) * 100;
+    this.setState({ videoProgress: progress || 0 });
+  };
+
+  handleVideoLoadedMetadata = () => {
+    if (!this.state.showVideoPreview) return;
+    const video = this.getVideoElement();
+    if (video && video.paused) {
+      video.play().catch(() => {
+        // ignore autoplay errors
+      });
+    }
+  };
+
+  handleVideoPlaying = () => {
+    if (this.state.showVideoPreview) {
+      this.setState({ videoReady: true });
+    }
+  };
+
+  handleToggleMute = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    this.setState({ isMuted: !this.state.isMuted });
+  };
+
+  getVideoSrc = () => {
+    const { repoID, dirent, path } = this.props;
+    const filePath = Utils.encodePath(Utils.joinPath(path, dirent.name));
+    return `${fileServerRoot}repos/${repoID}/files${filePath}?op=download`;
+  };
+
   getTextRenderWidth = (text, font) => {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -321,9 +441,12 @@ class DirentGridItem extends React.Component {
   };
 
   render() {
-    let { dirent, isGridDropTipShow } = this.state;
+    let { dirent, isGridDropTipShow, isHovering, showVideoPreview, videoReady, videoDimensions, isMuted, videoProgress } = this.state;
     let { is_freezed, is_locked, lock_owner_name, isSelected } = dirent;
     const showName = this.getRenderedText(dirent);
+    const isVideo = Utils.videoCheck(dirent.name);
+    const shouldHideBasePreview = isVideo && showVideoPreview && videoReady;
+
     return (
       <>
         <li
@@ -331,10 +454,15 @@ class DirentGridItem extends React.Component {
           onContextMenu={this.onGridItemContextMenu}
           onMouseDown={this.onGridItemMouseDown}
           onClick={this.onItemClick}
+          onMouseEnter={this.onGridItemMouseEnter}
+          onMouseLeave={this.onGridItemMouseLeave}
         >
           <div
             ref={this.ref}
-            className={classnames('grid-file-img-link', { 'grid-drop-show': isGridDropTipShow })}
+            className={classnames('grid-file-img-link', {
+              'grid-drop-show': isGridDropTipShow,
+              'video-preview-container': isVideo
+            })}
             draggable={this.canDrag}
             onDragStart={this.onGridItemDragStart}
             onDragEnter={this.onGridItemDragEnter}
@@ -345,15 +473,74 @@ class DirentGridItem extends React.Component {
             {(this.canPreview && dirent.encoded_thumbnail_src) ?
               <img
                 src={`${siteRoot}${dirent.encoded_thumbnail_src || ''}?mtime=${dirent.mtime}`}
-                className="thumbnail"
+                className={classnames('thumbnail', 'grid-preview-thumb', { 'grid-preview-thumb--hidden': shouldHideBasePreview })}
                 tabIndex="0"
                 onClick={this.onItemClick}
                 onKeyDown={Utils.onKeyDown}
                 alt={dirent.name}
                 draggable={false}
               /> :
-              <img src={Utils.getDirentIcon(dirent, true)} width="80" height="80" alt='' draggable={false} />
+              <img
+                src={Utils.getDirentIcon(dirent, true)}
+                width="80"
+                height="80"
+                alt=""
+                draggable={false}
+                className={classnames('grid-preview-thumb', 'grid-preview-icon', { 'grid-preview-thumb--hidden': shouldHideBasePreview })}
+              />
             }
+            {isVideo && (isHovering || showVideoPreview) && (
+              <div
+                className={classnames('grid-video-preview', {
+                  'grid-video-preview--active': showVideoPreview,
+                  'grid-video-preview--ready': videoReady
+                })}
+              >
+                <div className="video-wrapper">
+                  <video
+                    key="grid-video-preview"
+                    ref={this.videoPlayerRef}
+                    src={showVideoPreview ? this.getVideoSrc() : undefined}
+                    autoPlay={showVideoPreview}
+                    muted={isMuted}
+                    loop
+                    playsInline
+                    preload={showVideoPreview ? 'auto' : 'none'}
+                    onLoadedMetadata={this.handleVideoLoadedMetadata}
+                    onPlaying={this.handleVideoPlaying}
+                    onTimeUpdate={this.handleVideoTimeUpdate}
+                  />
+                  {videoReady && (
+                    <div className="custom-video-controls">
+                      <div className="custom-progress-bar">
+                        <div
+                          className="custom-progress-filled"
+                          style={{ width: `${videoProgress}%` }}
+                        />
+                      </div>
+                      <button
+                        className="custom-volume-btn"
+                        onClick={this.handleToggleMute}
+                        aria-label={isMuted ? gettext('Unmute') : gettext('Mute')}
+                      >
+                        <Icon symbol={isMuted ? 'mute' : 'unmute'} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {isVideo && isHovering && !showVideoPreview && videoDimensions && (
+              <div
+                className="grid-video-hover-overlay"
+                style={{
+                  width: `${videoDimensions.width}px`,
+                  height: `${videoDimensions.height}px`,
+                }}
+              >
+                <Icon symbol="play-filled" className="grid-video-play" />
+              </div>
+            )}
             {is_locked &&
               <img
                 className="grid-file-locked-icon"
