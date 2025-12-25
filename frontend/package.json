@@ -10,7 +10,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@excalidraw/excalidraw": "^0.18.0",
     "@gatsbyjs/reach-router": "2.0.1",
-    "@seafile/comment-editor": "1.0.5",
+    "@seafile/comment-editor": "1.0.6",
     "@seafile/react-image-lightbox": "^5.0.2",
     "@seafile/resumablejs": "1.1.16",
     "@seafile/seafile-calendar": "1.0.3",
