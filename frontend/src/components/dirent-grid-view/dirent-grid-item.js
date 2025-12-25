@@ -441,11 +441,11 @@ class DirentGridItem extends React.Component {
   };
 
   render() {
-    let { dirent, isGridDropTipShow, isHovering, showVideoPreview } = this.state;
+    let { dirent, isGridDropTipShow, isHovering, showVideoPreview, videoReady, videoDimensions, isMuted, videoProgress } = this.state;
     let { is_freezed, is_locked, lock_owner_name, isSelected } = dirent;
     const showName = this.getRenderedText(dirent);
     const isVideo = Utils.videoCheck(dirent.name);
-    const shouldHideBasePreview = isVideo && showVideoPreview && this.state.videoReady;
+    const shouldHideBasePreview = isVideo && showVideoPreview && videoReady;
 
     return (
       <>
@@ -493,7 +493,7 @@ class DirentGridItem extends React.Component {
               <div
                 className={classnames('grid-video-preview', {
                   'grid-video-preview--active': showVideoPreview,
-                  'grid-video-preview--ready': this.state.videoReady
+                  'grid-video-preview--ready': videoReady
                 })}
               >
                 <div className="video-wrapper">
@@ -502,7 +502,7 @@ class DirentGridItem extends React.Component {
                     ref={this.videoPlayerRef}
                     src={showVideoPreview ? this.getVideoSrc() : undefined}
                     autoPlay={showVideoPreview}
-                    muted={this.state.isMuted}
+                    muted={isMuted}
                     loop
                     playsInline
                     preload={showVideoPreview ? 'auto' : 'none'}
@@ -510,32 +510,32 @@ class DirentGridItem extends React.Component {
                     onPlaying={this.handleVideoPlaying}
                     onTimeUpdate={this.handleVideoTimeUpdate}
                   />
-                  {this.state.videoReady && (
+                  {videoReady && (
                     <div className="custom-video-controls">
                       <div className="custom-progress-bar">
                         <div
                           className="custom-progress-filled"
-                          style={{ width: `${this.state.videoProgress}%` }}
+                          style={{ width: `${videoProgress}%` }}
                         />
                       </div>
                       <button
                         className="custom-volume-btn"
                         onClick={this.handleToggleMute}
-                        aria-label={this.state.isMuted ? 'Unmute' : 'Mute'}
+                        aria-label={isMuted ? gettext('Unmute') : gettext('Mute')}
                       >
-                        <Icon symbol={this.state.isMuted ? 'mute' : 'unmute'} />
+                        <Icon symbol={isMuted ? 'mute' : 'unmute'} />
                       </button>
                     </div>
                   )}
                 </div>
               </div>
             )}
-            {isVideo && isHovering && !showVideoPreview && this.state.videoDimensions && (
+            {isVideo && isHovering && !showVideoPreview && videoDimensions && (
               <div
                 className="grid-video-hover-overlay"
                 style={{
-                  width: `${this.state.videoDimensions.width}px`,
-                  height: `${this.state.videoDimensions.height}px`,
+                  width: `${videoDimensions.width}px`,
+                  height: `${videoDimensions.height}px`,
                 }}
               >
                 <Icon symbol="play-filled" className="grid-video-play" />
