@@ -116,7 +116,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
     <div className='d-flex align-items-center image-zoomer'>
       <IconButton
         id="zoom-out-image"
-        icon="minus_sign"
+        icon="minus-sign"
         text={gettext('Zoom out')}
         onClick={zoomOut}
         disabled={curScale == SCALE_MIN}
@@ -177,7 +177,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
       </Dropdown>
       <IconButton
         id="zoom-in-image"
-        icon="plus_sign"
+        icon="plus-sign"
         text={gettext('Zoom in')}
         onClick={zoomIn}
         disabled={curScale == SCALE_MAX}
