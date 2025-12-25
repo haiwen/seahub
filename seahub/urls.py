@@ -971,6 +971,7 @@ urlpatterns = [
 
     # webhook
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/webhooks/$', WebhooksView.as_view(), name='api-v2.1-webhooks'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/webhooks/(?P<webhook_id>\d+)/$', WebhooksView.as_view(), name='api-v2.1-webhooks'),
 ]
 
 try:
