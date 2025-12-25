@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import Switch from '../switch';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -47,6 +47,7 @@ class FileToolbar extends React.Component {
       dropdownOpen: false,
       moreDropdownOpen: false,
       isShareDialogOpen: false,
+      moreTooltipOpen: false,
     };
   }
 
@@ -72,6 +73,10 @@ class FileToolbar extends React.Component {
 
   toggleShareDialog = () => {
     this.setState({ isShareDialogOpen: !this.state.isShareDialogOpen });
+  };
+
+  toggleMoreTooltip = () => {
+    this.setState({ moreTooltipOpen: !this.state.moreTooltipOpen });
   };
 
   toggleMoreOpMenu = (event) => {
@@ -218,14 +223,15 @@ class FileToolbar extends React.Component {
             text={gettext('Details')}
             onClick={this.props.toggleDetailsPanel}
           />
-          <Button
-            className='file-toolbar-btn border-0 p-0 bg-transparent'
-            onClick={this.props.toggleCommentPanel}
-            aria-label={gettext('Comment')}
-          >
-            <Icon symbol="comment" />
+          <span className="position-relative">
+            <IconButton
+              id="file-comment"
+              icon="comment"
+              text={gettext('Comment')}
+              onClick={this.props.toggleCommentPanel}
+            />
             {isCommentUpdated && <span className='comment-tip'></span>}
-          </Button>
+          </span>
           {showShareBtn && (
             <IconButton
               id="share-file"
@@ -236,14 +242,23 @@ class FileToolbar extends React.Component {
           )}
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
+              id="more-operations"
               className="file-toolbar-btn"
               aria-label={gettext('More operations')}
-              title={gettext('More operations')}
               tag="span"
               tabIndex="0"
               role='button'
             >
               <Icon symbol="more-level" />
+              <Tooltip
+                toggle={this.toggleMoreTooltip}
+                delay={{ show: 0, hide: 0 }}
+                target="more-operations"
+                placement='bottom'
+                isOpen={this.state.moreTooltipOpen}
+              >
+                {gettext('More operations')}
+              </Tooltip>
             </DropdownToggle>
             <DropdownMenu>
               {filePerm == 'rw' && (
