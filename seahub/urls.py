@@ -225,6 +225,7 @@ from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPla
 from seahub.api2.endpoints.user_list import UserListView
 from seahub.api2.endpoints.seahub_io import SeahubIOStatus
 from seahub.api2.endpoints.repo_office_suite import OfficeSuiteConfig
+from seahub.api2.endpoints.webhook import WebhooksView
 
 
 urlpatterns = [
@@ -967,6 +968,10 @@ urlpatterns = [
     path('sys/abuse-reports/', sysadmin_react_fake_view, name="sys_abuse_reports"),
 
     path('client-login/', client_token_login, name='client_token_login'),
+
+    # webhook
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/webhooks/$', WebhooksView.as_view(), name='api-v2.1-webhooks'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/webhooks/(?P<webhook_id>\d+)/$', WebhooksView.as_view(), name='api-v2.1-webhooks'),
 ]
 
 try:
