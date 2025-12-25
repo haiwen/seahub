@@ -7,6 +7,10 @@ def get_ccnet_db_name():
     return os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'ccnet_db'
 
 
+def get_seahub_db_name():
+    return os.environ.get('SEAFILE_MYSQL_DB_SEAHUB_DB_NAME', '') or 'seahub_db'
+
+
 class CcnetGroup(object):
 
     def __init__(self, **kwargs):
@@ -27,8 +31,20 @@ class CcnetUsers(object):
         self.ctime = kwargs.get('ctime')
         self.role = kwargs.get('role')
         self.passwd = kwargs.get('passwd')
-        
-        
+
+
+class CcnetOrg(object):
+
+    def __init__(self, **kwargs):
+        self.org_id = kwargs.get('org_id')
+        self.org_name = kwargs.get('org_name')
+        self.ctime = kwargs.get('ctime')
+        self.creator = kwargs.get('creator')
+        self.url_prefix = kwargs.get('url_prefix')
+        self.role = kwargs.get('role')
+        self.is_active = kwargs.get('is_active')
+
+
 class CcnetGroupMembers(object):
     def __init__(self, **kwargs):
         self.group_id = kwargs.get('group_id')
@@ -254,7 +270,7 @@ class CcnetDB:
 
     def get_org_staffs(self, org_id):
         sql = f"""
-        SELECT email 
+        SELECT email
         FROM `{self.db_name}`.`OrgUser`
         WHERE org_id={org_id} AND is_staff=1
         """
@@ -264,7 +280,6 @@ class CcnetDB:
 
         return [s[0] for s in staffs]
 
-    
     def get_all_sub_groups(self, group_id):
         sql = f"""
         SELECT group_id
@@ -275,7 +290,7 @@ class CcnetDB:
             cursor.execute(sql, [f'%{group_id}%'])
             sub_groups = cursor.fetchall()
         return [s[0] for s in sub_groups]
-    
+
     def move_department(self, department_id, target_department_id):
         get_current_path_sql = f"""
         SELECT path
@@ -322,7 +337,7 @@ class CcnetDB:
                         f"{old_path_prefix}%"  # Pattern to match all children
                     ]
                 )
-                
+
     def get_group_members(self, group_id, start, limit):
         sql = f"""
         SELECT group_id, user_name, is_staff
@@ -330,14 +345,14 @@ class CcnetDB:
         WHERE group_id=%s ORDER BY id
         LIMIT %s OFFSET %s
         """
-        
+
         count_sql = f"SELECT COUNT(1) from `{self.db_name}`.`GroupUser` WHERE group_id=%s"
         users = []
         with connection.cursor() as cursor:
             cursor.execute(count_sql, [group_id])
             total_count = int(cursor.fetchone()[0])
             cursor.execute(sql, [group_id, limit, start])
-            
+
             for item in cursor.fetchall():
                 group_id = item[0]
                 user_name = item[1]
@@ -346,10 +361,84 @@ class CcnetDB:
                     'group_id': group_id,
                     'user_name': user_name,
                     'is_staff': is_staff,
-                    
+
                 }
                 users_obj = CcnetGroupMembers(**params)
                 users.append(users_obj)
-        return users, total_count
-    
 
+        return users, total_count
+
+    def get_orgs_by_is_active(self, is_active, page, per_page):
+
+        offset = (page - 1) * per_page
+
+        ccnet_db = get_ccnet_db_name()
+        seahub_db = get_seahub_db_name()
+
+        with connection.cursor() as cursor:
+
+            if is_active in ('true', '1'):
+
+                count_sql = f"""
+                    SELECT COUNT(*)
+                    FROM `{ccnet_db}`.`organization` o
+                    LEFT JOIN `{seahub_db}`.`organizations_orgsettings` s
+                           ON o.org_id = s.org_id
+                    WHERE s.org_id IS NULL OR s.is_active = 1
+                """
+                cursor.execute(count_sql)
+                total_count = cursor.fetchone()[0]
+
+                list_sql = f"""
+                    SELECT o.org_id, o.org_name, o.url_prefix,
+                           o.creator, o.ctime, s.role, 1 AS is_active
+                    FROM `{ccnet_db}`.`organization` o
+                    LEFT JOIN `{seahub_db}`.`organizations_orgsettings` s
+                           ON o.org_id = s.org_id
+                    WHERE s.org_id IS NULL OR s.is_active = 1
+                    ORDER BY o.org_id ASC
+                    LIMIT {per_page} OFFSET {offset}
+                """
+                cursor.execute(list_sql)
+
+            else:
+
+                count_sql = f"""
+                    SELECT COUNT(*)
+                    FROM `{ccnet_db}`.`organization` o
+                    LEFT JOIN `{seahub_db}`.`organizations_orgsettings` s
+                           ON o.org_id = s.org_id
+                    WHERE s.org_id IS NOT NULL AND s.is_active = 0
+                """
+                cursor.execute(count_sql)
+                total_count = cursor.fetchone()[0]
+
+                list_sql = f"""
+                    SELECT o.org_id, o.org_name, o.url_prefix,
+                           o.creator, o.ctime, s.role, 0 AS is_active
+                    FROM `{ccnet_db}`.`organization` o
+                    LEFT JOIN `{seahub_db}`.`organizations_orgsettings` s
+                           ON o.org_id = s.org_id
+                    WHERE s.org_id IS NOT NULL AND s.is_active = 0
+                    ORDER BY o.org_id ASC
+                    LIMIT {per_page} OFFSET {offset}
+                """
+                cursor.execute(list_sql)
+
+            rows = cursor.fetchall()
+
+        orgs = []
+        for row in rows:
+            params = {
+                'org_id': row[0],
+                'org_name': row[1],
+                'url_prefix': row[2],
+                'creator': row[3],
+                'ctime': row[4],
+                'role': row[5],
+                'is_active': row[6],
+            }
+            org = CcnetOrg(**params)
+            orgs.append(org)
+
+        return total_count, orgs
