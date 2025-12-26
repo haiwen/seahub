@@ -39,7 +39,7 @@ class LibrariesSubNav extends React.Component {
                 onClick={(e) => this.tabItemClick(e, item.name, item.id)}
               >
                 <span className="nav-icon">
-                  <Icon symbol={item.parent_group_id == 0 ? 'groups' : 'department'} />
+                  <Icon symbol={item.parent_group_id == 0 ? 'group' : 'department'} />
                 </span>
                 <span className="nav-text ellipsis" title={item.name}>{item.name}</span>
               </Link>

@@ -71,7 +71,7 @@ class SidePanel extends React.Component {
                 </li>
                 <li className={`nav-item ${this.getActiveClass('groupadmin')}`}>
                   <Link className={`nav-link ellipsis ${this.getActiveClass('groupadmin')}`} to={siteRoot + 'org/groupadmin/'} onClick={() => this.tabItemClick('groupadmin')}>
-                    <Icon symbol="groups" />
+                    <Icon symbol="group" />
                     <span className="nav-text">{gettext('Groups')}</span>
                   </Link>
                 </li>
