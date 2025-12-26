@@ -9,7 +9,7 @@ import {
 } from '../../../../utils/cell';
 import { Utils } from '../../../../../utils/utils';
 import { checkIsDir } from '../../../../utils/row';
-import { siteRoot, thumbnailSizeForOriginal } from '../../../../../utils/constants';
+import { siteRoot, thumbnailSizeForOriginal, enableThumbnailServer } from '../../../../../utils/constants';
 
 import './index.css';
 
@@ -47,7 +47,7 @@ const CardItem = ({
     return Utils.imageCheck(value) ||
       Utils.pdfCheck(value) ||
       Utils.videoCheck(value) ||
-      Utils.isEditableSdocFile(value);
+      (Utils.isEditableSdocFile(value) && enableThumbnailServer);
   }, [isDir, fileNameValue]);
 
   const isDocumentFile = useMemo(() => {

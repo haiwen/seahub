@@ -9,7 +9,7 @@ import { Modal } from 'reactstrap';
 import { navigate } from '@gatsbyjs/reach-router';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { gettext, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY, siteRoot, username } from '../../utils/constants';
+import { enableThumbnailServer, gettext, SF_DIRECTORY_TREE_SORT_BY_KEY, SF_DIRECTORY_TREE_SORT_ORDER_KEY, siteRoot, thumbnailSizeForOriginal, username } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { Dirent, FileTag, RepoTag, RepoInfo } from '../../models';
@@ -36,6 +36,7 @@ import { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 
 import '../../css/lib-content-view.css';
+
 
 dayjs.extend(relativeTime);
 
@@ -1831,9 +1832,12 @@ class LibContentView extends React.Component {
       let direntList = this.state.direntList.map(item => {
         if (item.name === oldName) {
           item.name = newName;
-        }
-        if (Utils.isSdocFile(direntPath)) {
-          item.encoded_thumbnail_src = null;
+
+          if (Utils.isSdocFile(item.name) && enableThumbnailServer) {
+            const path = Utils.encodePath(Utils.joinPath(parentPath, newName));
+            const thumbnailURL = `thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}`;
+            item.encoded_thumbnail_src = thumbnailURL;
+          }
         }
         return item;
       });

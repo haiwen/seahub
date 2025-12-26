@@ -114,6 +114,7 @@ export const enableTC = window.app.pageOptions.enableTC;
 
 export const enableVideoThumbnail = window.app.pageOptions.enableVideoThumbnail;
 export const enablePDFThumbnail = window.app.pageOptions.enablePDFThumbnail;
+export const enableThumbnailServer = window.app.pageOptions.enableThumbnailServer;
 
 export const enableOfficeWebApp = window.app.pageOptions.enableOfficeWebApp || false;
 export const officeWebAppEditFileExtension = window.app.pageOptions.officeWebAppEditFileExtension || [];

@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import urlJoin from 'url-join';
 import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail, fileServerRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { imageThumbnailCenter, richTextThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
+import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import Icon from '../icon';
 
 const propTypes = {
@@ -67,10 +67,7 @@ class DirentGridItem extends React.Component {
       this.thumbnailCenter = imageThumbnailCenter;
       return true;
     }
-    if (Utils.isEditableSdocFile(dirent.name)) {
-      this.thumbnailCenter = richTextThumbnailCenter;
-      return true;
-    }
+
     return false;
   };
 
@@ -440,6 +437,15 @@ class DirentGridItem extends React.Component {
     return link;
   };
 
+  onError = () => {
+    const { dirent } = this.state;
+    if (Utils.isEditableSdocFile(dirent.name)) {
+      let dirent = this.state.dirent;
+      dirent.encoded_thumbnail_src = '';
+      this.setState({ dirent });
+    }
+  };
+
   render() {
     let { dirent, isGridDropTipShow, isHovering, showVideoPreview, videoReady, videoDimensions, isMuted, videoProgress } = this.state;
     let { is_freezed, is_locked, lock_owner_name, isSelected } = dirent;
@@ -479,6 +485,7 @@ class DirentGridItem extends React.Component {
                 onKeyDown={Utils.onKeyDown}
                 alt={dirent.name}
                 draggable={false}
+                onError={this.onError}
               /> :
               <img
                 src={Utils.getDirentIcon(dirent, true)}

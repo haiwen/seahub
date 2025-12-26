@@ -7,7 +7,7 @@ import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFT
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import { imageThumbnailCenter, videoThumbnailCenter, richTextThumbnailCenter } from '../../utils/thumbnail-center';
+import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import Rename from '../rename';
 import toaster from '../toast';
@@ -153,7 +153,7 @@ class DirentListItem extends React.Component {
   }
 
   checkGenerateThumbnail = (dirent) => {
-    if (this.props.repoEncrypted || dirent.encoded_thumbnail_src) {
+    if (this.props.repoEncrypted || dirent.encoded_thumbnail_src || dirent.encoded_thumbnail_src === '') {
       return false;
     }
     if (enableVideoThumbnail && Utils.videoCheck(dirent.name)) {
@@ -165,10 +165,6 @@ class DirentListItem extends React.Component {
       return true;
     }
 
-    if (Utils.isEditableSdocFile(dirent.name)) {
-      this.thumbnailCenter = richTextThumbnailCenter;
-      return true;
-    }
     return false;
   };
 
@@ -683,6 +679,15 @@ class DirentListItem extends React.Component {
     return dirent.type === 'dir' ? dirHref : fileHref;
   };
 
+  onError = () => {
+    const { dirent } = this.state;
+    if (Utils.isEditableSdocFile(dirent.name)) {
+      let dirent = this.state.dirent;
+      dirent.encoded_thumbnail_src = '';
+      this.setState({ dirent });
+    }
+  };
+
   renderItemOperation = () => {
     let { selectedDirentList } = this.props;
     let dirent = this.state.dirent;
@@ -839,6 +844,7 @@ class DirentListItem extends React.Component {
                     onClick={this.onItemClick}
                     onKeyDown={Utils.onKeyDown}
                     draggable={false}
+                    onError={this.onError}
                   /> :
                   <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' draggable={false} />
                 }
@@ -875,7 +881,7 @@ class DirentListItem extends React.Component {
             <td onClick={this.onItemClick}>
               <div className="dir-icon">
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" /> :
+                  <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" onError={this.onError}/> :
                   <img src={iconUrl} width="24" alt="" />
                 }
                 {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}

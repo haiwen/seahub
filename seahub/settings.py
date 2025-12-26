@@ -897,7 +897,7 @@ THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 
 # video thumbnails
-ENABLE_VIDEO_THUMBNAIL = False
+
 THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
 # pdf thumbnails
@@ -1063,6 +1063,10 @@ ROLES_DEFAULT_OFFCICE_SUITE = {}
 OFFICE_SUITE_ENABLED_FILE_TYPES = []
 OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES = []
 
+
+# Thumbnail
+ENABLE_THUMBNAIL_SERVER = False
+
 # file tags
 ENABLE_FILE_TAGS = True
 
@@ -1202,6 +1206,10 @@ for module in LOGGING_IGNORE_MODULES:
 JWT_PRIVATE_KEY = os.environ.get('JWT_PRIVATE_KEY', '') or JWT_PRIVATE_KEY
 
 # For database conf., now Seafile only support MySQL, skip for other engine
+
+
+
+ENABLE_VIDEO_THUMBNAIL = ENABLE_THUMBNAIL_SERVER
 
 ## use update methods to get user's cfg
 _tmp_db_cfg = copy.deepcopy(_preset_db_cfg)

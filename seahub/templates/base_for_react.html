@@ -177,7 +177,8 @@
             showWechatSupportGroup: {% if show_wechat_support_group %} true {% else %} false {% endif %},
             baiduMapKey: '{{ baidu_map_key }}',
             googleMapKey: '{{ google_map_key }}',
-            googleMapId: '{{ google_map_id }}'
+            googleMapId: '{{ google_map_id }}',
+            enableThumbnailServer: {% if enable_thumbnal_server %} true {% else %} false {% endif %},
         }
      };
 </script>
