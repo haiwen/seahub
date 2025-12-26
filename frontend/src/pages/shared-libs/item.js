@@ -167,7 +167,7 @@ class Item extends Component {
               <td className="text-center">
                 <OpIcon
                   className="star-icon"
-                  symbol={this.state.isStarred ? 'starred' : 'star-empty'}
+                  symbol={this.state.isStarred ? 'starred' : 'unstarred'}
                   title={this.state.isStarred ? gettext('Unstar') : gettext('Star')}
                   op={this.onToggleStarRepo}
                 />

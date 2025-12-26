@@ -1,15 +1,15 @@
 import CellType from './type';
 
 const COLUMNS_ICON_CONFIG = {
-  [CellType.CREATOR]: 'creator',
-  [CellType.LAST_MODIFIER]: 'creator',
+  [CellType.CREATOR]: 'user',
+  [CellType.LAST_MODIFIER]: 'user',
   [CellType.CTIME]: 'creation-time',
   [CellType.MTIME]: 'creation-time',
   [CellType.DEFAULT]: 'text',
   [CellType.TEXT]: 'text',
   [CellType.FILE_NAME]: 'text',
   [CellType.CHECKBOX]: 'checkbox',
-  [CellType.COLLABORATOR]: 'collaborator',
+  [CellType.COLLABORATOR]: 'group',
   [CellType.DATE]: 'date',
   [CellType.LONG_TEXT]: 'long-text',
   [CellType.SINGLE_SELECT]: 'single-select',

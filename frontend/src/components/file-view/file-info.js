@@ -32,8 +32,8 @@ class FileInfo extends React.PureComponent {
         <h2 className="file-title d-flex align-items-center">
           <span className="file-name text-truncate" title={fileName}>{fileName}</span>
           <OpIcon
-            className="op-icon mr-0 file-star"
-            symbol={isStarred ? 'starred' : 'star-empty'}
+            className="ml-2 file-star"
+            symbol={isStarred ? 'starred' : 'unstarred'}
             title={starredText}
             op={this.props.toggleStar}
           />

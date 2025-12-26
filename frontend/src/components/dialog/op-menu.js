@@ -47,7 +47,7 @@ class OpMenu extends React.Component {
   render() {
     const { operations, translateOperations } = this.props;
     return (
-      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+      <Dropdown className="lh-1" isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         <DropdownToggle
           tag="span"
           className="op-icon"

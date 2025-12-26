@@ -17,6 +17,11 @@ body {
   color: #999;
 }
 
+.file-view-header .file-title .seafile-multicolor-icon:hover,
+.file-view-header .file-title .seafile-multicolor-icon:focus {
+  color: #333;
+}
+
 .onlyoffice-file-view-header-shown {
   transition: height .3s ease-in-out;
   height: 56px;
@@ -122,12 +127,6 @@ body {
   font-size: .875rem;
   color: #999;
   margin-left: .5rem;
-}
-
-.file-star:hover,
-.file-star:focus {
-  text-decoration: none;
-  color: #999;
 }
 
 .file-locked-icon {

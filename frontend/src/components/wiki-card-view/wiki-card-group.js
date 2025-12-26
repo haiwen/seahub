@@ -69,7 +69,7 @@ class WikiCardGroup extends Component {
     if (isDepartment && depIcon) {
       iconSymbol = 'department';
     } else if (isDepartment) {
-      iconSymbol = 'groups';
+      iconSymbol = 'group';
     } else if (isMyWikis) {
       iconSymbol = 'my-libraries';
     }

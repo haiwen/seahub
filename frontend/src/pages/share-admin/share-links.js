@@ -325,7 +325,7 @@ class Item extends Component {
                 {!item.is_expired &&
                 <OpIcon
                   className={`op-icon ${isOpIconShown ? '' : 'invisible'}`}
-                  symbol="link1"
+                  symbol="link"
                   title={gettext('View')}
                   op={this.viewLink}
                 />

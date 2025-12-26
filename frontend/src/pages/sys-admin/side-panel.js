@@ -124,7 +124,7 @@ class SidePanel extends React.Component {
                       onClick={() => this.props.tabItemClick('groups')}
                     >
                       <span className="d-flex align-items-center">
-                        <Icon symbol="groups" />
+                        <Icon symbol="group" />
                       </span>
                       <span className="nav-text">{gettext('Groups')}</span>
                     </Link>
