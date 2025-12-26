@@ -2,10 +2,6 @@
   background-color: var(--bs-tr-hover-bg);
 }
 
-.unstarred {
-  color: #d0d0d0;
-}
-
 .dir-icon {
   position: relative;
   text-align: center;
