@@ -23,14 +23,14 @@ from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
         normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.file_types import IMAGE, VIDEO, PDF
+from seahub.utils.file_types import IMAGE, VIDEO, PDF, SVG, SEADOC
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.repo import parse_repo_perm
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.repo_metadata.models import RepoMetadata
-from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
+from seahub.settings import THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, ENABLE_THUMBNAIL_SERVER
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -57,6 +57,11 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
     except Exception as e:
         logger.error(e)
         starred_item_path_list = []
+        
+    thumbnail_support_file_types = [IMAGE, PDF, SVG]
+    if ENABLE_THUMBNAIL_SERVER:
+        thumbnail_support_file_types.append(SEADOC)
+        thumbnail_support_file_types.append(VIDEO)
 
     # only get dir info list
     if not request_type or request_type == 'd':
@@ -162,16 +167,18 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                 fileExt = os.path.splitext(file_name)[1][1:].lower()
                 file_type = FILEEXT_TYPE_MAP.get(fileExt)
 
-                if file_type in (IMAGE, PDF) or \
-                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
+                if file_type in thumbnail_support_file_types:
 
                     # if thumbnail has already been created, return its src.
                     # Then web browser will use this src to get thumbnail instead of
                     # recreating it.
                     thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,
                             str(thumbnail_size), file_obj_id)
-                    if os.path.exists(thumbnail_file_path):
-                        src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
+                    
+                    src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
+                    if ENABLE_THUMBNAIL_SERVER:
+                        file_info['encoded_thumbnail_src'] = quote(src)
+                    elif os.path.exists(thumbnail_file_path):
                         file_info['encoded_thumbnail_src'] = quote(src)
             file_info_list.append(file_info)
 
