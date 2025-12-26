@@ -322,11 +322,6 @@ img[src=""],img:not([src]) { /* for first loading img*/
   padding: 0 1rem;
 }
 
-.cur-view-container .sf3-font-star-empty.sf3-font,
-.cur-view-container .sf3-font-star.sf3-font {
-  color: var(--bs-icon-secondary-color);
-}
-
 .path-container {
   display: flex;
   align-items: center;

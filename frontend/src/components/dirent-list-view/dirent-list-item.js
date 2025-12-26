@@ -826,7 +826,7 @@ class DirentListItem extends React.Component {
               {dirent.starred !== undefined &&
                 <OpIcon
                   className="star-icon"
-                  symbol={dirent.starred ? 'starred' : 'star-empty'}
+                  symbol={dirent.starred ? 'starred' : 'unstarred'}
                   title={dirent.starred ? gettext('Unstar') : gettext('Star')}
                   op={this.onItemStarred}
                 />

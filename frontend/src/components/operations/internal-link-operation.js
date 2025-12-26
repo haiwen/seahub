@@ -31,8 +31,8 @@ class InternalLinkOperation extends React.Component {
     return (
       <Fragment>
         <OpIcon
-          className="op-icon file-internal-link"
-          symbol="link1"
+          className="file-internal-link"
+          symbol="link"
           title={title}
           op={this.onInternalLinkDialogToggle}
         />
