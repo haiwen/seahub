@@ -7,6 +7,11 @@
   text-overflow: clip;
 }
 
+.sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option .collaborator .collaborator-avatar {
+  height: 16px;
+  width: 16px;
+}
+
 .sf-metadata-selector-collaborator.seafile-customize-select .seafile-select-option .collaborator .collaborator-name {
   color: var(--bs-body-color);
 }
