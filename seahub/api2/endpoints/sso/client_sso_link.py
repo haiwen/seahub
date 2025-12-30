@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from urllib.parse import urlencode
 
 from seahub.api2.throttling import AnonRateThrottle
 from seahub.base.models import ClientSSOToken, STATUS_ERROR
@@ -57,14 +58,14 @@ class ClientSSOLink(APIView):
         finally:
             transaction.set_autocommit(True)
 
-        keys = ('platform', 'device_id', 'device_name', 'client_version', 'platform_version')
-        if all(['shib_' + key in request.GET for key in keys]):
-            request.session['shib_platform'] = request.GET['shib_platform']
-            request.session['shib_device_id'] = request.GET['shib_device_id']
-            request.session['shib_device_name'] = request.GET['shib_device_name']
-            request.session['shib_client_version'] = request.GET['shib_client_version']
-            request.session['shib_platform_version'] = request.GET['shib_platform_version']
+        base_link = get_site_scheme_and_netloc() + reverse('client_sso', args=[t.token])
+        params = {k: request.GET.get(k) for k in request.GET.keys()}
+        qs = urlencode(params)
+        if qs:
+            full_link = base_link + ('?' + qs)
+        else:
+            full_link = base_link
 
         return Response({
-            'link': get_site_scheme_and_netloc() + reverse('client_sso', args=[t.token])
+            'link': full_link
         })
