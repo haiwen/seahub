@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
+import json
 import logging
 import datetime
 from django.db import models
@@ -658,3 +659,57 @@ def add_group_invite_log(sender, org_id, group_id, users, operator, operation, *
             operation=operation
         ))
     GroupMemberAudit.objects.bulk_create(group_member_audit_list)
+
+
+
+class Webhooks(models.Model):
+    repo_id = models.CharField(max_length=36, db_index=True, null=False)
+    url = models.CharField(max_length=2000, null=False)
+    settings = models.TextField()
+    creator = models.CharField(max_length=255, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_valid = models.IntegerField(default=True)
+
+    class Meta:
+        db_table = 'webhooks'
+
+    @property
+    def hook_settings(self):
+        if not self.settings:
+            return None
+        try:
+            return json.loads(self.settings)
+        except:
+            pass
+        return None
+
+    def to_dict(self):
+        result = {
+            'id': self.pk,
+            'repo_id': self.repo_id,
+            'url': self.url,
+            'creator': self.creator,
+            'created_at': self.created_at,
+            'is_valid': self.is_valid
+        }
+        try:
+            if self.settings:
+                result['settings'] = json.loads(self.settings)
+        except:
+            pass
+        return result
+
+
+class WebhookJobs(models.Model):
+    webhook_id = models.IntegerField(db_index=True, null=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    trigger_at = models.DateTimeField()
+    status = models.IntegerField(db_index=True)
+    url = models.CharField(max_length=2000, null=False)
+    request_headers = models.TextField()
+    request_body = models.TextField()
+    response_status = models.IntegerField()
+    response_body = models.TextField()
+
+    class Meta:
+        db_table = 'webhook_jobs'
