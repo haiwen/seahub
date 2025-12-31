@@ -1,0 +1,1 @@
+ALTER TABLE RepoInfo ADD COLUMN archive_status VARCHAR(32) NULL;

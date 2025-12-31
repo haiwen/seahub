@@ -132,6 +132,7 @@ from seahub.ocm_via_webdav.ocm_api import OCMProviderView
 
 from seahub.api2.endpoints.repo_share_links import RepoShareLinks, RepoShareLink
 from seahub.api2.endpoints.repo_upload_links import RepoUploadLinks, RepoUploadLink
+from seahub.api2.endpoints.archive_repo import ArchiveRepoView
 
 # Admin
 from seahub.api2.endpoints.admin.logs_export import SysLogsExport, sys_log_export_excel
@@ -481,6 +482,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/related-users/$', RepoRelatedUsersView.as_view(), name='api-v2.1-related-user'),
 
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/auto-delete/$', RepoAutoDeleteView.as_view(), name='api-v2.1-repo-auto-delete'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/archive/$', ArchiveRepoView.as_view(), name='api-v2.1-archive-repo'),
 
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/$', RepoShareLinks.as_view(), name='api-v2.1-repo-share-links'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-links/(?P<token>[a-f0-9]+)/$', RepoShareLink.as_view(), name='api-v2.1-repo-share-link'),
