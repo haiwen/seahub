@@ -124,6 +124,9 @@ from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACTION_URL_DICT
 from seahub.thirdparty_editor.settings import THIRDPARTY_EDITOR_ACCESS_TOKEN_EXPIRATION
 from seahub.settings import ROLES_DEFAULT_OFFCICE_SUITE
 
+from seahub.weboffice.settings import ENABLE_WPS_WEBOFFICE, WPS_WEBOFFICE_FILE_EXTENSION
+from seahub.weboffice.utils import wps_weboffice_get_editor_url
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -820,6 +823,24 @@ def view_lib_file(request, repo_id, path):
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
 
+        if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+            can_edit = False
+            if parse_repo_perm(permission).can_edit_on_web and \
+                    ((not is_locked) or (is_locked and locked_by_online_office)):
+                can_edit = True
+
+            can_download = parse_repo_perm(permission).can_download,
+            wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
+                                                                    repo_id,
+                                                                    path,
+                                                                    can_edit,
+                                                                    can_download)
+            weboffice_dict = {
+                "wps_weboffice_editor_url": wps_weboffice_editor_url,
+            }
+            return render(request, 'view_file_weboffice.html', weboffice_dict)
+
         if ENABLE_OFFICE_WEB_APP:
             action_name = None
             # first check if can view file
@@ -1103,6 +1124,19 @@ def view_history_file_common(request, repo_id, ret_dict):
 
             username = request.user.username
 
+            if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+                wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
+                                                                        repo_id,
+                                                                        path,
+                                                                        can_edit=False,
+                                                                        can_download=True,
+                                                                        obj_id=obj_id)
+                weboffice_dict = {
+                    "wps_weboffice_editor_url": wps_weboffice_editor_url,
+                }
+                ret_dict['weboffice_dict'] = weboffice_dict
+
             if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
                 # obj_id for view trash/history file
@@ -1173,6 +1207,10 @@ def view_history_file(request, repo_id):
     if ret_dict['err']:
         return render(request, 'history_file_view_react.html', ret_dict)
 
+    if 'weboffice_dict' in ret_dict:
+        weboffice_dict = ret_dict['weboffice_dict']
+        return render(request, 'view_file_weboffice.html', weboffice_dict)
+
     if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
         return render(request, 'view_file_wopi.html', wopi_dict)
@@ -1198,6 +1236,10 @@ def view_trash_file(request, repo_id):
 
     if ret_dict['err']:
         return render(request, 'history_file_view_react.html', ret_dict)
+
+    if 'weboffice_dict' in ret_dict:
+        weboffice_dict = ret_dict['weboffice_dict']
+        return render(request, 'view_file_weboffice.html', weboffice_dict)
 
     if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
@@ -1225,6 +1267,10 @@ def view_snapshot_file(request, repo_id):
     view_history_file_common(request, repo_id, ret_dict)
     if not request.user_perm:
         return render_permission_error(request, _('Unable to view file'))
+
+    if 'weboffice_dict' in ret_dict:
+        weboffice_dict = ret_dict['weboffice_dict']
+        return render(request, 'view_file_weboffice.html', weboffice_dict)
 
     if ret_dict['err']:
         return render(request, 'history_file_view_react.html', ret_dict)
@@ -1452,6 +1498,18 @@ def view_shared_file(request, fileshare):
                                                   int(time.time()) + 40 * 60)
             except Exception as e:
                 logger.error(e)
+
+        if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+            wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
+                                                                    repo_id,
+                                                                    path,
+                                                                    can_edit,
+                                                                    can_download,)
+            weboffice_dict = {
+                "wps_weboffice_editor_url": wps_weboffice_editor_url,
+            }
+            return render(request, 'view_file_weboffice.html', weboffice_dict)
 
         if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
@@ -1704,6 +1762,18 @@ def view_file_via_shared_dir(request, fileshare):
             username = ANONYMOUS_EMAIL
         else:
             username = request.user.username
+
+        if ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
+
+            wps_weboffice_editor_url = wps_weboffice_get_editor_url(request,
+                                                                    repo_id,
+                                                                    real_path,
+                                                                    can_edit,
+                                                                    can_download)
+            weboffice_dict = {
+                "wps_weboffice_editor_url": wps_weboffice_editor_url,
+            }
+            return render(request, 'view_file_weboffice.html', weboffice_dict)
 
         if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
