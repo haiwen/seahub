@@ -163,6 +163,7 @@
   cursor: pointer;
   margin-right: 1rem;
   border-radius: 4px;
+  position: relative;
 }
 
 .search-result-container .search-result-item.search-result-item-highlight {
@@ -211,6 +212,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  top: auto;
+  right: 0;
 }
 
 .search-result-item .search-icon-right:hover {

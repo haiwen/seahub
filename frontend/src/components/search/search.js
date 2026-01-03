@@ -347,7 +347,11 @@ class Search extends Component {
     if (item.is_dir === true) {
       this.resetToDefault();
     }
-    this.keepVisitedItem(item);
+    // keep visited item in both global localStorage and current repo localStorage
+    this.keepVisitedItem(item, '');
+    if (this.props.repoID) {
+      this.keepVisitedItem(item, this.props.repoID);
+    }
     this.props.onSearchedClick(item);
   };
 
@@ -366,14 +370,19 @@ class Search extends Component {
     });
   };
 
-  keepVisitedItem = (targetItem) => {
+  /**
+   * save visited item in localStorage
+   * @param {object} targetItem - The visited item
+   * @param {string} savedRepoID - The saved repo ID. If empty string, save in global localStorage.
+   */ 
+  keepVisitedItem = (targetItem, savedRepoID) => {
     let targetIndex;
-    const { repo_id: targetRepoID, path: targetPath } = targetItem;
-    const storeKey = 'sfVisitedSearchItems' + targetRepoID;
+    const { path: targetPath } = targetItem;
+    const storeKey = 'sfVisitedSearchItems' + savedRepoID;
     const items = JSON.parse(localStorage.getItem(storeKey)) || [];
     for (let i = 0, len = items.length; i < len; i++) {
       const { repo_id, path } = items[i];
-      if (repo_id == targetRepoID && path == targetPath) {
+      if (repo_id == savedRepoID && path == targetPath) {
         targetIndex = i;
         break;
       }
