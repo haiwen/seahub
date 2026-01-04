@@ -1,4 +1,3 @@
-
 import os
 import json
 import logging
@@ -11,11 +10,6 @@ from seahub.api2.base import APIView
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.settings import ENABLE_STORAGE_CLASSES, REPO_ARCHIVE_STORAGE_ID
-try:
-    from seahub.settings import SEAFILE_CENTRAL_CONF_DIR
-except ImportError:
-    SEAFILE_CENTRAL_CONF_DIR = os.environ.get('SEAFILE_CENTRAL_CONF_DIR', '')
-
 from seaserv import seafile_api
 from seahub.api2.endpoints.utils import add_repo_archive_task_request
 from sqlalchemy import create_engine, text
@@ -24,7 +18,8 @@ from sqlalchemy.orm import sessionmaker
 logger = logging.getLogger(__name__)
 
 def get_seafile_db_url():
-    seafile_conf = os.path.join(SEAFILE_CENTRAL_CONF_DIR, 'seafile.conf')
+    env = os.environ
+    seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
     cp = configparser.ConfigParser()
     cp.read(seafile_conf)
     host = cp.get('database', 'host')
@@ -35,13 +30,14 @@ def get_seafile_db_url():
     return 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
 
 def get_default_storage_id():
-    seafile_conf = os.path.join(SEAFILE_CENTRAL_CONF_DIR, 'seafile.conf')
+    env = os.environ
+    seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
     cp = configparser.ConfigParser()
     cp.read(seafile_conf)
     
     storage_classes_file = cp.get('storage', 'storage_classes_file')
     if not os.path.isabs(storage_classes_file):
-        storage_classes_file = os.path.join(SEAFILE_CENTRAL_CONF_DIR, storage_classes_file)
+        storage_classes_file = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], storage_classes_file)
         
     with open(storage_classes_file, 'r') as f:
         json_cfg = json.load(f)
@@ -55,7 +51,7 @@ def get_default_storage_id():
         return json_cfg[0]['storage_id']
     return None
 
-class ArchiveRepoView(APIView):
+class RepoArchiveView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
