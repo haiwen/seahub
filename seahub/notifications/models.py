@@ -822,9 +822,17 @@ class UserNotification(models.Model):
             logger.error(e)
             return _("Internal Server Error")
 
-        msg = _("Library %(repo_name)s has been archived.") % {
-            'repo_name': escape(repo_name)
-        }
+        repo = seafile_api.get_repo(repo_id)
+        if repo:
+            lib_url = reverse('lib_view', args=[repo.id, repo.name, ''])
+            msg = _("Library <a href='%(lib_url)s'>%(repo_name)s</a> has been archived.") % {
+                'lib_url': lib_url,
+                'repo_name': escape(repo_name)
+            }
+        else:
+            msg = _("Library %(repo_name)s has been archived.") % {
+                'repo_name': escape(repo_name)
+            }
         return msg
 
     def format_repo_unarchived_msg(self):
