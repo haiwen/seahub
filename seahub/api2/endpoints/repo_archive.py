@@ -86,6 +86,37 @@ class RepoArchiveView(APIView):
             logger.error("Failed to set archive status: %s", e)
             raise e
 
+    def get(self, request, repo_id):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        # Check if user is admin
+        is_admin = request.user.is_staff
+
+        # Get archive status
+        archive_status = None
+        try:
+            archive_status = self.get_archive_status(repo_id)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get archive status.')
+
+        # Base condition: storage classes enabled and user is admin
+        base_condition = ENABLE_STORAGE_CLASSES and is_admin
+
+        # can_archive: when archive_status is null/empty (not archived, not in progress)
+        can_archive = base_condition and (archive_status is None or archive_status == '')
+
+        # can_unarchive: when archive_status is 'archived'
+        can_unarchive = base_condition and archive_status == 'archived'
+
+        return Response({
+            'archive_status': archive_status or '',
+            'can_archive': can_archive,
+            'can_unarchive': can_unarchive
+        })
+
     def post(self, request, repo_id):
         if not ENABLE_STORAGE_CLASSES:
              return api_error(status.HTTP_403_FORBIDDEN, 'Storage classes not enabled.')
