@@ -25,7 +25,7 @@ import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -161,6 +161,7 @@ class LibContentView extends React.Component {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
+    this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
     this.calculatePara(this.props);
   }
 
@@ -238,9 +239,11 @@ class LibContentView extends React.Component {
   calculatePara = async (props) => {
     const { repoID } = props;
 
-    const { path, viewId, tagId } = this.getInfoFromLocation(repoID);
+    const { path, viewId, tagId, isHistory } = this.getInfoFromLocation(repoID);
     let currentMode;
-    if (tagId) {
+    if (isHistory) {
+      currentMode = HISTORY_MODE;
+    } else if (tagId) {
       currentMode = TAGS_MODE;
     } else if (viewId) {
       currentMode = METADATA_MODE;
@@ -292,6 +295,9 @@ class LibContentView extends React.Component {
     const tagId = urlParams.get('tag');
     if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}`, tagId };
 
+    const isHistory = urlParams.get('history');
+    if (isHistory) return { path: '/', isHistory: true };
+
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
     let path = location.slice(location.indexOf(repoID) + repoID.length + 1);
@@ -331,6 +337,7 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
+    this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
@@ -377,6 +384,32 @@ class LibContentView extends React.Component {
         path: path,
         isViewFile: false
       });
+    } else {
+      // Handle browser back/forward button - check URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const isHistory = urlParams.get('history');
+      const viewId = urlParams.get('view');
+      const tagId = urlParams.get('tag');
+
+      let newMode = this.state.currentMode;
+      if (isHistory) {
+        newMode = HISTORY_MODE;
+      } else if (tagId) {
+        newMode = TAGS_MODE;
+      } else if (viewId) {
+        newMode = METADATA_MODE;
+      } else {
+        newMode = Cookies.get('seafile_view_mode') || LIST_MODE;
+      }
+
+      // Only update if mode changed
+      if (newMode !== this.state.currentMode) {
+        this.setState({
+          currentMode: newMode,
+          isTreePanelShown: true,
+          path: '/',
+        });
+      }
     }
   };
 
@@ -1073,6 +1106,14 @@ class LibContentView extends React.Component {
     });
   };
 
+  switchToHistoryView = () => {
+    this.setState({
+      currentMode: HISTORY_MODE,
+      isTreePanelShown: true,
+      path: '/',
+    });
+  };
+
   switchViewMode = (mode) => {
     if (mode === this.state.currentMode) {
       return;
@@ -1089,6 +1130,12 @@ class LibContentView extends React.Component {
       let repoInfo = this.state.currentRepoInfo;
 
       let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
+      // If switching away from history, remove history parameter from URL
+      if (this.state.currentMode === HISTORY_MODE) {
+        const urlObj = new URL(url);
+        urlObj.searchParams.delete('history');
+        url = urlObj.toString();
+      }
       window.history.pushState({ url: url, path: path }, path, url);
     }
 

@@ -1,0 +1,206 @@
+.dir-history-view {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.dir-history-view .sf-table-container {
+  height: 100%;
+}
+
+/* Description cell styling with ellipsis */
+.history-description-cell {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0; /* Allow flex child to shrink below content size */
+}
+
+.history-description-cell .description-text {
+  flex: 1;
+  min-width: 0; /* Allow text to shrink */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.history-description-cell .details-link {
+  flex-shrink: 0;
+  margin-left: 8px;
+  color: #ed7109;
+  text-decoration: none;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.history-description-cell .details-link:hover {
+  text-decoration: underline;
+}
+
+/* Show details link on row hover */
+.sf-table-row:hover .history-description-cell .details-link {
+  opacity: 1;
+}
+
+/* History-specific cell styling */
+.history-cell-description {
+  padding: 8px 12px;
+}
+
+.history-cell-description .commit-description {
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+}
+
+.history-cell-description .commit-description:hover {
+  color: #0969da;
+  text-decoration: underline;
+}
+
+.history-cell-time {
+  padding: 8px 12px;
+  color: #57606a;
+  font-size: 14px;
+}
+
+.history-cell-modifier {
+  padding: 8px 12px;
+}
+
+.history-cell-modifier img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.history-cell-modifier .modifier-name {
+  vertical-align: middle;
+}
+
+.history-cell-device {
+  padding: 8px 12px;
+  color: #57606a;
+  font-size: 13px;
+}
+
+.history-cell-labels {
+  display: flex;
+  align-items: center;
+}
+
+.history-cell-labels .commit-label {
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bs-body-bg);
+  font-size: 13px;
+  border: 1px solid #dbdbdb;
+  border-radius: 10px;
+  margin-right: 6px;
+  padding: 2px 6px;
+}
+
+.history-cell-labels .op-icon {
+  font-size: 14px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Show edit icon on row hover */
+.sf-table-row:hover .history-cell-labels .op-icon {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.history-cell-actions {
+  padding: 8px 12px;
+}
+
+.history-cell-actions .snapshot-link {
+  color: #0969da;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.history-cell-actions .snapshot-link:hover {
+  text-decoration: underline;
+}
+
+.sf-history-tool {
+  background: var(--bs-body-bg);
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  height: 24px;
+  justify-content: space-between;
+}
+
+.sf-history-tool .sf-history-tool-left-operations,
+.sf-history-tool .sf-history-tool-right-operations {
+  display: flex;
+  align-items: center;
+}
+
+.sf-history-tool .sf-history-view-tool-operation-btn {
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: .5rem;
+  color: var(--bs-icon-color);
+}
+
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-operation-btn:first-child {
+  margin-left: 0 !important;
+}
+
+.sf-history-tool .sf-history-view-tool-operation-btn:hover {
+  background-color: var(--bs-hover-bg);
+  cursor: pointer;
+}
+
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-filter.active:hover,
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-sort.active:hover,
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-groupby.active:hover,
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-hide-column.active:hover {
+  box-shadow: inset 0 0 0 2px #0000001a;
+}
+
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-filter.active {
+  background-color: #d1f7c4;
+  color: #666;
+}
+
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-sort.active {
+  background-color: #f5d9bc;
+  color: #666;
+}
+
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-groupby.active {
+  background-color: #dad7ff;
+  color: #666;
+}
+
+.sf-history-tool .sf-history-tool-left-operations .sf-history-view-tool-hide-column.active {
+  background-color: #d7e8ff;
+  color: #666;
+}
+
+.sf-history-tool .sf-history-view-tool-operation-btn .seafile-multicolor-icon {
+  color: inherit;
+  font-size: 16px;
+}
+
+.sf-history-filter-popover .popover {
+  max-width: none;
+}
+
+.sf-history-filters {
+  width: 280px;
+}

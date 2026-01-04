@@ -6,17 +6,18 @@ import Icon from '../../icon';
 const propTypes = {
   text: PropTypes.string.isRequired,
   iconSymbol: PropTypes.string.isRequired,
-  op: PropTypes.func.isRequired
+  op: PropTypes.func.isRequired,
+  isActive: PropTypes.bool
 };
 
 class Item extends React.Component {
   render() {
-    const { text, op, iconSymbol } = this.props;
+    const { text, op, iconSymbol, isActive = false } = this.props;
     return (
       <div
         role="button"
         tabIndex="0"
-        className='dir-others-item text-nowrap'
+        className={`dir-others-item text-nowrap ${isActive ? 'tree-node-hight-light' : ''}`}
         title={text}
         onClick={op}
         onKeyDown={Utils.onKeyDown}

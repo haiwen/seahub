@@ -1,0 +1,212 @@
+/* History Filter Setter Wrapper */
+.history-filter-setter-wrapper {
+  margin-left: 0.5rem;
+  line-height: 1;
+}
+
+.history-filter-setter-wrapper .sf-metadata-view-tool-operation-btn:hover {
+  background-color: var(--bs-hover-bg);
+  cursor: pointer;
+}
+
+.history-filter-setter-wrapper .sf-metadata-view-tool-filter.active:hover {
+  box-shadow: inset 0 0 0 2px #0000001a;
+}
+
+.history-filter-setter-wrapper .sf-metadata-view-tool-filter.active {
+  background-color: #d1f7c4;
+  color: #666;
+}
+
+.sf-history-filters-list {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.history-basic-filters-select.seafile-customize-select {
+  width: fit-content;
+  background-image: none;
+  border: none;
+  padding: 0 6px;
+  margin-left: -6px;
+  height: 28px;
+}
+
+.history-basic-filters-select.seafile-customize-select:hover,
+.history-basic-filters-select.seafile-customize-select.highlighted:hover {
+  background: var(--bs-hover-bg);
+}
+
+.history-basic-filters-select.seafile-customize-select .selected-option {
+  background-color: transparent;
+}
+
+.history-basic-filters-select.seafile-customize-select.focus {
+  border-color: unset;
+  box-shadow: none;
+}
+
+.history-basic-filters-select.highlighted .selected-option .selected-option-show {
+  color: #ed7109 !important;
+}
+
+.history-basic-filters-select.seafile-customize-select .selected-option .selected-option-show {
+  width: auto;
+}
+
+.history-basic-filters-select .selected-option-show,
+.history-basic-filters-select .select-placeholder {
+  margin-right: 4px;
+}
+
+.history-basic-filters-select .selected-option .custom-select-dropdown-icon {
+  margin-left: 0;
+}
+
+/* Date Filter Specific Styles */
+.history-date-filter-container {
+  margin-right: 1rem;
+}
+
+.history-date-filter-container .search-filter-toggle {
+  background-image: none;
+  border: none;
+  padding: 0 6px;
+  margin-left: -6px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.history-date-filter-container .search-filter-toggle:hover {
+  background: var(--bs-hover-bg);
+}
+
+.history-date-filter-container .search-filter-toggle.active,
+.history-date-filter-container .search-filter-toggle.highlighted {
+  background-color: transparent;
+}
+
+.history-date-filter-container .search-filter-toggle.active:hover,
+.history-date-filter-container .search-filter-toggle.highlighted:hover {
+  background-color: var(--bs-hover-bg);
+}
+
+.history-date-filter-container .search-filter-toggle.highlighted .filter-label {
+  color: #ed7109 !important;
+}
+
+.history-date-filter-container .filter-label {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Date Filter Menu Styles - Match search filter styles */
+.history-date-filter-container .filter-by-date-menu {
+  width: 280px;
+}
+
+.history-date-filter-container .filter-by-date-menu-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 10px;
+}
+
+.history-date-filter-container .filter-by-date-toolbar-label {
+  font-size: 14px;
+  color: var(--bs-body-secondary-color);
+}
+
+.history-date-filter-container .op-icon {
+  cursor: pointer;
+}
+
+.history-date-filter-container .dropdown-item {
+  position: relative;
+  padding: 0.25rem 10px;
+}
+
+.history-date-filter-container .dropdown-item-tick {
+  width: 1rem;
+  left: auto;
+  right: 16px;
+}
+
+.history-date-filter-container .filter-by-date-custom-date-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px;
+  gap: 8px;
+}
+
+.history-date-filter-container .custom-date-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-size: 14px;
+}
+
+.history-date-filter-container .custom-date-label {
+  margin-bottom: 6px;
+}
+
+.history-date-filter-container .custom-date-container .form-control {
+  height: 28px;
+  font-size: 14px;
+}
+
+/* Creator Filter Specific Styles */
+.history-creator-filter-container {
+  margin-right: 1rem;
+}
+
+.history-creator-filter-container .search-filter-toggle {
+  background-image: none;
+  border: none;
+  padding: 0 6px;
+  margin-left: -6px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.history-creator-filter-container .search-filter-toggle:hover {
+  background: var(--bs-hover-bg);
+}
+
+.history-creator-filter-container .search-filter-toggle.active,
+.history-creator-filter-container .search-filter-toggle.highlighted {
+  background-color: transparent;
+}
+
+.history-creator-filter-container .search-filter-toggle.highlighted .filter-label {
+  color: #ed7109 !important;
+}
+
+.history-creator-filter-container .filter-label {
+  font-size: 14px;
+  color: #333;
+}
+
+.history-creator-filter-container .search-filter-menu {
+  min-width: 250px;
+}
+
+/* Labels Filter Specific Styles */
+.history-labels-filter-container {
+  margin-right: 1rem;
+}
+
+.history-labels-filter-container .history-basic-filters-select {
+  margin-right: 0;
+}

@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
 import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
+import DirHistoryView from './dir-history-view';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 import ResizeBar from '../resize-bar';
 import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '../resize-bar/constants';
 import { SeafileMetadata } from '../../metadata';
 import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
-import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE } from './constants';
+import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE } from './constants';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -158,6 +159,7 @@ class DirColumnView extends React.Component {
             <DirColumnNav
               currentPath={this.props.path}
               userPerm={this.props.userPerm}
+              currentMode={currentMode}
               isTreeDataLoading={this.props.isTreeDataLoading}
               treeData={this.props.treeData}
               currentNode={this.props.currentNode}
@@ -295,6 +297,13 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
               updateTreeNode={this.props.updateTreeNode}
+            />
+          )}
+          {currentMode === HISTORY_MODE && (
+            <DirHistoryView
+              repoID={this.props.repoID}
+              userPerm={this.props.userPerm}
+              currentRepoInfo={this.props.currentRepoInfo}
             />
           )}
         </div>
