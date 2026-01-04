@@ -18,12 +18,10 @@
   align-items: center;
   font-size: 1rem;
   color: var(--bs-icon-color);
-  fill: var(--bs-icon-color);
 }
 
 .metadata-views-dropdown-menu .dropdown-item:hover .metadata-view-icon,
 .metadata-views-dropdown-menu .dropdown-item:focus .metadata-view-icon,
 .metadata-views-dropdown-menu .dropdown-item:focus .sf3-font {
   color: #fff;
-  fill: #fff;
 }
