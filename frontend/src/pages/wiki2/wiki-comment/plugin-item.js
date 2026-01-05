@@ -20,7 +20,7 @@ const CommentPlugin = ({ setIsShowRightPanel, unseenNotificationsCount }) => {
       tabIndex={0}
       onKeyDown={Utils.onKeyDown}
     >
-      <Icon symbol='context-comment' />
+      <Icon symbol='comment' />
       {unseenNotificationsCount > 0 && (
         <span className="sdoc-unread-message-tip"></span>
       )}
