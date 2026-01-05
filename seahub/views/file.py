@@ -394,26 +394,32 @@ def can_preview_file(file_name, file_size, repo):
         return False, error_msg
 
     elif fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
-            fileext in ONLYOFFICE_FILE_EXTENSION:
+            fileext in ONLYOFFICE_FILE_EXTENSION or \
+            fileext in WPS_WEBOFFICE_FILE_EXTENSION:
 
         if repo.encrypted:
             error_msg = _('The library is encrypted, can not open file online.')
             return False, error_msg
 
         if not ENABLE_OFFICE_WEB_APP and \
-                not ENABLE_ONLYOFFICE:
+                not ENABLE_ONLYOFFICE and \
+                not ENABLE_WPS_WEBOFFICE:
             error_msg = "File preview unsupported"
             return False, error_msg
 
         # priority of view office file is:
-        # OOS > OnlyOffice
+        # OOS > OnlyOffice > WPS
         if ENABLE_OFFICE_WEB_APP:
             if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
                 error_msg = "File preview unsupported"
                 return False, error_msg
 
-        else:
+        elif ENABLE_ONLYOFFICE:
             if fileext not in ONLYOFFICE_FILE_EXTENSION:
+                error_msg = "File preview unsupported"
+                return False, error_msg
+        else:
+            if fileext not in WPS_WEBOFFICE_FILE_EXTENSION:
                 error_msg = "File preview unsupported"
                 return False, error_msg
     else:
@@ -450,6 +456,9 @@ def can_edit_file(file_name, file_size, repo):
         return True, ''
 
     if ENABLE_ONLYOFFICE and file_ext in ONLYOFFICE_EDIT_FILE_EXTENSION:
+        return True, ''
+
+    if ENABLE_WPS_WEBOFFICE and file_ext in WPS_WEBOFFICE_FILE_EXTENSION:
         return True, ''
 
     return False, 'File edit unsupported'
@@ -811,7 +820,8 @@ def view_lib_file(request, repo_id, path):
         return render(request, template, return_dict)
 
     elif ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
-            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION or \
+            ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
 
         if repo.encrypted:
             return_dict['err'] = _('The library is encrypted, can not open file online.')
@@ -1120,7 +1130,8 @@ def view_history_file_common(request, repo_id, ret_dict):
     if user_perm:
 
         if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
-                ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+                ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION or \
+                ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
 
             username = request.user.username
 
@@ -1132,10 +1143,13 @@ def view_history_file_common(request, repo_id, ret_dict):
                                                                         can_edit=False,
                                                                         can_download=True,
                                                                         obj_id=obj_id)
-                weboffice_dict = {
-                    "wps_weboffice_editor_url": wps_weboffice_editor_url,
-                }
-                ret_dict['weboffice_dict'] = weboffice_dict
+                if wps_weboffice_editor_url:
+                    weboffice_dict = {
+                        "wps_weboffice_editor_url": wps_weboffice_editor_url,
+                    }
+                    ret_dict['weboffice_dict'] = weboffice_dict
+                else:
+                    ret_dict['err'] = _('Error when prepare Office Online file preview page.')
 
             if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
@@ -1236,10 +1250,6 @@ def view_trash_file(request, repo_id):
 
     if ret_dict['err']:
         return render(request, 'history_file_view_react.html', ret_dict)
-
-    if 'weboffice_dict' in ret_dict:
-        weboffice_dict = ret_dict['weboffice_dict']
-        return render(request, 'view_file_weboffice.html', weboffice_dict)
 
     if 'wopi_dict' in ret_dict:
         wopi_dict = ret_dict['wopi_dict']
@@ -1486,7 +1496,8 @@ def view_shared_file(request, fileshare):
         send_file_access_msg(request, repo, path, 'web')
 
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
-            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION or \
+            ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
 
         def online_office_lock_or_refresh_lock(repo_id, path, username):
             try:
@@ -1756,7 +1767,8 @@ def view_file_via_shared_dir(request, fileshare):
         }
 
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
-            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION or \
+            ENABLE_WPS_WEBOFFICE and fileext in WPS_WEBOFFICE_FILE_EXTENSION:
 
         if not request.user.is_authenticated:
             username = ANONYMOUS_EMAIL

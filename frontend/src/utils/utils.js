@@ -1,6 +1,7 @@
 import { mediaUrl, gettext, serviceURL, siteRoot, isPro, fileAuditEnabled, canGenerateShareLink, canGenerateUploadLink, shareLinkPasswordMinLength, username, folderPermEnabled, onlyofficeConverterExtensions, enableSeadoc, enableRepoSnapshotLabel,
   enableResetEncryptedRepoPassword, isEmailConfigured, isSystemStaff,
   enableOnlyoffice, onlyofficeEditFileExtension,
+  enableWPSWeboffice, wpsWebofficeFileExtension,
   enableOfficeWebApp, officeWebAppEditFileExtension, enableMultipleOfficeSuite, officeSuiteEditFileExtension } from './constants';
 import TextTranslation from './text-translation';
 import React from 'react';
@@ -217,6 +218,8 @@ export const Utils = {
 
     if (enableOnlyoffice) {
       return onlyofficeEditFileExtension.includes(file_ext);
+    } else if (enableWPSWeboffice) {
+      return wpsWebofficeFileExtension.includes(file_ext);
     } else if (enableOfficeWebApp) {
       return officeWebAppEditFileExtension.includes(file_ext);
     } else if (enableMultipleOfficeSuite) {

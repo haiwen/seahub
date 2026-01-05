@@ -79,11 +79,11 @@ class WebofficeFileInfoView(APIView):
                 "id": wps_file_id,  # 文件id,字符串长度不超过64位
                 "name": file_name,  # 文件名必须带后缀
                 "version": _get_file_version(repo_id, file_path),  # 文档版本号，从1开始累加，位数小于11
-                "size": dirent.size if dirent else 1000,  # 文档大小，单位为字节；此处需传文件真实大小，否则会出现异常
+                "size": dirent.size,  # 文档大小，单位为字节；此处需传文件真实大小，否则会出现异常
                 "creator": email2contact_email(repo_owner),  # 创建者id，字符串长度不超过32位
-                "create_time": dirent.mtime if dirent else 0,  # 创建时间，时间戳，单位为秒
+                "create_time": dirent.mtime,  # 创建时间，时间戳，单位为秒
                 "modifier": email2contact_email(dirent.modifier if dirent else repo_owner),  # 修改者id，字符串长度不超过32位
-                "modify_time": dirent.mtime if dirent else 0,  # 最近修改时间，时间戳，单位为
+                "modify_time": dirent.mtime,  # 最近修改时间，时间戳，单位为
                 "download_url": download_url,  # 文档下载地址
 
                 # 限制预览页数（不超过5000）
