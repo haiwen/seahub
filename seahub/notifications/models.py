@@ -598,6 +598,10 @@ class UserNotification(models.Model):
             return self.format_repo_archived_msg()
         elif self.is_repo_unarchived_msg():
             return self.format_repo_unarchived_msg()
+        elif self.is_repo_archive_failed_msg():
+            return self.format_repo_archive_failed_msg()
+        elif self.is_repo_unarchive_failed_msg():
+            return self.format_repo_unarchive_failed_msg()
         else:
             return ''
 
