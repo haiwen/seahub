@@ -102,13 +102,10 @@ class RepoArchiveView(APIView):
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get archive status.')
 
-        # Base condition: storage classes enabled and user is admin
         base_condition = ENABLE_STORAGE_CLASSES and is_admin
 
-        # can_archive: when archive_status is null/empty (not archived, not in progress)
         can_archive = base_condition and (archive_status is None or archive_status == '')
 
-        # can_unarchive: when archive_status is 'archived'
         can_unarchive = base_condition and archive_status == 'archived'
 
         return Response({
