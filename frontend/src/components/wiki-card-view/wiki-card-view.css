@@ -54,7 +54,7 @@
   padding: 2px 4px;
   border-radius: 3px;
   opacity: 0;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .wiki-card-item.wiki-card-item-menu-open .wiki-card-item-top .dropdown .sf-dropdown-toggle,
@@ -119,7 +119,7 @@
 }
 
 .wiki-card-item-add span:first-child {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   line-height: 24px;
   height: 24px;
   font-size: 40px;

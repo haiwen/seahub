@@ -6,7 +6,7 @@
   padding-left: 9px;
   font-size: 18px;
   cursor: pointer;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .add-members .toggle-detail-btn:hover {

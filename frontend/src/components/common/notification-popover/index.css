@@ -55,7 +55,7 @@
 }
 
 .show-weixin-qrcode .weixin-icon {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   font-size: 20px;
   margin-left: 20px;
 }
