@@ -401,7 +401,8 @@ def update_notice_detail(request, notices):
             except Exception as e:
                 logger.error(e)
 
-        elif notice.is_repo_archived_msg() or notice.is_repo_unarchived_msg():
+        elif notice.is_repo_archived_msg() or notice.is_repo_unarchived_msg() or \
+             notice.is_repo_archive_failed_msg() or notice.is_repo_unarchive_failed_msg():
             try:
                 d = json.loads(notice.detail)
                 notice.detail = d
