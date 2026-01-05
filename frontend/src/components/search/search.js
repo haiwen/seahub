@@ -374,7 +374,7 @@ class Search extends Component {
    * save visited item in localStorage
    * @param {object} targetItem - The visited item
    * @param {string} savedRepoID - The saved repo ID. If empty string, save in global localStorage.
-   */ 
+   */
   keepVisitedItem = (targetItem, savedRepoID) => {
     let targetIndex;
     const { path: targetPath } = targetItem;

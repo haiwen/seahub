@@ -92,7 +92,7 @@
 }
 
 .old-history-more-operation i {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   cursor: pointer;
 }
 

@@ -209,7 +209,7 @@
 .delete-filter .seafile-multicolor-icon-fork-number {
   display: inline-block;
   font-size: 12px;
-  fill: var(--bs-icon-secondary-color);
+  fill: var(--bs-icon-color);
 }
 
 .delete-filter .seafile-multicolor-icon-fork-number:hover {

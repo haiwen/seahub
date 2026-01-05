@@ -347,7 +347,7 @@ textarea::placeholder {
   font-size: 1rem;
   margin-right: 6px;
   line-height: 1;
-  color: var(--bs-icon-tertiary-color);
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-heading .sf-dropdown-toggle {
@@ -950,7 +950,7 @@ textarea::placeholder {
 .side-nav-con [class^="sf3-font-"] {
   font-size: 1.25rem;
   line-height: 1;
-  color: var(--bs-icon-tertiary-color);
+  color: var(--bs-icon-secondary-color);
   margin-right: 0.5rem;
 }
 
@@ -1693,7 +1693,7 @@ a.table-sort-op:hover {
 .side-panel .side-nav-con .active [class^="sf3-font-"],
 .side-panel .side-nav-con .active .nav-icon,
 .side-panel .side-nav-con .active .sharp {
-  color: var(--bs-icon-tertiary-color);
+  color: var(--bs-icon-secondary-color);
 }
 
 .side-panel .side-nav .side-nav-con .nav-item {
@@ -1827,5 +1827,5 @@ a.table-sort-op:hover {
 }
 
 [data-bs-theme=dark] .sf2-icon-plus {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }

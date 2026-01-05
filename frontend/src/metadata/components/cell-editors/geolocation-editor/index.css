@@ -37,7 +37,7 @@
 }
 
 .sf-geolocation-editor-container .editor-header .title .location-icon {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
 }
 
 .sf-geolocation-editor-container .editor-header .header-actions {
