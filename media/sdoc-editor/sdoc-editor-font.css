@@ -1,14 +1,14 @@
 @font-face {
   font-family: "sdocfont";
   /* Project id 5078528 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1766717441530');
+  src: url('./sdoc-editor-font/iconfont.eot?t=1767600491446');
   /* IE9 */
-  src: url('./sdoc-editor-font/iconfont.eot?t=1766717441530#iefix') format('embedded-opentype'),
+  src: url('./sdoc-editor-font/iconfont.eot?t=1767600491446#iefix') format('embedded-opentype'),
     /* IE6-IE8 */
-    url('./sdoc-editor-font/iconfont.woff2?t=1766717441530') format('woff2'),
-    url('./sdoc-editor-font/iconfont.woff?t=1766717441530') format('woff'),
-    url('./sdoc-editor-font/iconfont.ttf?t=1766717441530') format('truetype'),
-    url('./sdoc-editor-font/iconfont.svg?t=1766717441530#sdocfont') format('svg');
+    url('./sdoc-editor-font/iconfont.woff2?t=1767600491446') format('woff2'),
+    url('./sdoc-editor-font/iconfont.woff?t=1767600491446') format('woff'),
+    url('./sdoc-editor-font/iconfont.ttf?t=1767600491446') format('truetype'),
+    url('./sdoc-editor-font/iconfont.svg?t=1767600491446#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -17,6 +17,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-folder:before {
+  content: "\e6f8";
 }
 
 .sdoc-comments:before {

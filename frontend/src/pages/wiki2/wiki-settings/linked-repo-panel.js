@@ -101,7 +101,7 @@ export default function LinkedRepoPanel() {
     setIsShowRepoListPopover(false);
   };
 
-  const tipMessage = gettext('After connecting libraries. you can list files from them in the Wiki pages.');
+  const tipMessage = gettext('After connecting libraries, you can list files from them in the Wiki pages.');
 
   if (isLoading) {
     return <Loading />;
