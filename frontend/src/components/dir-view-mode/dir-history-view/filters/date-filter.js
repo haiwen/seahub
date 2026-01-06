@@ -18,10 +18,6 @@ const DATE_OPTION = {
   CUSTOM: 'custom',
 };
 
-/**
- * History Date Filter Component
- * Simplified version of search FilterByDate without type selection
- */
 const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: null }, onChange }) => {
   const [value, setValue] = useState(propsValue.value || '');
   const [isOpen, setIsOpen] = useState(false);
@@ -67,7 +63,14 @@ const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: nu
     ];
   }, []);
 
-  const toggle = useCallback(() => setIsOpen(!isOpen), [isOpen]);
+  const toggle = useCallback((e) => {
+    if (isCustomDate && isOpen) {
+      e && e.preventDefault();
+      e && e.stopPropagation();
+      return;
+    }
+    setIsOpen(!isOpen);
+  }, [isOpen, isCustomDate]);
 
   const onClearDate = useCallback(() => {
     setValue('');
@@ -153,6 +156,22 @@ const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: nu
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, time, value]);
 
+  useEffect(() => {
+    if (isCustomDate) {
+      if (time.from !== propsValue.from || time.to !== propsValue.to) {
+        onChange({
+          value,
+          from: time.from,
+          to: time.to,
+        });
+      }
+      if (time.from && time.to) {
+        setIsOpen(false);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCustomDate, time, value, propsValue.from, propsValue.to]);
+
   return (
     <div className="history-date-filter-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
@@ -171,7 +190,15 @@ const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: nu
           <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
-        <DropdownMenu className="search-filter-menu filter-by-date-menu">
+        <DropdownMenu
+          className="search-filter-menu filter-by-date-menu"
+          onMouseDown={(e) => {
+            if (isCustomDate && e.target.closest('.custom-date-container')) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+        >
           <div className="filter-by-date-menu-toolbar">
             <span className="filter-by-date-toolbar-label">{gettext('Create time')}</span>
             <OpIcon

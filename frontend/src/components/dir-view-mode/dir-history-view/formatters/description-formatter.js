@@ -1,37 +1,35 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../../../utils/constants';
+import { siteRoot } from '../../../../utils/constants';
 
-/**
- * Formatter for description column
- * Displays commit description with optional "Details" link
- */
-const DescriptionFormatter = ({ value, record, onShowDetails }) => {
-  if (!record) return null;
+const DescriptionFormatter = ({ value, record, repoID }) => {
 
-  const handleShowDetails = (e) => {
+  const handleViewSnapshot = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onShowDetails) {
-      onShowDetails(record);
+    window.open(`${siteRoot}repo/${repoID}/snapshot/?commit_id=${record.commit_id}`, '_blank');
+  }, [record, repoID]);
+
+  const handleDescriptionClick = useCallback((e) => {
+    if (e.button === 0) {
+      handleViewSnapshot(e);
     }
-  };
+  }, [handleViewSnapshot]);
+
+  if (!record) return null;
 
   const description = value || record.description;
 
   return (
     <div className="history-description-cell">
-      <span className="description-text text-truncate" title={description}>{description}</span>
-      {record.showDetails && (
-        <a
-          href="#"
-          className="details-link"
-          onClick={handleShowDetails}
-          role="button"
-        >
-          {gettext('Details')}
-        </a>
-      )}
+      <span
+        className="description-text"
+        title={description}
+        onClick={handleDescriptionClick}
+        role="button"
+      >
+        {description}
+      </span>
     </div>
   );
 };
@@ -39,7 +37,7 @@ const DescriptionFormatter = ({ value, record, onShowDetails }) => {
 DescriptionFormatter.propTypes = {
   value: PropTypes.string,
   record: PropTypes.object,
-  onShowDetails: PropTypes.func,
+  repoID: PropTypes.string,
 };
 
 export default DescriptionFormatter;

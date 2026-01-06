@@ -1,5 +1,4 @@
-import React, { useCallback, useState, useMemo, useRef, useEffect } from 'react';
-import SortMenu from '../../sort-menu';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import OpIcon from '../../op-icon';
 import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
@@ -8,18 +7,9 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import Icon from '../../icon';
 import HistoryFilterSetter from './history-filter-setter';
 
-/**
- * History search, filter, and sort toolbar component
- * Renders in DirTool and communicates with DirHistoryView via EventBus
- * Pattern: Similar to TagsTableSearcher + AllTagsSortSetter + FilterSetter
- * Search UI: Consistent with SFTableSearcher
- * Filter UI: Consistent with metadata FilterSetter
- */
 const HistoryViewToolbar = () => {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortBy, setSortBy] = useState('time');
-  const [sortOrder, setSortOrder] = useState('desc');
   const [filters, setFilters] = useState({
     date: {
       value: '',
@@ -34,7 +24,6 @@ const HistoryViewToolbar = () => {
   const searchInputRef = useRef(null);
   const inputTimer = useRef(null);
 
-  // Subscribe to commits updates from DirHistoryView
   useEffect(() => {
     const unsubscribe = eventBus.subscribe(EVENT_BUS_TYPE.HISTORY_COMMITS_UPDATED, (commits) => {
       setAllCommits(commits);
@@ -44,17 +33,9 @@ const HistoryViewToolbar = () => {
     };
   }, []);
 
-  const sortOptions = useMemo(() => [
-    { value: 'time-desc', text: gettext('Descending by time') },
-    { value: 'time-asc', text: gettext('Ascending by time') },
-    { value: 'creator-asc', text: gettext('Ascending by modifier') },
-    { value: 'creator-desc', text: gettext('Descending by modifier') },
-  ], []);
-
   const onToggleSearch = useCallback(() => {
     setIsSearchActive(!isSearchActive);
     if (!isSearchActive) {
-      // Auto-focus input when opening
       setTimeout(() => {
         searchInputRef.current && searchInputRef.current.focus();
       }, 0);
@@ -64,7 +45,6 @@ const HistoryViewToolbar = () => {
   const handleCloseSearcher = useCallback(() => {
     setIsSearchActive(false);
     setSearchQuery('');
-    // Clear search when closing
     eventBus.dispatch(EVENT_BUS_TYPE.HISTORY_SEARCH, '');
   }, []);
 
@@ -72,7 +52,6 @@ const HistoryViewToolbar = () => {
     const query = e.target.value;
     setSearchQuery(query);
 
-    // Debounce search
     if (inputTimer.current) clearTimeout(inputTimer.current);
     inputTimer.current = setTimeout(() => {
       eventBus.dispatch(EVENT_BUS_TYPE.HISTORY_SEARCH, query);
@@ -85,13 +64,6 @@ const HistoryViewToolbar = () => {
       handleCloseSearcher();
     }
   }, [handleCloseSearcher]);
-
-  const handleSortChange = useCallback((item) => {
-    const [newSortBy, newSortOrder] = item.value.split('-');
-    setSortBy(newSortBy);
-    setSortOrder(newSortOrder);
-    eventBus.dispatch(EVENT_BUS_TYPE.HISTORY_SORT, { sortBy: newSortBy, sortOrder: newSortOrder });
-  }, []);
 
   const handleFiltersChange = useCallback((newFilters) => {
     setFilters(newFilters);
@@ -137,14 +109,6 @@ const HistoryViewToolbar = () => {
           filters={filters}
           onFiltersChange={handleFiltersChange}
           allCommits={allCommits}
-        />
-
-        <SortMenu
-          className="ml-2"
-          sortBy={sortBy}
-          sortOrder={sortOrder}
-          sortOptions={sortOptions}
-          onSelectSortOption={handleSortChange}
         />
       </div>
     </div>

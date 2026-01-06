@@ -12,11 +12,6 @@ import Icon from '../../../icon';
 
 import '../../../search/search-filters/filter-by-creator.css';
 
-/**
- * History Creator Filter Component
- * Identical to search FilterByCreator but without ModalPortal
- * Uses same UserItem component and styles for consistency
- */
 const HistoryCreatorFilter = ({ value: selectedOptions = [], onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);

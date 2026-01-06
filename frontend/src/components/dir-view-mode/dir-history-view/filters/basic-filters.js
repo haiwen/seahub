@@ -1,18 +1,12 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { FormGroup, Label } from 'reactstrap';
-import { gettext } from '../../../../utils/constants';
+import { FormGroup } from 'reactstrap';
 import HistoryDateFilter from './date-filter';
 import HistoryCreatorFilter from './creator-filter';
 
 import './basic-filters.css';
 
-/**
- * History Basic Filters Component
- * Pattern: Similar to metadata BasicFilters
- * Contains: Date, Creator, Tags filters
- */
-const HistoryBasicFilters = ({ filters, onChange, allCommits }) => {
+const HistoryBasicFilters = ({ filters, onChange }) => {
 
   const onChangeDateFilter = useCallback((newValue) => {
     onChange({ ...filters, date: newValue });
@@ -24,7 +18,6 @@ const HistoryBasicFilters = ({ filters, onChange, allCommits }) => {
 
   return (
     <FormGroup className="filter-group-basic filter-group p-4">
-      <Label className="filter-group-name">{gettext('Basic')}</Label>
       <div className="filter-group-container">
         <div className="sf-history-filters-list">
           <HistoryDateFilter
@@ -48,7 +41,6 @@ HistoryBasicFilters.propTypes = {
     tags: PropTypes.array,
   }).isRequired,
   onChange: PropTypes.func.isRequired,
-  allCommits: PropTypes.array,
 };
 
 export default HistoryBasicFilters;

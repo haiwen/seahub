@@ -15,7 +15,7 @@
 
 .history-filter-setter-wrapper .sf-metadata-view-tool-filter.active {
   background-color: #d1f7c4;
-  color: #666;
+  color: var(--bs-icon-color);
 }
 
 .sf-history-filters-list {
@@ -101,7 +101,7 @@
 
 .history-date-filter-container .filter-label {
   font-size: 14px;
-  color: #333;
+  color: var(--bs-body-color);
 }
 
 /* Date Filter Menu Styles - Match search filter styles */
@@ -128,6 +128,7 @@
 .history-date-filter-container .dropdown-item {
   position: relative;
   padding: 0.25rem 10px;
+  line-height: 24px;
 }
 
 .history-date-filter-container .dropdown-item-tick {
@@ -195,18 +196,18 @@
 
 .history-creator-filter-container .filter-label {
   font-size: 14px;
-  color: #333;
+  color: var(--bs-body-color);
 }
 
 .history-creator-filter-container .search-filter-menu {
   min-width: 250px;
 }
 
-/* Labels Filter Specific Styles */
-.history-labels-filter-container {
+/* Tags Filter Specific Styles */
+.history-tags-filter-container {
   margin-right: 1rem;
 }
 
-.history-labels-filter-container .history-basic-filters-select {
+.history-tags-filter-container .history-basic-filters-select {
   margin-right: 0;
 }

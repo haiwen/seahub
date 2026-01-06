@@ -6,11 +6,6 @@ import HistoryFilterPopover from './history-filter-popover';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
 
-/**
- * History Filter Setter Component
- * Simplified version inspired by metadata FilterSetter
- * Supports filtering by time range, modifier, and tags
- */
 const HistoryFilterSetter = ({ filters = {
   date: { value: '', from: null, to: null },
   creators: [],
@@ -19,7 +14,6 @@ const HistoryFilterSetter = ({ filters = {
   const [isShowPopover, setShowPopover] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
 
-  // Sync localFilters with props when popup is closed (initial state)
   useEffect(() => {
     if (!isShowPopover) {
       setLocalFilters(filters);
@@ -50,13 +44,11 @@ const HistoryFilterSetter = ({ filters = {
   }, [onToggle]);
 
   const handleClose = useCallback(() => {
-    // Apply pending filters to parent and close popup
     onFiltersChange(localFilters);
     setShowPopover(false);
   }, [onFiltersChange, localFilters]);
 
   const handleChange = useCallback((newFilters) => {
-    // Only update local state - don't apply to parent yet
     setLocalFilters(newFilters);
   }, []);
 
@@ -102,8 +94,6 @@ HistoryFilterSetter.propTypes = {
   onFiltersChange: PropTypes.func.isRequired,
   allCommits: PropTypes.array,
 };
-
-// defaultProps removed - using JavaScript default parameters instead
 
 export default HistoryFilterSetter;
 

@@ -8,18 +8,6 @@ import RepoHistoryTable from '../repo-history-view';
 
 import '../../css/repo-history.css';
 
-// Old imports - kept for reference, can be removed after testing
-// import dayjs from 'dayjs';
-// import { siteRoot, enableRepoSnapshotLabel as showLabel } from '../../utils/constants';
-// import { seafileAPI } from '../../utils/seafile-api';
-// import Loading from '../loading';
-// import Paginator from '../../components/paginator';
-// import ModalPortal from '../../components/modal-portal';
-// import CommitDetails from '../../components/dialog/commit-details';
-// import UpdateRepoCommitLabels from '../../components/dialog/edit-repo-commit-labels';
-// import { formatWithTimezone } from '../../utils/time';
-// import Icon from '../icon';
-
 const propTypes = {
   repoID: PropTypes.string.isRequired,
   userPerm: PropTypes.string.isRequired,
@@ -43,7 +31,6 @@ class RepoHistory extends React.Component {
         </SeahubModalHeader>
         <ModalBody>
           {userPerm == 'rw' && <p className="repo-snapshot-tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
-          {/* NEW: Using RepoHistoryTable with SFTable for virtual scrolling */}
           <RepoHistoryTable
             repoID={repoID}
             userPerm={userPerm}
@@ -53,16 +40,6 @@ class RepoHistory extends React.Component {
     );
   }
 }
-
-/*
- * OLD IMPLEMENTATION - Kept for reference/rollback if needed
- * Can be removed after testing confirms new implementation works
- *
- * class Content extends React.Component { ... }
- * class Item extends React.Component { ... }
- *
- * Replaced with RepoHistoryTable component that uses SFTable for virtual scrolling
- */
 
 RepoHistory.propTypes = propTypes;
 

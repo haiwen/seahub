@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import { formatWithTimezone } from '../../../../utils/time';
 
-/**
- * Formatter for time/date column
- * Displays formatted date with full timestamp in tooltip
- */
 const TimeFormatter = ({ record }) => {
   if (!record) return null;
 

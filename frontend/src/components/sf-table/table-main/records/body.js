@@ -303,11 +303,15 @@ class RecordsBody extends Component {
   };
 
   onCellDoubleClick = (cell, e) => {
-    const { columns, recordGetterByIndex, checkCanModifyRecord } = this.props;
+    const { columns, recordGetterByIndex, checkCanModifyRecord, onCellDoubleClick } = this.props;
     const column = getColumnByIndex(cell.idx, columns);
     const supportOpenEditor = checkEditableViaClickCell(column);
     const hasOpenPermission = checkIsCellSupportOpenEditor(cell, column, false, recordGetterByIndex, checkCanModifyRecord);
     this.selectCell(cell, supportOpenEditor && hasOpenPermission);
+    // Call the onCellDoubleClick prop if provided, special for history view
+    if (onCellDoubleClick) {
+      onCellDoubleClick(cell);
+    }
   };
 
   // onRangeSelectStart

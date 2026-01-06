@@ -58,9 +58,6 @@ class LibContentView extends React.Component {
       isTreePanelShown = storedTreePanelState === 'true';
     }
 
-    const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
-    const isDirentDetailShow = storedDirentDetailShowState === 'true';
-
     this.socket = new WebSocketClient(this.onMessageCallback, this.props.repoID);
     this.state = {
       currentMode: Cookies.get('seafile_view_mode') || LIST_MODE,
@@ -95,7 +92,7 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '', // for update dir list
       errorMsg: '',
-      isDirentDetailShow,
+      isDirentDetailShow: false, // initialize as false, will be updated based on mode
       itemsShowLength: 100,
       isSessionExpired: false,
       isCopyMoveProgressDialogShow: false,
@@ -251,6 +248,10 @@ class LibContentView extends React.Component {
       currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
     }
 
+    // Initialize isDirentDetailShow from localStorage, but only for modes that use it
+    const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
+    const isDirentDetailShow = !isHistory && storedDirentDetailShowState === 'true';
+
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
       const isGroupOwnedRepo = repoInfo.owner_email.includes('@seafile_group');
@@ -267,6 +268,7 @@ class LibContentView extends React.Component {
         viewId,
         tagId,
         currentMode,
+        isDirentDetailShow,
       }, () => {
         if (this.state.isTreePanelShown) {
           this.loadSidePanel(path);
@@ -384,32 +386,6 @@ class LibContentView extends React.Component {
         path: path,
         isViewFile: false
       });
-    } else {
-      // Handle browser back/forward button - check URL parameters
-      const urlParams = new URLSearchParams(window.location.search);
-      const isHistory = urlParams.get('history');
-      const viewId = urlParams.get('view');
-      const tagId = urlParams.get('tag');
-
-      let newMode = this.state.currentMode;
-      if (isHistory) {
-        newMode = HISTORY_MODE;
-      } else if (tagId) {
-        newMode = TAGS_MODE;
-      } else if (viewId) {
-        newMode = METADATA_MODE;
-      } else {
-        newMode = Cookies.get('seafile_view_mode') || LIST_MODE;
-      }
-
-      // Only update if mode changed
-      if (newMode !== this.state.currentMode) {
-        this.setState({
-          currentMode: newMode,
-          isTreePanelShown: true,
-          path: '/',
-        });
-      }
     }
   };
 
@@ -1109,8 +1085,8 @@ class LibContentView extends React.Component {
   switchToHistoryView = () => {
     this.setState({
       currentMode: HISTORY_MODE,
-      isTreePanelShown: true,
       path: '/',
+      isDirentDetailShow: false,
     });
   };
 
@@ -1130,12 +1106,6 @@ class LibContentView extends React.Component {
       let repoInfo = this.state.currentRepoInfo;
 
       let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + Utils.encodePath(path);
-      // If switching away from history, remove history parameter from URL
-      if (this.state.currentMode === HISTORY_MODE) {
-        const urlObj = new URL(url);
-        urlObj.searchParams.delete('history');
-        url = urlObj.toString();
-      }
       window.history.pushState({ url: url, path: path }, path, url);
     }
 

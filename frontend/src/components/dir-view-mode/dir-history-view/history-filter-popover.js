@@ -10,49 +10,19 @@ const HistoryFilterPopover = ({ target, filters, onClose, onChange, allCommits }
   const isSelectOpenRef = useRef(false);
 
   useEffect(() => {
-    // Click popover to trigger it to show
     if (popoverRef.current) {
       popoverRef.current.click();
     }
 
-    // Handle click outside to close
     const handleClickOutside = (e) => {
-      const className = getEventClassName(e);
-
-      // Don't close if clicking on popover elements (dropdowns, date pickers, etc.)
-      if (className.includes('popover')) {
-        return;
+      if (!getEventClassName(e).includes('popover') && !popoverRef.current.contains(e.target)) {
+        e.preventDefault();
+        e.stopPropagation();
+        onClose();
+        return false;
       }
-
-      // Don't close if clicking on dropdown menus (Date/Creator filters use reactstrap Dropdown)
-      // These are rendered outside the popover via Portal
-      if (className.includes('dropdown') ||
-          className.includes('search-filter-menu') ||
-          className.includes('filter-by-date') ||
-          className.includes('filter-by-creator-container') ||
-          className.includes('filter-by-creator-menu') ||
-          className.includes('user-item') ||
-          className.includes('user-avatar') ||
-          className.includes('user-name') ||
-          className.includes('user-remove') ||
-          className.includes('date-picker') ||
-          className.includes('rc-calendar')) {
-        return;
-      }
-
-      // Don't close if clicking inside the popover
-      if (popoverRef.current && popoverRef.current.contains(e.target)) {
-        return;
-      }
-
-      // Click is outside - close the popover
-      e.preventDefault();
-      e.stopPropagation();
-      onClose();
-      return false;
     };
 
-    // Handle ESC key to close
     const handleKeyDown = (e) => {
       if (isHotkey('esc', e) && !isSelectOpenRef.current) {
         e.preventDefault();
@@ -70,7 +40,6 @@ const HistoryFilterPopover = ({ target, filters, onClose, onChange, allCommits }
   }, [onClose]);
 
   const handleChange = useCallback((newFilters) => {
-    // Update parent state immediately
     onChange(newFilters);
   }, [onChange]);
 

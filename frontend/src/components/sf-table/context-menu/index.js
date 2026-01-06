@@ -90,9 +90,15 @@ const ContextMenu = ({
     const metadataTagsWrapper = document.querySelector('.sf-metadata-tags-wrapper');
     metadataTagsWrapper && metadataTagsWrapper.addEventListener('contextmenu', handleShow);
 
+    const historyWrapper = document.querySelector('.sf-history-wrapper');
+    historyWrapper && historyWrapper.addEventListener('contextmenu', handleShow);
+
     return () => {
       const metadataTagsWrapper = document.querySelector('.sf-metadata-tags-wrapper');
       metadataTagsWrapper && metadataTagsWrapper.removeEventListener('contextmenu', handleShow);
+
+      const historyWrapper = document.querySelector('.sf-history-wrapper');
+      historyWrapper && historyWrapper.removeEventListener('contextmenu', handleShow);
     };
 
   }, [handleShow]);

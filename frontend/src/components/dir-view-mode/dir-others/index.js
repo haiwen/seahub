@@ -49,17 +49,8 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
   };
 
   const handleHistoryClick = () => {
-    // Update URL without page reload (SPA navigation)
-    const url = new URL(window.location.href);
-    // Remove all other view parameters (view, tag) to keep URL clean
-    url.searchParams.delete('view');
-    url.searchParams.delete('tag');
-    // Only set history=true parameter
-    url.searchParams.set('history', 'true');
-    // Use pushState to add to browser history so back button works
-    window.history.pushState({}, '', url.toString());
-
-    // Switch to history view mode via EventBus (no page reload)
+    const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoName) + '/?history=true';
+    window.history.pushState({}, '', url);
     eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW);
   };
 

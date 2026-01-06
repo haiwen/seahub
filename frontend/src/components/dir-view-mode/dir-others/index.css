@@ -13,13 +13,11 @@
   border-radius: 0.25rem;
 }
 
-/* Active state - use tree-node-hight-light class pattern */
 .dir-others .dir-others-item.tree-node-hight-light {
   border-radius: 4px;
   background-color: var(--bs-nav-active-bg) !important;
 }
 
-/* Ensure ::before pseudo-element for orange indicator works */
 .dir-others .dir-others-item.tree-node-hight-light::before {
   content: '';
   position: absolute;

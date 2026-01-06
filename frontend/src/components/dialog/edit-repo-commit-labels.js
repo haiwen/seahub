@@ -43,7 +43,10 @@ class UpdateRepoCommitLabels extends React.Component {
     });
 
     seafileAPI.updateRepoCommitLabels(repoID, commitID, labels).then((res) => {
-      this.props.updateCommitLabels(res.data.revisionTags.map((item, index) => item.tag));
+      // Extract tag names from API response
+      const updatedTags = res.data.revisionTags.map((item) => item.tag);
+      // Call callback to update frontend state with the latest tags
+      this.props.updateCommitLabels(updatedTags);
       this.props.toggleDialog();
       toaster.success(gettext('Successfully edited labels.'));
     }).catch((error) => {
