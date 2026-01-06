@@ -11,13 +11,12 @@ from rest_framework.views import APIView
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, is_wiki_repo
 from seahub.base.models import Webhooks, WebhookJobs
 from seahub.share.utils import is_repo_admin, normalize_custom_permission_name
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
-
 
 class WebhooksView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -30,6 +29,11 @@ class WebhooksView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if is_wiki_repo(repo):
+            error_msg = 'Webhooks are not supported for wikis.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
         # permission check
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
@@ -54,6 +58,10 @@ class WebhooksView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if is_wiki_repo(repo):
+            error_msg = 'Webhooks are not supported for wikis.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         # permission check
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
@@ -97,8 +105,13 @@ class WebhooksView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        webhook = Webhooks.objects.filter(id=webhook_id).first()
-        if not webhook or webhook.repo_id != repo_id:
+        
+        if is_wiki_repo(repo):
+            error_msg = 'Webhooks are not supported for wikis.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        webhook = Webhooks.objects.filter(id=webhook_id, repo_id=repo_id).first()
+        if not webhook:
             return api_error(status.HTTP_404_NOT_FOUND, 'Webhook not found.')
         
         # permission check
@@ -136,8 +149,13 @@ class WebhooksView(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        webhook = Webhooks.objects.filter(id=webhook_id).first()
-        if not webhook or webhook.repo_id != repo_id:
+        
+        if is_wiki_repo(repo):
+            error_msg = 'Webhooks are not supported for wikis.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        
+        webhook = Webhooks.objects.filter(id=webhook_id, repo_id=repo_id).first()
+        if not webhook:
             return api_error(status.HTTP_404_NOT_FOUND, 'Webhook not found.')
         
         # permission check
