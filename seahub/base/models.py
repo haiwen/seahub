@@ -619,7 +619,8 @@ class FileTrashQuerySet(models.QuerySet):
     
 
 class FileTrash(models.Model):
-    user = models.CharField(max_length=255)
+    
+    user = models.CharField(max_length=255, db_column='username')
     obj_type = models.CharField(max_length=128)
     obj_id = models.CharField(max_length=40)
     obj_name = models.CharField(max_length=255)
@@ -627,7 +628,7 @@ class FileTrash(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
     commit_id = models.CharField(max_length=40)
     path = models.TextField()
-    size = models.BigIntegerField()
+    size = models.BigIntegerField(db_column='file_size')
     objects = FileTrashQuerySet.as_manager()
     
     
