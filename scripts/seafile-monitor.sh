@@ -54,8 +54,8 @@ function check_python_executable() {
 }
 
 function set_file_config () {
-    if [ -z "${ENABLE_FILESERVER}" ]; then
-        export ENABLE_FILESERVER=`awk -F '=' '/\[fileserver\]/{a=1}a==1&&$1~/^use_go_fileserver/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
+    if [ -z "${ENABLE_GO_FILESERVER}" ]; then
+        export ENABLE_GO_FILESERVER=`awk -F '=' '/\[fileserver\]/{a=1}a==1&&$1~/^use_go_fileserver/{print $2;exit}' ${SEAFILE_CENTRAL_CONF_DIR}/seafile.conf`
     fi
 }
 
@@ -213,7 +213,7 @@ while [ 1 ]; do
 
     monitor_seaf_server
 
-    if [ $ENABLE_FILESERVER ] && [ $ENABLE_FILESERVER = "true" ]; then
+    if [ $ENABLE_GO_FILESERVER ] && [ $ENABLE_GO_FILESERVER = "true" ]; then
         monitor_fileserver
     fi
 

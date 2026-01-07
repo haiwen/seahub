@@ -1301,6 +1301,8 @@ msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile - це корпоративна платформа для розміщення файлів з високою "
+"надійністю та продуктивністю."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1311,6 +1313,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile містить веб-інтерфейс для керування та обміну файлами. Він має два "
+"види клієнтів для робочого столу, <a "
+"href=\"%(SITE_ROOT)shelp/install_sync/\">клієнт синхронізації файлів</a> та "
+"<a href=\"%(SITE_ROOT)shelp/using_drive_client\">дисковий клієнт</a>. Також "
+"є мобільні клієнти для Android та iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1318,6 +1325,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Ви можете завантажити клієнти на <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">веб-сайті "
+"Seafile</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1325,6 +1335,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Якщо цей посібник не містить потрібної вам інформації, ви можете звернутися "
+"за допомогою на нашому форумі: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1334,18 +1347,28 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile використовує \"бібліотеки\" для організації ваших файлів. Бібліотека"
+" - це контейнер верхнього рівня для набору файлів і папок. Ви можете "
+"створити бібліотеку для кожного проекту, над яким працюєте, або для кожного "
+"типу документів, які хочете зберегти в Seafile. Бібліотека працює в "
+"основному як папка верхнього рівня. Але вона також має деякі особливі "
+"властивості:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Кожна бібліотека зберігає власну історію змін файлів. Не існує глобальної "
+"історії змін файлів для всіх бібліотек."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Кожну бібліотеку можна синхронізувати з клієнтами для робочого столу окремо."
+" Ви можете вибрати, які бібліотеки синхронізувати."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1354,12 +1377,19 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Коли ви вперше входите до веб-додатку Seafile, Seafile автоматично створює "
+"для вас стандартну бібліотеку під назвою \"Моя бібліотека\". Ви також можете"
+" створити більше бібліотек. Ось як це виглядає, коли ви створили кілька "
+"бібліотек."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Ви можете перейти до бібліотеки та керувати своїми файлами та папками. Ви "
+"можете завантажувати, завантажувати, перейменовувати, переміщати, копіювати "
+"та видаляти файли."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1368,6 +1398,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Після <a href=\"%(SITE_ROOT)shelp/install_sync/\">синхронізації бібліотеки з"
+" клієнтом для робочого столу</a> ви можете виконувати будь-які операції з "
+"файлами в локальній папці бібліотеки. Операції будуть завантажені на сервер."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1376,6 +1409,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile відстежує історію змін для всієї бібліотеки. Кожного разу, коли "
+"операція з файлами застосовується до бібліотеки (оновлення файлу, видалення "
+"файлу тощо), Seafile створює \"знімок\" попереднього стану бібліотеки. "
+"Знімок містить повну структуру файлів і папок бібліотеки."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1386,10 +1423,16 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"У деяких випадках ви змінили багато файлів у бібліотеці та виявили, що "
+"хочете скасувати всі ці зміни. Відновлення багатьох файлів до їхніх старих "
+"версій може бути виснажливим. У цей час функція знімків стає дуже зручною. "
+"Ви можете відновити всю бібліотеку до будь-якого моменту в минулому. Усі "
+"файли в бібліотеці будуть відновлені до цього моменту часу, всі відразу. Це "
+"працює як \"машина часу\" для бібліотеки."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Щоб переглянути історію бібліотеки та знімки:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1397,12 +1440,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"У веб-додатку Seafile перейдіть до кореневої папки бібліотеки. Натисніть "
+"значок \"Історія\" на верхній панелі навігації бібліотеки. Усі записи змін "
+"бібліотеки будуть відображені в списку."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Натисніть посилання \"переглянути знімок\" на будь-якому записі змін. Ви "
+"побачите стан бібліотеки на той момент часу."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1411,6 +1459,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Ви можете налаштувати термін зберігання історії бібліотеки: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">налаштування терміну "
+"зберігання історії</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1420,6 +1471,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Захоплення та зберігання невеликих структурованих даних у зручному форматі -"
+" саме для цього призначені вікі Seafile. Сторінки вікі написані мовою "
+"розмітки Markdown (MD), простою мовою розмітки, щоб забезпечити крос-"
+"платформову сумісність. Файли MD зберігають текстову, табличну та графічну "
+"інформацію; Ви також можете додавати посилання на інші документи у файлі "
+"Markdown."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1428,10 +1485,15 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Ви можете керувати стандартною бібліотекою в Seafile як вікі за допомогою "
+"\"Стовпцевого подання\", представленого у версії 7.0. Оскільки Seafile "
+"реалізує вікі як стандартні бібліотеки Seafile, їх можна синхронізувати та "
+"ділитися з іншими користувачами так само, як і будь-якою звичайною "
+"бібліотекою."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Стовпцеве подання"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1442,10 +1504,17 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Вікі зазвичай мають бічну панель, що містить деревоподібну структуру папок, "
+"щоб забезпечити швидкий і легкий перегляд сторінок вікі. Стовпцеве подання "
+"Seafile дозволяє керувати файлами в бібліотеці так само, як і простором "
+"вікі. Користувачі можуть переглядати його та переміщати файли та папки "
+"просто перетягуючи. Дії з файлами, такі як перейменування, переміщення та "
+"відкриття через клієнт, доступні в контекстному меню, що відкривається "
+"правою кнопкою миші."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG редактор Markdown"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1461,12 +1530,25 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Сторінки вікі в Seafile зберігаються як звичайні документи у форматі "
+"Markdown. Щоб створити нову сторінку вікі в бібліотеці, просто створіть "
+"новий документ Markdown. Файли MD можна редагувати безпосередньо з веб-"
+"інтерфейсу Seafile за допомогою онлайн-редактора MD. Веб-редактор пропонує "
+"плавний користувацький досвід та багаті параметри форматування для тексту, "
+"зображень і таблиць. Зображення можна імпортувати у файли MD з бібліотек і "
+"локального сховища, а також за допомогою гіперпосилань. Основні функції "
+"редагування зображень, такі як масштабування, також можна виконувати в "
+"інтерфейсі WYSIWYG редактора. Таблиці можна вставляти та змінювати лише "
+"кількома клацаннями. Те саме стосується вмісту таблиці: таблицю можна "
+"скопіювати повністю або частково, не виходячи з подання WYSIWYG."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Історію змін файлу Markdown можна легко отримати, натиснувши кнопку "
+"\"Історія файлу\" в меню вгорі інтерфейсу редактора."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1474,10 +1556,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Ви можете відкрити приховану бічну панель з правого боку редактора Markdown."
+" У цій бічній панелі надаються зміст, інформація про файл та коментарі для "
+"спільної роботи."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Тегування файлів та пов'язані документи"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1486,22 +1571,31 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Тегування файлів - це важлива функція для управління знаннями. Seafile "
+"дозволяє користувачам визначати теги для кожної бібліотеки та застосовувати "
+"теги до файлів. Тегами можна керувати з бічної панелі редактора Markdown або"
+" з інтерфейсу файлового браузера."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Інтерфейс файлового браузера надає зведення всіх тегів файлів у поточній "
+"бібліотеці."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Якщо ви хочете, щоб користувачі, з якими ділиться, не могли змінювати "
+"локальні копії, ви можете розглянути можливість використання клієнта Seafile"
+" Drive."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Відновлення видалених файлів і папок"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1509,16 +1603,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Кожна бібліотека в Seafile автоматично відстежує ваші операції видалення "
+"файлів. Іноді ви виявляєте, що файли були видалені помилково. Ви можете "
+"знайти свої видалені файли в кошику кожної бібліотеки."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Ось як використовувати функцію кошика:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"У веб-додатку Seafile перейдіть до батьківської папки, що містить видалений "
+"файл або папку."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1526,6 +1625,10 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Натисніть значок \"кошик\" на панелі операцій бібліотеки. Видалені файли та "
+"папки будуть перераховані в порядку часу видалення. У нижній частині списку "
+"ви можете натиснути кнопку \"більше\", щоб завантажити більше видалених "
+"файлів."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1533,6 +1636,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"У списку видалених файлів ви можете відновити файли та папки. Якщо "
+"батьківська папка файлу або папки була видалена, вона буде відновлена в "
+"кореневу папку бібліотеки."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1540,6 +1646,8 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Зауважте, що кошик містить лише файли та підпапки, видалені в поточній "
+"папці. Файли, видалені в підпапках поточної папки, також включені до списку."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1548,6 +1656,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Ви можете налаштувати термін зберігання видалених файлів: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">налаштування терміну "
+"зберігання історії</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1556,6 +1667,9 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"У вас можуть бути дуже великі бібліотеки на сервері Seafile. І зараз вас "
+"цікавить лише підпапка в одній бібліотеці. Тоді ви можете вибірково "
+"синхронізувати підпапку в бібліотеці замість синхронізації всієї бібліотеки."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1564,40 +1678,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"Щоб синхронізувати підпапку, відкрийте браузер хмарних файлів, двічі "
+"клацнувши на бібліотеку, яка не синхронізована. Перейдіть до батьківської "
+"папки цієї підпапки. Клацніть правою кнопкою миші на підпапці. Виберіть "
+"\"Синхронізувати цю папку\" у контекстному меню."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"Після синхронізації підпапки ви можете побачити її статус синхронізації в "
+"групі \"Синхронізовані бібліотеки\" у головному вікні клієнта."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Налаштування терміну зберігання історії бібліотеки"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Тривалість терміну зберігання історії бібліотеки визначає, як довго ви "
+"можете отримувати доступ до ваших історичних даних у таких функціях:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Відновлення видалених файлів: ви не можете відновити файли та папки, "
+"видалені до закінчення терміну зберігання."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Версії файлів: ви не можете отримувати доступ до версій файлів, старіших за "
+"термін зберігання."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Історія бібліотеки та знімки: ви не можете отримувати доступ до знімків "
+"бібліотеки, старіших за термін зберігання."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1605,51 +1733,71 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Термін зберігання старих версій файлів можна налаштувати для кожної "
+"бібліотеки окремо. Ви повинні бути власником бібліотеки, щоб встановити "
+"термін зберігання. Щоб встановити тривалість терміну зберігання:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"У веб-додатку Seafile натисніть вкладку \"Мої\" на панелі навігації (як на "
+"скріншоті нижче). Будуть перераховані всі бібліотеки, якими ви володієте."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Перемістіть курсор на рядок бібліотеки. З'явиться меню операцій. Натисніть "
+"\"Налаштування історії\" у випадаючому меню."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"У спливаючому діалоговому вікні ви можете встановити тривалість терміну "
+"зберігання файлів."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
-msgstr ""
+msgstr "У Seafile є кілька способів обміну файлами та папками з іншими:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Використання посилань: існує кілька типів посилань, які можна "
+"використовувати для обміну з різними групами співробітників."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Посилання для обміну: будь-який користувач, який має доступ до посилань, "
+"може отримати доступ до файлів або папок, на які вказує посилання. Вхід не "
+"потрібен."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Посилання для завантаження: будь-який користувач, який має доступ до "
+"посилань, може завантажувати файли в папку, на яку вказує посилання. Вхід не"
+" потрібен."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Внутрішні посилання: лише авторизовані користувачі, які мають дозвіл на "
+"читання файлу або папки, можуть отримати доступ до цього посилання. "
+"Використовується для внутрішнього обміну файлами."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1657,10 +1805,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Спільний доступ до бібліотек або папок: використовується для встановлення "
+"дозволів доступу до бібліотеки або папки для конкретних користувачів або "
+"груп. Користувачі повинні увійти в систему, щоб отримати доступ до папок."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Створення посилань для обміну файлами або папками"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1668,12 +1819,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Посилання для обміну - це публічні посилання на файли або папки. До них може"
+" отримати доступ будь-хіто, включаючи тих, хто не має облікового запису "
+"Seafile. Ви також можете використовувати пароль і час закінчення для захисту"
+" ваших посилань."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Ви також можете встановити дозвіл доступу для посилань для обміну. Існує три"
+" типи дозволів:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1681,6 +1838,8 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Лише перегляд: файл або файли в папці можна переглядати лише у веб-браузері,"
+" але не можна завантажувати. Це корисно для обміну конфіденційними даними."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1688,16 +1847,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Редагування в хмарі та завантаження: подібно до \"Перегляд і завантаження\","
+" але якщо файл можна редагувати у веб-браузері (наприклад, файл Office), "
+"будь-який користувач, який має доступ до посилання, може його редагувати."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Щоб створити посилання для обміну у веб-додатку Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Перейдіть до батьківської папки, що містить файл або папку. Наведіть курсор "
+"миші на файл або папку та натисніть значок \"Поділитися\", який з'явиться."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1705,6 +1869,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"З'явиться спливаюче вікно з опціями спільного доступу. Натисніть вкладку "
+"\"Посилання для спільного доступу\" на лівій панелі. Потім натисніть кнопку "
+"\"Згенерувати\", щоб створити посилання. Ви можете використовувати пароль, "
+"час закінчення та дозволи для захисту вашого посилання."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1712,10 +1880,14 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Скопіюйте посилання в електронну пошту, клієнт миттєвих повідомлень або "
+"будь-який інший інструмент, щоб надіслати його іншим."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
 msgstr ""
+"Ви також можете створювати посилання для спільного доступу з клієнтів для "
+"настільного комп'ютера."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1724,6 +1896,11 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Якщо бібліотека синхронізована, двічі клацніть бібліотеку в головному вікні "
+"клієнта Seafile. Відкриється локальна папка цієї бібліотеки. Клацніть правою"
+" кнопкою миші на файлі або папці, для якої ви хочете створити посилання. У "
+"спливаючому меню виберіть \"Seafile\", а потім \"Створити посилання для "
+"спільного доступу\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1731,10 +1908,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Якщо бібліотека не синхронізована, двічі клацніть бібліотеку в головному "
+"вікні клієнта Seafile. Відкриється вікно перегляду хмарних файлів, і ви "
+"зможете створити посилання на файл або папку в ньому."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Створення посилань для завантаження на папки"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1742,16 +1922,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Ви можете використовувати посилання для завантаження, щоб збирати файли від "
+"інших. Ви можете створювати посилання для завантаження лише для папок. Інші "
+"не можуть бачити файли в папках. Вони можуть лише завантажувати файли в них."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Щоб створити посилання для завантаження в Seafile web app:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Перейдіть у батьківську папку, що містить папку. Наведіть курсор миші на "
+"папку та натисніть на значок \"Поділитися\", який з'явиться."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1759,10 +1944,14 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"З'явиться спливаюче вікно з опціями спільного доступу. Натисніть вкладку "
+"\"Посилання для завантаження\" на лівій панелі. Потім натисніть кнопку "
+"\"Згенерувати\", щоб створити посилання. Ви можете використовувати пароль "
+"для захисту вашого посилання."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Спільний доступ до бібліотек або папок"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1770,62 +1959,81 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Ви можете надати спільний доступ до бібліотеки або папки іншим "
+"зареєстрованим користувачам Seafile. До спільної бібліотеки або папки можна "
+"отримати доступ через веб-додаток та клієнти Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Ви можете вибрати область спільного доступу:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
 msgstr ""
+"Поділитися з користувачем: Ви можете поділитися з одним або кількома "
+"користувачами."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Поділитися з групою: Ви можете поділитися з групою."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Поділитися з організацією: Якщо ви використовуєте приватний сервер, іноді "
+"корисно поділитися з усіма членами на сервері (всією організацією)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Ви також можете встановити дозволи на спільний доступ:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Читання-Запис: користувачі можуть читати, записувати, завантажувати, "
+"скачувати та синхронізувати файли."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Тільки для читання: користувачі можуть читати, скачувати та синхронізувати "
+"файли."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Адміністратор: крім дозволу на запис, користувачі також можуть ділитися "
+"бібліотекою."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Онлайн Читання-Запис: користувачі можуть переглядати та редагувати файли "
+"онлайн через веб-браузер. Файли не можна скачати."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Онлайн Тільки для читання: користувачі можуть лише переглядати файли онлайн "
+"через веб-браузер. Файли не можна скачати."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Щоб поділитися бібліотекою або папкою з користувачем або групою:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Наведіть курсор миші на бібліотеку або папку та натисніть на значок "
+"\"Поділитися\", який з'явиться."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1833,6 +2041,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"З'явиться спливаюче вікно з опціями спільного доступу. Натисніть вкладку "
+"\"Поділитися з користувачем\" або \"Поділитися з групою\" на лівій панелі. "
+"Виберіть користувача або групу. Потім натисніть \"Надіслати\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1841,6 +2052,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Після того, як ви поділитеся бібліотекою або папкою з користувачем, "
+"користувач може побачити її, натиснувши вкладку \"Поділені зі мною\" на "
+"лівій панелі в Seafile web app. Якщо ви поділитеся нею з групою, члени групи"
+" можуть побачити її лише перейшовши в групу."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1849,10 +2064,14 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Щоб поділитися бібліотекою з усією організацією: У Seafile web app натисніть"
+" вкладку \"Поділені з усіма\" на лівій панелі. Потім натисніть кнопку "
+"\"Додати бібліотеку\". У спадному меню ви можете вибрати поділитися існуючою"
+" бібліотекою або створити нову бібліотеку та поділитися нею."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Внутрішні посилання"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1862,6 +2081,12 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"До цього посилання можуть отримати доступ лише авторизовані користувачі, які"
+" мають дозвіл на читання файлу або папки. Воно використовується для "
+"внутрішнього спільного доступу до файлів. Це зручний спосіб обміну файлами "
+"між членами команди, які мають доступ до спільної бібліотеки. Ви можете "
+"просто скопіювати посилання та вставити його в електронну пошту або "
+"програмне забезпечення для миттєвих повідомлень."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1872,10 +2097,16 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"Зазвичай клієнт Seafile автоматично виявляє зміни в локальній папці та "
+"завантажує зміни на сервер. Однак, якщо локальна папка знаходиться на "
+"мережевому диску Windows, клієнт Seafile не може надійно виявляти зміни. У "
+"цьому випадку ви можете попросити клієнт Seafile періодично перевіряти зміни"
+" в локальній папці. Ви можете встановити інтервал цієї періодичної "
+"синхронізації. Інтервал встановлюється в одиницях секунд."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Синхронізація з існуючою папкою"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1889,24 +2120,37 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"Іноді у вас вже є бібліотека на сервері Seafile (поділена іншими або "
+"завантажена з іншого комп'ютера). Ви можете синхронізувати цю бібліотеку з "
+"існуючою папкою на вашому комп'ютері. Локальна папка повинна мати ту саму "
+"назву, що й бібліотека. Файли в локальній папці будуть об'єднані з файлами в"
+" бібліотеці. Жоден файл у локальній папці або бібліотеці не буде "
+"перезаписаний або втрачений. Об'єднання призведе до створення деяких <a "
+"href=\"%(SITE_ROOT)shelp/conflicts/\">файлів конфліктів</a>, якщо вміст "
+"файлів відрізняється в локальній папці та бібліотеці."
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"Щоб синхронізувати бібліотеку з існуючою папкою, клацніть правою кнопкою "
+"миші на бібліотеці в головному вікні клієнта Seafile та натисніть "
+"\"Синхронізувати цю бібліотеку\"."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
 msgstr ""
+"У спливаючому діалоговому вікні натисніть посилання \"Синхронізувати з "
+"існуючою папкою\"."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr ""
+msgstr "Потім виберіть існуючу папку для синхронізації з цією бібліотекою."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Від'єднання та повторна синхронізація бібліотеки"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1918,6 +2162,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Коли ви більше не хочете синхронізувати локальну папку з бібліотекою, ви "
+"можете від'єднати її. Після того, як ви від'єднаєте бібліотеку, зміни в "
+"локальній папці та файлах не будуть завантажуватися, а зміни в бібліотеці не"
+" будуть скачуватися. Якщо ви хочете знову синхронізувати бібліотеку з "
+"локальною папкою, ви можете використовувати функцію <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">синхронізації з "
+"існуючою папкою</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1926,6 +2177,11 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"Іноді в клієнті виникають внутрішні помилки, які блокують синхронізацію. У "
+"цих випадках зазвичай корисно \"повторно синхронізувати\" бібліотеку. "
+"Повторна синхронізація означає від'єднання, а потім негайну синхронізацію "
+"бібліотеки з тією ж папкою. Ви можете знайти цю дію в спливаючому меню "
+"головного вікна клієнта."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -1933,16 +2189,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Після встановлення клієнта для драйву з інструкціями на <a "
+"href=\"https://www.seafile.com/en/download/\">сторінці завантаження</a>, ви "
+"можете запустити його, двічі клацнувши на значок програми \"SeaDrive\" на "
+"робочому столі."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Вас попросять вибрати літеру диска для віртуального диска. За замовчуванням "
+"буде використовуватися \"S:\"."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Потім вас попросять увійти на ваш сервер Seafile."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1951,6 +2213,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Після успішного входу на сервер клієнт Drive починає отримувати список "
+"бібліотек та файлів з сервера. Вміст файлів на цей момент не завантажується."
+" Тому це не займе багато часу. Ви можете дозволити йому працювати у фоновому"
+" режимі. Вас буде повідомлено, коли отримання буде завершено."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1960,21 +2226,29 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Відкриється папка віртуального диска. Ви виявите, що вона працює так само, "
+"як звичайний жорсткий диск на вашому комп'ютері. Папки верхнього рівня у "
+"віртуальному диску є бібліотеками на сервері Seafile. Вміст файлів буде "
+"завантажуватися, коли ви відкриваєте файл. Нещодавно відкриті файли будуть "
+"кешовані на вашому локальному диску. Усі кешовані файли будуть позначені "
+"зеленою галочкою."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Стан синхронізації"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Файли та папки у віртуальному диску знаходяться в одному з трьох станів: "
+"тільки в хмарі, синхронізовані або частково синхронізовані."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Стан"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
@@ -1988,7 +2262,7 @@ msgstr "Деталі"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Вміст тільки в хмарі"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1998,71 +2272,91 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Вміст, що знаходиться тільки в хмарі, відображається у віртуальному диску, "
+"але не використовує повний обсяг місця, який займав би файл. У вашому "
+"провіднику файлів ви можете бачити файл, але його вміст не завантажується "
+"повністю, поки ви не потребуєте його. Завантажується лише інформація про "
+"файл, така як його назва, розмір та дата оновлення."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Синхронізований вміст"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Синхронізований вміст завантажується та зберігається на жорсткому диску "
+"вашого комп'ютера. Ви можете безпосередньо редагувати ці файли з додатків на"
+" вашому комп'ютері."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Частково синхронізований вміст"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Частково синхронізовані папки містять як синхронізовані, так і файли/папки, "
+"які знаходяться лише в хмарі."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Спеціальні стани"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Для файлів, які вже синхронізовані на локальний комп'ютер, можуть бути 3 "
+"інші спеціальні стани, крім звичайного стану \"синхронізовано\"."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Заблоковано іншим користувачем"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Файл заблокований іншим користувачем на сервері. Ви можете відкривати файл "
+"лише в режимі читання. Ви не можете змінювати, видаляти, перейменовувати або"
+" переміщати файл."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Заблоковано мною"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
 msgstr ""
+"Файл заблокований вами. Це запобігає змінам файлу іншими користувачами."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Тільки для читання"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"Папка або бібліотека цього файлу надана вам з дозволом тільки для читання. "
+"Ви не можете змінювати, видаляти або переміщати файл."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Клієнт Drive регулярно очищає невикористані кешовані файли у фоновому "
+"режимі. Ви також можете обмежити місце для локального кешу."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2070,10 +2364,15 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Ви можете входити в кілька облікових записів у клієнті Drive. Однак у "
+"віртуальному диску будуть показані лише файли з поточного вибраного сервера."
+" Ви можете перемикатися між обліковими записами."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Чому я не можу створювати нові файли або видаляти папки в кореневій "
+"папці?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2084,13 +2383,22 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Коренева папка віртуального диска містить лише папки бібліотек. Seafile може"
+" синхронізувати лише файли всередині бібліотек. Файли в кореневій папці не "
+"можуть бути завантажені на сервер Seafile. Тому не має сенсу підтримувати "
+"створення файлів у кореневій папці. Оскільки папки верхнього рівня у "
+"віртуальному диску представляють бібліотеки, ми не хочемо, щоб користувачі "
+"випадково видаляли свої бібліотеки. Тому клієнт Drive не підтримує видалення"
+" папок верхнього рівня."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Деякі типи файлів можна безпосередньо відкривати та переглядати в Seafile "
+"Web App. Наразі це:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Графічні файли"

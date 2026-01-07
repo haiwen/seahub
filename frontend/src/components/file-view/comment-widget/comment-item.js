@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
-import { processor } from '@seafile/seafile-editor';
-import { SeafileCommentEditor } from '@seafile/comment-editor';
+import { SeafileCommentEditor, commentProcessor } from '@seafile/comment-editor';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext } from '../../../utils/constants';
 import CommentDeletePopover from './comment-delete-popover';
@@ -38,7 +37,7 @@ class CommentItem extends React.Component {
   };
 
   convertComment = (mdFile) => {
-    processor.process(mdFile).then((result) => {
+    commentProcessor.process(mdFile).then((result) => {
       let html = String(result);
       this.setState({ html: html });
     });

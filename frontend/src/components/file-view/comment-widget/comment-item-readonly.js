@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { processor } from '@seafile/seafile-editor';
+import { commentProcessor } from '@seafile/seafile-editor';
 import Icon from '../../icon';
 
 const commentItemPropTypes = {
@@ -21,7 +21,7 @@ class CommentItemReadOnly extends React.Component {
   }
 
   convertComment = (mdFile) => {
-    processor.process(mdFile).then((result) => {
+    commentProcessor.process(mdFile).then((result) => {
       let html = String(result);
       this.setState({ html: html });
     });

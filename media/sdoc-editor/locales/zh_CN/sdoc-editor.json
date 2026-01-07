@@ -649,9 +649,6 @@
   "Edit_link": "编辑链接",
   "Remove_link": "移除链接",
   "Preview": "预览",
-  "Go_to_link": "跳转链接",
-  "Link_block": "链接节点",
-  "The_link_address_or_link_block_is_required": "链接地址或链接节点是必填项。",
   "File_view": "文件视图",
   "Linked_repo_tip": "您尚未关联资料库，请先在设置模块关联资料库，方可使用该功能。",
   "Insert_file_view": "插入视图",
@@ -662,5 +659,9 @@
   "The_view_type_is_required": "视图类型是必填项。",
   "The_linked_library_is_required": "关联的资料库是必填项。",
   "Zoom_in": "放大",
-  "Zoom_out": "缩小"
+  "Zoom_out": "缩小",
+  "Go_to_link" : "转到链接",
+  "Link_block" : "链接块级元素",
+  "The_link_address_or_link_block_is_required": "链接地址或链接块级元素是必填项",
+  "Comment_filter": "评论过滤器"
 }

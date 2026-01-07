@@ -44,9 +44,11 @@ class SearchAPI {
     }
   }
 
-  searchItems(query_str, query_type, cancelToken) {
-    let url = this.server + '/api2/items-search/?query_str=' + query_str + '&query_type=' + query_type;
-    return this.req.get(url, { cancelToken: cancelToken });
+  searchRepos(query_str) {
+    let url = this.server + '/api2/items-search/';
+    let params = {};
+    params.query_str = query_str;
+    return this.req.get(url, { params });
   }
 
   searchWiki(query, search_wiki, cancelToken) {
