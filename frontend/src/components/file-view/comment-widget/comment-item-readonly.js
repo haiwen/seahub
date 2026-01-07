@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { commentProcessor } from '@seafile/seafile-editor';
+import { commentProcessor } from '@seafile/comment-editor';
 import Icon from '../../icon';
 
 const commentItemPropTypes = {
