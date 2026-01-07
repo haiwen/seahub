@@ -91,7 +91,7 @@
   position: relative;
   transform: none;
   padding-bottom: 16px;
-  border-bottom: 1px solid var(--bs-border-tertiary-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .lightbox-side-panel .sf-metadata-property-detail-capture-information-item .dirent-detail-item-value:empty::before,
