@@ -90,7 +90,7 @@ function set_env_config () {
         export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
         export SITE_ROOT=${SITE_ROOT:-/}
         export ENABLE_GO_FILESERVER=${ENABLE_GO_FILESERVER}
-        export ENABLE_SEAFDAV=${ENABLE_SEAFDAV}
+        export ENABLE_SEAFDAV=${ENABLE_SEAFDAV:-false}
     fi
 }
 
