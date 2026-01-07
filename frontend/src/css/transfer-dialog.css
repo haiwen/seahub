@@ -22,7 +22,7 @@
 
   .transfer-dialog-content .transfer-dialog-side {
     border: 0;
-    border-right: 1px solid var(--bs-border-tertiary-color);
+    border-right: 1px solid var(--bs-border-secondary-color);
   }
 
   .transfer-dialog-side .nav {
@@ -58,8 +58,8 @@
 
 .transfer-dialog-content .transfer-dialog-main .user-select {
   padding: 8px 0;
-  border-top: 1px solid var(--bs-border-tertiary-color);
-  border-bottom: 1px solid var(--bs-border-tertiary-color);
+  border-top: 1px solid var(--bs-border-secondary-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
 }
 
 .transfer-dialog-content .transfer-dialog-main .transfer-repo-reshare-switch .custom-switch {
