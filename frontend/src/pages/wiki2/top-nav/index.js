@@ -26,7 +26,7 @@ function WikiTopNav({ config, currentPageId, setCurrentPage, currentPageLocked }
               onKeyDown={Utils.onKeyDown}
             >
               {item.icon ? <CustomIcon icon={item.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
-              <div className="d-flex align-items-center">
+              <div className="d-flex align-items-center overflow-hidden">
                 <span className='text-truncate' title={item.name} aria-label={item.name}>{item.name}</span>
               </div>
             </div>
