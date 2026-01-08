@@ -2,18 +2,24 @@ import os
 import json
 import logging
 import configparser
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+
+from seaserv import seafile_api
+
 from seahub.api2.base import APIView
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.settings import ENABLE_STORAGE_CLASSES, REPO_ARCHIVE_STORAGE_ID
-from seaserv import seafile_api
+from seahub.share.utils import is_repo_admin
 from seahub.api2.endpoints.utils import add_repo_archive_task_request
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
+from seahub.settings import ENABLE_STORAGE_CLASSES, REPO_ARCHIVE_STORAGE_ID
+
 
 logger = logging.getLogger(__name__)
 
@@ -60,8 +66,8 @@ class RepoArchiveView(APIView):
         try:
             engine = create_engine(url, echo=False)
             session = sessionmaker(engine)()
-            sql = "SELECT archive_status FROM RepoInfo WHERE repo_id='{}'".format(repo_id)
-            result = session.execute(text(sql)).fetchone()
+            sql = "SELECT archive_status FROM RepoInfo WHERE repo_id=:repo_id"
+            result = session.execute(text(sql), {'repo_id': repo_id}).fetchone()
             session.close()
             if result:
                 return result[0]
@@ -76,51 +82,33 @@ class RepoArchiveView(APIView):
             engine = create_engine(url, echo=False)
             session = sessionmaker(engine)()
             if status is None:
-                sql = "UPDATE RepoInfo SET archive_status=NULL WHERE repo_id='{}'".format(repo_id)
+                sql = "UPDATE RepoInfo SET archive_status=NULL WHERE repo_id=:repo_id"
             else:
-                sql = "UPDATE RepoInfo SET archive_status='{}' WHERE repo_id='{}'".format(status, repo_id)
-            session.execute(text(sql))
+                sql = "UPDATE RepoInfo SET archive_status=:status WHERE repo_id=:repo_id"
+            session.execute(text(sql), {'status': status, 'repo_id': repo_id})
             session.commit()
             session.close()
         except Exception as e:
             logger.error("Failed to set archive status: %s", e)
             raise e
 
-    def get(self, request, repo_id):
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
-
-        # Check if user is admin
-        is_admin = request.user.is_staff
-
-        # Get archive status
-        archive_status = None
-        try:
-            archive_status = self.get_archive_status(repo_id)
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get archive status.')
-
-        base_condition = ENABLE_STORAGE_CLASSES and is_admin
-
-        can_archive = base_condition and (archive_status is None or archive_status == '')
-
-        can_unarchive = base_condition and archive_status == 'archived'
-
-        return Response({
-            'archive_status': archive_status or '',
-            'can_archive': can_archive,
-            'can_unarchive': can_unarchive
-        })
 
     def post(self, request, repo_id):
+        # whether storage classes is enabled
         if not ENABLE_STORAGE_CLASSES:
-             return api_error(status.HTTP_403_FORBIDDEN, 'Storage classes not enabled.')
+            error_msg = 'Storage classes not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            
+        # permission check
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
              archive_status = self.get_archive_status(repo_id)
