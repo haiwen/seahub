@@ -15,10 +15,13 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.share.utils import is_repo_admin
 from seahub.api2.endpoints.utils import add_repo_archive_task_request
-from seahub.settings import ENABLE_STORAGE_CLASSES, REPO_ARCHIVE_STORAGE_ID
+from seahub.settings import ENABLE_STORAGE_CLASSES
 from seahub.utils.db_api import SeafileDB
 
+from seahub import settings as seahub_settings
 
+
+REPO_ARCHIVE_STORAGE_ID = getattr(seahub_settings, 'REPO_ARCHIVE_STORAGE_ID', None)
 logger = logging.getLogger(__name__)
 
 
