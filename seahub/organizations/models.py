@@ -76,7 +76,16 @@ class OrgSettingsManager(models.Manager):
         except OrgSettings.DoesNotExist:
             return True
 
-    def add_or_update(self, org, role=None, is_active=None):
+    def get_monthly_traffic_limit_by_org(self, org):
+        org_id = org.org_id
+        try:
+            limit = self.get(org_id=org_id).monthly_traffic_limit
+            return limit
+        except OrgSettings.DoesNotExist:
+            return 0
+
+    def add_or_update(self, org, role=None, is_active=None,
+                      monthly_traffic_limit=None):
         org_id = org.org_id
         try:
             settings = self.get(org_id=org_id)
@@ -97,14 +106,22 @@ class OrgSettingsManager(models.Manager):
             except Exception as e:
                 logger.error(e)
 
+        if monthly_traffic_limit is not None:
+            settings.monthly_traffic_limit = monthly_traffic_limit
+
         settings.save(using=self._db)
         return settings
 
 
 class OrgSettings(models.Model):
+
+    # used for system admin
+
     org_id = models.IntegerField(unique=True)
     role = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True, db_index=True)
+    # The unit is bytes. 0 means no limit
+    monthly_traffic_limit = models.BigIntegerField(default=0)
 
     objects = OrgSettingsManager()
 
@@ -197,6 +214,8 @@ class OrgAdminSettingsManager(models.Manager):
 
 class OrgAdminSettings(models.Model):
 
+    # used for organization admin
+
     # boolean settings / str settings / int settings, etc
     # key: default-value
 
@@ -208,10 +227,9 @@ class OrgAdminSettings(models.Model):
 
     class Meta:
         unique_together = [('org_id', 'key')]
-        
+
 
 # handle signal
-
 @receiver(org_deleted)
 def org_deleted_cb(sender, **kwargs):
     org_id = kwargs['org_id']

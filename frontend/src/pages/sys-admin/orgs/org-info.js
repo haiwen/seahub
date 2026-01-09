@@ -8,6 +8,7 @@ import toaster from '../../../components/toast';
 import Loading from '../../../components/loading';
 import EditIcon from '../../../components/edit-icon';
 import SysAdminSetOrgQuotaDialog from '../../../components/dialog/sysadmin-dialog/set-quota';
+import SysAdminSetOrgMonthlyTrafficLimitDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-monthly-traffic-limit-dialog';
 import SysAdminSetOrgNameDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog';
 import SysAdminSetOrgMaxUserNumberDialog from '../../../components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog';
 import MainPanelTopbar from '../main-panel-topbar';
@@ -20,6 +21,7 @@ class Content extends Component {
     super(props);
     this.state = {
       isSetQuotaDialogOpen: false,
+      isSetMonthlyTrafficLimitDialogOpen: false,
       isSetNameDialogOpen: false,
       isSetMaxUserNumberDialogOpen: false
     };
@@ -27,6 +29,10 @@ class Content extends Component {
 
   toggleSetQuotaDialog = () => {
     this.setState({ isSetQuotaDialogOpen: !this.state.isSetQuotaDialogOpen });
+  };
+
+  toggleSetMonthlyTrafficLimitDialog = () => {
+    this.setState({ isSetMonthlyTrafficLimitDialogOpen: !this.state.isSetMonthlyTrafficLimitDialogOpen });
   };
 
   toggleSetNameDialog = () => {
@@ -50,8 +56,12 @@ class Content extends Component {
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
-      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, enable_saml_login, metadata_url, domain, force_adfs_login, enable_sso } = this.props.orgInfo;
-      const { isSetQuotaDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
+      const { org_name, users_count, max_user_number, groups_count, quota, quota_usage, monthly_traffic_limit, monthly_traffic_usage, enable_saml_login, metadata_url, domain, force_adfs_login, enable_sso } = this.props.orgInfo;
+
+      let download_traffic = monthly_traffic_usage.link_file_download + monthly_traffic_usage.sync_file_download + monthly_traffic_usage.web_file_download;
+      download_traffic = download_traffic ? download_traffic : 0;
+
+      const { isSetQuotaDialogOpen, isSetMonthlyTrafficLimitDialogOpen, isSetNameDialogOpen, isSetMaxUserNumberDialogOpen } = this.state;
       return (
         <>
           <dl className="m-0">
@@ -82,6 +92,13 @@ class Content extends Component {
               {`${Utils.bytesToSize(quota_usage)} / ${quota > 0 ? Utils.bytesToSize(quota) : '--'}`}
               <EditIcon onClick={this.toggleSetQuotaDialog} />
             </dd>
+
+            <dt className="info-item-heading">{gettext('Monthly Traffic Limit')}</dt>
+            <dd className="info-item-content">
+              {`${Utils.bytesToSize(download_traffic)} / ${quota > 0 ? Utils.bytesToSize(monthly_traffic_limit) : '--'}`}
+              <EditIcon onClick={this.toggleSetMonthlyTrafficLimitDialog} />
+            </dd>
+
             {enable_sso &&
               <>
                 <dt className="info-item-heading">{gettext('SSO')}</dt>
@@ -132,6 +149,12 @@ class Content extends Component {
             toggle={this.toggleSetQuotaDialog}
           />
           }
+          {isSetMonthlyTrafficLimitDialogOpen &&
+          <SysAdminSetOrgMonthlyTrafficLimitDialog
+            updateMonthlyTrafficLimit={this.props.updateMonthlyTrafficLimit}
+            toggle={this.toggleSetMonthlyTrafficLimitDialog}
+          />
+          }
           {isSetNameDialogOpen &&
           <SysAdminSetOrgNameDialog
             name={org_name}
@@ -162,6 +185,7 @@ Content.propTypes = {
   orgID: PropTypes.string,
   orgInfo: PropTypes.object,
   updateQuota: PropTypes.func.isRequired,
+  updateMonthlyTrafficLimit: PropTypes.func.isRequired,
   updateName: PropTypes.func.isRequired,
   updateMaxUserNumber: PropTypes.func.isRequired,
   updateForceSSOLogin: PropTypes.func,
@@ -200,6 +224,20 @@ class OrgInfo extends Component {
       });
       this.setState({ orgInfo: newOrgInfo });
       toaster.success(gettext('Successfully set quota.'));
+    }).catch((error) => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
+    });
+  };
+
+  updateMonthlyTrafficLimit = (limit) => {
+    const data = { monthlyTrafficLimit: limit };
+    systemAdminAPI.sysAdminUpdateOrg(this.props.orgID, data).then(res => {
+      const newOrgInfo = Object.assign(this.state.orgInfo, {
+        monthly_traffic_limit: res.data.monthly_traffic_limit
+      });
+      this.setState({ orgInfo: newOrgInfo });
+      toaster.success(gettext('Successfully set monthly traffic limit.'));
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
@@ -259,6 +297,7 @@ class OrgInfo extends Component {
                 errorMsg={this.state.errorMsg}
                 orgInfo={this.state.orgInfo}
                 updateQuota={this.updateQuota}
+                updateMonthlyTrafficLimit={this.updateMonthlyTrafficLimit}
                 updateName={this.updateName}
                 updateMaxUserNumber={this.updateMaxUserNumber}
                 updateForceSSOLogin={this.updateForceSSOLogin}
