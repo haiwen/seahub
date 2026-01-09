@@ -27,8 +27,8 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     PRIVACY_POLICY_LINK, TERMS_OF_SERVICE_LINK, ENABLE_SEADOC, THUMBNAIL_SIZE_FOR_GRID, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, NOTIFICATION_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
-    ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES
-
+    ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES, \
+    ENABLE_FACE_RECOGNITION
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, \
@@ -120,7 +120,6 @@ def base(request):
             login_bg_path = CUSTOM_LOGIN_BG_PATH
 
         avatar_url, is_default, date_uploaded = api_avatar_url(username)
-
     result = {
         'seafile_version': SEAFILE_VERSION,
         'site_title': config.SITE_TITLE,
@@ -190,6 +189,7 @@ def base(request):
         'enable_whiteboard': ENABLE_WHITEBOARD,
         'enable_notification_server': ENABLE_NOTIFICATION_SERVER,
         'notification_server_url': NOTIFICATION_SERVER_URL,
+        'enable_face_recognition': ENABLE_FACE_RECOGNITION,
     }
 
     if ENABLE_METADATA_MANAGEMENT:
