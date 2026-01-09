@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import deepCopy from 'deep-copy';
 import classNames from 'classnames';
+import { EventBus, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import { wikiId, wikiPermission, gettext } from '../../utils/constants';
 import toaster from '../../components/toast';
 import Loading from '../../components/loading';
@@ -251,6 +252,9 @@ class SidePanel extends PureComponent {
         errorCallback: () => {},
         jumpToNewPage,
       });
+      const wikiRepoId = res.data.file_info.repo_id;
+      const eventBus = EventBus.getInstance();
+      eventBus.dispatch(EXTERNAL_EVENT.WIKI_PAGE_ID_CREATED, { pageId: page_id, pageName: page_name, wikiRepoId: wikiRepoId });
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
