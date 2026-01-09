@@ -2208,6 +2208,12 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
+  // repo archive
+  archiveRepo(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/archive/';
+    return this.req.post(url);
+  }
+
 }
 
 let seafileAPI = new SeafileAPI();

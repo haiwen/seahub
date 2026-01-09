@@ -31,6 +31,7 @@ from seahub.utils import is_org_context, is_pro_version, gen_inner_file_get_url,
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
         repo_has_been_shared_out, normalize_repo_status_code
+from seahub.utils.db_api import SeafileDB
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
@@ -153,6 +154,11 @@ class ReposView(APIView):
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
                     repo_info['storage_name'] = r.storage_name
                     repo_info['storage_id'] = r.storage_id
+                                        
+                    seafile_db = SeafileDB()
+                    archive_status_dict = {}
+                    archive_status_dict = seafile_db.get_repos_archive_status(owned_repo_ids)
+                    repo_info['archive_status'] = archive_status_dict.get(r.id)
 
                 repo_info_list.append(repo_info)
 
@@ -430,6 +436,12 @@ class RepoView(APIView):
             "enable_onlyoffice": enable_onlyoffice,
             "monitored": monitored,
         }
+
+        # Add archive_status if storage classes is enabled
+        if is_pro_version() and ENABLE_STORAGE_CLASSES:
+            seafile_db = SeafileDB()
+            archive_status = seafile_db.get_archive_status(repo_id)
+            result['archive_status'] = archive_status
 
         return Response(result)
 

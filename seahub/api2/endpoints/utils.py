@@ -383,7 +383,7 @@ def add_repo_archive_task_request(repo_id, orig_storage_id, dest_storage_id, op_
     return json.loads(resp.content)['task_id']
 
 
-def query_archive_task_status_request(task_id):
+def event_archive_status(task_id):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     headers = {"Authorization": "Token %s" % token}
