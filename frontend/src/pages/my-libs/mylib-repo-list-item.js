@@ -22,6 +22,7 @@ import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoWebhookDialog from '../../components/dialog/repo-webhook-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
+import RepoArchiveDialog from '../../components/dialog/repo-archive-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
 import OpIcon from '../../components/op-icon';
@@ -62,6 +63,7 @@ class MylibRepoListItem extends React.Component {
       isRepoDeleted: false,
       isOfficeSuiteDialogShow: false,
       isWebhookDialogShow: false,
+      isArchiveDialogShow: false,
     };
   }
 
@@ -125,6 +127,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Office Suite':
         this.onOfficeSuiteToggle();
+        break;
+      case 'Archive':
+        this.onArchiveToggle();
         break;
       default:
         break;
@@ -205,6 +210,10 @@ class MylibRepoListItem extends React.Component {
 
   onOfficeSuiteToggle = () => {
     this.setState({ isOfficeSuiteDialogShow: !this.state.isOfficeSuiteDialogShow });
+  };
+
+  onArchiveToggle = () => {
+    this.setState({ isArchiveDialogShow: !this.state.isArchiveDialogShow });
   };
 
   toggleRepoShareAdminDialog = () => {
@@ -566,6 +575,15 @@ class MylibRepoListItem extends React.Component {
               repoID={repo.repo_id}
               repoName={repo.repo_name}
               toggleDialog={this.onOfficeSuiteToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isArchiveDialogShow && (
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={repo}
+              toggle={this.onArchiveToggle}
             />
           </ModalPortal>
         )}

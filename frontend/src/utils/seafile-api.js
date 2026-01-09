@@ -2240,6 +2240,13 @@ class SeafileAPI {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/webhooks/' + webhookID + '/';
     return this.req.delete(url);
   }
+
+  // repo archive
+  archiveRepo(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/archive/';
+    return this.req.post(url);
+  }
+
 }
 
 let seafileAPI = new SeafileAPI();

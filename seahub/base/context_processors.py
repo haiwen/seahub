@@ -28,7 +28,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, NOTIFICATION_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
     ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES, ENABLE_THUMBNAIL_SERVER, \
-    ENABLE_FACE_RECOGNITION
+    ENABLE_FACE_RECOGNITION, ENABLE_STORAGE_CLASSES
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -192,6 +192,7 @@ def base(request):
         'notification_server_url': NOTIFICATION_SERVER_URL,
         'enable_thumbnal_server': ENABLE_THUMBNAIL_SERVER,
         'enable_face_recognition': ENABLE_FACE_RECOGNITION,
+        'enable_storage_classes': ENABLE_STORAGE_CLASSES
     }
 
     if ENABLE_METADATA_MANAGEMENT:
