@@ -427,17 +427,6 @@ module.exports = function (webpackEnv) {
                       'cleanupIDs',
                       'inlineStyles',
                       'removeXMLProcInst',
-                      {
-                        name: 'removeAttrs',
-                        params: {
-                          attrs: [
-                            'fill',
-                            'fill-rule',
-                            'clip-rule',
-                            'stroke',
-                          ],
-                        }
-                      },
                     ]
                   }
                 }

@@ -318,6 +318,10 @@
   width: 16px;
 }
 
+.wiki-drag-ghost-wrapper .nav-item-icon .seafile-multicolor-icon path {
+  fill: #666666;
+}
+
 .wiki-drag-ghost-wrapper .op-icon,
 .wiki-drag-ghost-wrapper .page-operation-dropdown {
   display: none !important;
