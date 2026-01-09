@@ -35,6 +35,8 @@ from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE, \
         ONLYOFFICE_CONVERTER_EXTENSIONS, ONLYOFFICE_EDIT_FILE_EXTENSION
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP, \
         OFFICE_WEB_APP_EDIT_FILE_EXTENSION
+from seahub.weboffice.settings import ENABLE_WPS_WEBOFFICE, \
+        WPS_WEBOFFICE_FILE_EXTENSION
 from seahub.constants import DEFAULT_ADMIN
 from seahub.utils import get_site_name, get_service_url
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -158,6 +160,8 @@ def base(request):
         'FILE_SERVER_ROOT': file_server_root,
         'USE_GO_FILESERVER': seaserv.USE_GO_FILESERVER if hasattr(seaserv, 'USE_GO_FILESERVER') else False,
         'LOGIN_URL': dj_settings.LOGIN_URL,
+        'enable_wps_weboffice': ENABLE_WPS_WEBOFFICE,
+        'wps_weboffice_file_extension': list(WPS_WEBOFFICE_FILE_EXTENSION),
         'enable_onlyoffice': ENABLE_ONLYOFFICE,
         'onlyoffice_edit_file_extension': list(ONLYOFFICE_EDIT_FILE_EXTENSION),
         'onlyoffice_support_edit_docxf': ENABLE_ONLYOFFICE and 'docxf' in list(ONLYOFFICE_EDIT_FILE_EXTENSION),

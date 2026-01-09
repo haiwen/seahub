@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>WPS WebOffice Demo</title>
+  <style>
+    * { margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; }
+    .custom-mount { width: 100%; height: 100%; }
+  </style>
+</head>
+<body>
+  <div class="custom-mount"></div>
+  <script src="{{ MEDIA_URL }}js/web-office-sdk-v1.1.20.umd.js"></script>
+  <script>
+    window.onload = async function() {
+      const jssdk = WebOfficeSDK.config({
+        url: '{{wps_weboffice_editor_url|safe}}',
+        mount: document.querySelector('.custom-mount'),
+      });
+      await jssdk.ready(); // 等待初始化完成
+      const app = jssdk.WordApplication(); // 或 jssdk.Application
+      app.ActiveDocument.TrackRevisions = true; // 启用修订模式
+    };
+  </script>
+</body>
+</html>
