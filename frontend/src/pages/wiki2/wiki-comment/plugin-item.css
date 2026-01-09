@@ -23,6 +23,12 @@
   cursor: pointer;
 }
 
+.wiki-plugin-operation-btn-container svg path {
+  color: #666666;
+  fill: #666;
+  cursor: pointer;
+}
+
 .wiki-plugin-operation-btn-container .sdoc-unread-message-tip {
   display: inline-block;
   height: 6px;
