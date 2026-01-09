@@ -30,6 +30,7 @@ class Repo {
     this.monitored = object.monitored;
     this.status = object.status;
     this.storage_name = object.storage_name;
+    this.archive_status = object.archive_status;
     if (object.is_admin != undefined) {
       this.is_admin = object.is_admin;
     }

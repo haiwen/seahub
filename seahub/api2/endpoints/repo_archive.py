@@ -8,9 +8,6 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
-
 from seaserv import seafile_api
 
 from seahub.api2.base import APIView
@@ -19,21 +16,11 @@ from seahub.api2.utils import api_error
 from seahub.share.utils import is_repo_admin
 from seahub.api2.endpoints.utils import add_repo_archive_task_request
 from seahub.settings import ENABLE_STORAGE_CLASSES, REPO_ARCHIVE_STORAGE_ID
+from seahub.utils.db_api import SeafileDB
 
 
 logger = logging.getLogger(__name__)
 
-def get_seafile_db_url():
-    env = os.environ
-    seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
-    cp = configparser.ConfigParser()
-    cp.read(seafile_conf)
-    host = cp.get('database', 'host')
-    port = cp.get('database', 'port')
-    user = cp.get('database', 'user')
-    passwd = cp.get('database', 'password')
-    db_name = cp.get('database', 'db_name')
-    return 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
 
 def get_default_storage_id():
     env = os.environ
@@ -61,37 +48,6 @@ class RepoArchiveView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
 
-    def get_archive_status(self, repo_id):
-        url = get_seafile_db_url()
-        try:
-            engine = create_engine(url, echo=False)
-            session = sessionmaker(engine)()
-            sql = "SELECT archive_status FROM RepoInfo WHERE repo_id=:repo_id"
-            result = session.execute(text(sql), {'repo_id': repo_id}).fetchone()
-            session.close()
-            if result:
-                return result[0]
-            return None
-        except Exception as e:
-            logger.error("Failed to get archive status: %s", e)
-            raise e
-
-    def set_archive_status(self, repo_id, status):
-        url = get_seafile_db_url()
-        try:
-            engine = create_engine(url, echo=False)
-            session = sessionmaker(engine)()
-            if status is None:
-                sql = "UPDATE RepoInfo SET archive_status=NULL WHERE repo_id=:repo_id"
-            else:
-                sql = "UPDATE RepoInfo SET archive_status=:status WHERE repo_id=:repo_id"
-            session.execute(text(sql), {'status': status, 'repo_id': repo_id})
-            session.commit()
-            session.close()
-        except Exception as e:
-            logger.error("Failed to set archive status: %s", e)
-            raise e
-
 
     def post(self, request, repo_id):
         # whether storage classes is enabled
@@ -109,9 +65,11 @@ class RepoArchiveView(APIView):
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        seafile_db_api = SeafileDB()
 
         try:
-             archive_status = self.get_archive_status(repo_id)
+             archive_status = seafile_db_api.get_archive_status(repo_id)
         except Exception:
              return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get archive status.')
         
@@ -142,7 +100,7 @@ class RepoArchiveView(APIView):
 
         try:
             status_val = 'in_archiving' if op_type == 'archive' else 'in_unarchiving'
-            self.set_archive_status(repo_id, status_val)
+            seafile_db_api.set_archive_status(repo_id, status_val)
         
             task_id = add_repo_archive_task_request(repo_id, orig_storage_id, dest_storage_id, op_type, request.user.username)
         except Exception as e:
