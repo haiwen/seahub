@@ -163,7 +163,7 @@ class DirOperationToolbar extends React.Component {
             'text': gettext('Upload Files'),
             'onClick': this.onUploadFile
           }, {
-            'icon': 'upload-files',
+            'icon': 'upload-folder',
             'text': gettext('Upload Folder'),
             'onClick': this.onUploadFolder
           });
@@ -214,7 +214,7 @@ class DirOperationToolbar extends React.Component {
       }
 
       opList.push({
-        'icon': 'copy1',
+        'icon': 'copy',
         'text': gettext('Copy path'),
         'onClick': this.copyPath
       });
