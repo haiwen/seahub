@@ -12,7 +12,7 @@ import EventBus from '../../components/common/event-bus';
 
 import './index.css';
 
-const MetadataTreeView = ({ userPerm, currentPath, viewId }) => {
+const MetadataTreeView = ({ userPerm, currentPath }) => {
   const {
     navigation,
     idViewMap,
@@ -170,7 +170,6 @@ const MetadataTreeView = ({ userPerm, currentPath, viewId }) => {
 MetadataTreeView.propTypes = {
   userPerm: PropTypes.string,
   currentPath: PropTypes.string,
-  viewId: PropTypes.string,
 };
 
 export default MetadataTreeView;

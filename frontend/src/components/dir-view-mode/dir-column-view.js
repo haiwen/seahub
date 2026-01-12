@@ -37,7 +37,6 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
-  viewId: PropTypes.string,
   tagId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
@@ -174,7 +173,6 @@ class DirColumnView extends React.Component {
               updateRepoInfo={this.props.updateRepoInfo}
               onItemMove={this.props.onItemMove}
               onItemsMove={this.props.onItemsMove}
-              viewId={this.props.viewId}
               getMenuContainerSize={this.getMenuContainerSize}
               direntList={this.props.direntList}
               updateDirent={this.props.updateDirent}

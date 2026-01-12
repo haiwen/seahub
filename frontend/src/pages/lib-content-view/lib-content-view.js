@@ -26,7 +26,6 @@ import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENT
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import { LIST_MODE, METADATA_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
-import { ALL_TAGS_ID } from '../../tag/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -163,6 +162,7 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
     this.calculatePara(this.props);
+    window.addEventListener('popstate', this.onpopstate);
   }
 
   onMessageCallback = (noticeData) => {
@@ -327,6 +327,7 @@ class LibContentView extends React.Component {
   };
 
   componentWillUnmount() {
+    window.removeEventListener('popstate', this.onpopstate);
     window.onpopstate = this.oldOnpopstate;
     this.unsubscribeEvent();
     this.unsubscribeOpenTreePanel();
@@ -372,20 +373,13 @@ class LibContentView extends React.Component {
     } else if (viewId) {
       currentMode = METADATA_MODE;
     } else {
-      // If previously in tags mode and no tag in URL, show "All tags"
-      if (this.state.currentMode === TAGS_MODE) {
-        currentMode = TAGS_MODE;
-        resolvedTagId = ALL_TAGS_ID;
-        resolvedPath = `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${ALL_TAGS_ID}`;
-      } else {
-        currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
-      }
+      currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
     }
 
     this.setState({
       path: resolvedPath,
-      viewId,
-      tagId: resolvedTagId,
+      viewId: currentMode === LIST_MODE ? '' : viewId,
+      tagId: currentMode === LIST_MODE ? '' : resolvedTagId,
       currentMode,
       isViewFile: false,
     });
@@ -629,6 +623,7 @@ class LibContentView extends React.Component {
       currentMode: TAGS_MODE,
       path: filePath,
       tagId: tagId,
+      viewId: '',
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?tag=${encodeURIComponent(tagId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);
