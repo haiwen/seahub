@@ -5,7 +5,7 @@ import toaster from '../components/toast';
 import Loading from '../components/loading';
 import { PRIVATE_FILE_TYPE } from '../constants';
 import { EVENT_BUS_TYPE } from '../metadata/constants';
-import { enableSeafileAI } from '../utils/constants';
+import { enableSeafileAI, gettext } from '../utils/constants';
 
 
 // This hook provides content related to seahub interaction, such as whether to enable extended attributes
@@ -55,6 +55,7 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
       setLoading(false);
       return;
     }
+    // Fetch metadata status first
     metadataAPI.getMetadataStatus(repoID).then(res => {
       const {
         enabled: enableMetadata,
@@ -64,15 +65,9 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         details_settings: detailsSettings,
         face_recognition_enabled: enableFaceRecognition,
         global_hidden_columns: globalHiddenColumns,
-        exceed_limit: exceedLimit,
-        md_file_count_limit: mdFileCountLimit
       } = res.data;
       if (!enableMetadata) {
         cancelMetadataURL();
-      }
-      if (exceedLimit) {
-        let msg = `The number of metadata records exceeds the limit of ${mdFileCountLimit}`;
-        toaster.warning(msg, { hasCloseButton: true, duration: 5 });
       }
       setEnableTags(enableTags);
       setShowView(showView);
@@ -84,7 +79,22 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
         ? JSON.parse(globalHiddenColumns)
         : (globalHiddenColumns || []);
       setGlobalHiddenColumns(parsedGlobalHiddenColumns);
-      setLoading(false);
+
+      // Then check records count limit separately
+      metadataAPI.checkRecordsFileCount(repoID).then(res2 => {
+        const { exceed_limit: exceedLimit, md_file_count_limit: mdFileCountLimit } = res2.data;
+        if (exceedLimit) {
+          let msg = gettext('The number of metadata records exceeds the limit of {mdFileCountLimit} files.').replace('{mdFileCountLimit}', mdFileCountLimit);
+          toaster.warning(msg, { hasCloseButton: true, duration: 5 });
+        }
+        setLoading(false);
+      }).catch(error2 => {
+        // If check fails, log and continue; show error if it's critical
+        const errorMsg = Utils.getErrorMsg(error2, true);
+        toaster.danger(errorMsg);
+        setLoading(false);
+      });
+
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error, true);
       toaster.danger(errorMsg);

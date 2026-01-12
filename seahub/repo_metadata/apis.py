@@ -61,14 +61,10 @@ class MetadataManage(APIView):
         details_settings = '{}'
         face_recognition_enabled = False
         global_hidden_columns = []
-        records_count = 0
-        exceed_limit = False
-
         try:
             record = RepoMetadata.objects.filter(repo_id=repo_id).first()
             show_view = False
             if record and record.enabled:
-                from seafevents.repo_metadata.constants import METADATA_TABLE
                 is_enabled = True
                 show_view = True
                 details_settings = record.details_settings
@@ -89,12 +85,7 @@ class MetadataManage(APIView):
                     except Exception as e:
                         logger.error(e)
 
-                metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
-                sql = f'SELECT COUNT(1) AS records_count FROM `{METADATA_TABLE.name}`'
-                query_result = metadata_server_api.query_rows(sql)
-                results = query_result.get('results')
-                records_count = results[0].get('records_count')
-                exceed_limit = records_count > MD_FILE_COUNT_LIMIT
+               
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -108,9 +99,8 @@ class MetadataManage(APIView):
             'details_settings': details_settings,
             'global_hidden_columns': global_hidden_columns,
             'show_view': show_view,
-            'exceed_limit': exceed_limit,
-            'md_file_count_limit': MD_FILE_COUNT_LIMIT,
         })
+
 
     def put(self, request, repo_id):
         """
@@ -216,6 +206,49 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+    
+
+class MetadataCheckRecordsLimit(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id):
+        """
+        Check whether the metadata records count exceeds the configured limit.
+        Returns: { 'exceed_limit': bool, 'md_file_count_limit': int }
+        """
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        exceed_limit = False
+        try:
+            record = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            if record and record.enabled:
+                metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
+                from seafevents.repo_metadata.constants import METADATA_TABLE
+                sql = f'SELECT COUNT(1) AS records_count FROM `{METADATA_TABLE.name}`'
+                query_result = metadata_server_api.query_rows(sql)
+                results = query_result.get('results') or []
+                records_count = results[0].get('records_count') if results else 0
+                exceed_limit = records_count > MD_FILE_COUNT_LIMIT
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({
+            'exceed_limit': exceed_limit,
+            'md_file_count_limit': MD_FILE_COUNT_LIMIT,
+        })
 
 
 class MetadataDetailsSettingsView(APIView):

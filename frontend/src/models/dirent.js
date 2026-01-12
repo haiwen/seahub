@@ -1,9 +1,20 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Utils } from '../utils/utils';
 import FileTag from './file-tag';
+import { lang } from '../utils/constants';
+
+import 'dayjs/locale/ar';
+import 'dayjs/locale/de';
+import 'dayjs/locale/en';
+import 'dayjs/locale/es';
+import 'dayjs/locale/fr';
+import 'dayjs/locale/ru';
+import 'dayjs/locale/zh-cn';
 
 dayjs.extend(relativeTime);
+dayjs.extend(localizedFormat);
 
 class Dirent {
   constructor(json) {
@@ -14,7 +25,7 @@ class Dirent {
     if (!json.mtime) {
       this.mtime_relative = '';
     } else {
-      this.mtime_relative = dayjs.unix(json.mtime).fromNow();
+      this.mtime_relative = dayjs.unix(json.mtime).locale(lang).fromNow();
     }
     this.permission = json.permission || 'rw';
     this.isSelected = false;

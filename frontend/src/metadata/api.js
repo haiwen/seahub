@@ -55,6 +55,11 @@ class MetadataManagerAPI {
     return this.req.get(url);
   }
 
+  checkRecordsFileCount(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/check-records-limit/';
+    return this.req.get(url);
+  }
+
   createMetadata(repoID) {
     const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/';
     return this.req.put(url);

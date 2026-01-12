@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { gettext, enableRepoAutoDel, enableSeafileAI } from '../../utils/constants';
+import { gettext, enableRepoAutoDel, enableFaceRecognitionFeature } from '../../utils/constants';
 import { TAB } from '../../constants/repo-setting-tabs';
 import LibHistorySettingPanel from './lib-settings/lib-history-setting-panel';
 import LibAutoDelSettingPanel from './lib-settings/lib-old-files-auto-del-setting-panel';
@@ -126,7 +126,7 @@ const LibSettingsDialog = ({ repoID, currentRepoInfo, toggleDialog, tab, showMig
                         {gettext('Extended properties')}
                       </NavLink>
                     </NavItem>
-                    {enableSeafileAI &&
+                    {enableFaceRecognitionFeature &&
                       <NavItem
                         role="tab"
                         aria-selected={activeTab === TAB.FACE_RECOGNITION_SETTING}

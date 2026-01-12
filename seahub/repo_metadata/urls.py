@@ -4,7 +4,7 @@ from .apis import MetadataRecognizeFaces, MetadataRecords, MetadataManage, Metad
     FaceRecognitionManage, FacesRecord, MetadataExtractFileDetails, PeoplePhotos, MetadataTagsStatusManage, MetadataTags, \
     MetadataTagsLinks, MetadataFileTags, MetadataTagFiles, MetadataMergeTags, MetadataTagsFiles, MetadataDetailsSettingsView, \
     PeopleCoverPhoto, MetadataMigrateTags, MetadataExportTags, MetadataImportTags, MetadataGlobalHiddenColumnsView, \
-    MetadataBatchRecords, MetadataStatistics
+    MetadataBatchRecords, MetadataStatistics, MetadataCheckRecordsLimit
 
 urlpatterns = [
     re_path(r'^$', MetadataManage.as_view(), name='api-v2.1-metadata'),
@@ -36,6 +36,8 @@ urlpatterns = [
 
     # global hidden columns
     re_path(r'^global-hidden-columns/$', MetadataGlobalHiddenColumnsView.as_view(), name='api-v2.1-metadata-global-hidden-columns'),
+
+    re_path(r'^check-records-limit/$', MetadataCheckRecordsLimit.as_view(), name='api-v2.1-metadata-check-records-limit'),
 
     # tags api
     re_path(r'^tags-status/$', MetadataTagsStatusManage.as_view(), name='api-v2.1-metadata-tags-status'),

@@ -103,6 +103,7 @@ export const enableSSOToThirdpartWebsite = window.app.pageOptions.enableSSOToThi
 export const enableSeadoc = window.app.pageOptions.enableSeadoc;
 export const enableMetadataManagement = window.app.pageOptions.enableMetadataManagement;
 export const enableSeafileAI = window.app.pageOptions.enableSeafileAI;
+export const enableFaceRecognitionFeature = window.app.pageOptions.enableFaceRecognition;
 export const enableWhiteboard = window.app.pageOptions.enableWhiteboard;
 export const enableMultipleOfficeSuite = window.app.pageOptions.enableMultipleOfficeSuite;
 export const officeSuiteEditFileExtension = window.app.pageOptions.officeSuiteEditFileExtension || [];
