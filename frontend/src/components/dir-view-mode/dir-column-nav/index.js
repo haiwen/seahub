@@ -31,6 +31,7 @@ const propTypes = {
   updateTreeNode: PropTypes.func,
   updateRepoInfo: PropTypes.func,
   sortTreeNode: PropTypes.func,
+  viewId: PropTypes.string,
 };
 
 class DirColumnNav extends React.Component {
@@ -70,7 +71,7 @@ class DirColumnNav extends React.Component {
               updateTreeNode={this.props.updateTreeNode}
               sortTreeNode={this.props.sortTreeNode}
             />
-            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
+            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} viewId={this.props.viewId} />
             <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} updateRepoInfo={this.props.updateRepoInfo} />
           </>

@@ -25,8 +25,8 @@ const Detail = React.memo(({
 }) => {
   const { tagsData, addTag, modifyLocalFileTags } = useTags();
 
-  const isView = useMemo(() => currentMode === METADATA_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES), [currentMode, path]);
-  const isTag = useMemo(() => currentMode === TAGS_MODE || path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES), [currentMode, path]);
+  const isView = useMemo(() => currentMode === METADATA_MODE || (path && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES)), [currentMode, path]);
+  const isTag = useMemo(() => currentMode === TAGS_MODE || (path && path.startsWith('/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES)), [currentMode, path]);
 
   useEffect(() => {
     if (isView) return;
@@ -72,7 +72,7 @@ const Detail = React.memo(({
     return (<LibDetail currentRepoInfo={currentRepoInfo} onClose={onClose} />);
   }
 
-  if (!dirent) return null;
+  if (!dirent || !path) return null;
 
   return (
     <DirentDetail

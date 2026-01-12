@@ -88,18 +88,17 @@ const TagsTreeView = ({ currentPath }) => {
   }, [selectTag]);
 
   useEffect(() => {
-    if (!currSelectedNodeKey) {
-      const selectedNode = recordsTree.find((node) => {
-        const nodePath = '/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/' + getTreeNodeId(node);
-        return nodePath === currentPath;
-      });
-      const nextSelectedNodeKey = getTreeNodeKey(selectedNode);
-      setCurrSelectedNodeKey(nextSelectedNodeKey);
-    }
     if (!currentPath.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
       setCurrSelectedNodeKey('');
+      return;
     }
-  }, [currentPath, currSelectedNodeKey, recordsTree]);
+    const selectedNode = recordsTree.find((node) => {
+      const nodePath = '/' + PRIVATE_FILE_TYPE.TAGS_PROPERTIES + '/' + getTreeNodeId(node);
+      return nodePath === currentPath;
+    });
+    const nextSelectedNodeKey = getTreeNodeKey(selectedNode);
+    setCurrSelectedNodeKey(nextSelectedNodeKey);
+  }, [currentPath, recordsTree]);
 
   useEffect(() => {
     setKeyTreeNodeExpandedMap(getKeyTreeNodeExpandedMap());

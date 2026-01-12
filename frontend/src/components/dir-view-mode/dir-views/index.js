@@ -11,7 +11,7 @@ import { TAB } from '../../../constants/repo-setting-tabs';
 
 import './index.css';
 
-const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
+const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo, viewId }) => {
   const enableMetadataManagement = useMemo(() => {
     if (currentRepoInfo.encrypted) return false;
     return window.app.pageOptions.enableMetadataManagement;
@@ -64,7 +64,7 @@ const DirViews = ({ userPerm, repoID, currentPath, currentRepoInfo }) => {
         {!enableMetadata ? (
           <ExtensionPrompts onExtendedProperties={onExtendedProperties} />
         ) : !isLoading ? (
-          <MetadataTreeView userPerm={userPerm} currentPath={currentPath} />
+          <MetadataTreeView userPerm={userPerm} currentPath={currentPath} viewId={viewId} />
         ) : null}
       </TreeSection>
       {isSettingsDialogOpen && (
@@ -84,6 +84,7 @@ DirViews.propTypes = {
   repoID: PropTypes.string,
   currentPath: PropTypes.string,
   currentRepoInfo: PropTypes.object.isRequired,
+  viewId: PropTypes.string,
 };
 
 export default DirViews;

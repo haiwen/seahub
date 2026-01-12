@@ -171,7 +171,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
   }, [columns, saveColumns]);
 
   useEffect(() => {
-    if (!dirent || !direntDetail || !enableMetadata || SYSTEM_FOLDERS.find(folderPath => path.startsWith(folderPath))) {
+    if (!dirent || !direntDetail || !enableMetadata || !path || SYSTEM_FOLDERS.find(folderPath => path.startsWith(folderPath))) {
       setLoading(true);
       direntRef.current = null;
       setRecord(null);

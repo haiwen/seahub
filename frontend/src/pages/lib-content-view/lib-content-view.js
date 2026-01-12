@@ -26,6 +26,7 @@ import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENT
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import { LIST_MODE, METADATA_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
+import { ALL_TAGS_ID } from '../../tag/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -287,10 +288,10 @@ class LibContentView extends React.Component {
   getInfoFromLocation = (repoID) => {
     const urlParams = new URLSearchParams(window.location.search);
     const viewId = urlParams.get('view');
-    if (viewId) return { path: `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}`, viewId };
+    if (viewId) return { path: `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewId}`, viewId };
 
     const tagId = urlParams.get('tag');
-    if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}`, tagId };
+    if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${tagId}`, tagId };
 
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
@@ -359,23 +360,42 @@ class LibContentView extends React.Component {
   }
 
   onpopstate = (event) => {
-    if (event.state && event.state.key) { // root path
-      if (this.state.path === '/') {
-        return;
+    const { repoID } = this.props;
+    const { path: urlPath, viewId, tagId } = this.getInfoFromLocation(repoID);
+
+    let currentMode;
+    let resolvedPath = urlPath;
+    let resolvedTagId = tagId;
+
+    if (tagId) {
+      currentMode = TAGS_MODE;
+    } else if (viewId) {
+      currentMode = METADATA_MODE;
+    } else {
+      // If previously in tags mode and no tag in URL, show "All tags"
+      if (this.state.currentMode === TAGS_MODE) {
+        currentMode = TAGS_MODE;
+        resolvedTagId = ALL_TAGS_ID;
+        resolvedPath = `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${ALL_TAGS_ID}`;
       } else {
-        let path = '/';
-        this.loadDirentList(path);
-        this.setState({
-          path: path,
-          isViewFile: false
-        });
+        currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
       }
-    } else if (event.state && event.state.path) { // file path
-      let path = event.state.path;
-      this.loadDirentList(path);
+    }
+
+    this.setState({
+      path: resolvedPath,
+      viewId,
+      tagId: resolvedTagId,
+      currentMode,
+      isViewFile: false,
+    });
+
+    if (currentMode === LIST_MODE) {
       this.setState({
-        path: path,
-        isViewFile: false
+        isDirentListLoading: true,
+        direntList: [],
+      }, () => {
+        this.loadDirentList(resolvedPath);
       });
     }
   };

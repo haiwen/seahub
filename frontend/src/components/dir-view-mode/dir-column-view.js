@@ -174,6 +174,7 @@ class DirColumnView extends React.Component {
               updateRepoInfo={this.props.updateRepoInfo}
               onItemMove={this.props.onItemMove}
               onItemsMove={this.props.onItemsMove}
+              viewId={this.props.viewId}
               getMenuContainerSize={this.getMenuContainerSize}
               direntList={this.props.direntList}
               updateDirent={this.props.updateDirent}
