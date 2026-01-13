@@ -226,12 +226,14 @@ class OrgAdminUsers(APIView):
 
         # check plan
         url_prefix = request.user.org.url_prefix
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+        org_members = ccnet_api.get_org_emailusers(url_prefix, -1, -1)
+        org_active_members = [member for member in org_members if member.is_active]
+        org_active_members_count = len(org_active_members)
 
         if ORG_MEMBER_QUOTA_ENABLED:
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and org_members >= org_members_quota:
-                err_msg = 'Failed. You can only invite %d members.' % org_members_quota
+            if org_members_quota is not None and org_active_members_count >= org_members_quota:
+                err_msg = 'The number of users exceeds the limit.'
                 return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit():
@@ -437,6 +439,17 @@ class OrgAdminUser(APIView):
                 error_msg = "is_active can only be 'true' or 'false'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            if is_active == 'true':
+                if not user.is_active and ORG_MEMBER_QUOTA_ENABLED:
+                    org_members = ccnet_api.get_org_emailusers(request.user.org.url_prefix, -1, -1)
+                    org_active_members = [member for member in org_members if member.is_active]
+                    org_active_members_count = len(org_active_members)
+
+                    org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+                    if org_members_quota is not None and org_active_members_count >= org_members_quota:
+                        err_msg = 'The number of users exceeds the limit.'
+                        return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+            
             user.is_active = is_active == 'true'
             user.save()
             if not is_active == 'true':
@@ -664,12 +677,14 @@ class OrgAdminImportUsers(APIView):
 
         # check plan
         url_prefix = request.user.org.url_prefix
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+        org_members = ccnet_api.get_org_emailusers(url_prefix, -1, -1)
+        org_active_members = [member for member in org_members if member.is_active]
+        org_active_members_count = len(org_active_members)
 
         if ORG_MEMBER_QUOTA_ENABLED:
             from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and org_members+len(records) > org_members_quota:
+            if org_members_quota is not None and org_active_members_count+len(records) > org_members_quota:
                 err_msg = 'The number of users exceeds the limit.'
                 return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
@@ -801,12 +816,14 @@ class OrgAdminInviteUser(APIView):
 
         # check plan
         url_prefix = request.user.org.url_prefix
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
+        org_members = ccnet_api.get_org_emailusers(url_prefix, -1, -1)
+        org_active_members = [member for member in org_members if member.is_active]
+        org_active_members_count = len(org_active_members)
 
         if ORG_MEMBER_QUOTA_ENABLED:
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
             if org_members_quota is not None and \
-                    org_members + len(email_list) > org_members_quota:
+                    org_active_members_count + len(email_list) > org_members_quota:
                 err_msg = _(f'Failed. You can only invite {org_members_quota} members.')
                 return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
