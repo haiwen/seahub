@@ -10,13 +10,14 @@
 # eddelac <edg.delac@gmail.com>, 2013-2014
 # Hector Colina <hcolina@gmail.com>, 2013,2017
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015
+# Seafile Info <info@seafile.com>, 2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Spanish (Mexico) (http://app.transifex.com/haiwen/seahub/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1228,7 +1229,7 @@ msgstr "Predeterminado"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr "El equipo %(org_name)s está inactivo."
+msgstr "El equipo  {org_name} está inactivo."
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
@@ -1621,7 +1622,7 @@ msgstr "Has sido invitado a unirte a %(site_name)s."
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr "Has sido invitado a unirte al equipo %(org_name)s."
+msgstr "Has sido invitado a unirte al equipo  {org_name}."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1863,60 +1864,60 @@ msgstr "El usuario %(user)s ha transferido la biblioteca <a href=\"%(repo_url)s\
 #: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr "El usuario %(name)s ha creado %(obj_type)s %(obj_link)s en la biblioteca {repo_link}."
+msgstr "El usuario {name} ha creado {obj_type} {obj_link} en la biblioteca {repo_link}."
 
 #: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "El usuario %(name)s ha creado %(obj_type)s %(obj_link)s y %(obj_path_count_minus_one)s otros %(obj_type)s(s) en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr "El usuario %(name)s ha eliminado %(obj_type)s %(obj_name)s en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "El usuario %(name)s ha eliminado %(obj_type)s %(obj_name)s y %(obj_path_count_minus_one)s otros %(obj_type)s(s) en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr "El usuario %(name)s ha restaurado %(obj_type)s %(obj_link)s en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr "El usuario %(name)s ha renombrado %(obj_type)s %(old_obj_name)s a %(obj_link)s en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr "El usuario %(name)s ha movido %(obj_type)s %(obj_link)s en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr "El usuario %(name)s ha movido %(obj_type)s %(obj_link)s y %(obj_path_count_minus_one)s otros %(obj_type)s(s) en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr "El usuario %(name)s ha actualizado %(obj_type)s %(obj_link)s en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr "El usuario %(name)s ha %(op_type)s %(obj_type)s %(obj_link)s en la biblioteca {repo_link}."
+msgstr ""
 
 #: seahub/notifications/models.py:1046
 #, python-brace-format
@@ -2113,7 +2114,7 @@ msgstr "Tip: la manera más segura es la última, pero no está soportado por to
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
-msgstr "Error; no está permitido invitar más miembros, por favor contacte al administrador."
+msgstr "Error; no está permitido invitar más {org_members_quota}  miembros."
 
 #: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
@@ -2910,7 +2911,7 @@ msgstr ""
 #: seahub/templates/sysadmin/user_batch_add_email.html:10
 #, python-format
 msgid "%(nickname)s invited you to join %(site_name)s."
-msgstr "%(nickname)s te ha invitado a unirte a la organización \"%(org_name)s\" en %(site_name)s."
+msgstr ""
 
 #: seahub/templates/sysadmin/user_add_email.html:18
 #: seahub/templates/sysadmin/user_batch_add_email.html:14
