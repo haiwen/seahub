@@ -82,9 +82,11 @@ class RepoArchiveDialog extends Component {
     const { repo } = this.props;
     this.setState({ isSubmitting: true });
 
-    seafileAPI.archiveRepo(repo.repo_id).then((res) => {
+    const isArchive = !repo.archive_status || repo.archive_status !== 'archived';
+    const opType = isArchive ? 'archive' : 'unarchive';
+
+    seafileAPI.archiveRepo(repo.repo_id, opType).then((res) => {
       const { task_id } = res.data;
-      const isArchive = !repo.archive_status || repo.archive_status !== 'archived';
 
       // Show immediate feedback message
       const message = isArchive

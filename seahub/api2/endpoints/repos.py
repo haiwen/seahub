@@ -18,7 +18,7 @@ from seahub.api2.utils import api_error, is_wiki_repo
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
-from seahub.base.models import UserStarredFiles, UserMonitoredRepos
+from seahub.base.models import UserStarredFiles, UserMonitoredRepos, RepoArchiveStatus
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
@@ -31,7 +31,6 @@ from seahub.utils import is_org_context, is_pro_version, gen_inner_file_get_url,
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin, \
         repo_has_been_shared_out, normalize_repo_status_code
-from seahub.utils.db_api import SeafileDB
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
@@ -117,6 +116,13 @@ class ReposView(APIView):
                 monitored_repo_id_list = []
 
             owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
+            
+            # Fetch archive status for all owned repos at once
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(owned_repo_ids)
+            else:
+                archive_status_dict = {}
+
             for r in owned_repos:
 
                 # do not return virtual repos
@@ -154,10 +160,6 @@ class ReposView(APIView):
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
                     repo_info['storage_name'] = r.storage_name
                     repo_info['storage_id'] = r.storage_id
-                                        
-                    seafile_db = SeafileDB()
-                    archive_status_dict = {}
-                    archive_status_dict = seafile_db.get_repos_archive_status(owned_repo_ids)
                     repo_info['archive_status'] = archive_status_dict.get(r.id)
 
                 repo_info_list.append(repo_info)
@@ -439,8 +441,7 @@ class RepoView(APIView):
 
         # Add archive_status if storage classes is enabled
         if is_pro_version() and ENABLE_STORAGE_CLASSES:
-            seafile_db = SeafileDB()
-            archive_status = seafile_db.get_archive_status(repo_id)
+            archive_status = RepoArchiveStatus.objects.get_archive_status(repo_id)
             result['archive_status'] = archive_status
 
         return Response(result)
