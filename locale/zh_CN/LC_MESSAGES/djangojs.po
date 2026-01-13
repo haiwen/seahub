@@ -15,7 +15,7 @@
 # llj <lingjun.li1@gmail.com>, 2017-2022
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # Michael An <michael18811380328@163.com>, 2024
-# Seafile Info <info@seafile.com>, 2023-2025
+# Seafile Info <info@seafile.com>, 2023-2026
 # zheng xie <xiez1989@gmail.com>, 2015,2018
 # zMingGit <517046497@qq.com>, 2018
 # 杨国璇 <18335219360@163.com>, 2024
@@ -28,7 +28,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2023-2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2023-2026\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8723,7 +8723,7 @@ msgstr "ID"
 #: frontend/src/pages/org-admin/org-info.js:78
 #| msgid "Active Users"
 msgid "Active users"
-msgstr "活跃用户"
+msgstr "激活用户"
 
 #: frontend/src/pages/org-admin/org-info.js:83
 #| msgid "Total Users"
@@ -9200,7 +9200,7 @@ msgstr "同步端流量"
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:46
 msgid "Active Users"
-msgstr "活跃用户"
+msgstr "激活用户"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:28
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
