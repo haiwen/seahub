@@ -8,6 +8,7 @@ import FileInfo from './file-info';
 import Icon from '../../../components/icon';
 import IconButton from '../../../components/icon-button';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
+import CommentPanel from '../../../components/file-view/comment-panel';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import Dirent from '../../../../src/models/dirent';
@@ -34,6 +35,8 @@ const propTypes = {
   isLocked: PropTypes.bool.isRequired,
   lockedByMe: PropTypes.bool.isRequired,
   toggleLockFile: PropTypes.func.isRequired,
+  participants: PropTypes.array,
+  isCommentUpdated: PropTypes.bool,
 };
 
 class HeaderToolbar extends React.Component {
@@ -42,6 +45,7 @@ class HeaderToolbar extends React.Component {
     super(props);
     this.dirPath = filePath.substring(0, filePath.lastIndexOf('/') || 0) || '/';
     this.isFileInfoShow = false;
+    this.isCommentPanelShow = false;
     this.currentDirent = null;
     this.helpInfoToggleSubscribe = null;
   }
@@ -68,27 +72,17 @@ class HeaderToolbar extends React.Component {
 
   handleHelpClick = () => {
     this.isFileInfoShow = false;
-  };
-
-  getDirentList = () => {
-    return seafileAPI.listDir(repoID, this.dirPath, { 'with_thumbnail': true }).then(res => {
-      const direntList = res.data.dirent_list || [];
-      for (let i = 0; i < direntList.length; i++) {
-        const item = direntList[i];
-        const dirent = new Dirent(item);
-        if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
-          this.currentDirent = dirent;
-          break;
-        }
-      }
-    }).catch((err) => {
-      Utils.getErrorMsg(err, true);
-    });
+    this.isCommentPanelShow = false;
   };
 
   onArticleInfoToggle = () => {
-    const repoInfo = { permission: this.currentDirent.permission, is_admin: isRepoAdmin, };
+    const repoInfo = { permission: this.currentDirent.permission, is_admin: isRepoAdmin };
     const eventBus = EventBus.getInstance();
+
+    if (!this.isFileInfoShow) {
+      eventBus.dispatch(EXTERNAL_EVENTS.ON_COMMENT_PANEL_TOGGLE, null);
+      eventBus.dispatch(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, false);
+    }
 
     eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, this.isFileInfoShow ? null : {
       component: (props) => {
@@ -111,8 +105,45 @@ class HeaderToolbar extends React.Component {
     this.isFileInfoShow = !this.isFileInfoShow;
   };
 
+  onCommentPanelToggle = () => {
+    const eventBus = EventBus.getInstance();
+
+    if (!this.isCommentPanelShow) {
+      eventBus.dispatch(EXTERNAL_EVENTS.ON_ARTICLE_INFO_TOGGLE, null);
+      eventBus.dispatch(EXTERNAL_EVENTS.ON_HELP_INFO_TOGGLE, false);
+    }
+
+    eventBus.dispatch(EXTERNAL_EVENTS.ON_COMMENT_PANEL_TOGGLE, this.isCommentPanelShow ? null : {
+      component: (props) => {
+        return (<CommentPanel {...props} />);
+      },
+      props: {
+        toggleCommentPanel: this.onCommentPanelToggle,
+        participants: this.props.participants,
+        onParticipantsChange: this.props.onParticipantsChange,
+      }
+    });
+    this.isCommentPanelShow = !this.isCommentPanelShow;
+  };
+
+  getDirentList = () => {
+    return seafileAPI.listDir(repoID, this.dirPath, { 'with_thumbnail': true }).then(res => {
+      const direntList = res.data.dirent_list || [];
+      for (let i = 0; i < direntList.length; i++) {
+        const item = direntList[i];
+        const dirent = new Dirent(item);
+        if (Utils.joinPath(item.parent_dir, item.name) === filePath) {
+          this.currentDirent = dirent;
+          break;
+        }
+      }
+    }).catch((err) => {
+      Utils.getErrorMsg(err, true);
+    });
+  };
+
   render() {
-    let { contentChanged, saving, isLocked, lockedByMe } = this.props;
+    let { contentChanged, saving, isLocked, lockedByMe, isCommentUpdated } = this.props;
 
     if (this.props.editorMode === 'rich') {
       return (
@@ -174,6 +205,15 @@ class HeaderToolbar extends React.Component {
                     onClick={this.downloadFile}
                   />
                 )}
+                <span className="position-relative">
+                  <IconButton
+                    id="file-comment"
+                    icon="comment"
+                    text={gettext('Comment')}
+                    onClick={this.onCommentPanelToggle}
+                  />
+                  {isCommentUpdated && <span className='comment-tip'></span>}
+                </span>
                 <IconButton
                   id="file-info"
                   text={gettext('Info')}
@@ -189,6 +229,7 @@ class HeaderToolbar extends React.Component {
                 showFileHistory={this.props.showFileHistory}
                 toggleHistory={this.props.toggleHistory}
                 openParentDirectory={this.openParentDirectory}
+                onCommentPanelToggle={this.onCommentPanelToggle}
                 isSmallScreen={false}
               />
             </div>
@@ -224,6 +265,7 @@ class HeaderToolbar extends React.Component {
                 openParentDirectory={this.openParentDirectory}
                 showFileHistory={this.props.showFileHistory}
                 toggleHistory={this.props.toggleHistory}
+                onCommentPanelToggle={this.onCommentPanelToggle}
                 isSmallScreen={true}
               />
             </div>

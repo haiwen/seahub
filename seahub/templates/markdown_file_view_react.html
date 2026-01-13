@@ -61,6 +61,8 @@
                 fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
                 enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
                 enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+                fileUuid: '{{ file_uuid }}',
+                username: '{{ user.username|escapejs }}',
             },
             userInfo: {
             username: '{{ user.username }}',

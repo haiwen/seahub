@@ -1,4 +1,5 @@
 .seafile-comment {
+  height: 100%;
   background: var(--bs-body-bg);
   display: flex;
   flex-direction: column;
@@ -13,11 +14,21 @@
   padding: 0 16px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .seafile-comment-title .comments-panel-header-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 16px;
   font-weight: 500;
+}
+
+.seafile-comment-title .comments-panel-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .seafile-comment-title .sdoc-icon-btn {
@@ -29,10 +40,12 @@
   cursor: pointer;
   margin-left: 4px;
   border-radius: 3px;
+  font-size: 16px;
 }
 
-.seafile-comment-title .sdoc-icon-btn .sdocfont {
-  color: #999;
+.seafile-comment-title .sdoc-icon-btn .seafile-multicolor-icon {
+  color: var(--bs-icon-color);
+  fill: var(--bs-icon-color);
 }
 
 .seafile-comment-title .sdoc-icon-btn:hover {
@@ -47,6 +60,10 @@
 .seafile-comment-page .seafile-comment-item:hover {
   background-color: var(--bs-body-secondary-bg);
   cursor: pointer;
+}
+
+.seafile-comment-page .comment-type .sdoc-dropdown-menu .sdoc-dropdown-menu-item:hover {
+  background-color: #20a0ff;
 }
 
 .seafile-comment-item .seafile-comment-info {
@@ -101,7 +118,7 @@
 
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:focus,
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .sf-dropdown-toggle:hover {
-  color: #999;
+  color: var(--bs-icon-color);
   background-color: var(--bs-hover-bg);
 }
 

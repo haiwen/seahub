@@ -17,6 +17,7 @@ const MoreMenuPropTypes = {
   openParentDirectory: PropTypes.func,
   showFileHistory: PropTypes.bool,
   toggleHistory: PropTypes.func,
+  onCommentPanelToggle: PropTypes.func,
 };
 
 class MoreMenu extends React.PureComponent {
@@ -73,6 +74,7 @@ class MoreMenu extends React.PureComponent {
           {(this.props.openDialogs && editorMode === 'rich') &&
             <DropdownItem onClick={this.onHelpModuleToggle}>{gettext('Help')}</DropdownItem>
           }
+          {isSmall && this.props.onCommentPanelToggle && <DropdownItem onClick={this.props.onCommentPanelToggle}>{gettext('Comment')}</DropdownItem>}
           {isSmall && canGenerateShareLink && <DropdownItem onClick={this.props.toggleShareLinkDialog}>{gettext('Share')}</DropdownItem>}
           {isSmall && canDownloadFile &&
             <DropdownItem onClick={this.downloadFile}>{gettext('Download')}</DropdownItem>

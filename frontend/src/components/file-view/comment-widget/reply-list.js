@@ -8,6 +8,7 @@ import { Utils } from '../../../utils/utils';
 import toaster from '../../toast';
 import CommentItem from './comment-item';
 import ReplyItem from './reply-item';
+import Icon from '../../icon';
 
 const { username, repoID, filePath } = window.app.pageOptions;
 
@@ -86,15 +87,15 @@ class ReplyList extends React.Component {
 
         <div className="seafile-comment-title">
           <div className="comments-panel-header-left">
-            <div className="goback sdoc-icon-btn ml-0 mr-1" onClick={this.props.clearCurrentComment}>
-              <i className="sdocfont sdoc-previous-page" style={{ transform: 'scale(1.2)' }}></i>
-            </div>
+            <span className="sdoc-icon-btn mr-1" onClick={this.props.clearCurrentComment}>
+              <Icon symbol="arrow-left" />
+            </span>
             <span className="title">{gettext('Comment details')}</span>
           </div>
           <div className="comments-panel-header-right">
-            <div className="sdoc-icon-btn" onClick={this.props.toggleCommentList}>
-              <i className="sdocfont sdoc-sm-close"></i>
-            </div>
+            <span className="sdoc-icon-btn" onClick={this.props.toggleCommentList}>
+              <Icon symbol="close" />
+            </span>
           </div>
         </div>
 
