@@ -438,12 +438,12 @@ msgstr "Système"
 #: frontend/src/components/common/notice-item.js:428
 #| msgid "Email notification updated"
 msgid "Mark notification as read"
-msgstr ""
+msgstr "Marquer la notification comme lue"
 
 #: frontend/src/components/common/notice-item.js:451
 #| msgid "All Notifications"
 msgid "View notification"
-msgstr ""
+msgstr "Voir la notification"
 
 #: frontend/src/components/common/notification-popover/index.js:88
 #: frontend/src/user-notifications.js:228
@@ -3000,12 +3000,12 @@ msgstr "Renommer le dossier"
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename file"
 msgid "Rename file to"
-msgstr ""
+msgstr "Renommer le fichier en"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename folder"
 msgid "Rename folder to"
-msgstr ""
+msgstr "Renommer le dossier en"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:55
 msgid "Rename Group"
@@ -3033,7 +3033,7 @@ msgstr "Renommer le wiki"
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
 #| msgid "Rename Wiki"
 msgid "Rename Wiki to"
-msgstr ""
+msgstr "Renommer le wiki en"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:56
 msgid "API token is copied to the clipboard."
@@ -4333,7 +4333,7 @@ msgstr "Modifié"
 #: frontend/src/metadata/components/detail-editor/tags-editor/index.js:136
 #| msgid "Edit Quota"
 msgid "Edit tags"
-msgstr ""
+msgstr "Modifier les étiquettes"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:22
 msgid "Dimensions"
@@ -5358,7 +5358,7 @@ msgstr "Invité"
 #: frontend/src/components/select-members-to-share-with.js:59
 #| msgid "Select a department"
 msgid "Select members from department"
-msgstr ""
+msgstr "Sélectionner les membres du département"
 
 #: frontend/src/components/send-link.js:45
 msgid "Please input at least an email."
@@ -6141,7 +6141,7 @@ msgstr "Wiki publié"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:224
 msgid "Visit the wiki"
-msgstr ""
+msgstr "Visitez le wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
 #: frontend/src/pages/sdoc-revision/index.js:122
@@ -10910,11 +10910,11 @@ msgstr "La reconnaissance faciale est terminée pour la bibliothèque {libraryNa
 
 #: frontend/src/translate.js:41
 msgid "A folder named {upload_folder_link} is uploaded to {uploaded_link}."
-msgstr ""
+msgstr "Un dossier nommé {upload_folder_link} est téléchargé sur {uploaded_link}."
 
 #: frontend/src/translate.js:42
 msgid "A folder named {upload_folder_link} is uploaded."
-msgstr ""
+msgstr "Un dossier nommé {upload_folder_link} est téléchargé."
 
 #: frontend/src/translate.js:43
 msgid "A file named {upload_file_link} is uploaded to {uploaded_link}."
@@ -10922,7 +10922,7 @@ msgstr "Un fichier nommé {upload_file_link} est envoyé à {uploaded_link}."
 
 #: frontend/src/translate.js:44
 msgid "A file named {upload_file_link} is uploaded."
-msgstr ""
+msgstr "Un fichier nommé {upload_file_link} est téléchargé."
 
 #: frontend/src/user-notifications.js:200
 msgid "Mark all read"

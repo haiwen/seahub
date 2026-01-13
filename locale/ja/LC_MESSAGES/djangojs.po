@@ -5,7 +5,8 @@
 # Translators:
 # Translators:
 # Michael An <michael18811380328@163.com>, 2025
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2025-2026
+# kuruton8, 2025
 # 鑫 王 <wangxin@oneby.com.cn>, 2020,2022
 msgid ""
 msgstr ""
@@ -13,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: 鑫 王 <wangxin@oneby.com.cn>, 2020,2022\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025-2026\n"
 "Language-Team: Japanese (http://app.transifex.com/haiwen/seahub/language/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,24 +28,24 @@ msgstr ""
 #: frontend/src/repo-folder-trash.js:205 frontend/src/repo-folder-trash.js:208
 #: frontend/src/repo-history.js:112 frontend/src/repo-snapshot.js:150
 msgid "Back"
-msgstr "バック"
+msgstr "戻る"
 
 #: frontend/src/components/btn-qr-code.js:38
 #: frontend/src/components/share-link-panel/link-item.js:181
 msgid "Scan the QR code to view the shared content directly"
-msgstr "スキャンQRコードは、共有コンテンツを直接表示する"
+msgstr "QRコードの読み取りで内容を確認できます"
 
 #: frontend/src/components/common/account.js:109
 msgid "Exit System Admin"
-msgstr "システム管理を抜ける"
+msgstr "システム管理から移動する"
 
 #: frontend/src/components/common/account.js:114
 msgid "Exit Organization Admin"
-msgstr "組織管理を抜ける"
+msgstr "組織管理から移動する"
 
 #: frontend/src/components/common/account.js:119
 msgid "Exit Institution Admin"
-msgstr "機関管理者を抜ける"
+msgstr "機関管理から移動する"
 
 #: frontend/src/components/common/account.js:127
 #: frontend/src/pages/sys-admin/side-panel.js:33
@@ -53,24 +54,24 @@ msgstr "システム管理"
 
 #: frontend/src/components/common/account.js:132
 msgid "Organization Admin"
-msgstr "組織管理者"
+msgstr "組織管理"
 
 #: frontend/src/components/common/account.js:137
 msgid "Institution Admin"
-msgstr "機関管理者"
+msgstr "機関管理"
 
 #: frontend/src/components/common/account.js:152
 #: frontend/src/components/common/account.js:155
 msgid "View profile and more"
-msgstr "プロフィールプロフィールとより多く"
+msgstr "プロフィールその他"
 
 #: frontend/src/components/common/account.js:164
 msgid "Used:"
-msgstr "利用中："
+msgstr "使用: "
 
 #: frontend/src/components/common/account.js:172
 msgid "AI credit used:"
-msgstr "AIクレジット利用中："
+msgstr "AIクレジット: "
 
 #: frontend/src/components/common/account.js:181
 #: frontend/src/components/dialog/lib-settings.js:75
@@ -109,7 +110,7 @@ msgstr "元に戻す"
 
 #: frontend/src/components/common/go-back/index.js:15
 msgid "Go back"
-msgstr ""
+msgstr "前に戻る"
 
 #: frontend/src/components/common/group-select/index.js:93
 #: frontend/src/components/customize-select/index.js:117
@@ -269,149 +270,149 @@ msgstr "削除"
 
 #: frontend/src/components/common/notice-item.js:48
 msgid "File {file_link} has a new comment form user {author}."
-msgstr "ファイル {file_link} はユーザー {author} から新しいコメントを受け取りました。"
+msgstr "ユーザ {author} がファイル {file_link} に新しいコメントを追加"
 
 #: frontend/src/components/common/notice-item.js:83
 msgid "{share_from} has shared a library named {repo_link} to you."
-msgstr "ユーザー {share_from} がライブラリ {repo_link} を共有しました。"
+msgstr "ユーザ {share_from} がライブラリ {repo_link} を共有"
 
 #: frontend/src/components/common/notice-item.js:85
 msgid "{share_from} has shared a folder named {repo_link} to you."
-msgstr "ユーザー {share_from} がフォルダ {repo_link} を共有しました。"
+msgstr "ユーザ {share_from} がフォルダ {repo_link} を共有"
 
 #: frontend/src/components/common/notice-item.js:106
 msgid ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
-msgstr "ユーザー {share_from} がライブラリ {repo_link} の権限を {permission} に変更しました。"
+msgstr "ユーザ {share_from} がライブラリ {repo_link} の権限を {permission} に変更"
 
 #: frontend/src/components/common/notice-item.js:108
 msgid ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
-msgstr "ユーザー {share_from} がフォルダ {repo_link} の権限を {permission} に変更しました。"
+msgstr "ユーザ {share_from} がフォルダ {repo_link} の権限を {permission} に変更"
 
 #: frontend/src/components/common/notice-item.js:128
 msgid "{share_from} has cancelled the sharing of library {repo_name}."
-msgstr "ユーザー {share_from} がライブラリ {repo_name} の共有をキャンセルしました。"
+msgstr "ユーザ {share_from} がライブラリ {repo_name} の共有を停止"
 
 #: frontend/src/components/common/notice-item.js:130
 msgid "{share_from} has cancelled the sharing of folder {repo_name}."
-msgstr "ユーザー {share_from} がフォルダ {repo_name} の共有をキャンセルしました。"
+msgstr "ユーザ {share_from} がフォルダ {repo_name} の共有を停止"
 
 #: frontend/src/components/common/notice-item.js:149
 msgid ""
 "{share_from} has shared a library named {repo_link} to group {group_link}."
-msgstr "ユーザー {share_from} がライブラリ {repo_link} をグループ {group_link} に共有しました。"
+msgstr "ユーザ {share_from} がライブラリ {repo_link} をグループ {group_link} に共有"
 
 #: frontend/src/components/common/notice-item.js:151
 msgid ""
 "{share_from} has shared a folder named {repo_link} to group {group_link}."
-msgstr "ユーザー {share_from} がフォルダ {repo_link} をグループ {group_link} に共有しました。"
+msgstr "ユーザ {share_from} がフォルダ {repo_link} をグループ {group_link} に共有"
 
 #: frontend/src/components/common/notice-item.js:171
 #| msgid "{user} has transfered a library named {repo_link} to you."
 msgid "{user} has transferred a library named {repo_link} to you."
-msgstr "ユーザー {user} がライブラリ {repo_link} を共有しました。"
+msgstr "ユーザ {user} がライブラリ {repo_link} を共有"
 
 #: frontend/src/components/common/notice-item.js:268
 msgid "{user} created file {fileName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} を作成しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} にファイル {fileName} を作成"
 
 #: frontend/src/components/common/notice-item.js:268
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "ユーザ {user} がライブラリ {libraryName} にファイル {fileName} ほか{fileCount}個を共有"
 
 #: frontend/src/components/common/notice-item.js:271
 msgid "{user} deleted file {fileName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} を削除しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {fileName} を削除"
 
 #: frontend/src/components/common/notice-item.js:271
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {fileName} ほか{fileCount}個を削除"
 
 #: frontend/src/components/common/notice-item.js:275
 msgid "{user} restored file {fileName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} を復元しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {fileName} を復元"
 
 #: frontend/src/components/common/notice-item.js:278
 msgid "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内のファイル {oldFileName} を {fileName} に名前を変更しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {oldFileName} を {fileName} に名前変更"
 
 #: frontend/src/components/common/notice-item.js:282
 msgid "{user} moved file {fileName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} を移動しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {fileName} を移動"
 
 #: frontend/src/components/common/notice-item.js:282
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {fileName} ほか{fileCount}個を移動"
 
 #: frontend/src/components/common/notice-item.js:285
 msgid "{user} updated file {fileName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にファイル {fileName} を更新しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {fileName} を更新"
 
 #: frontend/src/components/common/notice-item.js:297
 msgid "{user} created folder {folderName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ {folderName} を作成しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} にフォルダ {folderName} を作成"
 
 #: frontend/src/components/common/notice-item.js:297
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "ユーザ {user} がライブラリ {libraryName} にフォルダ {folderName} ほか{folderCount}個を作成"
 
 #: frontend/src/components/common/notice-item.js:300
 msgid "{user} deleted folder {folderName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ {folderName} を削除しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のフォルダ {folderName} を削除"
 
 #: frontend/src/components/common/notice-item.js:300
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "ユーザ {user} がライブラリ {libraryName} にフォルダ {folderName} ほか{folderCount}個を削除"
 
 #: frontend/src/components/common/notice-item.js:304
 msgid "{user} restored folder {folderName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ {folderName} を復元しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のフォルダ {folderName} を復元"
 
 #: frontend/src/components/common/notice-item.js:307
 msgid ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内のフォルダ {oldFolderName} を {folderName} に名前を変更しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のフォルダ {oldFolderName} を {folderName} に名前変更"
 
 #: frontend/src/components/common/notice-item.js:311
 msgid "{user} moved folder {folderName} in library {libraryName}."
-msgstr "ユーザー {user} がライブラリ {libraryName} 内にフォルダ {folderName} を移動しました。"
+msgstr "ユーザ {user} がライブラリ {libraryName} のフォルダ {folderName} を移動"
 
 #: frontend/src/components/common/notice-item.js:311
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "ユーザ {user} がライブラリ {libraryName} のファイル {folderName} ほか{folderCount}個を移動"
 
 #: frontend/src/components/common/notice-item.js:361
 #: frontend/src/components/common/notice-item.js:388
 msgid "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
-msgstr "ユーザーがドキュメント {sdoc_link} のコメント \"{resolve_comment}\" を既読にしました。"
+msgstr "ユーザがドキュメント {sdoc_link} のコメント \"{resolve_comment}\" を確認"
 
 #: frontend/src/components/common/notice-item.js:365
 #: frontend/src/components/common/notice-item.js:392
 msgid "Marked as resolved in document {sdoc_link}"
-msgstr "ユーザーがドキュメント {sdoc_link} を既読にしました。"
+msgstr "ユーザがドキュメント {sdoc_link} を確認"
 
 #: frontend/src/components/common/notice-item.js:369
 msgid "Added a new comment in document {sdoc_link}:"
-msgstr "ユーザーがドキュメント {sdoc_link} に新しいコメントを追加しました。"
+msgstr "ユーザがドキュメント {sdoc_link} に新しいコメントを追加"
 
 #: frontend/src/components/common/notice-item.js:396
 msgid "Added a new reply in document {sdoc_link}:"
-msgstr "ユーザーがドキュメント {sdoc_link} に新しい返信を追加しました。"
+msgstr "ユーザがドキュメント {sdoc_link} に新しい返信を追加"
 
 #: frontend/src/components/common/notice-item.js:417
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:90
@@ -426,12 +427,12 @@ msgstr "システム"
 #: frontend/src/components/common/notice-item.js:428
 #| msgid "Email notification updated"
 msgid "Mark notification as read"
-msgstr ""
+msgstr "通知を既読にする"
 
 #: frontend/src/components/common/notice-item.js:451
 #| msgid "All Notifications"
 msgid "View notification"
-msgstr ""
+msgstr "通知を表示"
 
 #: frontend/src/components/common/notification-popover/index.js:88
 #: frontend/src/user-notifications.js:228
@@ -464,7 +465,7 @@ msgstr "すべてを既読にする"
 #: frontend/src/components/common/notification.js:188
 #| msgid "All Notifications"
 msgid "View all notifications"
-msgstr "すべての通知を表示"
+msgstr "通知をすべて表示"
 
 #: frontend/src/components/common/seahub-modal-close.js:7
 #: frontend/src/components/common/seahub-modal-header.js:8
@@ -499,12 +500,12 @@ msgstr "閉じる"
 #: frontend/src/components/main-side-nav-folded.js:91
 #: frontend/src/components/main-side-nav.js:84
 msgid "A file is being uploaded. Are you sure you want to leave this page?"
-msgstr "ファイルがアップロード中です。このページを離れてもよろしいですか？"
+msgstr "ファイルをアップロード中です。このページを離れますか？"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:130
 #: frontend/src/components/dir-view-mode/dir-views/index.js:61
 msgid "Views"
-msgstr "表示方法"
+msgstr "表示"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:136
 #: frontend/src/components/cur-dir-path/dir-path.js:139
@@ -512,7 +513,7 @@ msgstr "表示方法"
 #: frontend/src/components/cur-dir-path/dir-path.js:160
 #| msgid "Refresh"
 msgid "Refresh the view"
-msgstr "表示を更新する"
+msgstr "表示を更新"
 
 #: frontend/src/components/cur-dir-path/dir-path.js:174
 #: frontend/src/components/dialog/lib-settings.js:156
@@ -554,7 +555,7 @@ msgstr "ファイル"
 
 #: frontend/src/components/dialog/about-dialog.js:87
 msgid "Server Version: "
-msgstr "サーバ側の版："
+msgstr "バージョン: "
 
 #: frontend/src/components/dialog/about-dialog.js:87
 msgid "Seafile"
@@ -562,7 +563,7 @@ msgstr "Seafile"
 
 #: frontend/src/components/dialog/about-dialog.js:89
 msgid "About Us"
-msgstr "私達について"
+msgstr "About Us"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:29
 msgid "Copyright Infringement"
@@ -574,7 +575,7 @@ msgstr "ウイルス"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:31
 msgid "Abuse Content"
-msgstr "誤用の内容"
+msgstr "不正な内容"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:32
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:256
@@ -583,21 +584,21 @@ msgstr "その他"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:39
 msgid "Contact information is required."
-msgstr "連絡先情報が必要"
+msgstr "連絡先が必要です"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:45
 msgid "Abuse report added"
-msgstr "乱用レポート追加"
+msgstr "不正の報告が追加されました"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:76
 #: frontend/src/components/shared-file-view/shared-file-view.js:164
 msgid "Report Abuse"
-msgstr "不正使用を報告"
+msgstr "不正利用を報告"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:80
 #: frontend/src/pages/sys-admin/abuse-reports.js:94
 msgid "Abuse Type"
-msgstr "誤用種類"
+msgstr "不正の種類"
 
 #: frontend/src/components/dialog/add-abuse-report-dialog.js:89
 msgid "Contact Information"
@@ -868,7 +869,7 @@ msgstr "登録"
 #: frontend/src/components/wiki-card-view/wiki-card-item-add.js:16
 #: frontend/src/pages/wikis/wikis.js:429 frontend/src/pages/wikis/wikis.js:458
 msgid "Add Wiki"
-msgstr "ウィキを追加"
+msgstr "Wiki を追加"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:88
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:62
@@ -984,20 +985,20 @@ msgstr "氏名"
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
 #: frontend/src/components/dialog/import-confluence-dialog.js:143
 msgid "Wiki owner"
-msgstr "ウィキオーナー"
+msgstr "Wiki 所有者"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:98
 #: frontend/src/components/dialog/convert-wiki-dialog.js:94
 #: frontend/src/components/dialog/import-confluence-dialog.js:143
 msgid "Optional"
-msgstr "オプション"
+msgstr "任意"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:103
 #: frontend/src/components/dialog/convert-wiki-dialog.js:99
 #: frontend/src/components/dialog/import-confluence-dialog.js:148
 #: frontend/src/components/dialog/transfer-dialog.js:215
 msgid "Select a department"
-msgstr "部門を選択してください"
+msgstr "部門を選択"
 
 #: frontend/src/components/dialog/add-wiki-dialog.js:106
 #: frontend/src/components/dialog/convert-wiki-dialog.js:102
@@ -1026,7 +1027,7 @@ msgstr "グループを部門に変更"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:50
 msgid "Please enter the old password"
-msgstr "旧いパスワードを入力してください"
+msgstr "古いパスワードを入力してください"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:56
 msgid "Please enter a new password"
@@ -1034,7 +1035,7 @@ msgstr "新しいパスワードを入力してください"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:62
 msgid "New password is too short"
-msgstr "新しいパスワードは短すぎます"
+msgstr "新しいパスワードが短すぎます"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:68
 msgid "Please enter the new password again"
@@ -1042,47 +1043,47 @@ msgstr "新しいパスワードを再入力してください"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:74
 msgid "New passwords don't match"
-msgstr "パスワードが一致しません。"
+msgstr "パスワードが一致しません"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:85
 msgid "Successfully changed library password."
-msgstr "ライブラリのパスワードが正常に変更されました"
+msgstr "ライブラリのパスワードは正常に更新されました"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:99
 msgid "Change Password of Library {placeholder}"
-msgstr "ライブラリのパスワードを変更する {placeholder}"
+msgstr "ライブラリ {placeholder} のパスワードを変更する"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:109
 msgid "Old Password"
-msgstr "旧いパスワード"
+msgstr "古いパスワード"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:120
 msgid "New Password"
-msgstr "新規パスワード入力"
+msgstr "新しいパスワード"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:121
 #: frontend/src/components/dialog/create-repo-dialog.js:250
 msgid "(at least {placeholder} characters)"
-msgstr "（少なくとも {placeholder} 文字）"
+msgstr "（{placeholder}文字以上）"
 
 #: frontend/src/components/dialog/change-repo-password-dialog.js:132
 msgid "New Password Again"
-msgstr "再度パスワード入力"
+msgstr "パスワード再入力"
 
 #: frontend/src/components/dialog/clean-trash.js:22
 #: frontend/src/components/dialog/wiki-clean-trash.js:22
 msgid "3 days ago"
-msgstr "３日前"
+msgstr "3日前"
 
 #: frontend/src/components/dialog/clean-trash.js:23
 #: frontend/src/components/dialog/wiki-clean-trash.js:23
 msgid "1 week ago"
-msgstr "一週間前"
+msgstr "1週間前"
 
 #: frontend/src/components/dialog/clean-trash.js:24
 #: frontend/src/components/dialog/wiki-clean-trash.js:24
 msgid "1 month ago"
-msgstr "一ヶ月前"
+msgstr "1ヶ月前"
 
 #: frontend/src/components/dialog/clean-trash.js:25
 #: frontend/src/components/dialog/wiki-clean-trash.js:25
@@ -1092,7 +1093,7 @@ msgstr "すべて"
 #: frontend/src/components/dialog/clean-trash.js:48
 #: frontend/src/components/dialog/wiki-clean-trash.js:48
 msgid "Clean succeeded."
-msgstr "クリーニングは成功"
+msgstr "おそうじが完了しました"
 
 #: frontend/src/components/dialog/clean-trash.js:64
 #: frontend/src/components/dialog/trash-dialog/index.js:241
@@ -1106,22 +1107,22 @@ msgstr "クリーニングは成功"
 #: frontend/src/pages/wiki2/wiki-trash-dialog.js:99
 #: frontend/src/repo-folder-trash.js:218 frontend/src/repo-folder-trash.js:220
 msgid "Clean"
-msgstr "ゴミ箱を空にする"
+msgstr "空にする"
 
 #: frontend/src/components/dialog/clean-trash.js:67
 #: frontend/src/components/dialog/wiki-clean-trash.js:67
 msgid "Clear files in trash and history："
-msgstr "ゴミ箱と履歴のファイルを消去する："
+msgstr "ゴミ箱のファイルを履歴を消去する: "
 
 #: frontend/src/components/dialog/commit-details.js:51
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:124
 msgid "Modification Details"
-msgstr "変更の詳細"
+msgstr "更新の詳細"
 
 #: frontend/src/components/dialog/commit-details.js:68
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:62
 msgid "New files"
-msgstr "新規ファイル"
+msgstr "新しいファイル"
 
 #: frontend/src/components/dialog/commit-details.js:69
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:72
@@ -1131,22 +1132,22 @@ msgstr "削除されたファイル"
 #: frontend/src/components/dialog/commit-details.js:70
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:82
 msgid "Renamed or Moved files"
-msgstr "ファイルは、改名されたか移動された"
+msgstr "ファイルの移動または名前が変更されました"
 
 #: frontend/src/components/dialog/commit-details.js:71
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:92
 msgid "Modified files"
-msgstr "変更されたファイル"
+msgstr "更新されたファイル"
 
 #: frontend/src/components/dialog/commit-details.js:72
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:102
 msgid "New directories"
-msgstr "新規ディレクトリー"
+msgstr "新しいフォルダ"
 
 #: frontend/src/components/dialog/commit-details.js:73
 #: frontend/src/components/dialog/org-logs-file-update-detail.js:112
 msgid "Deleted directories"
-msgstr "削除されたディレクトリー"
+msgstr "削除されたフォルダ"
 
 #: frontend/src/components/dialog/common-operation-confirmation-dialog.js:36
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:64
@@ -1177,24 +1178,24 @@ msgstr "本当にアカウントを削除しますか？"
 #: frontend/src/components/user-settings/social-login-weixin.js:41
 #: frontend/src/components/user-settings/social-login.js:41
 msgid "Disconnect"
-msgstr "切断する"
+msgstr "切断"
 
 #: frontend/src/components/dialog/confirm-disconnect-dingtalk.js:30
 #: frontend/src/components/dialog/confirm-disconnect-wechat.js:30
 #: frontend/src/components/dialog/confirm-disconnect-weixin.js:30
 #: frontend/src/components/user-settings/social-login-saml.js:63
 msgid "Are you sure you want to disconnect?"
-msgstr "切断してもよろしいですか？"
+msgstr "切断しますか？"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:32
 #: frontend/src/pages/org-admin/libraries/org-repo-trash.js:273
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:272
 msgid "Restore Library"
-msgstr "ライブラリの復元"
+msgstr "ライブラリを復元"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:34
 msgid "Are you sure you want to restore this library?"
-msgstr "このライブラリを本当に復元して良いですか？"
+msgstr "このライブラリを本当に復元しますか？"
 
 #: frontend/src/components/dialog/confirm-restore-repo.js:38
 #: frontend/src/components/dialog/my-deleted-repos-dialog/repo-item.js:57
@@ -1223,17 +1224,17 @@ msgstr "復元"
 #: frontend/src/components/dialog/confirm-unlink-device.js:40
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:37
 msgid "Unlink device"
-msgstr "デバイスのリンクを解除"
+msgstr "デバイスの連携を解除"
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:42
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:39
 msgid "Are you sure you want to unlink this device?"
-msgstr "このデバイスのリンクを解除してもよろしいですか？"
+msgstr "このデバイスのリンクを解除しますか？"
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:51
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:43
 msgid "Delete files from this device the next time it comes online."
-msgstr "次回オンラインになったときに、このデバイスからファイルを削除します。"
+msgstr "次回のオンラインの際に削除されます"
 
 #: frontend/src/components/dialog/confirm-unlink-device.js:57
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-unlink-device-dialog.js:49
@@ -1244,36 +1245,36 @@ msgstr "次回オンラインになったときに、このデバイスからフ
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:165
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:170
 msgid "Unlink"
-msgstr "リンク解除"
+msgstr "連携を解除"
 
 #: frontend/src/components/dialog/convert-wiki-dialog.js:82
 msgid "Convert Wiki"
-msgstr "ウィキを変換"
+msgstr "Wiki を変換"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:97
 #: frontend/src/components/dialog/copy-dirent-dialog.js:142
 #: frontend/src/components/dialog/move-dirent-dialog.js:97
 #: frontend/src/components/dialog/move-dirent-dialog.js:149
 msgid "Invalid destination path"
-msgstr "行き先パス名が不正です。"
+msgstr "無効な宛先パス"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:128
 #: frontend/src/components/dialog/move-dirent-dialog.js:134
 #: frontend/src/components/dialog/move-dirent-dialog.js:170
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr "フォルダ %(src)s をフォルダ %(des)s のサブフォルダに移動できません"
+msgstr "フォルダ %(src)s を %(des)s のサブフォルダに移動できません"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:157
 msgid "Can not copy folder %(src)s to its subfolder %(des)s"
-msgstr "フォルダ %(src)s をフォルダ %(des)s のサブフォルダにコピーできません"
+msgstr "フォルダ %(src)s を %(des)s のサブフォルダにコピーできません"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:303
 msgid "Copy {placeholder} to"
-msgstr "{placeholder}をにコピー"
+msgstr "{placeholder} をコピー"
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:306
 msgid "Copy selected item(s) to:"
-msgstr "選択されたアイテムのコピー先："
+msgstr "選択された項目のコピー先: "
 
 #: frontend/src/components/dialog/copy-dirent-dialog.js:331
 #: frontend/src/components/dialog/move-dirent-dialog.js:332
@@ -1291,11 +1292,11 @@ msgstr "検索"
 
 #: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:20
 msgid "Move {num} items"
-msgstr "{num}個のアイテムを移動"
+msgstr "{num}個の項目を移動"
 
 #: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:20
 msgid "Copy {num} items"
-msgstr "{num}個のアイテムをコピー"
+msgstr "{num}個の項目をコピー"
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:57
 #: frontend/src/components/dialog/create-group-dialog.js:51
@@ -1314,18 +1315,18 @@ msgstr "{num}個のアイテムをコピー"
 #: frontend/src/metadata/utils/validate/view.js:9
 #: frontend/src/tag/utils/validate/tag.js:9 frontend/src/utils/utils.js:1971
 msgid "Name is required"
-msgstr "名前は必須項目です。"
+msgstr "氏名は必須項目です"
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:62
 #: frontend/src/components/dialog/create-repo-dialog.js:90
 #: frontend/src/components/dialog/rename-wiki-dialog.js:61
 #: frontend/src/components/rename.js:95
 msgid "Name should not include '/'."
-msgstr "名前には「/」を含めないでください。"
+msgstr "名前には「/」を含められません"
 
 #: frontend/src/components/dialog/create-department-repo-dialog.js:78
 msgid "New Department Library"
-msgstr "新部門ライブラリ"
+msgstr "部門ライブラリ作成"
 
 #: frontend/src/components/dialog/create-file-dialog.js:66
 #: frontend/src/components/dialog/create-folder-dialog.js:58
@@ -1343,7 +1344,7 @@ msgstr "名前 \"{name}\" は既に使用されています。別の名前を入
 #: frontend/src/pages/repo-wiki-mode/side-panel.js:175
 #: frontend/src/utils/text-translation.js:12
 msgid "New File"
-msgstr "新規ファイル"
+msgstr "新しいファイル"
 
 #: frontend/src/components/dialog/create-folder-dialog.js:81
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:180
@@ -1360,7 +1361,7 @@ msgstr "新しいフォルダ"
 #: frontend/src/components/main-side-nav.js:132
 #: frontend/src/pages/sys-admin/groups/groups.js:148
 msgid "New Group"
-msgstr "グループ作成"
+msgstr "新しいグループ"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:98
 #: frontend/src/components/dialog/org-add-user-dialog.js:115
@@ -1372,11 +1373,11 @@ msgstr "パスワードを入力してください"
 #: frontend/src/components/dialog/user-password-widgets/user-set-password-dialog.js:27
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:32
 msgid "Please enter the password again"
-msgstr "パスワードを再度入力してください"
+msgstr "パスワードを再入力してください"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:108
 msgid "Password is too short"
-msgstr "パスワードが短すぎます。"
+msgstr "パスワードが短すぎます"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:113
 #: frontend/src/components/dialog/generate-upload-link.js:150
@@ -1385,7 +1386,7 @@ msgstr "パスワードが短すぎます。"
 #: frontend/src/components/dialog/user-password-widgets/user-update-password-dialog.js:36
 #: frontend/src/components/share-link-panel/link-creation.js:196
 msgid "Passwords don't match"
-msgstr "パスワードが一致しません。"
+msgstr "パスワードが一致しません"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:185
 #: frontend/src/components/dialog/org-add-repo-dialog.js:66
@@ -1398,7 +1399,7 @@ msgstr "パスワードが一致しません。"
 #: frontend/src/pages/sys-admin/libraries-and-links.js:178
 #: frontend/src/pages/sys-admin/libraries-and-links.js:180
 msgid "New Library"
-msgstr "新しいライブラリー"
+msgstr "新しいライブラリ"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:202
 msgid "Template"
@@ -1453,7 +1454,7 @@ msgstr "権限"
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
 #: frontend/src/utils/utils.js:903
 msgid "Read-Write"
-msgstr "読み/書き"
+msgstr "読み書き"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:230
 #: frontend/src/components/dialog/create-repo-dialog.js:235
@@ -1461,7 +1462,7 @@ msgstr "読み/書き"
 #: frontend/src/components/select-editor/repo-api-token-permission-editor.js:57
 #: frontend/src/utils/utils.js:906
 msgid "Read-Only"
-msgstr "読みのみ"
+msgstr "読み取りのみ"
 
 #: frontend/src/components/dialog/create-repo-dialog.js:245
 msgid "Encrypt"
@@ -1490,25 +1491,25 @@ msgstr "パスワード"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-user-dialog.js:166
 #: frontend/src/components/share-link-panel/link-creation.js:332
 msgid "Password again"
-msgstr "パスワード (確認)"
+msgstr "パスワード (再入力)"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:76
 msgid "Description is required"
-msgstr "説明は入力必須です"
+msgstr "説明は必須項目です"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:100
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:23
 msgid "Add permission"
-msgstr "許可を加える"
+msgstr "権限を追加"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:100
 msgid "Edit permission"
-msgstr "許可を編集"
+msgstr "権限を編集"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:119
 #: frontend/src/components/dialog/custom-permission/list-custom-permissions.js:30
 msgid "Permission name"
-msgstr "許可名"
+msgstr "権限の名称"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:137
 #: frontend/src/components/file-uploader/file-uploader.js:736
@@ -1575,7 +1576,7 @@ msgstr "変更"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:178
 msgid "Modify includes modify file, move/rename file and folder"
-msgstr "変更には、ファイルの変更、ファイルの移動/名前変更およびフォルダが含まれています。"
+msgstr "「変更」には、ファイルの変更, 移動とファイル, フォルダの名前変更が含まれます。"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:190
 #: frontend/src/components/dialog/group-invite-members-dialog.js:88
@@ -1608,11 +1609,11 @@ msgstr "コピー"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:212
 msgid "Preview online"
-msgstr "プレビューオンライン"
+msgstr "オンラインで確認"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-editor.js:223
 msgid "Generate share link"
-msgstr "共有リンク"
+msgstr "共有リンクを作成"
 
 #: frontend/src/components/dialog/custom-permission/custom-permission-item.js:76
 #: frontend/src/components/dialog/generate-upload-link.js:340
@@ -1650,7 +1651,7 @@ msgstr "フォルダを削除"
 
 #: frontend/src/components/dialog/delete-dialog.js:30
 msgid "Are you sure you want to delete"
-msgstr "削除したいと思っていますか？"
+msgstr "本当に削除しますか？"
 
 #: frontend/src/components/dialog/delete-folder-dialog.js:46
 #: frontend/src/components/dialog/delete-repo-dialog.js:54
@@ -1680,13 +1681,13 @@ msgstr "本当に {placeholder} を削除しますか？"
 msgid ""
 "This folder has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr ""
+msgstr "このフォルダは、 {user_amount}人のユーザと {group_amount}つのグループに共有されています。"
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:59
 msgid ""
 "This library has been shared to {user_amount} user(s) and {group_amount} "
 "group(s)."
-msgstr ""
+msgstr "このライブラリは、 {user_amount}人のユーザと {group_amount}つのグループに共有されています。"
 
 #: frontend/src/components/dialog/delete-repo-dialog.js:68
 #: frontend/src/components/dialog/org-delete-repo-dialog.js:33
@@ -1697,17 +1698,17 @@ msgstr ""
 #: frontend/src/pages/sys-admin/repos/trash-repos.js:261
 #: frontend/src/pages/sys-admin/users/user-repos.js:213
 msgid "Delete Library"
-msgstr "ライブラリ削除"
+msgstr "ライブラリを削除"
 
 #: frontend/src/components/dialog/department-detail-dialog.js:234
 #| msgid "Search groups"
 msgid "Select group members"
-msgstr "グループメンバーを選択"
+msgstr "グループメンバを選択"
 
 #: frontend/src/components/dialog/department-detail-dialog.js:234
 #| msgid "Select a user"
 msgid "Select shared users"
-msgstr "共有ユーザーを選択"
+msgstr "ユーザを選択"
 
 #: frontend/src/components/dialog/department-detail-dialog.js:276
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:312
@@ -1727,7 +1728,7 @@ msgstr "共有ユーザーを選択"
 #: frontend/src/pages/sys-admin/users/index.js:100
 #: frontend/src/pages/sys-admin/users/search-users.js:315
 msgid "Search users"
-msgstr "ユーザー検索"
+msgstr "ユーザを検索"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-member-selected.js:76
 #| msgid "selected"
@@ -1744,16 +1745,16 @@ msgstr "追加"
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:111
 #| msgid "Members"
 msgid "members"
-msgstr "メンバー"
+msgstr "メンバ"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:128
 #| msgid "No libraries shared with this group"
 msgid "User is already in this group"
-msgstr "ユーザーは既にこのグループに所属しています"
+msgstr "既にこのグループに存在します"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:128
 msgid "It is already shared to user"
-msgstr "すでにユーザーに共有されています"
+msgstr "既に共有されています"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:134
 #| msgid "Search groups"
@@ -1772,25 +1773,25 @@ msgstr "検索結果"
 #: frontend/src/tag/views/tag-files/list/index.js:119
 #: frontend/src/tag/views/tag-files/list/index.js:120
 msgid "Select all"
-msgstr "すべてを選択"
+msgstr "すべて選択"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:155
 #: frontend/src/tag/views/tag-files/list/index.js:119
 #: frontend/src/tag/views/tag-files/list/index.js:120
 #| msgid "Select all"
 msgid "Unselect all"
-msgstr "すべての選択を解除"
+msgstr "選択をすべて解除"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:185
 #| msgid "No users"
 msgid "No users found"
-msgstr "ユーザーは見つかりませんでした"
+msgstr "ユーザが見つかりません"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group-members.js:185
 #: frontend/src/pages/org-admin/departments/department.js:193
 #: frontend/src/pages/sys-admin/departments/department.js:188
 msgid "No members"
-msgstr "メンバーなし"
+msgstr "メンバなし"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:74
 #: frontend/src/components/dialog/image-dialog/index.js:77
@@ -1811,7 +1812,7 @@ msgstr "メンバーなし"
 #: frontend/src/metadata/views/kanban/boards/board/header/index.js:62
 #| msgid "Folder"
 msgid "Fold"
-msgstr "折りたたみ"
+msgstr "折りたたむ"
 
 #: frontend/src/components/dialog/department-detail-widget/department-group.js:74
 #: frontend/src/components/dialog/image-dialog/index.js:77
@@ -1830,27 +1831,27 @@ msgstr "折りたたみ"
 #: frontend/src/metadata/components/data-process-setter/field-display-settings/index.js:56
 #: frontend/src/metadata/views/kanban/boards/board/header/index.js:62
 msgid "Unfold"
-msgstr "折りたたみを解除"
+msgstr "展開する"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:16
 #| msgid "deleted"
 msgid "Group deleted"
-msgstr "グループが削除されました"
+msgstr "グループは削除されました"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:26
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:105
 #: frontend/src/pages/sys-admin/groups/groups-content.js:260
 #: frontend/src/pages/sys-admin/orgs/org-groups.js:140
 msgid "Delete Group"
-msgstr "グループ削除"
+msgstr "グループを削除"
 
 #: frontend/src/components/dialog/dismiss-group-dialog.js:28
 msgid "Really want to delete this group?"
-msgstr "本当にこのグループを削除したいですか？"
+msgstr "本当に削除しますか？"
 
 #: frontend/src/components/dialog/edit-repo-commit-labels.js:48
 msgid "Successfully edited labels."
-msgstr "ラベルの編集に成功しました"
+msgstr "ラベルを編集しました"
 
 #: frontend/src/components/dialog/edit-repo-commit-labels.js:62
 msgid "Edit labels"
@@ -1860,11 +1861,11 @@ msgstr "ラベルを編集"
 #, javascript-format
 #| msgid "Add option"
 msgid "Add option: %s"
-msgstr ""
+msgstr "選択肢を追加 %s"
 
 #: frontend/src/components/dialog/file-access-log.js:87
 msgid "{placeholder} Access Log"
-msgstr ""
+msgstr "{placeholder}のアクセスログ"
 
 #: frontend/src/components/dialog/file-access-log.js:103
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:293
@@ -1943,25 +1944,25 @@ msgstr "日付"
 #: frontend/src/pages/org-admin/org-logs-file-update.js:205
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:153
 msgid "Anonymous User"
-msgstr "匿名ユーザー"
+msgstr "匿名ユーザ"
 
 #: frontend/src/components/dialog/file-access-log.js:130
 msgid "This file has (apparently) not been accessed yet"
-msgstr "このファイルは（おそらく）まだアクセスされていません"
+msgstr "このファイルには (おそらく) まだアクセスがありません"
 
 #: frontend/src/components/dialog/generate-upload-link.js:142
 #: frontend/src/components/dialog/reset-webdav-password.js:30
 #: frontend/src/components/dialog/set-webdav-password.js:30
 #: frontend/src/components/share-link-panel/link-creation.js:188
 msgid "Please enter a password."
-msgstr "パスワードを入力してください。"
+msgstr "パスワードを入力してください"
 
 #: frontend/src/components/dialog/generate-upload-link.js:146
 #: frontend/src/components/dialog/reset-webdav-password.js:34
 #: frontend/src/components/dialog/set-webdav-password.js:34
 #: frontend/src/components/share-link-panel/link-creation.js:192
 msgid "The password is too short."
-msgstr "パスワードが短すぎます。"
+msgstr "短すぎるパスワードです"
 
 #: frontend/src/components/dialog/generate-upload-link.js:154
 #: frontend/src/components/dialog/reset-webdav-password.js:39
@@ -1970,28 +1971,28 @@ msgstr "パスワードが短すぎます。"
 msgid ""
 "The password is too weak. It should include at least {passwordStrengthLevel}"
 " of the following: number, upper letter, lower letter and other symbols."
-msgstr "パスワードが弱すぎます。数字、大文字、小文字、その他の記号のうち、少なくとも{passwordStrengthLevel}種類を含める必要があります。"
+msgstr "脆弱なパスワードです。数字, アルファベット大文字・小文字, その他の記号のうち、最低{passwordStrengthLevel}種類を含める必要があります。"
 
 #: frontend/src/components/dialog/generate-upload-link.js:162
 #: frontend/src/components/share-link-panel/link-creation.js:208
 msgid "Please select an expiration time"
-msgstr "有効期限を選択してください"
+msgstr "有効期限を設定してください"
 
 #: frontend/src/components/dialog/generate-upload-link.js:170
 #: frontend/src/components/share-link-panel/link-creation.js:217
 msgid "Please enter days"
-msgstr "日数を入力してください。"
+msgstr "日数を入力してください"
 
 #: frontend/src/components/dialog/generate-upload-link.js:174
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:56
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:58
 #: frontend/src/components/share-link-panel/link-creation.js:221
 msgid "Please enter a non-negative integer"
-msgstr "非負の整数を入力してください"
+msgstr "正の整数を入力してください"
 
 #: frontend/src/components/dialog/generate-upload-link.js:206
 msgid "Upload link is copied to the clipboard."
-msgstr "アップロードリンクがクリップボードにコピーされます"
+msgstr "アップロード用リンクがクリップボードにコピーされました"
 
 #: frontend/src/components/dialog/generate-upload-link.js:276
 #: frontend/src/components/dialog/reset-webdav-password.js:69
@@ -2001,12 +2002,12 @@ msgid ""
 "(at least {passwordMinLength} characters and includes "
 "{passwordStrengthLevel} of the following: number, upper letter, lower letter"
 " and other symbols)"
-msgstr "（少なくとも {passwordMinLength} 文字で、数字、大文字、小文字、その他の記号のうち、少なくとも {passwordStrengthLevel} 種類を含める必要があります）"
+msgstr "(最低{passwordMinLength}文字かつ、数字, アルファベット大文字・小文字, その他の記号のうち、最低{passwordStrengthLevel}種類を含める必要があります)"
 
 #: frontend/src/components/dialog/generate-upload-link.js:285
 #: frontend/src/components/dialog/share-dialog.js:121
 msgid "Upload Link"
-msgstr "アップロードリンク"
+msgstr "アップロード用リンク"
 
 #: frontend/src/components/dialog/generate-upload-link.js:304
 #: frontend/src/components/share-link-panel/link-details.js:202
@@ -2018,7 +2019,7 @@ msgstr "隠す"
 #: frontend/src/components/share-link-panel/link-details.js:202
 #: frontend/src/components/user-settings/web-api-auth-token.js:84
 msgid "Show"
-msgstr "ショー"
+msgstr "表示"
 
 #: frontend/src/components/dialog/generate-upload-link.js:316
 #: frontend/src/components/share-link-panel/link-details.js:213
@@ -2057,7 +2058,7 @@ msgstr "有効期限を設定"
 #: frontend/src/components/user-settings/web-api-auth-token.js:94
 #| msgid "Generate Link"
 msgid "Generate"
-msgstr "生成"
+msgstr "作成"
 
 #: frontend/src/components/dialog/group-invite-members-dialog.js:65
 #| msgid "Internal link has been copied to clipboard"
@@ -2068,7 +2069,7 @@ msgstr "招待リンクがクリップボードにコピーされました"
 #: frontend/src/pages/groups/group-op-menu.js:173
 #| msgid "Invite users"
 msgid "Invite members"
-msgstr "メンバーを招待"
+msgstr "メンバを招待"
 
 #: frontend/src/components/dialog/group-invite-members-dialog.js:84
 #| msgid "No invitations"
@@ -2079,11 +2080,11 @@ msgstr "グループ招待リンク"
 msgid ""
 "No group invitation link yet. Group invitation link let registered users to "
 "join the group by clicking a link."
-msgstr "まだグループ招待リンクがありません。グループ招待リンクは、登録済みユーザーがリンクをクリックすることでグループに参加できます。"
+msgstr "グループ招待リンクがありません。登録済みのユーザが、グループ招待リンクを使うことでグループに参加できます。"
 
 #: frontend/src/components/dialog/group-members-dialog.js:86
 msgid "Group members"
-msgstr "グループメンバー"
+msgstr "グループメンバ"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:28
 #| msgid "Upload files to {folder_name_placeholder}"
@@ -2095,49 +2096,49 @@ msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. We have created a personal library for you. "
 "You can create more libraries later."
-msgstr ""
+msgstr "{site_name_placeholder} はファイルをライブラリ単位で整理します。個々のライブラリに異なる同期設定や共有権限を設定できます。「Personal Library」あなたのはじめてのライブラリです。いつでもライブラリは増やすことができます。"
 
 #: frontend/src/components/dialog/guide-for-new-dialog.js:31
 msgid ""
 "{site_name_placeholder} organizes files into libraries. Each library can be "
 "synced and shared separately. However, since you are a guest user now, you "
 "can not create libraries."
-msgstr ""
+msgstr "{site_name_placeholder} はファイルをライブラリ単位で整理します。個々のライブラリに異なる同期設定や共有権限を設定できます。しかし、今は、ゲストとしてアクセスしているため、ライブラリを追加することはできません。"
 
 #: frontend/src/components/dialog/image-dialog/index.js:105
 msgid "The image could not be previewed."
-msgstr "画像をプレビューできません。"
+msgstr "画像を表示できません。"
 
 #: frontend/src/components/dialog/image-dialog/index.js:106
 msgid "Previous (Left arrow key)"
-msgstr "前（左矢印キー）"
+msgstr "前へ (左矢印キー)"
 
 #: frontend/src/components/dialog/image-dialog/index.js:107
 msgid "Next (Right arrow key)"
-msgstr "次へ（右矢印キー）"
+msgstr "次へ (右矢印キー)"
 
 #: frontend/src/components/dialog/image-dialog/index.js:108
 #| msgid "Close"
 msgid "Close (Esc)"
-msgstr "閉じる（Esc）"
+msgstr "閉じる (Esc)"
 
 #: frontend/src/components/dialog/image-dialog/index.js:109
 #: frontend/src/components/file-view/image-zoomer.js:176
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:71
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:72
 msgid "Zoom in"
-msgstr "zoomイン"
+msgstr "拡大"
 
 #: frontend/src/components/dialog/image-dialog/index.js:110
 #: frontend/src/components/file-view/image-zoomer.js:119
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:50
 #: frontend/src/metadata/components/data-process-setter/gallery-slider-setter/index.js:51
 msgid "Zoom out"
-msgstr "zoomアウト"
+msgstr "縮小"
 
 #: frontend/src/components/dialog/image-dialog/index.js:115
 msgid "View original image"
-msgstr "元の画像を表示"
+msgstr "元の解像度で表示"
 
 #: frontend/src/components/dialog/image-dialog/index.js:118
 msgid "OCR"
@@ -2146,30 +2147,30 @@ msgstr "OCR"
 #: frontend/src/components/dialog/import-confluence-dialog.js:69
 #| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML exported file (.html.zip)"
-msgstr "Confluence HTML エクスポートファイルを選択 (.html.zip)"
+msgstr "Confluence HTML形式のファイルを選択 (.html.zip)"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:81
 #| msgid "Please select an expiration time"
 msgid "Select a Confluence exported file"
-msgstr "Confluence エクスポートファイルを選択"
+msgstr "Confluence形式のファイルを選択"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:90
 msgid "Confluence file imported"
-msgstr "Confluence ファイルがインポートされました"
+msgstr "Confluenceファイルを取り込みました"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:95
 #| msgid "Failed to restore {name}"
 msgid "Failed to import Confluence file"
-msgstr "Confluence ファイルのインポートに失敗しました"
+msgstr "Confluenceファイルの取り込みに失敗しました"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:119
 msgid "Import Confluence Wiki"
-msgstr "Confluence Wiki をインポート"
+msgstr "統合 Wikiをインポート"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:121
 #| msgid "Please select an expiration time"
 msgid "Confluence export file"
-msgstr "Confluence エクスポートファイル"
+msgstr "Confluence形式ファイル"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:131
 #: frontend/src/components/dialog/insert-file-dialog.js:56
@@ -2184,69 +2185,69 @@ msgstr "ファイルが選択されていません"
 #: frontend/src/components/dialog/import-confluence-dialog.js:138
 #| msgid "Please select an expiration time"
 msgid "Select a Confluence HTML export file (.html.zip)"
-msgstr "Confluence HTML エクスポートファイルを選択 (.html.zip)"
+msgstr "Confluence HTML形式のファイルを選択 (.html.zip)"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:157
 msgid ""
 "The import process may take several minutes depending on the size of your "
 "Confluence export."
-msgstr "Confluence エクスポートのサイズによっては、インポート処理に数分かかる場合があります。"
+msgstr "ファイルサイズにより、取り込み処理に数分かかる場合があります。"
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
 #| msgid "Exporting..."
 msgid "Importing..."
-msgstr "インポート中..."
+msgstr "取り込み中..."
 
 #: frontend/src/components/dialog/import-confluence-dialog.js:168
 #| msgid "Import tags"
 msgid "Import"
-msgstr "インポート"
+msgstr "取り込む"
 
 #: frontend/src/components/dialog/import-members-dialog.js:38
 #: frontend/src/components/dialog/org-import-users-dialog.js:38
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:39
 msgid "Please choose a .xlsx file."
-msgstr "Excel ファイルを選択してください。"
+msgstr "Excelファイル (.xlsx) を選択してください"
 
 #: frontend/src/components/dialog/import-members-dialog.js:51
 msgid "Import members from a .xlsx file"
-msgstr "メンバーを .xlsx ファイルからインポート"
+msgstr "メンバをExcelファイル (.xlsx) から取り込む"
 
 #: frontend/src/components/dialog/import-members-dialog.js:54
 #: frontend/src/components/dialog/org-import-users-dialog.js:53
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:54
 #| msgid "Download and upload"
 msgid "Download an example file"
-msgstr "サンプルファイルをダウンロードする"
+msgstr "サンプルファイルをダウンロード"
 
 #: frontend/src/components/dialog/import-members-dialog.js:55
 #: frontend/src/components/dialog/org-import-users-dialog.js:54
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:55
 #| msgid "Upload Files"
 msgid "Upload file"
-msgstr "ファイルアップロード"
+msgstr "ファイルをアップロード"
 
 #: frontend/src/components/dialog/import-tags-dialog.js:27
 #: frontend/src/tag/components/tag-view-name/all-tags-operation-toolbar/index.js:86
 msgid "Import tags"
-msgstr "タグをインポート"
+msgstr "タグを取り込む"
 
 #: frontend/src/components/dialog/import-tags-dialog.js:31
 #| msgid "Import tags"
 msgid "Importing tags..."
-msgstr "タグをインポート中..."
+msgstr "タグを取り込み中..."
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:27
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:198
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:230
 #| msgid "Import tags"
 msgid "Import page"
-msgstr "ページをインポート"
+msgstr "ページを取り込む"
 
 #: frontend/src/components/dialog/import-wiki-page-dialog.js:31
 #| msgid "Import tags"
 msgid "Importing page..."
-msgstr "ページをインポート中..."
+msgstr "ページを取り込み中..."
 
 #: frontend/src/components/dialog/internal-link-dialog.js:54
 #: frontend/src/components/dialog/internal-link.js:41
@@ -2259,7 +2260,7 @@ msgstr "内部リンクがクリップボードにコピーされました"
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
-msgstr "内部リンクは、ファイルまたはフォルダーへの読み取りアクセス許可を持つユーザーがアクセスできるファイルまたはフォルダーへのリンクです。"
+msgstr "内部リンクは、ファイルまたはフォルダーへの読み取りアクセス許可を持つユーザがアクセスできるファイルまたはフォルダーへのリンクです。"
 
 #: frontend/src/components/dialog/internal-link-dialog.js:68
 #: frontend/src/components/dialog/share-dialog.js:128
@@ -2270,11 +2271,11 @@ msgstr "内部リンク"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:35
 msgid "Successfully revoked access of user {placeholder}."
-msgstr "ユーザー {placeholder} のアクセス権が取り消されました。"
+msgstr "ユーザ {placeholder} のアクセス権が取り消されました。"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:48
 msgid "Are you sure to revoke access of user {placeholder} ?"
-msgstr "ユーザー {placeholder} のアクセス権を取り消すかどうか確認してください。"
+msgstr "ユーザ {placeholder} のアクセス権を取り消すかどうか確認してください。"
 
 #: frontend/src/components/dialog/invitation-revoke-dialog.js:52
 #: frontend/src/pages/invitations/invitations-view.js:104
@@ -2290,22 +2291,22 @@ msgstr "アクセス権を取り消す"
 #: frontend/src/pages/org-admin/statistic/statistic-reports.js:29
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:27
 msgid "It is required."
-msgstr "入力必須です"
+msgstr "必須項目です"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:66
 #: frontend/src/components/dialog/share-to-invite-people.js:215
 msgid "Email is invalid."
-msgstr "メールが無効"
+msgstr "メールアドレスが無効です"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:80
 #: frontend/src/components/dialog/share-to-invite-people.js:230
 msgid "Successfully invited %(email)."
-msgstr "ユーザー %(email) が招待されました。"
+msgstr "ユーザ %(email) が招待されました。"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:83
 #: frontend/src/components/dialog/share-to-invite-people.js:233
 msgid "Successfully invited %(email) and %(num) other people."
-msgstr "ユーザー %(email) と %(num) 人の他のユーザーが招待されました。"
+msgstr "ユーザ %(email) と %(num) 人の他のユーザが招待されました。"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:108
 #: frontend/src/components/dialog/share-dialog.js:158
@@ -2321,7 +2322,7 @@ msgstr "ゲストを招待"
 #: frontend/src/components/dialog/invite-people-dialog.js:110
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:67
 msgid "Emails"
-msgstr "メール"
+msgstr "メールアドレス"
 
 #: frontend/src/components/dialog/invite-people-dialog.js:115
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:71
@@ -2334,7 +2335,7 @@ msgstr "カンマ区切りのメールアドレス"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:68
 msgid "Successfully added label(s) for library {placeholder}"
-msgstr ""
+msgstr "ライブラリ {placeholder} にラベルを追加しました。"
 
 #: frontend/src/components/dialog/label-repo-state-dialog.js:83
 #: frontend/src/components/library-op-menu.js:169
@@ -2344,32 +2345,32 @@ msgstr "現在の状態にラベルを付ける"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:25
 msgid "Leave Group"
-msgstr "グループを離脱する"
+msgstr "グループを退会する"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:27
 msgid "Really want to leave this group?"
-msgstr "本当にこのグループを離れたいですか？"
+msgstr "本当にこのグループから退会しますか？"
 
 #: frontend/src/components/dialog/leave-group-dialog.js:31
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:261
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:297
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:309
 msgid "Leave"
-msgstr "去る"
+msgstr "退出"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:63
 #| msgid "Reset library password"
 msgid "This library is password protected"
-msgstr "このライブラリは、パスワードで保護されて"
+msgstr "このライブラリはパスワードで保護されています"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:65
 #| msgid "Confirm password"
 msgid "Wrong password"
-msgstr "パスワードが違います。"
+msgstr "パスワードが違います"
 
 #: frontend/src/components/dialog/lib-decrypt-dialog.js:69
 msgid "The password will be kept in the server for only 1 hour."
-msgstr "パスワードはサーバに１時間だけ保持されます。"
+msgstr "パスワードは1時間に限りサーバに保管されます"
 
 #: frontend/src/components/dialog/lib-settings.js:93
 #: frontend/src/components/dir-view-mode/dir-others/index.js:87
@@ -2400,7 +2401,7 @@ msgstr "ライブラリ履歴を正常に設定しました"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:117
 msgid "Setting library history is disabled by Admin."
-msgstr "ライブラリ履歴の設定は管理者によって無効にされています。"
+msgstr "ライブラリ履歴の設定は管理者によって無効化されています"
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:121
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:124
@@ -2415,7 +2416,7 @@ msgstr "履歴を保存しない"
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:129
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:132
 msgid "Only keep a period of history:"
-msgstr "履歴保存期間："
+msgstr "履歴保存期間: "
 
 #: frontend/src/components/dialog/lib-settings/lib-history-setting-panel.js:138
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:114
@@ -2434,11 +2435,11 @@ msgstr "正常に設定しました"
 
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:101
 msgid "Do not automatically delete files"
-msgstr "ファイルを自動削除しない"
+msgstr "ファイルを自動で削除しない"
 
 #: frontend/src/components/dialog/lib-settings/lib-old-files-auto-del-setting-panel.js:105
 msgid "Automatically delete files that are not modified within certain days:"
-msgstr "一定日数以内に更新されていないファイルを自動削除する:"
+msgstr "一定期間更新されないファイルを自動削除する:"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:50
 msgid "User Permission"
@@ -2446,15 +2447,15 @@ msgstr "ユーザ権限"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:60
 msgid "Group Permission"
-msgstr "グループ許可"
+msgstr "グループ権限"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:91
 msgid "{placeholder} Folder Permission"
-msgstr "{placeholder} フォルダのパーミッション"
+msgstr "{placeholder} フォルダの権限"
 
 #: frontend/src/components/dialog/lib-sub-folder-permission-dialog.js:91
 msgid "Set permission of {placeholder}"
-msgstr "{placeholder} のパーミッションを設定する"
+msgstr "{placeholder} の権限を設定する"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:313
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:276
@@ -2494,7 +2495,7 @@ msgstr "フォルダ"
 msgid ""
 "Folder permission is only effective after the library is shared to users or "
 "groups. It is used to fine tune sub-folder permissions."
-msgstr "フォルダー権限は、ライブラリがユーザーまたはグループに共有された後にのみ有効になります。サブフォルダー権限を微調整するために使用されます。"
+msgstr "フォルダー権限は、ライブラリがユーザまたはグループに共有された後にのみ有効になります。サブフォルダー権限を微調整するために使用されます。"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:352
 #: frontend/src/components/dialog/share-to-group.js:442
@@ -2529,7 +2530,7 @@ msgstr "結果がありません"
 #: frontend/src/metadata/views/card/card-items/index.js:155
 #| msgid "items"
 msgid "No items"
-msgstr ""
+msgstr "アイテムがありません"
 
 #: frontend/src/components/dialog/list-created-files-dialog.js:27
 msgid "Created Files"
@@ -2766,7 +2767,7 @@ msgstr "管理者を追加"
 
 #: frontend/src/components/dialog/org-add-admin-dialog.js:58
 msgid "Select a user as admin"
-msgstr "管理者を追加するユーザーを選択"
+msgstr "管理者を追加するユーザを選択"
 
 #: frontend/src/components/dialog/org-add-department-dialog.js:67
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-department-dialog.js:67
@@ -2790,7 +2791,7 @@ msgstr "メールが必要"
 #: frontend/src/pages/sys-admin/users/index.js:88
 #: frontend/src/pages/sys-admin/users/users.js:462
 msgid "Add User"
-msgstr "ユーザーを追加"
+msgstr "ユーザを追加"
 
 #: frontend/src/components/dialog/org-add-user-dialog.js:139
 #: frontend/src/components/dialog/share-to-invite-people.js:348
@@ -2829,7 +2830,7 @@ msgstr "確認のため、下のボックスに \"{placeholder}\" を入力し�
 #: frontend/src/pages/org-admin/org-users-users.js:276
 #: frontend/src/pages/org-admin/org-users-users.js:277
 msgid "Invite users"
-msgstr "ユーザーを招待"
+msgstr "ユーザを招待"
 
 #: frontend/src/components/dialog/org-admin-invite-user-dialog.js:64
 msgid ""
@@ -2888,7 +2889,7 @@ msgstr "部門を削除"
 #: frontend/src/components/dialog/org-import-users-dialog.js:51
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-import-user-dialog.js:52
 msgid "Import users from a .xlsx file"
-msgstr "ユーザーをインポート"
+msgstr "ユーザをインポート"
 
 #: frontend/src/components/dialog/org-rename-department-dialog.js:42
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:72
@@ -2936,7 +2937,7 @@ msgstr "ヒント：-2は制限なしを意味します。"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:66
 msgid "Wiki custom URL deleted"
-msgstr "WikiのカスタムURLが削除されました"
+msgstr "Wiki のカスタムURLが削除されました"
 
 #: frontend/src/components/dialog/publish-wiki-dialog.js:91
 msgid "URL is required"
@@ -2988,12 +2989,12 @@ msgstr "フォルダの名前を変更"
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename file"
 msgid "Rename file to"
-msgstr ""
+msgstr "ファイルを改名"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename folder"
 msgid "Rename folder to"
-msgstr ""
+msgstr "フォルダを改名"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:55
 msgid "Rename Group"
@@ -3021,7 +3022,7 @@ msgstr "Wikiを改名"
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
 #| msgid "Rename Wiki"
 msgid "Rename Wiki to"
-msgstr ""
+msgstr "Wiki を改名"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:56
 msgid "API token is copied to the clipboard."
@@ -3206,7 +3207,7 @@ msgstr "アップロードリンク"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:83
 msgid "User Shares"
-msgstr "ユーザー共有"
+msgstr "ユーザ共有"
 
 #: frontend/src/components/dialog/repo-share-admin-dialog.js:88
 msgid "Group Shares"
@@ -3263,7 +3264,7 @@ msgstr "{number_placeholder} 個のアップロードリンクを正常に削除
 #: frontend/src/pages/share-admin/upload-links.js:77
 #| msgid "Select all"
 msgid "Unselect items"
-msgstr ""
+msgstr "アイテムを選択解除"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:248
 #: frontend/src/components/share-link-panel/link-list.js:91
@@ -3271,7 +3272,7 @@ msgstr ""
 #: frontend/src/pages/share-admin/upload-links.js:77
 #| msgid "Select all"
 msgid "Select items"
-msgstr ""
+msgstr "アイテムを選択"
 
 #: frontend/src/components/dialog/repo-share-admin/upload-links.js:252
 #: frontend/src/components/dirent-detail/lib-details.js:20
@@ -3387,11 +3388,11 @@ msgstr "新しいフォルダ"
 
 #: frontend/src/components/dialog/set-org-user-contact-email.js:58
 msgid "Set user contact email"
-msgstr "ユーザーの連絡先メールアドレスを設定"
+msgstr "ユーザの連絡先メールアドレスを設定"
 
 #: frontend/src/components/dialog/set-org-user-default-quota.js:64
 msgid "Set user default quota"
-msgstr "ユーザーの既定クォータを設定"
+msgstr "ユーザの既定クォータを設定"
 
 #: frontend/src/components/dialog/set-org-user-default-quota.js:71
 #: frontend/src/components/dialog/set-org-user-quota.js:73
@@ -3402,11 +3403,11 @@ msgstr "ヒント： 0 は既定値を意味します"
 
 #: frontend/src/components/dialog/set-org-user-name.js:60
 msgid "Set user name"
-msgstr "ユーザー名を設定"
+msgstr "ユーザ名を設定"
 
 #: frontend/src/components/dialog/set-org-user-quota.js:66
 msgid "Set user quota"
-msgstr "ユーザークォータを設定"
+msgstr "ユーザクォータを設定"
 
 #: frontend/src/components/dialog/set-webdav-password.js:73
 msgid "Set WebDAV Password"
@@ -3426,7 +3427,7 @@ msgstr "共有リンク"
 #: frontend/src/components/dialog/share-wiki-dialog.js:84
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-share-dialog.js:51
 msgid "Share to user"
-msgstr "ユーザーに共有"
+msgstr "ユーザに共有"
 
 #: frontend/src/components/dialog/share-dialog.js:144
 #: frontend/src/components/dialog/share-wiki-dialog.js:91
@@ -3496,7 +3497,7 @@ msgstr "サーバ"
 #: frontend/src/components/dialog/share-to-other-server.js:234
 #| msgid "Email"
 msgid "User Email"
-msgstr "ユーザーのメール"
+msgstr "ユーザのメール"
 
 #: frontend/src/components/dialog/share-to-other-server.js:205
 #: frontend/src/components/share-link-panel/link-authenticated-emails.js:118
@@ -3628,7 +3629,7 @@ msgstr "ダウンロード率の制限を設定"
 #: frontend/src/pages/sys-admin/departments/departments-node-dropdown-menu.js:19
 #| msgid "Add Member"
 msgid "Add members"
-msgstr "メンバー追加"
+msgstr "メンバを追加"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-add-institution-dialog.js:42
 msgid "Add institution"
@@ -3769,7 +3770,7 @@ msgstr "（空白のままにすると、所有者が管理者になります）
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:52
 #: frontend/src/components/dialog/transfer-dialog.js:190
 msgid "Select a user"
-msgstr "ユーザーを選択します"
+msgstr "ユーザを選択します"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-delete-member-dialog.js:41
 #: frontend/src/pages/org-admin/departments/member-item.js:130
@@ -3777,7 +3778,7 @@ msgstr "ユーザーを選択します"
 #: frontend/src/pages/sys-admin/orgs/org-admins.js:275
 #: frontend/src/pages/sys-admin/orgs/org-users.js:300
 msgid "Delete Member"
-msgstr "メンバー削除"
+msgstr "メンバを削除"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-group-transfer-dialog.js:43
 msgid "Transfer Group {placeholder} to"
@@ -3824,7 +3825,7 @@ msgstr "部門名が変更されました"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-max-user-number-dialog.js:51
 msgid "Set max number of members"
-msgstr "メンバーの最大数を設定"
+msgstr "メンバの最大数を設定"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-set-org-name-dialog.js:51
 #: frontend/src/pages/sys-admin/users/user-info.js:68
@@ -3835,7 +3836,7 @@ msgstr "設定名前"
 #: frontend/src/pages/org-admin/org-user-item.js:197
 #| msgid "Set user name"
 msgid "Set user inactive"
-msgstr "ユーザーが非アクティブになりました"
+msgstr "ユーザが非アクティブになりました"
 
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-user-deactivate-dialog.js:39
 #| msgid "Are you sure you want to delete the selected share link(s) ?"
@@ -3874,7 +3875,7 @@ msgstr "sdocをインポート中、しばらくお待ちください"
 
 #: frontend/src/components/dialog/transfer-dialog.js:166
 msgid "Transfer to user"
-msgstr "ユーザーに転送"
+msgstr "ユーザに転送"
 
 #: frontend/src/components/dialog/transfer-dialog.js:177
 msgid "Transfer to department"
@@ -3904,7 +3905,7 @@ msgstr "ユーザ"
 #| msgid ""
 #| "the library is shared to another user, the sharing will be ketp."
 msgid "If the library is shared to another user, the sharing will be kept."
-msgstr "ライブラリが他のユーザーに共有されている場合は、共有関係が保持されます。"
+msgstr "ライブラリが他のユーザに共有されている場合は、共有関係が保持されます。"
 
 #: frontend/src/components/dialog/transfer-dialog.js:207
 #: frontend/src/pages/org-admin/departments/departments.js:387
@@ -4027,7 +4028,7 @@ msgstr "削除者"
 #: frontend/src/components/search/search-filters/filter-by-creator.js:125
 #| msgid "Search users"
 msgid "Search user"
-msgstr "ユーザーを検索"
+msgstr "ユーザを検索"
 
 #: frontend/src/components/dialog/trash-dialog/trash-search/search-filters/filter-by-date.js:32
 #: frontend/src/components/search/search-filters/filter-by-date.js:58
@@ -4321,7 +4322,7 @@ msgstr "最終更新日時"
 #: frontend/src/metadata/components/detail-editor/tags-editor/index.js:136
 #| msgid "Edit Quota"
 msgid "Edit tags"
-msgstr ""
+msgstr "タグを編集"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:22
 msgid "Dimensions"
@@ -4401,7 +4402,7 @@ msgstr "空"
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:205
 #| msgid "xxx cells selected"
 msgid "{xxx} items have been selected"
-msgstr ""
+msgstr "{xxx} 個のアイテムが選択されました"
 
 #: frontend/src/components/dirent-detail/multi-selection-details/index.js:209
 #| msgid "Loading"
@@ -4431,26 +4432,26 @@ msgstr "ロック"
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:357
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:765
 msgid "Frozen by {name}"
-msgstr ""
+msgstr "{name} によって凍結されました"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-item.js:357
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:765
 msgid "locked by {name}"
-msgstr ""
+msgstr "{name} によってロックされました"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:477
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:234
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:88
 #| msgid "Successfully unstarred {library_name_placeholder}."
 msgid "Successfully unstarred {name_placeholder}."
-msgstr ""
+msgstr "{name_placeholder} の星が外れました"
 
 #: frontend/src/components/dirent-grid-view/dirent-grid-view.js:487
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:244
 #: frontend/src/components/toolbar/selected-dirents-toolbar.js:98
 #| msgid "Successfully starred {library_name_placeholder}."
 msgid "Successfully starred {name_placeholder}."
-msgstr ""
+msgstr "{name_placeholder} の星が付きました"
 
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:801
 #: frontend/src/components/dirent-list-view/dirent-list-item.js:802
@@ -4544,7 +4545,7 @@ msgstr "ライブラリー"
 
 #: frontend/src/components/file-content-view/image.js:95
 msgid "you can also press →"
-msgstr ""
+msgstr "もっと見る ->"
 
 #: frontend/src/components/file-uploader/file-uploader.js:146
 #: frontend/src/components/file-uploader/file-uploader.js:266
@@ -4559,7 +4560,7 @@ msgstr "一度に最大 {maxFiles} ファイルまでアップロードできま
 #: frontend/src/components/shared-link-file-uploader/file-uploader.js:447
 #: frontend/src/pages/upload-link/file-uploader.js:428
 msgid "File is locked by others."
-msgstr "他のユーザーによってロックされています"
+msgstr "他のユーザによってロックされています"
 
 #: frontend/src/components/file-uploader/file-uploader.js:439
 msgid "Invalid filename."
@@ -4603,7 +4604,7 @@ msgstr "アップロードを準備中..."
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:95
 #: frontend/src/pages/upload-link/upload-list-item.js:95
 msgid "Remaining"
-msgstr ""
+msgstr "残り"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:96
 #: frontend/src/components/file-uploader/upload-list-item.js:122
@@ -4645,7 +4646,7 @@ msgstr "アップロード済み"
 #: frontend/src/pages/upload-link/upload-list-item.js:146
 #| msgid "Upload Files"
 msgid "Upload failed"
-msgstr ""
+msgstr "アップロード失敗"
 
 #: frontend/src/components/file-uploader/upload-list-item.js:147
 #: frontend/src/components/shared-link-file-uploader/upload-list-item.js:147
@@ -4663,7 +4664,7 @@ msgstr "アップロード済み {uploaded_files_num}/{all_files_num} ファイ�
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:56
 #: frontend/src/pages/upload-link/upload-progress-dialog.js:50
 msgid "{failed_files_num} file(s) failed to upload"
-msgstr ""
+msgstr "{failed_files_num} ファイルがアップロードに失敗しました"
 
 #: frontend/src/components/file-uploader/upload-progress-dialog.js:71
 #: frontend/src/components/shared-link-file-uploader/upload-progress-dialog.js:67
@@ -5040,7 +5041,7 @@ msgstr "活動"
 #: frontend/src/pages/sys-admin/repos/repos-nav.js:20
 #: frontend/src/pages/wikis/wikis.js:424
 msgid "Wikis"
-msgstr "ワキ"
+msgstr "Wiki"
 
 #: frontend/src/components/main-side-nav-folded.js:230
 #: frontend/src/components/main-side-nav-folded.js:232
@@ -5100,16 +5101,16 @@ msgstr "サイドバーを折りたたむ"
 
 #: frontend/src/components/manage-members-dialog.js:178
 msgid "Manage group members"
-msgstr "グループメンバーを管理"
+msgstr "グループメンバを管理"
 
 #: frontend/src/components/manage-members-dialog.js:180
 msgid "Add group member"
-msgstr "グループメンバーを追加"
+msgstr "グループメンバを追加"
 
 #: frontend/src/components/manage-members-dialog.js:208
 #| msgid "Search groups"
 msgid "Search group members"
-msgstr "グループメンバーを検索"
+msgstr "グループメンバを検索"
 
 #: frontend/src/components/more.js:14
 msgid "show more"
@@ -5123,7 +5124,7 @@ msgstr "さらに表示"
 #: frontend/src/pages/sys-admin/institutions/institution-nav.js:18
 #: frontend/src/pages/sys-admin/orgs/org-nav.js:18
 msgid "Members"
-msgstr "メンバー"
+msgstr "メンバ"
 
 #: frontend/src/components/org-admin-user-nav.js:23
 #: frontend/src/pages/institution-admin/user-content/index.js:8
@@ -5188,7 +5189,7 @@ msgstr "ドキュメントを印刷"
 msgid ""
 "Permission denied. Please try {placeholder-left}login again.{placeholder-"
 "right}"
-msgstr ""
+msgstr "ログインが必要です。再度ログインしてください。"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:141
 #: frontend/src/tag/views/all-tags/tags-table/index.js:318
@@ -5319,7 +5320,7 @@ msgstr "リンクを持つ人"
 #: frontend/src/components/share-link-panel/link-creation.js:399
 #: frontend/src/components/share-link-panel/link-item.js:124
 msgid "Specific users in the team"
-msgstr "チーム内の特定のユーザー"
+msgstr "チーム内の特定のユーザ"
 
 #: frontend/src/components/select-editor/share-link-scope-editor.js:25
 #: frontend/src/components/share-link-panel/link-creation.js:414
@@ -5346,7 +5347,7 @@ msgstr "ゲスト"
 #: frontend/src/components/select-members-to-share-with.js:59
 #| msgid "Select a department"
 msgid "Select members from department"
-msgstr ""
+msgstr "部門からメンバを選択"
 
 #: frontend/src/components/send-link.js:45
 msgid "Please input at least an email."
@@ -5395,7 +5396,7 @@ msgstr "有効時間"
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:578
 #| msgid "xxx cells selected"
 msgid "xxx cells cut"
-msgstr ""
+msgstr "xxx セルを切り取りました"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:578
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:677
@@ -5405,7 +5406,7 @@ msgstr "1 セルを切り取りました"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:615
 msgid "xxx rows are copied."
-msgstr ""
+msgstr "xxx 行をコピーしました"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:615
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:717
@@ -5414,7 +5415,7 @@ msgstr "1 行をコピーしました"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:646
 msgid "xxx cells copied"
-msgstr ""
+msgstr "xxx セルをコピーしました"
 
 #: frontend/src/components/sf-table/masks/interaction-masks/index.js:646
 #: frontend/src/metadata/views/table/masks/interaction-masks/index.js:749
@@ -5429,7 +5430,7 @@ msgstr "レコードがありません"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:112
 msgid "xxx records selected"
-msgstr ""
+msgstr "xxx レコードが選択されました"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:112
 #: frontend/src/metadata/views/table/table-main/records-footer/index.js:106
@@ -5438,11 +5439,11 @@ msgstr "1 レコードが選択されました"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:116
 msgid "xxx cells selected"
-msgstr ""
+msgstr "xxx セルが選択されました"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:121
 msgid "xxx records"
-msgstr ""
+msgstr "xxx レコード"
 
 #: frontend/src/components/sf-table/table-main/records-footer/index.js:123
 msgid "xxx record"
@@ -5506,13 +5507,13 @@ msgstr "認証済みのメールアドレス"
 #: frontend/src/components/share-link-panel/link-details.js:277
 #| msgid "Activated Users"
 msgid "Authenticated users"
-msgstr "認証済みのユーザー"
+msgstr "認証済みのユーザ"
 
 #: frontend/src/components/share-link-panel/link-creation.js:153
 msgid ""
 "Share links cannot be generated because \"Invisible\", \"Online Read-Write\""
 " or \"Online Read-Only\" is set for you on some folder(s) in the library."
-msgstr ""
+msgstr "共有リンクを生成できません。\"不可視\", \"オンライン 読み取り/書き込み\" または \"オンライン 読み取り専用\" が設定されているフォルダーがあります。"
 
 #: frontend/src/components/share-link-panel/link-creation.js:177
 msgid "Please enter an integer bigger than 1 as number of links."
@@ -5625,7 +5626,7 @@ msgstr "操作に失敗しました。ネットワークをご確認ください
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:273
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:261
 msgid "Failed to delete {name}."
-msgstr ""
+msgstr "操作に失敗しました。共有リンクを削除できませんでした。"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:314
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:456
@@ -5647,18 +5648,18 @@ msgstr "SeaTable統合"
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:140
 #: frontend/src/pages/shared-libs/item.js:100
 msgid "Successfully unstarred {library_name_placeholder}."
-msgstr ""
+msgstr "{library_name_placeholder} を星付け解除しました。"
 
 #: frontend/src/components/shared-repo-list-view/shared-repo-list-item.js:563
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:150
 #: frontend/src/pages/shared-libs/item.js:110
 msgid "Successfully starred {library_name_placeholder}."
-msgstr ""
+msgstr "{library_name_placeholder} を星付けしました。"
 
 #: frontend/src/components/single-selector.js:78
 #| msgid "Clear selected"
 msgid "Toggle selector menu"
-msgstr ""
+msgstr "セレクターメニューを切り替える"
 
 #: frontend/src/components/sort-menu.js:21
 #: frontend/src/metadata/constants/view/statistics.js:34
@@ -5804,7 +5805,7 @@ msgstr "新しいWordファイル"
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:195
 #| msgid "New SeaDoc File"
 msgid "New Docxf File"
-msgstr ""
+msgstr "新しいDocxfファイル"
 
 #: frontend/src/components/toolbar/dir-operation-toolbar.js:198
 #: frontend/src/utils/text-translation.js:32
@@ -5846,12 +5847,12 @@ msgstr "削除"
 #: frontend/src/components/user-select.js:234
 #| msgid "Select a user"
 msgid "Select users"
-msgstr "ユーザーを選択"
+msgstr "ユーザを選択"
 
 #: frontend/src/components/user-select.js:278
 #: frontend/src/pages/dashboard/log-user-selector.js:165
 msgid "User not found"
-msgstr "ユーザーが見つかりません"
+msgstr "ユーザが見つかりません"
 
 #: frontend/src/components/user-settings/delete-account.js:37
 msgid "This operation will not be reverted. Please think twice!"
@@ -5943,7 +5944,7 @@ msgstr "前回のアクセス"
 #: frontend/src/pages/linked-devices/linked-devices.js:119
 #| msgid "Successfully copied %(name)s."
 msgid "Successfully unlinked %(name)s."
-msgstr ""
+msgstr "操作に失敗しました。%(name)s をリンク解除できませんでした。"
 
 #: frontend/src/components/user-settings/linked-devices.js:229
 #: frontend/src/pages/linked-devices/linked-devices.js:216
@@ -5960,7 +5961,7 @@ msgstr "グローバルアドレスブック"
 msgid ""
 "List your account in global address book, so that others can find you by "
 "typing your name."
-msgstr "名前を入力すると、他のユーザーがあなたを見つけることができるように、アカウントをグローバルアドレスブックに追加します。"
+msgstr "名前を入力すると、他のユーザがあなたを見つけることができるように、アカウントをグローバルアドレスブックに追加します。"
 
 #: frontend/src/components/user-settings/social-login-dingtalk.js:38
 #: frontend/src/components/user-settings/social-login-saml.js:51
@@ -6045,7 +6046,7 @@ msgstr "プロフィール画像:"
 
 #: frontend/src/components/user-settings/user-basic-info-form.js:71
 msgid "Username:"
-msgstr "ユーザー名:"
+msgstr "ユーザ名:"
 
 #: frontend/src/components/user-settings/user-basic-info-form.js:75
 msgid "You can use this field at login."
@@ -6091,7 +6092,7 @@ msgstr "WebDAV アクセス"
 
 #: frontend/src/components/user-settings/webdav-password.js:95
 msgid "WebDAV username:"
-msgstr "WebDAV ユーザー名:"
+msgstr "WebDAV ユーザ名:"
 
 #: frontend/src/components/user-settings/webdav-password.js:98
 #: frontend/src/components/user-settings/webdav-password.js:103
@@ -6125,11 +6126,11 @@ msgstr "ビューモードを切り替え"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:118
 msgid "Wiki published"
-msgstr "Wiki が公開されました"
+msgstr "Wiki を公開しました"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:224
 msgid "Visit the wiki"
-msgstr ""
+msgstr "Wiki を訪問"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
 #: frontend/src/pages/sdoc-revision/index.js:122
@@ -6144,12 +6145,12 @@ msgstr "新しい Wiki に変換"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:281
 #| msgid "Publish Wiki"
 msgid "Unpublish Wiki"
-msgstr "Wiki を非公開にする"
+msgstr "Wiki を非公開"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:282
 #| msgid "Are you sure you want to unlink this device?"
 msgid "Are you sure you want to unpublish Wiki"
-msgstr "Wiki を非公開にするのは本当ですか？"
+msgstr "本当に Wiki の公開を停止しますか？"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:289
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:301
@@ -6161,32 +6162,32 @@ msgstr "Wiki を削除"
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:302
 #| msgid "Are you sure you want to delete"
 msgid "Are you sure you want to delete Wiki"
-msgstr "Wiki を削除するのは本当ですか？"
+msgstr "本当に Wiki を削除しますか？"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:295
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:307
 #| msgid "Leave Share"
 msgid "Leave Share Wiki"
-msgstr "Wiki を共有解除"
+msgstr "共有 Wiki を離脱"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:296
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:308
 #| msgid "Are you sure you want to delete %s ?"
 msgid "Are you sure you want to leave share Wiki"
-msgstr "Wiki を共有解除するのは本当ですか？"
+msgstr "本当にこの共有から離脱しますか？"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:88
 msgid "My Wikis"
-msgstr "私の Wiki"
+msgstr "マイ Wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:109
 #| msgid "No shared links"
 msgid "No shared Wikis"
-msgstr "共有された Wiki がありません"
+msgstr "共有の Wiki はありません"
 
 #: frontend/src/components/wiki-card-view/wiki-card-view.js:144
 msgid "Old Wikis"
-msgstr "古い Wiki"
+msgstr "過去の Wiki"
 
 #: frontend/src/file-history-old.js:244
 #: frontend/src/pages/file-history/side-panel.js:105
@@ -6242,13 +6243,13 @@ msgstr "全画面表示"
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:28
 #| msgid "Deleted option"
 msgid "Delete location"
-msgstr ""
+msgstr "位置情報を削除"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:12
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:170
 #| msgid "is not empty"
 msgid "Map is not ready"
-msgstr ""
+msgstr "マップが準備できていません"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:27
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:35
@@ -6259,14 +6260,14 @@ msgstr ""
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:112
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:117
 msgid "Search service unavailable"
-msgstr ""
+msgstr "検索サービスが利用できません"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:41
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:62
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:111
 #| msgid "No results"
 msgid "No results found"
-msgstr ""
+msgstr "結果が見つかりません"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:217
 #| msgid "Please enter the old password"
@@ -6276,7 +6277,7 @@ msgstr "住所を入力してください"
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/search-component.js:260
 #| msgid "Saving..."
 msgid "Searching..."
-msgstr ""
+msgstr "検索中..."
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:213
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:212
@@ -6334,7 +6335,7 @@ msgstr "タグを追加"
 #: frontend/src/metadata/components/cell-editors/tags-editor/tag-item/index.js:40
 #| msgid "Select Image"
 msgid "Select tag"
-msgstr ""
+msgstr "タグを選択"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
 msgid "1 filter"
@@ -6381,7 +6382,7 @@ msgstr "プロパティによるグループ化"
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:32
 #| msgid "Grouped by xxx properties"
 msgid "Grouped by {name_placeholder} properties"
-msgstr ""
+msgstr "プロパティによるグループ化"
 
 #: frontend/src/metadata/components/data-process-setter/groupby-setter.js:34
 #: frontend/src/metadata/views/kanban/settings/index.js:103
@@ -6395,7 +6396,7 @@ msgstr "プロパティを非表示"
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:25
 #| msgid "Failed to modify hidden properties"
 msgid "{name_placeholder} hidden properties"
-msgstr ""
+msgstr "プロパティを非表示"
 
 #: frontend/src/metadata/components/data-process-setter/hide-column-setter.js:26
 #: frontend/src/metadata/components/dialog/metadata-status-manage-dialog/index.js:152
@@ -6423,7 +6424,7 @@ msgstr "プリセット非表示プロパティ"
 #: frontend/src/metadata/components/data-process-setter/pre-hide-column-setter.js:50
 #| msgid "xxx preset hidden properties"
 msgid "{name_placeholder} preset hidden properties"
-msgstr ""
+msgstr "プリセット非表示プロパティ"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:20
 msgid "1 sort"
@@ -7141,11 +7142,11 @@ msgstr "以下と完全一致する..."
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:53
 msgid "is current user's ID"
-msgstr "現在のユーザーのIDである"
+msgstr "現在のユーザのIDである"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:54
 msgid "include the current user"
-msgstr "現在のユーザーを含む"
+msgstr "現在のユーザを含む"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:55
 msgid "is any of..."
@@ -7354,7 +7355,7 @@ msgstr "ファイルの移動に失敗しました"
 #: frontend/src/metadata/store/server-operator.js:109
 #| msgid "Failed to modify filter"
 msgid "Failed to move {n} items"
-msgstr ""
+msgstr "アイテムの移動に失敗しました{n}"
 
 #: frontend/src/metadata/store/server-operator.js:123
 #| msgid "Failed to duplicate page"
@@ -7369,7 +7370,7 @@ msgstr "ファイルの複製に失敗しました"
 #: frontend/src/metadata/store/server-operator.js:135
 #| msgid "Failed to copy %(name)s"
 msgid "Failed to copy {n} items"
-msgstr ""
+msgstr "アイテムのコピーに失敗しました{n}"
 
 #: frontend/src/metadata/store/server-operator.js:136
 #| msgid "Failed to modify filter"
@@ -7522,7 +7523,7 @@ msgstr "時代遅れ"
 #: frontend/src/metadata/utils/menu-builder.js:645
 #: frontend/src/metadata/utils/menu-builder.js:707
 msgid "AI"
-msgstr ""
+msgstr "AI"
 
 #: frontend/src/metadata/utils/validate/view.js:5
 #: frontend/src/tag/utils/validate/tag.js:5
@@ -7852,7 +7853,7 @@ msgstr "精度"
 #: frontend/src/metadata/views/table/table-main/records-header/insert-column/index.js:90
 #| msgid "Add icon"
 msgid "Add column"
-msgstr ""
+msgstr "列を追加"
 
 #: frontend/src/metadata/views/table/table-main/records/group-body/group-container/group-title.js:12
 msgid "Deleted option"
@@ -7986,7 +7987,7 @@ msgstr "私のアクティビティ"
 #: frontend/src/pages/dashboard/log-repo-selector.js:98
 #| msgid "Single select"
 msgid "Toggle repo selector"
-msgstr ""
+msgstr "リポジトリセレクタを切り替え"
 
 #: frontend/src/pages/dashboard/log-repo-selector.js:122
 #| msgid "in all libraries"
@@ -8009,12 +8010,12 @@ msgstr "ライブラリが見つかりません"
 #: frontend/src/pages/dashboard/user-selector.js:80
 #| msgid "Please select a file"
 msgid "Toggle user selector"
-msgstr ""
+msgstr "ユーザーセレクタを切り替え"
 
 #: frontend/src/pages/dashboard/log-user-selector.js:155
 #| msgid "Add user"
 msgid "Find users"
-msgstr "ユーザーを検索"
+msgstr "ユーザを検索"
 
 #: frontend/src/pages/dashboard/user-selector.js:85
 msgid "Modified by:"
@@ -8031,7 +8032,7 @@ msgstr "変更者を検索"
 #: frontend/src/pages/excalidraw-editable-viewer/index.js:83
 #| msgid "Set user name"
 msgid "Your name"
-msgstr ""
+msgstr "あなたの名前"
 
 #: frontend/src/pages/excalidraw-editor/editor/index.js:187
 msgid ""
@@ -8041,12 +8042,12 @@ msgstr "アップロードされた画像はまだ保存されていません。
 #: frontend/src/pages/excalidraw-editor/editor/index.js:236
 #| msgid "Person image"
 msgid "Link image"
-msgstr ""
+msgstr "画像をリンク"
 
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:72
 #| msgid "Select Image"
 msgid "Select image"
-msgstr ""
+msgstr "画像を選択"
 
 #: frontend/src/pages/file-history-old/history-item.js:54
 msgid "(current version)"
@@ -8088,11 +8089,11 @@ msgstr "{user_placeholder} のインポートに成功しました"
 
 #: frontend/src/pages/groups/group-op-menu.js:170
 msgid "Import members"
-msgstr "メンバーをインポート"
+msgstr "メンバをインポート"
 
 #: frontend/src/pages/groups/group-op-menu.js:171
 msgid "Manage members"
-msgstr "メンバーを管理"
+msgstr "メンバを管理"
 
 #: frontend/src/pages/groups/group-op-menu.js:181
 msgid "Delete group"
@@ -8159,7 +8160,7 @@ msgstr "グループ"
 
 #: frontend/src/pages/institution-admin/user-content/user-groups.js:29
 msgid "This user has not created or joined any groups"
-msgstr "このユーザーはグループを作成したり参加したりしていません"
+msgstr "このユーザはグループを作成したり参加したりしていません"
 
 #: frontend/src/pages/institution-admin/user-content/user-groups.js:39
 #: frontend/src/pages/institution-admin/user-list-search/index.js:71
@@ -8313,41 +8314,41 @@ msgstr "ライブラリをコピーできました。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:972
 msgid "Restored {name} and {n} other items"
-msgstr ""
+msgstr "{name}と{n}個の他のアイテムを復元しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:973
 msgid "Restored {name}"
-msgstr ""
+msgstr "{name}を復元しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:980
 msgid "Failed to restore {name} and {n} other items"
-msgstr ""
+msgstr "{name}と{n}個の他のアイテムの復元に失敗しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:981
 msgid "Failed to restore {name}"
-msgstr ""
+msgstr "{name}の復元に失敗しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1003
 msgid "Successfully deleted {name} and {n} other items."
-msgstr ""
+msgstr "{name}と{n}個の他のアイテムを削除しました。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1020
 msgid "Failed to delete {name} and {n} other items."
-msgstr ""
+msgstr "{name}と{n}個の他のアイテムの削除に失敗しました。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1258
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1286
 msgid "Failed to delete {name}"
-msgstr ""
+msgstr "{name}の削除に失敗しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1359
 #| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully moved {name} and {n} other items"
-msgstr ""
+msgstr "{name}と{n}個の他のアイテムを移動しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1363
 msgid "Successfully moved {name}."
-msgstr ""
+msgstr "{name}を移動しました。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1388
 msgid "Failed to move {name}."
@@ -8356,7 +8357,7 @@ msgstr "{name} の移動に失敗しました。"
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1445
 #| msgid "Successfully deleted {name} and {n} other items"
 msgid "Successfully copied {name} and {n} other items"
-msgstr ""
+msgstr "{name}と{n}個の他のアイテムをコピーしました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1449
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:139
@@ -8366,11 +8367,11 @@ msgstr "「%(name)s」をコピーしました。"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1474
 msgid "Failed to copy %(name)s"
-msgstr ""
+msgstr "「%(name)s」のコピーに失敗しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1496
 msgid "Failed to convert {name}."
-msgstr ""
+msgstr "{name}の変換に失敗しました"
 
 #: frontend/src/pages/lib-content-view/lib-content-view.js:1507
 msgid "Successfully converted the file."
@@ -8430,7 +8431,7 @@ msgstr "更新"
 
 #: frontend/src/pages/markdown-editor/index.js:127
 msgid "Another user is editing this file!"
-msgstr "他のユーザーがこのファイルを編集しています！"
+msgstr "他のユーザがこのファイルを編集しています！"
 
 #: frontend/src/pages/markdown-editor/index.js:269
 #: frontend/src/pages/plain-markdown-editor/index.js:99
@@ -8461,7 +8462,7 @@ msgid ""
 " your files and folders. A library can also be shared with others and synced"
 " to your connected devices. You can create a library by clicking the \"New "
 "Library\" item in the dropdown menu."
-msgstr "まだライブラリを作成していません。ライブラリはファイルやフォルダーを整理するためのコンテナーです。ライブラリは他のユーザーと共有することもでき、接続されたデバイスに同期することもできます。ライブラリを作成するには、メニューバーの \"New Library\" ボタンをクリックしてください。"
+msgstr "まだライブラリを作成していません。ライブラリはファイルやフォルダーを整理するためのコンテナーです。ライブラリは他のユーザと共有することもでき、接続されたデバイスに同期することもできます。ライブラリを作成するには、メニューバーの \"New Library\" ボタンをクリックしてください。"
 
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:307
 #: frontend/src/pages/my-libs/mylib-repo-list-item.js:367
@@ -8476,7 +8477,7 @@ msgstr "壊れています（管理者に連絡して、このライブラリを
 #: frontend/src/pages/shared-libs/item.js:80
 #: frontend/src/pages/shared-with-all/index.js:76
 msgid "Successfully unshared {name}"
-msgstr ""
+msgstr "ライブラリを成功してアンシェアしました {name}。"
 
 #: frontend/src/pages/ocm-via-webdav/ocm-via-webdav.js:166
 #| msgid "No libraries have been shared with you"
@@ -8554,7 +8555,7 @@ msgstr "デパートメント機能を有効にする"
 #: frontend/src/pages/org-admin/departments/tree-node.js:132
 #: frontend/src/pages/org-admin/departments/tree-node.js:133
 msgid "Toggle children"
-msgstr ""
+msgstr "子要素を切り替え"
 
 #: frontend/src/pages/org-admin/devices/devices-by-platform.js:130
 #: frontend/src/pages/sys-admin/devices/devices-by-platform.js:134
@@ -8708,16 +8709,16 @@ msgstr "ID"
 #: frontend/src/pages/org-admin/org-info.js:78
 #| msgid "Active Users"
 msgid "Active users"
-msgstr "アクティブユーザー"
+msgstr "アクティブユーザ"
 
 #: frontend/src/pages/org-admin/org-info.js:83
 #| msgid "Total Users"
 msgid "Total users"
-msgstr "全てのユーザー"
+msgstr "全てのユーザ"
 
 #: frontend/src/pages/org-admin/org-info.js:89
 msgid "User number limit"
-msgstr "ユーザー数の制限"
+msgstr "ユーザ数の制限"
 
 #: frontend/src/pages/org-admin/org-info.js:97
 #| msgid "Space Used"
@@ -8815,13 +8816,13 @@ msgstr "操作"
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:119
 #| msgid "Add Member"
 msgid "Add member"
-msgstr "メンバーを追加"
+msgstr "メンバを追加"
 
 #: frontend/src/pages/org-admin/org-logs-group-member-audit.js:128
 #: frontend/src/pages/sys-admin/logs-page/group-member-audit-logs.js:121
 #| msgid "Delete Member"
 msgid "Delete member"
-msgstr "メンバーを削除"
+msgstr "メンバを削除"
 
 #: frontend/src/pages/org-admin/org-logs-perm-audit.js:80
 #: frontend/src/pages/sys-admin/logs-page/share-permission-logs.js:44
@@ -8941,7 +8942,7 @@ msgstr "認証を確認する"
 
 #: frontend/src/pages/org-admin/org-user-item.js:60
 msgid "Resetting user's password, please wait for a moment."
-msgstr "ユーザーのパスワードをリセット中です。しばらくお待ちください。"
+msgstr "ユーザのパスワードをリセット中です。しばらくお待ちください。"
 
 #: frontend/src/pages/org-admin/org-user-item.js:111
 #: frontend/src/pages/sys-admin/admin-logs/login-logs.js:101
@@ -8952,7 +8953,7 @@ msgstr "失敗"
 #: frontend/src/pages/org-admin/org-user-item.js:150
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:230
 msgid "Are you sure you want to set {user_placeholder} inactive?"
-msgstr "ユーザー {user_placeholder} を非アクティブにしてもよろしいですか？"
+msgstr "ユーザ {user_placeholder} を非アクティブにしてもよろしいですか？"
 
 #: frontend/src/pages/org-admin/org-user-item.js:188
 #| msgid "Reset"
@@ -8980,7 +8981,7 @@ msgstr "設定"
 #: frontend/src/pages/sys-admin/users/users.js:230
 #, javascript-format
 msgid "Deleted user %s"
-msgstr "ユーザー%sを削除しました"
+msgstr "ユーザ%sを削除しました"
 
 #: frontend/src/pages/org-admin/org-users-admins.js:58
 #, javascript-format
@@ -9017,17 +9018,17 @@ msgstr "使用容量で降順"
 #: frontend/src/pages/org-admin/org-users-search-users.js:174
 #: frontend/src/pages/sys-admin/users/search-users.js:311
 msgid "Search Users"
-msgstr "ユーザーを検索"
+msgstr "ユーザを検索"
 
 #: frontend/src/pages/org-admin/org-users-users.js:188
 #, javascript-format
 msgid "successfully added user %s."
-msgstr "ユーザー %s を追加しました。"
+msgstr "ユーザ %s を追加しました。"
 
 #: frontend/src/pages/org-admin/org-users-users.js:222
 #, javascript-format
 msgid "successfully sent email to %s."
-msgstr "ユーザー %s にメールを送信しました。"
+msgstr "ユーザ %s にメールを送信しました。"
 
 #: frontend/src/pages/org-admin/org-users-users.js:270
 msgid "Import users"
@@ -9042,7 +9043,7 @@ msgstr "ユーザの追加"
 #: frontend/src/pages/org-admin/org-users-users.js:282
 #| msgid "Invite users"
 msgid "Invite users via WeChat"
-msgstr ""
+msgstr "WeChatでユーザーを招待"
 
 #: frontend/src/pages/org-admin/side-panel.js:45
 #: frontend/src/pages/sys-admin/side-panel.js:54
@@ -9127,7 +9128,7 @@ msgstr "無効な月、yyyyMM の形式で入力してください。"
 #: frontend/src/pages/org-admin/statistic/statistic-reports.js:69
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:64
 msgid "Monthly User Traffic"
-msgstr "月次ユーザー通信量"
+msgstr "月次ユーザ通信量"
 
 #: frontend/src/pages/org-admin/statistic/statistic-reports.js:71
 #: frontend/src/pages/org-admin/statistic/statistic-traffic-users.js:122
@@ -9147,7 +9148,7 @@ msgstr "レポートの作成"
 #: frontend/src/pages/org-admin/statistic/statistic-reports.js:78
 #: frontend/src/pages/sys-admin/statistic/statistic-reports.js:73
 msgid "User Storage"
-msgstr "ユーザーのストレージ"
+msgstr "ユーザのストレージ"
 
 #: frontend/src/pages/org-admin/statistic/statistic-storage.js:19
 #: frontend/src/pages/org-admin/statistic/statistic-storage.js:56
@@ -9185,7 +9186,7 @@ msgstr "同期トラフィック"
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:17
 #: frontend/src/pages/sys-admin/statistic/statistic-users.js:46
 msgid "Active Users"
-msgstr "アクティブユーザー"
+msgstr "アクティブユーザ"
 
 #: frontend/src/pages/org-admin/statistic/traffic-table.js:28
 #: frontend/src/pages/sys-admin/statistic/traffic-table.js:28
@@ -9229,7 +9230,7 @@ msgstr "設定が更新されました"
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:102
 #| msgid "Set user default quota"
 msgid "User default quota updated"
-msgstr "ユーザーのデフォルトクォータが更新されました"
+msgstr "ユーザのデフォルトクォータが更新されました"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:164
 msgid "File Upload"
@@ -9247,21 +9248,21 @@ msgstr "Web UIおよびAPI経由でファイルをアップロードするため
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:184
 msgid "Not allow user to create encrypted libraries"
-msgstr "ユーザーが暗号化されたライブラリを作成することを許可しない"
+msgstr "ユーザが暗号化されたライブラリを作成することを許可しない"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:190
 #| msgid "Allow user to clean library trash"
 msgid "Disable user clean trash"
-msgstr "ユーザーのゴミ箱のクリーンを無効にする"
+msgstr "ユーザのゴミ箱のクリーンを無効にする"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:193
 msgid "Not allow user to clean library trash"
-msgstr "ユーザーがライブラリのゴミ箱をクリーンすることを許可しない"
+msgstr "ユーザがライブラリのゴミ箱をクリーンすることを許可しない"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:204
 #| msgid "Set user default quota"
 msgid "User default quota"
-msgstr "ユーザーのデフォルトクォータ"
+msgstr "ユーザのデフォルトクォータ"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:206
 #| msgid "Tip: 0 means default limit"
@@ -9271,19 +9272,19 @@ msgstr "ヒント：0はデフォルトの制限を意味し、単位はMBです
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:216
 #| msgid "Disable SAML user email / password login"
 msgid "Disable SSO user email / password login"
-msgstr ""
+msgstr "SSOユーザーのメール/パスワードログインを無効にする"
 
 #: frontend/src/pages/org-admin/web-settings/web-settings.js:219
 #: frontend/src/pages/sys-admin/orgs/org-info.js:94
 #| msgid "Force user to use SSO login if SAML account is bound"
 msgid "Force user to use SSO login if SSO account is bound"
-msgstr ""
+msgstr "SSOアカウントがバインドされている場合は、ユーザーがSSOログインを強制する"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:104
 #: frontend/src/pages/sdoc/sdoc-file-history/history-version.js:105
 #| msgid "No version history"
 msgid "Show daily history"
-msgstr ""
+msgstr "日次履歴を表示"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:283
 msgid "No changes"
@@ -9336,12 +9337,12 @@ msgid ""
 "You have not shared any libraries with other users yet. You can share a "
 "library with other users by clicking the share icon to the right of a "
 "library's name in \"My Libraries\"."
-msgstr "まだ他のユーザーと共有しているライブラリはありません。「マイドキュメント」でライブラリの名前の右にある共有アイコンをクリックすると、他のユーザーとライブラリを共有できます。"
+msgstr "まだ他のユーザと共有しているライブラリはありません。「マイドキュメント」でライブラリの名前の右にある共有アイコンをクリックすると、他のユーザとライブラリを共有できます。"
 
 #: frontend/src/pages/share-admin/libraries.js:202
 #| msgid "No members"
 msgid "all members"
-msgstr "全てのメンバー"
+msgstr "全てのメンバ"
 
 #: frontend/src/pages/share-admin/share-links.js:304
 #: frontend/src/pages/share-admin/upload-links.js:203
@@ -9406,7 +9407,7 @@ msgstr "共有されたライブラリはありません。"
 #: frontend/src/pages/shared-libs/item.js:85
 #: frontend/src/pages/shared-with-all/index.js:81
 msgid "Failed to unshare {name}"
-msgstr ""
+msgstr "ライブラリを成功してアンシェアできませんでした {name}。"
 
 #: frontend/src/pages/shared-with-all/index.js:131
 #| msgid "No libraries"
@@ -9466,17 +9467,17 @@ msgstr "グループを作成"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:108
 msgid "Migrate User"
-msgstr "ユーザーを移行"
+msgstr "ユーザを移行"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:109
 #| msgid "Add group"
 msgid "Add User to Group"
-msgstr "ユーザーをグループに追加"
+msgstr "ユーザをグループに追加"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:110
 #| msgid "Delete Group"
 msgid "Delete User from Group"
-msgstr "ユーザーをグループから削除"
+msgstr "ユーザをグループから削除"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:138
 msgid "Created library {library_name} with {owner} as its owner"
@@ -9504,25 +9505,25 @@ msgstr "グループ{group_name}を削除しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:181
 msgid "Added user {user}"
-msgstr "ユーザー{user}を追加しました"
+msgstr "ユーザ{user}を追加しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:186
 msgid "Deleted user {user}"
-msgstr "ユーザー{user}を削除しました"
+msgstr "ユーザ{user}を削除しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:191
 msgid "User migrate from {user_from} to {user_to}"
-msgstr "ユーザーを{user_from}から{user_to}に移行しました"
+msgstr "ユーザを{user_from}から{user_to}に移行しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:197
 #| msgid "Added user {user}"
 msgid "Added user {user} to group {group}"
-msgstr "ユーザー{user}をグループ{group}に追加しました"
+msgstr "ユーザ{user}をグループ{group}に追加しました"
 
 #: frontend/src/pages/sys-admin/admin-logs/operation-logs.js:203
 #| msgid "Deleted user {user}"
 msgid "Deleted user {user} from group {group}"
-msgstr "ユーザー{user}をグループ{group}から削除しました"
+msgstr "ユーザ{user}をグループ{group}から削除しました"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:31
 msgid "Path"
@@ -9547,7 +9548,7 @@ msgstr "{placeholder}を削除してもよろしいですか？"
 #: frontend/src/pages/sys-admin/groups/group-members.js:191
 #| msgid "Delete Member"
 msgid "Remove Member"
-msgstr "メンバーを削除"
+msgstr "メンバを削除"
 
 #: frontend/src/pages/sys-admin/groups/group-members.js:278
 #| msgid "Successfully sent to {placeholder}"
@@ -9567,7 +9568,7 @@ msgstr "{placeholder}を削除しました。"
 #: frontend/src/pages/sys-admin/groups/group-repos.js:134
 #| msgid "Are you sure you want to remove {placeholder} ?"
 msgid "Are you sure you want to unshare {placeholder} ?"
-msgstr ""
+msgstr "ライブラリ共有を外してもよろしいですか {placeholder}？"
 
 #: frontend/src/pages/sys-admin/groups/group-repos.js:163
 #| msgid "Restore Library"
@@ -9593,13 +9594,13 @@ msgstr "ヒント：名前にキーワードを入力して検索できます"
 msgid ""
 "licensed to {placeholder_license_to}, upgrade service expired in "
 "{placeholder_license_expiration}"
-msgstr ""
+msgstr "ライセンスは{placeholder_license_to}にライセンスされており、{placeholder_license_expiration}に期限が切れます。"
 
 #: frontend/src/pages/sys-admin/info.js:70
 msgid ""
 "licensed to {placeholder_license_to}, expires on "
 "{placeholder_license_expiration}"
-msgstr ""
+msgstr "ライセンスは{placeholder_license_to}にライセンスされており、{placeholder_license_expiration}に期限が切れます。"
 
 #: frontend/src/pages/sys-admin/info.js:95
 msgid "System Info"
@@ -9636,12 +9637,12 @@ msgstr "現在接続されているデバイス数"
 #: frontend/src/pages/sys-admin/info.js:129
 #: frontend/src/pages/sys-admin/info.js:133
 msgid "Activated Users"
-msgstr "有効ユーザー数"
+msgstr "有効ユーザ数"
 
 #: frontend/src/pages/sys-admin/info.js:129
 #: frontend/src/pages/sys-admin/info.js:133
 msgid "Total Users"
-msgstr "総ユーザー数"
+msgstr "総ユーザ数"
 
 #: frontend/src/pages/sys-admin/info.js:129
 msgid "Limits"
@@ -9660,7 +9661,7 @@ msgstr "組織"
 #: frontend/src/pages/sys-admin/users/users-content.js:404
 msgid ""
 "Are you sure you want to revoke the admin permission of {placeholder} ?"
-msgstr ""
+msgstr "ユーザー{placeholder}の管理者権限を取り消してもよろしいですか？"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:197
 #: frontend/src/pages/sys-admin/users/users-content.js:576
@@ -9672,13 +9673,13 @@ msgstr "管理者権限を取り消す"
 #: frontend/src/pages/sys-admin/users/search-users.js:249
 #: frontend/src/pages/sys-admin/users/users.js:382
 msgid "Successfully revoked the admin permission of {placeholder}."
-msgstr ""
+msgstr "ユーザー{placeholder}の管理者権限を取り消しました。"
 
 #: frontend/src/pages/sys-admin/institutions/institution-admins.js:268
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:352
 #| msgid "deleted"
 msgid "User deleted"
-msgstr "ユーザーを削除しました。"
+msgstr "ユーザを削除しました。"
 
 #: frontend/src/pages/sys-admin/institutions/institution-info.js:108
 #| msgid "Successfully set it."
@@ -9704,7 +9705,7 @@ msgstr "管理権限を設定"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:201
 msgid "Are you sure you want to set {placeholder} as Admin?"
-msgstr ""
+msgstr "ユーザー{placeholder}を管理者に設定してもよろしいですか？"
 
 #: frontend/src/pages/sys-admin/institutions/institution-users.js:311
 #| msgid "Name updated"
@@ -9791,7 +9792,7 @@ msgstr "ログイン"
 #: frontend/src/pages/sys-admin/logs-page/logs-nav.js:21
 #| msgid "Group members"
 msgid "Group Member"
-msgstr "グループメンバー"
+msgstr "グループメンバ"
 
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
 #: frontend/src/pages/wiki2/main-panel.js:260
@@ -9827,7 +9828,7 @@ msgstr "全ての通知"
 #: frontend/src/pages/sys-admin/orgs/org-users.js:235
 #: frontend/src/pages/sys-admin/users/users-content.js:403
 msgid "Are you sure you want to reset the password of {placeholder} ?"
-msgstr ""
+msgstr "ユーザー{placeholder}のパスワードをリセットしてもよろしいですか？"
 
 #: frontend/src/pages/sys-admin/orgs/org-admins.js:287
 #: frontend/src/pages/sys-admin/orgs/org-users.js:312
@@ -9837,11 +9838,11 @@ msgstr "パスワードをリセット"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:64
 msgid "Number of members"
-msgstr "メンバー数"
+msgstr "メンバ数"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:69
 msgid "Max number of members"
-msgstr "最大メンバー数"
+msgstr "最大メンバ数"
 
 #: frontend/src/pages/sys-admin/orgs/org-info.js:77
 msgid "Number of groups"
@@ -9850,13 +9851,13 @@ msgstr "グループ数"
 #: frontend/src/pages/sys-admin/orgs/org-info.js:87
 #| msgid "ISO"
 msgid "SSO"
-msgstr ""
+msgstr "SSO"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:144
 msgid ""
 "{userCount} user(s) and {repoCount} libraries of this organization will also"
 " be deleted."
-msgstr ""
+msgstr "組織{placeholder}のユーザー{userCount}人とライブラリ{repoCount}件が削除されます。"
 
 #: frontend/src/pages/sys-admin/orgs/orgs-content.js:236
 #| msgid "deleted"
@@ -9983,22 +9984,22 @@ msgstr "更新完了"
 #: frontend/src/pages/sys-admin/users/search-users.js:360
 #: frontend/src/pages/sys-admin/users/users.js:477
 msgid "Delete Users"
-msgstr "ユーザーを削除"
+msgstr "ユーザを削除"
 
 #: frontend/src/pages/sys-admin/users/search-users.js:192
 #: frontend/src/pages/sys-admin/users/users.js:277
 msgid "Successfully deleted 1 user."
-msgstr "1 ユーザーを削除しました。"
+msgstr "1 ユーザを削除しました。"
 
 #: frontend/src/pages/sys-admin/users/search-users.js:193
 #: frontend/src/pages/sys-admin/users/users.js:278
 msgid "Successfully deleted {user_number_placeholder} users."
-msgstr "{user_number_placeholder} ユーザーを削除しました。"
+msgstr "{user_number_placeholder} ユーザを削除しました。"
 
 #: frontend/src/pages/sys-admin/users/search-users.js:361
 #: frontend/src/pages/sys-admin/users/users.js:478
 msgid "Are you sure you want to delete the selected user(s) ?"
-msgstr "選択したユーザーを削除しますか？"
+msgstr "選択したユーザを削除しますか？"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:72
 msgid "Set Login ID"
@@ -10011,7 +10012,7 @@ msgstr "連絡先メールを設定"
 #: frontend/src/pages/sys-admin/users/user-info.js:109
 #| msgid "User"
 msgid "User ID"
-msgstr ""
+msgstr "ユーザーID"
 
 #: frontend/src/pages/sys-admin/users/user-info.js:125
 msgid "Login ID"
@@ -10142,7 +10143,7 @@ msgstr "新規登録を許可"
 msgid ""
 "Allow new user registrations. Uncheck this to prevent anyone from creating a"
 " new account."
-msgstr "新規ユーザー登録を許可します。このチェックを外すと、誰も新しいアカウントを作成できなくなります。"
+msgstr "新規ユーザ登録を許可します。このチェックを外すと、誰も新しいアカウントを作成できなくなります。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:174
 #| msgid "activate after registration"
@@ -10153,7 +10154,7 @@ msgstr "登録後にアクティブ化"
 msgid ""
 "Activate user immediately after registration. If unchecked, a user need to "
 "be activated by administrator or via activation email"
-msgstr "登録後、直ちにユーザーをアクティブ化します。チェックを外すと、ユーザーは管理者によって、またはアクティベーションメールを介してアクティブ化する必要があります。"
+msgstr "登録後、直ちにユーザをアクティブ化します。チェックを外すと、ユーザは管理者によって、またはアクティベーションメールを介してアクティブ化する必要があります。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:181
 #| msgid "send activation email"
@@ -10162,7 +10163,7 @@ msgstr "アクティベーションメールを送信"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:184
 msgid "Send activation Email after user registration."
-msgstr "ユーザー登録後にアクティベーションメールを送信します。"
+msgstr "ユーザ登録後にアクティベーションメールを送信します。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:188
 #| msgid "keep sign in"
@@ -10171,7 +10172,7 @@ msgstr "ログイン状態を維持"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:191
 msgid "Number of days that keep user sign in."
-msgstr "ユーザーのログイン状態を維持する日数。"
+msgstr "ユーザのログイン状態を維持する日数。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:195
 msgid "Login attempt limit"
@@ -10183,11 +10184,11 @@ msgstr "CAPTCHAを表示する前の最大ログイン失敗回数。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:202
 msgid "Freeze user on login failed"
-msgstr "ログイン失敗時にユーザーを凍結"
+msgstr "ログイン失敗時にユーザを凍結"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:205
 msgid "Freeze user account when failed login attempts exceed limit."
-msgstr "ログイン失敗回数が制限を超えた場合、ユーザーアカウントを凍結する。"
+msgstr "ログイン失敗回数が制限を超えた場合、ユーザアカウントを凍結する。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:213
 msgid "Enable sharing to all groups"
@@ -10195,7 +10196,7 @@ msgstr "すべてのグループへの共有を有効化"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:216
 msgid "Enable users to share libraries to any groups in the system."
-msgstr "ユーザーがシステム内の任意のグループにライブラリを共有できるようにする。"
+msgstr "ユーザがシステム内の任意のグループにライブラリを共有できるようにする。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:224
 #| msgid "Confirm password"
@@ -10204,7 +10205,7 @@ msgstr "強力なパスワード"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:227
 msgid "Force user to use a strong password when sign up or change password."
-msgstr "ユーザーが新規登録またはパスワードを変更する際に、強力なパスワードの使用を強制する。"
+msgstr "ユーザが新規登録またはパスワードを変更する際に、強力なパスワードの使用を強制する。"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:231
 #| msgid "New Password Again"
@@ -10214,7 +10215,7 @@ msgstr "パスワード変更を強制する"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:234
 msgid ""
 "Force user to change password when account is newly added or reset by admin"
-msgstr "アカウントが新規追加された場合、または管理者によってリセットされた場合、ユーザーにパスワードの変更を強制する"
+msgstr "アカウントが新規追加された場合、または管理者によってリセットされた場合、ユーザにパスワードの変更を強制する"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:238
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:241
@@ -10229,12 +10230,12 @@ msgstr "ライブラリ履歴"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:253
 #| msgid "Allow user to change library history settings"
 msgid "Allow users to change library history settings"
-msgstr "ユーザーがライブラリ履歴設定を変更できるようにする"
+msgstr "ユーザがライブラリ履歴設定を変更できるようにする"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:260
 #| msgid "Allow user to create encrypted libraries"
 msgid "Allow users to create encrypted libraries"
-msgstr "ユーザーが暗号化されたライブラリを作成できるようにする"
+msgstr "ユーザが暗号化されたライブラリを作成できるようにする"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:264
 #| msgid "library password minimum length"
@@ -10254,7 +10255,7 @@ msgstr "共有/アップロードリンクでのパスワード必須化"
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:274
 #| msgid "Force user use password when generating share/upload link."
 msgid "Force users to use password when generating share/upload link."
-msgstr "共有/アップロードリンクを生成する際に、ユーザーにパスワードの使用を必須にする"
+msgstr "共有/アップロードリンクを生成する際に、ユーザにパスワードの使用を必須にする"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:278
 #| msgid "share/upload link password minimum length"
@@ -10281,12 +10282,12 @@ msgstr "共有/アップロードリンクのパスワードの強さのレベ�
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:292
 #| msgid "Allow user to clean library trash"
 msgid "Enable users to clean trash"
-msgstr "ユーザーがゴミ箱を空にできるようにする"
+msgstr "ユーザがゴミ箱を空にできるようにする"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:295
 #| msgid "Allow user to clean library trash"
 msgid "Allow users to clean library trash"
-msgstr "ユーザーがライブラリのゴミ箱を空にできるようにする"
+msgstr "ユーザがライブラリのゴミ箱を空にできるようにする"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:300
 msgid "Online Preview"
@@ -10327,7 +10328,7 @@ msgstr "利用規約を有効にする"
 msgid ""
 "Enable system admin to add Terms and Conditions, and all users will have to "
 "accept the terms."
-msgstr "システム管理者が利用規約を追加できるようにし、すべてのユーザーがその規約を承認する必要があります。"
+msgstr "システム管理者が利用規約を追加できるようにし、すべてのユーザがその規約を承認する必要があります。"
 
 #: frontend/src/pages/upload-link/file-uploader.js:467
 msgid "Failed to upload {file_name}."
@@ -10449,13 +10450,13 @@ msgstr "ページを複製"
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:235
 #| msgid "Import tags"
 msgid "Import page from docx"
-msgstr ""
+msgstr "docx 形式でページをインポート"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:204
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:236
 #| msgid "Export as docx"
 msgid "Import page from Markdown"
-msgstr ""
+msgstr "Markdown 形式でページをインポート"
 
 #: frontend/src/pages/wiki2/wiki-nav/pages/page-dropdownmenu.js:208
 msgid "Open in new tab"
@@ -10524,15 +10525,15 @@ msgstr "Confluence をインポート"
 
 #: frontend/src/pages/wikis/wikis.js:454
 msgid "No Wikis"
-msgstr "Wiki がありません。"
+msgstr "Wiki がありません"
 
 #: frontend/src/pages/wikis/wikis.js:457
 msgid "You can click the \"Add Wiki\" button below to add a new Wiki."
-msgstr "新しい Wiki を追加するには、下の \"Add Wiki\" ボタンをクリックしてください。"
+msgstr "新しい Wiki を追加するには、下の \"Wiki を追加\" をクリックしてください。"
 
 #: frontend/src/repo-snapshot.js:132
 msgid "{placeholder} Snapshot"
-msgstr ""
+msgstr "{placeholder} のスナップショット"
 
 #: frontend/src/settings.js:55
 msgid "Profile"
@@ -10544,7 +10545,7 @@ msgstr "言語"
 
 #: frontend/src/settings.js:93
 msgid "User info updated"
-msgstr "ユーザー情報が更新されました。"
+msgstr "ユーザ情報が更新されました。"
 
 #: frontend/src/settings.js:165
 msgid "Profile Setting"
@@ -10750,7 +10751,7 @@ msgstr "お気に入りのアイテムがありません。"
 
 #: frontend/src/translate.js:8
 msgid "Import Users"
-msgstr "ユーザーをインポート"
+msgstr "ユーザをインポート"
 
 #: frontend/src/translate.js:9
 msgid "No connected devices"
@@ -10825,7 +10826,7 @@ msgid ""
 "You have not shared any folders with other users yet. You can share a folder"
 " with other users by clicking the share icon to the right of a folder's "
 "name."
-msgstr "まだ他のユーザーとフォルダを共有していません。フォルダの名前の右側の共有アイコンをクリックすることで,他のユーザーとフォルダを共有できます."
+msgstr "まだ他のユーザとフォルダを共有していません。フォルダの名前の右側の共有アイコンをクリックすることで,他のユーザとフォルダを共有できます."
 
 #: frontend/src/translate.js:30
 msgid ""
@@ -10858,14 +10859,14 @@ msgid ""
 "No public libraries have been created yet. A public library is accessible by"
 " all users. You can create a public library by clicking the \"Add Library\" "
 "item in the dropdown menu."
-msgstr "まだ公共図書館は作られていません。公共図書館はすべてのユーザーにアクセスできます。ドロップダウンメニューの\"ライブラリを追加\"をクリックしてパブリックライブラリを作成できます."
+msgstr "まだ公共図書館は作られていません。公共図書館はすべてのユーザにアクセスできます。ドロップダウンメニューの\"ライブラリを追加\"をクリックしてパブリックライブラリを作成できます."
 
 #: frontend/src/translate.js:34
 msgid ""
 "No libraries have been shared directly with you. A shared library can be "
 "shared with full or restricted permission. If you need access to a library "
 "owned by another user, ask the user to share the library with you."
-msgstr "図書館はあなたと直接共有されていません。共有ライブラリは完全または制限された許可で共有できます。他のユーザーが所有するライブラリにアクセスする必要がある場合は、ユーザーにライブラリを共有するよう要求します。"
+msgstr "図書館はあなたと直接共有されていません。共有ライブラリは完全または制限された許可で共有できます。他のユーザが所有するライブラリにアクセスする必要がある場合は、ユーザにライブラリを共有するよう要求します。"
 
 #: frontend/src/translate.js:35
 #| msgid "Group not found"
@@ -10879,38 +10880,38 @@ msgstr "ビュータイプを変更"
 
 #: frontend/src/translate.js:37
 msgid "User {user_link} has added you to {group_link}"
-msgstr "ユーザー{user_link}があなたを{group_link}に追加しました"
+msgstr "ユーザ{user_link}があなたを{group_link}に追加しました"
 
 #: frontend/src/translate.js:38
 #| msgid "No users"
 msgid "No user shares"
-msgstr ""
+msgstr "ユーザー共有なし"
 
 #: frontend/src/translate.js:39
 #| msgid "No groups"
 msgid "No group shares"
-msgstr ""
+msgstr "グループ共有なし"
 
 #: frontend/src/translate.js:40
 #| msgid "{user} restored folder {folderName} in library {libraryName}."
 msgid "Face recognition is done for library {libraryName}."
-msgstr ""
+msgstr "ライブラリ {libraryName} の顔認識が完了しました。"
 
 #: frontend/src/translate.js:41
 msgid "A folder named {upload_folder_link} is uploaded to {uploaded_link}."
-msgstr ""
+msgstr "フォルダ {upload_folder_link} が {uploaded_link} にアップロードされました。"
 
 #: frontend/src/translate.js:42
 msgid "A folder named {upload_folder_link} is uploaded."
-msgstr ""
+msgstr "フォルダ {upload_folder_link} がアップロードされました。"
 
 #: frontend/src/translate.js:43
 msgid "A file named {upload_file_link} is uploaded to {uploaded_link}."
-msgstr ""
+msgstr "ファイル {upload_file_link} が {uploaded_link} にアップロードされました。"
 
 #: frontend/src/translate.js:44
 msgid "A file named {upload_file_link} is uploaded."
-msgstr ""
+msgstr "ファイル {upload_file_link} がアップロードされました。"
 
 #: frontend/src/user-notifications.js:200
 msgid "Mark all read"
@@ -11098,29 +11099,29 @@ msgstr "非表示"
 
 #: frontend/src/utils/utils.js:928
 msgid "User can read, write, upload, download and sync files."
-msgstr "ユーザーはファイルの読み取り、書き込み、アップロード、ダウンロード、同期を行うことができます。"
+msgstr "ユーザはファイルの読み取り、書き込み、アップロード、ダウンロード、同期を行うことができます。"
 
 #: frontend/src/utils/utils.js:931
 msgid "User can read, download and sync files."
-msgstr "ユーザーはファイルを読み取り、ダウンロード、同期できます。"
+msgstr "ユーザはファイルを読み取り、ダウンロード、同期できます。"
 
 #: frontend/src/utils/utils.js:934
 msgid "Besides Write permission, user can also share the library."
-msgstr "書き込み権限に加えて、ユーザーはライブラリを共有することもできます。"
+msgstr "書き込み権限に加えて、ユーザはライブラリを共有することもできます。"
 
 #: frontend/src/utils/utils.js:937
 msgid ""
 "User can view and edit file online via browser. Files can't be downloaded."
-msgstr "ユーザーはブラウザ経由でオンラインでファイルを表示および編集できます。ファイルをダウンロードすることはできません。"
+msgstr "ユーザはブラウザ経由でオンラインでファイルを表示および編集できます。ファイルをダウンロードすることはできません。"
 
 #: frontend/src/utils/utils.js:940
 msgid ""
 "User can only view files online via browser. Files can't be downloaded."
-msgstr "ユーザーはブラウザ経由でのみファイルをオンラインで表示できます。ファイルをダウンロードすることはできません。"
+msgstr "ユーザはブラウザ経由でのみファイルをオンラインで表示できます。ファイルをダウンロードすることはできません。"
 
 #: frontend/src/utils/utils.js:943
 msgid "User can not see this folder."
-msgstr "ユーザーはこのフォルダを表示できません。"
+msgstr "ユーザはこのフォルダを表示できません。"
 
 #: frontend/src/utils/utils.js:954
 msgid "Preview and download"
@@ -11168,7 +11169,7 @@ msgstr "%(name)s のほか%(amount)s項目を移動しました。"
 
 #: frontend/src/utils/utils.js:1593
 msgid "Failed to copy %(name)s and %(amount)s other item(s)."
-msgstr ""
+msgstr "%(name)s のほか%(amount)s項目をコピーできませんでした。"
 
 #: frontend/src/utils/utils.js:1596
 msgid "Failed to copy %(name)s."
@@ -11176,7 +11177,7 @@ msgstr "%(name)s のコピーに失敗しました。"
 
 #: frontend/src/utils/utils.js:1606
 msgid "Failed to move %(name)s and %(amount)s other item(s)."
-msgstr ""
+msgstr "%(name)s のほか%(amount)s項目を移動できませんでした。"
 
 #: frontend/src/utils/utils.js:1609
 msgid "Failed to move %(name)s."
