@@ -824,7 +824,7 @@ class OrgAdminInviteUser(APIView):
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
             if org_members_quota is not None and \
                     org_active_members_count + len(email_list) > org_members_quota:
-                err_msg = _(f'Failed. You can only invite {org_members_quota} members.')
+                err_msg = _('The number of users exceeds the limit')
                 return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit(len(email_list)):
