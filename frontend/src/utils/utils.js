@@ -602,7 +602,7 @@ export const Utils = {
     let list = [];
     const {
       SHARE, DOWNLOAD, DELETE, RENAME, MOVE, COPY, UNLOCK, LOCK, UNFREEZE_DOCUMENT, FREEZE_DOCUMENT,
-      HISTORY, ACCESS_LOG, PROPERTIES, OPEN_VIA_CLIENT, ONLYOFFICE_CONVERT,
+      HISTORY, ACCESS_LOG, PROPERTIES, OPEN_WITH, OPEN_WITH_DEFAULT, OPEN_VIA_CLIENT, OPEN_WITH_ONLYOFFICE, ONLYOFFICE_CONVERT,
       CONVERT_AND_EXPORT, CONVERT_TO_MARKDOWN, CONVERT_TO_DOCX, EXPORT_DOCX, CONVERT_TO_SDOC, EXPORT_SDOC,
       STAR, UNSTAR, MORE
     } = TextTranslation;
@@ -721,13 +721,24 @@ export const Utils = {
       }
     }
 
+    let fileExt = Utils.getFileExtension(dirent.name, true);
+    if (currentRepoInfo.enable_onlyoffice && (fileExt == 'csv' || fileExt == 'pdf')) {
+      let subOpList = [];
+      subOpList.push(OPEN_WITH_DEFAULT, 'Divider', OPEN_WITH_ONLYOFFICE, OPEN_VIA_CLIENT);
+      list.push({ ...OPEN_WITH, subOpList });
+    } else {
+      let subOpList = [];
+      subOpList.push(OPEN_WITH_DEFAULT, 'Divider', OPEN_VIA_CLIENT);
+      list.push({ ...OPEN_WITH, subOpList });
+    }
+
     if (permission == 'rw') {
       let subOpList = [];
       subOpList.push(PROPERTIES, HISTORY);
       if (isPro && fileAuditEnabled) {
         subOpList.push(ACCESS_LOG);
       }
-      subOpList.push(OPEN_VIA_CLIENT);
+
       list.push({ ...MORE, subOpList });
     }
 

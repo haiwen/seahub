@@ -681,6 +681,7 @@ def view_lib_file(request, repo_id, path):
         'can_download_file': can_download_file,
         'file_download_url': gen_file_get_url_new(repo_id, path),
         'mobile_login': mobile_login,
+        'enable_onlyoffice': ENABLE_ONLYOFFICE,
     }
 
     # check whether file is starred
@@ -752,7 +753,7 @@ def view_lib_file(request, repo_id, path):
     if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, 'Unknown'):
         template = 'common_file_view_react.html'
 
-    edit_pdf = request.GET.get('edit_pdf', 'false')
+    open_with_onlyoffice = request.GET.get('open_with_onlyoffice', 'false')
 
     if filetype == SEADOC:
         return_dict['assets_url'] = '/api/v2.1/seadoc/download-image/' + file_uuid
@@ -793,7 +794,7 @@ def view_lib_file(request, repo_id, path):
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
-    elif filetype == PDF and not edit_pdf == 'true':
+    elif filetype == PDF and not open_with_onlyoffice == 'true':
         return_dict['raw_path'] = raw_path
         return_dict['enable_pdf_thumbnail'] = settings.ENABLE_PDF_THUMBNAIL
 
@@ -807,8 +808,13 @@ def view_lib_file(request, repo_id, path):
 
         return render(request, template, return_dict)
 
-    elif ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
-            ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
+    elif (
+        (ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION)
+        or
+        (fileext != 'csv' and ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION)
+        or
+        (fileext == 'csv' and ENABLE_ONLYOFFICE and open_with_onlyoffice == 'true')
+    ):
 
         if repo.encrypted:
             return_dict['err'] = _('The library is encrypted, can not open file online.')
@@ -1779,7 +1785,7 @@ def view_file_via_shared_dir(request, fileshare):
         if not permissions['can_download']:
             raw_path = ''
 
-    
+
 
     # generate dir navigator
     if fileshare.path == '/':

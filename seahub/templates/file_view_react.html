@@ -42,6 +42,7 @@ window.app.pageOptions = {
   canLockUnlockFile: {% if can_lock_unlock_file %}true{% else %}false{% endif %},
   canEditFile: {% if can_edit_file %}true{% else %}false{% endif %}, // only for some file types
   canDownloadFile: {% if can_download_file %}true{% else %}false{% endif %},
+  enableOnlyoffice: {% if enable_onlyoffice %}true{% else %}false{% endif %},
   enableWatermark: {% if enable_watermark %}true{% else %}false{% endif %},
   enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
   enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
