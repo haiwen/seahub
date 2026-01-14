@@ -1323,6 +1323,19 @@ class SeafileAPI {
     return this.req.delete(url);
   }
 
+  updateStarredItemsPath(srcRepoId, srcParentDir, srcDirents, dstRepoId, dstParentDir, dstDirents) {
+    const url = this.server + '/api/v2.1/starred-items/batch-update-path/';
+    let data = {
+      'src_repo_id': srcRepoId,
+      'src_parent_dir': srcParentDir,
+      'src_dirents': srcDirents,
+      'dst_repo_id': dstRepoId,
+      'dst_parent_dir': dstParentDir,
+      'dst_dirents': dstDirents
+    };
+    return this._sendPostRequest(url, data, { headers: { 'Content-Type': 'application/json' } });
+  }
+
   monitorRepo(repoID) {
     const url = this.server + '/api/v2.1/monitored-repos/';
     let form = new FormData();
