@@ -34,6 +34,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.utils.db_api import SeafileDB
 from seahub.share.models import ExtraSharePermission
+from seahub.organizations.models import OrgMemberQuota
 
 try:
     from seahub.settings import ORG_MEMBER_QUOTA_ENABLED
@@ -200,12 +201,12 @@ class AdminOrgUsers(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check user number limit by org member quota
-        org_members = len(ccnet_api.get_org_emailusers(org.url_prefix, -1, -1))
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
-            from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
-            if org_members_quota is not None and org_members >= org_members_quota:
-                error_msg = 'Failed. You can only invite %d members.' % org_members_quota
+            if org_members_quota is not None and org_active_members_count >= org_members_quota:
+                error_msg = 'The number of users exceeds the limit.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # create user
@@ -286,7 +287,7 @@ class AdminOrgUser(APIView):
 
         if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
+        
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -302,6 +303,13 @@ class AdminOrgUser(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             if active == 'true':
+                if not user.is_active and ORG_MEMBER_QUOTA_ENABLED:
+                    ccnet_db = CcnetDB()
+                    org_active_members_count = ccnet_db.count_org_active_users(org_id)
+                    org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
+                    if org_members_quota is not None and org_active_members_count >= org_members_quota:
+                        err_msg = 'The number of users exceeds the limit.'
+                        return api_error(status.HTTP_403_FORBIDDEN, err_msg)
                 user.is_active = True
             else:
                 user.is_active = False

@@ -610,7 +610,7 @@
   "Add_video_link": "Ajouter un lien vidéo",
   "Link_Seafile_video_file": "Link vers un fichier vidéo Seafile",
   "Select_video_file": "Sélectionner un fichier vidéo",
-  "Support_YouTube_Bilibili_and_more": "Support YouTube, Bilibili and more",
+  "Support_YouTube_Bilibili_and_more": "Soutenir YouTube, Bilibili et plus encore",
   "Image_cannot_be_copied_Please_download_the_source_image": "L'image ne peut pas être copiée. Télécharger l'image.",
   "And_select_insert_-_image_to_upload": "et sélectionner 「insert」 - 「image」 pour importer.",
   "Image_copy_error": "Erreur copie de l'image",
@@ -649,5 +649,5 @@
   "Go_to_link" : "Aller au lien",
   "Link_block" : "Bloc de lien",
   "The_link_address_or_link_block_is_required": "L'adresse du lien ou le bloc de lien est requis",
-  "Comment_filter": "Comment filter"
+  "Comment_filter": "Filtre de commentaires"
 }

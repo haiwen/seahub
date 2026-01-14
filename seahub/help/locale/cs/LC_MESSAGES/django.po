@@ -7,6 +7,7 @@
 # Tomáš Holan <tomas@holan.dev>, 2024
 # Pavel Borecki <pavel.borecki@gmail.com>, 2024
 # Tomáš Kubalík <tkubalik@ifrog.cz>, 2024
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Tomáš Kubalík <tkubalik@ifrog.cz>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Czech (https://app.transifex.com/haiwen/teams/5086/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,85 +31,85 @@ msgstr "Postranní navigační nabídka"
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
-msgstr ""
+msgstr "Úvod"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "Správa souborů a složek"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "Správa souborů pomocí knihoven"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "Obnovení smazaných souborů"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "Hledání starých verzí souborů"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "Historie knihovny a snímky"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "Nastavení doby uchovávání historie"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
-msgstr ""
+msgstr "Smazání knihovny"
 
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "Prohlížení souborů v rámci webové aplikace"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "Fulltextové vyhledávání souborů"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "Sdílení a spolupráce"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "Sdílení souborů a složek"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "Správa skupin"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "Zamknutí souborů"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "Oprávnění složky"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "Sdílení mezi odděleními"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "Wiki a správa znalostí"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "Správa knihovny jako Wiki"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "Desktopový klient a synchronizace"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "Instalace a synchronizace souborů"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
@@ -116,11 +117,11 @@ msgstr "Synchronizují se existující složky"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "Selektivní synchronizace podsložek"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "Synchronizace pouze pro čtení"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
@@ -144,19 +145,19 @@ msgstr "Vynechané soubory"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "Drive klient"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "Používání Seafile drive klienta"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "Používání drive klienta 2.0 na Windows"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "Zabezpečení a šifrování"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
@@ -193,30 +194,36 @@ msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"Můžete smazat knihovnu, která vám patří. Smazaná knihovna může být obnovena "
+"vámi nebo správcem Seafile serveru."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "Po smazání knihovny mají následující účinky:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "Sdílení souborů a složek v této knihovně je zrušeno."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"Desktopoví klienti synchronizovaní s touto knihovnou již s ní nemohou "
+"synchronizovat. Místní soubory na klientovi však nebudou smazány."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "Správa a používání oddělení"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"Některé organizace se skládají z komplexní hierarchie oddělení. Obvykle "
+"existují dva běžné případy použití pro správu souborů v těchto organizacích:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -224,6 +231,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"Měl by existovat společný prostor pro sdílení souborů pro organizaci. "
+"Hierarchie složek by měla odpovídat hierarchii oddělení. Každému oddělení "
+"bude přidělena samostatná složka nebo prostor."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -231,46 +241,53 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"Sdílený prostor by měl být vlastněn a spravován organizací, nikoli "
+"jednotlivými zaměstnanci. Takže vlastnictví souborů se nemusí měnit, když "
+"zaměstnanec opustí organizaci."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"Funkce \"Oddělení\" je navržena tak, aby splňovala výše uvedené dva případy "
+"použití. Představíme tuto funkci ze 3 různých perspektiv:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "Systémový administrátor"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "Správce oddělení"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "Členové oddělení"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "Systémový administrátor může:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "Spravovat hierarchii oddělení a členy"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "Přiřadit kvótu úložiště pro oddělení"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "Vytvářet a spravovat sdílené knihovny v odděleních"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"Systémový administrátor může nastavit hierarchii oddělení dvěma způsoby: "
+"ruční nastavení nebo import z Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -280,6 +297,11 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"Systémový administrátor může vytvořit libovolný počet oddělení nejvyšší "
+"úrovně a vytvořit libovolné úrovně pododdělení pod každým oddělením. Každá "
+"úroveň oddělení může být naplněna členy. Systémový administrátor může "
+"nastavit roli každého člena na 'člen' nebo 'admin'. Později si představíme, "
+"jak může správce oddělení spravovat oddělení."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -288,12 +310,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"Systémový administrátor může také importovat hierarchii z OUs (Organizačních"
+" jednotek) v AD. Každá OU bude importována jako oddělení. A podřízené OUs "
+"pod OU budou importovány jako pododdělení. Knihovny oddělení mohou být "
+"automaticky vytvořeny během procesu importu."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"Systémový administrátor může také smazat oddělení po smazání všech "
+"pododdělení a knihoven."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -303,6 +331,11 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"Knihovny vytvořené uvnitř oddělení jsou vlastněny samotným oddělením, nikoli"
+" žádným jednotlivým uživatelem. Systémový administrátor tedy může přiřadit "
+"kvótu úložiště oddělení. Celková velikost všech knihoven v oddělení nesmí "
+"překročit kvótu úložiště. <strong>Upozorňujeme, že kvóta pododdělení "
+"nezávisí na kvótě jeho nadřazeného oddělení.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -310,12 +343,17 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"Knihovny oddělení mohou být vytvořeny systémovým administrátorem nebo "
+"správcem oddělení. Existuje také možnost řídit, zda jednotliví uživatelé "
+"mohou sdílet knihovny s oddělením."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"Všechny výše uvedené operace lze provést v rozhraní systémového "
+"administrátora. Pro informace viz níže uvedený snímek obrazovky."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -323,18 +361,22 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"Jak bylo uvedeno výše, správce oddělení je speciální role přiřazená "
+"systémovým administrátorem některým členům oddělení. Správci oddělení mohou "
+"po přihlášení do svého vlastního účtu provádět následující operace v "
+"oddělení."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "Přístup ke knihovnám oddělení"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "Spravovat členy ve svém oddělení"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "Spravovat knihovny ve svém oddělení"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -343,26 +385,34 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"Pokud je uživatel správcem oddělení, může přidávat nebo mazat členy v "
+"oddělení. Jakýkoli uživatel registrovaný v systému může být přidán jako člen"
+" oddělení. Pokud jsou však oddělení importována z AD, změny členství budou "
+"při příští synchronizaci s AD přepsány."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"Správce oddělení může spravovat knihovny v oddělení. Podporované operace "
+"jsou:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "Vytvořit nebo smazat knihovnu"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "Změnit název knihovny"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
+"Sdílet knihovnu uživatelům nebo skupinám mimo toto oddělení. To je velmi "
+"užitečné pro mezioddělenskou spolupráci."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -372,6 +422,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"Set fine-grained permission to folders in the libraries for users or sub-"
+"departments in this department. This works like <a "
+"href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
+"feature</a>."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -384,10 +438,18 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"A normal member of the department can use the department just like a group. "
+"Each department is presented to its members as a group. A user can not only "
+"access to the libraries in the department he/she belongs to, but also the "
+"libraries in the parent departments of his/her department. For example, if "
+"John is in the \"EMEA\" sub-department under the \"Sales\" department, and "
+"\"Sales\" is a sub-department under the company \"ACME\", John can then "
+"access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
+"departments are marked with a \"building\" icon next to its name."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "Using proxy in Seafile client"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
@@ -422,7 +484,7 @@ msgstr ""
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 pro Windows 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -431,10 +493,15 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (a budoucí verze) je přepracován s hlubší integrací do "
+"operačního systému Windows 10. Podporuje Windows 10 verzi 1709 (Podzimní "
+"aktualizace Windows 10 2017) a novější verze. Doporučujeme uživatelům "
+"Windows 10 upgradovat na SeaDrive 2.0 pro nativnější zážitek z virtuálního "
+"disku."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "Instalace a přístup k virtuálnímu disku"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -445,16 +512,24 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"SeaDrive 2.0 si můžete stáhnout z oficiálních webových stránek Seafile. Po "
+"instalaci a přihlášení do svého Seafile účtu začne SeaDrive stahovat seznamy"
+" knihoven a souborů ze serveru (stejně jako v SeaDrive 1.0.x). Může to trvat"
+" nějakou dobu, v závislosti na počtu souborů dostupných ve vašem seafile "
+"účtu. Stahování je progresivní, takže mezitím již můžete přistupovat k "
+"některým souborům na virtuálním disku."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"Pro přístup k virtuálnímu disku stačí otevřít Průzkumníka souborů Windows. V"
+" navigačním panelu Průzkumníka souborů Windows je uzel \"seadrive\"."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "Přístup k souborům na virtuálním disku"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
@@ -469,18 +544,24 @@ msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"Seafile klient 2.0 integruje se systémem Windows 10. Ikony souborů jsou méně"
+" podrobné než ve verzi 1.0."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"Soubory na virtuální jednotce jsou vytvořeny jako \"placeholder\" soubory ve"
+" lokálním souborovém systému. Mohou být ve 3 stavy:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>Placeholder soubor</b>: Prázdná reprezentace souboru, která může být "
+"otevřena jenom při přítomnosti síťového připojení."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -490,12 +571,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>Úplný soubor</b>: Soubor byl stažen a uložen lokálně. Stažení probíhá "
+"automaticky při prvním otevření placeholder souboru. Tyto soubory jsou k "
+"dispozici vždy, když se otevře SeaDrive, bez ohledu na přítomnost síťového "
+"připojení. Operativní systém může rozhodnout o vyčištění úplného souboru, "
+"když je nutné více místa na disku."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>Zapnutý úplný soubor</b>: Soubor byl stažen a uložen lokálně. Je "
+"zaručeno, že bude k dispozici offline."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -505,6 +593,9 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"Zvolte \"Zapnout na tomto zařízení\" pro zapnutí souboru nebo složky do "
+"lokální cache. Zvolte \"Uvolnit prostor\" pro vyčištění cache souboru nebo "
+"složky."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -512,10 +603,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"In SeaDrive 1.0, cached files are not automatically updated when they're "
+"updated on the server. In SeaDrive 2.0, full and pinned files are "
+"automatically kept in sync with the server."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "Stahování a řízení souborů"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -524,6 +618,10 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"Když se otevře placeholder soubor, operativní systém automaticky začne "
+"stahovat ho. Pokud soubor může trvat nějakou dobu na stažení, objeví se "
+"progresivní barra stahování v Průzkumníku souborů a můžete přerušit "
+"stahování."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -532,15 +630,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"Pokud se někde stane, že nějaká aplikace ve vašem systému pokusí se stahovat"
+" soubor z virtuálního disku (například antivirové software), vás operativní"
+"  systém o tom informuje a můžete přerušit stahování nebo zakázat aplikaci "
+"pro automatické stahování souborů v budoucnu."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "Často kladené otázky"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "Můžu vytvořit, smazat nebo přejmenovat knihovny?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -549,10 +651,14 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"Anžáda. Když vytvoříte, smažete nebo přejmenujete složky knihoven ve "
+"virtuální jednotce, operace se projeví na serveru. Můžete vytvářet, mazat a "
+"přejmenovávat pouze knihovny ve složce \"Moje knihovny\". Vytváření, mazání "
+"nebo přejmenování knihoven ve ostatních kategoriích bude ignorováno."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "Můžu vytvořit soubory nebo složky mimo složku knihovny?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -560,10 +666,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"Anžáda. Když vytvoříte soubor nebo složku mimo složku knihovny, operace se "
+"projeví pouze na vašem lokálním disku. Nová složka ve složce \"Moje "
+"knihovny\" se bude považovat za novou knihovnu."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "Můžu přistupovat ke šifrovaným knihovnám?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -573,10 +682,16 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"Anžáda. Ve výchozím nastavení jsou šifrované knihovny neprovedené a "
+"zobrazované ve virtuální jednotce. Musíte ručně vybrat, které šifrované "
+"knihovny chcete synchronizovat a zadat heslo. Stačí kliknout pravým "
+"tlačítkem na ikonu SeaDrive v oblasti systémového panelu a vybrat \"Zobrazit"
+" šifrované knihovny\". Otevře se okno, ve kterém můžete vybrat, které "
+"šifrované knihovny  chcete synchronizovat nebo ne."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "Je kompatibilní s SeaDrive 1.0?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -586,10 +701,16 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"Anžáda. SeaDrive 2.0 se použije na jakékoli existující účty a jejich "
+"metadata (uložená v adresáři C:\\users\\username\\seadrive\\). Nož ale ne "
+"použije lokální cache souborů z SeaDrive 1.0. Protože jsou lokální cache "
+"souborů z SeaDrive 1.0 neprůvedené, nemůžete je přistupovat ve verzi 2.0. "
+"Můžete spustit SeaDrive 1.0 znovu a nahrát soubory na server nebo je "
+"zkopírovat vynuceně."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "Jak vyčistit cache?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -600,10 +721,18 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"Anžáda. Můžete ručně vybrat, které složky nebo soubory chcete uložit do "
+"lokální cache. Pokud najdete složku, která zabírá příliš mnoho místa, stačí "
+"vybrat \"Uvolnit místo\" ve složce a všechny uložené soubory ve složce se "
+"budou vyčistit. Nežijete žádné nastavení pro čištění cache a omezení "
+"velikosti cache, protože placeholder jsou jen normální soubory uložené na "
+"vašem lokálním disku, velikost cache je pouze omezena dostupným místem na "
+"vašem počítači."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
 msgstr ""
+"Jak odebrat zbývající zástupné odkazy na SeaDrive v Windows Explorere?"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -612,12 +741,17 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"Anžáda. Zástupné odkazy na SeaDrive ve Windows Explorere se neodeberou po "
+"spuštění nebo přechodu na jiný účet v SeaDrive. To je očekávané chování. "
+"Pokud si přejete přístup k účtu později, nemusíte je odstraňovat."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"You can usually remove those shortcuts by uninstalling SeaDrive program and "
+"choose \"Remove account information\" in the prompt dialog."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -628,6 +762,12 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"Anžáda. Pokud se nepodaří odstranit zástupné odkazy prostřednictvím "
+"odinstalace SeaDrive, můžete je odebrat v Windows Explorere upravováním "
+"registry. Otevřete cestu "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" v editoru registry. Odeberte podklíče odpovídající zástupnému odkazu, který"
+" chcete odebrat."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
@@ -656,6 +796,9 @@ msgid ""
 "the server. The server uses this password to create the library. But it "
 "doesn't store the plain text password."
 msgstr ""
+"Anžáda. Pokud vytvoříte šifrovanou knihovnu v webové aplikaci, heslo se "
+"posílá na server. Server použije toto heslo k vytvoření knihovny. Nož ale ne"
+" uloží heslo v textové podobě."
 
 #: templates/help/encrypted_libraries.html:13
 #, python-format
@@ -664,6 +807,9 @@ msgid ""
 "client (see <a href=\"%(SITE_ROOT)shelp/install_sync/\">file syncing</a>), "
 "the password is not sent to the server."
 msgstr ""
+"Anžáda. Pokud vytvoříte šifrovanou knihovnu z lokální složky pomocí klienta "
+"na ploše (viz <a href=\"%(SITE_ROOT)shelp/install_sync/\">synchronizace "
+"souborů</a>), heslo se neposílá na server."
 
 #: templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
@@ -684,22 +830,29 @@ msgid ""
 "the server. The client decrypts and encrypts file contents locally. The "
 "plain text password is not stored on the client disk either."
 msgstr ""
+"Anžáda. Pokud použijete klienta na ploše pro synchronizaci knihovny, heslo "
+"se neposílá na server. Klient zašifruje a dešifruje obsahy souborů lokálně. "
+"Textové heslo se nikdy neuloží na disk klienta."
 
 #: templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client supports it since version 2.1.0."
 msgstr ""
+"Anžáda. Klient na iOS podporuje šifrování na straně klienta od verze 2.1.6. "
+"Klient na Android podporuje šifrování od verze 2.1.0."
 
 #: templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypts the contents of the files, but not"
 " the folder and file names."
 msgstr ""
+"Anžáda. Šifrovaná knihovna šifruje pouze obsahy souborů, ale ne jejich názvy"
+" složek a souborů."
 
 #: templates/help/file_locking.html:5
 msgid "File locking"
-msgstr ""
+msgstr "Uzamčení souboru"
 
 #: templates/help/file_locking.html:6
 msgid ""
@@ -709,22 +862,31 @@ msgid ""
 " the file when one person wants to exclusively modify the file. Seafile "
 "Professional Edition supports file locking."
 msgstr ""
+"Když více než jedna osoba spolupracuje na souboru, je pravděpodobné, že více"
+" než jedna osoba upraví soubor přibližně ve stejnou dobu. Seafile tuto "
+"situaci elegantně řeší pomocí konfliktních souborů. Ale často je pohodlnější"
+" uzamknout soubor, když jedna osoba chce soubor výhradně upravovat. Seafile "
+"Professional Edition podporuje uzamčení souboru."
 
 #: templates/help/file_locking.html:7
 msgid ""
 "File locking works on both the web app and the desktop syncing client. We'll"
 " introduce them one by one."
 msgstr ""
+"Uzamčení souboru funguje jak v webové aplikaci, tak v desktopovém "
+"synchronizačním klientovi. Představíme je jeden po druhém."
 
 #: templates/help/file_locking.html:8
 msgid "File locking on the Web App"
-msgstr ""
+msgstr "Uzamčení souboru v webové aplikaci"
 
 #: templates/help/file_locking.html:9
 msgid ""
 "To lock a file, you can navigate into the file's folder on the web app, and "
 "click on the \"operations\" drop-down menu."
 msgstr ""
+"Chcete-li uzamknout soubor, můžete v webové aplikaci přejít do složky "
+"souboru a kliknout na rozbalovací nabídku \"operace\"."
 
 #: templates/help/file_locking.html:11
 msgid ""
@@ -733,28 +895,39 @@ msgid ""
 "file. And you can also unlock a file that's locked by you. But you cannot "
 "unlock files locked by others."
 msgstr ""
+"Po uzamčení souboru můžete vidět červený \"stop sign\" v rohu ikony souboru."
+" Přejetím myši na stop sign můžete vidět, kdo soubor uzamkl. A můžete také "
+"odemknout soubor, který jste uzamkli vy. Ale nemůžete odemknout soubory "
+"uzamčené ostatními."
 
 #: templates/help/file_locking.html:13
 msgid "File locking on the desktop client"
-msgstr ""
+msgstr "Uzamčení souboru v desktopovém klientovi"
 
 #: templates/help/file_locking.html:14
 msgid ""
 "After a library is synced to the desktop, you can lock/unlock files in that "
 "library inside File Explorer on Windows or Finder on Mac OS."
 msgstr ""
+"Po synchronizaci knihovny na plochu můžete uzamknout/odemknout soubory v "
+"této knihovně uvnitř Průzkumníka souborů ve Windows nebo Finderu v Mac OS."
 
 #: templates/help/file_locking.html:15
 msgid ""
 "To lock a file, just right click on a synced file and choose \"lock this "
 "file\" in the \"Seafile\" menu."
 msgstr ""
+"Chcete-li uzamknout soubor, jednoduše klikněte pravým tlačítkem na "
+"synchronizovaný soubor a zvolte \"uzamknout tento soubor\" v nabídce "
+"\"Seafile\"."
 
 #: templates/help/file_locking.html:17
 msgid ""
 "If a file is locked by you, you can see an orange \"stop sign\" on the file "
 "icon. You can choose to unlock it."
 msgstr ""
+"Pokud je soubor uzamčen vámi, můžete na ikoně souboru vidět oranžový \"stop "
+"sign\". Můžete se rozhodnout jej odemknout."
 
 #: templates/help/file_locking.html:19
 msgid ""
@@ -762,16 +935,21 @@ msgid ""
 "file icon. The file is automatically set to read-only. You cannot modify it "
 "until it's unlocked."
 msgstr ""
+"Pokud je soubor uzamčen jiným uživatelem, můžete na ikoně souboru vidět "
+"červený \"stop sign\". Soubor je automaticky nastaven na pouze pro čtení. "
+"Nemůžete jej upravovat, dokud není odemčen."
 
 #: templates/help/file_locking.html:21
 msgid ""
 "If a library is not synced, you can still use cloud file browser to lock and"
 " unlock files in it."
 msgstr ""
+"Pokud není knihovna synchronizována, můžete stále používat cloudový "
+"prohlížeč souborů k uzamčení a odemčení souborů v ní."
 
 #: templates/help/file_locking.html:22
 msgid "Auto locking office files"
-msgstr ""
+msgstr "Automatické uzamykání kancelářských souborů"
 
 #: templates/help/file_locking.html:23
 msgid ""
@@ -781,18 +959,24 @@ msgid ""
 " propagated to other computers syncing this library. It prevents concurrent "
 "editing the same Office file and is convenient for collaboration."
 msgstr ""
+"Po synchronizaci knihovny na plochu, když otevřete soubor Microsoft Office "
+"uvnitř knihovny, Seafile automaticky uzamkne soubor. Když soubor zavřete, "
+"Seafile automaticky odemkne soubor. Stav uzamčení se šíří na ostatní "
+"počítače synchronizující tuto knihovnu. Zabrání to souběžné úpravě stejného "
+"souboru Office a je to vhodné pro spolupráci."
 
 #: templates/help/file_locking.html:24
 msgid "Details about file locking"
-msgstr ""
+msgstr "Podrobnosti o uzamykání souborů"
 
 #: templates/help/file_locking.html:25
 msgid "There are a few useful tips about how file locking works:"
 msgstr ""
+"Existuje několik užitečných tipů o tom, jak uzamykání souborů funguje:"
 
 #: templates/help/file_locking.html:27
 msgid "A locked file can only be unlocked by the user who locked it."
-msgstr ""
+msgstr "Uzamčený soubor může odemknout pouze uživatel, který jej uzamkl."
 
 #: templates/help/file_locking.html:28
 msgid ""
@@ -801,16 +985,22 @@ msgid ""
 "locked file. The purpose of file locking is mainly to prevent concurrent "
 "editing."
 msgstr ""
+"Uzamčený soubor nemůže být upravován, přesouván, přejmenován nebo mazán "
+"jinými uživateli. Ale jiní uživatelé stále mohou přesouvat, mazat nebo "
+"přejmenovávat nadřazenou složku uzamčeného souboru. Účelem uzamykání souborů"
+" je hlavně zabránit souběžné úpravě."
 
 #: templates/help/file_locking.html:29
 msgid ""
 "When a locked file's parent folder is renamed or moved inside the same "
 "library, it remains locked after the operation."
 msgstr ""
+"Když je nadřazená složka uzamčeného souboru přejmenována nebo přesunuta "
+"uvnitř stejné knihovny, zůstane po operaci uzamčena."
 
 #: templates/help/finding_older_version_files.html:6
 msgid "Finding older version of files"
-msgstr ""
+msgstr "Hledání starších verzí souborů"
 
 #: templates/help/finding_older_version_files.html:7
 msgid ""
@@ -819,10 +1009,14 @@ msgid ""
 "a configurable period. When you want to access an older version of a file, "
 "the file history feature becomes very handy."
 msgstr ""
+"Seafile sleduje historii úprav všech souborů. Kdykoli je soubor upraven, "
+"vytvoří se nová verze, zatímco stará verze je stále uchovávána po "
+"konfigurovatelné období. Když chcete získat přístup ke starší verzi souboru,"
+" funkce historie souborů se stává velmi užitečnou."
 
 #: templates/help/finding_older_version_files.html:8
 msgid "To list all the versions of a file:"
-msgstr ""
+msgstr "Pro zobrazení všech verzí souboru:"
 
 #: templates/help/finding_older_version_files.html:10
 msgid ""
@@ -830,16 +1024,21 @@ msgid ""
 "cursor onto the row of that file. An operation menu will appear. You can "
 "click the \"History\" button in that menu."
 msgstr ""
+"V Seafile webové aplikaci přejděte do složky obsahující soubor. Přesuňte "
+"kurzor na řádek tohoto souboru. Objeví se operační nabídka. Můžete kliknout "
+"na tlačítko \"Historie\" v této nabídce."
 
 #: templates/help/finding_older_version_files.html:11
 msgid ""
 "A list of all versions of that file will be displayed in time order, from "
 "newer to older. The list also contains the file's rename history."
 msgstr ""
+"Zobrazí se seznam všech verzí tohoto souboru v časovém pořadí, od "
+"nejnovějších po starší. Seznam také obsahuje historii přejmenování souboru."
 
 #: templates/help/finding_older_version_files.html:12
 msgid "You can download, restore, view any version of the file."
-msgstr ""
+msgstr "Můžete stáhnout, obnovit, zobrazit jakoukoli verzi souboru."
 
 #: templates/help/finding_older_version_files.html:14
 #, python-format
@@ -848,10 +1047,13 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Můžete nakonfigurovat dobu uchovávání verzí souborů: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">nastavení doby "
+"uchovávání historie</a>."
 
 #: templates/help/folder_permission.html:6
 msgid "Use folder permission for fine-grained access control"
-msgstr ""
+msgstr "Použijte oprávnění složek pro jemně odstupňovanou kontrolu přístupu"
 
 #: templates/help/folder_permission.html:8
 #, python-format
@@ -862,6 +1064,10 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing libraries</a>."
 " Here are some use cases:"
 msgstr ""
+"Pro sdílené knihovny nebo složky můžete nastavit oprávnění k jejich "
+"podsložkám pro osobu nebo skupinu. Dostupné oprávnění jsou stejné jako ty "
+"popsané v <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sdílení "
+"knihoven</a>. Zde jsou některé případy použití:"
 
 #: templates/help/folder_permission.html:10
 msgid ""
@@ -869,6 +1075,9 @@ msgid ""
 " to allow a specific member of the group to modify files in one sub-folder. "
 "You can grant write permission of this sub-folder to this person."
 msgstr ""
+"Sdílíte knihovnu skupině s oprávněním \"pouze pro čtení\". Také chcete "
+"povolit konkrétnímu členovi skupiny upravovat soubory v jedné podsložce. "
+"Můžete tomuto člověku udělit oprávnění k zápisu této podsložky."
 
 #: templates/help/folder_permission.html:11
 msgid ""
@@ -877,6 +1086,10 @@ msgid ""
 " change files not belong to his/her group. You can grant write permission of"
 " a sub-folder only to its group."
 msgstr ""
+"Sdílíte knihovnu 3 skupinám. Pod touto knihovnou jsou 3 podsložky, jedna pro"
+" každou skupinu pro nahrávání souborů. Nicméně nechcete, aby uživatelé "
+"měnili soubory, které nepatří do jejich skupiny. Můžete udělit oprávnění k "
+"zápisu podsložky pouze její skupině."
 
 #: templates/help/folder_permission.html:13
 msgid ""
@@ -885,17 +1098,23 @@ msgid ""
 "should first share the parent library or folder; otherwise the folder "
 "permission won't take effect."
 msgstr ""
+"Oprávnění složek jsou účinná pouze pro knihovny a složky, které sdílíte s "
+"ostatními. Chcete-li efektivně nastavit oprávnění složek k jejich "
+"podsložkám, měli byste nejprve sdílet nadřazenou knihovnu nebo složku; jinak"
+" oprávnění složky nebude mít účinek."
 
 #: templates/help/folder_permission.html:14
 msgid ""
 "One important design goal of folder permission is to support hierarchical "
 "permissions:"
 msgstr ""
+"Jedním z důležitých cílů návrhu oprávnění složek je podpora hierarchických "
+"oprávnění:"
 
 #: templates/help/folder_permission.html:16
 msgid ""
 "Sub-folders automatically inherit folder permissions from its parent folder."
-msgstr ""
+msgstr "Podsložky automaticky dědí oprávnění složek z nadřazené složky."
 
 #: templates/help/folder_permission.html:17
 msgid ""
@@ -905,10 +1124,15 @@ msgid ""
 "\"meeting files/today\" for user A. Then user A's permission to \"meeting "
 "files/today\" is \"read only\"."
 msgstr ""
+"Oprávnění nastavená na podsložkách přepisují oprávnění nastavená na jejich "
+"nadřazené složce. Například nastavíte oprávnění \"čtení zápis\" na složce "
+"\"soubory schůzky\" pro uživatele A a nastavíte oprávnění \"pouze pro "
+"čtení\" na podsložce \"soubory schůzky/dnes\" pro uživatele A. Pak je "
+"oprávnění uživatele A k \"soubory schůzky/dnes\" \"pouze pro čtení\"."
 
 #: templates/help/folder_permission.html:19
 msgid "Basic usage"
-msgstr ""
+msgstr "Základní použití"
 
 #: templates/help/folder_permission.html:20
 msgid ""
@@ -917,6 +1141,10 @@ msgid ""
 "\"permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions on this folder."
 msgstr ""
+"Pouze vlastník knihovny může nastavit oprávnění složek pro její podsložky. V"
+" rozhraní pro prohlížení souborů klikněte na tlačítko \"další operace\", "
+"zvolte \"oprávnění\" v rozbalovací nabídce. V pop-up okně můžete vidět a "
+"nastavit oprávnění složek na této složce."
 
 #: templates/help/folder_permission.html:21
 msgid ""
@@ -925,6 +1153,10 @@ msgid ""
 "Permission\" in the drop-down menu. In the pop-up window, you can see and "
 "set folder permissions in this library."
 msgstr ""
+"If you want to see all folder permissions set in a library, hover the mouse "
+"on the library. Click \"more operations\" button, choose \"Folder "
+"Permission\" in the drop-down menu. In the pop-up window, you can see and "
+"set folder permissions in this library."
 
 #: templates/help/folder_permission.html:22
 msgid ""
@@ -932,16 +1164,22 @@ msgid ""
 "next to \"read only\" sub-folders. When the user navigate into that sub-"
 "folder, he/she won't be able to add/modify/delete files."
 msgstr ""
+"Když ostatní uživatelé přejdou do složky, bude vedle podsložek \"pouze pro "
+"čtení\" malá ikona \"oko\". Když uživatel přejde do této podsložky, nebude "
+"moci přidávat/měnit/mazat soubory."
 
 #: templates/help/folder_permission.html:24
 msgid ""
 "If a \"read only\" folder is synced to PC with the Seafile desktop App, "
 "changes under a \"read only\" folder won't be uploaded to the cloud."
 msgstr ""
+"Pokud je složka \"pouze pro čtení\" synchronizována do PC pomocí desktopové "
+"aplikace Seafile, změny pod složkou \"pouze pro čtení\" nebudou nahrány do "
+"cloudu."
 
 #: templates/help/folder_permission.html:25
 msgid "Advanced: priority between different permissions"
-msgstr ""
+msgstr "Pokročilé: priorita mezi různými oprávněními"
 
 #: templates/help/folder_permission.html:27
 msgid ""
@@ -951,6 +1189,11 @@ msgid ""
 "library. Then user A only has \"read only\" access to the sub-folder, while "
 "he/she has \"read write\" access to all other sub-folders and files."
 msgstr ""
+"Oprávnění složek mají vyšší prioritu než oprávnění nastavená ve sdílení. "
+"Například pokud sdílíte knihovnu uživateli A s oprávněním \"čtení zápis\" a "
+"také nastavíte oprávnění \"pouze pro čtení\" k podsložce této knihovny. Pak "
+"má uživatel A přístup k podsložce pouze \"pouze pro čtení\", zatímco ke všem"
+" ostatním podsložkám a souborům má přístup \"čtení zápis\"."
 
 #: templates/help/folder_permission.html:28
 msgid ""
@@ -959,16 +1202,21 @@ msgid ""
 "if the system matches a permission specific to the user, it'll ignore all "
 "permissions set for the groups the user belongs to."
 msgstr ""
+"Oprávnění složek nastavená konkrétnímu uživateli mají vyšší prioritu než "
+"oprávnění nastavená skupině. To znamená, že při kontrole oprávnění pro "
+"složku, pokud systém najde shodu s oprávněním specifickým pro uživatele, "
+"ignoruje všechna oprávnění nastavená pro skupiny, do kterých uživatel patří."
 
 #: templates/help/folder_permission.html:29
 msgid ""
 "Permissions on sub-folders have higher priority than those on parent "
 "folders."
 msgstr ""
+"Oprávnění na podsložkách mají vyšší prioritu než na nadřazených složkách."
 
 #: templates/help/folder_permission.html:31
 msgid "Here is a more complex example:"
-msgstr ""
+msgstr "Zde je složitější příklad:"
 
 #: templates/help/folder_permission.html:32
 msgid ""
@@ -980,6 +1228,13 @@ msgid ""
 "first matched for folder \"A/B\" and user \"John\", which is inherited from "
 "its parent \"A\"."
 msgstr ""
+"Předpokládejme, že struktura složek vypadá jako \"A/B\", uživatel \"John\" "
+"je ve skupině \"Personál\". Pokud nastavíte oprávnění \"pouze pro čtení\" na"
+" složce A pro Johna a také nastavíte oprávnění \"čtení zápis\" na složce "
+"\"A/B\" pro skupinu \"Personál\". Pak je oprávnění Johna ke složce \"A/B\" "
+"stále pouze \"pouze pro čtení\". To je proto, že podle pravidla 2 je "
+"oprávnění \"pouze pro čtení\" nejprve shodováno pro složku \"A/B\" a "
+"uživatele \"John\", které je zděděno z jeho nadřazené složky \"A\"."
 
 #: templates/help/full_text_file_search.html:6
 msgid ""
@@ -987,46 +1242,49 @@ msgid ""
 "as well as the content of certain files, in the Seafile web app. Currently "
 "Seafile can search the contents of the following types of files:"
 msgstr ""
+"Pokud používáte Pro Edition Server, můžete vyhledávat názvy souborů a "
+"složek, stejně jako obsah určitých souborů v Seafile webové aplikaci. "
+"Aktuálně může Seafile vyhledávat obsah následujících typů souborů:"
 
 #: templates/help/full_text_file_search.html:8
 #: templates/help/viewing_files_within_web_app.html:8
 msgid "Microsoft Office Doc: .doc, .docx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Doc: .doc, .docx (pouze Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:9
 #: templates/help/viewing_files_within_web_app.html:9
 msgid "Microsoft Office PowerPoint: .ppt, .pptx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office PowerPoint: .ppt, .pptx (pouze Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:10
 #: templates/help/viewing_files_within_web_app.html:10
 msgid "Microsoft Office Excel: .xls, .xlsx (Pro Edition Server only)"
-msgstr ""
+msgstr "Microsoft Office Excel: .xls, .xlsx (pouze Pro Edition Server)"
 
 #: templates/help/full_text_file_search.html:11
 #: templates/help/viewing_files_within_web_app.html:11
 msgid "LibreOffice files"
-msgstr ""
+msgstr "LibreOffice soubory"
 
 #: templates/help/full_text_file_search.html:12
 #: templates/help/viewing_files_within_web_app.html:12
 msgid "PDF files"
-msgstr ""
+msgstr "PDF soubory"
 
 #: templates/help/full_text_file_search.html:13
 #: templates/help/viewing_files_within_web_app.html:14
 msgid "Markdown files: .md"
-msgstr ""
+msgstr "Markdown soubory: .md"
 
 #: templates/help/full_text_file_search.html:14
 #: templates/help/viewing_files_within_web_app.html:15
 msgid "Various source code files"
-msgstr ""
+msgstr "Různé soubory se zdrojovým kódem"
 
 #: templates/help/full_text_file_search.html:15
 #: templates/help/viewing_files_within_web_app.html:16
 msgid "Text files: .txt, .log"
-msgstr ""
+msgstr "Textové soubory: .txt, .log"
 
 #: templates/help/full_text_file_search.html:17
 msgid ""
@@ -1034,34 +1292,45 @@ msgid ""
 "text search feature. In that case, you can only search file and folder "
 "names."
 msgstr ""
+"Poznámka: váš správce systému Seafile nemusel povolit funkci full-text "
+"vyhledávání. V takovém případě můžete vyhledávat pouze názvy souborů a "
+"složek."
 
 #: templates/help/groups_managing.html:6
 msgid ""
 "Creating a group is a convenient way to share files to many people. In "
 "Seafile, you can create and manage a group easily."
 msgstr ""
+"Vytvoření skupiny je pohodlný způsob, jak sdílet soubory mnoha lidem. V "
+"Seafile můžete snadno vytvářet a spravovat skupinu."
 
 #: templates/help/groups_managing.html:7
 msgid "Here is how groups work in Seafile:"
-msgstr ""
+msgstr "Zde je jak skupiny fungují v Seafile:"
 
 #: templates/help/groups_managing.html:9
 msgid ""
 "Each group has a owner. The owner is the creator of the group by default. "
 "He/she can transfer the ownership of the group to another member."
 msgstr ""
+"Každá skupina má vlastníka. Vlastník je ve výchozím nastavení tvůrce "
+"skupiny. Může převést vlastnictví skupiny na jiného člena."
 
 #: templates/help/groups_managing.html:10
 msgid ""
 "Each group can have multiple admins. The group owner and group admins can "
 "add more group admins."
 msgstr ""
+"Každá skupina může mít více správců. Vlastník skupiny a správci skupiny "
+"mohou přidat více správců skupiny."
 
 #: templates/help/groups_managing.html:11
 msgid ""
 "The group admin can add/delete members in the group. And he/she can also "
 "unshare a library in the group."
 msgstr ""
+"Správce skupiny může přidávat/mazat členy ve skupině. A také může zrušit "
+"sdílení knihovny ve skupině."
 
 #: templates/help/groups_managing.html:13
 msgid ""
@@ -1069,6 +1338,9 @@ msgid ""
 "all the groups you're in. Clicking into any group, you'll see the libraries "
 "shared into this group."
 msgstr ""
+"Klikněte na kartu \"Sdíleno se skupinami\" na levém panelu a uvidíte všechny"
+" skupiny, ve kterých jste. Kliknutím na libovolnou skupinu uvidíte knihovny "
+"sdílené do této skupiny."
 
 #: templates/help/groups_managing.html:14
 msgid ""
@@ -1076,6 +1348,9 @@ msgid ""
 "panel. Then click on \"All Groups\". In the page, you can click the \"New "
 "Group\" button to create a group."
 msgstr ""
+"Chcete-li vytvořit novou skupinu, klikněte na kartu \"Sdíleno se skupinami\""
+" na levém panelu. Poté klikněte na \"Všechny skupiny\". Na stránce můžete "
+"kliknout na tlačítko \"Nová skupina\" a vytvořit skupinu."
 
 #: templates/help/groups_managing.html:15
 #, python-format
@@ -1083,6 +1358,8 @@ msgid ""
 "See <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sharing files "
 "and folders</a> about how to share libraries or folders to a group."
 msgstr ""
+"Viz <a href=\"%(SITE_ROOT)shelp/sharing_files_and_folders/\">sdílení souborů"
+" a složek</a> o tom, jak sdílet knihovny nebo složky se skupinou."
 
 #: templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1191,7 +1468,7 @@ msgstr ""
 
 #: templates/help/install_sync.html:6
 msgid "Installing Seafile client program"
-msgstr ""
+msgstr "Installing Seafile client program"
 
 #: templates/help/install_sync.html:8
 msgid ""
@@ -1262,6 +1539,8 @@ msgid ""
 "Seafile is an enterprise file hosting platform with high reliability and "
 "performance."
 msgstr ""
+"Seafile je podniková platforma pro hostování souborů s vysokou spolehlivostí"
+" a výkonem."
 
 #: templates/help/introduction.html:9
 #, python-format
@@ -1272,6 +1551,11 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/using_drive_client\">the drive client</a>. It also "
 "has mobile clients for Android and iOS."
 msgstr ""
+"Seafile obsahuje webové rozhraní pro správu a sdílení souborů. Má dva druhy "
+"desktopových klientů, <a href=\"%(SITE_ROOT)shelp/install_sync/\">klient pro"
+" synchronizaci souborů</a> a <a "
+"href=\"%(SITE_ROOT)shelp/using_drive_client\">drive klient</a>. Má také "
+"mobilní klienty pro Android a iOS."
 
 #: templates/help/introduction.html:10
 msgid ""
@@ -1279,6 +1563,9 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\" target=\"_blank\">Seafile web "
 "site</a>."
 msgstr ""
+"Klienty si můžete stáhnout na <a "
+"href=\"https://www.seafile.com/en/download/\" target=\"_blank\">webových "
+"stránkách Seafile</a>."
 
 #: templates/help/introduction.html:11
 msgid ""
@@ -1286,6 +1573,9 @@ msgid ""
 "help in our forum: <a href=\"https://forum.seafile.com\" "
 "target=\"_blank\">https://forum.seafile.com</a>."
 msgstr ""
+"Pokud tento manuál neobsahuje informace, které potřebujete, můžete hledat "
+"pomoc v našem fóru: <a href=\"https://forum.seafile.com\" "
+"target=\"_blank\">https://forum.seafile.com</a>."
 
 #: templates/help/libraries_managing.html:6
 msgid ""
@@ -1295,18 +1585,27 @@ msgid ""
 "library works mostly like a top level folder. But it also has some special "
 "properties:"
 msgstr ""
+"Seafile používá \"knihovny\" k organizaci vašich souborů. Knihovna je "
+"kontejner nejvyšší úrovně pro sadu souborů a složek. Můžete vytvořit "
+"knihovnu pro každý projekt, na kterém pracujete, nebo pro každý typ "
+"dokumentu, který chcete uložit v Seafile. Knihovna funguje většinou jako "
+"složka nejvyšší úrovně. Ale má také některé speciální vlastnosti:"
 
 #: templates/help/libraries_managing.html:8
 msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"Každá knihovna si udržuje svou vlastní historii úprav souborů. Neexistuje "
+"žádná globální historie úprav souborů napříč všemi knihovnami."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"Každá knihovna může být synchronizována s desktopovými klienty samostatně. "
+"Můžete zvolit, které knihovny se mají synchronizovat."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1315,12 +1614,18 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"Když se poprvé přihlásíte do webové aplikace Seafile, Seafile automaticky "
+"vytvoří výchozí knihovnu s názvem \"Moje knihovna\" pro vás. Můžete také "
+"vytvářet další knihovny. Zde je to, jak to vypadá, když jste vytvořili "
+"několik knihoven."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"Můžete přejít do knihovny a spravovat své soubory a složky. Můžete nahrávat,"
+" stahovat, přejmenovávat, přesouvat, kopírovat a mazat soubory."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1329,6 +1634,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"Po <a href=\"%(SITE_ROOT)shelp/install_sync/\">synchronizaci knihovny s "
+"desktopovým klientem</a> můžete provádět jakékoli operace se soubory uvnitř "
+"místní složky knihovny. Operace budou nahrány na server."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1337,6 +1645,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile sleduje historii úprav pro celou knihovnu. Kdykoli se na knihovnu "
+"vztahuje operace se souborem (aktualizace souboru, odstranění souboru atd.),"
+" Seafile vytvoří \"snímek\" předchozího stavu knihovny. Snímek obsahuje "
+"kompletní strukturu souborů a složek knihovny."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1347,10 +1659,16 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"V některých případech jste změnili mnoho souborů v knihovně a zjistíte, že "
+"chcete vrátit všechny tyto změny. Obnovení mnoha souborů na jejich staré "
+"verze může být zdlouhavé. V tuto chvíli se funkce snímků stává velmi "
+"užitečnou. Můžete obnovit celou knihovnu do jakéhokoli bodu v minulosti. "
+"Všechny soubory v knihovně budou obnoveny do tohoto časového bodu, všechny "
+"najednou. Funguje to jako \"stroj času\" pro knihovnu."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "Pro zobrazení historie knihovny a snímků:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1358,12 +1676,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"V Seafile Webové aplikaci přejděte do kořenové složky knihovny. Klikněte na "
+"ikonu \"Historie\" v horním navigačním panelu knihovny. Všechny záznamy změn"
+" knihovny budou zobrazeny v seznamu."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"Klikněte na odkaz \"zobrazit snímek\" u jakéhokoli záznamu úprav. Uvidíte "
+"stav knihovny v daném časovém bodě."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1372,6 +1695,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Můžete konfigurovat dobu uchovávání historie knihovny: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">nastavení doby "
+"uchovávání historie</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1381,6 +1707,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"Zachytávání a ukládání malých strukturovaných dat snadno použitelným "
+"způsobem – k tomu slouží wiki v Seafile. Wiki stránky jsou psány v Markdown "
+"(MD), jednoduchém značkovacím jazyce, aby byla zajištěna kompatibilita "
+"napříč platformami. MD soubory ukládají textové, tabulkové i grafické "
+"informace; Můžete také přidávat odkazy na další dokumenty v Markdown "
+"souboru."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1389,10 +1721,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"Můžete spravovat standardní knihovnu v Seafile jako Wiki, s \"Sloupcovým "
+"zobrazením\" zavedeným ve verzi 7.0. Protože Seafile implementuje wiki jako "
+"standardní knihovny Seafile, mohou být synchronizovány a sdíleny s jinými "
+"uživateli stejně jako jakákoli běžná knihovna."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "Sloupcové zobrazení"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1403,10 +1739,17 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"Wiki obvykle mají postranní panel obsahující stromovou strukturu složek, "
+"která umožňuje rychlé a snadné procházení wiki stránek. Sloupcové zobrazení "
+"Seafile vám umožňuje spravovat soubory v knihovně stejným způsobem jako wiki"
+" prostor. Uživatelé v něm mohou procházet a přesouvat soubory a složky "
+"pouhým přetažením. Akce se soubory, jako je přejmenování, přesun a otevření "
+"pomocí klienta, jsou dostupné v kontextové nabídce přístupné pravým "
+"kliknutím."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "WYSIWYG Markdown editor"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1422,12 +1765,25 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"Wiki stránky v Seafile jsou uloženy jako běžné dokumenty ve formátu "
+"Markdown. Chcete-li vytvořit novou wiki stránku v knihovně, stačí vytvořit "
+"nový Markdown dokument. MD soubory lze upravovat přímo z webového rozhraní "
+"Seafile pomocí online MD editoru. Webový editor nabízí plynulý uživatelský "
+"zážitek a bohaté možnosti formátování pro text, obrázky a tabulky. Obrázky "
+"lze importovat do MD souborů z knihoven a místního úložiště, stejně jako "
+"pomocí hypertextových odkazů. Základní funkce úprav obrázků, jako je změna "
+"měřítka, lze také provádět v rozhraní editoru WYSIWYG (co vidíš, to "
+"dostaneš). Tabulky lze vkládat a upravovat pomocí několika kliknutí. Totéž "
+"platí pro obsah tabulky: Tabulku lze zkopírovat celou nebo částečně bez "
+"opuštění WYSIWYG zobrazení."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"Historie změn Markdown souboru lze snadno přistupovat kliknutím na tlačítko "
+"\"Historie souboru\" v nabídce v horní části rozhraní editoru."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1435,10 +1791,13 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"Můžete otevřít skrytý postranní panel na pravé straně Markdown editoru. "
+"Obsah, informace o souboru a komentáře ke spolupráci jsou poskytovány v "
+"tomto postranním panelu."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "Označování souborů a související dokumenty"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1447,22 +1806,30 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"Označování souborů je důležitou funkcí pro správu znalostí. Seafile umožňuje"
+" uživatelům definovat štítky pro každou knihovnu a aplikovat štítky na "
+"soubory. Štítky lze spravovat z postranního panelu Markdown editoru nebo z "
+"rozhraní prohlížeče souborů."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"Rozhraní prohlížeče souborů poskytuje souhrn všech štítků souborů v aktuální"
+" knihovně."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"Pokud chcete, aby sdílení uživatelé nemohli upravovat místní kopie, můžete "
+"zvažovat použití Seafile Drive klienta."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "Obnovení smazaných souborů a složek"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1470,16 +1837,21 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"Každá knihovna v Seafile automaticky sleduje vaše operace mazání souborů. "
+"Někdy zjistíte, že soubory byly smazány omylem. Můžete najít své smazané "
+"soubory v koši každé knihovny."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "Zde je návod, jak používat funkci koše:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
 msgstr ""
+"V Seafile Webové aplikaci přejděte do nadřazené složky obsahující smazaný "
+"soubor nebo složku."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1487,6 +1859,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"Klikněte na ikonu \"koš\" v operačním panelu knihovny. Smazané soubory a "
+"složky budou uvedeny v pořadí podle času odstranění. V dolní části seznamu "
+"můžete kliknout na tlačítko \"více\" pro načtení dalších smazaných souborů."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1494,6 +1869,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"V seznamu smazaných souborů můžete obnovit soubory a složky. Pokud byla "
+"nadřazená složka souboru nebo složky smazána, bude obnovena do kořenové "
+"složky knihovny."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1501,6 +1879,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"Poznámka: koš obsahuje pouze soubory a podsložky smazané pod aktuální "
+"složkou. Soubory smazané v podsložkách aktuální složky jsou také zahrnuty v "
+"seznamu."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1509,6 +1890,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"Můžete konfigurovat dobu uchovávání smazaných souborů: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">nastavení doby "
+"uchovávání historie</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1517,6 +1901,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"Možná máte na Seafile serveru některé velmi velké knihovny. A v současné "
+"době vás zajímá pouze podsložka uvnitř jedné knihovny. Poté můžete "
+"selektivně synchronizovat podsložku v knihovně, místo synchronizace celé "
+"knihovny."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1540,31 +1928,39 @@ msgstr ""
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "Nastavení doby uchovávání historie knihovny"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"Délka doby uchovávání historie knihovny určuje, jak dlouho můžete "
+"přistupovat k vašim historickým datům v následujících funkcích:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"Obnovení smazaných souborů: nemůžete obnovit soubory a složky smazané před "
+"dobou uchovávání."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"Verze souborů: nemůžete přistupovat k verzím souborů starším než doba "
+"uchovávání."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"Historie knihovny a snímky: nemůžete přistupovat k snímkům knihovny starším "
+"než doba uchovávání."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1572,51 +1968,72 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"Dobu uchovávání starých verzí souborů lze konfigurovat pro každou knihovnu "
+"samostatně. Musíte být vlastníkem knihovny, abyste mohli nastavit dobu "
+"uchovávání. Pro nastavení délky doby uchovávání:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"V Seafile Webové aplikaci klikněte na kartu \"Moje\" v navigačním panelu "
+"(jak je znázorněno na obrázku níže). Zobrazí se všechny knihovny, které vám "
+"patří."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"Přesuňte kurzor na řádek knihovny. Objeví se operační nabídka. Klikněte na "
+"\"Nastavení historie\" v rozbalovací nabídce."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
 msgstr ""
+"Ve vyskakovacím dialogu můžete nastavit délku doby uchovávání souborů."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"V Seafile existuje několik způsobů, jak sdílet soubory a složky s ostatními:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"Používání odkazů: existuje více typů odkazů, které lze použít ke sdílení s "
+"různým rozsahem spolupracovníků."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"Sdílecí odkazy: Každý uživatel, který má přístup k odkazům, může přistupovat"
+" k souborům nebo složkám, na které odkaz ukazuje. Přihlášení není "
+"vyžadováno."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"Odkazy pro nahrávání: Každý uživatel, který má přístup k odkazům, může "
+"nahrávat soubory do složky, na kterou odkaz ukazuje. Přihlášení není "
+"vyžadováno."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"Interní odkazy: K tomuto odkazu mohou přistupovat pouze přihlášení "
+"uživatelé, kteří mají oprávnění ke čtení souboru nebo složky. Používá se pro"
+" interní sdílení souborů."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1624,10 +2041,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"Sdílení knihoven nebo složek: používá se pro nastavení přístupových "
+"oprávnění ke knihovně nebo složce pro konkrétní uživatele nebo skupiny. "
+"Uživatelé se musí přihlásit, aby mohli přistupovat ke složkám."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "Vytváření sdílecích odkazů na soubory nebo složky"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1635,12 +2055,17 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"Sdílecí odkazy jsou veřejné odkazy na soubory nebo složky. K nim může "
+"přistupovat kdokoli, včetně těch, kteří nemají účet Seafile. Můžete také "
+"použít heslo a čas vypršení platnosti k ochraně vašich odkazů."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"Můžete také nastavit přístupová oprávnění pro sdílecí odkazy. Existují tři "
+"typy oprávnění:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1648,6 +2073,8 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"Pouze náhled: soubor nebo soubory ve složce lze pouze zobrazit ve webovém "
+"prohlížeči, ale nelze je stáhnout. To je užitečné pro sdílení důvěrných dat."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1655,16 +2082,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"Úprava v cloudu a stažení: Podobné jako \"Náhled a stažení\", ale pokud lze "
+"soubor upravovat ve webovém prohlížeči (např. soubor Office), každý "
+"uživatel, který má přístup k odkazu, může jej upravovat."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "Pro vytvoření sdílecího odkazu v Seafile webové aplikaci:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Přejděte do nadřazené složky obsahující soubor nebo složku. Najděte myší na "
+"soubor nebo složku a klikněte na ikonu \"Sdílet\", která se objeví."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1672,6 +2104,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"Objeví se vyskakovací okno s možnostmi sdílení. Klikněte na kartu \"Sdílet "
+"odkaz\" na levém panelu. Poté klikněte na tlačítko \"Generovat\" pro "
+"vytvoření odkazu. Můžete použít heslo, čas vypršení platnosti a oprávnění k "
+"ochraně vašeho odkazu."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1679,10 +2115,12 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"Zkopírujte odkaz do e-mailu, klienta pro okamžité zasílání zpráv nebo "
+"jakéhokoli jiného nástroje pro jeho odeslání ostatním."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
-msgstr ""
+msgstr "Můžete také vytvářet sdílecí odkazy z desktopových klientů."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1691,6 +2129,10 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"Pokud je knihovna synchronizována, dvakrát klikněte na knihovnu v hlavním "
+"okně klienta Seafile. Otevře se místní složka této knihovny. Klikněte pravým"
+" tlačítkem na soubor nebo složku, ke které chcete vytvořit odkaz. V "
+"kontextové nabídce zvolte \"Seafile\" a poté \"Vytvořit sdílecí odkaz\"."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1698,10 +2140,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"Pokud není knihovna synchronizována, dvakrát klikněte na knihovnu v hlavním "
+"okně klienta Seafile. Otevře se okno cloudového prohlížeče souborů a můžete "
+"v něm vytvořit odkaz na soubor nebo složku."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "Vytváření odkazů pro nahrávání do složek"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1709,16 +2154,21 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"Můžete používat odkazy pro nahrávání ke sbírání souborů od ostatních. Můžete"
+" vytvářet odkazy pro nahrávání pouze pro složky. Ostatní nemohou vidět "
+"soubory ve složkách. Mohou pouze nahrávat soubory do nich."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "Pro vytvoření odkazu pro nahrávání v Seafile webové aplikaci:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"Přejděte do nadřazené složky obsahující složku. Najděte myší na složku a "
+"klikněte na ikonu \"Sdílet\", která se objeví."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1726,10 +2176,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"Objeví se vyskakovací okno s možnostmi sdílení. Klikněte na kartu \"Odkaz "
+"pro nahrávání\" na levém panelu. Poté klikněte na tlačítko \"Generovat\" pro"
+" vytvoření odkazu. Můžete použít heslo k ochraně vašeho odkazu."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "Sdílení knihoven nebo složek"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1737,62 +2190,77 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"Můžete sdílet knihovnu nebo složku s jinými registrovanými uživateli "
+"Seafile. Ke sdílené knihovně nebo složce mohou ostatní přistupovat pomocí "
+"webové aplikace a klientů Seafile."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "Můžete zvolit rozsah sdílení:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
-msgstr ""
+msgstr "Sdílet uživateli: Můžete sdílet jednomu nebo více uživatelům."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "Sdílet skupině: Můžete sdílet skupině."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"Sdílet organizaci: Pokud používáte privátní server, někdy je užitečné sdílet"
+" všem členům na serveru (celé organizaci)."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "Můžete také nastavit oprávnění pro sdílení:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"Čtení-Zápis: uživatelé mohou číst, zapisovat, nahrávat, stahovat a "
+"synchronizovat soubory."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"Pouze pro čtení: uživatelé mohou číst, stahovat a synchronizovat soubory."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"Správce: kromě oprávnění k zápisu mohou uživatelé také sdílet knihovnu."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"Online Čtení-Zápis: uživatelé mohou prohlížet a upravovat soubory online "
+"pomocí webového prohlížeče. Soubory nelze stáhnout."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"Online Pouze pro čtení: uživatelé mohou pouze prohlížet soubory online "
+"pomocí webového prohlížeče. Soubory nelze stáhnout."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "Pro sdílení knihovny nebo složky uživateli nebo skupině:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"Najděte myší na knihovnu nebo složku a klikněte na ikonu \"Sdílet\", která "
+"se objeví."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1800,6 +2268,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"Objeví se vyskakovací okno s možnostmi sdílení. Klikněte na kartu \"Sdílet "
+"uživateli\" nebo \"Sdílet skupině\" na levém panelu. Vyberte uživatele nebo "
+"skupinu. Poté klikněte na \"Odeslat\"."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1808,6 +2279,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"Po sdílení knihovny nebo složky uživateli ji uživatel může vidět kliknutím "
+"na kartu \"Sdíleno se mnou\" na levém panelu v Seafile webové aplikaci. "
+"Pokud ji sdílíte skupině, členové skupiny ji mohou vidět pouze přechodem do "
+"skupiny."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1816,10 +2291,14 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"Pro sdílení knihovny celé organizaci: V Seafile webové aplikaci klikněte na "
+"kartu \"Sdíleno se všemi\" na levém panelu. Poté klikněte na tlačítko "
+"\"Přidat knihovnu\". V rozbalovací nabídce můžete zvolit sdílení existující "
+"knihovny nebo vytvoření nové knihovny a její sdílení."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "Interní odkazy"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1829,6 +2308,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"K tomuto odkazu mohou přistupovat pouze přihlášení uživatelé, kteří mají "
+"oprávnění ke čtení souboru nebo složky. Používá se pro interní sdílení "
+"souborů. Je to pohodlný způsob sdílení souborů mezi členy týmu, kteří mají "
+"přístup ke společné knihovně. Můžete jednoduše zkopírovat odkaz a vložit ho "
+"do e-mailu nebo IM softwaru."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1847,7 +2331,7 @@ msgstr ""
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "Syncing with an existing folder"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1888,7 +2372,7 @@ msgstr "Pak vyberte existující složku pro synchronizaci s touto knihovnou."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "Unsync and resync library"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1900,6 +2384,12 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"Anžáda. Pokud nebudete synchronizovat lokální složku s knihovnou dál, můžete"
+" zrušit synchronizaci. Po zrušení synchronizace se změny ve lokální složce a"
+" souborech nebudou nahrané, a změny ve knihovně se nebudou stahovat. Pokud "
+"chcete knihovnu synchronizovat znovu s lokální složkou, můžete použít funkci"
+" <a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">synchronizace s "
+"existující složkou</a>."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1921,16 +2411,21 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"Anžáda. Po instalaci klienta na ploše podle pokynů na <a "
+"href=\"https://www.seafile.com/en/download/\">stránce stahování</a>, můžete "
+"ho spustit dvojkliknutím na ikonu \"SeaDrive\" na ploše."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"Anžáda. Po spuštění klienta na ploše se vás bude dotazovat na písmeno  "
+"virtuální jednotky. Výchozí hodnota je \"S:\". Po výběru písmena se vás "
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "Poté budete požádáni o přihlášení k vašemu Seafile serveru."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1939,6 +2434,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"Po úspěšném přihlášení k serveru začne Drive klient stahovat seznamy "
+"knihoven a souborů ze serveru. Obsahy souborů se v tuto chvíli nestahují. "
+"Takže to nebude trvat příliš dlouho. Můžete to nechat běžet na pozadí. "
+"Budete upozorněni, když je stahování dokončeno."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1948,26 +2447,34 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"Otevře se složka virtuálního disku. Zjistíte, že funguje stejně jako "
+"obyčejný pevný disk na vašem počítači. Nejvyšší úrovně složek na virtuálním "
+"disku jsou knihovny na Seafile serveru. Obsahy souborů se stáhnou, když "
+"otevřete soubor. Nedávno otevřené soubory budou uloženy do mezipaměti na "
+"vašem místním disku. Všechny soubory v mezipaměti budou označeny zeleným "
+"fajfkou."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "Stav synchronizace"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"Soubory a složky na virtuálním disku jsou buď pouze v cloudu, "
+"synchronizovány, nebo v částečně synchronizovaném stavu."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "Stav"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Ikona"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
@@ -1976,7 +2483,7 @@ msgstr "Detaily"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "Obsah pouze v cloudu"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1986,59 +2493,73 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"Obsah pouze v cloudu se zobrazuje na virtuálním disku, ale nepoužívá plné "
+"množství místa, které by soubor zabíral. V průzkumníku souborů můžete vidět "
+"soubor, ale obsah není plně stažen, dokud jej nepotřebujete. Co se stáhne, "
+"jsou pouze informace o souboru, jako je jeho název, velikost a datum "
+"aktualizace."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "Synchronizovaný obsah"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"Synchronizovaný obsah je stažen a uložen na pevném disku vašeho počítače. "
+"Tyto soubory můžete přímo upravovat z aplikací na vašem počítači."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "Částečně synchronizovaný obsah"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"Částečně synchronizované složky obsahují jak synchronizované, tak pouze "
+"cloudové soubory nebo složky."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "Speciální stavy"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"Pro soubory, které jsou již synchronizovány na místní počítač, mohou být ve "
+"3 dalších speciálních stavech, kromě normálního \"synchronizovaného\" stavu."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "Uzamčeno jiným uživatelem"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"Soubor je uzamčen jiným uživatelem na serveru. Soubor můžete otevřít pouze v"
+" režimu pouze pro čtení. Nemůžete soubor upravovat, mazat, přejmenovávat ani"
+" přesouvat."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "Uzamčeno mnou"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
-msgstr ""
+msgstr "Soubor je uzamčen vámi. Tím se zabrání ostatním v úpravě souboru."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "Pouze pro čtení"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
@@ -2053,6 +2574,8 @@ msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"Drive klient pravidelně čistí nepoužívané soubory v mezipaměti na pozadí. "
+"Můžete také omezit místní prostor mezipaměti."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -2060,10 +2583,14 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"Můžete se přihlásit k více účtům v Drive klientovi. Nicméně pouze soubory na"
+" aktuálně vybraném serveru se zobrazí na virtuálním disku. Můžete přepínat "
+"mezi účty."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. Proč nemohu vytvářet nové soubory nebo mazat složky v kořenové složce?"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -2074,13 +2601,21 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"Kořenová složka virtuálního disku obsahuje pouze složky knihoven. Seafile "
+"může synchronizovat pouze soubory uvnitř knihoven. Soubory v kořenové složce"
+" nelze nahrát na Seafile server. Takže nemá smysl podporovat vytváření "
+"souborů v kořenové složce. Protože složky nejvyšší úrovně na virtuálním "
+"disku představují knihovny, nechceme, aby uživatelé omylem smazali své "
+"knihovny. Takže Drive klient nepodporuje mazání složek nejvyšší úrovně."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"Některé typy souborů lze přímo otevřít a zobrazit v Seafile Webové aplikaci."
+" Momentálně jsou to:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "Obrázkové soubory"

@@ -365,8 +365,21 @@ class CcnetDB:
                 }
                 users_obj = CcnetGroupMembers(**params)
                 users.append(users_obj)
-
         return users, total_count
+    
+    def count_org_active_users(self, org_id):
+        sql = f"""
+        SELECT COUNT(1)
+        FROM `{self.db_name}`.`OrgUser` ou
+        JOIN `{self.db_name}`.`EmailUser` eu ON ou.email = eu.email
+        WHERE ou.org_id = %s AND eu.is_active = 1 AND eu.email NOT LIKE %s
+        """
+        user_count = 0
+        with connection.cursor() as cursor:
+            cursor.execute(sql, [org_id, '%@seafile_group'])
+            row = cursor.fetchone()
+            user_count = int(row[0]) if row and row[0] is not None else 0
+        return user_count
 
     def get_orgs_by_is_active(self, is_active, page, per_page):
 

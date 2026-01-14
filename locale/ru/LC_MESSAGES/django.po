@@ -1939,7 +1939,7 @@ msgstr "{name} {op_type} {obj_type} {obj_link} в библиотеке {repo_lin
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "Распознавание лиц выполнено для библиотеки {repo_name}."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
