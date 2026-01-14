@@ -162,6 +162,7 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
     this.calculatePara(this.props);
+    window.addEventListener('popstate', this.onpopstate);
   }
 
   onMessageCallback = (noticeData) => {
@@ -287,10 +288,10 @@ class LibContentView extends React.Component {
   getInfoFromLocation = (repoID) => {
     const urlParams = new URLSearchParams(window.location.search);
     const viewId = urlParams.get('view');
-    if (viewId) return { path: `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}`, viewId };
+    if (viewId) return { path: `/${PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES}/${viewId}`, viewId };
 
     const tagId = urlParams.get('tag');
-    if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}`, tagId };
+    if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${tagId}`, tagId };
 
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
@@ -326,6 +327,7 @@ class LibContentView extends React.Component {
   };
 
   componentWillUnmount() {
+    window.removeEventListener('popstate', this.onpopstate);
     window.onpopstate = this.oldOnpopstate;
     this.unsubscribeEvent();
     this.unsubscribeOpenTreePanel();
@@ -359,23 +361,35 @@ class LibContentView extends React.Component {
   }
 
   onpopstate = (event) => {
-    if (event.state && event.state.key) { // root path
-      if (this.state.path === '/') {
-        return;
-      } else {
-        let path = '/';
-        this.loadDirentList(path);
-        this.setState({
-          path: path,
-          isViewFile: false
-        });
-      }
-    } else if (event.state && event.state.path) { // file path
-      let path = event.state.path;
-      this.loadDirentList(path);
+    const { repoID } = this.props;
+    const { path: urlPath, viewId, tagId } = this.getInfoFromLocation(repoID);
+
+    let currentMode;
+    let resolvedPath = urlPath;
+    let resolvedTagId = tagId;
+
+    if (tagId) {
+      currentMode = TAGS_MODE;
+    } else if (viewId) {
+      currentMode = METADATA_MODE;
+    } else {
+      currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
+    }
+
+    this.setState({
+      path: resolvedPath,
+      viewId: currentMode === LIST_MODE ? '' : viewId,
+      tagId: currentMode === LIST_MODE ? '' : resolvedTagId,
+      currentMode,
+      isViewFile: false,
+    });
+
+    if (currentMode === LIST_MODE) {
       this.setState({
-        path: path,
-        isViewFile: false
+        isDirentListLoading: true,
+        direntList: [],
+      }, () => {
+        this.loadDirentList(resolvedPath);
       });
     }
   };
@@ -609,6 +623,7 @@ class LibContentView extends React.Component {
       currentMode: TAGS_MODE,
       path: filePath,
       tagId: tagId,
+      viewId: '',
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?tag=${encodeURIComponent(tagId)}`;
     window.history.pushState({ url: url, path: '' }, '', url);

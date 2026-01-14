@@ -37,7 +37,6 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   filePermission: PropTypes.string,
   content: PropTypes.string,
-  viewId: PropTypes.string,
   tagId: PropTypes.string,
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
