@@ -31,6 +31,7 @@ from djangosaml2.cache import IdentityCache, OutstandingQueriesCache
 from djangosaml2.conf import get_config
 from djangosaml2.views import LogoutView
 
+from seahub.utils.ccnet_db import CcnetDB
 from seaserv import ccnet_api, seafile_api
 
 from seahub import auth
@@ -127,13 +128,12 @@ def _handle_user_over_limit(request, org=None):
     
     # check user number limit by org member quota
     if org:
-        org_members = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
-        org_active_members = [member for member in org_members if member.is_active]
-        org_active_members_count = len(org_active_members)
+        ccnet_db = CcnetDB()
+        org_members = ccnet_db.count_org_active_users(org.org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(org.org_id)
-            if org_members_quota is not None and org_active_members_count >= org_members_quota:
+            if org_members_quota is not None and org_members >= org_members_quota:
                 logger.error('The number of users exceeds the organization quota.')
                 # send error msg to admin
                 error_msg = 'The number of users exceeds the organization quota.'

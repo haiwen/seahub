@@ -201,9 +201,8 @@ class AdminOrgUsers(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check user number limit by org member quota
-        org_members = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
-        org_active_members = [member for member in org_members if member.is_active]
-        org_active_members_count = len(org_active_members)
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
             if org_members_quota is not None and org_active_members_count >= org_members_quota:
@@ -289,11 +288,6 @@ class AdminOrgUser(APIView):
         if not request.user.admin_permissions.other_permission():
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         
-        org = ccnet_api.get_org_by_id(org_id)
-        if not org:
-            error_msg = 'Organization %d not found.' % org_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
@@ -310,9 +304,8 @@ class AdminOrgUser(APIView):
 
             if active == 'true':
                 if not user.is_active and ORG_MEMBER_QUOTA_ENABLED:
-                    org_members = ccnet_api.get_org_emailusers(org.url_prefix, -1, -1)
-                    org_active_members = [member for member in org_members if member.is_active]
-                    org_active_members_count = len(org_active_members)
+                    ccnet_db = CcnetDB()
+                    org_active_members_count = ccnet_db.count_org_active_users(org_id)
                     org_members_quota = OrgMemberQuota.objects.get_quota(org_id)
                     if org_members_quota is not None and org_active_members_count >= org_members_quota:
                         err_msg = 'The number of users exceeds the limit.'

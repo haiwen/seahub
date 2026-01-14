@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from django.utils.translation import gettext as _
 
+from seahub.utils.ccnet_db import CcnetDB
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
@@ -225,11 +226,8 @@ class OrgAdminUsers(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check plan
-        url_prefix = request.user.org.url_prefix
-        org_members = ccnet_api.get_org_emailusers(url_prefix, -1, -1)
-        org_active_members = [member for member in org_members if member.is_active]
-        org_active_members_count = len(org_active_members)
-
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
             if org_members_quota is not None and org_active_members_count >= org_members_quota:
@@ -441,10 +439,8 @@ class OrgAdminUser(APIView):
 
             if is_active == 'true':
                 if not user.is_active and ORG_MEMBER_QUOTA_ENABLED:
-                    org_members = ccnet_api.get_org_emailusers(request.user.org.url_prefix, -1, -1)
-                    org_active_members = [member for member in org_members if member.is_active]
-                    org_active_members_count = len(org_active_members)
-
+                    ccnet_db = CcnetDB()
+                    org_active_members_count = ccnet_db.count_org_active_users(org_id)
                     org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
                     if org_members_quota is not None and org_active_members_count >= org_members_quota:
                         err_msg = 'The number of users exceeds the limit.'
@@ -676,11 +672,8 @@ class OrgAdminImportUsers(APIView):
                 records.append([col.value for col in row])
 
         # check plan
-        url_prefix = request.user.org.url_prefix
-        org_members = ccnet_api.get_org_emailusers(url_prefix, -1, -1)
-        org_active_members = [member for member in org_members if member.is_active]
-        org_active_members_count = len(org_active_members)
-
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
@@ -815,11 +808,8 @@ class OrgAdminInviteUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check plan
-        url_prefix = request.user.org.url_prefix
-        org_members = ccnet_api.get_org_emailusers(url_prefix, -1, -1)
-        org_active_members = [member for member in org_members if member.is_active]
-        org_active_members_count = len(org_active_members)
-
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
             if org_members_quota is not None and \
