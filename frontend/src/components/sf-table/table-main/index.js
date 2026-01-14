@@ -24,6 +24,7 @@ const TableMain = ({
   showGridFooter,
   recordsTree,
   showRecordAsTree,
+  enableScrollToLoad = true,
   loadMore,
   loadAll,
   getTreeNodeByIndex,
@@ -111,7 +112,8 @@ const TableMain = ({
           recordsTree={recordsTree}
           treeNodesCount={treeNodesCount}
           treeNodeKeyRecordIdMap={treeNodeKeyRecordIdMap}
-          scrollToLoadMore={loadMore}
+          scrollToLoadMore={enableScrollToLoad ? loadMore : undefined}
+          loadMore={loadMore}
           loadAll={loadAll}
           getTreeNodeByIndex={getTreeNodeByIndex}
           recordGetterById={recordGetterById}
@@ -137,6 +139,7 @@ TableMain.propTypes = {
   recordsTree: PropTypes.array,
   showRecordAsTree: PropTypes.bool,
   modifyRecords: PropTypes.func,
+  enableScrollToLoad: PropTypes.bool,
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
 };
