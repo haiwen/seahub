@@ -14,18 +14,18 @@
 
 .sdoc-content-right-panel .detail-header .seafile-multicolor-icon-set-up,
 .sdoc-content-right-panel .detail-header .seafile-multicolor-icon-ai {
-  fill: #999;
+  fill: #666;
   font-weight: 700;
   font-size: 16px;
 }
 
 .sdoc-content-right-panel .detail-header .detail-control:hover .seafile-multicolor-icon-set-up,
 .sdoc-content-right-panel .detail-header .detail-control:hover .seafile-multicolor-icon-ai {
-  fill: #5a5a5a;
+  fill: #666;
 }
 
 .sdoc-content-right-panel .detail-header .sdoc-sm-close {
-  color: #999;
+  color: #666;
   font-size: 16px;
   font-weight: normal;
   line-height: 1;
