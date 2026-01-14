@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, isPro } from '../../../utils/constants';
+import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
 import TrashDialog from '../../dialog/trash-dialog';
 import LibSettingsDialog from '../../dialog/lib-settings';
-import RepoHistoryDialog from '../../dialog/repo-history';
 import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { TAB } from '../../../constants/repo-setting-tabs';
@@ -15,7 +14,7 @@ import Item from './item';
 
 import './index.css';
 
-const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
+const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoInfo }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
 
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
@@ -49,9 +48,10 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
     setShowTrashDialog(!showTrashDialog);
   };
 
-  let [isRepoHistoryDialogOpen, setRepoHistoryDialogOpen] = useState(false);
-  const toggleRepoHistoryDialog = () => {
-    setRepoHistoryDialogOpen(!isRepoHistoryDialogOpen);
+  const handleHistoryClick = () => {
+    const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoName) + '/?history=true';
+    window.history.pushState({}, '', url);
+    eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW);
   };
 
   const isDesktop = Utils.isDesktop();
@@ -86,7 +86,8 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
         <Item
           text={gettext('History')}
           iconSymbol="history"
-          op={toggleRepoHistoryDialog}
+          op={handleHistoryClick}
+          isActive={currentMode === 'history'}
         />
       )}
       {isDesktop && (isRepoOwner || isDepartmentAdmin) && (
@@ -113,14 +114,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, updateRepoInfo }) => {
           onMigrateSuccess={handleMigrateSuccess}
         />
       )}
-      {isRepoHistoryDialogOpen && (
-        <RepoHistoryDialog
-          repoID={repoID}
-          userPerm={userPerm}
-          currentRepoInfo={currentRepoInfo}
-          toggleDialog={toggleRepoHistoryDialog}
-        />
-      )}
     </TreeSection>
   );
 };
@@ -129,6 +122,7 @@ DirOthers.propTypes = {
   userPerm: PropTypes.string,
   repoID: PropTypes.string,
   currentRepoInfo: PropTypes.object.isRequired,
+  currentMode: PropTypes.string.isRequired,
   updateRepoInfo: PropTypes.func
 };
 

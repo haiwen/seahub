@@ -71,6 +71,10 @@ const TextTranslation = {
     key: 'Details',
     value: gettext('Details')
   },
+  VIEW_SNAPSHOT: {
+    key: 'View Snapshot',
+    value: gettext('View Snapshot')
+  },
   OPEN_VIA_CLIENT: {
     key: 'Open via Client',
     value: gettext('Open via Client')

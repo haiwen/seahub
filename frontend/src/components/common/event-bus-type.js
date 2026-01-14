@@ -41,4 +41,11 @@ export const EVENT_BUS_TYPE = {
   OPEN_CLEAN_TRASH_DIALOG: 'open_clean_trash_dialog',
   HANDLE_SELECTED_OPERATIONS: 'handle_selected_operations',
   RESET_PER_PAGE: 'reset_per_page',
+
+  // history view
+  HISTORY_SEARCH: 'history_search',
+  HISTORY_SORT: 'history_sort',
+  HISTORY_FILTER: 'history_filter',
+  HISTORY_COMMITS_UPDATED: 'history_commits_updated',
+  SWITCH_TO_HISTORY_VIEW: 'switch_to_history_view',
 };

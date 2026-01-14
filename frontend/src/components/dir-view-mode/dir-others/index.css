@@ -13,6 +13,24 @@
   border-radius: 0.25rem;
 }
 
+.dir-others .dir-others-item.tree-node-hight-light {
+  border-radius: 4px;
+  background-color: var(--bs-nav-active-bg) !important;
+}
+
+.dir-others .dir-others-item.tree-node-hight-light::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 4px;
+  height: 24px;
+  left: -8px;
+  top: 2px;
+  background-color: #ff9800;
+  border-radius: 2px;
+  z-index: 0;
+}
+
 .dir-others .dir-others-item .dir-others-item-text {
   font-size: 14px;
   margin-left: 4px;

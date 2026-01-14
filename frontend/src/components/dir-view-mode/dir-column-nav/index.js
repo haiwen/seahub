@@ -12,6 +12,7 @@ const propTypes = {
   currentPath: PropTypes.string.isRequired,
   userPerm: PropTypes.string.isRequired,
   currentRepoInfo: PropTypes.object.isRequired,
+  currentMode: PropTypes.string.isRequired,
   isTreeDataLoading: PropTypes.bool.isRequired,
   treeData: PropTypes.object.isRequired,
   direntList: PropTypes.array,
@@ -72,7 +73,7 @@ class DirColumnNav extends React.Component {
             />
             <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
             <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} updateRepoInfo={this.props.updateRepoInfo} />
+            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} currentMode={this.props.currentMode} updateRepoInfo={this.props.updateRepoInfo} />
           </>
         )}
       </div>

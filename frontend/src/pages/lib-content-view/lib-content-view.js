@@ -25,7 +25,7 @@ import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE, TAGS_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -57,9 +57,6 @@ class LibContentView extends React.Component {
     if (storedTreePanelState != undefined) {
       isTreePanelShown = storedTreePanelState === 'true';
     }
-
-    const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
-    const isDirentDetailShow = storedDirentDetailShowState === 'true';
 
     this.socket = new WebSocketClient(this.onMessageCallback, this.props.repoID);
     this.state = {
@@ -95,7 +92,7 @@ class LibContentView extends React.Component {
       isAllDirentSelected: false,
       dirID: '', // for update dir list
       errorMsg: '',
-      isDirentDetailShow,
+      isDirentDetailShow: false, // initialize as false, will be updated based on mode
       itemsShowLength: 100,
       isSessionExpired: false,
       isCopyMoveProgressDialogShow: false,
@@ -161,6 +158,7 @@ class LibContentView extends React.Component {
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_LIBRARY_CONTENT, this.onSearchedClick);
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
+    this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
     this.calculatePara(this.props);
     window.addEventListener('popstate', this.onpopstate);
   }
@@ -239,15 +237,21 @@ class LibContentView extends React.Component {
   calculatePara = async (props) => {
     const { repoID } = props;
 
-    const { path, viewId, tagId } = this.getInfoFromLocation(repoID);
+    const { path, viewId, tagId, isHistory } = this.getInfoFromLocation(repoID);
     let currentMode;
-    if (tagId) {
+    if (isHistory) {
+      currentMode = HISTORY_MODE;
+    } else if (tagId) {
       currentMode = TAGS_MODE;
     } else if (viewId) {
       currentMode = METADATA_MODE;
     } else {
       currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
     }
+
+    // Initialize isDirentDetailShow from localStorage, but only for modes that use it
+    const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
+    const isDirentDetailShow = !isHistory && storedDirentDetailShowState === 'true';
 
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
@@ -265,6 +269,7 @@ class LibContentView extends React.Component {
         viewId,
         tagId,
         currentMode,
+        isDirentDetailShow,
       }, () => {
         if (this.state.isTreePanelShown) {
           this.loadSidePanel(path);
@@ -292,6 +297,9 @@ class LibContentView extends React.Component {
 
     const tagId = urlParams.get('tag');
     if (tagId) return { path: `/${PRIVATE_FILE_TYPE.TAGS_PROPERTIES}/${tagId}`, tagId };
+
+    const isHistory = urlParams.get('history');
+    if (isHistory) return { path: '/', isHistory: true };
 
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
@@ -333,6 +341,7 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel();
     this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
+    this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
@@ -1085,6 +1094,14 @@ class LibContentView extends React.Component {
     }).catch((error) => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
+    });
+  };
+
+  switchToHistoryView = () => {
+    this.setState({
+      currentMode: HISTORY_MODE,
+      path: '/',
+      isDirentDetailShow: false,
     });
   };
 
