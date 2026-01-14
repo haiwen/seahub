@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { EventBus } from '@seafile/seafile-sdoc-editor';
 
 function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
 
@@ -46,12 +47,33 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
     }
   }, [pageName]);
 
-  const onKeyDown = (event) => {
+  const isAtEndOfTitle = useCallback((el) => {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return false;
+
+    const range = sel.getRangeAt(0);
+
+    const end = document.createRange();
+    end.selectNodeContents(el);
+    end.collapse(false);
+    return range.compareBoundaryPoints(Range.END_TO_END, end) === 0 || range.endContainer?.length === range.endOffset;
+  }, []);
+
+  const onKeyDown = useCallback((event) => {
+    const sel = window.getSelection();
+    const eventBus = EventBus.getInstance();
+
+    if (sel.isCollapsed && isAtEndOfTitle(contentEditableRef.current)) {
+      if (['ArrowRight', 'ArrowDown'].includes(event.key)) {
+        event.preventDefault();
+        eventBus.dispatch('wiki_editor_focus_internal', { key: event.key });
+      }
+    }
     if (event.keyCode === 13) {
       event.preventDefault();
       event.stopPropagation();
     }
-  };
+  }, [contentEditableRef.current, isAtEndOfTitle]);
 
   const onCompositionStart = useCallback(() => {
     isChineseInput.current = true;
@@ -93,6 +115,18 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
     selection.addRange(range);
   }, [currentPageConfig.name]);
 
+  const focusTitle = useCallback(() => {
+    contentEditableRef.current && contentEditableRef.current.focus();
+    const range = document.createRange();
+    const selection = window.getSelection();
+
+    range.selectNodeContents(contentEditableRef.current);
+    range.collapse(false);
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }, []);
+
   useEffect(() => {
     handlePageNameUpdate();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -110,6 +144,14 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
       restoreSelection();
     }
   }, [isUpdateBySide, restoreSelection]);
+
+  useEffect(() => {
+    const eventBus = EventBus.getInstance();
+    const unsubscribe = eventBus.subscribe('wiki_editor_focus_page_title', focusTitle);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
     <div
