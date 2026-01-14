@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from django.utils.translation import gettext as _
 
+from seahub.utils.ccnet_db import CcnetDB
 from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.permissions import IsProVersion, IsOrgAdminUser
@@ -225,13 +226,12 @@ class OrgAdminUsers(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check plan
-        url_prefix = request.user.org.url_prefix
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
-
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and org_members >= org_members_quota:
-                err_msg = 'Failed. You can only invite %d members.' % org_members_quota
+            if org_members_quota is not None and org_active_members_count >= org_members_quota:
+                err_msg = 'The number of users exceeds the limit.'
                 return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit():
@@ -437,6 +437,15 @@ class OrgAdminUser(APIView):
                 error_msg = "is_active can only be 'true' or 'false'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            if is_active == 'true':
+                if not user.is_active and ORG_MEMBER_QUOTA_ENABLED:
+                    ccnet_db = CcnetDB()
+                    org_active_members_count = ccnet_db.count_org_active_users(org_id)
+                    org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
+                    if org_members_quota is not None and org_active_members_count >= org_members_quota:
+                        err_msg = 'The number of users exceeds the limit.'
+                        return api_error(status.HTTP_403_FORBIDDEN, err_msg)
+            
             user.is_active = is_active == 'true'
             user.save()
             if not is_active == 'true':
@@ -663,13 +672,12 @@ class OrgAdminImportUsers(APIView):
                 records.append([col.value for col in row])
 
         # check plan
-        url_prefix = request.user.org.url_prefix
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
-
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             from seahub.organizations.models import OrgMemberQuota
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
-            if org_members_quota is not None and org_members+len(records) > org_members_quota:
+            if org_members_quota is not None and org_active_members_count+len(records) > org_members_quota:
                 err_msg = 'The number of users exceeds the limit.'
                 return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
@@ -800,14 +808,13 @@ class OrgAdminInviteUser(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check plan
-        url_prefix = request.user.org.url_prefix
-        org_members = len(ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1))
-
+        ccnet_db = CcnetDB()
+        org_active_members_count = ccnet_db.count_org_active_users(org_id)
         if ORG_MEMBER_QUOTA_ENABLED:
             org_members_quota = OrgMemberQuota.objects.get_quota(request.user.org.org_id)
             if org_members_quota is not None and \
-                    org_members + len(email_list) > org_members_quota:
-                err_msg = _(f'Failed. You can only invite {org_members_quota} members.')
+                    org_active_members_count + len(email_list) > org_members_quota:
+                err_msg = _('The number of users exceeds the limit')
                 return api_error(status.HTTP_403_FORBIDDEN, err_msg)
 
         if user_number_over_limit(len(email_list)):
