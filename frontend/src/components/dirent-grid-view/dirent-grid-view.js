@@ -16,6 +16,7 @@ import imageAPI from '../../utils/image-api';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
+import { VirtualGrid } from '../virtual-list';
 
 import '../../css/grid-view.css';
 
@@ -845,22 +846,28 @@ class DirentGridView extends React.Component {
       return (<Loading />);
     }
 
+    // Grid dimensions
+    const ITEM_WIDTH = 200;
+    const ITEM_HEIGHT = 200;
+
     return (
       <Fragment>
         {direntList.length > 0 ?
-          <ul
-            className="grid-view"
+          <div
+            className="grid-view-container"
+            style={{ height: '100%', width: '100%' }}
             onClick={this.gridContainerClick}
             onContextMenu={this.onGridContainerContextMenu}
             onMouseDown={this.onGridContainerMouseDown}
             onMouseMove={this.onSelectMouseMove}
             ref={this.containerRef}
           >
-            {direntList.map((dirent, index) => {
-              return (
+            <VirtualGrid
+              items={direntList}
+              renderItem={({ item, index }) => (
                 <DirentGridItem
-                  key={dirent.name} // dirent.id is not unique, so use dirent.name as key
-                  dirent={dirent}
+                  key={item.name}
+                  dirent={item}
                   repoID={this.props.repoID}
                   path={this.props.path}
                   onItemClick={this.props.onItemClick}
@@ -874,13 +881,17 @@ class DirentGridView extends React.Component {
                   selectedDirentList={selectedDirentList}
                   repoEncrypted={repoEncrypted}
                 />
-              );
-            })}
+              )}
+              itemWidth={ITEM_WIDTH}
+              itemHeight={ITEM_HEIGHT}
+              overscan={2}
+            />
             {this.renderSelectionBox()}
-          </ul>
+          </div>
           :
-          <ul
-            className="grid-view"
+          <div
+            className="grid-view-container"
+            style={{ height: '100%', width: '100%' }}
             onClick={this.gridContainerClick}
             onContextMenu={this.onGridContainerContextMenu}
             onMouseDown={this.onGridContainerMouseDown}
@@ -888,7 +899,7 @@ class DirentGridView extends React.Component {
             ref={this.containerRef}
           >
             <EmptyTip text={gettext('No file')} className='w-100' />
-          </ul>
+          </div>
         }
         <ContextMenu
           id={GRID_ITEM_CONTEXTMENU_ID}

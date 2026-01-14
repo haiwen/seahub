@@ -802,159 +802,192 @@ class DirentListItem extends React.Component {
     let lockedInfo = dirent.is_freezed ? gettext('Frozen by {name}') : gettext('locked by {name}');
     lockedInfo = lockedInfo.replace('{name}', dirent.lock_owner_name);
 
-    const isDesktop = Utils.isDesktop();
     const { canDrag } = this.state;
     const isSdocFile = Utils.isSdocFile(dirent.name);
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
+    const isDesktop = Utils.isDesktop();
 
-    return (
-      <>
-        {isDesktop ?
-          <tr
-            className={classnames(
-              { 'tr-highlight': this.state.highlight },
-              { 'tr-drop-effect': this.state.isDropTipShow },
-              { 'tr-active': isSelected },
-            )}
-            draggable={canDrag}
-            onFocus={this.onMouseEnter}
-            onMouseEnter={this.onMouseEnter}
-            onMouseOver={this.onMouseOver}
-            onMouseLeave={this.onMouseLeave}
-            onClick={this.onDirentClick}
-            onDragStart={this.onItemDragStart}
-            onDragEnter={this.onItemDragEnter}
-            onDragOver={this.onItemDragOver}
-            onDragLeave={this.onItemDragLeave}
-            onDrop={this.onItemDragDrop}
-            onMouseDown={this.onItemMouseDown}
-            onContextMenu={this.onItemContextMenu}
-          >
-            <td className={classnames('pl10 pr-2 cursor-pointer', { 'tr-drag-effect': this.state.isDragTipShow })} onClick={this.onItemSelected}>
-              <input
-                type="checkbox"
-                className="cursor-pointer form-check-input"
-                checked={isSelected}
-                aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
-                title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
-                onChange={() => {}}
-                onClick={this.onItemSelected}
-                onKeyDown={Utils.onKeyDown}
+    // Virtual list mode (div-based) - used on desktop
+    if (this.props.gridTemplateColumns || isDesktop) {
+      return (
+        <div
+          className={classnames(
+            'dirent-virtual-item',
+            { 'tr-highlight': this.state.highlight },
+            { 'tr-drop-effect': this.state.isDropTipShow },
+            { 'tr-active': isSelected },
+          )}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: this.props.gridTemplateColumns || '31px 32px 40px minmax(200px, 1fr) 80px 150px 120px 180px',
+            height: '42px',
+            width: '100%',
+            borderBottom: '1px solid var(--bs-border-color)',
+            alignItems: 'center',
+          }}
+          draggable={canDrag}
+          onFocus={this.onMouseEnter}
+          onMouseEnter={this.onMouseEnter}
+          onMouseOver={this.onMouseOver}
+          onMouseLeave={this.onMouseLeave}
+          onClick={this.onDirentClick}
+          onDragStart={this.onItemDragStart}
+          onDragEnter={this.onItemDragEnter}
+          onDragOver={this.onItemDragOver}
+          onDragLeave={this.onItemDragLeave}
+          onDrop={this.onItemDragDrop}
+          onMouseDown={this.onItemMouseDown}
+          onContextMenu={this.onItemContextMenu}
+        >
+          {/* Checkbox */}
+          <div className="pl10 pr-2 cursor-pointer" onClick={this.onItemSelected}>
+            <input
+              type="checkbox"
+              className="cursor-pointer form-check-input"
+              checked={isSelected}
+              aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+              title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+              onChange={() => {}}
+              onClick={this.onItemSelected}
+              onKeyDown={Utils.onKeyDown}
+            />
+          </div>
+
+          {/* Star */}
+          <div className="pl-2 pr-2">
+            {dirent.starred !== undefined &&
+              <OpIcon
+                className="star-icon"
+                symbol={dirent.starred ? 'starred' : 'unstarred'}
+                title={dirent.starred ? gettext('Unstar') : gettext('Star')}
+                op={this.onItemStarred}
               />
-            </td>
-            <td className="pl-2 pr-2">
-              {dirent.starred !== undefined &&
-                <OpIcon
-                  className="star-icon"
-                  symbol={dirent.starred ? 'starred' : 'unstarred'}
-                  title={dirent.starred ? gettext('Unstar') : gettext('Star')}
-                  op={this.onItemStarred}
-                />
+            }
+          </div>
+
+          {/* Icon */}
+          <div className="pl-2 pr-2">
+            <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
+              {(this.canPreview && dirent.encoded_thumbnail_src) ?
+                <img
+                  ref={ref => this.dragIconRef = ref}
+                  src={`${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`}
+                  alt={dirent.name}
+                  className="thumbnail cursor-pointer"
+                  tabIndex="0"
+                  onClick={this.onItemClick}
+                  onKeyDown={Utils.onKeyDown}
+                  draggable={false}
+                  onError={this.onError}
+                /> :
+                <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' draggable={false} />
               }
-            </td>
-            <td className="pl-2 pr-2">
-              <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
-                {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  <img
-                    ref={ref => this.dragIconRef = ref}
-                    src={`${siteRoot}${dirent.encoded_thumbnail_src}?mtime=${dirent.mtime}`}
-                    alt={dirent.name}
-                    className="thumbnail cursor-pointer"
-                    tabIndex="0"
-                    onClick={this.onItemClick}
-                    onKeyDown={Utils.onKeyDown}
-                    draggable={false}
-                    onError={this.onError}
-                  /> :
-                  <img ref={ref => this.dragIconRef = ref} src={iconUrl} width="24" alt='' draggable={false} />
+              {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo} draggable={false} />}
+              <div ref={ref => this.emptyContentRef = ref} className="empty-content"></div>
+            </div>
+          </div>
+
+          {/* Name */}
+          <div className="pl-2 pr-2" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {this.state.isRenaming &&
+              <Rename
+                hasSuffix={dirent.type !== 'dir'}
+                name={dirent.name}
+                onRenameConfirm={this.onRenameConfirm}
+                onRenameCancel={this.onRenameCancel}
+              />
+            }
+            {!this.state.isRenaming && (
+              <>
+                {(!dirent.isDir() && !this.canPreview) ?
+                  <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
+                  <a href={this.getDirentHref()} onClick={this.onDirentClick}>{dirent.name}</a>
                 }
-                {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo} draggable={false} />}
-                <div ref={ref => this.emptyContentRef = ref} className="empty-content"></div>
-              </div>
-            </td>
-            <td className="name">
-              {this.state.isRenaming &&
-                <Rename
-                  hasSuffix={dirent.type !== 'dir'}
-                  name={dirent.name}
-                  onRenameConfirm={this.onRenameConfirm}
-                  onRenameCancel={this.onRenameCancel}
-                />
+              </>
+            )}
+          </div>
+
+          {/* Tags */}
+          <div className="pl-2 pr-2">
+            {/* Tags placeholder */}
+          </div>
+
+          {/* Operations */}
+          <div className="pl-2 pr-2">
+            {this.renderItemOperation()}
+          </div>
+
+          {/* Size */}
+          <div className="pl-2 pr-2">
+            {dirent.size || ''}
+          </div>
+
+          {/* Modified */}
+          <div className="pl-2 pr-2" title={formatUnixWithTimezone(dirent.mtime)}>
+            {dirent.mtime_relative}
+          </div>
+        </div>
+      );
+    }
+
+    // Table mode (legacy) - mobile only
+    return (
+      <tr>
+        <td onClick={this.onItemClick}>
+          <div className="dir-icon">
+            {(this.canPreview && dirent.encoded_thumbnail_src) ?
+              <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" onError={this.onError}/> :
+              <img src={iconUrl} width="24" alt="" />
+            }
+            {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
+          </div>
+        </td>
+        <td onClick={this.onItemClick}>
+          {this.state.isRenaming &&
+            <Rename
+              hasSuffix={dirent.type !== 'dir'}
+              name={dirent.name}
+              onRenameConfirm={this.onRenameConfirm}
+              onRenameCancel={this.onRenameCancel}
+            />
+          }
+          {!this.state.isRenaming && (
+            <>
+              {(!dirent.isDir() && !this.canPreview) ?
+                <a className="sf-link">{dirent.name}</a> :
+                <a href={this.getDirentHref()}>{dirent.name}</a>
               }
-              {!this.state.isRenaming && (
-                <>
-                  {(!dirent.isDir() && !this.canPreview) ?
-                    <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                    <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
-                  }
-                </>
-              )}
-            </td>
-            <td className="tag-list-title">&nbsp;
-            </td>
-            <td className="operation">{this.renderItemOperation()}</td>
-            <td className="file-size">{dirent.size || ''}</td>
-            <td className="last-update" title={formatUnixWithTimezone(dirent.mtime)}>{dirent.mtime_relative}</td>
-          </tr>
-          :
-          <tr>
-            <td onClick={this.onItemClick}>
-              <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
-                {(this.canPreview && dirent.encoded_thumbnail_src) ?
-                  <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" onError={this.onError}/> :
-                  <img src={iconUrl} width="24" alt="" />
-                }
-                {dirent.is_locked && <img className="locked" src={lockedImageUrl} alt={lockedMessage} title={lockedInfo}/>}
-              </div>
-            </td>
-            <td onClick={this.onItemClick}>
-              {this.state.isRenaming &&
-                <Rename
-                  hasSuffix={dirent.type !== 'dir'}
-                  name={dirent.name}
-                  onRenameConfirm={this.onRenameConfirm}
-                  onRenameCancel={this.onRenameCancel}
-                />
-              }
-              {!this.state.isRenaming && (
-                <>
-                  {(!dirent.isDir() && !this.canPreview) ?
-                    <a className="sf-link">{dirent.name}</a> :
-                    <a href={this.getDirentHref()}>{dirent.name}</a>
-                  }
-                </>
-              )}
-              <br />
-              {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
-              <span className="item-meta-info">{dirent.mtime_relative}</span>
-            </td>
-            <td>
-              <MobileItemMenu>
-                {dirent.starred !== undefined &&
-                <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>
-                  {dirent.starred ? gettext('Unstar') : gettext('Star')}
-                </DropdownItem>
-                }
-                {this.props.getDirentItemMenuList(dirent, true)
-                  .filter(item => item != 'Divider' && item.key != 'Open via Client')
-                  .map((item, index) => {
-                    return (
-                      <DropdownItem
-                        className="mobile-menu-item"
-                        key={index}
-                        data-op={item.key}
-                        onClick={this.onMobileMenuItemClick}
-                      >
-                        {item.value}
-                      </DropdownItem>
-                    );
-                  })}
-              </MobileItemMenu>
-            </td>
-          </tr>
-        }
-      </>
+            </>
+          )}
+          <br />
+          {dirent.size && <span className="item-meta-info">{dirent.size}</span>}
+          <span className="item-meta-info">{dirent.mtime_relative}</span>
+        </td>
+        <td>
+          <MobileItemMenu>
+            {dirent.starred !== undefined &&
+            <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>
+              {dirent.starred ? gettext('Unstar') : gettext('Star')}
+            </DropdownItem>
+            }
+            {this.props.getDirentItemMenuList(dirent, true)
+              .filter(item => item != 'Divider' && item.key != 'Open via Client')
+              .map((item, index) => {
+                return (
+                  <DropdownItem
+                    className="mobile-menu-item"
+                    key={index}
+                    data-op={item.key}
+                    onClick={this.onMobileMenuItemClick}
+                  >
+                    {item.value}
+                  </DropdownItem>
+                );
+              })}
+          </MobileItemMenu>
+        </td>
+      </tr>
     );
   }
 }
