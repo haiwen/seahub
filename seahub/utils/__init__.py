@@ -413,11 +413,6 @@ def get_file_type_and_ext(filename):
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
 
-    if fileExt == 'csv' \
-            and ENABLE_ONLYOFFICE \
-            and fileExt in ONLYOFFICE_FILE_EXTENSION:
-        return (SPREADSHEET, fileExt)
-
     if fileExt in get_conf_text_ext():
         return (TEXT, fileExt)
 

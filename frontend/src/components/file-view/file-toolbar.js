@@ -36,6 +36,7 @@ const {
   canDownloadFile,
   fileDownloadURL,
   canEditPDF,
+  enableOnlyoffice
 } = window.app.pageOptions;
 
 class FileToolbar extends React.Component {
@@ -180,7 +181,7 @@ class FileToolbar extends React.Component {
               id="seafile-pdf-edit"
               icon="edit"
               text={gettext('Edit')}
-              href={'?edit_pdf=true'}
+              href={'?open_with_onlyoffice=true'}
             />
           )}
           {showLockUnlockBtn && (
@@ -261,9 +262,14 @@ class FileToolbar extends React.Component {
               </Tooltip>
             </DropdownToggle>
             <DropdownMenu>
+              {fileExt == 'csv' && enableOnlyoffice && (
+                <DropdownItem href={'?open_with_onlyoffice=true'}>
+                  {gettext('Open with OnlyOffice')}
+                </DropdownItem>
+              )}
               {filePerm == 'rw' && (
                 <DropdownItem href={`seafile://openfile?repo_id=${encodeURIComponent(repoID)}&path=${encodeURIComponent(filePath)}`}>
-                  {gettext('Open via client')}
+                  {gettext('Open with client')}
                 </DropdownItem>
               )}
               {filePerm == 'rw' && (

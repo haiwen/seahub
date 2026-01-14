@@ -372,8 +372,14 @@ class DirentListItem extends React.Component {
         this.props.onDirentClick(this.state.dirent);
         this.props.showDirentDetail('info');
         break;
+      case 'Open with Default':
+        this.onOpenWithDefault();
+        break;
       case 'Open via Client':
         this.onOpenViaClient();
+        break;
+      case 'Open with OnlyOffice':
+        this.onOpenWithOnlyOffice();
         break;
       case 'Convert with ONLYOFFICE':
         this.onConvertWithONLYOFFICE();
@@ -488,11 +494,25 @@ class DirentListItem extends React.Component {
     location.href = url;
   };
 
+  onOpenWithDefault = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.state.dirent);
+    let url = URLDecorator.getUrl({ type: 'open_with_default', repoID: repoID, filePath: filePath });
+    window.open(url, '_blank');
+  };
+
   onOpenViaClient = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.state.dirent);
     let url = URLDecorator.getUrl({ type: 'open_via_client', repoID: repoID, filePath: filePath });
     location.href = url;
+  };
+
+  onOpenWithOnlyOffice = () => {
+    let repoID = this.props.repoID;
+    let filePath = this.getDirentPath(this.state.dirent);
+    let url = URLDecorator.getUrl({ type: 'open_with_onlyoffice', repoID: repoID, filePath: filePath });
+    window.open(url, '_blank');
   };
 
   onConvertWithONLYOFFICE = () => {

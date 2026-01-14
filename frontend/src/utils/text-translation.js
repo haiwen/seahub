@@ -75,9 +75,21 @@ const TextTranslation = {
     key: 'View Snapshot',
     value: gettext('View Snapshot')
   },
+  OPEN_WITH: {
+    key: 'Open with',
+    value: gettext('Open with')
+  },
+  OPEN_WITH_DEFAULT: {
+    key: 'Open with Default',
+    value: gettext('Default')
+  },
   OPEN_VIA_CLIENT: {
     key: 'Open via Client',
-    value: gettext('Open via Client')
+    value: gettext('Desktop client')
+  },
+  OPEN_WITH_ONLYOFFICE: {
+    key: 'Open with OnlyOffice',
+    value: gettext('OnlyOffice')
   },
   LOCK: {
     key: 'Lock',
