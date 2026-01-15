@@ -804,6 +804,7 @@ class DirentListItem extends React.Component {
 
     const isDesktop = Utils.isDesktop();
     const { canDrag } = this.state;
+    const isSdocFile = Utils.isSdocFile(dirent.name);
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
 
@@ -853,7 +854,7 @@ class DirentListItem extends React.Component {
               }
             </td>
             <td className="pl-2 pr-2">
-              <div className="dir-icon">
+              <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
                   <img
                     ref={ref => this.dragIconRef = ref}
@@ -899,7 +900,7 @@ class DirentListItem extends React.Component {
           :
           <tr>
             <td onClick={this.onItemClick}>
-              <div className="dir-icon">
+              <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
                 {(this.canPreview && dirent.encoded_thumbnail_src) ?
                   <img src={`${siteRoot}${dirent.encoded_thumbnail_src}`} className="thumbnail cursor-pointer" alt="" onError={this.onError}/> :
                   <img src={iconUrl} width="24" alt="" />
