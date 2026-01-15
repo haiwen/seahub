@@ -782,8 +782,8 @@ class LibContentView extends React.Component {
 
           // Update starred files path for cross-repo move
           if (this.crossRepoMoveInfo) {
-            const { srcRepoId, srcParentDir, srcDirents, dstRepoId, dstParentDir, dstDirents } = this.crossRepoMoveInfo;
-            seafileAPI.updateStarredItemsPath(srcRepoId, srcParentDir, srcDirents, dstRepoId, dstParentDir, dstDirents).catch(() => {
+            const { srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents } = this.crossRepoMoveInfo;
+            seafileAPI.updateStarredItemsPath(srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents).catch(() => {
               // Silently ignore errors, starred files update is not critical
             });
             this.crossRepoMoveInfo = null;
@@ -864,10 +864,9 @@ class LibContentView extends React.Component {
         this.crossRepoMoveInfo = {
           srcRepoId: repoID,
           srcParentDir: this.state.path,
-          srcDirents: dirNames,
           dstRepoId: destRepo.repo_id,
           dstParentDir: destDirentPath,
-          dstDirents: dirNames
+          dirents: dirNames
         };
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
@@ -1377,10 +1376,9 @@ class LibContentView extends React.Component {
       this.crossRepoMoveInfo = {
         srcRepoId: repoID,
         srcParentDir: nodeParentPath,
-        srcDirents: srcDirents,
         dstRepoId: targetRepo.repo_id,
         dstParentDir: moveToDirentPath,
-        dstDirents: srcDirents
+        dirents: srcDirents
       };
       this.setState({
         asyncCopyMoveTaskId: taskId,

@@ -252,10 +252,9 @@ class StarredItemsBatchUpdatePath(APIView):
         {
             "src_repo_id": "xxx",
             "src_parent_dir": "/a/b/",
-            "src_dirents": ["file1.md", "folder1"],
             "dst_repo_id": "yyy",
             "dst_parent_dir": "/c/d/",
-            "dst_dirents": ["file1.md", "folder1"]
+            "dirents": ["file1.md", "folder1"]
         }
         """
 
@@ -270,11 +269,6 @@ class StarredItemsBatchUpdatePath(APIView):
             error_msg = 'src_parent_dir invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        src_dirents = request.data.get('src_dirents')
-        if not src_dirents or not isinstance(src_dirents, list):
-            error_msg = 'src_dirents invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         dst_repo_id = request.data.get('dst_repo_id')
         if not dst_repo_id:
             error_msg = 'dst_repo_id invalid.'
@@ -285,13 +279,9 @@ class StarredItemsBatchUpdatePath(APIView):
             error_msg = 'dst_parent_dir invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        dst_dirents = request.data.get('dst_dirents')
-        if not dst_dirents or not isinstance(dst_dirents, list):
-            error_msg = 'dst_dirents invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if len(src_dirents) != len(dst_dirents):
-            error_msg = 'src_dirents and dst_dirents length mismatch.'
+        dirents = request.data.get('dirents')
+        if not dirents or not isinstance(dirents, list):
+            error_msg = 'dirents invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Same repo move is handled by seafevents, skip
@@ -299,9 +289,9 @@ class StarredItemsBatchUpdatePath(APIView):
             return Response({'success': True})
 
         updated_count = 0
-        for src_dirent, dst_dirent in zip(src_dirents, dst_dirents):
-            src_path = os.path.join(src_parent_dir, src_dirent)
-            dst_path = os.path.join(dst_parent_dir, dst_dirent)
+        for dirent in dirents:
+            src_path = os.path.join(src_parent_dir, dirent)
+            dst_path = os.path.join(dst_parent_dir, dirent)
 
             # Normalize paths
             src_path = normalize_file_path(src_path)
