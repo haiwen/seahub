@@ -636,7 +636,9 @@ class FileTrash(models.Model):
         db_table = 'FileTrash'
         ordering = ["-delete_time"]
         
-
+STATUS_ARCHIVED = 'archived'
+STATUS_IN_ARCHIVING = 'in_archiving'
+STATUS_IN_UNARCHIVING = 'in_unarchiving'
 class RepoArchiveStatusManager(models.Manager):     
     def get_repos_archive_status(self, repo_ids):
         """Get archive_status for multiple repos."""

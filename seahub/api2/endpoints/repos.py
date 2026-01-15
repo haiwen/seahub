@@ -119,9 +119,9 @@ class ReposView(APIView):
             
             # Fetch archive status for all owned repos at once
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
-                archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(owned_repo_ids)
+                owned_archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(owned_repo_ids)
             else:
-                archive_status_dict = {}
+                owned_archive_status_dict = {}
 
             for r in owned_repos:
 
@@ -160,7 +160,7 @@ class ReposView(APIView):
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
                     repo_info['storage_name'] = r.storage_name
                     repo_info['storage_id'] = r.storage_id
-                    repo_info['archive_status'] = archive_status_dict.get(r.id)
+                    repo_info['archive_status'] = owned_archive_status_dict.get(r.id)
 
                 repo_info_list.append(repo_info)
 
@@ -193,6 +193,12 @@ class ReposView(APIView):
                 monitored_repo_id_list = []
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
+
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                shared_archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(shared_repo_ids)
+            else:
+                shared_archive_status_dict = {}
+            
             for r in shared_repos:
 
                 if is_wiki_repo(r):
@@ -240,6 +246,10 @@ class ReposView(APIView):
                 else:
                     repo_info['is_admin'] = False
 
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    repo_info['archive_status'] = shared_archive_status_dict.get(r.repo_id)
+
+
                 repo_info_list.append(repo_info)
 
         if filter_by['group']:
@@ -269,6 +279,11 @@ class ReposView(APIView):
                 logger.error(e)
                 monitored_repo_id_list = []
 
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                group_archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(group_repo_ids)
+            else:
+                group_archive_status_dict = {}
+
             for r in group_repos:
 
                 if is_wiki_repo(r):
@@ -294,6 +309,10 @@ class ReposView(APIView):
                     "salt": r.salt if r.enc_version >= 3 else '',
                     "enable_onlyoffice": enable_onlyoffice
                 }
+
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    repo_info['archive_status'] = group_archive_status_dict.get(r.repo_id)
+
                 repo_info_list.append(repo_info)
 
         if filter_by['public'] and request.user.permissions.can_view_org():
