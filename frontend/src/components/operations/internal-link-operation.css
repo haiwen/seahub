@@ -5,3 +5,7 @@
   margin-left: 0.5rem;
   color: #999;
 }
+
+.file-internal-link:hover {
+  color: #666;
+}

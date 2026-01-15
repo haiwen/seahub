@@ -29,7 +29,6 @@
 .sf-md-viewer-topbar .btn {
   color: #666;
   border: none !important;
-  font-size: .9375rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,19 +43,20 @@
 
 .sf-md-viewer-topbar .btn:hover {
   background-color: var(--bs-hover-bg) !important;
+  color: #666;
 }
 
 .sf-md-viewer-topbar .btn .seafile-multicolor-icon {
   fill: #666;
-  width: .875rem;
-  height: .875rem;
+  height: 16px;
+  width: 16px;
 }
 
 .collab-users-dropdown.dropdown {
   margin-right: 6px;
 }
 
-.btn-active[data-active=true]#saveButton {
+.btn[data-active=true]#saveButton {
   color: #ED7109;
 }
 
@@ -89,6 +89,7 @@
   align-items: center;
   justify-content: center;
   color: #666;
+  font-size: 16px;
 }
 
 .sf-md-viewer-topbar .sf-md-header-more-tool:hover {

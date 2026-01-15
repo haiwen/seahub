@@ -20,7 +20,7 @@ class FileInfo extends React.PureComponent {
         <div className="file-title">
           <span className='file-name text-truncate'>{fileInfo.name}</span>
           <OpIcon
-            className="op-icon file-star"
+            className="file-star"
             symbol={fileInfo.starred ? 'starred' : 'unstarred'}
             title={starTitle}
             op={this.props.toggleStar}
