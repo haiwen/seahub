@@ -1019,6 +1019,7 @@ class Records extends Component {
             recordGetterById={this.props.recordGetterById}
             recordGetterByIndex={this.props.recordGetterByIndex}
             getRecordsSummaries={this.getRecordsSummaries}
+            loadMore={this.props.loadMore}
             loadAll={this.props.loadAll}
           />
         }
@@ -1059,6 +1060,7 @@ Records.propTypes = {
   updateRecord: PropTypes.func,
   recordGetterById: PropTypes.func,
   recordGetterByIndex: PropTypes.func,
+  loadMore: PropTypes.func,
   loadAll: PropTypes.func,
   insertColumn: PropTypes.func,
   modifyColumnWidth: PropTypes.func,

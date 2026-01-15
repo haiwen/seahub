@@ -23,6 +23,7 @@ const SFTable = ({
   isLoadingMoreRecords = false,
   hasMoreRecords = false,
   showGridFooter = true,
+  enableScrollToLoad = true,
   onGridKeyDown,
   onGridKeyUp,
   loadMore,
@@ -97,6 +98,7 @@ const SFTable = ({
         isLoadingMoreRecords={isLoadingMoreRecords}
         showGridFooter={showGridFooter}
         showRecordAsTree={showRecordAsTree}
+        enableScrollToLoad={enableScrollToLoad}
         loadMore={loadMore}
         loadAll={loadAll}
         getTableContentRect={getTableContentRect}
@@ -137,6 +139,7 @@ SFTable.propTypes = {
   hasMoreRecords: PropTypes.bool,
   isLoadingMoreRecords: PropTypes.bool,
   showGridFooter: PropTypes.bool,
+  enableScrollToLoad: PropTypes.bool,
   canModifyRecords: PropTypes.bool,
   supportCopy: PropTypes.bool,
   supportCut: PropTypes.bool,

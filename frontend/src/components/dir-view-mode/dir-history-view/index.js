@@ -13,7 +13,7 @@ import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 
 import './index.css';
 
-const PAGE_SIZE = 1000;
+const PAGE_SIZE = 500;
 const PERMISSION_READ_WRITE = 'rw';
 const COLUMN_KEY_TAGS = 'tags';
 
@@ -183,7 +183,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
   }, [allCommits]);
 
   const createHistoryContextMenuOptions = useCallback((tableProps) => {
-    const { selectedPosition, recordIds, recordGetterByIndex, isGroupView } = tableProps;
+    const { selectedPosition, recordIds, recordGetterByIndex, isGroupView, hideMenu } = tableProps;
 
     let commit = null;
     if (selectedPosition) {
@@ -209,6 +209,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
           className="dropdown-item"
           onClick={(e) => {
             e.stopPropagation();
+            hideMenu && hideMenu(false);
             handleShowCommitDetails(commit);
           }}
         >
@@ -223,6 +224,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
         className="dropdown-item"
         onClick={(e) => {
           e.stopPropagation();
+          hideMenu && hideMenu(false);
           handleShowCommitDetails(commit);
         }}
       >
@@ -233,6 +235,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
         className="dropdown-item"
         onClick={(e) => {
           e.stopPropagation();
+          hideMenu && hideMenu(false);
           window.open(`${siteRoot}repo/${repoID}/snapshot/?commit_id=${commit.commit_id}`, '_blank');
         }}
       >
@@ -296,6 +299,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
         showGridFooter={true}
         hasMoreRecords={hasNextPage}
         isLoadingMoreRecords={isLoadingMore}
+        enableScrollToLoad={false}
         loadMore={loadNextPage}
         modifyColumnWidth={handleColumnWidthChange}
         onCellDoubleClick={handleCellDoubleClick}

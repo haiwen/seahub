@@ -43,8 +43,12 @@ class RecordsFooter extends React.Component {
     }
   };
 
-  onLoadAll = () => {
+  onLoadMore = () => {
     if (this.props.isLoadingMoreRecords) {
+      return;
+    }
+    if (this.props.loadMore) {
+      this.props.loadMore();
       return;
     }
     const loadNumber = this.props.recordsCount < 50000 ? 50000 : 100000;
@@ -137,8 +141,8 @@ class RecordsFooter extends React.Component {
       <div className="sf-table-footer" style={{ zIndex: Z_INDEX_GRID_FOOTER }} ref={ref => this.ref = ref}>
         <div className="rows-record d-flex text-nowrap" style={{ width: recordWidth }}>
           <span>{this.getRecord()}</span>
-          {(!isLoadingMoreRecords && hasMoreRecords && this.props.loadAll) &&
-            <span className="load-all ml-4" onClick={this.onLoadAll}>{gettext('Load all')}</span>
+          {(!isLoadingMoreRecords && hasMoreRecords && (this.props.loadMore || this.props.loadAll)) &&
+            <span className="load-all ml-4" onClick={this.onLoadMore}>{this.props.loadMore ? gettext('Load more') : gettext('Load all')}</span>
           }
           {isLoadingMoreRecords &&
             <span className="loading-message ml-4">
@@ -178,6 +182,7 @@ RecordsFooter.propTypes = {
   recordGetterByIndex: PropTypes.func,
   getRecordsSummaries: PropTypes.func,
   loadAll: PropTypes.func,
+  loadMore: PropTypes.func,
 };
 
 export default RecordsFooter;

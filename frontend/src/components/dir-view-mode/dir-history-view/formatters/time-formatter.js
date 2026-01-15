@@ -9,7 +9,7 @@ const TimeFormatter = ({ record }) => {
   const { time } = record;
   if (!time) return null;
 
-  const formatted = dayjs(time).format('YYYY-MM-DD');
+  const formatted = dayjs(time).format('YYYY-MM-DD HH:mm:ss');
   const fullTime = formatWithTimezone(time);
 
   return (
