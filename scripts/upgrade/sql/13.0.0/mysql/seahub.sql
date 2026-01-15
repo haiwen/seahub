@@ -109,11 +109,3 @@ ALTER TABLE repo_metadata ADD COLUMN details_settings longtext NULL;
 ALTER TABLE repo_metadata ADD COLUMN ocr_enabled tinyint(1) NULL;
 ALTER TABLE repo_metadata ADD COLUMN global_hidden_columns longtext DEFAULT NULL;
 ALTER TABLE `repo_metadata` ADD KEY `key_last_face_cluster_time_face_recognition_enabled`(`face_recognition_enabled`, `last_face_cluster_time`);
-
-CREATE TABLE IF NOT EXISTS `repo_archive_status` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` varchar(36) NOT NULL,
-  `status` varchar(32) NULL,
-  PRIMARY KEY (`id`),
-  KEY `idx_repo_archive_status_repo_id` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
