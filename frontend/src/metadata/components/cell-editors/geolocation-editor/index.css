@@ -233,7 +233,7 @@
   font-size: 12px;
 }
 
-.sf-geolocation-editor-container .selection-label-content seafile-multicolor-icon-drop-down {
+.sf-geolocation-editor-container .selection-label-content .seafile-multicolor-icon-drop-down {
   position: absolute;
   transform: rotate(180deg);
   top: -16px;

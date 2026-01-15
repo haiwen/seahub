@@ -1,5 +1,5 @@
 .sf-metadata-record-header-cell .sf-metadata-column-icon {
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
 }
 
 [data-bs-theme=dark] .sf-metadata-record-header-cell .sf-metadata-column-icon {
@@ -45,7 +45,7 @@
 .sf-metadata-record-header-cell .sf-metadata-dropdown-menu .seafile-multicolor-icon-down {
   width: 12px;
   height: 12px;
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-metadata-record-header-cell .sf-metadata-dropdown-menu .seafile-multicolor-icon-down:hover {

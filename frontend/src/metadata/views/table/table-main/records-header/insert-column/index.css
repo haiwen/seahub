@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-metadata-record-header-cell .sf-metadata-result-table-cell.insert-column:hover .seafile-multicolor-icon {

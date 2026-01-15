@@ -181,7 +181,7 @@
 
 .canvas-groups-rows .group-toggle-btn .seafile-multicolor-icon-drop-down {
   font-size: 12px;
-  fill: #666666;
+  fill: var(--bs-icon-color);
   transition: all .3s;
 }
 

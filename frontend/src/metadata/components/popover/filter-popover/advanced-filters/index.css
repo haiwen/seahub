@@ -319,7 +319,7 @@
 .sf-metadata-filter-header-icon .seafile-multicolor-icon,
 .sf-metadata-select-icon .seafile-multicolor-icon {
   font-size: 14px;
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
   cursor: default;
 }
 
@@ -334,9 +334,9 @@
 }
 
 .seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .sf2-icon-tick {
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
 }
 
 .seafile-select-option:not(.seafile-select-option-active):hover .sf-metadata-filter-header-icon .seafile-multicolor-icon {
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
 }

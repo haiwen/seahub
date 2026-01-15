@@ -63,7 +63,7 @@
 }
 
 .sf-metadata-column-popover .sf-metadata-column-type .seafile-multicolor-icon {
-  fill: #aaa;
+  fill: var(--bs-icon-secondary-color);
   cursor: default;
 }
 
