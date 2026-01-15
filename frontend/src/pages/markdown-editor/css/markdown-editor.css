@@ -63,8 +63,8 @@ html, body, #root {
   color: #999;
 }
 
-.topbar-file-info .file-title .file-star .star {
-  color: #999;
+.topbar-file-info .file-title .file-star:hover {
+  color: #666;
 }
 
 .topbar-file-info .file-state {

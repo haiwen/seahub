@@ -61,6 +61,7 @@ class IconButton extends React.Component {
           className={classNames('border-0 p-0 bg-transparent file-toolbar-btn', { 'disabled': this.props.disabled })}
           onClick={this.props.disabled ? () => {} : this.props.onClick}
           aria-label={this.props.text}
+          data-active={!this.props.disabled}
         >
           {btnContent}
         </Button>

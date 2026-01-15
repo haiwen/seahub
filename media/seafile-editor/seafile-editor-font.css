@@ -1,14 +1,14 @@
 @font-face {
   font-family: "mdfont";
   /* Project id 5080543 */
-  src: url('./seafile-editor-font/iconfont.eot?t=1764915317581');
+  src: url('./seafile-editor-font/iconfont.eot?t=1768372232343');
   /* IE9 */
-  src: url('./seafile-editor-font/iconfont.eot?t=1764915317581#iefix') format('embedded-opentype'),
+  src: url('./seafile-editor-font/iconfont.eot?t=1768372232343#iefix') format('embedded-opentype'),
     /* IE6-IE8 */
-    url('./seafile-editor-font/iconfont.woff2?t=1764915317581') format('woff2'),
-    url('./seafile-editor-font/iconfont.woff?t=1764915317581') format('woff'),
-    url('./seafile-editor-font/iconfont.ttf?t=1764915317581') format('truetype'),
-    url('./seafile-editor-font/iconfont.svg?t=1764915317581#mdfont') format('svg');
+    url('./seafile-editor-font/iconfont.woff2?t=1768372232343') format('woff2'),
+    url('./seafile-editor-font/iconfont.woff?t=1768372232343') format('woff'),
+    url('./seafile-editor-font/iconfont.ttf?t=1768372232343') format('truetype'),
+    url('./seafile-editor-font/iconfont.svg?t=1768372232343#mdfont') format('svg');
 }
 
 .mdfont {
@@ -17,6 +17,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.md-arrow-down:before {
+  content: "\e6ce";
+}
+
+.md-arrow-up:before {
+  content: "\e6cb";
+}
+
+.md-arrow-left:before {
+  content: "\e6cc";
+}
+
+.md-arrow-right:before {
+  content: "\e6cd";
 }
 
 .md-outline:before {
