@@ -19,45 +19,6 @@ const COLUMN_KEY_TAGS = 'tags';
 
 const showTags = enableRepoSnapshotLabel !== false;
 
-// ============ MOCK DATA CONFIG (Remove after testing) ============
-const USE_MOCK_DATA = true;
-const MOCK_TOTAL_ITEMS = 2000;
-const MOCK_DELAY_MS = 800;
-
-const generateMockCommits = (page, pageSize) => {
-  const startIndex = (page - 1) * pageSize;
-  const remainingItems = MOCK_TOTAL_ITEMS - startIndex;
-  const itemsToGenerate = Math.min(pageSize, remainingItems);
-
-  if (itemsToGenerate <= 0) return { data: [], more: false };
-
-  const commits = Array.from({ length: itemsToGenerate }, (_, i) => {
-    const index = startIndex + i;
-    const daysAgo = Math.floor(index / 5);
-    return {
-      commit_id: `mock_commit_${index}_${Date.now()}`,
-      description: `Mock commit #${index}: Updated files in repository`,
-      time: new Date(Date.now() - daysAgo * 86400000 - index * 3600000).toISOString(),
-      ctime: new Date(Date.now() - daysAgo * 86400000 - index * 3600000).toISOString(),
-      email: index % 3 === 0 ? 'admin@example.com' : index % 3 === 1 ? 'user@example.com' : 'dev@example.com',
-      creator_name: index % 3 === 0 ? 'Admin User' : index % 3 === 1 ? 'Regular User' : 'Developer',
-      tags: index % 10 === 0 ? ['important'] : [],
-    };
-  });
-
-  const hasMore = startIndex + itemsToGenerate < MOCK_TOTAL_ITEMS;
-  return { data: commits, more: hasMore };
-};
-
-const mockFetchWithDelay = (page, pageSize) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({ data: generateMockCommits(page, pageSize) });
-    }, MOCK_DELAY_MS);
-  });
-};
-// ============ END MOCK DATA CONFIG ============
-
 const DirHistoryView = ({ repoID, userPerm }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [allCommits, setAllCommits] = useState([]);
@@ -117,11 +78,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
 
     setIsLoadingMore(true);
 
-    const fetchPromise = USE_MOCK_DATA
-      ? mockFetchWithDelay(currentPage, PAGE_SIZE)
-      : seafileAPI.getRepoHistory(repoID, currentPage, PAGE_SIZE);
-
-    fetchPromise
+    seafileAPI.getRepoHistory(repoID, currentPage, PAGE_SIZE)
       .then(res => {
         const newCommits = res.data.data || [];
         const updatedCommits = [...allCommits, ...newCommits];
@@ -161,11 +118,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
 
     setIsLoadingMore(true);
 
-    const fetchPromise = USE_MOCK_DATA
-      ? mockFetchWithDelay(1, PAGE_SIZE)
-      : seafileAPI.getRepoHistory(repoID, 1, PAGE_SIZE);
-
-    fetchPromise
+    seafileAPI.getRepoHistory(repoID, 1, PAGE_SIZE)
       .then(res => {
         const newCommits = res.data.data || [];
 
