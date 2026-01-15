@@ -17,7 +17,8 @@ from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT, \
         ORG_ENABLE_REACTIVATE
 from seahub.organizations.signals import org_deleted
-from seahub.organizations.utils import generate_org_reactivate_link
+from seahub.organizations.utils import generate_org_reactivate_link, \
+        get_org_traffic_limit
 from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email, \
         get_org_traffic_by_month
 from seahub.utils.file_size import get_file_size_unit
@@ -83,8 +84,7 @@ def get_org_info(org):
     org_info['quota'] = seafile_api.get_org_quota(org_id)
     org_info['quota_usage'] = seafile_api.get_org_quota_usage(org_id)
 
-    org_info['monthly_traffic_limit'] = OrgSettings.objects.get_monthly_traffic_limit_by_org(org)
-
+    org_info['monthly_traffic_limit'] = get_org_traffic_limit(org)
     current_date = datetime.now()
     org_info['monthly_traffic_usage'] = get_org_traffic_by_month(org_id, current_date)
 

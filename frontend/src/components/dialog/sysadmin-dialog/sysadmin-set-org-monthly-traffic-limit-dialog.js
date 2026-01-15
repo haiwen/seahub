@@ -64,7 +64,7 @@ class SysAdminSetOrgMonthlyTrafficLimitDialog extends React.Component {
               <p className="small text-secondary mt-2 mb-2">
                 {gettext('An integer that is greater than or equal to 0.')}
                 <br />
-                {gettext('Tip: 0 means NO limit')}
+                {gettext('Tip: 0 means not set manually.')}
               </p>
             </FormGroup>
           </Form>
