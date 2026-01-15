@@ -19,6 +19,18 @@
   justify-content: center;
 }
 
+.history-list-item .history-operation .dropdown {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-list-item .history-operation .dropdown:hover {
+  background-color: #E5E5E5;
+}
+
 .history-list-item .history-operation .sf3-font-more:hover {
   text-decoration: none;
 }
