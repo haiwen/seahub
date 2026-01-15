@@ -94,7 +94,7 @@ class ReplyList extends React.Component {
           </div>
           <div className="comments-panel-header-right">
             <span className="sdoc-icon-btn" onClick={this.props.toggleCommentList}>
-              <Icon symbol="close" />
+              <Icon symbol="md-close" />
             </span>
           </div>
         </div>
