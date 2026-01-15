@@ -73,7 +73,7 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
       event.preventDefault();
       event.stopPropagation();
     }
-  }, [contentEditableRef.current, isAtEndOfTitle]);
+  }, [isAtEndOfTitle]);
 
   const onCompositionStart = useCallback(() => {
     isChineseInput.current = true;
@@ -151,7 +151,7 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [focusTitle]);
 
   return (
     <div
