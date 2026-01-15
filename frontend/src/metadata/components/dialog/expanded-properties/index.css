@@ -21,7 +21,7 @@
 
 .expanded-properties-content-container .icon-name-wrapper .column-type-icon {
   margin-right: 8px;
-  fill: #aaa;
+  fill: var(--bs-icon-secondary-color);
 }
 
 [data-bs-theme=dark] .expanded-properties-content-container .icon-name-wrapper .column-type-icon {

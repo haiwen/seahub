@@ -197,7 +197,7 @@
 
 .sf-table-column-content .sf-metadata-font {
   font-size: 14px;
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-table-column-content .header-name {

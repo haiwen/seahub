@@ -12,13 +12,13 @@
 }
 
 .column-type-item .sf-metadata-icon {
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
   margin-right: 8px;
   flex-shrink: 0;
 }
 
 .sf-metadata-column-type-dropdown-menu .column-type-item.dropdown-item .seafile-multicolor-icon {
-  color: #aaa;
+  color: var(--bs-icon-secondary-color);
 }
 
 .sf-metadata-column-type-dropdown-menu .column-type-item.dropdown-item .seafile-multicolor-icon-down {
