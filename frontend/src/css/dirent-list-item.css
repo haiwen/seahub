@@ -8,6 +8,10 @@
   max-width: 24px;
 }
 
+.sdoc-dir-icon {
+  background-color: #f5f5f5;
+}
+
 .dir-icon .empty-content {
   position: absolute;
   width: 1px;
@@ -16,8 +20,8 @@
 
 .dir-icon .locked {
   position: absolute;
-  width: 1rem;
-  height: 1rem;
+  width: 14px;
+  height: 14px;
   top: 50%;
   left: 50%;
 }
