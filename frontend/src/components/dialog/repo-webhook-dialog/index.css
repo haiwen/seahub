@@ -1,0 +1,78 @@
+.webhook-content-container {
+  height: 535px;
+}
+
+.webhook-content-body {
+  padding: 0 16px;
+  overflow: auto;
+}
+
+.webhook-content-body .webhook-list-header {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+}
+
+.webhook-content-body .webhook-list-container .webhook-list-item {
+  height: 40px;
+  line-height: 40px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.webhook-content-body .webhook-list-container .webhook-list-item:hover {
+  background-color: #F5F5F5;
+}
+
+.webhook-content-body .webhook-list-container .webhook-list-item .text-truncate {
+  color: #212529;
+}
+
+.webhook-content-body .webhook-list-container .webhook-list-item .webhook-item-operations {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.webhook-content-body .webhook-list-container .webhook-list-item .webhook-item-operations .op-icon {
+  height: 24px;
+  width: 24px;
+  font-size: 16px;
+  margin-right: 0px;
+}
+
+.webhook-content-body .webhook-list-container .webhook-list-item .webhook-item-operations .op-icon:hover {
+  background-color: #E5E5E5;
+}
+
+.webhook-add-toolbar {
+  align-items: center;
+  background: #fff;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  border-top: 1px solid #dedede;
+  display: flex;
+  font-size: 14px;
+  height: 40px;
+  padding: 0 1rem;
+  position: relative;
+  align-items: center;
+}
+
+.webhook-add-toolbar:hover {
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.webhook-add-toolbar svg {
+  color: #999;
+  vertical-align: -1px;
+}
