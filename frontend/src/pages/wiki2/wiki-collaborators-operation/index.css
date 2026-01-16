@@ -12,8 +12,7 @@
   color: #666666;
 }
 
-.wiki-collaborators-btn-container svg,
-.wiki-collaborators-btn-container path {
+.wiki-collaborators-btn-container svg {
   width: 16px;
   height: 16px;
   color: #666666;

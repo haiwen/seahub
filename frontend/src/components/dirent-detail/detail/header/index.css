@@ -38,8 +38,8 @@
   background-color: var(--bs-hover-bg) !important;
 }
 
-.detail-header .detail-control-icon path {
-  fill: #666;
+.detail-header .detail-control-icon {
+  fill: #999;
 }
 
 .detail-header .detail-title {
