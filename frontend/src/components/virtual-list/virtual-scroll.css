@@ -1,0 +1,15 @@
+/* Virtual Scroll Container Styles */
+.virtual-scroll-container {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  position: relative;
+}
+
+.virtual-scroll-grid {
+  display: grid;
+}
+
+.virtual-scroll-spacer {
+  width: 100%;
+}

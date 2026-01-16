@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { gettext } from '../../utils/constants';
+import { debounce } from '../../utils/utils';
+import './virtual-scroll.css';
 
 const VirtualList = ({
   items,
@@ -8,6 +11,7 @@ const VirtualList = ({
   overscan = 5,
   className = '',
   scrollTop: externalScrollTop,
+  ariaLabel = 'File list',
 }) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [height, setHeight] = useState(containerHeight || 0);
@@ -15,22 +19,18 @@ const VirtualList = ({
 
   useEffect(() => {
     const container = scrollContainerRef.current;
-    if (!container) return;
+    if (!container || !container.parentElement) return;
 
     const updateHeight = () => {
+      if (!container.parentElement) return;
       if (!containerHeight) {
-        // Walk up the DOM tree to find a container with a VALID height
-        // A valid height is one that's less than the total content height
         let element = container.parentElement;
         let calculatedHeight = 0;
         const totalContentHeight = items.length * itemHeight;
 
-        // Check up to 5 levels up the DOM tree
         for (let i = 0; i < 5 && element; i++) {
           const elementHeight = element.clientHeight;
 
-          // Valid height: greater than 0 and less than total content height
-          // This ensures we're measuring the container, not the content
           if (elementHeight > 0 && elementHeight < totalContentHeight) {
             calculatedHeight = elementHeight;
             break;
@@ -39,15 +39,12 @@ const VirtualList = ({
           element = element.parentElement;
         }
 
-        // If no valid height found, use a fallback
         if (calculatedHeight === 0) {
-          // Try to find .dir-content-main or .table-container specifically
           const rootElement = container.parentElement;
           if (rootElement) {
             const specificContainers = ['dir-content-main', 'table-container', 'cur-view-content'];
             let specificElement = rootElement;
 
-            // Search for a specific container
             for (let i = 0; i < 3 && specificElement; i++) {
               if (specificElement.classList) {
                 const hasSpecificClass = specificContainers.some(cls =>
@@ -65,7 +62,6 @@ const VirtualList = ({
             }
           }
 
-          // Final fallback
           if (calculatedHeight === 0) {
             calculatedHeight = Math.min(600, window.innerHeight - 150);
           }
@@ -75,12 +71,12 @@ const VirtualList = ({
       }
     };
 
-    // Use requestAnimationFrame to ensure layout is calculated
     requestAnimationFrame(() => {
       updateHeight();
     });
 
-    const resizeObserver = new ResizeObserver(updateHeight);
+    const debouncedCallback = debounce(updateHeight, 100);
+    const resizeObserver = new ResizeObserver(debouncedCallback);
     if (container.parentElement) {
       resizeObserver.observe(container.parentElement);
     }
@@ -88,64 +84,60 @@ const VirtualList = ({
     return () => {
       resizeObserver.disconnect();
     };
-  }, [containerHeight]);
+  }, [containerHeight, itemHeight, items.length]);
 
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
-      setScrollTop(container.scrollTop);
+      if (container) {
+        setScrollTop(container.scrollTop);
+      }
     };
 
-    // Listen to scroll events on this container
     container.addEventListener('scroll', handleScroll, { passive: true });
-    return () => container.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', handleScroll);
+      }
+    };
   }, []);
 
   const totalItems = items.length;
   const totalHeight = totalItems * itemHeight;
 
-  // Use external scrollTop if provided, otherwise use internal state
   const currentScrollTop = externalScrollTop !== undefined ? externalScrollTop : scrollTop;
 
-  // Calculate visible range
-  const effectiveHeight = Math.max(height, 400); // Ensure minimum height for virtualization
+  const effectiveHeight = Math.max(height, 400);
   const startIndex = Math.max(0, Math.floor(currentScrollTop / itemHeight) - overscan);
   const endIndex = Math.min(
     totalItems - 1,
     Math.ceil((currentScrollTop + effectiveHeight) / itemHeight) + overscan
   );
 
-  // Calculate offset for padding
   const startOffset = startIndex * itemHeight;
   const endOffset = Math.max(0, totalHeight - (endIndex + 1) * itemHeight);
 
-  // Render visible items
   const visibleItems = [];
   for (let i = startIndex; i <= endIndex; i++) {
     visibleItems.push(renderItem({ item: items[i], index: i }));
   }
 
-  // Render as div-based list (for virtualization with CSS Grid)
   return (
     <div
       ref={scrollContainerRef}
-      className={className}
+      className={`virtual-scroll-container ${className}`}
+      role="list"
+      aria-label={gettext(ariaLabel)}
       style={{
         overflowY: 'auto',
-        overflowX: 'hidden', // Only hide horizontal scroll on this inner container
-        height: '100%',
-        maxHeight: '100%',
-        width: '100%',
+        overflowX: 'hidden',
       }}
     >
-      {/* Spacer for top padding */}
-      <div style={{ height: `${startOffset}px` }} />
-      {/* Visible items */}
+      <div className="virtual-scroll-spacer" style={{ height: `${startOffset}px` }} />
       {visibleItems}
-      {/* Spacer for bottom padding */}
-      <div style={{ height: `${endOffset}px` }} />
+      <div className="virtual-scroll-spacer" style={{ height: `${endOffset}px` }} />
     </div>
   );
 };

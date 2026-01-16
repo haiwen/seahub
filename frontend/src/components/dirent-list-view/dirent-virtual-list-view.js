@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
 import { calculateResponsiveColumns } from '../../utils/table-headers';
+import './dirent-virtual-list.css';
 
 const DirentVirtualListView = ({
   headers,
@@ -51,7 +52,6 @@ const DirentVirtualListView = ({
   const [scrollTop, setScrollTop] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
 
-  // Measure container width for fixed table calculation
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -70,13 +70,11 @@ const DirentVirtualListView = ({
     };
   }, []);
 
-  // Calculate grid template columns with minimum width constraints
   const { gridTemplateColumns, tableWidth } = useMemo(() => {
     if (!headers || headers.length === 0 || containerWidth === 0) {
       return { gridTemplateColumns: '', tableWidth: 0 };
     }
 
-    // Use the simplified responsive calculation
     const { gridTemplate, totalWidth } = calculateResponsiveColumns(
       headers,
       containerWidth
@@ -88,14 +86,11 @@ const DirentVirtualListView = ({
     };
   }, [headers, containerWidth]);
 
-  // Sync horizontal scroll between header and body, and track vertical scroll
   const handleScroll = (e) => {
     const { scrollTop, scrollLeft } = e.target;
 
-    // Track vertical scroll position for VirtualList
     setScrollTop(scrollTop);
 
-    // Sync horizontal scroll between header and body
     if (headerRef.current) {
       headerRef.current.scrollLeft = scrollLeft;
     }
@@ -103,115 +98,80 @@ const DirentVirtualListView = ({
 
   return (
     <div className="dirent-virtual-list-view">
-      {/* Scrollable Container */}
       <div
         ref={scrollContainerRef}
         className="dirent-virtual-scroll-container"
-        style={{
-          overflow: 'auto',
-          height: '100%',
-          width: '100%',
-        }}
         onScroll={handleScroll}
       >
-        {/* Table wrapper with padding and fixed total width */}
-        <div style={{
-          width: '100%',
-        }}>
-          {/* Table content with fixed width */}
-          <div style={{ width: tableWidth }}>
-            {/* Fixed Header - scrolls horizontally with body */}
-            <div
-              ref={headerRef}
-              className="dirent-virtual-list-header"
-              style={{
-                display: 'grid',
-                gridTemplateColumns,
-                height: '40px',
-                borderBottom: '1px solid var(--bs-border-color)',
-                alignItems: 'center',
-                background: 'var(--bs-body-bg)',
-                position: 'sticky',
-                top: 0,
-                zIndex: 10,
-              }}
-              onMouseDown={onThreadMouseDown}
-              onContextMenu={onThreadContextMenu}
-            >
-              {headers.map((header, index) => {
-                const { className: headerClassName, children } = header;
-                return (
-                  <div
-                    key={index}
-                    className={headerClassName}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      height: '100%',
-                      padding: '0 8px',
-                    }}
-                  >
-                    {children}
-                  </div>
-                );
-              })}
-            </div>
+        <div style={{ width: tableWidth }}>
+          <div
+            ref={headerRef}
+            className="dirent-virtual-list-header"
+            style={{ gridTemplateColumns }}
+            onMouseDown={onThreadMouseDown}
+            onContextMenu={onThreadContextMenu}
+          >
+            {headers.map((header, index) => {
+              const { className: headerClassName, children } = header;
+              return (
+                <div
+                  key={index}
+                  className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
+                >
+                  {children}
+                </div>
+              );
+            })}
+          </div>
 
-            {/* Virtual List Body */}
-            <div
-              className="dirent-virtual-list-body"
-              style={{
-                overflow: 'hidden',
-              }}
-            >
-              <VirtualList
-                items={items}
-                itemHeight={itemHeight}
-                overscan={overscan}
-                scrollTop={scrollTop}
-                renderItem={({ item }) => (
-                  <DirentListItem
-                    key={item.name}
-                    dirent={item}
-                    path={path}
-                    repoID={repoID}
-                    currentRepoInfo={currentRepoInfo}
-                    eventBus={eventBus}
-                    isAdmin={isAdmin}
-                    isRepoOwner={isRepoOwner}
-                    repoEncrypted={repoEncrypted}
-                    enableDirPrivateShare={enableDirPrivateShare}
-                    isGroupOwnedRepo={isGroupOwnedRepo}
-                    onItemClick={onItemClick}
-                    onItemRenameToggle={onItemRenameToggle}
-                    onItemSelected={onItemSelected}
-                    onItemDelete={onItemDelete}
-                    onItemRename={onItemRename}
-                    onItemMove={onItemMove}
-                    onItemConvert={onItemConvert}
-                    updateDirent={updateDirent}
-                    isItemFreezed={isItemFreezed}
-                    freezeItem={freezeItem}
-                    unfreezeItem={unfreezeItem}
-                    onDirentClick={onDirentClick}
-                    showImagePopup={showImagePopup}
-                    onItemMouseDown={onItemMouseDown}
-                    onItemContextMenu={onItemContextMenu}
-                    selectedDirentList={selectedDirentList}
-                    activeDirent={activeDirent}
-                    repoTags={repoTags}
-                    onFileTagChanged={onFileTagChanged}
-                    getDirentItemMenuList={getDirentItemMenuList}
-                    showDirentDetail={showDirentDetail}
-                    onItemsMove={onItemsMove}
-                    onShowDirentsDraggablePreview={onShowDirentsDraggablePreview}
-                    loadDirentList={loadDirentList}
-                    onAddFolder={onAddFolder}
-                    gridTemplateColumns={gridTemplateColumns}
-                  />
-                )}
-              />
-            </div>
+          <div className="dirent-virtual-list-body">
+            <VirtualList
+              items={items}
+              itemHeight={itemHeight}
+              overscan={overscan}
+              scrollTop={scrollTop}
+              renderItem={({ item }) => (
+                <DirentListItem
+                  key={item.name}
+                  dirent={item}
+                  path={path}
+                  repoID={repoID}
+                  currentRepoInfo={currentRepoInfo}
+                  eventBus={eventBus}
+                  isAdmin={isAdmin}
+                  isRepoOwner={isRepoOwner}
+                  repoEncrypted={repoEncrypted}
+                  enableDirPrivateShare={enableDirPrivateShare}
+                  isGroupOwnedRepo={isGroupOwnedRepo}
+                  onItemClick={onItemClick}
+                  onItemRenameToggle={onItemRenameToggle}
+                  onItemSelected={onItemSelected}
+                  onItemDelete={onItemDelete}
+                  onItemRename={onItemRename}
+                  onItemMove={onItemMove}
+                  onItemConvert={onItemConvert}
+                  updateDirent={updateDirent}
+                  isItemFreezed={isItemFreezed}
+                  freezeItem={freezeItem}
+                  unfreezeItem={unfreezeItem}
+                  onDirentClick={onDirentClick}
+                  showImagePopup={showImagePopup}
+                  onItemMouseDown={onItemMouseDown}
+                  onItemContextMenu={onItemContextMenu}
+                  selectedDirentList={selectedDirentList}
+                  activeDirent={activeDirent}
+                  repoTags={repoTags}
+                  onFileTagChanged={onFileTagChanged}
+                  getDirentItemMenuList={getDirentItemMenuList}
+                  showDirentDetail={showDirentDetail}
+                  onItemsMove={onItemsMove}
+                  onShowDirentsDraggablePreview={onShowDirentsDraggablePreview}
+                  loadDirentList={loadDirentList}
+                  onAddFolder={onAddFolder}
+                  gridTemplateColumns={gridTemplateColumns}
+                />
+              )}
+            />
           </div>
         </div>
       </div>

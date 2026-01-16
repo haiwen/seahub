@@ -16,6 +16,7 @@
   text-align: center;
   position: relative;
   line-height: 0;
+  list-style: none;
 }
 
 .grid-item:hover {
@@ -94,6 +95,8 @@
   position: absolute;
   background-color: rgba(0, 120, 215, 0.3);
   border: 1px solid rgba(0, 120, 215, 0.8);
+  pointer-events: none; /* Prevent selection box from capturing mouse events */
+  z-index: 100;
 }
 
 .grid-file-img-link.video-preview-container {

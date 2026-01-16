@@ -17,6 +17,7 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
 import { VirtualGrid } from '../virtual-list';
+import { getSelectionRect, viewportToContentBounds, isIntersecting } from '../../utils/grid-selection';
 
 import '../../css/grid-view.css';
 
@@ -69,15 +70,33 @@ class DirentGridView extends React.Component {
       isSelecting: false,
       isMouseDown: false,
       autoScrollInterval: null,
+      startYContentOffset: 0,
     };
     this.containerRef = React.createRef();
+    this.scrollContainerRef = React.createRef();
+    this.cachedContainerBounds = null;
+    this.resizeObserver = null;
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
   }
 
   componentDidMount() {
     window.addEventListener('mouseup', this.onGlobalMouseUp);
     this.unsubscribeEvent = this.props.eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_IMAGE, this.recalculateImageItems);
+    this.setupResizeObserver();
   }
+
+  setupResizeObserver = () => {
+    const container = this.scrollContainerRef.current;
+    if (!container) return;
+
+    this.cachedContainerBounds = container.getBoundingClientRect();
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.cachedContainerBounds = container.getBoundingClientRect();
+    });
+
+    this.resizeObserver.observe(container);
+  };
 
   recalculateImageItems = () => {
     if (!this.state.isImagePopupOpen) return;
@@ -94,6 +113,13 @@ class DirentGridView extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('mouseup', this.onGlobalMouseUp);
     this.unsubscribeEvent();
+    clearInterval(this.state.autoScrollInterval);
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
+    this.setState({
+      autoScrollInterval: null,
+    });
   }
 
   onGridContainerMouseDown = (event) => {
@@ -102,15 +128,23 @@ class DirentGridView extends React.Component {
     } else if (event.button === 0) {
       hideMenu();
       this.props.onGridItemClick(null);
-      if (event.target.closest('img') || event.target.closest('div.grid-file-name')) return;
+      if (event.target.closest('img') || event.target.closest('div.grid-file-name')) {
+        return;
+      }
 
-      const containerBounds = this.containerRef.current.getBoundingClientRect();
+      const container = this.scrollContainerRef.current;
+      const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
+
+      const startX = event.clientX - containerBounds.left;
+      const startY = event.clientY - containerBounds.top + container.scrollTop;
+
       this.setState({
-        startPoint: { x: event.clientX - containerBounds.left, y: event.clientY - containerBounds.top },
-        endPoint: { x: event.clientX - containerBounds.left, y: event.clientY - containerBounds.top },
+        startPoint: { x: startX, y: startY },
+        endPoint: { x: startX, y: startY },
         selectedItemsList: [],
         isSelecting: false,
         isMouseDown: true,
+        startYContentOffset: startY,
       });
     }
   };
@@ -118,18 +152,22 @@ class DirentGridView extends React.Component {
   onSelectMouseMove = (e) => {
     if (!this.state.isMouseDown) return;
 
-    const containerBounds = this.containerRef.current.getBoundingClientRect();
-    const endPoint = { x: e.clientX - containerBounds.left, y: e.clientY - containerBounds.top };
+    const container = this.scrollContainerRef.current;
+    const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
 
-    // Constrain endPoint within the container bounds
+    const endPoint = {
+      x: e.clientX - containerBounds.left,
+      y: e.clientY - containerBounds.top + container.scrollTop
+    };
+
     endPoint.x = Math.max(0, Math.min(endPoint.x, containerBounds.width));
-    endPoint.y = Math.max(0, Math.min(endPoint.y, containerBounds.height));
+    endPoint.y = Math.max(0, Math.min(endPoint.y, container.scrollHeight));
 
-    // Check if the mouse has moved a certain distance to start selection, prevents accidental selections
     const distance = Math.sqrt(
       Math.pow(endPoint.x - this.state.startPoint.x, 2) +
       Math.pow(endPoint.y - this.state.startPoint.y, 2)
     );
+
     if (distance > 5) {
       this.setState({
         isSelecting: true,
@@ -145,6 +183,9 @@ class DirentGridView extends React.Component {
 
         this.props.onSelectedDirentListUpdate(filteredDirentList);
       });
+    } else {
+      this.setState({ endPoint });
+      this.autoScroll(e.clientY);
     }
   };
 
@@ -160,39 +201,32 @@ class DirentGridView extends React.Component {
 
   determineSelectedItems = () => {
     const { startPoint, endPoint } = this.state;
-    const container = this.containerRef.current;
-    const items = container.querySelectorAll('.grid-item');
+    const container = this.scrollContainerRef.current;
+    if (!container) return;
 
-    const selectionRect = {
-      left: Math.min(startPoint.x, endPoint.x),
-      top: Math.min(startPoint.y, endPoint.y),
-      right: Math.max(startPoint.x, endPoint.x),
-      bottom: Math.max(startPoint.y, endPoint.y),
-    };
+    const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
+    const items = container.querySelectorAll('.grid-item');
+    const selectionRect = getSelectionRect(startPoint, endPoint);
 
     const newSelectedItemsList = [];
 
     items.forEach(item => {
-      const bounds = item.getBoundingClientRect();
-      const relativeBounds = {
-        left: bounds.left - container.getBoundingClientRect().left,
-        top: bounds.top - container.getBoundingClientRect().top,
-        right: bounds.right - container.getBoundingClientRect().left,
-        bottom: bounds.bottom - container.getBoundingClientRect().top,
-      };
+      const itemBounds = item.getBoundingClientRect();
+      const contentBounds = viewportToContentBounds(itemBounds, containerBounds, container.scrollTop);
 
-      // Check if the element is within the selection box's bounds
-      if (relativeBounds.left < selectionRect.right && relativeBounds.right > selectionRect.left &&
-        relativeBounds.top < selectionRect.bottom && relativeBounds.bottom > selectionRect.top) {
+      if (isIntersecting(contentBounds, selectionRect)) {
         newSelectedItemsList.push(item);
       }
     });
+
     this.setState({ selectedItemsList: newSelectedItemsList });
   };
 
   autoScroll = (mouseY) => {
-    const container = this.containerRef.current;
-    const containerBounds = container.getBoundingClientRect();
+    const container = this.scrollContainerRef.current;
+    if (!container) return;
+
+    const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
     const scrollSpeed = 10;
     const scrollThreshold = 20;
 
@@ -201,13 +235,17 @@ class DirentGridView extends React.Component {
         x: this.state.endPoint.x,
         y: mouseY - containerBounds.top + container.scrollTop,
       };
+
+      endPoint.y = Math.max(0, Math.min(endPoint.y, container.scrollHeight));
+
       this.setState({ endPoint }, () => {
-        this.determineSelectedItems();
+        if (this.state.isSelecting) {
+          this.determineSelectedItems();
+        }
       });
     };
 
     if (mouseY < containerBounds.top + scrollThreshold) {
-      // Scroll Up
       if (!this.state.autoScrollInterval) {
         const interval = setInterval(() => {
           container.scrollTop -= scrollSpeed;
@@ -216,7 +254,6 @@ class DirentGridView extends React.Component {
         this.setState({ autoScrollInterval: interval });
       }
     } else if (mouseY > containerBounds.bottom - scrollThreshold) {
-      // Scroll Down
       if (!this.state.autoScrollInterval) {
         const interval = setInterval(() => {
           container.scrollTop += scrollSpeed;
@@ -846,9 +883,9 @@ class DirentGridView extends React.Component {
       return (<Loading />);
     }
 
-    // Grid dimensions
-    const ITEM_WIDTH = 200;
-    const ITEM_HEIGHT = 200;
+    // Grid dimensions - using actual grid-item size from CSS (134px + margins)
+    const ITEM_WIDTH = 142; // 134px grid-item width + 8px for spacing
+    const ITEM_HEIGHT = 140; // Height based on grid-item content
 
     return (
       <Fragment>
@@ -885,8 +922,9 @@ class DirentGridView extends React.Component {
               itemWidth={ITEM_WIDTH}
               itemHeight={ITEM_HEIGHT}
               overscan={2}
+              renderOverlay={this.renderSelectionBox}
+              scrollContainerRef={this.scrollContainerRef}
             />
-            {this.renderSelectionBox()}
           </div>
           :
           <div

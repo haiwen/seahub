@@ -1,0 +1,31 @@
+.dirent-virtual-list-view {
+  height: 100%;
+  width: 100%;
+}
+
+.dirent-virtual-scroll-container {
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+
+.dirent-virtual-list-header {
+  display: grid;
+  height: 40px;
+  border-bottom: 1px solid var(--bs-border-color);
+  align-items: center;
+  background: var(--bs-body-bg);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.dirent-virtual-list-header-cell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.dirent-virtual-list-body {
+  overflow: hidden;
+}

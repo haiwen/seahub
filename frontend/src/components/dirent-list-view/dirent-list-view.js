@@ -14,7 +14,6 @@ import EmptyTip from '../empty-tip';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Dirent } from '../../models';
-import Icon from '../icon';
 import { createTableHeaders } from '../../utils/table-headers';
 import DirentVirtualListView from './dirent-virtual-list-view';
 
@@ -702,7 +701,6 @@ class DirentListView extends React.Component {
       }
     }
 
-    // Fixed row height for virtual list (adjust based on actual row height)
     const TABLE_ROW_HEIGHT = 42;
 
     return (
