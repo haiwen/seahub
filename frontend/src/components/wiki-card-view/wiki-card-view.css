@@ -22,6 +22,7 @@
   border-radius: 6px;
   cursor: pointer;
 }
+
 [data-bs-theme=dark] .wiki-card-item {
   background-color: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -30,6 +31,7 @@
 .wiki-card-item:hover {
   box-shadow: 0 0 6px #0000002e;
 }
+
 [data-bs-theme=dark] .wiki-card-item:hover {
   background-color: rgba(255, 255, 255, 0.08);
   box-shadow: none;
@@ -42,8 +44,11 @@
 }
 
 .wiki-card-item .wiki-card-item-top .wiki-icon {
-  color: #FF9800;
   height: 24px;
+}
+
+.wiki-card-item .wiki-card-item-top .wiki-icon .seafile-multicolor-icon {
+  color: #FF9800;
 }
 
 .wiki-card-item .wiki-card-item-top .wiki-item-name {
