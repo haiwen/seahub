@@ -3,9 +3,12 @@
   font-weight: 700;
   cursor: pointer;
   margin-left: 0.5rem;
+}
+
+.file-internal-link svg {
   color: #999;
 }
 
-.file-internal-link:hover {
+.file-internal-link:hover svg {
   color: #666;
 }

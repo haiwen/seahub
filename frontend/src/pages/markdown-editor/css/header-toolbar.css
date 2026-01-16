@@ -88,8 +88,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #666;
   font-size: 16px;
+}
+
+.sf-md-viewer-topbar .sf-md-header-more-tool svg {
+  color: #666;
 }
 
 .sf-md-viewer-topbar .sf-md-header-more-tool:hover {

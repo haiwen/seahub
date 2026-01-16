@@ -60,10 +60,13 @@ html, body, #root {
   margin-left: 0.5rem;
   margin-right: 0;
   vertical-align: text-bottom;
+}
+
+.topbar-file-info .file-title .file-star svg {
   color: #999;
 }
 
-.topbar-file-info .file-title .file-star:hover {
+.topbar-file-info .file-title .file-star:hover svg {
   color: #666;
 }
 
