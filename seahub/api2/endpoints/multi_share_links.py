@@ -24,7 +24,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import CanGenerateShareLink
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW, PERMISSION_INVISIBLE
+from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_READ, \
+        PERMISSION_PREVIEW_EDIT, PERMISSION_PREVIEW, PERMISSION_INVISIBLE
 from seahub.share.models import FileShare
 from seahub.share.decorators import check_share_link_count
 from seahub.share.utils import is_repo_admin, VALID_SHARE_LINK_SCOPE, SCOPE_SPECIFIC_EMAILS, SCOPE_SPECIFIC_USERS
@@ -41,14 +42,15 @@ logger = logging.getLogger(__name__)
 
 FORBID_SHARE_LINK_CREATE_PERMISSIONS = [
     PERMISSION_INVISIBLE,
-    PERMISSION_PREVIEW, 
+    PERMISSION_PREVIEW,
     PERMISSION_PREVIEW_EDIT
 ]
+
 
 def _user_pass_folder_permissions(request, repo_id):
     if not is_pro_version():
         return True
-    
+
     username = request.user.username
 
     # 1. check repo user admin
@@ -60,10 +62,10 @@ def _user_pass_folder_permissions(request, repo_id):
     for ufp in user_folder_perms:
         if ufp.user == username and ufp.permission in FORBID_SHARE_LINK_CREATE_PERMISSIONS:
             return False
-        
+
     # 3. check folder permissions of the repo of groups
 
-    # 3.1 list folder perms of a groups    
+    # 3.1 list folder perms of a groups
     group_folder_perms = seafile_api.list_folder_group_perm_by_repo(repo_id)
     # 3.2 list user groups
     if group_folder_perms:
@@ -78,8 +80,9 @@ def _user_pass_folder_permissions(request, repo_id):
         for gfp in group_folder_perms:
             if gfp.group_id in user_group_ids and gfp.permission in FORBID_SHARE_LINK_CREATE_PERMISSIONS:
                 return False
-        
+
     return True
+
 
 class MultiShareLinks(APIView):
 
@@ -204,7 +207,7 @@ class MultiShareLinks(APIView):
         if repo.encrypted:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         origin_repo_id = repo_id
         if repo.is_virtual:
             origin_repo_id = repo.origin_repo_id
@@ -262,17 +265,17 @@ class MultiShareLinks(APIView):
         emails_list = []
         if user_scope and user_scope in VALID_SHARE_LINK_SCOPE:
             if user_scope == SCOPE_SPECIFIC_USERS:
-        
+
                 emails = request.data.get('emails', [])
                 emails_to_add = []
-        
+
                 for username in emails:
                     try:
                         User.objects.get(email=username)
                     except User.DoesNotExist:
                         continue
                     emails_to_add.append(username)
-        
+
                 fs.authed_details = json.dumps(
                     {'authed_users': emails_to_add}
                 )
@@ -283,13 +286,19 @@ class MultiShareLinks(APIView):
                 fs.authed_details = json.dumps(
                     {'authed_emails': emails_list}
                 )
-    
+
             fs.user_scope = user_scope
             fs.save()
+
+        comment = request.data.get('comment', '')
+        if comment:
+            fs.comment = comment
+            fs.save()
+
         if emails_list:
             shared_from = email2nickname(username)
             send_share_link_emails(emails_list, fs, shared_from)
-        
+
         link_info = get_share_link_info(fs)
         return Response(link_info)
 
@@ -440,11 +449,11 @@ class MultiShareLinksBatch(APIView):
         if repo.encrypted:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         origin_repo_id = repo_id
         if repo.is_virtual:
             origin_repo_id = repo.origin_repo_id
-        
+
         if not _user_pass_folder_permissions(request, origin_repo_id):
             error_msg = 'Folder permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

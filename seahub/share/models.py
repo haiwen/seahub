@@ -382,6 +382,7 @@ class FileShare(models.Model):
 
     user_scope = models.CharField(max_length=255, default='all_users')
     authed_details = models.TextField(default='')
+    comment = models.TextField(default='')
 
     objects = FileShareManager()
 
@@ -546,6 +547,8 @@ class UploadLinkShare(models.Model):
     view_cnt = models.IntegerField(default=0)
     password = models.CharField(max_length=128, null=True)
     expire_date = models.DateTimeField(null=True, db_index=True)
+    comment = models.TextField(default='')
+
     objects = UploadLinkShareManager()
 
     def is_encrypted(self):

@@ -83,6 +83,7 @@ def get_upload_link_info(uls):
     data['expire_date'] = expire_date
     data['is_expired'] = uls.is_expired()
     data['password'] = uls.get_password()
+    data['comment'] = uls.comment
 
     return data
 
@@ -278,6 +279,11 @@ class UploadLinks(APIView):
                                                                    path,
                                                                    password,
                                                                    expire_date)
+
+        comment = request.data.get('comment', '')
+        if comment:
+            uls.comment = comment
+            uls.save()
 
         link_info = get_upload_link_info(uls)
         return Response(link_info)
