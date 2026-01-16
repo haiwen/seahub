@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-
+from datetime import datetime
 from django.utils.translation import gettext as _
 from django.utils.crypto import get_random_string
 
@@ -17,8 +17,10 @@ from seahub.auth.utils import get_virtual_id_by_email
 from seahub.organizations.settings import ORG_MEMBER_QUOTA_DEFAULT, \
         ORG_ENABLE_REACTIVATE
 from seahub.organizations.signals import org_deleted
-from seahub.organizations.utils import generate_org_reactivate_link
-from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email
+from seahub.organizations.utils import generate_org_reactivate_link, \
+        get_org_traffic_limit
+from seahub.utils import is_valid_email, IS_EMAIL_CONFIGURED, send_html_email, \
+        get_org_traffic_by_month
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -81,6 +83,10 @@ def get_org_info(org):
 
     org_info['quota'] = seafile_api.get_org_quota(org_id)
     org_info['quota_usage'] = seafile_api.get_org_quota_usage(org_id)
+
+    org_info['monthly_traffic_limit'] = get_org_traffic_limit(org)
+    current_date = datetime.now()
+    org_info['monthly_traffic_usage'] = get_org_traffic_by_month(org_id, current_date)
 
     if ORG_MEMBER_QUOTA_ENABLED:
         org_info['max_user_number'] = OrgMemberQuota.objects.get_quota(org_id)
@@ -505,6 +511,21 @@ class AdminOrganization(APIView):
         if force_adfs_login is not None:
             OrgAdminSettings.objects.update_or_create(org_id=org_id, key='force_adfs_login',
                                                       defaults={'value': force_adfs_login})
+
+        monthly_traffic_limit = request.data.get('monthly_traffic_limit', None)
+        if monthly_traffic_limit:
+            try:
+                monthly_traffic_limit = int(monthly_traffic_limit)
+            except ValueError:
+                error_msg = 'monthly_traffic_limit invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if monthly_traffic_limit < 0:
+                error_msg = 'monthly_traffic_limit invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            monthly_traffic_limit = monthly_traffic_limit * get_file_size_unit('MB')
+            OrgSettings.objects.add_or_update(org, monthly_traffic_limit=monthly_traffic_limit)
 
         org = ccnet_api.get_org_by_id(org_id)
         org_info = get_org_info(org)
