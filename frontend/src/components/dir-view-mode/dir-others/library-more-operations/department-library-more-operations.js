@@ -14,6 +14,7 @@ import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/rese
 import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
 import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
+import RepoArchiveDialog from '../../../../components/dialog/repo-archive-dialog';
 import LibraryOpMenu from '../../../../components/library-op-menu';
 import Icon from '../../../icon';
 
@@ -33,7 +34,8 @@ class LibraryMoreOperations extends React.Component {
       isResetPasswordDialogOpen: false,
       isFolderPermissionDialogOpen: false,
       isAPITokenDialogOpen: false,
-      isRepoShareAdminDialogOpen: false
+      isRepoShareAdminDialogOpen: false,
+      isArchiveDialogOpen: false,
     };
   }
 
@@ -59,6 +61,9 @@ class LibraryMoreOperations extends React.Component {
         break;
       case 'API Token':
         this.onAPITokenToggle();
+        break;
+      case 'Archive':
+        this.onArchiveToggle();
         break;
       default:
         break;
@@ -91,6 +96,10 @@ class LibraryMoreOperations extends React.Component {
 
   toggleRepoShareAdminDialog = () => {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
+  };
+
+  onArchiveToggle = () => {
+    this.setState({ isArchiveDialogOpen: !this.state.isArchiveDialogOpen });
   };
 
   renameRepo = (newName) => {
@@ -203,6 +212,15 @@ class LibraryMoreOperations extends React.Component {
             <RepoShareAdminDialog
               repo={repo}
               toggleDialog={this.toggleRepoShareAdminDialog}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isArchiveDialogOpen && (
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={repo}
+              toggle={this.onArchiveToggle}
             />
           </ModalPortal>
         )}
