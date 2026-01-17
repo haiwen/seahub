@@ -16,6 +16,7 @@
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seafile-ui.css?t=20260107" />
         <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=20260105" />
+        <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
         {% render_bundle 'markdownEditor' 'css' %}
         <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_md_file_view.css" />
         {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
@@ -61,6 +62,8 @@
                 fileDownloadURL: {% if file_download_url %}'{{ file_download_url|escapejs }}'{% else %}''{% endif %},
                 enableMetadataManagement: {% if enable_metadata_management %} true {% else %} false {% endif %},
                 enableSeafileAI: {% if enable_seafile_ai %} true {% else %} false {% endif %},
+                fileUuid: '{{ file_uuid }}',
+                username: '{{ user.username|escapejs }}',
             },
             userInfo: {
             username: '{{ user.username }}',
