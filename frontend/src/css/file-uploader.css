@@ -115,6 +115,10 @@
   font-weight: bolder;
 }
 
+.file-upload-item .upload-success-icon .seafile-multicolor-icon {
+  color: #fff;
+}
+
 .file-upload-item .upload-success-msg {
   color: #47b881;
 }
