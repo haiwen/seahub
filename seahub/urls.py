@@ -109,7 +109,7 @@ from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
 from seahub.api2.endpoints.tag_filter_file import TaggedFilesView
 from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileView
 from seahub.api2.endpoints.webdav_secret import WebdavSecretView
-from seahub.api2.endpoints.starred_items import StarredItems, StarredItemsBatchUpdatePath
+from seahub.api2.endpoints.starred_items import StarredItems, BatchMoveItemsUpdatePath
 from seahub.api2.endpoints.monitored_repos import MonitoredRepos, MonitoredRepo
 from seahub.api2.endpoints.markdown_lint import MarkdownLintView
 from seahub.api2.endpoints.public_repos_search import PublishedRepoSearchView
@@ -591,7 +591,9 @@ urlpatterns = [
 
     ## user::starred-item
     re_path(r'^api/v2.1/starred-items/$', StarredItems.as_view(), name='api-v2.1-starred-items'),
-    re_path(r'^api/v2.1/starred-items/batch-update-path/$', StarredItemsBatchUpdatePath.as_view(), name='api-v2.1-starred-items-batch-update-path'),
+    
+    ## user::async-batch-move-item
+    re_path(r'^api/v2.1/async-batch-move-item/call-back/$', BatchMoveItemsUpdatePath.as_view(), name='api-v2.1-async-batch-move-item-call-back'),
 
     ## user::monitored-repos
     re_path(r'^api/v2.1/monitored-repos/$', MonitoredRepos.as_view(), name='api-v2.1-monitored-repos'),

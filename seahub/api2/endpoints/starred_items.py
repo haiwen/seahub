@@ -232,9 +232,9 @@ class StarredItems(APIView):
         return Response({'success': True})
 
 
-class StarredItemsBatchUpdatePath(APIView):
+class BatchMoveItemsUpdatePath(APIView):
     """
-    API for updating starred files path after cross-repo move.
+    API for updating files path after cross-repo move.
     This is called by frontend when async move operation completes successfully.
     """
 
@@ -243,7 +243,7 @@ class StarredItemsBatchUpdatePath(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
-        """ Update starred files path after cross-repo move.
+        """ Update files path after cross-repo move.
 
         Permission checking:
         1. all authenticated user can perform this action.

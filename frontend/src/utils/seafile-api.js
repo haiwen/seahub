@@ -1323,8 +1323,8 @@ class SeafileAPI {
     return this.req.delete(url);
   }
 
-  updateStarredItemsPath(srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents) {
-    const url = this.server + '/api/v2.1/starred-items/batch-update-path/';
+  updateBatchMoveItemPath(srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents) {
+    const url = this.server + '/api/v2.1/async-batch-move-item/call-back/';
     let data = {
       'src_repo_id': srcRepoId,
       'src_parent_dir': srcParentDir,

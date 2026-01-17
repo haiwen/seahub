@@ -783,7 +783,7 @@ class LibContentView extends React.Component {
           // Update starred files path for cross-repo move
           if (this.crossRepoMoveInfo) {
             const { srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents } = this.crossRepoMoveInfo;
-            seafileAPI.updateStarredItemsPath(srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents).catch(() => {
+            seafileAPI.updateBatchMoveItemPath(srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents).catch(() => {
               // Silently ignore errors, starred files update is not critical
             });
             this.crossRepoMoveInfo = null;
