@@ -69,6 +69,9 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
   const [showTurnOffConfirmDialog, setShowTurnOffConfirmDialog] = useState(false);
   const [isHiddenColumnsVisible, setHiddenColumnsVisible] = useState(false);
   const [hiddenColumns, setHiddenColumns] = useState(oldHiddenColumns || []);
+  const [isFixing, setIsFixing] = useState(false);
+
+  const pollIntervalRef = useRef(null);
 
   const hideColumnBtnRef = useRef(null);
 
@@ -148,6 +151,35 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
     setHiddenColumns(columns);
   }, []);
 
+  const pollFixStatus = useCallback(() => {
+    pollIntervalRef.current = setInterval(() => {
+      metadataAPI.getFixMetadataStatus(repoID).then(res => {
+        if (!res.data.is_fixing) {
+          clearInterval(pollIntervalRef.current);
+          pollIntervalRef.current = null;
+          setIsFixing(false);
+          toaster.success(gettext('Metadata fix completed'));
+        }
+      }).catch(() => {
+        clearInterval(pollIntervalRef.current);
+        pollIntervalRef.current = null;
+        setIsFixing(false);
+      });
+    }, 2000);
+  }, [repoID]);
+
+  const onFixMetadata = useCallback(() => {
+    setIsFixing(true);
+    metadataAPI.fixMetadata(repoID).then(() => {
+      toaster.success(gettext('Metadata fix task started'));
+      pollFixStatus();
+    }).catch(error => {
+      const errorMsg = Utils.getErrorMsg(error);
+      toaster.danger(errorMsg);
+      setIsFixing(false);
+    });
+  }, [repoID, pollFixStatus]);
+
   const count = hiddenColumns.length;
   let text = gettext('Hide properties');
   if (count === 1) {
@@ -174,32 +206,47 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
               {gettext('After enable extended properties for files, you can add different properties to files, like collaborators, file expiring time, file description. You can also create different views for files based extended properties.')}
             </p>
             {value && (
-              <div className="metadata-status-hide-columns-container mt-4">
-                <span className="text-truncate">{gettext('Global hidden properties')}</span>
-                <p className="tip">
-                  {gettext('Global hidden properties will not be displayed in all views.')}
-                </p>
-                <Button
-                  ref={hideColumnBtnRef}
-                  id="metadata-status-hide-properties-button"
-                  className={classnames('border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
-                  onClick={onClickHideColumns}
-                >
-                  <Icon symbol="hide" size={24} />
-                  <span className="ml-1">{text}</span>
-                </Button>
-                {isHiddenColumnsVisible && (
-                  <HideColumnPopover
-                    placement="bottom-start"
-                    target="metadata-status-hide-properties-button"
-                    hiddenColumns={hiddenColumns}
-                    columns={columns}
-                    canReorder={false}
-                    hidePopover={hidePopover}
-                    onChange={onHiddenColumnsChange}
-                  />
-                )}
-              </div>
+              <>
+                <div className="metadata-status-hide-columns-container mt-4">
+                  <span className="text-truncate">{gettext('Global hidden properties')}</span>
+                  <p className="tip">
+                    {gettext('Global hidden properties will not be displayed in all views.')}
+                  </p>
+                  <Button
+                    ref={hideColumnBtnRef}
+                    id="metadata-status-hide-properties-button"
+                    className={classnames('border-0 font-weight-normal metadata-status-hide-properties-button', { 'disabled': !oldValue })}
+                    onClick={onClickHideColumns}
+                  >
+                    <Icon symbol="hide" size={24} />
+                    <span className="ml-1">{text}</span>
+                  </Button>
+                  {isHiddenColumnsVisible && (
+                    <HideColumnPopover
+                      placement="bottom-start"
+                      target="metadata-status-hide-properties-button"
+                      hiddenColumns={hiddenColumns}
+                      columns={columns}
+                      canReorder={false}
+                      hidePopover={hidePopover}
+                      onChange={onHiddenColumnsChange}
+                    />
+                  )}
+                </div>
+                <div className="metadata-status-consistency-check-container mt-4">
+                  <span className="text-truncate">{gettext('Consistency check')}</span>
+                  <p className="tip">
+                    {gettext('Verify for any missing or obsolete metadata records and rectify them accordingly.')}
+                  </p>
+                  <Button
+                    className={classnames('font-weight-normal metadata-consistency-check-button', { 'disabled': !oldValue || isFixing })}
+                    onClick={onFixMetadata}
+                    disabled={!oldValue || isFixing}
+                  >
+                    {isFixing ? gettext('Fixing...') : gettext('Fix metadata')}
+                  </Button>
+                </div>
+              </>
             )}
           </ModalBody>
           <ModalFooter>
