@@ -13,7 +13,7 @@ const Header = ({ title, icon, iconSize = 32, onClose, children, component = {} 
       <div className="detail-title dirent-title">
         {showCloseIcon && (
           <div className="detail-header-close">
-            <Icon className="close-button" symbol='right_arrow' />
+            <Icon className="close-button" symbol="arrow-right" />
           </div>
         )}
         {icon && (

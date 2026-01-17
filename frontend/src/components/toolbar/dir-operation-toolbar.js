@@ -271,7 +271,7 @@ class DirOperationToolbar extends React.Component {
                       >
                         <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" />
                         <span className="mr-auto">{item.text}</span>
-                        <Icon symbol="right_arrow" />
+                        <Icon symbol="arrow-right-b" style={{ fontSize: '12px' }}/>
                       </DropdownToggle>
                       <DropdownMenu flip={false} modifiers={[{ name: 'preventOverflow', options: { boundary: document.body } }]}>
                         {item.subOpList.map((item, index) => {
