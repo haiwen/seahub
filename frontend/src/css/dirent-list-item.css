@@ -33,10 +33,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
 }
 
 .star-icon .seafile-multicolor-icon {
+  color: #999;
   width: 16px;
   height: 16px;
 }

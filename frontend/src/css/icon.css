@@ -1,7 +1,7 @@
 .seafile-multicolor-icon {
   width: 1em;
   height: 1em;
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-color);
   fill: currentColor;
   overflow: hidden;
 }
