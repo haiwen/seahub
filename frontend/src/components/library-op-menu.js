@@ -123,6 +123,7 @@ class LibraryOperationMenu extends React.Component {
     const { isDepartmentRepo } = this.props;
     const operations = [];
     operations.push('API Token');
+    operations.push('Webhooks');
     if (isDepartmentRepo) {
       return operations;
     }
@@ -171,6 +172,9 @@ class LibraryOperationMenu extends React.Component {
         break;
       case 'API Token':
         translateResult = 'API Token'; // translation is not needed here
+        break;
+      case 'Webhooks':
+        translateResult = 'Webhooks';
         break;
       case 'Share Admin':
         translateResult = gettext('Share Admin');

@@ -2208,6 +2208,38 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
+  // Webhooks
+  listRepoWebhooks(repoID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/webhooks/';
+    return this.req.get(url);
+  }
+
+  addRepoWebhook(repoID, url, secret) {
+    const apiURL = this.server + '/api/v2.1/repos/' + repoID + '/webhooks/';
+    let form = new FormData();
+    form.append('url', url);
+    if (secret) {
+      form.append('secret', secret);
+    }
+    return this._sendPostRequest(apiURL, form);
+  }
+
+  updateRepoWebhook(repoID, webhookID, url, secret) {
+    const apiURL = this.server + '/api/v2.1/repos/' + repoID + '/webhooks/' + webhookID + '/';
+    let form = new FormData();
+    if (url) {
+      form.append('url', url);
+    }
+    if (secret) {
+      form.append('secret', secret);
+    }
+    return this.req.put(apiURL, form);
+  }
+
+  deleteRepoWebhook(repoID, webhookID) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/webhooks/' + webhookID + '/';
+    return this.req.delete(url);
+  }
 }
 
 let seafileAPI = new SeafileAPI();

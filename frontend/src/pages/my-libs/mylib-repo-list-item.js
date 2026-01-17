@@ -19,6 +19,7 @@ import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder
 import Rename from '../../components/rename';
 import LibraryOpMenu from '../../components/library-op-menu';
 import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
+import RepoWebhookDialog from '../../components/dialog/repo-webhook-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
@@ -60,6 +61,7 @@ class MylibRepoListItem extends React.Component {
       isRepoShareAdminDialogOpen: false,
       isRepoDeleted: false,
       isOfficeSuiteDialogShow: false,
+      isWebhookDialogShow: false,
     };
   }
 
@@ -114,6 +116,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'API Token':
         this.onAPITokenToggle();
+        break;
+      case 'Webhooks':
+        this.onWebhookToggle();
         break;
       case 'Share Admin':
         this.toggleRepoShareAdminDialog();
@@ -192,6 +197,10 @@ class MylibRepoListItem extends React.Component {
 
   onAPITokenToggle = () => {
     this.setState({ isAPITokenDialogShow: !this.state.isAPITokenDialogShow });
+  };
+
+  onWebhookToggle = () => {
+    this.setState({ isWebhookDialogShow: !this.state.isWebhookDialogShow });
   };
 
   onOfficeSuiteToggle = () => {
@@ -358,12 +367,12 @@ class MylibRepoListItem extends React.Component {
             <Fragment>
               <Link to={repoURL} className="library-name text-truncate" title={repo.repo_name}>{repo.repo_name}</Link>
               {isStarred &&
-              <OpIcon
-                className="op-icon library-grid-item-icon"
-                symbol="starred"
-                title={gettext('Unstar')}
-                op={this.onToggleStarRepo}
-              />
+                <OpIcon
+                  className="op-icon library-grid-item-icon"
+                  symbol="starred"
+                  title={gettext('Unstar')}
+                  op={this.onToggleStarRepo}
+                />
               }
             </Fragment>
           )}
@@ -529,6 +538,15 @@ class MylibRepoListItem extends React.Component {
             <RepoAPITokenDialog
               repo={repo}
               onRepoAPITokenToggle={this.onAPITokenToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isWebhookDialogShow && (
+          <ModalPortal>
+            <RepoWebhookDialog
+              repo={repo}
+              onRepoWebhookToggle={this.onWebhookToggle}
             />
           </ModalPortal>
         )}
