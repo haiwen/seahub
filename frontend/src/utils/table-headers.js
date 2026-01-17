@@ -2,7 +2,6 @@ import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
 
-// 表格列最小宽度配置
 export const TABLE_COLUMN_MIN_WIDTHS = {
   checkbox: 31,
   star: 32,
@@ -14,19 +13,6 @@ export const TABLE_COLUMN_MIN_WIDTHS = {
   modified: 140
 };
 
-/**
- * 创建表格头部配置
- * @param {string} mode - 模式 ('desktop' | 'mobile')
- * @param {Object} sortOptions - 排序选项
- * @param {Object} sortOptions.sortBy - 当前排序字段
- * @param {string} sortOptions.sortOrder - 排序顺序 ('asc' | 'desc')
- * @param {Function} sortOptions.onSort - 排序处理函数
- * @param {Object} selectionOptions - 选择选项
- * @param {boolean} selectionOptions.isAllSelected - 是否全选
- * @param {Function} selectionOptions.onAllItemSelected - 全选处理函数
- * @param {boolean} selectionOptions.isPartiallySelected - 是否部分选择
- * @returns {Array} 表格头部配置数组
- */
 export const createTableHeaders = (mode, sortOptions = {}, selectionOptions = {}) => {
   const { sortBy, sortOrder, onSort } = sortOptions;
   const { isAllSelected, onAllItemSelected, isPartiallySelected } = selectionOptions;
@@ -154,7 +140,6 @@ export const createTableHeaders = (mode, sortOptions = {}, selectionOptions = {}
     }
   ];
 
-  // 移动端只显示必要列（保持与原有代码兼容的简单结构）
   if (mode === 'mobile') {
     return [
       { isFixed: false, width: 0.12 },
@@ -166,23 +151,15 @@ export const createTableHeaders = (mode, sortOptions = {}, selectionOptions = {}
   return baseHeaders;
 };
 
-/**
- * 计算列宽（简化版）
- * @param {Array} headers - 表头配置
- * @param {number} containerWidth - 容器宽度
- * @returns {Object} 计算结果 { columns, gridTemplate, totalWidth }
- */
 export const calculateResponsiveColumns = (headers, containerWidth) => {
   if (!headers?.length || !containerWidth) {
     return { columns: [], gridTemplate: '', totalWidth: 0 };
   }
 
-  // Calculate fixed column widths first
   const fixedWidth = headers.reduce((sum, header) => {
     return header.isFixed ? sum + header.width : sum;
   }, 0);
 
-  // Calculate remaining space for non-fixed columns
   const remainingWidth = containerWidth - fixedWidth;
 
   // Calculate each column width

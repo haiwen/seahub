@@ -891,8 +891,7 @@ class DirentGridView extends React.Component {
       <Fragment>
         {direntList.length > 0 ?
           <div
-            className="grid-view-container"
-            style={{ height: '100%', width: '100%' }}
+            className="grid-view-container w-100 h-100"
             onClick={this.gridContainerClick}
             onContextMenu={this.onGridContainerContextMenu}
             onMouseDown={this.onGridContainerMouseDown}
@@ -928,15 +927,14 @@ class DirentGridView extends React.Component {
           </div>
           :
           <div
-            className="grid-view-container"
-            style={{ height: '100%', width: '100%' }}
+            className="grid-view-container w-100 h-100"
             onClick={this.gridContainerClick}
             onContextMenu={this.onGridContainerContextMenu}
             onMouseDown={this.onGridContainerMouseDown}
             onMouseMove={this.onSelectMouseMove}
             ref={this.containerRef}
           >
-            <EmptyTip text={gettext('No file')} className='w-100' />
+            <EmptyTip text={gettext('No file')} className="w-100" />
           </div>
         }
         <ContextMenu

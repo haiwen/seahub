@@ -55,7 +55,7 @@
   flex: 1 0 74.5%;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .dir-content-main .virtual-scroll-container {
@@ -68,105 +68,6 @@
   height: 100%;
   min-height: 0;
 }
-
-.table-container table {
-  height: 100%;
-  /* Use table-layout: fixed to maintain column widths */
-  table-layout: fixed;
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.table-container table thead {
-  /* Keep header visible and fixed */
-  display: table-header-group;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: var(--bs-body-bg);
-}
-
-.table-container table thead th {
-  /* Ensure header cells have borders */
-  border-bottom: 2px solid var(--bs-border-color);
-}
-
-.table-container table tbody {
-  /* Make tbody scrollable and block for virtualization */
-  display: block;
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: calc(100% - 40px); /* Subtract header height */
-}
-
-.table-container table tbody tr {
-  /* Keep table structure for rows */
-  display: table-row;
-  width: 100%;
-}
-
-.table-container table tbody tr td {
-  /* Ensure data cells have borders */
-  border-bottom: 1px solid var(--bs-border-color);
-}
-
-.grid-view-container {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* Virtual list styles */
-.dirent-virtual-item {
-  cursor: pointer;
-  background: var(--bs-body-bg);
-  color: var(--bs-body-color);
-}
-
-.dirent-virtual-item:hover {
-  background: var(--bs-nav-hover-bg);
-}
-
-.dirent-virtual-item.tr-active {
-  background: var(--bs-nav-active-bg);
-}
-
-/* DirentVirtualListView standalone component */
-.dirent-virtual-list-view {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.dirent-virtual-list-header {
-  flex-shrink: 0;
-}
-
-.dirent-virtual-list-body {
-  flex: 1;
-  overflow: hidden;
-  position: relative;
-}
-
-.dirent-virtual-scroll-container {
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  /* Ensure smooth scrolling */
-  scrollbar-gutter: stable;
-}
-
-/* Ensure grid items align with header */
-.dirent-virtual-item {
-  display: grid;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-}
-
 
 /*tree view */
 .tree-view {

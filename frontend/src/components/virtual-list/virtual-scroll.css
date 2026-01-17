@@ -6,6 +6,11 @@
   position: relative;
 }
 
+.virtual-scroll-list {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .virtual-scroll-grid {
   display: grid;
 }

@@ -818,14 +818,7 @@ class DirentListItem extends React.Component {
             { 'tr-drop-effect': this.state.isDropTipShow },
             { 'tr-active': isSelected },
           )}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: this.props.gridTemplateColumns || '31px 32px 40px minmax(200px, 1fr) 80px 150px 120px 180px',
-            height: '42px',
-            width: '100%',
-            borderBottom: '1px solid var(--bs-border-color)',
-            alignItems: 'center',
-          }}
+          style={{ gridTemplateColumns: this.props.gridTemplateColumns || '31px 32px 40px minmax(200px, 1fr) 80px 150px 120px 180px' }}
           draggable={canDrag}
           onFocus={this.onMouseEnter}
           onMouseEnter={this.onMouseEnter}
@@ -889,7 +882,7 @@ class DirentListItem extends React.Component {
           </div>
 
           {/* Name */}
-          <div className="pl-2 pr-2" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div className="pl-2 pr-2 dirent-item-name">
             {this.state.isRenaming &&
               <Rename
                 hasSuffix={dirent.type !== 'dir'}

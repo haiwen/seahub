@@ -660,7 +660,6 @@ class DirentListView extends React.Component {
   getHeaders = (isDesktop) => {
     const { sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
 
-    // 构建排序选项
     const sortOptions = {
       sortBy,
       sortOrder,
@@ -670,14 +669,12 @@ class DirentListView extends React.Component {
       }
     };
 
-    // 构建选择选项
     const selectionOptions = {
       isAllSelected: isAllItemSelected,
       onAllItemSelected: this.props.onAllItemSelected,
       isPartiallySelected: selectedDirentList.length > 0 && !isAllItemSelected
     };
 
-    // 使用新的工具函数创建表头配置
     const mode = isDesktop ? 'desktop' : 'mobile';
     return createTableHeaders(mode, sortOptions, selectionOptions);
   };
