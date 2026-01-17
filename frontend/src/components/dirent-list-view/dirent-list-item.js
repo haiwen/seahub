@@ -253,11 +253,11 @@ class DirentListItem extends React.Component {
     }
   };
 
-  // on '<tr>'
   onDirentClick = (e) => {
-    // '<td>' is clicked
     e.stopPropagation();
-    if (e.target.tagName == 'TD') {
+
+    const isCellClick = e.target.tagName === 'TD' || e.target.closest('.dirent-virtual-item');
+    if (isCellClick) {
       this.props.onDirentClick(this.state.dirent, e);
     }
   };
@@ -908,22 +908,18 @@ class DirentListItem extends React.Component {
             )}
           </div>
 
-          {/* Tags */}
           <div className="pl-2 pr-2">
             {/* Tags placeholder */}
           </div>
 
-          {/* Operations */}
           <div className="pl-2 pr-2">
             {this.renderItemOperation()}
           </div>
 
-          {/* Size */}
           <div className="pl-2 pr-2">
             {dirent.size || ''}
           </div>
 
-          {/* Modified */}
           <div className="pl-2 pr-2" title={formatUnixWithTimezone(dirent.mtime)}>
             {dirent.mtime_relative}
           </div>
