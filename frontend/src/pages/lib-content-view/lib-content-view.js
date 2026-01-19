@@ -125,16 +125,6 @@ class LibContentView extends React.Component {
     }
   };
 
-  onItemsScroll = (e) => {
-    let target = e.target;
-    if (target.scrollTop === 0) {
-      return;
-    }
-    if (target.scrollTop + target.clientHeight + 1 >= target.scrollHeight) {
-      this.onListContainerScroll();
-    }
-  };
-
   showDirentDetail = () => {
     this.setState({ isDirentDetailShow: true }, () => {
       localStorage.setItem(DIRENT_DETAIL_SHOW_KEY, true);
@@ -532,7 +522,6 @@ class LibContentView extends React.Component {
 
     // update data
     this.loadDirentList(path);
-    this.resetShowLength();
 
     if (!this.isNeedUpdateHistoryState) {
       this.isNeedUpdateHistoryState = true;
@@ -702,14 +691,6 @@ class LibContentView extends React.Component {
     this.setState({
       direntList: direntList
     });
-  };
-
-  onListContainerScroll = () => {
-    this.setState({ itemsShowLength: this.state.itemsShowLength + 100 });
-  };
-
-  resetShowLength = () => {
-    this.setState({ itemsShowLength: 100 });
   };
 
   updateMoveCopyTreeNode = (path) => {
@@ -2451,9 +2432,6 @@ class LibContentView extends React.Component {
     if (!isVirtual && (isRepoOwner || isAdmin)) {
       enableDirPrivateShare = true;
     }
-    let direntItemsList = this.state.direntList.filter((item, index) => {
-      return index < this.state.itemsShowLength;
-    });
 
     let canUpload = true;
     const { isCustomPermission, customPermission } = Utils.getUserPermission(userPerm);
@@ -2549,7 +2527,7 @@ class LibContentView extends React.Component {
                               repoEncrypted={this.state.repoEncrypted}
                               repoTags={this.state.repoTags}
                               selectedDirentList={this.state.selectedDirentList}
-                              direntList={direntItemsList}
+                              direntList={this.state.direntList}
                               onItemsDelete={this.onDeleteItems}
                               isRepoOwner={isRepoOwner}
                               currentRepoInfo={this.state.currentRepoInfo}
@@ -2577,7 +2555,7 @@ class LibContentView extends React.Component {
                             onTabNavClick={this.props.onTabNavClick}
                             onPathClick={this.onMainNavBarClick}
                             fileTags={this.state.fileTags}
-                            direntList={direntItemsList}
+                            direntList={this.state.direntList}
                             sortBy={this.state.sortBy}
                             sortOrder={this.state.sortOrder}
                             sortItems={this.sortItems}
@@ -2619,7 +2597,7 @@ class LibContentView extends React.Component {
                       </div>
                       }
                     </div>
-                    <div className='cur-view-content lib-content-container' onScroll={this.onItemsScroll}>
+                    <div className='cur-view-content lib-content-container'>
                       {this.state.pathExist ?
                         <DirColumnView
                           isSidePanelFolded={this.props.isSidePanelFolded}
@@ -2655,7 +2633,7 @@ class LibContentView extends React.Component {
                           usedRepoTags={this.state.usedRepoTags}
                           updateUsedRepoTags={this.updateUsedRepoTags}
                           isDirentListLoading={this.state.isDirentListLoading}
-                          direntList={direntItemsList}
+                          direntList={this.state.direntList}
                           fullDirentList={this.state.direntList}
                           sortBy={this.state.sortBy}
                           sortOrder={this.state.sortOrder}
@@ -2681,7 +2659,6 @@ class LibContentView extends React.Component {
                           onItemsDelete={this.onDeleteItems}
                           onFileTagChanged={this.onFileTagChanged}
                           showDirentDetail={this.showDirentDetail}
-                          onItemsScroll={this.onItemsScroll}
                           eventBus={this.props.eventBus}
                           updateCurrentDirent={this.updateCurrentDirent}
                           updateCurrentPath={this.updatePath}

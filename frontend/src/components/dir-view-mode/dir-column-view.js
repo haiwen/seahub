@@ -73,7 +73,6 @@ const propTypes = {
   onFileTagChanged: PropTypes.func,
   showDirentDetail: PropTypes.func.isRequired,
   fullDirentList: PropTypes.array,
-  onItemsScroll: PropTypes.func.isRequired,
   eventBus: PropTypes.object,
   updateCurrentDirent: PropTypes.func.isRequired,
   updateCurrentPath: PropTypes.func,
@@ -193,7 +192,6 @@ class DirColumnView extends React.Component {
         )}
         <div
           className="dir-content-main" style={dirContentMainStyle}
-          onScroll={this.props.isViewFile ? () => {} : this.props.onItemsScroll}
           ref={this.dirContentMain}
         >
           {currentMode === METADATA_MODE && (
