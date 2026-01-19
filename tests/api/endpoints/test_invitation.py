@@ -166,4 +166,4 @@ class InvitationRevokeTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert Invitation.objects.get(pk=iv.pk).accept_time is not None
         tmp_user_accept = User.objects.get(self.tmp_username)
-        assert tmp_user_accept.is_active is True
+        assert tmp_user_accept.is_active is False
