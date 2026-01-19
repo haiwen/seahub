@@ -1,8 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import stat
+import json
 import logging
-import os
-from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -20,8 +19,6 @@ from seahub.utils import is_org_context
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner, is_repo_admin
 from seahub.views import check_folder_permission
-from seahub.group.utils import is_group_admin
-from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.organizations.models import OrgAdminSettings, DISABLE_ORG_USER_CLEAN_TRASH
 
 from seaserv import seafile_api
@@ -30,6 +27,7 @@ from constance import config
 
 logger = logging.getLogger(__name__)
 SHOW_REPO_TRASH_DAYS = 90
+
 
 class RepoTrash(APIView):
 
@@ -241,7 +239,8 @@ class RepoTrash(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
             if org_id and org_id > 0:
-                disable_clean_trash = OrgAdminSettings.objects.filter(org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
+                disable_clean_trash = OrgAdminSettings.objects.filter(
+                        org_id=org_id, key=DISABLE_ORG_USER_CLEAN_TRASH).first()
                 if (disable_clean_trash is not None) and int(disable_clean_trash.value):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -381,13 +380,13 @@ class RepoTrash2(APIView):
         if check_folder_permission(request, repo_id, path) is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
         # keep_days
         # -1 all history
         # 0 no history
         # n n-days history
         keep_days = seafile_api.get_repo_history_limit(repo_id)
-        
+
         if keep_days == 0:
             result = {
                 'items': [],
@@ -395,19 +394,18 @@ class RepoTrash2(APIView):
                 'can_search': False
             }
             return Response(result)
-        
+
         # pre-filter by repo history
-        
+
         elif keep_days == -1:
             qset = FileTrash.objects.by_repo_id(repo_id)
-            
+
         else:
             qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
-        
+
         deleted_entries = qset[start:end]
         total_count = qset.count()
-            
-        
+
         items = []
         if len(deleted_entries) >= 1:
             for item in deleted_entries:
@@ -421,6 +419,7 @@ class RepoTrash2(APIView):
         }
 
         return Response(result)
+
 
 class SearchRepoTrash2(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -462,7 +461,7 @@ class SearchRepoTrash2(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         q = request.GET.get('q', None)
-        
+
         op_users = request.GET.get('op_users', '').split(',') if request.GET.get('op_users') else None
         op_users = [u for u in op_users if u] if op_users else None
 
@@ -488,7 +487,7 @@ class SearchRepoTrash2(APIView):
         except ValueError:
             current_page = 1
             per_page = 20
-        
+
         start = (current_page - 1) * per_page
         end = start + per_page
         try:
@@ -515,14 +514,14 @@ class SearchRepoTrash2(APIView):
                 'total_count': 0
             }
             return Response(result)
-        
+
         # pre-filter by repo history
         elif keep_days == -1:
             qset = FileTrash.objects.by_repo_id(repo_id)
-        
+
         else:
             qset = FileTrash.objects.by_repo_id(repo_id).by_history_limit(keep_days)
-        
+
         if q:
             qset = qset.by_keywords(q)
         if op_users:
@@ -531,10 +530,10 @@ class SearchRepoTrash2(APIView):
             qset = qset.by_time_range(time_from, time_to)
         if suffixes:
             qset = qset.by_suffixes(suffixes)
-            
+
         deleted_entries = qset[start:end]
         total_count = qset.count()
-        
+
         items = []
         if len(deleted_entries) >= 1:
             for item in deleted_entries:
@@ -546,4 +545,55 @@ class SearchRepoTrash2(APIView):
             'total_count': total_count
         }
 
+        return Response(result)
+
+
+class RevertRepoTrash2(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, repo_id):
+        """ Revert deleted files/dirs.
+        """
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+        username = request.user.username
+
+        post_data = json.loads(request.body)
+        for commit_id, path_list in post_data.items():
+            for path in path_list:
+                try:
+                    if seafile_api.get_dir_id_by_commit_and_path(repo_id, commit_id, path):
+                        seafile_api.revert_dir(repo_id, commit_id, path, username)
+                        result['success'].append({'path': path, 'is_dir': True})
+                    elif seafile_api.get_file_id_by_commit_and_path(repo_id, commit_id, path):
+                        seafile_api.revert_file(repo_id, commit_id, path, username)
+                        result['success'].append({'path': path, 'is_dir': False})
+                    else:
+                        result['failed'].append({
+                            'commit_id': commit_id,
+                            'path': path,
+                            'error_msg': f'Dirent {path} not found.'
+                        })
+                except Exception as e:
+                    result['failed'].append({
+                        'commit_id': commit_id,
+                        'path': path,
+                        'error_msg': str(e)
+                    })
         return Response(result)
