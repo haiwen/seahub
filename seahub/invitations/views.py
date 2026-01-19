@@ -54,12 +54,7 @@ def token_view(request, token):
                 messages.error(request, _('A user with this email already exists.'))
                 return render(request, 'invitations/token_view.html', {'iv': i, })
             else:
-                # user is inactive
-                # non-guest role user can not accept invitation
-                if user.role != GUEST_USER:
-                    messages.error(request, _('Only guest user can accept invitation.'))
-                    return render(request, 'invitations/token_view.html', {'iv': i, })
-                
+                # user is inactive then set active and new password
                 user.set_password(passwd)
                 user.is_active = True
                 user.save()
