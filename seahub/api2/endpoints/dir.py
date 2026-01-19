@@ -28,7 +28,7 @@ from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.repo import parse_repo_perm
-from seahub.constants import PERMISSION_INVISIBLE
+from seahub.constants import PERMISSION_INVISIBLE, PERMISSION_READ
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.settings import THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, ENABLE_THUMBNAIL_SERVER
 
@@ -44,6 +44,11 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
     repo_id = repo_obj.id
     dir_info_list = []
     file_info_list = []
+    repo_status = seafile_api.get_repo_status(repo_id)
+
+    repo_permission = None
+    if repo_status == 1:
+        repo_permission = PERMISSION_READ
 
     # get dirent(folder and file) list
     parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
@@ -78,7 +83,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             dir_info["id"] = dirent.obj_id
             dir_info["name"] = dirent.obj_name
             dir_info["mtime"] = dirent.mtime
-            dir_info["permission"] = dirent.permission
+            dir_info["permission"] = repo_permission or dirent.permission
             dir_info["parent_dir"] = parent_dir
             dir_info_list.append(dir_info)
 
@@ -121,7 +126,7 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
             file_info["id"] = file_obj_id
             file_info["name"] = file_name
             file_info["mtime"] = dirent.mtime
-            file_info["permission"] = dirent.permission
+            file_info["permission"] = repo_permission or dirent.permission
             file_info["parent_dir"] = parent_dir
             file_info["size"] = dirent.size
 
@@ -265,6 +270,7 @@ class DirView(APIView):
 
         # permission check
         permission = check_folder_permission(request, repo_id, parent_dir)
+       
         if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
