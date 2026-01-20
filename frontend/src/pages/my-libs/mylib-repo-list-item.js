@@ -27,6 +27,8 @@ import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
 import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
+import Icon from '../../components/icon';
+import ArchiveIcon from '../../components/archive-icon';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -284,6 +286,11 @@ class MylibRepoListItem extends React.Component {
     });
   };
 
+  onArchiveRepo = (repo) => {
+    const newStatus = !repo.archive_status ? 'archived' : null;
+    this.props.updateRepoStatus(repo, newStatus);
+  };
+
   handleContextMenu = (event) => {
     this.props.onContextMenu(event, this.props.repo);
   };
@@ -320,7 +327,10 @@ class MylibRepoListItem extends React.Component {
             />
           )}
           {!this.state.isRenaming && repo.repo_name && (
-            <Link to={repoURL}>{repo.repo_name}</Link>
+            <>
+              <Link to={repoURL}>{repo.repo_name}</Link>
+              <ArchiveIcon currentRepoInfo={repo} />
+            </>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
             (gettext('Broken (please contact your administrator to fix this library)'))
@@ -436,6 +446,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <div>
               <Link to={repoURL}>{repo.repo_name}</Link>
+              {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
@@ -583,6 +594,7 @@ class MylibRepoListItem extends React.Component {
           <ModalPortal>
             <RepoArchiveDialog
               repo={repo}
+              onArchiveRepo={this.onArchiveRepo}
               toggle={this.onArchiveToggle}
             />
           </ModalPortal>

@@ -7,6 +7,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { userAPI } from '../../utils/user-api';
 import toaster from '../toast';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
+import Loading from '../loading';
 
 const POLLING_INTERVAL = 2000; // 2 seconds
 const MAX_POLLING_COUNT = 150; // Max 5 minutes (150 * 2s)
@@ -61,10 +62,22 @@ class RepoArchiveDialog extends Component {
         if (error) {
           // Show error message
           toaster.danger(error);
-        } else {
-          // Task completed successfully, refresh page to show updated status
-          window.location.reload();
+          return;
         }
+
+        const { repo } = this.props;
+        const isArchive = !repo.archive_status || repo.archive_status !== 'archived';
+        // Show immediate feedback message
+        const message = isArchive
+          ? gettext('The library is being archived. You will be notified once it is completed.')
+          : gettext('The library is being unarchived. You will be notified once it is completed.');
+        toaster.success(message);
+
+        this.props.onArchiveRepo(repo);
+        // Close dialog immediately
+        this.props.toggle();
+        this.setState({ isSubmitting: false });
+
       } else {
         // Continue polling in background
         this.pollingTimer = setTimeout(() => {
@@ -88,21 +101,20 @@ class RepoArchiveDialog extends Component {
     seafileAPI.archiveRepo(repo.repo_id, opType).then((res) => {
       const { task_id } = res.data;
 
-      // Show immediate feedback message
-      const message = isArchive
-        ? gettext('The library is being archived. You will be notified once it is completed')
-        : gettext('The library is being unarchived. You will be notified once it is completed');
-      toaster.success(message);
-
-      // Close dialog immediately
-      this.props.toggle();
-      if (this.props.onArchiveSuccess) {
-        this.props.onArchiveSuccess();
-      }
-
       // Start background polling if task_id is returned
       if (task_id) {
         this.queryTaskStatus(task_id);
+      } else {
+        // Show immediate feedback message
+        const message = isArchive
+          ? gettext('The library is being archived. You will be notified once it is completed.')
+          : gettext('The library is being unarchived. You will be notified once it is completed.');
+        toaster.success(message);
+
+        this.props.onArchiveRepo(repo);
+        // Close dialog immediately
+        this.props.toggle();
+        this.setState({ isSubmitting: false });
       }
     }).catch((error) => {
       const errMessage = Utils.getErrorMsg(error);
@@ -114,11 +126,11 @@ class RepoArchiveDialog extends Component {
   render() {
     const { isSubmitting } = this.state;
     const { repo, toggle: toggleDialog } = this.props;
-    const repoName = '<span class="op-target">' + Utils.HTMLescape(repo.repo_name) + '</span>';
+    const repoName = Utils.HTMLescape(repo.repo_name);
 
     // Determine if this is archive or unarchive operation
     const isArchive = !repo.archive_status || repo.archive_status !== 'archived';
-    const title = isArchive ? gettext('Archive Library') : gettext('Unarchive Library');
+    const title = isArchive ? gettext('Archive library') : gettext('Unarchive library');
     const buttonText = isArchive ? gettext('Archive') : gettext('Unarchive');
 
     let message;
@@ -127,7 +139,7 @@ class RepoArchiveDialog extends Component {
     } else {
       message = gettext('Are you sure you want to unarchive {placeholder} ?');
     }
-    message = message.replace('{placeholder}', repoName);
+    message = message.replace('{placeholder}', `"${repoName}"`);
 
     let warningMessage = '';
     if (isArchive) {
@@ -142,12 +154,12 @@ class RepoArchiveDialog extends Component {
         <ModalBody>
           <div className="pb-6">
             <p dangerouslySetInnerHTML={{ __html: message }}></p>
-            {warningMessage && <p className="text-warning">{warningMessage}</p>}
+            {warningMessage && <p>{warningMessage}</p>}
           </div>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={toggleDialog}>{gettext('Cancel')}</Button>
-          <Button color="primary" disabled={isSubmitting} onClick={this.onArchive}>{buttonText}</Button>
+          <Button className='submit-btn' color="primary" disabled={isSubmitting} onClick={this.onArchive}>{isSubmitting ? <Loading /> : buttonText}</Button>
         </ModalFooter>
       </Modal>
     );

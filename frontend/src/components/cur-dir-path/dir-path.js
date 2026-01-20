@@ -15,6 +15,7 @@ import Icon from '../icon';
 import { getTrashPath } from '../dir-view-mode/dir-trash-view/utils';
 import EventBus from '../common/event-bus';
 import CleanTrash from '../dialog/clean-trash';
+import ArchiveIcon from '../archive-icon';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -398,7 +399,7 @@ class DirPath extends React.Component {
   };
 
   render() {
-    const { currentPath, repoName, isTreePanelShown } = this.props;
+    const { currentPath, repoName, isTreePanelShown, currentRepoInfo } = this.props;
     const pathElem = this.turnPathToLink(currentPath);
     const isTrashMode = this.isTrashMode();
     const isHistoryMode = this.isHistoryMode();
@@ -446,7 +447,10 @@ class DirPath extends React.Component {
             onUploadFolder={this.props.onUploadFolder}
             loadDirentList={this.props.loadDirentList}
           >
-            <span className="last-path-item" title={repoName}>{repoName}</span>
+            <span className="last-path-item" title={repoName}>
+              {repoName}
+              <ArchiveIcon currentRepoInfo={currentRepoInfo} />
+            </span>
           </DirOperationToolbar> :
           <span
             className="path-item"
@@ -458,6 +462,7 @@ class DirPath extends React.Component {
             tabIndex="0"
           >
             {repoName}
+            <ArchiveIcon currentRepoInfo={currentRepoInfo} />
           </span>
         }
         {pathElem}

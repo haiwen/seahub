@@ -146,6 +146,17 @@ class MyLibraries extends Component {
     });
   };
 
+  updateRepoStatus = (repo, newStatus) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.archive_status = newStatus;
+        item.status = newStatus === null ? 'normal' : 'read-only';
+      }
+      return item;
+    });
+    this.setState({ repoList: repoList });
+  };
+
   render() {
     const { isLoading, errorMsg, currentViewMode, sortBy, sortOrder, repoList } = this.state;
     const isDesktop = Utils.isDesktop();
@@ -196,6 +207,7 @@ class MyLibraries extends Component {
                         onTransferRepo={this.onTransferRepo}
                         sortRepoList={this.sortRepoList}
                         currentViewMode={currentViewMode}
+                        updateRepoStatus={this.updateRepoStatus}
                       />
                     )
               }
