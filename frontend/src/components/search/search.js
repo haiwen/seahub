@@ -30,7 +30,9 @@ const propTypes = {
   onSelectTag: PropTypes.func,
 };
 
-const PER_PAGE = 20;
+const INITIAL_PAGE_SIZE = 20;
+const MAX_ITEMS = 100;
+const LOAD_MORE_THRESHOLD = 100;
 const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
 
 const isEnter = isHotkey('enter');
@@ -70,6 +72,10 @@ class Search extends Component {
         suffixes: '',
       },
       visitedItems: [],
+      hasMore: false,
+      isLoadingMore: false,
+      totalCount: 0,
+      isFolderSearch: false,
     };
     this.highlightRef = null;
     this.source = null; // used to cancel request;
@@ -90,6 +96,10 @@ class Search extends Component {
     const visitedItems = JSON.parse(localStorage.getItem(this.storeKey)) || [];
 
     this.setState({ isFiltersShow, visitedItems });
+
+    if (this.searchResultListContainerRef && this.searchResultListContainerRef.current) {
+      this.searchResultListContainerRef.current.addEventListener('scroll', this.handleScroll);
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -104,6 +114,9 @@ class Search extends Component {
         this.setState({ visitedItems });
       }
     }
+    if (this.state.isResultGotten && !prevState.isResultGotten && this.searchResultListContainerRef && this.searchResultListContainerRef.current) {
+      this.searchResultListContainerRef.current.addEventListener('scroll', this.handleScroll);
+    }
   }
 
   componentWillUnmount() {
@@ -111,6 +124,9 @@ class Search extends Component {
     document.removeEventListener('compositionstart', this.onCompositionStart);
     document.removeEventListener('compositionend', this.onCompositionEnd);
     this.isChineseInput = false;
+    if (this.searchResultListContainerRef && this.searchResultListContainerRef.current) {
+      this.searchResultListContainerRef.current.removeEventListener('scroll', this.handleScroll);
+    }
   }
 
   calculateStoreKey = (props) => {
@@ -128,6 +144,95 @@ class Search extends Component {
 
   onCompositionEnd = () => {
     this.isChineseInput = false;
+  };
+
+  handleScroll = (e) => {
+    const { hasMore, isLoadingMore, isResultGotten } = this.state;
+    if (!hasMore || isLoadingMore || !isResultGotten) return;
+
+    const container = e.target;
+    const { scrollTop, scrollHeight, clientHeight } = container;
+
+    const distanceToBottom = scrollHeight - scrollTop - clientHeight;
+    if (distanceToBottom < LOAD_MORE_THRESHOLD) {
+      this.loadMore();
+    }
+  };
+
+  loadMore = () => {
+    const { hasMore, isLoadingMore, inputValue, isFolderSearch, resultItems } = this.state;
+    if (!hasMore || isLoadingMore) return;
+
+    if (inputValue.trim() === '') return;
+
+    const isPublic = this.props.isPublic;
+    const queryData = this.buildSearchParams({
+      q: inputValue,
+      search_repo: isPublic ? this.queryData?.search_repo : this.props.repoID || 'all',
+      search_ftypes: 'all',
+      ...(isFolderSearch && this.props.path && this.props.path !== '/' ? { search_path: this.props.path } : {}),
+    });
+
+    const remainingItems = MAX_ITEMS - resultItems.length;
+
+    this.setState({ isLoadingMore: true }, () => {
+      if (this.source) {
+        this.source.cancel('prev request is cancelled');
+      }
+      this.source = seafileAPI.getSource();
+
+      this.sendLoadMoreRequest(queryData, this.source.token, remainingItems);
+    });
+  };
+
+  sendLoadMoreRequest = (queryData, cancelToken, remainingItems) => {
+    const isPublic = this.props.isPublic;
+
+    if (isPublic) {
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, 2, remainingItems, queryData.search_filename_only).then(res => {
+        this.source = null;
+        const newItems = this.formatResultItems(res.data.results);
+
+        this.setState(prevState => ({
+          resultItems: [...prevState.resultItems, ...newItems],
+          hasMore: false,
+          isLoadingMore: false,
+          page: 2,
+          totalCount: res.data.total,
+        }));
+      }).catch(error => {
+        this.handleLoadMoreError(error);
+      });
+    } else {
+      this.loadMoreNormalSearch(queryData, cancelToken, remainingItems);
+    }
+  };
+
+  loadMoreNormalSearch = (queryData, cancelToken, remainingItems) => {
+    queryData['per_page'] = remainingItems;
+    queryData['page'] = 2;
+    seafileAPI.searchFiles(queryData, cancelToken).then(res => {
+      this.source = null;
+      const newItems = this.formatResultItems(res.data.results);
+
+      this.setState(prevState => ({
+        resultItems: [...prevState.resultItems, ...newItems],
+        hasMore: false,
+        isLoadingMore: false,
+        page: 2,
+        totalCount: res.data.total,
+      }));
+    }).catch(error => {
+      this.handleLoadMoreError(error);
+    });
+  };
+
+  handleLoadMoreError = (e) => {
+    if (!axios.isCancel(e)) {
+      let errMessage = Utils.getErrorMsg(e);
+      toaster.danger(errMessage);
+    }
+    this.setState({ isLoadingMore: false });
   };
 
   onDocumentKeydown = (e) => {
@@ -452,22 +557,26 @@ class Search extends Component {
       highlightIndex: 0,
     });
     this.source = seafileAPI.getSource();
-    this.sendRequest(queryData, this.source.token, 1);
+    this.sendInitialRequest(queryData, this.source.token);
   };
 
-  sendRequest = (queryData, cancelToken, page) => {
+  sendInitialRequest = (queryData, cancelToken) => {
     let isPublic = this.props.isPublic;
     this.queryData = queryData;
 
     if (isPublic) {
-      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, page, PER_PAGE, queryData.search_filename_only).then(res => {
+      seafileAPI.searchFilesInPublishedRepo(queryData.search_repo, queryData.q, 1, INITIAL_PAGE_SIZE, queryData.search_filename_only).then(res => {
         this.source = null;
         if (res.data.total > 0) {
+          const newItems = this.formatResultItems(res.data.results);
+          const hasMore = newItems.length > 0 && newItems.length < MAX_ITEMS;
           this.setState({
-            resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
+            resultItems: newItems,
             isResultGotten: true,
-            page: page + 1,
+            page: 1,
             isLoading: false,
+            hasMore: hasMore,
+            totalCount: res.data.total,
           });
         } else {
           this.setState({
@@ -475,27 +584,33 @@ class Search extends Component {
             resultItems: [],
             isLoading: false,
             isResultGotten: true,
+            hasMore: false,
+            totalCount: 0,
           });
         }
       }).catch(error => {
         this.handleError(error);
       });
     } else {
-      this.onNormalSearch(queryData, cancelToken, page);
+      this.onInitialSearch(queryData, cancelToken);
     }
   };
 
-  onNormalSearch = (queryData, cancelToken, page) => {
-    queryData['per_page'] = PER_PAGE;
-    queryData['page'] = page;
+  onInitialSearch = (queryData, cancelToken) => {
+    queryData['per_page'] = INITIAL_PAGE_SIZE;
+    queryData['page'] = 1;
     seafileAPI.searchFiles(queryData, cancelToken).then(res => {
       this.source = null;
       if (res.data.total > 0) {
+        const newItems = this.formatResultItems(res.data.results);
+        const hasMore = newItems.length > 0 && newItems.length < MAX_ITEMS;
         this.setState({
-          resultItems: [...this.state.resultItems, ...this.formatResultItems(res.data.results)],
+          resultItems: newItems,
           isResultGotten: true,
+          page: 1,
           isLoading: false,
-          page: page + 1,
+          hasMore: hasMore,
+          totalCount: res.data.total,
         });
         return;
       }
@@ -504,6 +619,8 @@ class Search extends Component {
         resultItems: [],
         isLoading: false,
         isResultGotten: true,
+        hasMore: false,
+        totalCount: 0,
       });
     }).catch(error => {
       this.handleError(error);
@@ -542,6 +659,11 @@ class Search extends Component {
       isSearchInputShow: false,
       showRecent: true,
       isFilterControllerActive: false,
+      hasMore: false,
+      isLoadingMore: false,
+      totalCount: 0,
+      isFolderSearch: false,
+      page: 0,
       filters: {
         search_filename_only: false,
         creator_list: [],
@@ -565,6 +687,11 @@ class Search extends Component {
       highlightIndex: 0,
       isSearchInputShow: false,
       isCloseShow: false,
+      hasMore: false,
+      isLoadingMore: false,
+      totalCount: 0,
+      isFolderSearch: false,
+      page: 0,
     });
   };
 
@@ -735,6 +862,7 @@ class Search extends Component {
       search_repo: this.props.repoID,
       search_ftypes: 'all',
     };
+    this.setState({ isFolderSearch: false });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
@@ -746,6 +874,7 @@ class Search extends Component {
       search_ftypes: 'all',
       search_path: this.props.path,
     };
+    this.setState({ isFolderSearch: true });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
@@ -756,6 +885,7 @@ class Search extends Component {
       search_repo: 'all',
       search_ftypes: 'all',
     };
+    this.setState({ isFolderSearch: false });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
@@ -790,7 +920,7 @@ class Search extends Component {
   };
 
   renderResults = (resultItems, isVisited) => {
-    const { highlightIndex } = this.state;
+    const { highlightIndex, isLoadingMore, hasMore } = this.state;
 
     const results = (
       <>
@@ -818,6 +948,14 @@ class Search extends Component {
             );
           })}
         </ul>
+        {isLoadingMore && (
+          <div className="search-loading-more">
+            <Loading />
+          </div>
+        )}
+        {hasMore && resultItems.length > 0 && (
+          <div className="search-load-more-trigger" />
+        )}
       </>
     );
 
