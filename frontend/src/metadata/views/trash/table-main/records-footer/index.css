@@ -1,0 +1,105 @@
+.sf-metadata-result-footer {
+  position: relative;
+  height: 32px;
+  width: 100%;
+  overflow: hidden;
+  line-height: 32px;
+  background: var(--bs-body-bg);
+  border-top: 1px solid var(--bs-border-secondary-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+  display: flex;
+  flex-shrink: 0;
+}
+
+.sf-metadata-result-footer.at-border {
+  border-bottom: none;
+}
+
+.sf-metadata-result-footer .rows-record {
+  width: 80px;
+  padding-left: 8px;
+}
+
+.load-all-tip {
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-result-footer .summaries-pane {
+  position: relative;
+  display: flex;
+  flex: 1 1;
+  overflow: hidden;
+}
+
+.sf-metadata-result-footer .summaries-scroll {
+  position: relative;
+  overflow: hidden;
+}
+
+.sf-metadata-result-footer .summaries-scroll > div {
+  display: inline-flex;
+}
+
+.sf-metadata-result-footer .summary-item,
+.canvas-groups-rows .summary-item {
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+  padding: 0 8px;
+  height: 30px;
+}
+
+.sf-metadata-result-footer .summary-item .summary-value,
+.canvas-groups-rows .summary-item .summary-value {
+  display: flex;
+  justify-content: flex-end;
+  max-width: calc(100% - 18px);
+  overflow: hidden;
+}
+
+.sf-metadata-result-footer .summary-value .summary-value-title,
+.canvas-groups-rows .summary-value .summary-value-title {
+  color: #666666;
+  flex: none;
+}
+
+.sf-metadata-result-footer .summary-value .summary-value-text,
+.canvas-groups-rows .summary-value .summary-value-text {
+  max-width: 100%;
+  padding-left: 3px;
+  flex: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.load-all-tip .load-all,
+.sf-metadata-result-footer .load-all {
+  height: 16px;
+  line-height: 16px;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 1px solid #666;
+}
+
+.sf-metadata-result-footer .load-all {
+  margin: auto;
+}
+
+.load-all-tip .load-all:hover,
+.sf-metadata-result-footer .load-all:hover {
+  color: var(--bs-body-color);
+  border-bottom: 1px solid #212529;
+}
+
+.sf-metadata-result-footer .loading-message {
+  display: inline-flex;
+  align-items: center;
+  color: #666;
+}
+
+.sf-metadata-result-footer .loading-message .loading-icon {
+  width: 16px;
+  height: 16px;
+}

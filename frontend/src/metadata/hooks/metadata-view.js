@@ -246,6 +246,39 @@ export const MetadataViewProvider = ({
     });
   };
 
+  const restoreRecords = (recordsIds, { success_callback, fail_callback } = {}) => {
+    console.log('restoreRecords');
+    if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
+    let paths = [];
+    let fileNames = [];
+    const table = storeRef.current?.data || metadata;
+    recordsIds.forEach((recordId) => {
+      const record = getRowById(table, recordId);
+      const { _parent_dir, _name } = record || {};
+      if (_parent_dir && _name) {
+        const path = Utils.joinPath(_parent_dir, _name);
+        paths.push(path);
+        fileNames.push(_name);
+      }
+    });
+    storeRef.current.restoreRecords(recordsIds, {
+      fail_callback: (error) => {
+        fail_callback && fail_callback(error);
+        error && toaster.danger(error);
+      },
+      success_callback: () => {
+        // deleteFilesCallback(paths, fileNames);
+        let msg = fileNames.length > 1
+          ? gettext('Successfully restored{name} and {n} other items')
+          : gettext('Successfully restored {name}');
+        msg = msg.replace('{name}', fileNames[0])
+          .replace('{n}', fileNames.length - 1);
+        toaster.success(msg);
+        success_callback && success_callback();
+      },
+    });
+  };
+
   const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
     const rowIds = [rowId];
     const idRowUpdates = { [rowId]: updates };
@@ -360,6 +393,7 @@ export const MetadataViewProvider = ({
   }, [storeRef, modifyLocalFileTags]);
 
   const updateSelectedRecordIds = useCallback((ids, isSomeone, faceMetadata) => {
+    console.log('selected ...');
     toggleShowDirentToolbar(ids.length > 0);
     const data = isSomeone !== undefined ? faceMetadata : metadata;
     setTimeout(() => {
@@ -1004,6 +1038,7 @@ export const MetadataViewProvider = ({
     const unsubscribeMoveRecord = eventBus.subscribe(EVENT_BUS_TYPE.MOVE_RECORD, moveRecord);
     const unsubscribeDuplicateRecord = eventBus.subscribe(EVENT_BUS_TYPE.DUPLICATE_RECORD, duplicateRecord);
     const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
+    const unsubscribeRestoreRecords = eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_RECORDS, restoreRecords);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
@@ -1037,6 +1072,7 @@ export const MetadataViewProvider = ({
       unsubscribeMoveRecord();
       unsubscribeDuplicateRecord();
       unsubscribeDeleteRecords();
+      unsubscribeRestoreRecords();
       unsubscribeUpdateDetails();
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();
@@ -1075,6 +1111,7 @@ export const MetadataViewProvider = ({
         modifySettings,
         modifyRecords,
         deleteRecords,
+        restoreRecords,
         modifyRecord,
         moveRecord,
         duplicateRecord,

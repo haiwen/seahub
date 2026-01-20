@@ -5,7 +5,7 @@ import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
   VIEW_OPERATION, COLUMN_OPERATION, NEED_LOADING_OPERATION
 } from './operations';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, DEFAULT_RETRY_TIMES, DEFAULT_RETRY_INTERVAL } from '../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, DEFAULT_RETRY_TIMES, DEFAULT_RETRY_INTERVAL, TRASH_VIEW_ID } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import LocalOperator from './local-operator';
@@ -13,6 +13,7 @@ import Metadata from '../model/metadata';
 import { checkIsDir } from '../utils/row';
 import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord, checkDuplicatedName } from '../utils/cell';
+import { prepareTrashRows, getTrashColumns, TRASH_PER_PAGE } from '../utils/trash';
 
 class Store {
 
@@ -47,8 +48,19 @@ class Store {
   };
 
   async loadMetadata(view, limit, retries = DEFAULT_RETRY_TIMES, delay = DEFAULT_RETRY_INTERVAL) {
-    const res = await this.context.getMetadata({ view_id: this.viewId, start: this.startIndex, limit });
-    const rows = res?.data?.results || [];
+    let res;
+    let rows;
+    if (this.viewId === TRASH_VIEW_ID) {
+      const page = 1;
+      res = await this.context.getTrashData(page);
+      const initialRows = res?.data?.items || [];
+      rows = prepareTrashRows(initialRows);
+      res.data.metadata = getTrashColumns();
+    } else {
+      res = await this.context.getMetadata({ view_id: this.viewId, start: this.startIndex, limit });
+      rows = res?.data?.results || [];
+    }
+
     if (rows.length === 0 && retries > 0) {
       await new Promise(resolve => setTimeout(resolve, delay));
       return this.loadMetadata(view, limit, retries - 1, delay);
@@ -58,6 +70,11 @@ class Store {
     data.view.rows = data.row_ids;
     const loadedCount = rows.length;
     data.hasMore = loadedCount === limit;
+    if (this.viewId === TRASH_VIEW_ID) {
+      data.hasMore = res.data.total_count > res.data.items.length;
+      data.page = 1;
+      data.view.type = 'trash';
+    }
     this.data = data;
     this.startIndex += loadedCount;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
@@ -93,6 +110,24 @@ class Store {
     this.data.hasMore = loadedCount === limit;
     this.data.recordsCount = this.data.row_ids.length;
     this.startIndex = this.startIndex + loadedCount;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
+  }
+
+  async loadMoreTrash(page) {
+    if (!this.data) return;
+    const res = await this.context.getTrashData(page);
+    const rows = prepareTrashRows(res?.data?.items || []);
+
+    this.data.rows.push(...rows);
+    rows.forEach(record => {
+      this.data.row_ids.push(record._id);
+      this.data.id_row_map[record._id] = record;
+    });
+
+    this.data.hasMore = res.data.total_count > TRASH_PER_PAGE * page;
+    this.data.page = page;
+    this.data.recordsCount = this.data.row_ids.length;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
   }
@@ -304,6 +339,7 @@ class Store {
   }
 
   deleteRecords(rows_ids, { fail_callback, success_callback }) {
+    console.log('store deleteRecords');
     if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
     const type = OPERATION_TYPE.DELETE_RECORDS;
 
@@ -344,6 +380,40 @@ class Store {
       success_callback,
     });
     this.applyOperation(operation);
+  }
+
+  // restore selected trash records
+  async restoreRecords(rows_ids, { fail_callback, success_callback }) {
+    console.log('store restoreRecords');
+    if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
+
+    const items = {};
+    rows_ids.forEach((rowId) => {
+      const row = getRowById(this.data, rowId);
+      const { commit_id, _parent_dir, _name } = row;
+      const path = Utils.joinPath(_parent_dir, _name);
+      if (items[commit_id]) {
+        items[commit_id].push(path);
+      } else {
+        items[commit_id] = [path];
+      }
+    });
+    console.log('items:', items);
+
+    const res = await this.context.restoreTrashItems(items);
+    console.log(res);
+
+    /*
+    const operation = this.createOperation({
+      type,
+      repo_id: this.repoId,
+      rows_ids: valid_rows_ids,
+      deleted_rows,
+      fail_callback,
+      success_callback,
+    });
+    this.applyOperation(operation);
+    */
   }
 
   reloadRecords(row_ids) {
