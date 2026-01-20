@@ -269,10 +269,10 @@ class CcnetDB:
         sql = f"""
         SELECT group_id
         FROM `{self.db_name}`.`GroupStructure`
-        WHERE path LIKE %s
+        WHERE FIND_IN_SET(%s, REPLACE(path, ' ', '')) > 0
         """
         with connection.cursor() as cursor:
-            cursor.execute(sql, [f'%{group_id}%'])
+            cursor.execute(sql, [str(group_id)])
             sub_groups = cursor.fetchall()
         return [s[0] for s in sub_groups]
     
@@ -291,8 +291,9 @@ class CcnetDB:
 
         update_structure_sql = f"""
         UPDATE `{self.db_name}`.`GroupStructure`
-        SET path = CONCAT(%s, SUBSTRING(path, LENGTH(%s) + 1))
-        WHERE path LIKE %s
+        SET path = CONCAT(%s, SUBSTRING(path, CHAR_LENGTH(%s) + 1))
+        WHERE path = %s
+            OR path LIKE CONCAT(%s, ', %%');
         """
 
         with transaction.atomic():
@@ -319,7 +320,8 @@ class CcnetDB:
                     [
                         new_path_prefix,  # New path prefix
                         old_path_prefix,  # Old path prefix to remove
-                        f"{old_path_prefix}%"  # Pattern to match all children
+                        old_path_prefix,  # Pattern to match self
+                        old_path_prefix   # Pattern to match the sub
                     ]
                 )
                 
