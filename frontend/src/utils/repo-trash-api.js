@@ -70,6 +70,11 @@ class RepotrashAPI {
     return this.req.get(url, { params: params });
   }
 
+  restoreTrashItems(repoID, items) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/trash2/revert/';
+    return this.req.post(url, items);
+  }
+
 }
 
 let repoTrashAPI = new RepotrashAPI();

@@ -1,8 +1,10 @@
 import metadataAPI from './api';
+import { repoTrashAPI } from '../utils/repo-trash-api';
 import tagsAPI from '../tag/api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
   FACE_RECOGNITION_VIEW_ID,
+  TRASH_VIEW_ID,
 } from './constants';
 import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
@@ -85,8 +87,18 @@ class Context {
     if (view_id === FACE_RECOGNITION_VIEW_ID) {
       return this.metadataAPI.getFaceData(repoID, start, limit);
     }
-
     return this.metadataAPI.getMetadata(repoID, params);
+  };
+
+  getTrashData = (page) => {
+    const repoID = this.settings['repoID'];
+    const per_page = 100;
+    return repoTrashAPI.getRepoFolderTrash(repoID, page, per_page);
+  };
+
+  restoreTrashItems = (items) => {
+    const repoID = this.settings['repoID'];
+    return repoTrashAPI.restoreTrashItems(repoID, items);
   };
 
   getViews = () => {
