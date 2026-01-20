@@ -123,7 +123,6 @@ class LibraryOperationMenu extends React.Component {
     const { isDepartmentRepo, repo } = this.props;
     const operations = [];
     operations.push('API Token');
-    operations.push('Webhooks');
 
     // Archive/Unarchive operation - show for both personal and department repos when storage classes is enabled
     if (enableStorageClasses && isPro) {
@@ -132,6 +131,8 @@ class LibraryOperationMenu extends React.Component {
         operations.push('Archive');
       }
     }
+
+    operations.push('Webhooks');
 
     if (isDepartmentRepo) {
       return operations;
