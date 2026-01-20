@@ -94,7 +94,7 @@ class GroupSelect extends Component {
             :
             <span className="select-placeholder">{placeholder}</span>
           }
-          <Icon symbol="down" />
+          <Icon symbol="arrow-down" />
         </div>
         {this.state.isShowSelectOptions && !isInModal && (
           <SelectOptionGroup

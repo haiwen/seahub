@@ -82,7 +82,7 @@ class Content extends Component {
 
       const isDesktop = Utils.isDesktop();
       if (isDesktop) {
-        const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
+        const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="arrow-down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
         return currentViewMode == LIST_MODE
           ? (

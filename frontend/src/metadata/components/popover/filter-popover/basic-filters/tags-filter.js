@@ -84,7 +84,7 @@ const TagsFilter = ({ value: oldValue, onChange: onChangeAPI }) => {
           onClick={onSelectToggle}
         >
           <span className="selected-option-show">{gettext('Tags')}</span>
-          <span className="d-inline-flex align-items-center"><Icon symbol="down" /></span>
+          <span className="d-inline-flex align-items-center"><Icon symbol="arrow-down" /></span>
         </div>
         {isOptionsVisible && (
           <ClickOutside onClickOutside={onClickOutside}>

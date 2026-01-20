@@ -133,7 +133,7 @@ class DepartmentsV2TreeNode extends Component {
               aria-label={gettext('Toggle children')}
               title={gettext('Toggle children')}
             >
-              <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
+              <Icon symbol="arrow-down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
             </span>
             :
             <span style={{ width: 24 }}></span>

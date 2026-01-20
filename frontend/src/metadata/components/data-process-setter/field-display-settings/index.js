@@ -59,7 +59,7 @@ const FieldDisplaySettings = ({ fieldIconConfig, fields, textProperties, onToggl
       >
         <Label className="mb-0">{textProperties.titleValue}</Label>
         <div className="sf-metadata-field-display-toggle-btn">
-          <Icon symbol="down" className={classnames({ 'rotate-270': isCollapsed })} />
+          <Icon symbol="arrow-down" className={classnames({ 'rotate-270': isCollapsed })} />
         </div>
       </div>
       <Transition nodeRef={nodeRef} in={!isCollapsed} timeout={DURATION}>

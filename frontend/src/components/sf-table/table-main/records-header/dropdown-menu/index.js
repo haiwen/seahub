@@ -42,7 +42,7 @@ const HeaderDropdownMenu = ({ column, ColumnDropdownMenu, customProps }) => {
         aria-label={gettext('More operations')}
         tabIndex={0}
       >
-        <Icon symbol="down" />
+        <Icon symbol="arrow-down" />
       </DropdownToggle>
       {isMenuShow && !isMobile &&
         <ModalPortal>

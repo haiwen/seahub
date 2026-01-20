@@ -61,7 +61,7 @@ const RateData = ({ value, onChange, updatePopoverState }) => {
           >
             <div className="selected-option" style={{ fill: color }}>
               <Icon symbol={type} />
-              <Icon symbol="down" />
+              <Icon symbol="arrow-down" />
             </div>
           </div>
           {isShowStylePopover && (

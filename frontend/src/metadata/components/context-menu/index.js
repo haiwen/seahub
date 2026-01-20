@@ -164,7 +164,7 @@ const ContextMenu = ({
                   onMouseEnter={() => handleSubMenuMouseEnter(option)}
                 >
                   <span className="mr-auto">{option.value}</span>
-                  <Icon symbol="down" className="rotate-270" />
+                  <Icon symbol="arrow-down" className="rotate-270" />
                 </DropdownToggle>
                 <DropdownMenu>
                   {option.subOpList.map((subItem, subIndex) => {

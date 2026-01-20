@@ -75,7 +75,7 @@ const AllTagsOperationToolbar = ({ repoID }) => {
             aria-expanded={isMenuOpen}
           >
             <Icon symbol="new" />
-            <Icon symbol="down" />
+            <Icon symbol="arrow-down" />
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             <DropdownItem className="d-flex align-items-center" onClick={openAddTag}>

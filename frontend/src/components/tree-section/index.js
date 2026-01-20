@@ -85,7 +85,7 @@ const TreeSection = ({ repoID, stateStorageKey, title, children, renderHeaderOpe
           {renderOperations()}
           <OpIcon
             className={`tree-section-header-operation ${showChildren ? '' : 'rotate-90'}`}
-            symbol="down"
+            symbol="arrow-down"
             op={toggleShowChildren}
             title={showChildren ? gettext('Fold') : gettext('Unfold')}
           />

@@ -336,10 +336,10 @@ class SharedDirView extends React.Component {
                 {canUpload ? (
                   <span className="d-flex align-items-center">
                     <Icon symbol="new" className="main-icon ml-2" />
-                    <Icon symbol="down" />
+                    <Icon symbol="arrow-down" />
                   </span>
                 ) : (
-                  <Icon symbol="down" className="ml-1" />
+                  <Icon symbol="arrow-down" className="ml-1" />
                 )}
               </DropdownToggle>
               <DropdownMenu className='position-fixed'>
@@ -1064,7 +1064,7 @@ class Content extends React.Component {
       );
     }
 
-    const sortIcon = <span className="d-flex align-items-center ml-1"><Icon symbol="down" className={sortOrder == 'asc' ? 'rotate-180' : ''} /></span>;
+    const sortIcon = <span className="d-flex align-items-center ml-1"><Icon symbol="arrow-down" className={sortOrder == 'asc' ? 'rotate-180' : ''} /></span>;
     return mode == LIST_MODE ? (
       <div className="table-container">
         <table className="table-hover">

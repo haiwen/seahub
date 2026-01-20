@@ -111,7 +111,7 @@ class RepoHistory extends React.Component {
               <div className="col-md-10 offset-md-1">
                 <h2 dangerouslySetInnerHTML={{ __html: title }} className="d-flex text-nowrap"></h2>
                 <a href="#" className="go-back" title={gettext('Back')} onClick={this.goBack} role="button" aria-label={gettext('Back')}>
-                  <Icon symbol="down" className="rotate-90" />
+                  <Icon symbol="arrow-down" className="rotate-90" />
                 </a>
                 {userPerm == 'rw' && <p className="tip">{gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification.')}</p>}
                 <Content

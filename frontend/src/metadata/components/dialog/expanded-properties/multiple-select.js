@@ -43,7 +43,7 @@ const MultipleSelect = ({ record, column, onCommit, modifyColumnData }) => {
             return option ? <SelectOption key={optionId} option={option} /> : null;
           })}
         </div>
-        <Icon symbol="down" className="dropdown-indicator" />
+        <Icon symbol="arrow-down" className="dropdown-indicator" />
         {isEditorShow && (
           <MultipleSelectEditor
             ref={editorRef}

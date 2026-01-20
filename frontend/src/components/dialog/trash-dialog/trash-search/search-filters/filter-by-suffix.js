@@ -57,7 +57,7 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
           aria-expanded={isOpen}
         >
           <div className="filter-label" title={gettext('File suffix')}>{gettext('File suffix')}</div>
-          <Icon symbol="down" className="ml-1" />
+          <Icon symbol="arrow-down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-suffix-menu p-4">

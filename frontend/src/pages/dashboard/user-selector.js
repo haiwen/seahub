@@ -87,7 +87,7 @@ class UserSelector extends Component {
               <span className="d-inline-block ml-1">{currentSelectedUsers.map(item => item.name).join(', ')}</span>
             </>
           ) : gettext('Modified by')}
-          <Icon symbol="down" className="w-3 h-3 ml-2 toggle-icon" />
+          <Icon symbol="arrow-down" className="w-3 h-3 ml-2 toggle-icon" />
         </OpElement>
         {isPopoverOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>

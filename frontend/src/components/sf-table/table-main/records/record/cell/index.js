@@ -177,7 +177,7 @@ const Cell = React.memo(({
           {hasChildNodes &&
             <OpIcon
               className={classnames('sf-table-record-tree-expand-icon', { 'rotate-270': isFoldedTreeNode })}
-              symbol="down"
+              symbol="arrow-down"
               style={{ left: treeNodeDepth * NODE_ICON_LEFT_INDENT }}
               title={isFoldedTreeNode ? gettext('Unfold') : gettext('Fold')}
               op={toggleExpandTreeNode}

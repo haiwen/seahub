@@ -240,7 +240,7 @@ class FileHistory extends React.Component {
                 role="button"
                 aria-label={gettext('Back')}
               >
-                <Icon symbol="down" className="rotate-90" />
+                <Icon symbol="arrow-down" className="rotate-90" />
               </a>
               <h2><span className="file-name">{fileName}</span>{' '}{gettext('History Versions')}</h2>
             </Fragment>

@@ -83,7 +83,7 @@ class Selector extends Component {
           {customSelectorToggle ? customSelectorToggle : (
             <span className="cur-option">
               {currentSelectedOption ? currentSelectedOption.text : ''}
-              {isDropdownToggleShown && <Icon symbol="down" className="toggle-icon ml-1" />}
+              {isDropdownToggleShown && <Icon symbol="arrow-down" className="toggle-icon ml-1" />}
             </span>
           )}
         </div>

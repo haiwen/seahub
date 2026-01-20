@@ -76,12 +76,12 @@
   border: 1px solid var(--bs-border-color);
 }
 
-.permission-editor .seafile-multicolor-icon-down {
+.permission-editor .seafile-multicolor-icon-arrow-down {
   width: 14px;
   height: 14px;
   color: #999;
 }
 
-.permission-editor .seafile-multicolor-icon-down:hover {
+.permission-editor .seafile-multicolor-icon-arrow-down:hover {
   color: #666;
 }

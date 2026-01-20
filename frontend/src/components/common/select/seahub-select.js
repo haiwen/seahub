@@ -9,7 +9,7 @@ const DropdownIndicator = props => {
     components.DropdownIndicator && (
       <components.DropdownIndicator {...props}>
         <span className="d-flex align-items-center" style={{ marginLeft: '-2px' }} aria-hidden="true">
-          <Icon symbol="down" style={{ width: '12px', height: '12px' }} />
+          <Icon symbol="arrow-down" style={{ width: '12px', height: '12px' }} />
         </span>
       </components.DropdownIndicator>
     )

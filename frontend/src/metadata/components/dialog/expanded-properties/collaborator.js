@@ -36,7 +36,7 @@ const Collaborator = ({ record, column, columns, onCommit }) => {
         {Array.isArray(value) && value.length > 0 && (
           value.map(email => <AsyncCollaborator key={email} value={email} {...props} />)
         )}
-        <Icon symbol="down" className="dropdown-indicator" />
+        <Icon symbol="arrow-down" className="dropdown-indicator" />
         {isEditorShow && (
           <CollaboratorEditor
             value={value}

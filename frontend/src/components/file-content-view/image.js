@@ -90,12 +90,12 @@ class FileContent extends React.Component {
       <div className="file-view-content flex-1 image-file-view d-flex align-items-center justify-content-center">
         {previousImage && (
           <a href={previousImageUrl} id="img-prev" title={gettext('you can also press ← ')}>
-            <Icon symbol="down" className="rotate-90" />
+            <Icon symbol="arrow-down" className="rotate-90" />
           </a>
         )}
         {nextImage && (
           <a href={nextImageUrl} id="img-next" title={gettext('you can also press →')}>
-            <Icon symbol="down" className="rotate-270" />
+            <Icon symbol="arrow-down" className="rotate-270" />
           </a>
         )}
         <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={style} />

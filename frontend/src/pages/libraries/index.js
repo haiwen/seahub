@@ -396,7 +396,7 @@ class Libraries extends Component {
   render() {
     const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
-    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="arrow-down" className={`w-3 h-3 ${sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
     return (
       <>

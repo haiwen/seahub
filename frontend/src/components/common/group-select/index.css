@@ -31,13 +31,13 @@
   cursor: default;
 }
 
-.group-select .seafile-multicolor-icon-down {
+.group-select .seafile-multicolor-icon-arrow-down {
   width: 14px;
   height: 14px;
   color: #999;
 }
 
-.group-select .seafile-multicolor-icon-down:hover {
+.group-select .seafile-multicolor-icon-arrow-down:hover {
   color: #666;
 }
 

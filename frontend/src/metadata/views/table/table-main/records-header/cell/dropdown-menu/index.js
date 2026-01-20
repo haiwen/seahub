@@ -313,7 +313,7 @@ const HeaderDropdownMenu = forwardRef(({ column, view, renameColumn, modifyColum
           aria-expanded={isMenuShow}
           aria-label={gettext('More operations')}
         >
-          <Icon symbol="down" />
+          <Icon symbol="arrow-down" />
         </DropdownToggle>
         {isMenuShow && !isMobile &&
           <ModalPortal>

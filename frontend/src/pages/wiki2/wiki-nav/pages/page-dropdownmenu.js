@@ -201,7 +201,7 @@ export default class PageDropdownMenu extends Component {
                 <Icon symbol="import-sdoc" className="mr-2" aria-hidden="true" />
                 <span>{gettext('Import page')}</span>
               </span>
-              <Icon symbol="down" className="rotate-270 mr-2" aria-hidden="true" />
+              <Icon symbol="arrow-down" className="rotate-270 mr-2" aria-hidden="true" />
             </DropdownToggle>
             <DropdownMenu className="ml-0">
               <DropdownItem key="import-docx" onClick={this.importPage.bind(this, '.docx')}>{gettext('Import page from docx')}</DropdownItem>

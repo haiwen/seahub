@@ -124,7 +124,7 @@ const FilterByDate = ({ date, onChange }) => {
           aria-expanded={isOpen}
         >
           <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
-          <Icon symbol="down" className="ml-1" />
+          <Icon symbol="arrow-down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-date-menu">

@@ -131,7 +131,7 @@ class ViewFileToolbar extends React.Component {
             data-toggle="dropdown"
           >
             {this.props.children}
-            <Icon symbol="down" className="ml-1 path-item-dropdown-toggle" />
+            <Icon symbol="arrow-down" className="ml-1 path-item-dropdown-toggle" />
           </DropdownToggle>
           <DropdownMenu className='position-fixed' onMouseMove={this.onDropDownMouseMove}>
             {opList.map((item, index) => {
@@ -154,7 +154,7 @@ class ViewFileToolbar extends React.Component {
                     >
                       <Icon symbol={item.icon} className="mr-2 dropdown-item-icon" />
                       <span className="mr-auto">{item.text}</span>
-                      <Icon symbol="down" className="rotate-270" />
+                      <Icon symbol="arrow-down" className="rotate-270" />
                     </DropdownToggle>
                     <DropdownMenu>
                       {item.subOpList.map((item, index) => {

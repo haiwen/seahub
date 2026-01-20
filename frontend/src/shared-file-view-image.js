@@ -50,12 +50,12 @@ class FileContent extends React.Component {
         <div className="image-file-view flex-1">
           {prevImgPath && (
             <a href={prevImgURL} id="img-prev" className="d-flex align-items-center" title={gettext('you can also press ← ')}>
-              <Icon symbol="down" className="rotate-90" />
+              <Icon symbol="arrow-down" className="rotate-90" />
             </a>
           )}
           {nextImgPath && (
             <a href={nextImgURL} id="img-next" className="d-flex align-items-center" title={gettext('you can also press →')}>
-              <Icon symbol="down" className="rotate-270" />
+              <Icon symbol="arrow-down" className="rotate-270" />
             </a>
           )}
           <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" />

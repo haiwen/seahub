@@ -53,7 +53,7 @@ const SingleSelect = ({ record, column, columns, onCommit, modifyColumnData }) =
     <ClickOutside onClickOutside={onClickOutside}>
       <div className="form-control position-relative select-option-container" onClick={onEdit}>
         {option ? <SelectOption option={option} /> : null}
-        <Icon symbol="down" className="dropdown-indicator" />
+        <Icon symbol="arrow-down" className="dropdown-indicator" />
         {isEditorShow && (
           <SingleSelectEditor
             ref={editorRef}

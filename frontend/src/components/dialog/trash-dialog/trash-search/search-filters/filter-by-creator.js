@@ -105,7 +105,7 @@ const FilterByCreator = ({ creatorList, onChange }) => {
           aria-expanded={isOpen}
         >
           <div className="filter-label" title={gettext('Deleted by')}>{gettext('Deleted by')}</div>
-          <Icon symbol="down" className="ml-1" />
+          <Icon symbol="arrow-down" className="ml-1" />
         </DropdownToggle>
         <ModalPortal>
           <DropdownMenu className="search-filter-menu filter-by-creator-menu">

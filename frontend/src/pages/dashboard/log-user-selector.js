@@ -135,7 +135,7 @@ class LogUserSelector extends Component {
               <span className="d-inline-block ml-1">{selectedItems.map(item => item.name).join(', ')}</span>
             </>
           ) : this.props.componentName}
-          <Icon symbol="down" className="ml-2 toggle-icon" />
+          <Icon symbol="arrow-down" className="ml-2 toggle-icon" />
         </span>
         {isOpen && (
           <div className="position-absolute activity-modifier-selector-container rounded" ref={ref => this.userSelector = ref}>

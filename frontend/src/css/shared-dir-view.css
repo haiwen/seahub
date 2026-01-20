@@ -107,7 +107,7 @@ body {
   color: var(--bs-icon-color);
 }
 
-#shared-dir-view .path-item-dropdown-toggle .seafile-multicolor-icon-down {
+#shared-dir-view .path-item-dropdown-toggle .seafile-multicolor-icon-arrow-down {
   width: 12px;
   height: 12px;
   transform: translateY(1px);
@@ -117,7 +117,7 @@ body {
   margin-right: 2px;
 }
 
-#shared-dir-view .table-container th .seafile-multicolor-icon-down {
+#shared-dir-view .table-container th .seafile-multicolor-icon-arrow-down {
   width: 12px;
   height: 12px;
 }

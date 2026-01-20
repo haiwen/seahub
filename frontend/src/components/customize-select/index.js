@@ -85,7 +85,7 @@ class CustomizeSelect extends Component {
         <div className="custom-select-dropdown-icon">{DropDownIcon}</div>
       );
     }
-    return (<span className="d-inline-flex align-items-center"><Icon symbol="down" /></span>);
+    return (<span className="d-inline-flex align-items-center"><Icon symbol="arrow-down" /></span>);
   };
 
   render() {

@@ -15,7 +15,7 @@ import { openFile } from '../../../../metadata/utils/file';
 import { TAG_FILE_KEY } from '../../../constants/file';
 import { formatWithTimezone } from '../../../../utils/time';
 
-import './index.css';
+import './tag-file.css';
 
 dayjs.extend(relativeTime);
 

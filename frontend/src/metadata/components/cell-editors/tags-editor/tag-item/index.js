@@ -52,7 +52,7 @@ const TagItem = ({
             aria-label={isFolded ? gettext('Unfold') : gettext('Fold')}
             tabIndex={0}
           >
-            <Icon symbol="down" className={classNames({ 'rotate-270': isFolded })} />
+            <Icon symbol="arrow-down" className={classNames({ 'rotate-270': isFolded })} />
           </span>
         )}
         <div className="sf-metadata-tag-color-and-name">

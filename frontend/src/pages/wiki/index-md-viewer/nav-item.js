@@ -72,7 +72,7 @@ class NavItem extends React.Component {
         <div className="pl-4 position-relative">
           <span className="switch-btn" onClick={this.toggleExpanded}>
             <span className={`${expanded ? '' : 'rotate-270 d-inline-flex align-items-center'}`} aria-hidden="true">
-              <Icon symbol="down" />
+              <Icon symbol="arrow-down" />
             </span>
           </span>
           {this.renderLink(node)}

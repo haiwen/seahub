@@ -76,7 +76,7 @@ class Item extends Component {
               role="button"
               aria-label={gettext('Toggle department group menu')}
             >
-              <Icon symbol="down" />
+              <Icon symbol="arrow-down" />
             </span>
           }
           <span style={hasChild ? { paddingLeft: '8px' } : { paddingLeft: '20px' }}>{department.name}</span>

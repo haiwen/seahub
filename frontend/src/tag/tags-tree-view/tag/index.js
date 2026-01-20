@@ -110,7 +110,7 @@ const Tag = ({ node, currentPath, leftIndent, selectedNodeKey, expanded, checkNo
         <div className="left-icon" style={{ left: leftIndent - SIDEBAR_INIT_LEFT_INDENT }}>
           {hasChildren && (
             <span className="folder-toggle-icon" onClick={onToggleExpanded}>
-              <Icon symbol="down" className={classnames({ 'rotate-270': !expanded })} />
+              <Icon symbol="arrow-down" className={classnames({ 'rotate-270': !expanded })} />
             </span>
           )}
           <div className="tree-node-icon">

@@ -91,7 +91,7 @@ class Paginator extends Component {
           title={gettext('Previous')}
           aria-label={gettext('Previous')}
         >
-          <Icon symbol="down" className="rotate-90" />
+          <Icon symbol="arrow-down" className="rotate-90" />
         </Button>
         <span className="btn btn-primary mx-4">{currentPage}</span>
         <Button
@@ -100,7 +100,7 @@ class Paginator extends Component {
           title={gettext('Next')}
           aria-label={gettext('Next')}
         >
-          <Icon symbol="down" className="rotate-270" />
+          <Icon symbol="arrow-down" className="rotate-270" />
         </Button>
         <Dropdown isOpen={this.state.isMenuShow} toggle={this.toggleOperationMenu} direction="up" className="paginator-dropdown ml-6">
           <DropdownToggle
@@ -112,7 +112,7 @@ class Paginator extends Component {
           >
             <span className='pr-3'>{this.getPerPageText(curPerPage)}</span>
             <span aria-hidden="true" className={className('d-inline-flex align-items-center', { 'rotate-180': this.state.isMenuShow })}>
-              <Icon symbol="down" />
+              <Icon symbol="arrow-down" />
             </span>
           </DropdownToggle>
           <DropdownMenu className="paginator-dropdown-menu">

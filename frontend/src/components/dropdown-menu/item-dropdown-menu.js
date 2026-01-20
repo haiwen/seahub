@@ -259,7 +259,7 @@ class ItemDropdownMenu extends React.Component {
                       onMouseEnter={this.toggleSubMenuShown.bind(this, menuItem)}
                     >
                       <span className="mr-auto">{menuItem.value}</span>
-                      <Icon symbol="down" className="rotate-270" />
+                      <Icon symbol="arrow-down" className="rotate-270" />
                     </DropdownToggle>
                     <DropdownMenu>
                       {menuItem.subOpListHeader && <DropdownItem header>{menuItem.subOpListHeader}</DropdownItem>}

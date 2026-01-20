@@ -38,7 +38,7 @@ class FilterMenu extends React.Component {
           data-toggle="dropdown"
           aria-expanded={this.state.isMenuShown}
         >
-          <Icon symbol="down" />
+          <Icon symbol="arrow-down" />
         </DropdownToggle>
         <DropdownMenu>
           <DropdownItem onClick={this.onItemClick}>{gettext('only show {placeholder}').replace('{placeholder}', filterBy)}</DropdownItem>

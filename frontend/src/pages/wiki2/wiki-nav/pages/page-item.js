@@ -336,7 +336,7 @@ const PageItem = ({
                     }}
                     onKeyDown={Utils.onKeyDown}
                   >
-                    <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
+                    <Icon symbol="arrow-down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
                   </div>
                 )}
                 {childNumber > 0 && (customIcon ? (
@@ -455,7 +455,7 @@ const PageItem = ({
                 onClick={() => toggleExpand(page.id)}
                 onKeyDown={Utils.onKeyDown}
               >
-                <Icon symbol="down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
+                <Icon symbol="arrow-down" className={getFoldState(page.id) ? 'rotate-270' : ''} aria-hidden="true" />
               </div>
             )}
             <span className="wiki-page-title text-truncate">{page.name}</span>

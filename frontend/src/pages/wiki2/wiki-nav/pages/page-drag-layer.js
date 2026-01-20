@@ -43,7 +43,7 @@ const PageDragLayer = ({ pages, getFoldState }) => {
               {hasChildren && (
                 <div className="wiki-nav-item-icon">
                   <Icon
-                    symbol="down"
+                    symbol="arrow-down"
                     className={isFolded ? 'rotate-270' : ''}
                     aria-hidden="true"
                   />
