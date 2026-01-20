@@ -25,10 +25,11 @@ from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
     group_id_to_name, set_group_name_cache
 from seahub.group.views import remove_group_common
-from seahub.base.models import UserStarredFiles, UserMonitoredRepos
+from seahub.base.models import UserStarredFiles, UserMonitoredRepos, RepoArchiveStatus
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, email2contact_email
 from seahub.share.models import ExtraGroupsSharePermission
+from seahub.settings import ENABLE_STORAGE_CLASSES
 
 from .utils import api_check_group
 
@@ -171,11 +172,25 @@ class Groups(APIView):
                     monitored_repo_id_list = []
 
                 repos = []
+                
+                # Fetch archive status for all group repos at once
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(group_repo_ids)
+                else:
+                    archive_status_dict = {}
+                
                 for r in group_repos:
                     if is_wiki_repo(r):
                         continue
 
                     repo_owner = repo_id_owner_dict.get(r.id, r.user)
+                    
+                    # Get permission, override to 'r' if archived
+                    archive_status = archive_status_dict.get(r.id)
+                    permission = r.permission
+                    if archive_status == 'archived':
+                        permission = 'r'
+                    
                     repo = {
                         "id": r.id,
                         "repo_id": r.id,
@@ -187,7 +202,7 @@ class Groups(APIView):
                         "mtime_relative": translate_seahub_time(r.last_modified),
                         "last_modified": timestamp_to_isoformat_timestr(r.last_modified),
                         "encrypted": r.encrypted,
-                        "permission": r.permission,
+                        "permission": permission,
                         "owner": repo_owner,
                         "owner_email": repo_owner,
                         "owner_name": name_dict.get(repo_owner, ''),
@@ -195,6 +210,7 @@ class Groups(APIView):
                         "is_admin": (r.id, g.id) in admin_info,
                         "starred": r.repo_id in starred_repo_id_list,
                         "monitored": r.repo_id in monitored_repo_id_list,
+                        "archive_status": archive_status,
                     }
                     repos.append(repo)
 

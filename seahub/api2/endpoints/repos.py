@@ -161,6 +161,9 @@ class ReposView(APIView):
                     repo_info['storage_name'] = r.storage_name
                     repo_info['storage_id'] = r.storage_id
                     repo_info['archive_status'] = owned_archive_status_dict.get(r.id)
+                    # Set permission to 'r' for archived repos
+                    if owned_archive_status_dict.get(r.id) == 'archived':
+                        repo_info['permission'] = 'r'
 
                 repo_info_list.append(repo_info)
 
@@ -248,6 +251,9 @@ class ReposView(APIView):
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
                     repo_info['archive_status'] = shared_archive_status_dict.get(r.repo_id)
+                    # Set permission to 'r' for archived repos
+                    if shared_archive_status_dict.get(r.repo_id) == 'archived':
+                        repo_info['permission'] = 'r'
 
 
                 repo_info_list.append(repo_info)
@@ -312,6 +318,9 @@ class ReposView(APIView):
 
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
                     repo_info['archive_status'] = group_archive_status_dict.get(r.repo_id)
+                    # Set permission to 'r' for archived repos
+                    if group_archive_status_dict.get(r.repo_id) == 'archived':
+                        repo_info['permission'] = 'r'
 
                 repo_info_list.append(repo_info)
 
@@ -462,6 +471,9 @@ class RepoView(APIView):
         if is_pro_version() and ENABLE_STORAGE_CLASSES:
             archive_status = RepoArchiveStatus.objects.get_archive_status(repo_id)
             result['archive_status'] = archive_status
+            # Set permission to 'r' for archived repos
+            if archive_status == 'archived':
+                result['permission'] = 'r'
 
         return Response(result)
 
