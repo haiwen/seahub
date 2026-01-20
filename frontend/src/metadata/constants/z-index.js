@@ -25,5 +25,3 @@ export const UPLOAD_PROGRESS = 4;
 
 // EditorContainer is rendered outside the grid and it higher FROZEN_GROUP_CELL(2)
 export const EDITOR_CONTAINER = 9;
-
-export const DROPDOWN_MENU = 1051;
