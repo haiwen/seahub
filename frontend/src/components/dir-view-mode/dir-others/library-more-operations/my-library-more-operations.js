@@ -146,6 +146,11 @@ class LibraryMoreOperations extends React.Component {
     });
   };
 
+  onArchiveRepo = (repo) => {
+    const newStatus = !repo.archive_status ? 'archived' : null;
+    this.props.updateRepoInfo({ 'archive_status': newStatus });
+  };
+
   render() {
     const { repo } = this.props;
     const {
@@ -252,6 +257,7 @@ class LibraryMoreOperations extends React.Component {
           <ModalPortal>
             <RepoArchiveDialog
               repo={repo}
+              onArchiveRepo={this.onArchiveRepo}
               toggle={this.onArchiveToggle}
             />
           </ModalPortal>

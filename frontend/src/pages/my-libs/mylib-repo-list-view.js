@@ -21,6 +21,7 @@ const propTypes = {
   onTransferRepo: PropTypes.func.isRequired,
   inAllLibs: PropTypes.bool,
   currentViewMode: PropTypes.string,
+  updateRepoStatus: PropTypes.func,
 };
 
 class MylibRepoListView extends React.Component {
@@ -104,6 +105,7 @@ class MylibRepoListView extends React.Component {
               currentViewMode={this.props.currentViewMode}
               onContextMenu={this.onContextMenu}
               inAllLibs={this.props.inAllLibs}
+              updateRepoStatus={this.props.updateRepoStatus}
             />
           );
         })}

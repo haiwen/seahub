@@ -2497,11 +2497,11 @@ class LibContentView extends React.Component {
               >
                 <div className="main-panel-center flex-row">
                   <div className="cur-view-container">
-                    {this.state.currentRepoInfo.status === 'read-only' &&
-                    <div className="readonly-tip-message">
-                      {gettext('This library has been set to read-only by admin and cannot be updated.')}
-                    </div>
-                    }
+                    {currentRepoInfo.status === 'read-only' && currentRepoInfo.archive_status !== 'archived' && (
+                      <div className="readonly-tip-message">
+                        {gettext('This library has been set to read-only by admin and cannot be updated.')}
+                      </div>
+                    )}
                     <div className="cur-view-path lib-cur-view-path">
                       <div className={classnames(
                         'cur-view-path-left', {

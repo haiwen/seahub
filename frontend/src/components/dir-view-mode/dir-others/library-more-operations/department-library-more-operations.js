@@ -139,11 +139,16 @@ class LibraryMoreOperations extends React.Component {
     });
   };
 
+  onArchiveRepo = (repo) => {
+    const archiveStatus = !repo.archive_status ? 'archived' : null;
+    const status = archiveStatus === null ? 'normal' : 'read-only';
+    this.props.updateRepoInfo({ 'archive_status': archiveStatus, 'status': status });
+  };
+
+
   render() {
     const { repo } = this.props;
-    const {
-      isRenameRepoDialogOpen, isTransferDialogOpen
-    } = this.state;
+    const { isRenameRepoDialogOpen, isTransferDialogOpen } = this.state;
     return (
       <Fragment>
         <LibraryOpMenu
@@ -237,6 +242,7 @@ class LibraryMoreOperations extends React.Component {
             <RepoArchiveDialog
               repo={repo}
               toggle={this.onArchiveToggle}
+              onArchiveRepo={this.onArchiveRepo}
             />
           </ModalPortal>
         )}

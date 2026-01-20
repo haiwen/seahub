@@ -93,8 +93,8 @@ class GroupItem extends React.Component {
             />
           </h4>
         </div>
-        {group.repos.length === 0 ?
-          emptyTip :
+        {group.repos.length === 0 && emptyTip}
+        {group.repos.length !== 0 && (
           <SharedRepoListView
             key={`group-${group.id}`}
             inAllLibs={inAllLibs}
@@ -107,8 +107,9 @@ class GroupItem extends React.Component {
             onItemRename={this.onItemRename}
             onTransferRepo={this.props.onTransferRepo}
             currentViewMode={currentViewMode}
+            updateRepoStatus={this.props.updateRepoStatus}
           />
-        }
+        )}
       </div>
     );
   }
