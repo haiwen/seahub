@@ -1,8 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import json
 import logging
-import requests
-import posixpath
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -10,20 +7,16 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api, edit_repo
-from pysearpc import SearpcError
 from django.db import IntegrityError
-from django.db.models import Count
-from django.http import HttpResponse
 from django.utils.translation import gettext as _
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
-from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name
-from seahub.utils import is_org_context, get_user_repos, gen_inner_file_get_url, gen_file_upload_url
+from seahub.wiki.utils import slugfy_wiki_name
+from seahub.utils import is_org_context, get_user_repos, is_valid_dirent_name
 from seahub.utils.repo import is_group_repo_staff, is_repo_owner
-from seahub.views import check_folder_permission
 from seahub.share.utils import is_repo_admin
 from seahub.share.models import FileShare
 
@@ -117,7 +110,7 @@ class WikisView(APIView):
 
         try:
             wiki = Wiki.objects.add(wiki_name=repo.repo_name, username=username,
-                    repo_id=repo.repo_id, org_id=org_id, permission='public')
+                                    repo_id=repo.repo_id, org_id=org_id, permission='public')
         except DuplicateWikiNameError:
             msg = _('%s is taken by others, please try another name.') % repo.repo_name
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
@@ -143,7 +136,7 @@ class WikisView(APIView):
         fs = FileShare.objects.get_dir_link_by_path(username, repo_id, '/')
         if not fs:
             fs = FileShare.objects.create_dir_link(username, repo_id, '/',
-                    permission='view_download', org_id=org_id)
+                                                   permission='view_download', org_id=org_id)
 
         return Response(wiki.to_dict())
 
@@ -215,7 +208,7 @@ class WikiView(APIView):
             error_msg = _('Name is required.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if not is_valid_wiki_name(wiki_name):
+        if not is_valid_dirent_name(wiki_name):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
 

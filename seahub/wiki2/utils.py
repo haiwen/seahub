@@ -1,7 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
-import re
-import os
 import stat
 import logging
 import json
@@ -15,8 +13,7 @@ from urllib.parse import urljoin
 from seaserv import seafile_api
 from seahub.constants import PERMISSION_READ_WRITE, PERMISSION_INVISIBLE
 from seahub.utils import gen_inner_file_get_url, gen_inner_file_upload_url
-from seahub.group.utils import is_group_admin, is_group_member
-from seahub.wiki2.models import WikiPageTrash
+from seahub.group.utils import is_group_admin
 from seahub.settings import SECRET_KEY, SEAFEVENTS_SERVER_URL
 
 
@@ -25,13 +22,6 @@ logger = logging.getLogger(__name__)
 WIKI_PAGES_DIR = '/wiki-pages'
 WIKI_CONFIG_PATH = '_Internal/Wiki'
 WIKI_CONFIG_FILE_NAME = 'index.json'
-
-
-def is_valid_wiki_name(name):
-    name = name.strip()
-    if len(name) > 255 or len(name) < 1:
-        return False
-    return True if re.match('^[\w\s-]+$', name, re.U) else False
 
 
 def get_wiki_dirs_by_path(repo_id, path, all_dirs):
@@ -354,6 +344,7 @@ def add_convert_wiki_task(params):
     resp = requests.get(url, params=params, headers=headers)
     return json.loads(resp.content)['task_id']
 
+
 def import_conflunece_to_wiki(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -361,6 +352,7 @@ def import_conflunece_to_wiki(params):
     url = urljoin(SEAFEVENTS_SERVER_URL, '/import-confluence-to-wiki')
     resp = requests.post(url, json=params, headers=headers, timeout=30)
     return json.loads(resp.content)['task_id']
+
 
 def import_wiki_page(params):
     payload = {'exp': int(time.time()) + 300, }
