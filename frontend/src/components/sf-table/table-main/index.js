@@ -115,6 +115,7 @@ const TableMain = ({
           scrollToLoadMore={enableScrollToLoad ? loadMore : undefined}
           loadMore={loadMore}
           loadAll={loadAll}
+          isLoadingMoreRecords={isLoadingMoreRecords}
           getTreeNodeByIndex={getTreeNodeByIndex}
           recordGetterById={recordGetterById}
           recordGetterByIndex={recordGetterByIndex}
