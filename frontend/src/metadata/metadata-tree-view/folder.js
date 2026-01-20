@@ -305,7 +305,7 @@ const ViewsFolder = ({
         </div>
         <div className="left-icon" style={{ left: leftIndent - 40 }}>
           <span className="folder-toggle-icon">
-            <Icon symbol="down" className={classnames({ 'rotate-270': !expanded })} />
+            <Icon symbol="arrow-down" className={classnames({ 'rotate-270': !expanded })} />
           </span>
           <span className="tree-node-icon">
             <Icon symbol="folder" />

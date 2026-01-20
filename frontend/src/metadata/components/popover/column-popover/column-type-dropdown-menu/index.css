@@ -21,6 +21,6 @@
   color: var(--bs-icon-secondary-color);
 }
 
-.sf-metadata-column-type-dropdown-menu .column-type-item.dropdown-item .seafile-multicolor-icon-down {
+.sf-metadata-column-type-dropdown-menu .column-type-item.dropdown-item .seafile-multicolor-icon-arrow-down {
   color: var(--bs-icon-color);
 }

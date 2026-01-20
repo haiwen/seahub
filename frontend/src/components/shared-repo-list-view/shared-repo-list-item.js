@@ -516,7 +516,7 @@ class SharedRepoListItem extends React.Component {
                         onKeyDown={this.toggleAdvancedMenuShown}
                       >
                         {this.translateMenuItem(item)}
-                        <Icon symbol="down" className="w-3 h-3 rotate-270" />
+                        <Icon symbol="arrow-down" className="w-3 h-3 rotate-270" />
                       </DropdownToggle>
                       <DropdownMenu>
                         {advancedOperations.map((item, index) => {

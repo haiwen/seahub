@@ -208,7 +208,7 @@ class RepoFolderTrash extends React.Component {
                   role="button"
                   aria-label={gettext('Back')}
                 >
-                  <Icon symbol="down" className="rotate-90" />
+                  <Icon symbol="arrow-down" className="rotate-90" />
                 </a>
                 <div className="d-flex justify-content-between align-items-center op-bar">
                   <p className="m-0 text-truncate d-flex"><span className="mr-1">{gettext('Current path: ')}</span>{showFolder ? this.renderFolderPath() : <span className="text-truncate" title={repoFolderName}>{repoFolderName}</span>}</p>

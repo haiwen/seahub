@@ -40,7 +40,7 @@ const NewFolder = ({ closeNewFolder }) => {
         </div>
         <div className="left-icon">
           <span className="folder-toggle-icon">
-            <Icon symbol="down" />
+            <Icon symbol="arrow-down" />
           </span>
           <span className="tree-node-icon">
             <Icon symbol="folder" />

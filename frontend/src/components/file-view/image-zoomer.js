@@ -136,7 +136,7 @@ const ImageZoomer = ({ setImageScale, setDefaultPageFitScale }) => {
           aria-expanded={isScaleMenuOpen}
         >
           <Input id="cur-scale-input" type="text" value={curScaleText} readOnly={true} tabIndex="-1" />
-          <Icon id="scale-menu-caret" symbol="down" />
+          <Icon id="scale-menu-caret" symbol="arrow-down" />
         </DropdownToggle>
         <DropdownMenu id="scale-menu">
           {SCALE_OPTIONS.map((item, index) => {

@@ -47,7 +47,7 @@ class Content extends Component {
 
     // sort
     const sortByName = sortBy == 'name';
-    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder == 'asc' ? 'rotate-180' : ''}`} /></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="arrow-down" className={`w-3 h-3 ${sortOrder == 'asc' ? 'rotate-180' : ''}`} /></span>;
 
     const isDesktop = Utils.isDesktop();
     return (

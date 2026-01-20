@@ -257,7 +257,7 @@ class RepoListItem extends React.Component {
         >
           <div className="item-left-icon">
             <span className="d-flex justify-content-center align-items-center item-toggle tree-node-icon icon" onClick={this.onToggleClick}>
-              <Icon symbol="down" className={this.state.isShowChildren ? '' : 'rotate-270'} />
+              <Icon symbol="arrow-down" className={this.state.isShowChildren ? '' : 'rotate-270'} />
             </span>
             <span className="tree-node-icon icon">
               <Icon symbol="folder" />

@@ -114,7 +114,7 @@ class MylibRepoListView extends React.Component {
   renderPCUI = () => {
     const { inAllLibs, currentViewMode = LIST_MODE } = this.props;
     const showStorageBackend = !inAllLibs && storages.length > 0;
-    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${this.props.sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
+    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="arrow-down" className={`w-3 h-3 ${this.props.sortOrder === 'asc' ? 'rotate-180' : ''}`} /></span>;
 
     return currentViewMode == LIST_MODE ? (
       <table className={classNames({ 'table-thead-hidden': inAllLibs })}>

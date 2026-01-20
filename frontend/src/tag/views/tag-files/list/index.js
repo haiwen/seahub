@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
+import Icon from '../../../../components/icon';
 import FixedWidthTable from '../../../../components/common/fixed-width-table';
+import { hideMenu } from '../../../../components/context-menu/actions';
 import { Utils } from '../../../../utils/utils';
 import { gettext } from '../../../../utils/constants';
-import classNames from 'classnames';
+import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
 import { getRecordIdFromRecord } from '../../../../metadata/utils/cell';
 import { useTags, useTagView } from '../../../hooks';
-import TagFile from './item';
-import { hideMenu } from '../../../../components/context-menu/actions';
-import { EVENT_BUS_TYPE } from '../../../../metadata/constants';
-import Icon from '../../../../components/icon';
+import TagFile from './tag-file';
 
 const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMenu }) => {
   const [renameTargetId, setRenameTargetId] = useState(null);
@@ -102,7 +102,11 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
     };
   }, []);
 
-  const sortIcon = <span className="d-inline-flex align-items-center ml-1"><Icon symbol="down" className={classNames('w-3 h-3', sortOrder == 'asc' ? 'rotate-180 d-inline-flex' : '')} /></span>;
+  const sortIcon = (
+    <span className="d-inline-flex align-items-center ml-1">
+      <Icon symbol="arrow-down" className={classNames('w-3 h-3', sortOrder == 'asc' ? 'rotate-180 d-inline-flex' : '')} />
+    </span>
+  );
 
   const headers = [
     {

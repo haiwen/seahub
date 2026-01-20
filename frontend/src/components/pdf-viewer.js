@@ -76,12 +76,12 @@ class PDFViewer extends React.Component {
                   </div>
                   <div className="splitToolbarButton m-0">
                     <button id="findPrevious" className="hidden border-0 d-inline-flex justify-content-center align-items-center" title="Find the previous occurrence of the phrase" tabIndex="92" data-l10n-id="find_previous">
-                      <Icon symbol="down" />
+                      <Icon symbol="arrow-down" />
                       <span data-l10n-id="find_previous_label" className="find-label">Previous</span>
                     </button>
                     <div className="splitToolbarButtonSeparator d-none"></div>
                     <button id="findNext" className="hidden border-0 d-inline-flex justify-content-center align-items-center" title="Find the next occurrence of the phrase" tabIndex="93" data-l10n-id="find_next">
-                      <Icon symbol="down" />
+                      <Icon symbol="arrow-down" />
                       <span data-l10n-id="find_next_label" className="find-label">Next</span>
                     </button>
                   </div>

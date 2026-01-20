@@ -101,7 +101,7 @@ class DingtalkDepartmentsTreeNode extends Component {
           >
             <span className="tree-node-icon" onClick={(e) => this.toggleChildren(e)}>
               <Icon
-                symbol="down"
+                symbol="arrow-down"
                 aria-hidden="true"
                 className={classNames({ 'rotate-270': !this.state.isChildrenShow })}
               />

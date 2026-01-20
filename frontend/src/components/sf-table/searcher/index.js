@@ -59,14 +59,14 @@ const SFTableSearcher = ({ recordsCount, columnsCount, searchResult, searchCells
               role="button"
               onClick={focusPreviousMatchedCell ? focusPreviousMatchedCell : () => {}}
             >
-              <Icon symbol="down" className="rotate-180" />
+              <Icon symbol="arrow-down" className="rotate-180" />
             </span>
             <span
               role="button"
               className='toolbar-search-btn'
               onClick={focusNextMatchedCell ? focusNextMatchedCell : () => {}}
             >
-              <Icon symbol="down" />
+              <Icon symbol="arrow-down" />
             </span>
           </>
         }

@@ -32,7 +32,7 @@
   background-color: var(--bs-hover-bg);
 }
 
-.search-filter-toggle .seafile-multicolor-icon-down {
+.search-filter-toggle .seafile-multicolor-icon-arrow-down {
   width: 12px;
   height: 12px;
   color: var(--bs-icon-color);

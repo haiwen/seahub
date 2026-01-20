@@ -15,7 +15,7 @@ class GoBack extends Component {
     return (
       <div className="go-back" onClick={this.onBackClick} role="button" aria-label={gettext('Go back')} tabIndex={0}>
         <span className="rotate-90 d-inline-block" aria-hidden="true">
-          <Icon symbol="down" />
+          <Icon symbol="arrow-down" />
         </span>
       </div>
     );

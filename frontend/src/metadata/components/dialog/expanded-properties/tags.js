@@ -54,7 +54,7 @@ const Tags = ({ record, column, updateFileTags, containerRef }) => {
     <ClickOutside onClickOutside={() => setIsEditorShown(false)}>
       <div ref={ref} className="form-control position-relative select-option-container" onClick={onEdit}>
         <FileTagsFormatter tagsData={tagsData} value={value} showName={true} />
-        <Icon symbol="down" className="dropdown-indicator" />
+        <Icon symbol="arrow-down" className="dropdown-indicator" />
         {isEditorShown && (
           <TagsEditor ref={editorRef} value={value} column={{ ...column, width: 400 }} customStyle={editorPosition} onSelect={onSelect} onDeselect={onDeselect} />
         )}

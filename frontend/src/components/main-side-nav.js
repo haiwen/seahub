@@ -285,7 +285,7 @@ class MainSideNav extends React.Component {
                   </div>
                   <OpIcon
                     className={`op-icon ${filesNavUnfolded ? '' : 'rotate-90'}`}
-                    symbol="down"
+                    symbol="arrow-down"
                     title={filesNavUnfolded ? gettext('Fold') : gettext('Unfold')}
                     op={this.toggleLibrariesNav}
                   />
@@ -352,7 +352,7 @@ class MainSideNav extends React.Component {
                     <span className="nav-text">{gettext('Share Admin')}</span>
                   </div>
                   <span className="op-icon">
-                    <Icon symbol="down" className={`${this.state.sharedExtended ? '' : 'rotate-90'}`} />
+                    <Icon symbol="arrow-down" className={`${this.state.sharedExtended ? '' : 'rotate-90'}`} />
                   </span>
                 </div>
                 {this.renderSharedAdmin()}

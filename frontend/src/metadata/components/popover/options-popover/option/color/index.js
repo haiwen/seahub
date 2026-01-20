@@ -45,7 +45,7 @@ const Color = ({ option, isViewing, isPredefined, onChange }) => {
     <>
       <IconBtn
         className="sf-metadata-edit-option-color"
-        symbol="down"
+        symbol="arrow-down"
         id={target}
         style={{ backgroundColor: option?.color || null }}
         iconStyle={{ color: option?.textColor || '#666' }}

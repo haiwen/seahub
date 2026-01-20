@@ -128,7 +128,7 @@ class DepartmentsTreeNode extends Component {
         >
           {this.state.isShowTreeIcon ?
             <span className="departments-v2-tree-icon" onClick={(e) => this.toggleChildren(e)}>
-              <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
+              <Icon symbol="arrow-down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
             </span>
             :
             <span style={{ width: 24 }}></span>

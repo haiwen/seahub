@@ -125,7 +125,7 @@ class Department extends React.Component {
               aria-label={gettext('More operations')}
               data-toggle="dropdown"
             >
-              <Icon symbol="down" />
+              <Icon symbol="arrow-down" />
             </DropdownToggle>
             <DepartmentNodeMenu
               node={currentDepartment}

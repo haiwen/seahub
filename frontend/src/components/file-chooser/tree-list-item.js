@@ -128,7 +128,7 @@ class TreeViewItem extends React.Component {
               {
                 node.object.type !== 'file' &&
                 <span className="item-toggle tree-node-icon icon" onClick={this.onToggleClick} >
-                  <Icon symbol="down" className={node.isExpanded ? '' : 'rotate-270'} />
+                  <Icon symbol="arrow-down" className={node.isExpanded ? '' : 'rotate-270'} />
                 </span>
               }
               <span className="tree-node-icon icon">

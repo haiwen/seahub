@@ -188,7 +188,7 @@ const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: nu
           aria-expanded={isOpen}
         >
           <span className="filter-label" style={{ maxWidth: 300 }} title={label}>{label}</span>
-          <Icon symbol="down" className="w-3 h-3 ml-1" />
+          <Icon symbol="arrow-down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <DropdownMenu
           className="search-filter-menu filter-by-date-menu"

@@ -53,7 +53,7 @@ class SingleDropdownToolbar extends React.Component {
           aria-expanded={this.state.isDropdownMenuOpen}
         >
           {withPlusIcon && <Icon symbol="new" className="w-4 h-4 new-icon" />}
-          <Icon symbol="down" className="w-3 h-3" />
+          <Icon symbol="arrow-down" className="w-3 h-3" />
         </DropdownToggle>
         <DropdownMenu className='position-fixed'>
           {opList.map((item, index) => {

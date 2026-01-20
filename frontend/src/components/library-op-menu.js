@@ -240,7 +240,7 @@ class LibraryOperationMenu extends React.Component {
                       onMouseEnter={this.toggleAdvancedMenuShown}
                     >
                       {this.translateOperations(item)}
-                      <Icon symbol="down" className="rotate-270" />
+                      <Icon symbol="arrow-down" className="rotate-270" />
                     </DropdownToggle>
                     <DropdownMenu>
                       {advancedOperations.map((item, index) => {

@@ -61,7 +61,7 @@ class FileHistory extends React.Component {
                 role="button"
                 aria-label={gettext('Back')}
               >
-                <Icon symbol="down" className="rotate-90" />
+                <Icon symbol="arrow-down" className="rotate-90" />
               </a>
               <span className="name text-truncate" title={fileName}>{fileName}</span>
             </div>

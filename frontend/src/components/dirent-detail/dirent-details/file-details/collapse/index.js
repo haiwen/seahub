@@ -19,7 +19,7 @@ const Collapse = ({ className, title, children, isShow = true }) => {
       <div className="file-details-collapse-header">
         <div className="file-details-collapse-header-title">{title}</div>
         <div className="file-details-collapse-header-operation" onClick={toggleShowChildren}>
-          <Icon symbol="down" className={showChildren ? '' : 'rotate-90'} />
+          <Icon symbol="arrow-down" className={showChildren ? '' : 'rotate-90'} />
         </div>
       </div>
       {showChildren && (

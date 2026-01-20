@@ -160,7 +160,7 @@ const Content = ({
           >
             {name || gettext('Empty')}
             {isDateTagClickable && (
-              <Icon symbol="down" className="metadata-gallery-date-tag-arrow rotate-270" />
+              <Icon symbol="arrow-down" className="metadata-gallery-date-tag-arrow rotate-270" />
             )}
           </div>
         )}

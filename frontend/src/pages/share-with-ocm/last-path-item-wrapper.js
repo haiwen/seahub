@@ -59,7 +59,7 @@ class LastPathItemWrapper extends React.Component {
             aria-expanded={this.state.isDesktopMenuOpen}
           >
             <Icon symbol="new" />
-            <Icon symbol="down" className="path-item-dropdown-toggle" />
+            <Icon symbol="arrow-down" className="path-item-dropdown-toggle" />
           </DropdownToggle>
           <DropdownMenu className='position-fixed'>
             {opList.map((item, index) => {

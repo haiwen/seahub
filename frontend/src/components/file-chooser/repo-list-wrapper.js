@@ -51,7 +51,7 @@ const RepoListWrapper = (props) => {
             <div className="list-view">
               <div className="file-chooser-list-view-header">
                 <span className="item-toggle tree-node-icon icon" onClick={props.onCurrentRepoToggle}>
-                  <Icon symbol="down" className={isCurrentRepoShow ? '' : 'rotate-270'} />
+                  <Icon symbol="arrow-down" className={isCurrentRepoShow ? '' : 'rotate-270'} />
                 </span>
                 <span className="library">{gettext('Current Library')}</span>
               </div>
@@ -73,7 +73,7 @@ const RepoListWrapper = (props) => {
             <div className="list-view">
               <div className="file-chooser-list-view-header">
                 <span className="item-toggle tree-node-icon icon" onClick={props.onOtherRepoToggle}>
-                  <Icon symbol="down" className={isOtherRepoShow ? '' : 'rotate-270'} />
+                  <Icon symbol="arrow-down" className={isOtherRepoShow ? '' : 'rotate-270'} />
                 </span>
                 <span className="library">{gettext('Other Libraries')}</span>
               </div>
@@ -116,7 +116,7 @@ const RepoListWrapper = (props) => {
             <div className="list-view">
               <div className="file-chooser-list-view-header">
                 <span className="item-toggle tree-node-icon icon" onClick={props.onOtherRepoToggle}>
-                  <Icon symbol="down" className={isOtherRepoShow ? '' : 'rotate-270'} />
+                  <Icon symbol="arrow-down" className={isOtherRepoShow ? '' : 'rotate-270'} />
                 </span>
                 <span className="library">{gettext('Libraries')}</span>
               </div>
