@@ -30,6 +30,10 @@
   color: #666;
 }
 
+.search-trash .search-icon-left .seafile-multicolor-icon {
+  color: #868e96;
+}
+
 .search-trash .search-icon-right {
   position: absolute;
   top: 1px;
