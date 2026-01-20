@@ -2628,8 +2628,9 @@ class SdocRevisionBaseVersionContent(APIView):
         resp = requests.get(download_url)
         if not resp.ok:
             logger.error(resp.text)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            error_msg = 'file not found'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
         return Response({
             'content': resp.content
         })
