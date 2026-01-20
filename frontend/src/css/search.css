@@ -440,6 +440,11 @@
     left: 0;
     width: 100%;
   }
+  
+  .search-result-container .search-result-list {
+    max-height: 400px;
+    overflow-y: auto;
+  }
 }
 
 .search-result-container .search-mode-container {
