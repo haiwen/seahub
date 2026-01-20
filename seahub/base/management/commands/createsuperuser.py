@@ -7,23 +7,13 @@ import getpass
 import os
 import re
 import sys
-from optparse import make_option
-from django.core import exceptions
 from django.core.management.base import BaseCommand, CommandError
-from django.utils.translation import gettext as _
 
+from seahub.utils import is_valid_email
 from seahub.base.accounts import User
 
-RE_VALID_USERNAME = re.compile('[\w.@+-]+$')
+RE_VALID_USERNAME = re.compile(r'[\w.@+-]+$')
 
-EMAIL_RE = re.compile(
-    r"(^[-!#$%&'*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&'*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
-    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-\011\013\014\016-\177])*"' # quoted-string
-    r')@(?:[A-Z0-9-]+\.)+[A-Z]{2,6}$', re.IGNORECASE)  # domain
-
-def is_valid_email(value):
-    if not EMAIL_RE.search(value):
-        raise exceptions.ValidationError(_('Enter a valid e-mail address.'))
 
 class Command(BaseCommand):
     help = 'Used to create a superuser.'
@@ -57,16 +47,15 @@ class Command(BaseCommand):
         username = options.get('username', None)
         email = options.get('email', None)
         interactive = options.get('interactive')
-        
+
         # Do quick and dirty validation if --noinput
         if not interactive:
             if not username or not email:
                 raise CommandError("You must use --username and --email with --noinput.")
             if not RE_VALID_USERNAME.match(username):
                 raise CommandError("Invalid username. Use only letters, digits, and underscores")
-            try:
-                is_valid_email(email)
-            except exceptions.ValidationError:
+
+            if not is_valid_email(email):
                 raise CommandError("Invalid email address.")
 
         password = ''
@@ -95,40 +84,18 @@ class Command(BaseCommand):
         # try/except to trap for a keyboard interrupt and exit gracefully.
         if interactive:
             try:
-            
-                # Get a username
-                # while 1:
-                #     if not username:
-                #         input_msg = 'Username'
-                #         if default_username:
-                #             input_msg += ' (Leave blank to use %r)' % default_username
-                #         username = raw_input(input_msg + ': ')
-                #     if default_username and username == '':
-                #         username = default_username
-                #     if not RE_VALID_USERNAME.match(username):
-                #         sys.stderr.write("Error: That username is invalid. Use only letters, digits and underscores.\n")
-                #         username = None
-                #         continue
-                #     try:
-                #         User.objects.get(email=username)
-                #     except User.DoesNotExist:
-                #         break
-                #     else:
-                #         sys.stderr.write("Error: That username is already taken.\n")
-                #         username = None
-            
+
                 # Get an email
                 while True:
                     if not email:
                         email = input('E-mail address: ')
-                    try:
-                        is_valid_email(email)
-                    except exceptions.ValidationError:
+
+                    if not is_valid_email(email):
                         sys.stderr.write("Error: That e-mail address is invalid.\n")
                         email = None
                     else:
                         break
-            
+
                 # Get a password
                 while True:
                     if not password:
@@ -146,6 +113,6 @@ class Command(BaseCommand):
             except KeyboardInterrupt:
                 sys.stderr.write("\nOperation cancelled.\n")
                 sys.exit(1)
-        
+
         User.objects.create_superuser(email, password)
         print("Superuser created successfully.")
