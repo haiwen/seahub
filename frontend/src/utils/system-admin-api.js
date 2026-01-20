@@ -624,6 +624,9 @@ class SystemAdminAPI {
     if (orgInfo.quota) {
       formData.append('quota', orgInfo.quota);
     }
+    if (orgInfo.monthlyTrafficLimit) {
+      formData.append('monthly_traffic_limit', orgInfo.monthlyTrafficLimit);
+    }
     if (orgInfo.role) {
       formData.append('role', orgInfo.role);
     }
