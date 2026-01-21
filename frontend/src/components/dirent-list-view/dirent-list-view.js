@@ -657,7 +657,7 @@ class DirentListView extends React.Component {
     this.setState({ imageIndex: index });
   };
 
-  getHeaders = (isDesktop) => {
+  getHeaders = () => {
     const { sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
 
     const sortOptions = {
@@ -675,14 +675,12 @@ class DirentListView extends React.Component {
       isPartiallySelected: selectedDirentList.length > 0 && !isAllItemSelected
     };
 
-    const mode = isDesktop ? 'desktop' : 'mobile';
-    return createTableHeaders(mode, sortOptions, selectionOptions);
+    return createTableHeaders(sortOptions, selectionOptions);
   };
 
 
   render() {
     const { direntList, userPerm } = this.props;
-    const isDesktop = Utils.isDesktop();
 
     let canModifyFile = false;
     let canDeleteFile = false;
@@ -713,7 +711,7 @@ class DirentListView extends React.Component {
       >
         {direntList.length > 0 && (
           <DirentVirtualListView
-            headers={this.getHeaders(isDesktop)}
+            headers={this.getHeaders()}
             items={direntList}
             itemHeight={TABLE_ROW_HEIGHT}
             overscan={5}

@@ -13,7 +13,7 @@ export const TABLE_COLUMN_MIN_WIDTHS = {
   modified: 140
 };
 
-export const createTableHeaders = (mode, sortOptions = {}, selectionOptions = {}) => {
+export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
   const { sortBy, sortOrder, onSort } = sortOptions;
   const { isAllSelected, onAllItemSelected, isPartiallySelected } = selectionOptions;
 
@@ -140,20 +140,25 @@ export const createTableHeaders = (mode, sortOptions = {}, selectionOptions = {}
     }
   ];
 
-  if (mode === 'mobile') {
-    return [
-      { isFixed: false, width: 0.12 },
-      { isFixed: false, width: 0.8 },
-      { isFixed: false, width: 0.08 },
-    ];
-  }
-
   return baseHeaders;
 };
 
 export const calculateResponsiveColumns = (headers, containerWidth) => {
   if (!headers?.length || !containerWidth) {
     return { columns: [], gridTemplate: '', totalWidth: 0 };
+  }
+
+  // Detect mobile screen (typically < 768px)
+  const isMobile = containerWidth < 768;
+
+  // On mobile, return 100% width without calculating individual columns
+  // since mobile uses simple flex layout instead of grid
+  if (isMobile) {
+    return {
+      columns: [],
+      gridTemplate: '100%',
+      totalWidth: containerWidth
+    };
   }
 
   const fixedWidth = headers.reduce((sum, header) => {
@@ -170,7 +175,7 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
         width: header.width
       };
     } else {
-      // Non-fixed columns: calculate as percentage of REMAINING space
+      // Desktop: use original width percentages
       const width = remainingWidth * header.width;
       const minWidth = TABLE_COLUMN_MIN_WIDTHS[header.key] || 60;
       return {
