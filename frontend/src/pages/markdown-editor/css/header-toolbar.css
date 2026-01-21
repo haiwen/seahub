@@ -47,7 +47,7 @@
 }
 
 .sf-md-viewer-topbar .btn .seafile-multicolor-icon {
-  fill: #666;
+  color: #666;
   height: 16px;
   width: 16px;
 }
@@ -56,7 +56,7 @@
   margin-right: 6px;
 }
 
-.btn[data-active=true]#saveButton {
+.btn[data-active=true]#saveButton .seafile-multicolor-icon {
   color: #ED7109;
 }
 
