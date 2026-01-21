@@ -22,6 +22,7 @@
     opacity: 0;
     transform: translateY(-120%);
   }
+
   to {
     transform: translateY(0);
   }
@@ -32,6 +33,7 @@
     transform: scale(1);
     opacity: 1;
   }
+
   to {
     transform: scale(0.9);
     opacity: 0;
@@ -69,8 +71,16 @@
   color: rgb(71, 184, 129);
 }
 
+.seahub-toast-alert-container.success .seafile-multicolor-icon {
+  color: rgb(71, 184, 129);
+}
+
 .seahub-toast-alert-container.warning {
   border-left: 3px solid rgb(217, 130, 43);
+  color: rgb(217, 130, 43);
+}
+
+.seahub-toast-alert-container.warning .seafile-multicolor-icon {
   color: rgb(217, 130, 43);
 }
 
@@ -79,8 +89,16 @@
   color: rgb(16, 112, 202);
 }
 
+.seahub-toast-alert-container.none .seafile-multicolor-icon {
+  color: rgb(16, 112, 202);
+}
+
 .seahub-toast-alert-container.danger {
   border-left: 3px solid rgb(236, 76, 71);
+  color: rgb(236, 76, 71);
+}
+
+.seahub-toast-alert-container.danger .seafile-multicolor-icon {
   color: rgb(236, 76, 71);
 }
 
@@ -137,6 +155,6 @@
   color: rgba(255, 255, 255, .7);
 }
 
-.seahub-toast-alert-container .toast-close:hover { 
+.seahub-toast-alert-container .toast-close:hover {
   opacity: 1;
 }
