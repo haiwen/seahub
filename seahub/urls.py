@@ -593,7 +593,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/starred-items/$', StarredItems.as_view(), name='api-v2.1-starred-items'),
     
     ## user::async-batch-move-item
-    re_path(r'^api/v2.1/async-batch-move-item/call-back/$', BatchMoveItemsUpdatePath.as_view(), name='api-v2.1-async-batch-move-item-call-back'),
+    re_path(r'^api/v2.1/async-batch-move-item/callback/$', BatchMoveItemsUpdatePath.as_view(), name='api-v2.1-async-batch-move-item-callback'),
 
     ## user::monitored-repos
     re_path(r'^api/v2.1/monitored-repos/$', MonitoredRepos.as_view(), name='api-v2.1-monitored-repos'),
