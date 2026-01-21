@@ -197,6 +197,7 @@ class GroupView extends React.Component {
       if (item.repo_id === repo.repo_id) {
         item.archive_status = newStatus;
         item.status = newStatus === null ? 'normal' : 'read-only';
+        item.permission = newStatus === null ? 'rw' : 'r';
       }
       return item;
     });
