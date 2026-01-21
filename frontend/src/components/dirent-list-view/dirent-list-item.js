@@ -44,6 +44,7 @@ const propTypes = {
   repoEncrypted: PropTypes.bool.isRequired,
   onItemMouseDown: PropTypes.func.isRequired,
   onItemContextMenu: PropTypes.func.isRequired,
+  onMenuItemClick: PropTypes.func.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   activeDirent: PropTypes.object,
   getDirentItemMenuList: PropTypes.func.isRequired,
@@ -880,11 +881,7 @@ class DirentListItem extends React.Component {
 
           {/* Operations */}
           <div className="dirent-mobile-ops">
-            <MobileItemMenu
-              btnClassName="sf-item-menu-btn"
-              menuClassName="sf-mobile-item-menu"
-              btnIcon={<Icon symbol="more" />}
-            >
+            <MobileItemMenu>
               {dirent.starred !== undefined &&
                 <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>
                   {dirent.starred ? gettext('Unstar') : gettext('Star')}

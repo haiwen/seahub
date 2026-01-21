@@ -73,8 +73,8 @@ class DirentListView extends React.Component {
     this.repoEncrypted = props.currentRepoInfo.encrypted;
 
     this.clickedDirent = null;
-    this.direntItems = [];
     this.currentItemRef = null;
+    this.childComponents = new Map();
 
     this.zipToken = null;
 
@@ -539,15 +539,20 @@ class DirentListView extends React.Component {
     this.handleContextClick(event, id, menuList, dirent);
   };
 
-  setDirentItemRef = (index) => item => {
-    this.direntItems[index] = item;
+  onMenuItemClick = (operation, currentObject, event) => {
+    const childComponent = this.childComponents.get(currentObject.name);
+    if (childComponent) {
+      childComponent.onMenuItemClick(operation, event);
+    }
+    hideMenu();
   };
 
-  onMenuItemClick = (operation, currentObject, event) => {
-    let index = this.getDirentIndex(currentObject);
-    this.direntItems[index].onMenuItemClick(operation, event);
+  registerExecuteOperation = (direntName, component) => {
+    this.childComponents.set(direntName, component);
+  };
 
-    hideMenu();
+  unregisterExecuteOperation = (direntName) => {
+    this.childComponents.delete(direntName);
   };
 
   onShowMenu = (e) => {
@@ -739,6 +744,9 @@ class DirentListView extends React.Component {
             showImagePopup={this.showImagePopup}
             onItemMouseDown={this.onItemMouseDown}
             onItemContextMenu={this.onItemContextMenu}
+            onMenuItemClick={this.onMenuItemClick}
+            registerExecuteOperation={this.registerExecuteOperation}
+            unregisterExecuteOperation={this.unregisterExecuteOperation}
             selectedDirentList={this.props.selectedDirentList}
             activeDirent={this.state.activeDirent}
             repoTags={this.props.repoTags}

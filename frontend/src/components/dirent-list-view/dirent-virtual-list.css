@@ -53,12 +53,6 @@
   background: var(--bs-nav-active-bg);
 }
 
-.dirent-item-name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* Mobile list item layout */
 .dirent-mobile-item {
   display: flex;
@@ -119,7 +113,7 @@
 }
 
 /* Mobile operations menu button */
-.dirent-mobile-ops .sf-item-menu-btn {
+.dirent-mobile-ops .sf-dropdown-toggle {
   width: 32px;
   height: 32px;
   display: flex;
@@ -132,14 +126,36 @@
   padding: 0;
 }
 
-.dirent-mobile-ops .sf-item-menu-btn:hover {
+.dirent-mobile-ops .sf-dropdown-toggle:hover {
   background: var(--bs-hover-bg);
 }
 
-.dirent-mobile-ops .sf-item-menu-btn .seafile-multicolor-icon {
+.dirent-mobile-ops .sf-dropdown-toggle .seafile-multicolor-icon {
   width: 16px;
   height: 16px;
   color: var(--bs-secondary-color);
+}
+
+/* Mobile dropdown menu positioning */
+.mobile-dropdown-menu {
+  position: fixed;
+  z-index: 1050;
+}
+
+.mobile-operation-menu {
+  background: var(--bs-body-bg);
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.mobile-operation-menu-bg-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: -1;
 }
 
 /* Mobile optimizations */

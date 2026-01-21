@@ -5,11 +5,29 @@ import DirentListItem from './dirent-list-item';
 import { calculateResponsiveColumns } from '../../utils/table-headers';
 import './dirent-virtual-list.css';
 
+const DirentItemWrapper = ({ dirent, registerExecuteOperation, unregisterExecuteOperation, ...itemProps }) => {
+  const childRef = useRef(null);
+
+  useEffect(() => {
+    if (childRef.current) {
+      registerExecuteOperation(dirent.name, childRef.current);
+    }
+
+    return () => {
+      unregisterExecuteOperation(dirent.name);
+    };
+  }, [dirent.name, registerExecuteOperation, unregisterExecuteOperation]);
+
+  return <DirentListItem ref={childRef} dirent={dirent} {...itemProps} />;
+};
+
 const DirentVirtualListView = ({
   headers,
   items,
   itemHeight = 42,
   overscan = 5,
+  registerExecuteOperation,
+  unregisterExecuteOperation,
   ...itemProps
 }) => {
   const scrollContainerRef = useRef(null);
@@ -97,10 +115,12 @@ const DirentVirtualListView = ({
               scrollTop={scrollTop}
               scrollContainerRef={scrollContainerRef}
               renderItem={({ item }) => (
-                <DirentListItem
+                <DirentItemWrapper
                   key={item.name}
                   dirent={item}
                   gridTemplateColumns={gridTemplateColumns}
+                  registerExecuteOperation={registerExecuteOperation}
+                  unregisterExecuteOperation={unregisterExecuteOperation}
                   {...itemProps}
                 />
               )}

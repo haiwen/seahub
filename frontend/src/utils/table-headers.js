@@ -175,7 +175,7 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
         width: header.width
       };
     } else {
-      // Desktop: use original width percentages
+      // Desktop: use original width percentages (0.5, 0.06, 0.18, 0.11, 0.15)
       const width = remainingWidth * header.width;
       const minWidth = TABLE_COLUMN_MIN_WIDTHS[header.key] || 60;
       return {
