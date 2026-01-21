@@ -19,7 +19,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.utils import is_org_context, is_valid_username, is_pro_version
-from seahub.utils.repo import get_repo_owner
+from seahub.utils.repo import get_repo_owner, normalize_repo_status_code
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
@@ -185,10 +185,10 @@ class Groups(APIView):
 
                     repo_owner = repo_id_owner_dict.get(r.id, r.user)
                     
-                    # Get permission, override to 'r' if archived
                     archive_status = archive_status_dict.get(r.id)
+
                     permission = r.permission
-                    if archive_status == 'archived':
+                    if normalize_repo_status_code(r.status) == 'read-only':
                         permission = 'r'
                     
                     repo = {
