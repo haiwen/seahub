@@ -1253,6 +1253,10 @@ table td {
   vertical-align: -2px;
 }
 
+.seafile-multicolor-icon-archive:focus {
+  outline: none;
+}
+
 .seafile-multicolor-icon-archive:hover {
   color: #666 !important;
   cursor: pointer;

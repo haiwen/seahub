@@ -297,18 +297,20 @@ class DirPath extends React.Component {
               <ArchiveIcon currentRepoInfo={currentRepoInfo} />
             </span>
           </DirOperationToolbar> :
-          <span
-            className="path-item"
-            data-path="/"
-            onClick={this.onPathClick}
-            onKeyDown={Utils.onKeyDown}
-            role="button"
-            title={repoName}
-            tabIndex="0"
-          >
-            {repoName}
-            <ArchiveIcon currentRepoInfo={currentRepoInfo} />
-          </span>
+          <>
+            <span
+              className="path-item"
+              data-path="/"
+              onClick={this.onPathClick}
+              onKeyDown={Utils.onKeyDown}
+              role="button"
+              title={repoName}
+              tabIndex="0"
+            >
+              {repoName}
+            </span>
+            <ArchiveIcon currentRepoInfo={currentRepoInfo} className='mr-1' />
+          </>
         }
         {pathElem}
       </div>
