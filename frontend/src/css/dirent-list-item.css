@@ -47,3 +47,94 @@
   padding: 2px;
   border-radius: 2px;
 }
+
+/* Mobile table styles */
+.table-thead-virtual {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.table-tbody {
+  display: table-row-group;
+}
+
+.table-tbody tr {
+  border-bottom: 1px solid var(--bs-border-color);
+  height: 60px;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table-tbody tr:hover {
+  background-color: var(--bs-tr-hover-bg);
+}
+
+.table-tbody td {
+  padding: 8px;
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.table-tbody td:first-child {
+  width: 60px;
+  text-align: center;
+}
+
+.table-tbody td:nth-child(2) {
+  width: calc(100% - 100px);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.table-tbody td:last-child {
+  width: 40px;
+  text-align: right;
+}
+
+.dirent-item-name {
+  font-weight: normal;
+  color: var(--bs-body-color);
+  display: block;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-meta-info {
+  font-size: 12px;
+  color: var(--bs-secondary-color);
+  margin-right: 8px;
+}
+
+.mobile-menu-item {
+  padding: 8px 12px;
+  color: var(--bs-body-color);
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  font-size: 14px;
+}
+
+.mobile-menu-item:hover {
+  background-color: var(--bs-hover-bg);
+  color: var(--bs-body-color);
+}
+
+.mobile-menu-item:active {
+  background-color: var(--bs-active-bg);
+}
+
+/* Ensure table doesn't overflow on small screens */
+@media (max-width: 768px) {
+  .table-thead-virtual {
+    max-width: 100%;
+  }
+
+  .table-container {
+    overflow-x: hidden;
+  }
+}
