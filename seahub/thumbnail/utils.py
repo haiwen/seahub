@@ -7,7 +7,7 @@ import urllib.request, urllib.error, urllib.parse
 import logging
 import subprocess
 from io import BytesIO
-import zipfile
+
 try: # Py2 and Py3 compatibility
     from urllib.request import urlretrieve
 except:
@@ -18,11 +18,11 @@ from PIL import Image
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
-from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
-from seahub.utils.file_types import VIDEO, PDF, SVG
+from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext, normalize_file_path
+from seahub.utils.file_types import VIDEO, PDF, SVG, SEADOC
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
-    ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
+    ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME, SERVICE_URL
 try:
     from pillow_heif import register_heif_opener
     register_heif_opener()
@@ -138,6 +138,9 @@ def generate_thumbnail(request, repo_id, size, path):
     
     if filetype == SVG:
         return create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size)
+    
+    if filetype == SEADOC:
+        return (False, 400)
 
     token = seafile_api.get_fileserver_access_token(repo_id,
             file_id, 'view', '', use_onetime=True)
@@ -312,6 +315,7 @@ def create_svg_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         logger.error(f"Failed to generate SVG thumbnail for {path}: {str(e)}")
         os.unlink(tmp_png_path)
         return (False, 500)
+    
 
 def _create_thumbnail_common(fp, thumbnail_file, size):
     """Common logic for creating image thumbnail.
