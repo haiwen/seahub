@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { siteRoot, gettext, username, enableSeadoc, thumbnailSizeForOriginal, thumbnailDefaultSize, fileServerRoot, enableWhiteboard } from '../../utils/constants';
 import { updateImageThumbnail, Utils } from '../../utils/utils';
 import TextTranslation from '../../utils/text-translation';
 import toaster from '../toast';
 import ModalPortal from '../modal-portal';
 import ImageDialog from '../dialog/image-dialog';
-import DirentListItem from './dirent-list-item';
 import ContextMenu from '../context-menu/context-menu';
 import { hideMenu, showMenu } from '../context-menu/actions';
 import DirentsDraggedPreview from '../draggable/dirents-dragged-preview';
@@ -15,9 +13,9 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
 import imageAPI from '../../utils/image-api';
 import { seafileAPI } from '../../utils/seafile-api';
-import FixedWidthTable from '../common/fixed-width-table';
 import { Dirent } from '../../models';
-import Icon from '../icon';
+import { createTableHeaders } from '../../utils/table-headers';
+import DirentVirtualListView from './dirent-virtual-list-view';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -660,76 +658,27 @@ class DirentListView extends React.Component {
   };
 
   getHeaders = (isDesktop) => {
-    const { direntList, sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
-    if (!isDesktop) {
-      return [
-        { isFixed: false, width: 0.12 },
-        { isFixed: false, width: 0.8 },
-        { isFixed: false, width: 0.08 },
-      ];
-    }
+    const { sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
 
-    const hasSelectedItems = selectedDirentList.length > 0;
-    const isPartiallySelected = hasSelectedItems && !isAllItemSelected;
-    const sortIcon = <span className="d-flex justify-content-center align-items-center ml-1"><Icon symbol="down" className={`w-3 h-3 ${sortOrder == 'asc' ? 'rotate-180' : ''}`} /></span>;
-    return [
-      { isFixed: true,
-        width: 31,
-        className: 'pl10 pr-2 cursor-pointer',
-        children: (
-          <div
-            className="select-all-checkbox-wrapper"
-            onClick={this.props.onAllItemSelected}
-            onKeyDown={Utils.onKeyDown}
-            role="button"
-            tabIndex={0}
-            aria-label={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-            title={isAllItemSelected ? gettext('Unselect all items') : gettext('Select all items')}
-          >
-            {isPartiallySelected ? (
-              <Icon symbol="partially-selected" />
-            ) : (
-              <input
-                type="checkbox"
-                className="cursor-pointer form-check-input"
-                checked={isAllItemSelected}
-                disabled={direntList.length === 0}
-                onChange={() => {}}
-                readOnly
-              />
-            )}
-          </div>
-        ),
-      },
-      {
-        isFixed: true, width: 32, className: 'pl-2 pr-2', // star
-      },
-      {
-        isFixed: true, width: 40, className: 'pl-2 pr-2', // icon
-      },
-      {
-        isFixed: false,
-        width: 0.5,
-        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByName}>{gettext('Name')} {sortBy == 'name' && sortIcon}</a>),
-      },
-      {
-        isFixed: false, width: 0.06, // tag
-      },
-      {
-        isFixed: false, width: 0.18, // operation
-      },
-      {
-        isFixed: false,
-        width: 0.11,
-        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortBySize}>{gettext('Size')} {sortBy == 'size' && sortIcon}</a>)
-      },
-      {
-        isFixed: false,
-        width: 0.15,
-        children: (<a className="d-flex align-items-center table-sort-op" href="#" onClick={this.sortByTime}>{gettext('Last Update')} {sortBy == 'time' && sortIcon}</a>)
+    const sortOptions = {
+      sortBy,
+      sortOrder,
+      onSort: (field) => {
+        const order = sortOrder === 'asc' ? 'desc' : 'asc';
+        this.props.sortItems(field, order);
       }
-    ];
+    };
+
+    const selectionOptions = {
+      isAllSelected: isAllItemSelected,
+      onAllItemSelected: this.props.onAllItemSelected,
+      isPartiallySelected: selectedDirentList.length > 0 && !isAllItemSelected
+    };
+
+    const mode = isDesktop ? 'desktop' : 'mobile';
+    return createTableHeaders(mode, sortOptions, selectionOptions);
   };
+
 
   render() {
     const { direntList, userPerm } = this.props;
@@ -749,6 +698,8 @@ class DirentListView extends React.Component {
       }
     }
 
+    const TABLE_ROW_HEIGHT = 42;
+
     return (
       <div
         className={`table-container ${(this.state.isListDropTipShow && this.canDrop) ? 'table-drop-active' : ''}`}
@@ -761,55 +712,48 @@ class DirentListView extends React.Component {
         onDrop={this.tableDrop}
       >
         {direntList.length > 0 && (
-          <FixedWidthTable
-            className={classnames('table-hover', { 'table-thead-hidden': !isDesktop })}
+          <DirentVirtualListView
             headers={this.getHeaders(isDesktop)}
-            theadOptions={isDesktop ? { onMouseDown: this.onThreadMouseDown, onContextMenu: this.onThreadContextMenu } : {}}
-          >
-            {direntList.map((dirent, index) => {
-              return (
-                <DirentListItem
-                  ref={this.setDirentItemRef(index)}
-                  key={dirent.name} // dirent.id is not unique, so use dirent.name as key
-                  dirent={dirent}
-                  path={this.props.path}
-                  repoID={this.props.repoID}
-                  currentRepoInfo={this.props.currentRepoInfo}
-                  eventBus={this.props.eventBus}
-                  isAdmin={this.isAdmin}
-                  isRepoOwner={this.isRepoOwner}
-                  repoEncrypted={this.repoEncrypted}
-                  enableDirPrivateShare={this.props.enableDirPrivateShare}
-                  isGroupOwnedRepo={this.props.isGroupOwnedRepo}
-                  onItemClick={this.props.onItemClick}
-                  onItemRenameToggle={this.onItemRenameToggle}
-                  onItemSelected={this.onItemSelected}
-                  onItemDelete={this.props.onItemDelete}
-                  onItemRename={this.onItemRename}
-                  onItemMove={this.props.onItemMove}
-                  onItemConvert={this.props.onItemConvert}
-                  updateDirent={this.props.updateDirent}
-                  isItemFreezed={this.state.isItemFreezed}
-                  freezeItem={this.freezeItem}
-                  unfreezeItem={this.unfreezeItem}
-                  onDirentClick={this.onDirentClick}
-                  showImagePopup={this.showImagePopup}
-                  onItemMouseDown={this.onItemMouseDown}
-                  onItemContextMenu={this.onItemContextMenu}
-                  selectedDirentList={this.props.selectedDirentList}
-                  activeDirent={this.state.activeDirent}
-                  repoTags={this.props.repoTags}
-                  onFileTagChanged={this.props.onFileTagChanged}
-                  getDirentItemMenuList={this.getDirentItemMenuList}
-                  showDirentDetail={this.props.showDirentDetail}
-                  onItemsMove={this.props.onItemsMove}
-                  onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
-                  loadDirentList={this.props.loadDirentList}
-                  onAddFolder={this.props.onAddFolder}
-                />
-              );
-            })}
-          </FixedWidthTable>
+            items={direntList}
+            itemHeight={TABLE_ROW_HEIGHT}
+            overscan={5}
+            path={this.props.path}
+            repoID={this.props.repoID}
+            currentRepoInfo={this.props.currentRepoInfo}
+            eventBus={this.props.eventBus}
+            isAdmin={this.isAdmin}
+            isRepoOwner={this.isRepoOwner}
+            repoEncrypted={this.repoEncrypted}
+            enableDirPrivateShare={this.props.enableDirPrivateShare}
+            isGroupOwnedRepo={this.props.isGroupOwnedRepo}
+            onItemClick={this.props.onItemClick}
+            onItemRenameToggle={this.onItemRenameToggle}
+            onItemSelected={this.onItemSelected}
+            onItemDelete={this.props.onItemDelete}
+            onItemRename={this.onItemRename}
+            onItemMove={this.props.onItemMove}
+            onItemConvert={this.props.onItemConvert}
+            updateDirent={this.props.updateDirent}
+            isItemFreezed={this.state.isItemFreezed}
+            freezeItem={this.freezeItem}
+            unfreezeItem={this.unfreezeItem}
+            onDirentClick={this.onDirentClick}
+            showImagePopup={this.showImagePopup}
+            onItemMouseDown={this.onItemMouseDown}
+            onItemContextMenu={this.onItemContextMenu}
+            selectedDirentList={this.props.selectedDirentList}
+            activeDirent={this.state.activeDirent}
+            repoTags={this.props.repoTags}
+            onFileTagChanged={this.props.onFileTagChanged}
+            getDirentItemMenuList={this.getDirentItemMenuList}
+            showDirentDetail={this.props.showDirentDetail}
+            onItemsMove={this.props.onItemsMove}
+            onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
+            loadDirentList={this.props.loadDirentList}
+            onAddFolder={this.props.onAddFolder}
+            onThreadMouseDown={this.onThreadMouseDown}
+            onThreadContextMenu={this.onThreadContextMenu}
+          />
         )}
         {direntList.length === 0 &&
           <EmptyTip text={gettext('No file')}/>
