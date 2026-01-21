@@ -148,8 +148,10 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     return { columns: [], gridTemplate: '', totalWidth: 0 };
   }
 
+  const maxContainerWidth = Math.max(Math.floor(containerWidth) - 1, 0);
+
   // Detect mobile screen (typically < 768px)
-  const isMobile = containerWidth < 768;
+  const isMobile = maxContainerWidth < 768;
 
   // On mobile, return 100% width without calculating individual columns
   // since mobile uses simple flex layout instead of grid
@@ -157,7 +159,7 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     return {
       columns: [],
       gridTemplate: '100%',
-      totalWidth: containerWidth
+      totalWidth: maxContainerWidth
     };
   }
 
@@ -165,10 +167,10 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     return header.isFixed ? sum + header.width : sum;
   }, 0);
 
-  const remainingWidth = containerWidth - fixedWidth;
+  const remainingWidth = maxContainerWidth - fixedWidth;
 
   // Calculate each column width
-  const columns = headers.map(header => {
+  let columns = headers.map(header => {
     if (header.isFixed) {
       return {
         ...header,
@@ -177,7 +179,7 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     } else {
       // Desktop: use original width percentages (0.5, 0.06, 0.18, 0.11, 0.15)
       const width = remainingWidth * header.width;
-      const minWidth = TABLE_COLUMN_MIN_WIDTHS[header.key] || 60;
+      const minWidth = TABLE_COLUMN_MIN_WIDTHS[header.key] || 40;
       return {
         ...header,
         width: Math.max(width, minWidth)
@@ -185,7 +187,31 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     }
   });
 
-  const totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
+  let totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
+
+  if (totalWidth > maxContainerWidth && remainingWidth > 0) {
+    const flexibleTotal = columns.reduce((sum, col) => {
+      return col.isFixed ? sum : sum + col.width;
+    }, 0);
+
+    const availableFlexibleWidth = Math.max(maxContainerWidth - fixedWidth, 0);
+
+    if (flexibleTotal > 0 && availableFlexibleWidth > 0) {
+      const scale = availableFlexibleWidth / flexibleTotal;
+      columns = columns.map(col => {
+        if (col.isFixed) {
+          return col;
+        }
+        return {
+          ...col,
+          width: col.width * scale,
+        };
+      });
+
+      totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
+    }
+  }
+
   const gridTemplate = columns.map(col => col.width + 'px').join(' ');
 
   return {
