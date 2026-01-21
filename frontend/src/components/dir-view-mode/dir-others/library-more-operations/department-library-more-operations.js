@@ -142,7 +142,8 @@ class LibraryMoreOperations extends React.Component {
   onArchiveRepo = (repo) => {
     const archiveStatus = !repo.archive_status ? 'archived' : null;
     const status = archiveStatus === null ? 'normal' : 'read-only';
-    this.props.updateRepoInfo({ 'archive_status': archiveStatus, 'status': status });
+    const permission = archiveStatus === null ? 'rw' : 'r';
+    this.props.updateRepoInfo({ 'archive_status': archiveStatus, status, permission });
   };
 
 
