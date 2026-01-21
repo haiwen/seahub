@@ -210,6 +210,7 @@ class Groups(APIView):
                         "is_admin": (r.id, g.id) in admin_info,
                         "starred": r.repo_id in starred_repo_id_list,
                         "monitored": r.repo_id in monitored_repo_id_list,
+                        "status": normalize_repo_status_code(r.status),
                         "archive_status": archive_status,
                     }
                     repos.append(repo)
