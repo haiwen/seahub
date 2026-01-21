@@ -264,6 +264,7 @@ class DirentListItem extends React.Component {
 
   onItemClick = (e) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent event from bubbling up to parent div's onDirentClick
     const dirent = this.state.dirent;
     if (this.state.isRenaming) {
       return;
@@ -895,7 +896,7 @@ class DirentListItem extends React.Component {
               <>
                 {(!dirent.isDir() && !this.canPreview) ?
                   <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                  <a href={this.getDirentHref()} onClick={this.onDirentClick}>{dirent.name}</a>
+                  <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
                 }
               </>
             )}

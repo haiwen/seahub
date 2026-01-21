@@ -68,44 +68,44 @@ const DirentVirtualListView = ({
         className="dirent-virtual-scroll-container"
         onScroll={handleScroll}
       >
-        <div style={{ width: tableWidth }}>
-          <div
-            ref={headerRef}
-            className="dirent-virtual-list-header"
-            style={{ gridTemplateColumns }}
-          >
-            {headers.map((header, index) => {
-              const { className: headerClassName, children } = header;
-              return (
-                <div
-                  key={index}
-                  className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
-                >
-                  {children}
-                </div>
-              );
-            })}
-          </div>
+        {/* <div style={{ width: tableWidth }}> */}
+        <div
+          ref={headerRef}
+          className="dirent-virtual-list-header"
+          style={{ gridTemplateColumns }}
+        >
+          {headers.map((header, index) => {
+            const { className: headerClassName, children } = header;
+            return (
+              <div
+                key={index}
+                className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
+              >
+                {children}
+              </div>
+            );
+          })}
+        </div>
 
-          <div className="dirent-virtual-list-body">
-            <VirtualList
-              items={items}
-              itemHeight={itemHeight}
-              overscan={overscan}
-              scrollTop={scrollTop}
-              scrollContainerRef={scrollContainerRef}
-              renderItem={({ item }) => (
-                <DirentListItem
-                  key={item.name}
-                  dirent={item}
-                  gridTemplateColumns={gridTemplateColumns}
-                  {...itemProps}
-                />
-              )}
-            />
-          </div>
+        <div className="dirent-virtual-list-body">
+          <VirtualList
+            items={items}
+            itemHeight={itemHeight}
+            overscan={overscan}
+            scrollTop={scrollTop}
+            scrollContainerRef={scrollContainerRef}
+            renderItem={({ item }) => (
+              <DirentListItem
+                key={item.name}
+                dirent={item}
+                gridTemplateColumns={gridTemplateColumns}
+                {...itemProps}
+              />
+            )}
+          />
         </div>
       </div>
+      {/* </div> */}
     </div>
   );
 };
