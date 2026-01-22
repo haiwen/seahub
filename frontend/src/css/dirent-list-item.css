@@ -81,7 +81,6 @@
   font-weight: normal;
   color: var(--bs-body-color);
   display: block;
-  margin-bottom: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
