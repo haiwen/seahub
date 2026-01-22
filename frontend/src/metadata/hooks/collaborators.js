@@ -40,9 +40,8 @@ export const CollaboratorsProvider = ({ repoID, children }) => {
   }, [collaborators, collaboratorsCache]);
 
   const updateCollaboratorsCache = useCallback((user) => {
-    const newCollaboratorsCache = { ...collaboratorsCache, [user.email]: user };
-    setCollaboratorsCache(newCollaboratorsCache);
-  }, [collaboratorsCache]);
+    setCollaboratorsCache(prevCache => ({ ...prevCache, [user.email]: user }));
+  }, []);
 
   const getCollaborator = useCallback((email) => {
     let collaborator = collaborators && collaborators.find(c => c.email === email);

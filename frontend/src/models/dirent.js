@@ -4,6 +4,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { Utils } from '../utils/utils';
 import FileTag from './file-tag';
 import { lang } from '../utils/constants';
+import { PRIVATE_COLUMN_KEY } from '../metadata/constants/column/private';
 
 import 'dayjs/locale/ar';
 import 'dayjs/locale/de';
@@ -32,6 +33,7 @@ class Dirent {
     this.starred = json.starred || false;
     if (json.type === 'dir') {
       this.has_been_shared_out = false;
+      this.size = (typeof json.size === 'number') ? Utils.bytesToSize(json.size) : '';
     }
     if (json.type === 'file') {
       this.size_original = json.size_original || json.size;
@@ -59,6 +61,15 @@ class Dirent {
         this.is_sdoc_revision = json.is_sdoc_revision || false;
         this.revision_id = json.revision_id || null;
       }
+      if (json.creator) {
+        this.creator = json.creator;
+      }
+      if (json.last_modifier) {
+        this.last_modifier = json.last_modifier;
+      }
+      if (json.status) {
+        this.status = json.status;
+      }
     }
   }
 
@@ -68,6 +79,30 @@ class Dirent {
 
   isDir() {
     return this.type !== 'file';
+  }
+
+  mergeMetadata(metadata) {
+    if (!metadata) return this;
+
+    const enrichedData = { ...this };
+
+    if (metadata[PRIVATE_COLUMN_KEY.OWNER] !== undefined) {
+      enrichedData.creator = metadata[PRIVATE_COLUMN_KEY.OWNER];
+    } else if (metadata[PRIVATE_COLUMN_KEY.CREATOR] !== undefined) {
+      enrichedData.creator = metadata[PRIVATE_COLUMN_KEY.CREATOR];
+    }
+
+    if (metadata[PRIVATE_COLUMN_KEY.LAST_MODIFIER] !== undefined) {
+      enrichedData.last_modifier = metadata[PRIVATE_COLUMN_KEY.LAST_MODIFIER];
+    }
+
+    if (metadata[PRIVATE_COLUMN_KEY.FILE_STATUS] !== undefined) {
+      enrichedData.status = metadata[PRIVATE_COLUMN_KEY.FILE_STATUS];
+    }
+
+    enrichedData.isSelected = this.isSelected;
+
+    return new Dirent(enrichedData);
   }
 
   toJson() {

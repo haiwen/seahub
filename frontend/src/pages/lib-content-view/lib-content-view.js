@@ -1575,7 +1575,6 @@ class LibContentView extends React.Component {
       const isShiftKeyPressed = event && event.shiftKey;
 
       if (isCtrlOrMetaKeyPressed) {
-        // Ctrl (Cmd on Mac) key is pressed: Toggle selection of the clicked item
         const isSelected = newSelectedDirentList.some(dirent => dirent.name === clickedDirent.name);
         if (isSelected) {
           newSelectedDirentList = newSelectedDirentList.filter(dirent => dirent.name !== clickedDirent.name);
@@ -1583,10 +1582,8 @@ class LibContentView extends React.Component {
           newSelectedDirentList.push(clickedDirent);
         }
       } else if (isShiftKeyPressed && lastSelectedIndex !== null) {
-        // Shift key is pressed: Select or unselect items based on the clicked index
         const firstSelectedIndex = direntList.findIndex(dirent => dirent.name === newSelectedDirentList[0].name);
         if (clickedIndex < firstSelectedIndex) {
-          // Selected all the items between the clicked item and the first selected item
           const rangeSelectedDirents = direntList.slice(clickedIndex, firstSelectedIndex + 1);
           const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
           newSelectedDirentList = [
@@ -1594,17 +1591,14 @@ class LibContentView extends React.Component {
             ...rangeSelectedDirents
           ];
         } else if (clickedIndex >= firstSelectedIndex && clickedIndex < lastSelectedIndex) {
-          // Unselect items between clicked item and the last selected item
           const rangeSelectedDirents = direntList.slice(firstSelectedIndex, clickedIndex + 1);
           const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
           newSelectedDirentList = newSelectedDirentList.filter(dirent => rangeSelectedNames.has(dirent.name));
         } else {
-          // Select all items between the first selected and the clicked item
           const rangeStart = Math.min(firstSelectedIndex, clickedIndex);
           const rangeEnd = Math.max(firstSelectedIndex, clickedIndex);
           const rangeSelectedDirents = direntList.slice(rangeStart, rangeEnd + 1);
 
-          // Merge the new range selection with the existing selection
           const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
           newSelectedDirentList = [
             ...newSelectedDirentList.filter(dirent => !rangeSelectedNames.has(dirent.name)),
@@ -1617,8 +1611,9 @@ class LibContentView extends React.Component {
 
       this.setState(prevState => {
         const newDirentList = prevState.direntList.map(dirent => {
-          dirent.isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
-          return dirent;
+          const newDirent = { ...dirent };
+          newDirent.isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
+          return newDirent;
         });
 
         const updatedSelectedDirents = newSelectedDirentList.map(selected =>
@@ -1636,8 +1631,9 @@ class LibContentView extends React.Component {
     } else {
       this.setState({
         direntList: direntList.map(dirent => {
-          dirent.isSelected = false;
-          return dirent;
+          const newDirent = { ...dirent };
+          newDirent.isSelected = false;
+          return newDirent;
         }),
         isDirentSelected: false,
         isAllDirentSelected: false,
@@ -1710,18 +1706,19 @@ class LibContentView extends React.Component {
           return { ...currNameDirentSelectingMap, [currDirent.name]: true };
         }, {});
         nextDirentList = direntList.map((currDirent) => {
+          const newDirent = { ...currDirent };
           if (nameDirentSelectedMap[currDirent.name] || nameDirentSelectingMap[currDirent.name]) {
-            currDirent.isSelected = true;
+            newDirent.isSelected = true;
           }
-          return currDirent;
+          return newDirent;
         });
       }
     } else {
       nextDirentList = direntList.map(item => {
         if (dirent && item.name === dirent.name) {
-          item.isSelected = !item.isSelected;
+          return { ...item, isSelected: !item.isSelected };
         }
-        return item;
+        return { ...item };
       });
     }
 

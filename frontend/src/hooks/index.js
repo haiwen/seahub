@@ -4,3 +4,4 @@ export {
   MetadataMiddlewareProvider,
   MetadataAIOperationsProvider, useMetadataAIOperations,
 } from '../metadata';
+export { useDirentMetadata } from './use-dirent-metadata';

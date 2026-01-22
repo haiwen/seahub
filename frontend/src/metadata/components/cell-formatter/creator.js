@@ -42,7 +42,10 @@ const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [],
         name: value,
         avatar_url: defaultAvatarUrl,
       };
-      updateCollaboratorsCache && updateCollaboratorsCache(collaborator);
+      // Only update cache if not already present to avoid infinite loops
+      if (!collaboratorsCache[value]) {
+        updateCollaboratorsCache && updateCollaboratorsCache(collaborator);
+      }
       isMounted && setCollaborator(collaborator);
       return () => isMounted = false;
     }
@@ -50,12 +53,15 @@ const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [],
     api && api(value, (userMap) => {
       collaborator = userMap[value];
       Object.values(userMap).forEach(user => {
-        updateCollaboratorsCache && updateCollaboratorsCache(user);
+        // Only update cache if not already present to avoid infinite loops
+        if (!collaboratorsCache[user.email]) {
+          updateCollaboratorsCache && updateCollaboratorsCache(user);
+        }
       });
       isMounted && setCollaborator(collaborator);
     });
     return () => isMounted = false;
-  }, [value, api, mediaUrl, collaborators, collaboratorsCache, updateCollaboratorsCache]);
+  }, [value, mediaUrl, collaborators, collaboratorsCache, updateCollaboratorsCache, api]);
 
   if (!collaborator) return emptyFormatter || null;
   return (

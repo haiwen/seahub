@@ -1,22 +1,14 @@
 import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
-import { isMobile } from './utils';
 import {
   ESSENTIAL_COLUMNS,
 } from '../constants/dir-column-visibility';
+import { COLUMN_CONFIG } from '../components/dirent-list-view/column-config';
 
-export const TABLE_COLUMN_MIN_WIDTHS = {
-  checkbox: 32,
-  star: 32,
-  icon: 40,
-  name: 180,
-  size: 100,
-  modified: 140,
-  creator: 140,
-  last_modifier: 140,
-  status: 100,
-};
+export const TABLE_COLUMN_MIN_WIDTHS = Object.fromEntries(
+  Object.entries(COLUMN_CONFIG).map(([key, config]) => [key, config.width])
+);
 
 export const createTableHeaders = (
   sortOptions = {},
@@ -35,22 +27,18 @@ export const createTableHeaders = (
     })
   );
 
-  // Helper to check if column should be included
   const isColumnVisible = (columnKey) => {
-    // Essential columns are always visible
     if (ESSENTIAL_COLUMNS.includes(columnKey)) return true;
-    // Check if column is in visible list
     return visibleColumns.includes(columnKey);
   };
 
   const baseHeaders = [
-    // Essential columns (always visible)
     {
       key: 'checkbox',
-      width: TABLE_COLUMN_MIN_WIDTHS.checkbox,
-      flex: '0 0 32px',
-      className: 'pl10 pr-2 cursor-pointer',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.checkbox,
+      width: COLUMN_CONFIG.checkbox.width,
+      flex: COLUMN_CONFIG.checkbox.flex,
+      className: COLUMN_CONFIG.checkbox.headerClassName,
+      minWidth: COLUMN_CONFIG.checkbox.width,
       children: React.createElement(
         'div',
         {
@@ -75,26 +63,26 @@ export const createTableHeaders = (
     },
     {
       key: 'star',
-      width: TABLE_COLUMN_MIN_WIDTHS.star,
-      flex: '0 0 32px',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.star,
+      width: COLUMN_CONFIG.star.width,
+      flex: COLUMN_CONFIG.star.flex,
+      className: COLUMN_CONFIG.star.className,
+      minWidth: COLUMN_CONFIG.star.width,
       children: null
     },
     {
       key: 'icon',
-      width: TABLE_COLUMN_MIN_WIDTHS.icon,
-      flex: '0 0 40px',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.icon,
+      width: COLUMN_CONFIG.icon.width,
+      flex: COLUMN_CONFIG.icon.flex,
+      className: COLUMN_CONFIG.icon.className,
+      minWidth: COLUMN_CONFIG.icon.width,
       children: null
     },
     {
       key: 'name',
       width: 0.5,
-      flex: '1 1 auto',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.name,
+      flex: COLUMN_CONFIG.name.flex,
+      className: COLUMN_CONFIG.name.className,
+      minWidth: COLUMN_CONFIG.name.width,
       children: React.createElement(
         'a',
         {
@@ -106,13 +94,12 @@ export const createTableHeaders = (
         sortBy === 'name' && sortIcon
       )
     },
-    // Configurable columns (only add if visible)
     ...(isColumnVisible('size') ? [{
       key: 'size',
-      width: TABLE_COLUMN_MIN_WIDTHS.size,
-      flex: '0 0 100px',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.size,
+      width: COLUMN_CONFIG.size.width,
+      flex: COLUMN_CONFIG.size.flex,
+      className: COLUMN_CONFIG.size.className,
+      minWidth: COLUMN_CONFIG.size.width,
       children: React.createElement(
         'a',
         {
@@ -126,10 +113,10 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible('modified') ? [{
       key: 'modified',
-      width: TABLE_COLUMN_MIN_WIDTHS.modified,
-      flex: '0 0 140px',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.modified,
+      width: COLUMN_CONFIG.modified.width,
+      flex: COLUMN_CONFIG.modified.flex,
+      className: COLUMN_CONFIG.modified.className,
+      minWidth: COLUMN_CONFIG.modified.width,
       children: React.createElement(
         'a',
         {
@@ -143,10 +130,10 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible('creator') ? [{
       key: 'creator',
-      width: TABLE_COLUMN_MIN_WIDTHS.creator,
-      flex: '0 0 140px',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.creator,
+      width: COLUMN_CONFIG.creator.width,
+      flex: COLUMN_CONFIG.creator.flex,
+      className: COLUMN_CONFIG.creator.className,
+      minWidth: COLUMN_CONFIG.creator.width,
       children: React.createElement(
         'a',
         {
@@ -160,10 +147,10 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible('last_modifier') ? [{
       key: 'last_modifier',
-      width: TABLE_COLUMN_MIN_WIDTHS.last_modifier,
-      flex: '0 0 140px',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.last_modifier,
+      width: COLUMN_CONFIG.last_modifier.width,
+      flex: COLUMN_CONFIG.last_modifier.flex,
+      className: COLUMN_CONFIG.last_modifier.className,
+      minWidth: COLUMN_CONFIG.last_modifier.width,
       children: React.createElement(
         'a',
         {
@@ -177,10 +164,10 @@ export const createTableHeaders = (
     }] : []),
     ...(isColumnVisible('status') ? [{
       key: 'status',
-      width: TABLE_COLUMN_MIN_WIDTHS.status,
-      flex: '0 0 100px',
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.status,
+      width: COLUMN_CONFIG.status.width,
+      flex: COLUMN_CONFIG.status.flex,
+      className: COLUMN_CONFIG.status.className,
+      minWidth: COLUMN_CONFIG.status.width,
       children: React.createElement(
         'span',
         {},

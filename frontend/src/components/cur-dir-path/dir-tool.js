@@ -13,6 +13,7 @@ import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
+import { DEFAULT_VISIBLE_COLUMNS } from '../../constants/dir-column-visibility';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -34,7 +35,7 @@ class DirTool extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleColumns: []
+      visibleColumns: DEFAULT_VISIBLE_COLUMNS
     };
   }
 
@@ -46,6 +47,10 @@ class DirTool extends React.Component {
         this.setState({ visibleColumns: visibleCols });
       });
 
+      this.unsubscribeColumnVisibilityResponse = eventBus.subscribe('column-visibility-response', (visibleCols) => {
+        this.setState({ visibleColumns: visibleCols });
+      });
+
       // Dispatch event to get current state
       eventBus.dispatch('get-column-visibility');
     }
@@ -54,6 +59,9 @@ class DirTool extends React.Component {
   componentWillUnmount() {
     if (this.unsubscribeColumnVisibilityChanged) {
       this.unsubscribeColumnVisibilityChanged();
+    }
+    if (this.unsubscribeColumnVisibilityResponse) {
+      this.unsubscribeColumnVisibilityResponse();
     }
   }
 
@@ -121,7 +129,7 @@ class DirTool extends React.Component {
 
         {/* Add HideColumnSetter for column visibility control */}
         <HideColumnSetter
-          wrapperClass="ml-2"
+          wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
           target="dir-hide-column-popover"
           readOnly={isCustomPermission}
           columns={[

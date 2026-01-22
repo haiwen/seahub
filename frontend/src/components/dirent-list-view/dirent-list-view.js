@@ -16,7 +16,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Dirent } from '../../models';
 import { createTableHeaders } from '../../utils/table-headers';
 import DirentVirtualListView from './dirent-virtual-list-view';
-import { useDirColumnVisibility } from '../../hooks/dir-column-visibility';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -820,13 +819,46 @@ class DirentListView extends React.Component {
 
 DirentListView.propTypes = propTypes;
 
+const DEFAULT_VISIBLE_COLUMNS = ['size', 'modified', 'creator', 'last_modifier', 'status'];
+const STORAGE_KEY = 'dir_column_visibility';
+
 // Wrapper component to use the column visibility hook and event bus
 const DirListViewWithColumnVisibility = (props) => {
-  const { visibleColumns, setVisibleColumns } = useDirColumnVisibility();
+  const { eventBus } = props;
+
+  const [visibleColumns, setVisibleColumnsState] = React.useState(DEFAULT_VISIBLE_COLUMNS);
+
+  // Load from localStorage
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          const validColumns = parsed.filter(col =>
+            DEFAULT_VISIBLE_COLUMNS.includes(col)
+          );
+          if (validColumns.length > 0) {
+            setVisibleColumnsState(validColumns);
+          }
+        }
+      }
+    } catch (error) {
+      // ignore
+    }
+  }, []);
+
+  const setVisibleColumns = React.useCallback((columns) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(columns));
+      setVisibleColumnsState(columns);
+    } catch (error) {
+      setVisibleColumnsState(columns);
+    }
+  }, []);
 
   // Subscribe to event bus for column visibility changes
   React.useEffect(() => {
-    const { eventBus } = props;
     if (!eventBus) return;
 
     const handleColumnVisibilityChange = (visibleCols) => {
@@ -834,8 +866,8 @@ const DirListViewWithColumnVisibility = (props) => {
     };
 
     const handleGetColumnVisibility = () => {
-      // Dispatch current visible columns
-      eventBus.dispatch('column-visibility-changed', visibleColumns);
+      // Respond with current visible columns using a separate event
+      eventBus.dispatch('column-visibility-response', visibleColumns);
     };
 
     const unsubscribeColumnVisibilityChanged = eventBus.subscribe('column-visibility-changed', handleColumnVisibilityChange);
@@ -845,7 +877,7 @@ const DirListViewWithColumnVisibility = (props) => {
       unsubscribeColumnVisibilityChanged();
       unsubscribeGetColumnVisibility();
     };
-  }, [props.eventBus, setVisibleColumns, visibleColumns]);
+  }, [eventBus, setVisibleColumns, visibleColumns]);
 
   return (
     <DirentListView

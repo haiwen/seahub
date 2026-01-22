@@ -862,10 +862,28 @@ class MetadataBatchRecords(APIView):
             columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
             all_columns = columns_data.get('columns', [])
             metadata_columns = []
+            # Include all editable private columns and common metadata columns
+            # This includes _status (file status), _rate, _tags, _creator, _last_modifier, etc.
+            editable_columns = [
+                '_rate',  # File rating
+                '_tags',  # File tags
+                '_status',  # File status (for editable status in list view)
+                '_creator',  # Creator (for list view display)
+                '_last_modifier',  # Last modifier (for list view display)
+                '_file_creator',  # File creator
+                '_file_modifier',  # File modifier
+                '_file_mtime',  # File modification time
+                '_file_ctime',  # File creation time
+                '_file_type',  # File type
+                '_size',  # File size
+                '_name',  # File name
+                '_obj_id',  # Object ID
+            ]
             for column in all_columns:
-                if column.get('key') in ['_rate', '_tags']:
+                key = column.get('key')
+                if key in editable_columns:
                     metadata_columns.append({
-                        'key': column.get('key'),
+                        'key': key,
                         'name': column.get('name'),
                         'type': column.get('type'),
                         'data': column.get('data', {})
