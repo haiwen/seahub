@@ -974,7 +974,7 @@ class DirentListItem extends React.Component {
         </div>
 
         {/* Name */}
-        <div className="pl-2 pr-2 dirent-item-name">
+        <div className="dirent-item-name">
           {this.state.isRenaming &&
             <Rename
               hasSuffix={dirent.type !== 'dir'}
