@@ -20,7 +20,7 @@ from seahub.repo_metadata.utils import add_init_metadata_task, recognize_faces, 
     get_unmodifiable_columns, can_read_metadata, init_faces, \
     extract_file_details, get_table_by_name, remove_faces_table, FACES_SAVE_PATH, \
     init_tags, init_tag_self_link_columns, remove_tags_table, add_init_face_recognition_task, \
-    get_update_record, update_people_cover_photo
+    get_update_record, update_people_cover_photo, add_fix_metadata_task
 from seahub.repo_metadata.metadata_server_api import MetadataServerAPI, list_metadata_view_records
 from seahub.utils.repo import is_repo_admin, is_repo_owner
 from seahub.share.utils import check_invisible_folder
@@ -3690,3 +3690,98 @@ class MetadataStatistics(APIView):
         if isinstance(dt, str):
             return datetime.fromisoformat(dt)
         return dt
+
+
+class MetadataFix(APIView):
+    """
+    API for fixing metadata (add missing records, delete obsolete records).
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, repo_id):
+        """
+        Trigger metadata fix task.
+        """
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check: must be repo admin
+        if not is_repo_admin(request.user.username, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check if metadata is enabled
+        metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+        if not metadata or not metadata.enabled:
+            error_msg = f'The metadata module is disabled for repo {repo_id}.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check if currently fixing
+        if metadata.is_fixing:
+            error_msg = _('Metadata fix is already in progress for this library.')
+            return api_error(status.HTTP_409_CONFLICT, error_msg)
+
+        # set is_fixing to True
+        try:
+            metadata.is_fixing = True
+            metadata.save()
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # call seafevents to start fix task
+        params = {
+            'repo_id': repo_id,
+        }
+        try:
+            result = add_fix_metadata_task(params=params)
+        except Exception as e:
+            logger.exception(e)
+            # reset is_fixing on error
+            metadata.is_fixing = False
+            metadata.save()
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class MetadataFixStatus(APIView):
+    """
+    API for querying metadata fix status.
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id):
+        """
+        Get metadata fix status.
+        """
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not can_read_metadata(request, repo_id):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # get is_fixing status
+        try:
+            metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+            is_fixing = metadata.is_fixing if metadata else False
+        except Exception as e:
+            logger.exception(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'is_fixing': is_fixing})
