@@ -1,8 +1,7 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
-import { calculateResponsiveColumns } from '../../utils/table-headers';
 import './dirent-virtual-list.css';
 
 const DirentItemWrapper = ({ dirent, registerExecuteOperation, unregisterExecuteOperation, ...itemProps }) => {
@@ -28,6 +27,7 @@ const DirentVirtualListView = ({
   overscan = 5,
   registerExecuteOperation,
   unregisterExecuteOperation,
+  visibleColumns = [],
   ...itemProps
 }) => {
   const scrollContainerRef = useRef(null);
@@ -60,22 +60,6 @@ const DirentVirtualListView = ({
     };
   }, []);
 
-  const { gridTemplateColumns, tableWidth } = useMemo(() => {
-    if (!headers || headers.length === 0 || containerWidth === 0) {
-      return { gridTemplateColumns: '', tableWidth: 0 };
-    }
-
-    const { gridTemplate, totalWidth } = calculateResponsiveColumns(
-      headers,
-      containerWidth
-    );
-
-    return {
-      gridTemplateColumns: gridTemplate,
-      tableWidth: totalWidth
-    };
-  }, [headers, containerWidth]);
-
   const handleScroll = (e) => {
     const { scrollTop: st, scrollLeft } = e.target;
 
@@ -86,7 +70,7 @@ const DirentVirtualListView = ({
     }
   };
 
-  const tableWrapperWidth = tableWidth > 768 ? tableWidth : 768;
+  const tableWrapperWidth = containerWidth > 768 ? containerWidth : 768;
 
   return (
     <div className="dirent-virtual-list-view">
@@ -95,18 +79,19 @@ const DirentVirtualListView = ({
         className="dirent-virtual-scroll-container"
         onScroll={handleScroll}
       >
-        <div style={{ width: tableWrapperWidth }}>
+        <div style={{ width: tableWrapperWidth || '100%' }}>
           <div
             ref={headerRef}
             className="dirent-virtual-list-header"
-            style={{ gridTemplateColumns }}
+            style={{ display: 'flex' }}
           >
             {headers.map((header, index) => {
-              const { className: headerClassName, children } = header;
+              const { className: headerClassName, children, flex } = header;
               return (
                 <div
                   key={index}
                   className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
+                  style={{ flex: flex || '1' }}
                 >
                   {children}
                 </div>
@@ -125,9 +110,9 @@ const DirentVirtualListView = ({
                 <DirentItemWrapper
                   key={item.name}
                   dirent={item}
-                  gridTemplateColumns={gridTemplateColumns}
                   registerExecuteOperation={registerExecuteOperation}
                   unregisterExecuteOperation={unregisterExecuteOperation}
+                  visibleColumns={visibleColumns}
                   {...itemProps}
                 />
               )}

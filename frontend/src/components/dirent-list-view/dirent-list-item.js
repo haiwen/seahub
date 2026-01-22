@@ -55,6 +55,7 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onShowDirentsDraggablePreview: PropTypes.func,
   loadDirentList: PropTypes.func,
+  visibleColumns: PropTypes.array,
 };
 
 class DirentListItem extends React.Component {
@@ -790,6 +791,7 @@ class DirentListItem extends React.Component {
 
   render() {
     let dirent = this.state.dirent;
+    const { visibleColumns = [] } = this.props;
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
@@ -804,6 +806,13 @@ class DirentListItem extends React.Component {
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    // Check if configurable columns are visible
+    const showSize = visibleColumns.includes('size');
+    const showModified = visibleColumns.includes('modified');
+    const showCreator = visibleColumns.includes('creator');
+    const showLastModifier = visibleColumns.includes('last_modifier');
+    const showStatus = visibleColumns.includes('status');
 
     if (isMobile) {
       return (
@@ -907,7 +916,7 @@ class DirentListItem extends React.Component {
           { 'tr-drop-effect': this.state.isDropTipShow },
           { 'tr-active': isSelected },
         )}
-        style={{ gridTemplateColumns: this.props.gridTemplateColumns || '31px 32px 40px minmax(200px, 1fr) 80px 150px 120px 180px' }}
+        style={{ display: 'flex' }}
         draggable={canDrag}
         onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
@@ -925,6 +934,7 @@ class DirentListItem extends React.Component {
         {/* Checkbox */}
         <div
           className="dirent-checkbox-wrapper"
+          style={{ flex: '0 0 32px' }}
           onClick={this.onItemSelected}
           onKeyDown={(e) => e.key === 'Enter' && this.onItemSelected(e)}
           role="button"
@@ -940,7 +950,7 @@ class DirentListItem extends React.Component {
         </div>
 
         {/* Star */}
-        <div className="pl-2 pr-2">
+        <div className="pl-2 pr-2" style={{ flex: '0 0 32px' }}>
           {dirent.starred !== undefined &&
             <OpIcon
               className="star-icon"
@@ -952,7 +962,7 @@ class DirentListItem extends React.Component {
         </div>
 
         {/* Icon */}
-        <div className="pl-2 pr-2">
+        <div className="pl-2 pr-2" style={{ flex: '0 0 40px' }}>
           <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
             {(this.canPreview && dirent.encoded_thumbnail_src) ?
               <img
@@ -993,21 +1003,43 @@ class DirentListItem extends React.Component {
           )}
         </div>
 
-        <div className="pl-2 pr-2">
-          {/* Tags placeholder */}
+        <div className="pl-2 pr-2" style={{ flex: '0 0 100px' }}>
+          {/* Tags placeholder - can be made configurable */}
         </div>
 
-        <div className="pl-2 pr-2">
+        <div className="pl-2 pr-2" style={{ flex: '0 0 120px' }}>
           {this.renderItemOperation()}
         </div>
 
-        <div className="pl-2 pr-2">
-          {dirent.size || ''}
-        </div>
+        {showSize && (
+          <div className="pl-2 pr-2" style={{ flex: '0 0 100px' }}>
+            {dirent.size || ''}
+          </div>
+        )}
 
-        <div className="pl-2 pr-2" title={formatUnixWithTimezone(dirent.mtime)}>
-          {dirent.mtime_relative}
-        </div>
+        {showModified && (
+          <div className="pl-2 pr-2" style={{ flex: '0 0 140px' }} title={formatUnixWithTimezone(dirent.mtime)}>
+            {dirent.mtime_relative}
+          </div>
+        )}
+
+        {showCreator && (
+          <div className="pl-2 pr-2" style={{ flex: '0 0 140px' }}>
+            {dirent.owner || ''}
+          </div>
+        )}
+
+        {showLastModifier && (
+          <div className="pl-2 pr-2" style={{ flex: '0 0 140px' }}>
+            {dirent.last_modifier || ''}
+          </div>
+        )}
+
+        {showStatus && (
+          <div className="pl-2 pr-2" style={{ flex: '0 0 100px' }}>
+            {dirent.status || ''}
+          </div>
+        )}
       </div>
     );
   }

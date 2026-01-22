@@ -16,6 +16,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Dirent } from '../../models';
 import { createTableHeaders } from '../../utils/table-headers';
 import DirentVirtualListView from './dirent-virtual-list-view';
+import { useDirColumnVisibility } from '../../hooks/dir-column-visibility';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -50,6 +51,7 @@ const propTypes = {
   posY: PropTypes.string,
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
+  visibleColumns: PropTypes.array,
 };
 
 class DirentListView extends React.Component {
@@ -663,7 +665,7 @@ class DirentListView extends React.Component {
   };
 
   getHeaders = () => {
-    const { sortBy, sortOrder, isAllItemSelected, selectedDirentList } = this.props;
+    const { sortBy, sortOrder, isAllItemSelected, selectedDirentList, visibleColumns = [] } = this.props;
 
     const sortOptions = {
       sortBy,
@@ -680,7 +682,7 @@ class DirentListView extends React.Component {
       isPartiallySelected: selectedDirentList.length > 0 && !isAllItemSelected
     };
 
-    return createTableHeaders(sortOptions, selectionOptions);
+    return createTableHeaders(sortOptions, selectionOptions, visibleColumns);
   };
 
 
@@ -759,6 +761,7 @@ class DirentListView extends React.Component {
             onAddFolder={this.props.onAddFolder}
             onThreadMouseDown={this.onThreadMouseDown}
             onThreadContextMenu={this.onThreadContextMenu}
+            visibleColumns={this.props.visibleColumns}
           />
         )}
         {direntList.length === 0 &&
@@ -817,4 +820,39 @@ class DirentListView extends React.Component {
 
 DirentListView.propTypes = propTypes;
 
-export default DirentListView;
+// Wrapper component to use the column visibility hook and event bus
+const DirListViewWithColumnVisibility = (props) => {
+  const { visibleColumns, setVisibleColumns } = useDirColumnVisibility();
+
+  // Subscribe to event bus for column visibility changes
+  React.useEffect(() => {
+    const { eventBus } = props;
+    if (!eventBus) return;
+
+    const handleColumnVisibilityChange = (visibleCols) => {
+      setVisibleColumns(visibleCols);
+    };
+
+    const handleGetColumnVisibility = () => {
+      // Dispatch current visible columns
+      eventBus.dispatch('column-visibility-changed', visibleColumns);
+    };
+
+    const unsubscribeColumnVisibilityChanged = eventBus.subscribe('column-visibility-changed', handleColumnVisibilityChange);
+    const unsubscribeGetColumnVisibility = eventBus.subscribe('get-column-visibility', handleGetColumnVisibility);
+
+    return () => {
+      unsubscribeColumnVisibilityChanged();
+      unsubscribeGetColumnVisibility();
+    };
+  }, [props.eventBus, setVisibleColumns, visibleColumns]);
+
+  return (
+    <DirentListView
+      {...props}
+      visibleColumns={visibleColumns}
+    />
+  );
+};
+
+export default DirListViewWithColumnVisibility;

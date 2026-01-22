@@ -10,6 +10,8 @@
   height: 100%;
   width: 100%;
   padding: 0 16px;
+  /* Ensure horizontal scroll when content overflows */
+  overflow-x: auto;
 }
 
 .dirent-virtual-list-header {
@@ -162,7 +164,8 @@
 @media (max-width: 768px) {
   .dirent-virtual-scroll-container {
     padding: 0;
-    overflow-x: hidden;
+    /* Allow horizontal scroll when content overflows */
+    overflow-x: auto;
   }
 
   .dirent-virtual-item {
@@ -178,6 +181,7 @@
   }
 
   .dirent-virtual-list-view {
-    overflow-x: hidden;
+    /* Allow horizontal scroll when content overflows */
+    overflow-x: auto;
   }
 }

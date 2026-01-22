@@ -2619,6 +2619,7 @@ class LibContentView extends React.Component {
                           viewType={this.props.viewType}
                           onToggleDetail={this.toggleDirentDetail}
                           onCloseDetail={this.closeDirentDetail}
+                          eventBus={this.props.eventBus}
                         />
                       </div>
                       }

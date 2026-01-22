@@ -12,6 +12,7 @@ import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-se
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
+import { HideColumnSetter } from '../../metadata/components/data-process-setter';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -25,13 +26,55 @@ const propTypes = {
   viewId: PropTypes.string,
   onToggleDetail: PropTypes.func,
   onCloseDetail: PropTypes.func,
+  eventBus: PropTypes.object,
 };
 
 class DirTool extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      visibleColumns: []
+    };
+  }
+
+  componentDidMount() {
+    // Subscribe to column visibility changes
+    const { eventBus } = this.props;
+    if (eventBus) {
+      this.unsubscribeColumnVisibilityChanged = eventBus.subscribe('column-visibility-changed', (visibleCols) => {
+        this.setState({ visibleColumns: visibleCols });
+      });
+
+      // Dispatch event to get current state
+      eventBus.dispatch('get-column-visibility');
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.unsubscribeColumnVisibilityChanged) {
+      this.unsubscribeColumnVisibilityChanged();
+    }
+  }
+
   onSelectSortOption = (item) => {
     const [sortBy, sortOrder] = item.value.split('-');
     this.props.sortItems(sortBy, sortOrder);
+  };
+
+  getHiddenColumns = () => {
+    const allConfigurableColumns = ['size', 'modified', 'creator', 'last_modifier', 'status'];
+    return allConfigurableColumns.filter(col => !this.state.visibleColumns.includes(col));
+  };
+
+  handleColumnVisibilityChange = (hiddenColumns) => {
+    const allConfigurableColumns = ['size', 'modified', 'creator', 'last_modifier', 'status'];
+    const visibleCols = allConfigurableColumns.filter(col => !hiddenColumns.includes(col));
+
+    // Dispatch event via event bus
+    if (this.props.eventBus) {
+      this.props.eventBus.dispatch('column-visibility-changed', visibleCols);
+    }
   };
 
   render() {
@@ -75,6 +118,23 @@ class DirTool extends React.Component {
       <div className="dir-tool d-flex">
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+
+        {/* Add HideColumnSetter for column visibility control */}
+        <HideColumnSetter
+          wrapperClass="ml-2"
+          target="dir-hide-column-popover"
+          readOnly={isCustomPermission}
+          columns={[
+            { key: 'size', name: 'Size' },
+            { key: 'modified', name: 'Last Update' },
+            { key: 'creator', name: 'Creator' },
+            { key: 'last_modifier', name: 'Last Modifier' },
+            { key: 'status', name: 'Status' },
+          ]}
+          hiddenColumns={this.getHiddenColumns()}
+          modifyHiddenColumns={this.handleColumnVisibilityChange}
+        />
+
         {(!isCustomPermission) &&
           <OpIcon
             className="cur-view-path-btn ml-2"
