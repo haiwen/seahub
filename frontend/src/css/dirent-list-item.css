@@ -41,56 +41,40 @@
   height: 16px;
 }
 
+.dirent-checkbox-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px 0 10px;
+  cursor: pointer;
+}
+
+.dirent-checkbox-wrapper .seafile-multicolor-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.dirent-checkbox-wrapper .seafile-multicolor-icon-checkbox {
+  cursor: pointer;
+  font-size: 14px;
+  color: #2b76f6;
+  background-color: #fff;
+  border-radius: .25rem;
+}
+
+.dirent-checkbox-unchecked {
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: .25rem;
+  background-color: transparent;
+}
+
 /* Dark mode: add white background to thumbnails to ensure visibility of dark content in SVG files */
 [data-bs-theme="dark"] .dir-icon .thumbnail {
   background-color: white;
   padding: 2px;
   border-radius: 2px;
-}
-
-/* Mobile table styles */
-.table-thead-virtual {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-.table-tbody {
-  display: table-row-group;
-}
-
-.table-tbody tr {
-  border-bottom: 1px solid var(--bs-border-color);
-  height: 60px;
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
-
-.table-tbody tr:hover {
-  background-color: var(--bs-tr-hover-bg);
-}
-
-.table-tbody td {
-  padding: 8px;
-  vertical-align: middle;
-  display: table-cell;
-}
-
-.table-tbody td:first-child {
-  width: 60px;
-  text-align: center;
-}
-
-.table-tbody td:nth-child(2) {
-  width: calc(100% - 100px);
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-.table-tbody td:last-child {
-  width: 40px;
-  text-align: right;
 }
 
 .dirent-item-name {
@@ -126,15 +110,4 @@
 
 .mobile-menu-item:active {
   background-color: var(--bs-active-bg);
-}
-
-/* Ensure table doesn't overflow on small screens */
-@media (max-width: 768px) {
-  .table-thead-virtual {
-    max-width: 100%;
-  }
-
-  .table-container {
-    overflow-x: hidden;
-  }
 }

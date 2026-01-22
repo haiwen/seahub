@@ -86,6 +86,8 @@ const DirentVirtualListView = ({
     }
   };
 
+  const tableWrapperWidth = tableWidth > 768 ? tableWidth : 768;
+
   return (
     <div className="dirent-virtual-list-view">
       <div
@@ -93,7 +95,7 @@ const DirentVirtualListView = ({
         className="dirent-virtual-scroll-container"
         onScroll={handleScroll}
       >
-        <div style={{ width: tableWidth }}>
+        <div style={{ width: tableWrapperWidth }}>
           <div
             ref={headerRef}
             className="dirent-virtual-list-header"

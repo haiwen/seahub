@@ -570,9 +570,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 0 6px 0 10px;
   cursor: pointer;
 }
 
+.select-all-checkbox-wrapper .seafile-multicolor-icon {
+  width: 14px;
+  height: 14px;
+}
+
+.select-all-checkbox-unchecked {
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: .25rem;
+  background-color: transparent;
+}
+
+.select-all-checkbox-wrapper .seafile-multicolor-icon-checkbox, 
 .select-all-checkbox-wrapper .seafile-multicolor-icon-partially-selected {
   cursor: pointer;
   font-size: 14px;
