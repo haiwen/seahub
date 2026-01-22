@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import dayjs from 'dayjs';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
+import { EventBus } from '@seafile/seafile-sdoc-editor';
 import { Utils } from '../../utils/utils';
 import wikiAPI from '../../utils/wiki-api';
 import SDocServerApi from '../../utils/sdoc-server-api';
@@ -67,6 +68,10 @@ class Wiki extends Component {
     initWikiSettingsAndRepos();
     this.getWikiConfig();
     window.addEventListener('popstate', this.onPopstate);
+    const eventBus = EventBus.getInstance();
+    this.unsubscribeOpenWikiPageLink = eventBus.subscribe('open_wiki_page_id_link', ({ page_id }) => {
+      this.setCurrentPage(page_id);
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -79,6 +84,7 @@ class Wiki extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('popstate', this.onPopState);
+    this.unsubscribeOpenWikiPageLink && this.unsubscribeOpenWikiPageLink();
   }
 
   onPopstate = (e) => {
@@ -92,7 +98,7 @@ class Wiki extends Component {
   };
 
   setNavConfig = (config, wikiRepoId) => {
-    const { pages } = config;
+    const { pages, navigation } = config;
     const newPages = JSON.parse(JSON.stringify(pages));
     newPages.map((item) => {
       const { path, isDir } = getNamePaths(config, item.id);
@@ -103,8 +109,9 @@ class Wiki extends Component {
       item['isDir'] = isDir;
       return item;
     });
-    window.wiki.config['navConfig'] = {
-      pages: newPages
+    window.wiki.config['navConfig'] = { 
+      pages: newPages,
+      navigation,
     };
   };
 

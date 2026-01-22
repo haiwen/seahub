@@ -49,6 +49,10 @@ const getCurrentPageConfig = (pages, pageId) => {
 
 const getWikPageLink = (serviceURL, url, pageId) => {
   let pathname = url.replace(serviceURL, '');
+  if (!url.startsWith(serviceURL)) {
+    const newUrl = new URL(url);
+    pathname = newUrl.pathname;
+  }
   let pathArr = pathname.split('/');
   // pathname is like `/wikis/${wikiId}/{pageId}/`
   pathArr[3] = pageId;
