@@ -15,7 +15,7 @@
 .dirent-virtual-list-header {
   display: grid;
   height: 40px;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   align-items: center;
   background: var(--bs-body-bg);
   position: sticky;
@@ -40,7 +40,7 @@
   display: grid;
   height: 42px;
   width: 100%;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   align-items: center;
   cursor: pointer;
 }
@@ -59,7 +59,7 @@
   align-items: center;
   height: 60px;
   width: 100%;
-  border-bottom: 1px solid var(--bs-border-color);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
   cursor: pointer;
   padding: 0 8px;
 }
