@@ -40,9 +40,14 @@ const DirentVirtualListView = ({
     if (!container) return;
 
     const updateWidth = () => {
-      const isMobile = container.offsetWidth < 768;
-      const width = isMobile ? container.offsetWidth : (container.offsetWidth - 32);
-      setContainerWidth(width);
+      const style = window.getComputedStyle(container);
+      const paddingLeft = parseFloat(style.paddingLeft) || 0;
+      const paddingRight = parseFloat(style.paddingRight) || 0;
+      const contentWidth = Math.max(
+        container.clientWidth - paddingLeft - paddingRight,
+        0
+      );
+      setContainerWidth(contentWidth);
     };
 
     updateWidth();
@@ -81,6 +86,8 @@ const DirentVirtualListView = ({
     }
   };
 
+  const tableWrapperWidth = tableWidth > 768 ? tableWidth : 768;
+
   return (
     <div className="dirent-virtual-list-view">
       <div
@@ -88,7 +95,7 @@ const DirentVirtualListView = ({
         className="dirent-virtual-scroll-container"
         onScroll={handleScroll}
       >
-        <div style={{ width: tableWidth }}>
+        <div style={{ width: tableWrapperWidth }}>
           <div
             ref={headerRef}
             className="dirent-virtual-list-header"

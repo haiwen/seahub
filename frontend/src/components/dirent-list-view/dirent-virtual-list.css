@@ -46,11 +46,11 @@
 }
 
 .dirent-virtual-item:hover {
-  background: var(--bs-nav-hover-bg);
+  background: var(--bs-tr-hover-bg);
 }
 
 .dirent-virtual-item.tr-active {
-  background: var(--bs-nav-active-bg);
+  background: var(--bs-tr-active-bg);
 }
 
 /* Mobile list item layout */

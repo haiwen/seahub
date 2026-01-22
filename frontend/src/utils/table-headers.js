@@ -1,9 +1,10 @@
 import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
+import { isMobile } from './utils';
 
 export const TABLE_COLUMN_MIN_WIDTHS = {
-  checkbox: 31,
+  checkbox: 32,
   star: 32,
   icon: 40,
   name: 180,
@@ -31,7 +32,6 @@ export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
       key: 'checkbox',
       width: TABLE_COLUMN_MIN_WIDTHS.checkbox,
       isFixed: true,
-      className: 'pl10 pr-2 cursor-pointer',
       minWidth: TABLE_COLUMN_MIN_WIDTHS.checkbox,
       children: React.createElement(
         'div',
@@ -46,13 +46,9 @@ export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
         },
         isPartiallySelected
           ? React.createElement(Icon, { symbol: 'partially-selected' })
-          : React.createElement('input', {
-            type: 'checkbox',
-            className: 'cursor-pointer form-check-input',
-            checked: isAllSelected,
-            onChange: () => {},
-            readOnly: true
-          })
+          : isAllSelected
+            ? React.createElement(Icon, { symbol: 'checkbox' })
+            : React.createElement('div', { className: 'select-all-checkbox-unchecked' })
       )
     },
     {
@@ -148,16 +144,14 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     return { columns: [], gridTemplate: '', totalWidth: 0 };
   }
 
-  // Detect mobile screen (typically < 768px)
-  const isMobile = containerWidth < 768;
+  const maxContainerWidth = Math.max(Math.floor(containerWidth) - 1, 0);
+  const reconcileWidth = maxContainerWidth > 768 ? maxContainerWidth : 768;
 
-  // On mobile, return 100% width without calculating individual columns
-  // since mobile uses simple flex layout instead of grid
   if (isMobile) {
     return {
       columns: [],
       gridTemplate: '100%',
-      totalWidth: containerWidth
+      totalWidth: maxContainerWidth
     };
   }
 
@@ -165,10 +159,10 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     return header.isFixed ? sum + header.width : sum;
   }, 0);
 
-  const remainingWidth = containerWidth - fixedWidth;
+  const remainingWidth = reconcileWidth - fixedWidth;
 
   // Calculate each column width
-  const columns = headers.map(header => {
+  let columns = headers.map(header => {
     if (header.isFixed) {
       return {
         ...header,
@@ -177,7 +171,7 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     } else {
       // Desktop: use original width percentages (0.5, 0.06, 0.18, 0.11, 0.15)
       const width = remainingWidth * header.width;
-      const minWidth = TABLE_COLUMN_MIN_WIDTHS[header.key] || 60;
+      const minWidth = TABLE_COLUMN_MIN_WIDTHS[header.key] || 40;
       return {
         ...header,
         width: Math.max(width, minWidth)
@@ -185,7 +179,31 @@ export const calculateResponsiveColumns = (headers, containerWidth) => {
     }
   });
 
-  const totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
+  let totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
+
+  if (totalWidth > reconcileWidth && remainingWidth > 0) {
+    const flexibleTotal = columns.reduce((sum, col) => {
+      return col.isFixed ? sum : sum + col.width;
+    }, 0);
+
+    const availableFlexibleWidth = Math.max(reconcileWidth - fixedWidth, 0);
+
+    if (flexibleTotal > 0 && availableFlexibleWidth > 0) {
+      const scale = availableFlexibleWidth / flexibleTotal;
+      columns = columns.map(col => {
+        if (col.isFixed) {
+          return col;
+        }
+        return {
+          ...col,
+          width: col.width * scale,
+        };
+      });
+
+      totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
+    }
+  }
+
   const gridTemplate = columns.map(col => col.width + 'px').join(' ');
 
   return {

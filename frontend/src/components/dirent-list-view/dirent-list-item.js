@@ -77,7 +77,6 @@ class DirentListItem extends React.Component {
     this.state = {
       dirent,
       isOperationShow: false,
-      highlight: false,
       canDrag: this.canDrag,
       isShowTagTooltip: false,
       isDragTipShow: false,
@@ -134,7 +133,6 @@ class DirentListItem extends React.Component {
 
     if (prevProps.isItemFreezed !== isItemFreezed && !isItemFreezed) {
       this.setState({
-        highlight: false,
         isOperationShow: activeDirent && activeDirent.name === dirent.name,
       });
     }
@@ -180,7 +178,6 @@ class DirentListItem extends React.Component {
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        highlight: true,
         isOperationShow: true,
       });
     }
@@ -192,7 +189,6 @@ class DirentListItem extends React.Component {
   onMouseOver = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        highlight: true,
         isOperationShow: true,
       });
     }
@@ -204,7 +200,6 @@ class DirentListItem extends React.Component {
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        highlight: false,
         isOperationShow: false,
       });
     }
@@ -213,7 +208,6 @@ class DirentListItem extends React.Component {
 
   unfreezeItem = () => {
     this.setState({
-      highlight: false,
       isOperationShow: false,
     });
     this.props.unfreezeItem();
@@ -816,7 +810,6 @@ class DirentListItem extends React.Component {
         <div
           className={classnames(
             'dirent-mobile-item',
-            { 'tr-highlight': this.state.highlight },
             { 'tr-drop-effect': this.state.isDropTipShow },
             { 'tr-active': isSelected },
           )}
@@ -911,7 +904,6 @@ class DirentListItem extends React.Component {
       <div
         className={classnames(
           'dirent-virtual-item',
-          { 'tr-highlight': this.state.highlight },
           { 'tr-drop-effect': this.state.isDropTipShow },
           { 'tr-active': isSelected },
         )}
@@ -931,17 +923,20 @@ class DirentListItem extends React.Component {
         onContextMenu={this.onItemContextMenu}
       >
         {/* Checkbox */}
-        <div className="pl10 pr-2 cursor-pointer" onClick={this.onItemSelected}>
-          <input
-            type="checkbox"
-            className="cursor-pointer form-check-input"
-            checked={isSelected}
-            aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
-            title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
-            onChange={() => {}}
-            onClick={this.onItemSelected}
-            onKeyDown={Utils.onKeyDown}
-          />
+        <div
+          className="dirent-checkbox-wrapper"
+          onClick={this.onItemSelected}
+          onKeyDown={(e) => e.key === 'Enter' && this.onItemSelected(e)}
+          role="button"
+          tabIndex={0}
+          aria-label={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+          title={isSelected ? gettext('Unselect this item') : gettext('Select this item')}
+        >
+          {isSelected ? (
+            <Icon symbol="checkbox" />
+          ) : (
+            <div className="dirent-checkbox-unchecked" />
+          )}
         </div>
 
         {/* Star */}
