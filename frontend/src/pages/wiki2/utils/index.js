@@ -49,6 +49,8 @@ const getCurrentPageConfig = (pages, pageId) => {
 
 const getWikPageLink = (serviceURL, url, pageId) => {
   let pathname = url.replace(serviceURL, '');
+
+  // For demo test when serviceURL is http://127.0.0.1
   if (!url.startsWith(serviceURL)) {
     const newUrl = new URL(url);
     pathname = newUrl.pathname;
