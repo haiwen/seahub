@@ -140,6 +140,13 @@ class InvitationsBatchView(APIView):
                         'error_msg': _('User %s already exists.') % accepter
                         })
                     continue
+                else:
+                    if user.role != GUEST_USER:
+                        result['failed'].append({
+                            'email': accepter,
+                            'error_msg': 'An (inactive) regular account already exists for this mail address, can not proceed to create guest account'
+                            })
+                        continue
             except User.DoesNotExist:
                 pass
 

@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from seahub.auth.utils import get_virtual_id_by_email
 from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -164,8 +165,9 @@ class RepoShareInvitationsBatchView(APIView):
                     })
                 continue
 
+            vid = get_virtual_id_by_email(accepter)
             try:
-                user = User.objects.get(accepter)
+                user = User.objects.get(vid)
                 # user is active return exist
                 if user.is_active is True:
                     result['failed'].append({
@@ -173,6 +175,13 @@ class RepoShareInvitationsBatchView(APIView):
                         'error_msg': _('User %s already exists.') % accepter
                         })
                     continue
+                else:
+                    if user.role != GUEST_USER:
+                        result['failed'].append({
+                            'email': accepter,
+                            'error_msg': 'An (inactive) regular account already exists for this mail address, can not proceed to create guest account'
+                            })
+                        continue
             except User.DoesNotExist:
                 pass
 
