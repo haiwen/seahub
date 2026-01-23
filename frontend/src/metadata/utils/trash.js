@@ -53,3 +53,15 @@ export const getTrashColumns = () => {
 };
 
 export const TRASH_PER_PAGE = 100;
+
+export const prepareTrashFolderRows = (initialRows) => {
+  return initialRows.map(item => ({
+    _id: crypto.randomUUID(),
+    _parent_dir: item.parent_dir,
+    _name: item.name,
+    _obj_id: item.obj_id,
+    _size: item.size,
+    _is_dir: item.type == 'dir',
+    ...item,
+  }));
+};

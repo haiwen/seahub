@@ -104,6 +104,7 @@ const RecordsHeader = ({
         {/* frozen */}
         <div className="frozen-columns d-flex" style={wrapperStyle} ref={ref => onRef(ref)}>
           <ActionsCell
+            table={table}
             isMobile={isMobile}
             height={height}
             hasSelectedRecord={hasSelectedRecord}

@@ -30,7 +30,6 @@ class Records extends Component {
     this.lastScrollLeft = this.scrollLeft;
     this.initPosition = { idx: -1, rowIdx: -1, groupRecordIndex: -1 };
     const columnMetrics = this.createColumnMetrics(props);
-    console.log('columnMetrics:', columnMetrics);
     const { width: tableContentWidth } = props.getTableContentRect();
     const initHorizontalScrollState = this.getHorizontalScrollState({ gridWidth: tableContentWidth, columnMetrics, scrollLeft: 0 });
     this.state = {
@@ -109,8 +108,6 @@ class Records extends Component {
 
   createColumnMetrics = (props) => {
     const { columns, table } = props;
-    console.log('columns:', columns);
-    console.log('table:', table);
     return recalculate(columns, table.columns, table._id);
   };
 
