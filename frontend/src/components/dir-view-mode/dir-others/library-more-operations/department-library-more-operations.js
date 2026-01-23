@@ -16,6 +16,7 @@ import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dia
 import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
 import LibraryOpMenu from '../../../../components/library-op-menu';
 import Icon from '../../../icon';
+import RepoWebhookDialog from '../../../dialog/repo-webhook-dialog';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -33,7 +34,8 @@ class LibraryMoreOperations extends React.Component {
       isResetPasswordDialogOpen: false,
       isFolderPermissionDialogOpen: false,
       isAPITokenDialogOpen: false,
-      isRepoShareAdminDialogOpen: false
+      isRepoShareAdminDialogOpen: false,
+      isWebhookDialogShow: false,
     };
   }
 
@@ -59,6 +61,9 @@ class LibraryMoreOperations extends React.Component {
         break;
       case 'API Token':
         this.onAPITokenToggle();
+        break;
+      case 'Webhooks':
+        this.onWebhookToggle();
         break;
       default:
         break;
@@ -91,6 +96,10 @@ class LibraryMoreOperations extends React.Component {
 
   toggleRepoShareAdminDialog = () => {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
+  };
+
+  onWebhookToggle = () => {
+    this.setState({ isWebhookDialogShow: !this.state.isWebhookDialogShow });
   };
 
   renameRepo = (newName) => {
@@ -206,7 +215,14 @@ class LibraryMoreOperations extends React.Component {
             />
           </ModalPortal>
         )}
-
+        {this.state.isWebhookDialogShow && (
+          <ModalPortal>
+            <RepoWebhookDialog
+              repo={repo}
+              onRepoWebhookToggle={this.onWebhookToggle}
+            />
+          </ModalPortal>
+        )}
       </Fragment>
     );
   }
