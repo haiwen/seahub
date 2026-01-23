@@ -24,6 +24,7 @@ import TransferDialog from '../dialog/transfer-dialog';
 import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
 import Icon from '../icon';
+import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
 
 dayjs.extend(relativeTime);
 
@@ -181,6 +182,9 @@ class SharedRepoListItem extends React.Component {
       case 'API Token':
         this.onAPITokenToggle();
         break;
+      case 'Webhooks':
+        this.onWebhookToggle();
+        break;
       case 'Share Admin':
         this.toggleRepoShareAdminDialog();
         break;
@@ -299,6 +303,10 @@ class SharedRepoListItem extends React.Component {
     this.setState({ isResetPasswordDialogShow: !this.state.isResetPasswordDialogShow });
   };
 
+  onWebhookToggle = () => {
+    this.setState({ isWebhookDialogShow: !this.state.isWebhookDialogShow });
+  };
+
   translateMenuItem = (menuItem) => {
     let translateResult = '';
     switch (menuItem) {
@@ -335,6 +343,9 @@ class SharedRepoListItem extends React.Component {
       case 'API Token':
         translateResult = 'API Token'; // translation is not needed here
         break;
+      case 'Webhooks':
+        translateResult = 'Webhooks';
+        break;
       case 'Advanced':
         translateResult = gettext('Advanced');
         break;
@@ -350,6 +361,7 @@ class SharedRepoListItem extends React.Component {
   getAdvancedOperations = () => {
     const operations = [];
     operations.push('API Token');
+    operations.push('Webhooks');
     return operations;
   };
 
@@ -760,6 +772,14 @@ class SharedRepoListItem extends React.Component {
               canTransferToDept={true}
               toggleDialog={this.onTransferToggle}
               isDepAdminTransfer={true}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isWebhookDialogShow && (
+          <ModalPortal>
+            <RepoWebhookDialog
+              repo={repo}
+              onRepoWebhookToggle={this.onWebhookToggle}
             />
           </ModalPortal>
         )}
