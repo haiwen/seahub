@@ -32,7 +32,7 @@ from seahub.wiki.models import Wiki as OldWiki
 from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiFileViews, Wiki2Settings
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.repo_metadata.metadata_server_api import list_metadata_view_records
-from seahub.wiki2.utils import is_valid_wiki_name, get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
+from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
     check_wiki_admin_permission, check_wiki_permission, get_all_wiki_ids, get_and_gen_page_nav_by_id, \
     get_current_level_page_ids, save_wiki_config, gen_unique_id, gen_new_page_nav_by_id, pop_nav, \
     delete_page, move_nav, revert_nav, get_sub_ids_by_page_id, get_parent_id_stack, add_convert_wiki_task, \
@@ -61,7 +61,6 @@ from seahub.utils.rpc import SeafileAPI
 from seahub.constants import PERMISSION_READ_WRITE
 from seaserv import ccnet_api
 from seahub.share.utils import is_repo_admin
-from seahub.group.utils import group_id_to_name
 
 
 HTTP_520_OPERATION_FAILED = 520
@@ -218,7 +217,7 @@ class Wikis2View(APIView):
         if not wiki_name:
             return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
 
-        if not is_valid_wiki_name(wiki_name):
+        if not is_valid_dirent_name(wiki_name):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
@@ -1484,7 +1483,7 @@ class WikiConvertView(APIView):
         if not wiki_name:
             return api_error(status.HTTP_400_BAD_REQUEST, 'wiki name is required.')
 
-        if not is_valid_wiki_name(wiki_name):
+        if not is_valid_dirent_name(wiki_name):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
