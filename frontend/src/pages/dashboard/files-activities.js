@@ -5,7 +5,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, username } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import Loading from '../../components/loading';
-import Activity from '../../models/activity';
 import FileActivitiesContent from './content';
 import UserSelector from './user-selector';
 
@@ -72,7 +71,6 @@ class FilesActivities extends Component {
     seafileAPI.listActivities(currentPage, onlyMine ? username : '').then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
-      events = this.mergeFileCreateEvents(events);
       events.forEach(item => {
         if (!this.availableUserEmails.has(item.author_email)) {
           this.availableUserEmails.add(item.author_email);
@@ -134,46 +132,11 @@ class FilesActivities extends Component {
     return actuallyEvents;
   };
 
-  mergeFileCreateEvents = (events) => {
-    let actuallyEvents = [];
-    let multiFilesActivity = null;
-    for (var i = 0; i < events.length; i++) {
-      let isFulfilCondition = events[i].obj_type === 'file' &&
-                              events[i].op_type === 'create' &&
-                              events[i + 1] &&
-                              events[i + 1].obj_type === 'file' &&
-                              events[i + 1].op_type === 'create' &&
-                              events[i + 1].repo_name === events[i].repo_name &&
-                              events[i + 1].author_email === events[i].author_email;
-      if (multiFilesActivity != null) {
-        multiFilesActivity.createdFilesCount++;
-        multiFilesActivity.createdFilesList.push(events[i]);
-        if (isFulfilCondition) {
-          continue;
-        } else {
-          actuallyEvents.push(multiFilesActivity);
-          multiFilesActivity = null;
-        }
-      } else {
-        if (isFulfilCondition) {
-          multiFilesActivity = new Activity(events[i]);
-          multiFilesActivity.obj_type = 'files';
-          multiFilesActivity.createdFilesCount++;
-          multiFilesActivity.createdFilesList.push(events[i]);
-        } else {
-          actuallyEvents.push(events[i]);
-        }
-      }
-    }
-    return actuallyEvents;
-  };
-
   getMore() {
     const { currentPage, availableUsers, targetUsers, onlyMine } = this.state;
     seafileAPI.listActivities(currentPage, onlyMine ? username : '').then(res => {
       // {"events":[...]}
       let events = this.mergePublishEvents(res.data.events);
-      events = this.mergeFileCreateEvents(events);
       events.forEach(item => {
         if (!this.availableUserEmails.has(item.author_email)) {
           this.availableUserEmails.add(item.author_email);
