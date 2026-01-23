@@ -123,7 +123,12 @@ class Wikis2View(APIView):
         owned_wikis = [r for r in owned if is_wiki_repo(r)]
         shared_wikis = [r for r in shared if is_wiki_repo(r)]
         group_wikis = [r for r in groups if is_wiki_repo(r)]
-        wiki_ids = [w.repo_id for w in owned_wikis + shared_wikis + group_wikis]
+        
+        # Get public wikis (accessible to all org members)
+        public_wikis = [r for r in public if is_wiki_repo(r)]
+        public_wiki_ids = set([w.repo_id for w in public_wikis])
+        
+        wiki_ids = [w.repo_id for w in owned_wikis + shared_wikis + group_wikis + public_wikis]
         link_prefix = get_service_url().rstrip('/') + '/wiki/publish/'
         publish_wikis_dict = {}
         published_wikis = Wiki2Publish.objects.filter(repo_id__in=wiki_ids)
@@ -138,13 +143,15 @@ class Wikis2View(APIView):
             is_published = True if publish_wikis_dict.get(r.id) else False
             public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
             link = link_prefix + public_url_suffix if public_url_suffix else ""
+            is_public = r.id in public_wiki_ids
             repo_info = {
                     "type": "mine",
                     "permission": 'rw',
                     "owner_nickname": email2nickname(username),
                     "public_url_suffix": public_url_suffix,
                     "public_url": link,
-                    "is_published": is_published
+                    "is_published": is_published,
+                    "is_public": is_public
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
@@ -168,10 +175,40 @@ class Wikis2View(APIView):
                     "owner_nickname": owner_nickname,
                     "public_url_suffix": public_url_suffix,
                     "public_url": link,
-                    "is_published": is_published
+                    "is_published": is_published,
+                    "is_public": False
                 }
             wiki_info.update(repo_info)
             wiki_list.append(wiki_info)
+
+        shared_ids = set([w.repo_id for w in shared_wikis])
+        public_wiki_list = []
+        for r in public_wikis:
+            if r.repo_id in shared_ids:
+                continue
+            owner = r.user
+            r.owner = owner
+            wiki = Wiki(r)
+            if ('@seafile_group') in r.owner:
+                group_id = int(owner.split('@')[0])
+                owner_nickname = group_id_to_name(group_id)
+            else:
+                owner_nickname = email2nickname(owner)
+            wiki_info = wiki.to_dict()
+            is_published = True if publish_wikis_dict.get(r.id) else False
+            public_url_suffix = publish_wikis_dict.get(r.id) if is_published else ""
+            link = link_prefix + public_url_suffix if public_url_suffix else ""
+            repo_info = {
+                    "type": "public",
+                    "permission": r.permission,
+                    "owner_nickname": owner_nickname,
+                    "public_url_suffix": public_url_suffix,
+                    "public_url": link,
+                    "is_published": is_published,
+                    "is_public": True
+                }
+            wiki_info.update(repo_info)
+            public_wiki_list.append(wiki_info)
 
         group_id_in_wikis = list(set([r.group_id for r in group_wikis]))
         try:
@@ -200,8 +237,9 @@ class Wikis2View(APIView):
             }
             group_wiki_list.append(group_wiki)
         wiki_list = sorted(wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
+        public_wiki_list = sorted(public_wiki_list, key=lambda x: x.get('updated_at'), reverse=True)
 
-        return Response({'wikis': wiki_list, 'group_wikis': group_wiki_list})
+        return Response({'wikis': wiki_list, 'group_wikis': group_wiki_list, 'public_wikis': public_wiki_list})
 
     def post(self, request, format=None):
         """Add a new wiki.
@@ -2337,3 +2375,86 @@ class Wiki2FileViewRecords(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response(results)
+
+
+class Wiki2SetPublicView(APIView):
+    """Set or unset wiki as public (accessible to all org members)."""
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, wiki_id):
+        """Set or unset wiki as public.
+        
+        Permission checking:
+        1. User must have can_view_org permission.
+        2. Wiki must be a personal wiki (not group wiki).
+        3. User must be the wiki owner.
+        """
+        # Argument validation
+        set_public = request.data.get('set_public')
+        if set_public is None:
+            error_msg = 'set_public is required.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            set_public = to_python_boolean(str(set_public))
+        except ValueError:
+            error_msg = 'set_public invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        username = request.user.username
+
+        # Permission check: user must have can_view_org permission
+        if not request.user.permissions.can_view_org():
+            error_msg = 'Permission denied. You do not have permission to set wiki as public.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # Resource check: wiki must exist
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = 'Wiki not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        # Permission check: must be a personal wiki (not group wiki)
+        if is_group_wiki(wiki):
+            error_msg = 'Only personal wikis can be set as public.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # Permission check: user must be the wiki owner
+        if username != repo_owner:
+            error_msg = 'Permission denied. Only wiki owner can set wiki as public.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # Check repo exists
+        repo = seafile_api.get_repo(wiki_id)
+        if not repo:
+            error_msg = 'Wiki library not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        try:
+            if set_public:
+                # Set wiki as public with read-only permission
+                if org_id > 0:
+                    seafile_api.set_org_inner_pub_repo(org_id, wiki_id, 'r')
+                else:
+                    seafile_api.add_inner_pub_repo(wiki_id, 'r')
+            else:
+                # Unset wiki as public
+                if org_id > 0:
+                    seafile_api.unset_org_inner_pub_repo(org_id, wiki_id)
+                else:
+                    seafile_api.remove_inner_pub_repo(wiki_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
