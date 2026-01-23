@@ -247,7 +247,6 @@ export const MetadataViewProvider = ({
   };
 
   const restoreRecords = (recordsIds, { success_callback, fail_callback } = {}) => {
-    console.log('restoreRecords');
     if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
     let paths = [];
     let fileNames = [];
@@ -277,6 +276,14 @@ export const MetadataViewProvider = ({
         success_callback && success_callback();
       },
     });
+  };
+
+  const loadTrashFolderRecords = (commitID, baseDir, folderPath) => {
+    storeRef.current.loadTrashFolderRecords(commitID, baseDir, folderPath);
+  };
+
+  const trashFolderRecordsLoaded = () => {
+    setMetadata(storeRef.current.data);
   };
 
   const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
@@ -393,7 +400,6 @@ export const MetadataViewProvider = ({
   }, [storeRef, modifyLocalFileTags]);
 
   const updateSelectedRecordIds = useCallback((ids, isSomeone, faceMetadata) => {
-    console.log('selected ...');
     toggleShowDirentToolbar(ids.length > 0);
     const data = isSomeone !== undefined ? faceMetadata : metadata;
     setTimeout(() => {
@@ -1039,6 +1045,8 @@ export const MetadataViewProvider = ({
     const unsubscribeDuplicateRecord = eventBus.subscribe(EVENT_BUS_TYPE.DUPLICATE_RECORD, duplicateRecord);
     const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
     const unsubscribeRestoreRecords = eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_RECORDS, restoreRecords);
+    const unsubscribeLoadTrashFolderRecords = eventBus.subscribe(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, loadTrashFolderRecords);
+    const unsubscribeTrashFolderRecordsLoaded = eventBus.subscribe(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED, trashFolderRecordsLoaded);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
@@ -1073,6 +1081,8 @@ export const MetadataViewProvider = ({
       unsubscribeDuplicateRecord();
       unsubscribeDeleteRecords();
       unsubscribeRestoreRecords();
+      unsubscribeLoadTrashFolderRecords();
+      unsubscribeTrashFolderRecordsLoaded();
       unsubscribeUpdateDetails();
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();
@@ -1112,6 +1122,7 @@ export const MetadataViewProvider = ({
         modifyRecords,
         deleteRecords,
         restoreRecords,
+        loadTrashFolderRecords,
         modifyRecord,
         moveRecord,
         duplicateRecord,

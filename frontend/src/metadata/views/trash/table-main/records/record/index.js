@@ -74,7 +74,7 @@ class Record extends React.Component {
   getFrozenCells = () => {
     const {
       columns, lastFrozenColumnKey, groupRecordIndex, index: recordIndex, record,
-      cellMetaData, isGroupView, height, columnColor
+      cellMetaData, isGroupView, height, columnColor, metadata
     } = this.props;
     const frozenColumns = getFrozenColumns(columns);
     if (frozenColumns.length === 0) return null;
@@ -92,6 +92,7 @@ class Record extends React.Component {
         <Cell
           frozen
           key={column.key}
+          metadata={metadata}
           record={record}
           groupRecordIndex={groupRecordIndex}
           recordIndex={recordIndex}
@@ -138,7 +139,7 @@ class Record extends React.Component {
   getColumnCells = () => {
     const {
       columns, colOverScanStartIdx, colOverScanEndIdx, groupRecordIndex, index: recordIndex,
-      record, cellMetaData, isGroupView, height, columnColor
+      record, cellMetaData, isGroupView, height, columnColor, metadata
     } = this.props;
     const recordId = record._id;
     const rendererColumns = columns.slice(colOverScanStartIdx, colOverScanEndIdx);
@@ -154,6 +155,7 @@ class Record extends React.Component {
       return (
         <Cell
           key={column.key}
+          metadata={metadata}
           record={record}
           groupRecordIndex={groupRecordIndex}
           recordIndex={recordIndex}
@@ -225,7 +227,7 @@ class Record extends React.Component {
 
   render() {
     const {
-      isSelected, isGroupView, index, isLastRecord, lastFrozenColumnKey, height, record
+      isSelected, isGroupView, index, isLastRecord, lastFrozenColumnKey, height, record, metadata
     } = this.props;
     const isLocked = record._locked ? true : false;
     const cellHeight = isGroupView ? height : height - 1;
@@ -252,6 +254,7 @@ class Record extends React.Component {
           ref={ref => this.frozenColumns = ref}
         >
           <ActionsCell
+            metadata={metadata}
             isLocked={isLocked}
             isSelected={isSelected}
             recordId={record._id}

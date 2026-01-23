@@ -296,6 +296,15 @@ class ServerOperator {
         });
         break;
       }
+      case OPERATION_TYPE.RESTORE_TRASH_RECORDS: {
+        const { items } = operation;
+        window.sfMetadataContext.restoreTrashItems(items).then(res => {
+          callback({ operation });
+        }).catch(error => {
+          callback({ error: gettext('Failed to restore records') });
+        });
+        break;
+      }
 
       default: {
         break;

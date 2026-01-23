@@ -13,7 +13,7 @@ import Metadata from '../model/metadata';
 import { checkIsDir } from '../utils/row';
 import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord, checkDuplicatedName } from '../utils/cell';
-import { prepareTrashRows, getTrashColumns, TRASH_PER_PAGE } from '../utils/trash';
+import { prepareTrashRows, prepareTrashFolderRows, getTrashColumns, TRASH_PER_PAGE } from '../utils/trash';
 
 class Store {
 
@@ -74,6 +74,7 @@ class Store {
       data.hasMore = res.data.total_count > res.data.items.length;
       data.page = 1;
       data.view.type = 'trash';
+      data.showFolder = false;
     }
     this.data = data;
     this.startIndex += loadedCount;
@@ -130,6 +131,22 @@ class Store {
     this.data.recordsCount = this.data.row_ids.length;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
+  }
+
+  async loadTrashFolderRecords(commitID, baseDir, folderPath) {
+    const res = await this.context.loadTrashFolderRecords(commitID, baseDir, folderPath);
+    const rows = prepareTrashFolderRows(res?.data?.dirent_list || []);
+    let data = new Metadata({ rows, columns: this.data.columns });
+    data.view.type = 'trash';
+    data.showFolder = true;
+    data.commitID = commitID;
+    data.baseDir = baseDir;
+    data.folderPath = folderPath;
+    data.recordsCount = data.row_ids.length;
+    data.hasMore = false;
+    this.data = data;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED);
   }
 
   async updateRowData(newRowId) {
@@ -339,7 +356,6 @@ class Store {
   }
 
   deleteRecords(rows_ids, { fail_callback, success_callback }) {
-    console.log('store deleteRecords');
     if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
     const type = OPERATION_TYPE.DELETE_RECORDS;
 
@@ -384,7 +400,6 @@ class Store {
 
   // restore selected trash records
   async restoreRecords(rows_ids, { fail_callback, success_callback }) {
-    console.log('store restoreRecords');
     if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
 
     const items = {};
@@ -398,22 +413,16 @@ class Store {
         items[commit_id] = [path];
       }
     });
-    console.log('items:', items);
+    // const res = await this.context.restoreTrashItems(items);
 
-    const res = await this.context.restoreTrashItems(items);
-    console.log(res);
-
-    /*
+    const type = OPERATION_TYPE.RESTORE_TRASH_RECORDS;
     const operation = this.createOperation({
       type,
-      repo_id: this.repoId,
-      rows_ids: valid_rows_ids,
-      deleted_rows,
+      items: items,
       fail_callback,
       success_callback,
     });
     this.applyOperation(operation);
-    */
   }
 
   reloadRecords(row_ids) {

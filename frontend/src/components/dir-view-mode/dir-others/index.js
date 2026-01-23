@@ -106,6 +106,7 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
           text={gettext('Trash')}
           iconSymbol="trash"
           op={visitTrash}
+          isActive={currentMode === 'trash'}
         />
       )}
       {isDesktop && (

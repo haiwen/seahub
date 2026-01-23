@@ -57,7 +57,7 @@ class ActionsCell extends Component {
   };
 
   render() {
-    const { isSelected, isLastFrozenCell, index, height, recordId } = this.props;
+    const { isSelected, isLastFrozenCell, index, height, recordId, metadata } = this.props;
     const cellStyle = {
       height,
       width: SEQUENCE_COLUMN_WIDTH,
@@ -72,7 +72,8 @@ class ActionsCell extends Component {
         onMouseEnter={this.onCellMouseEnter}
         onMouseLeave={this.onCellMouseLeave}
       >
-        {!isSelected && <div className="sf-metadata-result-column-content row-index text-truncate">{index + 1}</div>}
+        {!isSelected && <div className={classnames('sf-metadata-result-column-content row-index text-truncate', { 'd-block': metadata.showFolder })}>{index + 1}</div>}
+        {!metadata.showFolder &&
         <label
           className='sf-metadata-result-column-content actions-checkbox'
           htmlFor={`select-cell-checkbox-${recordId}`}
@@ -93,6 +94,7 @@ class ActionsCell extends Component {
             />
           </div>
         </label>
+        }
         {enableExpandRow &&
         <IconBtn
           symbol="expand"

@@ -8,7 +8,7 @@ class ActionsCell extends Component {
 
   render() {
     const {
-      isMobile, hasSelectedRecord, isSelectedAll, isLastFrozenCell, groupOffsetLeft, height
+      isMobile, hasSelectedRecord, isSelectedAll, isLastFrozenCell, groupOffsetLeft, height, table
     } = this.props;
     const columnCellClass = 'sf-metadata-result-table-cell column';
     const columnCellStyle = {
@@ -21,6 +21,7 @@ class ActionsCell extends Component {
         className={classnames(columnCellClass, { 'table-last--frozen': isLastFrozenCell })}
         style={{ ...columnCellStyle }}
       >
+        {!table.showFolder &&
         <SelectAll
           isMobile={isMobile}
           hasSelectedRecord={hasSelectedRecord}
@@ -28,6 +29,7 @@ class ActionsCell extends Component {
           selectNoneRecords={this.props.selectNoneRecords}
           selectAllRecords={this.props.selectAllRecords}
         />
+        }
       </div>
     );
   }

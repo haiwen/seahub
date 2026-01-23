@@ -449,7 +449,8 @@ class RecordsBody extends Component {
     this.recordFrozenRefs = [];
     const {
       recordsCount, columns, colOverScanStartIdx, colOverScanEndIdx, lastFrozenColumnKey,
-      recordMetrics, showCellColoring, columnColors
+      recordMetrics, showCellColoring, columnColors,
+      metadata
     } = this.props;
     const { startRenderIndex, endRenderIndex, selectedPosition } = this.state;
     const cellMetaData = this.getCellMetaData();
@@ -470,6 +471,7 @@ class RecordsBody extends Component {
           ref={ref => {
             this.recordFrozenRefs.push(ref);
           }}
+          metadata={metadata}
           isSelected={isSelected}
           index={recordIndex}
           isLastRecord={isLastRecord}

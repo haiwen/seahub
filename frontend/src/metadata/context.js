@@ -1,5 +1,6 @@
 import metadataAPI from './api';
 import { repoTrashAPI } from '../utils/repo-trash-api';
+import { seafileAPI } from '../utils/seafile-api';
 import tagsAPI from '../tag/api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
@@ -95,6 +96,11 @@ class Context {
     const per_page = 100;
     return repoTrashAPI.getRepoFolderTrash(repoID, page, per_page);
   };
+
+  loadTrashFolderRecords = (commitID, baseDir, folderPath) => {
+    const repoID = this.settings['repoID'];
+    return seafileAPI.listCommitDir(repoID, commitID, `${baseDir.substr(0, baseDir.length - 1)}${folderPath}`);
+  }
 
   restoreTrashItems = (items) => {
     const repoID = this.settings['repoID'];

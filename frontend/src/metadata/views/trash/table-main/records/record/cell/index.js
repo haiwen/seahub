@@ -3,17 +3,18 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from './formatter';
 import { Utils } from '../../../../../../../utils/utils';
+import { siteRoot } from '../../../../../../../utils/constants';
 import ObjectUtils from '../../../../../../../utils/object';
 import { isCellValueChanged, getCellValueByColumn } from '../../../../../../utils/cell';
-import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP, EDITOR_TYPE, EVENT_BUS_TYPE } from '../../../../../../constants';
+import { CellType, PRIVATE_COLUMN_KEYS, TABLE_SUPPORT_EDIT_TYPE_MAP, EVENT_BUS_TYPE } from '../../../../../../constants';
 import { checkIsDir } from '../../../../../../utils/row';
-import { openFile } from '../../../../../../utils/file';
 import { useTags } from '../../../../../../../tag/hooks';
 
 import './index.css';
 
 const Cell = React.memo(({
   needBindEvents = true,
+  metadata,
   column,
   record,
   groupRecordIndex,
@@ -155,12 +156,24 @@ const Cell = React.memo(({
     event.nativeEvent.stopImmediatePropagation();
     if (!isCellSelected) return;
     const repoID = window.sfMetadataContext.getSetting('repoID');
-    const canPreview = window.sfMetadataContext.canPreview();
-    if (!canPreview) return;
-    openFile(repoID, record, () => {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
-    });
-  }, [isCellSelected, record]);
+    const { showFolder, commitID, baseDir, folderPath } = metadata;
+    if (showFolder) {
+      // render trash folder
+      if (record.type == 'dir') {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, commitID, baseDir, Utils.joinPath(folderPath, record.name));
+      } else {
+        window.open(`${siteRoot}repo/${repoID}/trash/files/?obj_id=${record.obj_id}&commit_id=${commitID}&base=${encodeURIComponent(baseDir)}&p=${encodeURIComponent(Utils.joinPath(folderPath, record.name))}`);
+      }
+    } else {
+    // render trash
+      const { is_dir } = record;
+      if (is_dir) {
+        window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, record.commit_id, record.parent_dir, Utils.joinPath('/', record.obj_name));
+      } else {
+        window.open(`${siteRoot}repo/${repoID}/trash/files/?obj_id=${record.obj_id}&commit_id=${record.commit_id}&base=${encodeURIComponent(record.parent_dir)}&p=${encodeURIComponent('/' + record.obj_name)}`);
+      }
+    }
+  }, [isCellSelected, record, metadata]);
 
   const cellValue = getCellValueByColumn(record, column);
   const cellEvents = needBindEvents && getEvents();
