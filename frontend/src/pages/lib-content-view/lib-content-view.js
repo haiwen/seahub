@@ -671,6 +671,10 @@ class LibContentView extends React.Component {
   };
 
   hideMetadataView = (isSetRoot = false) => {
+    const { currentMode } = this.state;
+    if (currentMode == TRASH) {
+      return;
+    }
     const { repoID } = this.props;
     const { path } = this.getInfoFromLocation(repoID);
     this.setState({
@@ -678,7 +682,6 @@ class LibContentView extends React.Component {
       path: isSetRoot ? '/' : path,
       viewId: '',
       tagId: '',
-      trash: '',
       currentDirent: isSetRoot ? null : this.state.currentDirent,
     }, () => {
       if (!isSetRoot) return;
@@ -2400,7 +2403,6 @@ class LibContentView extends React.Component {
       nextMode = TAGS_MODE;
     } else if (currentMode === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
       nextMode = METADATA_MODE;
-    // } else if (currentMode === TRASH && path.startsWith('/' + PRIVATE_FILE_TYPE.TRASH + '/')) {
     } else if (currentMode === TRASH && path.startsWith('/' + PRIVATE_FILE_TYPE.TRASH)) {
       nextMode = TRASH;
     } else {

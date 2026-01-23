@@ -4,8 +4,7 @@ import { seafileAPI } from '../utils/seafile-api';
 import tagsAPI from '../tag/api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
-  FACE_RECOGNITION_VIEW_ID,
-  TRASH_VIEW_ID,
+  FACE_RECOGNITION_VIEW_ID
 } from './constants';
 import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
@@ -100,7 +99,7 @@ class Context {
   loadTrashFolderRecords = (commitID, baseDir, folderPath) => {
     const repoID = this.settings['repoID'];
     return seafileAPI.listCommitDir(repoID, commitID, `${baseDir.substr(0, baseDir.length - 1)}${folderPath}`);
-  }
+  };
 
   restoreTrashItems = (items) => {
     const repoID = this.settings['repoID'];
