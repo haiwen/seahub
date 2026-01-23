@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 
 import os
+import json
 import logging
 
 from rest_framework import status
@@ -71,17 +72,50 @@ class ActivitiesView(APIView):
             d['avatar_url'] = url
             d['time'] = utc_datetime_to_isoformat_timestr(e.timestamp)
 
+            detail_dict = {}
+            if hasattr(e, 'size'):
+                detail_dict['size'] = e.size
+            if hasattr(e, 'old_path'):
+                detail_dict['old_path'] = e.old_path
+            if hasattr(e, 'days'):
+                detail_dict['days'] = e.days
+            if hasattr(e, 'old_repo_name'):
+                detail_dict['old_repo_name'] = e.old_repo_name
+            if hasattr(e, 'obj_id'):
+                detail_dict['obj_id'] = e.obj_id
+
+            if e.op_type.startswith('batch_'):
+                try:
+                    details = json.loads(getattr(e, 'detail', '[]'))
+                    if not isinstance(details, list):
+                        details = [details]
+                except (json.JSONDecodeError, AttributeError):
+                    details = []
+                
+                d['details'] = details
+                d['count'] = len(details)
+            else:
+                detail_item = {
+                    'path': e.path,
+                    'name': '' if e.path == '/' else os.path.basename(e.path)
+                }
+                detail_item.update(detail_dict)
+                d['details'] = [detail_item]
+                d['count'] = 1
+
+            # Keep original special fields for backward compatibility
             if e.op_type == 'clean-up-trash':
-                d['days'] = e.days
+                d['days'] = detail_dict.get('days', getattr(e, 'days', None))
             elif e.op_type == 'rename' and e.obj_type == 'repo':
-                d['old_repo_name'] = e.old_repo_name
+                d['old_repo_name'] = detail_dict.get('old_repo_name', getattr(e, 'old_repo_name', None))
             elif e.op_type == 'move' and e.obj_type in ['dir', 'file']:
-                d['old_path'] = e.old_path
+                d['old_path'] = detail_dict.get('old_path', getattr(e, 'old_path', None))
             elif e.op_type == 'rename' and e.obj_type in ['dir', 'file']:
-                d['old_path'] = e.old_path
-                d['old_name'] = os.path.basename(e.old_path)
+                d['old_path'] = detail_dict.get('old_path', getattr(e, 'old_path', None))
+                if d.get('old_path'):
+                    d['old_name'] = os.path.basename(d['old_path'])
             elif e.op_type == 'publish':
-                d['old_path'] = e.old_path
+                d['old_path'] = detail_dict.get('old_path', getattr(e, 'old_path', None))
 
             events_list.append(d)
 
