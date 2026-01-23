@@ -82,8 +82,13 @@ class Store {
   }
 
   async load(limit = PER_LOAD_NUMBER, isBeingBuilt = false) {
-    const viewRes = await this.context.getView(this.viewId);
-    const view = viewRes?.data?.view || {};
+    let view;
+    if (this.viewId === TRASH_VIEW_ID) {
+      view = {};
+    } else {
+      const viewRes = await this.context.getView(this.viewId);
+      view = viewRes?.data?.view || {};
+    }
     const retries = isBeingBuilt ? DEFAULT_RETRY_TIMES : 0;
     await this.loadMetadata(view, limit, retries);
   }

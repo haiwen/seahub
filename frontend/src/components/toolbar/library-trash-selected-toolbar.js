@@ -1,38 +1,19 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { gettext } from '../../utils/constants';
-import { EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
-import TextTranslation from '../../utils/text-translation';
+import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import RowUtils from '../../metadata/views/table/utils/row-utils';
-import { checkIsDir } from '../../metadata/utils/row';
-import { Utils } from '../../utils/utils';
 import OpIcon from '../../components/op-icon';
-import { getFileNameFromRecord, getParentDirFromRecord } from '../../metadata/utils/cell';
-import { openInNewTab, openParentFolder } from '../../metadata/utils/file';
-import { buildTableToolbarMenuOptions } from '../../metadata/utils/menu-builder';
-import { useMetadataStatus } from '../../hooks';
-import { getColumnByKey } from '../sf-table/utils/column';
 import Icon from '../icon';
 
 const LibraryTrashSelectedToolbar = ({ repoID }) => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
   const [metadata, setMetadata] = useState({});
   const metadataRef = useRef([]);
-  const menuRef = useRef(null);
 
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
 
   const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
-
-  const areRecordsInSameFolder = useMemo(() => {
-    if (records.length <= 1) return true;
-    const firstPath = records[0] ? getParentDirFromRecord(records[0]) : null;
-    return firstPath && records.every(record => getParentDirFromRecord(record) === firstPath);
-  }, [records]);
-
-  const readOnly = !window.sfMetadataContext.canModify();
-  const isMultiple = selectedRecordIds.length > 1;
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
