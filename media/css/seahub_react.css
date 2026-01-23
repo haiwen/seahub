@@ -1348,6 +1348,8 @@ a.table-sort-op:hover {
 .dropdown-item:focus .btn .dropdown-item-icon,
 .dropdown-item:hover .sf2-icon-tick,
 .dropdown-item:focus .sf2-icon-tick,
+.dropdown-item:hover .seafile-multicolor-icon,
+.dropdown-item:focus .seafile-multicolor-icon,
 .dropdown-item:hover .metadata-view-icon,
 .dropdown-item:focus .metadata-view-icon {
   color: #fff;
