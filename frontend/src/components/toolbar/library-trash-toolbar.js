@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { gettext, enableUserCleanTrash, username } from '../../utils/constants';
 import CleanTrash from '../../components/dialog/clean-trash';
 import ModalPortal from '../../components/modal-portal';
+import { EVENT_BUS_TYPE } from '../../metadata/constants';
 
 const LibraryTrashToolbar = ({ repoID, currentRepoInfo }) => {
   let [isCleanTrashDialogOpen, setCleanTrashDialogOpen] = useState(false);
@@ -13,7 +14,7 @@ const LibraryTrashToolbar = ({ repoID, currentRepoInfo }) => {
   };
 
   const refreshTrash = useCallback(() => {
-    location.reload();
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
   }, []);
 
   const { owner_email, is_admin } = currentRepoInfo;

@@ -66,7 +66,14 @@ class Store {
       return this.loadMetadata(view, limit, retries - 1, delay);
     }
     const columns = normalizeColumns(res?.data?.metadata);
-    let data = new Metadata({ rows, columns, view });
+
+    let data;
+    if (this.viewId === TRASH_VIEW_ID) {
+      // `view: {}`: for 'reload'
+      data = new Metadata({ rows, columns, view: {} });
+    } else {
+      data = new Metadata({ rows, columns, view });
+    }
     data.view.rows = data.row_ids;
     const loadedCount = rows.length;
     data.hasMore = loadedCount === limit;
