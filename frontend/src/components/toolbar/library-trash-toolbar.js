@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-// import Search from '../../components/library-trash-search';
+import Search from '../../components/library-trash-search';
 import { gettext, enableUserCleanTrash, username } from '../../utils/constants';
 import CleanTrash from '../../components/dialog/clean-trash';
 import ModalPortal from '../../components/modal-portal';
@@ -21,7 +21,7 @@ const LibraryTrashToolbar = ({ repoID, currentRepoInfo }) => {
   const isRepoAdmin = owner_email === username || is_admin;
   return (
     <>
-      {/* <Search /> */}
+      <Search />
       {(enableUserCleanTrash && isRepoAdmin) &&
       <button className="btn btn-sm btn-secondary clean flex-shrink-0 ml-4" onClick={toggleCleanTrashDialog}>{gettext('Clean')}</button>
       }
