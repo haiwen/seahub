@@ -94,13 +94,13 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
           op={toggleSettingsDialog}
         />
       )}
-      {userPerm == 'rw' && (
+      {/* userPerm == 'rw' && (
         <Item
-          text={gettext('pre Trash')}
+          text={gettext('previous Trash')}
           iconSymbol="trash"
           op={toggleTrashDialog}
         />
-      )}
+      )*/}
       {userPerm == 'rw' && (
         <Item
           text={gettext('Trash')}
