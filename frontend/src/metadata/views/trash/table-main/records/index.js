@@ -678,7 +678,7 @@ class Records extends Component {
       onShowExpandedPropsDialog: this.toggleExpandedPropsDialog,
     };
 
-    if (this.props.isGroupView) {
+    if (isGroupView) {
       return (
         <GroupBody
           onRef={ref => this.bodyRef = ref}

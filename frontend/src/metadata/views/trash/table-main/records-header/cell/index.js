@@ -6,8 +6,8 @@ import Icon from '../../../../../../components/icon';
 // import ResizeColumnHandle from './resize-column-handle';
 import DropdownMenu from './dropdown-menu';
 import { gettext } from '../../../../../../utils/constants';
-import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, EVENT_BUS_TYPE, PRIVATE_COLUMN_KEY } from '../../../../../constants';
-import { Utils } from '../../../../../../utils/utils';
+import { COLUMNS_ICON_CONFIG, COLUMNS_ICON_NAME, /* EVENT_BUS_TYPE, */ PRIVATE_COLUMN_KEY } from '../../../../../constants';
+// import { Utils } from '../../../../../../utils/utils';
 
 import './index.css';
 
@@ -52,6 +52,7 @@ const Cell = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [frozen, groupOffsetLeft, column, column.left, height, propsStyle]);
 
+  /*
   const getWidthFromMouseEvent = useCallback((e) => {
     let right = e.pageX || (e.touches && e.touches[0] && e.touches[0].pageX) || (e.changedTouches && e.changedTouches[e.changedTouches.length - 1].pageX);
     if (e.pageX === 0) {
@@ -74,6 +75,7 @@ const Cell = ({
       modifyColumnWidth(column, Math.max(width, 50));
     }
   }, [column, getWidthFromMouseEvent, modifyColumnWidth]);
+  */
 
   /*
   const handleHeaderCellClick = useCallback((column) => {
