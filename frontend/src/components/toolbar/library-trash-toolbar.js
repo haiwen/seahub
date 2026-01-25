@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 // import Search from '../../components/library-trash-search';
-import { gettext, siteRoot, enableUserCleanTrash, username } from '../../utils/constants';
+import { gettext, enableUserCleanTrash, username } from '../../utils/constants';
 import CleanTrash from '../../components/dialog/clean-trash';
 import ModalPortal from '../../components/modal-portal';
 
