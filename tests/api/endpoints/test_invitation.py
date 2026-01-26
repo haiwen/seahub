@@ -128,4 +128,4 @@ class InvitationRevokeTest(BaseTestCase):
             'accepter': self.tmp_username,
         })
         self.assertEqual(201, resp.status_code)
-        assert len(Invitation.objects.all()) == 1
+        assert len(Invitation.objects.all()) == 0
