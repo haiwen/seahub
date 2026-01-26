@@ -29,6 +29,8 @@ from urllib.parse import quote
 from django.utils.html import escape
 from django.utils.timezone import make_naive, is_aware
 from django.utils.crypto import get_random_string
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
 
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
@@ -265,19 +267,15 @@ def normalize_file_path(path):
     else:
         return '/' + path
 
-# modified from django1.5:/core/validators, and remove the support for single
-# quote in email address
-email_re = re.compile(
-    r"(^[-!#$%&*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
-    # quoted-string, see also http://tools.ietf.org/html/rfc2822#section-3.2.5
-    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-\011\013\014\016-\177])*"'
-    r')@((?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)$)'  # domain
-    r'|\[(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}\]$', re.IGNORECASE)  # literal form, ipv4 address (SMTP 4.1.3)
 
-def is_valid_email(email):
-    """A heavy email format validation.
-    """
-    return True if email_re.match(email) is not None else False
+def is_valid_email(email: str) -> bool:
+    validator = EmailValidator()
+    try:
+        validator(email)
+        return True
+    except ValidationError:
+        return False
+
 
 def is_valid_username(username):
     """Check whether username is valid, currently only email can be a username.
