@@ -5,7 +5,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Link, navigate } from '@gatsbyjs/reach-router';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured } from '../../utils/constants';
+import { gettext, siteRoot, isPro, username, folderPermEnabled, isSystemStaff, enableResetEncryptedRepoPassword, isEmailConfigured, enableStorageClasses } from '../../utils/constants';
 import ModalPortal from '../../components/modal-portal';
 import ShareDialog from '../../components/dialog/share-dialog';
 import LibSubFolderPermissionDialog from '../../components/dialog/lib-sub-folder-permission-dialog';
@@ -25,6 +25,8 @@ import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
 import Icon from '../icon';
 import RepoWebhookDialog from '../dialog/repo-webhook-dialog';
+import RepoArchiveDialog from '../dialog/repo-archive-dialog';
+import ArchiveIcon from '../archive-icon';
 
 dayjs.extend(relativeTime);
 
@@ -40,7 +42,8 @@ const propTypes = {
   onItemRename: PropTypes.func,
   onItemDelete: PropTypes.func,
   onContextMenu: PropTypes.func.isRequired,
-  onTransferRepo: PropTypes.func
+  onTransferRepo: PropTypes.func,
+  updateRepoStatus: PropTypes.func,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -194,6 +197,9 @@ class SharedRepoListItem extends React.Component {
       case 'Reset Password':
         this.onResetPasswordToggle();
         break;
+      case 'Archive':
+        this.onArchiveToggle();
+        break;
       // no default
     }
   };
@@ -224,6 +230,17 @@ class SharedRepoListItem extends React.Component {
         toaster.danger(gettext('Failed. Please check the network.'), { duration: 3 });
       }
     });
+  };
+
+  onArchiveToggle = () => {
+    this.setState({ isArchiveDialogOpen: !this.state.isArchiveDialogOpen });
+  };
+
+  onArchiveRepo = (repo) => {
+    const newStatus = !repo.archive_status ? 'archived' : null;
+    if (this.props.updateRepoStatus) {
+      this.props.updateRepoStatus(repo, newStatus);
+    }
   };
 
   onRenameConfirm = (name) => {
@@ -352,6 +369,9 @@ class SharedRepoListItem extends React.Component {
       case 'SeaTable integration':
         translateResult = gettext('SeaTable integration');
         break;
+      case 'Archive':
+        translateResult = this.props.repo && this.props.repo.archive_status === 'archived' ? gettext('Unarchive') : gettext('Archive');
+        break;
       default:
         break;
     }
@@ -359,8 +379,18 @@ class SharedRepoListItem extends React.Component {
   };
 
   getAdvancedOperations = () => {
+    const { repo } = this.props;
     const operations = [];
     operations.push('API Token');
+
+    // Archive/Unarchive operation - show for both personal and department repos when storage classes is enabled
+    if (enableStorageClasses && isPro) {
+      const archiveStatus = repo.archive_status;
+      if (!archiveStatus || archiveStatus === 'archived') {
+        operations.push('Archive');
+      }
+    }
+
     operations.push('Webhooks');
     return operations;
   };
@@ -619,6 +649,7 @@ class SharedRepoListItem extends React.Component {
             <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
             <Link to={libPath}>{repo.repo_name}</Link>
           }
+          <ArchiveIcon currentRepoInfo={repo} />
         </td>
         <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
         <td>{repo.size}</td>
@@ -674,7 +705,10 @@ class SharedRepoListItem extends React.Component {
           <td onClick={this.visitRepo}>
             {this.state.isRenaming ?
               <Rename name={repo.repo_name} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel} /> :
-              <Link to={libPath}>{repo.repo_name}</Link>
+              <>
+                <Link to={libPath}>{repo.repo_name}</Link>
+                {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
+              </>
             }
             <br />
             <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
@@ -780,6 +814,15 @@ class SharedRepoListItem extends React.Component {
             <RepoWebhookDialog
               repo={repo}
               onRepoWebhookToggle={this.onWebhookToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isArchiveDialogOpen && (
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={repo}
+              onArchiveRepo={this.onArchiveRepo}
+              toggle={this.onArchiveToggle}
             />
           </ModalPortal>
         )}

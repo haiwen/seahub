@@ -14,6 +14,7 @@ import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/rese
 import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
 import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
+import RepoArchiveDialog from '../../../../components/dialog/repo-archive-dialog';
 import LibraryOpMenu from '../../../../components/library-op-menu';
 import Icon from '../../../icon';
 import RepoWebhookDialog from '../../../dialog/repo-webhook-dialog';
@@ -36,6 +37,7 @@ class LibraryMoreOperations extends React.Component {
       isAPITokenDialogOpen: false,
       isRepoShareAdminDialogOpen: false,
       isWebhookDialogShow: false,
+      isArchiveDialogOpen: false,
     };
   }
 
@@ -64,6 +66,9 @@ class LibraryMoreOperations extends React.Component {
         break;
       case 'Webhooks':
         this.onWebhookToggle();
+        break;
+      case 'Archive':
+        this.onArchiveToggle();
         break;
       default:
         break;
@@ -102,6 +107,10 @@ class LibraryMoreOperations extends React.Component {
     this.setState({ isWebhookDialogShow: !this.state.isWebhookDialogShow });
   };
 
+  onArchiveToggle = () => {
+    this.setState({ isArchiveDialogOpen: !this.state.isArchiveDialogOpen });
+  };
+
   renameRepo = (newName) => {
     const { repo } = this.props;
     const { repo_id: repoID, owner_email } = repo;
@@ -130,11 +139,17 @@ class LibraryMoreOperations extends React.Component {
     });
   };
 
+  onArchiveRepo = (repo) => {
+    const archiveStatus = !repo.archive_status ? 'archived' : null;
+    const status = archiveStatus === null ? 'normal' : 'read-only';
+    const permission = archiveStatus === null ? 'rw' : 'r';
+    this.props.updateRepoInfo({ 'archive_status': archiveStatus, status, permission });
+  };
+
+
   render() {
     const { repo } = this.props;
-    const {
-      isRenameRepoDialogOpen, isTransferDialogOpen
-    } = this.state;
+    const { isRenameRepoDialogOpen, isTransferDialogOpen } = this.state;
     return (
       <Fragment>
         <LibraryOpMenu
@@ -220,6 +235,15 @@ class LibraryMoreOperations extends React.Component {
             <RepoWebhookDialog
               repo={repo}
               onRepoWebhookToggle={this.onWebhookToggle}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isArchiveDialogOpen && (
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={repo}
+              toggle={this.onArchiveToggle}
+              onArchiveRepo={this.onArchiveRepo}
             />
           </ModalPortal>
         )}

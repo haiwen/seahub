@@ -140,6 +140,10 @@ MSG_TYPE_REPO_MINOTOR = 'repo_monitor'
 MSG_TYPE_DELETED_FILES = 'deleted_files'
 MSG_TYPE_SAML_SSO_FAILED = 'saml_sso_failed'
 MSG_TYPE_FACE_CLUSTER = 'face_cluster'
+MSG_TYPE_REPO_ARCHIVED = 'repo_archived'
+MSG_TYPE_REPO_UNARCHIVED = 'repo_unarchived'
+MSG_TYPE_REPO_ARCHIVE_FAILED = 'repo_archive_failed'
+MSG_TYPE_REPO_UNARCHIVE_FAILED = 'repo_unarchive_failed'
 
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
@@ -529,6 +533,18 @@ class UserNotification(models.Model):
     def is_face_cluster_msg(self):
         return self.msg_type == MSG_TYPE_FACE_CLUSTER
 
+    def is_repo_archived_msg(self):
+        return self.msg_type == MSG_TYPE_REPO_ARCHIVED
+
+    def is_repo_unarchived_msg(self):
+        return self.msg_type == MSG_TYPE_REPO_UNARCHIVED
+
+    def is_repo_archive_failed_msg(self):
+        return self.msg_type == MSG_TYPE_REPO_ARCHIVE_FAILED
+
+    def is_repo_unarchive_failed_msg(self):
+        return self.msg_type == MSG_TYPE_REPO_UNARCHIVE_FAILED
+
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
         ``msg_from``.
@@ -578,6 +594,14 @@ class UserNotification(models.Model):
             return self.format_repo_monitor_msg()
         elif self.is_face_cluster_msg():
             return self.format_face_cluster_msg()
+        elif self.is_repo_archived_msg():
+            return self.format_repo_archived_msg()
+        elif self.is_repo_unarchived_msg():
+            return self.format_repo_unarchived_msg()
+        elif self.is_repo_archive_failed_msg():
+            return self.format_repo_archive_failed_msg()
+        elif self.is_repo_unarchive_failed_msg():
+            return self.format_repo_unarchive_failed_msg()
         else:
             return ''
 
@@ -798,6 +822,94 @@ class UserNotification(models.Model):
             'href': HASH_URLS['GROUP_MEMBERS'] % {'group_id': group_id},
             'group_name': escape(group.group_name),
             'join_request_msg': escape(join_request_msg),
+        }
+        return msg
+
+    def format_repo_archived_msg(self):
+        try:
+            d = json.loads(self.detail)
+            repo_name = d['repo_name']
+            repo_id = d['repo_id']
+        except Exception as e:
+            logger.error(e)
+            return _("Internal Server Error")
+
+        repo = seafile_api.get_repo(repo_id)
+        if repo:
+            lib_url = reverse('lib_view', args=[repo.id, repo.name, ''])
+            msg = _("Library <a href='%(lib_url)s'>%(repo_name)s</a> has been archived.") % {
+                'lib_url': lib_url,
+                'repo_name': escape(repo_name)
+            }
+        else:
+            msg = _("Library %(repo_name)s has been archived.") % {
+                'repo_name': escape(repo_name)
+            }
+        return msg
+
+    def format_repo_unarchived_msg(self):
+        try:
+            d = json.loads(self.detail)
+            repo_name = d['repo_name']
+            repo_id = d['repo_id']
+        except Exception as e:
+            logger.error(e)
+            return _("Internal Server Error")
+            
+        repo = seafile_api.get_repo(repo_id)
+        if repo:
+            lib_url = reverse('lib_view', args=[repo.id, repo.name, ''])
+            msg = _("Library <a href='%(lib_url)s'>%(repo_name)s</a> has been unarchived.") % {
+                'lib_url': lib_url,
+                'repo_name': escape(repo_name)
+            }
+        else:
+            msg = _("Library %(repo_name)s has been unarchived.") % {
+                'repo_name': escape(repo_name)
+            }
+        return msg
+
+    def format_repo_archive_failed_msg(self):
+        try:
+            d = json.loads(self.detail)
+            repo_name = d['repo_name']
+            repo_id = d['repo_id']
+        except Exception as e:
+            logger.error(e)
+            return _("Internal Server Error")
+
+        repo = seafile_api.get_repo(repo_id)
+        if repo:
+            lib_url = reverse('lib_view', args=[repo.id, repo.name, ''])
+            msg = _("Library <a href='%(lib_url)s'>%(repo_name)s</a> archive failed.") % {
+                'lib_url': lib_url,
+                'repo_name': escape(repo_name)
+            }
+        else:
+            msg = _("Library %(repo_name)s archive failed.") % {
+                'repo_name': escape(repo_name)
+            }
+        return msg
+
+    def format_repo_unarchive_failed_msg(self):
+        try:
+            d = json.loads(self.detail)
+            repo_name = d['repo_name']
+            repo_id = d['repo_id']
+        except Exception as e:
+            logger.error(e)
+            return _("Internal Server Error")
+
+        repo = seafile_api.get_repo(repo_id)
+        if repo:
+            lib_url = reverse('lib_view', args=[repo.id, repo.name, ''])
+            msg = _("Library <a href='%(lib_url)s'>%(repo_name)s</a> unarchive failed.") % {
+                'lib_url': lib_url,
+                'repo_name': escape(repo_name)
+            }
+        else:
+            msg = _("Library %(repo_name)s unarchive failed.") % {
+                'repo_name': escape(repo_name)
             }
         return msg
 

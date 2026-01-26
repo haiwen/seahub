@@ -16,6 +16,7 @@ import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-
 import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
 import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../../../components/dialog/repo-office-suite-dialog';
+import RepoArchiveDialog from '../../../../components/dialog/repo-archive-dialog';
 import LibraryOpMenu from '../../../../components/library-op-menu';
 import Icon from '../../../icon';
 
@@ -37,7 +38,8 @@ class LibraryMoreOperations extends React.Component {
       isFolderPermissionDialogOpen: false,
       isAPITokenDialogOpen: false,
       isRepoShareAdminDialogOpen: false,
-      isOfficeSuiteDialogOpen: false
+      isOfficeSuiteDialogOpen: false,
+      isArchiveDialogOpen: false,
     };
   }
 
@@ -69,6 +71,9 @@ class LibraryMoreOperations extends React.Component {
         break;
       case 'Office Suite':
         this.onOfficeSuiteToggle();
+        break;
+      case 'Archive':
+        this.onArchiveToggle();
         break;
       default:
         break;
@@ -111,6 +116,10 @@ class LibraryMoreOperations extends React.Component {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
   };
 
+  onArchiveToggle = () => {
+    this.setState({ isArchiveDialogOpen: !this.state.isArchiveDialogOpen });
+  };
+
   renameRepo = (newName) => {
     const { repo } = this.props;
     const { repo_id: repoID } = repo;
@@ -135,6 +144,13 @@ class LibraryMoreOperations extends React.Component {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
+  };
+
+  onArchiveRepo = (repo) => {
+    const archiveStatus = !repo.archive_status ? 'archived' : null;
+    const status = archiveStatus === null ? 'normal' : 'read-only';
+    const permission = archiveStatus === null ? 'rw' : 'r';
+    this.props.updateRepoInfo({ 'archive_status': archiveStatus, status, permission });
   };
 
   render() {
@@ -235,6 +251,16 @@ class LibraryMoreOperations extends React.Component {
               repoID={repo.repo_id}
               repoName={repo.repo_name}
               toggleDialog={this.onOfficeSuiteToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isArchiveDialogOpen && (
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={repo}
+              onArchiveRepo={this.onArchiveRepo}
+              toggle={this.onArchiveToggle}
             />
           </ModalPortal>
         )}
