@@ -25,7 +25,13 @@ class ListCreatedFileDialog extends React.Component {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <SeahubModalHeader toggle={this.toggle}>
-          {activity.op_type === 'batch_delete' ? gettext('Deleted Files') : gettext('Created Files')}
+          {(() => {
+            const isDir = activity.obj_type === 'dir';
+            if (activity.op_type === 'batch_delete') {
+              return isDir ? gettext('Deleted Folders') : gettext('Deleted Files');
+            }
+            return isDir ? gettext('Created Folders') : gettext('Created Files');
+          })()}
         </SeahubModalHeader>
         <ModalBody>
           <Table>
