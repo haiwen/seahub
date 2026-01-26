@@ -179,7 +179,7 @@ class RepoShareInvitationsBatchView(APIView):
                     if user.role != GUEST_USER:
                         result['failed'].append({
                             'email': accepter,
-                            'error_msg': 'An (inactive) regular account already exists for this mail address, can not proceed to create guest account'
+                            'error_msg': _('An (inactive) regular account already exists for this mail address, can not proceed to create guest account')
                             })
                         continue
             except User.DoesNotExist:

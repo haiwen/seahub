@@ -57,8 +57,7 @@ def token_view(request, token):
                 # user is inactive
                 # non-guest role user can not accept invitation
                 if user.role != GUEST_USER:
-                    messages.error(request, 'An (inactive) regular account already exists for this mail address, ' \
-                    'can not proceed to create guest account')
+                    messages.error(request, _('An (inactive) regular account already exists for this mail address, can not proceed to accept the invitation.'))
                     return render(request, 'invitations/token_view.html', {'iv': i, })
                 
                 user.set_password(passwd)

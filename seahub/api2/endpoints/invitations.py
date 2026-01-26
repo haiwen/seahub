@@ -66,6 +66,10 @@ class InvitationsView(APIView):
             if user.is_active is True:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  _('User %s already exists.') % accepter)
+            else:
+                if user.role != GUEST_USER:
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                                     _('An (inactive) regular account already exists for this mail address, can not proceed to create guest account'))
         except User.DoesNotExist:
             pass
 
@@ -144,7 +148,7 @@ class InvitationsBatchView(APIView):
                     if user.role != GUEST_USER:
                         result['failed'].append({
                             'email': accepter,
-                            'error_msg': 'An (inactive) regular account already exists for this mail address, can not proceed to create guest account'
+                            'error_msg': _('An (inactive) regular account already exists for this mail address, can not proceed to create guest account')
                             })
                         continue
             except User.DoesNotExist:
