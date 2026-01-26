@@ -574,7 +574,7 @@ class RevertRepoTrash2(APIView):
         result['success'] = []
         username = request.user.username
 
-        post_data = json.loads(request.body)
+        post_data = request.data
         for commit_id, path_list in post_data.items():
             for path in path_list:
                 try:
