@@ -177,7 +177,7 @@ export default class PageDropdownMenu extends Component {
             { name: 'flip', enabled: true, options: { fallbackPlacements: ['top'] } }
           ]}
         >
-          {this.renderItem(this.handleCopyLink, 'link1', gettext('Copy link'))}
+          {this.renderItem(this.handleCopyLink, 'copy', gettext('Copy link'))}
           {this.renderItem(this.onRename, 'rename', gettext('Modify name'))}
           {this.renderItem(this.addPageAbove, 'new', gettext('Add page above'))}
           {this.renderItem(this.addPageBelow, 'new', gettext('Add page below'))}
