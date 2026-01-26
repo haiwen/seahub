@@ -85,7 +85,7 @@ class MetadataManage(APIView):
                     except Exception as e:
                         logger.error(e)
 
-               
+
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -206,7 +206,7 @@ class MetadataManage(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
-    
+
 
 class MetadataCheckRecordsLimit(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -862,22 +862,12 @@ class MetadataBatchRecords(APIView):
             columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
             all_columns = columns_data.get('columns', [])
             metadata_columns = []
-            # Include all editable private columns and common metadata columns
-            # This includes _status (file status), _rate, _tags, _creator, _last_modifier, etc.
             editable_columns = [
-                '_rate',  # File rating
-                '_tags',  # File tags
-                '_status',  # File status (for editable status in list view)
-                '_creator',  # Creator (for list view display)
-                '_last_modifier',  # Last modifier (for list view display)
-                '_file_creator',  # File creator
-                '_file_modifier',  # File modifier
-                '_file_mtime',  # File modification time
-                '_file_ctime',  # File creation time
-                '_file_type',  # File type
-                '_size',  # File size
-                '_name',  # File name
-                '_obj_id',  # Object ID
+                '_rate',
+                '_tags',
+                '_status',
+                '_creator',
+                '_last_modifier',
             ]
             for column in all_columns:
                 key = column.get('key')
@@ -1127,7 +1117,7 @@ class MetadataViews(APIView):
         if permission != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        
+
 
         # The face_recognition view is unique for a repo, cannot be added repeatly.
         if view_type == 'face_recognition':
@@ -3054,10 +3044,10 @@ class MetadataMigrateTags(APIView):
 
             where_clause = " OR ".join(where_conditions)
             sql = f'''
-                SELECT `{METADATA_TABLE.columns.id.name}`, 
-                `{METADATA_TABLE.columns.file_name.name}`, 
-                `{METADATA_TABLE.columns.parent_dir.name}` 
-                FROM `{METADATA_TABLE.name}` 
+                SELECT `{METADATA_TABLE.columns.id.name}`,
+                `{METADATA_TABLE.columns.file_name.name}`,
+                `{METADATA_TABLE.columns.parent_dir.name}`
+                FROM `{METADATA_TABLE.name}`
                 WHERE `{METADATA_TABLE.columns.is_dir.name}` = FALSE
                 AND ({where_clause})
                 '''
@@ -3440,7 +3430,7 @@ class MetadataStatistics(APIView):
 
     def _get_file_type_stats_sql(self, metadata_server_api, METADATA_TABLE):
         sql = f'''
-            SELECT 
+            SELECT
                 `{METADATA_TABLE.columns.file_type.name}` as file_type,
                 COUNT(*) as count
             FROM `{METADATA_TABLE.name}`
@@ -3464,7 +3454,7 @@ class MetadataStatistics(APIView):
 
     def _get_creator_stats_sql(self, metadata_server_api, METADATA_TABLE):
         sql = f'''
-            SELECT 
+            SELECT
                 `{METADATA_TABLE.columns.file_creator.name}` as creator,
                 COUNT(*) as count
             FROM `{METADATA_TABLE.name}`
@@ -3486,7 +3476,7 @@ class MetadataStatistics(APIView):
 
     def _get_summary_stats_sql(self, metadata_server_api, METADATA_TABLE):
         sql = f'''
-            SELECT 
+            SELECT
                 COUNT(*) as total_files
             FROM `{METADATA_TABLE.name}`
             WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
@@ -3533,7 +3523,7 @@ class MetadataStatistics(APIView):
 
     def _get_time_stats_sql(self, metadata_server_api, METADATA_TABLE):
         date_range_sql = f'''
-            SELECT 
+            SELECT
                 MIN(`{METADATA_TABLE.columns.file_ctime.name}`) as min_ctime,
                 MAX(`{METADATA_TABLE.columns.file_ctime.name}`) as max_ctime,
                 MIN(`{METADATA_TABLE.columns.file_mtime.name}`) as min_mtime,
@@ -3541,7 +3531,7 @@ class MetadataStatistics(APIView):
                 COUNT(*) as total_files
             FROM `{METADATA_TABLE.name}`
             WHERE `{METADATA_TABLE.columns.is_dir.name}` = false
-                AND (`{METADATA_TABLE.columns.file_ctime.name}` IS NOT NULL 
+                AND (`{METADATA_TABLE.columns.file_ctime.name}` IS NOT NULL
                     OR `{METADATA_TABLE.columns.file_mtime.name}` IS NOT NULL)
         '''
 
@@ -3588,7 +3578,7 @@ class MetadataStatistics(APIView):
 
         if years_span >= 3:
             sql = f'''
-                SELECT 
+                SELECT
                     `{date_column}` as date_value,
                     COUNT(*) as count
                 FROM `{METADATA_TABLE.name}`
@@ -3624,7 +3614,7 @@ class MetadataStatistics(APIView):
 
         elif months_span >= 6:
             sql = f'''
-                SELECT 
+                SELECT
                     `{date_column}` as date_value,
                     COUNT(*) as count
                 FROM `{METADATA_TABLE.name}`
@@ -3666,7 +3656,7 @@ class MetadataStatistics(APIView):
 
         else:
             sql = f'''
-                SELECT 
+                SELECT
                     `{date_column}` as date_value,
                     COUNT(*) as count
                 FROM `{METADATA_TABLE.name}`

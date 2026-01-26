@@ -405,7 +405,7 @@ const StatusEditor = ({
       )}
       {isUpdating && (
         <div className="editable-status-loading">
-          <span className="loading-shimmer">-</span>
+          <span className="loading-shimmer"></span>
         </div>
       )}
       {containerRef.current && renderEditor()}

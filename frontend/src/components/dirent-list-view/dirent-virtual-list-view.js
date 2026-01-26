@@ -2,8 +2,9 @@ import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
-import './dirent-virtual-list.css';
 import { useCollaborators } from '../../metadata';
+
+import './dirent-virtual-list.css';
 
 const DirentItemWrapper = ({
   dirent,
@@ -129,8 +130,7 @@ const DirentVirtualListView = ({
           {!isMobile && (
             <div
               ref={headerRef}
-              className="dirent-virtual-list-header"
-              style={{ display: 'flex' }}
+              className="d-flex dirent-virtual-list-header"
             >
               {headers.map((header, index) => {
                 const { className: headerClassName, children } = header;

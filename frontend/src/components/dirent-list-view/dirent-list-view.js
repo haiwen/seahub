@@ -16,6 +16,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Dirent } from '../../models';
 import { createTableHeaders } from '../../utils/table-headers';
 import DirentVirtualListView from './dirent-virtual-list-view';
+import { CONFIGURABLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS } from '../../constants/dir-column-visibility';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -823,7 +824,6 @@ class DirentListView extends React.Component {
 
 DirentListView.propTypes = propTypes;
 
-const DEFAULT_VISIBLE_COLUMNS = ['size', 'modified', 'creator', 'last_modifier', 'status'];
 const STORAGE_KEY = 'dir_column_visibility';
 
 const DirListViewWithColumnVisibility = (props) => {
@@ -860,7 +860,7 @@ const DirListViewWithColumnVisibility = (props) => {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
           const validColumns = parsed.filter(col =>
-            DEFAULT_VISIBLE_COLUMNS.includes(col)
+            CONFIGURABLE_COLUMNS.includes(col)
           );
           if (validColumns.length > 0) {
             setInternalVisibleColumnsState(validColumns);

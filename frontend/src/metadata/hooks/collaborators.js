@@ -12,14 +12,22 @@ const CollaboratorsProvider = React.memo(({ repoID, children }) => {
   const [collaboratorsCache, setCollaboratorsCache] = useState({});
   const [collaborators, setCollaborators] = useState([]);
   const collaboratorsCacheRef = useRef(collaboratorsCache);
+  const userServiceRef = useRef(null);
 
   useEffect(() => {
     collaboratorsCacheRef.current = collaboratorsCache;
   }, [collaboratorsCache]);
 
+  useEffect(() => {
+    // Initialize UserService only once
+    if (!userServiceRef.current) {
+      userServiceRef.current = new UserService({ mediaUrl, api: metadataAPI.listUserInfo });
+    }
+  }, []);
+
   const queryUser = useCallback((email, callback) => {
-    const userService = new UserService({ mediaUrl, api: metadataAPI.listUserInfo });
-    return userService.queryUser(email, callback);
+    // Reuse the same UserService instance to maintain cache
+    return userServiceRef.current.queryUser(email, callback);
   }, []);
 
   useEffect(() => {

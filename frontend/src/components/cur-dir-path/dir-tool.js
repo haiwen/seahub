@@ -13,7 +13,7 @@ import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
-import { DEFAULT_VISIBLE_COLUMNS } from '../../constants/dir-column-visibility';
+import { DEFAULT_VISIBLE_COLUMNS, CONFIGURABLE_COLUMNS } from '../../constants/dir-column-visibility';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -40,7 +40,6 @@ class DirTool extends React.Component {
   }
 
   componentDidMount() {
-    // Subscribe to column visibility changes
     const { eventBus } = this.props;
     if (eventBus) {
       this.unsubscribeColumnVisibilityChanged = eventBus.subscribe('column-visibility-changed', (visibleCols) => {
@@ -51,7 +50,6 @@ class DirTool extends React.Component {
         this.setState({ visibleColumns: visibleCols });
       });
 
-      // Dispatch event to get current state
       eventBus.dispatch('get-column-visibility');
     }
   }
@@ -71,15 +69,14 @@ class DirTool extends React.Component {
   };
 
   getHiddenColumns = () => {
-    const allConfigurableColumns = ['size', 'modified', 'creator', 'last_modifier', 'status'];
+    const allConfigurableColumns = CONFIGURABLE_COLUMNS;
     return allConfigurableColumns.filter(col => !this.state.visibleColumns.includes(col));
   };
 
   handleColumnVisibilityChange = (hiddenColumns) => {
-    const allConfigurableColumns = ['size', 'modified', 'creator', 'last_modifier', 'status'];
+    const allConfigurableColumns = CONFIGURABLE_COLUMNS;
     const visibleCols = allConfigurableColumns.filter(col => !hiddenColumns.includes(col));
 
-    // Dispatch event via event bus
     if (this.props.eventBus) {
       this.props.eventBus.dispatch('column-visibility-changed', visibleCols);
     }

@@ -19,6 +19,7 @@ import Icon from '../icon';
 import StatusEditor from './status-editor';
 import Formatter from '../../metadata/components/formatter';
 import { CellType } from '../../metadata/constants';
+import { DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
@@ -136,6 +137,7 @@ class DirentListItem extends React.Component {
       });
     }
 
+    // Check if canDrag needs to be updated (when dirent permission changes)
     if (prevProps.dirent.permission !== dirent.permission) {
       this.setState({
         canDrag: dirent.permission === 'rw' || (this.customPermission && this.customPermission.permission.modify)
@@ -174,6 +176,7 @@ class DirentListItem extends React.Component {
 
   updateDirentThumbnail = (encoded_thumbnail_src) => {
     this.isGeneratingThumbnail = false;
+    // Let parent handle thumbnail update through props update
     this.props.updateDirent(this.props.dirent, 'encoded_thumbnail_src', encoded_thumbnail_src);
   };
 
@@ -734,11 +737,12 @@ class DirentListItem extends React.Component {
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-    const showSize = visibleColumns.includes('size');
-    const showModified = visibleColumns.includes('modified');
-    const showCreator = visibleColumns.includes('creator');
-    const showLastModifier = visibleColumns.includes('last_modifier');
-    const showStatus = visibleColumns.includes('status');
+    // Check if configurable columns are visible
+    const showSize = visibleColumns.includes(DIR_COLUMN_KEYS.SIZE);
+    const showModified = visibleColumns.includes(DIR_COLUMN_KEYS.MODIFIED);
+    const showCreator = visibleColumns.includes(DIR_COLUMN_KEYS.CREATOR);
+    const showLastModifier = visibleColumns.includes(DIR_COLUMN_KEYS.LAST_MODIFIER);
+    const showStatus = visibleColumns.includes(DIR_COLUMN_KEYS.STATUS);
 
     if (isMobile) {
       return (

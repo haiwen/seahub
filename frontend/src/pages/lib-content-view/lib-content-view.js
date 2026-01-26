@@ -2040,6 +2040,7 @@ class LibContentView extends React.Component {
     // else do nothing
   }
 
+  // only one scene: The deleted items are inside current path
   deleteDirents = (direntNames) => {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
@@ -2061,6 +2062,7 @@ class LibContentView extends React.Component {
     this.setState({ direntList: direntList, currentDirent: null });
   };
 
+  // only one scene: The moved items are inside current path
   moveDirents = (direntNames) => {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
