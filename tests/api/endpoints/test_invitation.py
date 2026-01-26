@@ -109,7 +109,7 @@ class InvitationRevokeTest(BaseTestCase):
 
     @patch.object(CanInviteGuest, 'has_permission')
     @patch.object(UserPermissions, 'can_invite_guest')
-    def test_can_invite_again_after_revoke(self, mock_can_invite_guest, mock_has_permission):
+    def test_cannot_invite_inactive_regular_user(self, mock_can_invite_guest, mock_has_permission):
         mock_can_invite_guest.return_val = True
         mock_has_permission.return_val = True
 
@@ -128,4 +128,30 @@ class InvitationRevokeTest(BaseTestCase):
             'accepter': self.tmp_username,
         })
         self.assertEqual(201, resp.status_code)
+        assert len(Invitation.objects.all()) == 0
+
+    @patch.object(CanInviteGuest, 'has_permission')
+    @patch.object(UserPermissions, 'can_invite_guest')
+    def test_cannot_invite_batch_inactive_regular_user(self, mock_can_invite_guest, mock_has_permission):
+
+        mock_can_invite_guest.return_val = True
+        mock_has_permission.return_val = True
+
+        # revoke
+        resp = self.client.post(self.endpoint)
+        self.assertEqual(200, resp.status_code)
+        tmp_user = User.objects.get(self.tmp_username)
+
+        assert len(Invitation.objects.all()) == 0
+        assert tmp_user.is_active is False
+
+        # invite again
+        invite_batch_endpoint = '/api/v2.1/invitations/batch/'
+        resp = self.client.post(invite_batch_endpoint, {
+            'type': 'guest',
+            'accepter': [self.tmp_username, ],
+        })
+        self.assertEqual(200, resp.status_code)
+
+        # regular (inactive) user can not accept invitation
         assert len(Invitation.objects.all()) == 0
