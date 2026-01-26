@@ -289,19 +289,32 @@ def is_valid_username2(username):
     """
     return (not username.startswith(' ')) and (not username.endswith(' '))
 
+
 def is_valid_dirent_name(name):
     """Check whether repo/dir/file name is valid.
     """
+    if not name or '..' in name:
+        return False
+
     for character in name:
+
         # Emojis fall within the range \U0001F300 to \U0001FAD6
         if 0x1F300 <= ord(character) <= 0x1FAD6:
             return False
-    if name == '..':
+
+        if character == '/' or character == '\\':
+            return False
+
+    try:
+        encoded = name.encode("utf-8")
+    except UnicodeEncodeError:
         return False
-    if '/' in name:
+
+    if len(encoded) > 256:
         return False
-    # `repo_id` parameter is not used in seafile api
-    return seafile_api.is_valid_filename('fake_repo_id', name)
+
+    return True
+
 
 def is_ldap_user(user):
     """Check whether user is a LDAP user.
