@@ -3,7 +3,7 @@ import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { siteRoot, gettext, username, canPublishWiki } from '../../utils/constants';
+import { siteRoot, gettext, username, canPublishWiki, canViewOrg } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import DeleteWikiDialog from '../dialog/delete-wiki-dialog';
@@ -25,6 +25,7 @@ const propTypes = {
   unshareGroupWiki: PropTypes.func.isRequired,
   renameWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func,
+  setWikiPublic: PropTypes.func,
   isDepartment: PropTypes.bool.isRequired,
   isShowAvatar: PropTypes.bool.isRequired,
 };
@@ -181,6 +182,7 @@ class WikiCardItem extends Component {
     let showDropdownMenu = false;
     let showPublish = false;
     let showWikiConvert = false;
+    let showSetPublic = false;
 
     if (isDepartment) {
       if (isAdmin) {
@@ -202,6 +204,10 @@ class WikiCardItem extends Component {
         showDelete = true;
         showRename = true;
         showPublish = true;
+        // Show set public option for personal wiki owner with canViewOrg permission
+        if (isWikiOwner && canViewOrg && !isOldVersion && this.props.setWikiPublic) {
+          showSetPublic = true;
+        }
         if (isOldVersion) {
           showWikiConvert = true;
         }
@@ -210,7 +216,7 @@ class WikiCardItem extends Component {
       }
     }
 
-    if (isOldVersion || showRename || showShare || showDelete || showLeaveShare) {
+    if (isOldVersion || showRename || showShare || showDelete || showLeaveShare || showSetPublic) {
       showDropdownMenu = true;
     }
 
@@ -250,6 +256,11 @@ class WikiCardItem extends Component {
                     <DropdownItem onClick={this.onPublishToggle}>{gettext('Publish')}</DropdownItem>}
                   {showShare &&
                     <DropdownItem onClick={this.onShareToggle}>{gettext('Share')}</DropdownItem>
+                  }
+                  {showSetPublic &&
+                    <DropdownItem onClick={() => this.props.setWikiPublic(wiki, !wiki.is_public)}>
+                      {wiki.is_public ? gettext('Unset public') : gettext('Set public')}
+                    </DropdownItem>
                   }
                   {isOldVersion &&
                     <DropdownItem onClick={this.onDeleteToggle}>{gettext('Unpublish')}</DropdownItem>
