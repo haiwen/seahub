@@ -136,7 +136,6 @@ class DirentListItem extends React.Component {
       });
     }
 
-    // Check if canDrag needs to be updated (when dirent permission changes)
     if (prevProps.dirent.permission !== dirent.permission) {
       this.setState({
         canDrag: dirent.permission === 'rw' || (this.customPermission && this.customPermission.permission.modify)
@@ -175,7 +174,7 @@ class DirentListItem extends React.Component {
 
   updateDirentThumbnail = (encoded_thumbnail_src) => {
     this.isGeneratingThumbnail = false;
-    // Let parent handle thumbnail update through props update
+    this.props.updateDirent(this.props.dirent, 'encoded_thumbnail_src', encoded_thumbnail_src);
   };
 
   onMouseEnter = () => {
@@ -735,15 +734,11 @@ class DirentListItem extends React.Component {
 
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
-    // Check if configurable columns are visible
     const showSize = visibleColumns.includes('size');
     const showModified = visibleColumns.includes('modified');
     const showCreator = visibleColumns.includes('creator');
     const showLastModifier = visibleColumns.includes('last_modifier');
     const showStatus = visibleColumns.includes('status');
-
-    // Check if metadata is loading for this item
-    const isMetadataLoading = this.props.isMetadataLoading || false;
 
     if (isMobile) {
       return (
@@ -947,57 +942,45 @@ class DirentListItem extends React.Component {
 
         {showCreator && (
           <div className="dirent-property dirent-property-creator">
-            {isMetadataLoading ? (
-              <span className="text-muted loading-shimmer">—</span>
-            ) : (
-              <Formatter
-                field={{ type: CellType.CREATOR, name: gettext('Creator') }}
-                value={dirent.creator}
-                collaborators={this.props.collaborators}
-                queryUserAPI={this.props.queryUser}
-              />
-            )}
+            <Formatter
+              field={{ type: CellType.CREATOR, name: gettext('Creator') }}
+              value={dirent.creator}
+              collaborators={this.props.collaborators}
+              queryUserAPI={this.props.queryUser}
+            />
           </div>
         )}
 
         {showLastModifier && (
           <div className="dirent-property dirent-property-last-modifier">
-            {isMetadataLoading ? (
-              <span className="text-muted loading-shimmer">—</span>
-            ) : (
-              <Formatter
-                field={{ type: CellType.LAST_MODIFIER, name: gettext('Last Modifier') }}
-                value={dirent.last_modifier}
-                collaborators={this.props.collaborators}
-                queryUserAPI={this.props.queryUser}
-              />
-            )}
+            <Formatter
+              field={{ type: CellType.LAST_MODIFIER, name: gettext('Last Modifier') }}
+              value={dirent.last_modifier}
+              collaborators={this.props.collaborators}
+              queryUserAPI={this.props.queryUser}
+            />
           </div>
         )}
 
         {showStatus && (
           <div className="dirent-property dirent-property-status">
-            {isMetadataLoading ? (
-              <span className="text-muted loading-shimmer">—</span>
-            ) : (
-              <StatusEditor
-                value={dirent.status}
-                repoID={this.props.repoID}
-                path={this.props.path}
-                fileName={dirent.name}
-                record={dirent}
-                dirent={dirent}
-                canEdit={true}
-                statusColumnOptions={this.props.statusColumnOptions}
-                onStatusChange={(newStatus, metadata) => {
-                  if (metadata?.isLocalUpdate) {
-                    this.props.updateDirent(dirent, 'status', newStatus);
-                  } else {
-                    this.props.onStatusChange && this.props.onStatusChange(dirent, newStatus);
-                  }
-                }}
-              />
-            )}
+            <StatusEditor
+              value={dirent.status}
+              repoID={this.props.repoID}
+              path={this.props.path}
+              fileName={dirent.name}
+              record={dirent}
+              dirent={dirent}
+              canEdit={true}
+              statusColumnOptions={this.props.statusColumnOptions}
+              onStatusChange={(newStatus, metadata) => {
+                if (metadata?.isLocalUpdate) {
+                  this.props.updateDirent(dirent, 'status', newStatus);
+                } else {
+                  this.props.onStatusChange && this.props.onStatusChange(dirent, newStatus);
+                }
+              }}
+            />
           </div>
         )}
       </div>

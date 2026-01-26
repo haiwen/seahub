@@ -36,7 +36,6 @@ export const createTableHeaders = (
     {
       key: 'checkbox',
       width: COLUMN_CONFIG.checkbox.width,
-      flex: COLUMN_CONFIG.checkbox.flex,
       className: COLUMN_CONFIG.checkbox.headerClassName,
       minWidth: COLUMN_CONFIG.checkbox.width,
       children: React.createElement(
@@ -64,7 +63,6 @@ export const createTableHeaders = (
     {
       key: 'star',
       width: COLUMN_CONFIG.star.width,
-      flex: COLUMN_CONFIG.star.flex,
       className: COLUMN_CONFIG.star.className,
       minWidth: COLUMN_CONFIG.star.width,
       children: null
@@ -72,7 +70,6 @@ export const createTableHeaders = (
     {
       key: 'icon',
       width: COLUMN_CONFIG.icon.width,
-      flex: COLUMN_CONFIG.icon.flex,
       className: COLUMN_CONFIG.icon.className,
       minWidth: COLUMN_CONFIG.icon.width,
       children: null
@@ -80,7 +77,6 @@ export const createTableHeaders = (
     {
       key: 'name',
       width: 0.5,
-      flex: COLUMN_CONFIG.name.flex,
       className: COLUMN_CONFIG.name.className,
       minWidth: COLUMN_CONFIG.name.width,
       children: React.createElement(
@@ -97,7 +93,6 @@ export const createTableHeaders = (
     ...(isColumnVisible('size') ? [{
       key: 'size',
       width: COLUMN_CONFIG.size.width,
-      flex: COLUMN_CONFIG.size.flex,
       className: COLUMN_CONFIG.size.className,
       minWidth: COLUMN_CONFIG.size.width,
       children: React.createElement(
@@ -114,7 +109,6 @@ export const createTableHeaders = (
     ...(isColumnVisible('modified') ? [{
       key: 'modified',
       width: COLUMN_CONFIG.modified.width,
-      flex: COLUMN_CONFIG.modified.flex,
       className: COLUMN_CONFIG.modified.className,
       minWidth: COLUMN_CONFIG.modified.width,
       children: React.createElement(
@@ -131,7 +125,6 @@ export const createTableHeaders = (
     ...(isColumnVisible('creator') ? [{
       key: 'creator',
       width: COLUMN_CONFIG.creator.width,
-      flex: COLUMN_CONFIG.creator.flex,
       className: COLUMN_CONFIG.creator.className,
       minWidth: COLUMN_CONFIG.creator.width,
       children: React.createElement(
@@ -148,7 +141,6 @@ export const createTableHeaders = (
     ...(isColumnVisible('last_modifier') ? [{
       key: 'last_modifier',
       width: COLUMN_CONFIG.last_modifier.width,
-      flex: COLUMN_CONFIG.last_modifier.flex,
       className: COLUMN_CONFIG.last_modifier.className,
       minWidth: COLUMN_CONFIG.last_modifier.width,
       children: React.createElement(
@@ -165,7 +157,6 @@ export const createTableHeaders = (
     ...(isColumnVisible('status') ? [{
       key: 'status',
       width: COLUMN_CONFIG.status.width,
-      flex: COLUMN_CONFIG.status.flex,
       className: COLUMN_CONFIG.status.className,
       minWidth: COLUMN_CONFIG.status.width,
       children: React.createElement(

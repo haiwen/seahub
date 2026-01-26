@@ -51,6 +51,8 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
   visibleColumns: PropTypes.array,
+  statusColumnOptions: PropTypes.array,
+  updateDirentMetadata: PropTypes.func,
 };
 
 class DirentListView extends React.Component {
@@ -761,6 +763,8 @@ class DirentListView extends React.Component {
             onThreadMouseDown={this.onThreadMouseDown}
             onThreadContextMenu={this.onThreadContextMenu}
             visibleColumns={this.props.visibleColumns}
+            statusColumnOptions={this.props.statusColumnOptions}
+            updateDirentMetadata={this.props.updateDirentMetadata}
           />
         )}
         {direntList.length === 0 &&
@@ -822,14 +826,34 @@ DirentListView.propTypes = propTypes;
 const DEFAULT_VISIBLE_COLUMNS = ['size', 'modified', 'creator', 'last_modifier', 'status'];
 const STORAGE_KEY = 'dir_column_visibility';
 
-// Wrapper component to use the column visibility hook and event bus
 const DirListViewWithColumnVisibility = (props) => {
-  const { eventBus } = props;
+  const { eventBus, visibleColumns: propVisibleColumns, setVisibleColumns: propSetVisibleColumns } = props;
 
-  const [visibleColumns, setVisibleColumnsState] = React.useState(DEFAULT_VISIBLE_COLUMNS);
+  const [internalVisibleColumns, setInternalVisibleColumnsState] = React.useState(propVisibleColumns || DEFAULT_VISIBLE_COLUMNS);
 
-  // Load from localStorage
+  const visibleColumns = propVisibleColumns || internalVisibleColumns;
+  const setVisibleColumns = React.useCallback((columns) => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(columns));
+    } catch (error) {
+      // ignore storage error
+    }
+    if (propSetVisibleColumns) {
+      propSetVisibleColumns(columns);
+    } else {
+      setInternalVisibleColumnsState(columns);
+    }
+  }, [propSetVisibleColumns]);
+
   React.useEffect(() => {
+    if (propVisibleColumns) {
+      setInternalVisibleColumnsState(propVisibleColumns);
+    }
+  }, [propVisibleColumns]);
+
+  React.useEffect(() => {
+    if (propVisibleColumns) return;
+
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
@@ -839,25 +863,15 @@ const DirListViewWithColumnVisibility = (props) => {
             DEFAULT_VISIBLE_COLUMNS.includes(col)
           );
           if (validColumns.length > 0) {
-            setVisibleColumnsState(validColumns);
+            setInternalVisibleColumnsState(validColumns);
           }
         }
       }
     } catch (error) {
-      // ignore
+      // ignore parse error
     }
-  }, []);
+  }, [propVisibleColumns]);
 
-  const setVisibleColumns = React.useCallback((columns) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(columns));
-      setVisibleColumnsState(columns);
-    } catch (error) {
-      setVisibleColumnsState(columns);
-    }
-  }, []);
-
-  // Subscribe to event bus for column visibility changes
   React.useEffect(() => {
     if (!eventBus) return;
 
@@ -866,7 +880,6 @@ const DirListViewWithColumnVisibility = (props) => {
     };
 
     const handleGetColumnVisibility = () => {
-      // Respond with current visible columns using a separate event
       eventBus.dispatch('column-visibility-response', visibleColumns);
     };
 

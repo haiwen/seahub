@@ -408,7 +408,7 @@ const StatusEditor = ({
           <span className="loading-shimmer">-</span>
         </div>
       )}
-      {renderEditor()}
+      {containerRef.current && renderEditor()}
     </div>
   );
 };

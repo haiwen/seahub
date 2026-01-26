@@ -164,8 +164,8 @@
 @media (max-width: 768px) {
   .dirent-virtual-scroll-container {
     padding: 0;
-    /* Allow horizontal scroll when content overflows */
-    overflow-x: auto;
+    /* No horizontal scroll on mobile */
+    overflow-x: hidden;
   }
 
   .dirent-virtual-item {
@@ -181,7 +181,7 @@
   }
 
   .dirent-virtual-list-view {
-    /* Allow horizontal scroll when content overflows */
-    overflow-x: auto;
+    /* No horizontal scroll on mobile */
+    overflow-x: hidden;
   }
 }

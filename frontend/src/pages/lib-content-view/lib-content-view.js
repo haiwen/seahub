@@ -23,8 +23,11 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
+import { DEFAULT_VISIBLE_COLUMNS } from '../../constants/dir-column-visibility';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
+import metadataAPI from '../../metadata/api';
+import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
 import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
@@ -104,6 +107,9 @@ class LibContentView extends React.Component {
       viewId: '0000',
       tagId: '',
       currentDirent: null,
+      statusColumnOptions: null,
+      visibleColumns: DEFAULT_VISIBLE_COLUMNS,
+      isCrossRepoMove: false,
     };
     this.oldOnpopstate = window.onpopstate;
     window.onpopstate = this.onpopstate;
@@ -112,10 +118,39 @@ class LibContentView extends React.Component {
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
     this.unsubscribeEventBus = null;
+    this.loadVisibleColumns();
   }
 
   updateCurrentDirent = (dirent = null) => {
     this.setState({ currentDirent: dirent });
+  };
+
+  loadVisibleColumns = () => {
+    try {
+      const stored = localStorage.getItem('dir_column_visibility');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          const validColumns = parsed.filter(col =>
+            DEFAULT_VISIBLE_COLUMNS.includes(col)
+          );
+          if (validColumns.length > 0) {
+            this.setState({ visibleColumns: validColumns });
+          }
+        }
+      }
+    } catch (error) {
+      // ignore
+    }
+  };
+
+  setVisibleColumns = (columns) => {
+    try {
+      localStorage.setItem('dir_column_visibility', JSON.stringify(columns));
+      this.setState({ visibleColumns: columns });
+    } catch (error) {
+      this.setState({ visibleColumns: columns });
+    }
   };
 
   updateCurrentNotExistDirent = (deletedDirent) => {
@@ -627,17 +662,70 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
-  loadDirentList = (path) => {
+  loadDirentList = async (path) => {
     const { repoID } = this.props;
-    const { sortBy, sortOrder } = this.state;
+    const { sortBy, sortOrder, visibleColumns } = this.state;
+
     this.setState({
       isDirentListLoading: true,
       direntList: [],
       path,
     });
-    seafileAPI.listDir(repoID, path, { 'with_thumbnail': true }).then(res => {
-      const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
-      const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), sortBy, sortOrder);
+
+    try {
+      const direntRes = await seafileAPI.listDir(repoID, path, { 'with_thumbnail': true });
+      const { dirent_list, user_perm: userPerm, dir_id: dirID } = direntRes.data;
+
+      let direntList = Utils.sortDirents(
+        dirent_list.map(item => new Dirent(item)),
+        sortBy,
+        sortOrder
+      );
+
+      const needsMetadata = visibleColumns.some(col =>
+        col === 'creator' || col === 'last_modifier' || col === 'status'
+      );
+
+      if (needsMetadata && direntList.length > 0) {
+        const files = direntList
+          .filter(d => d.type === 'file')
+          .map(dirent => ({
+            file_name: dirent.name,
+            parent_dir: path,
+          }));
+
+        if (files.length > 0) {
+          try {
+            const metadataRes = await metadataAPI.getRecords(repoID, files);
+            const { results = [], metadata = {} } = metadataRes.data || {};
+
+            const metadataMap = new Map();
+            results.forEach(record => {
+              if (record._name) {
+                metadataMap.set(record._name, record);
+              }
+            });
+
+            direntList = direntList.map(dirent => {
+              const fileMetadata = metadataMap.get(dirent.name);
+              if (fileMetadata && typeof dirent.mergeMetadata === 'function') {
+                return dirent.mergeMetadata(fileMetadata);
+              }
+              return dirent;
+            });
+
+            const statusColumn = metadata.columns?.find(col =>
+              col.key === PRIVATE_COLUMN_KEY.FILE_STATUS
+            );
+            if (statusColumn?.data?.options) {
+              this.setState({ statusColumnOptions: statusColumn.data.options });
+            }
+          } catch (metadataError) {
+            // ignore
+          }
+        }
+      }
+
       this.setState({
         pathExist: true,
         userPerm,
@@ -665,7 +753,7 @@ class LibContentView extends React.Component {
         }
       });
 
-    }).catch((err) => {
+    } catch (err) {
       Utils.getErrorMsg(err, true);
       if (err.response && err.response.status === 403) {
         this.setState({ isDirentListLoading: false });
@@ -675,7 +763,35 @@ class LibContentView extends React.Component {
         isDirentListLoading: false,
         pathExist: false,
       });
-    });
+    }
+  };
+
+  updateDirentMetadata = async (direntName, newStatus) => {
+    const { repoID } = this.props;
+    const { path, direntList } = this.state;
+
+    const dirent = direntList.find(d => d.name === direntName);
+    if (!dirent) return false;
+
+    const parentDir = dirent.parent_dir || path || '/';
+    const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: newStatus };
+
+    try {
+      await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
+
+      this.setState(prevState => ({
+        direntList: prevState.direntList.map(d => {
+          if (d.name === direntName) {
+            return new Dirent({ ...d, status: newStatus });
+          }
+          return d;
+        })
+      }));
+
+      return true;
+    } catch (error) {
+      return false;
+    }
   };
 
   identifyFoldersSharedOut = () => {
@@ -749,7 +865,11 @@ class LibContentView extends React.Component {
             if (this.state.isTreePanelShown) {
               this.deleteTreeNode(this.currentMoveItemPath);
             }
-            this.moveDirent(this.currentMoveItemName);
+            if (this.state.isCrossRepoMove) {
+              this.loadDirentList(this.state.path);
+            } else {
+              this.moveDirent(this.currentMoveItemName);
+            }
             this.currentMoveItemName = '';
             this.currentMoveItemPath = '';
           } else {
@@ -758,7 +878,11 @@ class LibContentView extends React.Component {
               this.deleteTreeNodes(direntPaths);
             }
             let direntNames = this.getSelectedDirentNames();
-            this.moveDirents(direntNames);
+            if (this.state.isCrossRepoMove) {
+              this.loadDirentList(this.state.path);
+            } else {
+              this.moveDirents(direntNames);
+            }
           }
 
           // Update starred files path for cross-repo move
@@ -854,7 +978,8 @@ class LibContentView extends React.Component {
           asyncOperatedFilesLength: selectedDirentList.length,
           asyncOperationProgress: 0,
           asyncOperationType: 'move',
-          isCopyMoveProgressDialogShow: true
+          isCopyMoveProgressDialogShow: true,
+          isCrossRepoMove: repoID !== destRepo.repo_id,
         }, () => {
           // After moving successfully, delete related files
           this.getAsyncCopyMoveProgress();
@@ -1367,6 +1492,7 @@ class LibContentView extends React.Component {
         asyncOperationProgress: 0,
         asyncOperationType: 'move',
         isCopyMoveProgressDialogShow: true,
+        isCrossRepoMove: repoID !== targetRepo.repo_id,
       }, () => {
         this.currentMoveItemName = dirName;
         this.currentMoveItemPath = direntPath;
@@ -1408,6 +1534,10 @@ class LibContentView extends React.Component {
 
     if (byDialog) {
       this.updateRecentlyUsedList(targetRepo, moveToDirentPath);
+    }
+
+    if (repoID === targetRepo.repo_id) {
+      this.moveDirent(direntPath, moveToDirentPath);
     }
   };
 
@@ -1611,7 +1741,7 @@ class LibContentView extends React.Component {
 
       this.setState(prevState => {
         const newDirentList = prevState.direntList.map(dirent => {
-          const newDirent = { ...dirent };
+          const newDirent = new Dirent(dirent);
           newDirent.isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
           return newDirent;
         });
@@ -1631,7 +1761,7 @@ class LibContentView extends React.Component {
     } else {
       this.setState({
         direntList: direntList.map(dirent => {
-          const newDirent = { ...dirent };
+          const newDirent = new Dirent(dirent);
           newDirent.isSelected = false;
           return newDirent;
         }),
@@ -1910,11 +2040,10 @@ class LibContentView extends React.Component {
     // else do nothing
   }
 
-  // only one scene: The deleted items are inside current path
   deleteDirents = (direntNames) => {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
-    });
+    }).map(item => new Dirent(item));
     this.recalculateSelectedDirents(direntNames, direntList);
     this.setState({ direntList: direntList });
   };
@@ -1927,12 +2056,11 @@ class LibContentView extends React.Component {
     }
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
-    });
+    }).map(item => new Dirent(item));
     this.recalculateSelectedDirents([name], direntList);
     this.setState({ direntList: direntList, currentDirent: null });
   };
 
-  // only one scene: The moved items are inside current path
   moveDirents = (direntNames) => {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
@@ -2643,6 +2771,8 @@ class LibContentView extends React.Component {
                           onNodeExpanded={this.onTreeNodeExpanded}
                           onRenameNode={this.onRenameTreeNode}
                           onDeleteNode={this.onDeleteTreeNode}
+                          visibleColumns={this.state.visibleColumns}
+                          setVisibleColumns={this.setVisibleColumns}
                           isViewFile={this.state.isViewFile}
                           isFileLoading={this.state.isFileLoading}
                           filePermission={this.state.filePermission}
@@ -2689,6 +2819,8 @@ class LibContentView extends React.Component {
                           toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                           updateTreeNode={this.updateTreeNode}
                           sortTreeNode={this.sortTreeNode}
+                          statusColumnOptions={this.state.statusColumnOptions}
+                          updateDirentMetadata={this.updateDirentMetadata}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>

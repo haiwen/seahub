@@ -84,6 +84,10 @@ class Dirent {
   mergeMetadata(metadata) {
     if (!metadata) return this;
 
+    if (!(this instanceof Dirent)) {
+      return new Dirent(this).mergeMetadata(metadata);
+    }
+
     const enrichedData = { ...this };
 
     if (metadata[PRIVATE_COLUMN_KEY.OWNER] !== undefined) {

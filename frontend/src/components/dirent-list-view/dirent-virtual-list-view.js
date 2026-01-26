@@ -2,8 +2,6 @@ import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
-import useDirentMetadata from '../../hooks/use-dirent-metadata';
-import { Dirent } from '../../models';
 import './dirent-virtual-list.css';
 import { useCollaborators } from '../../metadata';
 
@@ -13,11 +11,8 @@ const DirentItemWrapper = ({
   repoID,
   registerExecuteOperation,
   unregisterExecuteOperation,
-  metadataMap,
-  getMetadataForDirent,
-  isDirentLoading,
-  updateDirentStatus,
   statusColumnOptions,
+  updateDirentMetadata,
   ...itemProps
 }) => {
   const childRef = useRef(null);
@@ -32,53 +27,24 @@ const DirentItemWrapper = ({
     };
   }, [dirent.name, registerExecuteOperation, unregisterExecuteOperation]);
 
-  // Enrich dirent with metadata
-  const enrichedDirent = useMemo(() => {
-    let direntInstance = dirent;
-    if (!(dirent instanceof Dirent) && typeof dirent.mergeMetadata !== 'function') {
-      const isSelectedValue = dirent.isSelected;
-      direntInstance = new Dirent(dirent);
-      direntInstance.isSelected = isSelectedValue;
-    }
-
-    if (!metadataMap || metadataMap.size === 0) {
-      return direntInstance;
-    }
-    const metadata = metadataMap.get(direntInstance.name);
-    if (metadata && typeof direntInstance.mergeMetadata === 'function') {
-      const enriched = direntInstance.mergeMetadata(metadata);
-      enriched.isSelected = direntInstance.isSelected;
-      return enriched;
-    }
-    return direntInstance;
-  }, [dirent, metadataMap]);
-
-  // Check if this specific item is loading
-  const isMetadataLoading = isDirentLoading(dirent);
-
-  // Handle status change
   const handleStatusChange = useCallback((direntItem, newStatus, metadata) => {
-    // If it's a local update (from StatusEditor), don't call API again
     if (metadata?.isLocalUpdate) {
-      // Just update the local dirent object
       if (itemProps.updateDirent) {
         itemProps.updateDirent(direntItem, 'status', newStatus);
       }
     } else {
-      // External update, call the hook's update function
-      if (updateDirentStatus) {
-        updateDirentStatus(direntItem.name, newStatus);
+      if (updateDirentMetadata) {
+        updateDirentMetadata(direntItem.name, newStatus);
       }
     }
-  }, [updateDirentStatus, itemProps]);
+  }, [updateDirentMetadata, itemProps]);
 
   return (
     <DirentListItem
       ref={childRef}
-      dirent={enrichedDirent}
+      dirent={dirent}
       path={path}
       repoID={repoID}
-      isMetadataLoading={isMetadataLoading}
       onStatusChange={handleStatusChange}
       statusColumnOptions={statusColumnOptions}
       {...itemProps}
@@ -102,33 +68,17 @@ const DirentVirtualListView = ({
   const headerRef = useRef(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [visibleRange, setVisibleRange] = useState({ startIndex: 0, endIndex: 0 });
 
-  const prevVisibleRangeRef = useRef({ startIndex: 0, endIndex: 0 });
-
-  const handleVisibleRangeChange = useCallback((newRange) => {
-    const { startIndex, endIndex } = newRange;
-    const { startIndex: prevStart, endIndex: prevEnd } = prevVisibleRangeRef.current;
-
-    if (startIndex !== prevStart || endIndex !== prevEnd) {
-      prevVisibleRangeRef.current = { startIndex, endIndex };
-      setVisibleRange({ startIndex, endIndex });
-    }
+  const isMobile = useMemo(() => {
+    return typeof window !== 'undefined' && window.innerWidth < 768;
   }, []);
-  const {
-    metadataMap,
-    getMetadataForDirent,
-    isDirentLoading,
-    updateDirentStatus,
-    statusColumnOptions,
-  } = useDirentMetadata({
-    repoID,
-    path,
-    direntList: items,
-    visibleColumns,
-    visibleRange,
-    overscan: 10,
-  });
+
+  const tableWrapperWidth = useMemo(() => {
+    if (containerWidth === 0) {
+      return '100%';
+    }
+    return containerWidth > 768 ? containerWidth : 768;
+  }, [containerWidth]);
 
   const { collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser } = useCollaborators();
 
@@ -168,8 +118,6 @@ const DirentVirtualListView = ({
     }
   };
 
-  const tableWrapperWidth = containerWidth > 768 ? containerWidth : 768;
-
   return (
     <div className="dirent-virtual-list-view">
       <div
@@ -177,25 +125,26 @@ const DirentVirtualListView = ({
         className="dirent-virtual-scroll-container"
         onScroll={handleScroll}
       >
-        <div style={{ width: tableWrapperWidth || '100%' }}>
-          <div
-            ref={headerRef}
-            className="dirent-virtual-list-header"
-            style={{ display: 'flex' }}
-          >
-            {headers.map((header, index) => {
-              const { className: headerClassName, children, flex } = header;
-              return (
-                <div
-                  key={index}
-                  className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
-                  style={{ flex: flex || '1' }}
-                >
-                  {children}
-                </div>
-              );
-            })}
-          </div>
+        <div style={{ width: tableWrapperWidth }}>
+          {!isMobile && (
+            <div
+              ref={headerRef}
+              className="dirent-virtual-list-header"
+              style={{ display: 'flex' }}
+            >
+              {headers.map((header, index) => {
+                const { className: headerClassName, children } = header;
+                return (
+                  <div
+                    key={index}
+                    className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
+                  >
+                    {children}
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           <div className="dirent-virtual-list-body">
             <VirtualList
@@ -204,7 +153,6 @@ const DirentVirtualListView = ({
               overscan={overscan}
               scrollTop={scrollTop}
               scrollContainerRef={scrollContainerRef}
-              onVisibleRangeChange={handleVisibleRangeChange}
               renderItem={({ item }) => (
                 <DirentItemWrapper
                   key={item.name}
@@ -213,16 +161,11 @@ const DirentVirtualListView = ({
                   repoID={repoID}
                   registerExecuteOperation={registerExecuteOperation}
                   unregisterExecuteOperation={unregisterExecuteOperation}
-                  visibleColumns={visibleColumns}
-                  metadataMap={metadataMap}
-                  getMetadataForDirent={getMetadataForDirent}
-                  isDirentLoading={isDirentLoading}
-                  updateDirentStatus={updateDirentStatus}
-                  statusColumnOptions={statusColumnOptions}
                   collaborators={collaborators}
                   collaboratorsCache={collaboratorsCache}
                   updateCollaboratorsCache={updateCollaboratorsCache}
                   queryUser={queryUser}
+                  visibleColumns={visibleColumns}
                   {...itemProps}
                 />
               )}

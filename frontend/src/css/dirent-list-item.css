@@ -100,7 +100,12 @@
 }
 
 .dirent-property .sf-metadata-ui {
+  display: flex;
   line-height: 1;
+}
+
+.dirent-property .sf-metadata-ui.collaborator-item {
+  margin-right: 0;
 }
 
 .dirent-property.dirent-item-name {
@@ -108,6 +113,12 @@
   min-width: 120px;
   font-weight: normal;
   color: var(--bs-body-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dirent-property.dirent-item-name a {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
