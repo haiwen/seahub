@@ -288,7 +288,7 @@ img[src=""],img:not([src]) { /* for first loading img*/
 
 .cur-view-container .sf3-font-star-empty.sf3-font,
 .cur-view-container .sf3-font-star.sf3-font {
-  color: var(--bs-icon-secondary-color);
+  color: var(--bs-icon-tertiary-color);
 }
 
 .path-container {
