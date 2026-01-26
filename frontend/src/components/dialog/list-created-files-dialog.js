@@ -24,7 +24,9 @@ class ListCreatedFileDialog extends React.Component {
     let activity = this.props.activity;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <SeahubModalHeader toggle={this.toggle}>{gettext('Created Files')}</SeahubModalHeader>
+        <SeahubModalHeader toggle={this.toggle}>
+          {activity.op_type === 'batch_delete' ? gettext('Deleted Files') : gettext('Created Files')}
+        </SeahubModalHeader>
         <ModalBody>
           <Table>
             <thead>
@@ -35,16 +37,18 @@ class ListCreatedFileDialog extends React.Component {
             </thead>
             <tbody>
               {
-                activity.createdFilesList.map((item, index) => {
-                  let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-                  let fileLink = <a href={fileURL} target='_blank' rel="noreferrer">{item.name}</a>;
-                  if (item.name.endsWith('(draft).md')) { // be compatible with the existing draft files
-                    fileLink = item.name;
+                (activity.createdFilesList || activity.details || []).map((item, index) => {
+                  let repoID = item.repo_id || activity.repo_id;
+                  let name = item.name || (item.path ? item.path.split('/').pop() : '');
+                  let fileURL = `${siteRoot}lib/${repoID}/file${Utils.encodePath(item.path)}`;
+                  let fileLink = <a href={fileURL} target='_blank' rel="noreferrer">{name}</a>;
+                  if (name.endsWith('(draft).md')) { // be compatible with the existing draft files
+                    fileLink = name;
                   }
                   return (
                     <tr key={index}>
                       <td>{fileLink}</td>
-                      <td>{dayjs(item.time).fromNow()}</td>
+                      <td>{dayjs(item.time || activity.time).fromNow()}</td>
                     </tr>
                   );
                 })

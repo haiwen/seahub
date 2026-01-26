@@ -85,12 +85,15 @@ class ActivitiesView(APIView):
                 detail_dict['obj_id'] = e.obj_id
 
             if e.op_type.startswith('batch_'):
-                try:
-                    details = json.loads(getattr(e, 'detail', '[]'))
-                    if not isinstance(details, list):
-                        details = [details]
-                except (json.JSONDecodeError, AttributeError):
-                    details = []
+                if hasattr(e, 'details'):
+                    details = e.details
+                else:
+                    try:
+                        details = json.loads(getattr(e, 'detail', '[]'))
+                        if not isinstance(details, list):
+                            details = [details]
+                    except (json.JSONDecodeError, AttributeError):
+                        details = []
                 
                 d['details'] = details
                 d['count'] = len(details)
