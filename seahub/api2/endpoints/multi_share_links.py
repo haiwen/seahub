@@ -250,16 +250,21 @@ class MultiShareLinks(APIView):
             s_type = 'd'
 
         # create share link
+        comment = request.data.get('comment', '')
         org_id = request.user.org.org_id if is_org_context(request) else None
         if s_type == 'f':
             fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                     password, expire_date,
-                                                    permission=perm, org_id=org_id)
+                                                    permission=perm,
+                                                    org_id=org_id,
+                                                    comment=comment)
 
         else:
             fs = FileShare.objects.create_dir_link(username, repo_id, path,
                                                    password, expire_date,
-                                                   permission=perm, org_id=org_id)
+                                                   permission=perm,
+                                                   org_id=org_id,
+                                                   comment=comment)
 
         user_scope = request.data.get('user_scope', '')
         emails_list = []
