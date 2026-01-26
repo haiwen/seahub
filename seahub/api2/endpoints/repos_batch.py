@@ -12,6 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.utils.translation import gettext as _
 
+from seahub.base.models import UserStarredFiles
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
@@ -1741,3 +1742,104 @@ class RepoFoldersItemBatchDelete(APIView):
         result['success'] = True
         result['commit_id'] = repo.head_cmmt_id
         return Response(result)
+
+
+class BatchMoveItemsUpdatePath(APIView):
+    """
+    API for updating files path after cross-repo move.
+    This is called by frontend when async move operation completes successfully.
+    """
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        """ Update files path after cross-repo move.
+
+        Permission checking:
+        1. all authenticated user can perform this action.
+
+        Request body:
+        {
+            "src_repo_id": "xxx",
+            "src_parent_dir": "/a/b/",
+            "dst_repo_id": "yyy",
+            "dst_parent_dir": "/c/d/",
+            "dirents": ["file1.md", "folder1"]
+        }
+        """
+
+        # argument check
+        src_repo_id = request.data.get('src_repo_id')
+        if not src_repo_id:
+            error_msg = 'src_repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        src_parent_dir = request.data.get('src_parent_dir')
+        if not src_parent_dir:
+            error_msg = 'src_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_repo_id = request.data.get('dst_repo_id')
+        if not dst_repo_id:
+            error_msg = 'dst_repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_parent_dir = request.data.get('dst_parent_dir')
+        if not dst_parent_dir:
+            error_msg = 'dst_parent_dir invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dirents = request.data.get('dirents')
+        if not dirents or not isinstance(dirents, list):
+            error_msg = 'dirents invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # Same repo move is handled by seafevents, skip
+        if src_repo_id == dst_repo_id:
+            return Response({'success': True})
+
+        updated_count = 0
+        for dirent in dirents:
+            src_path = os.path.join(src_parent_dir, dirent)
+            dst_path = os.path.join(dst_parent_dir, dirent)
+
+            # Normalize paths
+            src_path = normalize_file_path(src_path)
+            dst_path = normalize_file_path(dst_path)
+
+            try:
+                # Update exact path match
+                count = UserStarredFiles.objects.filter(
+                    repo_id=src_repo_id,
+                    path=src_path
+                ).update(repo_id=dst_repo_id, path=dst_path)
+                updated_count += count
+
+                # Also try with trailing slash for directories
+                src_path_dir = normalize_dir_path(src_path)
+                dst_path_dir = normalize_dir_path(dst_path)
+                count = UserStarredFiles.objects.filter(
+                    repo_id=src_repo_id,
+                    path=src_path_dir
+                ).update(repo_id=dst_repo_id, path=dst_path_dir)
+                updated_count += count
+
+                # Update sub-paths (for directory moves)
+                starred_items = UserStarredFiles.objects.filter(
+                    repo_id=src_repo_id,
+                    path__startswith=src_path_dir
+                )
+                for item in starred_items:
+                    new_path = dst_path_dir + item.path[len(src_path_dir):]
+                    item.repo_id = dst_repo_id
+                    item.path = new_path
+                    item.save()
+                    updated_count += 1
+
+            except Exception as e:
+                logger.error('Failed to update starred files path: %s', e)
+
+        return Response({'success': True, 'updated_count': updated_count})
+

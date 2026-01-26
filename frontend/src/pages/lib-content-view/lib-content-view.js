@@ -760,6 +760,15 @@ class LibContentView extends React.Component {
             let direntNames = this.getSelectedDirentNames();
             this.moveDirents(direntNames);
           }
+
+          // Update starred files path for cross-repo move
+          if (this.crossRepoMoveInfo) {
+            const { srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents } = this.crossRepoMoveInfo;
+            seafileAPI.updateBatchMoveItemPath(srcRepoId, srcParentDir, dstRepoId, dstParentDir, dirents).catch(() => {
+              // Silently ignore errors, starred files update is not critical
+            });
+            this.crossRepoMoveInfo = null;
+          }
         }
 
         this.setState({ isCopyMoveProgressDialogShow: false });
@@ -832,6 +841,14 @@ class LibContentView extends React.Component {
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(res => {
       if (repoID !== destRepo.repo_id) {
+        // Store cross-repo move info for updating starred files after successful move
+        this.crossRepoMoveInfo = {
+          srcRepoId: repoID,
+          srcParentDir: this.state.path,
+          dstRepoId: destRepo.repo_id,
+          dstParentDir: destDirentPath,
+          dirents: dirNames
+        };
         this.setState({
           asyncCopyMoveTaskId: res.data.task_id,
           asyncOperatedFilesLength: selectedDirentList.length,
@@ -1335,6 +1352,15 @@ class LibContentView extends React.Component {
 
     if (repoID !== targetRepo.repo_id) {
       const operatedFilesLength = isBatchOperation ? batchFileNames.length : 1;
+      // Store cross-repo move info for updating starred files after successful move
+      const srcDirents = isBatchOperation ? batchFileNames : [dirName];
+      this.crossRepoMoveInfo = {
+        srcRepoId: repoID,
+        srcParentDir: nodeParentPath,
+        dstRepoId: targetRepo.repo_id,
+        dstParentDir: moveToDirentPath,
+        dirents: srcDirents
+      };
       this.setState({
         asyncCopyMoveTaskId: taskId,
         asyncOperatedFilesLength: operatedFilesLength,

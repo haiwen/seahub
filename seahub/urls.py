@@ -62,7 +62,7 @@ from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
         UploadLinkUpload, UploadLinksCleanInvalid
-from seahub.api2.endpoints.repos_batch import ReposBatchView, \
+from seahub.api2.endpoints.repos_batch import BatchMoveItemsUpdatePath, ReposBatchView, \
         ReposBatchCopyDirView, ReposBatchCreateDirView, \
         ReposBatchCopyItemView, ReposBatchMoveItemView, \
         ReposAsyncBatchCopyItemView, ReposAsyncBatchMoveItemView, \
@@ -592,6 +592,9 @@ urlpatterns = [
 
     ## user::starred-item
     re_path(r'^api/v2.1/starred-items/$', StarredItems.as_view(), name='api-v2.1-starred-items'),
+    
+    ## user::async-batch-move-item
+    re_path(r'^api/v2.1/async-batch-move-item/callback/$', BatchMoveItemsUpdatePath.as_view(), name='api-v2.1-async-batch-move-item-callback'),
 
     ## user::monitored-repos
     re_path(r'^api/v2.1/monitored-repos/$', MonitoredRepos.as_view(), name='api-v2.1-monitored-repos'),
