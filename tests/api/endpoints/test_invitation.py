@@ -127,7 +127,7 @@ class InvitationRevokeTest(BaseTestCase):
             'type': 'guest',
             'accepter': self.tmp_username,
         })
-        self.assertEqual(201, resp.status_code)
+        self.assertEqual(400, resp.status_code)
         assert len(Invitation.objects.all()) == 0
 
     @patch.object(CanInviteGuest, 'has_permission')
