@@ -158,7 +158,7 @@ class Store {
     data.hasMore = false;
     this.data = data;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
-    this.context.eventBus.dispatch(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED);
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS);
   }
 
   async updateRowData(newRowId) {
@@ -410,8 +410,7 @@ class Store {
     this.applyOperation(operation);
   }
 
-  // restore selected trash records
-  async restoreRecords(rows_ids, { fail_callback, success_callback }) {
+  restoreTrashRecords(rows_ids, { fail_callback, success_callback }) {
     if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
 
     const items = {};
@@ -425,7 +424,6 @@ class Store {
         items[commit_id] = [path];
       }
     });
-    // const res = await this.context.restoreTrashItems(items);
 
     const type = OPERATION_TYPE.RESTORE_TRASH_RECORDS;
     const operation = this.createOperation({
@@ -435,6 +433,29 @@ class Store {
       success_callback,
     });
     this.applyOperation(operation);
+  }
+
+  updateTrashRecords(restored) {
+    let prevData = this.data;
+    const { rows } = this.data;
+    restored.forEach((item) => {
+      const index = rows.findIndex(rowItem => {
+        const { _parent_dir, _name } = rowItem;
+        const path = Utils.joinPath(_parent_dir, _name);
+        return path == item.path;
+      });
+      if (index > -1) {
+        rows.splice(index, 1);
+      }
+    });
+    let data = new Metadata({ rows, columns: this.data.columns });
+    data.view.type = 'trash';
+    data.showFolder = false;
+    data.hasMore = prevData.hasMore;
+    data.page = prevData.page;
+    this.data = data;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS);
   }
 
   reloadRecords(row_ids) {

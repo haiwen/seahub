@@ -138,4 +138,10 @@ export const EVENT_BUS_TYPE = {
   CONVERT_FILE: 'convert_file',
   EXPORT_DOCX: 'export_docx',
   EXPORT_SDOC: 'export_sdoc',
+
+  // trash
+  LOAD_TRASH_FOLDER_RECORDS: 'load_trash_folder_records',
+  UPDATE_TRASH_RECORDS: 'update_trash_records',
+  UPDATE_TRASH_FOLDER_PATH: 'update_trash_folder_path',
+  RESTORE_TRASH_RECORDS: 'restore_trash_records'
 };
