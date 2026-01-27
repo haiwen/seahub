@@ -606,7 +606,7 @@ class DirentGridView extends React.Component {
     }
 
     let src = '';
-    const isTIFF = fileExt == 'tiff';
+    const isTIFF = fileExt == 'tiff' || fileExt == 'tif';
     if (isTIFF) {
       src = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${path}?mtime=${mtime}`;
     } else {
