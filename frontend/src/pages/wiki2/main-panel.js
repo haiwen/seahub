@@ -69,6 +69,8 @@ class MainPanel extends Component {
     const { seadoc_access_token, currentPageId, config } = props;
     const appConfig = window.app.config;
     const pageOptions = window.app.pageOptions;
+    const { repos, wikiSettings } = window.wiki.config;
+    const enableMetadataRepos = repos.filter(item => item.enable_metadata);
     const { assetsUrl, seadocServerUrl: sdocServer, publishUrl, wikiId, navConfig } = window.wiki.config;
     window.seafile = {
       ...window.seafile, // need docUuid
@@ -84,6 +86,8 @@ class MainPanel extends Component {
       publishUrl,
       wikiId,
       navConfig,
+      repos: enableMetadataRepos,
+      wikiSettings,
     };
     const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
