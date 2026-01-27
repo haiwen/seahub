@@ -618,7 +618,7 @@ def login(request, org_id=None):
 
 @require_POST
 @csrf_exempt
-def assertion_consumer_service(request, org_id=None, attribute_mapping=None, create_unknown_user=True):
+def assertion_consumer_service(request, org_id=None):
     """SAML Authorization Response endpoint.
     The IdP will send its response to this view, which will process it using pysaml2 and
     log the user in using whatever SAML authentication backend has been enabled in

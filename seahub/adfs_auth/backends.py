@@ -34,6 +34,10 @@ SSO_LDAP_USE_SAME_UID = getattr(settings, 'SSO_LDAP_USE_SAME_UID', False)
 
 
 class Saml2Backend(object):
+
+    create_unknown_user = getattr(settings, 'SAML_CREATE_UNKNOWN_USER', True)
+    # Create active user by default.
+    activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
     def get_user(self, username):
         try:
             user = User.objects.get(email=username)
@@ -42,7 +46,7 @@ class Saml2Backend(object):
         return user
     
     
-    def authenticate(self, saml_username=None, org_id=None, create_unknown_user=True):
+    def authenticate(self, saml_username=None, org_id=None):
         if not saml_username:
             user = None
         else:
@@ -50,14 +54,13 @@ class Saml2Backend(object):
             user = self.get_user(username)
         
 
-        if not user and create_unknown_user:
-            activate_after_creation = getattr(settings, 'SAML_ACTIVATE_USER_AFTER_CREATION', True)
-            user = User.objects.create_saml_user(is_active=activate_after_creation)
+        if not user and self.create_unknown_user:
+            user = User.objects.create_saml_user(is_active=self.activate_after_creation)
             # add org user
             if org_id and org_id > 0:
                 ccnet_api.add_org_user(org_id, user.username, 0)
 
-            if not activate_after_creation:
+            if not self.activate_after_creation:
                 notify_admins_on_activate_request(user.username)
             elif settings.NOTIFY_ADMIN_AFTER_REGISTRATION:
                 notify_admins_on_register_complete(user.username)
