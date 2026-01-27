@@ -218,35 +218,3 @@ input.expire-input {
   max-width: 128px;
   color: var(--bs-body-secondary-color);
 }
-
-.link-item-qrcode-body {
-  text-align: center;
-  padding: 16px;
-}
-
-.link-item-qrcode-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 12px;
-}
-
-.link-item-qrcode-container svg {
-  display: block;
-  border-radius: 4px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-}
-
-.link-item-qrcode-actions {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-}
-
-.link-item-qrcode-btn {
-  height: 24px;
-  min-width: 80px;
-  padding: 0 12px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-}

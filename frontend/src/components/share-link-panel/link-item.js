@@ -163,7 +163,7 @@ class LinkItem extends React.Component {
                   target={this.qrCodeBtn}
                   onToggle={this.toggleQRCodePopover}
                   value={link}
-                  className="link-item-qrcode-popover"
+                  className="qr-code-popover"
                 />
               </ClickOutside>
             )}
