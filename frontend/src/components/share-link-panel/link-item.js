@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
-import { QRCodeSVG } from 'qrcode.react';
-import { Popover, PopoverBody } from 'reactstrap';
+import QRCodePopover from '../qr-code-popover';
 import toaster from '../toast';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
+import ClickOutside from '../click-outside';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
@@ -28,26 +28,7 @@ class LinkItem extends React.Component {
       isQRCodePopoverOpen: false
     };
     this.qrCodeBtn = null;
-    this.popoverContainerRef = React.createRef();
   }
-
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  handleClickOutside = (event) => {
-    if (this.state.isQRCodePopoverOpen && this.popoverContainerRef.current &&
-        !this.popoverContainerRef.current.contains(event.target) &&
-        this.qrCodeBtn && !this.qrCodeBtn.contains(event.target)) {
-      this.setState({
-        isQRCodePopoverOpen: false
-      });
-    }
-  };
 
   onMouseOver = () => {
     this.setState({
@@ -174,14 +155,17 @@ class LinkItem extends React.Component {
             <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
             <a href="#" role="button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
             {this.qrCodeBtn && (
-              <div ref={this.popoverContainerRef}>
-                <Popover className="link-item-qrcode-popover" placement="bottom" isOpen={isQRCodePopoverOpen} target={this.qrCodeBtn}>
-                  <PopoverBody>
-                    <QRCodeSVG value={link} size={128} />
-                    <p className="link-item-qrcode-tip">{gettext('Scan the QR code to view the shared content directly')}</p>
-                  </PopoverBody>
-                </Popover>
-              </div>
+              <ClickOutside
+                onClickOutside={() => this.setState({ isQRCodePopoverOpen: false })}
+              >
+                <QRCodePopover
+                  isOpen={isQRCodePopoverOpen}
+                  target={this.qrCodeBtn}
+                  onToggle={this.toggleQRCodePopover}
+                  value={link}
+                  className="link-item-qrcode-popover"
+                />
+              </ClickOutside>
             )}
           </td>
         </tr>

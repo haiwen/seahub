@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { QRCodeSVG } from 'qrcode.react';
-import { Button, Popover, PopoverBody } from 'reactstrap';
-import { gettext } from '../utils/constants';
+import { Button } from 'reactstrap';
+import QRCodePopover from './qr-code-popover';
+import ClickOutside from './click-outside';
 
 import '../css/btn-qr-code.css';
 
@@ -32,12 +32,14 @@ class ButtonQR extends React.Component {
       <div className="ml-2" ref={ref => this.btn = ref}>
         <Button outline color="primary" className="btn-icon btn-qr-code-icon sf3-font sf3-font-qr-code" onClick={this.togglePopover} type="button"></Button>
         {this.btn && (
-          <Popover placement="bottom" isOpen={isPopoverOpen} target={this.btn} toggle={this.togglePopover}>
-            <PopoverBody>
-              <QRCodeSVG value={link} size={128} />
-              <p className="m-0 mt-1 text-center" style={{ 'maxWidth': '128px' }}>{gettext('Scan the QR code to view the shared content directly')}</p>
-            </PopoverBody>
-          </Popover>
+          <ClickOutside onClickOutside={() => this.setState({ isPopoverOpen: false })}>
+            <QRCodePopover
+              isOpen={isPopoverOpen}
+              target={this.btn}
+              onToggle={this.togglePopover}
+              value={link}
+            />
+          </ClickOutside>
         )}
       </div>
     );
