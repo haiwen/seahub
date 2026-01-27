@@ -250,14 +250,16 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit):
         for virt_repo_id in virt_repo_ids:
             api.set_repo_valid_since (virt_repo_id, repo_objs.timestamp_by_repo[virt_repo_id])
 
+    # The virtual repo’s storage_id is updated before that of the parent repo.
+    # This way, even if the process is interrupted, the migration of both the parent repo and the virtual repo will be retried the next time.
+    for virt_repo_id in virt_repo_ids:
+        if api.update_repo_storage_id(virt_repo_id, dest_storage_id) < 0:
+            logging.warning('Failed to update virtual repo [%s] storage_id.\n', virt_repo_id)
+
     if api.update_repo_storage_id(repo_id, dest_storage_id) < 0:
         logging.warning('Failed to update repo [%s] storage_id.\n', repo_id)
         api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
         return
-
-    for virt_repo_id in virt_repo_ids:
-        if api.update_repo_storage_id(virt_repo_id, dest_storage_id) < 0:
-            logging.warning('Failed to update virtual repo [%s] storage_id.\n', virt_repo_id)
 
     api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
     logging.info('The process of migrating repo [%s] is over.\n', repo_id)
@@ -324,14 +326,16 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit):
             for virt_repo_id in virt_repo_ids:
                 api.set_repo_valid_since (virt_repo_id, repo_objs.timestamp_by_repo[virt_repo_id])
 
+        # The virtual repo’s storage_id is updated before that of the parent repo.
+        # This way, even if the process is interrupted, the migration of both the parent repo and the virtual repo will be retried the next time.
+        for virt_repo_id in virt_repo_ids:
+            if api.update_repo_storage_id(virt_repo_id, dest_storage_id) < 0:
+                logging.warning('Failed to update virtual repo [%s] storage_id.\n', virt_repo_id)
+
         if api.update_repo_storage_id(repo_id, dest_storage_id) < 0:
             logging.warning('Failed to update repo [%s] storage_id.\n', repo_id)
             api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
             return
-
-        for virt_repo_id in virt_repo_ids:
-            if api.update_repo_storage_id(virt_repo_id, dest_storage_id) < 0:
-                logging.warning('Failed to update virtual repo [%s] storage_id.\n', virt_repo_id)
 
         api.set_repo_status (repo_id, REPO_STATUS_NORMAL)
         logging.info('The process of migrating repo [%s] is over.\n', repo_id)
@@ -363,7 +367,7 @@ class RepoObjects(object):
             self.traverse_virt_repo(virt_repo_id, repo.version)
 
     def traverse_repo(self, repo):
-        self.commit_keys_by_repo[self.repo_id] = set()
+        commit_keys = set()
         self.timestamp_by_repo[self.repo_id] = 0
 
         page = 0
@@ -373,23 +377,24 @@ class RepoObjects(object):
             commits = api.get_commit_list(self.repo_id, start, limit)
 
             for commit in commits:
-                if commit.id in self.commit_keys_by_repo[self.repo_id]:
+                if commit.id in commit_keys:
                     continue
                 if self.timestamp_by_repo[self.repo_id] == 0:
                     self.timestamp_by_repo[self.repo_id] = commit.ctime
                 if commit.ctime < self.timestamp_by_repo[self.repo_id]:
                     self.timestamp_by_repo[self.repo_id] = commit.ctime
-                self.commit_keys_by_repo[self.repo_id].add(commit.id)
+                commit_keys.add(commit.id)
                 self.traverse_dir(repo.version, commit.root_id)
 
             if len(commits) == limit:
                 page = page + 1
             else:
-                logging.info('Successfully traversed %d commits, %d fs and %d blocks in repo %s.\n', len(self.commit_keys_by_repo[self.repo_id]), len(self.fs_keys), len(self.block_keys), self.repo_id)
+                self.commit_keys_by_repo[self.repo_id] = commit_keys
+                logging.info('Successfully traversed %d commits, %d fs and %d blocks in repo %s.\n', len(commit_keys), len(self.fs_keys), len(self.block_keys), self.repo_id)
                 return
 
     def traverse_virt_repo(self, repo_id, version):
-        self.commit_keys_by_repo[repo_id] = set()
+        commit_keys = set()
         self.timestamp_by_repo[repo_id] = 0
 
         page = 0
@@ -399,19 +404,20 @@ class RepoObjects(object):
             commits = api.get_commit_list(repo_id, start, limit)
 
             for commit in commits:
-                if commit.id in self.commit_keys_by_repo[repo_id]:
+                if commit.id in commit_keys:
                     continue
                 if self.timestamp_by_repo[repo_id] == 0:
                     self.timestamp_by_repo[repo_id] = commit.ctime
                 if commit.ctime < self.timestamp_by_repo[repo_id]:
                     self.timestamp_by_repo[repo_id] = commit.ctime
-                self.commit_keys_by_repo[repo_id].add(commit.id)
+                commit_keys.add(commit.id)
                 self.traverse_dir(version, commit.root_id)
 
             if len(commits) == limit:
                 page = page + 1
             else:
-                logging.info('Successfully traversed %d commits in virtual repo %s.\n', len(self.commit_keys_by_repo[repo_id]), repo_id)
+                self.commit_keys_by_repo[repo_id] = commit_keys
+                logging.info('Successfully traversed %d commits in virtual repo %s.\n', len(commit_keys), repo_id)
                 return
 
     def traverse_dir(self, version, root_id):
@@ -440,7 +446,8 @@ class RepoObjects(object):
 
     def list_objs(self, dtype, repo_id):
         if dtype == 'commits':
-            for key in self.commit_keys_by_repo[repo_id]:
+            commit_keys = self.commit_keys_by_repo[repo_id]
+            for key in commit_keys:
                 obj = [repo_id, key, 0]
                 yield obj
         elif dtype == 'fs':
