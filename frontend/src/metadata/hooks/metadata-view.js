@@ -246,33 +246,31 @@ export const MetadataViewProvider = ({
     });
   };
 
-  const restoreRecords = (recordsIds, { success_callback, fail_callback } = {}) => {
+  const restoreTrashRecords = (recordsIds, { success_callback, fail_callback } = {}) => {
     if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
-    let paths = [];
-    let fileNames = [];
-    const table = storeRef.current?.data || metadata;
-    recordsIds.forEach((recordId) => {
-      const record = getRowById(table, recordId);
-      const { _parent_dir, _name } = record || {};
-      if (_parent_dir && _name) {
-        const path = Utils.joinPath(_parent_dir, _name);
-        paths.push(path);
-        fileNames.push(_name);
-      }
-    });
-    storeRef.current.restoreRecords(recordsIds, {
+    storeRef.current.restoreTrashRecords(recordsIds, {
       fail_callback: (error) => {
         fail_callback && fail_callback(error);
         error && toaster.danger(error);
       },
-      success_callback: () => {
-        // deleteFilesCallback(paths, fileNames);
-        let msg = fileNames.length > 1
-          ? gettext('Successfully restored{name} and {n} other items')
-          : gettext('Successfully restored {name}');
-        msg = msg.replace('{name}', fileNames[0])
-          .replace('{n}', fileNames.length - 1);
-        toaster.success(msg);
+      success_callback: (returned) => {
+        const { success, failed } = returned.res.data;
+        if (success.length) {
+          storeRef.current.updateTrashRecords(success);
+          const itemPathList = success[0].path.split('/');
+          const itemName = itemPathList[itemPathList.length - 1];
+          let msg = success.length > 1
+            ? gettext('Successfully restored {name} and {n} other item(s)')
+            : gettext('Successfully restored {name}');
+          msg = msg.replace('{name}', itemName)
+            .replace('{n}', success.length - 1);
+          toaster.success(msg);
+        }
+        if (failed.length) {
+          failed.forEach((item) => {
+            toaster.danger('{item.path}: {item.error_msg}');
+          });
+        }
         success_callback && success_callback();
       },
     });
@@ -282,7 +280,7 @@ export const MetadataViewProvider = ({
     storeRef.current.loadTrashFolderRecords(commitID, baseDir, folderPath);
   };
 
-  const trashFolderRecordsLoaded = () => {
+  const updateTrashRecords = () => {
     setMetadata(storeRef.current.data);
   };
 
@@ -1044,9 +1042,9 @@ export const MetadataViewProvider = ({
     const unsubscribeMoveRecord = eventBus.subscribe(EVENT_BUS_TYPE.MOVE_RECORD, moveRecord);
     const unsubscribeDuplicateRecord = eventBus.subscribe(EVENT_BUS_TYPE.DUPLICATE_RECORD, duplicateRecord);
     const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
-    const unsubscribeRestoreRecords = eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_RECORDS, restoreRecords);
+    const unsubscribeRestoreTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_TRASH_RECORDS, restoreTrashRecords);
     const unsubscribeLoadTrashFolderRecords = eventBus.subscribe(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, loadTrashFolderRecords);
-    const unsubscribeTrashFolderRecordsLoaded = eventBus.subscribe(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED, trashFolderRecordsLoaded);
+    const unsubscribeUpdateTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS, updateTrashRecords);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
@@ -1080,9 +1078,9 @@ export const MetadataViewProvider = ({
       unsubscribeMoveRecord();
       unsubscribeDuplicateRecord();
       unsubscribeDeleteRecords();
-      unsubscribeRestoreRecords();
+      unsubscribeRestoreTrashRecords();
       unsubscribeLoadTrashFolderRecords();
-      unsubscribeTrashFolderRecordsLoaded();
+      unsubscribeUpdateTrashRecords();
       unsubscribeUpdateDetails();
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();
@@ -1121,8 +1119,6 @@ export const MetadataViewProvider = ({
         modifySettings,
         modifyRecords,
         deleteRecords,
-        restoreRecords,
-        loadTrashFolderRecords,
         modifyRecord,
         moveRecord,
         duplicateRecord,

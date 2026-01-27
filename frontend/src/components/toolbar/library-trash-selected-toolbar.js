@@ -22,7 +22,7 @@ const LibraryTrashSelectedToolbar = ({ repoID }) => {
   }, [eventBus]);
 
   const restoreRecords = useCallback(() => {
-    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.RESTORE_RECORDS, selectedRecordIds, {
+    eventBus && eventBus.dispatch(EVENT_BUS_TYPE.RESTORE_TRASH_RECORDS, selectedRecordIds, {
       success_callback: () => {
         eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE);
       }

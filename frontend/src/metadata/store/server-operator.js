@@ -296,9 +296,12 @@ class ServerOperator {
         });
         break;
       }
+
+      // trash
       case OPERATION_TYPE.RESTORE_TRASH_RECORDS: {
         const { items } = operation;
         window.sfMetadataContext.restoreTrashItems(items).then(res => {
+          operation.res = res;
           callback({ operation });
         }).catch(error => {
           callback({ error: gettext('Failed to restore records') });
