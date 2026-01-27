@@ -1,19 +1,13 @@
-import React, { useCallback, useEffect, /* useMemo, useRef, */ useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback, useEffect, useState } from 'react';
 import { gettext } from '../../utils/constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
-// import RowUtils from '../../metadata/views/table/utils/row-utils';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 
-const LibraryTrashSelectedToolbar = ({ repoID }) => {
+const LibraryTrashSelectedToolbar = () => {
   const [selectedRecordIds, setSelectedRecordIds] = useState([]);
-  // const [metadata, setMetadata] = useState({});
-  // const metadataRef = useRef([]);
 
   const eventBus = window.sfMetadataContext && window.sfMetadataContext.eventBus;
-
-  // const records = useMemo(() => selectedRecordIds.map(id => RowUtils.getRecordById(id, metadataRef.current)).filter(Boolean) || [], [selectedRecordIds]);
 
   const unSelect = useCallback(() => {
     setSelectedRecordIds([]);
@@ -31,8 +25,6 @@ const LibraryTrashSelectedToolbar = ({ repoID }) => {
 
   useEffect(() => {
     const unsubscribeSelectedFileIds = eventBus && eventBus.subscribe(EVENT_BUS_TYPE.SELECT_RECORDS, (ids, metadataObj) => {
-      // metadataRef.current = metadataObj || [];
-      // setMetadata(metadataObj || {});
       setSelectedRecordIds(ids);
     });
 
@@ -63,10 +55,6 @@ const LibraryTrashSelectedToolbar = ({ repoID }) => {
       </OpIcon>
     </div>
   );
-};
-
-LibraryTrashSelectedToolbar.propTypes = {
-  repoID: PropTypes.string.isRequired,
 };
 
 export default LibraryTrashSelectedToolbar;

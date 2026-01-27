@@ -52,7 +52,7 @@ const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent
   }
 
   if (mode === TRASH) {
-    return <LibraryTrashSelectedToolbar repoID={repoID} />;
+    return <LibraryTrashSelectedToolbar />;
   }
 
 };
