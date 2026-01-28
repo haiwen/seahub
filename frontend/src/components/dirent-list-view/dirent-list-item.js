@@ -66,7 +66,7 @@ const propTypes = {
   collaboratorsCache: PropTypes.object,
   updateCollaboratorsCache: PropTypes.func,
   queryUser: PropTypes.func,
-  onStatusChange: PropTypes.func,
+  onStatusColumnOptionsChange: PropTypes.func,
   statusColumnOptions: PropTypes.array,
 };
 
@@ -137,7 +137,6 @@ class DirentListItem extends React.Component {
       });
     }
 
-    // Check if canDrag needs to be updated (when dirent permission changes)
     if (prevProps.dirent.permission !== dirent.permission) {
       this.setState({
         canDrag: dirent.permission === 'rw' || (this.customPermission && this.customPermission.permission.modify)
@@ -264,7 +263,7 @@ class DirentListItem extends React.Component {
 
   onItemClick = (e) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent event from bubbling up to parent div's onDirentClick
+    e.stopPropagation();
     const dirent = this.props.dirent;
     if (this.state.isRenaming) {
       return;
@@ -842,11 +841,10 @@ class DirentListItem extends React.Component {
     return (
       <div
         className={classnames(
-          'dirent-virtual-item',
+          'dirent-virtual-item d-flex',
           { 'tr-drop-effect': this.state.isDropTipShow },
           { 'tr-active': isSelected },
         )}
-        style={{ display: 'flex' }}
         draggable={canDrag}
         onFocus={this.onMouseEnter}
         onMouseEnter={this.onMouseEnter}
@@ -969,21 +967,13 @@ class DirentListItem extends React.Component {
         {showStatus && (
           <div className="dirent-property dirent-property-status">
             <StatusEditor
-              value={dirent.status}
               repoID={this.props.repoID}
-              path={this.props.path}
-              fileName={dirent.name}
+              value={dirent.status}
               record={dirent}
               dirent={dirent}
-              canEdit={true}
-              statusColumnOptions={this.props.statusColumnOptions}
-              onStatusChange={(newStatus, metadata) => {
-                if (metadata?.isLocalUpdate) {
-                  this.props.updateDirent(dirent, 'status', newStatus);
-                } else {
-                  this.props.onStatusChange && this.props.onStatusChange(dirent, newStatus);
-                }
-              }}
+              canEdit={dirent.type !== 'dir'}
+              options={this.props.statusColumnOptions}
+              onStatusColumnOptionsChange={this.props.onStatusColumnOptionsChange}
             />
           </div>
         )}

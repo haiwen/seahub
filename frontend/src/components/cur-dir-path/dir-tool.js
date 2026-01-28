@@ -14,6 +14,8 @@ import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
 import { DEFAULT_VISIBLE_COLUMNS, CONFIGURABLE_COLUMNS } from '../../constants/dir-column-visibility';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -28,40 +30,11 @@ const propTypes = {
   onToggleDetail: PropTypes.func,
   onCloseDetail: PropTypes.func,
   eventBus: PropTypes.object,
+  visibleColumns: PropTypes.array,
+  enableMetadata: PropTypes.bool,
 };
 
 class DirTool extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      visibleColumns: DEFAULT_VISIBLE_COLUMNS
-    };
-  }
-
-  componentDidMount() {
-    const { eventBus } = this.props;
-    if (eventBus) {
-      this.unsubscribeColumnVisibilityChanged = eventBus.subscribe('column-visibility-changed', (visibleCols) => {
-        this.setState({ visibleColumns: visibleCols });
-      });
-
-      this.unsubscribeColumnVisibilityResponse = eventBus.subscribe('column-visibility-response', (visibleCols) => {
-        this.setState({ visibleColumns: visibleCols });
-      });
-
-      eventBus.dispatch('get-column-visibility');
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.unsubscribeColumnVisibilityChanged) {
-      this.unsubscribeColumnVisibilityChanged();
-    }
-    if (this.unsubscribeColumnVisibilityResponse) {
-      this.unsubscribeColumnVisibilityResponse();
-    }
-  }
 
   onSelectSortOption = (item) => {
     const [sortBy, sortOrder] = item.value.split('-');
@@ -69,17 +42,21 @@ class DirTool extends React.Component {
   };
 
   getHiddenColumns = () => {
+    const visibleColumns = this.props.visibleColumns || DEFAULT_VISIBLE_COLUMNS;
     const allConfigurableColumns = CONFIGURABLE_COLUMNS;
-    return allConfigurableColumns.filter(col => !this.state.visibleColumns.includes(col));
+
+    const effectiveConfigurableColumns = this.props.enableMetadata
+      ? allConfigurableColumns
+      : allConfigurableColumns.filter(col => !['creator', 'last_modifier', 'status'].includes(col));
+
+    return effectiveConfigurableColumns.filter(col => !visibleColumns.includes(col));
   };
 
   handleColumnVisibilityChange = (hiddenColumns) => {
     const allConfigurableColumns = CONFIGURABLE_COLUMNS;
     const visibleCols = allConfigurableColumns.filter(col => !hiddenColumns.includes(col));
 
-    if (this.props.eventBus) {
-      this.props.eventBus.dispatch('column-visibility-changed', visibleCols);
-    }
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.COLUMN_VISIBILITY_CHANGED, visibleCols);
   };
 
   render() {
@@ -124,21 +101,22 @@ class DirTool extends React.Component {
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
 
-        {/* Add HideColumnSetter for column visibility control */}
-        <HideColumnSetter
-          wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
-          target="dir-hide-column-popover"
-          readOnly={isCustomPermission}
-          columns={[
-            { key: 'size', name: 'Size' },
-            { key: 'modified', name: 'Last Update' },
-            { key: 'creator', name: 'Creator' },
-            { key: 'last_modifier', name: 'Last Modifier' },
-            { key: 'status', name: 'Status' },
-          ]}
-          hiddenColumns={this.getHiddenColumns()}
-          modifyHiddenColumns={this.handleColumnVisibilityChange}
-        />
+        {this.props.enableMetadata && (
+          <HideColumnSetter
+            wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
+            target="dir-hide-column-popover"
+            readOnly={isCustomPermission}
+            columns={[
+              { key: 'size', name: gettext('Size') },
+              { key: 'modified', name: gettext('Last Update') },
+              { key: 'creator', name: gettext('Creator') },
+              { key: 'last_modifier', name: gettext('Last Modifier') },
+              { key: 'status', name: gettext('Status') },
+            ]}
+            hiddenColumns={this.getHiddenColumns()}
+            modifyHiddenColumns={this.handleColumnVisibilityChange}
+          />
+        )}
 
         {(!isCustomPermission) &&
           <OpIcon

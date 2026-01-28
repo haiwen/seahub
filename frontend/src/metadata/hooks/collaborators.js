@@ -26,7 +26,9 @@ const CollaboratorsProvider = React.memo(({ repoID, children }) => {
   }, []);
 
   const queryUser = useCallback((email, callback) => {
-    // Reuse the same UserService instance to maintain cache
+    if (!userServiceRef.current) {
+      return () => {};
+    }
     return userServiceRef.current.queryUser(email, callback);
   }, []);
 

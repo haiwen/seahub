@@ -43,6 +43,7 @@
 
 .dirent-checkbox-wrapper {
   height: 100%;
+  width: 16px;
   flex: 0 0 32px;
   display: inline-flex;
   align-items: center;

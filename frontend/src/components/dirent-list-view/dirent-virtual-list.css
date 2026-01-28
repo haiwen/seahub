@@ -10,7 +10,6 @@
   height: 100%;
   width: 100%;
   padding: 0 16px;
-  /* Ensure horizontal scroll when content overflows */
   overflow-x: auto;
 }
 

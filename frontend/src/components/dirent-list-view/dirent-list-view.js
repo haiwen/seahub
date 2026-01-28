@@ -16,7 +16,6 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Dirent } from '../../models';
 import { createTableHeaders } from '../../utils/table-headers';
 import DirentVirtualListView from './dirent-virtual-list-view';
-import { CONFIGURABLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS } from '../../constants/dir-column-visibility';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -53,7 +52,6 @@ const propTypes = {
   eventBus: PropTypes.object,
   visibleColumns: PropTypes.array,
   statusColumnOptions: PropTypes.array,
-  updateDirentMetadata: PropTypes.func,
 };
 
 class DirentListView extends React.Component {
@@ -765,7 +763,6 @@ class DirentListView extends React.Component {
             onThreadContextMenu={this.onThreadContextMenu}
             visibleColumns={this.props.visibleColumns}
             statusColumnOptions={this.props.statusColumnOptions}
-            updateDirentMetadata={this.props.updateDirentMetadata}
           />
         )}
         {direntList.length === 0 &&
@@ -824,80 +821,4 @@ class DirentListView extends React.Component {
 
 DirentListView.propTypes = propTypes;
 
-const STORAGE_KEY = 'dir_column_visibility';
-
-const DirListViewWithColumnVisibility = (props) => {
-  const { eventBus, visibleColumns: propVisibleColumns, setVisibleColumns: propSetVisibleColumns } = props;
-
-  const [internalVisibleColumns, setInternalVisibleColumnsState] = React.useState(propVisibleColumns || DEFAULT_VISIBLE_COLUMNS);
-
-  const visibleColumns = propVisibleColumns || internalVisibleColumns;
-  const setVisibleColumns = React.useCallback((columns) => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(columns));
-    } catch (error) {
-      // ignore storage error
-    }
-    if (propSetVisibleColumns) {
-      propSetVisibleColumns(columns);
-    } else {
-      setInternalVisibleColumnsState(columns);
-    }
-  }, [propSetVisibleColumns]);
-
-  React.useEffect(() => {
-    if (propVisibleColumns) {
-      setInternalVisibleColumnsState(propVisibleColumns);
-    }
-  }, [propVisibleColumns]);
-
-  React.useEffect(() => {
-    if (propVisibleColumns) return;
-
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          const validColumns = parsed.filter(col =>
-            CONFIGURABLE_COLUMNS.includes(col)
-          );
-          if (validColumns.length > 0) {
-            setInternalVisibleColumnsState(validColumns);
-          }
-        }
-      }
-    } catch (error) {
-      // ignore parse error
-    }
-  }, [propVisibleColumns]);
-
-  React.useEffect(() => {
-    if (!eventBus) return;
-
-    const handleColumnVisibilityChange = (visibleCols) => {
-      setVisibleColumns(visibleCols);
-    };
-
-    const handleGetColumnVisibility = () => {
-      eventBus.dispatch('column-visibility-response', visibleColumns);
-    };
-
-    const unsubscribeColumnVisibilityChanged = eventBus.subscribe('column-visibility-changed', handleColumnVisibilityChange);
-    const unsubscribeGetColumnVisibility = eventBus.subscribe('get-column-visibility', handleGetColumnVisibility);
-
-    return () => {
-      unsubscribeColumnVisibilityChanged();
-      unsubscribeGetColumnVisibility();
-    };
-  }, [eventBus, setVisibleColumns, visibleColumns]);
-
-  return (
-    <DirentListView
-      {...props}
-      visibleColumns={visibleColumns}
-    />
-  );
-};
-
-export default DirListViewWithColumnVisibility;
+export default DirentListView;

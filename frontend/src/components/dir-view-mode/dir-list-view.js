@@ -44,7 +44,8 @@ const propTypes = {
   visibleColumns: PropTypes.array,
   setVisibleColumns: PropTypes.func,
   statusColumnOptions: PropTypes.array,
-  updateDirentMetadata: PropTypes.func,
+  updateDirentStatus: PropTypes.func,
+  onStatusColumnOptionsChange: PropTypes.func,
 };
 
 class DirListView extends React.Component {
@@ -113,7 +114,8 @@ class DirListView extends React.Component {
             visibleColumns={this.props.visibleColumns}
             setVisibleColumns={this.props.setVisibleColumns}
             statusColumnOptions={this.props.statusColumnOptions}
-            updateDirentMetadata={this.props.updateDirentMetadata}
+            updateDirentStatus={this.props.updateDirentStatus}
+            onStatusColumnOptionsChange={this.props.onStatusColumnOptionsChange}
           />
         )}
       </Fragment>

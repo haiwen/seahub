@@ -105,9 +105,9 @@ export const MetadataStatusProvider = ({ repoID, repoInfo, currentPath, hideMeta
   }, [repoID, enableMetadataManagement]);
 
   useEffect(() => {
-    statusCallback && statusCallback({ enableTags, showView });
+    statusCallback && statusCallback({ enableTags, enableMetadata, showView });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enableTags, showView]);
+  }, [enableTags, enableMetadata, showView]);
 
   const updateEnableMetadata = useCallback((newValue) => {
     if (newValue === enableMetadata) return;

@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
@@ -13,7 +13,6 @@ const DirentItemWrapper = ({
   registerExecuteOperation,
   unregisterExecuteOperation,
   statusColumnOptions,
-  updateDirentMetadata,
   ...itemProps
 }) => {
   const childRef = useRef(null);
@@ -28,25 +27,12 @@ const DirentItemWrapper = ({
     };
   }, [dirent.name, registerExecuteOperation, unregisterExecuteOperation]);
 
-  const handleStatusChange = useCallback((direntItem, newStatus, metadata) => {
-    if (metadata?.isLocalUpdate) {
-      if (itemProps.updateDirent) {
-        itemProps.updateDirent(direntItem, 'status', newStatus);
-      }
-    } else {
-      if (updateDirentMetadata) {
-        updateDirentMetadata(direntItem.name, newStatus);
-      }
-    }
-  }, [updateDirentMetadata, itemProps]);
-
   return (
     <DirentListItem
       ref={childRef}
       dirent={dirent}
       path={path}
       repoID={repoID}
-      onStatusChange={handleStatusChange}
       statusColumnOptions={statusColumnOptions}
       {...itemProps}
     />

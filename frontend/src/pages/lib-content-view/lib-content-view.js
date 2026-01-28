@@ -23,7 +23,8 @@ import CopyMoveDirentProgressDialog from '../../components/dialog/copy-move-dire
 import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
-import { DEFAULT_VISIBLE_COLUMNS } from '../../constants/dir-column-visibility';
+import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE } from '../../metadata/constants';
+import { DEFAULT_VISIBLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS_WITH_METADATA, DIR_COLUMN_VISIBILITY_STORAGE_KEY } from '../../constants/dir-column-visibility';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
@@ -37,6 +38,7 @@ import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-to
 import ViewToolbar from '../../components/toolbar/view-toolbar';
 import { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
+import { formatStatusOptions } from '../../components/dirent-list-view/column-config';
 
 import '../../css/lib-content-view.css';
 
@@ -109,6 +111,7 @@ class LibContentView extends React.Component {
       currentDirent: null,
       statusColumnOptions: null,
       visibleColumns: DEFAULT_VISIBLE_COLUMNS,
+      enableMetadata: false,
       isCrossRepoMove: false,
     };
     this.oldOnpopstate = window.onpopstate;
@@ -118,38 +121,51 @@ class LibContentView extends React.Component {
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
     this.unsubscribeEventBus = null;
-    this.loadVisibleColumns();
   }
 
   updateCurrentDirent = (dirent = null) => {
     this.setState({ currentDirent: dirent });
   };
 
-  loadVisibleColumns = () => {
+  loadVisibleColumns = (enableMetadata = false) => {
     try {
-      const stored = localStorage.getItem('dir_column_visibility');
+      const stored = localStorage.getItem(DIR_COLUMN_VISIBILITY_STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          const validColumns = parsed.filter(col =>
-            DEFAULT_VISIBLE_COLUMNS.includes(col)
-          );
+          // Filter columns based on metadata status
+          const baseColumns = enableMetadata
+            ? DEFAULT_VISIBLE_COLUMNS_WITH_METADATA
+            : DEFAULT_VISIBLE_COLUMNS;
+
+          const validColumns = parsed.filter(col => baseColumns.includes(col));
           if (validColumns.length > 0) {
             this.setState({ visibleColumns: validColumns });
+            return;
           }
         }
       }
     } catch (error) {
       // ignore
     }
+    // Use appropriate default columns based on metadata status
+    const defaultColumns = enableMetadata
+      ? DEFAULT_VISIBLE_COLUMNS_WITH_METADATA
+      : DEFAULT_VISIBLE_COLUMNS;
+    this.setState({ visibleColumns: defaultColumns });
   };
 
   setVisibleColumns = (columns) => {
+    // Filter out metadata columns if metadata is disabled
+    const effectiveColumns = this.state.enableMetadata
+      ? columns
+      : columns.filter(col => !['creator', 'last_modifier', 'status'].includes(col));
+
     try {
-      localStorage.setItem('dir_column_visibility', JSON.stringify(columns));
-      this.setState({ visibleColumns: columns });
+      localStorage.setItem(DIR_COLUMN_VISIBILITY_STORAGE_KEY, JSON.stringify(effectiveColumns));
+      this.setState({ visibleColumns: effectiveColumns });
     } catch (error) {
-      this.setState({ visibleColumns: columns });
+      this.setState({ visibleColumns: effectiveColumns });
     }
   };
 
@@ -184,6 +200,14 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
+
+    this.loadVisibleColumns(false); // Load columns without metadata by default
+
+    this.unsubscribeColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.COLUMN_VISIBILITY_CHANGED, (visibleCols) => {
+      this.setVisibleColumns(visibleCols);
+    });
+    this.unsubscribeDirentStatusChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, this.updateDirentStatus);
+
     this.calculatePara(this.props);
     window.addEventListener('popstate', this.onpopstate);
   }
@@ -367,6 +391,8 @@ class LibContentView extends React.Component {
     this.unsubscribeEventBus && this.unsubscribeEventBus();
     this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
     this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
+    this.unsubscribeColumnVisibilityChanged && this.unsubscribeColumnVisibilityChanged();
+    this.unsubscribeDirentStatusChanged && this.unsubscribeDirentStatusChanged();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
@@ -379,10 +405,11 @@ class LibContentView extends React.Component {
     this.props.resetTitle();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevProps.repoID !== this.props.repoID) {
       this.calculatePara(this.props);
     }
+
     this.lastModifyTime = new Date();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: this.props.repoID,
@@ -664,7 +691,7 @@ class LibContentView extends React.Component {
 
   loadDirentList = async (path) => {
     const { repoID } = this.props;
-    const { sortBy, sortOrder, visibleColumns } = this.state;
+    const { sortBy, sortOrder } = this.state;
 
     this.setState({
       isDirentListLoading: true,
@@ -673,8 +700,15 @@ class LibContentView extends React.Component {
     });
 
     try {
-      const direntRes = await seafileAPI.listDir(repoID, path, { 'with_thumbnail': true });
-      const { dirent_list, user_perm: userPerm, dir_id: dirID } = direntRes.data;
+      const direntRes = await seafileAPI.listDir(repoID, path, {
+        with_thumbnail: true
+      });
+      const {
+        dirent_list,
+        user_perm: userPerm,
+        dir_id: dirID,
+        metadata_options
+      } = direntRes.data;
 
       let direntList = Utils.sortDirents(
         dirent_list.map(item => new Dirent(item)),
@@ -682,48 +716,8 @@ class LibContentView extends React.Component {
         sortOrder
       );
 
-      const needsMetadata = visibleColumns.some(col =>
-        col === 'creator' || col === 'last_modifier' || col === 'status'
-      );
-
-      if (needsMetadata && direntList.length > 0) {
-        const files = direntList
-          .filter(d => d.type === 'file')
-          .map(dirent => ({
-            file_name: dirent.name,
-            parent_dir: path,
-          }));
-
-        if (files.length > 0) {
-          try {
-            const metadataRes = await metadataAPI.getRecords(repoID, files);
-            const { results = [], metadata = {} } = metadataRes.data || {};
-
-            const metadataMap = new Map();
-            results.forEach(record => {
-              if (record._name) {
-                metadataMap.set(record._name, record);
-              }
-            });
-
-            direntList = direntList.map(dirent => {
-              const fileMetadata = metadataMap.get(dirent.name);
-              if (fileMetadata && typeof dirent.mergeMetadata === 'function') {
-                return dirent.mergeMetadata(fileMetadata);
-              }
-              return dirent;
-            });
-
-            const statusColumn = metadata.columns?.find(col =>
-              col.key === PRIVATE_COLUMN_KEY.FILE_STATUS
-            );
-            if (statusColumn?.data?.options) {
-              this.setState({ statusColumnOptions: statusColumn.data.options });
-            }
-          } catch (metadataError) {
-            // ignore
-          }
-        }
+      if (metadata_options?.status) {
+        this.setState({ statusColumnOptions: formatStatusOptions(metadata_options.status) });
       }
 
       this.setState({
@@ -766,32 +760,8 @@ class LibContentView extends React.Component {
     }
   };
 
-  updateDirentMetadata = async (direntName, newStatus) => {
-    const { repoID } = this.props;
-    const { path, direntList } = this.state;
-
-    const dirent = direntList.find(d => d.name === direntName);
-    if (!dirent) return false;
-
-    const parentDir = dirent.parent_dir || path || '/';
-    const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: newStatus };
-
-    try {
-      await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
-
-      this.setState(prevState => ({
-        direntList: prevState.direntList.map(d => {
-          if (d.name === direntName) {
-            return new Dirent({ ...d, status: newStatus });
-          }
-          return d;
-        })
-      }));
-
-      return true;
-    } catch (error) {
-      return false;
-    }
+  onStatusColumnOptionsChange = (newOptions) => {
+    this.setState({ statusColumnOptions: newOptions });
   };
 
   identifyFoldersSharedOut = () => {
@@ -865,11 +835,7 @@ class LibContentView extends React.Component {
             if (this.state.isTreePanelShown) {
               this.deleteTreeNode(this.currentMoveItemPath);
             }
-            if (this.state.isCrossRepoMove) {
-              this.loadDirentList(this.state.path);
-            } else {
-              this.moveDirent(this.currentMoveItemName);
-            }
+            this.moveDirent(this.currentMoveItemName);
             this.currentMoveItemName = '';
             this.currentMoveItemPath = '';
           } else {
@@ -878,11 +844,7 @@ class LibContentView extends React.Component {
               this.deleteTreeNodes(direntPaths);
             }
             let direntNames = this.getSelectedDirentNames();
-            if (this.state.isCrossRepoMove) {
-              this.loadDirentList(this.state.path);
-            } else {
-              this.moveDirents(direntNames);
-            }
+            this.moveDirents(direntNames);
           }
 
           // Update starred files path for cross-repo move
@@ -1705,6 +1667,7 @@ class LibContentView extends React.Component {
       const isShiftKeyPressed = event && event.shiftKey;
 
       if (isCtrlOrMetaKeyPressed) {
+        // Ctrl (Cmd on Mac) key is pressed: Toggle selection of the clicked item
         const isSelected = newSelectedDirentList.some(dirent => dirent.name === clickedDirent.name);
         if (isSelected) {
           newSelectedDirentList = newSelectedDirentList.filter(dirent => dirent.name !== clickedDirent.name);
@@ -1712,8 +1675,10 @@ class LibContentView extends React.Component {
           newSelectedDirentList.push(clickedDirent);
         }
       } else if (isShiftKeyPressed && lastSelectedIndex !== null) {
+        // Shift key is pressed: Select or unselect items based on the clicked index
         const firstSelectedIndex = direntList.findIndex(dirent => dirent.name === newSelectedDirentList[0].name);
         if (clickedIndex < firstSelectedIndex) {
+          // Selected all the items between the clicked item and the first selected item
           const rangeSelectedDirents = direntList.slice(clickedIndex, firstSelectedIndex + 1);
           const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
           newSelectedDirentList = [
@@ -1721,14 +1686,17 @@ class LibContentView extends React.Component {
             ...rangeSelectedDirents
           ];
         } else if (clickedIndex >= firstSelectedIndex && clickedIndex < lastSelectedIndex) {
+          // Unselect items between clicked item and the last selected item
           const rangeSelectedDirents = direntList.slice(firstSelectedIndex, clickedIndex + 1);
           const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
           newSelectedDirentList = newSelectedDirentList.filter(dirent => rangeSelectedNames.has(dirent.name));
         } else {
+          // Select all items between the first selected and the clicked item
           const rangeStart = Math.min(firstSelectedIndex, clickedIndex);
           const rangeEnd = Math.max(firstSelectedIndex, clickedIndex);
           const rangeSelectedDirents = direntList.slice(rangeStart, rangeEnd + 1);
 
+          // Merge the new range selection with the existing selection
           const rangeSelectedNames = new Set(rangeSelectedDirents.map(dirent => dirent.name));
           newSelectedDirentList = [
             ...newSelectedDirentList.filter(dirent => !rangeSelectedNames.has(dirent.name)),
@@ -1741,9 +1709,8 @@ class LibContentView extends React.Component {
 
       this.setState(prevState => {
         const newDirentList = prevState.direntList.map(dirent => {
-          const newDirent = new Dirent(dirent);
-          newDirent.isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
-          return newDirent;
+          dirent.isSelected = newSelectedDirentList.some(selected => selected.name === dirent.name);
+          return dirent;
         });
 
         const updatedSelectedDirents = newSelectedDirentList.map(selected =>
@@ -1761,9 +1728,8 @@ class LibContentView extends React.Component {
     } else {
       this.setState({
         direntList: direntList.map(dirent => {
-          const newDirent = new Dirent(dirent);
-          newDirent.isSelected = false;
-          return newDirent;
+          dirent.isSelected = false;
+          return dirent;
         }),
         isDirentSelected: false,
         isAllDirentSelected: false,
@@ -1846,9 +1812,9 @@ class LibContentView extends React.Component {
     } else {
       nextDirentList = direntList.map(item => {
         if (dirent && item.name === dirent.name) {
-          return { ...item, isSelected: !item.isSelected };
+          item.isSelected = !item.isSelected;
         }
-        return { ...item };
+        return item;
       });
     }
 
@@ -2044,7 +2010,7 @@ class LibContentView extends React.Component {
   deleteDirents = (direntNames) => {
     let direntList = this.state.direntList.filter(item => {
       return direntNames.indexOf(item.name) === -1;
-    }).map(item => new Dirent(item));
+    });
     this.recalculateSelectedDirents(direntNames, direntList);
     this.setState({ direntList: direntList });
   };
@@ -2057,7 +2023,7 @@ class LibContentView extends React.Component {
     }
     let direntList = this.state.direntList.filter(item => {
       return item.name !== name;
-    }).map(item => new Dirent(item));
+    });
     this.recalculateSelectedDirents([name], direntList);
     this.setState({ direntList: direntList, currentDirent: null });
   };
@@ -2091,6 +2057,70 @@ class LibContentView extends React.Component {
       return item;
     });
     this.setState({ direntList: newDirentList });
+  };
+
+  updateDirentStatus = async (direntName, newStatus) => {
+    const { repoID } = this.props;
+    const { path, direntList } = this.state;
+
+    const dirent = direntList.find(d => d.name === direntName);
+    if (!dirent) return false;
+
+    const oldStatus = dirent.status;
+    const parentDir = dirent.parent_dir || path || '/';
+    const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: newStatus };
+    this.setState(prevState => {
+      const newDirentList = prevState.direntList.map(d => {
+        if (d.name === direntName) {
+          return new Dirent({ ...d, status: newStatus });
+        }
+        return d;
+      });
+
+      const newState = {
+        direntList: newDirentList
+      };
+
+      if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
+        newState.currentDirent = new Dirent({ ...prevState.currentDirent, status: newStatus });
+      }
+
+      return newState;
+    });
+
+    try {
+      await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
+
+      if (window?.sfMetadataContext?.eventBus) {
+        window.sfMetadataContext.eventBus.dispatch(
+          METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
+          { parentDir, fileName: direntName },
+          updateData
+        );
+      }
+
+      return true;
+    } catch (error) {
+      this.setState(prevState => {
+        const newDirentList = prevState.direntList.map(d => {
+          if (d.name === direntName) {
+            return new Dirent({ ...d, status: oldStatus });
+          }
+          return d;
+        });
+
+        const newState = {
+          direntList: newDirentList
+        };
+
+        if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
+          newState.currentDirent = new Dirent({ ...prevState.currentDirent, status: oldStatus });
+        }
+
+        return newState;
+      });
+      return false;
+    }
   };
 
   updateTreeNode = (path, keys, values) => {
@@ -2526,7 +2556,14 @@ class LibContentView extends React.Component {
   };
 
   metadataStatusCallback = (status) => {
-    const { enableTags } = status;
+    const { enableTags, enableMetadata } = status;
+
+    if (enableMetadata !== this.state.enableMetadata) {
+      this.setState({ enableMetadata }, () => {
+        this.loadVisibleColumns(enableMetadata);
+      });
+    }
+
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAG_STATUS, enableTags);
   };
 
@@ -2747,6 +2784,8 @@ class LibContentView extends React.Component {
                           onToggleDetail={this.toggleDirentDetail}
                           onCloseDetail={this.closeDirentDetail}
                           eventBus={this.props.eventBus}
+                          visibleColumns={this.state.visibleColumns}
+                          enableMetadata={this.state.enableMetadata}
                         />
                       </div>
                       }
@@ -2822,7 +2861,7 @@ class LibContentView extends React.Component {
                           updateTreeNode={this.updateTreeNode}
                           sortTreeNode={this.sortTreeNode}
                           statusColumnOptions={this.state.statusColumnOptions}
-                          updateDirentMetadata={this.updateDirentMetadata}
+                          onStatusColumnOptionsChange={this.onStatusColumnOptionsChange}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>

@@ -17,6 +17,8 @@ import tagsAPI from '../../tag/api';
 import { getColumnByKey, getColumnOptions, getColumnOriginName } from '../utils/column';
 import ObjectUtils from '../../utils/object';
 import { NOT_DISPLAY_COLUMN_KEYS } from '../components/metadata-details/constants';
+import { eventBus } from '../../components/common/event-bus';
+import { EVENT_BUS_TYPE as DIRENT_EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 
 dayjs.extend(utc);
 
@@ -85,6 +87,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId }, update);
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId }, update);
       }
+      const fileName = getFileNameFromRecord(record);
+      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, fileName, newValue);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -179,7 +183,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       setLoading(false);
       return;
     }
-    if (ObjectUtils.isSameObject(direntRef.current, dirent, ['name'])) return;
+    if (ObjectUtils.isSameObject(direntRef.current, dirent, ['name', 'status'])) return;
 
     const fileName = dirent.name;
     let parentDir = path.split('/').pop() === fileName ? Utils.getDirName(path) : path;

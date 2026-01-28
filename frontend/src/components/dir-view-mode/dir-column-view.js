@@ -63,7 +63,6 @@ const propTypes = {
   copyFileCallback: PropTypes.func.isRequired,
   onItemConvert: PropTypes.func.isRequired,
   statusColumnOptions: PropTypes.array,
-  updateDirentMetadata: PropTypes.func,
   onDirentClick: PropTypes.func.isRequired,
   isAllItemSelected: PropTypes.bool.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
@@ -83,7 +82,6 @@ const propTypes = {
   updateRepoInfo: PropTypes.func,
   sortTreeNode: PropTypes.func,
   visibleColumns: PropTypes.array,
-  setVisibleColumns: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {
@@ -267,9 +265,8 @@ class DirColumnView extends React.Component {
               eventBus={this.props.eventBus}
               updateTreeNode={this.props.updateTreeNode}
               statusColumnOptions={this.props.statusColumnOptions}
-              updateDirentMetadata={this.props.updateDirentMetadata}
+              onStatusColumnOptionsChange={this.props.onStatusColumnOptionsChange}
               visibleColumns={this.props.visibleColumns}
-              setVisibleColumns={this.props.setVisibleColumns}
             />
           )}
           {currentMode === GRID_MODE && (

@@ -45,7 +45,6 @@ const VirtualList = ({
     Math.ceil((currentScrollTop + effectiveHeight) / itemHeight) + overscan
   );
 
-  // Notify parent component of visible range change
   useEffect(() => {
     if (onVisibleRangeChange) {
       onVisibleRangeChange({ startIndex, endIndex });
