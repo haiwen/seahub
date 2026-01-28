@@ -25,7 +25,7 @@ import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
-import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -227,12 +227,14 @@ class LibContentView extends React.Component {
   calculatePara = async (props) => {
     const { repoID } = props;
 
-    const { path, viewId, tagId, isHistory } = this.getInfoFromLocation(repoID);
+    const { path, viewId, tagId, isHistory, trash } = this.getInfoFromLocation(repoID);
     let currentMode;
     if (isHistory) {
       currentMode = HISTORY_MODE;
     } else if (tagId) {
       currentMode = TAGS_MODE;
+    } else if (trash) {
+      currentMode = TRASH;
     } else if (viewId) {
       currentMode = METADATA_MODE;
     } else {
@@ -258,6 +260,7 @@ class LibContentView extends React.Component {
         path,
         viewId,
         tagId,
+        trash,
         currentMode,
         isDirentDetailShow,
       }, () => {
@@ -290,6 +293,9 @@ class LibContentView extends React.Component {
 
     const isHistory = urlParams.get('history');
     if (isHistory) return { path: '/', isHistory: true };
+
+    const trash = urlParams.get('trash');
+    if (trash) return { path: `/${PRIVATE_FILE_TYPE.TRASH}`, trash };
 
     let location = window.location.href.split('?')[0];
     location = decodeURIComponent(location);
@@ -483,14 +489,23 @@ class LibContentView extends React.Component {
   // load data
   loadDirData = (path) => {
     this.updateUsedRepoTags();
-    if (!(path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) || path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES))) {
+    if (
+      !path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) &&
+      !path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES) &&
+      !path.includes(PRIVATE_FILE_TYPE.TRASH)
+    ) {
       this.showDir(path);
     }
   };
 
   loadSidePanel = (path) => {
     let repoID = this.props.repoID;
-    if (path === '/' || path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) || path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
+    if (
+      path === '/' ||
+      path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) ||
+      path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES) ||
+      path.includes(PRIVATE_FILE_TYPE.TRASH)
+    ) {
       seafileAPI.listDir(repoID, '/').then(res => {
         const { dirent_list, user_perm } = res.data;
         let tree = this.state.treeData;
@@ -600,6 +615,10 @@ class LibContentView extends React.Component {
   };
 
   hideMetadataView = (isSetRoot = false) => {
+    const { currentMode } = this.state;
+    if (currentMode == TRASH) {
+      return;
+    }
     const { repoID } = this.props;
     const { path } = this.getInfoFromLocation(repoID);
     this.setState({
@@ -621,9 +640,21 @@ class LibContentView extends React.Component {
       currentMode: TAGS_MODE,
       path: filePath,
       tagId: tagId,
-      viewId: '',
+      viewId: ''
     });
     const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?tag=${encodeURIComponent(tagId)}`;
+    window.history.pushState({ url: url, path: '' }, '', url);
+  };
+
+  showTrashView = (path) => {
+    const repoID = this.props.repoID;
+    const repoInfo = this.state.currentRepoInfo;
+    this.setState({
+      currentMode: TRASH,
+      path: path,
+      viewId: ''
+    });
+    const url = `${siteRoot}library/${repoID}/${encodeURIComponent(repoInfo.repo_name)}/?trash=trash`;
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
@@ -2076,8 +2107,11 @@ class LibContentView extends React.Component {
     }
 
     if (node.object.isDir()) { // isDir
-      if (this.state.path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) ||
-        this.state.path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
+      if (
+        this.state.path.includes(PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES) ||
+        this.state.path.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES) ||
+        this.state.path.includes(PRIVATE_FILE_TYPE.TRASH)
+      ) {
         this.isNeedUpdateHistoryState = true;
       }
       this.showDir(node.path);
@@ -2091,6 +2125,11 @@ class LibContentView extends React.Component {
         this.setState({ currentNode: null });
         if (node.path !== this.state.path) {
           this.showTagsView(node.path, node.tag_id);
+        }
+      } else if (Utils.isTrash(node?.object?.type)) {
+        this.setState({ currentNode: null });
+        if (node.path !== this.state.path) {
+          this.showTrashView(node.path);
         }
       } else {
         let url = siteRoot + 'lib/' + repoID + '/file' + Utils.encodePath(node.path);
@@ -2231,6 +2270,8 @@ class LibContentView extends React.Component {
       nextMode = TAGS_MODE;
     } else if (currentMode === METADATA_MODE && path.startsWith('/' + PRIVATE_FILE_TYPE.FILE_EXTENDED_PROPERTIES + '/')) {
       nextMode = METADATA_MODE;
+    } else if (currentMode === TRASH && path.startsWith('/' + PRIVATE_FILE_TYPE.TRASH)) {
+      nextMode = TRASH;
     } else {
       nextMode = Cookies.get('seafile_view_mode') || LIST_MODE;
     }
@@ -2480,7 +2521,13 @@ class LibContentView extends React.Component {
     }
 
     let detailPath = this.state.path;
-    if (!currentDirent && currentMode !== METADATA_MODE && currentMode !== TAGS_MODE && this.state.selectedDirentList.length === 0) {
+    if (
+      !currentDirent &&
+      currentMode !== METADATA_MODE &&
+      currentMode !== TAGS_MODE &&
+      currentMode !== TRASH &&
+      this.state.selectedDirentList.length === 0
+    ) {
       detailPath = Utils.getDirName(this.state.path);
     }
 
@@ -2535,7 +2582,7 @@ class LibContentView extends React.Component {
                           'animation-children': isDirentSelected
                         })}>
                         {isDirentSelected ? (
-                          currentMode === TAGS_MODE || currentMode === METADATA_MODE ? (
+                          [METADATA_MODE, TAGS_MODE, TRASH].includes(currentMode) ? (
                             <ViewToolbar
                               repoID={repoID}
                               repoInfo={currentRepoInfo}
@@ -2607,6 +2654,7 @@ class LibContentView extends React.Component {
                         <DirTool
                           repoID={this.props.repoID}
                           repoName={this.state.currentRepoInfo.repo_name}
+                          currentRepoInfo={this.state.currentRepoInfo}
                           userPerm={userPerm}
                           currentPath={path}
                           currentMode={this.state.currentMode}

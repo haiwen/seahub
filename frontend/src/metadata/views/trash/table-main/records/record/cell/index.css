@@ -1,0 +1,305 @@
+.sf-metadata-result-table-cell {
+  position: absolute;
+  height: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-right: 1px solid var(--bs-border-secondary-color);
+  padding: 6px 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.sf-metadata-result-table-cell:not(.table-cell-uneditable):hover {
+  cursor: pointer;
+}
+
+.sf-metadata-result-table-cell.index {
+  width: 90px;
+  height: 100%;
+  padding: 0;
+}
+
+.sf-metadata-result-table-cell.column {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.sf-metadata-result-table-cell .select-cell-checkbox-container,
+.sf-metadata-result-table-cell .select-all-checkbox-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.sf-metadata-result-table-cell .select-cell-checkbox-container:hover,
+.sf-metadata-result-table-cell .select-all-checkbox-container:hover,
+.sf-metadata-result-table-cell .select-cell-checkbox-container input:hover,
+.sf-metadata-result-table-cell .select-all-checkbox-container input:hover {
+  cursor: pointer;
+}
+
+.sf-metadata-result-table-cell .file-cell-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* cell formatter */
+.sf-metadata-result-table-cell .sf-metadata-ui.cell-formatter-container {
+  height: 100%;
+  line-height: 20px;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-ui.cell-formatter-container.sf-metadata-file-formatter {
+  overflow: visible;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-ui.cell-formatter-container.formula-formatter {
+  flex: 1;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-ui.cell-formatter-container .image-item {
+  height: auto;
+  width: auto;
+  max-height: 28px;
+}
+
+.sf-metadata-result-table-cell .links-formatter .sf-metadata-ui.cell-formatter-container {
+  width: auto;
+}
+
+.sf-metadata-result-table-cell .multiple-select-formatter,
+.sf-metadata-result-table-cell .single-select-formatter {
+  line-height: 1;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-button-formatter.cell-formatter-container {
+  margin-top: 6px;
+  text-align: center;
+  height: 26px;
+  line-height: 14px;
+  min-width: 80px;
+  max-width: 100%;
+  width: fit-content;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  border-radius: 3px;
+  border-width: 2px;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-button-formatter.cell-formatter-container.disabled {
+  cursor: default;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-button-formatter.cell-formatter-container {
+  margin: -3px auto;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-button-formatter .loading-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-button-formatter .button-formatter-btn-bg {
+  width: 11px;
+  height: 11px;
+  border-radius: 5px;
+  position: absolute;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-date-formatter,
+.sf-metadata-result-table-cell .sf-metadata-number-formatter,
+.sf-metadata-result-table-cell .sf-metadata-duration-formatter {
+  width: 100%;
+  text-align: right;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-long-text-formatter {
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
+.sf-metadata-result-table-cell .geolocation-formatter,
+.sf-metadata-result-table-cell .sf-metadata-text-formatter,
+.sf-metadata-result-table-cell .sf-metadata-url-formatter,
+.sf-metadata-result-table-cell .sf-metadata-email-formatter,
+.sf-metadata-result-table-cell .sf-metadata-long-text-formatter .long-text-content {
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-url-formatter {
+  text-decoration: none;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-ui.long-text-formatter {
+  height: 100%;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-checkbox-formatter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sf-metadata-file-formatter .file-item-icon {
+  margin-right: 4px;
+}
+
+.sf-metadata-result-table-cell .sf-metadata-collaborator-formatter,
+.sf-metadata-result-table-cell .sf-metadata-creator-formatter,
+.sf-metadata-result-table-cell .sf-metadata-last-modifier-formatter {
+  display: flex;
+  align-items: center;
+}
+
+.sf-metadata-result-table-cell.sf-metadata-result-table-digital-sign-cell {
+  padding: 0 8px;
+}
+
+.sf-metadata-result-table-cell .digital-sign-formatter .image-item {
+  height: 28px;
+}
+
+.sf-metadata-result-table-cell .collaborator-avatar,
+.sf-metadata-result-table-cell .sf-metadata-ui.collaborator-item .collaborator-avatar {
+  height: 16px;
+  width: 16px;
+  margin-left: 0;
+  transform: translateY(0px);
+  flex-shrink: 0;
+}
+
+.sf-metadata-result-table-cell .select-all-checkbox-container .seafile-multicolor-icon-partially-selected {
+  cursor: pointer;
+  font-size: 14px;
+  fill: #2b76f6;
+  background-color: #fff;
+  border-radius: .25rem;
+}
+
+.sf-metadata-result-table-cell .header-action-cell-placeholder {
+  /* same width as the button of record expand */
+  width: 20px;
+  height: 20px;
+}
+
+.sf-metadata-result-table-cell .mobile-select-all-container {
+  height: 14px;
+  width: 14px;
+  display: inline-flex;
+  margin-bottom: 0;
+}
+
+.sf-metadata-result-table-cell .mobile-select-all-container .mobile-select-all-checkbox {
+  display: none;
+  z-index: 99999;
+}
+
+.sf-metadata-result-table-cell .mobile-select-all-container .select-all-checkbox-show {
+  height: 14px;
+  width: 14px;
+  border: 1px solid #aaa;
+  border-radius: 2px;
+}
+
+.sf-metadata-result-table-cell .mobile-select-all-container .mobile-select-all-checkbox:checked + .select-all-checkbox-show {
+  border: unset;
+  background-color: #3b88fd;
+  position: relative;
+}
+
+.sf-metadata-result-table-cell .mobile-select-all-container .mobile-select-all-checkbox:checked + .select-all-checkbox-show::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 5px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.sf-metadata-result-table-cell .mobile-select-all-container .seafile-multicolor-icon-partially-selected {
+  font-size: 14px;
+  line-height: 1;
+}
+
+@media screen and (max-width: 991.8px) {
+  .sf-metadata-result-table-cell .select-cell-checkbox {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* row cell ui */
+.sf-metadata-result-table-row:hover .sf-metadata-result-table-cell,
+.sf-metadata-result-table-row:hover .column {
+  background-color: var(--bs-tr-hover-bg);
+}
+
+.sf-metadata-result-table-row:hover .cell-selected {
+  background: var(--bs-body-bg);
+}
+
+.sf-metadata-result-table:hover .sf-metadata-result-table-cell.cell-highlight {
+  background-color: rgb(239, 199, 151) !important;
+}
+
+.sf-metadata-result-table:hover .sf-metadata-result-table-cell.cell-current-highlight {
+  background-color: rgb(240, 159, 63) !important;
+}
+
+.sf-metadata-result-table-row.row-selected .sf-metadata-result-table-cell,
+.sf-metadata-result-table-row.row-selected .column {
+  background-color: var(--bs-tr-active-secondary-bg) !important;
+}
+
+/* checkbox editor */
+.sf-metadata-result-table-cell.sf-metadata-result-table-checkbox-cell {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* long text */
+.sf-metadata-result-table-cell.sf-metadata-result-table-long-text-cell {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.sf-metadata-result-table-cell.sf-metadata-result-table-long-text-cell .sf-metadata-long-text-formatter {
+  padding-top: 5.5px;
+  padding-bottom: 5.5px;
+}
+
+/* file name */
+.sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell .sf-metadata-ui.cell-formatter-container {
+  line-height: 24px;
+}
+
+.sf-metadata-result-table-file-name-cell .sf-metadata-ui.file-name-formatter .sf-metadata-file-icon {
+  transform: translateY(-1px);
+}
+
+.sf-metadata-result-table-cell.sf-metadata-result-table-file-name-cell .sf-metadata-file-name {
+  cursor: pointer;
+}

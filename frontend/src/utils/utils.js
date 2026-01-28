@@ -1139,6 +1139,10 @@ export const Utils = {
     return type === PRIVATE_FILE_TYPE.TAGS_PROPERTIES;
   },
 
+  isTrash: function (type) {
+    return type === PRIVATE_FILE_TYPE.TRASH;
+  },
+
   isInternalFileLink: function (url, repoID) {
     var re = new RegExp(serviceURL + '/lib/' + repoID + '/file.*');
     return re.test(url);

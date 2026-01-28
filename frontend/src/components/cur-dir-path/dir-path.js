@@ -185,6 +185,16 @@ class DirPath extends React.Component {
     );
   };
 
+  turnTrashPathToLink = (pathList) => {
+    if (!Array.isArray(pathList) || pathList.length === 0) return null;
+    return (
+      <>
+        <span className="path-split">/</span>
+        <span className="path-item path-item-read-only">{gettext('Trash')}</span>
+      </>
+    );
+  };
+
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
     const pathList = path.split('/');
@@ -193,6 +203,9 @@ class DirPath extends React.Component {
     }
     if (pathList.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
       return this.turnTagPathToLink(pathList);
+    }
+    if (pathList.includes(PRIVATE_FILE_TYPE.TRASH)) {
+      return this.turnTrashPathToLink(pathList);
     }
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {

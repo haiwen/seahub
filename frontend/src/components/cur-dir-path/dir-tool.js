@@ -11,6 +11,7 @@ import { HISTORY_MODE } from '../dir-view-mode/constants';
 import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-searcher';
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
+import LibraryTrashToolbar from '../../components/toolbar/library-trash-toolbar';
 import OpIcon from '../../components/op-icon';
 
 const propTypes = {
@@ -66,6 +67,18 @@ class DirTool extends React.Component {
       return (
         <div className="dir-tool">
           <HistoryViewToolbar />
+        </div>
+      );
+    }
+
+    const isTrash = currentPath.startsWith('/' + PRIVATE_FILE_TYPE.TRASH);
+    if (isTrash) {
+      return (
+        <div className="dir-tool">
+          <LibraryTrashToolbar
+            repoID={this.props.repoID}
+            currentRepoInfo={this.props.currentRepoInfo}
+          />
         </div>
       );
     }

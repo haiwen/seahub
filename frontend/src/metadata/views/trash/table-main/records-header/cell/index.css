@@ -1,0 +1,53 @@
+.sf-metadata-record-header-cell .sf-metadata-column-icon {
+  color: #aaa;
+}
+
+[data-bs-theme=dark] .sf-metadata-record-header-cell .sf-metadata-column-icon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.sf-metadata-record-header-cell .sf-metadata-result-table-cell.column.name-column {
+  cursor: default;
+}
+
+.sf-metadata-record-header-cell .rdg-can-drop > .sf-metadata-result-table-cell.column {
+  cursor: move;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping > .sf-metadata-result-table-cell.column {
+  background: #ececec;
+  position: relative;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping-position > .sf-metadata-result-table-cell.column::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  height: 80%;
+  width: 2px;
+  background-color: rgb(200, 220, 240);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping-position-left > .sf-metadata-result-table-cell.column::before {
+  left: -2px;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping-position-right > .sf-metadata-result-table-cell.column::before {
+  right: -2px;
+}
+
+.sf-metadata-record-header-cell .rdg-dropping-position-none > .sf-metadata-result-table-cell.column::before {
+  display: none;
+}
+
+.sf-metadata-record-header-cell .sf-metadata-dropdown-menu .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  color: #aaa;
+}
+
+.sf-metadata-record-header-cell .sf-metadata-dropdown-menu .seafile-multicolor-icon-down:hover {
+  color: #555;
+}

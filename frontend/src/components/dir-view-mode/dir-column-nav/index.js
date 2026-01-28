@@ -71,9 +71,26 @@ class DirColumnNav extends React.Component {
               updateTreeNode={this.props.updateTreeNode}
               sortTreeNode={this.props.sortTreeNode}
             />
-            <DirViews repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirTags repoID={repoID} currentPath={currentPath} userPerm={userPerm} currentRepoInfo={currentRepoInfo} />
-            <DirOthers repoID={repoID} userPerm={userPerm} currentRepoInfo={currentRepoInfo} currentMode={this.props.currentMode} updateRepoInfo={this.props.updateRepoInfo} />
+            <DirViews
+              repoID={repoID}
+              currentPath={currentPath}
+              userPerm={userPerm}
+              currentRepoInfo={currentRepoInfo}
+            />
+            <DirTags
+              repoID={repoID}
+              currentPath={currentPath}
+              userPerm={userPerm}
+              currentRepoInfo={currentRepoInfo}
+            />
+            <DirOthers
+              repoID={repoID}
+              userPerm={userPerm}
+              currentRepoInfo={currentRepoInfo}
+              currentMode={this.props.currentMode}
+              updateRepoInfo={this.props.updateRepoInfo}
+              onNodeClick={this.props.onNodeClick}
+            />
           </>
         )}
       </div>
