@@ -276,12 +276,19 @@ export const MetadataViewProvider = ({
     });
   };
 
+  const updateTrashRecords = () => {
+    setMetadata(storeRef.current.data);
+  };
+
   const loadTrashFolderRecords = (commitID, baseDir, folderPath) => {
     storeRef.current.loadTrashFolderRecords(commitID, baseDir, folderPath);
   };
 
-  const updateTrashRecords = () => {
+  const trashFolderRecordsLoaded = () => {
     setMetadata(storeRef.current.data);
+    setTimeout(() => {
+      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_FOLDER_PATH, storeRef.current.data);
+    }, 0);
   };
 
   const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
@@ -1044,6 +1051,7 @@ export const MetadataViewProvider = ({
     const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
     const unsubscribeRestoreTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_TRASH_RECORDS, restoreTrashRecords);
     const unsubscribeLoadTrashFolderRecords = eventBus.subscribe(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, loadTrashFolderRecords);
+    const unsubscribeTrashFolderRecordsLoaded = eventBus.subscribe(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED, trashFolderRecordsLoaded);
     const unsubscribeUpdateTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS, updateTrashRecords);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
@@ -1079,8 +1087,9 @@ export const MetadataViewProvider = ({
       unsubscribeDuplicateRecord();
       unsubscribeDeleteRecords();
       unsubscribeRestoreTrashRecords();
-      unsubscribeLoadTrashFolderRecords();
       unsubscribeUpdateTrashRecords();
+      unsubscribeLoadTrashFolderRecords();
+      unsubscribeTrashFolderRecordsLoaded();
       unsubscribeUpdateDetails();
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();

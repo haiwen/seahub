@@ -44,11 +44,14 @@ class DirPath extends React.Component {
     super(props);
     this.state = {
       dropTargetPath: '',
+      showTrashFolder: false,
+      trashData: null
     };
   }
 
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
+    this.setState({ showTrashFolder: false });
     this.props.onPathClick(path);
   };
 
@@ -185,8 +188,87 @@ class DirPath extends React.Component {
     );
   };
 
-  turnTrashPathToLink = (pathList) => {
-    if (!Array.isArray(pathList) || pathList.length === 0) return null;
+  componentWillUnmount() {
+    this.unsubscribeUpdateTrashFolderPath && this.unsubscribeUpdateTrashFolderPath();
+  }
+
+  clickTrashRoot = () => {
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.RELOAD_DATA);
+    this.setState({
+      showTrashFolder: false
+    });
+  };
+
+  clickFolderPath = (folderPath) => {
+    const { trashData } = this.state;
+    const { commitID, baseDir } = trashData;
+    window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, commitID, baseDir, folderPath);
+  };
+
+  renderTrashFolderPath = () => {
+    const { trashData } = this.state;
+    const { commitID, baseDir, folderPath } = trashData;
+    const pathList = folderPath.split('/');
+
+    return (
+      <React.Fragment>
+        <span className="path-split">/</span>
+        <span
+          className="path-item"
+          tabIndex={0}
+          role="button"
+          onClick={this.clickTrashRoot}
+          onKeyDown={Utils.onKeyDown}
+          aria-label={gettext('Trash')}
+        >
+          {gettext('Trash')}
+        </span>
+        <span className="path-split">/</span>
+        {pathList.map((item, index) => {
+          if (index > 0 && index != pathList.length - 1) {
+            return (
+              <React.Fragment key={index}>
+                <span
+                  className="path-item"
+                  title={pathList[index]}
+                  tabIndex={0}
+                  role="button"
+                  onClick={this.clickFolderPath.bind(this, pathList.slice(0, index + 1).join('/'))}
+                  onKeyDown={Utils.onKeyDown}
+                  aria-label={pathList[index]}
+                >
+                  {pathList[index]}
+                </span>
+                <span className="path-split">/</span>
+              </React.Fragment>
+            );
+          }
+          return null;
+        }
+        )}
+        <span className="last-path-item" title={pathList[pathList.length - 1]}>{pathList[pathList.length - 1]}</span>
+      </React.Fragment>
+    );
+  };
+
+  turnTrashPathToLink = () => {
+    let timer = setInterval(() => {
+      if (window.sfMetadataContext && window.sfMetadataContext.eventBus) {
+        timer && clearInterval(timer);
+        timer = null;
+        const eventBus = window.sfMetadataContext.eventBus;
+        this.unsubscribeUpdateTrashFolderPath = eventBus.subscribe(
+          EVENT_BUS_TYPE.UPDATE_TRASH_FOLDER_PATH,
+          (data) => {
+            this.setState({
+              showTrashFolder: true,
+              trashData: data
+            });
+          }
+        );
+      }
+    }, 300);
+
     return (
       <>
         <span className="path-split">/</span>
@@ -194,6 +276,7 @@ class DirPath extends React.Component {
       </>
     );
   };
+
 
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
@@ -205,7 +288,7 @@ class DirPath extends React.Component {
       return this.turnTagPathToLink(pathList);
     }
     if (pathList.includes(PRIVATE_FILE_TYPE.TRASH)) {
-      return this.turnTrashPathToLink(pathList);
+      return this.turnTrashPathToLink();
     }
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
@@ -258,8 +341,9 @@ class DirPath extends React.Component {
   };
 
   render() {
+    const { showTrashFolder } = this.state;
     const { currentPath, repoName, isTreePanelShown } = this.props;
-    const pathElem = this.turnPathToLink(currentPath);
+    const pathElem = showTrashFolder ? this.renderTrashFolderPath() : this.turnPathToLink(currentPath);
     return (
       <div className="path-container dir-view-path">
         <OpIcon

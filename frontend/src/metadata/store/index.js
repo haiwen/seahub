@@ -158,7 +158,7 @@ class Store {
     data.hasMore = false;
     this.data = data;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
-    this.context.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS);
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED);
   }
 
   async updateRowData(newRowId) {

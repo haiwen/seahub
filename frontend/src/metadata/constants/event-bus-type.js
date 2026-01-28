@@ -141,7 +141,8 @@ export const EVENT_BUS_TYPE = {
 
   // trash
   LOAD_TRASH_FOLDER_RECORDS: 'load_trash_folder_records',
-  UPDATE_TRASH_RECORDS: 'update_trash_records',
+  TRASH_FOLDER_RECORDS_LOADED: 'trash_folder_records_loaded',
   UPDATE_TRASH_FOLDER_PATH: 'update_trash_folder_path',
-  RESTORE_TRASH_RECORDS: 'restore_trash_records'
+  RESTORE_TRASH_RECORDS: 'restore_trash_records',
+  UPDATE_TRASH_RECORDS: 'update_trash_records',
 };
