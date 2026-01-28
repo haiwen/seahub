@@ -109,7 +109,7 @@ class Wiki extends Component {
       item['isDir'] = isDir;
       return item;
     });
-    window.wiki.config['navConfig'] = { 
+    window.wiki.config['navConfig'] = {
       pages: newPages,
       navigation,
     };

@@ -9,7 +9,7 @@ const SummaryCards = ({ totalFiles, totalCollaborators }) => {
         <img
           className="summary-icon"
           width="16"
-          src={`${mediaUrl}img/file-count.png`}          
+          src={`${mediaUrl}img/file-count.png`}
           alt={gettext('Files')}
           title={gettext('Files')}
         />
