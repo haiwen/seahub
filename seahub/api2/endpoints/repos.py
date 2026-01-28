@@ -592,7 +592,7 @@ class RepoImageRotateView(APIView):
 
         # permission check
         permission = check_folder_permission(request, repo_id, '/')
-        if permission is None:
+        if not permission or permission not in ('rw', 'cloud-edit'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         username = request.user.username
