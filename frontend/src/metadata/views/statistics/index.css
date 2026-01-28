@@ -289,22 +289,6 @@
   .chart-container.summary-chart-container .card-container {
     justify-content: center;
   }
-
-  .summary-card {
-    width: 220px;
-    height: 180px;
-    padding: 20px;
-  }
-
-  .summary-number {
-    font-size: 24px;
-  }
-
-  .summary-icon {
-    font-size: 28px;
-    width: 40px;
-    height: 40px;
-  }
 }
 
 @media (max-width: 768px) {
@@ -342,23 +326,5 @@
     padding: 16px;
     width: 100%;
     overflow-x: auto;
-  }
-
-  .summary-card {
-    width: 220px;
-    max-width: none;
-    height: 140px;
-    padding: 16px;
-    align-self: stretch;
-  }
-
-  .summary-number {
-    font-size: 20px;
-  }
-
-  .summary-icon {
-    font-size: 24px;
-    width: 36px;
-    height: 36px;
   }
 }

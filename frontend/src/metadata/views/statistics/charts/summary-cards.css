@@ -26,10 +26,6 @@
 .summary-icon {
   width: 50px;
   height: 50px;
-  font-size: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 12px;
 }
 
@@ -55,4 +51,40 @@
   font-weight: 500;
   letter-spacing: 0.5px;
   margin: 0;
+}
+
+@media (max-width: 1023.98px) {
+  .summary-card {
+    width: 220px;
+    height: 180px;
+    padding: 20px;
+  }
+
+  .summary-number {
+    font-size: 24px;
+  }
+
+  .summary-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .summary-card {
+    width: 220px;
+    max-width: none;
+    height: 140px;
+    padding: 16px;
+    align-self: stretch;
+  }
+
+  .summary-number {
+    font-size: 20px;
+  }
+
+  .summary-icon {
+    width: 36px;
+    height: 36px;
+  }
 }
