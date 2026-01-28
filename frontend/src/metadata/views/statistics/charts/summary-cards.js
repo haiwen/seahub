@@ -1,5 +1,6 @@
 import { gettext } from '../../../../utils/constants';
 import Icon from '../../../../components/icon';
+import './summary-cards.css';
 
 const SummaryCards = ({ totalFiles, totalCollaborators }) => {
   return (
