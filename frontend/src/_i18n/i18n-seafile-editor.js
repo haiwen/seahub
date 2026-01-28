@@ -13,7 +13,7 @@ i18n
   .init({
     lng: lang,
     fallbackLng: 'en',
-    ns: ['seafile-editor'],
+    ns: ['seafile-editor', 'comment-editor'],
     defaultNS: 'seafile-editor',
 
     whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],

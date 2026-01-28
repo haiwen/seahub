@@ -13,8 +13,8 @@ i18n
   .init({
     lng: lang,
     fallbackLng: 'en',
-    ns: ['sdoc-editor', 'seafile-editor', 'comment-editor'],
-    defaultNS: 'sdoc-editor',
+    ns: ['comment-editor'],
+    defaultNS: 'comment-editor',
 
     whitelist: ['en', 'zh-CN', 'fr', 'de', 'cs', 'es', 'es-AR', 'es-MX', 'ru'],
 
