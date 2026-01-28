@@ -305,7 +305,7 @@ class InternalConvertSeadocImage(APIView):
         
     def _handle_inner_image(self, repo_id, doc_uuid, image_url, image_name):
         md_img_url_re = re.compile(r"^(.+?)/lib/([-a-f0-9]{36})/file/(.+?)(\?|$)", re.IGNORECASE)
-        seadoc_img_url_re =  re.compile("^(.+?)/api/v2.1/seadoc/download-image/([-a-f0-9]{36})/(.+?)(\?|$)", re.IGNORECASE)
+        seadoc_img_url_re =  re.compile(r"^(.+?)/api/v2.1/seadoc/download-image/([-a-f0-9]{36})/(.+?)(\?|$)", re.IGNORECASE)
         is_md_image, is_seadoc_image, match_result = False, False, None
         md_match_result = md_img_url_re.match(image_url)
         seadoc_match_result = seadoc_img_url_re.match(image_url)

@@ -64,7 +64,7 @@ def check_parameter(func):
 
 
 def check_tagname(tagname):
-    return True if re.match('^[\.\w-]+$', tagname, re.U) else False
+    return True if re.match(r'^[\.\w-]+$', tagname, re.U) else False
 
 
 class TaggedItemsView(APIView):

@@ -2082,8 +2082,8 @@ def view_media_file_via_share_link(request):
     image_file_name = os.path.basename(image_path)
 
     # Translation ‘(’ ')'
-    image_file_name = image_file_name.replace('(', '\(')
-    image_file_name = image_file_name.replace(')', '\)')
+    image_file_name = image_file_name.replace('(', r'\(')
+    image_file_name = image_file_name.replace(')', r'\)')
     encoded_image_file_name = urllib.parse.quote(image_file_name)
 
     safe_pattern = f'({serviceURL})/lib/({repo_id})/file(.*?){re.escape(encoded_image_file_name)}\\?raw=1'
