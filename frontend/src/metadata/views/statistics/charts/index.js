@@ -1,3 +1,3 @@
-export { default as PieChart } from './PieChart';
-export { BarChart, HorizontalBarChart } from './BarChart';
-export { default as SummaryCards } from './SummaryCards';
+export { default as PieChart } from './pie-chart';
+export { BarChart, HorizontalBarChart } from './bar-chart';
+export { default as SummaryCards } from './summary-cards';
