@@ -10,7 +10,6 @@ import toaster from '../toast';
 import IconButton from '../icon-button';
 import FileInfo from './file-info';
 import FileToolbar from './file-toolbar';
-import CommentPanel from './comment-panel';
 import OnlyofficeFileToolbar from './onlyoffice-file-toolbar';
 import EmbeddedFileDetails from '../dirent-detail/embedded-file-details';
 import { MetadataMiddlewareProvider, MetadataStatusProvider } from '../../hooks';
@@ -18,6 +17,7 @@ import Loading from '../loading';
 import WebSocketClient from '../../utils/websocket-service';
 import ResizeWidth from './resize-width';
 import LocalStorage from '../../utils/local-storage-utils';
+import I18nCommentPanel from './i18n-comment-panel';
 
 import '../../css/file-view.css';
 
@@ -238,7 +238,7 @@ class FileView extends React.Component {
               }
               {this.props.content}
               {this.state.isCommentPanelOpen &&
-                <CommentPanel
+                <I18nCommentPanel
                   ref={this.setCommentPanelRef}
                   toggleCommentPanel={this.toggleCommentPanel}
                   participants={this.props.participants}
