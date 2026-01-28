@@ -1230,6 +1230,14 @@ if 'mysql' in DATABASES['default'].get('ENGINE', ''):
         except:
             raise ValueError(f"Invalid database port: {DATABASES['default']['PORT']}")
 
+    if os.environ.get('SEAFILE_MYSQL_DB_CONN_MAX_AGE') is not None:
+        try:
+            conn_max_age = int(os.environ.get('SEAFILE_MYSQL_DB_CONN_MAX_AGE'))
+            DATABASES['default']['CONN_MAX_AGE'] = conn_max_age
+            DATABASES['default']['CONN_HEALTH_CHECKS'] = True
+        except ValueError:
+            pass
+
 CACHE_PROVIDER = os.getenv('CACHE_PROVIDER', 'redis')
 
 ## use update methods to get user's cfg
