@@ -101,7 +101,7 @@
 }
 
 .dirent-property .sf-metadata-ui {
-  width: 100%;
+  max-width: 100%;
   display: flex;
   line-height: 1;
 }
@@ -142,7 +142,7 @@
 .dirent-property.dirent-property-creator,
 .dirent-property.dirent-property-last-modifier,
 .dirent-property.dirent-property-status {
-  width: 120px;
+  max-width: 120px;
   flex: 0 0 120px;
 }
 
