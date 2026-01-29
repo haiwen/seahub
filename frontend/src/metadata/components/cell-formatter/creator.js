@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Collaborator from './collaborator';
 import { isValidEmail } from '../../utils/validate/email';
+import { mediaUrl } from '../../../utils/constants';
 
-const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [], collaboratorsCache = {}, updateCollaboratorsCache, children: emptyFormatter }) => {
+const CreatorFormatter = React.memo(({ value, className, api, collaborators = [], collaboratorsCache = {}, updateCollaboratorsCache, children: emptyFormatter }) => {
   const [collaborator, setCollaborator] = useState(null);
+  const processedValuesRef = useRef(new Set());
 
   useEffect(() => {
     let isMounted = true;
@@ -14,9 +16,14 @@ const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [],
       return () => isMounted = false;
     }
 
+    if (processedValuesRef.current.has(value)) {
+      return;
+    }
+
     let collaborator = collaborators && collaborators.find(c => c.email === value);
     if (collaborator) {
-      isMounted && setCollaborator(collaborator);
+      isMounted && setCollaborator(prev => prev === collaborator ? prev : collaborator);
+      processedValuesRef.current.add(value);
       return () => isMounted = false;
     }
 
@@ -26,13 +33,15 @@ const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [],
         name: 'anonymous',
         avatar_url: defaultAvatarUrl,
       };
-      isMounted && setCollaborator(collaborator);
+      isMounted && setCollaborator(prev => prev === collaborator ? prev : collaborator);
+      processedValuesRef.current.add(value);
       return () => isMounted = false;
     }
 
     collaborator = collaboratorsCache[value];
     if (collaborator) {
-      isMounted && setCollaborator(collaborator);
+      isMounted && setCollaborator(prev => prev === collaborator ? prev : collaborator);
+      processedValuesRef.current.add(value);
       return () => isMounted = false;
     }
 
@@ -42,20 +51,18 @@ const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [],
         name: value,
         avatar_url: defaultAvatarUrl,
       };
-      updateCollaboratorsCache && updateCollaboratorsCache(collaborator);
-      isMounted && setCollaborator(collaborator);
+      isMounted && setCollaborator(prev => prev === collaborator ? prev : collaborator);
+      processedValuesRef.current.add(value);
       return () => isMounted = false;
     }
 
     api && api(value, (userMap) => {
       collaborator = userMap[value];
-      Object.values(userMap).forEach(user => {
-        updateCollaboratorsCache && updateCollaboratorsCache(user);
-      });
-      isMounted && setCollaborator(collaborator);
+      isMounted && setCollaborator(prev => prev === collaborator ? prev : collaborator);
+      processedValuesRef.current.add(value);
     });
     return () => isMounted = false;
-  }, [value, api, mediaUrl, collaborators, collaboratorsCache, updateCollaboratorsCache]);
+  }, [value, collaborators, collaboratorsCache, api]);
 
   if (!collaborator) return emptyFormatter || null;
   return (
@@ -63,7 +70,7 @@ const CreatorFormatter = ({ value, mediaUrl, className, api, collaborators = [],
       <Collaborator collaborator={collaborator} />
     </div>
   );
-};
+});
 
 CreatorFormatter.propTypes = {
   value: PropTypes.string,

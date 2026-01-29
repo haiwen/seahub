@@ -1,0 +1,63 @@
+.editable-status-wrapper {
+  min-height: 20px;
+  position: relative;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.editable-status-loading {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.editable-status-popover {
+  z-index: 1050;
+}
+
+.editable-status-popover .popover-body {
+  padding: 0;
+}
+
+.editable-status-wrapper .sf-metadata-ui-select-option {
+  transition: all 0.2s ease;
+}
+
+.list-view-status-option {
+  display: inline-block;
+  padding: 0px 10px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 10px;
+  max-width: 250px;
+  font-size: 13px;
+  width: fit-content;
+}
+
+.editable-status-editor {
+  position: absolute;
+  top: 2px;
+}
+
+.editor-bottom-start {
+  left: 0;
+}
+
+.editor-bottom-end {
+  right: 0;
+  left: auto;
+}
+
+.empty-status-placeholder {
+  padding: 0 10px;
+}

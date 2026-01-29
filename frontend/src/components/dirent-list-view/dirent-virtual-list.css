@@ -10,6 +10,7 @@
   height: 100%;
   width: 100%;
   padding: 0 16px;
+  overflow-x: auto;
 }
 
 .dirent-virtual-list-header {
@@ -28,6 +29,12 @@
   display: flex;
   align-items: center;
   height: 100%;
+}
+
+.dirent-virtual-list-header-cell.dirent-property.dirent-property-creator,
+.dirent-virtual-list-header-cell.dirent-property.dirent-property-last-modifier,
+.dirent-virtual-list-header-cell.dirent-property.dirent-property-status {
+  flex: 0 0 120px;
 }
 
 .dirent-virtual-list-body {
@@ -162,6 +169,7 @@
 @media (max-width: 768px) {
   .dirent-virtual-scroll-container {
     padding: 0;
+    /* No horizontal scroll on mobile */
     overflow-x: hidden;
   }
 
@@ -178,6 +186,7 @@
   }
 
   .dirent-virtual-list-view {
+    /* No horizontal scroll on mobile */
     overflow-x: hidden;
   }
 }

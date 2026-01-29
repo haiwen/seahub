@@ -1,20 +1,20 @@
 import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
-import { isMobile } from './utils';
+import {
+  ESSENTIAL_COLUMNS,
+} from '../constants/dir-column-visibility';
+import { COLUMN_CONFIG } from '../components/dirent-list-view/column-config';
 
-export const TABLE_COLUMN_MIN_WIDTHS = {
-  checkbox: 32,
-  star: 32,
-  icon: 40,
-  name: 180,
-  tags: 80,
-  operations: 120,
-  size: 100,
-  modified: 140
-};
+export const TABLE_COLUMN_MIN_WIDTHS = Object.fromEntries(
+  Object.entries(COLUMN_CONFIG).map(([key, config]) => [key, config.width])
+);
 
-export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
+export const createTableHeaders = (
+  sortOptions = {},
+  selectionOptions = {},
+  visibleColumns = []
+) => {
   const { sortBy, sortOrder, onSort } = sortOptions;
   const { isAllSelected, onAllItemSelected, isPartiallySelected } = selectionOptions;
 
@@ -27,12 +27,17 @@ export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
     })
   );
 
+  const isColumnVisible = (columnKey) => {
+    if (ESSENTIAL_COLUMNS.includes(columnKey)) return true;
+    return visibleColumns.includes(columnKey);
+  };
+
   const baseHeaders = [
     {
       key: 'checkbox',
-      width: TABLE_COLUMN_MIN_WIDTHS.checkbox,
-      isFixed: true,
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.checkbox,
+      width: COLUMN_CONFIG.checkbox.width,
+      className: COLUMN_CONFIG.checkbox.headerClassName,
+      minWidth: COLUMN_CONFIG.checkbox.width,
       children: React.createElement(
         'div',
         {
@@ -46,33 +51,34 @@ export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
         },
         isPartiallySelected
           ? React.createElement(Icon, { symbol: 'partially-selected' })
-          : isAllSelected
-            ? React.createElement(Icon, { symbol: 'checkbox' })
-            : React.createElement('div', { className: 'select-all-checkbox-unchecked' })
+          : React.createElement('input', {
+            type: 'checkbox',
+            className: 'cursor-pointer form-check-input',
+            checked: isAllSelected,
+            onChange: () => {},
+            readOnly: true
+          })
       )
     },
     {
       key: 'star',
-      width: TABLE_COLUMN_MIN_WIDTHS.star,
-      isFixed: true,
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.star,
+      width: COLUMN_CONFIG.star.width,
+      className: COLUMN_CONFIG.star.className,
+      minWidth: COLUMN_CONFIG.star.width,
       children: null
     },
     {
       key: 'icon',
-      width: TABLE_COLUMN_MIN_WIDTHS.icon,
-      isFixed: true,
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.icon,
+      width: COLUMN_CONFIG.icon.width,
+      className: COLUMN_CONFIG.icon.className,
+      minWidth: COLUMN_CONFIG.icon.width,
       children: null
     },
     {
       key: 'name',
       width: 0.5,
-      isFixed: false,
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.name,
+      className: COLUMN_CONFIG.name.className,
+      minWidth: COLUMN_CONFIG.name.width,
       children: React.createElement(
         'a',
         {
@@ -84,28 +90,11 @@ export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
         sortBy === 'name' && sortIcon
       )
     },
-    {
-      key: 'tags',
-      width: 0.06,
-      isFixed: false,
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.tags,
-      children: null
-    },
-    {
-      key: 'operations',
-      width: 0.18,
-      isFixed: false,
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.operations,
-      children: null
-    },
-    {
+    ...(isColumnVisible('size') ? [{
       key: 'size',
-      width: 0.11,
-      isFixed: false,
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.size,
+      width: COLUMN_CONFIG.size.width,
+      className: COLUMN_CONFIG.size.className,
+      minWidth: COLUMN_CONFIG.size.width,
       children: React.createElement(
         'a',
         {
@@ -116,13 +105,12 @@ export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
         gettext('Size'),
         sortBy === 'size' && sortIcon
       )
-    },
-    {
+    }] : []),
+    ...(isColumnVisible('modified') ? [{
       key: 'modified',
-      width: 0.15,
-      isFixed: false,
-      className: 'pl-2 pr-2',
-      minWidth: TABLE_COLUMN_MIN_WIDTHS.modified,
+      width: COLUMN_CONFIG.modified.width,
+      className: COLUMN_CONFIG.modified.className,
+      minWidth: COLUMN_CONFIG.modified.width,
       children: React.createElement(
         'a',
         {
@@ -133,82 +121,51 @@ export const createTableHeaders = (sortOptions = {}, selectionOptions = {}) => {
         gettext('Last Update'),
         sortBy === 'time' && sortIcon
       )
-    }
+    }] : []),
+    ...(isColumnVisible('creator') ? [{
+      key: 'creator',
+      width: COLUMN_CONFIG.creator.width,
+      className: COLUMN_CONFIG.creator.className,
+      minWidth: COLUMN_CONFIG.creator.width,
+      children: React.createElement(
+        'a',
+        {
+          className: 'd-flex align-items-center table-sort-op',
+          href: '#',
+          onClick: (e) => { e.preventDefault(); onSort && onSort('creator'); }
+        },
+        gettext('Creator'),
+        sortBy === 'creator' && sortIcon
+      )
+    }] : []),
+    ...(isColumnVisible('last_modifier') ? [{
+      key: 'last_modifier',
+      width: COLUMN_CONFIG.last_modifier.width,
+      className: COLUMN_CONFIG.last_modifier.className,
+      minWidth: COLUMN_CONFIG.last_modifier.width,
+      children: React.createElement(
+        'a',
+        {
+          className: 'd-flex align-items-center table-sort-op',
+          href: '#',
+          onClick: (e) => { e.preventDefault(); onSort && onSort('last_modifier'); }
+        },
+        gettext('Last Modifier'),
+        sortBy === 'last_modifier' && sortIcon
+      )
+    }] : []),
+    ...(isColumnVisible('status') ? [{
+      key: 'status',
+      width: COLUMN_CONFIG.status.width,
+      className: COLUMN_CONFIG.status.className,
+      minWidth: COLUMN_CONFIG.status.width,
+      children: React.createElement(
+        'span',
+        {},
+        gettext('Status')
+      )
+    }] : []),
   ];
 
   return baseHeaders;
-};
-
-export const calculateResponsiveColumns = (headers, containerWidth) => {
-  if (!headers?.length || !containerWidth) {
-    return { columns: [], gridTemplate: '', totalWidth: 0 };
-  }
-
-  const maxContainerWidth = Math.max(Math.floor(containerWidth) - 1, 0);
-  const reconcileWidth = maxContainerWidth > 768 ? maxContainerWidth : 768;
-
-  if (isMobile) {
-    return {
-      columns: [],
-      gridTemplate: '100%',
-      totalWidth: maxContainerWidth
-    };
-  }
-
-  const fixedWidth = headers.reduce((sum, header) => {
-    return header.isFixed ? sum + header.width : sum;
-  }, 0);
-
-  const remainingWidth = reconcileWidth - fixedWidth;
-
-  // Calculate each column width
-  let columns = headers.map(header => {
-    if (header.isFixed) {
-      return {
-        ...header,
-        width: header.width
-      };
-    } else {
-      // Desktop: use original width percentages (0.5, 0.06, 0.18, 0.11, 0.15)
-      const width = remainingWidth * header.width;
-      const minWidth = TABLE_COLUMN_MIN_WIDTHS[header.key] || 40;
-      return {
-        ...header,
-        width: Math.max(width, minWidth)
-      };
-    }
-  });
-
-  let totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
-
-  if (totalWidth > reconcileWidth && remainingWidth > 0) {
-    const flexibleTotal = columns.reduce((sum, col) => {
-      return col.isFixed ? sum : sum + col.width;
-    }, 0);
-
-    const availableFlexibleWidth = Math.max(reconcileWidth - fixedWidth, 0);
-
-    if (flexibleTotal > 0 && availableFlexibleWidth > 0) {
-      const scale = availableFlexibleWidth / flexibleTotal;
-      columns = columns.map(col => {
-        if (col.isFixed) {
-          return col;
-        }
-        return {
-          ...col,
-          width: col.width * scale,
-        };
-      });
-
-      totalWidth = columns.reduce((sum, col) => sum + col.width, 0);
-    }
-  }
-
-  const gridTemplate = columns.map(col => col.width + 'px').join(' ');
-
-  return {
-    columns,
-    gridTemplate,
-    totalWidth
-  };
 };

@@ -5,7 +5,7 @@ import FileName from './file-name';
 import { useCollaborators } from '../../hooks';
 import { CellType } from '../../constants';
 
-const CellFormatter = ({ readonly, value, field, record, tagsData, ...params }) => {
+const CellFormatter = React.memo(({ readonly, value, field, record, tagsData, ...params }) => {
   const { collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser } = useCollaborators();
   const props = useMemo(() => {
     return {
@@ -27,7 +27,7 @@ const CellFormatter = ({ readonly, value, field, record, tagsData, ...params }) 
   return (
     <Formatter { ...props } { ...params } tagsData={tagsData} />
   );
-};
+});
 
 CellFormatter.propTypes = {
   readonly: PropTypes.bool,

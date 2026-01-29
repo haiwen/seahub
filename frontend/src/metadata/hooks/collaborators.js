@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useContext, useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { UserService } from '../services';
 import { mediaUrl } from '../../utils/constants';
 import { isValidEmail } from '../utils/validate';
@@ -8,14 +8,28 @@ import metadataAPI from '../api';
 
 const CollaboratorsContext = React.createContext(null);
 
-export const CollaboratorsProvider = ({ repoID, children }) => {
+const CollaboratorsProvider = React.memo(({ repoID, children }) => {
   const [collaboratorsCache, setCollaboratorsCache] = useState({});
   const [collaborators, setCollaborators] = useState([]);
-  const queryUser = useMemo(() => {
-    const userService = new UserService({ mediaUrl, api: metadataAPI.listUserInfo });
-    const queryUserAPI = userService.queryUser;
-    window.queryUser = queryUserAPI;
-    return queryUserAPI;
+  const collaboratorsCacheRef = useRef(collaboratorsCache);
+  const userServiceRef = useRef(null);
+
+  useEffect(() => {
+    collaboratorsCacheRef.current = collaboratorsCache;
+  }, [collaboratorsCache]);
+
+  useEffect(() => {
+    // Initialize UserService only once
+    if (!userServiceRef.current) {
+      userServiceRef.current = new UserService({ mediaUrl, api: metadataAPI.listUserInfo });
+    }
+  }, []);
+
+  const queryUser = useCallback((email, callback) => {
+    if (!userServiceRef.current) {
+      return () => {};
+    }
+    return userServiceRef.current.queryUser(email, callback);
   }, []);
 
   useEffect(() => {
@@ -40,9 +54,15 @@ export const CollaboratorsProvider = ({ repoID, children }) => {
   }, [collaborators, collaboratorsCache]);
 
   const updateCollaboratorsCache = useCallback((user) => {
-    const newCollaboratorsCache = { ...collaboratorsCache, [user.email]: user };
-    setCollaboratorsCache(newCollaboratorsCache);
-  }, [collaboratorsCache]);
+    setCollaboratorsCache(prevCache => {
+      if (prevCache[user.email]) {
+        return prevCache;
+      }
+      const newCache = { ...prevCache, [user.email]: user };
+      collaboratorsCacheRef.current = newCache;
+      return newCache;
+    });
+  }, []);
 
   const getCollaborator = useCallback((email) => {
     let collaborator = collaborators && collaborators.find(c => c.email === email);
@@ -73,7 +93,9 @@ export const CollaboratorsProvider = ({ repoID, children }) => {
       {children}
     </CollaboratorsContext.Provider>
   );
-};
+});
+
+CollaboratorsProvider.displayName = 'CollaboratorsProvider';
 
 export const useCollaborators = () => {
   const context = useContext(CollaboratorsContext);
@@ -83,3 +105,5 @@ export const useCollaborators = () => {
   const { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, queryUser } = context;
   return { collaborators, collaboratorsCache, updateCollaboratorsCache, getCollaborator, queryUser };
 };
+
+export default CollaboratorsProvider;

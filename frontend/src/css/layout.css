@@ -196,6 +196,7 @@ select {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  border-radius: 3px;
 }
 
 .cur-view-path .cur-view-path-btn .seafile-multicolor-icon {
@@ -204,9 +205,16 @@ select {
   color: var(--bs-icon-color);
 }
 
+.cur-view-path-btn.dir-tool-hide-column-setter.active {
+  background-color: #d7e8ff;
+}
+
+.cur-view-path-btn.dir-tool-hide-column-setter.active:hover {
+  box-shadow: inset 0 0 0 2px #0000001a;
+}
+
 .cur-view-path .cur-view-path-btn:hover {
   background-color: var(--bs-hover-bg);
-  border-radius: 3px;
 }
 
 .cur-view-path:after {

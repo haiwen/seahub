@@ -11,6 +11,7 @@ const VirtualList = ({
   scrollTop: externalScrollTop,
   ariaLabel = 'File list',
   scrollContainerRef,
+  onVisibleRangeChange,
 }) => {
   const [scrollTop, setScrollTop] = useState(0);
   const listRef = useRef(null);
@@ -43,6 +44,12 @@ const VirtualList = ({
     totalItems - 1,
     Math.ceil((currentScrollTop + effectiveHeight) / itemHeight) + overscan
   );
+
+  useEffect(() => {
+    if (onVisibleRangeChange) {
+      onVisibleRangeChange({ startIndex, endIndex });
+    }
+  }, [startIndex, endIndex, onVisibleRangeChange]);
 
   const visibleItems = [];
   for (let i = startIndex; i <= endIndex; i++) {

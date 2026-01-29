@@ -48,4 +48,10 @@ export const EVENT_BUS_TYPE = {
   HISTORY_FILTER: 'history_filter',
   HISTORY_COMMITS_UPDATED: 'history_commits_updated',
   SWITCH_TO_HISTORY_VIEW: 'switch_to_history_view',
+
+  // column visibility
+  COLUMN_VISIBILITY_CHANGED: 'column_visibility_changed',
+
+  // dirent properties
+  DIRENT_STATUS_CHANGED: 'dirent_status_changed',
 };

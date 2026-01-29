@@ -2,10 +2,19 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
-import { calculateResponsiveColumns } from '../../utils/table-headers';
+import { useCollaborators } from '../../metadata';
+
 import './dirent-virtual-list.css';
 
-const DirentItemWrapper = ({ dirent, registerExecuteOperation, unregisterExecuteOperation, ...itemProps }) => {
+const DirentItemWrapper = ({
+  dirent,
+  path,
+  repoID,
+  registerExecuteOperation,
+  unregisterExecuteOperation,
+  statusColumnOptions,
+  ...itemProps
+}) => {
   const childRef = useRef(null);
 
   useEffect(() => {
@@ -18,7 +27,16 @@ const DirentItemWrapper = ({ dirent, registerExecuteOperation, unregisterExecute
     };
   }, [dirent.name, registerExecuteOperation, unregisterExecuteOperation]);
 
-  return <DirentListItem ref={childRef} dirent={dirent} {...itemProps} />;
+  return (
+    <DirentListItem
+      ref={childRef}
+      dirent={dirent}
+      path={path}
+      repoID={repoID}
+      statusColumnOptions={statusColumnOptions}
+      {...itemProps}
+    />
+  );
 };
 
 const DirentVirtualListView = ({
@@ -28,12 +46,29 @@ const DirentVirtualListView = ({
   overscan = 5,
   registerExecuteOperation,
   unregisterExecuteOperation,
+  visibleColumns = [],
+  repoID,
+  path,
   ...itemProps
 }) => {
   const scrollContainerRef = useRef(null);
   const headerRef = useRef(null);
   const [scrollTop, setScrollTop] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
+
+  const isMobile = useMemo(() => {
+    return typeof window !== 'undefined' && window.innerWidth < 768;
+  }, []);
+
+  const tableWrapperWidth = useMemo(() => {
+    if (containerWidth === 0) {
+      return '100%';
+    }
+    return containerWidth > 768 ? containerWidth : 768;
+  }, [containerWidth]);
+
+  const { collaborators, collaboratorsCache, updateCollaboratorsCache, queryUser } = useCollaborators();
+
 
   useEffect(() => {
     const container = scrollContainerRef.current;
@@ -60,22 +95,6 @@ const DirentVirtualListView = ({
     };
   }, []);
 
-  const { gridTemplateColumns, tableWidth } = useMemo(() => {
-    if (!headers || headers.length === 0 || containerWidth === 0) {
-      return { gridTemplateColumns: '', tableWidth: 0 };
-    }
-
-    const { gridTemplate, totalWidth } = calculateResponsiveColumns(
-      headers,
-      containerWidth
-    );
-
-    return {
-      gridTemplateColumns: gridTemplate,
-      tableWidth: totalWidth
-    };
-  }, [headers, containerWidth]);
-
   const handleScroll = (e) => {
     const { scrollTop: st, scrollLeft } = e.target;
 
@@ -86,8 +105,6 @@ const DirentVirtualListView = ({
     }
   };
 
-  const tableWrapperWidth = tableWidth > 768 ? tableWidth : 768;
-
   return (
     <div className="dirent-virtual-list-view">
       <div
@@ -96,23 +113,24 @@ const DirentVirtualListView = ({
         onScroll={handleScroll}
       >
         <div style={{ width: tableWrapperWidth }}>
-          <div
-            ref={headerRef}
-            className="dirent-virtual-list-header"
-            style={{ gridTemplateColumns }}
-          >
-            {headers.map((header, index) => {
-              const { className: headerClassName, children } = header;
-              return (
-                <div
-                  key={index}
-                  className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
-                >
-                  {children}
-                </div>
-              );
-            })}
-          </div>
+          {!isMobile && (
+            <div
+              ref={headerRef}
+              className="d-flex dirent-virtual-list-header"
+            >
+              {headers.map((header, index) => {
+                const { className: headerClassName, children } = header;
+                return (
+                  <div
+                    key={index}
+                    className={`dirent-virtual-list-header-cell ${headerClassName || ''}`}
+                  >
+                    {children}
+                  </div>
+                );
+              })}
+            </div>
+          )}
 
           <div className="dirent-virtual-list-body">
             <VirtualList
@@ -125,9 +143,15 @@ const DirentVirtualListView = ({
                 <DirentItemWrapper
                   key={item.name}
                   dirent={item}
-                  gridTemplateColumns={gridTemplateColumns}
+                  path={path}
+                  repoID={repoID}
                   registerExecuteOperation={registerExecuteOperation}
                   unregisterExecuteOperation={unregisterExecuteOperation}
+                  collaborators={collaborators}
+                  collaboratorsCache={collaboratorsCache}
+                  updateCollaboratorsCache={updateCollaboratorsCache}
+                  queryUser={queryUser}
+                  visibleColumns={visibleColumns}
                   {...itemProps}
                 />
               )}

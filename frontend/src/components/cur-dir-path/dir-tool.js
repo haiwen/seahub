@@ -12,6 +12,10 @@ import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-se
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
+import { HideColumnSetter } from '../../metadata/components/data-process-setter';
+import { DEFAULT_VISIBLE_COLUMNS, CONFIGURABLE_COLUMNS } from '../../constants/dir-column-visibility';
+import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import { gettext } from '../../utils/constants';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -25,6 +29,9 @@ const propTypes = {
   viewId: PropTypes.string,
   onToggleDetail: PropTypes.func,
   onCloseDetail: PropTypes.func,
+  eventBus: PropTypes.object,
+  visibleColumns: PropTypes.array,
+  enableMetadata: PropTypes.bool,
 };
 
 class DirTool extends React.Component {
@@ -32,6 +39,24 @@ class DirTool extends React.Component {
   onSelectSortOption = (item) => {
     const [sortBy, sortOrder] = item.value.split('-');
     this.props.sortItems(sortBy, sortOrder);
+  };
+
+  getHiddenColumns = () => {
+    const visibleColumns = this.props.visibleColumns || DEFAULT_VISIBLE_COLUMNS;
+    const allConfigurableColumns = CONFIGURABLE_COLUMNS;
+
+    const effectiveConfigurableColumns = this.props.enableMetadata
+      ? allConfigurableColumns
+      : allConfigurableColumns.filter(col => !['creator', 'last_modifier', 'status'].includes(col));
+
+    return effectiveConfigurableColumns.filter(col => !visibleColumns.includes(col));
+  };
+
+  modifyHiddenColumns = (hiddenColumns) => {
+    const allConfigurableColumns = CONFIGURABLE_COLUMNS;
+    const visibleCols = allConfigurableColumns.filter(col => !hiddenColumns.includes(col));
+
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.COLUMN_VISIBILITY_CHANGED, visibleCols);
   };
 
   render() {
@@ -75,6 +100,24 @@ class DirTool extends React.Component {
       <div className="dir-tool d-flex">
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
+
+        {this.props.enableMetadata && (
+          <HideColumnSetter
+            wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
+            target="dir-hide-column-popover"
+            readOnly={isCustomPermission}
+            columns={[
+              { key: 'size', name: gettext('Size') },
+              { key: 'modified', name: gettext('Last Update') },
+              { key: 'creator', name: gettext('Creator') },
+              { key: 'last_modifier', name: gettext('Last Modifier') },
+              { key: 'status', name: gettext('Status') },
+            ]}
+            hiddenColumns={this.getHiddenColumns()}
+            modifyHiddenColumns={this.modifyHiddenColumns}
+          />
+        )}
+
         {(!isCustomPermission) &&
           <OpIcon
             className="cur-view-path-btn ml-2"

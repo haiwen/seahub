@@ -19,7 +19,7 @@ import { CellType } from '../../constants';
 
 import './index.css';
 
-const Formatter = ({ field, value, isSample, queryUserAPI, emptyTip, tagsData, ...params }) => {
+const Formatter = React.memo(({ field, value, isSample, queryUserAPI, emptyTip, tagsData, ...params }) => {
   const { type: fieldType } = field || {};
   const className = `sf-metadata-${fieldType}-formatter`;
   switch (fieldType) {
@@ -131,7 +131,7 @@ const Formatter = ({ field, value, isSample, queryUserAPI, emptyTip, tagsData, .
       );
     }
   }
-};
+});
 
 Formatter.propTypes = {
   isSample: PropTypes.bool,
