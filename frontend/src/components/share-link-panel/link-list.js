@@ -118,6 +118,7 @@ class LinkList extends React.Component {
                       return (
                         <LinkItem
                           key={index}
+                          idx={index}
                           item={item}
                           permissionOptions={permissionOptions}
                           showLinkDetails={this.props.showLinkDetails}

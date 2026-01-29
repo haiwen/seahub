@@ -11,6 +11,7 @@ import CommonOperationConfirmationDialog from '../../components/dialog/common-op
 import ClickOutside from '../click-outside';
 
 const propTypes = {
+  idx: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   showLinkDetails: PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
@@ -27,7 +28,7 @@ class LinkItem extends React.Component {
       isDeleteShareLinkDialogOpen: false,
       isQRCodePopoverOpen: false
     };
-    this.qrCodeBtn = null;
+    this.qrCodeBtn = React.createRef();
   }
 
   onMouseOver = () => {
@@ -110,6 +111,12 @@ class LinkItem extends React.Component {
     return '';
   };
 
+  onClickOutside = (e) => {
+    if (this.qrCodeBtn.current && !this.qrCodeBtn.current.contains(e.target)) {
+      this.setState({ isQRCodePopoverOpen: false });
+    }
+  };
+
   render() {
     const { isHighlighted, isItemOpVisible, isQRCodePopoverOpen } = this.state;
     const { item } = this.props;
@@ -154,14 +161,12 @@ class LinkItem extends React.Component {
           <td>
             <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
             <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
-            <a href="#" role="button" id="qr-code-button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
+            <a href="#" role="button" id={`qr-code-button-${this.props.idx}`} ref={this.qrCodeBtn} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
             {isQRCodePopoverOpen && (
-              <ClickOutside
-                onClickOutside={() => this.setState({ isQRCodePopoverOpen: false })}
-              >
+              <ClickOutside onClickOutside={this.onClickOutside}>
                 <QRCodePopover
                   container={this.qrCodeBtn}
-                  target="qr-code-button"
+                  target={`qr-code-button-${this.props.idx}`}
                   value={link}
                 />
               </ClickOutside>
