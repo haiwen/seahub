@@ -24,7 +24,7 @@ import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE } from '../../metadata/constants';
-import { DEFAULT_VISIBLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS_WITH_METADATA, DIR_COLUMN_VISIBILITY_STORAGE_KEY } from '../../constants/dir-column-visibility';
+import { CONFIGURABLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS_WITH_METADATA, DIR_COLUMN_VISIBILITY_STORAGE_KEY } from '../../constants/dir-column-visibility';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
@@ -135,7 +135,7 @@ class LibContentView extends React.Component {
         if (Array.isArray(parsed)) {
           // Filter columns based on metadata status
           const baseColumns = enableMetadata
-            ? DEFAULT_VISIBLE_COLUMNS_WITH_METADATA
+            ? CONFIGURABLE_COLUMNS
             : DEFAULT_VISIBLE_COLUMNS;
 
           const validColumns = parsed.filter(col => baseColumns.includes(col));
@@ -146,11 +146,7 @@ class LibContentView extends React.Component {
     } catch (error) {
       // ignore
     }
-    // Use appropriate default columns based on metadata status
-    const defaultColumns = enableMetadata
-      ? DEFAULT_VISIBLE_COLUMNS_WITH_METADATA
-      : DEFAULT_VISIBLE_COLUMNS;
-    this.setState({ visibleColumns: defaultColumns });
+    this.setState({ visibleColumns: DEFAULT_VISIBLE_COLUMNS });
   };
 
   setVisibleColumns = (columns) => {
