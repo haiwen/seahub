@@ -1003,6 +1003,11 @@ def view_lib_file(request, repo_id, path):
         return_dict['img_next'] = img_next
         return_dict['raw_path'] = raw_path
 
+        can_rotate = True
+        if parse_repo_perm(permission).can_edit_on_web is False:
+            can_rotate = False
+        return_dict['can_rotate'] = can_rotate
+
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 

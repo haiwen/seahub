@@ -29,7 +29,7 @@ from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version, gen_inner_file_get_url, gen_file_upload_url, \
     get_file_type_and_ext, file_types
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.utils.repo import get_repo_owner, is_repo_admin, \
+from seahub.utils.repo import get_repo_owner, is_repo_admin, parse_repo_perm, \
         repo_has_been_shared_out, normalize_repo_status_code
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
@@ -595,6 +595,10 @@ class RepoImageRotateView(APIView):
         if permission is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if parse_repo_perm(permission).can_edit_on_web is False:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         username = request.user.username
         # get token
         try:
