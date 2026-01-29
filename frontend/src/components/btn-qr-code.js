@@ -29,14 +29,13 @@ class ButtonQR extends React.Component {
     const { link } = this.props;
     const { isPopoverOpen } = this.state;
     return (
-      <div className="ml-2" ref={ref => this.btn = ref}>
+      <div className="ml-2" id="qr-code-button" ref={ref => this.btn = ref}>
         <Button outline color="primary" className="btn-icon btn-qr-code-icon sf3-font sf3-font-qr-code" onClick={this.togglePopover} type="button"></Button>
-        {this.btn && (
+        {isPopoverOpen && (
           <ClickOutside onClickOutside={() => this.setState({ isPopoverOpen: false })}>
             <QRCodePopover
-              isOpen={isPopoverOpen}
-              target={this.btn}
-              onToggle={this.togglePopover}
+              container={this.btn}
+              target="qr-code-button"
               value={link}
             />
           </ClickOutside>

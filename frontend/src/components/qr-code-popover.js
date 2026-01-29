@@ -5,7 +5,7 @@ import { Popover, PopoverBody, Button } from 'reactstrap';
 import toaster from './toast';
 import { gettext } from '../utils/constants';
 
-const QRCodePopover = ({ isOpen, target, onToggle, value, className = '' }) => {
+const QRCodePopover = ({ container, target, value }) => {
   const qrCodeRef = React.useRef(null);
 
   const downloadQRCode = useCallback(() => {
@@ -97,11 +97,11 @@ const QRCodePopover = ({ isOpen, target, onToggle, value, className = '' }) => {
 
   return (
     <Popover
-      className={`qr-code-popover ${className}`}
       placement="bottom"
-      isOpen={isOpen}
+      isOpen={true}
+      fade={true}
+      container={container}
       target={target}
-      toggle={onToggle}
       onClick={onPopoverContentClick}
       onMouseDown={onPopoverMouseDown}
     >
@@ -133,11 +133,9 @@ const QRCodePopover = ({ isOpen, target, onToggle, value, className = '' }) => {
 };
 
 QRCodePopover.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
   target: PropTypes.object,
-  onToggle: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
-  className: PropTypes.string
+  container: PropTypes.object
 };
 
 export default QRCodePopover;

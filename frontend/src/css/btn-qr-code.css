@@ -5,11 +5,6 @@
   padding: 0.375rem;
 }
 
-.qr-code-popover {
-  text-align: center;
-  padding: 16px;
-}
-
 .qr-code-container {
   display: flex;
   justify-content: center;

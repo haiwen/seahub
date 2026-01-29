@@ -115,6 +115,7 @@ class LinkItem extends React.Component {
     const { item } = this.props;
     const { isSelected = false, permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
+    const opsVisible = isItemOpVisible || isQRCodePopoverOpen || isHighlighted;
     return (
       <Fragment>
         <tr
@@ -124,7 +125,7 @@ class LinkItem extends React.Component {
           onMouseOver={this.onMouseOver}
           onMouseOut={this.onMouseOut}
           className={classnames('cursor-pointer', {
-            'tr-highlight': isHighlighted,
+            'tr-highlight': isHighlighted || isQRCodePopoverOpen,
             'tr-active': isSelected
           }
           )}
@@ -151,19 +152,17 @@ class LinkItem extends React.Component {
           </td>
           <td>{item.password && <i className='sf2-icon-tick'></i>}</td>
           <td>
-            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
-            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
-            <a href="#" role="button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
-            {this.qrCodeBtn && (
+            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+            <a href="#" role="button" id="qr-code-button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
+            {isQRCodePopoverOpen && (
               <ClickOutside
                 onClickOutside={() => this.setState({ isQRCodePopoverOpen: false })}
               >
                 <QRCodePopover
-                  isOpen={isQRCodePopoverOpen}
-                  target={this.qrCodeBtn}
-                  onToggle={this.toggleQRCodePopover}
+                  container={this.qrCodeBtn}
+                  target="qr-code-button"
                   value={link}
-                  className="qr-code-popover"
                 />
               </ClickOutside>
             )}
