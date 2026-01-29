@@ -250,8 +250,15 @@ class DirView(APIView):
 
         with_parents = to_python_boolean(with_parents)
 
+        with_metadata = request.GET.get('with_metadata', 'false')
+        if with_metadata not in ('true', 'false'):
+            error_msg = 'with_metadata invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        with_metadata = to_python_boolean(with_metadata)
+
         metadata_record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        is_metadata_enabled = metadata_record and metadata_record.enabled
+        is_metadata_enabled = with_metadata and metadata_record and metadata_record.enabled
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -307,14 +314,27 @@ class DirView(APIView):
                         # Prepare file list for metadata API
                         file_list_for_metadata = []
                         for file_info in files:
+                            file_parent_dir = file_info.get('parent_dir') or parent_dir
+                            file_parent_dir = file_parent_dir.rstrip('/')
                             file_list_for_metadata.append({
-                                'parent_dir': file_info.get('parent_dir') or parent_dir,
+                                'parent_dir': file_parent_dir,
                                 'file_name': file_info.get('name')
                             })
 
                         try:
                             from seafevents.repo_metadata.constants import METADATA_TABLE
                             metadata_server_api = MetadataServerAPI(repo_id, username)
+
+                            # Define metadata columns to fetch
+                            metadata_columns = ['creator', 'last_modifier', 'status']
+
+                            # Prepare file list for metadata API
+                            file_list_for_metadata = []
+                            for file_info in files:
+                                file_list_for_metadata.append({
+                                    'parent_dir': file_info.get('parent_dir') or parent_dir,
+                                    'file_name': file_info.get('name')
+                                })
 
                             where_conditions = []
                             parameters = []
@@ -423,8 +443,10 @@ class DirView(APIView):
             if files:
                     file_list_for_metadata = []
                     for file_info in files:
+                        file_parent_dir = file_info.get('parent_dir') or parent_dir
+                        file_parent_dir = file_parent_dir.rstrip('/')
                         file_list_for_metadata.append({
-                            'parent_dir': file_info.get('parent_dir') or parent_dir,
+                            'parent_dir': file_parent_dir,
                             'file_name': file_info.get('name')
                         })
 
