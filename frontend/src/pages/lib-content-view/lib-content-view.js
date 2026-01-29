@@ -24,7 +24,7 @@ import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE } from '../../metadata/constants';
-import { CONFIGURABLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS_WITH_METADATA, DIR_COLUMN_VISIBILITY_STORAGE_KEY } from '../../constants/dir-column-visibility';
+import { CONFIGURABLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS, DIR_COLUMN_VISIBILITY_STORAGE_KEY } from '../../constants/dir-column-visibility';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
@@ -695,7 +695,8 @@ class LibContentView extends React.Component {
 
     try {
       const direntRes = await seafileAPI.listDir(repoID, path, {
-        with_thumbnail: true
+        with_thumbnail: true,
+        with_metadata: true
       });
       const {
         dirent_list,
