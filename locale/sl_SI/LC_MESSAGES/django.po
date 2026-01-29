@@ -2402,11 +2402,11 @@ msgstr "Uspešno shranjenjo"
 
 #: seahub/share/views.py:187
 msgid "Preview and download"
-msgstr ""
+msgstr "Pregledaj in preveri"
 
 #: seahub/share/views.py:188
 msgid "Preview only"
-msgstr ""
+msgstr "Pregledaj le"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
@@ -2617,7 +2617,7 @@ msgstr "Prijava"
 
 #: seahub/templates/registration/login.html:58
 msgid "Refresh"
-msgstr ""
+msgstr "Ponovno naloži"
 
 #: seahub/templates/registration/login.html:78
 msgid "Incorrect email or password"

@@ -460,7 +460,7 @@ msgstr ""
 #: frontend/src/components/common/notification.js:187
 #| msgid "Mark all read"
 msgid "Mark all as read"
-msgstr ""
+msgstr " merkkaa kaikki luetuksi"
 
 #: frontend/src/components/common/notification.js:188
 #| msgid "All Notifications"
@@ -1015,7 +1015,7 @@ msgstr ""
 #: frontend/src/components/dialog/add-wiki-page-dialog.js:58
 #: frontend/src/pages/wiki2/wiki-nav/wiki-nav.js:244
 msgid "New page"
-msgstr ""
+msgstr "Uusi sivu"
 
 #: frontend/src/components/dialog/change-group-dialog.js:30
 msgid "Are you sure to change group {placeholder} to department ?"
@@ -1153,7 +1153,7 @@ msgstr "Poistetut hakemistot"
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:64
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:96
 msgid "Confirm"
-msgstr ""
+msgstr "Vahvista"
 
 #: frontend/src/components/dialog/confirm-delete-account.js:28
 #: frontend/src/components/user-settings/delete-account.js:36
@@ -1288,7 +1288,7 @@ msgstr "Kopioi valitut kohteet:"
 #: frontend/src/components/sf-table/searcher/searcher-input.js:52
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/index.js:83
 msgid "Search"
-msgstr ""
+msgstr "Etsi"
 
 #: frontend/src/components/dialog/copy-move-dirent-progress-dialog.js:20
 msgid "Move {num} items"
@@ -1988,7 +1988,7 @@ msgstr "Ole hyvä ja syötä päivät"
 #: frontend/src/components/dialog/sysadmin-dialog/sysadmin-lib-history-setting-dialog.js:58
 #: frontend/src/components/share-link-panel/link-creation.js:221
 msgid "Please enter a non-negative integer"
-msgstr ""
+msgstr "Ole hyvä ja syötä ei-negatiivinen kokonaisluku"
 
 #: frontend/src/components/dialog/generate-upload-link.js:206
 msgid "Upload link is copied to the clipboard."
@@ -2260,7 +2260,7 @@ msgstr ""
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
-msgstr ""
+msgstr "Sisäinen linkki on linkki dokumentin sisällä."
 
 #: frontend/src/components/dialog/internal-link-dialog.js:68
 #: frontend/src/components/dialog/share-dialog.js:128
@@ -2512,7 +2512,7 @@ msgstr "Etsi ryhmiä"
 #: frontend/src/metadata/components/popover/sort-popover/index.js:219
 #: frontend/src/pages/excalidraw-editor/extension/select-image-dialog/local-image/index.js:180
 msgid "No results"
-msgstr ""
+msgstr "Ei tuloksia"
 
 #: frontend/src/components/dialog/lib-sub-folder-set-group-permission-dialog.js:396
 #: frontend/src/components/dialog/lib-sub-folder-set-user-permission-dialog.js:361
@@ -3918,7 +3918,7 @@ msgstr "Osastot"
 #: frontend/src/components/dialog/transfer-dialog.js:216
 #| msgid "Select a department"
 msgid "Search department"
-msgstr ""
+msgstr "Etsi osittain"
 
 #: frontend/src/components/dialog/transfer-dialog.js:229
 #| msgid ""
@@ -4494,7 +4494,7 @@ msgstr "Poista merkintä"
 #: frontend/src/pages/shared-libs/item.js:266
 #: frontend/src/utils/text-translation.js:156
 msgid "Star"
-msgstr ""
+msgstr "Merkitse suosikki"
 
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:679
 #: frontend/src/components/dirent-list-view/dirent-list-view.js:680
@@ -4728,36 +4728,36 @@ msgstr ""
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:31
 #| msgid "No tags"
 msgid "All comments"
-msgstr ""
+msgstr "Kaikki kommentit"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:27
 msgid "Resolved comments"
-msgstr ""
+msgstr "Ratkaistut kommentit"
 
 #: frontend/src/components/file-view/comment-widget/comment-body-header.js:29
 #| msgid "Unfreeze Document"
 msgid "Unresolved comments"
-msgstr ""
+msgstr "Aiemmat kommentit"
 
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
 #| msgid "Are you sure to delete "
 msgid "Are you sure to delete this comment?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa tämän kommentin?"
 
 #: frontend/src/components/file-view/comment-widget/comment-delete-popover.js:60
 #| msgid "Are you sure to delete "
 msgid "Are you sure to delete this reply?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa tämän vastauksen?"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:176
 #| msgid "Mark all read"
 msgid "Mark as resolved"
-msgstr ""
+msgstr " Merkitse ratkaistu"
 
 #: frontend/src/components/file-view/comment-widget/comment-item.js:185
 #| msgid "Submit"
 msgid "Resubmit"
-msgstr ""
+msgstr " Lähetä uudelleen"
 
 #: frontend/src/components/file-view/comment-widget/comment-list.js:104
 #| msgid "Documents"
@@ -4771,7 +4771,7 @@ msgstr "Ei kommentteja vielä."
 #: frontend/src/components/file-view/comment-widget/reply-list.js:92
 #| msgid "File details"
 msgid "Comment details"
-msgstr ""
+msgstr "Kommentti"
 
 #: frontend/src/components/file-view/file-info.js:28
 #: frontend/src/pages/markdown-editor/header-toolbar/file-info.js:14
@@ -4805,7 +4805,7 @@ msgstr ""
 
 #: frontend/src/components/file-view/file-toolbar.js:170
 msgid "Print"
-msgstr ""
+msgstr "Tulosta"
 
 #: frontend/src/components/file-view/file-toolbar.js:197
 #: frontend/src/components/file-view/file-toolbar.js:287
@@ -4816,7 +4816,7 @@ msgstr ""
 #: frontend/src/pages/markdown-editor/header-toolbar/header-toolbar.js:279
 #: frontend/src/shared-dir-view.js:254 frontend/src/shared-dir-view.js:874
 msgid "Save"
-msgstr ""
+msgstr "Tallenna"
 
 #: frontend/src/components/file-view/file-toolbar.js:224
 #: frontend/src/components/file-view/file-toolbar.js:324
@@ -5173,7 +5173,7 @@ msgstr ""
 
 #: frontend/src/components/pdf-viewer.js:21
 msgid "Outline"
-msgstr ""
+msgstr "Ulkoinen rakenne"
 
 #: frontend/src/components/pdf-viewer.js:337
 #| msgid "Document"
@@ -5194,11 +5194,11 @@ msgstr ""
 #: frontend/src/components/popover/edit-filetag-popover.js:141
 #: frontend/src/tag/views/all-tags/tags-table/index.js:318
 msgid "No tags"
-msgstr ""
+msgstr "Ei taggejä"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:145
 msgid "Tag not found"
-msgstr ""
+msgstr "Ei vaihtoehtoja"
 
 #: frontend/src/components/popover/edit-filetag-popover.js:158
 msgid "Find a tag"
@@ -5206,12 +5206,12 @@ msgstr ""
 
 #: frontend/src/components/popover/edit-filetag-popover.js:186
 msgid "Create a new tag"
-msgstr ""
+msgstr "Luo uusi tagi"
 
 #: frontend/src/components/published-wiki-entrance.js:30
 #| msgid "Publish"
 msgid "Published"
-msgstr ""
+msgstr "Julkaistu"
 
 #: frontend/src/components/published-wiki-entrance.js:36
 #| msgid "Wiki published"
@@ -6135,7 +6135,7 @@ msgstr ""
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
 #: frontend/src/pages/sdoc-revision/index.js:122
 msgid "Publish"
-msgstr ""
+msgstr "Julkaise"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:258
 #| msgid "Convert Wiki"
@@ -6237,7 +6237,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:21
 msgid "Full screen"
-msgstr ""
+msgstr "Koko näkymä"
 
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:27
 #: frontend/src/metadata/components/cell-editors/geolocation-editor/location-controls.js:28
@@ -6290,7 +6290,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:464
 #: frontend/src/metadata/components/popover/options-popover/index.js:217
 msgid "Search option"
-msgstr ""
+msgstr "Etsi vaihtoehto"
 
 #: frontend/src/metadata/components/cell-editors/multiple-select-editor/index.js:265
 #: frontend/src/metadata/components/cell-editors/single-select-editor/index.js:263
@@ -6339,7 +6339,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:37
 msgid "1 filter"
-msgstr ""
+msgstr "Yksi suodatin"
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:38
 msgid "Filters"
@@ -6347,7 +6347,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/filter-setter.js:39
 msgid "Filter"
-msgstr ""
+msgstr "Suodata"
 
 #: frontend/src/metadata/components/data-process-setter/gallery-group-by-setter.js:9
 msgid "Year"
@@ -6428,16 +6428,16 @@ msgstr ""
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:20
 msgid "1 sort"
-msgstr ""
+msgstr "Yksi järjestys"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:21
 msgid "sorts"
-msgstr ""
+msgstr "Järjestykset"
 
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:22
 #: frontend/src/metadata/components/data-process-setter/sort-setter.js:60
 msgid "Sort"
-msgstr ""
+msgstr "Järjestä"
 
 #: frontend/src/metadata/components/dialog/delete-confirm-dialog/index.js:13
 msgid "Are you sure to delete "
@@ -6690,7 +6690,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:55
 msgid "Style"
-msgstr ""
+msgstr "Tyyli"
 
 #: frontend/src/metadata/components/popover/column-popover/data/rate-data/index.js:91
 msgid "Max"
@@ -6729,20 +6729,20 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:68
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:81
 msgid "And"
-msgstr ""
+msgstr "Ja"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:72
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item-utils.js:86
 msgid "Or"
-msgstr ""
+msgstr "Vai"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/collaborator-filter/index.js:86
 msgid "Search collaborator"
-msgstr ""
+msgstr "Hae yhteistyökumppana"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:350
 msgid "Select option(s)"
-msgstr ""
+msgstr "Valitse vaihtoehto(ja)"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:445
 msgid "deleted option"
@@ -6750,7 +6750,7 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:462
 msgid "Select an option"
-msgstr ""
+msgstr "Valitse vaihtoehto"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:480
 msgid "Select collaborators"
@@ -6765,7 +6765,7 @@ msgstr ""
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:557
 #: frontend/src/metadata/components/popover/filter-popover/basic-filters/tags-filter.js:67
 msgid "Invalid filter"
-msgstr ""
+msgstr "Virheellinen suodatin"
 
 #: frontend/src/metadata/components/popover/filter-popover/advanced-filters/filter-item/index.js:605
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:187
@@ -6809,23 +6809,23 @@ msgstr ""
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:150
 msgid "No filters"
-msgstr ""
+msgstr "Ei suodattimia"
 
 #: frontend/src/metadata/components/popover/filter-popover/index.js:166
 #| msgid "1 filter"
 msgid "Add filter"
-msgstr ""
+msgstr "Lisää suodatin"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:88
 #: frontend/src/metadata/components/popover/sort-popover/index.js:21
 #: frontend/src/metadata/components/popover/sort-popover/index.js:188
 msgid "Up"
-msgstr ""
+msgstr "Ylös"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:91
 #: frontend/src/metadata/components/popover/sort-popover/index.js:24
 msgid "Down"
-msgstr ""
+msgstr "Alas"
 
 #: frontend/src/metadata/components/popover/groupbys-popover/groupbys/groupby-item.js:102
 msgid "By day"
@@ -6874,14 +6874,14 @@ msgstr ""
 #: frontend/src/metadata/views/card/settings/index.js:112
 #: frontend/src/metadata/views/kanban/settings/index.js:153
 msgid "Hide all"
-msgstr ""
+msgstr "Piilota kaikki sarakkeet"
 
 #: frontend/src/metadata/components/popover/hidden-column-popover/index.js:127
 #: frontend/src/metadata/components/popover/hidden-column-popover/index.js:130
 #: frontend/src/metadata/views/card/settings/index.js:113
 #: frontend/src/metadata/views/kanban/settings/index.js:154
 msgid "Show all"
-msgstr ""
+msgstr "Näytä kaikki sarakkeet"
 
 #: frontend/src/metadata/components/popover/kanban-add-category-popover/index.js:38
 #: frontend/src/metadata/components/popover/options-popover/index.js:57
@@ -6967,12 +6967,12 @@ msgstr ""
 #: frontend/src/metadata/components/popover/sort-popover/index.js:256
 #| msgid "sorts"
 msgid "No sorts"
-msgstr ""
+msgstr "Ei järjestyksiä"
 
 #: frontend/src/metadata/components/popover/sort-popover/index.js:263
 #| msgid "Add User"
 msgid "Add sort"
-msgstr ""
+msgstr "Lisää järjestys"
 
 #: frontend/src/metadata/components/view-details/index.js:19
 msgid "There is no information to display."
@@ -7082,7 +7082,7 @@ msgstr ""
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:32
 msgid "contains"
-msgstr ""
+msgstr " Sisältää"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:33
 msgid "does not contain"
@@ -7090,19 +7090,19 @@ msgstr ""
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:34
 msgid "is"
-msgstr ""
+msgstr "On"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:35
 msgid "is not"
-msgstr ""
+msgstr "Ei ole"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:42
 msgid "is empty"
-msgstr ""
+msgstr "On tyhjä"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:43
 msgid "is not empty"
-msgstr ""
+msgstr "Ei ole tyhjä"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:44
 msgid "is within..."
@@ -7142,11 +7142,11 @@ msgstr ""
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:53
 msgid "is current user's ID"
-msgstr ""
+msgstr "On nykyinen käyttäjä"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:54
 msgid "include the current user"
-msgstr ""
+msgstr "Includoi minut"
 
 #: frontend/src/metadata/constants/filter/filter-predicate.js:55
 msgid "is any of..."
@@ -7171,7 +7171,7 @@ msgstr ""
 
 #: frontend/src/metadata/constants/view/index.js:39
 msgid "Card"
-msgstr ""
+msgstr "Kortti"
 
 #: frontend/src/metadata/constants/view/index.js:40
 #| msgid "Status"
@@ -7201,7 +7201,7 @@ msgstr "Audio"
 #: frontend/src/metadata/constants/view/statistics.js:9
 #: frontend/src/metadata/utils/column/index.js:295
 msgid "Code"
-msgstr ""
+msgstr "Sisäinen koodi"
 
 #: frontend/src/metadata/constants/view/statistics.js:10
 #: frontend/src/metadata/utils/column/index.js:298
@@ -7216,7 +7216,7 @@ msgstr ""
 #: frontend/src/metadata/constants/view/statistics.js:27
 #: frontend/src/metadata/utils/column/index.js:168
 msgid "Created time"
-msgstr ""
+msgstr "Luoajan aika"
 
 #: frontend/src/metadata/constants/view/statistics.js:28
 #| msgid "Modified files"
@@ -7611,7 +7611,7 @@ msgstr ""
 #: frontend/src/metadata/views/statistics/charts/SummaryCards.js:18
 #| msgid "Collaborator"
 msgid "Collaborators"
-msgstr ""
+msgstr "Osallistujat"
 
 #: frontend/src/metadata/views/statistics/index.js:68
 #| msgid "No options available"
@@ -8415,15 +8415,15 @@ msgstr ""
 
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:68
 msgid "Switch to plain text editor"
-msgstr ""
+msgstr "Vaihda tekstieditoriin"
 
 #: frontend/src/pages/markdown-editor/header-toolbar/more-menu.js:70
 msgid "Switch to rich text editor"
-msgstr ""
+msgstr "Vaihda muotoiltu tekstieditoriin"
 
 #: frontend/src/pages/markdown-editor/index.js:91
 msgid "This file has been updated."
-msgstr ""
+msgstr "Tiedosto on päivitetty."
 
 #: frontend/src/pages/markdown-editor/index.js:92
 msgid "Refresh"
@@ -8886,7 +8886,7 @@ msgstr ""
 
 #: frontend/src/pages/org-admin/org-saml-config.js:85
 msgid "Copied"
-msgstr ""
+msgstr "Kopioitu"
 
 #: frontend/src/pages/org-admin/org-saml-config.js:100
 #: frontend/src/pages/org-admin/side-panel.js:116
@@ -9288,25 +9288,25 @@ msgstr ""
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:283
 msgid "No changes"
-msgstr ""
+msgstr "Ei muutoksia"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:296
 msgid "Changes"
-msgstr ""
+msgstr "Muutokset"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:304
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:305
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:321
 #| msgid "Last modified time"
 msgid "Last modification"
-msgstr ""
+msgstr "Viimeksi muokattu"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:315
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:316
 #: frontend/src/pages/sdoc/sdoc-file-history/index.js:324
 #| msgid "Notifications"
 msgid "Next modification"
-msgstr ""
+msgstr "Seuraava muutos"
 
 #: frontend/src/pages/sdoc/sdoc-file-history/side-panel.js:200
 msgid "No version history"
@@ -9535,7 +9535,7 @@ msgstr ""
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:33
 msgid "Suggestion"
-msgstr ""
+msgstr "Suhde"
 
 #: frontend/src/pages/sys-admin/file-scan-records.js:111
 msgid "Content Scan Records"

@@ -6,7 +6,7 @@
 # Translators:
 # aa bbb <lung375706226@gmail.com>, 2017
 # david082321 <david082321@gmail.com>, 2018
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2025-2026
 # david082321 <david082321@gmail.com>, 2018
 msgid ""
 msgstr ""
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: david082321 <david082321@gmail.com>, 2018\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025-2026\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -427,12 +427,12 @@ msgstr "系統資料庫"
 #: frontend/src/components/common/notice-item.js:428
 #| msgid "Email notification updated"
 msgid "Mark notification as read"
-msgstr ""
+msgstr "將通知標記為已讀"
 
 #: frontend/src/components/common/notice-item.js:451
 #| msgid "All Notifications"
 msgid "View notification"
-msgstr ""
+msgstr "查看通知"
 
 #: frontend/src/components/common/notification-popover/index.js:88
 #: frontend/src/user-notifications.js:228
@@ -2989,12 +2989,12 @@ msgstr "重新命名目錄"
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename file"
 msgid "Rename file to"
-msgstr ""
+msgstr "將檔案重命名為"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename folder"
 msgid "Rename folder to"
-msgstr ""
+msgstr "將資料夾重命名為"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:55
 msgid "Rename Group"
@@ -3022,7 +3022,7 @@ msgstr "重新命名 Wiki"
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
 #| msgid "Rename Wiki"
 msgid "Rename Wiki to"
-msgstr ""
+msgstr "將Wiki重命名為"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:56
 msgid "API token is copied to the clipboard."
@@ -4322,7 +4322,7 @@ msgstr "最後修改時間"
 #: frontend/src/metadata/components/detail-editor/tags-editor/index.js:136
 #| msgid "Edit Quota"
 msgid "Edit tags"
-msgstr ""
+msgstr "編輯標籤"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:22
 msgid "Dimensions"
@@ -4545,7 +4545,7 @@ msgstr "資料庫"
 
 #: frontend/src/components/file-content-view/image.js:95
 msgid "you can also press →"
-msgstr ""
+msgstr "你也可以按 →"
 
 #: frontend/src/components/file-uploader/file-uploader.js:146
 #: frontend/src/components/file-uploader/file-uploader.js:266
@@ -5347,7 +5347,7 @@ msgstr "訪客"
 #: frontend/src/components/select-members-to-share-with.js:59
 #| msgid "Select a department"
 msgid "Select members from department"
-msgstr ""
+msgstr "從部門中選擇成員"
 
 #: frontend/src/components/send-link.js:45
 msgid "Please input at least an email."
@@ -6130,7 +6130,7 @@ msgstr "Wiki 已發布"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:224
 msgid "Visit the wiki"
-msgstr ""
+msgstr "訪問wiki"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
 #: frontend/src/pages/sdoc-revision/index.js:122
@@ -10899,19 +10899,19 @@ msgstr "圖書館已完成人臉識別 {libraryName}."
 
 #: frontend/src/translate.js:41
 msgid "A folder named {upload_folder_link} is uploaded to {uploaded_link}."
-msgstr ""
+msgstr "名為 {upload_folder_link} 的資料夾已上載到 {uploaded_link}。"
 
 #: frontend/src/translate.js:42
 msgid "A folder named {upload_folder_link} is uploaded."
-msgstr ""
+msgstr "已上載名為 {upload_folder_link} 的資料夾。"
 
 #: frontend/src/translate.js:43
 msgid "A file named {upload_file_link} is uploaded to {uploaded_link}."
-msgstr ""
+msgstr "名為{upload_file_link}的檔案已上載到{uploaded_link}。"
 
 #: frontend/src/translate.js:44
 msgid "A file named {upload_file_link} is uploaded."
-msgstr ""
+msgstr "已上載名為{upload_file_link}的檔案。"
 
 #: frontend/src/user-notifications.js:200
 msgid "Mark all read"

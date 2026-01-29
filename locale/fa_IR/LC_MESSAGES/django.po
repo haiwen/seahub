@@ -2049,7 +2049,7 @@ msgstr ""
 
 #: seahub/notifications/utils.py:478 seahub/notifications/utils.py:498
 msgid "Details"
-msgstr ""
+msgstr "جزئیات"
 
 #: seahub/notifications/utils.py:484
 #, python-format
