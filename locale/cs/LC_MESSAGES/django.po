@@ -8,6 +8,7 @@
 # mgeisselreiter <mg@gz.cz>, 2020-2021
 # Pavel Borecki <pavel.borecki@gmail.com>, 2018,2021
 # Petr Zientek <shmaic@gmail.com>, 2017
+# Seafile Info <info@seafile.com>, 2026
 # Tomáš Holan <tomas@holan.dev>, 2017-2019
 # Tomáš Kubalík <tkubalik@ifrog.cz>, 2017,2019-2020,2024
 msgid ""
@@ -16,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Tomáš Kubalík <tkubalik@ifrog.cz>, 2017,2019-2020,2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Czech (http://app.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -59,12 +60,12 @@ msgstr "Spojení SAML se nezdařilo, nejprve se přihlaste."
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Login failed: The email %s is not consistent with the email %s from ADFS/SAML service"
 
 #: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "Uživatel nebyl nalezen v týmu."
 
 #: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
@@ -86,7 +87,7 @@ msgstr "Odpojení SAML se nezdařilo. Nejprve prosím nastavte heslo."
 #: seahub/adfs_auth/views.py:746
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "Odpojení SAML se nezdařilo. Nejprve prosím nastavte kontaktní e-mail."
 
 #: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
@@ -199,7 +200,7 @@ msgstr "Knihovnu nelze převést na vlastníka."
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Váš tým {org.org_name} byl deaktivován."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
@@ -555,7 +556,7 @@ msgstr "Přístup odmítnut."
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "Rozšíření souboru není v seznamu povolených."
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1170
@@ -609,7 +610,7 @@ msgstr "Skupina neexistuje"
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "Email or LoginID"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
@@ -888,7 +889,7 @@ msgstr "Již máte %(nb_avatars)d avatarů, maximální povolený počet avatar�
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "Délka WebDAV hesla by měla být menší než 30."
 
 #: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
 #: seahub/api2/endpoints/wikis.py:219
@@ -927,7 +928,7 @@ msgstr "Odkaz ke sdílení pro vás"
 #: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Permission error: you are not the admin of the department"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -1038,7 +1039,7 @@ msgstr "Nelze změnit heslo."
 #: seahub/auth/views.py:537
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr ""
+msgstr "Tým {domain} nemá oprávnění použít ADFS/SAML SSO."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -1111,7 +1112,7 @@ msgstr "Vaše kvóta na %s je téměř vyčerpána"
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "Kvóta týmu na %s je téměř vyčerpána."
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1228,12 +1229,12 @@ msgstr "Výchozí"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr ""
+msgstr "Tým {org_name} je neaktivní."
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr ""
+msgstr "Prosím kontaktujte {SUPPORT_EMAIL}, pokud chcete aktivovat tým."
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1591,11 +1592,11 @@ msgstr "Jste pozván do skupiny na %s"
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "Group invite link does not exist"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "Group invite link broken"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
@@ -1864,7 +1865,7 @@ msgstr "Host %(user)s přijal Vaše accepted your <a href=\"%(url_base)s%(inv_ur
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s has transferred a library named <a href=\"%(repo_url)s\">%(repo_name)s</a> to you."
 
 #: seahub/notifications/models.py:1004
 #, python-brace-format
@@ -2144,14 +2145,14 @@ msgstr "E-mailová adresa není platná"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "Dostali jste tuto e-mailovou zprávu, protože váš tým %(org_name)s byl deaktivován."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nPokud si přejete pokračovat na našem webu, klikněte <a href=\"%(link)s\">zde</a>. Jinak se vašim účtem smaže po 60 dní.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2173,7 +2174,7 @@ msgstr "Vítejte spátky, již jste přihlášen."
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "Budeš přesměrován na domovskou stránku za 5 sekund."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
@@ -2251,7 +2252,7 @@ msgstr "Neplatný token."
 #: seahub/organizations/views.py:358
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Expirovaný token."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2310,7 +2311,7 @@ msgstr "Úspěšně nastavena \"%s\" jako výchzí knihovna."
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr ""
+msgstr "Metadata není podporována pro knihovny obsahující více než %s souborů."
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -2528,7 +2529,7 @@ msgid ""
 "\n"
 "        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n"
 "      "
-msgstr ""
+msgstr "\n        Click <a href=\"%(link)s\">here</a> to reactivate your team and relogin.\n      "
 
 #: seahub/templates/i18n.html:6
 msgid "Upload Folder"
@@ -2718,7 +2719,7 @@ msgstr "Chyba při resetu hesla: tento odkaz již není dostupný."
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Pokud je váš email v našem databázi, budete dostávat krátký e-mail."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
@@ -2946,7 +2947,7 @@ msgstr "Vaše heslo na %(site_name)s bylo vyresetováno. Nyní je %(password)s. 
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Vaše kvóta na %(site_name)s je téměř vyčerpána."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
@@ -3025,7 +3026,7 @@ msgid ""
 "    for login verification. If you've used up all your backup tokens, you\n"
 "    can generate a new set of backup tokens. Only the backup tokens shown\n"
 "    below will be valid."
-msgstr ""
+msgstr "Záložní kódy mohou být použity, když se Váš primární a záložní telefonní číslo nemohou použít. Záložní kódy níže mohou být použity pro ověření přihlášení. Pokud jste použili všechny Vaše záložní kódy, můžete vygenerovat nové. Stačí použít pouze tyto záložní kódy."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."
@@ -3109,7 +3110,7 @@ msgstr "Vypnout dvoufaktorovou autentizaci"
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "Opravdu chcete vypnout dvoufaktorovou autentizaci? To může compromitovat zabezpečení Vašeho účtu."
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"
@@ -3253,7 +3254,7 @@ msgstr "Nelze stáhnout soubor"
 #: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "Revize nenalezena"
 
 #: seahub/views/file.py:2192
 msgid "The original file does not exist"

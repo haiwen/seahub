@@ -109,7 +109,7 @@ class InvitationRevokeTest(BaseTestCase):
 
     @patch.object(CanInviteGuest, 'has_permission')
     @patch.object(UserPermissions, 'can_invite_guest')
-    def test_can_invite_again_after_revoke(self, mock_can_invite_guest, mock_has_permission):
+    def test_cannot_invite_inactive_regular_user(self, mock_can_invite_guest, mock_has_permission):
         mock_can_invite_guest.return_val = True
         mock_has_permission.return_val = True
 
@@ -127,12 +127,12 @@ class InvitationRevokeTest(BaseTestCase):
             'type': 'guest',
             'accepter': self.tmp_username,
         })
-        self.assertEqual(201, resp.status_code)
-        assert len(Invitation.objects.all()) == 1
+        self.assertEqual(400, resp.status_code)
+        assert len(Invitation.objects.all()) == 0
 
     @patch.object(CanInviteGuest, 'has_permission')
     @patch.object(UserPermissions, 'can_invite_guest')
-    def test_can_invite_batch_again_and_accept_again_after_revoke(self, mock_can_invite_guest, mock_has_permission):
+    def test_cannot_invite_batch_inactive_regular_user(self, mock_can_invite_guest, mock_has_permission):
 
         mock_can_invite_guest.return_val = True
         mock_has_permission.return_val = True
@@ -152,18 +152,6 @@ class InvitationRevokeTest(BaseTestCase):
             'accepter': [self.tmp_username, ],
         })
         self.assertEqual(200, resp.status_code)
-        assert len(Invitation.objects.all()) == 1
 
-        # accept again
-        self.logout()
-
-        iv = Invitation.objects.all()[0]
-        token_endpoint = reverse('invitations:token_view', args=[iv.token])
-        assert iv.accept_time is None
-        resp = self.client.post(token_endpoint, {
-            'password': 'passwd'
-        })
-        self.assertEqual(302, resp.status_code)
-        assert Invitation.objects.get(pk=iv.pk).accept_time is not None
-        tmp_user_accept = User.objects.get(self.tmp_username)
-        assert tmp_user_accept.is_active is True
+        # regular (inactive) user can not accept invitation
+        assert len(Invitation.objects.all()) == 0

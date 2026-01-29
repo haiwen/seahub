@@ -7,13 +7,14 @@
 # eddelac <edg.delac@gmail.com>, 2013
 # Hector Colina <hcolina@gmail.com>, 2013
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2015,2017
+# Seafile Info <info@seafile.com>, 2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>, 2015,2017\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Spanish (Mexico) (http://app.transifex.com/haiwen/seahub/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -283,21 +284,21 @@ msgstr "{share_from} ha compartido una carpeta llamada {repo_link} contigo."
 msgid ""
 "{share_from} has changed the permission of library {repo_link} to "
 "{permission}."
-msgstr ""
+msgstr "{share_from} has changed the permission of library {repo_link} to {permission}."
 
 #: frontend/src/components/common/notice-item.js:108
 msgid ""
 "{share_from} has changed the permission of folder {repo_link} to "
 "{permission}."
-msgstr ""
+msgstr "{share_from} has changed the permission of folder {repo_link} to {permission}."
 
 #: frontend/src/components/common/notice-item.js:128
 msgid "{share_from} has cancelled the sharing of library {repo_name}."
-msgstr ""
+msgstr "{share_from} has cancelled the sharing of library {repo_name}."
 
 #: frontend/src/components/common/notice-item.js:130
 msgid "{share_from} has cancelled the sharing of folder {repo_name}."
-msgstr ""
+msgstr "{share_from} has cancelled the sharing of folder {repo_name}."
 
 #: frontend/src/components/common/notice-item.js:149
 msgid ""
@@ -312,106 +313,106 @@ msgstr "{share_from} ha compartido una carpeta llamada {repo_link} al grupo {gro
 #: frontend/src/components/common/notice-item.js:171
 #| msgid "{user} has transfered a library named {repo_link} to you."
 msgid "{user} has transferred a library named {repo_link} to you."
-msgstr ""
+msgstr "{user} has transferred a library named {repo_link} to you."
 
 #: frontend/src/components/common/notice-item.js:268
 msgid "{user} created file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} created file {fileName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:268
 msgid ""
 "{user} created file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} created file {fileName} and {fileCount} other file(s) in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:271
 msgid "{user} deleted file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} deleted file {fileName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:271
 msgid ""
 "{user} deleted file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} deleted file {fileName} and {fileCount} other file(s) in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:275
 msgid "{user} restored file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} restored file {fileName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:278
 msgid "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} renamed file {oldFileName} {fileName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:282
 msgid "{user} moved file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} moved file {fileName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:282
 msgid ""
 "{user} moved file {fileName} and {fileCount} other file(s) in library "
 "{libraryName}."
-msgstr ""
+msgstr "{user} moved file {fileName} and {fileCount} other file(s) in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:285
 msgid "{user} updated file {fileName} in library {libraryName}."
-msgstr ""
+msgstr "{user} updated file {fileName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:297
 msgid "{user} created folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} created folder {folderName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:297
 msgid ""
 "{user} created folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} created folder {folderName} and {folderCount} other folder(s) in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:300
 msgid "{user} deleted folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} deleted folder {folderName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:300
 msgid ""
 "{user} deleted folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} deleted folder {folderName} and {folderCount} other folder(s) in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:304
 msgid "{user} restored folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} restored folder {folderName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:307
 msgid ""
 "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} renamed folder {oldFolderName} {folderName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:311
 msgid "{user} moved folder {folderName} in library {libraryName}."
-msgstr ""
+msgstr "{user} moved folder {folderName} in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:311
 msgid ""
 "{user} moved folder {folderName} and {folderCount} other folder(s) in "
 "library {libraryName}."
-msgstr ""
+msgstr "{user} moved folder {folderName} and {folderCount} other folder(s) in library {libraryName}."
 
 #: frontend/src/components/common/notice-item.js:361
 #: frontend/src/components/common/notice-item.js:388
 msgid "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
-msgstr ""
+msgstr "Marked \"{resolve_comment}\" as resolved in document {sdoc_link}"
 
 #: frontend/src/components/common/notice-item.js:365
 #: frontend/src/components/common/notice-item.js:392
 msgid "Marked as resolved in document {sdoc_link}"
-msgstr ""
+msgstr "Marked as resolved in document {sdoc_link}"
 
 #: frontend/src/components/common/notice-item.js:369
 msgid "Added a new comment in document {sdoc_link}:"
-msgstr ""
+msgstr "Added a new comment in document {sdoc_link}:"
 
 #: frontend/src/components/common/notice-item.js:396
 msgid "Added a new reply in document {sdoc_link}:"
-msgstr ""
+msgstr "Added a new reply in document {sdoc_link}:"
 
 #: frontend/src/components/common/notice-item.js:417
 #: frontend/src/pages/org-admin/statistic/statistic-traffic.js:90
@@ -10191,7 +10192,7 @@ msgstr "Inmovilizar la cuenta del usuario cuando el número de intentos de acces
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:213
 msgid "Enable sharing to all groups"
-msgstr ""
+msgstr "Enable sharing to all groups"
 
 #: frontend/src/pages/sys-admin/web-settings/web-settings.js:216
 msgid "Enable users to share libraries to any groups in the system."

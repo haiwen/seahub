@@ -2391,11 +2391,11 @@ msgstr "Vellykket lagring."
 
 #: seahub/share/views.py:187
 msgid "Preview and download"
-msgstr ""
+msgstr "Forhåndsvisning og nedlasting"
 
 #: seahub/share/views.py:188
 msgid "Preview only"
-msgstr ""
+msgstr "Kun forhåndsvisning"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
@@ -2411,7 +2411,7 @@ msgstr ""
 
 #: seahub/share/views.py:223
 msgid "Share Link"
-msgstr ""
+msgstr "Del lenke"
 
 #: seahub/share/views.py:223 seahub/views/sysadmin.py:656
 msgid "Creator"

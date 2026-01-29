@@ -610,7 +610,7 @@
   "Add_video_link": "Добавить ссылку на видео",
   "Link_Seafile_video_file": "Ссылка на видео файл Seafile",
   "Select_video_file": "Выбрать видео файл",
-  "Support_YouTube_Bilibili_and_more": "Support YouTube, Bilibili and more",
+  "Support_YouTube_Bilibili_and_more": "Поддержка YouTube, Bilibili и многого другого",
   "Image_cannot_be_copied_Please_download_the_source_image": "Изображение не может быть скопировано. Скачайте исходное изображение,",
   "And_select_insert_-_image_to_upload": "и выбрать 「вставить」 - 「изображение」 для загрузки.",
   "Image_copy_error": "Ошибка копирования изображения",
@@ -649,5 +649,5 @@
   "Go_to_link" : "Перейти по ссылке",
   "Link_block" : "Блок ссылок",
   "The_link_address_or_link_block_is_required": "Требуется указать адрес ссылки или блок ссылок",
-  "Comment_filter": "Comment filter"
+  "Comment_filter": "Фильтр комментариев"
 }

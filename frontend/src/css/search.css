@@ -540,3 +540,15 @@
   font-size: 14px;
   margin-bottom: 10px;
 }
+
+.search-loading-more {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.search-load-more-trigger {
+  height: 1px;
+  width: 100%;
+}

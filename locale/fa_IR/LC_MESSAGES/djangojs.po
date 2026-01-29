@@ -3153,7 +3153,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/logs-page/file-update-logs.js:137
 #: frontend/src/repo-history.js:292 frontend/src/utils/text-translation.js:72
 msgid "Details"
-msgstr ""
+msgstr "جزئیات"
 
 #: frontend/src/components/dialog/repo-history.js:283
 #: frontend/src/repo-history.js:313
@@ -9793,7 +9793,7 @@ msgstr ""
 #: frontend/src/pages/sys-admin/main-panel-topbar.js:20
 #: frontend/src/pages/wiki2/main-panel.js:260
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "منوی ناوبری کناری"
 
 #: frontend/src/pages/sys-admin/notifications/notifications.js:47
 #: frontend/src/translate.js:13

@@ -5,14 +5,14 @@
 # Translators:
 # Translators:
 # Seafile Info <info@seafile.com>, 2025
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2025
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2026
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2015-05-09 05:28+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>, 2015-2017,2019,2022-2026\n"
 "Language-Team: Korean (http://app.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -425,12 +425,12 @@ msgstr "시스템"
 #: frontend/src/components/common/notice-item.js:428
 #| msgid "Email notification updated"
 msgid "Mark notification as read"
-msgstr ""
+msgstr "읽은 알림으로 표시"
 
 #: frontend/src/components/common/notice-item.js:451
 #| msgid "All Notifications"
 msgid "View notification"
-msgstr ""
+msgstr "알림 보기"
 
 #: frontend/src/components/common/notification-popover/index.js:88
 #: frontend/src/user-notifications.js:228
@@ -2987,12 +2987,12 @@ msgstr "폴더 이름 바꾸기"
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename file"
 msgid "Rename file to"
-msgstr ""
+msgstr "파일 이름 바꾸기"
 
 #: frontend/src/components/dialog/rename-dialog.js:98
 #| msgid "Rename folder"
 msgid "Rename folder to"
-msgstr ""
+msgstr "폴더 이름 바꾸기"
 
 #: frontend/src/components/dialog/rename-group-dialog.js:55
 msgid "Rename Group"
@@ -3020,7 +3020,7 @@ msgstr "위키 이름 변경"
 #: frontend/src/components/dialog/rename-wiki-dialog.js:72
 #| msgid "Rename Wiki"
 msgid "Rename Wiki to"
-msgstr ""
+msgstr "위키 이름 바꾸기"
 
 #: frontend/src/components/dialog/repo-api-token-dialog.js:56
 msgid "API token is copied to the clipboard."
@@ -4320,7 +4320,7 @@ msgstr "마지막 수정 시간"
 #: frontend/src/metadata/components/detail-editor/tags-editor/index.js:136
 #| msgid "Edit Quota"
 msgid "Edit tags"
-msgstr ""
+msgstr "태그 편집"
 
 #: frontend/src/components/dirent-detail/dirent-details/file-details/index.js:22
 msgid "Dimensions"
@@ -5345,7 +5345,7 @@ msgstr "손님"
 #: frontend/src/components/select-members-to-share-with.js:59
 #| msgid "Select a department"
 msgid "Select members from department"
-msgstr ""
+msgstr "부서 구성원 선택"
 
 #: frontend/src/components/send-link.js:45
 msgid "Please input at least an email."
@@ -6128,7 +6128,7 @@ msgstr "위키가 공개되었습니다"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:224
 msgid "Visit the wiki"
-msgstr ""
+msgstr "위키 방문"
 
 #: frontend/src/components/wiki-card-view/wiki-card-item.js:247
 #: frontend/src/pages/sdoc-revision/index.js:122
@@ -10897,11 +10897,11 @@ msgstr "라이브러리 {libraryName}의 얼굴 인식이 완료되었습니다.
 
 #: frontend/src/translate.js:41
 msgid "A folder named {upload_folder_link} is uploaded to {uploaded_link}."
-msgstr ""
+msgstr "{upload_folder_link} 폴더를 {uploaded_link}에 업로드했습니다."
 
 #: frontend/src/translate.js:42
 msgid "A folder named {upload_folder_link} is uploaded."
-msgstr ""
+msgstr "{upload_folder_link} 폴더를 업로드했습니다."
 
 #: frontend/src/translate.js:43
 msgid "A file named {upload_file_link} is uploaded to {uploaded_link}."
@@ -10909,7 +10909,7 @@ msgstr "{upload_file_link} 파일이 {uploaded_link} 링크에 올라갔습니�
 
 #: frontend/src/translate.js:44
 msgid "A file named {upload_file_link} is uploaded."
-msgstr ""
+msgstr "{upload_file_link} 파일을 업로드했습니다."
 
 #: frontend/src/user-notifications.js:200
 msgid "Mark all read"

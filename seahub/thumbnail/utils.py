@@ -32,6 +32,13 @@ except ImportError:
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+MAX_PAGE_AREA = 8000000  # 8 million square points
+# If the page size is large but does not exceed the limit, reduce DPI
+LARGE_WIDTH_HEIGHT_THRESHOLD = 2000
+LARGE_AREA_THRESHOLD = 3000000
+# PDF size threshold for detailed page size checking (bytes)
+LARGE_PDF_SIZE_THRESHOLD = 50 * 1024 * 1024  # 50MB
+
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
 
@@ -101,8 +108,8 @@ def generate_thumbnail(request, repo_id, size, path):
 
     filetype, fileext = get_file_type_and_ext(os.path.basename(path))
 
-    if filetype == VIDEO and not ENABLE_VIDEO_THUMBNAIL:
-        return (False, 400)
+    if filetype == VIDEO:
+        return (False, 400) # video thumbnails not supported in seahub
 
     file_id = get_file_id_by_path(repo_id, path)
     if not file_id:
@@ -115,13 +122,6 @@ def generate_thumbnail(request, repo_id, size, path):
     repo = get_repo(repo_id)
     file_size = get_file_size(repo.store_id, repo.version, file_id)
 
-    if filetype == VIDEO:
-        # video thumbnails
-        if ENABLE_VIDEO_THUMBNAIL:
-            return create_video_thumbnails(repo, file_id, path, size,
-                                           thumbnail_file, file_size)
-        else:
-            return (False, 400)
     if filetype == PDF:
         # pdf thumbnails
         return create_pdf_thumbnails(repo, file_id, path, size,
@@ -194,26 +194,67 @@ def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
         os.unlink(tmp_img_path)
         return (False, 500)
 
-
-def pdf_bytes_to_images(pdf_bytes, prefix_path, dpi=200):
+def pdf_bytes_to_images(pdf_bytes, prefix_path, dpi=150):
     with tempfile.NamedTemporaryFile(delete=True, suffix='.pdf') as tmpfile:
         tmpfile.write(pdf_bytes)
         tmp_file = tmpfile.name
+        
+        if len(pdf_bytes) > LARGE_PDF_SIZE_THRESHOLD:
+            pdf_info_command = [
+                'pdfinfo',
+                '-f', '1',
+                '-l', '1',
+                tmp_file
+            ]
+            try:
+                page_info = subprocess.check_output(pdf_info_command, stderr=subprocess.PIPE).decode('utf-8')
+                
+                page_size = None
+                for line in page_info.split('\n'):
+                    if 'Page    1 size:' in line:
+                        page_size = line.strip()
+                        break
+                # check page size
+                if page_size:
+                    # format: "Page    1 size:  6000 x 6000 pts"
+                    parts = page_size.split(':', 1)[1].strip().split('x')
+                    if len(parts) >= 2:
+                        width = float(parts[0].strip())
+                        height = float(parts[1].split('pts')[0].strip())
+                        area = width * height
+                        if area > MAX_PAGE_AREA:
+                            raise Exception(f'PDF page area too large: {area:.0f} sq pts (limit: {MAX_PAGE_AREA})')
+
+                        if (width > LARGE_WIDTH_HEIGHT_THRESHOLD or height > LARGE_WIDTH_HEIGHT_THRESHOLD or 
+                            area > LARGE_AREA_THRESHOLD):
+                            dpi = 72  # use min dpi
+                            logger.info(f'Large PDF page detected ({width}x{height}), reducing DPI to {dpi}')
+                            
+            except Exception as e:
+                # If it is clear that the page was skipped due to being too large, throw the exception again 
+                if 'PDF page too large' in str(e) or 'PDF page area too large' in str(e):
+                    logger.error(f'PDF thumbnail generation failed: {e}')
+                    return (False, 400)
+                dpi = 72
+        
         command = [
             'pdftoppm',
             '-png',
             '-r', str(dpi),
             '-f', '1',
             '-l', '1',
+            '-scale-to', '1024',
             '-singlefile', tmp_file,
             '-o', prefix_path
         ]
         try:
-            subprocess.check_output(command)
-        except Exception as e:
-            logger.error(e)
+            subprocess.check_output(command, timeout=60)
+        except subprocess.TimeoutExpired:
+            logger.error('PDF thumbnail generation timed out after 60 seconds')
             return (False, 500)
-
+        except subprocess.CalledProcessError as e:
+            logger.error(f'pdftoppm failed: {e}')
+            return (False, 500)
 
 def create_pdf_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
     t1 = timeit.default_timer()
