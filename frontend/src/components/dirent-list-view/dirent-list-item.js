@@ -956,7 +956,7 @@ class DirentListItem extends React.Component {
         {showLastModifier && (
           <div className="dirent-property dirent-property-last-modifier">
             <Formatter
-              field={{ type: CellType.LAST_MODIFIER, name: gettext('Last Modifier') }}
+              field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }}
               value={dirent.last_modifier}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
