@@ -8,10 +8,6 @@
   align-items: center;
 }
 
-.editable-status-wrapper.readonly {
-  cursor: default;
-}
-
 .editable-status-loading {
   position: absolute;
   right: 5px;

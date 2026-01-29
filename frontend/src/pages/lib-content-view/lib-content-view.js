@@ -139,10 +139,8 @@ class LibContentView extends React.Component {
             : DEFAULT_VISIBLE_COLUMNS;
 
           const validColumns = parsed.filter(col => baseColumns.includes(col));
-          if (validColumns.length > 0) {
-            this.setState({ visibleColumns: validColumns });
-            return;
-          }
+          this.setState({ visibleColumns: validColumns });
+          return;
         }
       }
     } catch (error) {

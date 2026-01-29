@@ -52,7 +52,7 @@ class DirTool extends React.Component {
     return effectiveConfigurableColumns.filter(col => !visibleColumns.includes(col));
   };
 
-  handleColumnVisibilityChange = (hiddenColumns) => {
+  modifyHiddenColumns = (hiddenColumns) => {
     const allConfigurableColumns = CONFIGURABLE_COLUMNS;
     const visibleCols = allConfigurableColumns.filter(col => !hiddenColumns.includes(col));
 
@@ -114,7 +114,7 @@ class DirTool extends React.Component {
               { key: 'status', name: gettext('Status') },
             ]}
             hiddenColumns={this.getHiddenColumns()}
-            modifyHiddenColumns={this.handleColumnVisibilityChange}
+            modifyHiddenColumns={this.modifyHiddenColumns}
           />
         )}
 
