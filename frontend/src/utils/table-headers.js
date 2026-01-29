@@ -118,7 +118,7 @@ export const createTableHeaders = (
           href: '#',
           onClick: (e) => { e.preventDefault(); onSort && onSort('time'); }
         },
-        gettext('Last Update'),
+        gettext('Last update'),
         sortBy === 'time' && sortIcon
       )
     }] : []),
@@ -150,7 +150,7 @@ export const createTableHeaders = (
           href: '#',
           onClick: (e) => { e.preventDefault(); onSort && onSort('last_modifier'); }
         },
-        gettext('Last Modifier'),
+        gettext('Last modifier'),
         sortBy === 'last_modifier' && sortIcon
       )
     }] : []),
