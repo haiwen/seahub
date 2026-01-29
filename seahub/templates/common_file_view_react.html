@@ -20,6 +20,7 @@ fileExt: '{{ fileext|escapejs }}',
 thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
 thumbnailSizeForGrid: {{ thumbnail_size_for_grid }},
 thumbnailDefaultSize: {{ thumbnail_default_size }},
+canRotate: {% if can_rotate %} true {% else %} false {% endif %},
 {% endif %}
 
 {% if filetype == 'Video' %}

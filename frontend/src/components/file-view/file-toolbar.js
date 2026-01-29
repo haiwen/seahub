@@ -34,6 +34,7 @@ const {
   canEditFile, err,
   // fileEnc, // for 'edit', not undefined only for some kinds of files (e.g. text file)
   canDownloadFile,
+  canRotate,
   fileDownloadURL,
   canEditPDF,
   enableOnlyoffice
@@ -157,7 +158,7 @@ class FileToolbar extends React.Component {
                   icon="rotate"
                   text={gettext('Rotate')}
                   onClick={this.props.rotateImage}
-                  disabled={isLocked} // disable rotate when file is locked
+                  disabled={isLocked || !canRotate} // disable rotate when file is locked
                 />
               )}
             </>
