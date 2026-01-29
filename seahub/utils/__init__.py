@@ -289,19 +289,44 @@ def is_valid_username2(username):
     """
     return (not username.startswith(' ')) and (not username.endswith(' '))
 
+
 def is_valid_dirent_name(name):
     """Check whether repo/dir/file name is valid.
     """
+    if not name or '..' in name:
+        return False
+
+    # Core Unicode ranges for most common single-code-point emojis
+    # Refer to Unicode Standard 15.0+, classified by emoji type for easy maintenance
+    EMOJI_UNICODE_RANGES = [
+        (0x1F600, 0x1F64F),  # Face & emotion emojis (😀😃😄😁😆 etc.)
+        (0x1F300, 0x1F5FF),  # Symbols, patterns & natural scenes (🌲🌊⭐️🎨 etc.)
+        (0x1F680, 0x1F6FF),  # Transport, technology & tools (🚗✈️💻⌚️ etc.)
+        (0x1F1E0, 0x1F1FF),  # Country flags & letter emojis (🇨🇳🇺🇸🇬🇧 etc.)
+        (0x2600, 0x26FF),    # Miscellaneous symbols (☀️⭐️☁️⚡️ etc.)
+        (0x2700, 0x27BF),    # Dingbats & hand gestures (❤️✋✌️👍 etc.)
+        (0x1F900, 0x1F9FF),  # Extended emojis (🦸🦹🧑💻🧶 etc.)
+        (0x1FA00, 0x1FAFF),  # Further extended emojis (🫶🫵🫰 etc., single-code-point)
+    ]
+
     for character in name:
-        # Emojis fall within the range \U0001F300 to \U0001FAD6
-        if 0x1F300 <= ord(character) <= 0x1FAD6:
+        char_ord = ord(character)
+        if any(start <= char_ord <= end for start, end in EMOJI_UNICODE_RANGES):
             return False
-    if name == '..':
+
+        if character == '/' or character == '\\':
+            return False
+
+    try:
+        encoded = name.encode("utf-8")
+    except UnicodeEncodeError:
         return False
-    if '/' in name:
+
+    if len(encoded) > 256:
         return False
-    # `repo_id` parameter is not used in seafile api
-    return seafile_api.is_valid_filename('fake_repo_id', name)
+
+    return True
+
 
 def is_ldap_user(user):
     """Check whether user is a LDAP user.

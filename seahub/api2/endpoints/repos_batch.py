@@ -31,7 +31,9 @@ from seahub.share.signals import share_repo_to_user_successful, \
         share_repo_to_group_successful
 from seahub.utils import is_org_context, send_perm_audit_msg, \
         normalize_dir_path, get_folder_permission_recursively, \
-        normalize_file_path, check_filename_with_rename, get_file_type_and_ext
+        normalize_file_path, check_filename_with_rename, \
+        get_file_type_and_ext, is_valid_dirent_name
+
 from seahub.utils.repo import get_repo_owner, get_available_repo_perms, \
         parse_repo_perm, get_locked_files_by_dir, get_sub_folder_permission_by_dir
 
@@ -661,8 +663,7 @@ class ReposBatchCreateDirView(APIView):
             for obj_name in obj_name_list:
                 try:
                     # check if path is valid
-                    is_valid_name = seafile_api.is_valid_filename(
-                            'fake_repo_id', obj_name)
+                    is_valid_name = is_valid_dirent_name(obj_name)
                 except Exception as e:
                     logger.error(e)
                     error_dict = {
