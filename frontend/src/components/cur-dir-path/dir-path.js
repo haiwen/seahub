@@ -207,7 +207,7 @@ class DirPath extends React.Component {
 
   renderTrashFolderPath = () => {
     const { trashData } = this.state;
-    const { commitID, baseDir, folderPath } = trashData;
+    const { folderPath } = trashData;
     const pathList = folderPath.split('/');
 
     return (

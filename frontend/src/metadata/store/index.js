@@ -79,6 +79,7 @@ class Store {
     data.hasMore = loadedCount === limit;
     if (this.viewId === TRASH_VIEW_ID) {
       data.hasMore = res.data.total_count > res.data.items.length;
+      data.canSearch = res.data.can_search;
       data.page = 1;
       data.view.type = 'trash';
       data.showFolder = false;
@@ -151,6 +152,7 @@ class Store {
     let data = new Metadata({ rows, columns: this.data.columns });
     data.view.type = 'trash';
     data.showFolder = true;
+    data.canSearch = false;
     data.commitID = commitID;
     data.baseDir = baseDir;
     data.folderPath = folderPath;
@@ -453,6 +455,7 @@ class Store {
     data.showFolder = false;
     data.hasMore = prevData.hasMore;
     data.page = prevData.page;
+    data.canSearch = prevData.canSearch;
     this.data = data;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS);

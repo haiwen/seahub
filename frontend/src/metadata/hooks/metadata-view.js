@@ -11,6 +11,7 @@ import {
   PRIVATE_COLUMN_KEY,
   SUPPORT_SEARCH_COLUMN_LIST,
   TABLE_NOT_DISPLAY_COLUMN_KEYS,
+  TRASH_VIEW_ID,
   shouldPreserveSearchForOperation
 } from '../constants';
 import { Utils, validateName } from '../../utils/utils';
@@ -118,12 +119,15 @@ export const MetadataViewProvider = ({
       setLoading(false);
       delayReloadDataTimer.current = null;
       notifyTableChanged(EVENT_BUS_TYPE.RELOAD_DATA);
+      if (viewID == TRASH_VIEW_ID) {
+        window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_TOOLBAR, storeRef.current.data);
+      }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       setErrorMessage(errorMsg);
       setLoading(false);
     });
-  }, [notifyTableChanged]);
+  }, [notifyTableChanged, viewID]);
 
   const delayReloadMetadata = useCallback(() => {
     delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
@@ -288,6 +292,7 @@ export const MetadataViewProvider = ({
     setMetadata(storeRef.current.data);
     setTimeout(() => {
       window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_FOLDER_PATH, storeRef.current.data);
+      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_TOOLBAR, storeRef.current.data);
     }, 0);
   };
 
