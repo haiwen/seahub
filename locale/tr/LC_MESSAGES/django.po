@@ -8,6 +8,7 @@
 # Cevdet Kaymaz <ck@vr.net.tr>, 2014,2021
 # Evrim Güner <evrim.guner@veriyum.net.tr>, 2014-2015
 # Muhammed Şamil Kıvanç, 2022
+# Seafile Info <info@seafile.com>, 2026
 # Şevval ANLI, 2022
 # zheng xie <xiez1989@gmail.com>, 2015
 msgid ""
@@ -16,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Muhammed Şamil Kıvanç, 2022\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Turkish (http://app.transifex.com/haiwen/seahub/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,7 +27,7 @@ msgstr ""
 
 #: seahub/adfs_auth/utils.py:56
 msgid "ADFS/SAML login relevant settings invalid."
-msgstr ""
+msgstr "ADFS/SAML giriş ilgili ayarlar geçersiz."
 
 #: seahub/adfs_auth/views.py:59 seahub/adfs_auth/views.py:570
 #: seahub/adfs_auth/views.py:599 seahub/adfs_auth/views.py:639
@@ -35,13 +36,13 @@ msgstr ""
 #: seahub/adfs_auth/views.py:735 seahub/adfs_auth/views.py:739
 #: seahub/adfs_auth/views.py:807 seahub/adfs_auth/views.py:811
 msgid "Internal server error. Please contact system administrator."
-msgstr ""
+msgstr "Internal server error. Lütfen sistem yöneticisine başvurun."
 
 #: seahub/adfs_auth/views.py:60
 msgid ""
 "Login failed: Bad response from ADFS/SAML service. Please report to your "
 "organization (company) administrator."
-msgstr ""
+msgstr "Giriş başarısız: ADFS/SAML hizmetinden yanlış yanıt aldınız. Lütfen organizasyonunuz (şirketiniz) yöneticisine bildirin."
 
 #: seahub/adfs_auth/views.py:126 seahub/adfs_auth/views.py:142
 #: seahub/api2/endpoints/admin/users.py:794
@@ -52,45 +53,45 @@ msgstr "Kullanıcı sayısı sınırı aşıyor."
 
 #: seahub/adfs_auth/views.py:224 seahub/adfs_auth/views.py:429
 msgid "Failed to bind SAML, please login first."
-msgstr ""
+msgstr "SAML bağlantısı başarısız. Lütfen önce giriş yapın."
 
 #: seahub/adfs_auth/views.py:274
 #, python-format
 msgid ""
 "Login failed: The email %s is not consistent with the email %s from "
 "ADFS/SAML service"
-msgstr ""
+msgstr "Giriş başarısız: %s e-posta adresi ADFS/SAML hizmetinden gelen %s ile tutarsız."
 
 #: seahub/adfs_auth/views.py:307
 #| msgid "User %s not found."
 msgid "User not found in Team."
-msgstr ""
+msgstr "Kullanıcı takımında bulunamadı."
 
 #: seahub/adfs_auth/views.py:342 seahub/adfs_auth/views.py:539
 msgid ""
 "Login failed: user is deactivated. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Giriş başarısız: kullanıcı devre dışı. Lütfen organizasyonunuz (şirketiniz) yöneticisine bildirin."
 
 #: seahub/adfs_auth/views.py:595 seahub/adfs_auth/views.py:655
 #: seahub/adfs_auth/views.py:706
 msgid ""
 "Login failed: ADFS/SAML service error. Please report to your organization "
 "(company) administrator."
-msgstr ""
+msgstr "Giriş başarısız: ADFS/SAML hizmetinden hata aldınız. Lütfen organizasyonunuz (şirketiniz) yöneticisine bildirin."
 
 #: seahub/adfs_auth/views.py:743
 msgid "Failed to unbind SAML, please set a password first."
-msgstr ""
+msgstr "SAML bağlantısı başarısız. Lütfen önce şifre belirleyin."
 
 #: seahub/adfs_auth/views.py:746
 #| msgid "Failed to bind SAML, please login first."
 msgid "Failed to unbind SAML, the user is forced login by SSO."
-msgstr ""
+msgstr "SAML bağlantısı başarısız. Kullanıcı SSO ile zorunlu olarak giriş yaptı."
 
 #: seahub/adfs_auth/views.py:751
 msgid "Failed to unbind SAML, please set a contact email first."
-msgstr ""
+msgstr "SAML bağlantısı başarısız. Lütfen önce iletişim e-posta adresi belirleyin."
 
 #: seahub/api2/endpoints/admin/account.py:204
 #: seahub/api2/endpoints/user.py:101 seahub/api2/views.py:380
@@ -173,14 +174,14 @@ msgstr "%s kullanıcısı zaten grup sahibi."
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
-msgstr ""
+msgstr "%s kullanıcısı zaten bir kurum üyesi."
 
 #: seahub/api2/endpoints/admin/institution_users.py:174
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to this "
 "institution"
-msgstr ""
+msgstr "%s kullanıcısı zaten bu kurum üyesi."
 
 #: seahub/api2/endpoints/admin/libraries.py:268 seahub/views/sysadmin.py:712
 msgid "System library can not be deleted."
@@ -189,7 +190,7 @@ msgstr "Sistem kütüphanesi silinemez."
 #: seahub/api2/endpoints/admin/libraries.py:390 seahub/api2/views.py:1934
 #, python-format
 msgid "Transfer failed: role of %s is %s, can not add library."
-msgstr ""
+msgstr "Kütüphane transferi başarısız: %s kullanıcısının rolü %s, kütüphane ekleme işlemi yapılamaz."
 
 #: seahub/api2/endpoints/admin/libraries.py:416 seahub/api2/views.py:1939
 msgid "Library can not be transferred to owner."
@@ -199,7 +200,7 @@ msgstr "Kütüphane sahibine devredilemez."
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Your team {org.org_name} has been deactivated"
-msgstr ""
+msgstr "Takımınız {org.org_name} kuruluşu devre dışı bırakıldı."
 
 #: seahub/api2/endpoints/admin/share_links.py:225
 #: seahub/api2/endpoints/repo_share_links.py:155
@@ -341,7 +342,7 @@ msgstr "Alan Kotası"
 #: seahub/api2/endpoints/admin/users.py:692
 #: seahub/organizations/api/admin/users.py:155
 msgid "There are more than 500 users, and sort is not offered."
-msgstr ""
+msgstr "Kullanıcı sayısı 500'den fazla, sıralama sunulmamaktadır."
 
 #: seahub/api2/endpoints/admin/users.py:893
 #, python-format
@@ -388,7 +389,7 @@ msgstr "Düzenleme başarılı ama eposta gönderilemedi, lütfen eposta yapıla
 #: seahub/api2/endpoints/admin/users.py:1495 seahub/auth/forms.py:167
 #: seahub/auth/views.py:365
 msgid "Unable to reset password."
-msgstr ""
+msgstr "Şifre sıfırlama başarısız."
 
 #: seahub/api2/endpoints/admin/users.py:1513 seahub/auth/forms.py:195
 #: seahub/organizations/api/admin/user_set_password.py:74
@@ -400,7 +401,7 @@ msgstr "%s deki şifreyi sıfırla"
 #: seahub/organizations/api/admin/user_set_password.py:78
 #, python-brace-format
 msgid "A password reset link has been sent to {contact_email}."
-msgstr ""
+msgstr "Şifre sıfırlama bağlantısı {contact_email} adresine gönderildi."
 
 #: seahub/api2/endpoints/admin/users.py:1535 seahub/views/sysadmin.py:494
 #, python-format
@@ -410,7 +411,7 @@ msgstr "%s deki şifre sıfırlandı."
 #: seahub/api2/endpoints/admin/users.py:1537
 #, python-format
 msgid "Successfully reset password, an email has been sent to %(user)s."
-msgstr ""
+msgstr "Şifre sıfırlama başarılı, %(user)s kullanıcısına eposta gönderildi."
 
 #: seahub/api2/endpoints/admin/users.py:1541 seahub/views/sysadmin.py:524
 #, python-format
@@ -499,7 +500,7 @@ msgstr "Kota dışında."
 #: seahub/api2/endpoints/copy_move_task.py:164
 #, python-format
 msgid "Can not move folder %(src)s to its subfolder %(des)s"
-msgstr ""
+msgstr "Klasör %(src)s, %(des)s alt klasörüne taşınamaz."
 
 #: seahub/api2/endpoints/copy_move_task.py:180
 #: seahub/api2/endpoints/file.py:322 seahub/api2/endpoints/file.py:402
@@ -531,7 +532,7 @@ msgstr "%s kullanıcı bulunamadı."
 #: seahub/api2/endpoints/wiki2.py:601 seahub/api2/endpoints/wikis.py:135
 #: seahub/api2/views.py:2075 seahub/seadoc/apis.py:3155
 msgid "The number of files in library exceeds the limit"
-msgstr ""
+msgstr "Kütüphane dosya sayısı limitini aşıyor."
 
 #: seahub/api2/endpoints/file.py:310
 #: seahub/api2/endpoints/file_participants.py:113
@@ -555,7 +556,7 @@ msgstr "İzin reddedildi."
 
 #: seahub/api2/endpoints/file.py:333
 msgid "File extension is not in the whitelist"
-msgstr ""
+msgstr "Dosya uzantısı izin verilen liste dışında."
 
 #: seahub/api2/endpoints/file.py:756 seahub/api2/endpoints/file.py:776
 #: seahub/api2/endpoints/via_repo_token.py:1170
@@ -609,7 +610,7 @@ msgstr "Grup yok"
 #: seahub/api2/endpoints/group_members.py:576
 #| msgid "Email or Username"
 msgid "Email or LoginID"
-msgstr ""
+msgstr "E-posta veya Giriş ID'si"
 
 #: seahub/api2/endpoints/group_members.py:587 seahub/views/sysadmin.py:167
 #: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:653
@@ -687,7 +688,7 @@ msgstr "Parola çok zayıf"
 msgid ""
 "Password can only contain number, upper letter, lower letter and other "
 "symbols."
-msgstr ""
+msgstr "Parola sadece sayı, büyük harf, küçük harf ve diğer semboller içerebilir."
 
 #: seahub/api2/endpoints/multi_share_links.py:141
 #: seahub/api2/endpoints/multi_share_links.py:376
@@ -801,12 +802,12 @@ msgstr "%s 'de sizinle bir dosya paylaşıldı"
 #: seahub/api2/endpoints/send_share_link_email.py:100
 #: seahub/notifications/models.py:965
 msgid "folder"
-msgstr ""
+msgstr "klasör"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
 #, python-format
 msgid "A folder is shared to you on %s"
-msgstr ""
+msgstr "%s 'de sizinle bir klasör paylaşıldı"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:74
 msgid "email invalid."
@@ -820,17 +821,17 @@ msgstr "%s'de sizinle bir bağlantı yüklemesi paylaşıldı"
 #: seahub/api2/endpoints/share_link_auth.py:147
 #, python-format
 msgid "User %s does not exist."
-msgstr ""
+msgstr "%s kullanıcısı bulunamadı."
 
 #: seahub/api2/endpoints/share_link_auth.py:310
 #, python-format
 msgid "Email %s already exists."
-msgstr ""
+msgstr "E-posta %s zaten var."
 
 #: seahub/api2/endpoints/share_link_auth.py:316
 #, python-format
 msgid "Email %s is invalid."
-msgstr ""
+msgstr "Geçersiz %s e-posta"
 
 #: seahub/api2/endpoints/share_links.py:498
 #: seahub/api2/endpoints/share_links.py:507
@@ -888,7 +889,7 @@ msgstr "%(nb_avatars)d avatarınız var,  izin verilen maksimum sayı %(nb_max_a
 #: seahub/api2/endpoints/webdav_secret.py:56
 #| msgid "Length of WebDav password should be less than 30."
 msgid "Length of WebDAV password should be less than 30."
-msgstr ""
+msgstr "WebDAV parolasının uzunluğu 30 karakterden kısa olmalıdır."
 
 #: seahub/api2/endpoints/wiki2.py:220 seahub/api2/endpoints/wiki2.py:1485
 #: seahub/api2/endpoints/wikis.py:219
@@ -897,15 +898,15 @@ msgstr "İsim yalnızca harf, sayı, boşluk, kısa çizgi veya alt çizgi içer
 
 #: seahub/api2/endpoints/wiki2.py:1335
 msgid "URL is invalid"
-msgstr ""
+msgstr "Geçersiz URL"
 
 #: seahub/api2/endpoints/wiki2.py:1339
 msgid "The custom part of URL should have 5-30 characters."
-msgstr ""
+msgstr "URL özel kısmı 5-30 karakter arasında olmalıdır."
 
 #: seahub/api2/endpoints/wiki2.py:1361
 msgid "This custom domain is already in use and cannot be used for your wiki"
-msgstr ""
+msgstr "Bu özel alan zaten kullanılıyor, lütfen başka bir ad deneyin."
 
 #: seahub/api2/endpoints/wikis.py:122 seahub/api2/endpoints/wikis.py:226
 #, python-format
@@ -922,12 +923,12 @@ msgstr "İsim gerekli."
 
 #: seahub/api2/utils.py:338
 msgid "A share link for you"
-msgstr ""
+msgstr "Sizin için bir paylaşım bağlantısı"
 
 #: seahub/api2/views.py:1925
 #| msgid "Permission error: only group staff can add member"
 msgid "Permission error: you are not the admin of the department"
-msgstr ""
+msgstr "Yetki hatası: sizin bölüm yöneticisi değilsiniz"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
@@ -972,7 +973,7 @@ msgstr "Bu eposta adresine bağlantılı bir kullanıcı hesabı yok. Kayıt old
 #: seahub/auth/forms.py:119 seahub/auth/forms.py:120
 #: seahub/templates/registration/login.html:76
 msgid "Please use Single Sign-On to login."
-msgstr ""
+msgstr "Lütfen tekrar deneyin."
 
 #: seahub/auth/forms.py:125
 msgid ""
@@ -1033,12 +1034,12 @@ msgstr "Eposta gönderme başarısız, lütfen yönetici ile iletişim kurun."
 
 #: seahub/auth/views.py:454
 msgid "Unable to change password."
-msgstr ""
+msgstr "Şifre değişimi başarısız."
 
 #: seahub/auth/views.py:537
 #, python-brace-format
 msgid "Team {domain} does not have permission to use ADFS/SAML SSO."
-msgstr ""
+msgstr "Bu takım {domain} ADFS/SAML SSO kullanma izni yok."
 
 #: seahub/avatar/models.py:144 seahub/avatar/models.py:172
 #, python-format
@@ -1105,13 +1106,13 @@ msgstr "Bu kütüphanedeki dosyalar çevrimiçi görüntülenemez."
 #: seahub/base/management/commands/check_user_quota.py:58
 #, python-format
 msgid "Your quota is almost full on %s"
-msgstr "%s üzerinde kotanız dolmak üzere"
+msgstr "Your quota is almost full on %s"
 
 #: seahub/base/management/commands/check_user_quota.py:82
 #, python-format
 #| msgid "Your quota is almost full on %s"
 msgid "The team quota is almost full on %s"
-msgstr ""
+msgstr "Bu takım kütüphanesi zaten dolu %s."
 
 #: seahub/base/management/commands/createsuperuser.py:26
 msgid "Enter a valid e-mail address."
@@ -1228,12 +1229,12 @@ msgstr "Varsayılan"
 #, python-brace-format
 #| msgid "This account is inactive."
 msgid "Team {org_name} is inactive."
-msgstr ""
+msgstr "Bu takım zaten {org_name} pasif."
 
 #: seahub/base/middleware.py:76
 #, python-brace-format
 msgid "Please contact {SUPPORT_EMAIL} if you want to activate the team."
-msgstr ""
+msgstr "Bu takım etkinleştirilmesi için lütfen {SUPPORT_EMAIL} ile iletişime geçin."
 
 #: seahub/base/templatetags/seahub_tags.py:141
 msgid "Added"
@@ -1257,11 +1258,11 @@ msgstr "Taşındı"
 
 #: seahub/base/templatetags/seahub_tags.py:147
 msgid "Added folder"
-msgstr ""
+msgstr "Yeni klasör eklendi"
 
 #: seahub/base/templatetags/seahub_tags.py:148
 msgid "Removed folder"
-msgstr ""
+msgstr "Klasör kaldırıldı"
 
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/notifications/management/commands/send_file_updates.py:172
@@ -1291,7 +1292,7 @@ msgstr "Dosya \"%(file)s\" %(time)s durumuna geri alındı."
 #: seahub/base/templatetags/seahub_tags.py:173
 #: seahub/base/templatetags/seahub_tags.py:244
 msgid "Recovered deleted folder"
-msgstr ""
+msgstr "Klasör geri yüklendi"
 
 #: seahub/base/templatetags/seahub_tags.py:175
 #: seahub/base/templatetags/seahub_tags.py:246 seahub/views/ajax.py:457
@@ -1581,11 +1582,11 @@ msgstr "%s'deki bir gruba katılmaya davetlisiniz."
 #: seahub/group/views.py:192
 #| msgid "Group does not exist"
 msgid "Group invite link does not exist"
-msgstr ""
+msgstr "Grup davet bağlantısı mevcut değil"
 
 #: seahub/group/views.py:200
 msgid "Group invite link broken"
-msgstr ""
+msgstr "Grup davet bağlantısı geçersiz"
 
 #: seahub/institutions/views.py:185
 msgid "Owner"
@@ -1616,7 +1617,7 @@ msgstr "%(site_name)s'a katılmaya davetlisiniz."
 #: seahub/invitations/models.py:99
 #, python-brace-format
 msgid "You are invited to join team {org_name}."
-msgstr ""
+msgstr "Bu takım zaten {org_name} pasif."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:9
@@ -1646,7 +1647,7 @@ msgstr "Selam,"
 #, python-format
 msgid ""
 "You are invited to join team %(org_name)s. Please click the link below:"
-msgstr ""
+msgstr "Bu takım zaten %(org_name)s pasif."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:15
 #, python-format
@@ -1658,7 +1659,7 @@ msgstr "%(inviter_name)s sizi %(site_name)s'a katılmanız için davet etti. Lü
 #: seahub/invitations/templates/invitations/invitation_revoke_email.html:12
 #, python-format
 msgid "%(inviter)s revoked your access to %(site_name)s."
-msgstr ""
+msgstr "%(inviter)s sizi %(site_name)s'den çıkarttı."
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
@@ -1798,7 +1799,7 @@ msgstr ""
 #: seahub/notifications/models.py:661
 #, python-format
 msgid "A folder named <strong>%(folder_name)s</strong> is uploaded"
-msgstr ""
+msgstr "Klasör <strong>%(folder_name)s</strong> buraya yüklendi"
 
 #: seahub/notifications/models.py:795
 #, python-format
@@ -1852,70 +1853,70 @@ msgstr "Misafir %(user)s <a href=\"%(url_base)s%(inv_url)s\">davetinizi</a> %(ti
 msgid ""
 "%(user)s has transferred a library named <a "
 "href=\"%(repo_url)s\">%(repo_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s kullanıcısı <a href=\"%(repo_url)s\">%(repo_name)s</a> kütüphanesini size aktardı."
 
 #: seahub/notifications/models.py:1004
 #, python-brace-format
 msgid "{name} created {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_link} oluşturdu {repo_link}."
 
 #: seahub/notifications/models.py:1006
 #, python-brace-format
 msgid ""
 "{name} created {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_link} ve {obj_path_count_minus_one} diğer {obj_type}(s) oluşturdu {repo_link}."
 
 #: seahub/notifications/models.py:1011
 #, python-brace-format
 msgid "{name} deleted {obj_type} {obj_name} in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_name} silindi {repo_link}."
 
 #: seahub/notifications/models.py:1013
 #, python-brace-format
 msgid ""
 "{name} deleted {obj_type} {obj_name} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_name} ve {obj_path_count_minus_one} diğer {obj_type}(s) silindi {repo_link}."
 
 #: seahub/notifications/models.py:1017
 #, python-brace-format
 msgid "{name} restored {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_link} geri yüklendi {repo_link}."
 
 #: seahub/notifications/models.py:1021
 #, python-brace-format
 msgid ""
 "{name} renamed {obj_type} {old_obj_name} to {obj_link} in library "
 "{repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {old_obj_name} ismi {obj_link} olarak değiştirildi {repo_link}."
 
 #: seahub/notifications/models.py:1026
 #, python-brace-format
 msgid "{name} moved {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_link} taşındı {repo_link}."
 
 #: seahub/notifications/models.py:1028
 #, python-brace-format
 msgid ""
 "{name} moved {obj_type} {obj_link} and {obj_path_count_minus_one} other "
 "{obj_type}(s) in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_link} ve {obj_path_count_minus_one} diğer {obj_type}(s) taşındı {repo_link}."
 
 #: seahub/notifications/models.py:1032
 #, python-brace-format
 msgid "{name} updated {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {obj_type} {obj_link} güncellendi {repo_link}."
 
 #: seahub/notifications/models.py:1035
 #, python-brace-format
 msgid "{name} {op_type} {obj_type} {obj_link} in library {repo_link}."
-msgstr ""
+msgstr "{name} kütüphanesinde {op_type} {obj_type} {obj_link} {repo_link}."
 
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "{repo_name} kütüphanesi için yüz tanıma işlemi tamamlandı."
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format
@@ -2042,16 +2043,16 @@ msgstr "%(user)s <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a> grubuy
 msgid ""
 "Virus detected in library %(repo_name)s during regular scanning: "
 "%(file_path)s."
-msgstr ""
+msgstr "%(repo_name)s kütüphanesi düzenli tarama sırasında virüs tespit edildi: %(file_path)s."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning:"
-msgstr ""
+msgstr "Düzenli tarama sırasında virüs tespit edildi:"
 
 #: seahub/notifications/utils.py:471
 #, python-format
 msgid "%(author)s added a new comment in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s %(sdoc_name)s dosyasına yeni bir yorum ekledi."
 
 #: seahub/notifications/utils.py:478 seahub/notifications/utils.py:498
 msgid "Details"
@@ -2060,7 +2061,7 @@ msgstr "Ayrıntılar"
 #: seahub/notifications/utils.py:484
 #, python-format
 msgid "%(author)s added a new reply in document %(sdoc_name)s"
-msgstr ""
+msgstr "%(author)s %(sdoc_name)s dosyasına yeni bir yanıt ekledi."
 
 #: seahub/notifications/utils.py:490
 #, python-format
@@ -2106,16 +2107,16 @@ msgstr "Tüyo: İkincisi daha güvenli, ama tüm tarayıcılar tarafından iyi d
 #: seahub/organizations/api/admin/users.py:810
 #, python-brace-format
 msgid "Failed. You can only invite {org_members_quota} members."
-msgstr ""
+msgstr "Hata, sadece {org_members_quota} kullanıcıya davet edilebilir."
 
 #: seahub/organizations/api/admin/users.py:814
 msgid "The number of users exceeds the limit"
-msgstr ""
+msgstr "Kullanıcı sayısı limitini aşıyor."
 
 #: seahub/organizations/api/admin/users.py:832
 #, python-brace-format
 msgid "User {email} already exists."
-msgstr ""
+msgstr "Kullanıcı {email} zaten var."
 
 #: seahub/organizations/forms.py:41 seahub/share/views.py:354
 #: seahub/share/views.py:367
@@ -2130,14 +2131,14 @@ msgstr "E-posta adresi geçerli değil"
 msgid ""
 "You are receiving this email because your team %(org_name)s has been "
 "deactivated."
-msgstr ""
+msgstr "%(org_name)s organizasyonu devre dışı bırakıldı."
 
 #: seahub/organizations/templates/organizations/org_deactivate_email.html:16
 #, python-format
 msgid ""
 "\n"
 "If you like to continue using our site, click <a href=\"%(link)s\">here</a>. Otherwise your account will be deleted in 60 days.\n"
-msgstr ""
+msgstr "\nOrganizasyonu devre dışı bırakıldı. Lütfen <a href=\"%(link)s\">buraya</a> tıklayarak siteyi kullanmaya devam edin. Aksi takdirde 60 gün içinde hesabınız silinecektir.\n"
 
 #: seahub/organizations/templates/organizations/org_register.html:3
 #: seahub/organizations/templates/organizations/org_register.html:13
@@ -2159,7 +2160,7 @@ msgstr "Tekrar hoşgeldiniz, zaten kaydoldunuz."
 #: seahub/organizations/templates/organizations/org_register.html:17
 #: seahub/templates/registration/registration_form.html:18
 msgid "You will be redirected to the home page within 5 seconds."
-msgstr ""
+msgstr "5 saniye içinde ana sayfaya yönlendirileceksiniz."
 
 #: seahub/organizations/templates/organizations/org_register.html:25
 msgid "Organization Name"
@@ -2237,7 +2238,7 @@ msgstr "Geçersiz jeton"
 #: seahub/organizations/views.py:358
 #| msgid "Expiration"
 msgid "Expired token."
-msgstr ""
+msgstr "Jeton süresi doldu."
 
 #: seahub/profile/templates/profile/set_profile_react.html:5
 msgid "Settings"
@@ -2296,7 +2297,7 @@ msgstr "\"%s\" varsayılan kütüphaneniz olarak başarıyla kuruldu."
 msgid ""
 "Metadata feature is not supported for libraries containing more than %s "
 "files"
-msgstr ""
+msgstr "Kütüphane %s dosyası içeriyor, metadatanın desteklenmediği için."
 
 #: seahub/seadoc/views.py:26 seahub/seadoc/views.py:80
 #: seahub/seadoc/views.py:158 seahub/views/__init__.py:454
@@ -2307,23 +2308,23 @@ msgstr "Kütüphane yok"
 
 #: seahub/seadoc/views.py:152
 msgid "File path invalid."
-msgstr ""
+msgstr "Geçersiz dosya yolu."
 
 #: seahub/share/decorators.py:50
 msgid "Invalid verification code, please try again."
-msgstr ""
+msgstr "Geçersiz doğrulama kodu, lütfen tekrar deneyin."
 
 #: seahub/share/decorators.py:81
 msgid "Link does not exist."
-msgstr ""
+msgstr "Bağlantı yok."
 
 #: seahub/share/decorators.py:84
 msgid "Link is expired."
-msgstr ""
+msgstr "Bağlantı süresi doldu."
 
 #: seahub/share/decorators.py:125
 msgid "The number of share link exceeds the limit."
-msgstr ""
+msgstr "Paylaşılan bağlantı sayısı limitini aşıyor."
 
 #: seahub/share/models.py:127
 msgid "Password can't be empty"
@@ -2336,7 +2337,7 @@ msgstr "Lüfen doğru bir şifre giriniz."
 #: seahub/share/templates/share/audit_code_email.html:10
 #, python-format
 msgid "The verification code is %(code)s. It is valid for one hour."
-msgstr ""
+msgstr "Doğrulama kodu %(code)s. Geçerlilik süresi 1 saat."
 
 #: seahub/share/templates/share/share_link_email.html:9
 #, python-format
@@ -2355,7 +2356,7 @@ msgstr ""
 #: seahub/share/templates/share/share_link_email_audit.html:4
 #: seahub/share/templates/share/share_link_email_audit.html:39
 msgid "Email address verification"
-msgstr ""
+msgstr "E-posta adresi doğrulama"
 
 #: seahub/share/templates/share/share_link_email_audit.html:40
 msgid "Please provide your email address to continue."
@@ -2363,7 +2364,7 @@ msgstr "Devam etmek için lütfen e-posta adresinizi girin"
 
 #: seahub/share/templates/share/share_link_email_audit.html:43
 msgid "Enter your email address"
-msgstr ""
+msgstr "Lütfen e-posta adresinizi girin"
 
 #: seahub/share/templates/share/share_link_email_audit.html:44
 msgid "Get code"
@@ -2371,19 +2372,19 @@ msgstr "Kod al"
 
 #: seahub/share/templates/share/share_link_email_audit.html:46
 msgid "Paste the verification code here"
-msgstr ""
+msgstr "Doğrulama kodunu buraya yapıştırın"
 
 #: seahub/share/templates/share/share_link_email_audit.html:79
 msgid "Resend"
-msgstr ""
+msgstr "Yeniden gönder"
 
 #: seahub/share/templates/share/share_link_email_audit.html:107
 msgid "A verification code has been sent to the email address."
-msgstr ""
+msgstr "Doğrulama kodu e-posta adresinize gönderildi."
 
 #: seahub/share/views.py:133
 msgid "Please choose a folder."
-msgstr ""
+msgstr "Lütfen bir klasör seçin."
 
 #: seahub/share/views.py:157
 msgid "Successfully saved."
@@ -2433,7 +2434,7 @@ msgstr "Kütüphane yok."
 
 #: seahub/share/views.py:258 seahub/views/ajax.py:383
 msgid "Folder does not exist."
-msgstr ""
+msgstr "Klasör yok."
 
 #: seahub/share/views.py:306
 msgid "Only the owner of the library has permission to share it."
@@ -2481,15 +2482,15 @@ msgstr "Bir organizasyon hesabı oluşturun"
 
 #: seahub/templates/client_login_complete.html:6
 msgid "The client has logged in. Please open the client to confirm."
-msgstr ""
+msgstr "Mevcut bir istemci oturumu açtınız. Lütfen istemciyi açın ve onaylayın."
 
 #: seahub/templates/client_login_confirm.html:6
 msgid "Client Login Confirm"
-msgstr ""
+msgstr "İstemci Giriş Onayı"
 
 #: seahub/templates/client_login_confirm.html:8
 msgid "Do you want to login to your client?"
-msgstr ""
+msgstr "İstemciye giriş yapmak istiyor musunuz?"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
@@ -2620,11 +2621,11 @@ msgstr "%(remember_days)s gün için beni hatırla"
 #: seahub/templates/registration/login.html:93
 #: seahub/templates/registration/login.html:97
 msgid "Single Sign-On"
-msgstr ""
+msgstr "Teknik Giriş"
 
 #: seahub/templates/registration/login.html:104
 msgid "Login with"
-msgstr ""
+msgstr "Giriş yap"
 
 #: seahub/templates/registration/login.html:130
 msgid "Forgot password?"
@@ -2704,11 +2705,11 @@ msgstr "Şifre sıfırlama başarısız: bu bağlantı artık mevcut değil."
 msgid ""
 "If your email address is in our database, you will receive a message "
 "shortly."
-msgstr ""
+msgstr "Eğer eposta adresiniz veritabanımızda varsa, kısa sürede bir mesaj gönderilecektir."
 
 #: seahub/templates/registration/password_reset_done.html:47
 msgid "Back to login page"
-msgstr ""
+msgstr "Giriş sayfasına geri dön"
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
@@ -2727,7 +2728,7 @@ msgstr "Yeni şifre oluşturmanız için size bir eposta gönderdik."
 
 #: seahub/templates/registration/password_reset_form.html:53
 msgid "Your email used in login"
-msgstr ""
+msgstr "Giriş yaparken kullanılan eposta"
 
 #: seahub/templates/registration/register_complete_email.html:1
 #, python-format
@@ -2800,7 +2801,7 @@ msgstr "Anlık görüntü"
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/folder."
-msgstr ""
+msgstr "Paylaşılan dosya/klasörü görüntülemek için lütfen parolasını girin."
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -2827,18 +2828,18 @@ msgstr "İzleyen sayfaya gidebilir ve dosyalarınızı yükleyebilirsiniz."
 
 #: seahub/templates/snippets/password_strength_js.html:7
 msgid "Password strength should be strong or very strong"
-msgstr ""
+msgstr "Parola güçlü olmalıdır veya çok güçlü olmalıdır."
 
 #: seahub/templates/snippets/password_strength_js.html:12
 #: seahub/templates/snippets/password_strength_js.html:97
 msgid "Password strength"
-msgstr ""
+msgstr "Parola Gücü"
 
 #: seahub/templates/snippets/password_strength_js.html:19
 msgid ""
 "The password should contain different types of characters to make it strong:"
 " uppercase letters, lowercase letters, numbers and special characters."
-msgstr ""
+msgstr "Parola güçlü olmalıdır. Büyük harfler, küçük harfler, sayılar ve özel karakterler içermelidir."
 
 #: seahub/templates/snippets/policy_service_link.html:5
 #: seahub/templates/snippets/policy_service_link.html:9
@@ -2913,7 +2914,7 @@ msgstr "Hesap bilgileriniz burada:"
 #: seahub/templates/sysadmin/user_add_email.html:19
 #: seahub/templates/sysadmin/user_batch_add_email.html:15
 msgid "Email:"
-msgstr ""
+msgstr "E-posta:"
 
 #: seahub/templates/sysadmin/user_freeze_email.html:12
 #, python-format
@@ -2932,7 +2933,7 @@ msgstr "%(site_name)s sitesindeki şifreniz resetlendi. Yeni şifreniz %(passwor
 #, python-format
 #| msgid "Your quota is almost full on %(site_name)s."
 msgid "The team quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Takım kota nearly full on %(site_name)s."
 
 #: seahub/templates/team_quota_full.html:14
 #: seahub/templates/user_quota_full.html:14
@@ -2967,11 +2968,11 @@ msgstr "değiştirimden sonra"
 #: seahub/templates/user_quota_full.html:12
 #, python-format
 msgid "Your quota is almost full on %(site_name)s."
-msgstr ""
+msgstr "Your quota is almost full on %(site_name)s."
 
 #: seahub/templates/wiki/wiki.html:24
 msgid "Last modified by"
-msgstr ""
+msgstr "Son değişiklik yapıldı:"
 
 #: seahub/thumbnail/views.py:48 seahub/thumbnail/views.py:178
 #: seahub/views/__init__.py:495
@@ -2987,7 +2988,7 @@ msgstr "Küçük resim oluşturulamadı."
 #: seahub/two_factor/forms.py:297
 #: seahub/two_factor/templates/two_factor/core/setup.html:59
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 #: seahub/two_factor/templates/two_factor/profile/disable.html:11
@@ -2996,7 +2997,7 @@ msgstr "İptal"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
 msgid "Backup Tokens"
-msgstr ""
+msgstr "Kurtarma Tokenleri"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
 #| msgid ""
@@ -3015,7 +3016,7 @@ msgstr ""
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
 msgid "Print these tokens and keep them somewhere safe."
-msgstr ""
+msgstr "Bu tokenleri bir yere saklayın."
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
 msgid "You don't have any backup codes yet."
@@ -3023,7 +3024,7 @@ msgstr "Henüz kurtarma kodunuz yok"
 
 #: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
 msgid "Generate Tokens"
-msgstr ""
+msgstr "Tokenleri Oluştur"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
@@ -3033,11 +3034,11 @@ msgstr "Çift Faktörlü Kimlik Doğrulama"
 msgid ""
 "Open the two-factor authentication app on your device to view your "
 "authentication token and verify your identify."
-msgstr ""
+msgstr "Cihazınızda iki faktörlü kimlik doğrulama uygulaması açın ve doğrulama tokenini görüntüleyin."
 
 #: seahub/two_factor/templates/two_factor/core/login.html:22
 msgid "Authentication token"
-msgstr ""
+msgstr "Doğrulama Tokeni"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:27
 #, python-format
@@ -3082,7 +3083,7 @@ msgid ""
 "        smartphone to scan the QR code below. For example, use Google\n"
 "        Authenticator. Then, enter the token generated by the app.\n"
 "        "
-msgstr ""
+msgstr "Lütfen aşağıdaki QR kodu tarayın. Örneğin, Google Authenticator kullanın. Ardından, uygulamadan oluşturulan tokeni girin."
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
@@ -3095,7 +3096,7 @@ msgstr "Çift Faktörlü Kimlik Doğrulamayı Devre Dışı Bırak"
 msgid ""
 "You are about to disable two-factor authentication. This compromises your "
 "account security, are you sure?"
-msgstr ""
+msgstr "Çift faktörlü kimlik doğrulamayı devre dışı bırakmak hesabınızın güvenliğini tehdit edebilir. Emin misiniz?"
 
 #: seahub/two_factor/templates/two_factor/profile/disable.html:10
 msgid "Disable"
@@ -3239,39 +3240,39 @@ msgstr "Dosya indirilemiyor."
 #: seahub/views/file.py:2185
 #| msgid "Wiki not found."
 msgid "revision not found"
-msgstr ""
+msgstr "Revizyon bulunamadı."
 
 #: seahub/views/file.py:2192
 msgid "The original file does not exist"
-msgstr ""
+msgstr "Orijinal dosya bulunamadı."
 
 #: seahub/views/mobile.py:35
 #, python-brace-format
 msgid "User {token.user} not found"
-msgstr ""
+msgstr "Kullanıcı {token.user} bulunamadı."
 
 #: seahub/views/mobile.py:39
 #, python-brace-format
 msgid "User {token.user} inactive"
-msgstr ""
+msgstr "Kullanıcı {token.user} pasif."
 
 #: seahub/views/sso.py:179
 msgid ""
 "This link has already been visited, please click the login button on the "
 "client again"
-msgstr ""
+msgstr "Bu bağlantı zaten ziyaret edilmiş, lütfen istemciye tekrar giriş düğmesine tıklayın."
 
 #: seahub/views/sso.py:204
 msgid "Invalid link, please click the login button on the client again"
-msgstr ""
+msgstr "Geçersiz bağlantı, lütfen istemciye tekrar giriş düğmesine tıklayın."
 
 #: seahub/views/sso.py:209
 msgid "Login timeout, please click the login button on the client again"
-msgstr ""
+msgstr "Giriş zaman aşımı, lütfen istemciye tekrar giriş düğmesine tıklayın."
 
 #: seahub/views/sysadmin.py:176 seahub/views/sysadmin.py:180
 msgid "Login ID"
-msgstr ""
+msgstr "Giriş ID"
 
 #: seahub/views/sysadmin.py:310 seahub/views/sysadmin.py:336
 msgid "Failed to set quota: internal server error"

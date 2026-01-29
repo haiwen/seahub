@@ -2394,11 +2394,11 @@ msgstr "Veiksmīgi saglabāts."
 
 #: seahub/share/views.py:187
 msgid "Preview and download"
-msgstr ""
+msgstr "Pārskatīt un lejupielādēt"
 
 #: seahub/share/views.py:188
 msgid "Preview only"
-msgstr ""
+msgstr "Pārskatīt tikai"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
@@ -2414,7 +2414,7 @@ msgstr ""
 
 #: seahub/share/views.py:223
 msgid "Share Link"
-msgstr ""
+msgstr "Dalīties saiti"
 
 #: seahub/share/views.py:223 seahub/views/sysadmin.py:656
 msgid "Creator"
@@ -2609,7 +2609,7 @@ msgstr "Pieslēgties"
 
 #: seahub/templates/registration/login.html:58
 msgid "Refresh"
-msgstr ""
+msgstr "Atjaunot"
 
 #: seahub/templates/registration/login.html:78
 msgid "Incorrect email or password"

@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Persian (Iran) (https://app.transifex.com/haiwen/teams/5086/fa_IR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,142 +23,142 @@ msgstr ""
 
 #: templates/help/base.html:34
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "منوی ناوبری کناری"
 
 #: templates/help/base.html:48 templates/help/base.html:50
 #: templates/help/introduction.html:6
 msgid "Introduction"
-msgstr ""
+msgstr "معرفی"
 
 #: templates/help/base.html:53
 msgid "Managing files and folders"
-msgstr ""
+msgstr "مدیریت فایل‌ها و پوشه‌ها"
 
 #: templates/help/base.html:55 templates/help/libraries_managing.html:5
 msgid "Managing files with libraries"
-msgstr ""
+msgstr "مدیریت فایل‌ها با کتابخانه‌ها"
 
 #: templates/help/base.html:56
 msgid "Restoring deleted files"
-msgstr ""
+msgstr "بازیابی فایل‌های حذف شده"
 
 #: templates/help/base.html:57
 msgid "Finding old file versions"
-msgstr ""
+msgstr "یافتن نسخه‌های قدیمی فایل‌ها"
 
 #: templates/help/base.html:58
 #: templates/help/library_history_and_snapshots.html:6
 msgid "Library history and snapshots"
-msgstr ""
+msgstr "تاریخچه و اسنپ‌شات‌های کتابخانه"
 
 #: templates/help/base.html:59
 msgid "Setting history retention period"
-msgstr ""
+msgstr "تنظیم دوره نگهداری تاریخچه"
 
 #: templates/help/base.html:60 templates/help/deleting_a_library.html:5
 msgid "Deleting a library"
-msgstr ""
+msgstr "حذف یک کتابخانه"
 
 #: templates/help/base.html:61
 #: templates/help/viewing_files_within_web_app.html:5
 msgid "Viewing files within Web App"
-msgstr ""
+msgstr "مشاهده فایل‌ها در برنامه وب"
 
 #: templates/help/base.html:62 templates/help/full_text_file_search.html:5
 msgid "Full text file search"
-msgstr ""
+msgstr "جستجوی متنی کامل فایل‌ها"
 
 #: templates/help/base.html:65
 msgid "Sharing and collaboration"
-msgstr ""
+msgstr "اشتراک‌گذاری و همکاری"
 
 #: templates/help/base.html:67 templates/help/sharing_files_and_folders.html:5
 msgid "Sharing files and folders"
-msgstr ""
+msgstr "اشتراک‌گذاری فایل‌ها و پوشه‌ها"
 
 #: templates/help/base.html:68 templates/help/groups_managing.html:5
 msgid "Managing groups"
-msgstr ""
+msgstr "مدیریت گروه‌ها"
 
 #: templates/help/base.html:69
 msgid "Locking files"
-msgstr ""
+msgstr "قفل کردن فایل‌ها"
 
 #: templates/help/base.html:70
 msgid "Folder permission"
-msgstr ""
+msgstr "مجوز پوشه"
 
 #: templates/help/base.html:71
 msgid "Departments sharing"
-msgstr ""
+msgstr "اشتراک‌گذاری بخش‌ها"
 
 #: templates/help/base.html:74
 msgid "Wiki and knowledge management"
-msgstr ""
+msgstr "ویکی و مدیریت دانش"
 
 #: templates/help/base.html:76 templates/help/manage_library_as_wiki.html:5
 msgid "Managing a library as Wiki"
-msgstr ""
+msgstr "مدیریت یک کتابخانه به عنوان ویکی"
 
 #: templates/help/base.html:79
 msgid "Desktop client and syncing"
-msgstr ""
+msgstr "کلاینت دسکتاپ و همگام‌سازی"
 
 #: templates/help/base.html:81
 msgid "Install and sync files"
-msgstr ""
+msgstr "نصب و همگام‌سازی فایل‌ها"
 
 #: templates/help/base.html:82
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "همگام‌سازی پوشه‌های موجود"
 
 #: templates/help/base.html:83 templates/help/selective_sync.html:6
 msgid "Selectively sync sub-folders"
-msgstr ""
+msgstr "همگام‌سازی انتخابی زیرپوشه‌ها"
 
 #: templates/help/base.html:84 templates/help/read-only_syncing.html:5
 msgid "Read-only syncing"
-msgstr ""
+msgstr "همگام‌سازی فقط خواندنی"
 
 #: templates/help/base.html:85
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "لغو همگام‌سازی و همگام‌سازی مجدد کتابخانه‌ها"
 
 #: templates/help/base.html:86 templates/help/sync_interval.html:6
 msgid "Setting sync interval"
-msgstr ""
+msgstr "تنظیم فاصله همگام‌سازی"
 
 #: templates/help/base.html:87
 msgid "Proxy settings"
-msgstr ""
+msgstr "تنظیمات پروکسی"
 
 #: templates/help/base.html:88 templates/help/conflicts.html:5
 msgid "File conflicts"
-msgstr ""
+msgstr "تعارضات فایل"
 
 #: templates/help/base.html:89
 msgid "Excluding files"
-msgstr ""
+msgstr "حذف فایل‌ها"
 
 #: templates/help/base.html:92
 msgid "Drive client"
-msgstr ""
+msgstr "کلاینت درایو"
 
 #: templates/help/base.html:94 templates/help/using_drive_client.html:6
 msgid "Using Seafile drive client"
-msgstr ""
+msgstr "استفاده از کلاینت درایو Seafile"
 
 #: templates/help/base.html:95
 msgid "Using drive client 2.0 on Windows"
-msgstr ""
+msgstr "استفاده از کلاینت درایو 2.0 در ویندوز"
 
 #: templates/help/base.html:98
 msgid "Security and encryption"
-msgstr ""
+msgstr "امنیت و رمزگذاری"
 
 #: templates/help/base.html:100
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "نحوه استفاده از کتابخانه‌های رمزگذاری شده"
 
 #: templates/help/conflicts.html:7
 msgid ""
@@ -166,6 +166,10 @@ msgid ""
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
 msgstr ""
+"هنگامی که شما و دوستانتان یک کتابخانه فایل مشترک را روی کامپیوترهای خود "
+"همگام‌سازی کنید، می‌توانید فایل‌ها را در کتابخانه با هم اضافه، حذف یا ویرایش"
+" کنید. هر تغییری که در کتابخانه ایجاد کنید به طور خودکار به کامپیوترهای "
+"دیگران همگام‌سازی می‌شود."
 
 #: templates/help/conflicts.html:9
 msgid ""
@@ -176,36 +180,48 @@ msgid ""
 "author's email address, plus the current time, e.g. test.txt (SFConflict "
 "name@example.com 2015-03-07-11-30-28)."
 msgstr ""
+"گاهی اوقات شما و دوستانتان ممکن است همزمان یک فایل را ویرایش کنید. تغییرات "
+"شما ممکن است با یکدیگر در تعارض باشد. در این حالت، Seafile نسخه اولی که به "
+"ابر همگام‌سازی شده را بدون تغییر نگه می‌دارد، در حالی که نسخه دیگر را به "
+"\"فایل تعارض\" تغییر نام می‌دهد. نام فایل تعارض با آدرس ایمیل نویسنده آن و "
+"زمان فعلی پایان می‌یابد، به عنوان مثال test.txt (SFConflict name@example.com"
+" 2015-03-07-11-30-28)."
 
 #: templates/help/deleting_a_library.html:6
 msgid ""
 "You can delete a library owned by you. A deleted library can be restored by "
 "you or Seafile server's administrator."
 msgstr ""
+"شما می‌توانید کتابخانه‌ای که متعلق به شماست را حذف کنید. یک کتابخانه حذف شده"
+" می‌تواند توسط شما یا مدیر سرور Seafile بازیابی شود."
 
 #: templates/help/deleting_a_library.html:7
 msgid "After a library is deleted, it has following effects:"
-msgstr ""
+msgstr "پس از حذف یک کتابخانه، اثرات زیر رخ می‌دهد:"
 
 #: templates/help/deleting_a_library.html:9
 msgid "Share of the files and folders within this library are all canceled."
-msgstr ""
+msgstr "اشتراک‌گذاری فایل‌ها و پوشه‌های درون این کتابخانه همگی لغو می‌شوند."
 
 #: templates/help/deleting_a_library.html:10
 msgid ""
 "Desktop clients synced with this library cannot sync with it any more. But "
 "the local files on the client won't be deleted."
 msgstr ""
+"کلاینت‌های دسکتاپی که با این کتابخانه همگام‌سازی شده‌اند دیگر نمی‌توانند با "
+"آن همگام‌سازی کنند. اما فایل‌های محلی روی کلاینت حذف نخواهند شد."
 
 #: templates/help/departments.html:5
 msgid "Managing and using departments"
-msgstr ""
+msgstr "مدیریت و استفاده از بخش‌ها"
 
 #: templates/help/departments.html:6
 msgid ""
 "Some organizations consist of complex department hierarchy. There are "
 "usually two common use cases for file management in these organizations:"
 msgstr ""
+"برخی سازمان‌ها از سلسله مراتب بخشی پیچیده تشکیل شده‌اند. معمولاً دو مورد "
+"استفاده رایج برای مدیریت فایل در این سازمان‌ها وجود دارد:"
 
 #: templates/help/departments.html:8
 msgid ""
@@ -213,6 +229,9 @@ msgid ""
 " hierarchy should map the department hierarchy. There will be separate "
 "folder or space assigned to each department."
 msgstr ""
+"باید یک فضای اشتراک‌گذاری فایل مشترک برای سازمان وجود داشته باشد. سلسله "
+"مراتب پوشه باید سلسله مراتب بخشی را نقشه‌برداری کند. برای هر بخش یک پوشه یا "
+"فضای جداگانه اختصاص داده خواهد شد."
 
 #: templates/help/departments.html:9
 msgid ""
@@ -220,46 +239,53 @@ msgid ""
 "individual employees. So that the ownership of files doesn't have to be "
 "changed when an employee leaves the organization."
 msgstr ""
+"فضای اشتراک‌گذاری باید متعلق به سازمان و توسط آن مدیریت شود، نه کارمندان "
+"فردی. به این ترتیب مالکیت فایل‌ها هنگام ترک سازمان توسط یک کارمند نیازی به "
+"تغییر ندارد."
 
 #: templates/help/departments.html:11
 msgid ""
 "The \"Departments\" feature is designed to meet the above two use cases. "
 "We'll introduce this feature from 3 different perspectives:"
 msgstr ""
+"ویژگی \"بخش‌ها\" برای پاسخگویی به دو مورد استفاده فوق طراحی شده است. این "
+"ویژگی را از 3 دیدگاه مختلف معرفی خواهیم کرد:"
 
 #: templates/help/departments.html:13 templates/help/departments.html:17
 msgid "System admin"
-msgstr ""
+msgstr "مدیر سیستم"
 
 #: templates/help/departments.html:14 templates/help/departments.html:35
 msgid "Department admin"
-msgstr ""
+msgstr "مدیر بخش"
 
 #: templates/help/departments.html:15 templates/help/departments.html:52
 msgid "Department members"
-msgstr ""
+msgstr "اعضای بخش"
 
 #: templates/help/departments.html:18
 msgid "The system admin can:"
-msgstr ""
+msgstr "مدیر سیستم می‌تواند:"
 
 #: templates/help/departments.html:20 templates/help/departments.html:24
 msgid "Manage department hierarchy and members"
-msgstr ""
+msgstr "مدیریت سلسله مراتب بخش و اعضا"
 
 #: templates/help/departments.html:21 templates/help/departments.html:29
 msgid "Assign storage quota for departments"
-msgstr ""
+msgstr "اختصاص سهمیه ذخیره‌سازی برای بخش‌ها"
 
 #: templates/help/departments.html:22 templates/help/departments.html:31
 msgid "Create and manage shared libraries in departments"
-msgstr ""
+msgstr "ایجاد و مدیریت کتابخانه‌های مشترک در بخش‌ها"
 
 #: templates/help/departments.html:25
 msgid ""
 "The system admin can set up the department hierarchy in two ways: manual "
 "setup or import from Active Directory."
 msgstr ""
+"مدیر سیستم می‌تواند سلسله مراتب بخش را به دو روش تنظیم کند: تنظیم دستی یا "
+"وارد کردن از Active Directory."
 
 #: templates/help/departments.html:26
 msgid ""
@@ -269,6 +295,10 @@ msgid ""
 "of each member to 'member' or 'admin'. We'll introduce how a department "
 "admin can manage department later."
 msgstr ""
+"مدیر سیستم می‌تواند هر تعداد بخش سطح بالا ایجاد کند و هر سطحی از زیربخش‌ها "
+"را در زیر هر بخش ایجاد کند. و هر سطح از بخش می‌تواند با اعضا پر شود. مدیر "
+"سیستم می‌تواند نقش هر عضو را به 'عضو' یا 'مدیر' تنظیم کند. بعداً نحوه مدیریت"
+" بخش توسط مدیر بخش را معرفی خواهیم کرد."
 
 #: templates/help/departments.html:27
 msgid ""
@@ -277,12 +307,18 @@ msgid ""
 "under an OU will be imported as sub-departments. Department libraries can be"
 " automatically created in the import process."
 msgstr ""
+"مدیر سیستم همچنین می‌تواند سلسله مراتب را از OUs (واحدهای سازمانی) در AD "
+"وارد کند. هر OU به عنوان یک بخش وارد می‌شود. و زیر-OUs زیر یک OU به عنوان "
+"زیربخش‌ها وارد می‌شوند. کتابخانه‌های بخش می‌توانند در فرآیند وارد کردن به "
+"طور خودکار ایجاد شوند."
 
 #: templates/help/departments.html:28
 msgid ""
 "System admin can also delete a department after all the sub-departments and "
 "libraries are deleted."
 msgstr ""
+"مدیر سیستم همچنین می‌تواند پس از حذف تمام زیربخش‌ها و کتابخانه‌ها، یک بخش را"
+" حذف کند."
 
 #: templates/help/departments.html:30
 msgid ""
@@ -292,6 +328,11 @@ msgid ""
 "cannot exceed the storage quota. <strong>Please note that the quota of sub-"
 "department doesn't depend on the quota of its parent department.</strong>"
 msgstr ""
+"کتابخانه‌های ایجاد شده درون یک بخش متعلق به خود بخش هستند، نه هیچ کاربر "
+"فردی. بنابراین مدیر سیستم می‌تواند سهمیه ذخیره‌سازی را به یک بخش اختصاص دهد."
+" اندازه کل تمام کتابخانه‌های یک بخش نمی‌تواند از سهمیه ذخیره‌سازی تجاوز کند."
+" <strong>لطفاً توجه داشته باشید که سهمیه زیربخش به سهمیه بخش والد آن وابسته "
+"نیست.</strong>"
 
 #: templates/help/departments.html:32
 msgid ""
@@ -299,12 +340,17 @@ msgid ""
 " There is also an option to control whether individual users can share "
 "libraries to a department."
 msgstr ""
+"کتابخانه‌های بخش می‌توانند توسط مدیر سیستم یا مدیر بخش ایجاد شوند. همچنین "
+"گزینه‌ای برای کنترل اینکه آیا کاربران فردی می‌توانند کتابخانه‌ها را به یک "
+"بخش به اشتراک بگذارند وجود دارد."
 
 #: templates/help/departments.html:33
 msgid ""
 "All the above operations can be done in the system admin interface. See the "
 "below screenshot for information."
 msgstr ""
+"تمام عملیات فوق را می‌توان در رابط مدیر سیستم انجام داد. برای اطلاعات بیشتر "
+"به تصویر زیر مراجعه کنید."
 
 #: templates/help/departments.html:36
 msgid ""
@@ -312,18 +358,21 @@ msgid ""
 "admin to some members of a department. Department admins can perform the "
 "following operations in a department after login to his/her own account."
 msgstr ""
+"همانطور که در بالا ذکر شد، مدیر بخش یک نقش ویژه است که توسط مدیر سیستم به "
+"برخی از اعضای یک بخش اختصاص داده می‌شود. مدیران بخش می‌توانند پس از ورود به "
+"حساب خود، عملیات زیر را در یک بخش انجام دهند."
 
 #: templates/help/departments.html:38
 msgid "Access to the libraries of the department"
-msgstr ""
+msgstr "دسترسی به کتابخانه‌های بخش"
 
 #: templates/help/departments.html:39
 msgid "Manage members in his/her department"
-msgstr ""
+msgstr "مدیریت اعضا در بخش خود"
 
 #: templates/help/departments.html:40
 msgid "Manage libraries in his/her department"
-msgstr ""
+msgstr "مدیریت کتابخانه‌ها در بخش خود"
 
 #: templates/help/departments.html:42
 msgid ""
@@ -332,26 +381,34 @@ msgid ""
 " the department. But if the departments are imported from AD, the changes to"
 " membership will be overwritten on the next sync with AD."
 msgstr ""
+"اگر کاربر مدیر یک بخش باشد، می‌تواند اعضا را در بخش اضافه یا حذف کند. هر "
+"کاربری که در سیستم ثبت نام کرده باشد می‌تواند به عنوان عضو بخش اضافه شود. "
+"اما اگر بخش‌ها از AD وارد شده باشند، تغییرات عضویت در همگام‌سازی بعدی با AD "
+"بازنویسی خواهند شد."
 
 #: templates/help/departments.html:44
 msgid ""
 "Department admin can manage the libraries in the department. The supported "
 "operations are:"
 msgstr ""
+"مدیر بخش می‌تواند کتابخانه‌های درون بخش را مدیریت کند. عملیات پشتیبانی شده "
+"عبارتند از:"
 
 #: templates/help/departments.html:46
 msgid "Create or delete library"
-msgstr ""
+msgstr "ایجاد یا حذف کتابخانه"
 
 #: templates/help/departments.html:47
 msgid "Change library name"
-msgstr ""
+msgstr "تغییر نام کتابخانه"
 
 #: templates/help/departments.html:48
 msgid ""
 "Share a library to users or groups outside of this department. This is very "
 "useful for cross-department collaboration."
 msgstr ""
+"اشتراک‌گذاری یک کتابخانه با کاربران یا گروه‌های خارج از این بخش. این برای "
+"همکاری بین بخشی بسیار مفید است."
 
 #: templates/help/departments.html:49
 #, python-format
@@ -361,6 +418,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/folder_permission/\">the folder permission "
 "feature</a>."
 msgstr ""
+"تنظیم مجوزهای دقیق برای پوشه‌های درون کتابخانه‌ها برای کاربران یا زیربخش‌های"
+" این بخش. این مانند <a href=\"%(SITE_ROOT)shelp/folder_permission/\">ویژگی "
+"مجوز پوشه</a> کار می‌کند."
 
 #: templates/help/departments.html:53
 msgid ""
@@ -373,16 +433,25 @@ msgid ""
 "access to the groups \"EMEA\", \"Sales\" and \"ACME\". The groups for "
 "departments are marked with a \"building\" icon next to its name."
 msgstr ""
+"یک عضو عادی بخش می‌تواند از بخش دقیقاً مانند یک گروه استفاده کند. هر بخش به "
+"اعضای خود به عنوان یک گروه ارائه می‌شود. یک کاربر نه تنها می‌تواند به "
+"کتابخانه‌های بخشی که به آن تعلق دارد دسترسی داشته باشد، بلکه به کتابخانه‌های"
+" بخش‌های والد بخش خود نیز دسترسی دارد. به عنوان مثال، اگر جان در زیربخش "
+"\"EMEA\" زیر بخش \"فروش\" باشد و \"فروش\" یک زیربخش زیر شرکت \"ACME\" باشد، "
+"جان می‌تواند به گروه‌های \"EMEA\"، \"فروش\" و \"ACME\" دسترسی داشته باشد. "
+"گروه‌های بخش‌ها با آیکون \"ساختمان\" در کنار نام خود مشخص شده‌اند."
 
 #: templates/help/desktop_proxy.html:6
 msgid "Using proxy in Seafile client"
-msgstr ""
+msgstr "استفاده از پروکسی در کلاینت Seafile"
 
 #: templates/help/desktop_proxy.html:8
 msgid ""
 "Seafile client supports 3 types of proxy servers: HTTP proxy, SOCKS5 proxy "
 "and system proxy settings."
 msgstr ""
+"کلاینت Seafile از 3 نوع سرور پروکسی پشتیبانی می‌کند: پروکسی HTTP، پروکسی "
+"SOCKS5 و تنظیمات پروکسی سیستم."
 
 #: templates/help/desktop_proxy.html:10
 msgid ""
@@ -392,6 +461,10 @@ msgid ""
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
 msgstr ""
+"پروکسی HTTP و SOCKS5 نیاز دارند که آدرس و پورت سرور پروکسی را وارد کنید. اگر"
+" از تنظیمات پروکسی سیستم استفاده کنید، کلاینت Seafile تنظیمات پروکسی را از "
+"سیستم عامل می‌خواند. سیستم عامل مکانیسم‌هایی برای تشخیص خودکار اطلاعات سرور "
+"پروکسی دارد. بنابراین نیازی به وارد کردن دستی آدرس سرور پروکسی ندارید."
 
 #: templates/help/desktop_proxy.html:12
 msgid ""
@@ -399,10 +472,13 @@ msgid ""
 "area. Choose \"Settings\" in the menu. In the pop-up settings dialog, you "
 "can change proxy settings in the \"Network\" tab."
 msgstr ""
+"برای تغییر تنظیمات پروکسی، روی آیکون Seafile در ناحیه اعلان سیستم کلیک کنید."
+" \"Settings\" را در منو انتخاب کنید. در کادر محاوره‌ای تنظیمات بازشو، "
+"می‌توانید تنظیمات پروکسی را در تب \"Network\" تغییر دهید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:6
 msgid "SeaDrive 2.0 for Windows 10"
-msgstr ""
+msgstr "SeaDrive 2.0 برای ویندوز 10"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:8
 msgid ""
@@ -411,10 +487,14 @@ msgid ""
 "Update for Windows 10) and later versions. We recommend Windows 10 users to "
 "upgrade to SeaDrive 2.0 for more native virtual drive experience."
 msgstr ""
+"SeaDrive 2.0 (و نسخه‌های آینده) با یکپارچگی عمیق‌تر با سیستم عامل ویندوز 10 "
+"طراحی شده است. از نسخه 1709 ویندوز 10 (به‌روزرسانی پاییز 2017 برای ویندوز "
+"10) و نسخه‌های بعدی پشتیبانی می‌کند. به کاربران ویندوز 10 توصیه می‌کنیم برای"
+" تجربه درایو مجازی بومی‌تر، به SeaDrive 2.0 ارتقا دهند."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:10
 msgid "Install and access the Virtual Drive"
-msgstr ""
+msgstr "نصب و دسترسی به درایو مجازی"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:11
 msgid ""
@@ -425,40 +505,57 @@ msgid ""
 " your seafile account. The download is progressive, so in the mean time you "
 "can already access some files in the virtual drive."
 msgstr ""
+"می‌توانید SeaDrive 2.0 را از وب‌سایت رسمی Seafile دانلود کنید. پس از نصب و "
+"ورود به حساب Seafile شما، SeaDrive شروع به دانلود لیست کتابخانه‌ها و فایل‌ها"
+" از سرور می‌کند (دقیقاً مانند SeaDrive 1.0.x). ممکن است بسته به تعداد "
+"فایل‌های موجود در حساب seafile شما مدتی طول بکشد. دانلود تدریجی است، "
+"بنابراین در همین حین می‌توانید به برخی فایل‌ها در درایو مجازی دسترسی داشته "
+"باشید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:12
 msgid ""
 "To access the virtual drive, just open Windows file explorer. There is a "
 "\"seadrive\" node in the navigation pane of Windows file explorer."
 msgstr ""
+"برای دسترسی به درایو مجازی، فقط Windows file explorer را باز کنید. یک گره "
+"\"seadrive\" در صفحه ناوبری Windows file explorer وجود دارد."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:16
 msgid "Accessing files in the Virtual Drive"
-msgstr ""
+msgstr "دسترسی به فایل‌ها در درایو مجازی"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:17
 msgid ""
 "Libraries are grouped into 4 categories in the virtual drive: My Libraries, "
 "Shared with me, Shared with groups and Shared with all."
 msgstr ""
+"کتابخانه‌ها در درایو مجازی به 4 دسته گروه‌بندی شده‌اند: کتابخانه‌های من، به "
+"اشتراک گذاشته شده با من، به اشتراک گذاشته شده با گروه‌ها و به اشتراک گذاشته "
+"شده با همه."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:18
 msgid ""
 "As you can see, the file status icons is more integrated into Windows file "
 "explorer. The icons are a bit different form version 1.0."
 msgstr ""
+"همانطور که می‌بینید، آیکون‌های وضعیت فایل بیشتر در Windows file explorer "
+"یکپارچه شده‌اند. آیکون‌ها کمی با نسخه 1.0 متفاوت هستند."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:19
 msgid ""
 "Files in the virtual drive are created as \"placeholders\" in the local file"
 " system. They may be in 3 states:"
 msgstr ""
+"فایل‌ها در درایو مجازی به عنوان \"placeholders\" در سیستم فایل محلی ایجاد "
+"می‌شوند. آن‌ها ممکن است در 3 حالت باشند:"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:21
 msgid ""
 "<b>Placeholder file</b>: An empty representation of the file and can only be"
 " opened when there is network connection."
 msgstr ""
+"<b>فایل placeholder</b>: یک نمایش خالی از فایل و فقط زمانی که اتصال شبکه "
+"وجود دارد قابل باز کردن است."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:22
 msgid ""
@@ -468,12 +565,19 @@ msgid ""
 "connections. The operating system may decide to clear a full file when more "
 "disk space is needed."
 msgstr ""
+"<b>فایل کامل</b>: فایل دانلود شده و به صورت محلی ذخیره شده است. دانلود هنگام"
+" باز کردن اولین بار یک فایل placeholder به طور خودکار انجام می‌شود. این "
+"فایل‌ها هر زمان که SeaDrive را باز کنید بدون توجه به اتصالات شبکه در دسترس "
+"هستند. سیستم عامل ممکن است هنگام نیاز به فضای دیسک بیشتر، یک فایل کامل را "
+"پاک کند."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:23
 msgid ""
 "<b>Pinned full file</b>: The file has been downloaded and saved locally. It "
 "is guaranteed to be available offline."
 msgstr ""
+"<b>فایل کامل ثابت شده</b>: فایل دانلود شده و به صورت محلی ذخیره شده است. "
+"تضمین می‌شود که به صورت آفلاین در دسترس باشد."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:26
 msgid ""
@@ -483,6 +587,11 @@ msgid ""
 "locally; choose \"Free up space\" when you want to clean the cache for a "
 "file or folder."
 msgstr ""
+"می‌توانید کنترل کنید که کدام فایل‌ها یا پوشه‌ها به صورت محلی کش شوند. این را"
+" می‌توان از منوی زمینه هنگام کلیک راست روی یک فایل یا پوشه تغییر داد. هنگامی"
+" که می‌خواهید یک فایل یا پوشه را به صورت محلی ثابت کنید، \"Always keep on "
+"this device\" را انتخاب کنید؛ هنگامی که می‌خواهید کش یک فایل یا پوشه را پاک "
+"کنید، \"Free up space\" را انتخاب کنید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:28
 msgid ""
@@ -490,10 +599,13 @@ msgid ""
 "updated on the server. In SeaDrive 2.0, full and pinned files are "
 "automatically kept in sync with the server."
 msgstr ""
+"در SeaDrive 1.0، فایل‌های کش شده هنگام به‌روزرسانی در سرور به طور خودکار "
+"به‌روز نمی‌شوند. در SeaDrive 2.0، فایل‌های کامل و ثابت شده به طور خودکار با "
+"سرور همگام نگه داشته می‌شوند."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:30
 msgid "File Download and Control"
-msgstr ""
+msgstr "دانلود و کنترل فایل"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:31
 msgid ""
@@ -502,6 +614,9 @@ msgid ""
 "download, there will be a progress bar shown up in file explorer and you may"
 " cancel the download."
 msgstr ""
+"هر زمان که یک فایل placeholder را باز کنید، سیستم عامل به طور خودکار شروع به"
+" دانلود آن می‌کند. اگر فایل ممکن است مدتی برای دانلود طول بکشد، یک نوار "
+"پیشرفت در file explorer نشان داده می‌شود و می‌توانید دانلود را لغو کنید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:32
 msgid ""
@@ -510,15 +625,19 @@ msgid ""
 "operating system about this and you may choose to cancel the download or "
 "disallow the application from automatically downloading files in the future."
 msgstr ""
+"گاهی اوقات یک برنامه پس‌زمینه ممکن است سعی کند یک فایل در درایو مجازی را "
+"دانلود کند (مانند یک نرم‌افزار ضد ویروس). سیستم عامل شما را از این موضوع "
+"مطلع می‌کند و می‌توانید دانلود را لغو کنید یا از دانلود خودکار فایل‌ها توسط "
+"برنامه در آینده جلوگیری کنید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:34
 #: templates/help/using_drive_client.html:79
 msgid "FAQ"
-msgstr ""
+msgstr "سوالات متداول"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:35
 msgid "Can I create, delete, rename libraries?"
-msgstr ""
+msgstr "آیا می‌توانم کتابخانه‌ها را ایجاد، حذف یا تغییر نام دهم؟"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:36
 msgid ""
@@ -527,10 +646,14 @@ msgid ""
 " rename libraries under the \"My Libraries\" category. Creating, deleting or"
 " renaming libraries in other categories will be ignored."
 msgstr ""
+"بله. هنگامی که پوشه‌های کتابخانه را در درایو مجازی ایجاد، حذف یا تغییر نام "
+"می‌دهید، عملیات در سرور منعکس می‌شود. شما فقط می‌توانید کتابخانه‌ها را در "
+"دسته \"کتابخانه‌های من\" ایجاد، حذف یا تغییر نام دهید. ایجاد، حذف یا تغییر "
+"نام کتابخانه‌ها در دسته‌های دیگر نادیده گرفته می‌شود."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:38
 msgid "Can I create files or folders outside of a library folder?"
-msgstr ""
+msgstr "آیا می‌توانم فایل‌ها یا پوشه‌ها را خارج از پوشه کتابخانه ایجاد کنم؟"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:39
 msgid ""
@@ -538,10 +661,13 @@ msgid ""
 "synced to the server. A new folder under the \"My Libraries\" folder will be"
 " handled as a new library."
 msgstr ""
+"بله. اما فایل‌های ایجاد شده خارج از پوشه کتابخانه نادیده گرفته شده و به سرور"
+" همگام‌سازی نمی‌شوند. یک پوشه جدید زیر پوشه \"کتابخانه‌های من\" به عنوان یک "
+"کتابخانه جدید در نظر گرفته می‌شود."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:41
 msgid "Can I access encrypted libraries?"
-msgstr ""
+msgstr "آیا می‌توانم به کتابخانه‌های رمزگذاری شده دسترسی داشته باشم؟"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:42
 msgid ""
@@ -551,10 +677,16 @@ msgid ""
 " area and choose \"Show encrypted libraries\". A window will show up and you"
 " can choose to sync or unsync an encrypted library."
 msgstr ""
+"بله. به طور پیش‌فرض، کتابخانه‌های رمزگذاری شده در درایو مجازی همگام‌سازی و "
+"نمایش داده نمی‌شوند. شما باید به صورت دستی انتخاب کنید که کدام کتابخانه‌های "
+"رمزگذاری شده را همگام‌سازی کنید و رمز عبور را وارد کنید. فقط روی آیکون "
+"SeaDrive در ناحیه system tray کلیک راست کنید و \"Show encrypted libraries\" "
+"را انتخاب کنید. یک پنجره نمایش داده می‌شود و می‌توانید انتخاب کنید که یک "
+"کتابخانه رمزگذاری شده را همگام‌سازی کنید یا همگام‌سازی آن را لغو کنید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:44
 msgid "Is it compatible to SeaDrive 1.0?"
-msgstr ""
+msgstr "آیا با SeaDrive 1.0 سازگار است؟"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:45
 msgid ""
@@ -564,10 +696,15 @@ msgid ""
 " be accessible in 2.0 version. You can start SeaDrive 1.0 again to upload "
 "the files to server or copy them out."
 msgstr ""
+"SeaDrive 2.0 از هر حساب موجود و متادیتای آن‌ها (ذخیره شده در پوشه "
+"C:\\users\\username\\seadrive\\) استفاده خواهد کرد. اما از فایل‌های کش شده "
+"از SeaDrive 1.0 استفاده نخواهد کرد. بنابراین هر فایل کش شده محلی در نسخه 1.0"
+" در نسخه 2.0 قابل دسترسی نخواهد بود. می‌توانید دوباره SeaDrive 1.0 را "
+"راه‌اندازی کنید تا فایل‌ها را به سرور آپلود کنید یا آن‌ها را کپی کنید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:47
 msgid "How do I clean the cache?"
-msgstr ""
+msgstr "چگونه کش را پاک کنم؟"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:48
 msgid ""
@@ -578,10 +715,17 @@ msgid ""
 "Because placeholders are just normal files created on your local disk, your "
 "cache size is only limited by the available disk space on your computer."
 msgstr ""
+"می‌توانید به صورت دستی انتخاب کنید که کدام پوشه‌ها یا فایل‌ها به صورت محلی "
+"کش شوند. اگر متوجه شدید که یک پوشه فضای زیادی مصرف می‌کند، فقط \"Free up "
+"space\" را روی آن پوشه انتخاب کنید و تمام فایل‌های کش شده در آن پوشه پاک "
+"خواهند شد. نیازی به تنظیم زمان پاک‌سازی کش و محدودیت اندازه کش مانند "
+"SeaDrive 1.0 نیست. زیرا placeholders فقط فایل‌های معمولی ایجاد شده روی دیسک "
+"محلی شما هستند، اندازه کش شما فقط توسط فضای دیسک موجود در کامپیوتر شما محدود"
+" می‌شود."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:50
 msgid "How to remove left-over SeaDrive shortcuts in Windows Explorer?"
-msgstr ""
+msgstr "چگونه میانبرهای باقی‌مانده SeaDrive در Windows Explorer را حذف کنم؟"
 
 #: templates/help/drive_client_2.0_for_windows_10.html:51
 msgid ""
@@ -590,12 +734,17 @@ msgid ""
 "intended behavior. You don't need to remove them if you still need to access"
 " the account later."
 msgstr ""
+"میانبر \"SeaDrive\" در Windows Explorer پس از خروج از برنامه SeaDrive یا "
+"تغییر حساب‌های Seafile در SeaDrive ناپدید نخواهد شد. این یک رفتار عمدی است. "
+"اگر هنوز نیاز به دسترسی به حساب بعداً دارید، نیازی به حذف آن‌ها ندارید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:53
 msgid ""
 "You can usually remove those shortcuts by uninstalling SeaDrive program and "
 "choose \"Remove account information\" in the prompt dialog."
 msgstr ""
+"معمولاً می‌توانید آن میانبرها را با حذف نصب برنامه SeaDrive و انتخاب "
+"\"Remove account information\" در کادر محاوره‌ای اعلان حذف کنید."
 
 #: templates/help/drive_client_2.0_for_windows_10.html:54
 msgid ""
@@ -606,10 +755,15 @@ msgid ""
 " in registry editor. Remove the sub-keys correspond to the shortcut you want"
 " to remove."
 msgstr ""
+"اگر حذف نصب میانبرها را با موفقیت حذف نکند، می‌توانید میانبر SeaDrive را در "
+"Windows Explorer با ویرایش رجیستری حذف کنید. مسیر "
+"\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\\""
+" را در ویرایشگر رجیستری باز کنید. زیرکلیدهای مربوط به میانبری که می‌خواهید "
+"حذف کنید را حذف کنید."
 
 #: templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr ""
+msgstr "نحوه استفاده از کتابخانه‌های رمزگذاری شده"
 
 #: templates/help/encrypted_libraries.html:8
 msgid ""
@@ -619,10 +773,15 @@ msgid ""
 "stored on the server. So even the server administrator can't access your "
 "file contents."
 msgstr ""
+"Seafile رمزگذاری end-to-end داده‌ها در سمت کلاینت را ارائه می‌دهد. می‌توانید"
+" کتابخانه‌های رمزگذاری شده ایجاد کنید تا از این ویژگی استفاده کنید. محتوای "
+"فایل‌ها در کتابخانه‌های رمزگذاری شده در سمت کلاینت رمزگذاری می‌شوند. رمز "
+"عبور رمزگذاری در سرور ذخیره نمی‌شود. بنابراین حتی مدیر سرور نیز نمی‌تواند به"
+" محتوای فایل‌های شما دسترسی داشته باشد."
 
 #: templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr ""
+msgstr "هنگام ایجاد یک کتابخانه رمزگذاری شده:"
 
 #: templates/help/encrypted_libraries.html:12
 msgid ""
@@ -1239,12 +1398,16 @@ msgid ""
 "Each library keeps its own file modification history. There is no global "
 "file modification history across all libraries."
 msgstr ""
+"هر کتابخانه تاریخچه تغییرات فایل خود را نگه می‌دارد. هیچ تاریخچه تغییرات "
+"فایل جهانی در بین تمام کتابخانه‌ها وجود ندارد."
 
 #: templates/help/libraries_managing.html:9
 msgid ""
 "Each library can be synced to desktop clients separately. You can choose "
 "which libraries to be synced."
 msgstr ""
+"هر کتابخانه را می‌توان به طور جداگانه با کلاینت‌های دسکتاپ همگام‌سازی کرد. "
+"می‌توانید انتخاب کنید که کدام کتابخانه‌ها همگام‌سازی شوند."
 
 #: templates/help/libraries_managing.html:11
 msgid ""
@@ -1253,12 +1416,18 @@ msgid ""
 "can also create more libraries. Here is what it looks like when you've "
 "created a few libraries."
 msgstr ""
+"وقتی برای اولین بار به برنامه وب Seafile وارد می‌شوید، Seafile به طور خودکار"
+" یک کتابخانه پیش‌فرض به نام \"کتابخانه من\" برای شما ایجاد می‌کند. همچنین "
+"می‌توانید کتابخانه‌های بیشتری ایجاد کنید. اینجا نشان می‌دهد که وقتی چند "
+"کتابخانه ایجاد کرده‌ید چگونه به نظر می‌رسد."
 
 #: templates/help/libraries_managing.html:13
 msgid ""
 "You can navigate into a library and manage your files and folders. You can "
 "upload, download, rename, move, copy and delete files."
 msgstr ""
+"می‌توانید به داخل یک کتابخانه بروید و فایل‌ها و پوشه‌های خود را مدیریت کنید."
+" می‌توانید فایل‌ها را آپلود، دانلود، تغییر نام، جابجا، کپی و حذف کنید."
 
 #: templates/help/libraries_managing.html:15
 #, python-format
@@ -1267,6 +1436,9 @@ msgid ""
 "desktop client</a>, you can do any file operations inside the local library "
 "folder. The operations will be uploaded to the server. "
 msgstr ""
+"پس از <a href=\"%(SITE_ROOT)shelp/install_sync/\">همگام‌سازی یک کتابخانه با "
+"کلاینت دسکتاپ</a>، می‌توانید هر عملیات فایلی را در داخل پوشه کتابخانه محلی "
+"انجام دهید. عملیات به سرور آپلود خواهند شد."
 
 #: templates/help/library_history_and_snapshots.html:7
 msgid ""
@@ -1275,6 +1447,10 @@ msgid ""
 "creates a \"snapshot\" of the previous state of the library. The snapshot "
 "contains the complete file and folder structure of the library."
 msgstr ""
+"Seafile تاریخچه تغییرات را برای کل کتابخانه ردیابی می‌کند. هر زمان که یک "
+"عملیات فایل روی یک کتابخانه اعمال شود (به‌روزرسانی فایل، حذف فایل و غیره)، "
+"Seafile یک \"اسنپ‌شات\" از وضعیت قبلی کتابخانه ایجاد می‌کند. اسنپ‌شات شامل "
+"ساختار کامل فایل و پوشه کتابخانه است."
 
 #: templates/help/library_history_and_snapshots.html:8
 msgid ""
@@ -1285,10 +1461,16 @@ msgid ""
 "files in the library will be restored to that point of time, all at once. It"
 " works like a \"time machine\" for the library."
 msgstr ""
+"در برخی موارد، شما فایل‌های زیادی را در کتابخانه تغییر داده‌اید و متوجه "
+"می‌شوید که می‌خواهید تمام این تغییرات را برگردانید. بازیابی فایل‌های زیاد به"
+" نسخه‌های قدیمی‌شان می‌تواند خسته‌کننده باشد. در این زمان، ویژگی اسنپ‌شات "
+"بسیار کاربردی می‌شود. می‌توانید کل کتابخانه را به هر نقطه‌ای در گذشته "
+"بازگردانید. تمام فایل‌های موجود در کتابخانه به آن نقطه زمانی، همه با هم، "
+"بازگردانده خواهند شد. این مانند یک \"ماشین زمان\" برای کتابخانه عمل می‌کند."
 
 #: templates/help/library_history_and_snapshots.html:9
 msgid "To view library history and snapshots:"
-msgstr ""
+msgstr "برای مشاهده تاریخچه و اسنپ‌شات‌های کتابخانه:"
 
 #: templates/help/library_history_and_snapshots.html:11
 msgid ""
@@ -1296,12 +1478,17 @@ msgid ""
 "\"History\" icon in the library navigation top bar. All the change record of"
 " the library will be displayed in a list."
 msgstr ""
+"در برنامه وب Seafile، به پوشه ریشه یک کتابخانه بروید. روی آیکون \"تاریخچه\" "
+"در نوار بالای ناوبری کتابخانه کلیک کنید. تمام سوابق تغییرات کتابخانه در یک "
+"لیست نمایش داده خواهد شد."
 
 #: templates/help/library_history_and_snapshots.html:12
 msgid ""
 "Click the \"view snapshot\" link on any modification record. You'll see the "
 "library state at the point of time."
 msgstr ""
+"روی لینک \"مشاهده اسنپ‌شات\" در هر سابقه تغییر کلیک کنید. وضعیت کتابخانه در "
+"آن نقطه زمانی را خواهید دید."
 
 #: templates/help/library_history_and_snapshots.html:15
 #, python-format
@@ -1310,6 +1497,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"می‌توانید دوره نگهداری تاریخچه کتابخانه را پیکربندی کنید: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">تنظیم دوره نگهداری "
+"تاریخچه</a>."
 
 #: templates/help/manage_library_as_wiki.html:6
 msgid ""
@@ -1319,6 +1509,12 @@ msgid ""
 "files store textual, tabular as well as graphical information; You can also "
 "add links to other documents in a Markdown file."
 msgstr ""
+"ضبط و ذخیره داده‌های ساختاریافته کوچک به روشی آسان برای استفاده - این همان "
+"چیزی است که ویکی‌های Seafile برای آن هستند. صفحات ویکی به زبان Markdown (MD)"
+" نوشته می‌شوند، یک زبان نشانه‌گذاری ساده، برای اطمینان از سازگاری بین "
+"پلتفرم‌ها. فایل‌های MD اطلاعات متنی، جدولی و همچنین گرافیکی را ذخیره "
+"می‌کنند؛ همچنین می‌توانید لینک‌هایی به سایر اسناد در یک فایل Markdown اضافه "
+"کنید."
 
 #: templates/help/manage_library_as_wiki.html:7
 msgid ""
@@ -1327,10 +1523,14 @@ msgid ""
 " Seafile libraries, they can be synced and shared with other users just like"
 " any ordinary library."
 msgstr ""
+"می‌توانید یک کتابخانه استاندارد در Seafile را مانند یک ویکی مدیریت کنید، با "
+"\"نمایش ستونی\" که در نسخه 7.0 معرفی شد. از آنجایی که Seafile ویکی‌ها را به "
+"عنوان کتابخانه‌های استاندارد Seafile پیاده‌سازی می‌کند، می‌توان آن‌ها را "
+"مانند هر کتابخانه معمولی با کاربران دیگر همگام‌سازی و به اشتراک گذاشت."
 
 #: templates/help/manage_library_as_wiki.html:8
 msgid "Column view"
-msgstr ""
+msgstr "نمایش ستونی"
 
 #: templates/help/manage_library_as_wiki.html:9
 msgid ""
@@ -1341,10 +1541,16 @@ msgid ""
 "File actions such as renaming, moving, and opening via client are available "
 "in a right-click-accessible context menu."
 msgstr ""
+"ویکی‌ها معمولاً یک نوار کناری دارند که شامل یک ساختار پوشه‌ای درختی است، تا "
+"مرور سریع و آسان صفحات ویکی را ممکن سازد. نمایش ستونی Seafile به شما امکان "
+"می‌دهد فایل‌های یک کتابخانه را به همان روش یک فضای ویکی مدیریت کنید. کاربران"
+" می‌توانند در آن مرور کنند و فایل‌ها و پوشه‌ها را فقط با کشیدن و رها کردن "
+"جابجا کنند. اقدامات فایل مانند تغییر نام، جابجایی و باز کردن از طریق کلاینت "
+"در یک منوی زمینه قابل دسترسی با کلیک راست در دسترس هستند."
 
 #: templates/help/manage_library_as_wiki.html:12
 msgid "WYSIWYG Markdown editor"
-msgstr ""
+msgstr "ویرایشگر Markdown WYSIWYG"
 
 #: templates/help/manage_library_as_wiki.html:13
 msgid ""
@@ -1360,12 +1566,25 @@ msgid ""
 "table’s content: A table can be copied in its entirety or in part without "
 "leaving the WYSIWYG view."
 msgstr ""
+"صفحات ویکی در Seafile به عنوان اسناد معمولی در قالب Markdown ذخیره می‌شوند. "
+"برای ایجاد یک صفحه ویکی جدید در یک کتابخانه، فقط یک سند Markdown جدید ایجاد "
+"کنید. فایل‌های MD را می‌توان مستقیماً از رابط وب Seafile با ویرایشگر MD "
+"آنلاین ویرایش کرد. ویرایشگر مبتنی بر وب یک تجربه کاربری روان و گزینه‌های "
+"قالب‌بندی غنی برای متن، تصاویر و جداول ارائه می‌دهد. تصاویر را می‌توان از "
+"کتابخانه‌ها و ذخیره‌سازی محلی و همچنین از طریق هایپرلینک‌ها به فایل‌های MD "
+"وارد کرد. عملکردهای ویرایش تصویر پایه مانند تغییر اندازه نیز می‌تواند در "
+"رابط WYSIWYG (آنچه می‌بینید همان چیزی است که دریافت می‌کنید) ویرایشگر انجام "
+"شود. جداول را می‌توان فقط با چند کلیک درج و تغییر داد. همین موضوع برای "
+"محتوای یک جدول نیز صدق می‌کند: یک جدول را می‌توان به طور کامل یا جزئی کپی "
+"کرد بدون اینکه از نمای WYSIWYG خارج شوید."
 
 #: templates/help/manage_library_as_wiki.html:15
 msgid ""
 "The change history of a Markdown file can be easily accessed by clicking the"
 " \"File History\" button in the menu on top of the editor interface."
 msgstr ""
+"تاریخچه تغییرات یک فایل Markdown را می‌توان به راحتی با کلیک روی دکمه "
+"\"تاریخچه فایل\" در منوی بالای رابط ویرایشگر دسترسی پیدا کرد."
 
 #: templates/help/manage_library_as_wiki.html:17
 msgid ""
@@ -1373,10 +1592,12 @@ msgid ""
 "Table of contents, file information, and collaborative commenting are "
 "provided in this side bar."
 msgstr ""
+"می‌توانید یک نوار کناری مخفی در سمت راست ویرایشگر Markdown باز کنید. فهرست "
+"مطالب، اطلاعات فایل و نظرگیری مشارکتی در این نوار کناری ارائه شده است."
 
 #: templates/help/manage_library_as_wiki.html:19
 msgid "File tagging and related documents"
-msgstr ""
+msgstr "برچسب‌گذاری فایل و اسناد مرتبط"
 
 #: templates/help/manage_library_as_wiki.html:20
 msgid ""
@@ -1385,22 +1606,30 @@ msgid ""
 "can be managed from the side bar of the Markdown editor, or from the file "
 "browser interface."
 msgstr ""
+"برچسب‌گذاری فایل یک ویژگی مهم برای مدیریت دانش است. Seafile به کاربران اجازه"
+" می‌دهد برچسب‌هایی برای هر کتابخانه تعریف کنند و برچسب‌ها را به فایل‌ها "
+"اعمال کنند. برچسب‌ها را می‌توان از نوار کناری ویرایشگر Markdown یا از رابط "
+"مرورگر فایل مدیریت کرد."
 
 #: templates/help/manage_library_as_wiki.html:23
 msgid ""
 "The file browser interface provides a summary of all file tags in the "
 "current library."
 msgstr ""
+"رابط مرورگر فایل خلاصه‌ای از تمام برچسب‌های فایل در کتابخانه فعلی را ارائه "
+"می‌دهد."
 
 #: templates/help/read-only_syncing.html:7
 msgid ""
 "If you want the be-shared users not be able to modify local copies, you can "
 "consider using the Seafile Drive client."
 msgstr ""
+"اگر می‌خواهید کاربران به اشتراک گذاشته شده نتوانند کپی‌های محلی را تغییر "
+"دهند، می‌توانید استفاده از کلاینت Seafile Drive را در نظر بگیرید."
 
 #: templates/help/restoring_deleted_files.html:6
 msgid "Restoring deleted files and folders"
-msgstr ""
+msgstr "بازیابی فایل‌ها و پوشه‌های حذف شده"
 
 #: templates/help/restoring_deleted_files.html:7
 msgid ""
@@ -1408,16 +1637,19 @@ msgid ""
 "Sometimes you find files are deleted mistakenly. You can find back your "
 "deleted files in the trash bin of each library."
 msgstr ""
+"هر کتابخانه در Seafile عملیات حذف فایل شما را به طور خودکار ردیابی می‌کند. "
+"گاهی اوقات متوجه می‌شوید فایل‌ها به اشتباه حذف شده‌اند. می‌توانید فایل‌های "
+"حذف شده خود را در سطل زباله هر کتابخانه پیدا کنید."
 
 #: templates/help/restoring_deleted_files.html:8
 msgid "Here is how to use the trash bin feature:"
-msgstr ""
+msgstr "در اینجا نحوه استفاده از ویژگی سطل زباله آمده است:"
 
 #: templates/help/restoring_deleted_files.html:10
 msgid ""
 "In Seafile Web App, navigate into the parent folder containing the deleted "
 "file or folder."
-msgstr ""
+msgstr "در برنامه وب Seafile، به پوشه والد حاوی فایل یا پوشه حذف شده بروید."
 
 #: templates/help/restoring_deleted_files.html:11
 msgid ""
@@ -1425,6 +1657,9 @@ msgid ""
 " folders will be listed in deletion time order. In the bottom of the list, "
 "you can click the \"more\" button to load more deleted files."
 msgstr ""
+"روی آیکون \"سطل زباله\" در نوار عملیات کتابخانه کلیک کنید. فایل‌ها و "
+"پوشه‌های حذف شده به ترتیب زمان حذف فهرست خواهند شد. در پایین لیست، می‌توانید"
+" روی دکمه \"بیشتر\" کلیک کنید تا فایل‌های حذف شده بیشتری بارگیری شوند."
 
 #: templates/help/restoring_deleted_files.html:12
 msgid ""
@@ -1432,6 +1667,9 @@ msgid ""
 "folder's parent folder has been deleted, it will be restored to the "
 "library's root folder."
 msgstr ""
+"در لیست فایل‌های حذف شده، می‌توانید فایل‌ها و پوشه‌ها را بازیابی کنید. اگر "
+"پوشه والد یک فایل یا پوشه حذف شده باشد، به پوشه ریشه کتابخانه بازگردانده "
+"خواهد شد."
 
 #: templates/help/restoring_deleted_files.html:13
 msgid ""
@@ -1439,6 +1677,9 @@ msgid ""
 "the current folder. Files deleted in the sub-folders of the current folder "
 "are also included in the list."
 msgstr ""
+"توجه داشته باشید که سطل زباله فقط شامل فایل‌ها و پوشه‌های فرعی حذف شده در "
+"زیر پوشه فعلی است. فایل‌های حذف شده در پوشه‌های فرعی پوشه فعلی نیز در لیست "
+"گنجانده شده‌اند."
 
 #: templates/help/restoring_deleted_files.html:15
 #, python-format
@@ -1447,6 +1688,9 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/setting_library_history/\">setting history "
 "retention period</a>."
 msgstr ""
+"می‌توانید دوره نگهداری فایل‌های حذف شده را پیکربندی کنید: <a "
+"href=\"%(SITE_ROOT)shelp/setting_library_history/\">تنظیم دوره نگهداری "
+"تاریخچه</a>."
 
 #: templates/help/selective_sync.html:8
 msgid ""
@@ -1455,6 +1699,10 @@ msgid ""
 "selectively sync a sub-folder in a library, instead of syncing the entire "
 "library."
 msgstr ""
+"ممکن است برخی کتابخانه‌های بسیار بزرگ در سرور Seafile داشته باشید. و در حال "
+"حاضر فقط به یک پوشه فرعی در داخل یک کتابخانه علاقه‌مند هستید. سپس می‌توانید "
+"به طور انتخابی یک پوشه فرعی در یک کتابخانه را همگام‌سازی کنید، به جای اینکه "
+"کل کتابخانه را همگام‌سازی کنید."
 
 #: templates/help/selective_sync.html:10
 msgid ""
@@ -1463,40 +1711,54 @@ msgid ""
 "folder. Right click on the sub-folder. Choose \"Sync this folder\" in the "
 "pop-up menu."
 msgstr ""
+"برای همگام‌سازی یک پوشه فرعی، مرورگر فایل ابری را با دوبار کلیک روی یک "
+"کتابخانه که همگام‌سازی نشده است باز کنید. به پوشه والد آن پوشه فرعی بروید. "
+"روی پوشه فرعی راست کلیک کنید. \"همگام‌سازی این پوشه\" را در منوی پاپ‌آپ "
+"انتخاب کنید."
 
 #: templates/help/selective_sync.html:14
 msgid ""
 "After syncing the sub-folder, you can see its syncing status in the \"Synced"
 " Libraries\" group in the client's main window."
 msgstr ""
+"پس از همگام‌سازی پوشه فرعی، می‌توانید وضعیت همگام‌سازی آن را در گروه "
+"\"کتابخانه‌های همگام‌سازی شده\" در پنجره اصلی کلاینت مشاهده کنید."
 
 #: templates/help/setting_library_history.html:6
 msgid "Setting library history retention period"
-msgstr ""
+msgstr "تنظیم دوره نگهداری تاریخچه کتابخانه"
 
 #: templates/help/setting_library_history.html:7
 msgid ""
 "A library's history retention period length controls how long you can access"
 " your history data in the following features:"
 msgstr ""
+"طول دوره نگهداری تاریخچه یک کتابخانه کنترل می‌کند که چقدر می‌توانید به "
+"داده‌های تاریخچه خود در ویژگی‌های زیر دسترسی داشته باشید:"
 
 #: templates/help/setting_library_history.html:9
 msgid ""
 "Restore deleted files: you cannot restore files and folders deleted before "
 "the retention period."
 msgstr ""
+"بازیابی فایل‌های حذف شده: نمی‌توانید فایل‌ها و پوشه‌هایی که قبل از دوره "
+"نگهداری حذف شده‌اند را بازیابی کنید."
 
 #: templates/help/setting_library_history.html:10
 msgid ""
 "File versions: you cannot access file versions older than the retention "
 "period."
 msgstr ""
+"نسخه‌های فایل: شما نمی‌توانید به نسخه‌های فایل قدیمی‌تر از دوره نگهداری "
+"دسترسی پیدا کنید."
 
 #: templates/help/setting_library_history.html:11
 msgid ""
 "Library history and snapshots: you cannot access library snapshots older "
 "than the retention period."
 msgstr ""
+"تاریخچه و اسنپ‌شات‌های کتابخانه: شما نمی‌توانید به اسنپ‌شات‌های کتابخانه "
+"قدیمی‌تر از دوره نگهداری دسترسی پیدا کنید."
 
 #: templates/help/setting_library_history.html:13
 msgid ""
@@ -1504,51 +1766,71 @@ msgid ""
 "library, separately. You must be the library's owner to set the retention "
 "period. To set retention period length:"
 msgstr ""
+"دوره نگهداری نسخه‌های قدیمی فایل‌ها را می‌توان برای هر کتابخانه به طور "
+"جداگانه پیکربندی کرد. شما باید مالک کتابخانه باشید تا بتوانید دوره نگهداری "
+"را تنظیم کنید. برای تنظیم طول دوره نگهداری:"
 
 #: templates/help/setting_library_history.html:15
 msgid ""
 "In Seafile Web App, click the \"Mine\" tab in the navigation panel (as in "
 "the below screenshot). All libraries owned by you will be listed."
 msgstr ""
+"در برنامه وب Seafile، روی تب \"مال من\" در پنل ناوبری کلیک کنید (همانطور که "
+"در تصویر زیر نشان داده شده است). تمام کتابخانه‌های متعلق به شما فهرست خواهند"
+" شد."
 
 #: templates/help/setting_library_history.html:16
 msgid ""
 "Move the cursor onto the row of the library. An operation menu will appear. "
 "Click \"History Setting\" in the drop-down menu."
 msgstr ""
+"مکان‌نما را روی ردیف کتابخانه ببرید. یک منوی عملیات ظاهر خواهد شد. روی "
+"\"تنظیمات تاریخچه\" در منوی کشویی کلیک کنید."
 
 #: templates/help/setting_library_history.html:17
 msgid "In the pop-up dialog, you can set the length of file retention period."
-msgstr ""
+msgstr "در دیالوگ پاپ‌آپ، می‌توانید طول دوره نگهداری فایل را تنظیم کنید."
 
 #: templates/help/sharing_files_and_folders.html:6
 msgid ""
 "In Seafile there are a few ways to share files and folders with others:"
 msgstr ""
+"در Seafile چندین روش برای به اشتراک گذاری فایل‌ها و پوشه‌ها با دیگران وجود "
+"دارد:"
 
 #: templates/help/sharing_files_and_folders.html:8
 msgid ""
 "Using links: there are multiple types of links that can be used to share "
 "with various scope of collaborators."
 msgstr ""
+"استفاده از لینک‌ها: انواع مختلفی از لینک‌ها وجود دارد که می‌توان برای به "
+"اشتراک گذاری با دامنه‌های مختلف همکاران استفاده کرد."
 
 #: templates/help/sharing_files_and_folders.html:10
 msgid ""
 "Share links: Any user who has access to the links can access the files or "
 "folders pointed by the link. No login is required."
 msgstr ""
+"لینک‌های اشتراک‌گذاری: هر کاربری که به لینک‌ها دسترسی داشته باشد می‌تواند به"
+" فایل‌ها یا پوشه‌های اشاره شده توسط لینک دسترسی پیدا کند. نیاز به ورود به "
+"سیستم نیست."
 
 #: templates/help/sharing_files_and_folders.html:11
 msgid ""
 "Upload links: Any user who has access to the links can upload files to the "
 "folder pointed by the link. No login is required."
 msgstr ""
+"لینک‌های آپلود: هر کاربری که به لینک‌ها دسترسی داشته باشد می‌تواند فایل‌ها "
+"را به پوشه اشاره شده توسط لینک آپلود کند. نیاز به ورود به سیستم نیست."
 
 #: templates/help/sharing_files_and_folders.html:12
 msgid ""
 "Internal links: Only logged in users who have read permission to the file or"
 " folder can access this link. Used for internal file sharing."
 msgstr ""
+"لینک‌های داخلی: فقط کاربران وارد شده‌ای که دسترسی خواندن به فایل یا پوشه را "
+"دارند می‌توانند به این لینک دسترسی پیدا کنند. برای اشتراک‌گذاری داخلی فایل "
+"استفاده می‌شود."
 
 #: templates/help/sharing_files_and_folders.html:15
 msgid ""
@@ -1556,10 +1838,13 @@ msgid ""
 "library or folder for specific users or groups. Users have to log in to "
 "access the folders."
 msgstr ""
+"اشتراک‌گذاری کتابخانه‌ها یا پوشه‌ها: برای تنظیم مجوزهای دسترسی به یک "
+"کتابخانه یا پوشه برای کاربران یا گروه‌های خاص استفاده می‌شود. کاربران باید "
+"وارد سیستم شوند تا به پوشه‌ها دسترسی پیدا کنند."
 
 #: templates/help/sharing_files_and_folders.html:17
 msgid "Creating share links to files or folders"
-msgstr ""
+msgstr "ایجاد لینک‌های اشتراک‌گذاری برای فایل‌ها یا پوشه‌ها"
 
 #: templates/help/sharing_files_and_folders.html:18
 msgid ""
@@ -1567,12 +1852,18 @@ msgid ""
 "anyone, including those who don't have a Seafile account. You can also use "
 "password and expiration time to protect your links."
 msgstr ""
+"لینک‌های اشتراک‌گذاری، لینک‌های عمومی برای فایل‌ها یا پوشه‌ها هستند. هر کسی،"
+" از جمله کسانی که حساب Seafile ندارند، می‌توانند به آن‌ها دسترسی پیدا کنند. "
+"همچنین می‌توانید از رمز عبور و زمان انقضا برای محافظت از لینک‌های خود "
+"استفاده کنید."
 
 #: templates/help/sharing_files_and_folders.html:19
 msgid ""
 "You can also set access permission to share links. There are three types of "
 "permissions:"
 msgstr ""
+"همچنین می‌توانید مجوز دسترسی به لینک‌های اشتراک‌گذاری را تنظیم کنید. سه نوع "
+"مجوز وجود دارد:"
 
 #: templates/help/sharing_files_and_folders.html:22
 msgid ""
@@ -1580,6 +1871,9 @@ msgid ""
 "browser, but cannot be downloaded. This is useful for sharing confidential "
 "data."
 msgstr ""
+"فقط پیش‌نمایش: فایل یا فایل‌های موجود در پوشه فقط در مرورگر وب قابل مشاهده "
+"هستند، اما قابل دانلود نیستند. این برای اشتراک‌گذاری داده‌های محرمانه مفید "
+"است."
 
 #: templates/help/sharing_files_and_folders.html:23
 msgid ""
@@ -1587,16 +1881,21 @@ msgid ""
 "file can be edited in web browser (e.g. an Office file), any user who has "
 "access to the link is allowed to edit it."
 msgstr ""
+"ویرایش در ابر و دانلود: مشابه \"پیش‌نمایش و دانلود\"، اما اگر فایل در مرورگر"
+" وب قابل ویرایش باشد (مثلاً یک فایل Office)، هر کاربری که به لینک دسترسی "
+"دارد مجاز به ویرایش آن است."
 
 #: templates/help/sharing_files_and_folders.html:25
 msgid "To create a share link in Seafile web app:"
-msgstr ""
+msgstr "برای ایجاد یک لینک اشتراک‌گذاری در برنامه وب Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:27
 msgid ""
 "Navigate into the parent folder containing the file or folder. Hover your "
 "mouse over the file or folder and click on the \"Share\" icon that appears."
 msgstr ""
+"به پوشه والد حاوی فایل یا پوشه بروید. ماوس خود را روی فایل یا پوشه ببرید و "
+"روی آیکون \"اشتراک‌گذاری\" که ظاهر می‌شود کلیک کنید."
 
 #: templates/help/sharing_files_and_folders.html:28
 msgid ""
@@ -1604,6 +1903,10 @@ msgid ""
 " on the left panel. Then click \"Generate\" button to create a link. You can"
 " use password, expiration time and permission to protect your link."
 msgstr ""
+"یک پنجره پاپ‌آپ با گزینه‌های اشتراک‌گذاری ظاهر خواهد شد. روی تب \"لینک "
+"اشتراک‌گذاری\" در پنل سمت چپ کلیک کنید. سپس روی دکمه \"تولید\" کلیک کنید تا "
+"یک لینک ایجاد شود. می‌توانید از رمز عبور، زمان انقضا و مجوز برای محافظت از "
+"لینک خود استفاده کنید."
 
 #: templates/help/sharing_files_and_folders.html:29
 #: templates/help/sharing_files_and_folders.html:42
@@ -1611,10 +1914,13 @@ msgid ""
 "Copy the link to email, instant messaging client or any other tool to send "
 "it to others."
 msgstr ""
+"لینک را کپی کنید و در ایمیل، کلاینت پیام‌رسانی فوری یا هر ابزار دیگری برای "
+"ارسال به دیگران قرار دهید."
 
 #: templates/help/sharing_files_and_folders.html:31
 msgid "You can also create share links from the desktop clients."
 msgstr ""
+"همچنین می‌توانید لینک‌های اشتراک‌گذاری را از کلاینت‌های دسکتاپ ایجاد کنید."
 
 #: templates/help/sharing_files_and_folders.html:33
 msgid ""
@@ -1623,6 +1929,10 @@ msgid ""
 " on the file or folder that you want to create a link to. In the pop-up "
 "menu, choose \"Seafile\" then \"Create share link\"."
 msgstr ""
+"اگر کتابخانه همگام‌سازی شده است، روی کتابخانه در پنجره اصلی کلاینت Seafile "
+"دوبار کلیک کنید. پوشه محلی آن کتابخانه باز خواهد شد. روی فایل یا پوشه‌ای که "
+"می‌خواهید برای آن لینک ایجاد کنید راست کلیک کنید. در منوی پاپ‌آپ، "
+"\"Seafile\" و سپس \"ایجاد لینک اشتراک‌گذاری\" را انتخاب کنید."
 
 #: templates/help/sharing_files_and_folders.html:34
 msgid ""
@@ -1630,10 +1940,13 @@ msgid ""
 " Seafile client. The cloud file browser window will be opened, and you can "
 "create a link to a file or folder in it."
 msgstr ""
+"اگر کتابخانه همگام‌سازی نشده است، روی کتابخانه در پنجره اصلی کلاینت Seafile "
+"دوبار کلیک کنید. پنجره مرورگر فایل ابری باز خواهد شد و می‌توانید یک لینک "
+"برای یک فایل یا پوشه در آن ایجاد کنید."
 
 #: templates/help/sharing_files_and_folders.html:36
 msgid "Creating upload links to folders"
-msgstr ""
+msgstr "ایجاد لینک‌های آپلود برای پوشه‌ها"
 
 #: templates/help/sharing_files_and_folders.html:37
 msgid ""
@@ -1641,16 +1954,22 @@ msgid ""
 "upload links for folders. Others cannot see the files in the folders. They "
 "can only upload files to them."
 msgstr ""
+"می‌توانید از لینک‌های آپلود برای جمع‌آوری فایل‌ها از دیگران استفاده کنید. "
+"فقط می‌توانید لینک‌های آپلود برای پوشه‌ها ایجاد کنید. دیگران نمی‌توانند "
+"فایل‌های موجود در پوشه‌ها را ببینند. آن‌ها فقط می‌توانند فایل‌ها را به آن‌ها"
+" آپلود کنند."
 
 #: templates/help/sharing_files_and_folders.html:38
 msgid "To create an upload link in Seafile web app:"
-msgstr ""
+msgstr "برای ایجاد یک لینک آپلود در برنامه وب Seafile:"
 
 #: templates/help/sharing_files_and_folders.html:40
 msgid ""
 "Navigate into the parent folder containing the folder. Hover your mouse over"
 " the folder and click on the \"Share\" icon that appears."
 msgstr ""
+"به پوشه والد حاوی پوشه بروید. ماوس خود را روی پوشه ببرید و روی آیکون "
+"\"اشتراک‌گذاری\" که ظاهر می‌شود کلیک کنید."
 
 #: templates/help/sharing_files_and_folders.html:41
 msgid ""
@@ -1658,10 +1977,13 @@ msgid ""
 "tab on the left panel. Then click \"Generate\" button to create a link. You "
 "can use password to protect your link."
 msgstr ""
+"یک پنجره پاپ‌آپ با گزینه‌های اشتراک‌گذاری ظاهر خواهد شد. روی تب \"لینک "
+"آپلود\" در پنل سمت چپ کلیک کنید. سپس روی دکمه \"تولید\" کلیک کنید تا یک لینک"
+" ایجاد شود. می‌توانید از رمز عبور برای محافظت از لینک خود استفاده کنید."
 
 #: templates/help/sharing_files_and_folders.html:44
 msgid "Sharing libraries or folders"
-msgstr ""
+msgstr "اشتراک‌گذاری کتابخانه‌ها یا پوشه‌ها"
 
 #: templates/help/sharing_files_and_folders.html:45
 msgid ""
@@ -1669,62 +1991,80 @@ msgid ""
 "shared library or folder can be accessed by others with the web app and "
 "Seafile clients."
 msgstr ""
+"می‌توانید یک کتابخانه یا پوشه را با سایر کاربران ثبت‌شده Seafile به اشتراک "
+"بگذارید. کتابخانه یا پوشه به اشتراک گذاشته شده می‌تواند توسط دیگران با "
+"استفاده از برنامه وب و کلاینت‌های Seafile قابل دسترسی باشد."
 
 #: templates/help/sharing_files_and_folders.html:46
 msgid "You can choose the range of the share:"
-msgstr ""
+msgstr "می‌توانید دامنه اشتراک‌گذاری را انتخاب کنید:"
 
 #: templates/help/sharing_files_and_folders.html:48
 msgid "Share to user: You can share to one or more users."
 msgstr ""
+"اشتراک‌گذاری با کاربر: می‌توانید با یک یا چند کاربر به اشتراک بگذارید."
 
 #: templates/help/sharing_files_and_folders.html:49
 msgid "Share to group: You can share to a group."
-msgstr ""
+msgstr "اشتراک‌گذاری با گروه: می‌توانید با یک گروه به اشتراک بگذارید."
 
 #: templates/help/sharing_files_and_folders.html:50
 msgid ""
 "Share to organization: If you're using a private server, sometimes it's "
 "useful to share to all members on the server (the entire organization)."
 msgstr ""
+"اشتراک‌گذاری با سازمان: اگر از یک سرور خصوصی استفاده می‌کنید، گاهی اوقات "
+"مفید است که با تمام اعضای سرور (کل سازمان) به اشتراک بگذارید."
 
 #: templates/help/sharing_files_and_folders.html:52
 msgid "You can also set permission on the share:"
-msgstr ""
+msgstr "همچنین می‌توانید مجوز روی اشتراک‌گذاری را تنظیم کنید:"
 
 #: templates/help/sharing_files_and_folders.html:54
 msgid "Read-Write: users can read, write, upload, download and sync files."
 msgstr ""
+"خواندن-نوشتن: کاربران می‌توانند فایل‌ها را بخوانند، بنویسند، آپلود کنند، "
+"دانلود کنند و همگام‌سازی کنند."
 
 #: templates/help/sharing_files_and_folders.html:55
 msgid "Read-only: users can read, download and sync files."
 msgstr ""
+"فقط خواندنی: کاربران می‌توانند فایل‌ها را بخوانند، دانلود کنند و همگام‌سازی "
+"کنند."
 
 #: templates/help/sharing_files_and_folders.html:56
 msgid "Admin: besides the write permission, users can also share the library."
 msgstr ""
+"مدیر: علاوه بر مجوز نوشتن، کاربران می‌توانند کتابخانه را نیز به اشتراک "
+"بگذارند."
 
 #: templates/help/sharing_files_and_folders.html:57
 msgid ""
 "Online Read-Write: users can view and edit files online via a web browser. "
 "The files cannot be downloaded."
 msgstr ""
+"خواندن-نوشتن آنلاین: کاربران می‌توانند فایل‌ها را به صورت آنلاین از طریق "
+"مرورگر وب مشاهده و ویرایش کنند. فایل‌ها قابل دانلود نیستند."
 
 #: templates/help/sharing_files_and_folders.html:58
 msgid ""
 "Online Read-only: users can only view files online via a web browser. The "
 "files cannot be downloaded."
 msgstr ""
+"فقط خواندنی آنلاین: کاربران فقط می‌توانند فایل‌ها را به صورت آنلاین از طریق "
+"مرورگر وب مشاهده کنند. فایل‌ها قابل دانلود نیستند."
 
 #: templates/help/sharing_files_and_folders.html:60
 msgid "To share a library or folder to a user or group:"
-msgstr ""
+msgstr "برای اشتراک‌گذاری یک کتابخانه یا پوشه با یک کاربر یا گروه:"
 
 #: templates/help/sharing_files_and_folders.html:62
 msgid ""
 "Hover your mouse over the library or folder and click on the \"Share\" icon "
 "that appears."
 msgstr ""
+"ماوس خود را روی کتابخانه یا پوشه ببرید و روی آیکون \"اشتراک‌گذاری\" که ظاهر "
+"می‌شود کلیک کنید."
 
 #: templates/help/sharing_files_and_folders.html:63
 msgid ""
@@ -1732,6 +2072,9 @@ msgid ""
 "or \"Share to group\" tab on the left panel. Select the user or group. Then "
 "click \"Submit\"."
 msgstr ""
+"یک پنجره پاپ‌آپ با گزینه‌های اشتراک‌گذاری ظاهر خواهد شد. روی تب "
+"\"اشتراک‌گذاری با کاربر\" یا \"اشتراک‌گذاری با گروه\" در پنل سمت چپ کلیک "
+"کنید. کاربر یا گروه را انتخاب کنید. سپس روی \"ارسال\" کلیک کنید."
 
 #: templates/help/sharing_files_and_folders.html:65
 msgid ""
@@ -1740,6 +2083,10 @@ msgid ""
 " you share it to a group, the group members can only see it by navigating "
 "into the group."
 msgstr ""
+"پس از اشتراک‌گذاری یک کتابخانه یا پوشه با یک کاربر، کاربر می‌تواند با کلیک "
+"روی تب \"اشتراک‌گذاری شده با من\" در پنل سمت چپ برنامه وب Seafile آن را "
+"ببیند. اگر آن را با یک گروه به اشتراک بگذارید، اعضای گروه فقط با رفتن به "
+"داخل گروه می‌توانند آن را ببینند."
 
 #: templates/help/sharing_files_and_folders.html:66
 msgid ""
@@ -1748,10 +2095,15 @@ msgid ""
 "button. In the drop-down menu, you can choose to share an existing library "
 "or create a new library and share it."
 msgstr ""
+"برای اشتراک‌گذاری یک کتابخانه با کل سازمان: در برنامه وب Seafile، روی تب "
+"\"اشتراک‌گذاری با همه\" در پنل سمت چپ کلیک کنید. سپس روی دکمه \"افزودن "
+"کتابخانه\" کلیک کنید. در منوی کشویی، می‌توانید انتخاب کنید که یک کتابخانه "
+"موجود را به اشتراک بگذارید یا یک کتابخانه جدید ایجاد کنید و آن را به اشتراک "
+"بگذارید."
 
 #: templates/help/sharing_files_and_folders.html:67
 msgid "Internal links"
-msgstr ""
+msgstr "لینک‌های داخلی"
 
 #: templates/help/sharing_files_and_folders.html:68
 msgid ""
@@ -1761,6 +2113,11 @@ msgid ""
 "library. You may just copy the link and paste it into an email or IM "
 "software."
 msgstr ""
+"فقط کاربران وارد شده‌ای که دسترسی خواندن به فایل یا پوشه را دارند می‌توانند "
+"به این لینک دسترسی پیدا کنند. برای اشتراک‌گذاری داخلی فایل استفاده می‌شود. "
+"این یک روش مناسب برای اشتراک‌گذاری فایل‌ها بین اعضای تیمی است که به یک "
+"کتابخانه مشترک دسترسی دارند. ممکن است فقط لینک را کپی کنید و در یک ایمیل یا "
+"نرم‌افزار پیام‌رسانی قرار دهید."
 
 #: templates/help/sync_interval.html:8
 msgid ""
@@ -1771,10 +2128,16 @@ msgid ""
 "local folder. You can set the interval of this periodic sync. The interval "
 "is set in the unit of seconds."
 msgstr ""
+"معمولاً کلاینت Seafile به طور خودکار تغییرات در پوشه محلی را تشخیص می‌دهد و "
+"تغییرات را به سرور آپلود می‌کند. با این حال، اگر پوشه محلی در یک درایو "
+"اشتراک‌گذاری شبکه ویندوز باشد، کلاینت Seafile نمی‌تواند تغییرات را به طور "
+"قابل اعتماد تشخیص دهد. در این مورد، می‌توانید از کلاینت Seafile بخواهید که "
+"به طور دوره‌ای تغییرات در پوشه محلی را بررسی کند. می‌توانید فاصله این "
+"همگام‌سازی دوره‌ای را تنظیم کنید. فاصله بر اساس ثانیه تنظیم می‌شود."
 
 #: templates/help/syncing_existing_folders.html:6
 msgid "Syncing with an existing folder"
-msgstr ""
+msgstr "همگام‌سازی با یک پوشه موجود"
 
 #: templates/help/syncing_existing_folders.html:8
 #, python-format
@@ -1788,24 +2151,34 @@ msgid ""
 "href=\"%(SITE_ROOT)shelp/conflicts/\">conflict files</a> if file contents "
 "are different in the local folder and the library. "
 msgstr ""
+"گاهی اوقات شما قبلاً یک کتابخانه در سرور Seafile دارید (که توسط دیگران به "
+"اشتراک گذاشته شده یا از کامپیوتر دیگری آپلود شده است). می‌توانید این "
+"کتابخانه را با یک پوشه موجود در کامپیوتر خود همگام‌سازی کنید. پوشه محلی باید"
+" همان نام کتابخانه را داشته باشد. فایل‌های موجود در پوشه محلی با فایل‌های "
+"موجود در کتابخانه ادغام خواهند شد. هیچ فایلی در پوشه محلی یا کتابخانه "
+"رونویسی یا از دست نخواهد رفت. اگر محتوای فایل در پوشه محلی و کتابخانه متفاوت"
+" باشد، ادغام برخی <a href=\"%(SITE_ROOT)shelp/conflicts/\">فایل‌های تضاد</a>"
+" را ایجاد خواهد کرد."
 
 #: templates/help/syncing_existing_folders.html:10
 msgid ""
 "To sync a library with an existing folder, right click on the library in "
 "Seafile client's main window and click \"Sync this library\"."
 msgstr ""
+"برای همگام‌سازی یک کتابخانه با یک پوشه موجود، روی کتابخانه در پنجره اصلی "
+"کلاینت Seafile راست کلیک کنید و \"همگام‌سازی این کتابخانه\" را کلیک کنید."
 
 #: templates/help/syncing_existing_folders.html:14
 msgid "In the pop-up dialog, click the \"Sync with an existing folder\" link."
-msgstr ""
+msgstr "در دیالوگ پاپ‌آپ، روی لینک \"همگام‌سازی با یک پوشه موجود\" کلیک کنید."
 
 #: templates/help/syncing_existing_folders.html:18
 msgid "Then choose an existing folder to sync with this library."
-msgstr ""
+msgstr "سپس یک پوشه موجود را برای همگام‌سازی با این کتابخانه انتخاب کنید."
 
 #: templates/help/unsync_resync.html:6
 msgid "Unsync and resync library"
-msgstr ""
+msgstr "لغو همگام‌سازی و همگام‌سازی مجدد کتابخانه"
 
 #: templates/help/unsync_resync.html:8
 #, python-format
@@ -1817,6 +2190,13 @@ msgid ""
 "<a href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">sync with existing "
 "folder</a> feature."
 msgstr ""
+"وقتی دیگر نمی‌خواهید یک پوشه محلی را با یک کتابخانه همگام‌سازی کنید، "
+"می‌توانید آن را لغو همگام‌سازی کنید. پس از لغو همگام‌سازی یک کتابخانه، "
+"تغییرات در پوشه و فایل‌های محلی آپلود نخواهند شد و تغییرات در کتابخانه "
+"دانلود نخواهند شد. اگر می‌خواهید دوباره کتابخانه را با پوشه محلی همگام‌سازی "
+"کنید، می‌توانید از ویژگی <a "
+"href=\"%(SITE_ROOT)shelp/syncing_existing_folders/\">همگام‌سازی با پوشه "
+"موجود</a> استفاده کنید."
 
 #: templates/help/unsync_resync.html:10
 msgid ""
@@ -1825,6 +2205,10 @@ msgid ""
 "unsync and then immediately sync the library with the same folder. You can "
 "find this action in the pop-up menu of the client's main window."
 msgstr ""
+"گاهی اوقات خطاهای داخلی در کلاینت وجود دارد که همگام‌سازی را مسدود می‌کند. "
+"در این موارد، معمولاً \"همگام‌سازی مجدد\" کتابخانه مفید است. همگام‌سازی مجدد"
+" به معنای لغو همگام‌سازی و سپس همگام‌سازی فوری کتابخانه با همان پوشه است. "
+"این عمل را می‌توانید در منوی پاپ‌آپ پنجره اصلی کلاینت پیدا کنید."
 
 #: templates/help/using_drive_client.html:7
 msgid ""
@@ -1832,16 +2216,22 @@ msgid ""
 "href=\"https://www.seafile.com/en/download/\">download page</a>, you can "
 "start it by double clicking the \"SeaDrive\" app icon on your desktop."
 msgstr ""
+"پس از نصب کلاینت درایو با دستورالعمل‌های موجود در <a "
+"href=\"https://www.seafile.com/en/download/\">صفحه دانلود</a>، می‌توانید آن "
+"را با دوبار کلیک کردن روی آیکون برنامه \"SeaDrive\" در دسکتاپ خود راه‌اندازی"
+" کنید."
 
 #: templates/help/using_drive_client.html:8
 msgid ""
 "You'll be asked to choose a drive letter for the virtual drive. By default, "
 "\"S:\" will be used."
 msgstr ""
+"از شما خواسته می‌شود که یک حرف درایو برای درایو مجازی انتخاب کنید. به طور "
+"پیش‌فرض، \"S:\" استفاده خواهد شد."
 
 #: templates/help/using_drive_client.html:9
 msgid "Then you'll be asked to log into your Seafile server."
-msgstr ""
+msgstr "سپس از شما خواسته می‌شود که به سرور Seafile خود وارد شوید."
 
 #: templates/help/using_drive_client.html:12
 msgid ""
@@ -1850,6 +2240,10 @@ msgid ""
 "at this moment. So it'll not take very long. You can let it run in the "
 "background. You'll be noticed when the fetch is done."
 msgstr ""
+"پس از ورود موفقیت‌آمیز به سرور، کلاینت درایو شروع به دریافت لیست کتابخانه‌ها"
+" و فایل‌ها از سرور می‌کند. محتوای فایل‌ها در این لحظه دانلود نمی‌شود. "
+"بنابراین زمان زیادی طول نخواهد کشید. می‌توانید اجازه دهید در پس‌زمینه اجرا "
+"شود. پس از اتمام دریافت به شما اطلاع داده می‌شود."
 
 #: templates/help/using_drive_client.html:14
 msgid ""
@@ -1859,21 +2253,28 @@ msgid ""
 "when you open a file. Recently opened file will be cached in your local "
 "disk. All cached files will be marked with a green tick."
 msgstr ""
+"پوشه درایو مجازی باز خواهد شد. خواهید دید که دقیقاً مانند یک هارد دیسک "
+"معمولی در کامپیوتر شما کار می‌کند. پوشه‌های سطح بالا در درایو مجازی، "
+"کتابخانه‌های موجود در سرور Seafile هستند. محتوای فایل‌ها هنگام باز کردن یک "
+"فایل دانلود می‌شود. فایل‌های اخیراً باز شده در دیسک محلی شما کش می‌شوند. "
+"تمام فایل‌های کش شده با یک تیک سبز علامت‌گذاری می‌شوند."
 
 #: templates/help/using_drive_client.html:17
 msgid "Synced State"
-msgstr ""
+msgstr "وضعیت همگام‌سازی"
 
 #: templates/help/using_drive_client.html:18
 msgid ""
 "Files and folders in the virtual drive are in either cloud-only, synced, or "
 "in partially synced state."
 msgstr ""
+"فایل‌ها و پوشه‌ها در درایو مجازی در یکی از حالت‌های فقط ابری، همگام‌سازی شده"
+" یا نیمه همگام‌سازی شده هستند."
 
 #: templates/help/using_drive_client.html:22
 #: templates/help/using_drive_client.html:51
 msgid "State"
-msgstr ""
+msgstr "وضعیت"
 
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
@@ -1883,11 +2284,11 @@ msgstr "آیکون"
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
 msgid "Details"
-msgstr ""
+msgstr "جزئیات"
 
 #: templates/help/using_drive_client.html:29
 msgid "Cloud-only content"
-msgstr ""
+msgstr "محتوای فقط ابری"
 
 #: templates/help/using_drive_client.html:31
 msgid ""
@@ -1897,71 +2298,91 @@ msgid ""
 "downloaded is only information about the file, such as its name, its size "
 "and the date it was updated."
 msgstr ""
+"محتوای فقط ابری در درایو مجازی نمایش داده می‌شود، اما از کل فضایی که فایل "
+"استفاده می‌کند استفاده نمی‌کند. در اکسپلورر فایل خود می‌توانید فایل را "
+"ببینید، اما محتوا تا زمانی که به آن نیاز نداشته باشید به طور کامل دانلود "
+"نمی‌شود. آنچه دانلود می‌شود فقط اطلاعات مربوط به فایل است، مانند نام، اندازه"
+" و تاریخ به‌روزرسانی آن."
 
 #: templates/help/using_drive_client.html:34
 msgid "Synced content"
-msgstr ""
+msgstr "محتوای همگام‌سازی شده"
 
 #: templates/help/using_drive_client.html:36
 msgid ""
 "Synced content is downloaded and saved on the hard drive of your computer. "
 "You can directly edit these files from applications on your computer."
 msgstr ""
+"محتوای همگام‌سازی شده دانلود و روی هارد دیسک کامپیوتر شما ذخیره می‌شود. "
+"می‌توانید این فایل‌ها را مستقیماً از برنامه‌های موجود در کامپیوتر خود ویرایش"
+" کنید."
 
 #: templates/help/using_drive_client.html:39
 msgid "Partially synced content"
-msgstr ""
+msgstr "محتوای نیمه همگام‌سازی شده"
 
 #: templates/help/using_drive_client.html:41
 msgid ""
 "Partially synced folders contain both synced and cloud-only files or "
 "folders."
 msgstr ""
+"پوشه‌های نیمه همگام‌سازی شده شامل فایل‌ها یا پوشه‌های همگام‌سازی شده و فقط "
+"ابری هستند."
 
 #: templates/help/using_drive_client.html:46
 msgid "Special States"
-msgstr ""
+msgstr "وضعیت‌های ویژه"
 
 #: templates/help/using_drive_client.html:47
 msgid ""
 "For files that are already synced to local computer, they may be in 3 other "
 "special states, besides the normal \"synced\" state. "
 msgstr ""
+"برای فایل‌هایی که قبلاً به کامپیوتر محلی همگام‌سازی شده‌اند، ممکن است علاوه "
+"بر حالت عادی \"همگام‌سازی شده\"، در 3 حالت ویژه دیگر نیز باشند."
 
 #: templates/help/using_drive_client.html:58
 msgid "Locked by other user"
-msgstr ""
+msgstr "قفل شده توسط کاربر دیگر"
 
 #: templates/help/using_drive_client.html:60
 msgid ""
 "The file is locked by other user on the server. You can only open the file "
 "in read-only mode. You cannot modify, delete, rename or move the file."
 msgstr ""
+"فایل توسط کاربر دیگری در سرور قفل شده است. شما فقط می‌توانید فایل را در حالت"
+" فقط خواندنی باز کنید. نمی‌توانید فایل را تغییر، حذف، تغییر نام یا جابجا "
+"کنید."
 
 #: templates/help/using_drive_client.html:63
 msgid "Locked by me"
-msgstr ""
+msgstr "قفل شده توسط من"
 
 #: templates/help/using_drive_client.html:65
 msgid ""
 "The file is locked by you. This prevents others from modifying the file."
 msgstr ""
+"فایل توسط شما قفل شده است. این کار از تغییر فایل توسط دیگران جلوگیری می‌کند."
 
 #: templates/help/using_drive_client.html:68
 msgid "Read-only"
-msgstr ""
+msgstr "فقط خواندنی"
 
 #: templates/help/using_drive_client.html:70
 msgid ""
 "The folder or library of this file is shared with read-only permission to "
 "you. You cannot modify, delete or move the file."
 msgstr ""
+"پوشه یا کتابخانه این فایل با دسترسی فقط خواندنی با شما به اشتراک گذاشته شده "
+"است. نمی‌توانید فایل را تغییر، حذف یا جابجا کنید."
 
 #: templates/help/using_drive_client.html:74
 msgid ""
 "The Drive client regularly cleans up unused cached files in the background. "
 "You can also limit the local cache space."
 msgstr ""
+"کلاینت درایو به طور منظم فایل‌های کش شده استفاده نشده را در پس‌زمینه پاک "
+"می‌کند. همچنین می‌توانید فضای کش محلی را محدود کنید."
 
 #: templates/help/using_drive_client.html:76
 msgid ""
@@ -1969,10 +2390,14 @@ msgid ""
 "on the current selected server will be shown in the virtual drive. You can "
 "switch among accounts."
 msgstr ""
+"می‌توانید در کلاینت درایو به چندین حساب وارد شوید. با این حال، فقط فایل‌های "
+"موجود در سرور انتخاب شده فعلی در درایو مجازی نمایش داده می‌شوند. می‌توانید "
+"بین حساب‌ها جابجا شوید."
 
 #: templates/help/using_drive_client.html:80
 msgid "1. Why can't I create new files or delete folders in root folder?"
 msgstr ""
+"1. چرا نمی‌توانم فایل‌های جدید ایجاد کنم یا پوشه‌ها را در پوشه ریشه حذف کنم؟"
 
 #: templates/help/using_drive_client.html:81
 msgid ""
@@ -1983,13 +2408,21 @@ msgid ""
 "represents libraries, we don't want users to delete their libraries by "
 "mistake. So the Drive client doesn't support deleting top level folders."
 msgstr ""
+"پوشه ریشه درایو مجازی فقط شامل پوشه‌های کتابخانه است. Seafile فقط می‌تواند "
+"فایل‌های داخل کتابخانه‌ها را همگام‌سازی کند. فایل‌های موجود در پوشه ریشه "
+"نمی‌توانند به سرور Seafile آپلود شوند. بنابراین پشتیبانی از ایجاد فایل در "
+"پوشه ریشه منطقی نیست. از آنجایی که پوشه‌های سطح بالا در درایو مجازی نمایانگر"
+" کتابخانه‌ها هستند، نمی‌خواهیم کاربران به اشتباه کتابخانه‌های خود را حذف "
+"کنند. بنابراین کلاینت درایو از حذف پوشه‌های سطح بالا پشتیبانی نمی‌کند."
 
 #: templates/help/viewing_files_within_web_app.html:6
 msgid ""
 "Some types of files can be directly opened and viewed within the Seafile Web"
 " App. Currently they are:"
 msgstr ""
+"برخی از انواع فایل‌ها را می‌توان مستقیماً در برنامه وب Seafile باز کرد و "
+"مشاهده کرد. در حال حاضر این موارد عبارتند از:"
 
 #: templates/help/viewing_files_within_web_app.html:13
 msgid "Image files"
-msgstr ""
+msgstr "فایل‌های تصویری"

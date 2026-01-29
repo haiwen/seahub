@@ -1127,7 +1127,7 @@ msgstr ""
 
 #: seahub/base/management/commands/export_file_access_log.py:58
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: seahub/base/management/commands/export_file_access_log.py:59
 msgid "Library Name"
@@ -1218,7 +1218,7 @@ msgstr ""
 #: seahub/base/management/commands/export_users.py:138
 #: seahub/views/sysadmin.py:254 seahub/views/sysadmin.py:258
 msgid "Default"
-msgstr ""
+msgstr "Per defecte"
 
 #: seahub/base/middleware.py:64
 #, python-brace-format
@@ -2387,11 +2387,11 @@ msgstr "S'ha guardat correctament."
 
 #: seahub/share/views.py:187
 msgid "Preview and download"
-msgstr ""
+msgstr "Previsualitza i descarrega"
 
 #: seahub/share/views.py:188
 msgid "Preview only"
-msgstr ""
+msgstr "Previsualitza només"
 
 #: seahub/share/views.py:189
 msgid "Download and upload"
@@ -2407,7 +2407,7 @@ msgstr ""
 
 #: seahub/share/views.py:223
 msgid "Share Link"
-msgstr ""
+msgstr "Comparteix l'enllaç"
 
 #: seahub/share/views.py:223 seahub/views/sysadmin.py:656
 msgid "Creator"
@@ -2518,7 +2518,7 @@ msgstr ""
 
 #: seahub/templates/i18n.html:7
 msgid "Add auto expiration"
-msgstr ""
+msgstr "Afegeix expiració automàtica"
 
 #: seahub/templates/i18n.html:8
 msgid "Days"
@@ -2602,7 +2602,7 @@ msgstr "Inicia sessió"
 
 #: seahub/templates/registration/login.html:58
 msgid "Refresh"
-msgstr ""
+msgstr "Actualitza"
 
 #: seahub/templates/registration/login.html:78
 msgid "Incorrect email or password"

@@ -230,5 +230,10 @@
   "Insert_on_the_right": "Вставить справа",
   "Insert_on_the_left": "Вставить слева",
   "Row(s)": "строк",
-  "Column(s)": "столбцов"
+  "Column(s)": "столбцов",
+  "Insert": "Вставить",
+  "Horizontal_align": "Выравнивание по горизонтали",
+  "Underline": "Подчёркивание",
+  "Row_number": "Номер строки",
+  "Column_number": "Номер столбца"
 }
