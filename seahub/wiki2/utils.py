@@ -31,7 +31,7 @@ def is_valid_wiki_name(name):
     name = name.strip()
     if len(name) > 255 or len(name) < 1:
         return False
-    return True if re.match('^[\w\s-]+$', name, re.U) else False
+    return True if re.match(r'^[\w\s-]+$', name, re.U) else False
 
 
 def get_wiki_dirs_by_path(repo_id, path, all_dirs):

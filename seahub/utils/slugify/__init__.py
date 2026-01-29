@@ -20,5 +20,5 @@ def slugify(s, ok=SLUG_OK, lower=True, spaces=False):
             rv.append(' ')
     new = ''.join(rv).strip()
     if not spaces:
-        new = re.sub('[-\s]+', '-', new)
+        new = re.sub(r'[-\s]+', '-', new)
     return new.lower() if lower else new
