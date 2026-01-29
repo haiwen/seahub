@@ -296,10 +296,22 @@ def is_valid_dirent_name(name):
     if not name or '..' in name:
         return False
 
-    for character in name:
+    # Core Unicode ranges for most common single-code-point emojis
+    # Refer to Unicode Standard 15.0+, classified by emoji type for easy maintenance
+    EMOJI_UNICODE_RANGES = [
+        (0x1F600, 0x1F64F),  # Face & emotion emojis (😀😃😄😁😆 etc.)
+        (0x1F300, 0x1F5FF),  # Symbols, patterns & natural scenes (🌲🌊⭐️🎨 etc.)
+        (0x1F680, 0x1F6FF),  # Transport, technology & tools (🚗✈️💻⌚️ etc.)
+        (0x1F1E0, 0x1F1FF),  # Country flags & letter emojis (🇨🇳🇺🇸🇬🇧 etc.)
+        (0x2600, 0x26FF),    # Miscellaneous symbols (☀️⭐️☁️⚡️ etc.)
+        (0x2700, 0x27BF),    # Dingbats & hand gestures (❤️✋✌️👍 etc.)
+        (0x1F900, 0x1F9FF),  # Extended emojis (🦸🦹🧑💻🧶 etc.)
+        (0x1FA00, 0x1FAFF),  # Further extended emojis (🫶🫵🫰 etc., single-code-point)
+    ]
 
-        # Emojis fall within the range \U0001F300 to \U0001FAD6
-        if 0x1F300 <= ord(character) <= 0x1FAD6:
+    for character in name:
+        char_ord = ord(character)
+        if any(start <= char_ord <= end for start, end in EMOJI_UNICODE_RANGES):
             return False
 
         if character == '/' or character == '\\':
