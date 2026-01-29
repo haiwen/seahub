@@ -13,7 +13,7 @@
 # imwhatiam <imwhatiam123@gmail.com>, 2017
 # Keyue Hu <rwindz0@gmail.com>, 2014
 # Keyue Hu <rwindz0@gmail.com>, 2014
-# Seafile Info <info@seafile.com>, 2025
+# Seafile Info <info@seafile.com>, 2025-2026
 # zheng xie <xiez1989@gmail.com>, 2017
 # david082321 <david082321@gmail.com>, 2018
 msgid ""
@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-23 10:19+0800\n"
 "PO-Revision-Date: 2013-10-25 07:03+0000\n"
-"Last-Translator: Seafile Info <info@seafile.com>, 2025\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2025-2026\n"
 "Language-Team: Chinese (Taiwan) (http://app.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1915,7 +1915,7 @@ msgstr "用戶 {name} 在倉庫 {repo_link} 中 {op_type} {obj_type} {obj_link}�
 #: seahub/notifications/models.py:1046
 #, python-brace-format
 msgid "Face recognition is done for library {repo_name}."
-msgstr ""
+msgstr "已對庫 {repo_name} 進行人臉識別。"
 
 #: seahub/notifications/templates/notifications/file_updates_email.html:9
 #, python-format

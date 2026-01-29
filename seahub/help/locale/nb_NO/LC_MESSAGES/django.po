@@ -7,6 +7,7 @@
 # Mikal Thunold-Olsen <mikal@thunold-olsen.no>, 2024
 # Bjørn Tore Hoem <bthoem@cloudwalker.no>, 2024
 # bobbaluba <bobbaluba@gmail.com>, 2024
+# Seafile Info <info@seafile.com>, 2026
 # 
 #, fuzzy
 msgid ""
@@ -15,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-12-05 10:24+0800\n"
 "PO-Revision-Date: 2024-02-06 08:23+0000\n"
-"Last-Translator: bobbaluba <bobbaluba@gmail.com>, 2024\n"
+"Last-Translator: Seafile Info <info@seafile.com>, 2026\n"
 "Language-Team: Norwegian Bokmål (Norway) (https://app.transifex.com/haiwen/teams/5086/nb_NO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1917,7 +1918,7 @@ msgstr ""
 #: templates/help/using_drive_client.html:23
 #: templates/help/using_drive_client.html:52
 msgid "Icon"
-msgstr ""
+msgstr "Ikon"
 
 #: templates/help/using_drive_client.html:24
 #: templates/help/using_drive_client.html:53
