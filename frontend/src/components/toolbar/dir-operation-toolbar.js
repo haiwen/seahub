@@ -77,11 +77,13 @@ class DirOperationToolbar extends React.Component {
 
   onCreateFolder = () => {
     const { eventBus, path, direntList } = this.props;
+    this.setState({ isDesktopMenuOpen: false });
     eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FOLDER, path, direntList);
   };
 
   onCreateFile = (fileType = '') => {
     const { eventBus, path, direntList } = this.props;
+    this.setState({ isDesktopMenuOpen: false });
     eventBus.dispatch(EVENT_BUS_TYPE.CREATE_FILE, path, direntList, fileType);
   };
 
