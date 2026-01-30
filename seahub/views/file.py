@@ -1453,6 +1453,13 @@ def view_shared_file(request, fileshare):
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
             ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
+        meta_property_dict = {
+            'file_share_link': request.path,
+            'file_name': filename,
+            'icon_path_for_ogp': file_icon_filter(filename),
+            'desc_for_ogp': _('Share link for %s.') % filename
+        }
+
         def online_office_lock_or_refresh_lock(repo_id, path, username):
             try:
                 if not is_locked:
@@ -1479,6 +1486,7 @@ def view_shared_file(request, fileshare):
                 # send file audit message
                 send_file_access_msg(request, repo, path, 'share-link')
 
+                wopi_dict.update(meta_property_dict)
                 return render(request, 'view_file_wopi.html', wopi_dict)
             else:
                 ret_dict['err'] = _('Error when prepare Office Online file preview page.')
@@ -1499,6 +1507,7 @@ def view_shared_file(request, fileshare):
                 # send file audit message
                 send_file_access_msg(request, repo, path, 'share-link')
 
+                onlyoffice_dict.update(meta_property_dict)
                 return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
             else:
                 ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
@@ -1533,6 +1542,13 @@ def view_shared_file(request, fileshare):
     desc_for_ogp = _('Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename)
 
+    thumbnail_for_og_image = ''
+    if filetype == IMAGE or \
+            filetype == VIDEO and settings.ENABLE_VIDEO_PREVIEW or \
+            filetype == PDF and settings.ENABLE_PDF_PREVIEW:
+        thumbnail_for_og_image = reverse('share_link_thumbnail_get',
+                                         args=[token, 256, path.lstrip('/')])
+
     file_obj = seafile_api.get_dirent_by_path(repo_id, path)
 
     data = {'repo': repo,
@@ -1559,6 +1575,7 @@ def view_shared_file(request, fileshare):
             'file_share_link': file_share_link,
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
+            'thumbnail_for_og_image': thumbnail_for_og_image,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
             'shared_file_download_url': shared_file_download_url
             }
@@ -1711,6 +1728,13 @@ def view_file_via_shared_dir(request, fileshare):
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION or \
             ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
+        meta_property_dict = {
+            'file_share_link': request.path,
+            'file_name': filename,
+            'icon_path_for_ogp': file_icon_filter(filename),
+            'desc_for_ogp': _('Share link for %s.') % filename
+        }
+
         if not request.user.is_authenticated:
             username = ANONYMOUS_EMAIL
         else:
@@ -1727,6 +1751,7 @@ def view_file_via_shared_dir(request, fileshare):
                 # send file audit message
                 send_file_access_msg(request, repo, real_path, 'share-link')
 
+                wopi_dict.update(meta_property_dict)
                 return render(request, 'view_file_wopi.html', wopi_dict)
             else:
                 ret_dict['err'] = _('Error when prepare Office Online file preview page.')
@@ -1743,6 +1768,7 @@ def view_file_via_shared_dir(request, fileshare):
                 # send file audit message
                 send_file_access_msg(request, repo, real_path, 'share-link')
 
+                onlyoffice_dict.update(meta_property_dict)
                 return render(request, 'view_file_onlyoffice.html', onlyoffice_dict)
             else:
                 ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
@@ -1790,8 +1816,6 @@ def view_file_via_shared_dir(request, fileshare):
         if not permissions['can_download']:
             raw_path = ''
 
-
-
     # generate dir navigator
     if fileshare.path == '/':
         zipped = gen_path_link(req_path, repo.name)
@@ -1803,6 +1827,13 @@ def view_file_via_shared_dir(request, fileshare):
     file_share_link = request.path
     desc_for_ogp = _('Share link for %s.') % filename
     icon_path_for_ogp = file_icon_filter(filename)
+
+    thumbnail_for_og_image = ''
+    if filetype == IMAGE or \
+            filetype == VIDEO and settings.ENABLE_VIDEO_PREVIEW or \
+            filetype == PDF and settings.ENABLE_PDF_PREVIEW:
+        thumbnail_for_og_image = reverse('share_link_thumbnail_get',
+                                         args=[token, 256, req_path.lstrip('/')])
 
     file_obj = seafile_api.get_dirent_by_path(repo_id, req_path)
 
@@ -1833,6 +1864,7 @@ def view_file_via_shared_dir(request, fileshare):
             'file_share_link': file_share_link,
             'desc_for_ogp': desc_for_ogp,
             'icon_path_for_ogp': icon_path_for_ogp,
+            'thumbnail_for_og_image': thumbnail_for_og_image,
             'enable_share_link_report_abuse': ENABLE_SHARE_LINK_REPORT_ABUSE,
         }
     if filetype == SEADOC:
