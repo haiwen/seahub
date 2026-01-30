@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import axios from 'axios';
 import SFTableSearcher from '../components/sf-table/searcher';
 import { EVENT_BUS_TYPE } from '../metadata/constants';
@@ -18,23 +18,23 @@ const Search = () => {
   };
   const [filters, setFilters] = useState(initialFilters);
 
-  let source = null;
+  const sourceRef = useRef(null);
 
   const searchTrash = useCallback((query) => {
-    if (source) {
-      source.cancel('prev request is cancelled');
+    if (sourceRef.current) {
+      sourceRef.current.cancel('prev request is cancelled');
     }
-    source = axios.CancelToken.source();
+    sourceRef.current = axios.CancelToken.source();
     const { suffixes, date, creator_list } = filters;
     const creators = creator_list.map(user => user.email).join(',');
     window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_TRASH_RECORDS, query.trim(), { suffixes, date, creators });
   }, [filters]);
 
+  const debouncedSearch = useRef(debounce(searchTrash, 300));
   const searchRows = useCallback((value) => {
     setSearchValue(value);
-    const debouncedSearch = debounce(searchTrash, 300);
-    debouncedSearch(value);
-  }, [searchTrash]);
+    debouncedSearch.current(value);
+  }, []);
 
   const closeSearcher = useCallback(() => {
     searchTrash('');
