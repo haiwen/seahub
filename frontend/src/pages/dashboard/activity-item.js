@@ -89,21 +89,87 @@ class ActivityItem extends Component {
           moreDetails = true;
           break;
       }
-    } else if (item.obj_type == 'files') {
-      let fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
-      let fileLink = `<a href=${fileURL} target="_blank">${Utils.HTMLescape(item.name)}</a>`;
-      let fileCount = item.createdFilesCount - 1;
-      let firstLine = gettext('{file} and {n} other files')
-        .replace('{file}', fileLink)
-        .replace('{n}', fileCount);
-      op = gettext('Created {n} files').replace('{n}', item.createdFilesCount);
-      details = (
-        <Fragment>
-          <p className="m-0 d-inline" dangerouslySetInnerHTML={{ __html: firstLine }}></p>
-          {isDesktop && <button type="button" onClick={this.onListCreatedFilesToggle} className="activity-details ml-2 border-0 p-0 bg-transparent">{gettext('details')}</button>}
-        </Fragment>
-      );
-      moreDetails = true;
+    } else if (item.obj_type == 'files' || item.op_type === 'batch_create') {
+      const isBatchCreate = item.op_type === 'batch_create';
+      const detailsList = item.details || [];
+      const fileCount = isBatchCreate ? detailsList.length : (item.createdFilesCount || 1);
+
+      if (fileCount > 1) {
+        // Batch create: show first file and total count
+        const firstFile = isBatchCreate ? detailsList[0] : item;
+        const firstFilePath = firstFile.path || item.path;
+        const firstFileName = firstFile.name || item.name;
+        const fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(firstFilePath)}`;
+        const fileLink = `<a href=${fileURL} target="_blank">${Utils.HTMLescape(firstFileName)}</a>`;
+        const remainingCount = fileCount - 1;
+        let firstLine;
+        if (item.obj_type === 'dir') {
+          firstLine = gettext('{folder} and {n} other folders');
+        } else {
+          firstLine = gettext('{file} and {n} other files');
+        }
+        firstLine = firstLine.replace('{file}', fileLink).replace('{folder}', fileLink).replace('{n}', remainingCount);
+
+        let opText;
+        if (item.obj_type === 'dir') {
+          opText = gettext('Created {n} folders');
+        } else {
+          opText = gettext('Created {n} files');
+        }
+        op = opText.replace('{n}', fileCount);
+        details = (
+          <Fragment>
+            <p className="m-0 d-inline" dangerouslySetInnerHTML={{ __html: firstLine }}></p>
+            {isDesktop && <button type="button" onClick={this.onListCreatedFilesToggle} className="activity-details ml-2 border-0 p-0 bg-transparent">{gettext('details')}</button>}
+          </Fragment>
+        );
+        moreDetails = true;
+      } else {
+        // Single file creation
+        const fileURL = `${siteRoot}lib/${item.repo_id}/file${Utils.encodePath(item.path)}`;
+        const fileLink = <a href={fileURL} target="_blank" rel="noreferrer">{item.name}</a>;
+        op = gettext('Created file');
+        details = fileLink;
+        moreDetails = true;
+      }
+    } else if (item.op_type === 'batch_delete') {
+      // Batch delete
+      const detailsList = item.details || [];
+      const fileCount = detailsList.length;
+      const objType = item.obj_type === 'file' ? gettext('files') : gettext('folders');
+
+      if (fileCount > 1) {
+        const firstItem = detailsList[0];
+        const firstName = firstItem.name || (firstItem.path ? firstItem.path.split('/').pop() : '');
+        const remainingCount = fileCount - 1;
+        op = gettext('Deleted {n} {type}').replace('{n}', fileCount).replace('{type}', objType);
+
+        let detailsTextPattern;
+        if (item.obj_type === 'file') {
+          detailsTextPattern = gettext('{name} and {n} other files');
+        } else {
+          detailsTextPattern = gettext('{name} and {n} other folders');
+        }
+        const detailsText = detailsTextPattern.replace('{name}', firstName).replace('{n}', remainingCount);
+        details = (
+          <Fragment>
+            <p className="m-0 d-inline">{detailsText}</p>
+            {isDesktop && <button type="button" onClick={this.onListCreatedFilesToggle} className="activity-details ml-2 border-0 p-0 bg-transparent">{gettext('details')}</button>}
+          </Fragment>
+        );
+        moreDetails = true;
+      } else if (fileCount === 1) {
+        const firstItem = detailsList[0];
+        const fileName = firstItem.name || (firstItem.path ? firstItem.path.split('/').pop() : '');
+        op = item.obj_type === 'file' ? gettext('Deleted file') : gettext('Deleted folder');
+        details = fileName;
+        moreDetails = true;
+      } else {
+        // Empty details, fallback to item properties
+        op = item.obj_type === 'file' ? gettext('Deleted file') : gettext('Deleted folder');
+        details = item.name || '';
+        moreDetails = true;
+      }
     } else if (item.obj_type == 'file') {
       const isDraft = item.name.endsWith('(draft).md');
       const fileURL = isDraft ? '' :
