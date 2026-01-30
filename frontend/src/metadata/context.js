@@ -10,6 +10,7 @@ import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
 import { username, lang } from '../utils/constants';
 import { Utils } from '../utils/utils';
+import { TRASH_PER_PAGE } from './utils/trash';
 
 class Context {
 
@@ -92,8 +93,14 @@ class Context {
 
   getTrashData = (page) => {
     const repoID = this.settings['repoID'];
-    const per_page = 100;
+    const per_page = TRASH_PER_PAGE;
     return repoTrashAPI.getRepoFolderTrash(repoID, page, per_page);
+  };
+
+  searchTrashRecords = (query, filters, page) => {
+    const repoID = this.settings['repoID'];
+    const per_page = TRASH_PER_PAGE;
+    return repoTrashAPI.searchRepoFolderTrash(repoID, page, per_page, query, filters);
   };
 
   loadTrashFolderRecords = (commitID, baseDir, folderPath) => {

@@ -146,4 +146,5 @@ export const EVENT_BUS_TYPE = {
   UPDATE_TRASH_TOOLBAR: 'update_trash_toolbar',
   RESTORE_TRASH_RECORDS: 'restore_trash_records',
   UPDATE_TRASH_RECORDS: 'update_trash_records',
+  SEARCH_TRASH_RECORDS: 'search_trash_records'
 };

@@ -163,6 +163,23 @@ class Store {
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED);
   }
 
+  async searchTrashRecords(query, filters) {
+    const page = 1;
+    const res = await this.context.searchTrashRecords(query, filters, page);
+    const initialRows = res?.data?.items || [];
+    const rows = prepareTrashRows(initialRows);
+    let data = new Metadata({ rows, columns: this.data.columns });
+    data.view.type = 'trash';
+    data.showFolder = false;
+    data.canSearch = true;
+    data.recordsCount = data.row_ids.length;
+    data.hasMore = res.data.total_count > TRASH_PER_PAGE * page;
+    data.page = page;
+    this.data = data;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS);
+  }
+
   async updateRowData(newRowId) {
     const res = await this.context.getRowsByIds(this.repoId, [newRowId]);
     if (!res || !res.data) {

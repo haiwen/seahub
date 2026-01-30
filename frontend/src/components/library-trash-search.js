@@ -1,60 +1,51 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import axios from 'axios';
 import SFTableSearcher from '../components/sf-table/searcher';
 import { EVENT_BUS_TYPE } from '../metadata/constants';
+import { debounce } from '../utils/utils';
 
-const Search = ({ viewId, columns }) => {
+const Search = () => {
   const [searchResult, setSearchResult] = useState(null);
   const [searchValue, setSearchValue] = useState('');
+  const initialFilters = {
+    date: {
+      value: '',
+      from: null,
+      to: null,
+    },
+    suffixes: '',
+    creator_list: [],
+  };
+  const [filters, setFilters] = useState(initialFilters);
 
-  const recordsCount = useMemo(() => {
-    return window.sfMetadataStore?.view?.records_count || 0;
-  }, []);
+  let source = null;
 
-  const columnsCount = useMemo(() => {
-    return columns?.length || 0;
-  }, [columns]);
+  const searchTrash = useCallback((query) => {
+    if (source) {
+      source.cancel('prev request is cancelled');
+    }
+    source = axios.CancelToken.source();
+    const { suffixes, date, creator_list } = filters;
+    const creators = creator_list.map(user => user.email).join(',');
+    window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_TRASH_RECORDS, query.trim(), { suffixes, date, creators });
+  }, [filters]);
 
   const searchRows = useCallback((value) => {
     setSearchValue(value);
-    window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_ROWS, value, (result) => {
-      setSearchResult(result);
-    });
-  }, []);
+    const debouncedSearch = debounce(searchTrash, 300);
+    debouncedSearch(value);
+  }, [searchTrash]);
 
   const closeSearcher = useCallback(() => {
-    setSearchValue('');
+    searchTrash('');
     setSearchResult(null);
-    window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_ROWS);
-  }, []);
-
-  // Listen for search bar reset events from the context
-  useEffect(() => {
-    const handleResetSearchBar = () => {
-      setSearchValue('');
-      setSearchResult(null);
-    };
-
-    if (window.sfMetadataContext?.eventBus) {
-      const unsubscribe = window.sfMetadataContext.eventBus.subscribe(EVENT_BUS_TYPE.RESET_SEARCH_BAR, handleResetSearchBar);
-      return unsubscribe;
-    }
-  }, []);
-
-  // Reset search when viewId changes
-  useEffect(() => {
-    setSearchValue('');
-    setSearchResult(null);
-    // Also notify the context that search should be cleared
-    if (window.sfMetadataContext?.eventBus) {
-      window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.SEARCH_ROWS, '');
-    }
-  }, [viewId]);
+  }, [searchTrash]);
 
   return (
     <SFTableSearcher
-      key={viewId}
-      recordsCount={recordsCount}
-      columnsCount={columnsCount}
+      key={'search-trash'}
+      recordsCount={0}
+      columnsCount={0}
       searchResult={searchResult}
       searchCells={searchRows}
       closeSearcher={closeSearcher}

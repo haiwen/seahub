@@ -46,7 +46,7 @@ const LibraryTrashToolbar = ({ repoID, currentRepoInfo }) => {
   return showFolder ? null : (
     <>
       {canSearch &&
-      <Search />
+        <Search />
       }
       {(enableUserCleanTrash && isRepoAdmin) &&
       <button className="btn btn-sm btn-secondary clean flex-shrink-0 ml-4" onClick={toggleCleanTrashDialog}>{gettext('Clean')}</button>

@@ -296,6 +296,10 @@ export const MetadataViewProvider = ({
     }, 0);
   };
 
+  const searchTrashRecords = (query, filters) => {
+    storeRef.current.searchTrashRecords(query, filters);
+  };
+
   const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
     const rowIds = [rowId];
     const idRowUpdates = { [rowId]: updates };
@@ -1058,6 +1062,7 @@ export const MetadataViewProvider = ({
     const unsubscribeLoadTrashFolderRecords = eventBus.subscribe(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, loadTrashFolderRecords);
     const unsubscribeTrashFolderRecordsLoaded = eventBus.subscribe(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED, trashFolderRecordsLoaded);
     const unsubscribeUpdateTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS, updateTrashRecords);
+    const unsubscribeSearchTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_TRASH_RECORDS, searchTrashRecords);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
@@ -1093,6 +1098,7 @@ export const MetadataViewProvider = ({
       unsubscribeDeleteRecords();
       unsubscribeRestoreTrashRecords();
       unsubscribeUpdateTrashRecords();
+      unsubscribeSearchTrashRecords();
       unsubscribeLoadTrashFolderRecords();
       unsubscribeTrashFolderRecordsLoaded();
       unsubscribeUpdateDetails();
