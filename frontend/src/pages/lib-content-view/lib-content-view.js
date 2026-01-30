@@ -248,7 +248,7 @@ class LibContentView extends React.Component {
         }
       }
     } else if (noticeData.type === 'repo-update') {
-      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(res => {
+      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true, 'with_metadata': true }).then(res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
         const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
         this.setState({
@@ -1917,28 +1917,9 @@ class LibContentView extends React.Component {
       return;
     }
     let item = this.createDirent(name, type, size);
-    if (type === 'dir') {
-      direntList.unshift(item);
-    } else {
-      // there will be there conditions;
-      // first: direntList.length === 0;
-      // second: all the direntList's items are dir;
-      // third: direntList has dir and file;
-      let length = direntList.length;
-      if (length === 0 || direntList[length - 1].type === 'dir') {
-        direntList.push(item);
-      } else {
-        let index = 0;
-        for (let i = 0; i <= length; i++) {
-          if (direntList[i].type === 'file') {
-            index = i;
-            break;
-          }
-        }
-        direntList.splice(index, 0, item);
-      }
-    }
-    this.setState({ direntList: direntList });
+    direntList.push(item);
+    const sortedDirentList = Utils.sortDirents(direntList, this.state.sortBy, this.state.sortOrder);
+    this.setState({ direntList: sortedDirentList });
   };
 
   renameDirent = (direntPath, newName) => {
