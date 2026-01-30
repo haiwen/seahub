@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { Utils } from '../utils/utils';
 import { gettext } from '../utils/constants';
-import { GRID_MODE, LIST_MODE } from './dir-view-mode/constants';
+import { GRID_MODE, LIST_MODE, TABLE_MODE } from './dir-view-mode/constants';
 import Icon from './icon';
 
 import '../css/view-modes.css';
@@ -36,6 +36,8 @@ class ViewModes extends React.Component {
         this.props.switchViewMode(LIST_MODE);
       } else if (e.keyCode === 50) {
         this.props.switchViewMode(GRID_MODE);
+      } else if (e.keyCode === 51) {
+        this.props.switchViewMode(TABLE_MODE);
       }
     }
   };
@@ -52,7 +54,8 @@ class ViewModes extends React.Component {
     const shortcutMain = Utils.isMac() ? '⇧ ⌘' : 'Ctrl + Shift +';
     const options = [
       { 'icon': 'list-view', 'text': gettext('List view'), 'value': LIST_MODE, 'shortcut': `${shortcutMain} 1` },
-      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': GRID_MODE, 'shortcut': `${shortcutMain} 2` }
+      { 'icon': 'grid-view', 'text': gettext('Grid view'), 'value': GRID_MODE, 'shortcut': `${shortcutMain} 2` },
+      { 'icon': 'table', 'text': gettext('Table view'), 'value': TABLE_MODE, 'shortcut': `${shortcutMain} 3` }
     ];
     return (
       <Dropdown
@@ -69,7 +72,11 @@ class ViewModes extends React.Component {
           aria-label={gettext('Switch view mode')}
           aria-expanded={isDropdownMenuOpen}
         >
-          <Icon symbol={currentViewMode === LIST_MODE ? 'list-view' : 'grid-view'} />
+          <Icon symbol={
+            currentViewMode === LIST_MODE ? 'list-view' :
+              currentViewMode === GRID_MODE ? 'grid-view' :
+                currentViewMode === TABLE_MODE ? 'table' : 'list-view'
+          } />
         </DropdownToggle>
         <DropdownMenu className="mt-1">
           {options.map((item, index) => {

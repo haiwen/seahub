@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import DirColumnNav from './dir-column-nav';
 import DirListView from './dir-list-view';
 import DirGridView from './dir-grid-view';
+import DirTableView from './dir-table-view';
 import DirHistoryView from './dir-history-view';
 import { SIDE_PANEL_FOLDED_WIDTH } from '../../constants';
 import ResizeBar from '../resize-bar';
@@ -10,7 +11,7 @@ import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '.
 import { SeafileMetadata } from '../../metadata';
 import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
-import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE } from './constants';
+import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE, TABLE_MODE } from './constants';
 import DirTrashView from './dir-trash-view';
 import NoPermissionView from './dir-trash-view/no-permission-view';
 
@@ -317,6 +318,24 @@ class DirColumnView extends React.Component {
                 />
               )}
             </>
+          )}
+          {currentMode === TABLE_MODE && (
+            <DirTableView
+              direntList={this.props.direntList}
+              repoID={this.props.repoID}
+              path={this.props.path}
+              sortBy={this.props.sortBy}
+              sortOrder={this.props.sortOrder}
+              onSort={this.props.sortItems}
+              visibleColumns={this.props.visibleColumns}
+              onItemClick={this.props.onItemClick}
+              onItemDoubleClick={this.props.onItemClick}
+              onDirentChecked={this.props.onItemSelected}
+              onAllDirentsChecked={this.props.onAllItemSelected}
+              isAllDirentsChecked={this.props.isAllItemSelected}
+              statusColumnOptions={this.props.statusColumnOptions}
+              updateDirentMetadata={this.props.updateDirentMetadata}
+            />
           )}
           {currentMode === HISTORY_MODE && (
             <DirHistoryView
