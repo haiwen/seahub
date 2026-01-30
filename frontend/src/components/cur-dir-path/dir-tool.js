@@ -99,6 +99,7 @@ class DirTool extends React.Component {
     return (
       <div className="dir-tool d-flex">
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
+        <div className="dir-tool-divider" />
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
 
         {this.props.enableMetadata && currentMode === LIST_MODE && (

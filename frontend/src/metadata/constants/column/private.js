@@ -25,6 +25,7 @@ export const PRIVATE_COLUMN_KEY = {
   LOCATION: '_location',
   OBJ_ID: '_obj_id',
   SIZE: '_size',
+  SIZE_ORIGINAL: '_size_original',
   SUFFIX: '_suffix',
   FILE_DETAILS: '_file_details',
   CAPTURE_TIME: '_capture_time',
@@ -80,6 +81,7 @@ export const PRIVATE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_RATE,
   PRIVATE_COLUMN_KEY.TAGS,
   PRIVATE_COLUMN_KEY.LOCATION_TRANSLATED,
+  PRIVATE_COLUMN_KEY.SIZE_ORIGINAL,
 ];
 
 export const EDITABLE_PRIVATE_COLUMN_KEYS = [
