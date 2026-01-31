@@ -218,7 +218,7 @@ from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx, sdoc_preview
 from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view, wiki_repo_view
-from seahub.api2.endpoints.wiki2 import Wiki2FileView, Wiki2FileViews, Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
+from seahub.api2.endpoints.wiki2 import Wiki2FileView, Wiki2FileViewDuplicateView, Wiki2FileViews, Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
     WikiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView, Wiki2Views, Wiki2View, \
     Wiki2SettingsView, Wiki2LinkedReposView, Wiki2FileViewRecords, Wiki2ViewDuplicateView
@@ -627,6 +627,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/publish/$', Wiki2PublishView.as_view(), name='api-v2.1-wiki2-publish'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-views/$', Wiki2FileViews.as_view(), name='api-v2.1-wiki2-file-views'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-views/(?P<file_view_id>\d+)/$', Wiki2FileView.as_view(), name='api-v2.1-wiki2-file-view'),
+    re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-views/(?P<file_view_id>\d+)/duplicate/$', Wiki2FileViewDuplicateView.as_view(), name='api-v2.1-wiki2-file-view-duplicate'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/views/$', Wiki2Views.as_view(), name='api-v2.1-wiki2-views'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/views/(?P<file_view_id>\d+)/$', Wiki2View.as_view(), name='api-v2.1-wiki2-view'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/views/(?P<file_view_id>\d+)/records/$', Wiki2FileViewRecords.as_view(), name='api-v2.1-wiki2-metadata-records'),

@@ -2074,6 +2074,28 @@ class Wiki2FileView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
+    def get(self, request, wiki_id, file_view_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        file_view = WikiFileViews.objects.filter(wiki_id=wiki_id, pk=file_view_id).first()
+        if not file_view:
+            error_msg = 'File view not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        return Response({'file_view': file_view.to_dict()})
+
     def put(self, request, wiki_id, file_view_id):
 
         name = request.data.get('name')
@@ -2152,6 +2174,38 @@ class Wiki2FileView(APIView):
         file_view.delete()
 
         return Response({'success': True})
+    
+class Wiki2FileViewDuplicateView(APIView):
+    '''
+    access all the records of wiki_file_views db
+    '''
+    authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, wiki_id, file_view_id):
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        permission = check_wiki_permission(wiki, username)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        file_view = WikiFileViews.objects.filter(wiki_id=wiki_id, pk=file_view_id).first()
+        if not file_view:
+            error_msg = 'File view not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        new_file_view = WikiFileViews.objects.duplicate_file_view(file_view_id)
+        
+        return Response({'file_view': new_file_view.to_dict()})
 
         
 class Wiki2Views(APIView):
