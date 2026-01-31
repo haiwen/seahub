@@ -56,7 +56,7 @@ class SharedUploadLink extends React.Component {
               </div>
             ) : (
               <Fragment>
-                {maxUploadFileSize && <p className="small text-gray m-0">{gettext('File size should be smaller than {max_size_placeholder}.').replace('{max_size_placeholder}', Utils.bytesToSize(maxUploadFileSize * 1000 * 1000))}</p>}
+                {maxUploadFileSize && <p className="small text-gray m-0">{gettext('File size should be smaller than {max_size_placeholder}.').replace('{max_size_placeholder}', Utils.bytesToSize(maxUploadFileSize * 1024 * 1024))}</p>}
                 <div id="upload-link-drop-zone" className="text-center mt-2 mb-4">
                   <span className="upload-icon" aria-hidden="true"><Icon symbol="shared-link-upload" /></span>
                   <p className="small text-gray mb-0">{gettext('Drag and drop files or folders here.')}</p>

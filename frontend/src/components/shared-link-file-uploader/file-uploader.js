@@ -65,7 +65,7 @@ class FileUploader extends React.Component {
       query: this.setQuery || {},
       fileType: this.props.filetypes,
       maxFiles: undefined,
-      maxFileSize: maxUploadFileSize * 1000 * 1000 || undefined,
+      maxFileSize: maxUploadFileSize * 1024 * 1024 || undefined,
       testMethod: this.props.testMethod || 'post',
       testChunks: this.props.testChunks || false,
       headers: this.setHeaders || {},
