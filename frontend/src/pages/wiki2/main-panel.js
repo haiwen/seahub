@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { SdocWikiEditor, DocInfo, ErrorBoundary, EXTERNAL_EVENT } from '@seafile/seafile-sdoc-editor';
 import { CollaboratorsProvider, CommentContextProvider, EventBus, PluginsProvider, RightPanel } from '@seafile/sdoc-editor';
-import { gettext, wikiPermission, wikiId, siteRoot, isPro, seadocServerUrl } from '../../utils/constants';
+import { gettext, wikiPermission, wikiId, siteRoot, isPro, seadocServerUrl, mediaUrl } from '../../utils/constants';
 import TextTranslation from '../../utils/text-translation';
 import Switch from '../../components/switch';
 import Loading from '../../components/loading';
@@ -380,6 +380,7 @@ class MainPanel extends Component {
                     showComment={true}
                     isShowRightPanel={this.state.isShowRightPanel}
                     setEditor={this.setEditor}
+                    mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
                   />
                 </div>
               </div>
