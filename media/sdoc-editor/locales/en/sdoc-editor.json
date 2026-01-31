@@ -662,5 +662,10 @@
   "The_view_type_is_required": "The view type is required.",
   "The_linked_library_is_required": "The linked library is required.",
   "Zoom_in": "Zoom in",
-  "Zoom_out": "Zoom out"
+  "Zoom_out": "Zoom out",
+  "Search_page": "Search page",
+  "The_link_address_or_link_page_or_link_block_is_required": "The link address or link page or link block is required",
+  "Link_page": "Link page",
+  "Whiteboard_link_invalid_tip": "The whiteboard link is invalid, it needs to be deleted and added again.",
+  "The_link_is_invalid": "The link is invalid."
 }
