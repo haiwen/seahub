@@ -1,14 +1,9 @@
 import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
-import {
-  ESSENTIAL_COLUMNS,
-} from '../constants/dir-column-visibility';
+import { DIR_COLUMN_KEYS } from '../constants/dir-column-visibility';
 import { COLUMN_CONFIG } from '../components/dirent-list-view/column-config';
-
-export const TABLE_COLUMN_MIN_WIDTHS = Object.fromEntries(
-  Object.entries(COLUMN_CONFIG).map(([key, config]) => [key, config.width])
-);
+import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 
 export const createTableHeaders = (
   sortOptions = {},
@@ -28,7 +23,6 @@ export const createTableHeaders = (
   );
 
   const isColumnVisible = (columnKey) => {
-    if (ESSENTIAL_COLUMNS.includes(columnKey)) return true;
     return visibleColumns.includes(columnKey);
   };
 
@@ -106,8 +100,8 @@ export const createTableHeaders = (
         sortBy === 'size' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible('modified') ? [{
-      key: 'modified',
+    ...(isColumnVisible(DIR_COLUMN_KEYS.MTIME) ? [{
+      key: DIR_COLUMN_KEYS.MTIME,
       width: COLUMN_CONFIG.modified.width,
       className: COLUMN_CONFIG.modified.className,
       minWidth: COLUMN_CONFIG.modified.width,
@@ -122,11 +116,11 @@ export const createTableHeaders = (
         sortBy === 'time' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible('creator') ? [{
-      key: 'creator',
-      width: COLUMN_CONFIG.creator.width,
-      className: COLUMN_CONFIG.creator.className,
-      minWidth: COLUMN_CONFIG.creator.width,
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_CREATOR) ? [{
+      key: PRIVATE_COLUMN_KEY.FILE_CREATOR,
+      width: COLUMN_CONFIG.file_creator.width,
+      className: COLUMN_CONFIG.file_creator.className,
+      minWidth: COLUMN_CONFIG.file_creator.width,
       children: React.createElement(
         'a',
         {
@@ -138,8 +132,8 @@ export const createTableHeaders = (
         sortBy === 'creator' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible('last_modifier') ? [{
-      key: 'last_modifier',
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.LAST_MODIFIER) ? [{
+      key: PRIVATE_COLUMN_KEY.LAST_MODIFIER,
       width: COLUMN_CONFIG.last_modifier.width,
       className: COLUMN_CONFIG.last_modifier.className,
       minWidth: COLUMN_CONFIG.last_modifier.width,
@@ -154,8 +148,8 @@ export const createTableHeaders = (
         sortBy === 'last_modifier' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible('status') ? [{
-      key: 'status',
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_STATUS) ? [{
+      key: PRIVATE_COLUMN_KEY.FILE_STATUS,
       width: COLUMN_CONFIG.status.width,
       className: COLUMN_CONFIG.status.className,
       minWidth: COLUMN_CONFIG.status.width,

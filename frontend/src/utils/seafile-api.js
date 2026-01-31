@@ -871,9 +871,9 @@ class SeafileAPI {
   }
 
   // ---- directory operation
-  listDir(repoID, dirPath, { recursive = false, type = '', with_thumbnail = false, with_parents = false, with_metadata = false } = {}) {
+  listDir(repoID, dirPath, { recursive = false, type = '', with_thumbnail = false, with_parents = false } = {}) {
     /*
-     * opts: `{recursive: true}`, `{'with_thumbnail': true}`, `{'with_metadata': true}`
+     * opts: `{recursive: true}`, `{'with_thumbnail': true}`
      */
     const url = this.server + '/api/v2.1/repos/' + repoID + '/dir/';
     let params = {};
@@ -889,9 +889,6 @@ class SeafileAPI {
     }
     if (with_parents) {
       params.with_parents = with_parents;
-    }
-    if (with_metadata) {
-      params.with_metadata = with_metadata;
     }
     return this.req.get(url, { params: params });
   }

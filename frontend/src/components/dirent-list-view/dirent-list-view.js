@@ -51,7 +51,8 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
   visibleColumns: PropTypes.array,
-  statusColumnOptions: PropTypes.array,
+  columns: PropTypes.array,
+  onColumnDataModified: PropTypes.func,
 };
 
 class DirentListView extends React.Component {
@@ -762,7 +763,8 @@ class DirentListView extends React.Component {
             onThreadMouseDown={this.onThreadMouseDown}
             onThreadContextMenu={this.onThreadContextMenu}
             visibleColumns={this.props.visibleColumns}
-            statusColumnOptions={this.props.statusColumnOptions}
+            columns={this.props.columns}
+            onColumnDataModified={this.props.onColumnDataModified}
           />
         )}
         {direntList.length === 0 &&

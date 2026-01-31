@@ -380,7 +380,7 @@ export const normalizeColumnData = (column) => {
 
 export const normalizeColumns = (columns) => {
   if (!Array.isArray(columns) || columns.length === 0) return [];
-  const columnsWidth = window.sfMetadataContext.localStorage.getItem('columns_width') || {};
+  const columnsWidth = window.sfMetadataContext && window.sfMetadataContext.localStorage && window.sfMetadataContext.localStorage.getItem('columns_width') || {};
   const validColumns = columns.map((column) => {
     const { type, key, ...params } = column;
     const columnType = getNormalizedColumnType(key, type);

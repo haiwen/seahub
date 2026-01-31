@@ -43,9 +43,8 @@ const propTypes = {
   updateTreeNode: PropTypes.func,
   visibleColumns: PropTypes.array,
   setVisibleColumns: PropTypes.func,
-  statusColumnOptions: PropTypes.array,
+  columns: PropTypes.array,
   updateDirentStatus: PropTypes.func,
-  onStatusColumnOptionsChange: PropTypes.func,
 };
 
 class DirListView extends React.Component {
@@ -113,9 +112,8 @@ class DirListView extends React.Component {
             updateTreeNode={this.props.updateTreeNode}
             visibleColumns={this.props.visibleColumns}
             setVisibleColumns={this.props.setVisibleColumns}
-            statusColumnOptions={this.props.statusColumnOptions}
+            columns={this.props.columns}
             updateDirentStatus={this.props.updateDirentStatus}
-            onStatusColumnOptionsChange={this.props.onStatusColumnOptionsChange}
           />
         )}
       </Fragment>

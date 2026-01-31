@@ -18,12 +18,13 @@ import { formatUnixWithTimezone } from '../../utils/time';
 import Icon from '../icon';
 import StatusEditor from './status-editor';
 import Formatter from '../../metadata/components/formatter';
-import { CellType } from '../../metadata/constants';
+import { CellType, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
 import './index.css';
+import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -66,8 +67,7 @@ const propTypes = {
   collaboratorsCache: PropTypes.object,
   updateCollaboratorsCache: PropTypes.func,
   queryUser: PropTypes.func,
-  onStatusColumnOptionsChange: PropTypes.func,
-  statusColumnOptions: PropTypes.array,
+  columns: PropTypes.array,
 };
 
 class DirentListItem extends React.Component {
@@ -720,7 +720,7 @@ class DirentListItem extends React.Component {
 
   render() {
     let dirent = this.props.dirent;
-    const { visibleColumns = [] } = this.props;
+    const { visibleColumns = [], columns } = this.props;
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
@@ -738,10 +738,12 @@ class DirentListItem extends React.Component {
 
     // Check if configurable columns are visible
     const showSize = visibleColumns.includes(DIR_COLUMN_KEYS.SIZE);
-    const showModified = visibleColumns.includes(DIR_COLUMN_KEYS.MODIFIED);
-    const showCreator = visibleColumns.includes(DIR_COLUMN_KEYS.CREATOR);
-    const showLastModifier = visibleColumns.includes(DIR_COLUMN_KEYS.LAST_MODIFIER);
-    const showStatus = visibleColumns.includes(DIR_COLUMN_KEYS.STATUS);
+    const showModified = visibleColumns.includes(DIR_COLUMN_KEYS.MTIME);
+    const showCreator = visibleColumns.includes(PRIVATE_COLUMN_KEY.FILE_CREATOR);
+    const showLastModifier = visibleColumns.includes(PRIVATE_COLUMN_KEY.LAST_MODIFIER);
+    const showStatus = visibleColumns.includes(PRIVATE_COLUMN_KEY.FILE_STATUS);
+    const statusCol = columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
+    const canEdit = !dirent.isDir() && dirent.permission === 'rw';
 
     if (isMobile) {
       return (
@@ -944,11 +946,11 @@ class DirentListItem extends React.Component {
 
         {showCreator && (
           <div className="dirent-property dirent-property-creator">
-            <Formatter
-              field={{ type: CellType.CREATOR, name: gettext('Creator') }}
-              value={dirent.creator}
+            <CreatorFormatter
+              value={dirent[PRIVATE_COLUMN_KEY.FILE_CREATOR]}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
+              collaboratorsCache={this.props.collaboratorsCache}
             />
           </div>
         )}
@@ -957,7 +959,7 @@ class DirentListItem extends React.Component {
           <div className="dirent-property dirent-property-last-modifier">
             <Formatter
               field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }}
-              value={dirent.last_modifier}
+              value={dirent[PRIVATE_COLUMN_KEY.LAST_MODIFIER]}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
             />
@@ -967,13 +969,10 @@ class DirentListItem extends React.Component {
         {showStatus && (
           <div className="dirent-property dirent-property-status">
             <StatusEditor
-              repoID={this.props.repoID}
-              value={dirent.status}
+              value={dirent[PRIVATE_COLUMN_KEY.FILE_STATUS]}
               record={dirent}
-              dirent={dirent}
-              canEdit={dirent.type !== 'dir'}
-              options={this.props.statusColumnOptions}
-              onStatusColumnOptionsChange={this.props.onStatusColumnOptionsChange}
+              column={statusCol}
+              canEdit={canEdit}
             />
           </div>
         )}

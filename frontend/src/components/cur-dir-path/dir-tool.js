@@ -13,9 +13,10 @@ import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
-import { DEFAULT_VISIBLE_COLUMNS, CONFIGURABLE_COLUMNS } from '../../constants/dir-column-visibility';
+import { DEFAULT_VISIBLE_COLUMNS, CONFIGURABLE_COLUMNS, DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { gettext } from '../../utils/constants';
+import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -107,11 +108,11 @@ class DirTool extends React.Component {
             target="dir-hide-column-popover"
             readOnly={isCustomPermission}
             columns={[
-              { key: 'size', name: gettext('Size') },
-              { key: 'modified', name: gettext('Last update') },
-              { key: 'creator', name: gettext('Creator') },
-              { key: 'last_modifier', name: gettext('Last modifier') },
-              { key: 'status', name: gettext('Status') },
+              { key: DIR_COLUMN_KEYS.SIZE, name: gettext('Size') },
+              { key: DIR_COLUMN_KEYS.MTIME, name: gettext('Last update') },
+              { key: PRIVATE_COLUMN_KEY.CREATOR, name: gettext('Creator') },
+              { key: PRIVATE_COLUMN_KEY.LAST_MODIFIER, name: gettext('Last modifier') },
+              { key: PRIVATE_COLUMN_KEY.FILE_STATUS, name: gettext('Status') },
             ]}
             hiddenColumns={this.getHiddenColumns()}
             modifyHiddenColumns={this.modifyHiddenColumns}
