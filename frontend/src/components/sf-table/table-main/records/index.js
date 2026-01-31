@@ -412,7 +412,7 @@ class Records extends Component {
 
     // clear selected records
     this.onDeselectAllRecords();
-    this.props.updateSelectedRecordIds([]);
+    this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
   };
 
   selectCell = (cellPosition) => {

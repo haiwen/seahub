@@ -56,6 +56,7 @@ const propTypes = {
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
+  onDirentStatus: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -149,6 +150,7 @@ class DirColumnView extends React.Component {
     const dirContentMainStyle = {
       userSelect: inResizing ? 'none' : '',
       flex: '1 0 ' + (1 - navRate) * 100 + '%',
+      overflow: currentMode === TABLE_MODE ? 'hidden' : 'auto',
     };
     return (
       <div
@@ -323,18 +325,21 @@ class DirColumnView extends React.Component {
             <DirTableView
               direntList={this.props.direntList}
               repoID={this.props.repoID}
+              repoInfo={this.props.currentRepoInfo}
               path={this.props.path}
               sortBy={this.props.sortBy}
               sortOrder={this.props.sortOrder}
               onSort={this.props.sortItems}
-              visibleColumns={this.props.visibleColumns}
+              columns={this.props.columns}
+              hiddenColumnKeys={this.props.hiddenColumnKeys}
               onItemClick={this.props.onItemClick}
               onItemDoubleClick={this.props.onItemClick}
               onDirentChecked={this.props.onItemSelected}
               onAllDirentsChecked={this.props.onAllItemSelected}
               isAllDirentsChecked={this.props.isAllItemSelected}
               statusColumnOptions={this.props.statusColumnOptions}
-              updateDirentMetadata={this.props.updateDirentMetadata}
+              onDirentChange={this.props.updateDirent}
+              onDirentStatus={this.props.onDirentStatus}
             />
           )}
           {currentMode === HISTORY_MODE && (

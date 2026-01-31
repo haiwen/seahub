@@ -1,12 +1,13 @@
-import NumberFormatter from '@/metadata/components/cell-formatter/number';
+import classNames from 'classnames';
 
-const SizeFormatter = ({ value, formats }) => {
+const SizeFormatter = ({ value, className }) => {
   return (
-    <NumberFormatter
-      value={value}
-      formats={formats}
-      className="dir-table-size-formatter"
-    />
+    <div
+      className={classNames('sf-metadata-ui cell-formatter-container text-formatter number-formatter', className)}
+      title={value}
+    >
+      {value}
+    </div>
   );
 };
 

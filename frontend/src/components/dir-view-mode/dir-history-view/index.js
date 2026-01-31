@@ -288,7 +288,7 @@ const DirHistoryView = ({ repoID, userPerm }) => {
     <div className="dir-history-view sf-history-wrapper">
       <SFTable
         table={tableData}
-        visibleColumns={columns}
+        visibleColumnKeys={columns}
         recordsIds={tableData.row_ids}
         headerSettings={{}}
         noRecordsTipsText=""

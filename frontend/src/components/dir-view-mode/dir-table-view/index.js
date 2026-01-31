@@ -1,19 +1,23 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import SFTable from '../../sf-table';
 import { transformDirentsToTableData } from './data-transformer';
 import { createDirentTableColumns } from './columns';
 
 import './index.css';
+import { username } from '@/utils/constants';
+import { Utils } from '@/utils/utils';
 
 const DirTableView = ({
   direntList,
   repoID,
+  repoInfo,
   path,
   sortBy,
   sortOrder,
   onSort,
-  visibleColumns,
+  columns,
+  hiddenColumnKeys,
   onItemClick,
   onItemRightClick,
   onItemMouseDown,
@@ -38,31 +42,16 @@ const DirTableView = ({
   registerExecuteOperation,
   unregisterExecuteOperation,
   statusColumnOptions,
-  updateDirentMetadata,
+  onDirentChange,
+  onDirentStatus,
 }) => {
   const tableData = useMemo(() => {
     return transformDirentsToTableData(direntList, repoID);
   }, [direntList, repoID]);
 
-  const columns = useMemo(() => {
-    let cols = createDirentTableColumns({
-      repoID,
-      path,
-      sortBy,
-      sortOrder,
-      onSort,
-      onItemClick,
-    });
-
-    return cols;
-  }, [repoID, path, sortBy, sortOrder, onSort, onItemClick]);
-
-  const handleCellDoubleClick = ({ rowIdx, idx }) => {
-    if (onItemDoubleClick) {
-      const dirent = direntList[rowIdx];
-      onItemDoubleClick(dirent);
-    }
-  };
+  const enrichedColumns = useMemo(() => {
+    return createDirentTableColumns(columns, { repoID, repoInfo, tableData, onDirentChange, onDirentStatus });
+  }, [repoID, repoInfo, tableData, columns, onDirentChange, onDirentStatus]);
 
   const handleColumnWidthChange = (column, newWidth) => {
   };
@@ -71,11 +60,19 @@ const DirTableView = ({
     return !isReadOnly;
   };
 
+  const createContextMenuOptions = useCallback((cellPosition) => {
+    const { rowIdx } = cellPosition;
+    const dirent = direntList[rowIdx];
+    console.log('createContextMenuOptions', { cellPosition, dirent });
+    const isRepoOwner = repoInfo.ower_email === username;
+    return Utils.getDirentOperationList(isRepoOwner, repoInfo, dirent, true);
+  }, [direntList, repoInfo]);
+
   return (
-    <div className="dir-table-view">
+    <div className="dir-table-view dir-table-wrapper">
       <SFTable
         table={tableData}
-        visibleColumns={columns}
+        visibleColumns={enrichedColumns}
         recordsIds={tableData.row_ids}
         headerSettings={{}}
         noRecordsTipsText=""
@@ -88,7 +85,6 @@ const DirTableView = ({
         isLoadingMoreRecords={false}
         enableScrollToLoad={false}
         modifyColumnWidth={handleColumnWidthChange}
-        onCellDoubleClick={handleCellDoubleClick}
         checkCanModifyRecord={checkCanModifyRecord}
         supportCopy={false}
         supportPaste={false}
@@ -96,7 +92,7 @@ const DirTableView = ({
         supportCut={false}
         isGroupView={false}
         showRecordAsTree={false}
-        createContextMenuOptions={() => []}
+        createContextMenuOptions={createContextMenuOptions}
       />
     </div>
   );

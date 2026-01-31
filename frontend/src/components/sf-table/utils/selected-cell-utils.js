@@ -18,6 +18,7 @@ export const getSelectedRow = ({ selectedPosition, isGroupView, recordGetterByIn
 };
 
 export const getSelectedColumn = ({ selectedPosition, columns }) => {
+  console.log('getSelectedColumn', { selectedPosition, columns });
   const { idx } = selectedPosition;
   return getColumnByIndex(idx, columns);
 };

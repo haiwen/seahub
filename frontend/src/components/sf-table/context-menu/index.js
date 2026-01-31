@@ -96,6 +96,9 @@ const ContextMenu = ({
     const trashWrapper = document.querySelector('.sf-trash-wrapper');
     trashWrapper && trashWrapper.addEventListener('contextmenu', handleShow);
 
+    const dirTableWrapper = document.querySelector('.dir-table-wrapper');
+    dirTableWrapper && dirTableWrapper.addEventListener('contextmenu', handleShow);
+
     return () => {
       const metadataTagsWrapper = document.querySelector('.sf-metadata-tags-wrapper');
       metadataTagsWrapper && metadataTagsWrapper.removeEventListener('contextmenu', handleShow);
@@ -105,6 +108,9 @@ const ContextMenu = ({
 
       const trashWrapper = document.querySelector('.sf-trash-wrapper');
       trashWrapper && trashWrapper.removeEventListener('contextmenu', handleShow);
+
+      const dirTableWrapper = document.querySelector('.dir-table-wrapper');
+      dirTableWrapper && dirTableWrapper.removeEventListener('contextmenu', handleShow);
     };
 
   }, [handleShow]);
