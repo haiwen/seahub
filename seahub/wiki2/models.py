@@ -271,7 +271,7 @@ class WikiFileViewsManager(models.Manager):
     
     ########################### file view related methods ###########################
     def create_file_view(self, wiki_id, file_view_name, linked_repo_id, view_name='Default View'):
-        file_view_name = get_no_duplicate_obj_name(file_view_name, WikiFileViews.objects.filter(wiki_id=wiki_id).values_list('name', flat=True))
+        file_view_name = get_no_duplicate_obj_name(file_view_name, self.filter(wiki_id=wiki_id).values_list('name', flat=True))
         wiki_file_view = WikiFileViews(
             wiki_id=wiki_id,
             name=file_view_name,
@@ -284,6 +284,13 @@ class WikiFileViewsManager(models.Manager):
         # add a default view
         self.add_view(file_view_id, view_name, linked_repo_id)
         return self.get(pk=file_view_id)
+    def duplicate_file_view(self, file_view_id):
+        wiki_file_view = self.filter(pk=file_view_id).first()
+        new_file_view_name = get_no_duplicate_obj_name(wiki_file_view.name, self.filter(wiki_id=wiki_file_view.wiki_id).values_list('name', flat=True))
+        wiki_file_view.pk = None
+        wiki_file_view.name = new_file_view_name
+        wiki_file_view.save()
+        return wiki_file_view
     
     
 
