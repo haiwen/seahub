@@ -652,5 +652,7 @@
   "Go_to_link" : "转到链接",
   "Link_block" : "链接块级元素",
   "The_link_address_or_link_block_is_required": "链接地址或链接块级元素是必填项",
-  "Comment_filter": "评论过滤器"
+  "Comment_filter": "评论过滤器",
+  "Whiteboard_link_invalid_tip": "白板链接无效,需要将其删除并重新添加。",
+  "The_link_is_invalid": "该链接无效。"
 }

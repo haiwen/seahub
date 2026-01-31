@@ -652,5 +652,7 @@
   "Go_to_link" : "Go to link",
   "Link_block" : "Link block",
   "The_link_address_or_link_block_is_required": "The link address or link block is required",
-  "Comment_filter": "Comment filter"
+  "Comment_filter": "Comment filter",
+  "Whiteboard_link_invalid_tip": "The whiteboard link is invalid, it needs to be deleted and added again.",
+  "The_link_is_invalid": "The link is invalid."
 }
