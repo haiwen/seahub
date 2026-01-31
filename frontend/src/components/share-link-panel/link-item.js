@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import copy from 'copy-to-clipboard';
 import classnames from 'classnames';
-import { QRCodeSVG } from 'qrcode.react';
-import { Popover, PopoverBody } from 'reactstrap';
+import QRCodePopover from '../qr-code-popover';
 import toaster from '../toast';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import CommonOperationConfirmationDialog from '../../components/dialog/common-operation-confirmation-dialog';
 import Icon from '../icon';
+import ClickOutside from '../click-outside';
 
 const propTypes = {
+  idx: PropTypes.number.isRequired,
   item: PropTypes.object.isRequired,
   showLinkDetails: PropTypes.func.isRequired,
   toggleSelectLink: PropTypes.func.isRequired,
@@ -28,27 +29,8 @@ class LinkItem extends React.Component {
       isDeleteShareLinkDialogOpen: false,
       isQRCodePopoverOpen: false
     };
-    this.qrCodeBtn = null;
-    this.popoverContainerRef = React.createRef();
+    this.qrCodeBtn = React.createRef();
   }
-
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
-  }
-
-  handleClickOutside = (event) => {
-    if (this.state.isQRCodePopoverOpen && this.popoverContainerRef.current &&
-        !this.popoverContainerRef.current.contains(event.target) &&
-        this.qrCodeBtn && !this.qrCodeBtn.contains(event.target)) {
-      this.setState({
-        isQRCodePopoverOpen: false
-      });
-    }
-  };
 
   onMouseOver = () => {
     this.setState({
@@ -130,11 +112,18 @@ class LinkItem extends React.Component {
     return '';
   };
 
+  onClickOutside = (e) => {
+    if (this.qrCodeBtn.current && !this.qrCodeBtn.current.contains(e.target)) {
+      this.setState({ isQRCodePopoverOpen: false });
+    }
+  };
+
   render() {
     const { isHighlighted, isItemOpVisible, isQRCodePopoverOpen } = this.state;
     const { item } = this.props;
     const { isSelected = false, permissions, link, expire_date } = item;
     const currentPermission = Utils.getShareLinkPermissionStr(permissions);
+    const opsVisible = isItemOpVisible || isQRCodePopoverOpen || isHighlighted;
     return (
       <Fragment>
         <tr
@@ -144,7 +133,7 @@ class LinkItem extends React.Component {
           onMouseOver={this.onMouseOver}
           onMouseOut={this.onMouseOut}
           className={classnames('cursor-pointer', {
-            'tr-highlight': isHighlighted,
+            'tr-highlight': isHighlighted || isQRCodePopoverOpen,
             'tr-active': isSelected
           }
           )}
@@ -171,24 +160,17 @@ class LinkItem extends React.Component {
           </td>
           <td>{item.password && <Icon symbol="check-thin" />}</td>
           <td>
-            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}>
-              <Icon symbol="copy" />
-            </a>
-            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}>
-              <Icon symbol="delete1" />
-            </a>
-            <a href="#" role="button" ref={ref => this.qrCodeBtn = ref} onClick={this.onQRCodeIconClicked} className={`op-icon ${isItemOpVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}>
-              <Icon symbol="qr-code" />
-            </a>
-            {this.qrCodeBtn && (
-              <div ref={this.popoverContainerRef}>
-                <Popover className="link-item-qrcode-popover" placement="bottom" isOpen={isQRCodePopoverOpen} target={this.qrCodeBtn}>
-                  <PopoverBody>
-                    <QRCodeSVG value={link} size={128} />
-                    <p className="link-item-qrcode-tip">{gettext('Scan the QR code to view the shared content directly')}</p>
-                  </PopoverBody>
-                </Popover>
-              </div>
+            <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>
+            <a href="#" role="button" onClick={this.onDeleteIconClicked} className={`sf3-font-delete1 sf3-font op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Delete')} aria-label={gettext('Delete')}></a>
+            <a href="#" role="button" id={`qr-code-button-${this.props.idx}`} ref={this.qrCodeBtn} onClick={this.onQRCodeIconClicked} className={`sf3-font sf3-font-qr-code op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('QR Code')} aria-label={gettext('QR Code')}></a>
+            {isQRCodePopoverOpen && (
+              <ClickOutside onClickOutside={this.onClickOutside}>
+                <QRCodePopover
+                  container={this.qrCodeBtn}
+                  target={`qr-code-button-${this.props.idx}`}
+                  value={link}
+                />
+              </ClickOutside>
             )}
           </td>
         </tr>
