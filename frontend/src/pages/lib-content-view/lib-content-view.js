@@ -2118,7 +2118,7 @@ class LibContentView extends React.Component {
     this.setState({ hiddenColumnKeys: colKeys });
   };
 
-  updateDirentStatus = async (direntName, newValue, isLocal = false) => {
+  updateDirentStatus = async (direntName, optionID, isLocal = false) => {
     const { repoID } = this.props;
     const { path, direntList } = this.state;
 
@@ -2128,7 +2128,7 @@ class LibContentView extends React.Component {
     const oldStatus = dirent[PRIVATE_COLUMN_KEY.FILE_STATUS];
     const parentDir = dirent.parent_dir || path;
     const column = this.state.columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
-    const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: getColumnOptionNameById(column, newValue) };
+    const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: getColumnOptionNameById(column, optionID) };
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
         if (d.name === direntName) {
@@ -2148,7 +2148,7 @@ class LibContentView extends React.Component {
 
     if (!isLocal) {
       try {
-        await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
+        await metadataAPI.modifyRecord(repoID, { recordId: dirent._record_id, parentDir, fileName: direntName }, updateData);
 
         if (this.state.isDirentDetailShow && window?.sfMetadataContext?.eventBus) {
           window.sfMetadataContext.eventBus.dispatch(
@@ -2927,6 +2927,7 @@ class LibContentView extends React.Component {
                           onItemConvert={this.onConvertItem}
                           onDirentClick={this.onDirentClick}
                           updateDirent={this.updateDirent}
+                          onDirentStatus={this.updateDirentStatus}
                           isAllItemSelected={this.state.isAllDirentSelected}
                           onAllItemSelected={this.onAllDirentSelected}
                           selectedDirentList={this.state.selectedDirentList}

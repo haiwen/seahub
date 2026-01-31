@@ -46,6 +46,7 @@ class Dirent {
       this.modifier_name = json.modifier_name || '';
       this.modifier_email = json.modifier_email || '';
       this.modifier_contact_email = json.modifier_contact_email || '';
+      this.parent_dir = json.parent_dir || '';
       let file_tags = [];
       if (json.file_tags) {
         file_tags = json.file_tags.map(item => {
@@ -62,6 +63,9 @@ class Dirent {
       }
 
       // metadata fields
+      if (json._record_id) {
+        this._record_id = json._record_id;
+      }
       if (json._file_creator) {
         this._file_creator = json._file_creator;
       }
