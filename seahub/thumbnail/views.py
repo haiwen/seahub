@@ -9,7 +9,6 @@ from django.utils.translation import gettext as _
 from urllib.parse import quote
 from django.http import HttpResponse
 from django.views.decorators.http import condition
-from django.shortcuts import render
 
 from seaserv import get_repo, get_file_id_by_path
 
@@ -26,6 +25,7 @@ from seahub.share.models import FileShare, check_share_link_common
 logger = logging.getLogger(__name__)
 
 THUMBNAIL_CACHE_DAYS = getattr(settings, 'THUMBNAIL_CACHE_DAYS', 7)
+
 
 @login_required_ajax
 def thumbnail_create(request, repo_id):
@@ -49,8 +49,7 @@ def thumbnail_create(request, repo_id):
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
-    if repo.encrypted or \
-        check_folder_permission(request, repo_id, path) is None:
+    if repo.encrypted or check_folder_permission(request, repo_id, path) is None:
         err_msg = _("Permission denied.")
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
@@ -64,7 +63,8 @@ def thumbnail_create(request, repo_id):
     else:
         err_msg = _('Failed to create thumbnail.')
         return HttpResponse(json.dumps({'err_msg': err_msg}),
-                status=status_code, content_type=content_type)
+                            status=status_code, content_type=content_type)
+
 
 def latest_entry(request, repo_id, size, path):
     obj_id = get_file_id_by_path(repo_id, path)
@@ -84,6 +84,7 @@ def latest_entry(request, repo_id, size, path):
     else:
         return None
 
+
 @login_required
 @condition(last_modified_func=latest_entry)
 def thumbnail_get(request, repo_id, size, path):
@@ -100,8 +101,7 @@ def thumbnail_get(request, repo_id, size, path):
         return HttpResponse()
 
     # check if is allowed
-    if repo.encrypted or \
-        check_folder_permission(request, repo_id, path) is None:
+    if repo.encrypted or check_folder_permission(request, repo_id, path) is None:
         return HttpResponse()
 
     try:
@@ -121,7 +121,7 @@ def thumbnail_get(request, repo_id, size, path):
                 thumbnail = f.read()
             resp = HttpResponse(content=thumbnail,
                                 content_type='image/' + THUMBNAIL_EXTENSION)
-            
+
             resp['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * THUMBNAIL_CACHE_DAYS)
             return resp
         except IOError as e:
@@ -129,6 +129,7 @@ def thumbnail_get(request, repo_id, size, path):
             return HttpResponse(status=500)
     else:
         return HttpResponse(status=status_code)
+
 
 def get_real_path_by_fs_and_req_path(fileshare, req_path):
     """ Return the real path of a file.
@@ -145,6 +146,7 @@ def get_real_path_by_fs_and_req_path(fileshare, req_path):
         real_path = fileshare.path
 
     return real_path
+
 
 def share_link_thumbnail_create(request, token):
     """generate thumbnail from dir download link page
@@ -190,7 +192,8 @@ def share_link_thumbnail_create(request, token):
     else:
         err_msg = _('Failed to create thumbnail.')
         return HttpResponse(json.dumps({'err_msg': err_msg}),
-                status=status_code, content_type=content_type)
+                            status=status_code, content_type=content_type)
+
 
 def share_link_latest_entry(request, token, size, path):
     fileshare = FileShare.objects.get_valid_file_link_by_token(token)
@@ -218,6 +221,7 @@ def share_link_latest_entry(request, token, size, path):
     else:
         return None
 
+
 @condition(last_modified_func=share_link_latest_entry)
 def share_link_thumbnail_get(request, token, size, path):
     """ handle thumbnail src from dir download link page
@@ -237,8 +241,7 @@ def share_link_thumbnail_get(request, token, size, path):
 
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     if not password_check_passed:
-        d = {'token': token, 'view_name': 'view_shared_dir', 'err_msg': err_msg}
-        return render(request, 'share_access_validation.html', d)
+        return HttpResponse()
 
     image_path = get_real_path_by_fs_and_req_path(fileshare, path)
 

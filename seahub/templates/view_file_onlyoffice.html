@@ -9,6 +9,12 @@
 {% else %}
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 {% endif %}
+<meta property="og:type" content="object">
+<meta property="og:site_name" content="{{ site_name }}">
+<meta property="og:url" content="{{ service_url }}{{ file_share_link }}">
+<meta property="og:title" content="{{ file_name }}">
+<meta property="og:image" content="{{ service_url }}{{ MEDIA_URL }}img/file/{{ icon_path_for_ogp }}">
+<meta property="og:description" content="{{ desc_for_ogp }}">
 <link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
 <style type="text/css">
 html, body { padding:0; margin:0; height:100%; }
