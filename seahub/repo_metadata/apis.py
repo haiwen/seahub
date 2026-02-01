@@ -865,9 +865,9 @@ class MetadataBatchRecords(APIView):
             editable_columns = [
                 '_rate',
                 '_tags',
-                '_status',
-                '_creator',
+                '_file_creator',
                 '_last_modifier',
+                '_status',
             ]
             for column in all_columns:
                 key = column.get('key')
@@ -889,6 +889,8 @@ class MetadataBatchRecords(APIView):
 
         for file_info in files:
             parent_dir = file_info.get('parent_dir')
+            if parent_dir and parent_dir != '/' and parent_dir.endswith('/'):
+                parent_dir = parent_dir.rstrip('/')
             file_name = file_info.get('file_name')
 
             if not parent_dir or not file_name:

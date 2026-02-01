@@ -88,7 +88,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId }, update);
       }
       const fileName = getFileNameFromRecord(record);
-      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, fileName, newValue);
+      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, fileName, newValue, true);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -119,6 +119,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         const oldValue = getCellValueByColumn(record, newField) || [];
         update = { [fileName]: [...oldValue, newOption.name] };
       }
+      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, fieldKey, newData, true);
       return metadataAPI.modifyRecord(repoID, { recordId: record._id }, update);
     }).then(res => {
       setOriginColumns(newColumns);

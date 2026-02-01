@@ -24,7 +24,7 @@ import DeleteFolderDialog from '../../components/dialog/delete-folder-dialog';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import { PRIVATE_FILE_TYPE, DIRENT_DETAIL_SHOW_KEY, TREE_PANEL_STATE_KEY, RECENTLY_USED_LIST_KEY } from '../../constants';
 import { EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE } from '../../metadata/constants';
-import { CONFIGURABLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS, DIR_COLUMN_VISIBILITY_STORAGE_KEY } from '../../constants/dir-column-visibility';
+import { CONFIGURABLE_COLUMNS, DEFAULT_VISIBLE_COLUMNS, DIR_COLUMN_VISIBILITY_STORAGE_KEY, METADATA_COLUMNS } from '../../constants/dir-column-visibility';
 import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvider } from '../../hooks';
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
@@ -38,10 +38,10 @@ import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-to
 import ViewToolbar from '../../components/toolbar/view-toolbar';
 import { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
-import { formatStatusOptions } from '../../components/dirent-list-view/column-config';
+import { normalizeColumns } from '@/metadata/utils/column';
+import Column from '@/metadata/model/column';
 
 import '../../css/lib-content-view.css';
-
 
 dayjs.extend(relativeTime);
 
@@ -109,7 +109,7 @@ class LibContentView extends React.Component {
       viewId: '0000',
       tagId: '',
       currentDirent: null,
-      statusColumnOptions: null,
+      columns: [],
       visibleColumns: DEFAULT_VISIBLE_COLUMNS,
       enableMetadata: false,
       isCrossRepoMove: false,
@@ -133,7 +133,6 @@ class LibContentView extends React.Component {
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          // Filter columns based on metadata status
           const baseColumns = enableMetadata
             ? CONFIGURABLE_COLUMNS
             : DEFAULT_VISIBLE_COLUMNS;
@@ -153,14 +152,14 @@ class LibContentView extends React.Component {
     // Filter out metadata columns if metadata is disabled
     const effectiveColumns = this.state.enableMetadata
       ? columns
-      : columns.filter(col => !['creator', 'last_modifier', 'status'].includes(col));
+      : columns.filter(col => !METADATA_COLUMNS.includes(col));
 
     try {
       localStorage.setItem(DIR_COLUMN_VISIBILITY_STORAGE_KEY, JSON.stringify(effectiveColumns));
-      this.setState({ visibleColumns: effectiveColumns });
     } catch (error) {
-      this.setState({ visibleColumns: effectiveColumns });
+      // ignore
     }
+    this.setState({ visibleColumns: effectiveColumns });
   };
 
   updateCurrentNotExistDirent = (deletedDirent) => {
@@ -201,6 +200,7 @@ class LibContentView extends React.Component {
       this.setVisibleColumns(visibleCols);
     });
     this.unsubscribeDirentStatusChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, this.updateDirentStatus);
+    this.unsubscribeColumnDataModified = eventBus.subscribe(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, this.onColumnDataModified);
 
     this.calculatePara(this.props);
     window.addEventListener('popstate', this.onpopstate);
@@ -248,9 +248,13 @@ class LibContentView extends React.Component {
         }
       }
     } else if (noticeData.type === 'repo-update') {
-      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true, 'with_metadata': true }).then(res => {
+      seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true }).then(async res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID } = res.data;
-        const direntList = Utils.sortDirents(dirent_list.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
+
+        // Enrich dirent list with metadata for list view
+        const enrichedDirentList = await this.enrichDirentListWithMetadata(dirent_list, this.props.repoID, this.state.path);
+
+        const direntList = Utils.sortDirents(enrichedDirentList.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
         this.setState({
           pathExist: true,
           userPerm,
@@ -387,6 +391,7 @@ class LibContentView extends React.Component {
     this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
     this.unsubscribeColumnVisibilityChanged && this.unsubscribeColumnVisibilityChanged();
     this.unsubscribeDirentStatusChanged && this.unsubscribeDirentStatusChanged();
+    this.unsubscribeColumnDataModified && this.unsubscribeColumnDataModified();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
       repoID: '',
       repoName: '',
@@ -683,6 +688,54 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
+  // Helper method to enrich dirent list with metadata for list view
+  enrichDirentListWithMetadata = async (direntList, repoID, currentPath) => {
+    if (this.state.currentMode !== LIST_MODE || !this.state.enableMetadata) {
+      return direntList;
+    }
+
+    const files = direntList
+      .filter(item => item.type === 'file')
+      .map(item => ({
+        parent_dir: item.parent_dir || currentPath,
+        file_name: item.name
+      }));
+
+    if (files.length === 0) {
+      return direntList;
+    }
+
+    try {
+      const res = await metadataAPI.getRecords(repoID, files);
+      const rows = res.data.results || [];
+      const columns = normalizeColumns(res.data.metadata.columns || []).map(col => new Column(col));
+      this.setState({ columns: columns || [] });
+
+      // Create a map for quick lookup
+      const metadataMap = {};
+      rows.forEach(record => {
+        const key = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+        if (key) {
+          metadataMap[key] = record;
+        }
+      });
+
+      // Merge metadata into dirent objects
+      const enrichedDirentList = direntList.map(item => {
+        if (item.type === 'file' && metadataMap[item.name]) {
+          const metadata = metadataMap[item.name];
+          item[PRIVATE_COLUMN_KEY.FILE_CREATOR] = metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR];
+          item[PRIVATE_COLUMN_KEY.LAST_MODIFIER] = metadata[PRIVATE_COLUMN_KEY.LAST_MODIFIER];
+          item[PRIVATE_COLUMN_KEY.FILE_STATUS] = metadata[PRIVATE_COLUMN_KEY.FILE_STATUS];
+        }
+        return item;
+      });
+      return enrichedDirentList;
+    } catch (error) {
+      return direntList;
+    }
+  };
+
   loadDirentList = async (path) => {
     const { repoID } = this.props;
     const { sortBy, sortOrder } = this.state;
@@ -695,25 +748,22 @@ class LibContentView extends React.Component {
 
     try {
       const direntRes = await seafileAPI.listDir(repoID, path, {
-        with_thumbnail: true,
-        with_metadata: true
+        with_thumbnail: true
       });
       const {
         dirent_list,
         user_perm: userPerm,
-        dir_id: dirID,
-        metadata_options
+        dir_id: dirID
       } = direntRes.data;
 
+      // Enrich dirent list with metadata for list view
+      const enrichedDirentList = await this.enrichDirentListWithMetadata(dirent_list, repoID, path);
+
       let direntList = Utils.sortDirents(
-        dirent_list.map(item => new Dirent(item)),
+        enrichedDirentList.map(item => new Dirent(item)),
         sortBy,
         sortOrder
       );
-
-      if (metadata_options?.status) {
-        this.setState({ statusColumnOptions: formatStatusOptions(metadata_options.status) });
-      }
 
       this.setState({
         pathExist: true,
@@ -753,10 +803,6 @@ class LibContentView extends React.Component {
         pathExist: false,
       });
     }
-  };
-
-  onStatusColumnOptionsChange = (newOptions) => {
-    this.setState({ statusColumnOptions: newOptions });
   };
 
   identifyFoldersSharedOut = () => {
@@ -2035,20 +2081,20 @@ class LibContentView extends React.Component {
     this.setState({ direntList: newDirentList });
   };
 
-  updateDirentStatus = async (direntName, newStatus) => {
+  updateDirentStatus = async (direntName, newStatus, isLocal = false) => {
     const { repoID } = this.props;
     const { path, direntList } = this.state;
 
     const dirent = direntList.find(d => d.name === direntName);
     if (!dirent) return false;
 
-    const oldStatus = dirent.status;
-    const parentDir = dirent.parent_dir || path || '/';
+    const oldStatus = dirent[PRIVATE_COLUMN_KEY.FILE_STATUS];
+    const parentDir = dirent.parent_dir || path;
     const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: newStatus };
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
         if (d.name === direntName) {
-          return new Dirent({ ...d, status: newStatus });
+          return new Dirent({ ...d, [PRIVATE_COLUMN_KEY.FILE_STATUS]: newStatus });
         }
         return d;
       });
@@ -2058,45 +2104,62 @@ class LibContentView extends React.Component {
       };
 
       if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
-        newState.currentDirent = new Dirent({ ...prevState.currentDirent, status: newStatus });
+        newState.currentDirent = new Dirent({ ...prevState.currentDirent, [PRIVATE_COLUMN_KEY.FILE_STATUS]: newStatus });
       }
 
       return newState;
     });
 
-    try {
-      await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
+    if (!isLocal) {
+      try {
+        await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
 
-      if (window?.sfMetadataContext?.eventBus) {
-        window.sfMetadataContext.eventBus.dispatch(
-          METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
-          { parentDir, fileName: direntName },
-          updateData
-        );
-      }
-
-      return true;
-    } catch (error) {
-      this.setState(prevState => {
-        const newDirentList = prevState.direntList.map(d => {
-          if (d.name === direntName) {
-            return new Dirent({ ...d, status: oldStatus });
-          }
-          return d;
-        });
-
-        const newState = {
-          direntList: newDirentList
-        };
-
-        if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
-          newState.currentDirent = new Dirent({ ...prevState.currentDirent, status: oldStatus });
+        if (window?.sfMetadataContext?.eventBus) {
+          window.sfMetadataContext.eventBus.dispatch(
+            METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
+            { parentDir, fileName: direntName },
+            updateData
+          );
         }
 
-        return newState;
-      });
-      return false;
+        return true;
+      } catch (error) {
+        this.setState(prevState => {
+          const newDirentList = prevState.direntList.map(d => {
+            if (d.name === direntName) {
+              return new Dirent({ ...d, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
+            }
+            return d;
+          });
+
+          const newState = {
+            direntList: newDirentList
+          };
+
+          if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
+            newState.currentDirent = new Dirent({ ...prevState.currentDirent, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
+          }
+
+          return newState;
+        });
+        return false;
+      }
     }
+  };
+
+  onColumnDataModified = async (key, data, isLocal = false) => {
+    const { repoID } = this.props;
+
+    !isLocal && await metadataAPI.modifyColumnData(repoID, key, data);
+
+    const updatedColumns = this.state.columns.map(column => {
+      if (column.key === key) {
+        return new Column({ ...column, data });
+      }
+      return column;
+    });
+
+    this.setState({ columns: updatedColumns });
   };
 
   updateTreeNode = (path, keys, values) => {
@@ -2836,8 +2899,7 @@ class LibContentView extends React.Component {
                           toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                           updateTreeNode={this.updateTreeNode}
                           sortTreeNode={this.sortTreeNode}
-                          statusColumnOptions={this.state.statusColumnOptions}
-                          onStatusColumnOptionsChange={this.onStatusColumnOptionsChange}
+                          columns={this.state.columns}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>
