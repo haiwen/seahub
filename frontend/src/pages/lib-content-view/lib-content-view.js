@@ -2081,7 +2081,7 @@ class LibContentView extends React.Component {
     this.setState({ direntList: newDirentList });
   };
 
-  updateDirentStatus = async (direntName, newStatus) => {
+  updateDirentStatus = async (direntName, newStatus, isLocal = false) => {
     const { repoID } = this.props;
     const { path, direntList } = this.state;
 
@@ -2089,7 +2089,7 @@ class LibContentView extends React.Component {
     if (!dirent) return false;
 
     const oldStatus = dirent[PRIVATE_COLUMN_KEY.FILE_STATUS];
-    const parentDir = dirent.parent_dir || path || '/';
+    const parentDir = dirent.parent_dir || path;
     const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: newStatus };
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
@@ -2110,76 +2110,56 @@ class LibContentView extends React.Component {
       return newState;
     });
 
-    try {
-      await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
+    if (!isLocal) {
+      try {
+        await metadataAPI.modifyRecord(repoID, { parentDir, fileName: direntName }, updateData);
 
-      if (window?.sfMetadataContext?.eventBus) {
-        window.sfMetadataContext.eventBus.dispatch(
-          METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
-          { parentDir, fileName: direntName },
-          updateData
-        );
-      }
-
-      return true;
-    } catch (error) {
-      this.setState(prevState => {
-        const newDirentList = prevState.direntList.map(d => {
-          if (d.name === direntName) {
-            return new Dirent({ ...d, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
-          }
-          return d;
-        });
-
-        const newState = {
-          direntList: newDirentList
-        };
-
-        if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
-          newState.currentDirent = new Dirent({ ...prevState.currentDirent, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
+        if (window?.sfMetadataContext?.eventBus) {
+          window.sfMetadataContext.eventBus.dispatch(
+            METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
+            { parentDir, fileName: direntName },
+            updateData
+          );
         }
 
-        return newState;
-      });
-      return false;
+        return true;
+      } catch (error) {
+        this.setState(prevState => {
+          const newDirentList = prevState.direntList.map(d => {
+            if (d.name === direntName) {
+              return new Dirent({ ...d, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
+            }
+            return d;
+          });
+
+          const newState = {
+            direntList: newDirentList
+          };
+
+          if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
+            newState.currentDirent = new Dirent({ ...prevState.currentDirent, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
+          }
+
+          return newState;
+        });
+        return false;
+      }
     }
   };
 
-  onColumnDataModified = async (key, data) => {
+  onColumnDataModified = async (key, data, isLocal = false) => {
     const { repoID } = this.props;
 
-    try {
-      await metadataAPI.modifyColumnData(repoID, key, data);
+    !isLocal && await metadataAPI.modifyColumnData(repoID, key, data);
 
-      const updatedColumns = this.state.columns.map(column => {
-        if (column.key === key) {
-          return {
-            ...column,
-            data,
-          };
-        }
-        return column;
-      });
-
-      if (key === PRIVATE_COLUMN_KEY.FILE_STATUS && data.options) {
-        const statusOptions = data.options.map(option => ({
-          id: option.id,
-          name: option.name,
-          color: option.color,
-          borderColor: option.borderColor,
-          textColor: option.textColor
-        }));
-        this.setState({
-          columns: updatedColumns,
-          statusColumnOptions: statusOptions
-        });
-      } else {
-        this.setState({ columns: updatedColumns });
+    const updatedColumns = this.state.columns.map(column => {
+      if (column.key === key) {
+        return new Column({ ...column, data });
       }
-      return { successful: true };
-    } catch (error) {
-      return { successful: false };
-    }
+      return column;
+    });
+
+    this.setState({ columns: updatedColumns });
   };
 
   updateTreeNode = (path, keys, values) => {

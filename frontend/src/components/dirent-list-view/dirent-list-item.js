@@ -20,11 +20,11 @@ import StatusEditor from './status-editor';
 import Formatter from '../../metadata/components/formatter';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
+import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
 import './index.css';
-import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -939,7 +939,7 @@ class DirentListItem extends React.Component {
         )}
 
         {showModified && (
-          <div className="dirent-property dirent-property-modified" title={formatUnixWithTimezone(dirent.mtime)}>
+          <div className="d-block dirent-property dirent-property-modified" title={formatUnixWithTimezone(dirent.mtime)}>
             {dirent.mtime_relative}
           </div>
         )}

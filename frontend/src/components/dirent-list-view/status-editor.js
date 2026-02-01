@@ -7,9 +7,9 @@ import { PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { eventBus } from '../common/event-bus';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import SingleSelectFormatter from '@/metadata/components/cell-formatter/single-select';
+import { DEFAULT_FILE_STATUS_OPTIONS } from '@/metadata/constants/column/format';
 
 import './index.css';
-import { DEFAULT_FILE_STATUS_OPTIONS } from '@/metadata/constants/column/format';
 
 const STATUS_EDITOR_CONFIG = {
   MIN_WIDTH: 200,
@@ -198,7 +198,7 @@ const StatusEditor = ({
       onClick={handleClick}
     >
       {displayValue ? (
-        <SingleSelectFormatter value={displayValue} options={column?.data?.options || DEFAULT_FILE_STATUS_OPTIONS} className="dirent-property dirent-property-status" />
+        <SingleSelectFormatter value={displayValue} options={column?.data?.options || DEFAULT_FILE_STATUS_OPTIONS} />
       ) : (
         <span className="text-muted empty-status-placeholder"></span>
       )}

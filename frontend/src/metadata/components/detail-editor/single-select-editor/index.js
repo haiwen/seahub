@@ -49,13 +49,9 @@ const SingleSelectEditor = ({ field, value, record, fields, onChange, modifyColu
   }, []);
 
   const onCommit = useCallback((newValue) => {
-    if (newValue && !getOption(options, newValue)) {
-      setShowEditor(false);
-      return;
-    }
     onChange(newValue);
     setShowEditor(false);
-  }, [options, onChange]);
+  }, [onChange]);
 
   const option = value ? getOption(options, value) : null;
 
