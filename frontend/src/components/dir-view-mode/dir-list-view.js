@@ -41,9 +41,8 @@ const propTypes = {
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
   updateTreeNode: PropTypes.func,
-  visibleColumns: PropTypes.array,
-  setVisibleColumns: PropTypes.func,
   columns: PropTypes.array,
+  hiddenColumnKeys: PropTypes.array,
   updateDirentStatus: PropTypes.func,
 };
 
@@ -110,9 +109,8 @@ class DirListView extends React.Component {
             getMenuContainerSize={this.props.getMenuContainerSize}
             eventBus={this.props.eventBus}
             updateTreeNode={this.props.updateTreeNode}
-            visibleColumns={this.props.visibleColumns}
-            setVisibleColumns={this.props.setVisibleColumns}
             columns={this.props.columns}
+            hiddenColumnKeys={this.props.hiddenColumnKeys}
             updateDirentStatus={this.props.updateDirentStatus}
           />
         )}

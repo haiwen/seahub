@@ -8,7 +8,7 @@ import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 export const createTableHeaders = (
   sortOptions = {},
   selectionOptions = {},
-  visibleColumns = []
+  visibleColumnKeys = []
 ) => {
   const { sortBy, sortOrder, onSort } = sortOptions;
   const { isAllSelected, onAllItemSelected, isPartiallySelected } = selectionOptions;
@@ -23,7 +23,7 @@ export const createTableHeaders = (
   );
 
   const isColumnVisible = (columnKey) => {
-    return visibleColumns.includes(columnKey);
+    return visibleColumnKeys.includes(columnKey);
   };
 
   const baseHeaders = [
@@ -84,8 +84,8 @@ export const createTableHeaders = (
         sortBy === 'name' && sortIcon
       )
     },
-    ...(isColumnVisible('size') ? [{
-      key: 'size',
+    ...(isColumnVisible(DIR_COLUMN_KEYS.SIZE) ? [{
+      key: DIR_COLUMN_KEYS.SIZE,
       width: COLUMN_CONFIG.size.width,
       className: COLUMN_CONFIG.size.className,
       minWidth: COLUMN_CONFIG.size.width,
@@ -132,11 +132,11 @@ export const createTableHeaders = (
         sortBy === 'creator' && sortIcon
       )
     }] : []),
-    ...(isColumnVisible(PRIVATE_COLUMN_KEY.LAST_MODIFIER) ? [{
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.FILE_MODIFIER) ? [{
       key: PRIVATE_COLUMN_KEY.LAST_MODIFIER,
-      width: COLUMN_CONFIG.last_modifier.width,
-      className: COLUMN_CONFIG.last_modifier.className,
-      minWidth: COLUMN_CONFIG.last_modifier.width,
+      width: COLUMN_CONFIG.file_modifier.width,
+      className: COLUMN_CONFIG.file_modifier.className,
+      minWidth: COLUMN_CONFIG.file_modifier.width,
       children: React.createElement(
         'a',
         {

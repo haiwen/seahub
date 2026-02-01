@@ -46,7 +46,6 @@ const DirentVirtualListView = ({
   overscan = 5,
   registerExecuteOperation,
   unregisterExecuteOperation,
-  visibleColumns = [],
   columns,
   repoID,
   path,
@@ -152,7 +151,6 @@ const DirentVirtualListView = ({
                   collaboratorsCache={collaboratorsCache}
                   updateCollaboratorsCache={updateCollaboratorsCache}
                   queryUser={queryUser}
-                  visibleColumns={visibleColumns}
                   columns={columns}
                   {...itemProps}
                 />

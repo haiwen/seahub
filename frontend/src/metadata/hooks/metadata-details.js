@@ -71,6 +71,16 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     }
   }, [record]);
 
+  const onLocalColumnChange = useCallback((key, data) => {
+    const updatedColumns = originColumns.map(col => {
+      if (col.key === key) {
+        return new Column({ ...col, data });
+      }
+      return col;
+    });
+    setOriginColumns(updatedColumns);
+  }, [originColumns]);
+
   const onChange = useCallback((fieldKey, newValue) => {
     const field = getColumnByKey(allColumnsRef.current, fieldKey);
     const columnName = getColumnOriginName(field);
@@ -88,7 +98,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId }, update);
       }
       const fileName = getFileNameFromRecord(record);
-      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, fileName, newValue);
+      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, fileName, newValue, true);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -119,6 +129,7 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         const oldValue = getCellValueByColumn(record, newField) || [];
         update = { [fileName]: [...oldValue, newOption.name] };
       }
+      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, fieldKey, newData, true);
       return metadataAPI.modifyRecord(repoID, { recordId: record._id }, update);
     }).then(res => {
       setOriginColumns(newColumns);
@@ -230,10 +241,12 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
     const eventBus = window?.sfMetadataContext?.eventBus;
     if (!eventBus) return;
     const unsubscribeLocalRecordChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, onLocalRecordChange);
+    const unsubscribeLocalColumnChanged = eventBus.subscribe(EVENT_BUS_TYPE.LOCAL_COLUMN_DATA_CHANGED, onLocalColumnChange);
     return () => {
       unsubscribeLocalRecordChanged();
+      unsubscribeLocalColumnChanged();
     };
-  }, [onLocalRecordChange]);
+  }, [onLocalRecordChange, onLocalColumnChange]);
 
   return (
     <MetadataDetailsContext.Provider

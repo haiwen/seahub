@@ -7,9 +7,10 @@ import { PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { eventBus } from '../common/event-bus';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import SingleSelectFormatter from '@/metadata/components/cell-formatter/single-select';
+import { DEFAULT_FILE_STATUS_OPTIONS } from '@/metadata/constants/column/format';
+import { getServerOptions } from '@/metadata/utils/cell';
 
 import './index.css';
-import { DEFAULT_FILE_STATUS_OPTIONS } from '@/metadata/constants/column/format';
 
 const STATUS_EDITOR_CONFIG = {
   MIN_WIDTH: 200,
@@ -61,23 +62,24 @@ const StatusEditor = ({
     };
   }, [canEdit]);
 
-  const handleStatusChange = useCallback(async (newValue) => {
+  const handleStatusChange = useCallback(async (id) => {
     if (!canEdit) return;
 
-    setCurrentValue(newValue);
+    setCurrentValue(id);
     setIsEditing(false);
-    eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, record.name, newValue);
-  }, [record, canEdit]);
+    eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, record.name, id);
+  }, [canEdit, record.name]);
 
-  const handleEditorCommit = useCallback((newValue) => {
-    if (newValue === undefined || newValue === null || newValue === currentValue) {
+  const handleEditorCommit = useCallback((id) => {
+    if (!id || id === currentValue) {
       setIsEditing(false);
       return;
     }
-    handleStatusChange(newValue);
+    handleStatusChange(id);
   }, [currentValue, handleStatusChange]);
 
   const modifyColumnData = useCallback((columnKey, newData) => {
+    newData.options = getServerOptions({ key: PRIVATE_COLUMN_KEY.FILE_STATUS, data: newData });
     eventBus.dispatch(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, columnKey, newData);
   }, []);
 
@@ -198,7 +200,7 @@ const StatusEditor = ({
       onClick={handleClick}
     >
       {displayValue ? (
-        <SingleSelectFormatter value={displayValue} options={column?.data?.options || DEFAULT_FILE_STATUS_OPTIONS} className="dirent-property dirent-property-status" />
+        <SingleSelectFormatter value={displayValue} options={column?.data?.options || DEFAULT_FILE_STATUS_OPTIONS} />
       ) : (
         <span className="text-muted empty-status-placeholder"></span>
       )}

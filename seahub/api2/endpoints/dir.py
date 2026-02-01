@@ -23,14 +23,15 @@ from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
         normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.file_types import IMAGE, VIDEO, PDF
+from seahub.utils.file_types import IMAGE, VIDEO, PDF, SVG, SEADOC
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.utils.repo import parse_repo_perm
 from seahub.constants import PERMISSION_INVISIBLE
 from seahub.repo_metadata.models import RepoMetadata
-from seahub.settings import ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
+from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+from seahub.settings import THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, ENABLE_THUMBNAIL_SERVER
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -57,6 +58,11 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
     except Exception as e:
         logger.error(e)
         starred_item_path_list = []
+
+    thumbnail_support_file_types = [IMAGE, PDF, SVG]
+    if ENABLE_THUMBNAIL_SERVER:
+        thumbnail_support_file_types.append(SEADOC)
+        thumbnail_support_file_types.append(VIDEO)
 
     # only get dir info list
     if not request_type or request_type == 'd':
@@ -162,16 +168,18 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
                 fileExt = os.path.splitext(file_name)[1][1:].lower()
                 file_type = FILEEXT_TYPE_MAP.get(fileExt)
 
-                if file_type in (IMAGE, PDF) or \
-                        (file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
+                if file_type in thumbnail_support_file_types:
 
                     # if thumbnail has already been created, return its src.
                     # Then web browser will use this src to get thumbnail instead of
                     # recreating it.
                     thumbnail_file_path = os.path.join(THUMBNAIL_ROOT,
                             str(thumbnail_size), file_obj_id)
-                    if os.path.exists(thumbnail_file_path):
-                        src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
+
+                    src = get_thumbnail_src(repo_id, thumbnail_size, file_path)
+                    if ENABLE_THUMBNAIL_SERVER:
+                        file_info['encoded_thumbnail_src'] = quote(src)
+                    elif os.path.exists(thumbnail_file_path):
                         file_info['encoded_thumbnail_src'] = quote(src)
             file_info_list.append(file_info)
 
@@ -241,6 +249,13 @@ class DirView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         with_parents = to_python_boolean(with_parents)
+
+        with_metadata = request.GET.get('with_metadata', 'false')
+        if with_metadata not in ('true', 'false'):
+            error_msg = 'with_metadata invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        with_metadata = to_python_boolean(with_metadata)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
@@ -325,6 +340,84 @@ class DirView(APIView):
         response_dict = {}
         response_dict["user_perm"] = permission
         response_dict["dir_id"] = dir_id
+
+        if with_metadata:
+            try:
+                # Check if metadata is enabled for this repo
+                metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+                if metadata and metadata.enabled:
+                    # Check if user has permission to read metadata
+                    from seahub.repo_metadata.utils import can_read_metadata
+                    if not can_read_metadata(request, repo_id):
+                        logger.debug(f"User {username} does not have permission to read metadata for repo {repo_id}")
+                    else:
+                        from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+                        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+                        files = []
+                        for file_info in file_info_list:
+                            files.append({
+                                'parent_dir': file_info.get('parent_dir', parent_dir),
+                                'file_name': file_info['name']
+                            })
+
+                        if files:
+                            metadata_server_api = MetadataServerAPI(repo_id, username)
+                            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+                            all_columns = columns_data.get('columns', [])
+                            metadata_columns = []
+                            editable_columns = [
+                                '_rate',
+                                '_tags',
+                                '_file_creator',
+                                '_file_modifier',
+                                '_status',
+                            ]
+                            for column in all_columns:
+                                key = column.get('key')
+                                if key in editable_columns:
+                                    metadata_columns.append({
+                                        'key': key,
+                                        'name': column.get('name'),
+                                        'type': column.get('type'),
+                                        'data': column.get('data', {})
+                                    })
+
+                            where_conditions = []
+                            parameters = []
+
+                            for file_info in files:
+                                parent_dir = file_info.get('parent_dir')
+                                if parent_dir and parent_dir != '/' and parent_dir.endswith('/'):
+                                    parent_dir = parent_dir.rstrip('/')
+                                file_name = file_info.get('file_name')
+
+                                if not parent_dir or not file_name:
+                                    continue
+
+                                where_conditions.append(f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?)')
+                                parameters.extend([parent_dir, file_name])
+
+                            if where_conditions:
+                                where_clause = ' OR '.join(where_conditions)
+                                sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
+
+                                try:
+                                    query_result = metadata_server_api.query_rows(sql, parameters)
+                                    rows = query_result.get('results', [])
+                                    if rows:
+                                        metadata = {}
+                                        metadata['columns'] = metadata_columns
+                                        metadata['rows'] = rows
+                                        logger.info(f"Fetched metadata for repo {repo_id}, number of rows: {len(rows)}")
+                                        response_dict['metadata'] = metadata
+
+                                except Exception as e:
+                                    logger.error(f"Failed to fetch metadata for repo {repo_id}: {e}")
+                                    pass
+            except Exception as e:
+                logger.error(f"Metadata enrichment failed for repo {repo_id}: {e}")
+                pass
 
         if request_type == 'f':
             response_dict['dirent_list'] = all_file_info_list
@@ -580,30 +673,29 @@ class DirDetailView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        dir_obj = seafile_api.get_dirent_by_path(repo_id, path)  
-        
+        dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
+
         dir_info = {
             'repo_id': repo_id,
             'path': path,
             'name': dir_obj.obj_name if dir_obj else '',
             'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime) if dir_obj else '',
             'permission': permission,
-        }  
+        }
 
         # metadata enable check
         metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
         if metadata and metadata.enabled:
             from seafevents.repo_metadata.constants import METADATA_TABLE
-            from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
             metadata_server_api = MetadataServerAPI(repo_id, request.user.username)
             try:
                 sql = f"""
-                    SELECT 
+                    SELECT
                         COUNT(*) AS file_count,
                         SUM(`{METADATA_TABLE.columns.size.name}`) AS total_size
                     FROM `{METADATA_TABLE.name}`
-                    WHERE 
-                        (`{METADATA_TABLE.columns.is_dir.name}` = False) AND 
+                    WHERE
+                        (`{METADATA_TABLE.columns.is_dir.name}` = False) AND
                         (
                           `{METADATA_TABLE.columns.parent_dir.name}` ILIKE '{path}%' OR
                           `{METADATA_TABLE.columns.parent_dir.name}` = '{path[:-1]}'

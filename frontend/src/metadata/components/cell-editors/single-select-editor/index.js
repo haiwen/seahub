@@ -22,6 +22,7 @@ const SingleSelectEditor = forwardRef(({
   onCommit,
   onPressTab,
   modifyColumnData,
+  canEdit = false,
 }, ref) => {
   const [value, setValue] = useState(oldValue || '');
   const [searchValue, setSearchValue] = useState('');
@@ -31,7 +32,7 @@ const SingleSelectEditor = forwardRef(({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
-  const canEditData = window.sfMetadataContext.canModifyColumnData(column);
+  const canEditData = window.sfMetadataContext && window.sfMetadataContext.canModifyColumnData(column) || canEdit;
 
   const options = useMemo(() => {
     const options = getColumnOptions(column);

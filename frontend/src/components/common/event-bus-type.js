@@ -50,7 +50,7 @@ export const EVENT_BUS_TYPE = {
   SWITCH_TO_HISTORY_VIEW: 'switch_to_history_view',
 
   // column visibility
-  COLUMN_VISIBILITY_CHANGED: 'column_visibility_changed',
+  HIDDEN_COLUMNS_CHANGED: 'hidden_columns_changed',
 
   // dirent properties
   DIRENT_STATUS_CHANGED: 'dirent_status_changed',

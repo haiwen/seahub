@@ -50,8 +50,8 @@ const propTypes = {
   posY: PropTypes.string,
   getMenuContainerSize: PropTypes.func,
   eventBus: PropTypes.object,
-  visibleColumns: PropTypes.array,
   columns: PropTypes.array,
+  hiddenColumnKeys: PropTypes.array,
   onColumnDataModified: PropTypes.func,
 };
 
@@ -666,7 +666,8 @@ class DirentListView extends React.Component {
   };
 
   getHeaders = () => {
-    const { sortBy, sortOrder, isAllItemSelected, selectedDirentList, visibleColumns = [] } = this.props;
+    const { sortBy, sortOrder, isAllItemSelected, selectedDirentList, columns, hiddenColumnKeys } = this.props;
+    const visibleColumnKeys = columns.filter(col => !hiddenColumnKeys.includes(col.key)).map(col => col.key);
 
     const sortOptions = {
       sortBy,
@@ -683,7 +684,7 @@ class DirentListView extends React.Component {
       isPartiallySelected: selectedDirentList.length > 0 && !isAllItemSelected
     };
 
-    return createTableHeaders(sortOptions, selectionOptions, visibleColumns);
+    return createTableHeaders(sortOptions, selectionOptions, visibleColumnKeys);
   };
 
 
@@ -762,8 +763,8 @@ class DirentListView extends React.Component {
             onAddFolder={this.props.onAddFolder}
             onThreadMouseDown={this.onThreadMouseDown}
             onThreadContextMenu={this.onThreadContextMenu}
-            visibleColumns={this.props.visibleColumns}
             columns={this.props.columns}
+            hiddenColumnKeys={this.props.hiddenColumnKeys}
             onColumnDataModified={this.props.onColumnDataModified}
           />
         )}

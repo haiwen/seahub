@@ -21,19 +21,19 @@ export const COLUMN_CONFIG = {
     className: 'dirent-property dirent-property-size',
   },
   modified: {
-    width: 160,
+    width: 120,
     className: 'dirent-property dirent-property-modified',
   },
   file_creator: {
     width: 100,
     className: 'dirent-property dirent-property-creator',
   },
-  last_modifier: {
+  file_modifier: {
     width: 120,
     className: 'dirent-property dirent-property-last-modifier',
   },
   status: {
-    width: 100,
+    width: 120,
     className: 'dirent-property dirent-property-status',
   },
 };
