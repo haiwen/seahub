@@ -219,7 +219,7 @@ from seahub.ocm.settings import OCM_ENDPOINT
 from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view, wiki_repo_view
 from seahub.api2.endpoints.wiki2 import Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
-    WikiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView, Wiki2FileViews, Wiki2FileView, \
+    WikiSearch, Wiki2MultiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView, Wiki2FileViews, Wiki2FileView, \
     Wiki2SettingsView, Wiki2LinkedReposView, Wiki2FileViewRecords, Wiki2FileViewDuplicateView
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.user_list import UserListView
@@ -627,6 +627,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/views/(?P<view_id>[^/]+)/$', Wiki2FileView.as_view(), name='api-v2.1-wiki2-view'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/views/(?P<view_id>[^/]+)/records/$', Wiki2FileViewRecords.as_view(), name='api-v2.1-wiki2-metadata-records'),
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
+    re_path(r'^api/v2.1/wiki2/multi-search/$', Wiki2MultiSearch.as_view(), name='api-v2.1-wiki2-multi-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     re_path(r'^api/v2.1/import-confluence/$', ImportConfluenceView.as_view(), name='api-v2.1-import-confluence'),
     ## user::drafts
