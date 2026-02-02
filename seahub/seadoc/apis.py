@@ -179,7 +179,12 @@ class SeadocUploadFile(APIView):
     def post(self, request, file_uuid):
         # jwt permission check
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -230,7 +235,12 @@ class SeadocUploadLink(APIView):
     def get(self, request, file_uuid):
         # jwt permission check
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -394,6 +404,10 @@ class SeadocUploadImage(APIView):
         if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         file_list = request.FILES.getlist('file')
         if not file_list or not isinstance(file_list, list):
@@ -423,7 +437,6 @@ class SeadocUploadImage(APIView):
         parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
 
         upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
-
         relative_path = []
         for file in file_list:
             file_path = posixpath.join(parent_path, file.name)
@@ -519,6 +532,10 @@ class SeadocUploadVideo(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if payload.get('permission') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         file_list = request.FILES.getlist('file')
         if not file_list or not isinstance(file_list, list):
             error_msg = 'Video can not be found.'
@@ -2890,7 +2907,12 @@ class SeadocEditorCallBack(APIView):
 
         # jwt permission check
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
