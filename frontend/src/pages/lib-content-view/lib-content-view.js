@@ -564,6 +564,13 @@ class LibContentView extends React.Component {
     ) {
       seafileAPI.listDir(repoID, '/').then(res => {
         const { dirent_list, user_perm } = res.data;
+
+        // in case a user without 'rw' permission visits 'trash' via the trash URL
+        const { currentMode } = this.state;
+        if (currentMode == TRASH && user_perm != 'rw') {
+          location.search = '';
+        }
+
         let tree = this.state.treeData;
         this.addResponseListToNode(dirent_list, tree.root);
         this.setState({
