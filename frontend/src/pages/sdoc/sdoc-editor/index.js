@@ -6,6 +6,7 @@ import Dirent from '../../../models/dirent';
 import { Utils } from '../../../utils/utils';
 import { useCollaborators } from '../../../metadata';
 import EmbeddedFileDetails from '../../../components/dirent-detail/embedded-file-details';
+import { mediaUrl } from '../../../utils/constants';
 import { useMetadataStatus } from '../../../hooks';
 
 import './index.css';
@@ -103,7 +104,7 @@ const SdocEditor = () => {
   const { repoID, docPath, docName, docPerm } = window.seafile;
   return (
     <>
-      <SimpleEditor isStarred={isStarred} isDraft={isDraft} plugins={plugins} collaborators={collaborators} showComment={true} />
+      <SimpleEditor isStarred={isStarred} isDraft={isDraft} plugins={plugins} collaborators={collaborators} showComment={true} mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'} />
       <ExternalOperations
         repoID={repoID}
         docPath={docPath}
