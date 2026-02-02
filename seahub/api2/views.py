@@ -97,7 +97,8 @@ from seahub.views import is_registered_user, check_folder_permission, \
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg, can_edit_file
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
     from seahub.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT, ai_search_files, \
-        RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos
+        RELATED_REPOS_PREFIX, SEARCH_REPOS_LIMIT, RELATED_REPOS_CACHE_TIMEOUT, format_repos, is_invisible_path, \
+        get_invisible_repos_info_by_username, USER_REPO_INVISIBLE_PATH_PREFIX, USER_REPO_INVISIBLE_PATH_CACHE_TIMEOUT
 from seahub.utils import HAS_OFFICE_CONVERTER, transfer_repo
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
@@ -570,6 +571,12 @@ class Search(APIView):
 
         username = request.user.username
         org_id = request.user.org.org_id if is_org_context(request) else None
+        invisible_path_cache_key = normalize_cache_key(username, USER_REPO_INVISIBLE_PATH_PREFIX)
+        repo_id_to_invisible_paths = cache.get(invisible_path_cache_key)
+        if repo_id_to_invisible_paths is None:
+            repo_id_to_invisible_paths = get_invisible_repos_info_by_username(username, org_id)
+            cache.set(invisible_path_cache_key, repo_id_to_invisible_paths, USER_REPO_INVISIBLE_PATH_CACHE_TIMEOUT)
+
         if HAS_FILE_SEARCH:
             repo_id_map = {}
             # check recourse and permissin when search in a single repo
@@ -610,8 +617,9 @@ class Search(APIView):
                 results, total = [], 0
                 return Response({"total": total, "results": results, "has_more": False})
 
+            new_results = []
             for e in results:
-                e.pop('repo', None)
+                repo = e.pop('repo', None)
                 e.pop('exists', None)
                 e.pop('last_modified_by', None)
                 e.pop('name_highlight', None)
@@ -619,9 +627,20 @@ class Search(APIView):
 
                 repo_id = e['repo_id']
 
+                fullpath = e.get('fullpath', '')
+                origin_full_path = fullpath
+                origin_repo_id = repo_id
+                if repo.origin_repo_id:
+                    origin_repo_id = repo.origin_repo_id
+                    origin_full_path = os.path.join(repo.origin_path + fullpath)
+
+                if is_invisible_path(repo_id_to_invisible_paths, origin_repo_id, origin_full_path):
+                    continue
+
                 if with_permission.lower() == 'true':
                     permission = check_folder_permission(request, repo_id, '/')
                     if not permission:
+                        # it should not happen
                         continue
                     e['permission'] = permission
 
@@ -641,8 +660,10 @@ class Search(APIView):
                     params = '?p={}&size={}'.format(quote(e.get('fullpath', '').encode('utf-8')), 72)
                     e['thumbnail_url'] = thumbnail_url + params
 
+                new_results.append(e)
+
             has_more = True if total > current_page * per_page else False
-            return Response({"total": total, "results": results, "has_more": has_more})
+            return Response({"total": total, "results": new_results, "has_more": has_more})
 
         elif HAS_FILE_SEASEARCH:
             if search_repo == 'all':
@@ -670,6 +691,7 @@ class Search(APIView):
             searched_repos, repos_map = format_repos(repos)
             results, total = ai_search_files(keyword, searched_repos, per_page, suffixes, search_path=search_path, obj_type=obj_type)
 
+            new_results = []
             for f in results:
                 repo_id = f['repo_id']
                 repo = repos_map.get(repo_id, None)
@@ -681,6 +703,11 @@ class Search(APIView):
                 f['repo_name'] = repo_name
                 f.pop('_id', None)
 
+                origin_repo_id = f['repo_id']
+                origin_full_path = f['fullpath']
+                if is_invisible_path(repo_id_to_invisible_paths, origin_repo_id, origin_full_path):
+                    continue
+
                 if origin_path:
                     if not f['fullpath'].startswith(origin_path):
                         # this operation will reduce the result items, but it will not happen now
@@ -689,7 +716,9 @@ class Search(APIView):
                         f['repo_id'] = real_repo_id
                         f['fullpath'] = f['fullpath'].split(origin_path)[-1]
 
-            return Response({"total": total, "results": results, "has_more": False})
+                new_results.append(f)
+
+            return Response({"total": total, "results": new_results, "has_more": False})
 
 
 class ItemsSearch(APIView):
