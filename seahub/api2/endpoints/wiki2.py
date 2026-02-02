@@ -29,7 +29,7 @@ from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
 from seahub.utils.db_api import SeafileDB
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki.models import Wiki as OldWiki
-from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiFileViews, Wiki2Settings
+from seahub.wiki2.models import WikiPageTrash, Wiki2Publish, WikiFileRepos, Wiki2Settings
 from seahub.repo_metadata.models import RepoMetadata
 from seahub.repo_metadata.metadata_server_api import list_metadata_view_records
 from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
@@ -1991,10 +1991,10 @@ class Wiki2LinkedReposView(APIView):
         try:
             wiki_settings.remove_linked_repo(repo_id)
             wiki_settings.save()
-            WikiFileViews.objects.filter(wiki_id=wiki_id, linked_repo_id=repo_id).delete()
+            WikiFileRepos.objects.filter(wiki_id=wiki_id, linked_repo_id=repo_id).delete()
 
-            for wiki_file_view in WikiFileViews.objects.filter(wiki_id=wiki_id):
-                WikiFileViews.objects.delete_views_by_repo_id(wiki_file_view.id, repo_id)
+            for wiki_file_repo in WikiFileRepos.objects.filter(wiki_id=wiki_id):
+                WikiFileRepos.objects.delete_views_by_repo_id(wiki_file_repo.id, repo_id)
         except Exception as e:
             logger.error(f'Error removing linked repo: {e}')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
@@ -2002,9 +2002,9 @@ class Wiki2LinkedReposView(APIView):
         return Response({"success": True})
     
 
-class Wiki2FileViews(APIView):
+class Wiki2FileRepos(APIView):
     '''
-    access all the records of wiki_file_views db
+    access all the records of wiki_file_repos db
     '''
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
@@ -2026,19 +2026,19 @@ class Wiki2FileViews(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            file_views = WikiFileViews.objects.filter(wiki_id=wiki_id)
+            file_repos = WikiFileRepos.objects.filter(wiki_id=wiki_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        file_views = [file_view.to_dict() for file_view in file_views]
-        return Response({'file_views': file_views})
+        file_repos = [file_repo.to_dict() for file_repo in file_repos]
+        return Response({'file_repos': file_repos})
     
     def post(self, request, wiki_id):
-        file_view_name = request.data.get('name')
-        if not file_view_name:
-            error_msg = 'file_view_name is invalid.'
+        file_repo_name = request.data.get('name')
+        if not file_repo_name:
+            error_msg = 'file_repo_name is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         view_name = request.data.get('view_name', 'Default view')
@@ -2058,23 +2058,23 @@ class Wiki2FileViews(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            file_view = WikiFileViews.objects.create_file_view(wiki_id, file_view_name, linked_repo_id, view_name)
+            file_repo = WikiFileRepos.objects.create_file_repo(wiki_id, file_repo_name, linked_repo_id, view_name)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response(file_view.to_dict())
+        return Response(file_repo.to_dict())
     
-class Wiki2FileView(APIView):
+class Wiki2FileRepo(APIView):
     '''
-    access all the records of wiki_file_views db
+    access all the records of wiki_file_repos db
     '''
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, wiki_id, file_view_id):
+    def get(self, request, wiki_id, file_repo_id):
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -2089,14 +2089,14 @@ class Wiki2FileView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        file_view = WikiFileViews.objects.filter(wiki_id=wiki_id, pk=file_view_id).first()
-        if not file_view:
+        file_repo = WikiFileRepos.objects.filter(wiki_id=wiki_id, pk=file_repo_id).first()
+        if not file_repo:
             error_msg = 'File view not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        return Response({'file_view': file_view.to_dict()})
+        return Response({'file_repo': file_repo.to_dict()})
 
-    def put(self, request, wiki_id, file_view_id):
+    def put(self, request, wiki_id, file_repo_id):
 
         name = request.data.get('name')
         linked_repo_id = request.data.get('linked_repo_id', None)
@@ -2126,32 +2126,32 @@ class Wiki2FileView(APIView):
         wiki_linked_repos = wiki_settings.get_linked_repos()
 
         try:
-            file_view = WikiFileViews.objects.filter(wiki_id=wiki_id, pk=file_view_id).first()
+            file_repo = WikiFileRepos.objects.filter(wiki_id=wiki_id, pk=file_repo_id).first()
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         
-        if not file_view:
+        if not file_repo:
             error_msg = 'File view not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
         if name:
-            if WikiFileViews.objects.filter(wiki_id=wiki_id, name=name).exclude(pk=file_view_id).exists():
+            if WikiFileRepos.objects.filter(wiki_id=wiki_id, name=name).exclude(pk=file_repo_id).exists():
                 error_msg = 'File view name %s already exists.' % name
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            file_view.name = name
-        if linked_repo_id and file_view.linked_repo_id != linked_repo_id:
+            file_repo.name = name
+        if linked_repo_id and file_repo.linked_repo_id != linked_repo_id:
             if linked_repo_id not in wiki_linked_repos:
                 error_msg = f'The repo {linked_repo_id} is not linked to wiki {wiki_id}.'
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-            file_view.linked_repo_id = linked_repo_id
-            file_view = file_view.refresh_views()
+            file_repo.linked_repo_id = linked_repo_id
+            file_repo = file_repo.refresh_views()
         
-        file_view.save()
-        return Response(file_view.to_dict())
+        file_repo.save()
+        return Response(file_repo.to_dict())
     
-    def delete(self, request, wiki_id, file_view_id):
+    def delete(self, request, wiki_id, file_repo_id):
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -2166,24 +2166,24 @@ class Wiki2FileView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        file_view = WikiFileViews.objects.filter(wiki_id=wiki_id, pk=file_view_id).first()
-        if not file_view:
+        file_repo = WikiFileRepos.objects.filter(wiki_id=wiki_id, pk=file_repo_id).first()
+        if not file_repo:
             error_msg = 'File view not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        file_view.delete()
+        file_repo.delete()
 
         return Response({'success': True})
     
-class Wiki2FileViewDuplicateView(APIView):
+class Wiki2FileRepoDuplicateView(APIView):
     '''
-    access all the records of wiki_file_views db
+    access all the records of wiki_file_repos db
     '''
     authentication_classes = (SdocJWTTokenAuthentication, TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
-    def post(self, request, wiki_id, file_view_id):
+    def post(self, request, wiki_id, file_repo_id):
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
             error_msg = "Wiki not found."
@@ -2198,14 +2198,14 @@ class Wiki2FileViewDuplicateView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        file_view = WikiFileViews.objects.filter(wiki_id=wiki_id, pk=file_view_id).first()
-        if not file_view:
+        file_repo = WikiFileRepos.objects.filter(wiki_id=wiki_id, pk=file_repo_id).first()
+        if not file_repo:
             error_msg = 'File view not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        new_file_view = WikiFileViews.objects.duplicate_file_view(file_view_id)
+        new_file_repo = WikiFileRepos.objects.duplicate_file_repo(file_repo_id)
         
-        return Response({'file_view': new_file_view.to_dict()})
+        return Response({'file_repo': new_file_repo.to_dict()})
 
         
 class Wiki2Views(APIView):
@@ -2218,10 +2218,10 @@ class Wiki2Views(APIView):
     throttle_classes = (UserRateThrottle, )
     
     def get(self, request, wiki_id):
-        file_view_id = request.data.get('file_view_id')
+        file_repo_id = request.data.get('file_repo_id')
         try:
-            file_view = WikiFileViews.objects.get(pk=file_view_id, wiki_id=wiki_id)
-        except WikiFileViews.DoesNotExist:
+            file_repo = WikiFileRepos.objects.get(pk=file_repo_id, wiki_id=wiki_id)
+        except WikiFileRepos.DoesNotExist:
             error_msg = "Wiki file view not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)  
         
@@ -2243,7 +2243,7 @@ class Wiki2Views(APIView):
         if not wiki_settings or not wiki_settings.enable_link_repos:
             return Response([])
         try:
-            wiki_views = WikiFileViews.objects.list_views(file_view_id)
+            wiki_views = WikiFileRepos.objects.list_views(file_repo_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2259,10 +2259,10 @@ class Wiki2Views(APIView):
         linked_repo_id = request.data.get('linked_repo_id')
         view_data = request.data.get('data', {})
 
-        file_view_id = request.data.get('file_view_id')
+        file_repo_id = request.data.get('file_repo_id')
         try:
-            file_view = WikiFileViews.objects.get(pk=file_view_id, wiki_id=wiki_id)
-        except WikiFileViews.DoesNotExist:
+            file_repo = WikiFileRepos.objects.get(pk=file_repo_id, wiki_id=wiki_id)
+        except WikiFileRepos.DoesNotExist:
             error_msg = "Wiki file view not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)  
 
@@ -2272,7 +2272,7 @@ class Wiki2Views(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         if not linked_repo_id:
-            linked_repo_id = file_view.linked_repo_id
+            linked_repo_id = file_repo.linked_repo_id
         
         wiki = Wiki.objects.get(wiki_id=wiki_id)
         if not wiki:
@@ -2299,7 +2299,7 @@ class Wiki2Views(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            new_view = WikiFileViews.objects.add_view(file_view_id, view_name, linked_repo_id, view_type, view_data)
+            new_view = WikiFileRepos.objects.add_view(file_repo_id, view_name, linked_repo_id, view_type, view_data)
             if not new_view:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'add view failed')
         except Exception as e:
@@ -2312,10 +2312,10 @@ class Wiki2Views(APIView):
     def put(self, request, wiki_id):
         # Update a wiki view, including rename
         # by a json data
-        file_view_id = request.data.get('file_view_id')
+        file_repo_id = request.data.get('file_repo_id')
         try:
-            file_view = WikiFileViews.objects.get(pk=file_view_id, wiki_id=wiki_id)
-        except WikiFileViews.DoesNotExist:
+            file_repo = WikiFileRepos.objects.get(pk=file_repo_id, wiki_id=wiki_id)
+        except WikiFileRepos.DoesNotExist:
             error_msg = "Wiki file view not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)  
         view_id = request.data.get('view_id', None)
@@ -2347,12 +2347,12 @@ class Wiki2Views(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
 
-        if view_id not in file_view.views_ids:
+        if view_id not in file_repo.views_ids:
             error_msg = 'view_id %s does not exists.' % view_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            WikiFileViews.objects.update_view(file_view_id, view_id, view_data)
+            WikiFileRepos.objects.update_view(file_repo_id, view_id, view_data)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2362,10 +2362,10 @@ class Wiki2Views(APIView):
 
     def delete(self, request, wiki_id):
 
-        file_view_id = request.data.get('file_view_id')
+        file_repo_id = request.data.get('file_repo_id')
         try:
-            file_view = WikiFileViews.objects.get(pk=file_view_id, wiki_id=wiki_id)
-        except WikiFileViews.DoesNotExist:
+            file_repo = WikiFileRepos.objects.get(pk=file_repo_id, wiki_id=wiki_id)
+        except WikiFileRepos.DoesNotExist:
             error_msg = "Wiki file view not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)  
         # Delete a wiki view
@@ -2394,12 +2394,12 @@ class Wiki2Views(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check view exist
-        if view_id not in file_view.views_ids:
+        if view_id not in file_repo.views_ids:
             error_msg = 'view_id %s does not exists.' % view_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            WikiFileViews.objects.delete_view(file_view_id, view_id)
+            WikiFileRepos.objects.delete_view(file_repo_id, view_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2412,14 +2412,14 @@ class Wiki2View(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
     
-    def get(self, request, wiki_id, file_view_id):
+    def get(self, request, wiki_id, file_repo_id):
         view_id = request.data.get('view_id', None)
         if not view_id:
             error_msg = 'view_id is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         try:
-            file_view = WikiFileViews.objects.get(pk=file_view_id, wiki_id=wiki_id)
-        except WikiFileViews.DoesNotExist:
+            file_repo = WikiFileRepos.objects.get(pk=file_repo_id, wiki_id=wiki_id)
+        except WikiFileRepos.DoesNotExist:
             error_msg = "Wiki file view not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -2441,11 +2441,11 @@ class Wiki2View(APIView):
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        if view_id not in file_view.views_ids:
+        if view_id not in file_repo.views_ids:
             error_msg = 'view_id %s does not exists.' % view_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         try:
-            view = WikiFileViews.objects.get_view(file_view_id, view_id)
+            view = WikiFileRepos.objects.get_view(file_repo_id, view_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
@@ -2460,17 +2460,17 @@ class Wiki2ViewDuplicateView(APIView):
     
     def post(self, request, wiki_id):
         view_id = request.data.get('view_id', None)
-        file_view_id = request.data.get('file_view_id', None)
+        file_repo_id = request.data.get('file_repo_id', None)
         if not view_id:
             error_msg = 'view_id is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-        if not file_view_id:
-            error_msg = 'file_view_id is invalid.'
+        if not file_repo_id:
+            error_msg = 'file_repo_id is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            file_view = WikiFileViews.objects.get(pk=file_view_id, wiki_id=wiki_id)
-        except WikiFileViews.DoesNotExist:
+            file_repo = WikiFileRepos.objects.get(pk=file_repo_id, wiki_id=wiki_id)
+        except WikiFileRepos.DoesNotExist:
             error_msg = "Wiki file view not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -2492,12 +2492,12 @@ class Wiki2ViewDuplicateView(APIView):
             error_msg = f'The wiki link repos is disabled for wiki {wiki_id}.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         
-        if view_id not in file_view.views_ids:
+        if view_id not in file_repo.views_ids:
             error_msg = 'view_id %s does not exists.' % view_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         
         try:
-            new_view = WikiFileViews.objects.duplicate_view(file_view_id, view_id)
+            new_view = WikiFileRepos.objects.duplicate_view(file_repo_id, view_id)
             if not new_view:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'duplicate view failed')
         except Exception as e:
@@ -2507,12 +2507,12 @@ class Wiki2ViewDuplicateView(APIView):
         
         return Response({'view': new_view})
 
-class Wiki2FileViewRecords(APIView):
+class Wiki2FileRepoViewRecords(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
     
-    def get(self, request, wiki_id, file_view_id):
+    def get(self, request, wiki_id, file_repo_id):
         view_id = request.GET.get('view_id', None)
         start = request.GET.get('start', 0)
         limit = request.GET.get('limit', 1000)
@@ -2535,8 +2535,8 @@ class Wiki2FileViewRecords(APIView):
             error_msg = 'view_id is invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         try:
-            file_view = WikiFileViews.objects.get(pk=file_view_id, wiki_id=wiki_id)
-        except WikiFileViews.DoesNotExist:
+            file_repo = WikiFileRepos.objects.get(pk=file_repo_id, wiki_id=wiki_id)
+        except WikiFileRepos.DoesNotExist:
             error_msg = "Wiki file view not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -2561,7 +2561,7 @@ class Wiki2FileViewRecords(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            view = WikiFileViews.objects.get_view(file_view_id, view_id)
+            view = WikiFileRepos.objects.get_view(file_repo_id, view_id)
         except Exception as e:
             logger.exception(e)
             error_msg = 'Internal Server Error'
