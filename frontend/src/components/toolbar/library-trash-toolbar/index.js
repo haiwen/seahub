@@ -1,10 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Search from '../../components/library-trash-search';
-import { gettext, enableUserCleanTrash, username } from '../../utils/constants';
-import CleanTrash from '../../components/dialog/clean-trash';
-import ModalPortal from '../../components/modal-portal';
-import { EVENT_BUS_TYPE } from '../../metadata/constants';
+import Search from './library-trash-search';
+import { gettext, enableUserCleanTrash, username } from '../../../utils/constants';
+import CleanTrash from '../../../components/dialog/clean-trash';
+import ModalPortal from '../../../components/modal-portal';
+import { EVENT_BUS_TYPE } from '../../../metadata/constants';
 
 const LibraryTrashToolbar = ({ repoID, currentRepoInfo }) => {
   let [showFolder, setShowFolder] = useState(false);
