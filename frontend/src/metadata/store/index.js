@@ -173,8 +173,7 @@ class Store {
     data.showFolder = false;
     data.canSearch = true;
     data.recordsCount = data.row_ids.length;
-    // data.hasMore = res.data.total_count > TRASH_PER_PAGE * page;
-    data.hasMore = false;
+    data.hasMore = res.data.total_count > TRASH_PER_PAGE * page;
     data.page = page;
     this.data = data;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
