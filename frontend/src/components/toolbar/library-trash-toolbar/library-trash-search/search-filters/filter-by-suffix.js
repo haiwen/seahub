@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Dropdown, DropdownMenu, DropdownToggle } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -27,19 +27,13 @@ const FilterBySuffix = ({ suffixes, onChange }) => {
       setIsOpen(false);
       onChange(SEARCH_FILTERS_KEY.SUFFIXES, inputValue.replace(/\./g, ''));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [inputValue, onChange]);
 
   const handleClearInput = useCallback(() => {
     setInputValue('');
     setIsOpen(false);
-  }, []);
-
-  useEffect(() => {
-    if (!isOpen && inputValue !== suffixes) {
-      onChange(SEARCH_FILTERS_KEY.SUFFIXES, inputValue.replace(/\./g, ''));
-    }
-  }, [isOpen, inputValue, suffixes, onChange]);
+    onChange(SEARCH_FILTERS_KEY.SUFFIXES, '');
+  }, [onChange]);
 
   return (
     <div className="search-filter filter-by-suffix-container">
