@@ -25,8 +25,8 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
   const [highlightIndex, setHighlightIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const [isResultGotten, setIsResultGotten] = useState(false);
-  let searchResultListContainerRef = useRef(null);
-  let highlightRef = useRef(null);
+  const searchResultListContainerRef = useRef(null);
+  const highlightRef = useRef(null);
 
   const onDocumentKeyDown = useCallback((e) => {
     if (!isModalOpen && isHotkey('mod+k')(e)) {
@@ -156,6 +156,18 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
     setResults([]);
   }, []);
 
+  const onHighlightIdx = useCallback((idx) => {
+    setHighlightIndex(idx);
+  }, []);
+
+  const onItemClick = useCallback((e, item) => {
+    if (!item.page || item.page.id === getCurrentPageId()) {
+      return;
+    }
+    setCurrentPage(item.page.id);
+    resetToDefault();
+  }, [getCurrentPageId, resetToDefault, setCurrentPage]);
+
   return (
     <>
       <Button className="wiki2-search border-0 p-0 font-weight-normal" onClick={() => setIsModalOpen(true)}>
@@ -167,7 +179,7 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
       {isModalOpen &&
         <Modal className="wiki2-search-modal" isOpen={isModalOpen} toggle={resetToDefault} autoFocus={false} size='lg'>
           <ModalBody>
-            <div className="wiki2-search-input mb-4 position-relative">
+            <div className="wiki2-search-input">
               <span className="d-flex align-items-center search-icon-left input-icon-addon">
                 <Icon symbol="search" />
               </span>
@@ -189,25 +201,38 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
                 aria-label={gettext('Close')}
               />
             </div>
-            <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) + 'px' }} ref={searchResultListContainerRef}>
+
+            <div className="seafile-divider"></div>
+
+            <div className="wiki2-search-result-container" style={{ maxHeight: (window.innerHeight - 200) }} ref={searchResultListContainerRef}>
               {isLoading && <Loading />}
               {(value === '' && !isResultGotten) &&
                 <p className='sf-tip-default d-flex justify-content-center'>{gettext('Type characters to start search')}</p>}
               {(value !== '' && isResultGotten && results.length === 0) &&
                 <p className='sf-tip-default d-flex justify-content-center'>{gettext('No result')}</p>}
-              {results.map((result, index) => {
-                return (
-                  <Wiki2SearchResult
-                    result={result}
-                    key={result._id}
-                    getCurrentPageId={getCurrentPageId}
-                    setCurrentPage={setCurrentPage}
-                    resetToDefault={resetToDefault}
-                    isHighlight={highlightIndex === index}
-                    setRef={highlightIndex === index ? (ref) => {highlightRef.current = ref;} : () => {}}
-                  />
-                );
-              })}
+              {results.length > 0 && (
+                <div className="wiki2-search-result mb-3">
+                  <h6 className="wiki2-search-result-header d-flex align-items-center mb-2">
+                    <span>{gettext('Wiki pages')}</span>
+                  </h6>
+                  <ul>
+                    {results.map((result, index) => {
+                      return (
+                        <Wiki2SearchResult
+                          key={result._id}
+                          index={index}
+                          result={result}
+                          highlightIndex={highlightIndex}
+                          onHighlightIdx={onHighlightIdx}
+                          getCurrentPageId={getCurrentPageId}
+                          onItemClick={onItemClick}
+                          setRef={highlightIndex === index ? (ref) => {highlightRef.current = ref;} : () => {}}
+                        />
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
             </div>
           </ModalBody>
         </Modal>

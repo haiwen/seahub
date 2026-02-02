@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import NavItemIcon from '../../pages/wiki2/common/nav-item-icon';
 import CustomIcon from '../../pages/wiki2/custom-icon';
 import { gettext } from '../../utils/constants';
 import Icon from '../icon';
@@ -9,50 +8,69 @@ import { Utils } from '../../utils/utils';
 
 import './wiki2-search-result.css';
 
-function Wiki2SearchResult({ result, getCurrentPageId, setCurrentPage, resetToDefault, setRef, isHighlight }) {
+function Wiki2SearchResult({ index, result, onItemClick, getCurrentPageId, setRef, highlightIndex, onHighlightIdx }) {
   const { content, page, title } = result;
-  const currentPageId = getCurrentPageId();
-  const isCurrentPage = currentPageId === page.id;
+  const isCurrentPage = getCurrentPageId && getCurrentPageId() === result.page?.id;
+  const isHighlighted = highlightIndex === index;
+  const key = result._id || result.doc_uuid;
+
+  const onMouseEnter = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onHighlightIdx(index);
+  }, [index, onHighlightIdx]);
+
   return (
-    <div
-      className={classNames('wiki2-search-result', { 'wiki2-search-result-highlight': isHighlight })}
-      onClick={() => { setCurrentPage(page.id); resetToDefault(); }}
+    <li
+      key={key}
+      className={classNames('wiki2-search-result-item', { 'wiki2-search-result-item-highlight': isHighlighted })}
+      onClick={(e) => onItemClick(e, result)}
       ref={ref => setRef(ref)}
       tabIndex={0}
       role="option"
-      aria-selected={isHighlight}
+      aria-selected={isHighlighted}
       onKeyDown={Utils.onKeyDown}
+      onMouseEnter={onMouseEnter}
     >
-      <div className='wiki2-search-result-top d-flex align-items-center'>
-        {page.icon ? <CustomIcon icon={page.icon} /> : <NavItemIcon symbol={'file'} disable={true} />}
-        <span className='wiki2-search-result-page-name text-truncate' title={page.name} style={isCurrentPage ? { width: 'auto' } : { width: 700 }}>
-          {title ? <span dangerouslySetInnerHTML={{ __html: title }}></span> : page.name}
-        </span>
-        {isCurrentPage ?
-          <span className='wiki2-search-result-current'>{gettext('Current page')}</span> :
-          <span className="wiki2-search-result-enter">
-            <Icon symbol="enter" style={isHighlight ? { opacity: 1 } : {}} />
-          </span>
-        }
+      <div className="wiki2-search-result-icon">
+        {result.page?.icon ? <CustomIcon icon={page.icon} /> : <Icon symbol="wiki-file" />}
       </div>
-      {content ?
-        <div className='wiki2-search-result-bottom'>
-          <p dangerouslySetInnerHTML={{ __html: content }} ></p>
+
+      <div className="wiki2-search-result-content">
+        <div className="wiki2-search-result-title text-truncate" title={title}>
+          {title ? <div dangerouslySetInnerHTML={{ __html: title }}></div> : (page && page.name || gettext('Untitled'))}
+          {isCurrentPage && (
+            <div className="wiki2-search-result-current">{gettext('Current page')}</div>
+          )}
         </div>
-        :
-        <div className='py-1'></div>
-      }
-    </div>
+
+        {!page && ( // Don't show path when current page is searched, as it's meaningless
+          <div className="wiki2-search-result-path text-truncate">
+            {result.wiki_name ? (
+              <span title={result.wiki_name}>
+                {result.wiki_name} / <span dangerouslySetInnerHTML={{ __html: result.title }}></span>
+              </span>
+            ) : ''}
+          </div>
+        )}
+        {content && (
+          <div className='wiki2-search-result-summary'>
+            <p className="m-0" dangerouslySetInnerHTML={{ __html: content }} ></p>
+          </div>
+        )}
+      </div>
+    </li>
   );
 }
 
 Wiki2SearchResult.propTypes = {
+  index: PropTypes.number.isRequired,
   result: PropTypes.object.isRequired,
-  getCurrentPageId: PropTypes.func.isRequired,
-  setCurrentPage: PropTypes.func.isRequired,
-  resetToDefault: PropTypes.func.isRequired,
+  highlightIndex: PropTypes.number.isRequired,
+  onHighlightIdx: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
   setRef: PropTypes.func.isRequired,
-  isHighlight: PropTypes.bool.isRequired,
+  currentPageId: PropTypes.string,
 };
 
 export default Wiki2SearchResult;

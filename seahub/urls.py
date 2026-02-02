@@ -217,10 +217,10 @@ from seahub.api2.endpoints.repo_related_users import RepoRelatedUsersView
 from seahub.api2.endpoints.repo_auto_delete import RepoAutoDeleteView
 from seahub.seadoc.views import sdoc_revision, sdoc_revisions, sdoc_to_docx, sdoc_preview
 from seahub.ocm.settings import OCM_ENDPOINT
-from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view, wiki_repo_view
+from seahub.wiki2.views import wiki_view, wiki_publish_view, wiki_history_view, wiki_repo_view, wiki_search_result_view
 from seahub.api2.endpoints.wiki2 import Wiki2FileView, Wiki2FileViewDuplicateView, Wiki2FileViews, Wikis2View, Wiki2View, Wiki2ConfigView, Wiki2PagesView, Wiki2PageView, \
     Wiki2DuplicatePageView, WikiPageTrashView, Wiki2PublishView, Wiki2PublishConfigView, Wiki2PublishPageView, \
-    WikiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView, \
+    WikiSearch, Wiki2MultiSearch, WikiConvertView, WikiPageExport, ImportConfluenceView, Wiki2ImportPageView, \
     Wiki2SettingsView, Wiki2LinkedReposView, Wiki2FileViewRecords
 from seahub.api2.endpoints.subscription import SubscriptionView, SubscriptionPlansView, SubscriptionLogsView
 from seahub.api2.endpoints.user_list import UserListView
@@ -629,6 +629,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-views/(?P<file_view_id>\d+)/duplicate/$', Wiki2FileViewDuplicateView.as_view(), name='api-v2.1-wiki2-file-view-duplicate'),
     re_path(r'^api/v2.1/wiki2/(?P<wiki_id>[-0-9a-f]{36})/file-view/(?P<file_view_id>\d+)/records/$', Wiki2FileViewRecords.as_view(), name='api-v2.1-wiki2-metadata-records'),
     re_path(r'^api/v2.1/wiki2/search/$', WikiSearch.as_view(), name='api-v2.1-wiki2-search'),
+    re_path(r'^api/v2.1/wiki2/multi-search/$', Wiki2MultiSearch.as_view(), name='api-v2.1-wiki2-multi-search'),
     re_path(r'^api/v2.1/convert-wiki/$', WikiConvertView.as_view(), name='api-v2.1-wiki-convert'),
     re_path(r'^api/v2.1/import-confluence/$', ImportConfluenceView.as_view(), name='api-v2.1-import-confluence'),
     ## user::drafts
@@ -822,6 +823,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/admin/wikis/$', AdminWikis.as_view(), name='api-v2.1-admin-wikis'),
 
     re_path(r'^wikis/(?P<wiki_id>[^/]+)/$', wiki_view, name='wiki'),
+    re_path(r'^wikis/(?P<wiki_id>[^/]+)/(?P<doc_uuid>[-0-9a-f]{36})/$', wiki_search_result_view, name='wiki-search-result'),
     re_path(r'^wikis/(?P<wiki_id>[^/]+)/(?P<page_id>[-0-9a-zA-Z]{4})/$', wiki_view, name='wiki'),
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/$', wiki_publish_view, name='wiki-publish'),
     re_path(r'^wiki/publish/(?P<publish_url>[-0-9a-zA-Z]+)/(?P<page_id>[-0-9a-zA-Z]{4})/$', wiki_publish_view, name='wiki-publish'),

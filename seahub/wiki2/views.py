@@ -8,8 +8,9 @@ from datetime import datetime
 from constance import config
 from seaserv import seafile_api
 
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from seahub.api2.endpoints.repos import ReposView
 from seahub.wiki2.models import Wiki2 as Wiki
@@ -20,7 +21,7 @@ from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
 from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
-from seahub.settings import SEADOC_SERVER_URL
+from seahub.settings import SEADOC_SERVER_URL, SITE_ROOT
 from seahub.seadoc.utils import gen_seadoc_access_token
 
 # Get an instance of a logger
@@ -242,3 +243,33 @@ def wiki_repo_view(request, wiki_id, view_id):
         'view_id': view_id,
         'repo_id': repo_id,
     })
+
+
+@login_required
+def wiki_search_result_view(request, wiki_id, doc_uuid):
+    """Redirect /wikis/<wiki_id>/<doc_uuid>/ to /wikis/<wiki_id>/<page_id>/
+    by looking up doc_uuid in wiki config.
+    """
+    wiki = Wiki.objects.get(wiki_id=wiki_id)
+    if not wiki:
+        raise Http404
+
+    username = request.user.username
+
+    # perm check
+    if not check_wiki_permission(wiki, username):
+        return render_permission_error(request, 'Permission denied.')
+
+    wiki_config = get_wiki_config(wiki.repo_id, username)
+    pages = wiki_config.get('pages', [])
+
+    page_id = None
+    for page in pages:
+        if page.get('docUuid') == doc_uuid:
+            page_id = page.get('id')
+            break
+    if not page_id:
+        raise Http404
+
+    redirect_url = reverse('wiki', args=[wiki_id, page_id])
+    return HttpResponseRedirect(redirect_url)
