@@ -298,18 +298,17 @@ def get_invisible_repos_info_by_username(username, org_id):
     seafile_db_api = SeafileDB()
     repo_id_to_invisible_path_set = {}
 
-    user_repo_invisible_path_set = seafile_db_api.get_share_to_user_invisible_repos_info(username)
+    user_repo_to_invisible_path_set = seafile_db_api.get_share_to_user_invisible_repos_info(username)
     group_ids = get_user_group_ids(username, org_id)
-    group_repo_invisible_path_set = seafile_db_api.get_share_to_group_invisible_repos_info_by_group_ids(group_ids)
-
-    for repo_id, path_set in user_repo_invisible_path_set.items():
-        group_invisible_path_set = group_repo_invisible_path_set.get(repo_id)
+    group_repo_to_invisible_path_set = seafile_db_api.get_share_to_group_invisible_repos_info_by_group_ids(group_ids)
+    for repo_id, path_set in user_repo_to_invisible_path_set.items():
+        group_invisible_path_set = group_repo_to_invisible_path_set.get(repo_id)
         if group_invisible_path_set:
             path_set.update(group_invisible_path_set)
-            group_repo_invisible_path_set.pop(repo_id)
+            group_repo_to_invisible_path_set.pop(repo_id)
         repo_id_to_invisible_path_set[repo_id] = path_set
 
-    repo_id_to_invisible_path_set.update(group_repo_invisible_path_set)
+    repo_id_to_invisible_path_set.update(group_repo_to_invisible_path_set)
 
     return repo_id_to_invisible_path_set
 
