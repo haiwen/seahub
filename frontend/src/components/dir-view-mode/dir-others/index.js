@@ -4,7 +4,6 @@ import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../../constants';
 import TreeSection from '../../tree-section';
-import TrashDialog from '../../dialog/trash-dialog';
 import LibSettingsDialog from '../../dialog/lib-settings';
 import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
@@ -34,7 +33,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
   }, [repoID, repoName]);
 
   const visitTrash = useCallback(() => {
-    // if (isSelected) return;
     const node = {
       children: [],
       path: '/' + PRIVATE_FILE_TYPE.TRASH,
@@ -61,11 +59,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
       unsubscribeUnselectFiles();
     };
   });
-
-  const [showTrashDialog, setShowTrashDialog] = useState(false);
-  const toggleTrashDialog = () => {
-    setShowTrashDialog(!showTrashDialog);
-  };
 
   const handleHistoryClick = () => {
     const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoName) + '/?history=true';
@@ -96,13 +89,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
       )}
       {userPerm == 'rw' && (
         <Item
-          text={gettext('previous Trash')}
-          iconSymbol="trash"
-          op={toggleTrashDialog}
-        />
-      )}
-      {userPerm == 'rw' && (
-        <Item
           text={gettext('Trash')}
           iconSymbol="trash"
           op={visitTrash}
@@ -121,14 +107,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
         <LibraryMoreOperations
           repo={currentRepoInfo}
           updateRepoInfo={updateRepoInfo}
-        />
-      )}
-      {showTrashDialog && (
-        <TrashDialog
-          repoID={repoID}
-          currentRepoInfo={currentRepoInfo}
-          showTrashDialog={showTrashDialog}
-          toggleTrashDialog={toggleTrashDialog}
         />
       )}
       {isSettingsDialogOpen && (
