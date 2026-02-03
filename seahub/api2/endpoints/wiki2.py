@@ -2497,8 +2497,7 @@ class Wiki2FileRepoViewRecords(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
     
-    def get(self, request, wiki_id, file_repo_id):
-        view_id = request.GET.get('view_id', None)
+    def get(self, request, wiki_id, file_repo_id, view_id):
         start = request.GET.get('start', 0)
         limit = request.GET.get('limit', 1000)
         try:
