@@ -8,7 +8,7 @@ import { DiffViewer } from '@seafile/seafile-sdoc-editor';
 import dayjs from 'dayjs';
 import { seafileAPI } from '../../../utils/seafile-api';
 import SDocServerApi from '../../../utils/sdoc-server-api';
-import { PER_PAGE, gettext, historyRepoID } from '../../../utils/constants';
+import { PER_PAGE, gettext, historyRepoID, mediaUrl } from '../../../utils/constants';
 import Loading from '../../../components/loading';
 import GoBack from '../../../components/common/go-back';
 import SidePanel from './side-panel';
@@ -398,6 +398,7 @@ class SdocFileHistory extends React.Component {
 
   render() {
     const { currentVersion, isShowChanges, currentVersionContent, lastVersionContent, isLoading, isMobile, sidePanelInitData, showSidePanel } = this.state;
+    const mathJaxSource = mediaUrl + 'js/mathjax/tex-svg.js';
     return (
       <div className={`sdoc-file-history d-flex ${isMobile ? 'mobile' : ''}`}>
         <div className="sdoc-file-history-container d-flex flex-column">
@@ -422,6 +423,7 @@ class SdocFileHistory extends React.Component {
                     currentContent={currentVersionContent}
                     lastContent={isShowChanges ? lastVersionContent : ''}
                     didMountCallback={this.setDiffCount}
+                    mathJaxSource={mathJaxSource}
                   />
                 }
                 {

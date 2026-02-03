@@ -5,6 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './_i18n/i18n-sdoc-editor';
 import Loading from './components/loading';
 import { Utils } from './utils/utils';
+import { mediaUrl } from './utils/constants';
 
 const { serviceURL, siteRoot, avatarURL } = window.app.config;
 const { shareLinkUsername: username } = window.shared.pageOptions;
@@ -52,8 +53,8 @@ const root = createRoot(document.getElementById('wrapper'));
 root.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
-      {!canEdit && <SimpleViewer />}
-      {canEdit && <ShareLinkEditor showComment={false} collaborators={[]}/>}
+      {!canEdit && <SimpleViewer mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'} />}
+      {canEdit && <ShareLinkEditor showComment={false} collaborators={[]} mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'} />}
     </Suspense>
   </I18nextProvider>
 );
