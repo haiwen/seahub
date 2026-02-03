@@ -6,6 +6,11 @@ import Icon from '@/components/icon';
 import { gettext } from '@/utils/constants';
 import { getEventClassName } from '@/utils/dom';
 import ColumnTypeDropdownMenu from '@/metadata/components/popover/column-popover/column-type-dropdown-menu';
+import { useMetadataView } from '@/metadata/hooks/metadata-view';
+import { ValidateColumnFormFields } from '@/metadata/components/popover/column-popover/utils';
+import { COMMON_FORM_FIELD_TYPE } from '@/metadata/components/popover/column-popover/constants';
+import toaster from '@/components/toast';
+import { getColumnDisplayName } from '@/metadata/utils/column';
 
 import './index.css';
 
@@ -13,6 +18,8 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
   const [isColumnMenuOpen, setColumnMenuOpen] = useState(false);
   const [isColumnPopoverShow, setColumnPopoverShow] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState(null);
+
+  const { metadata } = useMetadataView();
 
   const id = useMemo(() => 'sf-metadata-add-column', []);
 
@@ -47,11 +54,17 @@ const InsertColumn = ({ lastColumn, height, groupOffsetLeft, insertColumn: inser
     setColumnMenuOpen(false);
     setSelectedColumn(column);
     if (column.groupby === 'predefined' && !column.canSetData) {
+      const columnName = getColumnDisplayName(column.key, column.name);
+      const columnNameError = ValidateColumnFormFields[COMMON_FORM_FIELD_TYPE.COLUMN_NAME]({ columnName, metadata, gettext });
+      if (columnNameError) {
+        toaster.danger(columnNameError.tips);
+        return;
+      }
       handleSubmit(column.key, column.type, { key: column.key, data: column.data || {} });
       return;
     }
     setColumnPopoverShow(true);
-  }, [handleSubmit]);
+  }, [handleSubmit, metadata]);
 
   const handleClickOutside = useCallback((event) => {
     if (!isColumnPopoverShow) return;
