@@ -14,7 +14,7 @@ const propTypes = {
   onShowSidePanel: PropTypes.func,
   onSearchedClick: PropTypes.func,
   searchPlaceholder: PropTypes.string,
-  showSearch: PropTypes.bool,
+  searchType: PropTypes.string, // 'files' or 'wikis'
   isSidePanelFolded: PropTypes.bool,
 };
 class Header extends React.Component {
@@ -26,7 +26,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { onShowSidePanel, onSearchedClick, showSearch, children } = this.props;
+    const { onShowSidePanel, onSearchedClick, children } = this.props;
     return (
       <div id="header" className="top-header d-flex justify-content-between flex-shrink-0" onMouseEnter={this.onMouseEnter}>
         <div className={'flex-shrink-0 d-none d-md-flex'}>
@@ -40,7 +40,7 @@ class Header extends React.Component {
             {children}
           </div>
           <CommonToolbar
-            showSearch={showSearch}
+            searchType={this.props.searchType}
             searchPlaceholder={this.props.searchPlaceholder}
             onSearchedClick={onSearchedClick}
             eventBus={this.props.eventBus}

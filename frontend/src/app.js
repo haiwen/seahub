@@ -287,6 +287,8 @@ class App extends Component {
         flex: sidePanelRate ? `0 0 ${sidePanelRate * 100}%` : `0 0 ${INIT_SIDE_PANEL_RATE * 100}%`,
       };
     }
+    const isWikisPage = window.location.pathname.includes('/published');
+    const searchType = isWikisPage ? 'wikis' : 'files';
     return (
       <React.Fragment>
         <SystemNotification />
@@ -298,6 +300,7 @@ class App extends Component {
           onSearchedClick={this.onSearchedClick}
           eventBus={this.eventBus}
           isSidePanelFolded={isSidePanelFolded}
+          searchType={searchType}
         />
         <div
           id="main"

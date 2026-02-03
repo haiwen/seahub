@@ -1493,17 +1493,24 @@ class Wiki2MultiSearch(APIView):
         if HAS_FILE_SEARCH:
             try:
                 results = search_wikis(wiki_ids, query, count)
+                total = len(results)
             except Exception as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-            return Response({"results": results})
         elif HAS_FILE_SEASEARCH:
             try:
                 results, total = ai_search_wikis(params)
             except Exception as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if not results:
+             return Response({"results": [], "total": 0})
+
+        if HAS_FILE_SEASEARCH:
             return Response({"results": results, "total": total})
+        
+        return Response({"results": results})
 
 class WikiConvertView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
