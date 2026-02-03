@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import tempfile
 import uuid
 import stat
 import logging
@@ -3121,15 +3122,11 @@ class SeadocExportView(APIView):
 
 
 class SdocImportView(APIView):
-    authentication_classes = (TokenAuthentication, CsrfExemptSessionAuthentication)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request, repo_id):
-        # use TemporaryFileUploadHandler, which contains TemporaryUploadedFile
-        # TemporaryUploadedFile has temporary_file_path() method
-        # in order to change upload_handlers, we must exempt csrf check
-        request.upload_handlers = [TemporaryFileUploadHandler(request=request)]
         username = request.user.username
         relative_path = request.data.get('relative_path', '/').strip('/')
         parent_dir = request.data.get('parent_dir', '/')
@@ -3146,9 +3143,11 @@ class SdocImportView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         filename = file.name
-        uploaded_temp_path = file.temporary_file_path()
         extension = filename.split('.')[-1].lower()
-
+        with tempfile.NamedTemporaryFile(suffix='.sdoczip', delete=False, mode='wb') as tmp_f:
+            for chunk in file.chunks():
+                tmp_f.write(chunk)
+            uploaded_temp_path = tmp_f.name
         if not (extension == 'sdoczip' and is_zipfile(uploaded_temp_path)):
             error_msg = 'file format not supported.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -3234,6 +3233,9 @@ class SdocImportView(APIView):
         # remove tmp file
         if os.path.exists(tmp_extracted_path):
             shutil.rmtree(tmp_extracted_path)
+        
+        if os.path.exists(uploaded_temp_path):
+            os.unlink(uploaded_temp_path)
 
         return Response({'success': True})
 
