@@ -44,16 +44,23 @@ class ListCreatedFileDialog extends React.Component {
             <tbody>
               {
                 (activity.createdFilesList || activity.details || []).map((item, index) => {
-                  let repoID = item.repo_id || activity.repo_id;
                   let name = item.name || (item.path ? item.path.split('/').pop() : '');
-                  let fileURL = `${siteRoot}lib/${repoID}/file${Utils.encodePath(item.path)}`;
-                  let fileLink = <a href={fileURL} target='_blank' rel="noreferrer">{name}</a>;
-                  if (name.endsWith('(draft).md')) { // be compatible with the existing draft files
-                    fileLink = name;
+                  let displayName;
+                  // For batch_delete, show plain text without link as the file no longer exists
+                  if (activity.op_type === 'batch_delete') {
+                    displayName = name;
+                  } else {
+                    let repoID = item.repo_id || activity.repo_id;
+                    let fileURL = `${siteRoot}lib/${repoID}/file${Utils.encodePath(item.path)}`;
+                    displayName = <a href={fileURL} target='_blank' rel="noreferrer">{name}</a>;
+                    // be compatible with the existing draft files
+                    if (name.endsWith('(draft).md')) {
+                      displayName = name;
+                    }
                   }
                   return (
                     <tr key={index}>
-                      <td>{fileLink}</td>
+                      <td>{displayName}</td>
                       <td>{dayjs(item.time || activity.time).fromNow()}</td>
                     </tr>
                   );
