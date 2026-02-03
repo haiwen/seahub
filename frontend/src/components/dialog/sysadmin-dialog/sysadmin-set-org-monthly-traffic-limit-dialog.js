@@ -43,6 +43,11 @@ class SysAdminSetOrgMonthlyTrafficLimitDialog extends React.Component {
     this.toggle();
   };
 
+  handleUnset = () => {
+    this.props.updateMonthlyTrafficLimit(0);
+    this.toggle();
+  };
+
   render() {
     const { traffic, isSubmitBtnActive } = this.state;
     return (
@@ -62,10 +67,9 @@ class SysAdminSetOrgMonthlyTrafficLimitDialog extends React.Component {
                 <InputGroupText>MB</InputGroupText>
               </InputGroup>
               <p className="small text-secondary mt-2 mb-2">
-                {gettext('An integer that is greater than or equal to 0.')}
-                <br />
-                {gettext('Tip: 0 means not set manually.')}
+                {gettext('An integer that is greater than 0.')}
               </p>
+              <Button color="secondary" onClick={this.handleUnset}>{gettext('Unset')}</Button>
             </FormGroup>
           </Form>
         </ModalBody>

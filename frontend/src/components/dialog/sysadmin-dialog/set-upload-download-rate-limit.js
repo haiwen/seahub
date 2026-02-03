@@ -44,6 +44,11 @@ class SysAdminSetUploadDownloadRateLimitDialog extends React.Component {
     this.toggle();
   };
 
+  handleUnset = () => {
+    this.props.updateUploadDownloadRateLimit(this.props.uploadOrDownload, 0);
+    this.toggle();
+  };
+
   render() {
     const { rateLimit, isSubmitBtnActive } = this.state;
     return (
@@ -63,10 +68,9 @@ class SysAdminSetUploadDownloadRateLimitDialog extends React.Component {
                 <InputGroupText>kB/s</InputGroupText>
               </InputGroup>
               <p className="small text-secondary mt-2 mb-2">
-                {gettext('An integer that is greater than or equal to 0.')}
-                <br />
-                {gettext('Tip: 0 means default limit')}
+                {gettext('An integer that is greater than 0.')}
               </p>
+              <Button color="secondary" onClick={this.handleUnset}>{gettext('Unset')}</Button>
             </FormGroup>
           </Form>
         </ModalBody>

@@ -621,10 +621,10 @@ class SystemAdminAPI {
     if (orgInfo.maxUserNumber) {
       formData.append('max_user_number', orgInfo.maxUserNumber);
     }
-    if (orgInfo.quota) {
+    if (orgInfo.quota != undefined) {
       formData.append('quota', orgInfo.quota);
     }
-    if (orgInfo.monthlyTrafficLimit) {
+    if (orgInfo.monthlyTrafficLimit != undefined) {
       formData.append('monthly_traffic_limit', orgInfo.monthlyTrafficLimit);
     }
     if (orgInfo.role) {
