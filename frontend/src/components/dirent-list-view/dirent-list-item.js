@@ -960,7 +960,7 @@ class DirentListItem extends React.Component {
           <div className="dirent-property dirent-property-last-modifier">
             <Formatter
               field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }}
-              value={dirent[PRIVATE_COLUMN_KEY.LAST_MODIFIER]}
+              value={dirent[PRIVATE_COLUMN_KEY.FILE_MODIFIER]}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
             />

@@ -65,8 +65,8 @@ class Dirent {
       if (json._file_creator) {
         this._file_creator = json._file_creator;
       }
-      if (json._last_modifier) {
-        this._last_modifier = json._last_modifier;
+      if (json._file_modifier) {
+        this._file_modifier = json._file_modifier;
       }
       if (json._status) {
         this._status = json._status;

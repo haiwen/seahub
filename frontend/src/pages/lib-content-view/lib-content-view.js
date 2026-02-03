@@ -39,7 +39,7 @@ import { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import { normalizeColumns } from '@/metadata/utils/column';
 import Column from '@/metadata/model/column';
-import { DIR_COLUMN_KEYS, DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS } from '@/constants/dir-column-visibility';
+import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS } from '@/constants/dir-column-visibility';
 import { getColumnOptionNameById } from '@/metadata/utils/cell';
 
 import '../../css/lib-content-view.css';
@@ -110,10 +110,7 @@ class LibContentView extends React.Component {
       viewId: '0000',
       tagId: '',
       currentDirent: null,
-      columns: [
-        { key: DIR_COLUMN_KEYS.SIZE, name: gettext('Size'), type: 'number' },
-        { key: DIR_COLUMN_KEYS.MTIME, name: gettext('Last Modified'), type: 'mtime' }
-      ],
+      columns: DIR_BASE_COLUMNS,
       hiddenColumnKeys: JSON.parse(localStorage.getItem(DIR_HIDDEN_COLUMN_KEYS)) || DIR_METADATA_COLUMNS,
       enableMetadata: false,
       isCrossRepoMove: false,
@@ -217,7 +214,7 @@ class LibContentView extends React.Component {
         const { dirent_list, user_perm: userPerm, dir_id: dirID, metadata } = res.data;
 
         // Enrich dirent list with metadata for list view
-        const enrichedDirentList = await this.enrichDirentListWithMetadata(this.state.path, dirent_list, metadata);
+        const enrichedDirentList = await this.enrichDirentListWithMetadata(dirent_list, metadata);
         const direntList = Utils.sortDirents(enrichedDirentList.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
         this.setState({
           pathExist: true,
@@ -652,17 +649,10 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
-  // Helper method to enrich dirent list with metadata for list view
-  enrichDirentListWithMetadata = async (currentPath, direntList, metadata) => {
+  enrichDirentListWithMetadata = async (direntList, metadata) => {
     if (!metadata) return direntList;
 
-    const files = direntList
-      .filter(item => item.type === 'file')
-      .map(item => ({
-        parent_dir: item.parent_dir || currentPath,
-        file_name: item.name
-      }));
-
+    const files = direntList.filter(item => item.type === 'file');
     if (files.length === 0) {
       return direntList;
     }
@@ -673,7 +663,7 @@ class LibContentView extends React.Component {
 
       const normalizedCols = normalizeColumns(cols || []).map(col => new Column(col));
       this.setState({ columns: [
-        ...this.state.columns,
+        ...DIR_BASE_COLUMNS,
         ...normalizedCols
       ] || [] });
 
@@ -690,12 +680,12 @@ class LibContentView extends React.Component {
           const metadata = metadataMap[item.name];
           if (metadata) {
             item[PRIVATE_COLUMN_KEY.FILE_CREATOR] = metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR];
-            item[PRIVATE_COLUMN_KEY.LAST_MODIFIER] = metadata[PRIVATE_COLUMN_KEY.LAST_MODIFIER];
+            item[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = metadata[PRIVATE_COLUMN_KEY.FILE_MODIFIER];
             item[PRIVATE_COLUMN_KEY.FILE_STATUS] = metadata[PRIVATE_COLUMN_KEY.FILE_STATUS];
           } else {
             const cachedDirent = this.state.direntList.find(dirent => dirent.name === item.name);
             item[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
-            item[PRIVATE_COLUMN_KEY.LAST_MODIFIER] = cachedDirent[PRIVATE_COLUMN_KEY.LAST_MODIFIER] || username;
+            item[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
             item[PRIVATE_COLUMN_KEY.FILE_STATUS] = cachedDirent[PRIVATE_COLUMN_KEY.FILE_STATUS] || '';
           }
         }
@@ -729,7 +719,7 @@ class LibContentView extends React.Component {
         metadata,
       } = direntRes.data;
 
-      const enrichedDirentList = await this.enrichDirentListWithMetadata(path, dirent_list, metadata);
+      const enrichedDirentList = await this.enrichDirentListWithMetadata(dirent_list, metadata);
 
       let direntList = Utils.sortDirents(
         enrichedDirentList.map(item => new Dirent(item)),

@@ -1,10 +1,16 @@
-import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
+import { CellType, PRIVATE_COLUMN_KEY } from '@/metadata/constants';
+import { gettext } from '@/utils/constants';
 
 // Column visibility configuration
 export const DIR_COLUMN_KEYS = {
   SIZE: 'size',
   MTIME: 'mtime',
 };
+
+export const DIR_BASE_COLUMNS = [
+  { key: DIR_COLUMN_KEYS.SIZE, name: gettext('Size'), type: CellType.NUMBER },
+  { key: DIR_COLUMN_KEYS.MTIME, name: gettext('Last Modified'), type: CellType.MTIME }
+];
 
 // Columns that can be hidden (essential columns like checkbox, star, icon, name are always visible)
 export const CONFIGURABLE_COLUMNS = [
