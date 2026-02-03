@@ -107,7 +107,8 @@ class CommonToolbar extends React.Component {
       return;
     }
     const url = `${siteRoot}wikis/${item.wiki_id}/${pageId}/`;
-    window.location.href = url;
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
   };
 
   renderSearch = () => {

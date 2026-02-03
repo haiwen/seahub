@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Modal, ModalBody, Input } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import wikiAPI from '../../utils/wiki-api';
-import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import toaster from '../toast';
@@ -84,7 +83,8 @@ function WikisSearch({ placeholder, onSearchedClick }) {
         return;
       }
       const url = siteRoot + 'wikis/' + result.wiki_id + '/' + result.page_id + '/';
-      window.location.href = url;
+      const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+      if (newWindow) newWindow.opener = null;
     }
     resetToDefault();
   }, [onSearchedClick, resetToDefault]);
@@ -139,50 +139,10 @@ function WikisSearch({ placeholder, onSearchedClick }) {
         return;
       }
 
-      const wikiIds = [...new Set(rawResults.map(r => r.wiki_id))];
-      const configs = {};
-      const wikiNames = {};
-
-      await Promise.all(wikiIds.map(async (wid) => {
-        try {
-          const confRes = await wikiAPI.getWiki2Config(wid);
-          const wikiData = confRes.data.wiki;
-          configs[wid] = wikiData.wiki_config || {};
-          if (wikiData.name) wikiNames[wid] = wikiData.name;
-          else if (wikiData.repo_name) wikiNames[wid] = wikiData.repo_name;
-          else if (wikiData.slug) wikiNames[wid] = wikiData.slug;
-        } catch (error) {
-          return null;
-        }
-
-        if (!wikiNames[wid]) {
-          const sample = rawResults.find(r => r.wiki_id === wid);
-          if (!sample?.repo_name && !sample?.wiki_name && !sample?.name) {
-            try {
-              const repoRes = await seafileAPI.getRepoInfo(wid);
-              wikiNames[wid] = repoRes.data.name;
-            } catch (error) {
-              return null;
-            }
-          }
-        }
-      }));
-
       const mappedResults = rawResults.map(r => {
-        const wiki_name = r.wiki_name || r.repo_name || r.name || wikiNames[r.wiki_id] || '';
-        let page_id = r.page_id;
-        let title = r.title;
-        const conf = configs[r.wiki_id];
-        if (conf?.pages) {
-          const page = conf.pages.find(p => p.docUuid === r.doc_uuid);
-          if (page) {
-            page_id = page.id;
-            title = page.title || title || page.name;
-          }
-        }
-        return { ...r, wiki_name, page_id, title };
+        const wiki_name = r.wiki_name || r.repo_name || r.name || '';
+        return { ...r, wiki_name };
       });
-
       setResults(mappedResults);
       setHighlightIndex(0);
       setIsResultGotten(true);

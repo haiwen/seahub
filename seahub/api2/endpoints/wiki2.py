@@ -1448,6 +1448,12 @@ class Wiki2MultiSearch(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request):
+        def iterate_pages(pages):
+            for page in pages or []:
+                yield page
+                for child in iterate_pages(page.get('children', [])):
+                    yield child
+
         if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
             error_msg = 'Search not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -1507,10 +1513,49 @@ class Wiki2MultiSearch(APIView):
         if not results:
              return Response({"results": [], "total": 0})
 
-        if HAS_FILE_SEASEARCH:
-            return Response({"results": results, "total": total})
-        
-        return Response({"results": results})
+        wiki_ids_in_results = set()
+        for result in results:
+            wiki_id = result.get('wiki_id') or result.get('repo_id')
+            if wiki_id:
+                wiki_ids_in_results.add(wiki_id)
+
+        wiki_name_map = {}
+        wiki_docuuid_page_map = {}
+        for wiki_id in wiki_ids_in_results:
+            try:
+                repo = seafile_api.get_repo(wiki_id)
+                if repo:
+                    wiki_name_map[wiki_id] = repo.name
+            except Exception as e:
+                logger.error(e)
+
+            try:
+                wiki_config = get_wiki_config(wiki_id, username)
+                pages = wiki_config.get('pages', [])
+                docuuid_page_map = {}
+                for page in iterate_pages(pages):
+                    doc_uuid = page.get('docUuid')
+                    if doc_uuid:
+                        docuuid_page_map[doc_uuid] = page
+                wiki_docuuid_page_map[wiki_id] = docuuid_page_map
+            except Exception as e:
+                logger.error(e)
+
+        for result in results:
+            wiki_id = result.get('wiki_id') or result.get('repo_id')
+            if wiki_id and wiki_id in wiki_name_map:
+                result['wiki_name'] = wiki_name_map[wiki_id]
+            doc_uuid = result.get('doc_uuid')
+            if wiki_id and doc_uuid and wiki_id in wiki_docuuid_page_map:
+                page = wiki_docuuid_page_map[wiki_id].get(doc_uuid)
+                if page:
+                    result['page_id'] = page.get('id')
+                    if not result.get('title'):
+                        title = page.get('title') or page.get('name')
+                        if title:
+                            result['title'] = title
+
+        return Response({"results": results, "total": total})
 
 class WikiConvertView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
