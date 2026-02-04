@@ -51,5 +51,9 @@ class ServerInfoView(APIView):
         if enable_onlyoffice:
             features.append('onlyoffice')
 
+        enable_wiki = getattr(settings, 'ENABLE_WIKI', False)
+        if enable_wiki:
+            features.append('wiki')
+
         info['features'] = features
         return info
