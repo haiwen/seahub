@@ -5,7 +5,7 @@ import {
   Operation, LOCAL_APPLY_OPERATION_TYPE, NEED_APPLY_AFTER_SERVER_OPERATION, OPERATION_TYPE, UNDO_OPERATION_TYPE,
   VIEW_OPERATION, COLUMN_OPERATION, NEED_LOADING_OPERATION
 } from './operations';
-import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, DEFAULT_RETRY_TIMES, DEFAULT_RETRY_INTERVAL } from '../constants';
+import { EVENT_BUS_TYPE, PER_LOAD_NUMBER, PRIVATE_COLUMN_KEY, DEFAULT_RETRY_TIMES, DEFAULT_RETRY_INTERVAL, TRASH_VIEW_ID } from '../constants';
 import DataProcessor from './data-processor';
 import ServerOperator from './server-operator';
 import LocalOperator from './local-operator';
@@ -13,6 +13,7 @@ import Metadata from '../model/metadata';
 import { checkIsDir } from '../utils/row';
 import { Utils } from '../../utils/utils';
 import { getFileNameFromRecord, checkDuplicatedName } from '../utils/cell';
+import { prepareTrashRows, prepareTrashFolderRows, getTrashColumns, TRASH_PER_PAGE } from '../utils/trash';
 
 class Store {
 
@@ -47,25 +48,55 @@ class Store {
   };
 
   async loadMetadata(view, limit, retries = DEFAULT_RETRY_TIMES, delay = DEFAULT_RETRY_INTERVAL) {
-    const res = await this.context.getMetadata({ view_id: this.viewId, start: this.startIndex, limit });
-    const rows = res?.data?.results || [];
+    let res;
+    let rows;
+    if (this.viewId === TRASH_VIEW_ID) {
+      const page = 1;
+      res = await this.context.getTrashData(page);
+      const initialRows = res?.data?.items || [];
+      rows = prepareTrashRows(initialRows);
+      res.data.metadata = getTrashColumns();
+    } else {
+      res = await this.context.getMetadata({ view_id: this.viewId, start: this.startIndex, limit });
+      rows = res?.data?.results || [];
+    }
+
     if (rows.length === 0 && retries > 0) {
       await new Promise(resolve => setTimeout(resolve, delay));
       return this.loadMetadata(view, limit, retries - 1, delay);
     }
     const columns = normalizeColumns(res?.data?.metadata);
-    let data = new Metadata({ rows, columns, view });
+
+    let data;
+    if (this.viewId === TRASH_VIEW_ID) {
+      // `view: {}`: for 'reload'
+      data = new Metadata({ rows, columns, view: {} });
+    } else {
+      data = new Metadata({ rows, columns, view });
+    }
     data.view.rows = data.row_ids;
     const loadedCount = rows.length;
     data.hasMore = loadedCount === limit;
+    if (this.viewId === TRASH_VIEW_ID) {
+      data.hasMore = res.data.total_count > res.data.items.length;
+      data.canSearch = res.data.can_search;
+      data.page = 1;
+      data.view.type = 'trash';
+      data.showFolder = false;
+    }
     this.data = data;
     this.startIndex += loadedCount;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
   }
 
   async load(limit = PER_LOAD_NUMBER, isBeingBuilt = false) {
-    const viewRes = await this.context.getView(this.viewId);
-    const view = viewRes?.data?.view || {};
+    let view;
+    if (this.viewId === TRASH_VIEW_ID) {
+      view = {};
+    } else {
+      const viewRes = await this.context.getView(this.viewId);
+      view = viewRes?.data?.view || {};
+    }
     const retries = isBeingBuilt ? DEFAULT_RETRY_TIMES : 0;
     await this.loadMetadata(view, limit, retries);
   }
@@ -95,6 +126,58 @@ class Store {
     this.startIndex = this.startIndex + loadedCount;
     DataProcessor.run(this.data, { collaborators: this.collaborators });
     this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
+  }
+
+  async loadMoreTrash(page) {
+    if (!this.data) return;
+    const res = await this.context.getTrashData(page);
+    const rows = prepareTrashRows(res?.data?.items || []);
+
+    this.data.rows.push(...rows);
+    rows.forEach(record => {
+      this.data.row_ids.push(record._id);
+      this.data.id_row_map[record._id] = record;
+    });
+
+    this.data.hasMore = res.data.total_count > TRASH_PER_PAGE * page;
+    this.data.page = page;
+    this.data.recordsCount = this.data.row_ids.length;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_TABLE_CHANGED);
+  }
+
+  async loadTrashFolderRecords(commitID, baseDir, folderPath) {
+    const res = await this.context.loadTrashFolderRecords(commitID, baseDir, folderPath);
+    const rows = prepareTrashFolderRows(res?.data?.dirent_list || []);
+    let data = new Metadata({ rows, columns: this.data.columns });
+    data.view.type = 'trash';
+    data.showFolder = true;
+    data.canSearch = false;
+    data.commitID = commitID;
+    data.baseDir = baseDir;
+    data.folderPath = folderPath;
+    data.recordsCount = data.row_ids.length;
+    data.hasMore = false;
+    this.data = data;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED);
+  }
+
+  async searchTrashRecords(query, filters) {
+    const page = 1;
+    const res = await this.context.searchTrashRecords(query, filters, page);
+    const initialRows = res?.data?.items || [];
+    const rows = prepareTrashRows(initialRows);
+    let data = new Metadata({ rows, columns: this.data.columns });
+    data.view.type = 'trash';
+    data.showFolder = false;
+    data.canSearch = true;
+    data.recordsCount = data.row_ids.length;
+    data.hasMore = res.data.total_count > TRASH_PER_PAGE * page;
+    data.page = page;
+    this.data = data;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS);
   }
 
   async updateRowData(newRowId) {
@@ -344,6 +427,55 @@ class Store {
       success_callback,
     });
     this.applyOperation(operation);
+  }
+
+  restoreTrashRecords(rows_ids, { fail_callback, success_callback }) {
+    if (!Array.isArray(rows_ids) || rows_ids.length === 0) return;
+
+    const items = {};
+    rows_ids.forEach((rowId) => {
+      const row = getRowById(this.data, rowId);
+      const { commit_id, _parent_dir, _name } = row;
+      const path = Utils.joinPath(_parent_dir, _name);
+      if (items[commit_id]) {
+        items[commit_id].push(path);
+      } else {
+        items[commit_id] = [path];
+      }
+    });
+
+    const type = OPERATION_TYPE.RESTORE_TRASH_RECORDS;
+    const operation = this.createOperation({
+      type,
+      items: items,
+      fail_callback,
+      success_callback,
+    });
+    this.applyOperation(operation);
+  }
+
+  updateTrashRecords(restored) {
+    let prevData = this.data;
+    const { rows } = this.data;
+    restored.forEach((item) => {
+      const index = rows.findIndex(rowItem => {
+        const { _parent_dir, _name } = rowItem;
+        const path = Utils.joinPath(_parent_dir, _name);
+        return path == item.path;
+      });
+      if (index > -1) {
+        rows.splice(index, 1);
+      }
+    });
+    let data = new Metadata({ rows, columns: this.data.columns });
+    data.view.type = 'trash';
+    data.showFolder = false;
+    data.hasMore = prevData.hasMore;
+    data.page = prevData.page;
+    data.canSearch = prevData.canSearch;
+    this.data = data;
+    DataProcessor.run(this.data, { collaborators: this.collaborators });
+    this.context.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS);
   }
 
   reloadRecords(row_ids) {

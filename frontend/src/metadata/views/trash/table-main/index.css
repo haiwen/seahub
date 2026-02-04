@@ -1,0 +1,23 @@
+/* basic css */
+.sf-metadata-single-select-option,
+.sf-metadata-multiple-select-option {
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 20px;
+  margin: 6px 0;
+  max-width: 250px;
+  overflow: hidden;
+  padding: 0 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: min-content;
+}
+
+.sf-metadata-result-table-row .sf-metadata-result-table-cell .select-all-checkbox-container {
+  width: 40px;
+}
+
+.sf-metadata-result-table-row .sf-metadata-result-table-cell .select-all-checkbox-container .form-check-input {
+  margin: 0;
+}

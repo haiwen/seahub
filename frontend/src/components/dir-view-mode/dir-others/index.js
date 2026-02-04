@@ -2,8 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
+import { PRIVATE_FILE_TYPE } from '../../../constants';
 import TreeSection from '../../tree-section';
-import TrashDialog from '../../dialog/trash-dialog';
 import LibSettingsDialog from '../../dialog/lib-settings';
 import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
@@ -14,7 +14,7 @@ import Item from './item';
 
 import './index.css';
 
-const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoInfo }) => {
+const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoInfo, onNodeClick }) => {
   const { owner_email, is_admin, repo_name: repoName, permission } = currentRepoInfo;
 
   const showSettings = is_admin; // repo owner, department admin, shared with 'Admin' permission
@@ -32,6 +32,23 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
     window.location.href = serviceUrl + '/library/' + repoID + '/' + repoName + '/?tag=__all_tags';
   }, [repoID, repoName]);
 
+  const visitTrash = useCallback(() => {
+    const node = {
+      children: [],
+      path: '/' + PRIVATE_FILE_TYPE.TRASH,
+      isExpanded: false,
+      isLoaded: true,
+      isPreload: true,
+      object: {
+        type: PRIVATE_FILE_TYPE.TRASH,
+        isDir: () => false
+      },
+      parentNode: {},
+      key: repoID
+    };
+    onNodeClick(node);
+  }, [repoID, onNodeClick]);
+
   useEffect(() => {
     const unsubscribeUnselectFiles = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_LIBRARY_SETTINGS_TAGS, () => {
       setSettingsDialogOpen(true);
@@ -42,11 +59,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
       unsubscribeUnselectFiles();
     };
   });
-
-  const [showTrashDialog, setShowTrashDialog] = useState(false);
-  const toggleTrashDialog = () => {
-    setShowTrashDialog(!showTrashDialog);
-  };
 
   const handleHistoryClick = () => {
     const url = siteRoot + 'library/' + repoID + '/' + encodeURIComponent(repoName) + '/?history=true';
@@ -79,7 +91,8 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
         <Item
           text={gettext('Trash')}
           iconSymbol="trash"
-          op={toggleTrashDialog}
+          op={visitTrash}
+          isActive={currentMode === 'trash'}
         />
       )}
       {isDesktop && (
@@ -94,14 +107,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
         <LibraryMoreOperations
           repo={currentRepoInfo}
           updateRepoInfo={updateRepoInfo}
-        />
-      )}
-      {showTrashDialog && (
-        <TrashDialog
-          repoID={repoID}
-          currentRepoInfo={currentRepoInfo}
-          showTrashDialog={showTrashDialog}
-          toggleTrashDialog={toggleTrashDialog}
         />
       )}
       {isSettingsDialogOpen && (
@@ -123,7 +128,8 @@ DirOthers.propTypes = {
   repoID: PropTypes.string,
   currentRepoInfo: PropTypes.object.isRequired,
   currentMode: PropTypes.string.isRequired,
-  updateRepoInfo: PropTypes.func
+  updateRepoInfo: PropTypes.func,
+  onNodeClick: PropTypes.func
 };
 
 export default DirOthers;

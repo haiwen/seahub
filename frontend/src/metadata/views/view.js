@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import Loading from '../../components/loading';
 import CenteredLoading from '../../components/centered-loading';
 import Table from './table';
+import Trash from './trash';
 import Gallery from './gallery';
 import FaceRecognition from './face-recognition';
 import Kanban from './kanban';
@@ -24,6 +25,9 @@ const View = () => {
       }
       case VIEW_TYPE.TABLE: {
         return <Table />;
+      }
+      case 'trash': {
+        return <Trash />;
       }
       case VIEW_TYPE.FACE_RECOGNITION: {
         return (<FaceRecognition />);

@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { TAGS_MODE } from '../dir-view-mode/constants';
+import { TAGS_MODE, TRASH } from '../dir-view-mode/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import { useMetadata } from '../../metadata/hooks';
 import { VIEW_TYPE } from '../../metadata/constants';
 import AllTagsToolbar from './all-tags-toolbar';
 import TagFilesToolbar from './tag-files-toolbar';
+import LibraryTrashSelectedToolbar from './library-trash-selected-toolbar';
 import TableFilesToolbar from './table-files-toolbar';
 import GalleryFilesToolbar from './gallery-files-toolbar';
 import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
@@ -48,6 +49,10 @@ const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent
     } else {
       return <TagFilesToolbar currentRepoInfo={repoInfo} />;
     }
+  }
+
+  if (mode === TRASH) {
+    return <LibraryTrashSelectedToolbar />;
   }
 
 };

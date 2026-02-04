@@ -29,6 +29,7 @@ export const VIEW_TYPE = {
   MAP: 'map',
   CARD: 'card',
   STATISTICS: 'statistics',
+  TRASH: 'trash',
 };
 
 export const VIEW_TYPE_LABEL = {
@@ -41,6 +42,7 @@ export const VIEW_TYPE_LABEL = {
 };
 
 export const FACE_RECOGNITION_VIEW_ID = '_face_recognition';
+export const TRASH_VIEW_ID = '_trash';
 
 export const VIEW_TYPE_ICON = {
   [VIEW_TYPE.TABLE]: 'table',

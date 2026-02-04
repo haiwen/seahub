@@ -11,6 +11,7 @@ import {
   PRIVATE_COLUMN_KEY,
   SUPPORT_SEARCH_COLUMN_LIST,
   TABLE_NOT_DISPLAY_COLUMN_KEYS,
+  TRASH_VIEW_ID,
   shouldPreserveSearchForOperation
 } from '../constants';
 import { Utils, validateName } from '../../utils/utils';
@@ -118,12 +119,15 @@ export const MetadataViewProvider = ({
       setLoading(false);
       delayReloadDataTimer.current = null;
       notifyTableChanged(EVENT_BUS_TYPE.RELOAD_DATA);
+      if (viewID == TRASH_VIEW_ID) {
+        window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_TOOLBAR, storeRef.current.data);
+      }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       setErrorMessage(errorMsg);
       setLoading(false);
     });
-  }, [notifyTableChanged]);
+  }, [notifyTableChanged, viewID]);
 
   const delayReloadMetadata = useCallback(() => {
     delayReloadDataTimer.current && clearTimeout(delayReloadDataTimer.current);
@@ -244,6 +248,56 @@ export const MetadataViewProvider = ({
         success_callback && success_callback();
       },
     });
+  };
+
+  const restoreTrashRecords = (recordsIds, { success_callback, fail_callback } = {}) => {
+    if (!Array.isArray(recordsIds) || recordsIds.length === 0) return;
+    storeRef.current.restoreTrashRecords(recordsIds, {
+      fail_callback: (error) => {
+        fail_callback && fail_callback(error);
+        error && toaster.danger(error);
+      },
+      success_callback: (returned) => {
+        const { success, failed } = returned.res.data;
+        if (success.length) {
+          storeRef.current.updateTrashRecords(success);
+          const itemPathList = success[0].path.split('/');
+          const itemName = itemPathList[itemPathList.length - 1];
+          let msg = success.length > 1
+            ? gettext('Successfully restored {name} and {n} other item(s)')
+            : gettext('Successfully restored {name}');
+          msg = msg.replace('{name}', itemName)
+            .replace('{n}', success.length - 1);
+          toaster.success(msg);
+        }
+        if (failed.length) {
+          failed.forEach((item) => {
+            toaster.danger('{item.path}: {item.error_msg}');
+          });
+        }
+        success_callback && success_callback();
+      },
+    });
+  };
+
+  const updateTrashRecords = () => {
+    setMetadata(storeRef.current.data);
+  };
+
+  const loadTrashFolderRecords = (commitID, baseDir, folderPath) => {
+    storeRef.current.loadTrashFolderRecords(commitID, baseDir, folderPath);
+  };
+
+  const trashFolderRecordsLoaded = () => {
+    setMetadata(storeRef.current.data);
+    setTimeout(() => {
+      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_FOLDER_PATH, storeRef.current.data);
+      window.sfMetadataContext && window.sfMetadataContext.eventBus && window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.UPDATE_TRASH_TOOLBAR, storeRef.current.data);
+    }, 0);
+  };
+
+  const searchTrashRecords = (query, filters) => {
+    storeRef.current.searchTrashRecords(query, filters);
   };
 
   const modifyRecord = (rowId, updates, oldRowData, originalUpdates, originalOldRowData, isCopyPaste, { success_callback, fail_callback } = {}) => {
@@ -1004,6 +1058,11 @@ export const MetadataViewProvider = ({
     const unsubscribeMoveRecord = eventBus.subscribe(EVENT_BUS_TYPE.MOVE_RECORD, moveRecord);
     const unsubscribeDuplicateRecord = eventBus.subscribe(EVENT_BUS_TYPE.DUPLICATE_RECORD, duplicateRecord);
     const unsubscribeDeleteRecords = eventBus.subscribe(EVENT_BUS_TYPE.DELETE_RECORDS, deleteRecords);
+    const unsubscribeRestoreTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.RESTORE_TRASH_RECORDS, restoreTrashRecords);
+    const unsubscribeLoadTrashFolderRecords = eventBus.subscribe(EVENT_BUS_TYPE.LOAD_TRASH_FOLDER_RECORDS, loadTrashFolderRecords);
+    const unsubscribeTrashFolderRecordsLoaded = eventBus.subscribe(EVENT_BUS_TYPE.TRASH_FOLDER_RECORDS_LOADED, trashFolderRecordsLoaded);
+    const unsubscribeUpdateTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_RECORDS, updateTrashRecords);
+    const unsubscribeSearchTrashRecords = eventBus.subscribe(EVENT_BUS_TYPE.SEARCH_TRASH_RECORDS, searchTrashRecords);
     const unsubscribeUpdateDetails = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_RECORD_DETAILS, updateRecordDetails);
     const unsubscribeUpdateFaceRecognition = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_FACE_RECOGNITION, updateFaceRecognition);
     const unsubscribeUpdateDescription = eventBus.subscribe(EVENT_BUS_TYPE.GENERATE_DESCRIPTION, updateRecordDescription);
@@ -1037,6 +1096,11 @@ export const MetadataViewProvider = ({
       unsubscribeMoveRecord();
       unsubscribeDuplicateRecord();
       unsubscribeDeleteRecords();
+      unsubscribeRestoreTrashRecords();
+      unsubscribeUpdateTrashRecords();
+      unsubscribeSearchTrashRecords();
+      unsubscribeLoadTrashFolderRecords();
+      unsubscribeTrashFolderRecordsLoaded();
       unsubscribeUpdateDetails();
       unsubscribeUpdateFaceRecognition();
       unsubscribeUpdateDescription();

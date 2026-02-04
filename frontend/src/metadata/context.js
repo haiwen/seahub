@@ -1,13 +1,16 @@
 import metadataAPI from './api';
+import { repoTrashAPI } from '../utils/repo-trash-api';
+import { seafileAPI } from '../utils/seafile-api';
 import tagsAPI from '../tag/api';
 import {
   PRIVATE_COLUMN_KEYS, EDITABLE_DATA_PRIVATE_COLUMN_KEYS, EDITABLE_PRIVATE_COLUMN_KEYS, DELETABLE_PRIVATE_COLUMN_KEY,
-  FACE_RECOGNITION_VIEW_ID,
+  FACE_RECOGNITION_VIEW_ID
 } from './constants';
 import LocalStorage from './utils/local-storage';
 import EventBus from '../components/common/event-bus';
 import { username, lang } from '../utils/constants';
 import { Utils } from '../utils/utils';
+import { TRASH_PER_PAGE } from './utils/trash';
 
 class Context {
 
@@ -85,8 +88,29 @@ class Context {
     if (view_id === FACE_RECOGNITION_VIEW_ID) {
       return this.metadataAPI.getFaceData(repoID, start, limit);
     }
-
     return this.metadataAPI.getMetadata(repoID, params);
+  };
+
+  getTrashData = (page) => {
+    const repoID = this.settings['repoID'];
+    const per_page = TRASH_PER_PAGE;
+    return repoTrashAPI.getRepoFolderTrash(repoID, page, per_page);
+  };
+
+  searchTrashRecords = (query, filters, page) => {
+    const repoID = this.settings['repoID'];
+    const per_page = TRASH_PER_PAGE;
+    return repoTrashAPI.searchRepoFolderTrash(repoID, page, per_page, query, filters);
+  };
+
+  loadTrashFolderRecords = (commitID, baseDir, folderPath) => {
+    const repoID = this.settings['repoID'];
+    return seafileAPI.listCommitDir(repoID, commitID, `${baseDir.substr(0, baseDir.length - 1)}${folderPath}`);
+  };
+
+  restoreTrashItems = (items) => {
+    const repoID = this.settings['repoID'];
+    return repoTrashAPI.restoreTrashItems(repoID, items);
   };
 
   getViews = () => {

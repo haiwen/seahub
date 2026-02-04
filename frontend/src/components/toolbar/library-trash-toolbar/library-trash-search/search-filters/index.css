@@ -1,0 +1,212 @@
+.search-filters-container {
+  min-height: 32px;
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 12px;
+  padding: 0 16px 10px;
+  overflow: auto hidden;
+  scrollbar-color: #C1C1C1 rgba(0, 0, 0, 0);
+  border-bottom: 1px solid var(--bs-border-secondary-color);
+}
+
+.search-filters-container .search-filter {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.search-filters-container .search-filter .search-filter-toggle,
+.search-filter-menu .search-filter-toggle {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.search-filters-container .search-filter .search-filter-toggle:hover,
+.search-filter-menu .search-filter-toggle:hover {
+  background-color: var(--bs-hover-bg);
+}
+
+.search-filter-toggle .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  color: var(--bs-icon-color);
+}
+
+.search-filters-container .search-filter .filter-label {
+  width: fit-content;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-filters-container .search-filter.filter-by-suffix-container .filter-label,
+.search-filters-container .search-filter.filter-by-creator-container .filter-label {
+  max-width: 120px;
+}
+
+.search-filter-menu.filter-by-text-menu,
+.search-filter-menu.filter-by-date-menu,
+.search-filter-menu.filter-by-creator-menu {
+  width: 280px;
+}
+
+.search-filter-menu.filter-by-suffix-menu {
+  width: 400px;
+  position: relative;
+}
+
+.search-filter-menu.filter-by-suffix-menu .clear-icon-right {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--bs-icon-color);
+  margin: 9px;
+  border: 0;
+  border-radius: 3px;
+  background-color: transparent;
+  padding: 0;
+}
+
+.search-filter-menu.filter-by-suffix-menu .clear-icon-right:hover {
+  background-color: var(--bs-hover-bg);
+}
+
+.search-filters-container .search-filters-dropdown-item {
+  width: 100%;
+}
+
+.search-filter-menu {
+  z-index: 1050;
+}
+
+.search-filter-menu .dropdown-item {
+  position: relative;
+  padding: 0.25rem 10px;
+}
+
+.search-filter-menu .dropdown-item .dropdown-item-tick {
+  width: 1rem;
+  left: auto;
+  right: 16px;
+}
+
+.search-filter-menu .input-container {
+  position: relative;
+  border: 1px solid var(--bs-border-secondary-color);
+  border-radius: 4px;
+  padding: 4px 6px;
+  margin: 8px 10px;
+  min-height: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.search-filter-menu .input-container.focus {
+  background-color: var(--bs-body-bg);
+  border-color: #1991eb;
+  box-shadow: 0 0 0 2px rgba(70, 127, 207, .25);
+  color: #495057;
+  outline: 0;
+}
+
+.search-filter-menu .input-container .search-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: none;
+  padding: 0px;
+  width: auto;
+  background: transparent;
+  font-size: inherit;
+  line-height: 20px;
+  flex: 1 1 60px;
+  min-width: 60px;
+  border-radius: 4px;
+}
+
+.search-filter-menu .input-container input {
+  border: none;
+  outline: none;
+  width: 100%;
+  display: block;
+  resize: none;
+  padding: 0px;
+  height: 20px;
+  background: inherit;
+}
+
+.search-filter-menu .user-item {
+  height: 20px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.search-filter-menu .user-item .user-avatar {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+  border-radius: 50%;
+}
+
+.search-filter-menu .input-container .user-item {
+  background-color: #eaeaea;
+  border-radius: 10px;
+  padding: 0 4px 0 2px;
+  margin-right: 2px;
+  font-size: 13px;
+}
+
+.filter-by-date-menu .filter-by-date-custom-date-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 16px;
+  gap: 8px;
+}
+
+.filter-by-date-menu .filter-by-date-custom-date-container .custom-date-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-size: 14px;
+}
+
+.filter-by-date-menu .filter-by-date-custom-date-container .custom-date-container .custom-date-label {
+  margin-bottom: 6px;
+}
+
+.filter-by-date-menu .filter-by-date-custom-date-container .custom-date-container .form-control {
+  height: 28px;
+  font-size: 14px;
+}
+
+.search-filters-container .search-filter-toggle.active:hover,
+.search-filters-container .search-filter-toggle.highlighted:hover {
+  background-color: var(--bs-hover-bg);
+}
+
+.search-filters-container .search-filter-toggle.highlighted,
+.search-filter-toggle.highlighted .sf3-font-down {
+  color: #ed7109 !important;
+}
+
+.search-filter-menu {
+  z-index: 9999 !important;
+  position: relative;
+}
