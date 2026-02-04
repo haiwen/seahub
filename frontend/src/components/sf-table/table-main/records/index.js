@@ -454,10 +454,12 @@ class Records extends Component {
     const operateRecordId = operateRecord._id;
     if (RecordMetrics.isRecordSelected(operateRecordId, recordMetrics)) {
       this.deselectRecordById(operateRecordId);
+      this.props.onRecordSelected(e, operateRecordId);
       this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 } });
       return;
     }
     this.selectRecordById(operateRecordId);
+    this.props.onRecordSelected(e, operateRecordId);
     this.setState({ lastRowIdxUiSelected: { groupRecordIndex, recordIndex } });
   };
 
@@ -1081,6 +1083,8 @@ Records.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveRecords: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
+  onRecordSelected: PropTypes.func,
+  checkCanModifyRecord: PropTypes.func,
 };
 
 export default Records;

@@ -2,7 +2,8 @@ import { gettext } from '@/utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
 import { NameFormatter, SizeFormatter, LastModifiedFormatter, Creator, StatusFormatter } from './formatter';
 import { DIR_COLUMN_KEYS } from '@/constants/dir-column-visibility';
-import { StatusEditor, FileNameEditor } from './editor';
+import { StatusEditor } from './editor';
+import FileNameEditor from '@/metadata/components/cell-editors/file-name-editor';
 
 export const EDITABLE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
@@ -22,12 +23,36 @@ export const SUPPORT_PREVIEW_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
 ];
 
-const createColumnFormatter = ({ column, otherProps }) => {
+const DEFAULT_NAME_COLUMN_WIDTH = 200;
+const DEFAULT_COLUMN_WIDTH = 200;
+
+const DIR_TABLE_COLUMNS_WIDTH_KEY = 'dir_table_columns_width';
+
+export const getDirTableColumnWidths = () => {
+  try {
+    const savedWidths = localStorage.getItem(DIR_TABLE_COLUMNS_WIDTH_KEY);
+    return savedWidths ? JSON.parse(savedWidths) : {};
+  } catch (err) {
+    return {};
+  }
+};
+
+export const setDirTableColumnWidth = (columnKey, width) => {
+  try {
+    const savedWidths = getDirTableColumnWidths();
+    savedWidths[columnKey] = width;
+    localStorage.setItem(DIR_TABLE_COLUMNS_WIDTH_KEY, JSON.stringify(savedWidths));
+  } catch (err) {
+    // Ignore errors
+  }
+};
+
+const createColumnFormatter = ({ column, ...otherProps }) => {
   const { key } = column;
   switch (key) {
     case PRIVATE_COLUMN_KEY.FILE_NAME:
-      const { repoID } = otherProps;
-      return <NameFormatter repoID={repoID} />;
+      const { repoID, onItemClick } = otherProps;
+      return <NameFormatter repoID={repoID} onItemClick={onItemClick} />;
     case PRIVATE_COLUMN_KEY.SIZE:
       return <SizeFormatter />;
     case DIR_COLUMN_KEYS.MTIME:
@@ -42,46 +67,54 @@ const createColumnFormatter = ({ column, otherProps }) => {
   }
 };
 
-const createColumnEditor = ({ column, otherProps }) => {
+const createColumnEditor = ({ column, repoID, repoInfo, tableData, updateDirent, onDirentStatus }) => {
   switch (column.key) {
     case PRIVATE_COLUMN_KEY.FILE_NAME:
-      const { repoID, repoInfo, tableData, onDirentChange } = otherProps;
-      return <FileNameEditor repoID={repoID} repoInfo={repoInfo} table={tableData} onDirentChange={onDirentChange} {...otherProps} />;
+      return <FileNameEditor repoID={repoID} repoInfo={repoInfo} table={tableData} updateDirent={updateDirent} />;
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
-      const { onDirentStatus } = otherProps;
       return <StatusEditor onDirentStatus={onDirentStatus} />;
     default:
       return null;
   }
 };
 
-const createDirentTableColumns = (columns, otherProps) => {
+const createDirentTableColumns = (columns, hiddenColumnKeys = [], { ...otherProps }) => {
+  const savedWidths = getDirTableColumnWidths();
+  const visibleColumns = columns.filter(col => !hiddenColumnKeys.includes(col.key));
   const allColumns = [
     {
       key: PRIVATE_COLUMN_KEY.FILE_NAME,
       name: gettext('Name'),
       display_name: gettext('Name'),
       type: CellType.TEXT,
-      width: 200,
+      width: savedWidths[PRIVATE_COLUMN_KEY.FILE_NAME] || DEFAULT_NAME_COLUMN_WIDTH,
       frozen: true,
       editable: true,
       resizable: true,
       is_name_column: true,
     },
-    ...columns,
+    ...visibleColumns,
   ];
 
   return allColumns.map(column => {
     const { key, name, type } = column;
     const display_name = name;
     const icon_name = COLUMNS_ICON_CONFIG[type];
-    const formatter = createColumnFormatter({ column, otherProps });
+    const formatter = createColumnFormatter({ column, ...otherProps });
     const is_private = PRIVATE_COLUMN_KEYS.includes(key);
     const editable = is_private && (EDITABLE_COLUMN_KEYS.includes(key) || column.editable);
     const editable_via_click_cell = is_private && EDITABLE_VIA_CLICK_CELL_COLUMNS_KEYS.includes(key);
-    const editor = editable && createColumnEditor({ column, otherProps });
+    const editor = editable && createColumnEditor({ column, ...otherProps });
     const is_popup_editor = is_private && POPUP_EDITOR_COLUMN_KEYS.includes(key);
-    const is_support_preview = SUPPORT_PREVIEW_COLUMN_KEYS.includes(key);
+
+    // Apply saved width or use default
+    const savedWidth = savedWidths[key];
+    if (savedWidth) {
+      column.width = savedWidth;
+    } else if (!column.width) {
+      // Use default width based on column type
+      column.width = key === PRIVATE_COLUMN_KEY.FILE_NAME ? DEFAULT_NAME_COLUMN_WIDTH : DEFAULT_COLUMN_WIDTH;
+    }
 
     let normalizedColumn = { ...column, is_private, editable };
     if (editable_via_click_cell) {
@@ -102,9 +135,6 @@ const createDirentTableColumns = (columns, otherProps) => {
     if (is_popup_editor) {
       normalizedColumn.is_popup_editor = is_popup_editor;
     }
-    // if (is_support_preview) {
-    //   normalizedColumn.is_support_preview = is_support_preview;
-    // }
     return normalizedColumn;
   });
 };

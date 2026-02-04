@@ -16,6 +16,9 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Dirent } from '../../models';
 import { createTableHeaders } from '../../utils/table-headers';
 import DirentVirtualListView from './dirent-virtual-list-view';
+import { withDirentContextMenu } from '../dir-view-mode/hoc/withDirentContextMenu';
+import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
+import { getCreateMenuList } from '../dir-view-mode/utils/contextMenuUtils';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -373,35 +376,11 @@ class DirentListView extends React.Component {
       return;
     }
 
-    const {
-      NEW_FOLDER, NEW_FILE,
-      NEW_MARKDOWN_FILE,
-      NEW_EXCEL_FILE,
-      NEW_POWERPOINT_FILE,
-      NEW_WORD_FILE,
-      NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE,
-      NEW_EXCALIDRAW_FILE,
-    } = TextTranslation;
-
-    const direntsContainerMenuList = [
-      NEW_FOLDER, NEW_FILE, 'Divider',
-    ];
-    const { currentRepoInfo } = this.props;
-    if (enableSeadoc && !currentRepoInfo.encrypted) {
-      direntsContainerMenuList.push(NEW_SEADOC_FILE);
-      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
-    }
-    direntsContainerMenuList.push(
-      NEW_MARKDOWN_FILE,
-      NEW_EXCEL_FILE,
-      NEW_POWERPOINT_FILE,
-      NEW_WORD_FILE,
-    );
-
-    if (enableWhiteboard) {
-      direntsContainerMenuList.push(NEW_TLDRAW_FILE);
-    }
+    const direntsContainerMenuList = getCreateMenuList({
+      enableSeadoc,
+      enableWhiteboard,
+      isRepoEncrypted: this.props.currentRepoInfo.encrypted
+    });
 
     if (this.props.selectedDirentList.length === 0) {
       let id = 'dirent-container-menu';
@@ -419,7 +398,7 @@ class DirentListView extends React.Component {
         if (!this.state.activeDirent) {
           let id = 'dirent-item-menu';
           let dirent = this.props.selectedDirentList[0];
-          let menuList = this.getDirentItemMenuList(dirent, true);
+          let menuList = this.props.getItemMenuList(dirent, true);
           this.handleContextClick(event, id, menuList, dirent);
         } else {
           this.onDirentClick(null);
@@ -458,60 +437,32 @@ class DirentListView extends React.Component {
   };
 
   onContainerMenuItemClick = (operation) => {
-    switch (operation) {
-      case 'New Folder':
-        this.onCreateFolder();
-        break;
-      case 'New File':
-        this.onCreateFile();
-        break;
-      case 'New Markdown File':
-        this.onCreateFile('.md');
-        break;
-      case 'New Excel File':
-        this.onCreateFile('.xlsx');
-        break;
-      case 'New PowerPoint File':
-        this.onCreateFile('.pptx');
-        break;
-      case 'New Word File':
-        this.onCreateFile('.docx');
-        break;
-      case 'New Docxf File':
-        this.onCreateFile('.docxf');
-        break;
-      case 'New Whiteboard File':
-        this.onCreateFile('.draw');
-        break;
-      case 'New Excalidraw File':
-        this.onCreateFile('.exdraw');
-        break;
-      case 'New SeaDoc File':
-        this.onCreateFile('.sdoc');
-        break;
-      default:
-        break;
+    // operation is already the key string (from data-operation attribute)
+    const handler = menuHandlers[operation];
+    if (handler) {
+      handler({
+        eventBus: this.props.eventBus,
+        path: this.props.path,
+        direntList: this.props.direntList
+      });
     }
 
     hideMenu();
   };
 
   onDirentsMenuItemClick = (operation) => {
-    switch (operation) {
-      case 'Move':
-        this.onMove();
-        break;
-      case 'Copy':
-        this.onCopy();
-        break;
-      case 'Download':
-        this.onDownload();
-        break;
-      case 'Delete':
-        this.props.onItemsDelete();
-        break;
-      default:
-        break;
+    // operation is already the key string (from data-operation attribute)
+    const handler = menuHandlers[operation];
+    if (handler) {
+      handler({
+        eventBus: this.props.eventBus,
+        path: this.props.path,
+        repoID: this.props.repoID,
+        dirents: this.props.selectedDirentList,
+        isBatch: true,
+        onBatchDelete: this.props.onItemsDelete,
+        updateDirentProperties: this.props.updateDirent
+      });
     }
 
     hideMenu();
@@ -538,7 +489,7 @@ class DirentListView extends React.Component {
     }
     this.onDirentClick(dirent);
     let id = 'dirent-item-menu';
-    let menuList = this.getDirentItemMenuList(dirent, true);
+    let menuList = this.props.getItemMenuList(dirent, true);
     this.handleContextClick(event, id, menuList, dirent);
   };
 
@@ -577,12 +528,6 @@ class DirentListView extends React.Component {
       }
     }
     return index;
-  };
-
-  getDirentItemMenuList = (dirent, isContextmenu) => {
-    const isRepoOwner = this.isRepoOwner;
-    const currentRepoInfo = this.props.currentRepoInfo;
-    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   };
 
   onTableDragEnter = (e) => {
@@ -755,7 +700,6 @@ class DirentListView extends React.Component {
             activeDirent={this.state.activeDirent}
             repoTags={this.props.repoTags}
             onFileTagChanged={this.props.onFileTagChanged}
-            getDirentItemMenuList={this.getDirentItemMenuList}
             showDirentDetail={this.props.showDirentDetail}
             onItemsMove={this.props.onItemsMove}
             onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}
@@ -824,4 +768,4 @@ class DirentListView extends React.Component {
 
 DirentListView.propTypes = propTypes;
 
-export default DirentListView;
+export default withDirentContextMenu(DirentListView);
