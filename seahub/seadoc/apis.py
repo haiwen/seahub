@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import tempfile
 import uuid
 import stat
 import logging
@@ -179,7 +180,12 @@ class SeadocUploadFile(APIView):
     def post(self, request, file_uuid):
         # jwt permission check
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -230,7 +236,12 @@ class SeadocUploadLink(APIView):
     def get(self, request, file_uuid):
         # jwt permission check
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -394,6 +405,10 @@ class SeadocUploadImage(APIView):
         if not is_valid:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         file_list = request.FILES.getlist('file')
         if not file_list or not isinstance(file_list, list):
@@ -423,7 +438,6 @@ class SeadocUploadImage(APIView):
         parent_path = gen_seadoc_image_parent_path(file_uuid, repo_id, username)
 
         upload_link = get_seadoc_asset_upload_link(repo_id, parent_path, username)
-
         relative_path = []
         for file in file_list:
             file_path = posixpath.join(parent_path, file.name)
@@ -519,6 +533,10 @@ class SeadocUploadVideo(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        if payload.get('permission') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
         file_list = request.FILES.getlist('file')
         if not file_list or not isinstance(file_list, list):
             error_msg = 'Video can not be found.'
@@ -2891,7 +2909,12 @@ class SeadocEditorCallBack(APIView):
 
         # jwt permission check
         auth = request.headers.get('authorization', '').split()
-        if not is_valid_seadoc_access_token(auth, file_uuid):
+        is_valid, payload = is_valid_seadoc_access_token(auth, file_uuid, return_payload=True)
+        if not is_valid:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if payload.get('permission') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -3100,15 +3123,11 @@ class SeadocExportView(APIView):
 
 
 class SdocImportView(APIView):
-    authentication_classes = (TokenAuthentication, CsrfExemptSessionAuthentication)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request, repo_id):
-        # use TemporaryFileUploadHandler, which contains TemporaryUploadedFile
-        # TemporaryUploadedFile has temporary_file_path() method
-        # in order to change upload_handlers, we must exempt csrf check
-        request.upload_handlers = [TemporaryFileUploadHandler(request=request)]
         username = request.user.username
         relative_path = request.data.get('relative_path', '/').strip('/')
         parent_dir = request.data.get('parent_dir', '/')
@@ -3125,9 +3144,11 @@ class SdocImportView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         filename = file.name
-        uploaded_temp_path = file.temporary_file_path()
         extension = filename.split('.')[-1].lower()
-
+        with tempfile.NamedTemporaryFile(suffix='.sdoczip', delete=False, mode='wb') as tmp_f:
+            for chunk in file.chunks():
+                tmp_f.write(chunk)
+            uploaded_temp_path = tmp_f.name
         if not (extension == 'sdoczip' and is_zipfile(uploaded_temp_path)):
             error_msg = 'file format not supported.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -3213,6 +3234,9 @@ class SdocImportView(APIView):
         # remove tmp file
         if os.path.exists(tmp_extracted_path):
             shutil.rmtree(tmp_extracted_path)
+        
+        if os.path.exists(uploaded_temp_path):
+            os.unlink(uploaded_temp_path)
 
         return Response({'success': True})
 

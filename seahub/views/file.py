@@ -761,9 +761,10 @@ def view_lib_file(request, repo_id, path):
         return_dict['enable_seadoc'] = ENABLE_SEADOC
 
         can_edit_file = True
+        locked_by_online_office = if_locked_by_online_office(repo_id, path)
         if parse_repo_perm(permission).can_edit_on_web is False:
             can_edit_file = False
-        elif is_locked and not locked_by_me:
+        elif is_locked and not locked_by_online_office:
             can_edit_file = False
 
         return_dict['can_edit_file'] = can_edit_file

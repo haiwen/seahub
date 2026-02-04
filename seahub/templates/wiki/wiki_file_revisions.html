@@ -12,7 +12,7 @@
     window.fileHistory = {
         pageOptions: {
             isWiki2: true,
-            wikiConfig: '{{ wiki_config|safe }}',
+            wikiConfig: '{{ wiki_config|safe|escapejs }}',
             repoID: '{{ repo.id }}',
             repoName: '{{ repo.name }}',
             fileName: '{{ file_name|escapejs }}',

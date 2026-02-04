@@ -118,6 +118,10 @@ class MetadataManage(APIView):
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        if repo.is_virtual:
+            error_msg = 'Virtual library is not supported.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if not is_repo_admin(request.user.username, repo_id):
             error_msg = 'Permission denied.'
