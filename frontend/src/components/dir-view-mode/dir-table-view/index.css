@@ -5,6 +5,7 @@
 }
 
 .dir-table-view .dir-table-name-cell {
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -28,4 +29,8 @@
 
 .dir-table-view .dir-table-cell-empty {
   color: var(--text-muted, #999);
+}
+
+.sf-table-context-menu {
+  width: 200px;
 }

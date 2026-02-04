@@ -63,8 +63,8 @@ class Dirent {
       }
 
       // metadata fields
-      if (json._record_id) {
-        this._record_id = json._record_id;
+      if (json._id) {
+        this._id = json._id;
       }
       if (json._file_creator) {
         this._file_creator = json._file_creator;

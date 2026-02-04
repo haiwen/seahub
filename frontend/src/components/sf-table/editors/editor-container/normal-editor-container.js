@@ -102,9 +102,8 @@ class NormalEditorContainer extends React.Component {
       onOverrideKeyDown: this.onKeyDown,
       modifyColumnData,
     };
-
     return (
-      <Editor column={column} editorProps={editorProps} />
+      <Editor ref={editorProps.ref} column={column} editorProps={editorProps} />
     );
   };
 

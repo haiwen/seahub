@@ -121,6 +121,7 @@ class LibContentView extends React.Component {
     this.currentMoveItemName = '';
     this.currentMoveItemPath = '';
     this.unsubscribeEventBus = null;
+    this.cachedColumns = null;
   }
 
   updateCurrentDirent = (dirent = null) => {
@@ -666,35 +667,46 @@ class LibContentView extends React.Component {
   };
 
   enrichColumns = (metadata) => {
-    if (!metadata?.columns) return DIR_BASE_COLUMNS;
+    if (!metadata?.columns) {
+      if (this.cachedColumns) {
+        return this.cachedColumns;
+      }
+      return DIR_BASE_COLUMNS;
+    }
 
     const validColumns = metadata.columns.filter(col => DIR_METADATA_COLUMNS.includes(col.key));
     let columns = DIR_BASE_COLUMNS;
     if (validColumns.length > 0) {
       columns = [...columns, ...validColumns];
     }
-    return columns.map(col => new Column(col));
+
+    this.cachedColumns = columns.map(col => new Column(col));
+    return this.cachedColumns;
   };
 
   enrichDirentListWithMetadata = (direntList, metadata) => {
     const files = direntList.filter(item => item.type === 'file');
-    if (files.length === 0 || !metadata) {
+    if (files.length === 0) {
       return direntList.map(item => new Dirent(item));
     }
 
     const cachedDirentMap = new Map(this.state.direntList.map(dirent => [dirent.name, dirent]));
     const metadataMap = new Map();
-    const { rows } = metadata;
-    rows.forEach(record => {
-      const filename = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-      if (filename) {
-        metadataMap.set(filename, {
-          creator: record[PRIVATE_COLUMN_KEY.FILE_CREATOR],
-          modifier: record[PRIVATE_COLUMN_KEY.FILE_MODIFIER],
-          status: record[PRIVATE_COLUMN_KEY.FILE_STATUS],
-        });
-      }
-    });
+
+    if (metadata?.rows) {
+      const { rows } = metadata;
+      rows.forEach(record => {
+        const filename = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+        if (filename) {
+          metadataMap.set(filename, {
+            id: record[PRIVATE_COLUMN_KEY.ID],
+            creator: record[PRIVATE_COLUMN_KEY.FILE_CREATOR],
+            modifier: record[PRIVATE_COLUMN_KEY.FILE_MODIFIER],
+            status: record[PRIVATE_COLUMN_KEY.FILE_STATUS],
+          });
+        }
+      });
+    }
 
     return direntList.map(item => {
       if (item.type !== 'file') {
@@ -705,11 +717,13 @@ class LibContentView extends React.Component {
 
       const metadataInfo = metadataMap.get(item.name);
       if (metadataInfo) {
+        enrichedItem[PRIVATE_COLUMN_KEY.ID] = metadataInfo.id;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = metadataInfo.creator;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = metadataInfo.modifier;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = metadataInfo.status;
       } else {
         const cachedDirent = cachedDirentMap.get(item.name);
+        enrichedItem[PRIVATE_COLUMN_KEY.ID] = cachedDirent?.[PRIVATE_COLUMN_KEY.ID] || '';
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_STATUS] || '';
@@ -2097,16 +2111,32 @@ class LibContentView extends React.Component {
     });
   };
 
-  updateDirent = (dirent, paramKey, paramValue) => {
+  updateDirent = (dirent, keyOrUpdates, value) => {
     let newDirentList = this.state.direntList.map(item => {
       if (item.name === dirent.name) {
-        if (typeof paramKey === 'string') {
-          item[paramKey] = paramValue;
-        } else if (Array.isArray(paramKey)) {
-          paramKey.forEach((key, index) => {
-            item[key] = paramValue[index];
+        if (typeof keyOrUpdates === 'string') {
+          item[keyOrUpdates] = value;
+        } else if (Array.isArray(keyOrUpdates)) {
+          keyOrUpdates.forEach((k, index) => {
+            item[k] = value[index];
+          });
+        } else if (typeof keyOrUpdates === 'object' && keyOrUpdates !== null) {
+          Object.keys(keyOrUpdates).forEach(key => {
+            item[key] = keyOrUpdates[key];
           });
         }
+      }
+      return item;
+    });
+    this.setState({ direntList: newDirentList });
+  };
+
+  updateDirentProperties = (dirent, updates) => {
+    let newDirentList = this.state.direntList.map(item => {
+      if (item.name === dirent.name) {
+        Object.keys(updates).forEach(key => {
+          item[key] = updates[key];
+        });
       }
       return item;
     });
@@ -2148,7 +2178,7 @@ class LibContentView extends React.Component {
 
     if (!isLocal) {
       try {
-        await metadataAPI.modifyRecord(repoID, { recordId: dirent._record_id, parentDir, fileName: direntName }, updateData);
+        await metadataAPI.modifyRecord(repoID, { recordId: dirent._id, parentDir, fileName: direntName }, updateData);
 
         if (this.state.isDirentDetailShow && window?.sfMetadataContext?.eventBus) {
           window.sfMetadataContext.eventBus.dispatch(
@@ -2927,6 +2957,7 @@ class LibContentView extends React.Component {
                           onItemConvert={this.onConvertItem}
                           onDirentClick={this.onDirentClick}
                           updateDirent={this.updateDirent}
+                          updateDirentProperties={this.updateDirentProperties}
                           onDirentStatus={this.updateDirentStatus}
                           isAllItemSelected={this.state.isAllDirentSelected}
                           onAllItemSelected={this.onAllDirentSelected}

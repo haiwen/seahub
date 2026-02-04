@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, name } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import URLDecorator from '../../utils/url-decorator';
 import OpIcon from '../../components/op-icon';
 import OpElement from '../../components/op-element';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
@@ -11,6 +10,7 @@ import toaster from '../toast';
 import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
+import { lockFile, unlockFile, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient } from '../../utils/dirent-operations';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -78,33 +78,13 @@ class SelectedDirentsToolbar extends React.Component {
   };
 
   onToggleStarItem = () => {
-    const { repoID, selectedDirentList } = this.props;
+    const { selectedDirentList, repoID, path, updateDirent } = this.props;
     const dirent = selectedDirentList[0];
-    const filePath = this.getDirentPath(dirent);
-    const itemName = dirent.name;
-
-    if (dirent.starred) {
-      seafileAPI.unstarItem(repoID, filePath).then(() => {
-        this.props.updateDirent(dirent, 'starred', false);
-        const msg = gettext('Successfully unstarred {name_placeholder}.')
-          .replace('{name_placeholder}', itemName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    } else {
-      seafileAPI.starItem(repoID, filePath).then(() => {
-        this.props.updateDirent(dirent, 'starred', true);
-        const msg = gettext('Successfully starred {name_placeholder}.')
-          .replace('{name_placeholder}', itemName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
+    if (dirent) {
+      toggleStar(dirent, repoID, path, updateDirent);
     }
   };
+
 
   onPermission = () => {
     const { eventBus, selectedDirentList } = this.props;
@@ -217,69 +197,39 @@ class SelectedDirentsToolbar extends React.Component {
   };
 
   exportDocx = (dirent) => {
-    const serviceUrl = window.app.config.serviceURL;
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(dirent);
-    let exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + filePath;
-    window.location.href = exportToDocxUrl;
+    const { repoID, path } = this.props;
+    exportDocx(dirent, repoID, path);
   };
 
   exportSdoc = (dirent) => {
-    const serviceUrl = window.app.config.serviceURL;
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(dirent);
-    let exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + filePath + '?dl=1';
-    window.location.href = exportToSdocUrl;
+    const { repoID, path } = this.props;
+    exportSdoc(dirent, repoID, path);
   };
 
   lockFile = (dirent) => {
-    const filePath = this.getDirentPath(dirent);
-    seafileAPI.lockfile(this.props.repoID, filePath).then((res) => {
-      if (res.data.is_locked) {
-        this.props.updateDirent(dirent, 'is_locked', true);
-        this.props.updateDirent(dirent, 'locked_by_me', true);
-        this.props.updateDirent(dirent, 'lock_owner_name', name);
-        this.props.unSelectDirent();
-      }
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+    const { repoID, path, updateDirent, unSelectDirent } = this.props;
+    lockFile(dirent, repoID, path, (dirent, updates) => {
+      updateDirent(dirent, updates);
+      unSelectDirent();
     });
   };
 
   unlockFile = (dirent) => {
-    const filePath = this.getDirentPath(dirent);
-    seafileAPI.unlockfile(this.props.repoID, filePath).then((res) => {
-      if (!res.data.is_locked) {
-        this.props.updateDirent(dirent, 'is_locked', false);
-        this.props.updateDirent(dirent, 'locked_by_me', false);
-        this.props.updateDirent(dirent, 'lock_owner_name', '');
-        this.props.unSelectDirent();
-      }
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
+    const { repoID, path, updateDirent, unSelectDirent } = this.props;
+    unlockFile(dirent, repoID, path, (dirent, updates) => {
+      updateDirent(dirent, updates);
+      unSelectDirent();
     });
   };
 
   onOpenViaClient = (dirent) => {
-    const filePath = this.getDirentPath(dirent);
-    let url = URLDecorator.getUrl({
-      type: 'open_via_client',
-      repoID: this.props.repoID,
-      filePath: filePath
-    });
-    location.href = url;
+    const { repoID, path } = this.props;
+    openViaClient(dirent, repoID, path);
   };
 
   onHistory = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    let url = URLDecorator.getUrl({
-      type: 'file_revisions',
-      repoID: this.props.repoID,
-      filePath: filePath
-    });
-    location.href = url;
+    const { repoID, path } = this.props;
+    openHistory(dirent, repoID, path);
   };
 
   toggleCancel = () => {

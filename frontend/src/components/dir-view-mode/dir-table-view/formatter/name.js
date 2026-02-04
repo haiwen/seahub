@@ -10,7 +10,7 @@ import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
 import { openFile } from '@/metadata/utils/file';
 
 // Dirent Name Formatter - reuses metadata FileNameFormatter
-const NameFormatter = ({ repoID, record, value, ...params }) => {
+const NameFormatter = ({ repoID, record, value, onItemClick, ...params }) => {
   const eventBus = EventBus.getInstance();
   const iconUrl = useMemo(() => {
     const isDir = checkIsDir(record);
@@ -33,16 +33,21 @@ const NameFormatter = ({ repoID, record, value, ...params }) => {
   const onClick = useCallback((e) => {
     e.preventDefault();
     e.nativeEvent.stopImmediatePropagation();
+    if (record._is_dir) {
+      onItemClick && onItemClick(value);
+      return;
+    }
     openFile(repoID, record, () => {
       eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
     });
 
-  }, [eventBus, record, repoID]);
+  }, [eventBus, onItemClick, record, repoID, value]);
 
   return (
     <div className="dir-table-name-cell">
       <FileNameFormatter
         {...params}
+        record={record}
         value={value}
         onClickName={onClick}
         {...iconUrl}

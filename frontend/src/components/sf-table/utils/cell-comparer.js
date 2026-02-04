@@ -35,10 +35,15 @@ export const cellCompare = (props, nextProps) => {
   if (props.checkCellValueChanged) {
     isCustomCellValueChanged = props.checkCellValueChanged(column, oldRecord, newRecord);
   }
+  let isLockStatusChanged = false;
+  if (oldRecord._is_locked !== undefined) {
+    isLockStatusChanged = oldRecord._is_locked !== newRecord._is_locked || oldRecord._is_freezed !== newRecord._is_freezed;
+  }
   return (
     isCustomCellValueChanged ||
     checkCellValueChanged(oldValue, newValue) ||
     oldRecord._last_modifier !== newRecord._last_modifier ||
+    isLockStatusChanged ||
     isCellSelected !== nextProps.isCellSelected ||
     isLastCell !== nextProps.isLastCell ||
     highlightClassName !== newHighlightClassName ||

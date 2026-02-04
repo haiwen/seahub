@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { siteRoot, username, enableSeadoc, thumbnailDefaultSize, thumbnailSizeForOriginal, gettext, fileServerRoot, enableWhiteboard } from '../../utils/constants';
 import { updateImageThumbnail, Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import URLDecorator from '../../utils/url-decorator';
 import Loading from '../loading';
 import ModalPortal from '../modal-portal';
 import ImageDialog from '../dialog/image-dialog';
@@ -18,6 +17,10 @@ import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
 import { VirtualGrid } from '../virtual-list';
 import { getSelectionRect, viewportToContentBounds, isIntersecting } from '../../utils/grid-selection';
+import { lockFile, unlockFile, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient, freezeDocument } from '../../utils/dirent-operations';
+import { withDirentContextMenu } from '../dir-view-mode/hoc/withDirentContextMenu';
+import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
+import { getCreateMenuList } from '../dir-view-mode/utils/contextMenuUtils';
 
 import '../../css/grid-view.css';
 
@@ -291,147 +294,57 @@ class DirentGridView extends React.Component {
   };
 
   exportDocx = () => {
-    const serviceUrl = window.app.config.serviceURL;
-    let dirent = this.state.activeDirent ? this.state.activeDirent : '';
-    if (!dirent) {
-      return;
+    const { activeDirent: dirent } = this.state;
+    const { repoID, path } = this.props;
+    if (dirent) {
+      exportDocx(dirent, repoID, path);
     }
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(dirent);
-    window.location.href = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + filePath;
   };
 
   exportSdoc = () => {
-    const serviceUrl = window.app.config.serviceURL;
-    let dirent = this.state.activeDirent ? this.state.activeDirent : '';
-    if (!dirent) {
-      return;
+    const { activeDirent: dirent } = this.state;
+    const { repoID, path } = this.props;
+    if (dirent) {
+      exportSdoc(dirent, repoID, path);
     }
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(dirent);
-    window.location.href = serviceUrl + '/lib/' + repoID + '/file/' + filePath + '?dl=1';
   };
 
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
-    switch (operation) {
-      case 'Download':
-        this.onDownload();
-        break;
-      case 'Share':
-        this.onShare(event);
-        break;
-      case 'Delete':
-        this.onItemDelete(currentObject, event);
-        break;
-      case 'Rename':
-        this.onRename();
-        break;
-      case 'Move':
-        this.onMove();
-        break;
-      case 'Copy':
-        this.onCopy();
-        break;
-      case 'Star':
-        this.onToggleStarItem();
-        break;
-      case 'Unstar':
-        this.onToggleStarItem();
-        break;
-      case 'Unfreeze Document':
-        this.onUnlockItem(currentObject);
-        break;
-      case 'Freeze Document':
-        this.onFreezeDocument(currentObject);
-        break;
-      case 'Convert to Markdown':
-        this.onItemConvert(currentObject, event, 'markdown');
-        break;
-      case 'Convert to docx':
-        this.onItemConvert(currentObject, event, 'docx');
-        break;
-      case 'Export docx':
-        this.exportDocx();
-        break;
-      case 'Export sdoc':
-        this.exportSdoc();
-        break;
-      case 'Convert to sdoc':
-        this.onItemConvert(currentObject, event, 'sdoc');
-        break;
-      case 'Permission':
-        this.onPermission();
-        break;
-      case 'Unlock':
-        this.onUnlockItem(currentObject);
-        break;
-      case 'Lock':
-        this.onLockItem(currentObject);
-        break;
-      case 'History':
-        this.onHistory(currentObject);
-        break;
-      case 'New Folder':
-        this.onCreateFolder();
-        break;
-      case 'New File':
-        this.onCreateFile('');
-        break;
-      case 'New Markdown File':
-        this.onCreateFile('.md');
-        break;
-      case 'New Excel File':
-        this.onCreateFile('.xlsx');
-        break;
-      case 'New PowerPoint File':
-        this.onCreateFile('.pptx');
-        break;
-      case 'New Word File':
-        this.onCreateFile('.docx');
-        break;
-      case 'New Docxf File':
-        this.onCreateFile('.docxf');
-        break;
-      case 'New Whiteboard File':
-        this.onCreateFile('.draw');
-        break;
-      case 'New Excalidraw File':
-        this.onCreateFile('.exdraw');
-        break;
-      case 'New SeaDoc File':
-        this.onCreateFile('.sdoc');
-        break;
-      case 'Access Log':
-        this.openFileAccessLog();
-        break;
-      case 'Properties':
-        this.props.showDirentDetail('info');
-        break;
-      case 'Open via Client':
-        this.onOpenViaClient(currentObject);
-        break;
-      default:
-        break;
+
+    // Use unified menuHandlers for all operations
+    // operation is already the key string (from data-operation attribute)
+    const handler = menuHandlers[operation];
+    if (handler) {
+      handler({
+        eventBus: this.props.eventBus,
+        path: this.props.path,
+        repoID: this.props.repoID,
+        dirent: currentObject,
+        dirents: currentObject,
+        isBatch: false,
+        updateDirentProperties: this.props.updateDirent,
+        onItemDelete: this.props.onItemDelete,
+        onItemConvert: this.props.onItemConvert,
+        showDirentDetail: this.props.showDirentDetail
+      });
     }
   };
 
   onDirentsMenuItemClick = (operation) => {
-    switch (operation) {
-      case 'Move':
-        this.onMove();
-        break;
-      case 'Copy':
-        this.onCopy();
-        break;
-      case 'Download':
-        this.onDownload();
-        break;
-      case 'Delete':
-        this.props.onItemsDelete();
-        break;
-      default:
-        break;
+    // Use shared menu handlers directly
+    // operation is already the key string (from data-operation attribute)
+    const handler = menuHandlers[operation];
+    if (handler) {
+      handler({
+        eventBus: this.props.eventBus,
+        path: this.props.path,
+        repoID: this.props.repoID,
+        dirents: this.props.selectedDirentList,
+        isBatch: true,
+        onBatchDelete: this.props.onItemsDelete,
+        updateDirentProperties: this.props.updateDirent
+      });
     }
 
     hideMenu();
@@ -505,31 +418,8 @@ class DirentGridView extends React.Component {
 
   onToggleStarItem = () => {
     const { activeDirent: dirent } = this.state;
-    const { repoID } = this.props;
-    const filePath = this.getDirentPath(dirent);
-    const itemName = dirent.name;
-
-    if (dirent.starred) {
-      seafileAPI.unstarItem(repoID, filePath).then(() => {
-        this.props.updateDirent(dirent, 'starred', false);
-        const msg = gettext('Successfully unstarred {name_placeholder}.')
-          .replace('{name_placeholder}', itemName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    } else {
-      seafileAPI.starItem(repoID, filePath).then(() => {
-        this.props.updateDirent(dirent, 'starred', true);
-        const msg = gettext('Successfully starred {name_placeholder}.')
-          .replace('{name_placeholder}', itemName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
+    const { repoID, path, updateDirent } = this.props;
+    toggleStar(dirent, repoID, path, updateDirent);
   };
 
   handleError = (error) => {
@@ -537,56 +427,28 @@ class DirentGridView extends React.Component {
   };
 
   onLockItem = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    seafileAPI.lockfile(repoID, filePath).then(() => {
-      this.props.updateDirent(currentObject, 'is_locked', true);
-      this.props.updateDirent(currentObject, 'locked_by_me', true);
-      let lockName = username.split('@');
-      this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
-    }).catch(error => {
-      this.handleError(error);
-    });
+    const { repoID, path, updateDirent } = this.props;
+    lockFile(currentObject, repoID, path, updateDirent);
   };
 
   onFreezeDocument = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    seafileAPI.lockfile(repoID, filePath, -1).then(() => {
-      this.props.updateDirent(currentObject, 'is_freezed', true);
-      this.props.updateDirent(currentObject, 'is_locked', true);
-      this.props.updateDirent(currentObject, 'locked_by_me', true);
-      let lockName = username.split('@');
-      this.props.updateDirent(currentObject, 'lock_owner_name', lockName[0]);
-    }).catch(error => {
-      this.handleError(error);
-    });
+    const { repoID, path, updateDirent } = this.props;
+    freezeDocument(currentObject, repoID, path, updateDirent);
   };
 
   onUnlockItem = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    seafileAPI.unlockfile(repoID, filePath).then(() => {
-      this.props.updateDirent(currentObject, 'is_locked', false);
-      this.props.updateDirent(currentObject, 'locked_by_me', false);
-      this.props.updateDirent(currentObject, 'lock_owner_name', '');
-    }).catch(error => {
-      this.handleError(error);
-    });
+    const { repoID, path, updateDirent } = this.props;
+    unlockFile(currentObject, repoID, path, updateDirent);
   };
 
   onHistory = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    let url = URLDecorator.getUrl({ type: 'file_revisions', repoID: repoID, filePath: filePath });
-    location.href = url;
+    const { repoID, path } = this.props;
+    openHistory(currentObject, repoID, path);
   };
 
   onOpenViaClient = (currentObject) => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(currentObject);
-    let url = URLDecorator.getUrl({ type: 'open_via_client', repoID: repoID, filePath: filePath });
-    location.href = url;
+    const { repoID, path } = this.props;
+    openViaClient(currentObject, repoID, path);
   };
 
   prepareImageItem = (item) => {
@@ -733,45 +595,22 @@ class DirentGridView extends React.Component {
 
     if (!['admin', 'rw'].includes(this.props.userPerm)) return;
 
-    const {
-      NEW_FOLDER,
-      NEW_FILE,
-      NEW_MARKDOWN_FILE,
-      NEW_EXCEL_FILE,
-      NEW_POWERPOINT_FILE,
-      NEW_WORD_FILE,
-      NEW_SEADOC_FILE,
-      NEW_TLDRAW_FILE,
-      NEW_EXCALIDRAW_FILE
-    } = TextTranslation;
-
-    let direntsContainerMenuList = [
-      NEW_FOLDER, NEW_FILE, 'Divider',
-    ];
     const { currentRepoInfo, selectedDirentList } = this.props;
 
-    if (enableSeadoc && !currentRepoInfo.encrypted) {
-      direntsContainerMenuList.push(NEW_SEADOC_FILE);
-      direntsContainerMenuList.push(NEW_EXCALIDRAW_FILE);
-    }
-
-    direntsContainerMenuList.push(
-      NEW_MARKDOWN_FILE,
-      NEW_EXCEL_FILE,
-      NEW_POWERPOINT_FILE,
-      NEW_WORD_FILE
-    );
-
-    if (enableWhiteboard) {
-      direntsContainerMenuList.push(NEW_TLDRAW_FILE);
-    }
+    // Use shared function to get create menu options
+    let direntsContainerMenuList = getCreateMenuList({
+      enableSeadoc,
+      enableWhiteboard,
+      isRepoEncrypted: currentRepoInfo.encrypted
+    });
 
     if (selectedDirentList.length === 0) {
       if (!hasCustomPermission('create')) return;
       this.handleContextClick(event, DIRENT_GRID_CONTAINER_MENU_ID, direntsContainerMenuList);
     } else if (selectedDirentList.length === 1) {
       if (!this.state.activeDirent) {
-        let menuList = Utils.getDirentOperationList(this.isRepoOwner, currentRepoInfo, selectedDirentList[0], true);
+        // Use shared HOC method for getting item menu
+        let menuList = this.props.getItemMenuList(selectedDirentList[0], true);
         this.handleContextClick(event, GRID_ITEM_CONTEXTMENU_ID, menuList, selectedDirentList[0]);
       } else {
         this.props.onGridItemClick(null);
@@ -796,7 +635,7 @@ class DirentGridView extends React.Component {
   onGridItemContextMenu = (event, dirent) => {
     if (this.props.selectedDirentList.length > 1) return;
     // Display menu items according to the current dirent permission
-    const menuList = this.getDirentItemMenuList(dirent, true);
+    const menuList = this.props.getItemMenuList(dirent, true);
     const id = 'grid-item-contextmenu';
     this.handleContextClick(event, id, menuList, dirent);
     if (this.props.direntList.filter(item => item.isSelected).length > 1) return;
@@ -834,12 +673,6 @@ class DirentGridView extends React.Component {
     }
 
     showMenu(showMenuConfig);
-  };
-
-  getDirentItemMenuList = (dirent, isContextmenu) => {
-    const isRepoOwner = this.isRepoOwner;
-    const currentRepoInfo = this.props.currentRepoInfo;
-    return Utils.getDirentOperationList(isRepoOwner, currentRepoInfo, dirent, isContextmenu);
   };
 
   renderSelectionBox = () => {
@@ -977,4 +810,4 @@ class DirentGridView extends React.Component {
 
 DirentGridView.propTypes = propTypes;
 
-export default DirentGridView;
+export default withDirentContextMenu(DirentGridView);
