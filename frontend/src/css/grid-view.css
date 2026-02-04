@@ -214,6 +214,11 @@
   transition: background 0.2s;
 }
 
+.custom-volume-btn .seafile-multicolor-icon-mute,
+.custom-volume-btn .seafile-multicolor-icon-unmute {
+  color: #fff;
+}
+
 .grid-video-hover-overlay {
   position: absolute;
   left: 50%;
