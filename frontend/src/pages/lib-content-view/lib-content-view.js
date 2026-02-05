@@ -37,7 +37,6 @@ import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-to
 import ViewToolbar from '../../components/toolbar/view-toolbar';
 import { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
-import { normalizeColumns } from '@/metadata/utils/column';
 import Column from '@/metadata/model/column';
 import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS } from '@/constants/dir-column-visibility';
 import { getColumnOptionNameById } from '@/metadata/utils/cell';
