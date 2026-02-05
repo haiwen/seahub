@@ -889,8 +889,6 @@ class MetadataBatchRecords(APIView):
 
         for file_info in files:
             parent_dir = file_info.get('parent_dir')
-            if parent_dir and parent_dir != '/' and parent_dir.endswith('/'):
-                parent_dir = parent_dir.rstrip('/')
             file_name = file_info.get('file_name')
 
             if not parent_dir or not file_name:
