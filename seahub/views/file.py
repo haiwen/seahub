@@ -1545,8 +1545,8 @@ def view_shared_file(request, fileshare):
 
     thumbnail_for_og_image = ''
     if filetype == IMAGE or \
-            filetype == VIDEO and settings.ENABLE_VIDEO_PREVIEW or \
-            filetype == PDF and settings.ENABLE_PDF_PREVIEW:
+            filetype == VIDEO and settings.ENABLE_VIDEO_THUMBNAIL or \
+            filetype == PDF and settings.ENABLE_PDF_THUMBNAIL:
         thumbnail_for_og_image = get_site_scheme_and_netloc() + reverse('share_link_thumbnail_get',
                                                                         args=[token,
                                                                               256,
@@ -1833,8 +1833,8 @@ def view_file_via_shared_dir(request, fileshare):
 
     thumbnail_for_og_image = ''
     if filetype == IMAGE or \
-            filetype == VIDEO and settings.ENABLE_VIDEO_PREVIEW or \
-            filetype == PDF and settings.ENABLE_PDF_PREVIEW:
+            filetype == VIDEO and settings.ENABLE_VIDEO_THUMBNAIL or \
+            filetype == PDF and settings.ENABLE_PDF_THUMBNAIL:
         thumbnail_for_og_image = get_site_scheme_and_netloc() + reverse('share_link_thumbnail_get',
                                                                         args=[token,
                                                                               256,
