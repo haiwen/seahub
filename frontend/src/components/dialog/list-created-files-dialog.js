@@ -51,8 +51,14 @@ class ListCreatedFileDialog extends React.Component {
                     displayName = name;
                   } else {
                     let repoID = item.repo_id || activity.repo_id;
-                    let fileURL = `${siteRoot}lib/${repoID}/file${Utils.encodePath(item.path)}`;
-                    displayName = <a href={fileURL} target='_blank' rel="noreferrer">{name}</a>;
+                    let itemURL;
+                    if (activity.obj_type === 'dir') {
+                      let repoName = activity.repo_name || '';
+                      itemURL = `${siteRoot}library/${repoID}/${encodeURIComponent(repoName)}${Utils.encodePath(item.path)}`;
+                    } else {
+                      itemURL = `${siteRoot}lib/${repoID}/file${Utils.encodePath(item.path)}`;
+                    }
+                    displayName = <a href={itemURL} target='_blank' rel="noreferrer">{name}</a>;
                     // be compatible with the existing draft files
                     if (name.endsWith('(draft).md')) {
                       displayName = name;
