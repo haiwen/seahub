@@ -257,9 +257,6 @@ class DirView(APIView):
 
         with_metadata = to_python_boolean(with_metadata)
 
-        metadata_record = RepoMetadata.objects.filter(repo_id=repo_id).first()
-        is_metadata_enabled = with_metadata and metadata_record and metadata_record.enabled
-
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -306,93 +303,6 @@ class DirView(APIView):
             else:
                 response_dict['dirent_list'] = dir_file_info_list
 
-            # Automatically enrich response with metadata if enabled (for recursive mode too)
-            if is_metadata_enabled:
-                # Get metadata for files only
-                files = [d for d in response_dict['dirent_list'] if d.get('type') == 'file']
-                if files:
-                        # Prepare file list for metadata API
-                        file_list_for_metadata = []
-                        for file_info in files:
-                            file_parent_dir = file_info.get('parent_dir') or parent_dir
-                            file_parent_dir = file_parent_dir.rstrip('/')
-                            file_list_for_metadata.append({
-                                'parent_dir': file_parent_dir,
-                                'file_name': file_info.get('name')
-                            })
-
-                        try:
-                            from seafevents.repo_metadata.constants import METADATA_TABLE
-                            metadata_server_api = MetadataServerAPI(repo_id, username)
-
-                            # Define metadata columns to fetch
-                            metadata_columns = ['creator', 'last_modifier', 'status']
-
-                            # Prepare file list for metadata API
-                            file_list_for_metadata = []
-                            for file_info in files:
-                                file_list_for_metadata.append({
-                                    'parent_dir': file_info.get('parent_dir') or parent_dir,
-                                    'file_name': file_info.get('name')
-                                })
-
-                            where_conditions = []
-                            parameters = []
-
-                            for file_info in file_list_for_metadata:
-                                where_conditions.append(
-                                    f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?)'
-                                )
-                                parameters.extend([file_info.get('parent_dir'), file_info.get('file_name')])
-
-                            where_clause = ' OR '.join(where_conditions)
-                            sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
-
-                            query_result = metadata_server_api.query_rows(sql, parameters)
-                            results = query_result.get('results', [])
-
-                            metadata_dict = {}
-                            for record in results:
-                                file_key = record.get('_name')
-                                if file_key:
-                                    metadata_dict[file_key] = record
-
-                            for dirent in response_dict['dirent_list']:
-                                if dirent.get('type') == 'file' and dirent.get('name') in metadata_dict:
-                                    file_metadata = metadata_dict[dirent['name']]
-
-                                    for field in metadata_columns:
-                                        if field == 'creator':
-                                            dirent['creator'] = file_metadata.get('_file_creator')
-                                        elif field == 'last_modifier':
-                                            dirent['last_modifier'] = file_metadata.get('_file_modifier')
-                                        elif field == 'status':
-                                            dirent['status'] = file_metadata.get('_status')
-
-                        except Exception as e:
-                            logger.warning(f"Failed to fetch metadata for {repo_id}/{parent_dir}: {e}")
-
-            if is_metadata_enabled:
-                try:
-                    from seafevents.repo_metadata.constants import METADATA_TABLE
-                    columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
-                    columns = columns_data.get('columns', [])
-
-                    metadata_options = {}
-                    for column in columns:
-                        column_key = column.get('key') or column.get('column_key')
-                        column_data = column.get('data', {})
-
-                        if column_key == '_status' and column_data.get('options'):
-                            metadata_options['status'] = column_data['options']
-                            break
-
-                    if metadata_options:
-                        response_dict['metadata_options'] = metadata_options
-
-                except Exception as e:
-                    logger.warning(f"Failed to fetch metadata column options for {repo_id}: {e}")
-
             return Response(response_dict)
 
         parent_dir_list = []
@@ -431,80 +341,90 @@ class DirView(APIView):
         response_dict["user_perm"] = permission
         response_dict["dir_id"] = dir_id
 
+        if with_metadata:
+            try:
+                # Check if metadata is enabled for this repo
+                metadata = RepoMetadata.objects.filter(repo_id=repo_id).first()
+                if metadata and metadata.enabled:
+                    # Check if user has permission to read metadata
+                    from seahub.repo_metadata.utils import can_read_metadata
+                    if not can_read_metadata(request, repo_id):
+                        logger.debug(f"User {username} does not have permission to read metadata for repo {repo_id}")
+                    else:
+                        from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
+                        from seafevents.repo_metadata.constants import METADATA_TABLE
+
+                        files = []
+                        for file_info in file_info_list:
+                            files.append({
+                                'parent_dir': file_info.get('parent_dir', parent_dir),
+                                'file_name': file_info['name']
+                            })
+
+                        if files:
+                            metadata_server_api = MetadataServerAPI(repo_id, username)
+                            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+                            all_columns = columns_data.get('columns', [])
+                            metadata_columns = []
+                            editable_columns = [
+                                '_rate',
+                                '_tags',
+                                '_file_creator',
+                                '_file_modifier',
+                                '_status',
+                            ]
+                            for column in all_columns:
+                                key = column.get('key')
+                                if key in editable_columns:
+                                    metadata_columns.append({
+                                        'key': key,
+                                        'name': column.get('name'),
+                                        'type': column.get('type'),
+                                        'data': column.get('data', {})
+                                    })
+
+                            where_conditions = []
+                            parameters = []
+
+                            for file_info in files:
+                                parent_dir = file_info.get('parent_dir')
+                                if parent_dir and parent_dir != '/' and parent_dir.endswith('/'):
+                                    parent_dir = parent_dir.rstrip('/')
+                                file_name = file_info.get('file_name')
+
+                                if not parent_dir or not file_name:
+                                    continue
+
+                                where_conditions.append(f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?)')
+                                parameters.extend([parent_dir, file_name])
+
+                            if where_conditions:
+                                where_clause = ' OR '.join(where_conditions)
+                                sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
+
+                                try:
+                                    query_result = metadata_server_api.query_rows(sql, parameters)
+                                    rows = query_result.get('results', [])
+                                    if rows:
+                                        metadata = {}
+                                        metadata['columns'] = metadata_columns
+                                        metadata['rows'] = rows
+                                        logger.info(f"Fetched metadata for repo {repo_id}, number of rows: {len(rows)}")
+                                        response_dict['metadata'] = metadata
+
+                                except Exception as e:
+                                    logger.error(f"Failed to fetch metadata for repo {repo_id}: {e}")
+                                    pass
+            except Exception as e:
+                logger.error(f"Metadata enrichment failed for repo {repo_id}: {e}")
+                pass
+
         if request_type == 'f':
             response_dict['dirent_list'] = all_file_info_list
         elif request_type == 'd':
             response_dict['dirent_list'] = all_dir_info_list
         else:
             response_dict['dirent_list'] = all_dir_info_list + all_file_info_list
-
-        if is_metadata_enabled:
-            files = [d for d in response_dict['dirent_list'] if d.get('type') == 'file']
-            if files:
-                    file_list_for_metadata = []
-                    for file_info in files:
-                        file_parent_dir = file_info.get('parent_dir') or parent_dir
-                        file_parent_dir = file_parent_dir.rstrip('/')
-                        file_list_for_metadata.append({
-                            'parent_dir': file_parent_dir,
-                            'file_name': file_info.get('name')
-                        })
-
-                    try:
-                        from seafevents.repo_metadata.constants import METADATA_TABLE
-                        metadata_server_api = MetadataServerAPI(repo_id, username)
-
-                        where_conditions = []
-                        parameters = []
-
-                        for file_info in file_list_for_metadata:
-                            where_conditions.append(
-                                f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?)'
-                            )
-                            parameters.extend([file_info.get('parent_dir'), file_info.get('file_name')])
-
-                        where_clause = ' OR '.join(where_conditions)
-                        sql = f'SELECT * FROM `{METADATA_TABLE.name}` WHERE {where_clause};'
-
-                        query_result = metadata_server_api.query_rows(sql, parameters)
-                        results = query_result.get('results', [])
-
-                        metadata_dict = {}
-                        for record in results:
-                            file_key = record.get('_name')
-                            if file_key:
-                                metadata_dict[file_key] = record
-
-                        for dirent in response_dict['dirent_list']:
-                            if dirent.get('type') == 'file' and dirent.get('name') in metadata_dict:
-                                file_metadata = metadata_dict[dirent['name']]
-                                dirent['creator'] = file_metadata.get('_file_creator')
-                                dirent['last_modifier'] = file_metadata.get('_file_modifier')
-                                dirent['status'] = file_metadata.get('_status')
-
-                    except Exception as e:
-                        logger.warning(f"Failed to fetch metadata for {repo_id}/{parent_dir}: {e}")
-
-        if is_metadata_enabled:
-            try:
-                from seafevents.repo_metadata.constants import METADATA_TABLE
-                columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
-                columns = columns_data.get('columns', [])
-
-                metadata_options = {}
-                for column in columns:
-                    column_key = column.get('key') or column.get('column_key')
-                    column_data = column.get('data', {})
-
-                    if column_key == '_status' and column_data.get('options'):
-                        metadata_options['status'] = column_data['options']
-                        break
-
-                if metadata_options:
-                    response_dict['metadata_options'] = metadata_options
-
-            except Exception as e:
-                logger.warning(f"Failed to fetch metadata column options for {repo_id}: {e}")
 
         return Response(response_dict)
 

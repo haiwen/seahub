@@ -18,8 +18,9 @@ import { formatUnixWithTimezone } from '../../utils/time';
 import Icon from '../icon';
 import StatusEditor from './status-editor';
 import Formatter from '../../metadata/components/formatter';
-import { CellType } from '../../metadata/constants';
+import { CellType, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
+import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
@@ -60,14 +61,13 @@ const propTypes = {
   onItemsMove: PropTypes.func.isRequired,
   onShowDirentsDraggablePreview: PropTypes.func,
   loadDirentList: PropTypes.func,
-  visibleColumns: PropTypes.array,
   isMetadataLoading: PropTypes.bool,
   collaborators: PropTypes.array,
   collaboratorsCache: PropTypes.object,
   updateCollaboratorsCache: PropTypes.func,
   queryUser: PropTypes.func,
-  onStatusColumnOptionsChange: PropTypes.func,
-  statusColumnOptions: PropTypes.array,
+  columns: PropTypes.array,
+  hiddenColumnKeys: PropTypes.array,
 };
 
 class DirentListItem extends React.Component {
@@ -720,7 +720,7 @@ class DirentListItem extends React.Component {
 
   render() {
     let dirent = this.props.dirent;
-    const { visibleColumns = [] } = this.props;
+    const { columns, hiddenColumnKeys } = this.props;
 
     let iconUrl = Utils.getDirentIcon(dirent);
 
@@ -737,11 +737,14 @@ class DirentListItem extends React.Component {
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
     // Check if configurable columns are visible
-    const showSize = visibleColumns.includes(DIR_COLUMN_KEYS.SIZE);
-    const showModified = visibleColumns.includes(DIR_COLUMN_KEYS.MODIFIED);
-    const showCreator = visibleColumns.includes(DIR_COLUMN_KEYS.CREATOR);
-    const showLastModifier = visibleColumns.includes(DIR_COLUMN_KEYS.LAST_MODIFIER);
-    const showStatus = visibleColumns.includes(DIR_COLUMN_KEYS.STATUS);
+    const visibleColumnKeys = columns.filter(col => !hiddenColumnKeys.includes(col.key)).map(col => col.key);
+    const showSize = visibleColumnKeys.includes(DIR_COLUMN_KEYS.SIZE);
+    const showModified = visibleColumnKeys.includes(DIR_COLUMN_KEYS.MTIME);
+    const showCreator = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_CREATOR);
+    const showLastModifier = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_MODIFIER);
+    const showStatus = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_STATUS);
+    const statusCol = columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
+    const canEdit = !dirent.isDir() && dirent.permission === 'rw';
 
     if (isMobile) {
       return (
@@ -937,18 +940,18 @@ class DirentListItem extends React.Component {
         )}
 
         {showModified && (
-          <div className="dirent-property dirent-property-modified" title={formatUnixWithTimezone(dirent.mtime)}>
+          <div className="d-block dirent-property dirent-property-modified" title={formatUnixWithTimezone(dirent.mtime)}>
             {dirent.mtime_relative}
           </div>
         )}
 
         {showCreator && (
           <div className="dirent-property dirent-property-creator">
-            <Formatter
-              field={{ type: CellType.CREATOR, name: gettext('Creator') }}
-              value={dirent.creator}
+            <CreatorFormatter
+              value={dirent[PRIVATE_COLUMN_KEY.FILE_CREATOR]}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
+              collaboratorsCache={this.props.collaboratorsCache}
             />
           </div>
         )}
@@ -957,7 +960,7 @@ class DirentListItem extends React.Component {
           <div className="dirent-property dirent-property-last-modifier">
             <Formatter
               field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }}
-              value={dirent.last_modifier}
+              value={dirent[PRIVATE_COLUMN_KEY.FILE_MODIFIER]}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
             />
@@ -967,13 +970,10 @@ class DirentListItem extends React.Component {
         {showStatus && (
           <div className="dirent-property dirent-property-status">
             <StatusEditor
-              repoID={this.props.repoID}
-              value={dirent.status}
+              value={dirent[PRIVATE_COLUMN_KEY.FILE_STATUS]}
               record={dirent}
-              dirent={dirent}
-              canEdit={dirent.type !== 'dir'}
-              options={this.props.statusColumnOptions}
-              onStatusColumnOptionsChange={this.props.onStatusColumnOptionsChange}
+              column={statusCol}
+              canEdit={canEdit}
             />
           </div>
         )}

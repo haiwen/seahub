@@ -12,7 +12,7 @@ const DirentItemWrapper = ({
   repoID,
   registerExecuteOperation,
   unregisterExecuteOperation,
-  statusColumnOptions,
+  columns,
   ...itemProps
 }) => {
   const childRef = useRef(null);
@@ -33,7 +33,7 @@ const DirentItemWrapper = ({
       dirent={dirent}
       path={path}
       repoID={repoID}
-      statusColumnOptions={statusColumnOptions}
+      columns={columns}
       {...itemProps}
     />
   );
@@ -46,7 +46,7 @@ const DirentVirtualListView = ({
   overscan = 5,
   registerExecuteOperation,
   unregisterExecuteOperation,
-  visibleColumns = [],
+  columns,
   repoID,
   path,
   ...itemProps
@@ -151,7 +151,7 @@ const DirentVirtualListView = ({
                   collaboratorsCache={collaboratorsCache}
                   updateCollaboratorsCache={updateCollaboratorsCache}
                   queryUser={queryUser}
-                  visibleColumns={visibleColumns}
+                  columns={columns}
                   {...itemProps}
                 />
               )}
@@ -168,6 +168,7 @@ DirentVirtualListView.propTypes = {
   items: PropTypes.array.isRequired,
   itemHeight: PropTypes.number,
   overscan: PropTypes.number,
+  onColumnDataModified: PropTypes.func,
 };
 
 export default DirentVirtualListView;

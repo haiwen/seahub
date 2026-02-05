@@ -13,9 +13,7 @@ import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
-import { DEFAULT_VISIBLE_COLUMNS, CONFIGURABLE_COLUMNS } from '../../constants/dir-column-visibility';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
-import { gettext } from '../../utils/constants';
 
 const propTypes = {
   userPerm: PropTypes.string,
@@ -30,8 +28,9 @@ const propTypes = {
   onToggleDetail: PropTypes.func,
   onCloseDetail: PropTypes.func,
   eventBus: PropTypes.object,
-  visibleColumns: PropTypes.array,
   enableMetadata: PropTypes.bool,
+  columns: PropTypes.array,
+  hiddenColumnKeys: PropTypes.array,
 };
 
 class DirTool extends React.Component {
@@ -41,22 +40,8 @@ class DirTool extends React.Component {
     this.props.sortItems(sortBy, sortOrder);
   };
 
-  getHiddenColumns = () => {
-    const visibleColumns = this.props.visibleColumns || DEFAULT_VISIBLE_COLUMNS;
-    const allConfigurableColumns = CONFIGURABLE_COLUMNS;
-
-    const effectiveConfigurableColumns = this.props.enableMetadata
-      ? allConfigurableColumns
-      : allConfigurableColumns.filter(col => !['creator', 'last_modifier', 'status'].includes(col));
-
-    return effectiveConfigurableColumns.filter(col => !visibleColumns.includes(col));
-  };
-
   modifyHiddenColumns = (hiddenColumns) => {
-    const allConfigurableColumns = CONFIGURABLE_COLUMNS;
-    const visibleCols = allConfigurableColumns.filter(col => !hiddenColumns.includes(col));
-
-    this.props.eventBus.dispatch(EVENT_BUS_TYPE.COLUMN_VISIBILITY_CHANGED, visibleCols);
+    this.props.eventBus.dispatch(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, hiddenColumns);
   };
 
   render() {
@@ -106,14 +91,8 @@ class DirTool extends React.Component {
             wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
             target="dir-hide-column-popover"
             readOnly={isCustomPermission}
-            columns={[
-              { key: 'size', name: gettext('Size') },
-              { key: 'modified', name: gettext('Last update') },
-              { key: 'creator', name: gettext('Creator') },
-              { key: 'last_modifier', name: gettext('Last modifier') },
-              { key: 'status', name: gettext('Status') },
-            ]}
-            hiddenColumns={this.getHiddenColumns()}
+            columns={this.props.columns}
+            hiddenColumns={this.props.hiddenColumnKeys}
             modifyHiddenColumns={this.modifyHiddenColumns}
           />
         )}

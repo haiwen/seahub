@@ -869,9 +869,9 @@ class MetadataBatchRecords(APIView):
             editable_columns = [
                 '_rate',
                 '_tags',
-                '_status',
-                '_creator',
+                '_file_creator',
                 '_last_modifier',
+                '_status',
             ]
             for column in all_columns:
                 key = column.get('key')

@@ -268,7 +268,6 @@ class PopupEditorContainer extends React.Component {
       const value = updated[key];
       updates = PRIVATE_COLUMN_KEYS.includes(columnKey) ? { [columnKey]: value } : { [columnName]: value };
     }
-
     const { oldRowData, originalOldRowData } = this.getOldRowData(originalOldCellValue);
 
     // updates used for update remote record data

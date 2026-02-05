@@ -2,16 +2,15 @@ import React, { useMemo, useState, useRef, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types';
 import { Popover } from 'reactstrap';
 import SingleSelectEditor from '../../metadata/components/cell-editors/single-select-editor';
-import { Utils } from '../../utils/utils';
 import { KeyCodes } from '../../constants';
-import toaster from '../toast';
 import { PRIVATE_COLUMN_KEY } from '../../metadata/constants';
-import metadataAPI from '../../metadata/api';
-import { STATUS_OPTIONS, formatStatusOptions } from './column-config';
-
-import './index.css';
 import { eventBus } from '../common/event-bus';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
+import SingleSelectFormatter from '@/metadata/components/cell-formatter/single-select';
+import { DEFAULT_FILE_STATUS_OPTIONS } from '@/metadata/constants/column/format';
+import { getServerOptions } from '@/metadata/utils/cell';
+
+import './index.css';
 
 const STATUS_EDITOR_CONFIG = {
   MIN_WIDTH: 200,
@@ -20,69 +19,12 @@ const STATUS_EDITOR_CONFIG = {
   EDITOR_PADDING: '0 10px'
 };
 
-const ListViewStatusFormatter = ({ value, options = [], className }) => {
-  const displayData = useMemo(() => {
-    if (!value) {
-      return {
-        id: '',
-        name: '',
-        color: 'transparent',
-        textColor: 'transparent'
-      };
-    }
-
-    if (options && options.length > 0) {
-      const found = options.find(o => o.id === value || o.name === value);
-      if (found) {
-        return found;
-      }
-    }
-
-    if (value === STATUS_OPTIONS.IN_PROGRESS.name) {
-      return STATUS_OPTIONS.IN_PROGRESS;
-    } else if (value === STATUS_OPTIONS.IN_REVIEW.name) {
-      return STATUS_OPTIONS.IN_REVIEW;
-    } else if (value === STATUS_OPTIONS.DONE.name) {
-      return STATUS_OPTIONS.DONE;
-    } else if (value === STATUS_OPTIONS.OUTDATED.name) {
-      return STATUS_OPTIONS.OUTDATED;
-    } else {
-      return {
-        id: value,
-        name: value,
-        color: '#eaeaea',
-        textColor: '#212529'
-      };
-    }
-  }, [value, options]);
-
-  if (!displayData) {
-    return <span className="empty"></span>;
-  }
-
-  return (
-    <div
-      className={`list-view-status-option text-truncate ${className || ''}`}
-      style={{
-        backgroundColor: displayData.color,
-        color: displayData.textColor,
-      }}
-      title={displayData.name}
-    >
-      {displayData.name}
-    </div>
-  );
-};
-
 const StatusEditor = ({
-  repoID,
   value,
   record,
+  column,
   className = '',
   canEdit = true,
-  options,
-  dirent,
-  onStatusColumnOptionsChange,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
@@ -91,13 +33,6 @@ const StatusEditor = ({
   useEffect(() => {
     setCurrentValue(value);
   }, [value]);
-
-  const hasPermission = useMemo(() => {
-    if (!canEdit) return false;
-    if (!dirent) return true;
-    const permission = dirent.permission || '';
-    return permission.includes('w');
-  }, [canEdit, dirent]);
 
   useEffect(() => {
     const originalSfMetadataContext = window.sfMetadataContext || null;
@@ -109,7 +44,7 @@ const StatusEditor = ({
       window.sfMetadataContext = {
         ...(window.sfMetadataContext || {}),
         canModifyColumnData: (column) => {
-          return column.key === PRIVATE_COLUMN_KEY.FILE_STATUS && hasPermission;
+          return column.key === PRIVATE_COLUMN_KEY.FILE_STATUS && canEdit;
         }
       };
     }
@@ -125,40 +60,34 @@ const StatusEditor = ({
         }
       }
     };
-  }, [hasPermission]);
+  }, [canEdit]);
 
-  const handleStatusChange = useCallback(async (newValue) => {
-    if (!hasPermission) return;
+  const handleStatusChange = useCallback(async (id) => {
+    if (!canEdit) return;
 
-    setCurrentValue(newValue);
+    setCurrentValue(id);
     setIsEditing(false);
-    eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, dirent.name, newValue);
-  }, [hasPermission, dirent]);
+    eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, record.name, id);
+  }, [canEdit, record.name]);
 
-  const handleEditorCommit = useCallback((newValue) => {
-    if (newValue === undefined || newValue === null || newValue === currentValue) {
+  const handleEditorCommit = useCallback((id) => {
+    if (!id || id === currentValue) {
       setIsEditing(false);
       return;
     }
-    handleStatusChange(newValue);
+    handleStatusChange(id);
   }, [currentValue, handleStatusChange]);
 
-  const modifyColumnData = useCallback(async (columnKey, newData) => {
-    try {
-      const optionsWithColors = formatStatusOptions(newData.options);
-      onStatusColumnOptionsChange(optionsWithColors);
-      await metadataAPI.modifyColumnData(repoID, columnKey, newData);
-    } catch (error) {
-      const errorMsg = Utils.getErrorMsg(error);
-      toaster.danger(errorMsg);
-    }
-  }, [repoID, onStatusColumnOptionsChange]);
+  const modifyColumnData = useCallback((columnKey, newData) => {
+    newData.options = getServerOptions({ key: PRIVATE_COLUMN_KEY.FILE_STATUS, data: newData });
+    eventBus.dispatch(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, columnKey, newData);
+  }, []);
 
   const handleClick = useCallback(() => {
-    if (hasPermission) {
+    if (canEdit) {
       setIsEditing(true);
     }
-  }, [hasPermission]);
+  }, [canEdit]);
 
   useEffect(() => {
     let isMounted = true;
@@ -239,13 +168,7 @@ const StatusEditor = ({
       <div className={editorClassName} style={{ width: width }}>
         <SingleSelectEditor
           value={displayValue}
-          column={{
-            key: PRIVATE_COLUMN_KEY.FILE_STATUS,
-            type: 'file_status',
-            width: width,
-            data: { options: options },
-            editable: true
-          }}
+          column={column}
           columns={[]}
           record={record}
           onCommit={handleEditorCommit}
@@ -268,16 +191,16 @@ const StatusEditor = ({
         {editor}
       </Popover>
     );
-  }, [isEditing, displayValue, options, record, handleEditorCommit, modifyColumnData, containerRef]);
+  }, [isEditing, displayValue, record, column, handleEditorCommit, modifyColumnData, containerRef]);
 
   return (
     <div
       ref={containerRef}
-      className={`editable-status-wrapper ${isEditing ? 'editing' : ''} ${className} ${!hasPermission ? 'readonly' : ''}`}
+      className={`editable-status-wrapper ${isEditing ? 'editing' : ''} ${className} ${!canEdit ? 'readonly' : ''}`}
       onClick={handleClick}
     >
       {displayValue ? (
-        <ListViewStatusFormatter value={displayValue} options={options} />
+        <SingleSelectFormatter value={displayValue} options={column?.data?.options || DEFAULT_FILE_STATUS_OPTIONS} />
       ) : (
         <span className="text-muted empty-status-placeholder"></span>
       )}
@@ -287,14 +210,12 @@ const StatusEditor = ({
 };
 
 StatusEditor.propTypes = {
-  repoID: PropTypes.string,
   value: PropTypes.string,
   record: PropTypes.object,
+  column: PropTypes.object,
   className: PropTypes.string,
   canEdit: PropTypes.bool,
   options: PropTypes.array,
-  dirent: PropTypes.object,
-  onStatusColumnOptionsChange: PropTypes.func,
 };
 
 export default StatusEditor;
