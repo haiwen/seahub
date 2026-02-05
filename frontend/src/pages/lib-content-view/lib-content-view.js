@@ -213,9 +213,10 @@ class LibContentView extends React.Component {
       seafileAPI.listDir(this.props.repoID, this.state.path, { 'with_thumbnail': true, 'with_metadata': true }).then(async res => {
         const { dirent_list, user_perm: userPerm, dir_id: dirID, metadata } = res.data;
 
-        // Enrich dirent list with metadata for list view
-        const enrichedDirentList = await this.enrichDirentListWithMetadata(dirent_list, metadata);
-        const direntList = Utils.sortDirents(enrichedDirentList.map(item => new Dirent(item)), this.state.sortBy, this.state.sortOrder);
+        const columns = this.enrichColumns(metadata);
+        const enrichedDirentList = this.enrichDirentListWithMetadata(dirent_list, metadata);
+        const direntList = Utils.sortDirents(enrichedDirentList, this.state.sortBy, this.state.sortOrder);
+
         this.setState({
           pathExist: true,
           userPerm,
@@ -225,6 +226,7 @@ class LibContentView extends React.Component {
           path: this.state.path,
           isSessionExpired: false,
           currentDirent: null,
+          columns,
         });
 
         // Synchronize tree panel with updated directory list
@@ -649,52 +651,58 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
-  enrichDirentListWithMetadata = async (direntList, metadata) => {
-    if (!metadata) return direntList;
+  enrichColumns = (metadata) => {
+    if (!metadata?.columns) return DIR_BASE_COLUMNS;
 
+    const validColumns = metadata.columns.filter(col => DIR_METADATA_COLUMNS.includes(col.key));
+    let columns = DIR_BASE_COLUMNS;
+    if (validColumns.length > 0) {
+      columns = [...columns, ...validColumns];
+    }
+    return columns.map(col => new Column(col));
+  };
+
+  enrichDirentListWithMetadata = (direntList, metadata) => {
     const files = direntList.filter(item => item.type === 'file');
-    if (files.length === 0) {
-      return direntList;
+    if (files.length === 0 || !metadata) {
+      return direntList.map(item => new Dirent(item));
     }
 
-    try {
-      const { columns, rows } = metadata;
-      const cols = columns.filter(col => DIR_METADATA_COLUMNS.includes(col.key));
+    const cachedDirentMap = new Map(this.state.direntList.map(dirent => [dirent.name, dirent]));
+    const metadataMap = new Map();
+    const { rows } = metadata;
+    rows.forEach(record => {
+      const filename = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+      if (filename) {
+        metadataMap.set(filename, {
+          creator: record[PRIVATE_COLUMN_KEY.FILE_CREATOR],
+          modifier: record[PRIVATE_COLUMN_KEY.FILE_MODIFIER],
+          status: record[PRIVATE_COLUMN_KEY.FILE_STATUS],
+        });
+      }
+    });
 
-      const normalizedCols = normalizeColumns(cols || []).map(col => new Column(col));
-      this.setState({ columns: [
-        ...DIR_BASE_COLUMNS,
-        ...normalizedCols
-      ] || [] });
+    return direntList.map(item => {
+      if (item.type !== 'file') {
+        return new Dirent(item);
+      }
 
-      const metadataMap = {};
-      rows.forEach(record => {
-        const key = record[PRIVATE_COLUMN_KEY.FILE_NAME];
-        if (key) {
-          metadataMap[key] = record;
-        }
-      });
+      const enrichedItem = { ...item };
 
-      const enrichedDirentList = direntList.map(item => {
-        if (item.type === 'file') {
-          const metadata = metadataMap[item.name];
-          if (metadata) {
-            item[PRIVATE_COLUMN_KEY.FILE_CREATOR] = metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR];
-            item[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = metadata[PRIVATE_COLUMN_KEY.FILE_MODIFIER];
-            item[PRIVATE_COLUMN_KEY.FILE_STATUS] = metadata[PRIVATE_COLUMN_KEY.FILE_STATUS];
-          } else {
-            const cachedDirent = this.state.direntList.find(dirent => dirent.name === item.name);
-            item[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
-            item[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
-            item[PRIVATE_COLUMN_KEY.FILE_STATUS] = cachedDirent[PRIVATE_COLUMN_KEY.FILE_STATUS] || '';
-          }
-        }
-        return item;
-      });
-      return enrichedDirentList;
-    } catch (error) {
-      return direntList;
-    }
+      const metadataInfo = metadataMap.get(item.name);
+      if (metadataInfo) {
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = metadataInfo.creator;
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = metadataInfo.modifier;
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = metadataInfo.status;
+      } else {
+        const cachedDirent = cachedDirentMap.get(item.name);
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_STATUS] || '';
+      }
+
+      return new Dirent(enrichedItem);
+    });
   };
 
   loadDirentList = async (path) => {
@@ -719,13 +727,9 @@ class LibContentView extends React.Component {
         metadata,
       } = direntRes.data;
 
-      const enrichedDirentList = await this.enrichDirentListWithMetadata(dirent_list, metadata);
-
-      let direntList = Utils.sortDirents(
-        enrichedDirentList.map(item => new Dirent(item)),
-        sortBy,
-        sortOrder
-      );
+      const columns = this.enrichColumns(metadata);
+      const enrichedDirentList = this.enrichDirentListWithMetadata(dirent_list, metadata);
+      const direntList = Utils.sortDirents(enrichedDirentList, sortBy, sortOrder);
 
       this.setState({
         pathExist: true,
@@ -736,6 +740,7 @@ class LibContentView extends React.Component {
         path,
         isSessionExpired: false,
         currentDirent: null,
+        columns,
       }, () => {
         if (this.state.currentRepoInfo.is_admin) {
           if (this.foldersSharedOut) {

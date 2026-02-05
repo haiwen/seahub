@@ -9,7 +9,7 @@ export const DIR_COLUMN_KEYS = {
 
 export const DIR_BASE_COLUMNS = [
   { key: DIR_COLUMN_KEYS.SIZE, name: gettext('Size'), type: CellType.NUMBER },
-  { key: DIR_COLUMN_KEYS.MTIME, name: gettext('Last Modified'), type: CellType.MTIME }
+  { key: DIR_COLUMN_KEYS.MTIME, name: gettext('Last modified'), type: CellType.MTIME }
 ];
 
 // Columns that can be hidden (essential columns like checkbox, star, icon, name are always visible)
