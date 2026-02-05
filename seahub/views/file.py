@@ -54,7 +54,8 @@ from seahub.utils import render_error, is_org_context, \
     EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     get_conf_text_ext, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, \
-    normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new
+    normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new, \
+    get_site_scheme_and_netloc
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EXCALIDRAW)
@@ -1546,8 +1547,8 @@ def view_shared_file(request, fileshare):
     if filetype == IMAGE or \
             filetype == VIDEO and settings.ENABLE_VIDEO_PREVIEW or \
             filetype == PDF and settings.ENABLE_PDF_PREVIEW:
-        thumbnail_for_og_image = reverse('share_link_thumbnail_get',
-                                         args=[token, 256, path.lstrip('/')])
+        thumbnail_for_og_image = get_site_scheme_and_netloc() + reverse('share_link_thumbnail_get',
+                                                                        args=[token, 256, path.lstrip('/')])
 
     file_obj = seafile_api.get_dirent_by_path(repo_id, path)
 
