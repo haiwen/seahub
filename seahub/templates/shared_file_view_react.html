@@ -9,7 +9,11 @@
 <meta property="og:site_name" content="{{ site_name }}">
 <meta property="og:url" content="{{ service_url }}{{ file_share_link }}">
 <meta property="og:title" content="{{ file_name }}">
+{% if thumbnail_for_og_image %}
+<meta property="og:image" content="{{ thumbnail_for_og_image }}">
+{% else %}
 <meta property="og:image" content="{{ service_url }}{{ MEDIA_URL }}img/file/{{ icon_path_for_ogp }}">
+{% endif %}
 <meta property="og:description" content="{{ desc_for_ogp }}">
 {% endblock %}
 
