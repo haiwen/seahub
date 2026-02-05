@@ -1548,7 +1548,9 @@ def view_shared_file(request, fileshare):
             filetype == VIDEO and settings.ENABLE_VIDEO_PREVIEW or \
             filetype == PDF and settings.ENABLE_PDF_PREVIEW:
         thumbnail_for_og_image = get_site_scheme_and_netloc() + reverse('share_link_thumbnail_get',
-                                                                        args=[token, 256, path.lstrip('/')])
+                                                                        args=[token,
+                                                                              256,
+                                                                              path.lstrip('/')])
 
     file_obj = seafile_api.get_dirent_by_path(repo_id, path)
 
@@ -1833,8 +1835,10 @@ def view_file_via_shared_dir(request, fileshare):
     if filetype == IMAGE or \
             filetype == VIDEO and settings.ENABLE_VIDEO_PREVIEW or \
             filetype == PDF and settings.ENABLE_PDF_PREVIEW:
-        thumbnail_for_og_image = reverse('share_link_thumbnail_get',
-                                         args=[token, 256, req_path.lstrip('/')])
+        thumbnail_for_og_image = get_site_scheme_and_netloc() + reverse('share_link_thumbnail_get',
+                                                                        args=[token,
+                                                                              256,
+                                                                              req_path.lstrip('/')])
 
     file_obj = seafile_api.get_dirent_by_path(repo_id, req_path)
 
