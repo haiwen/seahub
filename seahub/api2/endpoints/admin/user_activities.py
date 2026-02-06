@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 
 import os
-import json
 import logging
 
 from rest_framework import status
@@ -100,7 +99,6 @@ class UserActivitiesView(APIView):
                 d['old_name'] = os.path.basename(e.old_path)
             elif e.op_type == 'publish':
                 d['old_path'] = e.old_path
-            
             events_list.append(d)
 
         response = {'events': events_list}

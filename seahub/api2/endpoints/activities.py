@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 
 import os
-import json
 import logging
 
 from rest_framework import status
