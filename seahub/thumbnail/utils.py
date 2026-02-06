@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import hashlib
 import os
 import posixpath
 import timeit
@@ -115,9 +116,21 @@ def generate_thumbnail(request, repo_id, size, path):
     if not file_id:
         return (False, 400)
 
-    thumbnail_file = os.path.join(thumbnail_dir, file_id)
+    # Use MD5 of repo_id + path as thumbnail filename
+    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    thumbnail_file = os.path.join(thumbnail_dir, thumbnail_key)
+    
+    file_obj = seafile_api.get_dirent_by_path(repo_id, path)
+    source_mtime = file_obj.mtime if file_obj else 0
+    
     if os.path.exists(thumbnail_file):
-        return (True, 200)
+        thumbnail_mtime = os.path.getmtime(thumbnail_file)
+        if thumbnail_mtime >= source_mtime:
+            return (True, 200)
+        try:
+            os.unlink(thumbnail_file)
+        except OSError:
+            pass
 
     repo = get_repo(repo_id)
     file_size = get_file_size(repo.store_id, repo.version, file_id)
@@ -385,12 +398,17 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     image.save(thumbnail_file, save_type, icc_profile=icc_profile)
     return (True, 200)
 
-def get_thumbnail_image_path(obj_id, image_size):
+def get_thumbnail_image_path(repo_id, path, image_size):
+    """Get thumbnail image path using MD5(repo_id + path) as filename."""
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(image_size))
-    thumbnail_image_path = os.path.join(thumbnail_dir, obj_id)
+    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    thumbnail_image_path = os.path.join(thumbnail_dir, thumbnail_key)
     return thumbnail_image_path
 
-def remove_thumbnail_by_id(file_id):
+def remove_thumbnail_by_path(repo_id, path):
+    """Remove thumbnail files for a given repo_id + path."""
+    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
     for size_dir in [item for item in os.listdir(THUMBNAIL_ROOT) if os.path.isdir(os.path.join(THUMBNAIL_ROOT, item))]:
-        if os.path.exists(os.path.join(THUMBNAIL_ROOT, size_dir, file_id)):
-            os.remove(os.path.join(THUMBNAIL_ROOT, size_dir, file_id))
+        thumbnail_file = os.path.join(THUMBNAIL_ROOT, size_dir, thumbnail_key)
+        if os.path.exists(thumbnail_file):
+            os.remove(thumbnail_file)

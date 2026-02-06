@@ -194,13 +194,19 @@ def sdoc_to_docx(request, repo_id):
     return response
 
 
-def sdoc_preview(request, repo_id, file_uuid):
+def sdoc_preview(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         error_msg = _("Library does not exist")
         logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
-    
+
+    path = request.GET.get('path', '')
+    if not path:
+        error_msg = 'Path cannot be empty.'
+        logger.warning(f'Sdoc preview failed: {error_msg}')
+        return render_error(request, error_msg)
+
     access_token = request.GET.get('access_token')
     if not access_token:
         error_msg = 'Token cannot be empty.'
@@ -208,7 +214,7 @@ def sdoc_preview(request, repo_id, file_uuid):
         return render_error(request, error_msg)
     try:
         payload = jwt.decode(access_token, JWT_PRIVATE_KEY, algorithms=['HS256'])
-        if payload.get('file_uuid') != file_uuid:
+        if payload.get('repo_id') != repo_id or payload.get('path') != path:
             error_msg = 'Permission denied.'
             logger.warning(f'Sdoc preview failed: {error_msg}')
             return render_error(request, error_msg)
@@ -217,13 +223,22 @@ def sdoc_preview(request, repo_id, file_uuid):
         logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
 
-    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+    file_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not file_id:
+        error_msg = 'File %s not found.' % path
+        logger.warning(f'Sdoc preview failed: {error_msg}')
+        return render_error(request, error_msg)
+
+    filename = os.path.basename(path)
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, file_id, 'view', '', use_onetime=False)
+    file_download_link = gen_file_get_url(token, filename)
+
+    file_uuid = get_seadoc_file_uuid(repo, path)
     return_dict = {
         'repo': repo,
-        'file_uuid': file_uuid,
-        'can_compare': True,
         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
-        'file_download_link': get_seadoc_download_link(uuid_map)
+        'file_download_link': file_download_link,
     }
 
     return render(request, 'sdoc_preview.html', return_dict)
