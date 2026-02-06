@@ -28,6 +28,10 @@ const MSG_TYPE_REPO_SHARE_PERM_DELETE = 'repo_share_perm_delete';
 const MSG_TYPE_FACE_CLUSTER = 'face_cluster';
 const MSG_TYPE_SEADOC_REPLY = 'reply';
 const MSG_TYPE_SEADOC_COMMENT = 'comment';
+const MSG_TYPE_REPO_ARCHIVED = 'repo_archived';
+const MSG_TYPE_REPO_UNARCHIVED = 'repo_unarchived';
+const MSG_TYPE_REPO_ARCHIVE_FAILED = 'repo_archive_failed';
+const MSG_TYPE_REPO_UNARCHIVE_FAILED = 'repo_unarchive_failed';
 
 dayjs.extend(relativeTime);
 
@@ -397,6 +401,38 @@ class NoticeItem extends React.Component {
       }
       return { avatar_url, username, notice };
     }
+    if (noticeType === MSG_TYPE_REPO_ARCHIVED) {
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+      let notice = gettext('Library {libraryName} has been archived.');
+      notice = notice.replace('{libraryName}', repoLink);
+      return { avatar_url: `${mediaUrl}/avatars/default.png`, notice };
+    }
+
+    if (noticeType === MSG_TYPE_REPO_UNARCHIVED) {
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+      let notice = gettext('Library {libraryName} has been unarchived.');
+      notice = notice.replace('{libraryName}', repoLink);
+      return { avatar_url: `${mediaUrl}/avatars/default.png`, notice };
+    }
+
+    if (noticeType === MSG_TYPE_REPO_ARCHIVE_FAILED) {
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+      let notice = gettext('Library {libraryName} archive failed.');
+      notice = notice.replace('{libraryName}', repoLink);
+      return { avatar_url: `${mediaUrl}/avatars/default.png`, notice };
+    }
+
+    if (noticeType === MSG_TYPE_REPO_UNARCHIVE_FAILED) {
+      const repoURL = `${siteRoot}library/${repo_id}/${encodeURIComponent(repo_name)}/`;
+      const repoLink = `<a href=${repoURL} target="_blank">${Utils.HTMLescape(repo_name)}</a>`;
+      let notice = gettext('Library {libraryName} unarchive failed.');
+      notice = notice.replace('{libraryName}', repoLink);
+      return { avatar_url: `${mediaUrl}/avatars/default.png`, notice };
+    }
+
     return { avatar_url: null, notice: null, username: null };
   }
 
@@ -420,15 +456,15 @@ class NoticeItem extends React.Component {
       <tr className='notification-item'>
         <td className="text-center">
           {!noticeItem.seen &&
-          <span
-            className="notification-point"
-            onClick={this.onMarkNotificationRead}
-            tabIndex={0}
-            role="button"
-            aria-label={gettext('Mark notification as read')}
-            onKeyDown={Utils.onKeyDown}
-          >
-          </span>
+            <span
+              className="notification-point"
+              onClick={this.onMarkNotificationRead}
+              tabIndex={0}
+              role="button"
+              aria-label={gettext('Mark notification as read')}
+              onKeyDown={Utils.onKeyDown}
+            >
+            </span>
           }
         </td>
         <td className="text-truncate">

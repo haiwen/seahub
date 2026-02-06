@@ -636,7 +636,33 @@ class FileTrash(models.Model):
         db_table = 'FileTrash'
         ordering = ["-delete_time"]
         
+STATUS_ARCHIVED = 'archived'
+STATUS_IN_ARCHIVING = 'in_archiving'
+STATUS_IN_UNARCHIVING = 'in_unarchiving'
+class RepoArchiveStatusManager(models.Manager):     
+    def get_repos_archive_status(self, repo_ids):
+        """Get archive_status for multiple repos."""
+        if not repo_ids:
+            return {}
         
+        qs = self.filter(repo_id__in=repo_ids)
+        return {obj.repo_id: obj.status for obj in qs}
+
+    def get_archive_status(self, repo_id):
+        """Get archive_status for a single repo."""
+        try:
+            obj = self.get(repo_id=repo_id)
+            return obj.status
+        except self.model.DoesNotExist:
+            return None
+
+class RepoArchiveStatus(models.Model):
+    repo_id = models.CharField(max_length=36, db_index=True)
+    status = models.CharField(max_length=32, null=True, blank=True)
+    objects = RepoArchiveStatusManager()
+
+    class Meta:
+        db_table = 'repo_archive_status'
 
 
 ###### signal handler ###############

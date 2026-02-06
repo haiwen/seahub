@@ -393,6 +393,45 @@ class Libraries extends Component {
     });
   };
 
+  updateRepoStatus = (repo, newStatus) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.archive_status = newStatus;
+        item.status = newStatus === null ? 'normal' : 'read-only';
+        item.permission = newStatus === null ? 'rw' : 'r';
+      }
+      return item;
+    });
+    this.setState({ repoList: repoList });
+    this.updateStatusRelatedGroupsRepos(repo.repo_id, newStatus);
+  };
+
+
+  updateStatusRelatedGroupsRepos = (repoId, newStatus) => {
+    const relatedGroups = this.groupsReposManager.getRepoInGroupsIdsById(repoId);
+    if (relatedGroups.length === 0) {
+      return;
+    }
+
+    const { groupList } = this.state;
+    const updatedGroups = groupList.map((group) => {
+      const { repos } = group;
+      if (!relatedGroups.includes(group.id)) {
+        return group;
+      }
+      const updatedRepos = repos.map(item => {
+        if (item.repo_id === repoId) {
+          item.archive_status = newStatus;
+          item.status = newStatus === null ? 'normal' : 'read-only';
+          item.permission = newStatus === null ? 'rw' : 'r';
+        }
+        return item;
+      });
+      return { ...group, repos: updatedRepos };
+    });
+    this.setState({ groupList: updatedGroups });
+  };
+
   render() {
     const { isLoading, currentViewMode, sortBy, sortOrder, groupList } = this.state;
     const isDesktop = Utils.isDesktop();
@@ -464,6 +503,7 @@ class Libraries extends Component {
                               sortRepoList={this.sortRepoList}
                               inAllLibs={true}
                               currentViewMode={currentViewMode}
+                              updateRepoStatus={this.updateRepoStatus}
                             />
                           )
                       }
@@ -515,6 +555,7 @@ class Libraries extends Component {
                         unshareRepoToGroup={this.unshareRepoToGroup}
                         onTransferRepo={this.onGroupTransferRepo}
                         currentViewMode={currentViewMode}
+                        updateRepoStatus={this.updateRepoStatus}
                       />
                     );
                   })}

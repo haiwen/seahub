@@ -18,7 +18,7 @@ from seahub.api2.utils import api_error, is_wiki_repo
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
-from seahub.base.models import UserStarredFiles, UserMonitoredRepos
+from seahub.base.models import UserStarredFiles, UserMonitoredRepos, RepoArchiveStatus
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
@@ -116,6 +116,13 @@ class ReposView(APIView):
                 monitored_repo_id_list = []
 
             owned_repos.sort(key=lambda x: x.last_modify, reverse=True)
+            
+            # Fetch archive status for all owned repos at once
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                owned_archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(owned_repo_ids)
+            else:
+                owned_archive_status_dict = {}
+
             for r in owned_repos:
 
                 # do not return virtual repos
@@ -153,6 +160,11 @@ class ReposView(APIView):
                 if is_pro_version() and ENABLE_STORAGE_CLASSES:
                     repo_info['storage_name'] = r.storage_name
                     repo_info['storage_id'] = r.storage_id
+                    repo_info['archive_status'] = owned_archive_status_dict.get(r.id)
+
+                # Set permission to 'r' for read-only repos
+                if normalize_repo_status_code(r.status) == 'read-only':
+                    repo_info['permission'] = 'r'
 
                 repo_info_list.append(repo_info)
 
@@ -185,6 +197,12 @@ class ReposView(APIView):
                 monitored_repo_id_list = []
 
             shared_repos.sort(key=lambda x: x.last_modify, reverse=True)
+
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                shared_archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(shared_repo_ids)
+            else:
+                shared_archive_status_dict = {}
+            
             for r in shared_repos:
 
                 if is_wiki_repo(r):
@@ -232,6 +250,14 @@ class ReposView(APIView):
                 else:
                     repo_info['is_admin'] = False
 
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    repo_info['archive_status'] = shared_archive_status_dict.get(r.repo_id)
+
+                # Set permission to 'r' for read-only repos
+                if normalize_repo_status_code(r.status) == 'read-only':
+                    repo_info['permission'] = 'r'
+
+
                 repo_info_list.append(repo_info)
 
         if filter_by['group']:
@@ -261,6 +287,11 @@ class ReposView(APIView):
                 logger.error(e)
                 monitored_repo_id_list = []
 
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                group_archive_status_dict = RepoArchiveStatus.objects.get_repos_archive_status(group_repo_ids)
+            else:
+                group_archive_status_dict = {}
+
             for r in group_repos:
 
                 if is_wiki_repo(r):
@@ -286,6 +317,14 @@ class ReposView(APIView):
                     "salt": r.salt if r.enc_version >= 3 else '',
                     "enable_onlyoffice": enable_onlyoffice
                 }
+
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    repo_info['archive_status'] = group_archive_status_dict.get(r.repo_id)
+
+                # Set permission to 'r' for read-only repos
+                if normalize_repo_status_code(r.status) == 'read-only':
+                    repo_info['permission'] = 'r'
+
                 repo_info_list.append(repo_info)
 
         if filter_by['public'] and request.user.permissions.can_view_org():
@@ -430,6 +469,15 @@ class RepoView(APIView):
             "enable_onlyoffice": enable_onlyoffice,
             "monitored": monitored,
         }
+
+        # Add archive_status if storage classes is enabled
+        if is_pro_version() and ENABLE_STORAGE_CLASSES:
+            archive_status = RepoArchiveStatus.objects.get_archive_status(repo_id)
+            result['archive_status'] = archive_status
+
+        # Set permission to 'r' for read-only repos
+        if normalize_repo_status_code(repo.status) == 'read-only':
+            result['permission'] = 'r'
 
         return Response(result)
 

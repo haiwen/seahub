@@ -12,6 +12,7 @@ import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
+import ArchiveIcon from '../archive-icon';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -245,7 +246,7 @@ class DirPath extends React.Component {
   };
 
   render() {
-    const { currentPath, repoName, isTreePanelShown } = this.props;
+    const { currentPath, repoName, isTreePanelShown, currentRepoInfo } = this.props;
     const pathElem = this.turnPathToLink(currentPath);
     return (
       <div className="path-container dir-view-path">
@@ -291,19 +292,25 @@ class DirPath extends React.Component {
             onUploadFolder={this.props.onUploadFolder}
             loadDirentList={this.props.loadDirentList}
           >
-            <span className="last-path-item" title={repoName}>{repoName}</span>
+            <span className="last-path-item" title={repoName}>
+              {repoName}
+              <ArchiveIcon currentRepoInfo={currentRepoInfo} />
+            </span>
           </DirOperationToolbar> :
-          <span
-            className="path-item"
-            data-path="/"
-            onClick={this.onPathClick}
-            onKeyDown={Utils.onKeyDown}
-            role="button"
-            title={repoName}
-            tabIndex="0"
-          >
-            {repoName}
-          </span>
+          <>
+            <span
+              className="path-item"
+              data-path="/"
+              onClick={this.onPathClick}
+              onKeyDown={Utils.onKeyDown}
+              role="button"
+              title={repoName}
+              tabIndex="0"
+            >
+              {repoName}
+            </span>
+            <ArchiveIcon currentRepoInfo={currentRepoInfo} className='mr-1' />
+          </>
         }
         {pathElem}
       </div>

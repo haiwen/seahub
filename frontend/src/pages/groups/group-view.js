@@ -192,6 +192,18 @@ class GroupView extends React.Component {
     });
   };
 
+  updateRepoStatus = (repo, newStatus) => {
+    const repoList = this.state.repoList.map(item => {
+      if (item.repo_id === repo.repo_id) {
+        item.archive_status = newStatus;
+        item.status = newStatus === null ? 'normal' : 'read-only';
+        item.permission = newStatus === null ? 'rw' : 'r';
+      }
+      return item;
+    });
+    this.setState({ repoList: repoList });
+  };
+
   sortItems = (sortBy, sortOrder) => {
     Cookies.set('seafile-repo-dir-sort-by', sortBy);
     Cookies.set('seafile-repo-dir-sort-order', sortOrder);
@@ -366,6 +378,7 @@ class GroupView extends React.Component {
                         onItemRename={this.onItemRename}
                         onTransferRepo={this.onItemTransfer}
                         currentViewMode={currentViewMode}
+                        updateRepoStatus={this.updateRepoStatus}
                       />
                     )
               }

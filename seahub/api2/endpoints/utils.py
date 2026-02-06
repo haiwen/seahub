@@ -365,3 +365,29 @@ def get_seafevents_metrics():
     url = urljoin(SEAFEVENTS_SERVER_URL, '/metrics')
     resp = requests.get(url, headers=headers)
     return resp
+
+
+def add_repo_archive_task_request(repo_id, orig_storage_id, dest_storage_id, op_type, username):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-repo-archive-task')
+    params = {
+        'repo_id': repo_id,
+        'orig_storage_id': orig_storage_id,
+        'dest_storage_id': dest_storage_id,
+        'op_type': op_type,
+        'username': username
+    }
+    resp = requests.post(url, json=params, headers=headers)
+    return json.loads(resp.content)['task_id']
+
+
+def event_archive_status(task_id):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/query-archive-status')
+    params = {'task_id': task_id}
+    resp = requests.get(url, params=params, headers=headers)
+    return resp

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite } from '../utils/constants';
+import { gettext, isPro, folderPermEnabled, enableRepoSnapshotLabel, enableResetEncryptedRepoPassword, isEmailConfigured, enableMultipleOfficeSuite, enableStorageClasses } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import MobileItemMenu from '../components/mobile-item-menu';
 import Icon from './icon';
@@ -120,10 +120,20 @@ class LibraryOperationMenu extends React.Component {
   };
 
   getAdvancedOperations = () => {
-    const { isDepartmentRepo } = this.props;
+    const { isDepartmentRepo, repo } = this.props;
     const operations = [];
     operations.push('API Token');
+
+    // Archive/Unarchive operation - show for both personal and department repos when storage classes is enabled
+    if (enableStorageClasses && isPro) {
+      const archiveStatus = repo.archive_status;
+      if (!archiveStatus || archiveStatus === 'archived') {
+        operations.push('Archive');
+      }
+    }
+
     operations.push('Webhooks');
+
     if (isDepartmentRepo) {
       return operations;
     }
@@ -184,6 +194,9 @@ class LibraryOperationMenu extends React.Component {
         break;
       case 'Office Suite':
         translateResult = gettext('Office Suite');
+        break;
+      case 'Archive':
+        translateResult = this.props.repo && this.props.repo.archive_status === 'archived' ? gettext('Unarchive') : gettext('Archive');
         break;
       default:
         break;

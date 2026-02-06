@@ -61,6 +61,7 @@ export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
 export const resumableUploadFileBlockSize = window.app.pageOptions.resumableUploadFileBlockSize;
 export const storages = window.app.pageOptions.storages; // storage backends
+export const enableStorageClasses = window.app.pageOptions.enableStorageClasses;
 export const libraryTemplates = window.app.pageOptions.libraryTemplates; // library templates
 export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshotLabel;
 export const shareLinkForceUsePassword = window.app.pageOptions.shareLinkForceUsePassword;
