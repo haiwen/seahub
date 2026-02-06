@@ -81,11 +81,13 @@ class UserActivitiesView(APIView):
             d['author_email'] = e.op_user
             d['author_name'] = email2nickname(e.op_user)
             d['author_contact_email'] = email2contact_email(e.op_user)
+            details = e.details
+            d['details'] = details
+            d['count'] = len(details)
 
             url, is_default, date_uploaded = api_avatar_url(e.op_user)
             d['avatar_url'] = url
             d['time'] = utc_datetime_to_isoformat_timestr(e.timestamp)
-
             if e.op_type == 'clean-up-trash':
                 d['days'] = e.days
             elif e.op_type == 'rename' and e.obj_type == 'repo':

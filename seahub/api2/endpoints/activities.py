@@ -70,6 +70,10 @@ class ActivitiesView(APIView):
             url, is_default, date_uploaded = api_avatar_url(e.op_user)
             d['avatar_url'] = url
             d['time'] = utc_datetime_to_isoformat_timestr(e.timestamp)
+            details = e.details
+            d['details'] = details
+            d['count'] = len(details)
+
 
             if e.op_type == 'clean-up-trash':
                 d['days'] = e.days
