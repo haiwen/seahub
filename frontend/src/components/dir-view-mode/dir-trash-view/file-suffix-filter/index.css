@@ -1,0 +1,26 @@
+.sf-trash-filter .filter-by-suffix-container {
+  margin-right: 1rem;
+}
+
+.sf-trash-filter .filter-by-suffix-container .search-filter-toggle {
+  background-image: none;
+  border: none;
+  padding: 0 6px;
+  margin-left: -6px;
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.sf-trash-filter .search-filter-toggle.highlighted .filter-label {
+  color: #ed7109 !important;
+}
+
+
+.sf-trash-filter .filter-by-suffix-container .filter-label {
+  font-size: 14px;
+  color: var(--bs-body-color);
+}

@@ -7,15 +7,18 @@ import MetadataViewToolBar from '../../metadata/components/view-toolbar';
 import HistoryViewToolbar from '../dir-view-mode/dir-history-view/history-view-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
-import { HISTORY_MODE, LIST_MODE } from '../dir-view-mode/constants';
+import { HISTORY_MODE, LIST_MODE, TRASH_MODE } from '../dir-view-mode/constants';
 import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-searcher';
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
 import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
+import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
 
 const propTypes = {
+  repoID: PropTypes.string,
+  currentRepoInfo: PropTypes.object,
   userPerm: PropTypes.string,
   currentPath: PropTypes.string.isRequired,
   currentMode: PropTypes.string.isRequired,
@@ -76,6 +79,18 @@ class DirTool extends React.Component {
       return (
         <div className="dir-tool">
           <HistoryViewToolbar />
+        </div>
+      );
+    }
+
+    const isTrashView = currentMode === TRASH_MODE;
+    if (isTrashView) {
+      return (
+        <div className="dir-tool">
+          <TrashViewToolbar
+            repoID={this.props.repoID}
+            currentRepoInfo={this.props.currentRepoInfo}
+          />
         </div>
       );
     }

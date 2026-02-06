@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { gettext, username, isPro, siteRoot } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import TreeSection from '../../tree-section';
-import TrashDialog from '../../dialog/trash-dialog';
 import LibSettingsDialog from '../../dialog/lib-settings';
 import { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
@@ -43,9 +42,9 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
     };
   });
 
-  const [showTrashDialog, setShowTrashDialog] = useState(false);
-  const toggleTrashDialog = () => {
-    setShowTrashDialog(!showTrashDialog);
+
+  const handleTrashClick = () => {
+    eventBus.dispatch(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW);
   };
 
   const handleHistoryClick = () => {
@@ -79,7 +78,8 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
         <Item
           text={gettext('Trash')}
           iconSymbol="trash"
-          op={toggleTrashDialog}
+          op={handleTrashClick}
+          isActive={currentMode === 'trash'}
         />
       )}
       {isDesktop && (
@@ -94,14 +94,6 @@ const DirOthers = ({ userPerm, repoID, currentRepoInfo, currentMode, updateRepoI
         <LibraryMoreOperations
           repo={currentRepoInfo}
           updateRepoInfo={updateRepoInfo}
-        />
-      )}
-      {showTrashDialog && (
-        <TrashDialog
-          repoID={repoID}
-          currentRepoInfo={currentRepoInfo}
-          showTrashDialog={showTrashDialog}
-          toggleTrashDialog={toggleTrashDialog}
         />
       )}
       {isSettingsDialogOpen && (

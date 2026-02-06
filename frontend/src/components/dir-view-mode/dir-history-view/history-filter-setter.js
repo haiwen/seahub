@@ -5,12 +5,16 @@ import IconBtn from '../../icon-btn';
 import HistoryFilterPopover from './history-filter-popover';
 import { gettext } from '../../../utils/constants';
 import { isEnter, isSpace } from '../../../utils/hotkey';
+import { HISTORY_MODE } from '../constants';
 
-const HistoryFilterSetter = ({ filters = {
+const DEFAULT_FILTER = {
   date: { value: '', from: null, to: null },
   creators: [],
   tags: [],
-}, onFiltersChange, allCommits = [] }) => {
+  suffixes: '',
+};
+const HistoryFilterSetter = ({ mode = HISTORY_MODE, filters = DEFAULT_FILTER, onFiltersChange }) => {
+
   const [isShowPopover, setShowPopover] = useState(false);
   const [localFilters, setLocalFilters] = useState(filters);
 
@@ -25,6 +29,7 @@ const HistoryFilterSetter = ({ filters = {
     if (localFilters.date && localFilters.date.value) count++;
     if (localFilters.creators && localFilters.creators.length > 0) count++;
     if (localFilters.tags && localFilters.tags.length > 0) count++;
+    if (localFilters.suffixes) count++;
     return count;
   }, [localFilters]);
 
@@ -74,11 +79,11 @@ const HistoryFilterSetter = ({ filters = {
       />
       {isShowPopover && (
         <HistoryFilterPopover
+          mode={mode}
           target="history-filter-popover-target"
           filters={localFilters}
           onClose={handleClose}
           onChange={handleChange}
-          allCommits={allCommits}
         />
       )}
     </div>
@@ -90,9 +95,9 @@ HistoryFilterSetter.propTypes = {
     date: PropTypes.object,
     creators: PropTypes.array,
     tags: PropTypes.array,
+    suffixes: PropTypes.string,
   }),
   onFiltersChange: PropTypes.func.isRequired,
-  allCommits: PropTypes.array,
 };
 
 export default HistoryFilterSetter;

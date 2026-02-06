@@ -8,6 +8,7 @@ import { Utils } from '../../../../utils/utils';
 import OpIcon from '../../../op-icon';
 import Picker from '../../../date-and-time-picker';
 import Icon from '../../../icon';
+import { HISTORY_MODE } from '../../constants';
 
 const DATE_INPUT_WIDTH = 118;
 
@@ -18,7 +19,7 @@ const DATE_OPTION = {
   CUSTOM: 'custom',
 };
 
-const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: null }, onChange }) => {
+const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '', from: null, to: null }, onChange }) => {
   const [value, setValue] = useState(propsValue.value || '');
   const [isOpen, setIsOpen] = useState(false);
   const [isCustomDate, setIsCustomDate] = useState(propsValue.value === DATE_OPTION.CUSTOM);
@@ -172,6 +173,8 @@ const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: nu
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCustomDate, time, value, propsValue.from, propsValue.to]);
 
+  const copyRight = mode === HISTORY_MODE ? gettext('Create time') : gettext('Deleted time');
+
   return (
     <div className="history-date-filter-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
@@ -200,7 +203,7 @@ const HistoryDateFilter = ({ value: propsValue = { value: '', from: null, to: nu
           }}
         >
           <div className="filter-by-date-menu-toolbar">
-            <span className="filter-by-date-toolbar-label">{gettext('Create time')}</span>
+            <span className="filter-by-date-toolbar-label">{copyRight}</span>
             <OpIcon
               className="op-icon"
               title={gettext('Delete')}

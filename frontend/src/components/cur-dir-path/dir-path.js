@@ -52,6 +52,10 @@ class DirPath extends React.Component {
     this.props.onPathClick(path);
   };
 
+  isTrashMode = () => {
+    return location.href.indexOf('?trash=true') > -1;
+  };
+
   onTabNavClick = (e, tabName, id) => {
     if (window.uploader &&
       window.uploader.isUploadProgressDialogShow &&
@@ -185,6 +189,45 @@ class DirPath extends React.Component {
     );
   };
 
+  turnTrashPathToLink = (pathList) => {
+    if (pathList.length === 1 && pathList[0] === '') {
+      return (
+        <>
+          <span className="path-split">/</span>
+          <span className="path-item path-item-read-only">{gettext('Trash')}</span>
+        </>
+      );
+    }
+
+    let nodePath = '';
+    const pathElem = pathList.map((item, index) => {
+      if (item === '') {
+        return (
+          <>
+            <span className="path-split">/</span>
+            <span className="path-item path-item-read-only">{gettext('Trash')}</span>
+          </>
+        );
+      }
+      nodePath += '/' + item;
+      return (
+        <Fragment key={index} >
+          <span className="path-split">/</span>
+          <span
+            className={'path-item'}
+            data-path={nodePath}
+            onClick={this.onPathClick}
+            role="button"
+            title={item}
+          >
+            {item}
+          </span>
+        </Fragment>
+      );
+    });
+    return pathElem;
+  };
+
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
     const pathList = path.split('/');
@@ -194,6 +237,11 @@ class DirPath extends React.Component {
     if (pathList.includes(PRIVATE_FILE_TYPE.TAGS_PROPERTIES)) {
       return this.turnTagPathToLink(pathList);
     }
+
+    if (this.isTrashMode()) {
+      return this.turnTrashPathToLink(pathList);
+    }
+
     let nodePath = '';
     let pathElem = pathList.map((item, index) => {
       if (item === '') return null;
@@ -247,6 +295,7 @@ class DirPath extends React.Component {
   render() {
     const { currentPath, repoName, isTreePanelShown } = this.props;
     const pathElem = this.turnPathToLink(currentPath);
+    const isTrashMode = this.isTrashMode();
     return (
       <div className="path-container dir-view-path">
         <OpIcon
@@ -275,7 +324,7 @@ class DirPath extends React.Component {
             <span className="path-split">/</span>
           </>
         )}
-        {(currentPath === '/' || currentPath === '') ?
+        {(!isTrashMode && (currentPath === '/' || currentPath === '')) ?
           <DirOperationToolbar
             path={this.props.currentPath}
             repoID={this.props.repoID}

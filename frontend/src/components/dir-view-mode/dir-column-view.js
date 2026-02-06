@@ -10,7 +10,8 @@ import { DRAG_HANDLER_HEIGHT, MAX_SIDE_PANEL_RATE, MIN_SIDE_PANEL_RATE } from '.
 import { SeafileMetadata } from '../../metadata';
 import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
-import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE } from './constants';
+import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE } from './constants';
+import DirTrashView from './dir-trash-view';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -298,6 +299,14 @@ class DirColumnView extends React.Component {
               getMenuContainerSize={this.getMenuContainerSize}
               eventBus={this.props.eventBus}
               updateTreeNode={this.props.updateTreeNode}
+            />
+          )}
+          {currentMode === TRASH_MODE && (
+            <DirTrashView
+              repoID={this.props.repoID}
+              userPerm={this.props.userPerm}
+              currentRepoInfo={this.props.currentRepoInfo}
+              toggleShowDirentToolbar={this.props.toggleShowDirentToolbar}
             />
           )}
           {currentMode === HISTORY_MODE && (

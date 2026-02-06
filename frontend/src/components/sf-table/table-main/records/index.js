@@ -570,9 +570,12 @@ class Records extends Component {
     }
     let updatedRecordMetrics = { ...recordMetrics };
     RecordMetrics.selectRecord(recordId, updatedRecordMetrics);
-    this.setState({
-      recordMetrics: updatedRecordMetrics,
-    });
+
+    if (this.props.updateSelectedRecordIds) {
+      this.props.updateSelectedRecordIds(RecordMetrics.getSelectedIds(updatedRecordMetrics));
+    }
+
+    this.setState({ recordMetrics: updatedRecordMetrics });
   };
 
   selectRecordsById = (recordIds) => {
@@ -583,9 +586,12 @@ class Records extends Component {
     }
     let updatedRecordMetrics = { ...recordMetrics };
     RecordMetrics.selectRecordsById(recordIds, updatedRecordMetrics);
-    this.setState({
-      recordMetrics: updatedRecordMetrics,
-    });
+
+    if (this.props.updateSelectedRecordIds) {
+      this.props.updateSelectedRecordIds(RecordMetrics.getSelectedIds(updatedRecordMetrics));
+    }
+
+    this.setState({ recordMetrics: updatedRecordMetrics });
   };
 
   deselectRecordById = (recordId) => {
@@ -595,9 +601,10 @@ class Records extends Component {
     }
     let updatedRecordMetrics = { ...recordMetrics };
     RecordMetrics.deselectRecord(recordId, updatedRecordMetrics);
-    this.setState({
-      recordMetrics: updatedRecordMetrics,
-    });
+    if (this.props.updateSelectedRecordIds) {
+      this.props.updateSelectedRecordIds(RecordMetrics.getSelectedIds(updatedRecordMetrics));
+    }
+    this.setState({ recordMetrics: updatedRecordMetrics });
   };
 
   selectTreeNodesByKeys = (nodesKeys) => {
@@ -668,6 +675,9 @@ class Records extends Component {
       selectedRowIds = recordIds;
     }
     RecordMetrics.selectRecordsById(selectedRowIds, updatedRecordMetrics);
+    if (this.props.updateSelectedRecordIds) {
+      this.props.updateSelectedRecordIds(RecordMetrics.getSelectedIds(updatedRecordMetrics));
+    }
     this.setState({ recordMetrics: updatedRecordMetrics });
   };
 
