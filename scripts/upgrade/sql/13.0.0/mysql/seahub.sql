@@ -131,3 +131,10 @@ DROP INDEX IF EXISTS `share_fileshare_permission_d12c353f` ON `share_fileshare`;
 -- and remove the now-redundant single-column repo_id index
 ALTER TABLE `FileTrash` ADD INDEX `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`);
 DROP INDEX IF EXISTS `ix_FileTrash_repo_id` ON `FileTrash`;
+-- Performance optimization: Add composite index for unread notifications query
+-- This query runs on every page load: WHERE to_user=? AND seen=0
+CREATE INDEX idx_usernotification_user_seen ON notifications_usernotification(to_user, seen);
+
+-- Drop redundant single-column index (covered by composite index leftmost prefix)
+-- Note: Check the actual index name with: SHOW INDEX FROM notifications_usernotification;
+-- ALTER TABLE notifications_usernotification DROP INDEX notifications_usernotification_86899d6f;
