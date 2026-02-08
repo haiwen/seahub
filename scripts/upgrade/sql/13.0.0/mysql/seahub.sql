@@ -115,3 +115,7 @@ DROP INDEX IF EXISTS `ix_repo_extra_repo_id` ON `repo_extra_config`;
 DROP INDEX IF EXISTS `ix_stats_ai_by_team_org_id_month` ON `stats_ai_by_team`;
 DROP INDEX IF EXISTS `ix_stats_ai_by_owner_username_month` ON `stats_ai_by_owner`;
 DROP INDEX IF EXISTS `sdoc_operation_log_doc_uuid` ON `sdoc_operation_log`;
+DROP INDEX IF EXISTS `base_usermonitoredrepos_email_55ead1b9` ON `base_usermonitoredrepos`;
+DROP INDEX IF EXISTS `history_name_doc_uuid` ON `history_name`;
+DROP INDEX IF EXISTS `organizations_orgadminsettings_org_id_4f70d186` ON `organizations_orgadminsettings`;
+DROP INDEX IF EXISTS `key_repo_metadata_face_recognition_enabled` ON `repo_metadata`;
