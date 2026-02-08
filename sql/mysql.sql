@@ -1492,8 +1492,7 @@ CREATE TABLE `FileTrash` (
   `commit_id` varchar(40) DEFAULT NULL,
   `path` text NOT NULL,
   `size` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `ix_FileTrash_repo_id` (`repo_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `WikiPageTrash` (
