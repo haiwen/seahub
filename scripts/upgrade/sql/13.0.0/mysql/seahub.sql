@@ -4,7 +4,6 @@ CREATE TABLE IF NOT EXISTS `repo_extra_config` (
   `config_type` varchar(50) NOT NULL,
   `config_details` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ix_repo_extra_repo_id` (`repo_id`),
   UNIQUE KEY `ix_repo_extra_repo_idconfig_type` (`repo_id`, `config_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -37,8 +36,7 @@ CREATE TABLE IF NOT EXISTS `org_last_active_time` (
   `org_id` int(11) NOT NULL,
   `timestamp` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `org_id` (`org_id`),
-  KEY `ix_org_last_active_time_org_id` (`org_id`)
+  UNIQUE KEY `org_id` (`org_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `group_member_audit` (
@@ -80,8 +78,7 @@ CREATE TABLE IF NOT EXISTS `stats_ai_by_team` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `stats_ai_by_team_org_id_month_model` (`org_id`,`month`,`model`),
-  KEY `ix_stats_ai_by_team_org_id_month` (`org_id`,`month`)
+  UNIQUE KEY `stats_ai_by_team_org_id_month_model` (`org_id`,`month`,`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS `stats_ai_by_owner` (
@@ -95,8 +92,7 @@ CREATE TABLE IF NOT EXISTS `stats_ai_by_owner` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`),
-  KEY `ix_stats_ai_by_owner_username_month` (`username`,`month`)
+  UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `sdoc_notification` ADD INDEX `idx_user_seen` (`username`, `seen`);
@@ -109,3 +105,13 @@ ALTER TABLE repo_metadata ADD COLUMN details_settings longtext NULL;
 ALTER TABLE repo_metadata ADD COLUMN ocr_enabled tinyint(1) NULL;
 ALTER TABLE repo_metadata ADD COLUMN global_hidden_columns longtext DEFAULT NULL;
 ALTER TABLE `repo_metadata` ADD KEY `key_last_face_cluster_time_face_recognition_enabled`(`face_recognition_enabled`, `last_face_cluster_time`);
+
+-- Remove redundant indexes (covered by composite/unique indexes)
+-- These indexes are redundant because they are covered by the leftmost prefix of existing indexes
+DROP INDEX IF EXISTS `sdoc_revision_repo_id` ON `sdoc_revision`;
+DROP INDEX IF EXISTS `ix_wiki2_publish_repo_id` ON `wiki_wiki2_publish`;
+DROP INDEX IF EXISTS `ix_org_last_active_time_org_id` ON `org_last_active_time`;
+DROP INDEX IF EXISTS `ix_repo_extra_repo_id` ON `repo_extra_config`;
+DROP INDEX IF EXISTS `ix_stats_ai_by_team_org_id_month` ON `stats_ai_by_team`;
+DROP INDEX IF EXISTS `ix_stats_ai_by_owner_username_month` ON `stats_ai_by_owner`;
+DROP INDEX IF EXISTS `sdoc_operation_log_doc_uuid` ON `sdoc_operation_log`;
