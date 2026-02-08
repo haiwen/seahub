@@ -373,10 +373,10 @@ class FileShare(models.Model):
     token = models.CharField(max_length=100, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
-    s_type = models.CharField(max_length=2, db_index=True, default='f')  # `f` or `d`
+    s_type = models.CharField(max_length=2, default='f')  # `f` or `d`
     password = models.CharField(max_length=128, null=True)
     expire_date = models.DateTimeField(null=True)
-    permission = models.CharField(max_length=50, db_index=True,
+    permission = models.CharField(max_length=50,
                                   choices=PERMISSION_CHOICES,
                                   default=PERM_VIEW_DL)
 
