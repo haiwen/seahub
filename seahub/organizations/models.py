@@ -219,7 +219,7 @@ class OrgAdminSettings(models.Model):
     # boolean settings / str settings / int settings, etc
     # key: default-value
 
-    org_id = models.IntegerField(db_index=True, null=False)
+    org_id = models.IntegerField(null=False)
     key = models.CharField(max_length=255, null=False)
     value = models.TextField()
 
