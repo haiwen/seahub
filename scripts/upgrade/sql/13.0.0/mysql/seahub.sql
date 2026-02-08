@@ -119,3 +119,5 @@ DROP INDEX IF EXISTS `base_usermonitoredrepos_email_55ead1b9` ON `base_usermonit
 DROP INDEX IF EXISTS `history_name_doc_uuid` ON `history_name`;
 DROP INDEX IF EXISTS `organizations_orgadminsettings_org_id_4f70d186` ON `organizations_orgadminsettings`;
 DROP INDEX IF EXISTS `key_repo_metadata_face_recognition_enabled` ON `repo_metadata`;
+DROP INDEX IF EXISTS `ix_FileAudit_user` ON `FileAudit`;
+DROP INDEX IF EXISTS `ix_FileAudit_repo_id` ON `FileAudit`;
