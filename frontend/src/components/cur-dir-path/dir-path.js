@@ -12,6 +12,8 @@ import { EVENT_BUS_TYPE } from '../../metadata/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
+import { getTrashPath } from '../dir-view-mode/dir-trash-view/utils';
+import EventBus from '../common/event-bus';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -50,6 +52,16 @@ class DirPath extends React.Component {
   onPathClick = (e) => {
     let path = Utils.getEventData(e, 'path');
     this.props.onPathClick(path);
+  };
+
+  onTrashPathClick = (e) => {
+    // update path
+    let path = Utils.getEventData(e, 'path');
+    this.props.onTrashPathClick(path);
+
+    // update content
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch('update_trash_path_by_dir_path', path);
   };
 
   isTrashMode = () => {
@@ -189,8 +201,9 @@ class DirPath extends React.Component {
     );
   };
 
-  turnTrashPathToLink = (pathList) => {
-    if (pathList.length === 1 && pathList[0] === '') {
+  turnTrashPathToLink = () => {
+    const path = getTrashPath();
+    if (path === '/') {
       return (
         <>
           <span className="path-split">/</span>
@@ -199,13 +212,22 @@ class DirPath extends React.Component {
       );
     }
 
+    const pathList = path.split('/');
     let nodePath = '';
     const pathElem = pathList.map((item, index) => {
       if (item === '') {
         return (
           <>
             <span className="path-split">/</span>
-            <span className="path-item path-item-read-only">{gettext('Trash')}</span>
+            <span
+              className="path-item"
+              data-path={'/'}
+              onClick={this.onTrashPathClick}
+              role="button"
+              title={item}
+            >
+              {gettext('Trash')}
+            </span>
           </>
         );
       }
@@ -216,7 +238,7 @@ class DirPath extends React.Component {
           <span
             className={'path-item'}
             data-path={nodePath}
-            onClick={this.onPathClick}
+            onClick={this.onTrashPathClick}
             role="button"
             title={item}
           >

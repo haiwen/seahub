@@ -303,6 +303,7 @@ class DirColumnView extends React.Component {
           )}
           {currentMode === TRASH_MODE && (
             <DirTrashView
+              currentPath={this.props.path}
               repoID={this.props.repoID}
               userPerm={this.props.userPerm}
               currentRepoInfo={this.props.currentRepoInfo}

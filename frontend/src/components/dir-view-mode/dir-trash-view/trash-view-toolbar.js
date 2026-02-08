@@ -23,7 +23,6 @@ const TrashViewToolbar = ({ repoID, currentRepoInfo }) => {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState(DEFAULT_FILTER);
-  const [allCommits, setAllCommits] = useState([]);
   let [canSearch, setCanSearch] = useState(true);
   let [isCleanTrashDialogOpen, setCleanTrashDialogOpen] = useState(false);
 
@@ -38,11 +37,10 @@ const TrashViewToolbar = ({ repoID, currentRepoInfo }) => {
 
   useEffect(() => {
     const eventBus = EventBus.getInstance();
-    const unsubscribe = eventBus.subscribe(EVENT_BUS_TYPE.HISTORY_COMMITS_UPDATED, (commits) => {
-      setAllCommits(commits);
-    });
+    const unsubscribe = eventBus.subscribe(EVENT_BUS_TYPE.TRASH_SEARCH_STATE_CHANGED, setCanSearch);
+
     return () => {
-      if (unsubscribe) unsubscribe();
+      unsubscribe();
     };
   }, []);
 
@@ -95,6 +93,8 @@ const TrashViewToolbar = ({ repoID, currentRepoInfo }) => {
     eventBus.dispatch(EVENT_BUS_TYPE.REFRESH_TRASH);
   }, []);
 
+  if (!canSearch) return null;
+
   return (
     <div className="sf-history-tool">
       <div className="sf-history-tool-left-operations">
@@ -133,7 +133,6 @@ const TrashViewToolbar = ({ repoID, currentRepoInfo }) => {
           mode={TRASH_MODE}
           filters={filters}
           onFiltersChange={handleFiltersChange}
-          allCommits={allCommits}
         />
         {(enableUserCleanTrash && isRepoAdmin) && (
           <button className="btn btn-sm btn-secondary clean flex-shrink-0 ml-4" onClick={toggleCleanTrashDialog}>{gettext('Clean')}</button>

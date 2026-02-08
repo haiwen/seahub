@@ -35,7 +35,7 @@ import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import ViewToolbar from '../../components/toolbar/view-toolbar';
-import { eventBus } from '../../components/common/event-bus';
+import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
 import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS } from '@/constants/dir-column-visibility';
@@ -158,7 +158,8 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
-    this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW, this.switchToTrashView);
+    this.unsubscribeSwitchToTrashView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW, this.switchToTrashView);
+    this.unsubscribeUpdateTrashPath = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_PATH, this.updateTrashPath);
 
     this.unsubscribeColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, this.onHiddenColumnKeys);
     this.unsubscribeDirentStatusChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, this.updateDirentStatus);
@@ -1207,18 +1208,48 @@ class LibContentView extends React.Component {
   };
 
   switchToTrashView = () => {
-    const { pathname } = location;
-    let url = '';
-    if (pathname.endsWith('/')) {
-      url = pathname + '?trash=true';
-    } else {
-      url = pathname + '/?trash=true';
+    if (location.href.indexOf('?trash=true') > -1) {
+      setTimeout(() => {
+        const eventBus = EventBus.getInstance();
+        eventBus.dispatch(EVENT_BUS_TYPE.REFRESH_TRASH);
+      });
     }
+
+    const repoInfo = this.state.currentRepoInfo;
+    const url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?trash=true&path=' + this.state.path;
     window.history.pushState({}, '', url);
 
     this.setState({
       currentMode: TRASH_MODE,
       path: this.state.path,
+      isDirentDetailShow: false,
+    });
+  };
+
+  updateTrashPath = (trashItem) => {
+    const { parent_dir, obj_name } = trashItem;
+    const dirPath = Utils.joinPath(parent_dir, obj_name);
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '?trash=true&path=' + Utils.encodePath(dirPath);
+
+    window.history.pushState({}, '', url);
+
+    this.setState({
+      currentMode: TRASH_MODE,
+      path: '/',
+      isDirentDetailShow: false,
+    });
+  };
+
+  onTrashPathClick = (path) => {
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '?trash=true&path=' + Utils.encodePath(path);
+
+    window.history.pushState({}, '', url);
+
+    this.setState({
+      currentMode: TRASH_MODE,
+      path: '/',
       isDirentDetailShow: false,
     });
   };
@@ -2784,6 +2815,7 @@ class LibContentView extends React.Component {
                             userPerm={userPerm}
                             onTabNavClick={this.props.onTabNavClick}
                             onPathClick={this.onMainNavBarClick}
+                            onTrashPathClick={this.onTrashPathClick}
                             fileTags={this.state.fileTags}
                             direntList={this.state.direntList}
                             sortBy={this.state.sortBy}

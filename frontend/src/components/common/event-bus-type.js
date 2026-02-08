@@ -65,4 +65,8 @@ export const EVENT_BUS_TYPE = {
   TRASH_SEARCH: 'trash_search',
   TRASH_FILTER: 'trash_filter',
   REFRESH_TRASH: 'refresh_trash',
+  ON_TRASH_ITEM_CLICK: 'on_trash_item_click',
+  UPDATE_TRASH_PATH: 'update_trash_path',
+  UPDATE_TRASH_PATH_BY_DIR_PATH: 'update_trash_path_by_dir_path',
+  TRASH_SEARCH_STATE_CHANGED: 'trash_search_state_changed',
 };
