@@ -955,8 +955,6 @@ CREATE TABLE `share_fileshare` (
   UNIQUE KEY `token` (`token`),
   KEY `share_fileshare_username_5cb6de75` (`username`),
   KEY `share_fileshare_repo_id_9b5ae27a` (`repo_id`),
-  KEY `share_fileshare_s_type_724eb6c1` (`s_type`),
-  KEY `share_fileshare_permission_d12c353f` (`permission`),
   KEY `idx_ctime` (`ctime`),
   KEY `idx_view_cnt` (`view_cnt`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
