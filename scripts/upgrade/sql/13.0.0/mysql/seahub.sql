@@ -136,5 +136,4 @@ DROP INDEX IF EXISTS `ix_FileTrash_repo_id` ON `FileTrash`;
 CREATE INDEX idx_usernotification_user_seen ON notifications_usernotification(to_user, seen);
 
 -- Drop redundant single-column index (covered by composite index leftmost prefix)
--- Note: Check the actual index name with: SHOW INDEX FROM notifications_usernotification;
--- ALTER TABLE notifications_usernotification DROP INDEX notifications_usernotification_86899d6f;
+DROP INDEX IF EXISTS `notifications_usernotification_to_user_6cadafa1` ON `notifications_usernotification`;
