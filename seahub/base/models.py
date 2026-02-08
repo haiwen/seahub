@@ -310,7 +310,7 @@ def update_last_login(sender, user, **kwargs):
 user_logged_in.connect(update_last_login)
 
 class OrgLastActivityTime(models.Model):
-    org_id = models.IntegerField(unique=True, db_index=True)
+    org_id = models.IntegerField(unique=True)
     timestamp = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -404,7 +404,7 @@ class RepoSecretKey(models.Model):
 class UserMonitoredRepos(models.Model):
     """
     """
-    email = models.EmailField(db_index=True)
+    email = models.EmailField()
     repo_id = models.CharField(max_length=36, db_index=True)
     timestamp = models.DateTimeField(default=timezone.now)
 
