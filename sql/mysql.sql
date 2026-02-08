@@ -1361,7 +1361,7 @@ CREATE TABLE `org_saml_config` (
   `domain_verified` tinyint(1) NOT NULL DEFAULT 0,
   `idp_certificate` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `org_id` (`org_id`),
+  UNIQUE KEY `org_id` (`org_id`)
   UNIQUE KEY `domain` (`domain`),
   KEY `org_saml_config_domain_verified_398065b9` (`domain_verified`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1426,7 +1426,6 @@ CREATE TABLE `sdoc_revision` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `sdoc_revision_doc_uuid` (`doc_uuid`),
   UNIQUE KEY `sdoc_revision_repo_id_revision_id` (`repo_id`, `revision_id`),
-  KEY `sdoc_revision_repo_id` (`repo_id`),
   KEY `sdoc_revision_origin_doc_uuid` (`origin_doc_uuid`),
   KEY `sdoc_revision_username` (`username`),
   KEY `sdoc_revision_is_published` (`is_published`)
@@ -1567,7 +1566,6 @@ CREATE TABLE `sdoc_operation_log` (
   `author` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sdoc_operation_log_op_time` (`op_time`),
-  KEY `sdoc_operation_log_doc_uuid` (`doc_uuid`),
   KEY `sdoc_idx_operation_log_doc_uuid_op_id` (`doc_uuid`,`op_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1580,8 +1578,7 @@ CREATE TABLE `wiki_wiki2_publish` (
   `visit_count` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `repo_id` (`repo_id`),
-  UNIQUE KEY `publish_url` (`publish_url`),
-  KEY `ix_wiki2_publish_repo_id` (`repo_id`)
+  UNIQUE KEY `publish_url` (`publish_url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `RepoTransfer` (
@@ -1614,7 +1611,6 @@ CREATE TABLE `repo_extra_config` (
   `config_type` varchar(50) NOT NULL,
   `config_details` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ix_repo_extra_repo_id` (`repo_id`),
   UNIQUE KEY `ix_repo_extra_repo_idconfig_type` (`repo_id`, `config_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1623,8 +1619,7 @@ CREATE TABLE `org_last_active_time` (
   `org_id` int(11) NOT NULL,
   `timestamp` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `org_id` (`org_id`),
-  KEY `ix_org_last_active_time_org_id` (`org_id`)
+  UNIQUE KEY `org_id` (`org_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `group_member_audit` (
@@ -1666,8 +1661,7 @@ CREATE TABLE `stats_ai_by_team` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `stats_ai_by_team_org_id_month_model` (`org_id`,`month`,`model`),
-  KEY `ix_stats_ai_by_team_org_id_month` (`org_id`,`month`)
+  UNIQUE KEY `stats_ai_by_team_org_id_month_model` (`org_id`,`month`,`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `stats_ai_by_owner` (
@@ -1681,8 +1675,7 @@ CREATE TABLE `stats_ai_by_owner` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`),
-  KEY `ix_stats_ai_by_owner_username_month` (`username`,`month`)
+  UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `wiki_settings` (
