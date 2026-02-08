@@ -121,3 +121,7 @@ DROP INDEX IF EXISTS `organizations_orgadminsettings_org_id_4f70d186` ON `organi
 DROP INDEX IF EXISTS `key_repo_metadata_face_recognition_enabled` ON `repo_metadata`;
 DROP INDEX IF EXISTS `ix_FileAudit_user` ON `FileAudit`;
 DROP INDEX IF EXISTS `ix_FileAudit_repo_id` ON `FileAudit`;
+-- Remove unused indexes on share_fileshare
+-- s_type and permission are never used in WHERE clauses
+DROP INDEX IF EXISTS `share_fileshare_s_type_724eb6c1` ON `share_fileshare`;
+DROP INDEX IF EXISTS `share_fileshare_permission_d12c353f` ON `share_fileshare`;
