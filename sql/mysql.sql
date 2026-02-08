@@ -575,7 +575,7 @@ CREATE TABLE `notifications_usernotification` (
   `timestamp` datetime NOT NULL,
   `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `notifications_usernotification_to_user_6cadafa1` (`to_user`),
+  KEY `idx_usernotification_user_seen` (`to_user`, `seen`),
   KEY `notifications_usernotification_msg_type_985afd02` (`msg_type`),
   KEY `notifications_usernotification_timestamp_125067e8` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
