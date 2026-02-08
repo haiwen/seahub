@@ -125,3 +125,6 @@ DROP INDEX IF EXISTS `ix_FileAudit_repo_id` ON `FileAudit`;
 -- s_type and permission are never used in WHERE clauses
 DROP INDEX IF EXISTS `share_fileshare_s_type_724eb6c1` ON `share_fileshare`;
 DROP INDEX IF EXISTS `share_fileshare_permission_d12c353f` ON `share_fileshare`;
+-- Remove redundant single-column repo_id index on FileTrash
+-- (covered by composite index (repo_id, delete_time) added in seafevents)
+DROP INDEX IF EXISTS `ix_FileTrash_repo_id` ON `FileTrash`;
