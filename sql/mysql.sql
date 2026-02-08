@@ -1361,7 +1361,7 @@ CREATE TABLE `org_saml_config` (
   `domain_verified` tinyint(1) NOT NULL DEFAULT 0,
   `idp_certificate` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `org_id` (`org_id`)
+  UNIQUE KEY `org_id` (`org_id`),
   UNIQUE KEY `domain` (`domain`),
   KEY `org_saml_config_domain_verified_398065b9` (`domain_verified`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1373,7 +1373,6 @@ CREATE TABLE `base_usermonitoredrepos` (
   `timestamp` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `base_usermonitoredrepos_email_repo_id_b4ab00e4_uniq` (`email`,`repo_id`),
-  KEY `base_usermonitoredrepos_email_55ead1b9` (`email`),
   KEY `base_usermonitoredrepos_repo_id_00e624c3` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1383,8 +1382,7 @@ CREATE TABLE `organizations_orgadminsettings` (
   `key` varchar(255) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `organizations_orgadminsettings_org_id_key_a01cc7de_uniq` (`org_id`,`key`),
-  KEY `organizations_orgadminsettings_org_id_4f70d186` (`org_id`)
+  UNIQUE KEY `organizations_orgadminsettings_org_id_key_a01cc7de_uniq` (`org_id`,`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `history_name` (
@@ -1393,7 +1391,6 @@ CREATE TABLE `history_name` (
   `obj_id` varchar(40) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `history_name_doc_uuid` (`doc_uuid`),
   UNIQUE KEY `history_name_doc_uuid_obj_id` (`doc_uuid`, `obj_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1544,7 +1541,6 @@ CREATE TABLE `repo_metadata`  (
   `global_hidden_columns` longtext DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
-  KEY `key_repo_metadata_face_recognition_enabled`(`face_recognition_enabled`),
   KEY `key_last_face_cluster_time_face_recognition_enabled` (`face_recognition_enabled`,`last_face_cluster_time`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1620,7 +1616,7 @@ CREATE TABLE `org_last_active_time` (
   `timestamp` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `org_id` (`org_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `group_member_audit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
