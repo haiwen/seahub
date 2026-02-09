@@ -1373,7 +1373,6 @@ CREATE TABLE `base_usermonitoredrepos` (
   `timestamp` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `base_usermonitoredrepos_email_repo_id_b4ab00e4_uniq` (`email`,`repo_id`),
-  KEY `base_usermonitoredrepos_email_55ead1b9` (`email`),
   KEY `base_usermonitoredrepos_repo_id_00e624c3` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1383,8 +1382,7 @@ CREATE TABLE `organizations_orgadminsettings` (
   `key` varchar(255) NOT NULL,
   `value` longtext NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `organizations_orgadminsettings_org_id_key_a01cc7de_uniq` (`org_id`,`key`),
-  KEY `organizations_orgadminsettings_org_id_4f70d186` (`org_id`)
+  UNIQUE KEY `organizations_orgadminsettings_org_id_key_a01cc7de_uniq` (`org_id`,`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `history_name` (
@@ -1393,7 +1391,6 @@ CREATE TABLE `history_name` (
   `obj_id` varchar(40) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `history_name_doc_uuid` (`doc_uuid`),
   UNIQUE KEY `history_name_doc_uuid_obj_id` (`doc_uuid`, `obj_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1426,7 +1423,6 @@ CREATE TABLE `sdoc_revision` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `sdoc_revision_doc_uuid` (`doc_uuid`),
   UNIQUE KEY `sdoc_revision_repo_id_revision_id` (`repo_id`, `revision_id`),
-  KEY `sdoc_revision_repo_id` (`repo_id`),
   KEY `sdoc_revision_origin_doc_uuid` (`origin_doc_uuid`),
   KEY `sdoc_revision_username` (`username`),
   KEY `sdoc_revision_is_published` (`is_published`)
@@ -1545,7 +1541,6 @@ CREATE TABLE `repo_metadata`  (
   `global_hidden_columns` longtext DEFAULT NULL,
   UNIQUE KEY `key_repo_metadata_repo_id`(`repo_id`),
   KEY `key_repo_metadata_enabled`(`enabled`),
-  KEY `key_repo_metadata_face_recognition_enabled`(`face_recognition_enabled`),
   KEY `key_last_face_cluster_time_face_recognition_enabled` (`face_recognition_enabled`,`last_face_cluster_time`),
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -1567,7 +1562,6 @@ CREATE TABLE `sdoc_operation_log` (
   `author` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sdoc_operation_log_op_time` (`op_time`),
-  KEY `sdoc_operation_log_doc_uuid` (`doc_uuid`),
   KEY `sdoc_idx_operation_log_doc_uuid_op_id` (`doc_uuid`,`op_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1580,8 +1574,7 @@ CREATE TABLE `wiki_wiki2_publish` (
   `visit_count` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `repo_id` (`repo_id`),
-  UNIQUE KEY `publish_url` (`publish_url`),
-  KEY `ix_wiki2_publish_repo_id` (`repo_id`)
+  UNIQUE KEY `publish_url` (`publish_url`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `RepoTransfer` (
@@ -1614,7 +1607,6 @@ CREATE TABLE `repo_extra_config` (
   `config_type` varchar(50) NOT NULL,
   `config_details` longtext DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `ix_repo_extra_repo_id` (`repo_id`),
   UNIQUE KEY `ix_repo_extra_repo_idconfig_type` (`repo_id`, `config_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -1623,9 +1615,8 @@ CREATE TABLE `org_last_active_time` (
   `org_id` int(11) NOT NULL,
   `timestamp` datetime(6) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `org_id` (`org_id`),
-  KEY `ix_org_last_active_time_org_id` (`org_id`)
-  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  UNIQUE KEY `org_id` (`org_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `group_member_audit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1666,8 +1657,7 @@ CREATE TABLE `stats_ai_by_team` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `stats_ai_by_team_org_id_month_model` (`org_id`,`month`,`model`),
-  KEY `ix_stats_ai_by_team_org_id_month` (`org_id`,`month`)
+  UNIQUE KEY `stats_ai_by_team_org_id_month_model` (`org_id`,`month`,`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `stats_ai_by_owner` (
@@ -1681,8 +1671,7 @@ CREATE TABLE `stats_ai_by_owner` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`),
-  KEY `ix_stats_ai_by_owner_username_month` (`username`,`month`)
+  UNIQUE KEY `stats_ai_by_owner_username_month_model` (`username`,`month`,`model`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `wiki_settings` (
