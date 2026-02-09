@@ -51,13 +51,14 @@ export function createHistoryColumns({ repoID }) {
       key: 'size',
       name: gettext('Size'),
       display_name: gettext('Size'),
+      data: { format: 'byte' },
       icon_name: 'number',
       type: 'number',
       width: 200,
       editable: false,
       resizable: true,
       is_private: true,
-      formatter: <NumberFormatter />,
+      formatter: <NumberFormatter formats={{ format: 'byte' }}/>,
     },
   ];
 

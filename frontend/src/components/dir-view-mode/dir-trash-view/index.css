@@ -25,3 +25,8 @@
 .sf-trash-wrapper.read-only .actions-cell {
   cursor: default !important;
 }
+
+.sf-trash-wrapper .sf-table-cell.sf-table-number-cell .number-formatter {
+  width: 100%;
+  text-align: right;
+}
