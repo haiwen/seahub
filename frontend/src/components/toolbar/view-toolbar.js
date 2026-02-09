@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { TAGS_MODE } from '../dir-view-mode/constants';
+import { TAGS_MODE, TRASH_MODE } from '../dir-view-mode/constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
 import { useMetadata } from '../../metadata/hooks';
 import { VIEW_TYPE } from '../../metadata/constants';
@@ -11,6 +11,7 @@ import GalleryFilesToolbar from './gallery-files-toolbar';
 import FaceRecognitionFilesToolbar from './face-recognition-files-toolbar';
 import KanbanFilesToolbar from './kanban-files-toolbar';
 import CardFilesToolbar from './card-files-toolbar';
+import TrashToolbar from './trash-toolbar';
 
 const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent }) => {
   const { idViewMap } = useMetadata();
@@ -48,6 +49,10 @@ const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent
     } else {
       return <TagFilesToolbar currentRepoInfo={repoInfo} />;
     }
+  }
+
+  if (mode === TRASH_MODE) {
+    return <TrashToolbar />;
   }
 
 };

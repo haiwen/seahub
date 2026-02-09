@@ -4,8 +4,10 @@ import { UncontrolledPopover } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import HistoryBasicFilters from './filters/basic-filters';
 import { getEventClassName } from '../../../utils/dom';
+import classNames from 'classnames';
+import { TRASH_MODE } from '../constants';
 
-const HistoryFilterPopover = ({ target, filters, onClose, onChange, allCommits }) => {
+const HistoryFilterPopover = ({ mode, target, filters, onClose, onChange }) => {
   const popoverRef = useRef(null);
   const isSelectOpenRef = useRef(false);
 
@@ -57,11 +59,11 @@ const HistoryFilterPopover = ({ target, filters, onClose, onChange, allCommits }
       className="sf-history-filter-popover"
       boundariesElement={document.body}
     >
-      <div ref={popoverRef} onClick={handlePopoverInsideClick} className="sf-history-filters">
+      <div ref={popoverRef} onClick={handlePopoverInsideClick} className={classNames('sf-history-filter', { 'sf-trash-filter': mode === TRASH_MODE })}>
         <HistoryBasicFilters
+          mode={mode}
           filters={filters}
           onChange={handleChange}
-          allCommits={allCommits}
         />
       </div>
     </UncontrolledPopover>
@@ -77,7 +79,6 @@ HistoryFilterPopover.propTypes = {
   }).isRequired,
   onClose: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  allCommits: PropTypes.array,
 };
 
 export default HistoryFilterPopover;

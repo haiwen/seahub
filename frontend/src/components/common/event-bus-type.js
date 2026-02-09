@@ -55,4 +55,18 @@ export const EVENT_BUS_TYPE = {
   // dirent properties
   DIRENT_STATUS_CHANGED: 'dirent_status_changed',
   COLUMN_DATA_MODIFIED: 'column_data_modified',
+
+  // trash
+  SWITCH_TO_TRASH_VIEW: 'switch_to_trash_view',
+  SELECT_TRASH: 'select_trash',
+  UNSELECT_TRASH: 'unselect_trash',
+  RESTORE_TRASH: 'restore_trash',
+  SELECT_NONE: 'select_none',
+  TRASH_SEARCH: 'trash_search',
+  TRASH_FILTER: 'trash_filter',
+  REFRESH_TRASH: 'refresh_trash',
+  ON_TRASH_ITEM_CLICK: 'on_trash_item_click',
+  UPDATE_TRASH_PATH: 'update_trash_path',
+  UPDATE_TRASH_PATH_BY_DIR_PATH: 'update_trash_path_by_dir_path',
+  TRASH_SEARCH_STATE_CHANGED: 'trash_search_state_changed',
 };

@@ -28,14 +28,14 @@ import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvi
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
 import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
-import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
 import DirColumnView from '../../components/dir-view-mode/dir-column-view';
 import SelectedDirentsToolbar from '../../components/toolbar/selected-dirents-toolbar';
 import ViewToolbar from '../../components/toolbar/view-toolbar';
-import { eventBus } from '../../components/common/event-bus';
+import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
 import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS } from '@/constants/dir-column-visibility';
@@ -158,6 +158,8 @@ class LibContentView extends React.Component {
     this.unsubscribeOpenTreePanel = eventBus.subscribe(EVENT_BUS_TYPE.OPEN_TREE_PANEL, this.openTreePanel);
     this.unsubscribeSelectSearchedTag = this.props.eventBus.subscribe(EVENT_BUS_TYPE.SELECT_TAG, this.onTreeNodeClick);
     this.unsubscribeSwitchToHistoryView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_HISTORY_VIEW, this.switchToHistoryView);
+    this.unsubscribeSwitchToTrashView = eventBus.subscribe(EVENT_BUS_TYPE.SWITCH_TO_TRASH_VIEW, this.switchToTrashView);
+    this.unsubscribeUpdateTrashPath = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_PATH, this.updateTrashPath);
 
     this.unsubscribeColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, this.onHiddenColumnKeys);
     this.unsubscribeDirentStatusChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, this.updateDirentStatus);
@@ -246,9 +248,11 @@ class LibContentView extends React.Component {
   calculatePara = async (props) => {
     const { repoID } = props;
 
-    const { path, viewId, tagId, isHistory } = this.getInfoFromLocation(repoID);
+    const { path, viewId, tagId, isHistory, isTrash } = this.getInfoFromLocation(repoID);
     let currentMode;
-    if (isHistory) {
+    if (isTrash) {
+      currentMode = TRASH_MODE;
+    } else if (isHistory) {
       currentMode = HISTORY_MODE;
     } else if (tagId) {
       currentMode = TAGS_MODE;
@@ -260,7 +264,7 @@ class LibContentView extends React.Component {
 
     // Initialize isDirentDetailShow from localStorage, but only for modes that use it
     const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
-    const isDirentDetailShow = !isHistory && storedDirentDetailShowState === 'true';
+    const isDirentDetailShow = !isHistory && isTrash && storedDirentDetailShowState === 'true';
 
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
@@ -317,6 +321,10 @@ class LibContentView extends React.Component {
     if (path.length > 1 && path.endsWith('/')) {
       path = path.slice(0, -1);
     }
+
+    const isTrash = urlParams.get('trash');
+    if (isTrash) return { path: path, isTrash: true };
+
     return { path };
   };
 
@@ -384,13 +392,15 @@ class LibContentView extends React.Component {
 
   onpopstate = (event) => {
     const { repoID } = this.props;
-    const { path: urlPath, viewId, tagId } = this.getInfoFromLocation(repoID);
+    const { path: urlPath, viewId, tagId, isTrash } = this.getInfoFromLocation(repoID);
 
     let currentMode;
     let resolvedPath = urlPath;
     let resolvedTagId = tagId;
 
-    if (tagId) {
+    if (isTrash) {
+      currentMode = TRASH_MODE;
+    } else if (tagId) {
       currentMode = TAGS_MODE;
     } else if (viewId) {
       currentMode = METADATA_MODE;
@@ -1192,6 +1202,53 @@ class LibContentView extends React.Component {
   switchToHistoryView = () => {
     this.setState({
       currentMode: HISTORY_MODE,
+      path: '/',
+      isDirentDetailShow: false,
+    });
+  };
+
+  switchToTrashView = () => {
+    if (location.href.indexOf('?trash=true') > -1) {
+      setTimeout(() => {
+        const eventBus = EventBus.getInstance();
+        eventBus.dispatch(EVENT_BUS_TYPE.REFRESH_TRASH);
+      });
+    }
+
+    const repoInfo = this.state.currentRepoInfo;
+    const url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?trash=true&path=/';
+    window.history.pushState({}, '', url);
+
+    this.setState({
+      currentMode: TRASH_MODE,
+      path: '/',
+      isDirentDetailShow: false,
+    });
+  };
+
+  updateTrashPath = (trashItem) => {
+    const { trash_path, is_trash_folder, obj_name } = trashItem;
+    const path = is_trash_folder ? trash_path : '/' + obj_name;
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?trash=true&path=' + Utils.encodePath(path);
+
+    window.history.pushState({}, '', url);
+
+    this.setState({
+      currentMode: TRASH_MODE,
+      path: '/',
+      isDirentDetailShow: false,
+    });
+  };
+
+  onTrashPathClick = (path) => {
+    let repoInfo = this.state.currentRepoInfo;
+    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?trash=true&path=' + Utils.encodePath(path);
+
+    window.history.pushState({}, '', url);
+
+    this.setState({
+      currentMode: TRASH_MODE,
       path: '/',
       isDirentDetailShow: false,
     });
@@ -2713,7 +2770,7 @@ class LibContentView extends React.Component {
                           'animation-children': isDirentSelected
                         })}>
                         {isDirentSelected ? (
-                          currentMode === TAGS_MODE || currentMode === METADATA_MODE ? (
+                          [METADATA_MODE, TAGS_MODE, TRASH_MODE].includes(currentMode) ? (
                             <ViewToolbar
                               repoID={repoID}
                               repoInfo={currentRepoInfo}
@@ -2758,6 +2815,7 @@ class LibContentView extends React.Component {
                             userPerm={userPerm}
                             onTabNavClick={this.props.onTabNavClick}
                             onPathClick={this.onMainNavBarClick}
+                            onTrashPathClick={this.onTrashPathClick}
                             fileTags={this.state.fileTags}
                             direntList={this.state.direntList}
                             sortBy={this.state.sortBy}
@@ -2784,6 +2842,7 @@ class LibContentView extends React.Component {
                       <div className="cur-view-path-right py-1">
                         <DirTool
                           repoID={this.props.repoID}
+                          currentRepoInfo={this.state.currentRepoInfo}
                           repoName={this.state.currentRepoInfo.repo_name}
                           userPerm={userPerm}
                           currentPath={path}

@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { FormGroup } from 'reactstrap';
 import HistoryDateFilter from './date-filter';
 import HistoryCreatorFilter from './creator-filter';
+import { HISTORY_MODE, TRASH_MODE } from '../../constants';
+import FilterBySuffix from '../../dir-trash-view/file-suffix-filter';
 
 import './basic-filters.css';
 
-const HistoryBasicFilters = ({ filters, onChange }) => {
+const HistoryBasicFilters = ({ mode, filters, onChange }) => {
 
   const onChangeDateFilter = useCallback((newValue) => {
     onChange({ ...filters, date: newValue });
@@ -16,18 +18,45 @@ const HistoryBasicFilters = ({ filters, onChange }) => {
     onChange({ ...filters, creators: newValue });
   }, [filters, onChange]);
 
+  const onChangeSuffixesFilter = useCallback((newValue) => {
+    onChange({ ...filters, suffixes: newValue });
+  }, [filters, onChange]);
+
+
   return (
     <FormGroup className="filter-group-basic filter-group p-4">
       <div className="filter-group-container">
         <div className="sf-history-filters-list">
-          <HistoryDateFilter
-            value={filters.date}
-            onChange={onChangeDateFilter}
-          />
-          <HistoryCreatorFilter
-            value={filters.creators}
-            onChange={onChangeCreatorFilter}
-          />
+          {mode === HISTORY_MODE && (
+            <>
+              <HistoryDateFilter
+                value={filters.date}
+                onChange={onChangeDateFilter}
+              />
+              <HistoryCreatorFilter
+                value={filters.creators}
+                onChange={onChangeCreatorFilter}
+              />
+            </>
+          )}
+          {mode === TRASH_MODE && (
+            <>
+              <FilterBySuffix
+                suffixes={filters.suffixes}
+                onChange={onChangeSuffixesFilter}
+              />
+              <HistoryCreatorFilter
+                mode={mode}
+                value={filters.creators}
+                onChange={onChangeCreatorFilter}
+              />
+              <HistoryDateFilter
+                value={filters.date}
+                mode={mode}
+                onChange={onChangeDateFilter}
+              />
+            </>
+          )}
         </div>
       </div>
     </FormGroup>

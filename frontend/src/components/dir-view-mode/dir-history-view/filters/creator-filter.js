@@ -11,8 +11,9 @@ import toaster from '../../../toast';
 import Icon from '../../../icon';
 
 import '../../../search/search-filters/filter-by-creator.css';
+import { HISTORY_MODE } from '../../constants';
 
-const HistoryCreatorFilter = ({ value: selectedOptions = [], onChange }) => {
+const HistoryCreatorFilter = ({ mode = HISTORY_MODE, value: selectedOptions = [], onChange }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState([]);
   const [searchValue, setSearchValue] = useState('');
@@ -85,6 +86,8 @@ const HistoryCreatorFilter = ({ value: selectedOptions = [], onChange }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
 
+  const copyRight = mode === HISTORY_MODE ? gettext('Creator') : gettext('Deleted by');
+
   return (
     <div className="history-creator-filter-container">
       <Dropdown isOpen={isOpen} toggle={toggle}>
@@ -99,7 +102,7 @@ const HistoryCreatorFilter = ({ value: selectedOptions = [], onChange }) => {
           aria-haspopup={true}
           aria-expanded={isOpen}
         >
-          <span className="filter-label" title={gettext('Creator')}>{gettext('Creator')}</span>
+          <span className="filter-label" title={copyRight}>{copyRight}</span>
           <Icon symbol="down" className="w-3 h-3 ml-1" />
         </DropdownToggle>
         <DropdownMenu className="search-filter-menu filter-by-creator-menu">

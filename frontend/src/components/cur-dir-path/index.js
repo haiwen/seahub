@@ -62,6 +62,7 @@ class CurDirPath extends React.Component {
           currentPath={this.props.currentPath}
           userPerm={this.props.userPerm}
           onPathClick={this.props.onPathClick}
+          onTrashPathClick={this.props.onTrashPathClick}
           onTabNavClick={this.props.onTabNavClick}
           fileTags={this.props.fileTags}
           toggleTreePanel={this.props.toggleTreePanel}

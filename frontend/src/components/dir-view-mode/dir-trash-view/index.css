@@ -1,0 +1,32 @@
+.sf-trash-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+.sf-trash-wrapper .sf-table-result-container {
+  height: 100%;
+}
+
+.sf-trash-wrapper .sf-table-canvas {
+  padding-bottom: 0 !important;
+}
+
+.sf-trash-wrapper.read-only .actions-checkbox,
+.sf-trash-wrapper.read-only .select-all-checkbox {
+  display: none !important;
+  cursor: default !important;
+}
+
+.sf-trash-wrapper.read-only .row-index,
+.sf-trash-wrapper.read-only .sf-table-row:hover .row-index {
+  display: block !important;
+}
+
+.sf-trash-wrapper.read-only .actions-cell {
+  cursor: default !important;
+}
+
+.sf-trash-wrapper .sf-table-cell.sf-table-number-cell .number-formatter {
+  width: 100%;
+  text-align: right;
+}
