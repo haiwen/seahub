@@ -58,7 +58,7 @@ class RepotrashAPI {
       params.suffixes = filters.suffixes;
     }
 
-    if (filters.data && filters.date.from != null && filters.date.to != null) {
+    if (filters.date && filters.date.from != null && filters.date.to != null) {
       params.time_from = filters.date.from;
       params.time_to = filters.date.to;
     }

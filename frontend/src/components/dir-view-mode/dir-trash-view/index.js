@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import classNames from 'classnames';
+import deepCopy from 'deep-copy';
 import { repoTrashAPI } from './api';
 import { ensureLeadingSlash, generateTrashItem, getTrashPath, isFiltersValid, transformTrashListToTableData } from './utils';
 import Loading from '../../loading';
@@ -11,7 +13,6 @@ import toaster from '../../toast';
 import { seafileAPI } from '../../../utils/seafile-api';
 
 import './index.css';
-import classNames from 'classnames';
 
 const PER_PAGE = 100;
 export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
@@ -96,7 +97,12 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
       // Trigger the function to load the next page
       setCurrentPage(1);
     }
-    setTrashFilters(filters);
+    const dupFilters = deepCopy(filters);
+    if (dupFilters.date.value === 'custom') {
+      dupFilters.date.from = (new Date(dupFilters.date.from).getTime() / 1000).toFixed(0);
+      dupFilters.date.to = (new Date(dupFilters.date.to).getTime() / 1000).toFixed(0);
+    }
+    setTrashFilters(dupFilters);
   }, [trashSearchValue]);
 
   const refreshTrash = useCallback(() => {
@@ -224,7 +230,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   useEffect(() => {
     if (isFirstLoading) return;
     repoTrashAPI.searchRepoFolderTrash(repoID, 1, PER_PAGE, trashSearchValue, trashFilters).then(res => {
-      const { items, total_count, can_search } = res.data;
+      const { items, total_count } = res.data;
       setTrashList(items);
       if (total_count > currentPage * PER_PAGE) {
         setHasMore(true);
