@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { repoTrashAPI } from './api';
-import { generateTrashItem, getTrashPath, isFiltersValid, transformTrashListToTableData } from './utils';
+import { ensureLeadingSlash, generateTrashItem, getTrashPath, isFiltersValid, transformTrashListToTableData } from './utils';
 import Loading from '../../loading';
 import SFTable from '../../sf-table';
 import EventBus, { eventBus } from '../../common/event-bus';
@@ -51,19 +51,19 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   const restoreTrashes = useCallback(() => {
     let restoreItems = {};
     selectIds.forEach(item => {
-      const index = item.split('_')[1];
+      const index = item.split('____')[1];
       const trashItem = trashList[index];
       const { commit_id, parent_dir, obj_name } = trashItem;
       const path = Utils.joinPath(parent_dir, obj_name);
       if (restoreItems[commit_id]) {
-        restoreItems[commit_id] = restoreItems[commit_id].push(path);
+        restoreItems[commit_id].push(path);
       } else {
         restoreItems[commit_id] = [path];
       }
     });
 
     const unShowTrashList = selectIds.reduce((res, item) => {
-      const index = item.split('_')[1];
+      const index = item.split('____')[1];
       res[index] = true;
       return res;
     }, {});
@@ -232,24 +232,25 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
       } else {
         setHasMore(false);
       }
-
-      const eventBus = EventBus.getInstance();
-      eventBus.dispatch(EVENT_BUS_TYPE.TRASH_SEARCH_STATE_CHANGED, can_search);
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trashSearchValue, trashFilters]);
 
   useEffect(() => {
     if (!trashItem) return;
-    const { commit_id, parent_dir, obj_name } = trashItem;
+    const { commit_id, parent_dir, obj_name, is_trash_folder } = trashItem;
     const path = Utils.joinPath(parent_dir, obj_name);
+    const base_path = is_trash_folder ? trashItem.trash_path : ensureLeadingSlash(obj_name);
     seafileAPI.listCommitDir(repoID, commit_id, path).then(res => {
       const { dirent_list } = res.data;
       const trashList = dirent_list.map(item => {
-        item.is_folder_trash = item.type === 'dir';
         item.obj_name = item.name;
         item.commit_id = commit_id;
         item.is_dir = item.type === 'dir';
+        if (item.is_dir) {
+          item.is_trash_folder = true;
+          item.trash_path = Utils.joinPath(base_path, item.name);
+        }
         return item;
       });
       setTrashList(trashList);

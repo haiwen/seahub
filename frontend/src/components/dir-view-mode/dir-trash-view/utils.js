@@ -97,7 +97,7 @@ export function transformTrashListToTableData(trashList, repoID) {
     const path = Utils.joinPath(trash.parent_dir, trash.obj_name);
     const row = {
       ...trash,
-      _id: path,
+      _id: `${path}____${index}`,
     };
     id_row_map[row._id] = row;
     return row;

@@ -1227,10 +1227,10 @@ class LibContentView extends React.Component {
   };
 
   updateTrashPath = (trashItem) => {
-    const { parent_dir, obj_name } = trashItem;
-    const dirPath = Utils.joinPath(parent_dir, obj_name);
+    const { trash_path, is_trash_folder, obj_name } = trashItem;
+    const path = is_trash_folder ? trash_path : '/' + obj_name;
     let repoInfo = this.state.currentRepoInfo;
-    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '?trash=true&path=' + Utils.encodePath(dirPath);
+    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '?trash=true&path=' + Utils.encodePath(path);
 
     window.history.pushState({}, '', url);
 
