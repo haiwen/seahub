@@ -108,7 +108,7 @@ export function getNewSelectedRange(startCell, nextCellPosition) {
   return { topLeft, bottomRight };
 }
 
-const getColumnRangeProperties = (from, to, columns) => {
+const getColumnRangeProperties = (from, to, columns, scrollLeft) => {
   let totalWidth = 0;
   let anyColFrozen = false;
   for (let i = from; i <= to; i++) {
@@ -118,11 +118,11 @@ const getColumnRangeProperties = (from, to, columns) => {
       anyColFrozen = anyColFrozen || column.frozen;
     }
   }
-  return { totalWidth, anyColFrozen, left: columns[from].left };
+  return { totalWidth, anyColFrozen, left: columns[from].left + scrollLeft };
 };
 
 export const getSelectedRangeDimensions = ({
-  selectedRange, columns, rowHeight, isGroupView, groups, groupMetrics,
+  selectedRange, columns, scrollLeft, rowHeight, isGroupView, groups, groupMetrics,
   groupOffsetLeft, getRecordTopFromRecordsBody,
 }) => {
   const { topLeft, bottomRight, startCell, cursorCell } = selectedRange;
@@ -130,7 +130,7 @@ export const getSelectedRangeDimensions = ({
     return { width: 0, left: 0, top: 0, height: rowHeight, zIndex: Z_INDEX_CELL_MASK };
   }
 
-  let { totalWidth, anyColFrozen, left } = getColumnRangeProperties(topLeft.idx, bottomRight.idx, columns);
+  let { totalWidth, anyColFrozen, left } = getColumnRangeProperties(topLeft.idx, bottomRight.idx, columns, scrollLeft);
   let height;
   let top;
   if (isGroupView) {

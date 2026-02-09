@@ -162,6 +162,7 @@ class Records extends Component {
   };
 
   onContentScroll = (e) => {
+    if (!this.bodyRef) return;
     const { scrollLeft } = e.target;
     const scrollTop = this.bodyRef.getScrollTop();
     const deltaX = this.scrollLeft - scrollLeft;
