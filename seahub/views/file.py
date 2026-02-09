@@ -58,7 +58,8 @@ from seahub.utils import render_error, is_org_context, \
     get_site_scheme_and_netloc
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EXCALIDRAW)
+                                     MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EXCALIDRAW,
+                                     RAW, EXR, EPS)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.star import is_file_starred
 from seahub.utils.file_op import check_file_lock, \
@@ -751,7 +752,7 @@ def view_lib_file(request, repo_id, path):
     if filetype in FILE_TYPE_FOR_NEW_FILE_LINK:
         raw_path = gen_file_get_url_new(repo_id, path)
 
-    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, 'Unknown'):
+    if filetype in (IMAGE, VIDEO, AUDIO, PDF, SVG, RAW, EXR, EPS, 'Unknown'):
         template = 'common_file_view_react.html'
 
     open_with_onlyoffice = request.GET.get('open_with_onlyoffice', 'false')
@@ -973,7 +974,7 @@ def view_lib_file(request, repo_id, path):
             send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 
-    elif filetype == IMAGE:
+    elif filetype in (IMAGE, RAW, EXR, EPS):
 
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _('File size surpasses %s, can not be opened online.') % \
@@ -990,7 +991,7 @@ def view_lib_file(request, repo_id, path):
         for dirent in dirs:
             if not stat.S_ISDIR(dirent.props.mode):
                 fltype, flext = get_file_type_and_ext(dirent.obj_name)
-                if fltype == IMAGE:
+                if fltype in (IMAGE, RAW, EXR, EPS):
                     img_list.append(dirent.obj_name)
 
         if len(img_list) > 1:
