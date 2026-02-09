@@ -625,7 +625,7 @@ class FileTrash(models.Model):
     obj_id = models.CharField(max_length=40)
     obj_name = models.CharField(max_length=255)
     delete_time = models.DateTimeField()
-    repo_id = models.CharField(max_length=36, db_index=True)
+    repo_id = models.CharField(max_length=36)
     commit_id = models.CharField(max_length=40)
     path = models.TextField()
     size = models.BigIntegerField()
