@@ -11,8 +11,8 @@ export function createHistoryColumns({ repoID }) {
   let baseColumns = [
     {
       key: 'obj_name',
-      name: gettext('File Name'),
-      display_name: gettext('File Name'),
+      name: gettext('File name'),
+      display_name: gettext('File name'),
       icon_name: 'text',
       type: 'text',
       width: 350,
