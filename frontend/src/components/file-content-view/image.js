@@ -57,7 +57,7 @@ class FileContent extends React.Component {
     // request thumbnails for some files
     // only for 'file view'. not for 'history/trash file view'
     let thumbnailURL = '';
-    const fileExtList = ['tif', 'tiff', 'psd', 'heic'];
+    const fileExtList = ['tif', 'tiff', 'psd', 'psb', 'heic', 'cr2', 'cr3', 'nef', 'arw', 'dng', 'exr', 'eps'];
     if (!repoEncrypted && fileExtList.includes(fileExt)) {
       thumbnailURL = `${siteRoot}thumbnail/${repoID}/${thumbnailSizeForOriginal}${Utils.encodePath(filePath)}?mtime=${lastModificationTime}`;
     }

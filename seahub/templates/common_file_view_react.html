@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block extra_data %}
-{% if filetype == 'Image' %}
+{% if filetype == 'Image' or filetype == 'RAW' or filetype == 'EXR' or filetype == 'EPS' %}
 // img_prev && img_next can be path or None
 previousImage: {% if img_prev %}'{{ img_prev|escapejs }}'{% else %}false{% endif %},
 nextImage: {% if img_next %}'{{ img_next|escapejs }}'{% else %}false{% endif %},
