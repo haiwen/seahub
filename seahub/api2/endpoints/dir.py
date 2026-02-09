@@ -23,7 +23,7 @@ from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
         normalize_dir_path, is_pro_version, FILEEXT_TYPE_MAP
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_tags import get_files_tags_in_dir
-from seahub.utils.file_types import IMAGE, VIDEO, PDF, SVG, SEADOC
+from seahub.utils.file_types import IMAGE, VIDEO, PDF, SVG, SEADOC, RAW, EXR, EPS
 from seahub.base.models import UserStarredFiles
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -63,6 +63,9 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
     if ENABLE_THUMBNAIL_SERVER:
         thumbnail_support_file_types.append(SEADOC)
         thumbnail_support_file_types.append(VIDEO)
+        thumbnail_support_file_types.append(RAW)
+        thumbnail_support_file_types.append(EXR)
+        thumbnail_support_file_types.append(EPS)
 
     # only get dir info list
     if not request_type or request_type == 'd':

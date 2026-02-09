@@ -117,7 +117,7 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
-    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'heic', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'webp', 'jfif'),
+    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'heic', 'ico', 'bmp', 'tif', 'tiff', 'psd', 'psb', 'webp', 'jfif'),
     DOCUMENT: ('doc', 'docx', 'docxf', 'oform', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp', 'odg', 'pages'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     SVG: ('svg',),
@@ -130,6 +130,9 @@ PREVIEW_FILEEXT = {
     TLDRAW: ('draw',),
     EXCALIDRAW: ('exdraw',),
     TEXT: ('admin', 'txt', 'log', 'csv', 'py', 'c', 'cpp', 'h', 'java', 'js', 'css', 'html', 'htm', 'xml', 'json', 'yml', 'yaml', 'sh', 'rb', 'php', 'go', 'rs', 'swift', 'kt", "kts', 'dart', 'ini', 'cfg', 'conf', 'toml'),
+    RAW: ('cr2', 'cr3', 'nef', 'arw', 'dng'),
+    EXR: ('exr',),
+    EPS: ('eps',),
 }
 
 def get_non_sdoc_file_exts():
