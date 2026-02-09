@@ -198,6 +198,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   }, []);
 
   const loadNextPage = useCallback(() => {
+    if (!hasMore) return;
     setIsLoadingMore(true);
     if (!trashSearchValue && !trashFilters) {
       repoTrashAPI.getRepoFolderTrash(repoID, currentPage, PER_PAGE).then(res => {
@@ -224,7 +225,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
         setIsLoadingMore(false);
       });
     }
-  }, [currentPage, repoID, trashFilters, trashList, trashSearchValue]);
+  }, [currentPage, hasMore, repoID, trashFilters, trashList, trashSearchValue]);
 
   // search module
   useEffect(() => {
@@ -308,7 +309,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
         showGridFooter={true}
         hasMoreRecords={hasMore}
         isLoadingMoreRecords={isLoadingMore}
-        enableScrollToLoad={false}
+        enableScrollToLoad={true}
         loadMore={loadNextPage}
         modifyColumnWidth={handleColumnWidthChange}
         onCellDoubleClick={handleCellDoubleClick}

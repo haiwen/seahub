@@ -923,6 +923,7 @@ class Records extends Component {
       hasSelectedCell: this.hasSelectedCell,
       onCellContextMenu: this.onCellContextMenu,
       getTableCanvasContainerRect: this.getTableCanvasContainerRect,
+      scrollToLoadMore: this.props.scrollToLoadMore,
     };
     if (this.props.showRecordAsTree) {
       return (
