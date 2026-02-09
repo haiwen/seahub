@@ -1204,6 +1204,7 @@ class LibContentView extends React.Component {
       currentMode: HISTORY_MODE,
       path: '/',
       isDirentDetailShow: false,
+      isDirentSelected: false,
     });
   };
 
@@ -1223,6 +1224,7 @@ class LibContentView extends React.Component {
       currentMode: TRASH_MODE,
       path: '/',
       isDirentDetailShow: false,
+      isDirentSelected: false,
     });
   };
 
@@ -1238,6 +1240,7 @@ class LibContentView extends React.Component {
       currentMode: TRASH_MODE,
       path: '/',
       isDirentDetailShow: false,
+      isDirentSelected: false,
     });
   };
 
@@ -1251,6 +1254,7 @@ class LibContentView extends React.Component {
       currentMode: TRASH_MODE,
       path: '/',
       isDirentDetailShow: false,
+      isDirentSelected: false,
     });
   };
 

@@ -51,8 +51,8 @@ const HistoryBasicFilters = ({ mode, filters, onChange }) => {
                 onChange={onChangeCreatorFilter}
               />
               <HistoryDateFilter
-                value={filters.date}
                 mode={mode}
+                value={filters.date}
                 onChange={onChangeDateFilter}
               />
             </>
