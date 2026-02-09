@@ -1216,12 +1216,12 @@ class LibContentView extends React.Component {
     }
 
     const repoInfo = this.state.currentRepoInfo;
-    const url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?trash=true&path=' + this.state.path;
+    const url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?trash=true&path=/';
     window.history.pushState({}, '', url);
 
     this.setState({
       currentMode: TRASH_MODE,
-      path: this.state.path,
+      path: '/',
       isDirentDetailShow: false,
     });
   };
@@ -1243,7 +1243,7 @@ class LibContentView extends React.Component {
 
   onTrashPathClick = (path) => {
     let repoInfo = this.state.currentRepoInfo;
-    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '?trash=true&path=' + Utils.encodePath(path);
+    let url = siteRoot + 'library/' + repoInfo.repo_id + '/' + encodeURIComponent(repoInfo.repo_name) + '/?trash=true&path=' + Utils.encodePath(path);
 
     window.history.pushState({}, '', url);
 

@@ -124,7 +124,12 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
     const searchValue = path.split('/')[1];
     repoTrashAPI.searchRepoFolderTrash(repoID, 1, PER_PAGE, searchValue, {}).then(res => {
       const { items } = res.data;
-      const item = items[0];
+      const item = items.find(item => item.obj_name === searchValue);
+      if (!item) {
+        setTrashList([]);
+        setIsFirstLoading(false);
+        return;
+      }
       const trashItem = generateTrashItem(item, path);
       setCurrentTrashItem(trashItem);
       setIsFirstLoading(false);
@@ -171,7 +176,12 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
       const searchValue = currentPath.split('/')[1];
       repoTrashAPI.searchRepoFolderTrash(repoID, 1, PER_PAGE, searchValue, trashFilters).then(res => {
         const { items } = res.data;
-        const item = items[0];
+        const item = items.find(item => item.obj_name === searchValue);
+        if (!item) {
+          setTrashList([]);
+          setIsFirstLoading(false);
+          return;
+        }
         const trashItem = generateTrashItem(item, currentPath);
         setCurrentTrashItem(trashItem);
         setIsFirstLoading(false);
