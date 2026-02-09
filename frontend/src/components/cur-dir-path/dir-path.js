@@ -68,6 +68,10 @@ class DirPath extends React.Component {
     return location.href.indexOf('?trash=true') > -1;
   };
 
+  isHistoryMode = () => {
+    return location.href.indexOf('?history=true') > -1;
+  };
+
   onTabNavClick = (e, tabName, id) => {
     if (window.uploader &&
       window.uploader.isUploadProgressDialogShow &&
@@ -250,6 +254,15 @@ class DirPath extends React.Component {
     return pathElem;
   };
 
+  turnHistoryPathToLink = () => {
+    return (
+      <>
+        <span className="path-split">/</span>
+        <span className="path-item path-item-read-only">{gettext('History')}</span>
+      </>
+    );
+  };
+
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
     const pathList = path.split('/');
@@ -262,6 +275,10 @@ class DirPath extends React.Component {
 
     if (this.isTrashMode()) {
       return this.turnTrashPathToLink(pathList);
+    }
+
+    if (this.isHistoryMode()) {
+      return this.turnHistoryPathToLink(pathList);
     }
 
     let nodePath = '';
@@ -318,6 +335,7 @@ class DirPath extends React.Component {
     const { currentPath, repoName, isTreePanelShown } = this.props;
     const pathElem = this.turnPathToLink(currentPath);
     const isTrashMode = this.isTrashMode();
+    const isHistoryMode = this.isHistoryMode();
     return (
       <div className="path-container dir-view-path">
         <OpIcon
@@ -346,7 +364,7 @@ class DirPath extends React.Component {
             <span className="path-split">/</span>
           </>
         )}
-        {(!isTrashMode && (currentPath === '/' || currentPath === '')) ?
+        {(!isHistoryMode && !isTrashMode && (currentPath === '/' || currentPath === '')) ?
           <DirOperationToolbar
             path={this.props.currentPath}
             repoID={this.props.repoID}

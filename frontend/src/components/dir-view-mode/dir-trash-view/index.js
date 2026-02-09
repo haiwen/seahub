@@ -77,6 +77,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
       // clear header left toolbar
       const eventBus = EventBus.getInstance();
       eventBus.dispatch(EVENT_BUS_TYPE.SELECT_TRASH, []);
+      eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE, []);
       toggleShowDirentToolbar(false);
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error);
@@ -200,7 +201,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   const loadNextPage = useCallback(() => {
     if (!hasMore) return;
     setIsLoadingMore(true);
-    if (!trashSearchValue && !trashFilters) {
+    if (!trashSearchValue && !isFiltersValid(trashFilters)) {
       repoTrashAPI.getRepoFolderTrash(repoID, currentPage, PER_PAGE).then(res => {
         const { items, total_count } = res.data;
         setTrashList([...trashList, ...items]);
@@ -276,7 +277,6 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
     return transformTrashListToTableData(trashList, repoID);
   }, [repoID, trashList]);
 
-  const handleColumnWidthChange = () => {};
 
   const handleCellDoubleClick = () => {};
 
@@ -311,7 +311,6 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
         isLoadingMoreRecords={isLoadingMore}
         enableScrollToLoad={true}
         loadMore={loadNextPage}
-        modifyColumnWidth={handleColumnWidthChange}
         onCellDoubleClick={handleCellDoubleClick}
         checkCanModifyRecord={checkCanModifyRecord}
         supportCopy={false}

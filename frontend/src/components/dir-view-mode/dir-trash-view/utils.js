@@ -115,7 +115,7 @@ export function transformTrashListToTableData(trashList, repoID) {
 
 export const isFiltersValid = (filters) => {
   let count = 0;
-  if (filters.date && (filters.date.value || (filters.date.to || filters.date.from))) count++;
+  if (filters.date && (filters.date.value)) count++;
   if (filters.creators && filters.creators.length > 0) count++;
   if (filters.tags && filters.tags.length > 0) count++;
   if (filters.suffixes) count++;
