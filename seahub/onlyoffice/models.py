@@ -19,7 +19,7 @@ class OnlyOfficeDocKey(models.Model):
 REPO_OFFICE_CONFIG = 'office'
 class RepoExtraConfig(models.Model):
 
-    repo_id = models.CharField(max_length=36, db_index=True)
+    repo_id = models.CharField(max_length=36)
     config_type = models.CharField(max_length=50)
     config_details = models.TextField()
 

@@ -89,7 +89,7 @@ class WikiPageTrash(models.Model):
         }
 
 class Wiki2Publish(models.Model):
-    repo_id = models.CharField(max_length=36, unique=True, db_index=True)
+    repo_id = models.CharField(max_length=36, unique=True)
     publish_url = models.CharField(max_length=40, null=True, unique=True)
     username = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
