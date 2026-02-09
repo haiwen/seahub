@@ -11,6 +11,10 @@
   padding-bottom: 0 !important;
 }
 
+.sf-trash-wrapper .select-all-checkbox-container {
+  pointer-events: none;
+}
+
 .sf-trash-wrapper.read-only .actions-checkbox,
 .sf-trash-wrapper.read-only .select-all-checkbox {
   display: none !important;

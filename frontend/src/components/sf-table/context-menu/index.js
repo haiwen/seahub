@@ -93,12 +93,18 @@ const ContextMenu = ({
     const historyWrapper = document.querySelector('.sf-history-wrapper');
     historyWrapper && historyWrapper.addEventListener('contextmenu', handleShow);
 
+    const trashWrapper = document.querySelector('.sf-trash-wrapper');
+    trashWrapper && trashWrapper.addEventListener('contextmenu', handleShow);
+
     return () => {
       const metadataTagsWrapper = document.querySelector('.sf-metadata-tags-wrapper');
       metadataTagsWrapper && metadataTagsWrapper.removeEventListener('contextmenu', handleShow);
 
       const historyWrapper = document.querySelector('.sf-history-wrapper');
       historyWrapper && historyWrapper.removeEventListener('contextmenu', handleShow);
+
+      const trashWrapper = document.querySelector('.sf-trash-wrapper');
+      trashWrapper && trashWrapper.removeEventListener('contextmenu', handleShow);
     };
 
   }, [handleShow]);
