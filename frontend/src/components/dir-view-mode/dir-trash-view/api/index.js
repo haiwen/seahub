@@ -64,7 +64,8 @@ class RepotrashAPI {
     }
 
     if (filters.creators != null) {
-      params.op_users = filters.creators;
+      const op_users = filters.creators.map(item => item.email).join(',');
+      params.op_users = op_users;
     }
 
     return this.req.get(url, { params: params });
