@@ -252,18 +252,22 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   // search module
   useEffect(() => {
     if (isFirstLoading) return;
-    repoTrashAPI.searchRepoFolderTrash(repoID, 1, PER_PAGE, trashSearchValue, trashFilters).then(res => {
-      const { items, total_count } = res.data;
-      setTrashList(items);
-      if (total_count > currentPage * PER_PAGE) {
-        setHasMore(true);
-        setCurrentPage(2);
-      } else {
-        setHasMore(false);
-      }
-    });
+    if (!trashSearchValue && !isFiltersValid(trashFilters)) {
+      reloadTrashList();
+    } else {
+      repoTrashAPI.searchRepoFolderTrash(repoID, 1, PER_PAGE, trashSearchValue, trashFilters).then(res => {
+        const { items, total_count } = res.data;
+        setTrashList(items);
+        if (total_count > currentPage * PER_PAGE) {
+          setHasMore(true);
+          setCurrentPage(2);
+        } else {
+          setHasMore(false);
+        }
+      });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trashSearchValue, trashFilters]);
+  }, [trashSearchValue, trashFilters, reloadTrashList]);
 
   useEffect(() => {
     if (!trashItem) return;
