@@ -118,7 +118,7 @@ const getColumnRangeProperties = (from, to, columns, scrollLeft) => {
       anyColFrozen = anyColFrozen || column.frozen;
     }
   }
-  return { totalWidth, anyColFrozen, left: columns[from].left + scrollLeft };
+  return { totalWidth, anyColFrozen, left: anyColFrozen ? columns[from].left + scrollLeft : columns[from].left };
 };
 
 export const getSelectedRangeDimensions = ({

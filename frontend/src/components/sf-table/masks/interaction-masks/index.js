@@ -375,8 +375,8 @@ class InteractionMasks extends React.Component {
             left += groupOffsetLeft;
           }
           mask.style.position = 'fixed';
-          mask.style.top = (top - 1) + 'px';
-          mask.style.left = (left - 1) + 'px';
+          mask.style.top = top + 'px';
+          mask.style.left = left + 'px';
           mask.style.transform = 'none';
         }
       }
@@ -402,7 +402,7 @@ class InteractionMasks extends React.Component {
     mask.style.position = 'absolute';
     mask.style.top = 0;
     mask.style.left = 0;
-    mask.style.transform = `translate(${left - 1}px, ${top - 1}px)`;
+    mask.style.transform = `translate(${left}px, ${top}px)`;
   };
 
   getEditorPosition = () => {

@@ -18,6 +18,10 @@ const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent
   const view = useMemo(() => idViewMap[viewId], [viewId, idViewMap]);
   const type = view?.type;
 
+  if (mode === TRASH_MODE) {
+    return <TrashToolbar />;
+  }
+
   if (type === VIEW_TYPE.GALLERY) {
     return (
       <GalleryFilesToolbar updateCurrentDirent={updateCurrentDirent} />
@@ -49,10 +53,6 @@ const ViewToolbar = ({ repoID, repoInfo, mode, path, viewId, updateCurrentDirent
     } else {
       return <TagFilesToolbar currentRepoInfo={repoInfo} />;
     }
-  }
-
-  if (mode === TRASH_MODE) {
-    return <TrashToolbar />;
   }
 
 };
