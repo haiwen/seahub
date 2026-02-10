@@ -312,6 +312,19 @@ class DirPath extends React.Component {
       <>
         <span className="path-split">/</span>
         <span className="path-item path-item-read-only">{gettext('History')}</span>
+        <div
+          className="path-item"
+          id="sf-history-mode-tip"
+          role="button"
+          tabIndex={0}
+        >
+          <Icon symbol="question-circle-stroked" />
+          <UncontrolledTooltip target="sf-history-mode-tip" placement="bottom" style={{
+            maxWidth: '260px',
+          }}>
+            {gettext('Tip: a snapshot will be generated after modification, which records the library state after the modification')}
+          </UncontrolledTooltip>
+        </div>
       </>
     );
   };
