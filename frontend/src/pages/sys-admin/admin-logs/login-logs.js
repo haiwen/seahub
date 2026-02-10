@@ -161,22 +161,16 @@ class AdminLoginLogs extends Component {
   render() {
     let { logList, currentPage, perPage, hasNextPage } = this.state;
     return (
-      <div className="main-panel-center flex-row">
-        <div className="cur-view-container">
-          <div className="cur-view-content">
-            <Content
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              items={logList}
-              currentPage={currentPage}
-              perPage={perPage}
-              hasNextPage={hasNextPage}
-              getLogsByPage={this.getLogsByPage}
-              resetPerPage={this.resetPerPage}
-            />
-          </div>
-        </div>
-      </div>
+      <Content
+        loading={this.state.loading}
+        errorMsg={this.state.errorMsg}
+        items={logList}
+        currentPage={currentPage}
+        perPage={perPage}
+        hasNextPage={hasNextPage}
+        getLogsByPage={this.getLogsByPage}
+        resetPerPage={this.resetPerPage}
+      />
     );
   }
 }
