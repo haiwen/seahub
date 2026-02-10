@@ -1284,6 +1284,14 @@ def _download_file_from_share_link(request, fileshare, use_tmp_token=False):
     if not obj_id:
         messages.error(request, _('Unable to download file, wrong file path'))
         return HttpResponseRedirect(next_page)
+    
+    if use_tmp_token:
+        dl_token = seafile_api.get_fileserver_access_token(repo.id,
+            obj_id, 'download-link', fileshare.username, use_onetime=False)
+        if not dl_token:
+            messages.error(request, _('Unable to download file.'))
+        
+        return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
     if use_tmp_token:
         dl_token = seafile_api.get_fileserver_access_token(repo.id,
