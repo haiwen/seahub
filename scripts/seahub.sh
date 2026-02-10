@@ -253,7 +253,7 @@ function stop_seahub () {
     if [[ -f ${pidfile} ]]; then
         echo "Stopping seahub ..."
         pkill -f "thirdpart/bin/gunicorn"
-        sleep 1
+        sleep 5
         if pgrep -f "thirdpart/bin/gunicorn" 2>/dev/null 1>&2 ; then
             echo 'Failed to stop seahub.'
             exit 1
