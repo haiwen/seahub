@@ -313,7 +313,6 @@ class DirentGridView extends React.Component {
     hideMenu();
 
     // Use unified menuHandlers for all operations
-    // operation is already the key string (from data-operation attribute)
     const handler = menuHandlers[operation];
     if (handler) {
       handler({
@@ -333,7 +332,6 @@ class DirentGridView extends React.Component {
 
   onDirentsMenuItemClick = (operation) => {
     // Use shared menu handlers directly
-    // operation is already the key string (from data-operation attribute)
     const handler = menuHandlers[operation];
     if (handler) {
       handler({
@@ -556,7 +554,7 @@ class DirentGridView extends React.Component {
           });
           // Update the thumbnail URL with the cache-busting query parameter
           const item = this.props.direntList.find((item) => item.name === imageName);
-          this.props.updateDirent(item, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
+          this.props.updateDirent(item, { encoded_thumbnail_src: newThumbnailSrc, mtime: cacheBuster });
           this.props.updateTreeNode(path, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
         }).catch(error => {
           this.handleError(error);

@@ -37,8 +37,7 @@ const DirTableView = ({
   onItemSelected,
   onBatchDelete,
   updateDirent,
-  updateDirentProperties,
-  onDirentStatus,
+  updateDirentStatus,
   onItemConvert,
   showDirentDetail,
   onItemsMove,
@@ -64,9 +63,9 @@ const DirTableView = ({
   }, [direntList, onItemClick]);
 
   const enrichedColumns = useMemo(() => {
-    return createDirentTableColumns(columns, hiddenColumnKeys, { repoID, repoInfo, tableData, onItemClick: handleItemClick, updateDirent, onDirentStatus });
+    return createDirentTableColumns(columns, hiddenColumnKeys, { repoID, repoInfo, tableData, onItemClick: handleItemClick, updateDirentStatus });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, handleItemClick, updateDirent, onDirentStatus, columnWidthVersion]);
+  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, handleItemClick, updateDirentStatus, columnWidthVersion]);
 
   const modifyColumnWidth = useCallback((column, newWidth) => {
     setDirTableColumnWidth(column.key, newWidth);
@@ -116,7 +115,7 @@ const DirTableView = ({
         isBatch,
         onBatchDelete,
         onItemDelete,
-        updateDirentProperties,
+        updateDirent,
         onItemConvert,
         showDirentDetail,
         direntList,
@@ -238,6 +237,11 @@ const DirTableView = ({
     });
   };
 
+  const handleSelectedRecord = useCallback((ids) => {
+    const list = direntList.filter(d => ids.includes(d._id) || ids.includes(d.id));
+    onSelectedDirentListUpdate(list);
+  }, [direntList, onSelectedDirentListUpdate]);
+
   const onRecordSelected = useCallback((event, recordId) => {
     const dirent = direntList.find(d => d._id === recordId || d.id === recordId); // _id for file, id for folder
     onItemSelected(dirent, event);
@@ -335,7 +339,7 @@ const DirTableView = ({
         onRecordSelected={onRecordSelected}
         renderCustomDraggedRows={renderCustomDraggedRows}
         moveRecords={moveDirents}
-        updateSelectedRecordIds={onSelectedDirentListUpdate}
+        updateSelectedRecordIds={handleSelectedRecord}
       />
     </div>
   );
@@ -357,8 +361,7 @@ DirTableView.propTypes = {
   onItemSelected: PropTypes.func,
   onBatchDelete: PropTypes.func,
   updateDirent: PropTypes.func,
-  updateDirentProperties: PropTypes.func,
-  onDirentStatus: PropTypes.func,
+  updateDirentStatus: PropTypes.func,
   onItemConvert: PropTypes.func,
   showDirentDetail: PropTypes.func,
   onItemsMove: PropTypes.func,

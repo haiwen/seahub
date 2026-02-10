@@ -196,19 +196,20 @@ class LibContentView extends React.Component {
         // update file status
         const fileNameObj = { name: noticeData.content.path.split('/').pop() };
         if (noticeData.content.change_event === 'locked') {
-          if (noticeData.content.expire === -1) {
-            this.updateDirent(fileNameObj, 'is_freezed', true);
-          } else {
-            this.updateDirent(fileNameObj, 'is_freezed', false);
-          }
-          this.updateDirent(fileNameObj, 'is_locked', true);
-          this.updateDirent(fileNameObj, 'locked_by_me', true);
-          let lockOwnerName = noticeData.content.lock_user.split('@')[0];
-          this.updateDirent(fileNameObj, 'lock_owner_name', lockOwnerName);
+          const updates = {
+            is_freezed: noticeData.content.expire === -1,
+            is_locked: true,
+            locked_by_me: true,
+            lock_owner_name: noticeData.content.lock_user.split('@')[0]
+          };
+          this.updateDirent(fileNameObj, updates);
         } else if (noticeData.content.change_event === 'unlocked') {
-          this.updateDirent(fileNameObj, 'is_locked', false);
-          this.updateDirent(fileNameObj, 'locked_by_me', false);
-          this.updateDirent(fileNameObj, 'lock_owner_name', '');
+          const updates = {
+            is_locked: false,
+            locked_by_me: false,
+            lock_owner_name: ''
+          };
+          this.updateDirent(fileNameObj, updates);
         }
       }
     } else if (noticeData.type === 'repo-update') {
@@ -1836,6 +1837,7 @@ class LibContentView extends React.Component {
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,
       isAllDirentSelected: newSelectedDirentList.length === this.state.direntList.length,
+      currentDirent: lastSelectedIndex ? this.state.direntList[lastSelectedIndex] : null,
     });
   };
 
@@ -1961,7 +1963,7 @@ class LibContentView extends React.Component {
       if (this.state.isViewFile) {
         this.setState({ fileTags: fileTags });
       } else {
-        this.updateDirent(dirent, 'file_tags', fileTags);
+        this.updateDirent(dirent, { file_tags: fileTags });
       }
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
@@ -1977,7 +1979,7 @@ class LibContentView extends React.Component {
     if (isExist) {
       dirent = this.state.direntList.find(dirent => dirent.name === direntObject.name && dirent.type === direntObject.type);
       const mtime = dayjs.unix(direntObject.mtime).fromNow();
-      dirent && this.updateDirent(dirent, 'mtime', mtime);
+      dirent && this.updateDirent(dirent, { mtime });
     } else {
       // use current dirent parent's permission as it's permission
       direntObject.permission = this.state.userPerm;
@@ -2111,27 +2113,15 @@ class LibContentView extends React.Component {
     });
   };
 
-  updateDirent = (dirent, keyOrUpdates, value) => {
-    let newDirentList = this.state.direntList.map(item => {
-      if (item.name === dirent.name) {
-        if (typeof keyOrUpdates === 'string') {
-          item[keyOrUpdates] = value;
-        } else if (Array.isArray(keyOrUpdates)) {
-          keyOrUpdates.forEach((k, index) => {
-            item[k] = value[index];
-          });
-        } else if (typeof keyOrUpdates === 'object' && keyOrUpdates !== null) {
-          Object.keys(keyOrUpdates).forEach(key => {
-            item[key] = keyOrUpdates[key];
-          });
-        }
-      }
-      return item;
-    });
-    this.setState({ direntList: newDirentList });
-  };
+  // Unified single entry point for updating dirents
+  // Format: updateDirent(dirent, { key: value })
+  // Batch : updateDirent(dirent, { key1: value1, key2: value2 })
+  updateDirent = (dirent, updates) => {
+    if (!dirent || !updates || typeof updates !== 'object') {
+      return;
+    }
 
-  updateDirentProperties = (dirent, updates) => {
+    // Apply updates to state
     let newDirentList = this.state.direntList.map(item => {
       if (item.name === dirent.name) {
         Object.keys(updates).forEach(key => {
@@ -2141,11 +2131,6 @@ class LibContentView extends React.Component {
       return item;
     });
     this.setState({ direntList: newDirentList });
-  };
-
-  onHiddenColumnKeys = (colKeys) => {
-    localStorage.setItem(DIR_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
-    this.setState({ hiddenColumnKeys: colKeys });
   };
 
   updateDirentStatus = async (direntName, optionID, isLocal = false) => {
@@ -2159,6 +2144,7 @@ class LibContentView extends React.Component {
     const parentDir = dirent.parent_dir || path;
     const column = this.state.columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
     const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: getColumnOptionNameById(column, optionID) };
+
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
         if (d.name === direntName) {
@@ -2172,7 +2158,6 @@ class LibContentView extends React.Component {
       if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
         newState.currentDirent = new Dirent({ ...prevState.currentDirent, ...updateData });
       }
-
       return newState;
     });
 
@@ -2211,6 +2196,11 @@ class LibContentView extends React.Component {
         return false;
       }
     }
+  };
+
+  onHiddenColumnKeys = (colKeys) => {
+    localStorage.setItem(DIR_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
+    this.setState({ hiddenColumnKeys: colKeys });
   };
 
   onColumnDataModified = async (key, data, isLocal = false) => {
@@ -2957,8 +2947,7 @@ class LibContentView extends React.Component {
                           onItemConvert={this.onConvertItem}
                           onDirentClick={this.onDirentClick}
                           updateDirent={this.updateDirent}
-                          updateDirentProperties={this.updateDirentProperties}
-                          onDirentStatus={this.updateDirentStatus}
+                          updateDirentStatus={this.updateDirentStatus}
                           isAllItemSelected={this.state.isAllDirentSelected}
                           onAllItemSelected={this.onAllDirentSelected}
                           selectedDirentList={this.state.selectedDirentList}

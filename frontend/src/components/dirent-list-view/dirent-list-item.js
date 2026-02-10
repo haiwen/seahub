@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { DropdownItem } from 'reactstrap';
 import urlJoin from 'url-join';
-import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import Rename from '../rename';
-import toaster from '../toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
@@ -178,7 +176,7 @@ class DirentListItem extends React.Component {
   updateDirentThumbnail = (encoded_thumbnail_src) => {
     this.isGeneratingThumbnail = false;
     // Let parent handle thumbnail update through props update
-    this.props.updateDirent(this.props.dirent, 'encoded_thumbnail_src', encoded_thumbnail_src);
+    this.props.updateDirent(this.props.dirent, { encoded_thumbnail_src });
   };
 
   onMouseEnter = () => {

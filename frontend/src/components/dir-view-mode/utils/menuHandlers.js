@@ -33,20 +33,20 @@ export const menuHandlers = {
     sfTableEventBus.dispatch(SF_TABLE_EVENT_BUS_TYPE.OPEN_EDITOR);
   },
 
-  [TextTranslation.LOCK.key]: ({ repoID, path, dirent, updateDirentProperties }) => {
-    lockFile(repoID, path, dirent, updateDirentProperties);
+  [TextTranslation.LOCK.key]: ({ repoID, path, dirent, updateDirent }) => {
+    lockFile(repoID, path, dirent, updateDirent);
   },
 
-  [TextTranslation.UNLOCK.key]: ({ repoID, path, dirent, updateDirentProperties }) => {
-    unlockFile(repoID, path, dirent, updateDirentProperties);
+  [TextTranslation.UNLOCK.key]: ({ repoID, path, dirent, updateDirent }) => {
+    unlockFile(repoID, path, dirent, updateDirent);
   },
 
-  [TextTranslation.FREEZE_DOCUMENT.key]: ({ repoID, path, dirent, updateDirentProperties }) => {
-    freezeDocument(repoID, path, dirent, updateDirentProperties);
+  [TextTranslation.FREEZE_DOCUMENT.key]: ({ repoID, path, dirent, updateDirent }) => {
+    freezeDocument(repoID, path, dirent, updateDirent);
   },
 
-  [TextTranslation.UNFREEZE_DOCUMENT.key]: ({ repoID, path, dirent, updateDirentProperties }) => {
-    unlockFile(repoID, path, dirent, updateDirentProperties);
+  [TextTranslation.UNFREEZE_DOCUMENT.key]: ({ repoID, path, dirent, updateDirent }) => {
+    unlockFile(repoID, path, dirent, updateDirent);
   },
 
   [TextTranslation.HISTORY.key]: ({ repoID, path, dirent }) => {
@@ -141,12 +141,12 @@ export const menuHandlers = {
     eventBus.dispatch(EVENT_BUS_TYPE.PERMISSION, direntPath, name);
   },
 
-  [TextTranslation.STAR.key]: ({ dirent, repoID, path, updateDirentProperties }) => {
-    toggleStar(dirent, repoID, path, updateDirentProperties);
+  [TextTranslation.STAR.key]: ({ dirent, repoID, path, updateDirent }) => {
+    toggleStar(dirent, repoID, path, updateDirent);
   },
 
-  [TextTranslation.UNSTAR.key]: ({ dirent, repoID, path, updateDirentProperties }) => {
-    toggleStar(dirent, repoID, path, updateDirentProperties);
+  [TextTranslation.UNSTAR.key]: ({ dirent, repoID, path, updateDirent }) => {
+    toggleStar(dirent, repoID, path, updateDirent);
   },
 
   [TextTranslation.ONLYOFFICE_CONVERT.key]: async ({ repoID, path, dirent, loadDirentList }) => {
