@@ -422,6 +422,17 @@ class MetadataManagerAPI {
     return this.req.get(url);
   };
 
+  // fix metadata
+  fixMetadata = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/fix/';
+    return this.req.post(url);
+  };
+
+  getFixMetadataStatus = (repoID) => {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/metadata/fix-status/';
+    return this.req.get(url);
+  };
+
 }
 
 const metadataAPI = new MetadataManagerAPI();
