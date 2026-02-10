@@ -125,6 +125,10 @@
   cursor: pointer;
 }
 
+.history-date-filter-container .op-icon:hover {
+  background: var(--bs-hover-bg);
+}
+
 .history-date-filter-container .dropdown-item {
   position: relative;
   padding: 0.25rem 10px;
