@@ -7,6 +7,8 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 
+import '../../css/list-created-files-dialog.css';
+
 const propTypes = {
   activity: PropTypes.object.isRequired,
   toggleCancel: PropTypes.func.isRequired,
@@ -23,7 +25,7 @@ class ListCreatedFileDialog extends React.Component {
   render() {
     let activity = this.props.activity;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} className='list-created-files-dialog'>
         <SeahubModalHeader toggle={this.toggle}>
           {(() => {
             const isDir = activity.obj_type === 'dir';
