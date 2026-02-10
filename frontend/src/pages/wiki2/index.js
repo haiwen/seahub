@@ -162,7 +162,7 @@ class Wiki extends Component {
       let errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
     });
-  }, 1000);
+  }, 500);
 
   updatePageLock = (pageId, locked) => {
     wikiAPI.updateWiki2PageLock(wikiId, pageId, locked).then(res => {

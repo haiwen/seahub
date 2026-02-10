@@ -41,9 +41,13 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
       range.setStart(startContainer, startOffset);
       range.setEnd(endContainer, endOffset);
 
+      range.selectNodeContents(contentEditableRef.current);
+      range.collapse(false);
+
       const selection = window.getSelection();
       selection.removeAllRanges();
       selection.addRange(range);
+      contentEditableRef.current.focus();
     }
   }, [pageName]);
 
