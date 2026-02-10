@@ -261,10 +261,9 @@ class LibContentView extends React.Component {
     } else {
       currentMode = Cookies.get('seafile_view_mode') || LIST_MODE;
     }
-
     // Initialize isDirentDetailShow from localStorage, but only for modes that use it
     const storedDirentDetailShowState = localStorage.getItem(DIRENT_DETAIL_SHOW_KEY);
-    const isDirentDetailShow = !isHistory && isTrash && storedDirentDetailShowState === 'true';
+    const isDirentDetailShow = !isHistory && !isTrash && storedDirentDetailShowState === 'true';
 
     try {
       const repoInfo = await this.fetchRepoInfo(repoID);
@@ -634,9 +633,15 @@ class LibContentView extends React.Component {
 
   hideMetadataView = (isSetRoot = false) => {
     const { repoID } = this.props;
-    const { path } = this.getInfoFromLocation(repoID);
+    const { path, isHistory, isTrash } = this.getInfoFromLocation(repoID);
+    let mode = Cookies.get('seafile_view_mode') || LIST_MODE;
+    if (isHistory) {
+      mode = HISTORY_MODE;
+    } else if (isTrash) {
+      mode = TRASH_MODE;
+    }
     this.setState({
-      currentMode: Cookies.get('seafile_view_mode') || LIST_MODE,
+      currentMode: mode,
       path: isSetRoot ? '/' : path,
       viewId: '',
       tagId: '',

@@ -334,10 +334,10 @@ class InteractionMasks extends React.Component {
     };
   };
 
-  setScrollLeft = () => {
+  setScrollLeft = (scrollLeft, scrollTop) => {
     const { selectionMask, selectedRangeMask, state: { selectedPosition, selectedRange } } = this;
-    this.setMaskScrollLeft(selectionMask, selectedPosition);
-    this.setMaskScrollLeft(selectedRangeMask, selectedRange);
+    this.setMaskScrollLeft(selectionMask, selectedPosition, scrollLeft, scrollTop);
+    this.setMaskScrollLeft(selectedRangeMask, selectedRange, scrollLeft, scrollTop);
   };
 
   geHeaderHeight = () => {
@@ -349,7 +349,8 @@ class InteractionMasks extends React.Component {
     return containerHeight + 1;
   };
 
-  setMaskScrollLeft = (mask, position, scrollLeft) => {
+  setMaskScrollLeft = (mask, position, scrollLeft, scrollTop) => {
+    const headerHeight = this.geHeaderHeight();
     if (mask) {
       let idx; let rowIdx; let groupRecordIndex;
       if (position.topLeft) {
@@ -362,15 +363,13 @@ class InteractionMasks extends React.Component {
         groupRecordIndex = position.groupRecordIndex;
       }
       if (idx >= 0 && rowIdx >= 0) {
-        const { columns, getRowTop, isGroupView, groupOffsetLeft } = this.props;
+        const { columns, getRowTop, isGroupView = false, groupOffsetLeft = 0 } = this.props;
         const column = columns[idx];
         const frozen = !!column.frozen;
         if (frozen) {
           // use fixed
-          const { top: containerTop } = this.container.getClientRects()[0];
-          const { left: tableContentLeft } = this.props.getTableContentOffsets();
-          let top = containerTop + getRowTop(isGroupView ? groupRecordIndex : rowIdx);
-          let left = tableContentLeft + column.left;
+          let top = -scrollTop + getRowTop(isGroupView ? groupRecordIndex : rowIdx) + headerHeight;
+          let left = column.left;
           if (isGroupView) {
             top += 1;
             left += groupOffsetLeft;

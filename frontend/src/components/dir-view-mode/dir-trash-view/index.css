@@ -34,3 +34,10 @@
   width: 100%;
   text-align: right;
 }
+
+.sf-trash-wrapper.error-message-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: red;
+}
