@@ -113,6 +113,7 @@ class SimpleTextEditor extends Component {
 
   setInputRef = (input) => {
     this.input = input;
+    return this.input;
   };
 
   render() {

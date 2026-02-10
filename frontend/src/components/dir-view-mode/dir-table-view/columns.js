@@ -67,12 +67,12 @@ const createColumnFormatter = ({ column, ...otherProps }) => {
   }
 };
 
-const createColumnEditor = ({ column, repoID, repoInfo, tableData, updateDirent, onDirentStatus }) => {
+const createColumnEditor = ({ column, repoID, repoInfo, tableData, updateDirentStatus }) => {
   switch (column.key) {
     case PRIVATE_COLUMN_KEY.FILE_NAME:
-      return <FileNameEditor repoID={repoID} repoInfo={repoInfo} table={tableData} updateDirent={updateDirent} />;
+      return <FileNameEditor repoID={repoID} repoInfo={repoInfo} table={tableData} />;
     case PRIVATE_COLUMN_KEY.FILE_STATUS:
-      return <StatusEditor onDirentStatus={onDirentStatus} />;
+      return <StatusEditor onDirentStatus={updateDirentStatus} />;
     default:
       return null;
   }

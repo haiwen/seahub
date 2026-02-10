@@ -109,6 +109,7 @@
 }
 
 .sf-table-result-container {
+  height: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
 }

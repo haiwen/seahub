@@ -334,6 +334,7 @@ class Records extends Component {
     if (classNames.includes('sf-table-result-content')) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.CLOSE_EDITOR);
     }
+    this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
   };
 
   onCellClick = (cell) => {
@@ -412,7 +413,6 @@ class Records extends Component {
 
     // clear selected records
     this.onDeselectAllRecords();
-    this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
   };
 
   selectCell = (cellPosition) => {
@@ -454,12 +454,10 @@ class Records extends Component {
     const operateRecordId = operateRecord._id;
     if (RecordMetrics.isRecordSelected(operateRecordId, recordMetrics)) {
       this.deselectRecordById(operateRecordId);
-      this.props.onRecordSelected(e, operateRecordId);
       this.setState({ lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 } });
       return;
     }
     this.selectRecordById(operateRecordId);
-    this.props.onRecordSelected(e, operateRecordId);
     this.setState({ lastRowIdxUiSelected: { groupRecordIndex, recordIndex } });
   };
 

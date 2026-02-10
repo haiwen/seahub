@@ -24,7 +24,6 @@ const ContextMenu = ({
 
   const getMenuPosition = useCallback((x = 0, y = 0) => {
     if (!menuRef.current) {
-      // Should not happen with setTimeout approach, but return a safe default
       return { top: y, left: x };
     }
 
@@ -33,10 +32,7 @@ const ContextMenu = ({
       left: x
     };
 
-    // Use actual measurements
     const rect = menuRef.current.getBoundingClientRect();
-
-    // Calculate available space
     const spaceBelow = window.innerHeight - y;
     const spaceAbove = y;
     const spaceRight = window.innerWidth - x;
@@ -48,12 +44,9 @@ const ContextMenu = ({
     const fitsLeft = spaceLeft >= rect.width;
     const fitsRight = spaceRight >= rect.width;
 
-    // Select optimal direction - prioritize vertical
     if (fitsBelow) {
-      // Default: open downward
       menuStyles.top = y;
     } else if (fitsAbove) {
-      // Open upward
       menuStyles.top = y - rect.height;
     } else {
       // Neither fits vertically, choose the direction with more space
@@ -64,13 +57,11 @@ const ContextMenu = ({
       }
     }
 
-    // Horizontal positioning
     if (fitsRight) {
       menuStyles.left = x;
     } else if (fitsLeft) {
       menuStyles.left = x - rect.width;
     } else {
-      // Neither fits horizontally
       if (spaceLeft > spaceRight) {
         menuStyles.left = 0; // Left of screen
       } else {
@@ -102,11 +93,8 @@ const ContextMenu = ({
       return;
     }
 
-    // Show menu first
     setVisible(true);
 
-    // Use setTimeout to ensure menu is rendered before calculating position
-    // This eliminates the need for estimation logic and prevents flickering
     setTimeout(() => {
       if (menuRef.current) {
         const position = getMenuPosition(event.clientX, event.clientY);

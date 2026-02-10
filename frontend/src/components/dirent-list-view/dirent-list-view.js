@@ -274,7 +274,7 @@ class DirentListView extends React.Component {
           });
           // Update the thumbnail URL with the cache-busting query parameter
           const item = this.props.direntList.find((item) => item.name === imageName);
-          this.props.updateDirent(item, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
+          this.props.updateDirent(item, { encoded_thumbnail_src: newThumbnailSrc, mtime: cacheBuster });
           this.props.updateTreeNode(path, ['encoded_thumbnail_src', 'mtime'], [newThumbnailSrc, cacheBuster]);
         }).catch(error => {
           this.handleError(error);

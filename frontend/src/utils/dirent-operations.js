@@ -130,18 +130,3 @@ export const freezeDocument = async (repoID, path, dirent, updateState) => {
     return { success: false, error };
   }
 };
-
-// Generic state update helper function
-export const createUpdateState = (updateFunction, dirent) => {
-  return (key, value) => {
-    if (typeof key === 'object') {
-      // If key is an object (e.g., { is_locked: true, locked_by_me: true })
-      Object.keys(key).forEach(k => {
-        updateFunction(dirent, k, key[k]);
-      });
-    } else {
-      // If key is a key-value pair (e.g., 'is_locked', true)
-      updateFunction(dirent, key, value);
-    }
-  };
-};

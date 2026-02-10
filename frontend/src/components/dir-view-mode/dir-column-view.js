@@ -55,8 +55,8 @@ const propTypes = {
   sortBy: PropTypes.string.isRequired,
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
-  updateDirentProperties: PropTypes.func.isRequired,
-  onDirentStatus: PropTypes.func.isRequired,
+  updateDirent: PropTypes.func.isRequired,
+  updateDirentStatus: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -342,8 +342,8 @@ class DirColumnView extends React.Component {
               onAllDirentsChecked={this.props.onAllItemSelected}
               isAllDirentsChecked={this.props.isAllItemSelected}
               statusColumnOptions={this.props.statusColumnOptions}
-              updateDirentProperties={this.props.updateDirentProperties}
-              onDirentStatus={this.props.onDirentStatus}
+              updateDirent={this.props.updateDirent}
+              updateDirentStatus={this.props.updateDirentStatus}
               onItemConvert={this.props.onItemConvert}
               showDirentDetail={this.props.showDirentDetail}
               onItemsMove={this.props.onItemsMove}
