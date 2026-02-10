@@ -11,6 +11,9 @@ SPREADSHEET = 'SpreadSheet'
 SEADOC = 'SDoc'
 TLDRAW = 'Tldraw'
 EXCALIDRAW = 'Excalidraw'
+RAW = 'RAW'
+EXR = 'EXR'
+EPS = 'EPS'
 
 
 MARKDOWN_SUPPORT_CONVERT_TYPES = ['sdoc']
