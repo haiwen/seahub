@@ -358,15 +358,17 @@ class InteractionMasks extends React.Component {
 
   getSelectedRangeDimensions = (selectedRange) => {
     const { columns, rowHeight, isGroupView = false, groups, groupMetrics, groupOffsetLeft = 0, getRowTop: getRecordTopFromRecordsBody } = this.props;
+    const scrollLeft = this.props.getScrollLeft();
     return {
       ...getSelectedRangeDimensions({
-        selectedRange, columns, rowHeight, isGroupView, groups, groupMetrics, groupOffsetLeft, getRecordTopFromRecordsBody,
+        selectedRange, columns, scrollLeft, rowHeight, isGroupView, groups, groupMetrics, groupOffsetLeft, getRecordTopFromRecordsBody,
       })
     };
   };
 
   setScrollLeft = (scrollLeft, scrollTop) => {
-    const { selectionMask, state: { selectedPosition } } = this;
+    const { selectionMask, selectedRangeMask, state: { selectedPosition, selectedRange } } = this;
+    this.setMaskScrollLeft(selectedRangeMask, selectedRange, scrollLeft, scrollTop);
     this.setMaskScrollLeft(selectionMask, selectedPosition, scrollLeft, scrollTop);
   };
 
@@ -382,7 +384,16 @@ class InteractionMasks extends React.Component {
   setMaskScrollLeft = (mask, position, scrollLeft, scrollTop) => {
     const headerHeight = this.geHeaderHeight();
     if (mask) {
-      const { idx, rowIdx, groupRecordIndex } = position;
+      let idx; let rowIdx; let groupRecordIndex;
+      if (position.topLeft) {
+        idx = position.topLeft.idx;
+        rowIdx = position.topLeft.rowIdx;
+        groupRecordIndex = position.topLeft.groupRecordIndex;
+      } else {
+        idx = position.idx;
+        rowIdx = position.rowIdx;
+        groupRecordIndex = position.groupRecordIndex;
+      }
       if (idx >= 0 && rowIdx >= 0) {
         const { columns, getRowTop, isGroupView = false, groupOffsetLeft = 0 } = this.props;
         const column = columns[idx];
