@@ -372,6 +372,7 @@ def can_preview_file(file_name, file_size, repo):
     """
 
     filetype, fileext = get_file_type_and_ext(file_name)
+    print(ONLYOFFICE_FILE_EXTENSION, '555555')
 
     ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
