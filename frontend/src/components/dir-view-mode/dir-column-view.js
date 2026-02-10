@@ -12,6 +12,7 @@ import { TagsView } from '../../tag';
 import { mediaUrl } from '../../utils/constants';
 import { GRID_MODE, LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE } from './constants';
 import DirTrashView from './dir-trash-view';
+import NoPermissionView from './dir-trash-view/no-permission-view';
 
 const propTypes = {
   isSidePanelFolded: PropTypes.bool,
@@ -302,13 +303,20 @@ class DirColumnView extends React.Component {
             />
           )}
           {currentMode === TRASH_MODE && (
-            <DirTrashView
-              currentPath={this.props.path}
-              repoID={this.props.repoID}
-              userPerm={this.props.userPerm}
-              currentRepoInfo={this.props.currentRepoInfo}
-              toggleShowDirentToolbar={this.props.toggleShowDirentToolbar}
-            />
+            <>
+              {this.props.userPerm !== 'rw' && (
+                <NoPermissionView />
+              )}
+              {this.props.userPerm === 'rw' && (
+                <DirTrashView
+                  currentPath={this.props.path}
+                  repoID={this.props.repoID}
+                  userPerm={this.props.userPerm}
+                  currentRepoInfo={this.props.currentRepoInfo}
+                  toggleShowDirentToolbar={this.props.toggleShowDirentToolbar}
+                />
+              )}
+            </>
           )}
           {currentMode === HISTORY_MODE && (
             <DirHistoryView

@@ -47,6 +47,7 @@
   transform: translateY(-50%);
   color: var(--bs-icon-color);
   font-size: 14px;
+  border-radius: 4px;
 }
 
 .sf-table-searcher-input-wrapper .btn-close-searcher-wrapper .seafile-multicolor-icon {
@@ -154,7 +155,7 @@
   background-color: #2d7ff9;
 }
 
-.sf-table-header-cell .sf-table-cell  {
+.sf-table-header-cell .sf-table-cell {
   overflow: unset;
 }
 

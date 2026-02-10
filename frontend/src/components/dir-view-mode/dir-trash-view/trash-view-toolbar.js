@@ -1,13 +1,12 @@
-import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
+import React, { useCallback, useState, useRef, useEffect } from 'react';
 import OpIcon from '../../op-icon';
-import { enableUserCleanTrash, gettext, username } from '../../../utils/constants';
+import { gettext } from '../../../utils/constants';
 import { KeyCodes } from '../../../constants';
 import EventBus from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import Icon from '../../icon';
 import HistoryFilterSetter from '../dir-history-view/history-filter-setter';
 import { TRASH_MODE } from '../constants';
-import CleanTrash from '../../dialog/clean-trash';
 
 const DEFAULT_FILTER = {
   date: {
@@ -19,18 +18,11 @@ const DEFAULT_FILTER = {
   suffixes: '',
 };
 
-const TrashViewToolbar = ({ repoID, currentRepoInfo }) => {
+const TrashViewToolbar = () => {
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState(DEFAULT_FILTER);
   let [canSearch, setCanSearch] = useState(true);
-  let [isCleanTrashDialogOpen, setCleanTrashDialogOpen] = useState(false);
-
-  const isRepoAdmin = useMemo(() => {
-    const { owner_email, is_admin } = currentRepoInfo;
-    const isRepoAdmin = owner_email === username || is_admin;
-    return isRepoAdmin;
-  }, [currentRepoInfo]);
 
   const searchInputRef = useRef(null);
   const inputTimer = useRef(null);
@@ -84,15 +76,6 @@ const TrashViewToolbar = ({ repoID, currentRepoInfo }) => {
     eventBus.dispatch(EVENT_BUS_TYPE.TRASH_FILTER, newFilters);
   }, []);
 
-  const toggleCleanTrashDialog = useCallback(() => {
-    setCleanTrashDialogOpen(!isCleanTrashDialogOpen);
-  }, [isCleanTrashDialogOpen]);
-
-  const refreshTrash = useCallback(() => {
-    const eventBus = EventBus.getInstance();
-    eventBus.dispatch(EVENT_BUS_TYPE.REFRESH_TRASH);
-  }, []);
-
   if (!canSearch) return null;
 
   return (
@@ -134,16 +117,6 @@ const TrashViewToolbar = ({ repoID, currentRepoInfo }) => {
           filters={filters}
           onFiltersChange={handleFiltersChange}
         />
-        {(enableUserCleanTrash && isRepoAdmin) && (
-          <button className="btn btn-sm btn-secondary clean flex-shrink-0 ml-4" onClick={toggleCleanTrashDialog}>{gettext('Clean')}</button>
-        )}
-        {isCleanTrashDialogOpen && (
-          <CleanTrash
-            repoID={repoID}
-            refreshTrash={refreshTrash}
-            toggleDialog={toggleCleanTrashDialog}
-          />
-        )}
       </div>
     </div>
   );

@@ -28,8 +28,12 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
     to: propsValue.to,
   });
 
+  const labelValue = useMemo(() => {
+    return mode === HISTORY_MODE ? gettext('Date') : gettext('Deleted time');
+  }, [mode]);
+
   const label = useMemo(() => {
-    if (!value || value.length === 0) return gettext('Date');
+    if (!value || value.length === 0) return labelValue;
     switch (value) {
       case DATE_OPTION.TODAY:
         return gettext('Today');
@@ -40,9 +44,9 @@ const HistoryDateFilter = ({ mode = HISTORY_MODE, value: propsValue = { value: '
       case DATE_OPTION.CUSTOM:
         return gettext('Custom time');
       default:
-        return gettext('Date');
+        return labelValue;
     }
-  }, [value]);
+  }, [labelValue, value]);
 
   const options = useMemo(() => {
     return [

@@ -15,6 +15,10 @@
   background-color: transparent;
 }
 
+.sf-trash-filter .filter-by-suffix-container .search-filter-toggle:hover {
+  background: var(--bs-hover-bg);
+}
+
 .sf-trash-filter .search-filter-toggle.highlighted .filter-label {
   color: #ed7109 !important;
 }

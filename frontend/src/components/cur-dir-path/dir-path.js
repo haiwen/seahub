@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { UncontrolledTooltip } from 'reactstrap';
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledTooltip } from 'reactstrap';
 import { Link } from '@gatsbyjs/reach-router';
 import DirOperationToolbar from '../../components/toolbar/dir-operation-toolbar';
 import MetadataViewName from '../../metadata/components/metadata-view-name';
 import TagViewName from '../../tag/components/tag-view-name';
-import { siteRoot, gettext } from '../../utils/constants';
+import { siteRoot, gettext, username, enableUserCleanTrash } from '../../utils/constants';
 import { debounce, Utils } from '../../utils/utils';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { EVENT_BUS_TYPE } from '../../metadata/constants';
@@ -14,6 +14,7 @@ import OpIcon from '../../components/op-icon';
 import Icon from '../icon';
 import { getTrashPath } from '../dir-view-mode/dir-trash-view/utils';
 import EventBus from '../common/event-bus';
+import CleanTrash from '../dialog/clean-trash';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -66,6 +67,10 @@ class DirPath extends React.Component {
 
   isTrashMode = () => {
     return location.href.indexOf('?trash=true') > -1;
+  };
+
+  isHistoryMode = () => {
+    return location.href.indexOf('?history=true') > -1;
   };
 
   onTabNavClick = (e, tabName, id) => {
@@ -201,6 +206,57 @@ class DirPath extends React.Component {
     );
   };
 
+  toggleDesktopOpMenu = () => {
+    this.setState({ isDesktopMenuOpen: !this.state.isDesktopMenuOpen });
+  };
+
+  toggleCleanTrashDialog = () => {
+    this.setState({ isCleanTrashDialogOpen: !this.state.isCleanTrashDialogOpen });
+  };
+
+  refreshTrash = () => {
+    const eventBus = EventBus.getInstance();
+    eventBus.dispatch(EVENT_BUS_TYPE.REFRESH_TRASH);
+  };
+
+  renderCleanTrash = () => {
+    const { currentRepoInfo } = this.props;
+    const { owner_email, is_admin } = currentRepoInfo;
+    const isRepoAdmin = owner_email === username || is_admin;
+    if (!enableUserCleanTrash || !isRepoAdmin) {
+      return null;
+    }
+
+    return (
+      <>
+        <Dropdown className='trash-path-dropdown' isOpen={this.state.isDesktopMenuOpen} toggle={this.toggleDesktopOpMenu}>
+          <DropdownToggle
+            tag="span"
+            role="button"
+            tabIndex="0"
+            className="trash-path-item"
+            onClick={this.toggleDesktopOpMenu}
+            data-toggle="dropdown"
+            aria-label={gettext('More operations')}
+            aria-expanded={this.state.isDesktopMenuOpen}
+          >
+            <Icon symbol="down" className="path-item-dropdown-toggle" />
+          </DropdownToggle>
+          <DropdownMenu onMouseMove={this.onDropDownMouseMove} className='position-fixed'>
+            <DropdownItem onClick={this.toggleCleanTrashDialog}>{gettext('Clean trash')}</DropdownItem>
+          </DropdownMenu>
+        </Dropdown>
+        {this.state.isCleanTrashDialogOpen && (
+          <CleanTrash
+            repoID={this.props.repoID}
+            refreshTrash={this.refreshTrash}
+            toggleDialog={this.toggleCleanTrashDialog}
+          />
+        )}
+      </>
+    );
+  };
+
   turnTrashPathToLink = () => {
     const path = getTrashPath();
     if (path === '/') {
@@ -208,6 +264,7 @@ class DirPath extends React.Component {
         <>
           <span className="path-split">/</span>
           <span className="path-item path-item-read-only">{gettext('Trash')}</span>
+          {this.renderCleanTrash()}
         </>
       );
     }
@@ -250,6 +307,15 @@ class DirPath extends React.Component {
     return pathElem;
   };
 
+  turnHistoryPathToLink = () => {
+    return (
+      <>
+        <span className="path-split">/</span>
+        <span className="path-item path-item-read-only">{gettext('History')}</span>
+      </>
+    );
+  };
+
   turnPathToLink = (path) => {
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
     const pathList = path.split('/');
@@ -262,6 +328,10 @@ class DirPath extends React.Component {
 
     if (this.isTrashMode()) {
       return this.turnTrashPathToLink(pathList);
+    }
+
+    if (this.isHistoryMode()) {
+      return this.turnHistoryPathToLink(pathList);
     }
 
     let nodePath = '';
@@ -318,6 +388,7 @@ class DirPath extends React.Component {
     const { currentPath, repoName, isTreePanelShown } = this.props;
     const pathElem = this.turnPathToLink(currentPath);
     const isTrashMode = this.isTrashMode();
+    const isHistoryMode = this.isHistoryMode();
     return (
       <div className="path-container dir-view-path">
         <OpIcon
@@ -346,7 +417,7 @@ class DirPath extends React.Component {
             <span className="path-split">/</span>
           </>
         )}
-        {(!isTrashMode && (currentPath === '/' || currentPath === '')) ?
+        {(!isHistoryMode && !isTrashMode && (currentPath === '/' || currentPath === '')) ?
           <DirOperationToolbar
             path={this.props.currentPath}
             repoID={this.props.repoID}

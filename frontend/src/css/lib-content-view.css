@@ -23,13 +23,13 @@
 
 @media (max-width: 767px) {
   .dir-content-nav {
-    position:fixed;
+    position: fixed;
     top: 0;
     left: 0;
     z-index: 1031;
     width: 300px;
     max-width: calc(100% - 40px);
-    height:100%;
+    height: 100%;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     transition: all 0.3s ease;
@@ -302,10 +302,37 @@
   border-radius: 3px;
   text-decoration: none;
   min-width: 28px;
-  max-width: 145px; /* for long path in mobile */
+  max-width: 145px;
+  /* for long path in mobile */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.dir-view-path .trash-path-dropdown {
+  height: 24px;
+}
+
+.dir-view-path .trash-path-item {
+  color: var(--bs-icon-color);
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  transition: all .1s ease-in;
+}
+
+.dir-view-path .trash-path-item:hover {
+  background-color: var(--bs-hover-bg);
+  cursor: pointer;
+}
+
+.dir-view-path .trash-path-item .seafile-multicolor-icon-down {
+  width: 12px;
+  height: 12px;
+  transform: translateY(1px);
 }
 
 .dir-view-path .dir-operation {
@@ -484,7 +511,7 @@
   border-radius: 3px;
 }
 
-.custom-modal .repo-list-item:hover{
+.custom-modal .repo-list-item:hover {
   background-color: var(--bs-nav-hover-bg);
   border-radius: 3px;
 }
@@ -586,7 +613,7 @@
   background-color: transparent;
 }
 
-.select-all-checkbox-wrapper .seafile-multicolor-icon-checkbox, 
+.select-all-checkbox-wrapper .seafile-multicolor-icon-checkbox,
 .select-all-checkbox-wrapper .seafile-multicolor-icon-partially-selected {
   cursor: pointer;
   font-size: 14px;

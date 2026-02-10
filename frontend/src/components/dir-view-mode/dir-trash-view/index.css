@@ -11,6 +11,10 @@
   padding-bottom: 0 !important;
 }
 
+.sf-trash-wrapper .select-all-checkbox-container {
+  pointer-events: none;
+}
+
 .sf-trash-wrapper.read-only .actions-checkbox,
 .sf-trash-wrapper.read-only .select-all-checkbox {
   display: none !important;
@@ -29,4 +33,11 @@
 .sf-trash-wrapper .sf-table-cell.sf-table-number-cell .number-formatter {
   width: 100%;
   text-align: right;
+}
+
+.sf-trash-wrapper.error-message-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: red;
 }

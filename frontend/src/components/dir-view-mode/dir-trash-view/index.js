@@ -8,7 +8,7 @@ import SFTable from '../../sf-table';
 import EventBus, { eventBus } from '../../common/event-bus';
 import { EVENT_BUS_TYPE } from '../../common/event-bus-type';
 import { Utils } from '../../../utils/utils';
-import { siteRoot } from '../../../utils/constants';
+import { gettext, siteRoot } from '../../../utils/constants';
 import toaster from '../../toast';
 import { seafileAPI } from '../../../utils/seafile-api';
 
@@ -77,12 +77,34 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
       // clear header left toolbar
       const eventBus = EventBus.getInstance();
       eventBus.dispatch(EVENT_BUS_TYPE.SELECT_TRASH, []);
+      eventBus.dispatch(EVENT_BUS_TYPE.SELECT_NONE, []);
       toggleShowDirentToolbar(false);
+
+      const copyright = selectIds.length > 1 ? gettext('Restored {n} items') : gettext('Restored 1 item');
+      toaster.success(copyright.replace('{n}', selectIds.length));
     }).catch(error => {
       const errorMessage = Utils.getErrorMsg(error);
       toaster.danger(errorMessage);
     });
   }, [repoID, selectIds, toggleShowDirentToolbar, trashList]);
+
+  const restoreTrash = useCallback((trashItem) => {
+    const { commit_id, parent_dir, obj_name } = trashItem;
+    const path = Utils.joinPath(parent_dir, obj_name);
+    const restoreItems = { [commit_id]: [path] };
+
+    repoTrashAPI.restoreTrashItems(repoID, restoreItems).then(res => {
+      const newTrashList = trashList.filter((item, index) => {
+        const itemPath = Utils.joinPath(item.parent_dir, item.obj_name);
+        return itemPath !== path;
+      });
+      setTrashList(newTrashList);
+      toaster.success(gettext('Restored 1 item'));
+    }).catch(error => {
+      const errorMessage = Utils.getErrorMsg(error);
+      toaster.danger(errorMessage);
+    });
+  }, [repoID, trashList]);
 
   const onTrashSearchValueChange = useCallback((value) => {
     if (!value && !isFiltersValid(trashFilters)) {
@@ -200,7 +222,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   const loadNextPage = useCallback(() => {
     if (!hasMore) return;
     setIsLoadingMore(true);
-    if (!trashSearchValue && !trashFilters) {
+    if (!trashSearchValue && !isFiltersValid(trashFilters)) {
       repoTrashAPI.getRepoFolderTrash(repoID, currentPage, PER_PAGE).then(res => {
         const { items, total_count } = res.data;
         setTrashList([...trashList, ...items]);
@@ -230,18 +252,22 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
   // search module
   useEffect(() => {
     if (isFirstLoading) return;
-    repoTrashAPI.searchRepoFolderTrash(repoID, 1, PER_PAGE, trashSearchValue, trashFilters).then(res => {
-      const { items, total_count } = res.data;
-      setTrashList(items);
-      if (total_count > currentPage * PER_PAGE) {
-        setHasMore(true);
-        setCurrentPage(2);
-      } else {
-        setHasMore(false);
-      }
-    });
+    if (!trashSearchValue && !isFiltersValid(trashFilters)) {
+      reloadTrashList();
+    } else {
+      repoTrashAPI.searchRepoFolderTrash(repoID, 1, PER_PAGE, trashSearchValue, trashFilters).then(res => {
+        const { items, total_count } = res.data;
+        setTrashList(items);
+        if (total_count > currentPage * PER_PAGE) {
+          setHasMore(true);
+          setCurrentPage(2);
+        } else {
+          setHasMore(false);
+        }
+      });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trashSearchValue, trashFilters]);
+  }, [trashSearchValue, trashFilters, reloadTrashList]);
 
   useEffect(() => {
     if (!trashItem) return;
@@ -276,7 +302,6 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
     return transformTrashListToTableData(trashList, repoID);
   }, [repoID, trashList]);
 
-  const handleColumnWidthChange = () => {};
 
   const handleCellDoubleClick = () => {};
 
@@ -291,6 +316,41 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
     }, 0);
 
   }, [toggleShowDirentToolbar]);
+
+  const createHistoryContextMenuOptions = useCallback((tableProps) => {
+    if (!canSelected) return;
+
+    const { selectedPosition, recordIds, recordGetterByIndex, isGroupView, hideMenu } = tableProps;
+
+    let trashItem = null;
+    if (selectedPosition) {
+      const recordIndex = selectedPosition.rowIdx !== undefined ? selectedPosition.rowIdx : selectedPosition.recordIndex;
+      const groupRecordIndex = selectedPosition.groupRecordIndex;
+
+      if (recordIndex !== undefined && recordIds && recordIndex >= 0 && recordIndex < recordIds.length) {
+        if (recordGetterByIndex && typeof recordGetterByIndex === 'function') {
+          const params = { isGroupView, groupRecordIndex, recordIndex };
+          trashItem = recordGetterByIndex(params);
+        }
+      }
+    }
+
+    if (!trashItem) return [];
+
+    return [
+      <button
+        key="history-view-snapshot"
+        className="dropdown-item"
+        onClick={(e) => {
+          e.stopPropagation();
+          hideMenu && hideMenu(false);
+          restoreTrash(trashItem);
+        }}
+      >
+        {trashItem.is_dir ? gettext('Restore folder') : gettext('Restore file')}
+      </button>
+    ];
+  }, [canSelected, restoreTrash]);
 
   if (isFirstLoading) return <Loading />;
 
@@ -311,7 +371,6 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
         isLoadingMoreRecords={isLoadingMore}
         enableScrollToLoad={true}
         loadMore={loadNextPage}
-        modifyColumnWidth={handleColumnWidthChange}
         onCellDoubleClick={handleCellDoubleClick}
         checkCanModifyRecord={checkCanModifyRecord}
         supportCopy={false}
@@ -321,6 +380,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
         isGroupView={false}
         showRecordAsTree={false}
         updateSelectedRecordIds={updateSelectedTrashIds}
+        createContextMenuOptions={createHistoryContextMenuOptions}
       />
     </div>
   );
