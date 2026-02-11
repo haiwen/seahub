@@ -16,11 +16,13 @@ const propTypes = {
   isShowAvatar: PropTypes.bool.isRequired,
   renameWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func,
+  setWikiPublic: PropTypes.func,
   toggleAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
   noItemsTip: PropTypes.string,
   isMyWikis: PropTypes.bool,
+  isPublicWikis: PropTypes.bool,
 };
 
 class WikiCardGroup extends Component {
@@ -54,7 +56,7 @@ class WikiCardGroup extends Component {
   };
 
   render() {
-    const { wikis, title, isDepartment, toggleAddWikiDialog, group, noItemsTip, isMyWikis } = this.props;
+    const { wikis, title, isDepartment, toggleAddWikiDialog, group, noItemsTip, isMyWikis, isPublicWikis } = this.props;
     const containerWidth = this.getContainerWidth();
     const numberOfWiki = Math.floor(containerWidth / 180);
     const grids = (Math.floor((containerWidth - (numberOfWiki + 1) * 16) / numberOfWiki) + 'px ').repeat(numberOfWiki);
@@ -72,6 +74,8 @@ class WikiCardGroup extends Component {
       iconSymbol = 'group';
     } else if (isMyWikis) {
       iconSymbol = 'my-libraries';
+    } else if (isPublicWikis) {
+      iconSymbol = 'organization';
     }
 
     return (
@@ -96,6 +100,7 @@ class WikiCardGroup extends Component {
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
                 convertWiki={this.props.convertWiki}
+                setWikiPublic={this.props.setWikiPublic}
               />
               :
               <WikiCardItem
@@ -107,6 +112,7 @@ class WikiCardGroup extends Component {
                 isShowAvatar={this.props.isShowAvatar}
                 renameWiki={this.props.renameWiki}
                 convertWiki={this.props.convertWiki}
+                setWikiPublic={this.props.setWikiPublic}
               />
             );
           })}

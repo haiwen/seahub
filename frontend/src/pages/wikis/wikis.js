@@ -34,6 +34,7 @@ class Wikis extends Component {
       isShowAddDialog: false,
       isShowConvertStatusDialog: false,
       isShowImportConfluenceDialog: false,
+      publicWikis: [],
     };
   }
 
@@ -44,6 +45,7 @@ class Wikis extends Component {
   getWikis = () => {
     let wikis = [];
     let groupWikis = [];
+    let publicWikis = [];
     wikiAPI.listWikis().then(res => {
       wikis = wikis.concat(res.data.data);
       wikis.map(wiki => {
@@ -52,6 +54,7 @@ class Wikis extends Component {
       wikiAPI.listWikis2().then(res => {
         let wikis2 = res.data.wikis;
         groupWikis = res.data.group_wikis;
+        publicWikis = res.data.public_wikis || [];
         groupWikis.forEach(group => {
           group.wiki_info.forEach(wiki => {
             wiki.version = 'v2';
@@ -61,10 +64,14 @@ class Wikis extends Component {
         wikis2.map(wiki => {
           return wiki['version'] = 'v2';
         });
+        publicWikis.map(wiki => {
+          return wiki['version'] = 'v2';
+        });
         this.setState({
           loading: false,
           wikis: wikis.concat(wikis2),
-          groupWikis: groupWikis
+          groupWikis: groupWikis,
+          publicWikis: publicWikis
         });
       }).catch((error) => {
         this.setState({
@@ -403,6 +410,22 @@ class Wikis extends Component {
     });
   };
 
+  setWikiPublic = (wiki, setPublic) => {
+    wikiAPI.setWikiPublic(wiki.id, setPublic).then(() => {
+      if (setPublic) {
+        toaster.success(gettext('Wiki set as public successfully'));
+      } else {
+        toaster.success(gettext('Wiki unset from public successfully'));
+      }
+      this.getWikis();
+    }).catch((error) => {
+      if (error.response) {
+        let errorMsg = error.response.data.error_msg;
+        toaster.danger(errorMsg);
+      }
+    });
+  };
+
   render() {
     return (
       <Fragment>
@@ -445,7 +468,7 @@ class Wikis extends Component {
                 }
               </div>
             </div>
-            {(this.state.loading || this.state.wikis.length !== 0 || this.state.groupWikis.length !== 0) &&
+            {(this.state.loading || this.state.wikis.length !== 0 || this.state.groupWikis.length !== 0 || this.state.publicWikis.length !== 0) &&
               <div className="cur-view-content pb-4">
                 <WikiCardView
                   data={this.state}
@@ -454,13 +477,14 @@ class Wikis extends Component {
                   unshareGroupWiki={this.unshareGroupWiki}
                   renameWiki={this.renameWiki}
                   convertWiki={this.convertWiki}
+                  setWikiPublic={this.setWikiPublic}
                   toggleAddWikiDialog={this.toggleAddWikiDialog}
                   sidePanelRate={this.props.sidePanelRate}
                   isSidePanelFolded={this.props.isSidePanelFolded}
                 />
               </div>
             }
-            {(!this.state.loading && this.state.wikis.length === 0 && this.state.groupWikis.length === 0) &&
+            {(!this.state.loading && this.state.wikis.length === 0 && this.state.groupWikis.length === 0 && this.state.publicWikis.length === 0) &&
               <div className="cur-view-content">
                 <EmptyTip
                   title={gettext('No Wikis')}
