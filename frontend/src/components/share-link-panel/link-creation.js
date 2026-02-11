@@ -45,6 +45,7 @@ class LinkCreation extends React.Component {
       expDate: null,
       password: '',
       newPassword: '',
+      comment: '',
       errorInfo: '',
       currentPermission: props.currentPermission,
 
@@ -103,12 +104,17 @@ class LinkCreation extends React.Component {
     this.setState({ currentPermission: e.target.value });
   };
 
+  inputComment = (e) => {
+    let comment = e.target.value.trim();
+    this.setState({ comment: comment });
+  };
+
   generateShareLink = () => {
     let isValid = this.validateParamsInput();
     if (isValid) {
       this.setState({ errorInfo: '' });
       let { type, itemPath, repoID } = this.props;
-      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate } = this.state;
+      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate, comment } = this.state;
 
       const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
       let permissions;
@@ -136,7 +142,7 @@ class LinkCreation extends React.Component {
         if (currentScope === 'specific_emails' && inputEmails) {
           users = inputEmails;
         }
-        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users);
+        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users, comment);
       }
 
       request.then((res) => {
@@ -419,6 +425,18 @@ class LinkCreation extends React.Component {
                   }
                 </FormGroup>
               )}
+            </FormGroup>
+          )}
+          {type !== 'batch' && (
+            <FormGroup>
+              <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Comment (optional):')}</Label>
+              <textarea
+                className="form-control w-75"
+                id="msg"
+                value={this.state.comment}
+                onChange={this.inputComment}
+              >
+              </textarea>
             </FormGroup>
           )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}

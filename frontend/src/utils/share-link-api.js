@@ -101,12 +101,13 @@ class ShareLinkAPI {
     return this.req.put(url, form);
   }
 
-  createMultiShareLink(repoID, path, password, expirationTime, permissions, scope, users) {
+  createMultiShareLink(repoID, path, password, expirationTime, permissions, scope, users, comment) {
     const url = this.server + '/api/v2.1/multi-share-links/';
     let form = {
       'path': path,
       'repo_id': repoID,
       'user_scope': scope,
+      'comment': comment
     };
     if (permissions) {
       form['permissions'] = permissions;

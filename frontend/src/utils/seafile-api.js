@@ -453,11 +453,12 @@ class SeafileAPI {
     return this.req.get(url);
   }
 
-  createUploadLink(repoID, path, password, expirationTime) {
+  createUploadLink(repoID, path, password, expirationTime, comment) {
     const url = this.server + '/api/v2.1/upload-links/';
     let form = new FormData();
     form.append('path', path);
     form.append('repo_id', repoID);
+    form.append('comment', comment);
     if (password) {
       form.append('password', password);
     }

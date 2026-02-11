@@ -49,7 +49,7 @@ from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED, \
         SHARE_LINK_EXPIRE_DAYS_DEFAULT, THUMBNAIL_DEFAULT_SIZE, \
-        ENABLE_VIDEO_THUMBNAIL, ENABLE_PDF_THUMBNAIL,\
+        ENABLE_VIDEO_THUMBNAIL, ENABLE_PDF_THUMBNAIL, \
         THUMBNAIL_ROOT, ENABLE_UPLOAD_LINK_VIRUS_CHECK
 from seahub.wiki.models import Wiki
 from seahub.views.file import can_edit_file
@@ -117,6 +117,7 @@ def get_share_link_info(fileshare):
     data['permissions'] = fileshare.get_permissions()
     data['password'] = fileshare.get_password()
     data['user_scope'] = fileshare.user_scope
+    data['comment'] = fileshare.comment
     data['can_edit'] = False
     if repo and path != '/' and not data['is_dir']:
         try:
@@ -284,7 +285,7 @@ class ShareLinks(APIView):
                 real_repo_id = repo.origin_repo_id
             else:
                 real_repo_id = repo_id
-            
+
             if s_type == 'd':
                 can_edit = False
             else:
@@ -310,8 +311,9 @@ class ShareLinks(APIView):
             link_info['permissions'] = fs.get_permissions()
             link_info['password'] = fs.get_password()
             link_info['user_scope'] = fs.user_scope
+            link_info['comment'] = fs.comment
 
-            link_info['can_edit']= can_edit
+            link_info['can_edit'] = can_edit
             tmp_key = f"{repo_id}_{path}"
             link_info['repo_folder_permission'] = repo_folder_permission_dict.get(tmp_key, "")
 
@@ -538,9 +540,16 @@ class ShareLinks(APIView):
 
             fs.user_scope = user_scope
             fs.save()
+
+        comment = request.data.get('comment', '')
+        if comment:
+            fs.comment = comment
+            fs.save()
+
         if emails_list:
             shared_from = email2nickname(username)
             send_share_link_emails(emails_list, fs, shared_from)
+
         link_info = get_share_link_info(fs)
         return Response(link_info)
 
@@ -777,6 +786,11 @@ class ShareLink(APIView):
         if user_scope and user_scope in VALID_SHARE_LINK_SCOPE:
             fs.user_scope = user_scope
             fs.authed_details = None
+            fs.save()
+
+        comment = request.data.get('comment', '')
+        if comment:
+            fs.comment = comment
             fs.save()
 
         link_info = get_share_link_info(fs)

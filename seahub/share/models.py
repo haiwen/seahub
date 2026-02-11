@@ -139,7 +139,7 @@ class FileShareManager(models.Manager):
 
     def _add_file_share(self, username, repo_id, path, s_type,
                         password=None, expire_date=None,
-                        permission='view_download', org_id=None):
+                        permission='view_download', org_id=None, comment=None):
 
         if password is not None:
             password_enc = make_password(password)
@@ -155,6 +155,10 @@ class FileShareManager(models.Manager):
 
         if is_valid_org_id(org_id):
             OrgFileShare.objects.set_org_file_share(org_id, fs)
+
+        if comment is not None:
+            fs.comment = comment
+            fs.save()
 
         return fs
 
@@ -185,12 +189,12 @@ class FileShareManager(models.Manager):
     # public methods
     def create_file_link(self, username, repo_id, path, password=None,
                          expire_date=None, permission='view_download',
-                         org_id=None):
+                         org_id=None, comment=None):
         """Create download link for file.
         """
         path = normalize_file_path(path)
         return self._add_file_share(username, repo_id, path, 'f', password,
-                                    expire_date, permission, org_id)
+                                    expire_date, permission, org_id, comment)
 
     def get_file_link_by_path(self, username, repo_id, path):
         path = normalize_file_path(path)
@@ -201,12 +205,12 @@ class FileShareManager(models.Manager):
 
     def create_dir_link(self, username, repo_id, path, password=None,
                         expire_date=None, permission='view_download',
-                        org_id=None):
+                        org_id=None, comment=None):
         """Create download link for directory.
         """
         path = normalize_dir_path(path)
         return self._add_file_share(username, repo_id, path, 'd', password,
-                                    expire_date, permission, org_id)
+                                    expire_date, permission, org_id, comment)
 
     def get_dir_link_by_path(self, username, repo_id, path):
         path = normalize_dir_path(path)
@@ -382,6 +386,7 @@ class FileShare(models.Model):
 
     user_scope = models.CharField(max_length=255, default='all_users')
     authed_details = models.TextField(default='')
+    comment = models.TextField(default='')
 
     objects = FileShareManager()
 
@@ -546,6 +551,8 @@ class UploadLinkShare(models.Model):
     view_cnt = models.IntegerField(default=0)
     password = models.CharField(max_length=128, null=True)
     expire_date = models.DateTimeField(null=True, db_index=True)
+    comment = models.TextField(default='')
+
     objects = UploadLinkShareManager()
 
     def is_encrypted(self):
