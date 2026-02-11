@@ -19,7 +19,7 @@ mysqlclient==2.2.*
 qrcode==8.2.*
 pillow==12.1.*
 chardet==5.2.*
-cffi==2.2.*
+cffi==2.0.*
 captcha==0.7.*
 openpyxl==3.1.*
 Markdown==3.10.*
