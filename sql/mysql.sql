@@ -1082,7 +1082,8 @@ CREATE TABLE `tags_fileuuidmap` (
   `is_dir` tinyint(1) NOT NULL,
   PRIMARY KEY (`uuid`),
   KEY `tags_fileuuidmap_repo_id_ac67aa33` (`repo_id`),
-  KEY `tags_fileuuidmap_repo_id_parent_path_md5_c8bb0860` (`repo_id_parent_path_md5`)
+  KEY `tags_fileuuidmap_repo_id_parent_path_md5_c8bb0860` (`repo_id_parent_path_md5`),
+  KEY `idx_fileuuidmap_md5_filename_isdir` (`repo_id_parent_path_md5`,`filename`(255),`is_dir`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
