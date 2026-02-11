@@ -1493,7 +1493,8 @@ CREATE TABLE `FileTrash` (
   `path` text NOT NULL,
   `size` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`)
+  KEY `idx_filetrash_repo_delete_time` (`repo_id`, `delete_time`),
+  KEY `idx_fileTrash_delete_time` (`delete_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `WikiPageTrash` (
