@@ -12,6 +12,7 @@ import Rename from '../rename';
 import toaster from '../toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
+import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import { Dirent } from '../../models';
 import { formatUnixWithTimezone } from '../../utils/time';
@@ -924,12 +925,24 @@ class DirentListItem extends React.Component {
             />
           }
           {!this.state.isRenaming && (
-            <>
-              {(!dirent.isDir() && !this.canPreview) ?
-                <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
-              }
-            </>
+            <div className="dirent-item-name-content">
+              <span className="dirent-item-name-text">
+                {(!dirent.isDir() && !this.canPreview) ?
+                  <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
+                  <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
+                }
+              </span>
+              {this.state.isOperationShow && (
+                <ItemDropdownMenu
+                  toggleClass="op-icon mr-0"
+                  item={dirent}
+                  getMenuList={(item) => this.props.getDirentItemMenuList(item)}
+                  onMenuItemClick={this.onMenuItemClick}
+                  freezeItem={this.props.freezeItem}
+                  unfreezeItem={this.unfreezeItem}
+                />
+              )}
+            </div>
           )}
         </div>
 

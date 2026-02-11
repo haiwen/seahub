@@ -112,15 +112,36 @@
 
 .dirent-property.dirent-item-name {
   flex: 1 1 120px;
+  height: 24px;
   min-width: 120px;
   font-weight: normal;
+  padding-right: 0px;
   color: var(--bs-body-color);
+  overflow: hidden;
+}
+
+.dirent-item-name-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+
+.dirent-item-name-content .dropdown {
+  line-height: 1;
+}
+
+.dirent-item-name-text {
+  flex: 1 1 auto;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.dirent-property.dirent-item-name a {
+.dirent-item-name-text a {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
