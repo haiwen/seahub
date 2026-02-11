@@ -1,6 +1,6 @@
 Django==5.2.*
 django-statici18n==2.6.*
-django_webpack_loader==3.2.*
+django_webpack_loader==1.7.*
 django_picklefield==3.4.*
 django_formtools==2.5.*
 django_simple_captcha==0.6.*
