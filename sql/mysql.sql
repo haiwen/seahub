@@ -186,7 +186,8 @@ CREATE TABLE `avatar_avatar` (
   `primary` tinyint(1) NOT NULL,
   `avatar` varchar(1024) NOT NULL,
   `date_uploaded` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `avatar_avatar_emailuser` (`emailuser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
