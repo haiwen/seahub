@@ -20,6 +20,7 @@ import WikiRightPanel from './wiki-right-panel';
 import SDocServerApi from '../../utils/sdoc-server-api';
 import Icon from '../../components/icon';
 import WikiCollaboratorsOperation from './wiki-collaborators-operation';
+import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -94,11 +95,13 @@ class MainPanel extends Component {
     const eventBus = EventBus.getInstance();
     this.unsubscribeUnseenNotificationsCount = eventBus.subscribe(EXTERNAL_EVENT.UNSEEN_NOTIFICATIONS_COUNT, this.updateUnseenNotificationsCount);
     this.unsubscribeWikiFilePreview = eventBus.subscribe(EXTERNAL_EVENT.TRANSFER_PREVIEW_FILE_ID, this.toggleWikiFilePreview);
+    this.unsubscribeGenerateExdrawReadOnlyLink = eventBus.subscribe(EXTERNAL_EVENT.GENERATE_EXDRAW_READ_ONLY_LINK, this.generateExdrawReadOnlyLink);
   }
 
   componentWillUnmount() {
     this.unsubscribeUnseenNotificationsCount();
     this.unsubscribeWikiFilePreview();
+    this.unsubscribeGenerateExdrawReadOnlyLink();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -141,6 +144,20 @@ class MainPanel extends Component {
     }).catch(error => {
       // eslint-disable-next-line no-console
       console.error(error);
+    });
+  };
+
+  generateExdrawReadOnlyLink = (params) => {
+    if (!params?.repoID || !params?.filePath) return;
+
+    seafileAPI.getInternalLink(params.repoID, params?.filePath).then((res) => {
+      const url = new URL(res.data.smart_link);
+      url.searchParams.set('readonly', 'true');
+      url.searchParams.set('filetype', 'Excalidraw');
+      const link = url.toString();
+      if (params?.onSuccess) {
+        params?.onSuccess(link);
+      }
     });
   };
 
