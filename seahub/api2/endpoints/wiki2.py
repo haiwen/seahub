@@ -41,7 +41,7 @@ from seahub.wiki2.utils import get_wiki_config, WIKI_PAGES_DIR, is_group_wiki, \
 from seahub.utils import is_org_context, get_user_repos, is_pro_version, is_valid_dirent_name, \
     get_no_duplicate_obj_name, HAS_FILE_SEARCH, HAS_FILE_SEASEARCH, gen_file_get_url, get_service_url
 if HAS_FILE_SEARCH or HAS_FILE_SEASEARCH:
-    from seahub.search.utils import search_wikis, ai_search_wikis
+    from seahub.search.utils import search_wikis, ai_search_wikis, SEARCH_REPOS_LIMIT
 
 from seahub.views import check_folder_permission
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -1422,7 +1422,7 @@ class WikiSearch(APIView):
 
         params = {
             'query': query,
-            'wiki': search_wiki,
+            'wiki_ids': search_wiki,
             'count': count,
         }
         if HAS_FILE_SEARCH:
@@ -1440,6 +1440,122 @@ class WikiSearch(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
             return Response({"results": results})
 
+
+class Wiki2MultiSearch(APIView):
+    """API endpoint for searching across multiple wikis that user has access to."""
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+        def iterate_pages(pages):
+            for page in pages or []:
+                yield page
+                for child in iterate_pages(page.get('children', [])):
+                    yield child
+
+        if not HAS_FILE_SEARCH and not HAS_FILE_SEASEARCH:
+            error_msg = 'Search not supported.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        query = request.data.get('query', '').strip()
+        if not query:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'query invalid.')
+
+        try:
+            count = int(request.data.get('count', 20))
+        except:
+            count = 20
+
+        username = request.user.username
+        org_id = request.user.org.org_id if is_org_context(request) else None
+
+        # Get all wikis user has access to
+        (owned, shared, groups, public) = get_user_repos(username, org_id)
+
+        owned_wikis = [r for r in owned if is_wiki_repo(r)]
+        shared_wikis = [r for r in shared if is_wiki_repo(r)]
+        group_wikis = [r for r in groups if is_wiki_repo(r)]
+
+        # Collect all accessible wiki IDs
+        wiki_ids = list(set(
+            [w.repo_id for w in owned_wikis] +
+            [w.repo_id for w in shared_wikis] +
+            [w.repo_id for w in group_wikis]
+        ))
+
+        # Apply search limit (same as repo search limit: 200)
+        wiki_ids = wiki_ids[:SEARCH_REPOS_LIMIT]
+
+        if not wiki_ids:
+            return Response({"results": [], "total": 0})
+
+        params = {
+            'query': query,
+            'wiki_ids': wiki_ids,
+            'count': count,
+        }
+
+        if HAS_FILE_SEARCH:
+            try:
+                results = search_wikis(wiki_ids, query, count)
+                total = len(results)
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+        elif HAS_FILE_SEASEARCH:
+            try:
+                results, total = ai_search_wikis(params)
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
+
+        if not results:
+             return Response({"results": [], "total": 0})
+
+        wiki_ids_in_results = set()
+        for result in results:
+            wiki_id = result.get('wiki_id') or result.get('repo_id')
+            if wiki_id:
+                wiki_ids_in_results.add(wiki_id)
+
+        wiki_name_map = {}
+        wiki_docuuid_page_map = {}
+        for wiki_id in wiki_ids_in_results:
+            try:
+                repo = seafile_api.get_repo(wiki_id)
+                if repo:
+                    wiki_name_map[wiki_id] = repo.name
+            except Exception as e:
+                logger.error(e)
+
+            try:
+                wiki_config = get_wiki_config(wiki_id, username)
+                pages = wiki_config.get('pages', [])
+                docuuid_page_map = {}
+                for page in iterate_pages(pages):
+                    doc_uuid = page.get('docUuid')
+                    if doc_uuid:
+                        docuuid_page_map[doc_uuid] = page
+                wiki_docuuid_page_map[wiki_id] = docuuid_page_map
+            except Exception as e:
+                logger.error(e)
+
+        for result in results:
+            wiki_id = result.get('wiki_id') or result.get('repo_id')
+            if wiki_id and wiki_id in wiki_name_map:
+                result['wiki_name'] = wiki_name_map[wiki_id]
+            doc_uuid = result.get('doc_uuid')
+            if wiki_id and doc_uuid and wiki_id in wiki_docuuid_page_map:
+                page = wiki_docuuid_page_map[wiki_id].get(doc_uuid)
+                if page:
+                    result['page_id'] = page.get('id')
+                    if not result.get('title'):
+                        title = page.get('title') or page.get('name')
+                        if title:
+                            result['title'] = title
+
+        return Response({"results": results, "total": total})
 
 class WikiConvertView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

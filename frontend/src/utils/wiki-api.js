@@ -392,6 +392,11 @@ class WikiAPI {
     return this.req.get(url, { params: params });
   }
 
+  searchWikis(query, count = 20) {
+    const url = this.server + '/api/v2.1/wiki2/multi-search/';
+    return this.req.post(url, { query, count });
+  }
+
 }
 
 let wikiAPI = new WikiAPI();
