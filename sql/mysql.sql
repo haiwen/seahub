@@ -186,7 +186,8 @@ CREATE TABLE `avatar_avatar` (
   `primary` tinyint(1) NOT NULL,
   `avatar` varchar(1024) NOT NULL,
   `date_uploaded` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `avatar_avatar_emailuser` (`emailuser`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1082,7 +1083,8 @@ CREATE TABLE `tags_fileuuidmap` (
   `is_dir` tinyint(1) NOT NULL,
   PRIMARY KEY (`uuid`),
   KEY `tags_fileuuidmap_repo_id_ac67aa33` (`repo_id`),
-  KEY `tags_fileuuidmap_repo_id_parent_path_md5_c8bb0860` (`repo_id_parent_path_md5`)
+  KEY `tags_fileuuidmap_repo_id_parent_path_md5_c8bb0860` (`repo_id_parent_path_md5`),
+  KEY `idx_fileuuidmap_md5_filename_isdir` (`repo_id_parent_path_md5`,`filename`(255),`is_dir`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1499,7 +1501,8 @@ CREATE TABLE `FileTrash` (
   `path` text NOT NULL,
   `size` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `ix_FileTrash_repo_id` (`repo_id`)
+  KEY `ix_FileTrash_repo_id` (`repo_id`),
+  KEY `ix_FileTrash_delete_time` (`delete_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `WikiPageTrash` (
