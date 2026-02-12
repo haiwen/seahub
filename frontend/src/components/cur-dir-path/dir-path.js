@@ -313,7 +313,7 @@ class DirPath extends React.Component {
         <span className="path-split">/</span>
         <span className="path-item path-item-read-only">{gettext('History')}</span>
         <div
-          className="path-item"
+          className="cur-view-tip"
           id="sf-history-mode-tip"
           role="button"
           tabIndex={0}
