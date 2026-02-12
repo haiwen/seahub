@@ -26,3 +26,7 @@
   font-size: 14px;
   color: #666;
 }
+
+.rc-calendar.sf-metadata-rc-calendar {
+  font-family: var(--bs-body-font-family);
+}
