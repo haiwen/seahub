@@ -187,7 +187,8 @@ select {
   height: 32px;
 }
 
-.cur-view-path .cur-view-path-btn {
+.cur-view-path .cur-view-path-btn,
+.cur-view-path .cur-view-tip {
   cursor: pointer;
   font-size: 14px;
   height: 24px;
