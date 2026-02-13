@@ -5,6 +5,7 @@ import sys
 import logging
 import configparser 
 import json
+import time
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from migrate import ObjMigrateWorker
@@ -43,7 +44,7 @@ def main(argv):
     else:
         migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit)
 
-def parse_seafile_db_config():
+def parse_seafile_config():
     env = os.environ
     seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
     cp = configparser.ConfigParser()
@@ -53,8 +54,13 @@ def parse_seafile_db_config():
     user = cp.get('database', 'user')
     passwd = cp.get('database', 'password')
     db_name = cp.get('database', 'db_name')
+    keep_days = 0
+    if cp.has_section("history"):
+        if cp.has_option('history', 'keep_days'):
+            keep_days = cp.get('history', 'keep_days')
 
-    return host, port, user, passwd, db_name
+
+    return host, port, user, passwd, db_name, keep_days
 
 def is_default_storage(orig_storage_id):
     env = os.environ
@@ -130,7 +136,7 @@ def get_existing_repo_ids (url):
     return results
 
 def get_repo_ids(storage_id, dest_storage_id):
-    host, port, user, passwd, db_name = parse_seafile_db_config()
+    host, port, user, passwd, db_name, days = parse_seafile_config()
     is_default = is_default_storage(storage_id)
     url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
 
@@ -174,7 +180,7 @@ def get_repo_ids(storage_id, dest_storage_id):
     return ret_repo_ids
 
 def get_virt_repo_ids(repo_id):
-    host, port, user, passwd, db_name = parse_seafile_db_config()
+    host, port, user, passwd, db_name, days = parse_seafile_config()
     url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
     sql = 'SELECT repo_id FROM VirtualRepo WHERE origin_repo=\"%s\"'%(repo_id)
 
@@ -189,6 +195,35 @@ def get_virt_repo_ids(repo_id):
 
     return virt_repo_ids
 
+def get_repo_truncate_time(repo_id):
+    host, port, user, passwd, db_name, keep_days = parse_seafile_config()
+    url = 'mysql+pymysql://' + user + ':' + passwd + '@' + host + ':' + port + '/' + db_name
+    sql = 'SELECT days FROM RepoHistoryLimit WHERE repo_id=\"%s\"'%(repo_id)
+
+    engine = create_engine(url, echo=False)
+    session = sessionmaker(engine)()
+    result_proxy = session.execute(text(sql))
+    results = result_proxy.fetchall()
+
+    days = 0
+    for r in results:
+        days = r[0]
+    if days == 0:
+        days = int(keep_days)
+
+    sql = 'SELECT timestamp FROM RepoValidSince WHERE repo_id=\"%s\"'%(repo_id)
+    result_proxy = session.execute(text(sql))
+    results = result_proxy.fetchall()
+
+    timestamp = 0
+    for r in results:
+        timestamp = r[0]
+
+    now = int(time.time())
+    if days > 0:
+        return max(now - days * 24 * 3600, timestamp)
+    return timestamp
+
 def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit):
     repo = api.get_repo(repo_id)
     if repo is None:
@@ -201,12 +236,13 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit):
     api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
 
     virt_repo_ids = get_virt_repo_ids(repo_id)
+    truncate_time = get_repo_truncate_time(repo_id)
 
     dtypes = ['commits', 'fs', 'blocks']
     workers = []
     repo_objs = None
     if list_src_by_commit:
-        repo_objs = RepoObjects(repo_id, virt_repo_ids)
+        repo_objs = RepoObjects(repo_id, virt_repo_ids, truncate_time)
         try:
             repo_objs.traverse()
         except Exception as e:
@@ -246,9 +282,9 @@ def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit):
 
     if list_src_by_commit:
         # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
-        api.set_repo_valid_since (repo_id, repo_objs.timestamp_by_repo[repo_id])
+        api.set_repo_valid_since (repo_id, repo_objs.truncate_time)
         for virt_repo_id in virt_repo_ids:
-            api.set_repo_valid_since (virt_repo_id, repo_objs.timestamp_by_repo[virt_repo_id])
+            api.set_repo_valid_since (virt_repo_id, repo_objs.truncate_time)
 
     # The virtual repo’s storage_id is updated before that of the parent repo.
     # This way, even if the process is interrupted, the migration of both the parent repo and the virtual repo will be retried the next time.
@@ -272,12 +308,13 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit):
         api.set_repo_status (repo_id, REPO_STATUS_READ_ONLY)
 
         virt_repo_ids = get_virt_repo_ids(repo_id)
+        truncate_time = get_repo_truncate_time(repo_id)
 
         dtypes = ['commits', 'fs', 'blocks']
         workers = []
         repo_objs = None
         if list_src_by_commit:
-            repo_objs = RepoObjects(repo_id, virt_repo_ids)
+            repo_objs = RepoObjects(repo_id, virt_repo_ids, truncate_time)
             try:
                 repo_objs.traverse()
             except Exception as e:
@@ -322,9 +359,9 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit):
 
         if list_src_by_commit:
             # This RPC was added in version 11.0. If the user is running a server version earlier than 11.0, this part of the code needs to be commented.
-            api.set_repo_valid_since (repo_id, repo_objs.timestamp_by_repo[repo_id])
+            api.set_repo_valid_since (repo_id, repo_objs.truncate_time)
             for virt_repo_id in virt_repo_ids:
-                api.set_repo_valid_since (virt_repo_id, repo_objs.timestamp_by_repo[virt_repo_id])
+                api.set_repo_valid_since (virt_repo_id, repo_objs.truncate_time)
 
         # The virtual repo’s storage_id is updated before that of the parent repo.
         # This way, even if the process is interrupted, the migration of both the parent repo and the virtual repo will be retried the next time.
@@ -347,13 +384,14 @@ def migrate_repos(orig_storage_id, dest_storage_id, list_src_by_commit):
 
 # RepoObjects traverses commits, fs and block objects in the source storage starting from the repo’s HEAD commit.
 class RepoObjects(object):
-    def __init__(self, repo_id, virt_repo_ids):
+    def __init__(self, repo_id, virt_repo_ids, truncate_time):
         self.repo_id = repo_id
-        self.timestamp_by_repo = {}
         self.commit_keys_by_repo = {}
         self.fs_keys = set()
         self.block_keys = set()
         self.virt_repo_ids = virt_repo_ids
+        self.truncate_time = truncate_time
+        self.traversed_head = False
 
     def traverse(self):
         repo = api.get_repo(self.repo_id)
@@ -364,61 +402,43 @@ class RepoObjects(object):
         # This avoids the situation where, after a virtual repo has been migrated but the origin repo has not, the virutal repo’s fs and block objects are still written to the origin repo’s storage.
         self.traverse_repo(repo)
         for virt_repo_id in self.virt_repo_ids:
-            self.traverse_virt_repo(virt_repo_id, repo.version)
+            vrepo = api.get_repo(virt_repo_id)
+            if vrepo is None:
+                raise Exception("Failed to get virtual repo %s" % virt_repo_id)
+            self.traverse_virt_repo(virt_repo_id, repo.version, vrepo.head_cmmt_id)
 
     def traverse_repo(self, repo):
         commit_keys = set()
-        self.timestamp_by_repo[self.repo_id] = 0
+        self.traversed_head = False
 
-        page = 0
-        limit = 100
-        while True:
-            start = page * limit
-            commits = api.get_commit_list(self.repo_id, start, limit)
+        self.traverse_commit(self.repo_id, repo.version, repo.head_cmmt_id, commit_keys)
+        self.commit_keys_by_repo[self.repo_id] = commit_keys
+        logging.info('Successfully traversed %d commits, %d fs and %d blocks in repo %s.\n', len(commit_keys), len(self.fs_keys), len(self.block_keys), self.repo_id)
 
-            for commit in commits:
-                if commit.id in commit_keys:
-                    continue
-                if self.timestamp_by_repo[self.repo_id] == 0:
-                    self.timestamp_by_repo[self.repo_id] = commit.ctime
-                if commit.ctime < self.timestamp_by_repo[self.repo_id]:
-                    self.timestamp_by_repo[self.repo_id] = commit.ctime
-                commit_keys.add(commit.id)
-                self.traverse_dir(repo.version, commit.root_id)
+    def traverse_commit (self, repo_id, version, commit_id, commit_keys):
+        commit = commit_mgr.load_commit (repo_id, version, commit_id)
+        if commit.commit_id in commit_keys:
+            return
 
-            if len(commits) == limit:
-                page = page + 1
-            else:
-                self.commit_keys_by_repo[self.repo_id] = commit_keys
-                logging.info('Successfully traversed %d commits, %d fs and %d blocks in repo %s.\n', len(commit_keys), len(self.fs_keys), len(self.block_keys), self.repo_id)
-                return
+        commit_keys.add(commit.commit_id)
+        self.traverse_dir(version, commit.root_id)
 
-    def traverse_virt_repo(self, repo_id, version):
+        if self.truncate_time > 0  and commit.ctime <= self.truncate_time and self.traversed_head:
+            return
+        self.traversed_head = True
+
+        if commit.parent_id is not None:
+            self.traverse_commit(repo_id, version, commit.parent_id, commit_keys)
+        if commit.second_parent_id is not None:
+            self.traverse_commit(repo_id, version, commit.second_parent_id, commit_keys)
+
+    def traverse_virt_repo(self, repo_id, version, head_cmmt_id):
         commit_keys = set()
-        self.timestamp_by_repo[repo_id] = 0
+        self.traversed_head = False
 
-        page = 0
-        limit = 100
-        while True:
-            start = page * limit
-            commits = api.get_commit_list(repo_id, start, limit)
-
-            for commit in commits:
-                if commit.id in commit_keys:
-                    continue
-                if self.timestamp_by_repo[repo_id] == 0:
-                    self.timestamp_by_repo[repo_id] = commit.ctime
-                if commit.ctime < self.timestamp_by_repo[repo_id]:
-                    self.timestamp_by_repo[repo_id] = commit.ctime
-                commit_keys.add(commit.id)
-                self.traverse_dir(version, commit.root_id)
-
-            if len(commits) == limit:
-                page = page + 1
-            else:
-                self.commit_keys_by_repo[repo_id] = commit_keys
-                logging.info('Successfully traversed %d commits in virtual repo %s.\n', len(commit_keys), repo_id)
-                return
+        self.traverse_commit(repo_id, version, head_cmmt_id, commit_keys)
+        self.commit_keys_by_repo[self.repo_id] = commit_keys
+        logging.info('Successfully traversed %d commits in virtual repo %s.\n', len(commit_keys), repo_id)
 
     def traverse_dir(self, version, root_id):
         if root_id == ZERO_OBJ_ID:
