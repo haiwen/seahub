@@ -54,7 +54,7 @@ def parse_seafile_config():
     user = cp.get('database', 'user')
     passwd = cp.get('database', 'password')
     db_name = cp.get('database', 'db_name')
-    keep_days = 0
+    keep_days = -1
     if cp.has_section("history"):
         if cp.has_option('history', 'keep_days'):
             keep_days = cp.get('history', 'keep_days')
@@ -205,24 +205,27 @@ def get_repo_truncate_time(repo_id):
     result_proxy = session.execute(text(sql))
     results = result_proxy.fetchall()
 
-    days = 0
+    days = -1
     for r in results:
         days = r[0]
-    if days == 0:
+    if days < 0:
         days = int(keep_days)
 
     sql = 'SELECT timestamp FROM RepoValidSince WHERE repo_id=\"%s\"'%(repo_id)
     result_proxy = session.execute(text(sql))
     results = result_proxy.fetchall()
 
-    timestamp = 0
+    timestamp = -1
     for r in results:
         timestamp = r[0]
 
     now = int(time.time())
     if days > 0:
         return max(now - days * 24 * 3600, timestamp)
-    return timestamp
+    elif days < 0:
+        return timestamp
+    else:
+        return 0
 
 def migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit):
     repo = api.get_repo(repo_id)
@@ -415,22 +418,28 @@ class RepoObjects(object):
         self.commit_keys_by_repo[self.repo_id] = commit_keys
         logging.info('Successfully traversed %d commits, %d fs and %d blocks in repo %s.\n', len(commit_keys), len(self.fs_keys), len(self.block_keys), self.repo_id)
 
-    def traverse_commit (self, repo_id, version, commit_id, commit_keys):
-        commit = commit_mgr.load_commit (repo_id, version, commit_id)
-        if commit.commit_id in commit_keys:
-            return
+    def traverse_commit(self, repo_id, version, commit_id, commit_keys):
+        stack = [commit_id]
+        while stack:
+            current_id = stack.pop()
 
-        commit_keys.add(commit.commit_id)
-        self.traverse_dir(version, commit.root_id)
+            commit = commit_mgr.load_commit(repo_id, version, current_id)
+            if commit.commit_id in commit_keys:
+                continue
 
-        if self.truncate_time > 0  and commit.ctime <= self.truncate_time and self.traversed_head:
-            return
-        self.traversed_head = True
+            commit_keys.add(commit.commit_id)
 
-        if commit.parent_id is not None:
-            self.traverse_commit(repo_id, version, commit.parent_id, commit_keys)
-        if commit.second_parent_id is not None:
-            self.traverse_commit(repo_id, version, commit.second_parent_id, commit_keys)
+            self.traverse_dir(version, commit.root_id)
+
+            if self.truncate_time > 0 and commit.ctime <= self.truncate_time and self.traversed_head:
+                continue
+            self.traversed_head = True
+
+            if commit.second_parent_id is not None:
+                stack.append(commit.second_parent_id)
+
+            if commit.parent_id is not None:
+                stack.append(commit.parent_id)
 
     def traverse_virt_repo(self, repo_id, version, head_cmmt_id):
         commit_keys = set()
