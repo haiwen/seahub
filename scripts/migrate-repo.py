@@ -446,7 +446,7 @@ class RepoObjects(object):
         self.traversed_head = False
 
         self.traverse_commit(repo_id, version, head_cmmt_id, commit_keys)
-        self.commit_keys_by_repo[self.repo_id] = commit_keys
+        self.commit_keys_by_repo[repo_id] = commit_keys
         logging.info('Successfully traversed %d commits in virtual repo %s.\n', len(commit_keys), repo_id)
 
     def traverse_dir(self, version, root_id):
