@@ -109,6 +109,7 @@
 }
 
 .sf-table-result-container {
+  height: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
 }
@@ -148,7 +149,7 @@
   margin: 3px 0px;
   height: 80%;
   cursor: col-resize;
-  z-index: 1;
+  z-index: 2;
 }
 
 .record-HeaderCell__draggable:hover {
@@ -182,6 +183,7 @@
 
 .sf-table-result-content .frozen-columns .sf-table-cell {
   position: relative;
+  overflow: hidden;
 }
 
 .sf-table-column-content {

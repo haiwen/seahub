@@ -1,0 +1,36 @@
+.dir-table-view {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.dir-table-view .dir-table-name-cell {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.dir-table-view .dir-table-name-icon {
+  flex-shrink: 0;
+}
+
+.dir-table-view .dir-table-name-text {
+  margin-left: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dir-table-view .dir-table-cell {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.dir-table-view .dir-table-cell-empty {
+  color: var(--text-muted, #999);
+}
+
+.sf-table-context-menu {
+  width: 200px;
+}

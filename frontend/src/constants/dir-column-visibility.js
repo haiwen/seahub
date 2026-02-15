@@ -3,8 +3,8 @@ import { gettext } from '@/utils/constants';
 
 // Column visibility configuration
 export const DIR_COLUMN_KEYS = {
-  SIZE: 'size',
-  MTIME: 'mtime',
+  SIZE: '_size',
+  MTIME: '_mtime',
 };
 
 export const DIR_BASE_COLUMNS = [

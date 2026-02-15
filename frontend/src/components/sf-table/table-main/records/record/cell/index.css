@@ -147,3 +147,11 @@
 .sf-table-row.row-selected .column {
   background-color: var(--bs-tr-active-secondary-bg) !important;
 }
+
+.sf-table-cell .sf-metadata-ui.cell-formatter-container .sf-metadata-file-icon-container .locked {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  top: 50%;
+  left: 50%;
+}

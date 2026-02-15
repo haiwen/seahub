@@ -334,6 +334,7 @@ class Records extends Component {
     if (classNames.includes('sf-table-result-content')) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.CLOSE_EDITOR);
     }
+    this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
   };
 
   onCellClick = (cell) => {
@@ -412,7 +413,6 @@ class Records extends Component {
 
     // clear selected records
     this.onDeselectAllRecords();
-    this.props.updateSelectedRecordIds([]);
   };
 
   selectCell = (cellPosition) => {
@@ -1081,6 +1081,8 @@ Records.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveRecords: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
+  onRecordSelected: PropTypes.func,
+  checkCanModifyRecord: PropTypes.func,
 };
 
 export default Records;

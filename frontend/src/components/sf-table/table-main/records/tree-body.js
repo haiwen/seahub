@@ -44,7 +44,6 @@ class TreeBody extends Component {
     this.columnVisibleEnd = this.props.getColumnVisibleEnd();
     this.timer = null;
     this.initFrozenNodesRef();
-    this.canModify = window.sfTagsDataContext && window.sfTagsDataContext.canModify();
   }
 
   componentDidMount() {
@@ -612,7 +611,6 @@ class TreeBody extends Component {
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
           toggleExpandTreeNode={() => this.toggleExpandNode(node_key)}
-          canModify={this.canModify}
         />
       );
     });

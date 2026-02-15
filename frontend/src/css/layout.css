@@ -370,6 +370,13 @@ img[src=""],img:not([src]) { /* for first loading img*/
   text-align: center;
 }
 
+.dir-tool .dir-tool-divider {
+  width: 1px;
+  height: 16px;
+  background-color: var(--bs-border-secondary-color);
+  margin-left: 8px;
+}
+
 .dir-tool .dropdown {
   line-height: 1;
 }

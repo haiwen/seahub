@@ -508,6 +508,9 @@ class RecordsBody extends Component {
           selectedPosition={this.state.selectedPosition}
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
+          recordDraggable={this.props.recordDraggable}
+          recordDragDropEvents={this.props.recordDragDropEvents}
+          draggingRecordSource={this.props.draggingRecordSource}
         />
       );
     });

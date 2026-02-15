@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { DropdownItem } from 'reactstrap';
 import urlJoin from 'url-join';
-import { gettext, siteRoot, mediaUrl, username, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
+import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
 import Rename from '../rename';
-import toaster from '../toast';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
 import ItemDropdownMenu from '../dropdown-menu/item-dropdown-menu';
@@ -22,6 +20,8 @@ import Formatter from '../../metadata/components/formatter';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
 import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
+import { lockFile, unlockFile, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient, freezeDocument } from '../../utils/dirent-operations';
+import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
@@ -177,7 +177,7 @@ class DirentListItem extends React.Component {
   updateDirentThumbnail = (encoded_thumbnail_src) => {
     this.isGeneratingThumbnail = false;
     // Let parent handle thumbnail update through props update
-    this.props.updateDirent(this.props.dirent, 'encoded_thumbnail_src', encoded_thumbnail_src);
+    this.props.updateDirent(this.props.dirent, { encoded_thumbnail_src });
   };
 
   onMouseEnter = () => {
@@ -225,32 +225,8 @@ class DirentListItem extends React.Component {
   };
 
   onItemStarred = () => {
-    const { dirent } = this.props;
-    const { repoID } = this.props;
-    const filePath = this.getDirentPath(dirent);
-    const itemName = dirent.name;
-
-    if (dirent.starred) {
-      seafileAPI.unstarItem(repoID, filePath).then(() => {
-        this.props.updateDirent(dirent, 'starred', false);
-        const msg = gettext('Successfully unstarred {name_placeholder}.')
-          .replace('{name_placeholder}', itemName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    } else {
-      seafileAPI.starItem(repoID, filePath).then(() => {
-        this.props.updateDirent(dirent, 'starred', true);
-        const msg = gettext('Successfully starred {name_placeholder}.')
-          .replace('{name_placeholder}', itemName);
-        toaster.success(msg);
-      }).catch(error => {
-        let errMessage = Utils.getErrorMsg(error);
-        toaster.danger(errMessage);
-      });
-    }
+    const { dirent, repoID, path, updateDirent } = this.props;
+    toggleStar(dirent, repoID, path, updateDirent);
   };
 
   onDirentClick = (e) => {
@@ -293,19 +269,13 @@ class DirentListItem extends React.Component {
   };
 
   exportDocx = () => {
-    const serviceUrl = window.app.config.serviceURL;
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    let exportToDocxUrl = serviceUrl + '/repo/sdoc_export_to_docx/' + repoID + '/?file_path=' + filePath;
-    window.location.href = exportToDocxUrl;
+    const { dirent, repoID, path } = this.props;
+    exportDocx(dirent, repoID, path);
   };
 
   exportSdoc = () => {
-    const serviceUrl = window.app.config.serviceURL;
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    let exportToSdocUrl = serviceUrl + '/lib/' + repoID + '/file/' + filePath + '?dl=1';
-    window.location.href = exportToSdocUrl;
+    const { dirent, repoID, path } = this.props;
+    exportSdoc(dirent, repoID, path);
   };
 
   onMobileMenuItemClick = (e) => {
@@ -314,85 +284,23 @@ class DirentListItem extends React.Component {
   };
 
   onMenuItemClick = (operation, event) => {
-    switch (operation) {
-      case 'Download':
-        this.onItemDownload(event);
-        break;
-      case 'Share':
-        this.onItemShare();
-        break;
-      case 'Delete':
-        this.onItemDelete(event);
-        break;
-      case 'Rename':
-        this.onItemRenameToggle();
-        break;
-      case 'Move':
-        this.onItemMove();
-        break;
-      case 'Copy':
-        this.onItemCopy();
-        break;
-      case 'Permission':
-        this.onPermission();
-        break;
-      case 'Unlock':
-        this.onUnlockItem();
-        break;
-      case 'Lock':
-        this.onLockItem();
-        break;
-      case 'Unfreeze Document':
-        this.onUnlockItem();
-        break;
-      case 'Freeze Document':
-        this.onFreezeDocument();
-        break;
-      case 'Convert to Markdown':
-        this.onItemConvert(event, 'markdown');
-        break;
-      case 'Convert to docx':
-        this.onItemConvert(event, 'docx');
-        break;
-      case 'Export docx':
-        this.exportDocx();
-        break;
-      case 'Export sdoc':
-        this.exportSdoc();
-        break;
-      case 'Convert to sdoc':
-        this.onItemConvert(event, 'sdoc');
-        break;
-      case 'History':
-        this.onHistory();
-        break;
-      case 'Access Log':
-        this.openFileAccessLog();
-        break;
-      case 'Properties':
-        this.props.onDirentClick(this.props.dirent);
-        this.props.showDirentDetail('info');
-        break;
-      case 'Open with Default':
-        this.onOpenWithDefault();
-        break;
-      case 'Open via Client':
-        this.onOpenViaClient();
-        break;
-      case 'Open with OnlyOffice':
-        this.onOpenWithOnlyOffice();
-        break;
-      case 'Convert with ONLYOFFICE':
-        this.onConvertWithONLYOFFICE();
-        break;
-      case 'Star':
-        this.onItemStarred();
-        break;
-      case 'Unstar':
-        this.onItemStarred();
-        break;
-      default:
-        break;
+    // Use unified menuHandlers for all operations
+    const handler = menuHandlers[operation];
+
+    if (handler) {
+      handler({
+        eventBus: this.props.eventBus,
+        path: this.props.path,
+        repoID: this.props.repoID,
+        dirent: this.props.dirent,
+        dirents: this.props.dirent,
+        isBatch: false,
+        updateDirentProperties: this.props.updateDirent,
+        onItemDelete: this.props.onItemDelete,
+        onItemConvert: this.props.onItemConvert,
+        showDirentDetail: this.props.showDirentDetail,
+        loadDirentList: this.props.loadDirentList
+      });
     }
   };
 
@@ -445,54 +353,23 @@ class DirentListItem extends React.Component {
   };
 
   onLockItem = () => {
-    let repoID = this.props.repoID;
-    let dirent = this.props.dirent;
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.lockfile(repoID, filePath).then(() => {
-      this.props.updateDirent(dirent, 'is_locked', true);
-      this.props.updateDirent(dirent, 'locked_by_me', true);
-      let lockName = username.split('@');
-      this.props.updateDirent(dirent, 'lock_owner_name', lockName[0]);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    const { dirent, repoID, path, updateDirent } = this.props;
+    lockFile(dirent, repoID, path, updateDirent);
   };
 
   onFreezeDocument = () => {
-    let repoID = this.props.repoID;
-    let dirent = this.props.dirent;
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.lockfile(repoID, filePath, -1).then(() => {
-      this.props.updateDirent(dirent, 'is_freezed', true);
-      this.props.updateDirent(dirent, 'is_locked', true);
-      this.props.updateDirent(dirent, 'locked_by_me', true);
-      let lockName = username.split('@');
-      this.props.updateDirent(dirent, 'lock_owner_name', lockName[0]);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    const { dirent, repoID, path, updateDirent } = this.props;
+    freezeDocument(dirent, repoID, path, updateDirent);
   };
 
   onUnlockItem = () => {
-    let repoID = this.props.repoID;
-    let dirent = this.props.dirent;
-    let filePath = this.getDirentPath(dirent);
-    seafileAPI.unlockfile(repoID, filePath).then(() => {
-      this.props.updateDirent(dirent, 'is_locked', false);
-      this.props.updateDirent(dirent, 'locked_by_me', false);
-      this.props.updateDirent(dirent, 'lock_owner_name', '');
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+    const { dirent, repoID, path, updateDirent } = this.props;
+    unlockFile(dirent, repoID, path, updateDirent);
   };
 
   onHistory = () => {
-    let filePath = this.getDirentPath(this.props.dirent);
-    let url = URLDecorator.getUrl({ type: 'file_revisions', repoID: this.props.repoID, filePath: filePath });
-    location.href = url;
+    const { dirent, repoID, path } = this.props;
+    openHistory(dirent, repoID, path);
   };
 
   onOpenWithDefault = () => {
@@ -503,10 +380,8 @@ class DirentListItem extends React.Component {
   };
 
   onOpenViaClient = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    let url = URLDecorator.getUrl({ type: 'open_via_client', repoID: repoID, filePath: filePath });
-    location.href = url;
+    const { dirent, repoID, path } = this.props;
+    openViaClient(dirent, repoID, path);
   };
 
   onOpenWithOnlyOffice = () => {
@@ -514,17 +389,6 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({ type: 'open_with_onlyoffice', repoID: repoID, filePath: filePath });
     window.open(url, '_blank');
-  };
-
-  onConvertWithONLYOFFICE = () => {
-    let repoID = this.props.repoID;
-    let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.onlyofficeConvert(repoID, filePath).then(res => {
-      this.props.loadDirentList(res.data.parent_dir);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
   };
 
   onItemDownload = (e) => {

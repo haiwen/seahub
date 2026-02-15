@@ -61,3 +61,7 @@
 .empty-status-placeholder {
   padding: 0 10px;
 }
+
+.seafile-contextmenu {
+  width: 200px;
+}

@@ -164,6 +164,7 @@ SFTable.propTypes = {
   moveRecords: PropTypes.func,
   renderCustomDraggedRows: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
+  onRecordSelected: PropTypes.func,
 };
 
 export default SFTable;
