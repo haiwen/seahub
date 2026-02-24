@@ -186,7 +186,7 @@ class WikiFileViewsManager(models.Manager):
         view_details = json.loads(wiki_views.details)
         new_view = WikiView(view_type, view_data)
         view_json = new_view.view_json
-        view_details=view_json
+        view_details['views'].append(view_json)
         wiki_views.details = json.dumps(view_details)
         wiki_views.save()
         return new_view.view_json
@@ -196,12 +196,15 @@ class WikiFileViewsManager(models.Manager):
         if not wiki_views:
             return None
         view_details = wiki_views.details and json.loads(wiki_views.details) or None
-        return view_details or None
+        view = view_details.get('views', [])[0] if view_details else None
+        return view
         
     def update_view(self, file_view_id, view_dict):
         wiki_views = self.filter(pk=file_view_id).first()
         view_details = json.loads(wiki_views.details)
-        view_details.update(view_dict)
+        view = view_details.get('views', [])[0] if view_details else None
+        if view:
+            view.update(view_dict)
         wiki_views.details = json.dumps(view_details)
         wiki_views.save()
         return wiki_views
@@ -214,7 +217,7 @@ class WikiFileViewsManager(models.Manager):
             wiki_id=wiki_id,
             name=file_view_name,
             linked_repo_id=linked_repo_id,
-            details=json.dumps({})
+            details=json.dumps({'views': []})
         )
         wiki_file_view.save()
         file_view_id = wiki_file_view.pk
@@ -243,19 +246,19 @@ class WikiFileViews(models.Model):
     
     def to_dict(self):
         views_dict = json.loads(self.details)
-        views_dict['name'] = self.name
-        views_dict['linked_repo_id'] = self.linked_repo_id
+        views_dict['views'][0]['name'] = self.name
+        views_dict['views'][0]['linked_repo_id'] = self.linked_repo_id
         res = {
             'id': self.pk,
             'wiki_id': self.wiki_id,
             'name': self.name,
             'linked_repo_id': self.linked_repo_id,
         }
-        res.update({'details': views_dict})
+        res.update(views_dict)
         return res
     def refresh_views(self):
         from seafevents.repo_metadata.constants import METADATA_TABLE
-        views_dict = json.loads(self.details)
+        views = json.loads(self.details).get('views')
         view_data = {
                 'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
                 'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }],
@@ -264,8 +267,10 @@ class WikiFileViews(models.Model):
                 "hidden_columns": [],
                 "linked_repo_id": self.linked_repo_id,
             }
-        views_dict.update(view_data)
-        self.details = json.dumps(views_dict)
+        for view in views:
+            view.update(view_data)
+            break
+        self.details = json.dumps({'views': views})
         self.save()
         return self
     
