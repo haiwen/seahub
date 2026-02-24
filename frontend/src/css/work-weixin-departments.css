@@ -62,6 +62,10 @@
   color: var(--bs-icon-color);
 }
 
+.tree-node-inner .tree-node-icon .seafile-multicolor-icon-down {
+  font-size: 12px;
+}
+
 .tree-view .department-children .tip {
   font-size: 12px;
 }
