@@ -261,6 +261,8 @@ def main(argv):
     try:
         orig_obj_factory = SeafObjStoreFactory()
         os.environ['SEAFILE_CENTRAL_CONF_DIR'] = os.environ['DEST_SEAFILE_CENTRAL_CONF_DIR']
+        # Set SEAF_SERVER_STORAGE_TYPE to empty so that when seafobj loads the storage backend,
+        # it can load the destination storage configuration from the configuration file.
         os.environ['SEAF_SERVER_STORAGE_TYPE'] = ''
     except KeyError:
         logging.warning('DEST_SEAFILE_CENTRAL_CONF_DIR environment variable is not set.\n')
