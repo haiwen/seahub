@@ -3,6 +3,13 @@
   font-weight: normal;
 }
 
+.paginator .btn.btn-secondary {
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+}
+
 [data-bs-theme=dark] .paginator .btn:disabled {
   background-color: rgba(255, 255, 255, .02);
   border-color: rgba(255, 255, 255, .1);
@@ -14,6 +21,10 @@
   border-color: #1991eb;
   outline: 0;
   box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
+}
+
+.paginator .paginator-dropdown .seafile-multicolor-icon-down {
+  font-size: 12px;
 }
 
 .paginator-dropdown .paginator-dropdown-menu {

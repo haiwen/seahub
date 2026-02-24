@@ -237,7 +237,7 @@ class ShareLinks extends Component {
   };
 
   render() {
-    let { shareLinkList, currentPage, perPage, hasNextPage } = this.state;
+    let { shareLinkList, perPage, hasNextPage } = this.state;
     return (
       <>
         <div className="main-panel-center flex-row">
@@ -247,7 +247,7 @@ class ShareLinks extends Component {
                 loading={this.state.loading}
                 errorMsg={this.state.errorMsg}
                 items={shareLinkList}
-                currentPage={currentPage}
+                currentPage={this.props.currentPage}
                 perPage={perPage}
                 hasNextPage={hasNextPage}
                 getShareLinksByPage={this.getShareLinksByPage}

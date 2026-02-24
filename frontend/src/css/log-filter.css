@@ -13,6 +13,9 @@
 }
 
 .cur-activity-modifiers {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.25rem;
   margin-left: -0.5rem;
 }
 
@@ -22,6 +25,7 @@
 }
 
 .cur-activity-modifiers .toggle-icon {
+  font-size: 12px;
   color: #999;
 }
 

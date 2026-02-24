@@ -123,7 +123,7 @@ class LogUserSelector extends Component {
     return (
       <div className="position-relative d-inline-block ml-2" ref={this.dropdownRef}>
         <span
-          className="cur-activity-modifiers d-inline-block p-2 rounded"
+          className="cur-activity-modifiers p-2 rounded"
           onClick={this.onToggleClick}
           aria-label={gettext('Toggle user selector')}
           role="button"
