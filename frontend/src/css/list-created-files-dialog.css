@@ -1,10 +1,9 @@
-.list-created-files-dialog .modal-dialog {
-  max-height: 90vh;
+.list-created-files-dialog.modal-dialog {
+  max-height: calc(100% - 3.5rem);
   margin: 1.75rem auto;
 }
 
 .list-created-files-dialog .modal-content {
-  max-height: 90vh;
   display: block;
 }
 
