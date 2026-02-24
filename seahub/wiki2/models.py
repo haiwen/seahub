@@ -152,10 +152,8 @@ class Wiki2Settings(models.Model):
         }
 
 class WikiView(object):
-    def __init__(self, name, linked_repo_id, type='table', view_data={}):
-        self.name = name
+    def __init__(self, type='table', view_data={}):
         self.type = type
-        self.linked_repo_id = linked_repo_id
         self.view_data = view_data
         self.view_json = {}
 
@@ -165,21 +163,19 @@ class WikiView(object):
         self.view_json = {
             "_id": generate_random_string_lower_digits(4),
             "table_id": '0001',  # by default
-            "name": self.name,
             "filters": [],
             "sorts": [],
             "groupbys": [],
             "filter_conjunction": "And",
             "hidden_columns": [],
             "type": self.type,
-            "linked_repo_id": self.linked_repo_id
         }
         self.view_json.update(self.view_data)
 
 class WikiFileViewsManager(models.Manager):
 
     ##################### views related methods #####################
-    def add_view(self, file_repo_id, view_name, linked_repo_id, view_type='table', view_data={}):
+    def add_view(self, file_repo_id, view_type='table', view_data={}):
         wiki_views = self.filter(pk=file_repo_id).first()
         if not view_data:
             from seafevents.repo_metadata.constants import METADATA_TABLE
@@ -188,101 +184,43 @@ class WikiFileViewsManager(models.Manager):
                 'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }]
             }
         view_details = json.loads(wiki_views.details)
-        view_name = get_no_duplicate_obj_name(view_name, wiki_views.views_names)
-        new_view = WikiView(view_name, linked_repo_id, view_type, view_data)
+        new_view = WikiView(view_type, view_data)
         view_json = new_view.view_json
-        view_details['views'].append(view_json)
+        view_details=view_json
         wiki_views.details = json.dumps(view_details)
         wiki_views.save()
         return new_view.view_json
 
-    def list_views(self, file_repo_id):
-        wiki_views = self.filter(pk=file_repo_id).first()
-        if not wiki_views:
-            return {'views': []}
-        return json.loads(wiki_views.details)
-
-    def get_view(self, file_repo_id, view_id):
+    def get_view(self, file_repo_id):
         wiki_views = self.filter(pk=file_repo_id).first()
         if not wiki_views:
             return None
-        view_details = json.loads(wiki_views.details)
-        for v in view_details['views']:
-            if v.get('_id') == view_id:
-                return v
-    def update_view(self, file_repo_id, view_id, view_dict):
-        wiki_views = self.filter(pk=file_repo_id).first()
-        view_dict.pop('_id', '')
-        if 'name' in view_dict:
-            exist_obj_names = wiki_views.views_names
-            view_dict['name'] = get_no_duplicate_obj_name(view_dict['name'], exist_obj_names)
-        view_details = json.loads(wiki_views.details)
-        for v in view_details['views']:
-            if v.get('_id') == view_id:
-                v.update(view_dict)
-                break
-        wiki_views.details = json.dumps(view_details)
-        wiki_views.save()
-        return json.loads(wiki_views.details)
-
-    def delete_view(self, file_repo_id, view_id):
-        wiki_views = self.filter(pk=file_repo_id).first()
-        if not wiki_views:
-            return
-        view_details = json.loads(wiki_views.details)
-        views = view_details.get('views', [])
-
-        for view in views:
-            if view.get('_id') == view_id:
-                views.remove(view)
-                break
-
-        wiki_views.details = json.dumps(view_details)
-        wiki_views.save()
-        return json.loads(wiki_views.details)
-
-    def delete_views_by_repo_id(self, file_repo_id, repo_id):
-        wiki_views = self.filter(pk=file_repo_id).first()
-        if not wiki_views:
-            return
-        view_details = json.loads(wiki_views.details)
-        views = view_details.get('views', [])
-        filtered_views = [v for v in views if v.get('linked_repo_id') != repo_id]
-        view_details['views'] = filtered_views
-
-        wiki_views.details = json.dumps(view_details)
-        wiki_views.save()
-        return json.loads(wiki_views.details)
-
-    def duplicate_view(self, file_repo_id, view_id):
+        view_details = wiki_views.details and json.loads(wiki_views.details) or None
+        return view_details or None
+        
+    def update_view(self, file_repo_id, view_dict):
         wiki_views = self.filter(pk=file_repo_id).first()
         view_details = json.loads(wiki_views.details)
-        duplicate_view = next((copy.deepcopy(view) for view in view_details['views'] if view.get('_id') == view_id), None)
-        if not duplicate_view:
-            return None
-        view_name = get_no_duplicate_obj_name(duplicate_view['name'], wiki_views.views_names)
-        new_view_id = generate_views_unique_id(4, wiki_views.views_ids)
-        duplicate_view['_id'] = new_view_id
-        duplicate_view['name'] = view_name
-        view_details['views'].append(duplicate_view)
+        view_details.update(view_dict)
         wiki_views.details = json.dumps(view_details)
         wiki_views.save()
-        return duplicate_view
-    
+        return wiki_views
+        
+
     ########################### file view related methods ###########################
-    def create_file_repo(self, wiki_id, file_view_name, linked_repo_id, view_name='Default View'):
+    def create_file_repo(self, wiki_id, file_view_name, linked_repo_id, view_type='table'):
         file_view_name = get_no_duplicate_obj_name(file_view_name, self.filter(wiki_id=wiki_id).values_list('name', flat=True))
         wiki_file_repo = WikiFileRepos(
             wiki_id=wiki_id,
             name=file_view_name,
             linked_repo_id=linked_repo_id,
-            details=json.dumps({'views': []})
+            details=json.dumps({})
         )
         wiki_file_repo.save()
         file_repo_id = wiki_file_repo.pk
 
         # add a default view
-        self.add_view(file_repo_id, view_name, linked_repo_id)
+        self.add_view(file_repo_id, view_type=view_type)
         return self.get(pk=file_repo_id)
     def duplicate_file_repo(self, file_repo_id):
         wiki_file_repo = self.filter(pk=file_repo_id).first()
@@ -292,9 +230,6 @@ class WikiFileViewsManager(models.Manager):
         wiki_file_repo.save()
         return wiki_file_repo
     
-    
-
-
 class WikiFileRepos(models.Model):
     wiki_id = models.CharField(max_length=36, db_index=True)
     name = models.CharField(max_length=255, default='Default')
@@ -304,32 +239,23 @@ class WikiFileRepos(models.Model):
 
     class Meta:
         db_table = 'wiki_file_repos'
-
-    @property
-    def views_ids(self):
-        wiki_views = json.loads(self.details)
-        views = wiki_views.get('views', [])
-        return [v.get('_id') for v in views]
-
-    @property
-    def views_names(self):
-        wiki_views = json.loads(self.details)
-        views = wiki_views.get('views', [])
-        return [v.get('name') for v in views]
+        unique_together = (('wiki_id', 'name'),)
     
     def to_dict(self):
         views_dict = json.loads(self.details)
+        views_dict['name'] = self.name
+        views_dict['linked_repo_id'] = self.linked_repo_id
         res = {
             'id': self.pk,
             'wiki_id': self.wiki_id,
             'name': self.name,
             'linked_repo_id': self.linked_repo_id,
         }
-        res.update(views_dict)
+        res.update({'details': views_dict})
         return res
     def refresh_views(self):
         from seafevents.repo_metadata.constants import METADATA_TABLE
-        views = json.loads(self.details).get('views')
+        views_dict = json.loads(self.details)
         view_data = {
                 'basic_filters': [{ 'column_key': METADATA_TABLE.columns.is_dir.key, 'filter_predicate': 'is', 'filter_term': 'file' }],
                 'sorts': [{ 'column_key': METADATA_TABLE.columns.file_mtime.key, 'sort_type': 'down' }],
@@ -338,11 +264,12 @@ class WikiFileRepos(models.Model):
                 "hidden_columns": [],
                 "linked_repo_id": self.linked_repo_id,
             }
-        for view in views:
-            view.update(view_data)
-        self.details = json.dumps({'views': views})
+        views_dict.update(view_data)
+        self.details = json.dumps(views_dict)
         self.save()
         return self
+    
+
 ###### signal handlers
 from django.dispatch import receiver
 from seahub.signals import repo_deleted
