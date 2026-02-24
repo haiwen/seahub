@@ -211,7 +211,7 @@ class ObjMigrateWorker(Thread):
             UUID(obj[0], version = 4)
         except ValueError:
             return True
-        if len(obj[1]) != 40 or not re.match('\A[0-9a-f]+\Z', obj[1]):
+        if len(obj[1]) != 40 or not re.match(r'\A[0-9a-f]+\Z', obj[1]):
             return True
         return False
 
@@ -226,6 +226,9 @@ def main(argv):
     try:
         orig_obj_factory = SeafObjStoreFactory()
         os.environ['SEAFILE_CENTRAL_CONF_DIR'] = os.environ['DEST_SEAFILE_CENTRAL_CONF_DIR']
+        # Set SEAF_SERVER_STORAGE_TYPE to empty so that when seafobj loads the storage backend,
+        # it can load the destination storage configuration from the configuration file.
+        os.environ['SEAF_SERVER_STORAGE_TYPE'] = ''
     except KeyError:
         logging.warning('DEST_SEAFILE_CENTRAL_CONF_DIR environment variable is not set.\n')
         sys.exit()
