@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, canCreateWiki, isPro } from '../../utils/constants';
+import { gettext, username, canCreateWiki, isPro, canViewOrg } from '../../utils/constants';
 import WikiCardGroup from './wiki-card-group';
 import wikiAPI from '../../utils/wiki-api';
 import { Utils } from '../../utils/utils';
@@ -15,6 +15,7 @@ const propTypes = {
   leaveSharedWiki: PropTypes.func.isRequired,
   unshareGroupWiki: PropTypes.func.isRequired,
   convertWiki: PropTypes.func.isRequired,
+  setWikiPublic: PropTypes.func,
   toggleAddWikiDialog: PropTypes.func,
   sidePanelRate: PropTypes.number,
   isSidePanelFolded: PropTypes.bool,
@@ -65,8 +66,9 @@ class WikiCardView extends Component {
 
 
   render() {
-    let { loading, errorMsg, wikis, groupWikis } = this.props.data;
-    const { toggleAddWikiDialog, sidePanelRate, isSidePanelFolded } = this.props;
+    let { loading, errorMsg, wikis, groupWikis, publicWikis } = this.props.data;
+    const { toggleAddWikiDialog, sidePanelRate, isSidePanelFolded, setWikiPublic } = this.props;
+    publicWikis = publicWikis || [];
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
@@ -82,6 +84,7 @@ class WikiCardView extends Component {
         deleteWiki={this.props.deleteWiki}
         renameWiki={this.props.renameWiki}
         unshareGroupWiki={this.props.unshareGroupWiki}
+        setWikiPublic={setWikiPublic}
         sidePanelRate={sidePanelRate}
         isSidePanelFolded={isSidePanelFolded}
         wikis={myWikis}
@@ -109,6 +112,27 @@ class WikiCardView extends Component {
         noItemsTip={gettext('No shared Wikis')}
       />
     );
+    // Add "Shared with all" section for public wikis
+    if (canViewOrg && publicWikis.length > 0) {
+      wikiCardGroups.push(
+        <WikiCardGroup
+          key='public-Wikis'
+          deleteWiki={this.props.leaveSharedWiki}
+          renameWiki={this.props.renameWiki}
+          unshareGroupWiki={this.props.unshareGroupWiki}
+          setWikiPublic={setWikiPublic}
+          wikis={publicWikis}
+          title={gettext('Shared with all')}
+          isDepartment={false}
+          isShowAvatar={true}
+          isMyWikis={false}
+          isPublicWikis={true}
+          sidePanelRate={sidePanelRate}
+          isSidePanelFolded={isSidePanelFolded}
+          toggleAddWikiDialog={null}
+        />
+      );
+    }
     for (let i = 0; i < groupWikis.length; i++) {
       const groupWiki = groupWikis[i];
       if (groupWiki.wiki_info.length !== 0) {

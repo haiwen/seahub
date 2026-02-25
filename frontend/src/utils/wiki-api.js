@@ -303,6 +303,12 @@ class WikiAPI {
     return this.req.delete(url);
   }
 
+  setWikiPublic(wikiId, setPublic) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/set-public/';
+    const params = { set_public: setPublic };
+    return this.req.put(url, params);
+  }
+
   convertWiki(oldWikiId, wikiName, owner) {
     const url = this.server + '/api/v2.1/convert-wiki/';
     let form = new FormData();
