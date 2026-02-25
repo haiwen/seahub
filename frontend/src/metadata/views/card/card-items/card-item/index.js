@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Formatter from './formatter';
@@ -9,7 +9,8 @@ import {
 } from '../../../../utils/cell';
 import { Utils } from '../../../../../utils/utils';
 import { checkIsDir } from '../../../../utils/row';
-import { siteRoot, thumbnailSizeForOriginal, enableThumbnailServer } from '../../../../../utils/constants';
+import { siteRoot, gettext, fileServerRoot, thumbnailSizeForOriginal, enableThumbnailServer } from '../../../../../utils/constants';
+import Icon from '../../../../../components/icon';
 
 import './index.css';
 
@@ -118,6 +119,130 @@ const CardItem = ({
 
   const scrollable = isDocumentFile && !isUsingIcon;
 
+  // for video (hover to play)
+  const [isHovering, setIsHovering] = useState(false);
+  const [showVideoPreview, setShowVideoPreview] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [videoReady, setVideoReady] = useState(false);
+  const [videoDimensions, setVideoDimensions] = useState(null); // { width, height }
+
+  const videoPlayerRef = useRef(null);
+  const hoverTimer = useRef(null);
+  const metadataVideo = useRef(null);
+
+  const videoSrc = useMemo(() => {
+    const repoID = window.sfMetadataStore.repoId;
+    const filePath = Utils.encodePath(Utils.joinPath(parentDir, fileNameValue));
+    return `${fileServerRoot}repos/${repoID}/files${filePath}?op=download`;
+  }, [fileNameValue, parentDir]);
+
+  const handleGridItemMouseEnter = useCallback((e) => {
+    if (!Utils.videoCheck(fileNameValue)) return;
+    setIsHovering(true);
+
+    // Preload video metadata to get dimensions
+    if (!metadataVideo.current) {
+      metadataVideo.current = document.createElement('video');
+      metadataVideo.current.preload = 'metadata';
+      metadataVideo.current.src = videoSrc;
+      metadataVideo.current.onloadedmetadata = () => {
+        const maxSize = 96;
+        const videoWidth = metadataVideo.current.videoWidth;
+        const videoHeight = metadataVideo.current.videoHeight;
+        const aspectRatio = videoWidth / videoHeight;
+
+        let displayWidth;
+        let displayHeight;
+        if (aspectRatio > 1) {
+          // Landscape
+          displayWidth = Math.min(videoWidth, maxSize);
+          displayHeight = displayWidth / aspectRatio;
+        } else {
+          // Portrait
+          displayHeight = Math.min(videoHeight, maxSize);
+          displayWidth = displayHeight * aspectRatio;
+        }
+
+        setVideoDimensions({ width: displayWidth, height: displayHeight });
+      };
+    }
+
+    hoverTimer.current = setTimeout(() => {
+      setShowVideoPreview(true);
+    }, 500);
+  }, [fileNameValue, videoSrc]);
+
+  const handleGridItemMouseLeave = useCallback(() => {
+    if (hoverTimer.current) {
+      clearTimeout(hoverTimer.current);
+    }
+
+    const video = videoPlayerRef.current;
+    if (video) {
+      if (video.pause) video.pause();
+      if (typeof video.currentTime === 'number') video.currentTime = 0;
+    }
+
+    setIsHovering(false);
+    setShowVideoPreview(false);
+    setVideoProgress(0);
+    setVideoReady(false);
+  }, []);
+
+  const handleVideoTimeUpdate = useCallback((e) => {
+    const video = e.target;
+    const progress = (video.currentTime / video.duration) * 100;
+    setVideoProgress(progress || 0);
+  }, []);
+
+  const handleVideoLoadedMetadata = useCallback(() => {
+    if (!showVideoPreview) return;
+    const video = videoPlayerRef.current;
+    if (video && video.paused) {
+      video.play().catch(() => {
+        // ignore autoplay errors
+      });
+    }
+  }, [showVideoPreview]);
+
+  const handleVideoPlaying = useCallback(() => {
+    if (showVideoPreview) {
+      setVideoReady(true);
+    }
+  }, [showVideoPreview]);
+
+  const handleToggleMute = useCallback((e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setIsMuted(muted => !muted);
+  }, []);
+
+  useEffect(() => {
+    let currentPlayer = videoPlayerRef.current;
+    return () => {
+      if (hoverTimer.current) {
+        clearTimeout(hoverTimer.current);
+      }
+      if (metadataVideo.current) {
+        metadataVideo.current.onloadedmetadata = null;
+        metadataVideo.current.onerror = null;
+        metadataVideo.current.src = '';
+        metadataVideo.current = null;
+      }
+      if (currentPlayer?.player) {
+        try {
+          currentPlayer.player.dispose();
+        } catch (e) {
+          // ignore
+        }
+      }
+    };
+  }, [hoverTimer, metadataVideo, videoPlayerRef]);
+
+  const isVideo = Utils.videoCheck(fileNameValue);
+  const shouldHideBasePreview = isVideo && showVideoPreview && videoReady;
+
   return (
     <article
       data-id={record._id}
@@ -129,15 +254,20 @@ const CardItem = ({
     >
       <div
         ref={containerRef}
-        className="sf-metadata-card-item-image-container"
-        onMouseEnter={handleImageContainerMouseEnter}
-        onMouseLeave={handleImageContainerMouseLeave}
+        className={classnames('sf-metadata-card-item-image-container', {
+          'video-preview-container': isVideo,
+          'position-relative': isVideo
+        })}
+        onMouseEnter={handleGridItemMouseEnter}
+        onMouseLeave={handleGridItemMouseLeave}
       >
         {scrollable ? (
           <div
             className={classnames('sf-metadata-card-item-image-scroll-wrapper', {
               'show-scrollbar': showScrollbar
             })}
+            onMouseEnter={handleImageContainerMouseEnter}
+            onMouseLeave={handleImageContainerMouseLeave}
             onScroll={handleImageContainerScroll}
           >
             <img
@@ -150,14 +280,70 @@ const CardItem = ({
             />
           </div>
         ) : (
-          <img
-            loading="lazy"
-            className="sf-metadata-card-item-image"
-            ref={imgRef}
-            src={imageURLs.URL}
-            onError={onLoadError}
-            alt=""
-          />
+          <>
+            <img
+              loading="lazy"
+              className={classnames('sf-metadata-card-item-image', 'grid-preview-thumb', {
+                'grid-preview-thumb--hidden': shouldHideBasePreview
+              })}
+              ref={imgRef}
+              src={imageURLs.URL}
+              onError={onLoadError}
+              alt=""
+            />
+            {isVideo && (isHovering || showVideoPreview) && (
+              <div
+                className={classnames('grid-video-preview', {
+                  'grid-video-preview--active': showVideoPreview,
+                  'grid-video-preview--ready': videoReady
+                })}
+              >
+                <div className="video-wrapper">
+                  <video
+                    key="grid-video-preview"
+                    ref={videoPlayerRef}
+                    src={showVideoPreview ? videoSrc : undefined}
+                    autoPlay={showVideoPreview}
+                    muted={isMuted}
+                    loop
+                    playsInline
+                    preload={showVideoPreview ? 'auto' : 'none'}
+                    onLoadedMetadata={handleVideoLoadedMetadata}
+                    onPlaying={handleVideoPlaying}
+                    onTimeUpdate={handleVideoTimeUpdate}
+                  />
+                  {videoReady && (
+                    <div className="custom-video-controls">
+                      <div className="custom-progress-bar">
+                        <div
+                          className="custom-progress-filled"
+                          style={{ width: `${videoProgress}%` }}
+                        />
+                      </div>
+                      <button
+                        className="custom-volume-btn"
+                        onClick={handleToggleMute}
+                        aria-label={isMuted ? gettext('Unmute') : gettext('Mute')}
+                      >
+                        <Icon symbol={isMuted ? 'mute' : 'unmute'} />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+            {isVideo && isHovering && !showVideoPreview && videoDimensions && (
+              <div
+                className="grid-video-hover-overlay"
+                style={{
+                  width: `${videoDimensions.width}px`,
+                  height: `${videoDimensions.height}px`,
+                }}
+              >
+                <Icon symbol="play-filled" className="grid-video-play" />
+              </div>
+            )}
+          </>
         )}
       </div>
       <div className="sf-metadata-card-item-text-container">
