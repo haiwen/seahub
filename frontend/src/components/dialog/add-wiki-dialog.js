@@ -12,6 +12,7 @@ const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   addWiki: PropTypes.func.isRequired,
   currentDeptID: PropTypes.string,
+  isMyWiki: PropTypes.bool,
 };
 
 class AddWikiDialog extends React.Component {
@@ -51,6 +52,11 @@ class AddWikiDialog extends React.Component {
       this.setState({ options });
       if (this.props.currentDeptID) {
         const selectedOption = options.find(op => op.id == this.props.currentDeptID);
+        this.setState({ selectedOption });
+      }
+      const { isMyWiki } = this.props;
+      if (isMyWiki) {
+        const selectedOption = myWikiOption;
         this.setState({ selectedOption });
       }
     }).catch(error => {
