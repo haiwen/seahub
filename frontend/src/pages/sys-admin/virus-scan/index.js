@@ -22,7 +22,7 @@ const VirusScan = ({ children, ...commonProps }) => {
     eventBus.dispatch(EVENT_BUS_TYPE.HANDLE_SELECTED_OPERATIONS, op);
   };
   return (
-    <div>
+    <>
       {path === 'unhandled' ? (
         <MainPanelTopbar {...commonProps}>
           <>
@@ -33,9 +33,13 @@ const VirusScan = ({ children, ...commonProps }) => {
       ) : (
         <MainPanelTopbar {...commonProps} />
       )}
-      <Nav currentItem={path} />
-      <div className="h-100 d-flex overflow-auto">{children}</div>
-    </div>
+      <div className="main-panel-center">
+        <div className="cur-view-container">
+          <Nav currentItem={path} />
+          <div className="cur-view-content">{children}</div>
+        </div>
+      </div>
+    </>
   );
 };
 

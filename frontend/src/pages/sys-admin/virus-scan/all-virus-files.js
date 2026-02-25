@@ -290,23 +290,17 @@ class AllVirusFiles extends Component {
 
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-content">
-            <Content
-              loading={this.state.loading}
-              errorMsg={this.state.errorMsg}
-              virusFiles={this.state.virusFiles}
-              currentPage={this.state.currentPage}
-              hasNextPage={this.state.hasNextPage}
-              curPerPage={this.state.perPage}
-              resetPerPage={this.resetPerPage}
-              getListByPage={this.getListByPage}
-              handleFile={this.handleFile}
-            />
-          </div>
-        </div>
-      </div>
+      <Content
+        loading={this.state.loading}
+        errorMsg={this.state.errorMsg}
+        virusFiles={this.state.virusFiles}
+        currentPage={this.state.currentPage}
+        hasNextPage={this.state.hasNextPage}
+        curPerPage={this.state.perPage}
+        resetPerPage={this.resetPerPage}
+        getListByPage={this.getListByPage}
+        handleFile={this.handleFile}
+      />
     );
   }
 }

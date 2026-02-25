@@ -9,8 +9,12 @@ const AdminLogs = ({ children, ...commonProps }) => {
   return (
     <>
       <MainPanelTopbar {...commonProps} />
-      <LogsNav currentItem={path} />
-      <div className="h-100 d-flex overflow-auto">{children}</div>
+      <div className="main-panel-center flex-row">
+        <div className="cur-view-container">
+          <LogsNav currentItem={path} />
+          <div className="cur-view-content">{children}</div>
+        </div>
+      </div>
     </>
   );
 };
