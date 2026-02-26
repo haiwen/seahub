@@ -685,6 +685,7 @@ class DirentListItem extends React.Component {
   };
 
   onItemMouseDown = (event) => {
+    event.preventDefault();
     this.props.onItemMouseDown(event);
   };
 

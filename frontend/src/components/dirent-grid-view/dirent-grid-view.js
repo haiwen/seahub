@@ -179,7 +179,11 @@ class DirentGridView extends React.Component {
         const selectedItemNames = new Set(this.state.selectedItemsList.map(item => item.lastChild.lastChild.title));
         const filteredDirentList = this.props.direntList
           .filter(dirent => selectedItemNames.has(dirent.name))
-          .map(dirent => ({ ...dirent, isSelected: true }));
+          .map(dirent => {
+            const newDirent = dirent.clone();
+            newDirent.isSelected = true;
+            return newDirent;
+          });
 
         this.props.onSelectedDirentListUpdate(filteredDirentList);
       });
