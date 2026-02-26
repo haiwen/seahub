@@ -502,28 +502,40 @@ class Search extends Component {
     localStorage.setItem(storeKey, JSON.stringify(items));
   };
 
+  debouncedSearch = debounce((newValue) => {
+    const isInRepo = this.props.repoID;
+    if (this.isChineseInput === false) {
+      this.setState({
+        inputValue: newValue,
+        isLoading: true,
+        highlightIndex: 0,
+        isResultGotten: false,
+      }, () => {
+        if (!isInRepo) {
+          this.getRepoSearchResult(newValue);
+        }
+      });
+    }
+  }, 300);
+
   onChangeHandler = (event) => {
     const newValue = event.target.value;
     if (this.state.showRecent) {
       this.setState({ showRecent: false });
     }
     this.setState({ value: newValue, isCloseShow: newValue.length > 0 });
-    setTimeout(() => {
-      const trimmedValue = newValue.trim();
-      const isInRepo = this.props.repoID;
-      if (this.isChineseInput === false && this.state.inputValue !== newValue) {
-        this.setState({
-          inputValue: newValue,
-          isLoading: false,
-          highlightIndex: 0,
-          isResultGotten: false,
-        }, () => {
-          if (!isInRepo && trimmedValue !== '') {
-            this.getRepoSearchResult(newValue);
-          }
-        });
-      }
-    }, 1);
+
+    if (newValue.trim() === '') {
+      this.setState({
+        inputValue: '',
+        isSearching: false,
+        resultItems: [],
+        isResultGotten: false,
+      });
+      return;
+    }
+
+    this.debouncedSearch(newValue);
   };
 
   handleError = (e) => {
@@ -531,7 +543,7 @@ class Search extends Component {
       let errMessage = Utils.getErrorMsg(e);
       toaster.danger(errMessage);
     }
-    this.setState({ isLoading: false });
+    this.setState({ isLoading: false, resultItems: [] });
   };
 
   getRepoSearchResult = (query_str) => {
@@ -542,9 +554,6 @@ class Search extends Component {
     this.source = seafileAPI.getSource();
 
     if (query_str.trim() === '') return;
-    this.setState({
-      resultItems: [],
-    });
     searchAPI.searchRepos(query_str.trim()).then(res => {
       this.setState({
         resultItems: this.formatResultItems(res.data.results),
