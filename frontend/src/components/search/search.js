@@ -554,6 +554,9 @@ class Search extends Component {
     this.source = seafileAPI.getSource();
 
     if (query_str.trim() === '') return;
+    this.setState({
+      resultItems: [],
+    });
     searchAPI.searchRepos(query_str.trim()).then(res => {
       this.setState({
         resultItems: this.formatResultItems(res.data.results),
