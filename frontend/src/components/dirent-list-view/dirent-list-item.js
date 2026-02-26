@@ -936,7 +936,7 @@ class DirentListItem extends React.Component {
                 <ItemDropdownMenu
                   toggleClass="op-icon mr-0"
                   item={dirent}
-                  getMenuList={(item) => this.props.getDirentItemMenuList(item)}
+                  getMenuList={(item) => this.props.getDirentItemMenuList(item, true)}
                   onMenuItemClick={this.onMenuItemClick}
                   freezeItem={this.props.freezeItem}
                   unfreezeItem={this.unfreezeItem}

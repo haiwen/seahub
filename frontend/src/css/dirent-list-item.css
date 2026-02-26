@@ -112,12 +112,10 @@
 
 .dirent-property.dirent-item-name {
   flex: 1 1 120px;
-  height: 24px;
   min-width: 120px;
   font-weight: normal;
   padding-right: 0px;
   color: var(--bs-body-color);
-  overflow: hidden;
 }
 
 .dirent-item-name-content {
@@ -145,6 +143,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.dirent-property.dirent-item-name .dropdown {
+  margin: 0 30px;
 }
 
 .dirent-property.dirent-property-modified {
