@@ -543,7 +543,6 @@ class Search extends Component {
 
     if (query_str.trim() === '') return;
     this.setState({
-      isLoading: true,
       resultItems: [],
     });
     searchAPI.searchRepos(query_str.trim()).then(res => {
