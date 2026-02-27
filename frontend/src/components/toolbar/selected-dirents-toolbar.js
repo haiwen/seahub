@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, name, username } from '../../utils/constants';
+import { gettext, siteRoot, name } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -276,7 +276,7 @@ class SelectedDirentsToolbar extends React.Component {
       this.props.updateDirent(dirent, 'is_freezed', true);
       this.props.updateDirent(dirent, 'is_locked', true);
       this.props.updateDirent(dirent, 'locked_by_me', true);
-      this.props.updateDirent(dirent, 'lock_owner_name', username.split('@')[0]);
+      this.props.updateDirent(dirent, 'lock_owner_name', name);
     }).catch(error => {
       let errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
