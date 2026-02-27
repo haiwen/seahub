@@ -877,7 +877,7 @@ class DirentListItem extends React.Component {
           {isSelected ? (
             <Icon symbol="checkbox" />
           ) : (
-            <div className="dirent-checkbox-unchecked" />
+            <div className="dirent-checkbox-unchecked form-check-input" />
           )}
         </div>
 

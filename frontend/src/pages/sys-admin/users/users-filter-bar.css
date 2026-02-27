@@ -1,4 +1,10 @@
 .users-filter-bar .filter-item,
 .users-filter-bar .cur-option {
+  display: inline-flex;
+  align-items: center;
   font-size: 14px;
+}
+
+.users-filter-bar .seafile-multicolor-icon-down {
+  font-size: 12px;
 }

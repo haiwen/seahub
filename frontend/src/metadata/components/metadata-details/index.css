@@ -15,10 +15,6 @@
   line-height: 1 !important;
 }
 
-.dirent-detail-item .sf-metadata-ui.collaborator-item .collaborator-avatar {
-  margin-left: 1px;
-}
-
 .dirent-detail-item .sf-metadata-collaborator-formatter .sf-metadata-ui.collaborator-item {
   margin-bottom: 2px;
   margin-top: 2px;
