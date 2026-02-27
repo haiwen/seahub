@@ -1875,7 +1875,7 @@ class LibContentView extends React.Component {
           return { ...currNameDirentSelectingMap, [currDirent.name]: true };
         }, {});
         nextDirentList = direntList.map((currDirent) => {
-          const newDirent = { ...currDirent };
+          const newDirent = currDirent.clone();
           if (nameDirentSelectedMap[currDirent.name] || nameDirentSelectingMap[currDirent.name]) {
             newDirent.isSelected = true;
           }
