@@ -89,16 +89,18 @@ class Wikis extends Component {
     this.setState({ isShowAddWikiMenu: !this.state.isShowAddWikiMenu });
   };
 
-  toggleAddWikiDialog = (currentDeptID) => {
+  toggleAddWikiDialog = (currentDeptID, isMyWiki) => {
     if (this.state.isShowAddDialog) {
       this.setState({
         isShowAddDialog: false,
         currentDeptID: '',
+        isMyWiki: false
       });
     } else {
       this.setState({
         isShowAddDialog: true,
-        currentDeptID
+        currentDeptID,
+        isMyWiki: isMyWiki || false
       });
     }
   };
@@ -417,6 +419,7 @@ class Wikis extends Component {
               toggleCancel={this.toggleAddWikiDialog}
               addWiki={this.addWiki}
               currentDeptID={this.state.currentDeptID}
+              isMyWiki={this.state.isMyWiki}
             />
           </ModalPortal>
         }

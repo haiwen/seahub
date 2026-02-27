@@ -89,7 +89,7 @@ class WikiCardView extends Component {
         isDepartment={false}
         isShowAvatar={false}
         isMyWikis={true}
-        toggleAddWikiDialog={canCreateWiki ? toggleAddWikiDialog.bind(this, null) : null}
+        toggleAddWikiDialog={canCreateWiki ? toggleAddWikiDialog.bind(this, null, true) : null}
       />
     );
     wikiCardGroups.push(
