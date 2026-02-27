@@ -142,11 +142,11 @@ export const menuHandlers = {
   },
 
   [TextTranslation.STAR.key]: ({ dirent, repoID, path, updateDirent }) => {
-    toggleStar(dirent, repoID, path, updateDirent);
+    toggleStar(repoID, path, dirent, updateDirent);
   },
 
   [TextTranslation.UNSTAR.key]: ({ dirent, repoID, path, updateDirent }) => {
-    toggleStar(dirent, repoID, path, updateDirent);
+    toggleStar(repoID, path, dirent, updateDirent);
   },
 
   [TextTranslation.ONLYOFFICE_CONVERT.key]: async ({ repoID, path, dirent, loadDirentList }) => {

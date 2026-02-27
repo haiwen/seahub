@@ -700,6 +700,7 @@ class DirentListView extends React.Component {
             activeDirent={this.state.activeDirent}
             repoTags={this.props.repoTags}
             onFileTagChanged={this.props.onFileTagChanged}
+            getDirentItemMenuList={this.props.getItemMenuList}
             showDirentDetail={this.props.showDirentDetail}
             onItemsMove={this.props.onItemsMove}
             onShowDirentsDraggablePreview={this.onShowDirentsDraggablePreview}

@@ -226,7 +226,7 @@ class DirentListItem extends React.Component {
 
   onItemStarred = () => {
     const { dirent, repoID, path, updateDirent } = this.props;
-    toggleStar(dirent, repoID, path, updateDirent);
+    toggleStar(repoID, path, dirent, updateDirent);
   };
 
   onDirentClick = (e) => {

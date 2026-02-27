@@ -70,6 +70,7 @@
   height: 14px;
   border: 1px solid rgba(0, 0, 0, 0.5);
   border-radius: .25rem;
+  margin: 0;
 }
 
 /* Dark mode: add white background to thumbnails to ensure visibility of dark content in SVG files */

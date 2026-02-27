@@ -421,7 +421,7 @@ class DirentGridView extends React.Component {
   onToggleStarItem = () => {
     const { activeDirent: dirent } = this.state;
     const { repoID, path, updateDirent } = this.props;
-    toggleStar(dirent, repoID, path, updateDirent);
+    toggleStar(repoID, path, dirent, updateDirent);
   };
 
   handleError = (error) => {

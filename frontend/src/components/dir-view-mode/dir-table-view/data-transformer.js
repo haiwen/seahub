@@ -10,7 +10,7 @@ export const transformDirentsToTableData = (dirents, repoID) => {
     const transformedRow = {};
 
     Object.keys(props).forEach(key => {
-      const mappedKey = key.startsWith('_') ? key : `_${key}`;
+      const mappedKey = key.startsWith('_') ? key : `_${key}`; // Adapt to the shape of table perameter of SFTable
       transformedRow[mappedKey] = props[key];
     });
 
