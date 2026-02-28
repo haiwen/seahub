@@ -336,6 +336,7 @@ class DirColumnView extends React.Component {
               onItemClick={this.props.onItemClick}
               onItemDoubleClick={this.props.onItemClick}
               onItemDelete={this.props.onItemDelete}
+              onItemsDelete={this.props.onItemsDelete}
               onItemRename={this.props.onItemRename}
               onItemSelected={this.props.onItemSelected}
               onSelectedDirentListUpdate={this.props.onSelectedDirentListUpdate}

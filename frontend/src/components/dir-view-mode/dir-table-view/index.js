@@ -13,6 +13,8 @@ import { RecordMetrics } from '../../sf-table/utils/record-metrics';
 import { menuHandlers } from '../utils/menuHandlers';
 import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
 import { getCreateMenuList } from '../utils/contextMenuUtils';
+import EventBus from '@/components/common/event-bus';
+import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 
 import './index.css';
 
@@ -33,9 +35,9 @@ const DirTableView = ({
   eventBus,
   onItemClick,
   onItemDelete,
+  onItemsDelete,
   onItemRename,
   onItemSelected,
-  onBatchDelete,
   updateDirent,
   updateDirentStatus,
   onItemConvert,
@@ -79,7 +81,6 @@ const DirTableView = ({
   const modifyRecord = useCallback(({ rowId, updates, otherProps }) => {
     const dirent = direntList.find(d => d._id === rowId || d.id === rowId);
     if (!dirent) return;
-
     Object.entries(updates).forEach(([key, value]) => {
       if (key === PRIVATE_COLUMN_KEY.FILE_NAME) {
         onItemRename(dirent, value);
@@ -95,6 +96,11 @@ const DirTableView = ({
     }
     setSubMenuShown(true);
     setHoveredOptionKey(subMenuOptionKey);
+  };
+
+  const onRenameEditor = () => {
+    const sfTableEventBus = EventBus.getInstance();
+    sfTableEventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
   };
 
   const onOptionClick = (e, option, dirent, selectedDirents) => {
@@ -113,8 +119,9 @@ const DirTableView = ({
         dirent,
         dirents,
         isBatch,
-        onBatchDelete,
         onItemDelete,
+        onItemRename: onRenameEditor,
+        onBatchDelete: onItemsDelete,
         updateDirent,
         onItemConvert,
         showDirentDetail,
@@ -127,7 +134,8 @@ const DirTableView = ({
 
   const createContextMenuOptions = (tableProps) => {
     const { hideMenu, recordMetrics, selectedPosition } = tableProps;
-    const { idx, rowIdx } = selectedPosition;
+    if (!selectedPosition) return;
+
     hideMenuRef.current = hideMenu;
 
     const selectedRecordIds = RecordMetrics.getSelectedIds(recordMetrics);
@@ -136,7 +144,7 @@ const DirTableView = ({
       .filter(Boolean);
 
     // No selection - show create menu
-    if (idx === -1 && rowIdx === -1 && selectedRecordIds.length === 0) {
+    if (!selectedPosition && selectedRecordIds.length === 0) {
       const createMenuOptions = getCreateMenuList({
         enableSeadoc,
         enableWhiteboard,
@@ -175,9 +183,15 @@ const DirTableView = ({
     }
 
     // Single dirent menu
+    const { idx, rowIdx } = selectedPosition;
     const dirent = selectedDirents[0] || direntList[rowIdx];
-    const options = getItemMenuList(dirent)
+    if (!dirent) return;
+    let options = getItemMenuList(dirent)
       .filter(option => !DIR_TABLE_UNSUPPORTED_MENU_OPTION_KEYS.includes(option.key));
+
+    if (idx !== 0) {
+      options = options.filter(op => op.key !== TextTranslation.RENAME.key);
+    }
 
     return options.map((option, index) => {
       if (option === 'Divider') {
@@ -357,6 +371,7 @@ DirTableView.propTypes = {
   eventBus: PropTypes.object,
   onItemClick: PropTypes.func,
   onItemDelete: PropTypes.func,
+  onItemsDelete: PropTypes.func,
   onItemRename: PropTypes.func,
   onItemSelected: PropTypes.func,
   onBatchDelete: PropTypes.func,

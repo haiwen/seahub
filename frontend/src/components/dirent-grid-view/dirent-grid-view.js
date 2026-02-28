@@ -328,6 +328,7 @@ class DirentGridView extends React.Component {
         isBatch: false,
         updateDirentProperties: this.props.updateDirent,
         onItemDelete: this.props.onItemDelete,
+        onItemRename: this.onRename,
         onItemConvert: this.props.onItemConvert,
         showDirentDetail: this.props.showDirentDetail
       });

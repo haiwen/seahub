@@ -1,8 +1,6 @@
 import TextTranslation from '@/utils/text-translation';
 import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, openHistory, openViaClient, openByDefault, openWithOnlyOffice, toggleStar } from '@/utils/dirent-operations';
 import { EVENT_BUS_TYPE } from '@/components/common/event-bus-type';
-import { EVENT_BUS_TYPE as SF_TABLE_EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
-import EventBus from '@/components/common/event-bus';
 import { Dirent } from '@/models';
 import { Utils } from '@/utils/utils';
 import { seafileAPI } from '@/utils/seafile-api';
@@ -14,9 +12,11 @@ export const menuHandlers = {
     eventBus.dispatch(EVENT_BUS_TYPE.DOWNLOAD_FILE, path, direntList);
   },
 
-  [TextTranslation.DELETE.key]: ({ onBatchDelete, dirents }) => {
-    if (onBatchDelete) {
-      onBatchDelete(dirents);
+  [TextTranslation.DELETE.key]: ({ dirent, isBatch, onItemDelete, onBatchDelete }) => {
+    if (!isBatch) {
+      onItemDelete(dirent);
+    } else {
+      onBatchDelete && onBatchDelete();
     }
   },
 
@@ -28,9 +28,8 @@ export const menuHandlers = {
     eventBus.dispatch(EVENT_BUS_TYPE.COPY_FILE, path, dirents, isBatch);
   },
 
-  [TextTranslation.RENAME.key]: () => {
-    const sfTableEventBus = EventBus.getInstance();
-    sfTableEventBus.dispatch(SF_TABLE_EVENT_BUS_TYPE.OPEN_EDITOR);
+  [TextTranslation.RENAME.key]: ({ onItemRename }) => {
+    onItemRename && onItemRename();
   },
 
   [TextTranslation.LOCK.key]: ({ repoID, path, dirent, updateDirent }) => {

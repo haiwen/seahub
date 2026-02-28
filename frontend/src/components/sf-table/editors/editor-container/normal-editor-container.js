@@ -104,7 +104,7 @@ class NormalEditorContainer extends React.Component {
     };
 
     return (
-      <Editor column={column} editorProps={editorProps} />
+      <Editor ref={editorProps.ref} column={column} editorProps={editorProps} />
     );
   };
 

@@ -34,3 +34,7 @@
 .sf-table-context-menu {
   width: 200px;
 }
+
+.table-cell-editor .sf-metadata-text-editor {
+  height: 100%;
+}
