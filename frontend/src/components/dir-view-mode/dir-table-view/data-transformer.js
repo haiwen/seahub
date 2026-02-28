@@ -15,6 +15,8 @@ export const transformDirentsToTableData = (dirents, repoID) => {
     });
 
     transformedRow._is_dir = transformedRow._type !== 'file';
+    transformedRow._id = `${transformedRow._id}_${transformedRow._name}`;
+
     id_row_map[transformedRow._id] = transformedRow;
 
     return transformedRow;

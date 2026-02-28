@@ -15,6 +15,7 @@ import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
 import { getCreateMenuList } from '../utils/contextMenuUtils';
 import EventBus from '@/components/common/event-bus';
 import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
+import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 
 import './index.css';
 
@@ -78,15 +79,27 @@ const DirTableView = ({
     return record._permission !== 'r';
   };
 
+  const getDirentByRowId = useCallback((id) => {
+    const record = getRowById(tableData, id);
+    if (!record) return;
+    const dirent = direntList.find(d => d.name === record._name);
+    return dirent;
+  }, [tableData, direntList]);
+
+  const getDirentsByRowIds = useCallback((ids) => {
+    const recordNames = getRowsByIds(tableData, ids).map(r => r._name);
+    return direntList.filter(d => recordNames.includes(d.name));
+  }, [tableData, direntList]);
+
   const modifyRecord = useCallback(({ rowId, updates, otherProps }) => {
-    const dirent = direntList.find(d => d._id === rowId || d.id === rowId);
+    const dirent = getDirentByRowId(rowId);
     if (!dirent) return;
     Object.entries(updates).forEach(([key, value]) => {
       if (key === PRIVATE_COLUMN_KEY.FILE_NAME) {
         onItemRename(dirent, value);
       }
     });
-  }, [direntList, onItemRename]);
+  }, [getDirentByRowId, onItemRename]);
 
   const toggleSubMenu = (e, subMenuOptionKey) => {
     e.stopPropagation();
@@ -140,7 +153,7 @@ const DirTableView = ({
 
     const selectedRecordIds = RecordMetrics.getSelectedIds(recordMetrics);
     const selectedDirents = selectedRecordIds
-      .map(id => direntList.find(d => d._id === id))
+      .map(id => getDirentByRowId(id))
       .filter(Boolean);
 
     // No selection - show create menu
@@ -252,19 +265,19 @@ const DirTableView = ({
   };
 
   const handleSelectedRecord = useCallback((ids) => {
-    const list = direntList.filter(d => ids.includes(d._id) || ids.includes(d.id));
+    const list = getDirentsByRowIds(ids);
     onSelectedDirentListUpdate(list);
-  }, [direntList, onSelectedDirentListUpdate]);
+  }, [getDirentsByRowIds, onSelectedDirentListUpdate]);
 
-  const onRecordSelected = useCallback((event, recordId) => {
-    const dirent = direntList.find(d => d._id === recordId || d.id === recordId); // _id for file, id for folder
+  const onRecordSelected = useCallback((event, rowId) => {
+    const dirent = getDirentByRowId(rowId);
     onItemSelected(dirent, event);
-  }, [direntList, onItemSelected]);
+  }, [getDirentByRowId, onItemSelected]);
 
   const renderCustomDraggedRows = useCallback((draggedRecordIds) => {
     if (!Array.isArray(draggedRecordIds) || draggedRecordIds.length === 0) return null;
     return draggedRecordIds.map((recordId) => {
-      const dirent = direntList.find(d => d._id === recordId || d.id === recordId);
+      const dirent = getDirentByRowId(recordId);
       if (!dirent) return null;
       const iconUrl = Utils.getDirentIcon(dirent);
       return (
@@ -287,7 +300,7 @@ const DirTableView = ({
         </tr>
       );
     });
-  }, [direntList]);
+  }, [getDirentByRowId]);
 
   const moveDirents = useCallback(({ draggingSource, dropTarget }) => {
     if (!draggingSource || !dropTarget) {
@@ -295,7 +308,7 @@ const DirTableView = ({
     }
 
     const destRecordId = dropTarget;
-    const destDirent = direntList.find(d => d._id === destRecordId || d.id === destRecordId);
+    const destDirent = getDirentByRowId(destRecordId);
     if (!destDirent) {
       return;
     }
@@ -314,15 +327,15 @@ const DirTableView = ({
 
     if (draggingSource.length === 1) {
       if (!onItemMove) return;
-      const sourceDirentId = draggingSource[0];
-      const sourceDirent = direntList.find(d => d._id === sourceDirentId || d.id === sourceDirentId);
+      const sourceRecordId = draggingSource[0];
+      const sourceDirent = getDirentByRowId(sourceRecordId);
       if (!sourceDirent) return;
       onItemMove(destRepo, sourceDirent, destDirentPath, path, false);
     } else {
       if (!onItemsMove) return;
       onItemsMove(destRepo, destDirentPath, false);
     }
-  }, [repoID, path, direntList, onItemMove, onItemsMove]);
+  }, [repoID, path, getDirentByRowId, onItemMove, onItemsMove]);
 
   return (
     <div className="dir-table-view dir-table-wrapper">
