@@ -707,6 +707,9 @@ class Records extends Component {
     }
     let updatedRecordMetrics = { ...recordMetrics };
     RecordMetrics.deselectAllRecords(updatedRecordMetrics);
+    if (this.props.updateSelectedRecordIds) {
+      this.props.updateSelectedRecordIds(RecordMetrics.getSelectedIds(updatedRecordMetrics));
+    }
     this.setState({
       recordMetrics: updatedRecordMetrics,
       lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 },
