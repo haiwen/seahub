@@ -49,6 +49,15 @@ class SidePanel extends PureComponent {
     };
   }
 
+  componentDidMount() {
+    const eventBus = EventBus.getInstance();
+    this.unsubscribeLibraryToggle = eventBus.subscribe(EXTERNAL_EVENT.ADD_WIKI_LIBRARY_TOGGLE, this.toggleSettingDialog);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeLibraryToggle();
+  }
+
   onDeletePage = (pageId) => {
     const config = deepCopy(this.props.config);
     const { pages, navigation } = config;
