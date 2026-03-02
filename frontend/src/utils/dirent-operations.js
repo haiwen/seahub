@@ -64,16 +64,17 @@ export const exportSdoc = (repoID, path, dirent) => {
 
 export const toggleStar = async (repoID, path, dirent, updateState) => {
   const filePath = Utils.joinPath(path, dirent.name);
+  const currentState = dirent.starred;
   try {
-    if (dirent.starred) {
+    if (currentState) {
       await seafileAPI.unstarItem(repoID, filePath);
     } else {
       await seafileAPI.starItem(repoID, filePath);
     }
     if (updateState) {
-      updateState(dirent, { starred: !dirent.starred });
+      updateState(dirent, { starred: !currentState });
     }
-    const msg = gettext(dirent.starred ?
+    const msg = gettext(currentState ?
       'Successfully unstarred {name_placeholder}.' :
       'Successfully starred {name_placeholder}.'
     ).replace('{name_placeholder}', dirent.name);

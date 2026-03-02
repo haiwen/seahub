@@ -226,9 +226,10 @@
 
 .sf-table-canvas {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   position: relative;
   min-width: 100%;
-  padding-bottom: 150px;
   overflow-y: scroll;
 }
 
@@ -461,4 +462,9 @@
 .sf-metadata-tip-default {
   font-size: 13px;
   color: #666;
+}
+
+.sf-table-canvas-ctx-wrapper {
+  min-height: 150px;
+  flex: 1;
 }

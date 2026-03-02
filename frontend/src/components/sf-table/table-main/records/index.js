@@ -409,6 +409,7 @@ class Records extends Component {
         topLeft: this.initPosition,
         bottomRight: this.initPosition
       },
+      selectedPosition: this.initPosition
     });
 
     // clear selected records
@@ -776,7 +777,7 @@ class Records extends Component {
   };
 
   onCellContextMenu = (cell) => {
-    const { isGroupView, recordGetterByIndex, showRecordAsTree } = this.props;
+    const { isGroupView, recordGetterByIndex, showRecordAsTree, updateSelectedRecordIds } = this.props;
     const { recordMetrics, treeMetrics } = this.state;
     const { rowIdx: recordIndex, idx, groupRecordIndex } = cell;
 
@@ -794,7 +795,12 @@ class Records extends Component {
 
       const recordId = record._id;
       if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
-        this.setState({ recordMetrics: this.createRowMetrics() });
+        let updatedRecordMetrics = this.createRowMetrics();
+        if (updateSelectedRecordIds) {
+          updateSelectedRecordIds([recordId]);
+          RecordMetrics.selectRecordsById([recordId], updatedRecordMetrics);
+        }
+        this.setState({ recordMetrics: updatedRecordMetrics });
       }
     }
 

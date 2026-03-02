@@ -113,8 +113,11 @@ const ContextMenu = ({
     const trashWrapper = document.querySelector('.sf-trash-wrapper');
     trashWrapper && trashWrapper.addEventListener('contextmenu', handleShow);
 
-    const dirTableWrapper = document.querySelector('.dir-table-wrapper');
+    const dirTableWrapper = document.querySelector('.sf-table-records-wrapper');
     dirTableWrapper && dirTableWrapper.addEventListener('contextmenu', handleShow);
+
+    const dirTableCanvasCtxWrapper = document.querySelector('.sf-table-canvas-ctx-wrapper');
+    dirTableCanvasCtxWrapper && dirTableCanvasCtxWrapper.addEventListener('contextmenu', handleShow);
 
     return () => {
       const metadataTagsWrapper = document.querySelector('.sf-metadata-tags-wrapper');
@@ -126,8 +129,11 @@ const ContextMenu = ({
       const trashWrapper = document.querySelector('.sf-trash-wrapper');
       trashWrapper && trashWrapper.removeEventListener('contextmenu', handleShow);
 
-      const dirTableWrapper = document.querySelector('.dir-table-wrapper');
+      const dirTableWrapper = document.querySelector('.sf-table-records-wrapper');
       dirTableWrapper && dirTableWrapper.removeEventListener('contextmenu', handleShow);
+
+      const dirTableCanvasCtxWrapper = document.querySelector('.sf-table-canvas-ctx-wrapper');
+      dirTableCanvasCtxWrapper && dirTableCanvasCtxWrapper.removeEventListener('contextmenu', handleShow);
     };
 
   }, [handleShow]);

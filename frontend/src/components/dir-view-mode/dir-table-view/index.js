@@ -156,8 +156,9 @@ const DirTableView = ({
       .map(id => getDirentByRowId(id))
       .filter(Boolean);
 
+    const { idx, rowIdx } = selectedPosition;
     // No selection - show create menu
-    if (!selectedPosition && selectedRecordIds.length === 0) {
+    if (idx === -1 && rowIdx === -1 && selectedRecordIds.length === 0) {
       const createMenuOptions = getCreateMenuList({
         enableSeadoc,
         enableWhiteboard,
@@ -196,7 +197,6 @@ const DirTableView = ({
     }
 
     // Single dirent menu
-    const { idx, rowIdx } = selectedPosition;
     const dirent = selectedDirents[0] || direntList[rowIdx];
     if (!dirent) return;
     let options = getItemMenuList(dirent)
