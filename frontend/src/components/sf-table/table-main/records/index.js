@@ -334,6 +334,7 @@ class Records extends Component {
     if (classNames.includes('sf-table-result-content')) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.CLOSE_EDITOR);
     }
+    this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
   };
 
   onCellClick = (cell) => {
@@ -408,11 +409,11 @@ class Records extends Component {
         topLeft: this.initPosition,
         bottomRight: this.initPosition
       },
+      selectedPosition: this.initPosition
     });
 
     // clear selected records
     this.onDeselectAllRecords();
-    this.props.updateSelectedRecordIds([]);
   };
 
   selectCell = (cellPosition) => {
@@ -707,6 +708,9 @@ class Records extends Component {
     }
     let updatedRecordMetrics = { ...recordMetrics };
     RecordMetrics.deselectAllRecords(updatedRecordMetrics);
+    if (this.props.updateSelectedRecordIds) {
+      this.props.updateSelectedRecordIds(RecordMetrics.getSelectedIds(updatedRecordMetrics));
+    }
     this.setState({
       recordMetrics: updatedRecordMetrics,
       lastRowIdxUiSelected: { groupRecordIndex: -1, recordIndex: -1 },
@@ -773,7 +777,7 @@ class Records extends Component {
   };
 
   onCellContextMenu = (cell) => {
-    const { isGroupView, recordGetterByIndex, showRecordAsTree } = this.props;
+    const { isGroupView, recordGetterByIndex, showRecordAsTree, updateSelectedRecordIds } = this.props;
     const { recordMetrics, treeMetrics } = this.state;
     const { rowIdx: recordIndex, idx, groupRecordIndex } = cell;
 
@@ -791,7 +795,12 @@ class Records extends Component {
 
       const recordId = record._id;
       if (!RecordMetrics.isRecordSelected(recordId, recordMetrics)) {
-        this.setState({ recordMetrics: this.createRowMetrics() });
+        let updatedRecordMetrics = this.createRowMetrics();
+        if (updateSelectedRecordIds) {
+          updateSelectedRecordIds([recordId]);
+          RecordMetrics.selectRecordsById([recordId], updatedRecordMetrics);
+        }
+        this.setState({ recordMetrics: updatedRecordMetrics });
       }
     }
 
@@ -1081,6 +1090,8 @@ Records.propTypes = {
   getCopiedRecordsAndColumnsFromRange: PropTypes.func,
   moveRecords: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
+  onRecordSelected: PropTypes.func,
+  checkCanModifyRecord: PropTypes.func,
 };
 
 export default Records;

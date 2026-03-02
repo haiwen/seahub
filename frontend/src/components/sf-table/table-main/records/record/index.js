@@ -302,6 +302,7 @@ class Record extends React.Component {
 
     const frozenCells = this.getFrozenCells();
     const columnCells = this.getColumnCells();
+    const canModify = this.props.checkCanModifyRecord(record);
 
     return (
       <div
@@ -338,7 +339,7 @@ class Record extends React.Component {
               height={cellHeight}
               recordDraggable={this.props.recordDraggable}
               handleDragStart={this.handleDragStart}
-              canModify={this.props.canModify}
+              canModify={canModify}
             />
           }
           {frozenCells}
@@ -385,7 +386,6 @@ Record.propTypes = {
   hasChildNodes: PropTypes.bool,
   isFoldedTreeNode: PropTypes.bool,
   toggleExpandTreeNode: PropTypes.func,
-  canModify: PropTypes.bool,
 };
 
 export default Record;

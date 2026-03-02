@@ -177,6 +177,11 @@ const SingleSelectEditor = forwardRef(({
     }
   }, []);
 
+  const onMouseDown = useCallback((e, isSelected, option) => {
+    e.stopPropagation();
+    onSelectOption(isSelected ? null : option.id);
+  }, [onSelectOption]);
+
   useEffect(() => {
     if (editorRef.current) {
       const { bottom } = editorRef.current.getBoundingClientRect();
@@ -221,7 +226,7 @@ const SingleSelectEditor = forwardRef(({
         <div key={option.id} className="sf-metadata-single-select-item" ref={selectItemRef}>
           <div
             className={classnames('single-select-container', { 'single-select-container-highlight': i === highlightIndex })}
-            onMouseDown={() => onSelectOption(isSelected ? null : option.id)}
+            onMouseDown={(e) => onMouseDown(e, isSelected, option)}
             onMouseEnter={() => onMenuMouseEnter(i)}
             onMouseLeave={() => onMenuMouseLeave(i)}
           >
@@ -243,7 +248,7 @@ const SingleSelectEditor = forwardRef(({
       );
     });
 
-  }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onSelectOption]);
+  }, [displayOptions, searchValue, value, highlightIndex, onMenuMouseEnter, onMenuMouseLeave, onMouseDown]);
 
   return (
     <div className="sf-metadata-single-select-editor" style={style} ref={editorRef}>

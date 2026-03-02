@@ -46,9 +46,9 @@ const FileNameEditor = React.forwardRef((props, ref) => {
 
   if (mode === EDITOR_TYPE.PREVIEWER) {
     const fileType = getFileType();
-    const repoID = window.sfMetadataContext.getSetting('repoID');
-    const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
-    const canDelete = window.sfMetadataContext.checkCanDeleteRow();
+    const repoID = window.sfMetadataContext && window.sfMetadataContext.getSetting('repoID');
+    const repoInfo = window.sfMetadataContext && window.sfMetadataContext.getSetting('repoInfo');
+    const canDelete = window.sfMetadataContext && window.sfMetadataContext.checkCanDeleteRow();
 
     if (fileType === 'image') {
       return (

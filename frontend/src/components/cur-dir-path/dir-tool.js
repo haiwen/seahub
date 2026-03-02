@@ -7,7 +7,7 @@ import MetadataViewToolBar from '../../metadata/components/view-toolbar';
 import HistoryViewToolbar from '../dir-view-mode/dir-history-view/history-view-toolbar';
 import { PRIVATE_FILE_TYPE } from '../../constants';
 import { ALL_TAGS_ID } from '../../tag/constants';
-import { HISTORY_MODE, LIST_MODE, TRASH_MODE } from '../dir-view-mode/constants';
+import { HISTORY_MODE, LIST_MODE, TRASH_MODE, TABLE_MODE } from '../dir-view-mode/constants';
 import TagsTableSearcher from '../../tag/views/all-tags/tags-table/tags-table-searcher';
 import AllTagsSortSetter from '../../tag/views/all-tags/tags-table/all-tags-sort-setter';
 import TagFilesViewToolbar from '../../tag/components/tag-files-view-toolbar';
@@ -99,9 +99,10 @@ class DirTool extends React.Component {
     return (
       <div className="dir-tool d-flex">
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
+        <div className="dir-tool-divider" />
         <SortMenu className="ml-2" sortBy={sortBy} sortOrder={sortOrder} onSelectSortOption={this.onSelectSortOption} />
 
-        {this.props.enableMetadata && currentMode === LIST_MODE && (
+        {this.props.enableMetadata && (currentMode === LIST_MODE || currentMode === TABLE_MODE) && (
           <HideColumnSetter
             wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
             target="dir-hide-column-popover"

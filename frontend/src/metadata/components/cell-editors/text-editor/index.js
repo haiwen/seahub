@@ -123,6 +123,7 @@ class SimpleTextEditor extends Component {
       <>
         <input
           type="text"
+          autoFocus
           className={classnames('sf-metadata-text-editor form-control', className)}
           ref={this.setInputRef}
           placeholder={placeholder || ''}

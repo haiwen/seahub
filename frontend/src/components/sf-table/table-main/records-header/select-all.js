@@ -23,6 +23,7 @@ class SelectAll extends Component {
   }
 
   onToggleSelectAll = (e) => {
+    e.stopPropagation();
     const { isMobile, hasSelectedRecord } = this.props;
     const { isSelectedAll } = this.state;
     if (isMobile) {

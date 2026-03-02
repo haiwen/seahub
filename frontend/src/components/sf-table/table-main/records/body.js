@@ -11,6 +11,7 @@ import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../utils/selected-cell-utils';
+import ContextMenu from '../../context-menu';
 
 const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
@@ -462,6 +463,12 @@ class RecordsBody extends Component {
     return (this.resultContentRef && this.resultContentRef.clientHeight) || 0;
   };
 
+  onContainerClick = (e) => {
+    e.preventDefault();
+    this.interactionMask && this.interactionMask.selectNone();
+    this.props.selectNone();
+  };
+
   renderRecords = () => {
     this.recordFrozenRefs = [];
     const {
@@ -508,6 +515,9 @@ class RecordsBody extends Component {
           selectedPosition={this.state.selectedPosition}
           selectNoneCells={this.selectNoneCells}
           onSelectRecord={this.props.onSelectRecord}
+          recordDraggable={this.props.recordDraggable}
+          recordDragDropEvents={this.props.recordDragDropEvents}
+          draggingRecordSource={this.props.draggingRecordSource}
         />
       );
     });
@@ -579,6 +589,13 @@ class RecordsBody extends Component {
           <div className="sf-table-records-wrapper" style={{ width: this.props.totalWidth + this.props.sequenceColumnWidth }} ref={this.setResultRef}>
             {this.renderRecords()}
           </div>
+          <div className="sf-table-canvas-ctx-wrapper" onClick={(e) => this.onContainerClick(e)} onContextMenu={((e) => {e.preventDefault();})}>
+            <ContextMenu
+              createContextMenuOptions={this.props.createContextMenuOptions}
+              getTableContentRect={this.props.getTableContentRect}
+              getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
+            />
+          </div>
         </div>
         <RightScrollbar
           ref={this.setRightScrollbar}
@@ -643,6 +660,7 @@ RecordsBody.propTypes = {
   cacheDownloadFilesProps: PropTypes.func,
   onCellContextMenu: PropTypes.func,
   getTableCanvasContainerRect: PropTypes.func,
+  createContextMenuOptions: PropTypes.func,
 };
 
 export default RecordsBody;
