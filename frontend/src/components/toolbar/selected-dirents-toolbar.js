@@ -159,6 +159,12 @@ class SelectedDirentsToolbar extends React.Component {
       case 'Unlock':
         this.unlockFile(dirent);
         break;
+      case 'Unfreeze Document':
+        this.unlockFile(dirent);
+        break;
+      case 'Freeze Document':
+        this.onFreezeDocument();
+        break;
       case 'History':
         this.onHistory(dirent);
         break;
@@ -219,6 +225,21 @@ class SelectedDirentsToolbar extends React.Component {
     unlockFile(dirent, repoID, path, (dirent, updates) => {
       updateDirent(dirent, updates);
       unSelectDirent();
+    });
+  };
+
+  onFreezeDocument = () => {
+    const { repoID, selectedDirentList } = this.props;
+    const dirent = selectedDirentList[0];
+    const filePath = this.getDirentPath(dirent);
+    seafileAPI.lockfile(repoID, filePath, -1).then(() => {
+      this.props.updateDirent(dirent, 'is_freezed', true);
+      this.props.updateDirent(dirent, 'is_locked', true);
+      this.props.updateDirent(dirent, 'locked_by_me', true);
+      this.props.updateDirent(dirent, 'lock_owner_name', name);
+    }).catch(error => {
+      let errMessage = Utils.getErrorMsg(error);
+      toaster.danger(errMessage);
     });
   };
 
