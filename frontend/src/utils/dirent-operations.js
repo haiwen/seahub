@@ -1,6 +1,6 @@
 import { seafileAPI } from './seafile-api';
 import { Utils } from './utils';
-import { gettext, username } from './constants';
+import { gettext, name } from './constants';
 import URLDecorator from './url-decorator';
 import toaster from '../components/toast';
 
@@ -19,7 +19,7 @@ export const lockFile = async (repoID, path, dirent, updateState) => {
       updateState(dirent, {
         is_locked: true,
         locked_by_me: true,
-        lock_owner_name: username.split('@')[0]
+        lock_owner_name: name
       });
     }
     return { success: true };
@@ -125,7 +125,7 @@ export const freezeDocument = async (repoID, path, dirent, updateState) => {
         is_freezed: true,
         is_locked: true,
         locked_by_me: true,
-        lock_owner_name: username.split('@')[0]
+        lock_owner_name: name
       });
     }
     return { success: true };
