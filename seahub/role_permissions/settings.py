@@ -47,8 +47,14 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_publish_wiki': True,
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
+        # download traffic limit for common user
         'monthly_rate_limit': '',
+        # download traffic limit for org
         'monthly_rate_limit_per_user': '',
+        # upload traffic limit for common user
+        'monthly_upload_traffic_limit': '',
+        # upload traffic limit for org
+        'monthly_upload_traffic_limit_per_user': '',
         'can_choose_office_suite': True,
         'monthly_ai_credit_per_user': -1,
         'can_use_sso_in_multi_tenancy': True,
@@ -75,8 +81,14 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_publish_wiki': False,
         'upload_rate_limit': 0,
         'download_rate_limit': 0,
+        # download traffic limit for common user
         'monthly_rate_limit': '',
+        # download traffic limit for org
         'monthly_rate_limit_per_user': '',
+        # upload traffic limit for common user
+        'monthly_upload_traffic_limit': '',
+        # upload traffic limit for org
+        'monthly_upload_traffic_limit_per_user': '',
         'can_choose_office_suite': False,
         'can_use_sso_in_multi_tenancy': False,
     },
