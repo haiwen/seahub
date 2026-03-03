@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon, SF_COLOR_MODE } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon, SF_COLOR_MODE, siteRoot } from '../../utils/constants';
 import Search from '../search/search';
 import SearchByName from '../search/search-by-name';
+import Wiki2GlobalSearch from '../search/wiki2-global-search';
+import toaster from '../toast';
 import Notification from '../common/notification';
 import Account from '../common/account';
 import Logout from '../common/logout';
@@ -21,7 +23,7 @@ const propTypes = {
   currentRepoInfo: PropTypes.object,
   eventBus: PropTypes.object,
   isViewFile: PropTypes.bool,
-  showSearch: PropTypes.bool
+  searchType: PropTypes.string, // 'files' or 'wikis'
 };
 
 class CommonToolbar extends React.Component {
@@ -98,7 +100,30 @@ class CommonToolbar extends React.Component {
     document.body.setAttribute('data-bs-theme', colorMode);
   };
 
+  onWikiSearchedClick = (item) => {
+    if (!item.doc_uuid) {
+      toaster.danger(gettext('Page not found'));
+      return;
+    }
+    const url = `${siteRoot}wikis/${item.wiki_id}/${item.doc_uuid}/`;
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
   renderSearch = () => {
+    const { searchType = 'files' } = this.props;
+
+    // Render wiki search for wikis page
+    if (searchType === 'wikis') {
+      return (
+        <Wiki2GlobalSearch
+          placeholder={gettext('Search wiki pages')}
+          onSearchedClick={this.onWikiSearchedClick}
+        />
+      );
+    }
+
+    // Render file search (default)
     const { repoID, repoName, isLibView, path, isViewFile, isTagEnabled, tagsData } = this.state;
     const { searchPlaceholder } = this.props;
     const placeholder = searchPlaceholder || gettext('Search files');
@@ -128,13 +153,12 @@ class CommonToolbar extends React.Component {
   };
 
   render() {
-    const { showSearch = true } = this.props;
     const { colorMode } = this.state;
     const symbol = colorMode === 'light' ? 'dark-mode' : 'light-mode';
     const title = colorMode === 'light' ? gettext('Dark mode') : gettext('Light mode');
     return (
       <div className="common-toolbar">
-        {showSearch && this.renderSearch()}
+        {this.renderSearch()}
         <IconBtn
           symbol={symbol}
           size={32}

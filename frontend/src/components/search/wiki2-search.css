@@ -40,10 +40,16 @@
   width: 100%;
 }
 
-.wiki2-search-result-container {
-  min-height: 300px;
-  overflow-y: auto;
-  margin-right: -16px;
-  padding-right: 16px;
+.seafile-divider {
+  height: 1px;
+  background-color: var(--bs-border-color);
+  margin: 16px 0;
 }
 
+.wiki2-search-modal .modal-body {
+  padding: 16px 0;
+}
+
+.wiki2-search-modal .seafile-divider {
+  margin: 16px 0;
+}
