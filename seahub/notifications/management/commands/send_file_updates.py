@@ -131,10 +131,10 @@ class Command(BaseCommand):
         elif ev.obj_type == 'file':
             file_name = os.path.basename(ev.path)
             file_link = a_tag(file_name, file_url(ev.repo_id, ev.path))
-            if ev.op_type == 'create':
+            if ev.op_type in ['create', 'batch_create']:
                 op = _('Created file')
                 details = td("%s<br />%s" % (file_link, small_lib_link))
-            elif ev.op_type == 'delete':
+            elif ev.op_type in ['delete', 'batch_delete']:
                 op = _('Deleted file')
                 details = td("%s<br />%s" % (e(file_name), small_lib_link))
             elif ev.op_type == 'recover':
@@ -159,10 +159,10 @@ class Command(BaseCommand):
         else:                   # dir
             dir_name = os.path.basename(ev.path)
             dir_link = a_tag(dir_name, dir_url(ev.repo_id, ev.repo_name, ev.path))
-            if ev.op_type == 'create':
+            if ev.op_type in ['create', 'batch_create']:
                 op = _('Created folder')
                 details = td('%s<br />%s' % (dir_link, small_lib_link))
-            elif ev.op_type == 'delete':
+            elif ev.op_type in ['delete', 'batch_delete']:
                 op = _('Deleted folder')
                 details = td('%s<br />%s' % (e(dir_name), small_lib_link))
             elif ev.op_type == 'recover':
