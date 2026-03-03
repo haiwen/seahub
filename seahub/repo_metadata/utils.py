@@ -33,6 +33,15 @@ def add_init_face_recognition_task(params):
     return json.loads(resp.content)['task_id']
 
 
+def add_fix_metadata_task(params):
+    payload = {'exp': int(time.time()) + 300, }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    headers = {"Authorization": "Token %s" % token}
+    url = urljoin(SEAFEVENTS_SERVER_URL, '/add-fix-metadata-task')
+    resp = requests.get(url, params=params, headers=headers)
+    return json.loads(resp.content)
+
+
 def extract_file_details(params):
     payload = {'exp': int(time.time()) + 300, }
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
