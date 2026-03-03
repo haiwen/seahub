@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from seaserv import seafile_api
+from pysearpc import SearpcError
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -124,6 +125,12 @@ class FileHistoryView(APIView):
         try:
             file_revisions, next_start_commit = get_file_revisions_within_limit(
                     repo_id, path, commit_id, limit)
+        except SearpcError as e:
+            logger.warning('Failed to get file history for repo %s path %s: %s.' % (repo_id, path, e))
+            return Response({
+                "data": [],
+                "next_start_commit": False
+                })
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
