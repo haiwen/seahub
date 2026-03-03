@@ -13,7 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
 from seahub.base.accounts import User
-from seahub.organizations.signals import org_deleted
+from seahub.organizations.signals import org_deleted, org_operation_signal
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_DELETE_ORG
 
 try:
@@ -69,5 +69,10 @@ class OrgAdminDeleteOrg(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        try:
+            org_operation_signal.send(sender=None, org=org, operation='delete')
+        except Exception as e:
+            logger.error(e)
 
         return Response({'success': True})
