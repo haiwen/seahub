@@ -10,7 +10,7 @@ import toaster from '../toast';
 import { Dirent } from '../../models';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import Icon from '../icon';
-import { lockFile, unlockFile, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient } from '../../utils/dirent-operations';
+import { lockFile, unlockFile, freezeDocument, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient } from '../../utils/dirent-operations';
 
 import '../../css/selected-dirents-toolbar.css';
 
@@ -81,10 +81,9 @@ class SelectedDirentsToolbar extends React.Component {
     const { selectedDirentList, repoID, path, updateDirent } = this.props;
     const dirent = selectedDirentList[0];
     if (dirent) {
-      toggleStar(dirent, repoID, path, updateDirent);
+      toggleStar(repoID, path, dirent, updateDirent);
     }
   };
-
 
   onPermission = () => {
     const { eventBus, selectedDirentList } = this.props;
@@ -163,7 +162,7 @@ class SelectedDirentsToolbar extends React.Component {
         this.unlockFile(dirent);
         break;
       case 'Freeze Document':
-        this.onFreezeDocument();
+        this.onFreezeDocument(dirent);
         break;
       case 'History':
         this.onHistory(dirent);
@@ -204,53 +203,37 @@ class SelectedDirentsToolbar extends React.Component {
 
   exportDocx = (dirent) => {
     const { repoID, path } = this.props;
-    exportDocx(dirent, repoID, path);
+    exportDocx(repoID, path, dirent);
   };
 
   exportSdoc = (dirent) => {
     const { repoID, path } = this.props;
-    exportSdoc(dirent, repoID, path);
+    exportSdoc(repoID, path, dirent);
   };
 
   lockFile = (dirent) => {
-    const { repoID, path, updateDirent, unSelectDirent } = this.props;
-    lockFile(dirent, repoID, path, (dirent, updates) => {
-      updateDirent(dirent, updates);
-      unSelectDirent();
-    });
+    const { repoID, path, updateDirent } = this.props;
+    lockFile(repoID, path, dirent, updateDirent);
   };
 
   unlockFile = (dirent) => {
-    const { repoID, path, updateDirent, unSelectDirent } = this.props;
-    unlockFile(dirent, repoID, path, (dirent, updates) => {
-      updateDirent(dirent, updates);
-      unSelectDirent();
-    });
+    const { repoID, path, updateDirent } = this.props;
+    unlockFile(repoID, path, dirent, updateDirent);
   };
 
-  onFreezeDocument = () => {
-    const { repoID, selectedDirentList } = this.props;
-    const dirent = selectedDirentList[0];
-    const filePath = this.getDirentPath(dirent);
-    seafileAPI.lockfile(repoID, filePath, -1).then(() => {
-      this.props.updateDirent(dirent, 'is_freezed', true);
-      this.props.updateDirent(dirent, 'is_locked', true);
-      this.props.updateDirent(dirent, 'locked_by_me', true);
-      this.props.updateDirent(dirent, 'lock_owner_name', name);
-    }).catch(error => {
-      let errMessage = Utils.getErrorMsg(error);
-      toaster.danger(errMessage);
-    });
+  onFreezeDocument = (dirent) => {
+    const { repoID, path, updateDirent } = this.props;
+    freezeDocument(repoID, path, dirent, updateDirent);
   };
 
   onOpenViaClient = (dirent) => {
     const { repoID, path } = this.props;
-    openViaClient(dirent, repoID, path);
+    openViaClient(repoID, path, dirent);
   };
 
   onHistory = (dirent) => {
     const { repoID, path } = this.props;
-    openHistory(dirent, repoID, path);
+    openHistory(repoID, path, dirent);
   };
 
   toggleCancel = () => {
