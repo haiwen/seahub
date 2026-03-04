@@ -87,6 +87,7 @@ const DirTableView = ({
   }, [tableData, direntList]);
 
   const getDirentsByRowIds = useCallback((ids) => {
+    if (ids.length === 0) return [];
     const recordNames = getRowsByIds(tableData, ids).map(r => r._name);
     return direntList.filter(d => recordNames.includes(d.name));
   }, [tableData, direntList]);

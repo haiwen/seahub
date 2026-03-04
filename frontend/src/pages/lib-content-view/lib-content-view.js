@@ -1836,6 +1836,7 @@ class LibContentView extends React.Component {
   };
 
   onSelectedDirentListUpdate = (newSelectedDirentList, lastSelectedIndex = null) => {
+    if (newSelectedDirentList.length === 0 && this.state.selectedDirentList.length === 0) return;
     this.setState({
       direntList: this.state.direntList.map(dirent => {
         dirent.isSelected = newSelectedDirentList.some(selectedDirent => selectedDirent.name === dirent.name);

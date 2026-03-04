@@ -40,7 +40,6 @@ const NameFormatter = ({ repoID, record, value, onItemClick, ...params }) => {
     openFile(repoID, record, () => {
       eventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
     });
-
   }, [eventBus, onItemClick, record, repoID, value]);
 
   return (
