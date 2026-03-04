@@ -20,7 +20,7 @@ import Formatter from '../../metadata/components/formatter';
 import { CellType, PRIVATE_COLUMN_KEY } from '../../metadata/constants';
 import { DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
 import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
-import { lockFile, unlockFile, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient, freezeDocument } from '../../utils/dirent-operations';
+import { toggleStar } from '../../utils/dirent-operations';
 import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 
 import '../../css/dirent-list-item.css';
@@ -268,16 +268,6 @@ class DirentListItem extends React.Component {
     this.props.onItemDelete(this.props.dirent);
   };
 
-  exportDocx = () => {
-    const { dirent, repoID, path } = this.props;
-    exportDocx(dirent, repoID, path);
-  };
-
-  exportSdoc = () => {
-    const { dirent, repoID, path } = this.props;
-    exportSdoc(dirent, repoID, path);
-  };
-
   onMobileMenuItemClick = (e) => {
     const operation = e.target.getAttribute('data-op');
     this.onMenuItemClick(operation, e);
@@ -353,36 +343,11 @@ class DirentListItem extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, direntPath, dirent.name);
   };
 
-  onLockItem = () => {
-    const { dirent, repoID, path, updateDirent } = this.props;
-    lockFile(dirent, repoID, path, updateDirent);
-  };
-
-  onFreezeDocument = () => {
-    const { dirent, repoID, path, updateDirent } = this.props;
-    freezeDocument(dirent, repoID, path, updateDirent);
-  };
-
-  onUnlockItem = () => {
-    const { dirent, repoID, path, updateDirent } = this.props;
-    unlockFile(dirent, repoID, path, updateDirent);
-  };
-
-  onHistory = () => {
-    const { dirent, repoID, path } = this.props;
-    openHistory(dirent, repoID, path);
-  };
-
   onOpenWithDefault = () => {
     let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({ type: 'open_with_default', repoID: repoID, filePath: filePath });
     window.open(url, '_blank');
-  };
-
-  onOpenViaClient = () => {
-    const { dirent, repoID, path } = this.props;
-    openViaClient(dirent, repoID, path);
   };
 
   onOpenWithOnlyOffice = () => {

@@ -17,7 +17,6 @@ import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
 import { VirtualGrid } from '../virtual-list';
 import { getSelectionRect, viewportToContentBounds, isIntersecting } from '../../utils/grid-selection';
-import { lockFile, unlockFile, exportDocx, exportSdoc, toggleStar, openHistory, openViaClient, freezeDocument } from '../../utils/dirent-operations';
 import { withDirentContextMenu } from '../dir-view-mode/hoc/withDirentContextMenu';
 import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 import { getCreateMenuList } from '../dir-view-mode/utils/contextMenuUtils';
@@ -297,22 +296,6 @@ class DirentGridView extends React.Component {
     this.props.onItemConvert(currentObject, dstType);
   };
 
-  exportDocx = () => {
-    const { activeDirent: dirent } = this.state;
-    const { repoID, path } = this.props;
-    if (dirent) {
-      exportDocx(dirent, repoID, path);
-    }
-  };
-
-  exportSdoc = () => {
-    const { activeDirent: dirent } = this.state;
-    const { repoID, path } = this.props;
-    if (dirent) {
-      exportSdoc(dirent, repoID, path);
-    }
-  };
-
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
 
@@ -419,39 +402,8 @@ class DirentGridView extends React.Component {
     eventBus.dispatch(EVENT_BUS_TYPE.ACCESS_LOG, direntPath, name);
   };
 
-  onToggleStarItem = () => {
-    const { activeDirent: dirent } = this.state;
-    const { repoID, path, updateDirent } = this.props;
-    toggleStar(repoID, path, dirent, updateDirent);
-  };
-
   handleError = (error) => {
     toaster.danger(Utils.getErrorMsg(error));
-  };
-
-  onLockItem = (currentObject) => {
-    const { repoID, path, updateDirent } = this.props;
-    lockFile(currentObject, repoID, path, updateDirent);
-  };
-
-  onFreezeDocument = (currentObject) => {
-    const { repoID, path, updateDirent } = this.props;
-    freezeDocument(currentObject, repoID, path, updateDirent);
-  };
-
-  onUnlockItem = (currentObject) => {
-    const { repoID, path, updateDirent } = this.props;
-    unlockFile(currentObject, repoID, path, updateDirent);
-  };
-
-  onHistory = (currentObject) => {
-    const { repoID, path } = this.props;
-    openHistory(currentObject, repoID, path);
-  };
-
-  onOpenViaClient = (currentObject) => {
-    const { repoID, path } = this.props;
-    openViaClient(currentObject, repoID, path);
   };
 
   prepareImageItem = (item) => {
