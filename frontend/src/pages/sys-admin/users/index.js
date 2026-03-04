@@ -6,7 +6,6 @@ import { gettext, siteRoot } from '../../../utils/constants';
 import UsersNav from './users-nav';
 import Users from './users';
 import Search from '../search';
-import AdminUsers from './admin-users';
 import LDAPImportedUsers from './ldap-imported-users';
 import LDAPUsers from './ldap-users';
 import UserNav from './user-nav';
@@ -145,7 +144,7 @@ const UsersLayout = ({ ...commonProps }) => {
       <UsersNav currentItem={curTab} sortBy={sortBy} sortOrder={sortOrder} sortItems={sortByQuotaUsage} />
       <div className="h-100 d-flex overflow-hidden">
         {commonProps.tab === '' && <Users default sortBy={sortBy} sortOrder={sortOrder} {...usersProps} />}
-        {commonProps.tab === 'admins' && <AdminUsers path="admins" {...usersProps} />}
+        {commonProps.tab === 'admins' && <Users isAdmin={true} path="admins" {...usersProps} />}
         {commonProps.tab === 'ldap-imported' && <LDAPImportedUsers path="ldap-imported" {...usersProps} />}
         {commonProps.tab === 'ldap' && <LDAPUsers path="ldap" {...usersProps} />}
       </div>
