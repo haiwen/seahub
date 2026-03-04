@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, \
 
 from seahub.settings import REQUEST_RATE_LIMIT_NUMBER, \
         REQUEST_RATE_LIMIT_PERIOD
+from seahub.utils.ip import get_remote_ip
 
 JSON_CONTENT_TYPE = 'application/json; charset=utf-8'
 
@@ -70,7 +71,7 @@ def rate_limit(number=REQUEST_RATE_LIMIT_NUMBER,
             if REQUEST_RATE_LIMIT_NUMBER > 0 and \
                     REQUEST_RATE_LIMIT_PERIOD > 0:
 
-                ip = request.META.get('REMOTE_ADDR')
+                ip = get_remote_ip(request)
                 cache_key = f"rate_limit:{ip}"
 
                 current_time = time.time()
