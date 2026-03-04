@@ -1313,6 +1313,10 @@ sys.path.pop(0)
 # Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
+if os.environ.get('ENABLE_METADATA_MANAGEMENT'):
+    ENABLE_METADATA_MANAGEMENT = os.environ.get('ENABLE_METADATA_MANAGEMENT', 'false').lower() == 'true'
+METADATA_SERVER_URL = os.environ.get('METADATA_SERVER_URL', '') or METADATA_SERVER_URL
+
 if os.environ.get('ENABLE_SEAFILE_AI'):
     ENABLE_SEAFILE_AI = os.environ.get('ENABLE_SEAFILE_AI', 'false').lower() == 'true'
 SEAFILE_AI_SECRET_KEY = os.environ.get('SEAFILE_AI_SECRET_KEY', '') or SEAFILE_AI_SECRET_KEY
