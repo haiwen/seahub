@@ -7,6 +7,7 @@ from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseBadRequest, \
         HttpResponseForbidden
 
+from seahub.api2.utils import get_client_ip
 from seahub.settings import REQUEST_RATE_LIMIT_NUMBER, \
         REQUEST_RATE_LIMIT_PERIOD
 
@@ -70,7 +71,7 @@ def rate_limit(number=REQUEST_RATE_LIMIT_NUMBER,
             if REQUEST_RATE_LIMIT_NUMBER > 0 and \
                     REQUEST_RATE_LIMIT_PERIOD > 0:
 
-                ip = request.META.get('REMOTE_ADDR')
+                ip = get_client_ip(request)
                 cache_key = f"rate_limit:{ip}"
 
                 current_time = time.time()
