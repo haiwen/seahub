@@ -3,10 +3,16 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { getRowById } from '../../../../components/sf-table/utils/table';
 import { getTagColor, getTagName } from '../../../../tag/utils/cell';
+import { useTags } from '../../../../tag/hooks';
 
 import './index.css';
 
-const FileTagsFormatter = ({ tagsData, value: oldValue, className, children: emptyFormatter, showName = false }) => {
+const FileTagsFormatter = ({ tagsData: propsTagsData, value: oldValue, className, children: emptyFormatter, showName = false }) => {
+  // Get tagsData directly from context (same pattern as Detail component)
+  const { tagsData: contextTagsData } = useTags();
+  // Use context tagsData if available, fallback to props for backward compatibility
+  const tagsData = useMemo(() => contextTagsData || propsTagsData || {}, [contextTagsData, propsTagsData]);
+
   const value = useMemo(() => {
     if (!Array.isArray(oldValue) || oldValue.length === 0) return [];
     return oldValue.filter(item => getRowById(tagsData, item.row_id)).map(item => item.row_id);

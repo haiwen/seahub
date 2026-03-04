@@ -9,6 +9,7 @@ import { Utils } from '@/utils/utils';
 import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
+import { useTags } from '@/tag/hooks';
 import { RecordMetrics } from '../../sf-table/utils/record-metrics';
 import { menuHandlers } from '../utils/menuHandlers';
 import { useDirentContextMenu } from '../hooks/useDirentContextMenu';
@@ -16,6 +17,9 @@ import { getCreateMenuList } from '../utils/contextMenuUtils';
 import EventBus from '@/components/common/event-bus';
 import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
+import { openFile } from '@/metadata/utils/file';
+import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
+import { useCollaborators } from '@/metadata';
 
 import './index.css';
 
@@ -51,8 +55,11 @@ const DirTableView = ({
   const [hoveredOptionKey, setHoveredOptionKey] = useState('');
   const [columnWidthVersion, setColumnWidthVersion] = useState(0);
   const hideMenuRef = useRef(null);
+  const sfTableEventBus = useRef(EventBus.getInstance());
 
-  // Use the shared context menu hook
+  const { tagsData } = useTags();
+  const { collaborators, queryUser } = useCollaborators();
+
   const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo });
 
   const tableData = useMemo(() => {
@@ -60,15 +67,24 @@ const DirTableView = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [direntList, repoID, sortBy, sortOrder]);
 
-  const handleItemClick = useCallback((value) => {
+  const onFileNameClick = useCallback((e, record) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const value = record[PRIVATE_COLUMN_KEY.FILE_NAME];
+    if (Utils.imageCheck(value)) {
+      openFile(repoID, record, () => {
+        sfTableEventBus.current.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR, EDITOR_TYPE.PREVIEWER);
+      });
+      return;
+    }
     const dirent = direntList.find(item => item.name === value);
     onItemClick && onItemClick(dirent);
-  }, [direntList, onItemClick]);
+  }, [repoID, direntList, onItemClick]);
 
   const enrichedColumns = useMemo(() => {
-    return createDirentTableColumns(columns, hiddenColumnKeys, { repoID, repoInfo, tableData, onItemClick: handleItemClick, updateDirentStatus });
+    return createDirentTableColumns(columns, hiddenColumnKeys, { repoID, repoInfo, tableData, onFileNameClick, updateDirentStatus, tagsData: tagsData || {}, collaborators, queryUserAPI: queryUser });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, handleItemClick, updateDirentStatus, columnWidthVersion]);
+  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, onFileNameClick, updateDirentStatus, columnWidthVersion, tagsData]);
 
   const modifyColumnWidth = useCallback((column, newWidth) => {
     setDirTableColumnWidth(column.key, newWidth);
@@ -113,8 +129,7 @@ const DirTableView = ({
   };
 
   const onRenameEditor = () => {
-    const sfTableEventBus = EventBus.getInstance();
-    sfTableEventBus.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
+    sfTableEventBus.current.dispatch(EVENT_BUS_TYPE.OPEN_EDITOR);
   };
 
   const onOptionClick = (e, option, dirent, selectedDirents) => {

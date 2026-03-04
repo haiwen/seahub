@@ -44,7 +44,11 @@ class DirTool extends React.Component {
   };
 
   modifyHiddenColumns = (hiddenColumns) => {
-    this.props.eventBus.dispatch(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, hiddenColumns);
+    if (this.props.currentMode === TABLE_MODE) {
+      this.props.eventBus.dispatch(EVENT_BUS_TYPE.HIDDEN_TABLE_VIEW_COLUMNS_CHANGED, hiddenColumns);
+    } else {
+      this.props.eventBus.dispatch(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, hiddenColumns);
+    }
   };
 
   render() {

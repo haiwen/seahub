@@ -4,7 +4,7 @@ import classnames from 'classnames';
 import HideColumn from './hide-column';
 import { gettext } from '../../../../../utils/constants';
 
-const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, canReorder, modifyColumnOrder }) => {
+const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, modifyColumnOrder }) => {
   const [draggingColumnKey, setDraggingCellKey] = useState(null);
   const [dragOverColumnKey, setDragOverCellKey] = useState(null);
 
@@ -39,7 +39,6 @@ const HiddenColumns = ({ readOnly, columns, hiddenColumns, onChange, canReorder,
             draggingColumnKey={draggingColumnKey}
             draggingColumnIndex={draggingColumnIndex}
             dragOverColumnKey={dragOverColumnKey}
-            canReorder={canReorder}
             onChange={onChange}
             onMove={modifyColumnOrder}
             updateDraggingKey={updateDraggingKey}
@@ -56,7 +55,6 @@ HiddenColumns.propTypes = {
   hiddenColumns: PropTypes.array,
   columns: PropTypes.array,
   onChange: PropTypes.func,
-  canReorder: PropTypes.bool,
   modifyColumnOrder: PropTypes.func,
 };
 

@@ -51,6 +51,7 @@ export const EVENT_BUS_TYPE = {
 
   // column visibility
   HIDDEN_COLUMNS_CHANGED: 'hidden_columns_changed',
+  HIDDEN_TABLE_VIEW_COLUMNS_CHANGED: 'hidden_table_view_columns_changed',
 
   // dirent properties
   DIRENT_STATUS_CHANGED: 'dirent_status_changed',

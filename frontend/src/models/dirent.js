@@ -62,18 +62,8 @@ class Dirent {
         this.revision_id = json.revision_id || null;
       }
 
-      // metadata fields
-      if (json._id) {
-        this._id = json._id;
-      }
-      if (json._file_creator) {
-        this._file_creator = json._file_creator;
-      }
-      if (json._file_modifier) {
-        this._file_modifier = json._file_modifier;
-      }
-      if (json._status) {
-        this._status = json._status;
+      if (json.metadata) {
+        this.metadata = json.metadata;
       }
       if (json._tags) {
         this._tags = json._tags;

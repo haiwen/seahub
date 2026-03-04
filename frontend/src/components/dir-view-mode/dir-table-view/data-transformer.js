@@ -5,17 +5,22 @@ export const transformDirentsToTableData = (dirents, repoID) => {
 
   const id_row_map = {};
   const rows = dirents.map((dirent) => {
-    const { ...props } = dirent;
-
     const transformedRow = {};
-
-    Object.keys(props).forEach(key => {
-      const mappedKey = key.startsWith('_') ? key : `_${key}`; // Adapt to the shape of table perameter of SFTable
-      transformedRow[mappedKey] = props[key];
+    Object.keys(dirent).forEach(key => {
+      if (key === 'metadata') {
+        const metadata = dirent[key];
+        if (metadata) {
+          Object.keys(metadata).forEach(metadataKey => {
+            transformedRow[metadataKey] = metadata[metadataKey];
+          });
+        }
+        return;
+      }
+      transformedRow[`_${key}`] = dirent[key]; // Adapt to the shape of table perameter of SFTable
     });
 
-    transformedRow._is_dir = transformedRow._type !== 'file';
-    transformedRow._id = `${transformedRow._id}_${transformedRow._name}`;
+    transformedRow._is_dir = dirent.type !== 'file';
+    transformedRow._id = transformedRow._id ? transformedRow._id : `${dirent.id}_${dirent.name}`;
 
     id_row_map[transformedRow._id] = transformedRow;
 
