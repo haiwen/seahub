@@ -150,7 +150,7 @@ class SelectedDirentsToolbar extends React.Component {
         this.onToggleStarItem();
         break;
       case 'Permission':
-        this.onPermissionItem();
+        this.onPermission();
         break;
       case 'Lock':
         this.lockFile(dirent);
