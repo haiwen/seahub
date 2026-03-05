@@ -16,7 +16,7 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
 import { VirtualGrid } from '../virtual-list';
-import { getSelectionRect, viewportToContentBounds, isIntersecting } from '../../utils/grid-selection';
+import { getSelectionRect } from '../../utils/grid-selection';
 import { withDirentContextMenu } from '../dir-view-mode/hoc/withDirentContextMenu';
 import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 import { getCreateMenuList } from '../dir-view-mode/utils/contextMenuUtils';
@@ -68,7 +68,7 @@ class DirentGridView extends React.Component {
 
       startPoint: { x: 0, y: 0 },
       endPoint: { x: 0, y: 0 },
-      selectedItemsList: [],
+      selectedIds: new Set(),
       isSelecting: false,
       isMouseDown: false,
       autoScrollInterval: null,
@@ -79,6 +79,16 @@ class DirentGridView extends React.Component {
     this.cachedContainerBounds = null;
     this.resizeObserver = null;
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
+    // Refs for mutable values to avoid race conditions
+    this.selectedIdsRef = new Set(); // IDs for visual rendering
+    this.selectedIndicesRef = new Set(); // Indices for accurate counting
+    this.scrollYRef = 0;
+    this.startPointRef = { x: 0, y: 0 }; // Track start point in ref for consistent access
+    this.endPointRef = { x: 0, y: 0 };
+    this.virtualEndPointY = 0; // Track virtual Y position for auto-scroll
+    this.isSelectingRef = false;
+    this.autoScrollIntervalRef = null;
+    this.autoScrollDirection = 0; // -1 = up, 0 = none, 1 = down
   }
 
   componentDidMount() {
@@ -115,13 +125,12 @@ class DirentGridView extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('mouseup', this.onGlobalMouseUp);
     this.unsubscribeEvent();
-    clearInterval(this.state.autoScrollInterval);
+    // Use ref instead of state to avoid race condition during unmount
+    clearInterval(this.autoScrollIntervalRef);
+    this.autoScrollIntervalRef = null;
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-    this.setState({
-      autoScrollInterval: null,
-    });
   }
 
   onGridContainerMouseDown = (event) => {
@@ -140,10 +149,19 @@ class DirentGridView extends React.Component {
       const startX = event.clientX - containerBounds.left;
       const startY = event.clientY - containerBounds.top + container.scrollTop;
 
+      // Clear selection refs for new selection
+      this.selectedIdsRef = new Set();
+      this.selectedIndicesRef = new Set();
+
+      // Update refs for consistent access
+      this.startPointRef = { x: startX, y: startY };
+      this.endPointRef = { x: startX, y: startY };
+      this.virtualEndPointY = startY;
+
       this.setState({
         startPoint: { x: startX, y: startY },
         endPoint: { x: startX, y: startY },
-        selectedItemsList: [],
+        selectedIds: new Set(),
         isSelecting: false,
         isMouseDown: true,
         startYContentOffset: startY,
@@ -165,39 +183,71 @@ class DirentGridView extends React.Component {
     endPoint.x = Math.max(0, Math.min(endPoint.x, containerBounds.width));
     endPoint.y = Math.max(0, Math.min(endPoint.y, container.scrollHeight));
 
+    // Update refs to avoid race conditions
+    this.endPointRef = endPoint;
+    this.virtualEndPointY = endPoint.y;
+    this.scrollYRef = e.clientY;
+    this.isSelectingRef = true;
+
+    // Use refs for consistent access (avoid stale state)
     const distance = Math.sqrt(
-      Math.pow(endPoint.x - this.state.startPoint.x, 2) +
-      Math.pow(endPoint.y - this.state.startPoint.y, 2)
+      Math.pow(endPoint.x - this.startPointRef.x, 2) +
+      Math.pow(endPoint.y - this.startPointRef.y, 2)
     );
 
-    if (distance > 5) {
-      this.setState({
-        isSelecting: true,
-        endPoint: endPoint,
-      }, () => {
-        this.determineSelectedItems();
-        this.autoScroll(e.clientY);
+    // Always update selection state regardless of distance
+    // Only skip autoScroll when not actually selecting (distance <= 5)
+    this.setState({
+      isSelecting: true,
+      endPoint: endPoint,
+    }, () => {
+      this.determineSelectedItems();
 
-        const selectedItemNames = new Set(this.state.selectedItemsList.map(item => item.lastChild.lastChild.title));
-        const filteredDirentList = this.props.direntList
-          .filter(dirent => selectedItemNames.has(dirent.name))
-          .map(dirent => {
+      // Only trigger autoScroll when actually dragging (distance > 5)
+      if (distance > 5) {
+        this.autoScroll(e.clientY);
+      }
+
+      // Sync to parent after selection is determined
+      // Use setTimeout to ensure refs are updated before reading
+      setTimeout(() => {
+        const filteredDirentList = [];
+        this.selectedIndicesRef.forEach(index => {
+          const dirent = this.props.direntList[index];
+          if (dirent) {
             const newDirent = dirent.clone();
             newDirent.isSelected = true;
-            return newDirent;
-          });
-
+            filteredDirentList.push(newDirent);
+          }
+        });
         this.props.onSelectedDirentListUpdate(filteredDirentList);
-      });
-    } else {
-      this.setState({ endPoint });
-      this.autoScroll(e.clientY);
-    }
+      }, 0);
+    });
   };
 
   onGlobalMouseUp = () => {
     if (!this.state.isMouseDown) return;
-    clearInterval(this.state.autoScrollInterval);
+
+    // Clear refs
+    clearInterval(this.autoScrollIntervalRef);
+    this.autoScrollIntervalRef = null;
+    this.isSelectingRef = false;
+
+    // Sync final selection to parent using indices for accurate count
+    if (this.selectedIndicesRef && this.selectedIndicesRef.size > 0) {
+      const filteredDirentList = [];
+      this.selectedIndicesRef.forEach(index => {
+        const dirent = this.props.direntList[index];
+        if (dirent) {
+          const newDirent = dirent.clone();
+          newDirent.isSelected = true;
+          filteredDirentList.push(newDirent);
+        }
+      });
+
+      this.props.onSelectedDirentListUpdate(filteredDirentList);
+    }
+
     this.setState({
       isSelecting: false,
       isMouseDown: false,
@@ -206,26 +256,102 @@ class DirentGridView extends React.Component {
   };
 
   determineSelectedItems = () => {
-    const { startPoint, endPoint } = this.state;
+    // Use refs to avoid stale state in async callbacks
+    const startPoint = this.startPointRef;
+    const endPoint = this.endPointRef;
     const container = this.scrollContainerRef.current;
     if (!container) return;
 
     const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
-    const items = container.querySelectorAll('.grid-item');
     const selectionRect = getSelectionRect(startPoint, endPoint);
 
-    const newSelectedItemsList = [];
+    // Grid dimensions - must match VirtualGrid
+    const ITEM_WIDTH = 142;
+    const ITEM_HEIGHT = 140;
+    const GAP = 4;
+    const ITEM_MARGIN = 4; // margin: 4px on each item
 
-    items.forEach(item => {
-      const itemBounds = item.getBoundingClientRect();
-      const contentBounds = viewportToContentBounds(itemBounds, containerBounds, container.scrollTop);
+    // Calculate columns (same formula as VirtualGrid)
+    const columns = Math.max(1, Math.floor((containerBounds.width + GAP) / (ITEM_WIDTH + GAP)));
 
-      if (isIntersecting(contentBounds, selectionRect)) {
-        newSelectedItemsList.push(item);
+    // Get all items in direntList
+    const direntList = this.props.direntList;
+    const totalItems = direntList.length;
+
+    // Calculate selection bounds in pixel coordinates
+    const selLeft = Math.min(selectionRect.left, selectionRect.right);
+    const selRight = Math.max(selectionRect.left, selectionRect.right);
+    const selTop = Math.min(selectionRect.top, selectionRect.bottom);
+    const selBottom = Math.max(selectionRect.top, selectionRect.bottom);
+
+    // Calculate start/end row and column from selection rectangle
+    // Account for margin: each item starts at col * (itemWidth + gap) + margin
+    const ROW_SPACING = ITEM_HEIGHT + GAP;
+    const startCol = Math.max(0, Math.floor((selLeft - ITEM_MARGIN) / (ITEM_WIDTH + GAP)));
+    const endCol = Math.min(columns - 1, Math.floor((selRight - ITEM_MARGIN) / (ITEM_WIDTH + GAP)));
+    const startRow = Math.max(0, Math.floor((selTop - ITEM_MARGIN) / ROW_SPACING));
+    const endRow = Math.floor((selBottom - ITEM_MARGIN - 0.01) / ROW_SPACING);
+
+    // Check for zero-size selection (when user clicks without dragging)
+    if (startCol > endCol || startRow > endRow) {
+      this.selectedIdsRef = new Set();
+      this.selectedIndicesRef = new Set();
+      this.setState({ selectedIds: new Set() });
+      return;
+    }
+
+    // Rebuild selection set from indices in the selection range
+    const newSelectedIds = new Set();
+    const newSelectedIndices = new Set(); // Store indices for accurate counting
+
+    for (let row = startRow; row <= endRow; row++) {
+      for (let col = startCol; col <= endCol; col++) {
+        const index = row * columns + col;
+
+        // Skip if index is out of bounds
+        if (index < 0 || index >= totalItems) continue;
+
+        const dirent = direntList[index];
+        if (!dirent) continue;
+
+        // Calculate exact item bounds - account for margin
+        const itemLeft = col * (ITEM_WIDTH + GAP) + ITEM_MARGIN;
+        const itemTop = row * (ITEM_HEIGHT + GAP) + ITEM_MARGIN;
+        const itemRight = itemLeft + ITEM_WIDTH;
+        const itemBottom = itemTop + ITEM_HEIGHT;
+
+        // Calculate intersection rectangle
+        const intersectLeft = Math.max(selLeft, itemLeft);
+        const intersectTop = Math.max(selTop, itemTop);
+        const intersectRight = Math.min(selRight, itemRight);
+        const intersectBottom = Math.min(selBottom, itemBottom);
+
+        // Calculate intersection dimensions
+        const intersectWidth = Math.max(0, intersectRight - intersectLeft);
+        const intersectHeight = Math.max(0, intersectBottom - intersectTop);
+        const intersectArea = intersectWidth * intersectHeight;
+
+        // Require minimum overlap of 10% of item area to select it
+        // Lowered from 30% to make edge items easier to select
+        const minOverlapRatio = 0.1;
+        const itemArea = ITEM_WIDTH * ITEM_HEIGHT;
+
+        if (intersectArea >= itemArea * minOverlapRatio) {
+          const direntId = dirent.id || `${dirent.repo_id || ''}${dirent.name}`;
+          if (direntId) {
+            newSelectedIds.add(direntId);
+            newSelectedIndices.add(index); // Store index for accurate counting
+          }
+        }
       }
-    });
+    }
 
-    this.setState({ selectedItemsList: newSelectedItemsList });
+    // Update refs for other operations
+    this.selectedIdsRef = newSelectedIds;
+    this.selectedIndicesRef = newSelectedIndices;
+
+    // Update state for rendering
+    this.setState({ selectedIds: newSelectedIds });
   };
 
   autoScroll = (mouseY) => {
@@ -234,42 +360,75 @@ class DirentGridView extends React.Component {
 
     const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
     const scrollSpeed = 10;
-    const scrollThreshold = 20;
+    const scrollThreshold = 80;
+
+    // Determine scroll direction
+    let direction = 0;
+    if (mouseY < containerBounds.top + scrollThreshold) {
+      direction = -1;
+    } else if (mouseY > containerBounds.bottom - scrollThreshold) {
+      direction = 1;
+    }
+
+    // Update direction tracking
+    this.autoScrollDirection = direction;
 
     const updateEndPoint = () => {
+      // Use virtualEndPointY which moves with scroll content
+      // This avoids the stale scrollYRef issue
       const endPoint = {
-        x: this.state.endPoint.x,
-        y: mouseY - containerBounds.top + container.scrollTop,
+        x: this.endPointRef.x,
+        y: this.virtualEndPointY,
       };
 
       endPoint.y = Math.max(0, Math.min(endPoint.y, container.scrollHeight));
 
+      this.endPointRef = endPoint;
+
       this.setState({ endPoint }, () => {
-        if (this.state.isSelecting) {
+        if (this.isSelectingRef) {
           this.determineSelectedItems();
+
+          // Sync to parent during auto-scroll
+          setTimeout(() => {
+            const filteredDirentList = [];
+            this.selectedIndicesRef.forEach(index => {
+              const dirent = this.props.direntList[index];
+              if (dirent) {
+                const newDirent = dirent.clone();
+                newDirent.isSelected = true;
+                filteredDirentList.push(newDirent);
+              }
+            });
+            this.props.onSelectedDirentListUpdate(filteredDirentList);
+          }, 0);
         }
       });
     };
 
-    if (mouseY < containerBounds.top + scrollThreshold) {
-      if (!this.state.autoScrollInterval) {
+    if (direction !== 0) {
+      // Need to scroll
+      if (!this.autoScrollIntervalRef) {
         const interval = setInterval(() => {
-          container.scrollTop -= scrollSpeed;
+          if (this.autoScrollDirection === -1) {
+            container.scrollTop -= scrollSpeed;
+            this.virtualEndPointY -= scrollSpeed;
+          } else if (this.autoScrollDirection === 1) {
+            container.scrollTop += scrollSpeed;
+            this.virtualEndPointY += scrollSpeed;
+          }
           updateEndPoint();
         }, 50);
-        this.setState({ autoScrollInterval: interval });
-      }
-    } else if (mouseY > containerBounds.bottom - scrollThreshold) {
-      if (!this.state.autoScrollInterval) {
-        const interval = setInterval(() => {
-          container.scrollTop += scrollSpeed;
-          updateEndPoint();
-        }, 50);
+        this.autoScrollIntervalRef = interval;
         this.setState({ autoScrollInterval: interval });
       }
     } else {
-      clearInterval(this.state.autoScrollInterval);
-      this.setState({ autoScrollInterval: null });
+      // Stop scrolling
+      if (this.autoScrollIntervalRef) {
+        clearInterval(this.autoScrollIntervalRef);
+        this.autoScrollIntervalRef = null;
+        this.setState({ autoScrollInterval: null });
+      }
     }
   };
 
@@ -632,11 +791,15 @@ class DirentGridView extends React.Component {
 
   renderSelectionBox = () => {
     const { startPoint, endPoint } = this.state;
-    if (!this.state.isSelecting) return null;
+    const container = this.scrollContainerRef.current;
+    if (!this.state.isSelecting || !container) return null;
+
+    // Use content coordinates (already include scrollTop)
     const left = Math.min(startPoint.x, endPoint.x);
     const top = Math.min(startPoint.y, endPoint.y);
     const width = Math.abs(startPoint.x - endPoint.x);
     const height = Math.abs(startPoint.y - endPoint.y);
+
     return (
       <div
         className="selection-box"

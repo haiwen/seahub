@@ -457,6 +457,7 @@ class DirentGridItem extends React.Component {
       <>
         <li
           className={classnames('grid-item cursor-pointer', { 'grid-selected-active': isSelected })}
+          data-dirent-id={dirent.id || `${dirent.repo_id || ''}${dirent.name}`}
           onContextMenu={this.onGridItemContextMenu}
           onMouseDown={this.onGridItemMouseDown}
           onClick={this.onItemClick}
