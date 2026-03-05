@@ -14,6 +14,7 @@ import ResetEncryptedRepoPasswordDialog from '../../../../components/dialog/rese
 import LabelRepoStateDialog from '../../../../components/dialog/label-repo-state-dialog';
 import LibSubFolderPermissionDialog from '../../../../components/dialog/lib-sub-folder-permission-dialog';
 import RepoAPITokenDialog from '../../../../components/dialog/repo-api-token-dialog';
+import RepoWebhookDialog from '../../../../components/dialog/repo-webhook-dialog';
 import RepoShareAdminDialog from '../../../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../../../components/dialog/repo-office-suite-dialog';
 import LibraryOpMenu from '../../../../components/library-op-menu';
@@ -36,6 +37,7 @@ class LibraryMoreOperations extends React.Component {
       isLabelRepoStateDialogOpen: false,
       isFolderPermissionDialogOpen: false,
       isAPITokenDialogOpen: false,
+      isWebhookDialogOpen: false,
       isRepoShareAdminDialogOpen: false,
       isOfficeSuiteDialogOpen: false
     };
@@ -63,6 +65,9 @@ class LibraryMoreOperations extends React.Component {
         break;
       case 'API Token':
         this.onAPITokenToggle();
+        break;
+      case 'Webhooks':
+        this.onWebhookToggle();
         break;
       case 'Label Current State':
         this.onLabelToggle();
@@ -101,6 +106,10 @@ class LibraryMoreOperations extends React.Component {
 
   onAPITokenToggle = () => {
     this.setState({ isAPITokenDialogOpen: !this.state.isAPITokenDialogOpen });
+  };
+
+  onWebhookToggle = () => {
+    this.setState({ isWebhookDialogOpen: !this.state.isWebhookDialogOpen });
   };
 
   onOfficeSuiteToggle = () => {
@@ -216,6 +225,15 @@ class LibraryMoreOperations extends React.Component {
             <RepoAPITokenDialog
               repo={repo}
               onRepoAPITokenToggle={this.onAPITokenToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isWebhookDialogOpen && (
+          <ModalPortal>
+            <RepoWebhookDialog
+              repo={repo}
+              onRepoWebhookToggle={this.onWebhookToggle}
             />
           </ModalPortal>
         )}
