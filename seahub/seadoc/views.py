@@ -194,16 +194,12 @@ def sdoc_to_docx(request, repo_id):
     return response
 
 
-def sdoc_preview(request, repo_id):
+def sdoc_preview(request, repo_id, file_path):
+
+    file_path = normalize_file_path(file_path)
     repo = get_repo(repo_id)
     if not repo:
         error_msg = _("Library does not exist")
-        logger.warning(f'Sdoc preview failed: {error_msg}')
-        return render_error(request, error_msg)
-
-    path = request.GET.get('path', '')
-    if not path:
-        error_msg = 'Path cannot be empty.'
         logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
 
@@ -214,8 +210,9 @@ def sdoc_preview(request, repo_id):
         return render_error(request, error_msg)
     try:
         payload = jwt.decode(access_token, JWT_PRIVATE_KEY, algorithms=['HS256'])
-        if payload.get('repo_id') != repo_id or payload.get('path') != path:
-            error_msg = 'Permission denied.'
+        is_internal = payload.get('is_internal', False)
+        if not is_internal:
+            error_msg = 'Token invalid.'
             logger.warning(f'Sdoc preview failed: {error_msg}')
             return render_error(request, error_msg)
     except:
@@ -223,22 +220,22 @@ def sdoc_preview(request, repo_id):
         logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
 
-    file_id = seafile_api.get_file_id_by_path(repo_id, path)
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     if not file_id:
-        error_msg = 'File %s not found.' % path
+        error_msg = 'File %s not found.' % file_path
         logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
 
-    filename = os.path.basename(path)
-    token = seafile_api.get_fileserver_access_token(
-        repo_id, file_id, 'view', '', use_onetime=False)
-    file_download_link = gen_file_get_url(token, filename)
-
-    file_uuid = get_seadoc_file_uuid(repo, path)
+    filename = os.path.basename(file_path)
+    parent_path = os.path.dirname(file_path)
+    uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_path, filename, is_dir=False)
+    file_uuid = str(uuid_map.uuid)  # 36 chars str
     return_dict = {
         'repo': repo,
+        'file_uuid': file_uuid,
+        'can_compare': True,
         'assets_url': '/api/v2.1/seadoc/download-image/' + file_uuid,
-        'file_download_link': file_download_link,
+        'file_download_link': get_seadoc_download_link(uuid_map)
     }
 
     return render(request, 'sdoc_preview.html', return_dict)
