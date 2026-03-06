@@ -503,7 +503,6 @@ class Search extends Component {
   };
 
   debouncedSearch = debounce((newValue) => {
-    const isInRepo = this.props.repoID;
     if (this.isChineseInput === false) {
       this.setState({
         inputValue: newValue,
@@ -511,9 +510,7 @@ class Search extends Component {
         highlightIndex: 0,
         isResultGotten: false,
       }, () => {
-        if (!isInRepo) {
-          this.getRepoSearchResult(newValue);
-        }
+        this.getRepoSearchResult(newValue);
       });
     }
   }, 300);
