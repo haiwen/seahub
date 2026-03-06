@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { SEARCH_CONTAINER, SEARCH_MASK } from '@/constants/zIndexes';
 import wikiAPI from '../../utils/wiki-api';
 import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { debounce, Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import IconBtn from '../icon-btn';
@@ -143,6 +143,21 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
     }
   }, []);
 
+  const debouncedSearch = useMemo(() => {
+    const fn = debounce((newValue) => {
+      getWikisSearchResult(newValue);
+    }, 300);
+    return fn;
+  }, [getWikisSearchResult]);
+
+  useEffect(() => {
+    return () => {
+      if (debouncedSearch.cancel) {
+        debouncedSearch.cancel();
+      }
+    };
+  }, [debouncedSearch]);
+
   const onKeyDown = useCallback((e) => {
     if (isHotkey('esc', e)) {
       resetToDefault();
@@ -172,7 +187,9 @@ function Wiki2GlobalSearch({ placeholder, onSearchedClick }) {
     setHighlightIndex(-1);
     setIsResultGotten(false);
     setResults([]);
-  }, []);
+
+    debouncedSearch(value);
+  }, [debouncedSearch]);
 
   const flatIndexMap = useMemo(() => {
     const map = new Map();

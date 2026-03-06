@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useRef, useEffect } from 'react';
+import React, { useCallback, useState, useRef, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, Input, Button } from 'reactstrap';
 import isHotkey from 'is-hotkey';
 import searchAPI from '../../utils/search-api';
 import { gettext } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { debounce, Utils } from '../../utils/utils';
 import toaster from '../toast';
 import Loading from '../loading';
 import Wiki2SearchResult from './wiki2-search-result';
@@ -149,12 +149,28 @@ function Wiki2Search({ setCurrentPage, config, getCurrentPageId, wikiId }) {
     });
   }, [config, wikiId]);
 
+  const debouncedSearch = useMemo(() => {
+    const fn = debounce((newValue) => {
+      getWikiSearchResult(newValue);
+    }, 300);
+    return fn;
+  }, [getWikiSearchResult]);
+
+  useEffect(() => {
+    return () => {
+      if (debouncedSearch.cancel) {
+        debouncedSearch.cancel();
+      }
+    };
+  }, [debouncedSearch]);
+
   const onInputChange = useCallback((e) => {
     const { value } = e.target;
     setValue(value);
     setIsResultGotten(false);
     setResults([]);
-  }, []);
+    debouncedSearch(value);
+  }, [debouncedSearch]);
 
   const onHighlightIdx = useCallback((idx) => {
     setHighlightIndex(idx);
