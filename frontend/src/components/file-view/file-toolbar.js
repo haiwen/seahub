@@ -7,8 +7,6 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
-import { seafileAPI } from '../../utils/seafile-api';
-import toaster from '../toast';
 import Icon from '../../components/icon';
 import ImageZoomer from './image-zoomer';
 
@@ -24,6 +22,8 @@ const propTypes = {
   setImageScale: PropTypes.func,
   rotateImage: PropTypes.func,
   isCommentUpdated: PropTypes.bool,
+  isShareEnabled: PropTypes.bool,
+  toggleShareDialog: PropTypes.func.isRequired,
 };
 
 const {
@@ -45,37 +45,11 @@ class FileToolbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
       dropdownOpen: false,
       moreDropdownOpen: false,
-      isShareDialogOpen: false,
       moreTooltipOpen: false,
     };
   }
-
-  async componentDidMount() {
-    if (filePerm && filePerm.startsWith('custom-')) {
-      this.isCustomPermission = true;
-      const permissionID = filePerm.split('-')[1];
-      try {
-        const permissionRes = await seafileAPI.getCustomPermission(repoID, permissionID);
-        this.customPermission = permissionRes.data.permission;
-        // share dialog need a global custom_permission
-        window.custom_permission = this.customPermission;
-        this.setState({ isLoading: false });
-      } catch (error) {
-        let errorMsg = Utils.getErrorMsg(error);
-        toaster.danger(errorMsg);
-        this.setState({ isLoading: false });
-      }
-    } else {
-      this.setState({ isLoading: false });
-    }
-  }
-
-  toggleShareDialog = () => {
-    this.setState({ isShareDialogOpen: !this.state.isShareDialogOpen });
-  };
 
   toggleMoreTooltip = () => {
     this.setState({ moreTooltipOpen: !this.state.moreTooltipOpen });
@@ -106,13 +80,9 @@ class FileToolbar extends React.Component {
   };
 
   render() {
-    if (this.state.isLoading) {
-      return null;
-    }
-
     const { moreDropdownOpen } = this.state;
 
-    const { isLocked, lockedByMe, isCommentUpdated } = this.props;
+    const { isLocked, lockedByMe, isCommentUpdated, isShareEnabled } = this.props;
     let showLockUnlockBtn = false;
     let lockUnlockText; let lockUnlockIcon;
     if (canLockUnlockFile) {
@@ -125,19 +95,6 @@ class FileToolbar extends React.Component {
         lockUnlockText = gettext('Unlock');
         lockUnlockIcon = 'unlock';
       }
-    }
-
-    let showShareBtn = false;
-    if (repoEncrypted) {
-      showShareBtn = true; // for internal link
-    } else if (filePerm == 'rw' || filePerm == 'r') {
-      showShareBtn = true;
-    }
-
-    const { isCustomPermission, customPermission } = this;
-    if (isCustomPermission) {
-      const { download_external_link } = customPermission.permission;
-      showShareBtn = download_external_link;
     }
 
     const shortcutMain = Utils.isMac() ? '⌘ + ' : 'Ctrl + ';
@@ -234,12 +191,12 @@ class FileToolbar extends React.Component {
             />
             {isCommentUpdated && <span className='comment-tip'></span>}
           </span>
-          {showShareBtn && (
+          {isShareEnabled && (
             <IconButton
               id="share-file"
               icon='share'
               text={gettext('Share')}
-              onClick={this.toggleShareDialog}
+              onClick={this.props.toggleShareDialog}
             />
           )}
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
@@ -331,8 +288,8 @@ class FileToolbar extends React.Component {
                 {lockUnlockText}
               </DropdownItem>
             )}
-            {showShareBtn && (
-              <DropdownItem onClick={this.toggleShareDialog}>
+            {isShareEnabled && (
+              <DropdownItem onClick={this.props.toggleShareDialog}>
                 {gettext('Share')}
               </DropdownItem>
             )}
