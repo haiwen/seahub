@@ -139,7 +139,7 @@
 }
 
 .dirent-item-name-text a {
-  width: fit-content;
+  width: 100%;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
