@@ -918,6 +918,66 @@ class Wiki2PageView(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({'is_locked': locked}, status=status.HTTP_200_OK)
+    
+class Wiki2PageConfigView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, wiki_id, page_id):
+        page_name = request.data.get('page_name', None)
+        page_icon = request.data.get('page_icon', None)
+        page_cover = request.data.get('page_cover', None)
+
+        if not (page_name or page_icon or page_cover):
+            error_msg = 'At least one of page_name, page_icon or page_cover is required.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        wiki = Wiki.objects.get(wiki_id=wiki_id)
+        if not wiki:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, wiki_id)
+        wiki.owner = repo_owner
+
+        username = request.user.username
+        if not check_wiki_permission(wiki, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = wiki.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        
+        wiki_config = get_wiki_config(repo_id, username)
+        pages = wiki_config.get('pages', [])
+        page_exists = False
+        for page in pages:
+            if page['id'] == page_id:
+                if page_name:
+                    page['name'] = page_name
+                if page_icon:
+                    page['icon'] = page_icon
+                if page_cover:
+                    page['cover_img_url'] = page_cover
+                page_exists = True
+                break
+        if not page_exists:
+            error_msg = 'page %s not found.' % page_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        try:
+            wiki_config['pages'] = pages
+            wiki_config = json.dumps(wiki_config)
+            save_wiki_config(wiki, username, wiki_config)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        
+        return Response({'success': True})
 
 
 class Wiki2PublishPageView(APIView):
