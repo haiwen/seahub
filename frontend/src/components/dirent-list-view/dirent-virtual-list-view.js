@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
 import { useCollaborators } from '../../metadata';
+import { useTags } from '@/tag/hooks';
 
 import './dirent-virtual-list.css';
 
@@ -13,6 +14,7 @@ const DirentItemWrapper = ({
   registerExecuteOperation,
   unregisterExecuteOperation,
   columns,
+  tagsData,
   ...itemProps
 }) => {
   const childRef = useRef(null);
@@ -34,6 +36,7 @@ const DirentItemWrapper = ({
       path={path}
       repoID={repoID}
       columns={columns}
+      tagsData={tagsData}
       {...itemProps}
     />
   );
@@ -51,6 +54,8 @@ const DirentVirtualListView = ({
   path,
   ...itemProps
 }) => {
+  const { tagsData } = useTags();
+
   const scrollContainerRef = useRef(null);
   const headerRef = useRef(null);
   const [scrollTop, setScrollTop] = useState(0);
@@ -152,6 +157,7 @@ const DirentVirtualListView = ({
                   updateCollaboratorsCache={updateCollaboratorsCache}
                   queryUser={queryUser}
                   columns={columns}
+                  tagsData={tagsData}
                   {...itemProps}
                 />
               )}

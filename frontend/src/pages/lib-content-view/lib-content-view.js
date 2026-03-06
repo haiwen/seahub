@@ -40,6 +40,7 @@ import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
 import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS } from '@/constants/dir-column-visibility';
 import { getColumnOptionNameById } from '@/metadata/utils/cell';
+import { normalizeColumns } from '@/metadata/utils/column';
 
 import '../../css/lib-content-view.css';
 
@@ -165,6 +166,7 @@ class LibContentView extends React.Component {
     this.unsubscribeColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, this.onHiddenColumnKeys);
     this.unsubscribeDirentStatusChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, this.updateDirentStatus);
     this.unsubscribeColumnDataModified = eventBus.subscribe(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, this.onColumnDataModified);
+    this.unsubscribeDirentTagsModified = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_TAGS_CHANGED, this.updateDirentTags);
 
     this.calculatePara(this.props);
     window.addEventListener('popstate', this.onpopstate);
@@ -675,7 +677,10 @@ class LibContentView extends React.Component {
       return DIR_BASE_COLUMNS;
     }
 
-    const validColumns = metadata.columns.filter(col => DIR_METADATA_COLUMNS.includes(col.key));
+    const normalizedColumns = normalizeColumns(metadata.columns);
+    const validColumns = normalizedColumns
+      .filter(col => DIR_METADATA_COLUMNS.includes(col.key))
+      .sort((a, b) => DIR_METADATA_COLUMNS.indexOf(a.key) - DIR_METADATA_COLUMNS.indexOf(b.key));
     let columns = DIR_BASE_COLUMNS;
     if (validColumns.length > 0) {
       columns = [...columns, ...validColumns];
@@ -704,6 +709,7 @@ class LibContentView extends React.Component {
             creator: record[PRIVATE_COLUMN_KEY.FILE_CREATOR],
             modifier: record[PRIVATE_COLUMN_KEY.FILE_MODIFIER],
             status: record[PRIVATE_COLUMN_KEY.FILE_STATUS],
+            tags: record[PRIVATE_COLUMN_KEY.TAGS],
           });
         }
       });
@@ -722,12 +728,14 @@ class LibContentView extends React.Component {
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = metadataInfo.creator;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = metadataInfo.modifier;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = metadataInfo.status;
+        enrichedItem[PRIVATE_COLUMN_KEY.TAGS] = metadataInfo.tags;
       } else {
         const cachedDirent = cachedDirentMap.get(item.name);
         enrichedItem[PRIVATE_COLUMN_KEY.ID] = cachedDirent?.[PRIVATE_COLUMN_KEY.ID] || '';
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_STATUS] || '';
+        enrichedItem[PRIVATE_COLUMN_KEY.TAGS] = cachedDirent?.[PRIVATE_COLUMN_KEY.TAGS] || [];
       }
 
       return new Dirent(enrichedItem);
@@ -2198,6 +2206,28 @@ class LibContentView extends React.Component {
     }
   };
 
+  updateDirentTags = async (direntName, update) => {
+    const { direntList } = this.state;
+    const dirent = direntList.find(d => d.name === direntName);
+    if (!dirent) return false;
+
+    this.setState(prevState => {
+      const newDirentList = prevState.direntList.map(d => {
+        if (d.name === direntName) {
+          return new Dirent({ ...d, ...update });
+        }
+        return d;
+      });
+
+      const newState = { direntList: newDirentList };
+
+      if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
+        newState.currentDirent = new Dirent({ ...prevState.currentDirent, ...update });
+      }
+      return newState;
+    });
+  };
+
   onHiddenColumnKeys = (colKeys) => {
     localStorage.setItem(DIR_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
     this.setState({ hiddenColumnKeys: colKeys });
@@ -2664,6 +2694,7 @@ class LibContentView extends React.Component {
       }
     }
 
+    this.loadDirentList(this.state.path);
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.TAG_STATUS, enableTags);
   };
 

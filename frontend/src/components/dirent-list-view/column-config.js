@@ -36,4 +36,8 @@ export const COLUMN_CONFIG = {
     width: 120,
     className: 'dirent-property dirent-property-status',
   },
+  tags: {
+    width: 100,
+    className: 'dirent-property dirent-property-tags',
+  },
 };

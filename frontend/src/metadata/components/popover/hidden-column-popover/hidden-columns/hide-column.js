@@ -84,7 +84,7 @@ const HideColumnItem = ({
       onDragLeave={onDragLeave}
       onDragEnd={onDragEnd}
     >
-      {!readOnly && canReorder && (
+      {!readOnly && canReorder && onMove && (
         <span className="d-flex drag-hide-column-handle" draggable="true" onDragStart={onDragStart}>
           <Icon symbol="drag" />
         </span>

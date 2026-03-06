@@ -22,6 +22,7 @@ import { DIR_COLUMN_KEYS } from '../../constants/dir-column-visibility';
 import CreatorFormatter from '@/metadata/components/cell-formatter/creator';
 import { toggleStar } from '../../utils/dirent-operations';
 import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
+import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
@@ -69,6 +70,7 @@ const propTypes = {
   queryUser: PropTypes.func,
   columns: PropTypes.array,
   hiddenColumnKeys: PropTypes.array,
+  tagsData: PropTypes.object,
 };
 
 class DirentListItem extends React.Component {
@@ -576,6 +578,7 @@ class DirentListItem extends React.Component {
     const showLastModifier = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_MODIFIER);
     const showStatus = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_STATUS);
     const statusCol = columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
+    const showTags = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.TAGS);
     const canEdit = !dirent.isDir() && dirent.permission === 'rw';
 
     if (isMobile) {
@@ -819,6 +822,12 @@ class DirentListItem extends React.Component {
               column={statusCol}
               canEdit={canEdit}
             />
+          </div>
+        )}
+
+        {showTags && (
+          <div className="dirent-property dirent-property-tags">
+            <FileTagsFormatter value={dirent[PRIVATE_COLUMN_KEY.TAGS]} tagsData={this.props.tagsData} className="sf-metadata-tags-formatter" />
           </div>
         )}
       </div>

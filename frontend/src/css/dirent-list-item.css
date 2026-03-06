@@ -170,6 +170,10 @@
   flex: 0 0 120px;
 }
 
+.dirent-property.dirent-property-tags {
+  flex: 0 0 100px;
+}
+
 .item-meta-info {
   font-size: 12px;
   color: var(--bs-secondary-color);
