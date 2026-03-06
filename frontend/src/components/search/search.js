@@ -35,6 +35,11 @@ const INITIAL_PAGE_SIZE = 20;
 const MAX_ITEMS = 100;
 const LOAD_MORE_THRESHOLD = 100;
 const controlKey = Utils.isMac() ? '⌘' : 'Ctrl';
+const searchType = {
+  REPO: 'repo',
+  FOLDER: 'folder',
+  ALL: 'all',
+};
 
 const isEnter = isHotkey('enter');
 const isUp = isHotkey('up');
@@ -76,7 +81,7 @@ class Search extends Component {
       hasMore: false,
       isLoadingMore: false,
       totalCount: 0,
-      isFolderSearch: false,
+      searchType: '', // searchType.REPO, searchType.FOLDER, searchType.ALL
     };
     this.highlightRef = null;
     this.source = null; // used to cancel request;
@@ -161,7 +166,7 @@ class Search extends Component {
   };
 
   loadMore = () => {
-    const { hasMore, isLoadingMore, inputValue, isFolderSearch, resultItems } = this.state;
+    const { hasMore, isLoadingMore, inputValue, searchType, resultItems } = this.state;
     if (!hasMore || isLoadingMore) return;
 
     if (inputValue.trim() === '') return;
@@ -171,7 +176,7 @@ class Search extends Component {
       q: inputValue,
       search_repo: isPublic ? this.queryData?.search_repo : this.props.repoID || 'all',
       search_ftypes: 'all',
-      ...(isFolderSearch && this.props.path && this.props.path !== '/' ? { search_path: this.props.path } : {}),
+      ...(searchType === searchType.FOLDER && this.props.path && this.props.path !== '/' ? { search_path: this.props.path } : {}),
     });
 
     const remainingItems = MAX_ITEMS - resultItems.length;
@@ -503,14 +508,27 @@ class Search extends Component {
   };
 
   debouncedSearch = debounce((newValue) => {
+    const searchType = this.state.searchType;
     if (this.isChineseInput === false) {
       this.setState({
         inputValue: newValue,
         isLoading: true,
         highlightIndex: 0,
-        isResultGotten: false,
       }, () => {
-        this.getRepoSearchResult(newValue);
+        switch (searchType) {
+          case searchType.FOLDER:
+            this.searchFolder();
+            break;
+          case searchType.REPO:
+            this.searchRepo();
+            break;
+          case searchType.ALL:
+            this.searchAllRepos();
+            break;
+          default:
+            this.searchAllRepos();
+            break;
+        }
       });
     }
   }, 300);
@@ -528,18 +546,16 @@ class Search extends Component {
         isSearching: false,
         resultItems: [],
         isResultGotten: false,
+        searchType: '',
       });
       return;
     }
-    if (!this.props.repoID) {
+    this.setState({ inputValue: newValue, isSearching: false });
+
+    if (this.state.isResultGotten) {
       this.debouncedSearch(newValue);
     } else {
-      this.setState({
-        inputValue: newValue,
-        isLoading: false,
-        highlightIndex: 0,
-        isResultGotten: false,
-      });
+      !this.props.repoID && this.getRepoSearchResult(newValue);
     }
   };
 
@@ -688,7 +704,6 @@ class Search extends Component {
       hasMore: false,
       isLoadingMore: false,
       totalCount: 0,
-      isFolderSearch: false,
       page: 0,
       filters: {
         search_filename_only: false,
@@ -700,7 +715,8 @@ class Search extends Component {
           end: null,
         },
         suffixes: '',
-      }
+      },
+      searchType: '',
     });
   }
 
@@ -716,7 +732,7 @@ class Search extends Component {
       hasMore: false,
       isLoadingMore: false,
       totalCount: 0,
-      isFolderSearch: false,
+      searchType: '',
       page: 0,
     });
   };
@@ -865,7 +881,7 @@ class Search extends Component {
       search_repo: this.props.repoID,
       search_ftypes: 'all',
     };
-    this.setState({ isFolderSearch: false });
+    this.setState({ searchType: searchType.REPO });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
@@ -877,7 +893,7 @@ class Search extends Component {
       search_ftypes: 'all',
       search_path: this.props.path,
     };
-    this.setState({ isFolderSearch: true });
+    this.setState({ searchType: searchType.FOLDER });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
@@ -888,7 +904,7 @@ class Search extends Component {
       search_repo: 'all',
       search_ftypes: 'all',
     };
-    this.setState({ isFolderSearch: false });
+    this.setState({ searchType: searchType.ALL });
     this.getSearchResult(this.buildSearchParams(queryData));
   };
 
