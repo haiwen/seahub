@@ -145,7 +145,6 @@
   list-style: none;
 }
 
-
 .search-result-container .search-result-list-container {
   height: 400px;
   max-height: 400px;
@@ -440,7 +439,7 @@
     left: 0;
     width: 100%;
   }
-  
+
   .search-result-container .search-result-list {
     max-height: 400px;
     overflow-y: auto;
