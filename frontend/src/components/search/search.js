@@ -531,8 +531,16 @@ class Search extends Component {
       });
       return;
     }
-
-    this.debouncedSearch(newValue);
+    if (!this.props.repoID) {
+      this.debouncedSearch(newValue);
+    } else {
+      this.setState({
+        inputValue: newValue,
+        isLoading: false,
+        highlightIndex: 0,
+        isResultGotten: false,
+      });
+    }
   };
 
   handleError = (e) => {
