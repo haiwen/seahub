@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { EventBus } from '@seafile/seafile-sdoc-editor';
+import { gettext } from '../../../utils/constants';
+import { DEFAULT_PAGE_NAME } from '../constant';
 
-function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
+function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePageConfig }) {
 
   const [pageName, setPageName] = useState(currentPageConfig.name);
   const isChineseInput = useRef(false);
@@ -85,25 +87,25 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
 
     saveSelection();
 
-    const newName = e.target.innerText.trim();
-    const { id, icon } = currentPageConfig;
-    const pageConfig = { name: newName, icon };
-    onUpdatePage(id, pageConfig);
-  }, [currentPageConfig, onUpdatePage]);
+    const newName = e.target.innerText.trim() || gettext(DEFAULT_PAGE_NAME);
+    const { id } = currentPageConfig;
+    const pageConfig = { name: newName };
+    onUpdatePageConfig(id, pageConfig);
+  }, [currentPageConfig, onUpdatePageConfig]);
 
   const handleInput = useCallback((e) => {
     saveSelection();
     if (isChineseInput.current === false) {
       setPageName(e.target.innerText);
 
-      const newName = e.target.innerText.trim();
+      const newName = e.target.innerText.trim() || gettext(DEFAULT_PAGE_NAME);
       if (newName === pageName) return;
-      const { id, icon } = currentPageConfig;
-      const pageConfig = { name: newName, icon };
+      const { id } = currentPageConfig;
+      const pageConfig = { name: newName };
 
-      onUpdatePage(id, pageConfig);
+      onUpdatePageConfig(id, pageConfig);
     }
-  }, [currentPageConfig, onUpdatePage, pageName]);
+  }, [currentPageConfig, onUpdatePageConfig, pageName]);
 
   const handlePageNameUpdate = useCallback(() => {
     setPageName(currentPageConfig.name);
@@ -172,7 +174,7 @@ function PageTitleEditor({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
 PageTitleEditor.propTypes = {
   isUpdateBySide: PropTypes.bool,
   currentPageConfig: PropTypes.object,
-  onUpdatePage: PropTypes.func,
+  onUpdatePageConfig: PropTypes.func,
 };
 
 export default PageTitleEditor;

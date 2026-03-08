@@ -16,6 +16,7 @@ import wikiAPI from '../../../../utils/wiki-api';
 import { Utils } from '../../../../utils/utils';
 import OpIcon from '../../../../components/op-icon';
 import Icon from '../../../../components/icon';
+import { DEFAULT_PAGE_NAME } from '../../constant';
 
 const PageItem = ({
   page,
@@ -25,7 +26,7 @@ const PageItem = ({
   duplicatePage,
   importPage,
   setCurrentPage,
-  onUpdatePage,
+  onUpdatePageName,
   onDeletePage,
   onMovePage,
   canDeletePage,
@@ -173,10 +174,9 @@ const PageItem = ({
     const { name, id } = page;
     const currentPageName = pageName.trim();
     if (currentPageName !== name) {
-      const isUpdateBySide = true;
-      onUpdatePage(id, { name: currentPageName }, isUpdateBySide);
+      onUpdatePageName(id, currentPageName || gettext(DEFAULT_PAGE_NAME));
     }
-  }, [page, pageName, onUpdatePage]);
+  }, [page, pageName, onUpdatePageName]);
 
   const toggleNameEditor = useCallback((e) => {
     if (e) {
@@ -245,7 +245,7 @@ const PageItem = ({
         parentPageId={page.id}
         duplicatePage={duplicatePage}
         setCurrentPage={setCurrentPage}
-        onUpdatePage={onUpdatePage}
+        onUpdatePageName={onUpdatePageName}
         onDeletePage={onDeletePage}
         onMovePage={onMovePage}
         updateWikiConfig={updateWikiConfig}
@@ -486,7 +486,7 @@ PageItem.propTypes = {
   duplicatePage: PropTypes.func,
   importPage: PropTypes.func,
   setCurrentPage: PropTypes.func,
-  onUpdatePage: PropTypes.func,
+  onUpdatePageName: PropTypes.func,
   onDeletePage: PropTypes.func,
   onMovePage: PropTypes.func,
   canDeletePage: PropTypes.bool,

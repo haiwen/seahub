@@ -7,16 +7,16 @@ import { Utils } from '../../../utils/utils';
 import { gettext, wikiPermission } from '../../../utils/constants';
 import { data } from './../utils/emoji-utils';
 
-const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
+const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
   const popoverRef = useRef(null);
   const isDesktop = Utils.isDesktop();
 
   const handleSetIcon = useCallback((emoji) => {
-    onUpdatePage && onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: emoji });
+    onUpdatePageConfig && onUpdatePageConfig(currentPageConfig.id, { icon: emoji });
     setTimeout(() => {
       popoverRef.current?.toggle();
     }, 300);
-  }, [currentPageConfig.id, currentPageConfig.name, onUpdatePage]);
+  }, [currentPageConfig.id, onUpdatePageConfig]);
 
   const handleIconRemove = useCallback(() => {
     handleSetIcon('');
@@ -63,7 +63,7 @@ const PageIcon = ({ currentPageConfig, onUpdatePage }) => {
 
 PageIcon.propTypes = {
   currentPageConfig: PropTypes.object.isRequired,
-  onUpdatePage: PropTypes.func,
+  onUpdatePageConfig: PropTypes.func,
 };
 
 export default PageIcon;
