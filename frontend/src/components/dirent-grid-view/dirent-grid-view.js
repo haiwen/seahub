@@ -16,7 +16,7 @@ import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import EmptyTip from '../empty-tip';
 import { Dirent } from '../../models';
 import { VirtualGrid } from '../virtual-list';
-import { getSelectionRect, viewportToContentBounds, isIntersecting } from '../../utils/grid-selection';
+import { getSelectionRect } from '../../utils/grid-selection';
 import { withDirentContextMenu } from '../dir-view-mode/hoc/withDirentContextMenu';
 import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 import { getCreateMenuList } from '../dir-view-mode/utils/contextMenuUtils';
@@ -55,7 +55,16 @@ const DIRENT_GRID_CONTAINER_MENU_ID = 'dirent-grid-container-menu';
 const GRID_ITEM_CONTEXTMENU_ID = 'grid-item-contextmenu';
 const DIRENTS_MENU_ID = 'dirents-menu';
 
+const GRID_ITEM_WIDTH = 142;
+const GRID_ITEM_HEIGHT = 140;
+const GRID_GAP = 4;
+const GRID_ITEM_MARGIN = 4;
+const SCROLL_SPEED = 8;
+const SCROLL_THRESHOLD = 80;
+const MIN_OVERLAP_RATIO = 0.1;
+
 class DirentGridView extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -68,17 +77,26 @@ class DirentGridView extends React.Component {
 
       startPoint: { x: 0, y: 0 },
       endPoint: { x: 0, y: 0 },
-      selectedItemsList: [],
+      selectedIds: new Set(),
       isSelecting: false,
       isMouseDown: false,
       autoScrollInterval: null,
-      startYContentOffset: 0,
     };
     this.containerRef = React.createRef();
     this.scrollContainerRef = React.createRef();
     this.cachedContainerBounds = null;
     this.resizeObserver = null;
     this.isRepoOwner = props.currentRepoInfo.owner_email === username;
+    this.selectedIdsRef = new Set();
+    this.selectedIndicesRef = new Set();
+    this.scrollYRef = 0;
+    this.startPointRef = { x: 0, y: 0 };
+    this.endPointRef = { x: 0, y: 0 };
+    this.virtualEndPointY = 0;
+    this.isSelectingRef = false;
+    this.autoScrollIntervalRef = null;
+    this.autoScrollDirection = 0;
+    this.rafIdRef = null;
   }
 
   componentDidMount() {
@@ -115,13 +133,15 @@ class DirentGridView extends React.Component {
   componentWillUnmount() {
     window.removeEventListener('mouseup', this.onGlobalMouseUp);
     this.unsubscribeEvent();
-    clearInterval(this.state.autoScrollInterval);
+    clearInterval(this.autoScrollIntervalRef);
+    this.autoScrollIntervalRef = null;
+    if (this.rafIdRef) {
+      cancelAnimationFrame(this.rafIdRef);
+      this.rafIdRef = null;
+    }
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
     }
-    this.setState({
-      autoScrollInterval: null,
-    });
   }
 
   onGridContainerMouseDown = (event) => {
@@ -140,13 +160,20 @@ class DirentGridView extends React.Component {
       const startX = event.clientX - containerBounds.left;
       const startY = event.clientY - containerBounds.top + container.scrollTop;
 
+      this.selectedIdsRef = new Set();
+      this.selectedIndicesRef = new Set();
+      this._scrollSyncCounter = 0;
+
+      this.startPointRef = { x: startX, y: startY };
+      this.endPointRef = { x: startX, y: startY };
+      this.virtualEndPointY = startY;
+
       this.setState({
         startPoint: { x: startX, y: startY },
         endPoint: { x: startX, y: startY },
-        selectedItemsList: [],
+        selectedIds: new Set(),
         isSelecting: false,
         isMouseDown: true,
-        startYContentOffset: startY,
       });
     }
   };
@@ -165,39 +192,41 @@ class DirentGridView extends React.Component {
     endPoint.x = Math.max(0, Math.min(endPoint.x, containerBounds.width));
     endPoint.y = Math.max(0, Math.min(endPoint.y, container.scrollHeight));
 
+    this.endPointRef = endPoint;
+    this.virtualEndPointY = endPoint.y;
+    this.scrollYRef = e.clientY;
+    this.isSelectingRef = true;
+
     const distance = Math.sqrt(
-      Math.pow(endPoint.x - this.state.startPoint.x, 2) +
-      Math.pow(endPoint.y - this.state.startPoint.y, 2)
+      Math.pow(endPoint.x - this.startPointRef.x, 2) +
+      Math.pow(endPoint.y - this.startPointRef.y, 2)
     );
 
-    if (distance > 5) {
-      this.setState({
-        isSelecting: true,
-        endPoint: endPoint,
-      }, () => {
-        this.determineSelectedItems();
+    this.setState({
+      isSelecting: true,
+      endPoint: endPoint,
+    }, () => {
+      this.determineSelectedItems();
+
+      if (distance > 5) {
         this.autoScroll(e.clientY);
+      }
 
-        const selectedItemNames = new Set(this.state.selectedItemsList.map(item => item.lastChild.lastChild.title));
-        const filteredDirentList = this.props.direntList
-          .filter(dirent => selectedItemNames.has(dirent.name))
-          .map(dirent => {
-            const newDirent = dirent.clone();
-            newDirent.isSelected = true;
-            return newDirent;
-          });
-
-        this.props.onSelectedDirentListUpdate(filteredDirentList);
-      });
-    } else {
-      this.setState({ endPoint });
-      this.autoScroll(e.clientY);
-    }
+      setTimeout(() => {
+        this.syncSelectedDirentsToParent();
+      }, 0);
+    });
   };
 
   onGlobalMouseUp = () => {
     if (!this.state.isMouseDown) return;
-    clearInterval(this.state.autoScrollInterval);
+
+    clearInterval(this.autoScrollIntervalRef);
+    this.autoScrollIntervalRef = null;
+    this.isSelectingRef = false;
+
+    this.syncSelectedDirentsToParent();
+
     this.setState({
       isSelecting: false,
       isMouseDown: false,
@@ -206,26 +235,95 @@ class DirentGridView extends React.Component {
   };
 
   determineSelectedItems = () => {
-    const { startPoint, endPoint } = this.state;
+    const startPoint = this.startPointRef;
+    const endPoint = this.endPointRef;
     const container = this.scrollContainerRef.current;
     if (!container) return;
 
     const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
-    const items = container.querySelectorAll('.grid-item');
     const selectionRect = getSelectionRect(startPoint, endPoint);
 
-    const newSelectedItemsList = [];
+    const columns = Math.max(1, Math.floor((containerBounds.width + GRID_GAP) / (GRID_ITEM_WIDTH + GRID_GAP)));
 
-    items.forEach(item => {
-      const itemBounds = item.getBoundingClientRect();
-      const contentBounds = viewportToContentBounds(itemBounds, containerBounds, container.scrollTop);
+    const direntList = this.props.direntList;
+    const totalItems = direntList.length;
 
-      if (isIntersecting(contentBounds, selectionRect)) {
-        newSelectedItemsList.push(item);
+    const selLeft = Math.min(selectionRect.left, selectionRect.right);
+    const selRight = Math.max(selectionRect.left, selectionRect.right);
+    const selTop = Math.min(selectionRect.top, selectionRect.bottom);
+    const selBottom = Math.max(selectionRect.top, selectionRect.bottom);
+
+    const ROW_SPACING = GRID_ITEM_HEIGHT + GRID_GAP;
+    const startCol = Math.max(0, Math.floor((selLeft - GRID_ITEM_MARGIN) / (GRID_ITEM_WIDTH + GRID_GAP)));
+    const endCol = Math.min(columns - 1, Math.floor((selRight - GRID_ITEM_MARGIN) / (GRID_ITEM_WIDTH + GRID_GAP)));
+    const startRow = Math.max(0, Math.floor((selTop - GRID_ITEM_MARGIN) / ROW_SPACING));
+    const endRow = Math.floor((selBottom - GRID_ITEM_MARGIN - 0.01) / ROW_SPACING);
+
+    if (startCol > endCol || startRow > endRow) {
+      this.selectedIdsRef = new Set();
+      this.selectedIndicesRef = new Set();
+      this.setState({ selectedIds: new Set() });
+      return;
+    }
+
+    const newSelectedIds = new Set();
+    const newSelectedIndices = new Set();
+
+    for (let row = startRow; row <= endRow; row++) {
+      for (let col = startCol; col <= endCol; col++) {
+        const index = row * columns + col;
+
+        if (index < 0 || index >= totalItems) continue;
+
+        const dirent = direntList[index];
+        if (!dirent) continue;
+
+        const itemLeft = col * (GRID_ITEM_WIDTH + GRID_GAP) + GRID_ITEM_MARGIN;
+        const itemTop = row * (GRID_ITEM_HEIGHT + GRID_GAP) + GRID_ITEM_MARGIN;
+        const itemRight = itemLeft + GRID_ITEM_WIDTH;
+        const itemBottom = itemTop + GRID_ITEM_HEIGHT;
+
+        const intersectLeft = Math.max(selLeft, itemLeft);
+        const intersectTop = Math.max(selTop, itemTop);
+        const intersectRight = Math.min(selRight, itemRight);
+        const intersectBottom = Math.min(selBottom, itemBottom);
+
+        const intersectWidth = Math.max(0, intersectRight - intersectLeft);
+        const intersectHeight = Math.max(0, intersectBottom - intersectTop);
+        const intersectArea = intersectWidth * intersectHeight;
+
+        const itemArea = GRID_ITEM_WIDTH * GRID_ITEM_HEIGHT;
+
+        if (intersectArea >= itemArea * MIN_OVERLAP_RATIO) {
+          const direntId = dirent.id || `${dirent.repo_id || ''}${dirent.name}`;
+          if (direntId) {
+            newSelectedIds.add(direntId);
+            newSelectedIndices.add(index);
+          }
+        }
+      }
+    }
+
+    this.selectedIdsRef = newSelectedIds;
+    this.selectedIndicesRef = newSelectedIndices;
+
+    this.setState({ selectedIds: newSelectedIds });
+  };
+
+  syncSelectedDirentsToParent = () => {
+    if (!this.selectedIndicesRef || this.selectedIndicesRef.size === 0) return;
+
+    const filteredDirentList = [];
+    const direntList = this.props.direntList;
+    this.selectedIndicesRef.forEach(index => {
+      const dirent = direntList[index];
+      if (dirent) {
+        const newDirent = dirent.clone();
+        newDirent.isSelected = true;
+        filteredDirentList.push(newDirent);
       }
     });
-
-    this.setState({ selectedItemsList: newSelectedItemsList });
+    this.props.onSelectedDirentListUpdate(filteredDirentList);
   };
 
   autoScroll = (mouseY) => {
@@ -233,44 +331,78 @@ class DirentGridView extends React.Component {
     if (!container) return;
 
     const containerBounds = this.cachedContainerBounds || container.getBoundingClientRect();
-    const scrollSpeed = 10;
-    const scrollThreshold = 20;
+
+    let direction = 0;
+    if (mouseY < containerBounds.top + SCROLL_THRESHOLD) {
+      direction = -1;
+    } else if (mouseY > containerBounds.bottom - SCROLL_THRESHOLD) {
+      direction = 1;
+    }
+
+    if (direction === this.autoScrollDirection && this.autoScrollIntervalRef) {
+      return;
+    }
+
+    if (this.autoScrollIntervalRef) {
+      clearInterval(this.autoScrollIntervalRef);
+      this.autoScrollIntervalRef = null;
+    }
+
+    this.autoScrollDirection = direction;
+
+    if (direction === 0) {
+      this.setState({ autoScrollInterval: null });
+      return;
+    }
 
     const updateEndPoint = () => {
       const endPoint = {
-        x: this.state.endPoint.x,
-        y: mouseY - containerBounds.top + container.scrollTop,
+        x: this.endPointRef.x,
+        y: this.virtualEndPointY,
       };
 
       endPoint.y = Math.max(0, Math.min(endPoint.y, container.scrollHeight));
+      this.endPointRef = endPoint;
 
-      this.setState({ endPoint }, () => {
-        if (this.state.isSelecting) {
-          this.determineSelectedItems();
-        }
+      if (this.rafIdRef) cancelAnimationFrame(this.rafIdRef);
+      this.rafIdRef = requestAnimationFrame(() => {
+        this.setState({ endPoint }, () => {
+          if (this.isSelectingRef) {
+            this.determineSelectedItems();
+
+            if (!this._scrollSyncCounter) this._scrollSyncCounter = 0;
+            this._scrollSyncCounter++;
+
+            if (this._scrollSyncCounter % 3 === 0) {
+              setTimeout(() => {
+                this.syncSelectedDirentsToParent();
+              }, 0);
+            }
+          }
+        });
+        this.rafIdRef = null;
       });
     };
 
-    if (mouseY < containerBounds.top + scrollThreshold) {
-      if (!this.state.autoScrollInterval) {
-        const interval = setInterval(() => {
-          container.scrollTop -= scrollSpeed;
-          updateEndPoint();
-        }, 50);
-        this.setState({ autoScrollInterval: interval });
+    this.autoScrollIntervalRef = setInterval(() => {
+      if (!this.isSelectingRef) {
+        clearInterval(this.autoScrollIntervalRef);
+        this.autoScrollIntervalRef = null;
+        return;
       }
-    } else if (mouseY > containerBounds.bottom - scrollThreshold) {
-      if (!this.state.autoScrollInterval) {
-        const interval = setInterval(() => {
-          container.scrollTop += scrollSpeed;
-          updateEndPoint();
-        }, 50);
-        this.setState({ autoScrollInterval: interval });
+
+      if (this.autoScrollDirection === -1) {
+        container.scrollTop -= SCROLL_SPEED;
+        this.virtualEndPointY -= SCROLL_SPEED;
+      } else if (this.autoScrollDirection === 1) {
+        container.scrollTop += SCROLL_SPEED;
+        this.virtualEndPointY += SCROLL_SPEED;
       }
-    } else {
-      clearInterval(this.state.autoScrollInterval);
-      this.setState({ autoScrollInterval: null });
-    }
+
+      updateEndPoint();
+    }, 16);
+
+    this.setState({ autoScrollInterval: this.autoScrollIntervalRef });
   };
 
   onGridItemClick = (dirent, event) => {
@@ -299,7 +431,6 @@ class DirentGridView extends React.Component {
   onMenuItemClick = (operation, currentObject, event) => {
     hideMenu();
 
-    // Use unified menuHandlers for all operations
     const handler = menuHandlers[operation];
     if (handler) {
       handler({
@@ -319,7 +450,6 @@ class DirentGridView extends React.Component {
   };
 
   onDirentsMenuItemClick = (operation) => {
-    // Use shared menu handlers directly
     const handler = menuHandlers[operation];
     if (handler) {
       handler({
@@ -632,11 +762,14 @@ class DirentGridView extends React.Component {
 
   renderSelectionBox = () => {
     const { startPoint, endPoint } = this.state;
-    if (!this.state.isSelecting) return null;
+    const container = this.scrollContainerRef.current;
+    if (!this.state.isSelecting || !container) return null;
+
     const left = Math.min(startPoint.x, endPoint.x);
     const top = Math.min(startPoint.y, endPoint.y);
     const width = Math.abs(startPoint.x - endPoint.x);
     const height = Math.abs(startPoint.y - endPoint.y);
+
     return (
       <div
         className="selection-box"
@@ -671,10 +804,6 @@ class DirentGridView extends React.Component {
       return (<Loading />);
     }
 
-    // Grid dimensions - using actual grid-item size from CSS (134px + margins)
-    const ITEM_WIDTH = 142; // 134px grid-item width + 8px for spacing
-    const ITEM_HEIGHT = 140; // Height based on grid-item content
-
     return (
       <Fragment>
         {direntList.length > 0 ?
@@ -706,8 +835,8 @@ class DirentGridView extends React.Component {
                   repoEncrypted={repoEncrypted}
                 />
               )}
-              itemWidth={ITEM_WIDTH}
-              itemHeight={ITEM_HEIGHT}
+              itemWidth={GRID_ITEM_WIDTH}
+              itemHeight={GRID_ITEM_HEIGHT}
               overscan={2}
               renderOverlay={this.renderSelectionBox}
               scrollContainerRef={this.scrollContainerRef}
