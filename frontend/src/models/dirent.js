@@ -75,6 +75,9 @@ class Dirent {
       if (json._status) {
         this._status = json._status;
       }
+      if (json._tags) {
+        this._tags = json._tags;
+      }
     }
   }
 

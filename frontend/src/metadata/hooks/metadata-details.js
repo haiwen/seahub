@@ -98,7 +98,9 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED, { recordId }, update);
       }
       const fileName = getFileNameFromRecord(record);
-      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, fileName, newValue, true);
+      if (field.key === PRIVATE_COLUMN_KEY.FILE_STATUS) {
+        eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, fileName, newValue, true);
+      }
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);
@@ -156,6 +158,8 @@ export const MetadataDetailsProvider = ({ repoID, repoInfo, path, dirent, dirent
       if (window?.sfMetadataContext?.eventBus) {
         window.sfMetadataContext.eventBus.dispatch(EVENT_BUS_TYPE.LOCAL_RECORD_CHANGED, { recordId: record_id }, update);
       }
+      const fileName = getFileNameFromRecord(record);
+      eventBus.dispatch(DIRENT_EVENT_BUS_TYPE.DIRENT_TAGS_CHANGED, fileName, update);
     }).catch(error => {
       const errorMsg = Utils.getErrorMsg(error);
       toaster.danger(errorMsg);

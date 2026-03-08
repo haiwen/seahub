@@ -55,6 +55,7 @@ export const EVENT_BUS_TYPE = {
   // dirent properties
   DIRENT_STATUS_CHANGED: 'dirent_status_changed',
   COLUMN_DATA_MODIFIED: 'column_data_modified',
+  DIRENT_TAGS_CHANGED: 'dirent_tags_changed',
 
   // trash
   SWITCH_TO_TRASH_VIEW: 'switch_to_trash_view',

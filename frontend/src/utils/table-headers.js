@@ -159,6 +159,17 @@ export const createTableHeaders = (
         gettext('Status')
       )
     }] : []),
+    ...(isColumnVisible(PRIVATE_COLUMN_KEY.TAGS) ? [{
+      key: PRIVATE_COLUMN_KEY.TAGS,
+      width: COLUMN_CONFIG.tags.width,
+      className: COLUMN_CONFIG.tags.className,
+      minWidth: COLUMN_CONFIG.tags.width,
+      children: React.createElement(
+        'span',
+        {},
+        gettext('Tags')
+      )
+    }] : []),
   ];
 
   return baseHeaders;

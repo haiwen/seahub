@@ -361,28 +361,18 @@ class DirView(APIView):
                                 'file_name': file_info['name']
                             })
 
+                        metadata_server_api = MetadataServerAPI(repo_id, username)
+                        columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
+                        all_columns = columns_data.get('columns', [])
+                        metadata_columns = []
+                        for column in all_columns:
+                            metadata_columns.append({
+                                'key': column.get('key'),
+                                'name': column.get('name'),
+                                'type': column.get('type'),
+                                'data': column.get('data', {})
+                            })
                         if files:
-                            metadata_server_api = MetadataServerAPI(repo_id, username)
-                            columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
-                            all_columns = columns_data.get('columns', [])
-                            metadata_columns = []
-                            editable_columns = [
-                                '_rate',
-                                '_tags',
-                                '_file_creator',
-                                '_file_modifier',
-                                '_status',
-                            ]
-                            for column in all_columns:
-                                key = column.get('key')
-                                if key in editable_columns:
-                                    metadata_columns.append({
-                                        'key': key,
-                                        'name': column.get('name'),
-                                        'type': column.get('type'),
-                                        'data': column.get('data', {})
-                                    })
-
                             where_conditions = []
                             parameters = []
 
@@ -409,12 +399,16 @@ class DirView(APIView):
                                         metadata = {}
                                         metadata['columns'] = metadata_columns
                                         metadata['rows'] = rows
-                                        logger.info(f"Fetched metadata for repo {repo_id}, number of rows: {len(rows)}")
                                         response_dict['metadata'] = metadata
 
                                 except Exception as e:
                                     logger.error(f"Failed to fetch metadata for repo {repo_id}: {e}")
                                     pass
+                        else:
+                            response_dict['metadata'] = {
+                                'columns': metadata_columns,
+                                'rows': []
+                            }
             except Exception as e:
                 logger.error(f"Metadata enrichment failed for repo {repo_id}: {e}")
                 pass
