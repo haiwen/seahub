@@ -8,7 +8,7 @@ import Icon from '../../../components/icon';
 
 import './page-cover.css';
 
-function PageCover({ currentPageConfig, onUpdatePage }) {
+function PageCover({ currentPageConfig, onUpdatePageConfig }) {
 
   const [isShowCoverController, setIsShowCoverController] = useState(false);
   const popoverRef = useRef(null);
@@ -31,11 +31,11 @@ function PageCover({ currentPageConfig, onUpdatePage }) {
   }, []);
 
   const updatePageCover = useCallback((imageName) => {
-    onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, cover_img_url: imageName });
+    onUpdatePageConfig(currentPageConfig.id, { cover_img_url: imageName });
     setTimeout(() => {
       popoverRef.current?.toggle();
     }, 300);
-  }, [currentPageConfig.id, currentPageConfig.name, onUpdatePage]);
+  }, [currentPageConfig.id, onUpdatePageConfig]);
 
   const removeCoverImage = useCallback(() => {
     updatePageCover('');
@@ -86,7 +86,7 @@ function PageCover({ currentPageConfig, onUpdatePage }) {
 
 PageCover.propTypes = {
   currentPageConfig: PropTypes.object,
-  onUpdatePage: PropTypes.func,
+  onUpdatePageConfig: PropTypes.func,
 };
 
 export default PageCover;

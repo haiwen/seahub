@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import PageCover from './page-cover';
 import PageTitle from './page-title';
 
-function RightHeader({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
+function RightHeader({ isUpdateBySide, currentPageConfig, onUpdatePageConfig }) {
 
-  const props = { isUpdateBySide, currentPageConfig, onUpdatePage };
+  const props = { isUpdateBySide, currentPageConfig, onUpdatePageConfig };
   return (
     <>
       <PageCover {...props} />
@@ -17,7 +17,7 @@ function RightHeader({ isUpdateBySide, currentPageConfig, onUpdatePage }) {
 RightHeader.propTypes = {
   isUpdateBySide: PropTypes.bool,
   currentPageConfig: PropTypes.object,
-  onUpdatePage: PropTypes.func,
+  onUpdatePageConfig: PropTypes.func,
 };
 
 export default RightHeader;

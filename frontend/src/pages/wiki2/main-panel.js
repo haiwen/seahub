@@ -34,7 +34,7 @@ const propTypes = {
   config: PropTypes.object,
   currentPageId: PropTypes.string,
   isUpdateBySide: PropTypes.bool,
-  onUpdatePage: PropTypes.func,
+  onUpdatePageConfig: PropTypes.func,
   updatePageLock: PropTypes.func,
   currentPageLocked: PropTypes.bool,
   onAddWikiPage: PropTypes.func,
@@ -272,7 +272,7 @@ class MainPanel extends Component {
   render() {
     const menuItems = this.getMenu();
     const isOpenSocket = window.seafile.isOpenSocket;
-    const { permission, pathExist, isDataLoading, config, onUpdatePage, isUpdateBySide, style, currentPageLocked, seadoc_access_token } = this.props;
+    const { permission, pathExist, isDataLoading, config, onUpdatePageConfig, isUpdateBySide, style, currentPageLocked, seadoc_access_token } = this.props;
     const { currentPageConfig = {}, isDropdownMenuOpen, showExportSubmenu } = this.state;
     const isViewingFile = pathExist && !isDataLoading;
     const isReadOnly = currentPageLocked || !(permission === 'rw');
@@ -391,7 +391,7 @@ class MainPanel extends Component {
             {isViewingFile && Utils.isSdocFile(this.props.path) && (
               <div className='sdoc-scroll-container' id='sdoc-scroll-container' ref={this.scrollRef}>
                 <div className='wiki-editor-container'>
-                  <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
+                  <RightHeader isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePageConfig={onUpdatePageConfig} />
                   <SdocWikiEditor
                     document={this.props.editorContent}
                     docUuid={this.state.docUuid}

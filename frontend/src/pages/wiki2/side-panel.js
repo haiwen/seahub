@@ -34,7 +34,7 @@ const propTypes = {
   getWikiConfig: PropTypes.func.isRequired,
   setCurrentPage: PropTypes.func.isRequired,
   getCurrentPageId: PropTypes.func.isRequired,
-  onUpdatePage: PropTypes.func.isRequired,
+  onUpdatePageName: PropTypes.func.isRequired,
   style: PropTypes.object.isRequired,
 };
 
@@ -272,7 +272,7 @@ class SidePanel extends PureComponent {
   };
 
   renderWikiNav = () => {
-    const { config, onUpdatePage } = this.props;
+    const { config, onUpdatePageName } = this.props;
     const { pages, navigation } = config;
     return (
       <div className="wiki2-pages-container">
@@ -281,7 +281,7 @@ class SidePanel extends PureComponent {
             navigation={navigation}
             pages={pages}
             onDeletePage={this.onDeletePage}
-            onUpdatePage={onUpdatePage}
+            onUpdatePageName={onUpdatePageName}
             setCurrentPage={this.props.setCurrentPage}
             onMovePage={this.movePage}
             updateWikiConfig={this.props.updateWikiConfig}

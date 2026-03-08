@@ -14,10 +14,10 @@ import './page-title.css';
 const propTypes = {
   isUpdateBySide: PropTypes.bool,
   currentPageConfig: PropTypes.object.isRequired,
-  onUpdatePage: PropTypes.func,
+  onUpdatePageConfig: PropTypes.func,
 };
 
-const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
+const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePageConfig }) => {
   const [isShowController, setIsShowController] = useState(false);
   const isDesktop = Utils.isDesktop();
 
@@ -31,14 +31,14 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
 
   const handleAddIcon = useCallback(() => {
     const icon = generateARandomEmoji();
-    onUpdatePage && onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, icon: icon });
-  }, [currentPageConfig.id, currentPageConfig.name, onUpdatePage]);
+    onUpdatePageConfig && onUpdatePageConfig(currentPageConfig.id, { icon: icon });
+  }, [currentPageConfig.id, onUpdatePageConfig]);
 
   const handleAddCover = useCallback(() => {
     const coverName = WIKI_COVER_LIST[Math.floor(Math.random() * WIKI_COVER_LIST.length)];
     const coverImgUrl = `${coverName}`;
-    onUpdatePage && onUpdatePage(currentPageConfig.id, { name: currentPageConfig.name, cover_img_url: coverImgUrl });
-  }, [currentPageConfig.id, currentPageConfig.name, onUpdatePage]);
+    onUpdatePageConfig && onUpdatePageConfig(currentPageConfig.id, { cover_img_url: coverImgUrl });
+  }, [currentPageConfig.id, onUpdatePageConfig]);
 
   // Update current page favicon
   useEffect(() => {
@@ -55,7 +55,7 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
   return (
     <div id="wiki-page-title" className='wiki-page-title-wrapper' onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       {currentPageConfig.icon && (
-        <PageIcon currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} />
+        <PageIcon currentPageConfig={currentPageConfig} onUpdatePageConfig={onUpdatePageConfig} />
       )}
       {wikiPermission === 'rw' ?
         <>
@@ -74,7 +74,7 @@ const PageTitle = ({ isUpdateBySide, currentPageConfig, onUpdatePage }) => {
             }
           </div>
           {!currentPageConfig.locked ?
-            <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePage={onUpdatePage} /> :
+            <PageTitleEditor isUpdateBySide={isUpdateBySide} currentPageConfig={currentPageConfig} onUpdatePageConfig={onUpdatePageConfig} /> :
             <div className='wiki-sdoc-title'>{currentPageConfig.name}</div>
           }
         </>

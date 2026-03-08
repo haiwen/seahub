@@ -171,6 +171,23 @@ class WikiAPI {
     return this.req.put(url, params);
   }
 
+  updateWiki2PageConfig(wikiId, pageId, pageConfig) {
+    const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/page/' + pageId + '/config/';
+    let params = {};
+    if (pageConfig.name) {
+      params['page_name'] = pageConfig.name;
+    }
+    if (pageConfig.icon) {
+      params['page_icon'] = pageConfig.icon;
+    }
+    if (pageConfig.cover_img_url) {
+      params['page_cover'] = pageConfig.cover_img_url;
+    }
+
+    return this.req.put(url, params);
+
+  }
+
   getWiki2Config(wikiId) {
     const url = this.server + '/api/v2.1/wiki2/' + wikiId + '/config/';
     return this.req.get(url);
