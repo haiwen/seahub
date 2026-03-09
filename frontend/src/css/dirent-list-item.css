@@ -115,6 +115,7 @@
   min-width: 120px;
   font-weight: normal;
   color: var(--bs-body-color);
+  padding-left: 0;
 }
 
 .dirent-item-name-content {
