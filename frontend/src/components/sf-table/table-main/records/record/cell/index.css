@@ -5,7 +5,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   border-right: 1px solid var(--bs-border-secondary-color);
-  padding: 6px 8px;
+  padding: 4px 8px;
   display: flex;
   justify-content: flex-start;
 }

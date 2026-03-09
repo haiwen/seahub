@@ -333,8 +333,8 @@ class Records extends Component {
     const classNames = getEventClassName(e);
     if (classNames.includes('sf-table-result-content')) {
       this.eventBus.dispatch(EVENT_BUS_TYPE.CLOSE_EDITOR);
+      this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
     }
-    this.props.updateSelectedRecordIds && this.props.updateSelectedRecordIds([]);
   };
 
   onCellClick = (cell) => {

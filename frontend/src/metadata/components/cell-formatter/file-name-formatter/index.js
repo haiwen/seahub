@@ -48,7 +48,7 @@ const FileNameFormatter = ({
         tabIndex="0"
         role="button"
         className="sf-metadata-file-name"
-        onClick={onClickName}
+        onClick={(e) => onClickName(e, record)}
         onKeyDown={Utils.onKeyDown}
       >
         {value}

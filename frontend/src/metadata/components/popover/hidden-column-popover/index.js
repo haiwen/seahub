@@ -11,7 +11,7 @@ import { Utils } from '../../../../utils/utils';
 
 import './index.css';
 
-const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement, columns, hiddenColumns: oldHiddenColumns, canReorder, modifyColumnOrder }) => {
+const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement, columns, hiddenColumns: oldHiddenColumns, modifyColumnOrder }) => {
   const [searchValue, setSearchValue] = useState('');
   const [hiddenColumns, setHiddenColumns] = useState(oldHiddenColumns);
   const displayColumns = useMemo(() => {
@@ -106,7 +106,7 @@ const HideColumnPopover = ({ hidePopover, onChange, readOnly, target, placement,
         <div className="sf-metadata-hide-columns-search-container">
           <SearchInput placeholder={gettext('Search property')} onKeyDown={onKeyDown} onChange={onChangeSearch} autoFocus={true}/>
         </div>
-        <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} canReorder={canReorder} modifyColumnOrder={modifyColumnOrder} />
+        <HiddenColumns readOnly={readOnly} columns={displayColumns} hiddenColumns={hiddenColumns} onChange={hideColumn} modifyColumnOrder={modifyColumnOrder} />
         {!readOnly && !searchValue && (
           <div className="sf-metadata-hide-columns-operations">
             <div
@@ -145,7 +145,6 @@ HideColumnPopover.propTypes = {
   columns: PropTypes.array.isRequired,
   onChange: PropTypes.func.isRequired,
   hidePopover: PropTypes.func.isRequired,
-  canReorder: PropTypes.bool,
   modifyColumnOrder: PropTypes.func,
 };
 

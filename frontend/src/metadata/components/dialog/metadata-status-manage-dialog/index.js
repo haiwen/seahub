@@ -194,7 +194,6 @@ const MetadataStatusManagementDialog = ({ value: oldValue, repoID, hiddenColumns
                     target="metadata-status-hide-properties-button"
                     hiddenColumns={hiddenColumns}
                     columns={columns}
-                    canReorder={false}
                     hidePopover={hidePopover}
                     onChange={onHiddenColumnsChange}
                   />

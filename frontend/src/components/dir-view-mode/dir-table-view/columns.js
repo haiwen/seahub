@@ -1,9 +1,21 @@
-import { gettext } from '@/utils/constants';
 import { CellType, COLUMNS_ICON_CONFIG, PRIVATE_COLUMN_KEY, PRIVATE_COLUMN_KEYS } from '@/metadata/constants';
-import { NameFormatter, SizeFormatter, LastModifiedFormatter, Creator, StatusFormatter } from './formatter';
-import { DIR_COLUMN_KEYS } from '@/constants/dir-column-visibility';
 import { StatusEditor } from './editor';
 import FileNameEditor from '@/metadata/components/cell-editors/file-name-editor';
+import TextFormatter from '@/metadata/components/cell-formatter/text';
+import Empty from '@/metadata/components/formatter/empty';
+import NumberFormatter from '@/metadata/components/cell-formatter/number';
+import CTimeFormatter from '@/metadata/components/cell-formatter/ctime';
+import DateFormatter from '@/metadata/components/cell-formatter/date';
+import CollaboratorsFormatter from '@/metadata/components/cell-formatter/collaborators';
+import MultipleSelectFormatter from '@/metadata/components/cell-formatter/multiple-select';
+import SingleSelectFormatter from '@/metadata/components/cell-formatter/single-select';
+import CheckboxFormatter from '@/metadata/components/cell-formatter/checkbox';
+import GeolocationFormatter from '@/metadata/components/cell-formatter/geolocation';
+import LongTextFormatter from '@/metadata/components/cell-formatter/long-text';
+import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
+import RateFormatter from '@/metadata/components/cell-formatter/rate';
+import FileName from '@/metadata/components/cell-formatter/file-name';
+import Creator from './formatter/creator';
 
 export const EDITABLE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
@@ -47,23 +59,115 @@ export const setDirTableColumnWidth = (columnKey, width) => {
   }
 };
 
-const createColumnFormatter = ({ column, ...otherProps }) => {
-  const { key } = column;
-  switch (key) {
-    case PRIVATE_COLUMN_KEY.FILE_NAME:
-      const { repoID, onItemClick } = otherProps;
-      return <NameFormatter repoID={repoID} onItemClick={onItemClick} />;
-    case PRIVATE_COLUMN_KEY.SIZE:
-      return <SizeFormatter />;
-    case DIR_COLUMN_KEYS.MTIME:
-      return <LastModifiedFormatter />;
-    case PRIVATE_COLUMN_KEY.FILE_CREATOR:
-    case PRIVATE_COLUMN_KEY.FILE_MODIFIER:
-      return <Creator />;
-    case PRIVATE_COLUMN_KEY.FILE_STATUS:
-      return <StatusFormatter />;
-    default:
-      return null;
+const createColumnFormatter = ({ repoID, record, column, value, queryUserAPI, tagsData, onFileNameClick, ...otherProps }) => {
+  const { type } = column;
+  const className = `sf-metadata-${type}-formatter`;
+  switch (type) {
+    case CellType.FILE_NAME: {
+      return (
+        <FileName repoID={repoID} record={record} value={value} onFileNameClick={onFileNameClick} className={className} />
+      );
+    }
+    case CellType.TEXT: {
+      return (
+        <TextFormatter value={value} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </TextFormatter>
+      );
+    }
+    case CellType.NUMBER: {
+      return (
+        <NumberFormatter value={value} formats={column?.data} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </NumberFormatter>
+      );
+    }
+    case CellType.CTIME:
+    case CellType.MTIME: {
+      return (
+        <CTimeFormatter value={value} className={className} {...otherProps}>
+          <Empty fieldType={type} placeholder='' />
+        </CTimeFormatter>
+      );
+    }
+    case CellType.CREATOR:
+    case CellType.LAST_MODIFIER: {
+      return (
+        <Creator record={record} value={value} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </Creator>
+      );
+    }
+    case CellType.DATE: {
+      return (
+        <DateFormatter value={value} format={column.data?.format} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </DateFormatter>
+      );
+    }
+    case CellType.SINGLE_SELECT: {
+      return (
+        <SingleSelectFormatter value={value} options={column.data?.options || []} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </SingleSelectFormatter>
+      );
+    }
+    case CellType.MULTIPLE_SELECT: {
+      return (
+        <MultipleSelectFormatter value={value} options={column.data?.options || []} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </MultipleSelectFormatter>
+      );
+    }
+    case CellType.COLLABORATOR: {
+      return (
+        <CollaboratorsFormatter value={value} api={queryUserAPI} className={className} {...otherProps}>
+          <Empty fieldType={type} placeholder='' />
+        </CollaboratorsFormatter>
+      );
+    }
+    case CellType.CHECKBOX: {
+      return (
+        <CheckboxFormatter value={value} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </CheckboxFormatter>
+      );
+    }
+    case CellType.GEOLOCATION: {
+      return (
+        <GeolocationFormatter {...otherProps} format={column.data?.geo_format} value={value} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </GeolocationFormatter>
+      );
+    }
+    case CellType.LONG_TEXT: {
+      return (
+        <LongTextFormatter {...otherProps} value={value} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </LongTextFormatter>
+      );
+    }
+    case CellType.RATE: {
+      return (
+        <RateFormatter value={value} data={column?.data} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </RateFormatter>
+      );
+    }
+    case CellType.TAGS: {
+      return (
+        <FileTagsFormatter value={value} tagsData={tagsData} showName={true} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </FileTagsFormatter>
+      );
+    }
+    default: {
+      return (
+        <TextFormatter value={value} className={className} >
+          <Empty fieldType={type} placeholder='' />
+        </TextFormatter>
+      );
+    }
   }
 };
 
@@ -81,22 +185,8 @@ const createColumnEditor = ({ column, repoID, repoInfo, tableData, updateDirentS
 const createDirentTableColumns = (columns, hiddenColumnKeys = [], { ...otherProps }) => {
   const savedWidths = getDirTableColumnWidths();
   const visibleColumns = columns.filter(col => !hiddenColumnKeys.includes(col.key));
-  const allColumns = [
-    {
-      key: PRIVATE_COLUMN_KEY.FILE_NAME,
-      name: gettext('Name'),
-      display_name: gettext('Name'),
-      type: CellType.TEXT,
-      width: savedWidths[PRIVATE_COLUMN_KEY.FILE_NAME] || DEFAULT_NAME_COLUMN_WIDTH,
-      frozen: true,
-      editable: true,
-      resizable: true,
-      is_name_column: true,
-    },
-    ...visibleColumns,
-  ];
 
-  return allColumns.map(column => {
+  return visibleColumns.map(column => {
     const { key, name, type } = column;
     const display_name = name;
     const icon_name = COLUMNS_ICON_CONFIG[type];
@@ -116,7 +206,7 @@ const createDirentTableColumns = (columns, hiddenColumnKeys = [], { ...otherProp
       column.width = key === PRIVATE_COLUMN_KEY.FILE_NAME ? DEFAULT_NAME_COLUMN_WIDTH : DEFAULT_COLUMN_WIDTH;
     }
 
-    let normalizedColumn = { ...column, is_private, editable };
+    let normalizedColumn = { ...column, is_private, editable, type: type };
     if (editable_via_click_cell) {
       normalizedColumn.editable_via_click_cell = editable_via_click_cell;
     }
