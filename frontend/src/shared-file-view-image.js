@@ -16,7 +16,7 @@ const nextImgURL = `?p=${encodeURIComponent(nextImgPath)}`;
 
 class SharedFileViewImage extends React.Component {
   render() {
-    return <SharedFileView content={<FileContent />} />;
+    return <SharedFileView type="image" content={<FileContent />} />;
   }
 }
 

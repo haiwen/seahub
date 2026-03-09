@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import watermark from 'watermark-dom';
+import classNames from 'classnames';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Account from '../common/account';
 import { gettext, siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../../utils/constants';
@@ -15,7 +16,8 @@ import '../../css/header.css';
 import '../../css/shared-file-view.css';
 
 const propTypes = {
-  content: PropTypes.object.isRequired
+  content: PropTypes.object.isRequired,
+  type: PropTypes.string,
 };
 
 let loginUser = window.app.pageOptions.name;
@@ -188,7 +190,7 @@ class SharedFileView extends React.Component {
           )}
           {loginUser && <Account />}
         </div>
-        <div className="flex-fill d-flex flex-column">
+        <div className={classNames('flex-fill d-flex flex-column', { 'shared-image-view': this.props.type === 'image' })}>
           {!isDesktop && (
             <div className={'shared-file-view-head'}>
               {this.renderFileViewHeader()}
