@@ -112,7 +112,7 @@ export const createTableHeaders = (
           href: '#',
           onClick: (e) => { e.preventDefault(); onSort && onSort('time'); }
         },
-        gettext('Last update'),
+        gettext('Last modified'),
         sortBy === 'time' && sortIcon
       )
     }] : []),

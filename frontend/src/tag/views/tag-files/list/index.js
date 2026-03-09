@@ -164,7 +164,7 @@ const ListView = ({ repoID, openImagePreview, renameTagFile, onTagFileContextMen
       width: 0.15,
       children: (
         <a className="d-inline-flex align-items-center table-sort-op" href="#" onClick={onSortTime}>
-          {gettext('Last Update')} {sortBy == 'time' && sortIcon}
+          {gettext('Last modified')} {sortBy == 'time' && sortIcon}
         </a>
       ),
     }
