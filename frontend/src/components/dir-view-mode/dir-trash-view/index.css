@@ -35,6 +35,16 @@
   text-align: right;
 }
 
+.sf-trash-wrapper .sf-table-cell.sf-table-text-cell .text-formatter {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.sf-trash-filter .seafile-divider {
+  margin: 8px 0;
+}
+
 .sf-trash-wrapper.error-message-container {
   display: flex;
   align-items: center;
