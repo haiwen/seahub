@@ -2,6 +2,10 @@
   height: 100%;
 }
 
+.shared-file-view .top-header {
+  background-color: var(--bs-body-bg);
+}
+
 .shared-file-view-top-head {
   border-left: 1px solid #eee;
 }
@@ -56,19 +60,15 @@
   top: 145px !important;
 }
 
-.shared-image-view {
+.shared-image-file-view .shared-file-view-content-container {
   width: 100%;
   height: 100%;
   overflow: hidden;
 }
 
-.shared-image-view img {
+.shared-image-file-view .shared-file-view-content-container img {
   height: 100% !important;
   object-fit: contain;
-}
-
-.shared-file-view.shared-text-file-view .top-header {
-  background-color: var(--bs-body-bg);
 }
 
 @media (max-width: 991.98px) {
