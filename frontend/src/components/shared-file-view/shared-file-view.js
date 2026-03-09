@@ -177,8 +177,9 @@ class SharedFileView extends React.Component {
 
   render() {
     const isDesktop = Utils.isDesktop();
+    const { type } = this.props;
     return (
-      <div className="h-100 d-flex flex-column">
+      <div className={classNames('h-100 d-flex flex-column shared-file-view', type !== '' ? `shared-${type}-file-view` : '')}>
         <div className="top-header d-flex align-items-center flex-shrink-0">
           <a href={siteRoot} className='mr-auto mr-md-0'>
             <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
@@ -190,7 +191,7 @@ class SharedFileView extends React.Component {
           )}
           {loginUser && <Account />}
         </div>
-        <div className={classNames('flex-fill d-flex flex-column', { 'shared-image-view': this.props.type === 'image' })}>
+        <div className="flex-fill d-flex flex-column shared-file-view-content-container">
           {!isDesktop && (
             <div className={'shared-file-view-head'}>
               {this.renderFileViewHeader()}
@@ -236,5 +237,8 @@ if (enableWatermark) {
 }
 
 SharedFileView.propTypes = propTypes;
+SharedFileView.defaultProps = {
+  type: '',
+};
 
 export default SharedFileView;
