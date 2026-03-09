@@ -533,6 +533,12 @@ class Search extends Component {
     }
   }, 300);
 
+  debouncedRepoSearch = debounce((newValue) => {
+    if (this.isChineseInput === false) {
+      this.getRepoSearchResult(newValue);
+    }
+  }, 300);
+
   onChangeHandler = (event) => {
     const newValue = event.target.value;
     if (this.state.showRecent) {
@@ -555,7 +561,7 @@ class Search extends Component {
     if (this.state.isResultGotten) {
       this.debouncedSearch(newValue);
     } else {
-      !this.props.repoID && this.getRepoSearchResult(newValue);
+      !this.props.repoID && this.debouncedRepoSearch(newValue);
     }
   };
 
@@ -575,9 +581,6 @@ class Search extends Component {
     this.source = seafileAPI.getSource();
 
     if (query_str.trim() === '') return;
-    this.setState({
-      resultItems: [],
-    });
     searchAPI.searchRepos(query_str.trim()).then(res => {
       this.setState({
         resultItems: this.formatResultItems(res.data.results),
