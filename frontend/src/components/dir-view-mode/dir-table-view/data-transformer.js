@@ -1,3 +1,5 @@
+import { formatUnixWithTimezone } from '@/utils/time';
+
 export const transformDirentsToTableData = (dirents, repoID) => {
   if (!dirents || !Array.isArray(dirents)) {
     return;
@@ -21,6 +23,7 @@ export const transformDirentsToTableData = (dirents, repoID) => {
 
     transformedRow._is_dir = dirent.type !== 'file';
     transformedRow._size = transformedRow._size_original;
+    transformedRow._mtime = formatUnixWithTimezone(transformedRow._mtime);
     transformedRow._id = `${transformedRow._id}_${transformedRow._name}`;
 
     id_row_map[transformedRow._id] = transformedRow;
