@@ -3,12 +3,14 @@ import { gettext } from '@/utils/constants';
 
 // List mode
 export const DIR_COLUMN_KEYS = {
+  FILE_NAME: '_name',
   SIZE: '_size',
   MTIME: '_mtime',
 };
 
 export const DIR_BASE_COLUMNS = [
-  { key: DIR_COLUMN_KEYS.SIZE, name: gettext('Size'), type: CellType.NUMBER },
+  { key: PRIVATE_COLUMN_KEY.FILE_NAME, name: gettext('Name'), type: CellType.FILE_NAME },
+  { key: DIR_COLUMN_KEYS.SIZE, name: gettext('Size'), type: CellType.NUMBER, data: { format: 'byte' } },
   { key: DIR_COLUMN_KEYS.MTIME, name: gettext('Last modified'), type: CellType.MTIME }
 ];
 
@@ -18,46 +20,21 @@ export const CONFIGURABLE_COLUMNS = [
   PRIVATE_COLUMN_KEY.FILE_CREATOR,
   PRIVATE_COLUMN_KEY.FILE_MODIFIER,
   PRIVATE_COLUMN_KEY.FILE_STATUS,
+  PRIVATE_COLUMN_KEY.TAGS,
 ];
 
 export const DIR_METADATA_COLUMNS = [
   PRIVATE_COLUMN_KEY.FILE_CREATOR,
-  PRIVATE_COLUMN_KEY.FILE_MODIFIER,
   PRIVATE_COLUMN_KEY.FILE_STATUS,
+  PRIVATE_COLUMN_KEY.TAGS,
 ];
 
 export const ESSENTIAL_COLUMNS = ['checkbox', 'star', 'icon', 'name'];
 
 export const DIR_HIDDEN_COLUMN_KEYS = 'dir_hidden_column_keys';
 
-// Table mode
-export const DIR_TABLE_COLUMNS = [
-  // Default columns
-  { key: PRIVATE_COLUMN_KEY.FILE_NAME, name: gettext('Name'), type: CellType.FILE_NAME },
-  { key: PRIVATE_COLUMN_KEY.SIZE, name: gettext('Size'), type: CellType.NUMBER },
-  { key: DIR_COLUMN_KEYS.MTIME, name: gettext('Last modified'), type: CellType.MTIME },
-
-  // Base metadata columns
-  { key: PRIVATE_COLUMN_KEY.FILE_CREATOR, name: gettext('Creator'), type: CellType.CREATOR },
-  { key: PRIVATE_COLUMN_KEY.FILE_MODIFIER, name: gettext('Last modifier'), type: CellType.LAST_MODIFIER },
-  { key: PRIVATE_COLUMN_KEY.FILE_STATUS, name: gettext('Status'), type: CellType.SINGLE_SELECT },
-
-  // Additional columns from metadata table view
-  { key: PRIVATE_COLUMN_KEY.FILE_TYPE, name: gettext('Type'), type: CellType.TEXT },
-  { key: PRIVATE_COLUMN_KEY.TAGS, name: gettext('Tags'), type: CellType.TAGS },
-  { key: PRIVATE_COLUMN_KEY.FILE_DESCRIPTION, name: gettext('Description'), type: CellType.LONG_TEXT },
-  { key: PRIVATE_COLUMN_KEY.FILE_RATE, name: gettext('Rating'), type: CellType.RATE },
-  { key: PRIVATE_COLUMN_KEY.OWNER, name: gettext('Owner'), type: CellType.COLLABORATOR },
-  { key: PRIVATE_COLUMN_KEY.FILE_COLLABORATORS, name: gettext('Collaborators'), type: CellType.COLLABORATOR },
-  { key: PRIVATE_COLUMN_KEY.FILE_REVIEWER, name: gettext('Reviewer'), type: CellType.COLLABORATOR },
-  { key: PRIVATE_COLUMN_KEY.FILE_EXPIRE_TIME, name: gettext('Expire time'), type: CellType.DATE },
-  { key: PRIVATE_COLUMN_KEY.CAPTURE_TIME, name: gettext('Capture time'), type: CellType.DATE },
-  { key: PRIVATE_COLUMN_KEY.LOCATION, name: gettext('Location'), type: CellType.GEOLOCATION },
-];
-
-export const DIR_TABLE_CONFIGURABLE_COLUMNS = DIR_TABLE_COLUMNS.map(col => col.key);
-
-export const DIR_TABLE_DEFAULT_COLUMNS = [
+// table mode
+export const DIR_TABLE_DEFAULT_METADATA_COLUMNS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
   PRIVATE_COLUMN_KEY.SIZE,
   DIR_COLUMN_KEYS.MTIME,

@@ -28,7 +28,7 @@ class Dirent {
       this.mtime_relative = dayjs.unix(json.mtime).locale(lang).fromNow();
     }
     this.permission = json.permission || 'rw';
-    this.isSelected = false;
+    this.isSelected = json.isSelected || false;
     this.starred = json.starred || false;
     if (json.type === 'dir') {
       this.has_been_shared_out = false;
@@ -64,9 +64,6 @@ class Dirent {
 
       if (json.metadata) {
         this.metadata = json.metadata;
-      }
-      if (json._tags) {
-        this._tags = json._tags;
       }
     }
   }

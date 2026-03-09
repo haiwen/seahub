@@ -38,7 +38,7 @@ import ViewToolbar from '../../components/toolbar/view-toolbar';
 import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
-import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS, DIR_TABLE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, DIR_TABLE_HIDDEN_COLUMN_KEYS, DIR_TABLE_DEFAULT_COLUMNS } from '@/constants/dir-column-config';
+import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, DIR_TABLE_HIDDEN_COLUMN_KEYS, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
 import { getColumnOptionNameById } from '@/metadata/utils/cell';
 import { normalizeColumns } from '@/metadata/utils/column';
 
@@ -111,7 +111,7 @@ class LibContentView extends React.Component {
       tagId: '',
       currentDirent: null,
       columns: DIR_BASE_COLUMNS,
-      tableViewColumns: DIR_TABLE_COLUMNS,
+      tableViewColumns: DIR_BASE_COLUMNS,
       hiddenColumnKeys: JSON.parse(localStorage.getItem(DIR_HIDDEN_COLUMN_KEYS)) || DIR_METADATA_COLUMNS,
       hiddenTableViewColumnKeys: JSON.parse(localStorage.getItem(DIR_TABLE_HIDDEN_COLUMN_KEYS)) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
@@ -679,7 +679,7 @@ class LibContentView extends React.Component {
   // List view columns
   enrichColumns = (metadata) => {
     if (!metadata?.columns) {
-      if (this.cachedColumns) {
+      if (this.state.enableMetadata && this.cachedColumns) {
         return this.cachedColumns;
       }
       return DIR_BASE_COLUMNS;
@@ -701,7 +701,7 @@ class LibContentView extends React.Component {
   // Get all metadata columns for DirTableView (not filtered)
   getTableViewColumns = (metadata) => {
     if (!metadata?.columns) {
-      return DIR_TABLE_COLUMNS;
+      return DIR_BASE_COLUMNS;
     }
 
     // Filter metadata columns
@@ -712,7 +712,7 @@ class LibContentView extends React.Component {
     const additionalColumns = [];
 
     filteredColumns.forEach(col => {
-      if (DIR_TABLE_DEFAULT_COLUMNS.includes(col.key)) {
+      if (DIR_TABLE_DEFAULT_METADATA_COLUMNS.includes(col.key)) {
         originalColumns.push(col);
       } else {
         additionalColumns.push(col);
@@ -720,7 +720,7 @@ class LibContentView extends React.Component {
     });
 
     originalColumns.sort((a, b) => {
-      return DIR_TABLE_DEFAULT_COLUMNS.indexOf(a.key) - DIR_TABLE_DEFAULT_COLUMNS.indexOf(b.key);
+      return DIR_TABLE_DEFAULT_METADATA_COLUMNS.indexOf(a.key) - DIR_TABLE_DEFAULT_METADATA_COLUMNS.indexOf(b.key);
     });
 
     // Combine: original columns first, then additional metadata columns in their API order
@@ -2251,16 +2251,17 @@ class LibContentView extends React.Component {
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
         if (d.name === direntName) {
-          return new Dirent({ ...d, ...update });
+          return new Dirent({
+            ...d,
+            metadata: {
+              ...d.metadata,
+              ...update
+            } });
         }
         return d;
       });
 
       const newState = { direntList: newDirentList };
-
-      if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
-        newState.currentDirent = new Dirent({ ...prevState.currentDirent, ...update });
-      }
       return newState;
     });
   };
