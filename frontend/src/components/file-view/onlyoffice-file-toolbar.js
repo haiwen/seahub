@@ -8,6 +8,8 @@ import IconButton from '../icon-button';
 
 const propTypes = {
   isCommentUpdated: PropTypes.bool,
+  isShareEnabled: PropTypes.bool,
+  toggleShareDialog: PropTypes.func.isRequired,
   toggleDetailsPanel: PropTypes.func.isRequired,
   toggleHeader: PropTypes.func.isRequired,
 };
@@ -39,7 +41,7 @@ class OnlyofficeFileToolbar extends React.Component {
   };
 
   render() {
-    const { isCommentUpdated } = this.props;
+    const { isCommentUpdated, isShareEnabled } = this.props;
     const { moreDropdownOpen } = this.state;
     return (
       <Fragment>
@@ -58,6 +60,14 @@ class OnlyofficeFileToolbar extends React.Component {
             <Icon symbol="comment" />
             {isCommentUpdated && <span className='comment-tip'></span>}
           </Button>
+          {isShareEnabled && (
+            <IconButton
+              id="share-file"
+              icon='share'
+              text={gettext('Share')}
+              onClick={this.props.toggleShareDialog}
+            />
+          )}
           <Dropdown isOpen={moreDropdownOpen} toggle={this.toggleMoreOpMenu}>
             <DropdownToggle
               tag="span"
@@ -90,13 +100,18 @@ class OnlyofficeFileToolbar extends React.Component {
           <DropdownMenu>
             <DropdownItem onClick={this.props.toggleHeader}>{gettext('Fold')}</DropdownItem>
             <DropdownItem onClick={this.props.toggleDetailsPanel}>{gettext('Details')}</DropdownItem>
+            <DropdownItem onClick={this.props.toggleCommentPanel}>
+              {gettext('Comment')}
+            </DropdownItem>
+            {isShareEnabled && (
+              <DropdownItem onClick={this.props.toggleShareDialog}>
+                {gettext('Share')}
+              </DropdownItem>
+            )}
             <DropdownItem>
               <a href={`${siteRoot}library/${repoID}/${Utils.encodePath(repoName + parentDir)}`} className="text-inherit">
                 {gettext('Open parent folder')}
               </a>
-            </DropdownItem>
-            <DropdownItem onClick={this.props.toggleCommentPanel}>
-              {gettext('Comment')}
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
