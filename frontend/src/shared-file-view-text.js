@@ -29,6 +29,7 @@ const SharedFileViewText = () => {
 
   return (
     <SharedFileView
+      type="text"
       content={<FileContent lineWrapping={lineWrapping}/>}
       updateLineWrapping={updateLineWrapping}
       lineWrapping={lineWrapping}

@@ -178,7 +178,7 @@ class SharedFileView extends React.Component {
   render() {
     const isDesktop = Utils.isDesktop();
     return (
-      <div className="h-100 d-flex flex-column">
+      <div className={classNames('h-100 d-flex flex-column shared-file-view', this.props.type === 'text' ? 'shared-text-file-view' : '')}>
         <div className="top-header d-flex align-items-center flex-shrink-0">
           <a href={siteRoot} className='mr-auto mr-md-0'>
             <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
