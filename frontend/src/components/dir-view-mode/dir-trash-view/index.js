@@ -32,6 +32,8 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
 
   const [trashItem, setCurrentTrashItem] = useState(false);
 
+  const [columnWidths, setColumnWidths] = useState({});
+
   const reloadTrashList = useCallback(() => {
     repoTrashAPI.getRepoFolderTrash(repoID, currentPage, PER_PAGE).then(res => {
       const { items, total_count, can_search } = res.data;
@@ -302,10 +304,30 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
     return transformTrashListToTableData(trashList, repoID);
   }, [repoID, trashList]);
 
+  const columns = useMemo(() => {
+
+    let left = 0;
+    let cols = tableData.columns.map((column, idx) => {
+      const width = columnWidths[column.key] || column.width;
+      const updatedColumn = { ...column, width, left, idx };
+      left += width;
+      return updatedColumn;
+    });
+
+    return cols;
+  }, [columnWidths, tableData.columns]);
+
 
   const handleCellDoubleClick = () => {};
 
   const checkCanModifyRecord = () => {};
+
+  const handleColumnWidthChange = useCallback((column, newWidth) => {
+    setColumnWidths(prevState => ({
+      ...prevState,
+      [column.key]: newWidth,
+    }));
+  }, []);
 
   const updateSelectedTrashIds = useCallback((ids) => {
     toggleShowDirentToolbar(ids.length > 0);
@@ -358,7 +380,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
     <div className={classNames('dir-trash-view sf-trash-wrapper', { 'read-only': !canSelected })}>
       <SFTable
         table={tableData}
-        visibleColumns={tableData.columns}
+        visibleColumns={columns}
         recordsIds={tableData.row_ids}
         headerSettings={{}}
         noRecordsTipsText=""
@@ -371,6 +393,7 @@ export default function DirTrashView({ repoID, toggleShowDirentToolbar }) {
         isLoadingMoreRecords={isLoadingMore}
         enableScrollToLoad={true}
         loadMore={loadNextPage}
+        modifyColumnWidth={handleColumnWidthChange}
         onCellDoubleClick={handleCellDoubleClick}
         checkCanModifyRecord={checkCanModifyRecord}
         supportCopy={false}
