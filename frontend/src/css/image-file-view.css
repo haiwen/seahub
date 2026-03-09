@@ -14,7 +14,7 @@
 
 #image-view {
   padding: 1px;
-  background: var(--bs-body-bg);
+  background: transparent;
   border: 1px solid #eee;
   width: auto;
   height: auto;
