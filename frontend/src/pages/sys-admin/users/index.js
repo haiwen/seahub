@@ -113,6 +113,7 @@ const UsersLayout = ({ ...commonProps }) => {
     isBatchAddAdminDialogOpen,
     isBatchDeleteUserDialogOpen,
     isBatchSetQuotaDialogOpen,
+    setPerPage,
     onHasUserSelected,
     toggleAddUserDialog,
     toggleImportUserDialog,

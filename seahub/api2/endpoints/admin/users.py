@@ -1083,10 +1083,14 @@ class AdminSearchUser(APIView):
             ccnet_users = []
             ccnet_db_users = ccnet_api.search_emailusers('DB', query_str, 0, page * per_page)
 
-            if len(ccnet_db_users) == page * per_page:
+            start = (page - 1) * per_page
+            ccnet_total = len(ccnet_db_users)
+            
+            if ccnet_total > start:
+                ccnet_users = ccnet_db_users[start : page * per_page]
+            else:
+                ccnet_users = []
 
-                # users from ccnet db is enough
-                ccnet_users = ccnet_db_users[-per_page:]
 
             # search user from profile
             all_ccnet_users = ccnet_db_users
@@ -1098,12 +1102,14 @@ class AdminSearchUser(APIView):
                 users = ccnet_users
 
             if len(all_ccnet_users) < page * per_page:
-
+                ccnet_exist_emails = [u.email for u in all_ccnet_users]
                 all_profile_users = Profile.objects.filter(
-                    Q(nickname__icontains=query_str) |
+                    (Q(nickname__icontains=query_str) |
                     Q(contact_email__icontains=query_str) |
-                    Q(login_id__icontains=query_str)
+                    Q(login_id__icontains=query_str))
+                    & ~Q(user__in=ccnet_exist_emails)
                 )[:page * per_page - len(all_ccnet_users)]
+
 
                 if int(len(all_ccnet_users)/per_page) == page-1:
                     # need ccnet users + profile users
