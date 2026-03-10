@@ -23,7 +23,7 @@
 .empty-tip .empty-tip-text {
   font-size: 14px;
   font-weight: normal;
-  color: var(--bs-body-secondary-color);
+  color: var(--bs-body-secondary-color) !important;
   text-align: center;
 }
 
