@@ -24,7 +24,6 @@ class DepartmentsV2TreeNode extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowTreeIcon: true,
       isChildrenShow: false,
       dropdownOpen: false,
       active: false
@@ -51,9 +50,6 @@ class DepartmentsV2TreeNode extends Component {
   listSubDepartments = () => {
     const { node } = this.props;
     this.props.listSubDepartments(node.id, (childrenNodes) => {
-      if (Array.isArray(childrenNodes) && childrenNodes.length === 0) {
-        this.setState({ isShowTreeIcon: false });
-      }
       this.setState({ isChildrenShow: true });
     });
   };
@@ -125,19 +121,15 @@ class DepartmentsV2TreeNode extends Component {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          {this.state.isShowTreeIcon ?
-            <span
-              className="departments-v2-tree-icon"
-              onClick={(e) => this.toggleChildren(e)}
-              role="button"
-              aria-label={gettext('Toggle children')}
-              title={gettext('Toggle children')}
-            >
-              <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
-            </span>
-            :
-            <span style={{ width: 24 }}></span>
-          }
+          <span
+            className="departments-v2-tree-icon"
+            onClick={(e) => this.toggleChildren(e)}
+            role="button"
+            aria-label={gettext('Toggle children')}
+            title={gettext('Toggle children')}
+          >
+            <Icon symbol="down" className={isChildrenShow ? '' : 'rotate-270'} aria-hidden="true" />
+          </span>
           <span className="departments-v2-tree-node-text text-truncate">{node.name}</span>
           {active &&
             <Dropdown
