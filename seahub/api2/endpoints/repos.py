@@ -22,7 +22,7 @@ from seahub.base.models import UserStarredFiles, UserMonitoredRepos
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.signals import repo_deleted
-from seahub.thumbnail.utils import remove_thumbnail_by_id
+from seahub.thumbnail.utils import remove_thumbnail_by_path
 from seahub.views import check_folder_permission, list_inner_pub_repos
 from seahub.share.models import ExtraSharePermission
 from seahub.group.utils import group_id_to_name
@@ -655,6 +655,6 @@ class RepoImageRotateView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # remove thumbnails
-        remove_thumbnail_by_id(asset_id)
+        remove_thumbnail_by_path(repo_id, path)
 
         return Response({'success': True})
