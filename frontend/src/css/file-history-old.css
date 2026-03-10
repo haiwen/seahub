@@ -80,7 +80,6 @@
 .old-history-main .commit-list .avatar {
   width: 16px;
   height: 16px;
-  border-radius: 2px;
   vertical-align: middle;
 }
 
@@ -88,7 +87,6 @@
   vertical-align: middle;
   color: #ED7109;
   text-decoration: none;
-  font-weight: bold;
 }
 
 .old-history-more-operation i {
