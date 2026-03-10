@@ -40,6 +40,11 @@ LARGE_AREA_THRESHOLD = 3000000
 # PDF size threshold for detailed page size checking (bytes)
 LARGE_PDF_SIZE_THRESHOLD = 50 * 1024 * 1024  # 50MB
 
+def generate_thumbnail_key(repo_id, path):
+    """Generate thumbnail key using MD5(repo_id + path)."""
+    path = normalize_file_path(path)
+    return hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
 
@@ -96,7 +101,6 @@ def generate_thumbnail(request, repo_id, size, path):
     1. if repo exist: should exist;
     2. if repo is encrypted: not encrypted;
     """
-
     try:
         size = int(size)
     except ValueError as e:
@@ -117,11 +121,12 @@ def generate_thumbnail(request, repo_id, size, path):
         return (False, 400)
 
     # Use MD5 of repo_id + path as thumbnail filename
-    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    thumbnail_key = generate_thumbnail_key(repo_id, path)
     thumbnail_file = os.path.join(thumbnail_dir, thumbnail_key)
     
     file_obj = seafile_api.get_dirent_by_path(repo_id, path)
     source_mtime = file_obj.mtime if file_obj else 0
+
     
     if os.path.exists(thumbnail_file):
         thumbnail_mtime = os.path.getmtime(thumbnail_file)
@@ -131,7 +136,6 @@ def generate_thumbnail(request, repo_id, size, path):
             os.unlink(thumbnail_file)
         except OSError:
             pass
-
     repo = get_repo(repo_id)
     file_size = get_file_size(repo.store_id, repo.version, file_id)
 
@@ -401,13 +405,13 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
 def get_thumbnail_image_path(repo_id, path, image_size):
     """Get thumbnail image path using MD5(repo_id + path) as filename."""
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(image_size))
-    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    thumbnail_key = generate_thumbnail_key(repo_id, path)
     thumbnail_image_path = os.path.join(thumbnail_dir, thumbnail_key)
     return thumbnail_image_path
 
 def remove_thumbnail_by_path(repo_id, path):
     """Remove thumbnail files for a given repo_id + path."""
-    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    thumbnail_key = generate_thumbnail_key(repo_id, path)
     for size_dir in [item for item in os.listdir(THUMBNAIL_ROOT) if os.path.isdir(os.path.join(THUMBNAIL_ROOT, item))]:
         thumbnail_file = os.path.join(THUMBNAIL_ROOT, size_dir, thumbnail_key)
         if os.path.exists(thumbnail_file):

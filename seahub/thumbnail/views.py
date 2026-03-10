@@ -18,7 +18,7 @@ from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
     THUMBNAIL_ROOT
 import seahub.settings as settings
-from seahub.thumbnail.utils import generate_thumbnail, \
+from seahub.thumbnail.utils import generate_thumbnail, generate_thumbnail_key, \
     get_thumbnail_src, get_share_link_thumbnail_src
 from seahub.share.models import FileShare, check_share_link_common
 
@@ -69,7 +69,7 @@ def thumbnail_create(request, repo_id):
 
 def latest_entry(request, repo_id, size, path):
     """Get the last modified time of the thumbnail file."""
-    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    thumbnail_key = generate_thumbnail_key(repo_id, path)
     try:
         thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
         last_modified_time = os.path.getmtime(thumbnail_file)
@@ -89,7 +89,6 @@ def thumbnail_get(request, repo_id, size, path):
 
     return thumbnail file to web
     """
-    
     repo = get_repo(repo_id)
     obj_id = get_file_id_by_path(repo_id, path)
 
@@ -108,7 +107,7 @@ def thumbnail_get(request, repo_id, size, path):
         return HttpResponse()
 
     # Use MD5 of repo_id + path as thumbnail filename
-    thumbnail_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    thumbnail_key = generate_thumbnail_key(repo_id, path)
     thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
     
     success, status_code = generate_thumbnail(request, repo_id, size, path)
@@ -120,7 +119,7 @@ def thumbnail_get(request, repo_id, size, path):
             resp = HttpResponse(content=thumbnail,
                                 content_type='image/' + THUMBNAIL_EXTENSION)
 
-            resp['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * THUMBNAIL_CACHE_DAYS)
+            # resp['Cache-Control'] = 'private, max-age=%s' % (3600 * 24 * THUMBNAIL_CACHE_DAYS)
             return resp
         except IOError as e:
             logger.error(e)
@@ -205,7 +204,7 @@ def share_link_latest_entry(request, token, size, path):
         return None
 
     image_path = get_real_path_by_fs_and_req_path(fileshare, path)
-    thumbnail_key = hashlib.md5((repo_id + image_path).encode('utf-8')).hexdigest()
+    thumbnail_key = generate_thumbnail_key(repo_id, image_path)
     
     try:
         thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
@@ -252,7 +251,7 @@ def share_link_thumbnail_get(request, token, size, path):
         return HttpResponse()
 
     # Use MD5 of repo_id + path as thumbnail filename
-    thumbnail_key = hashlib.md5((repo_id + image_path).encode('utf-8')).hexdigest()
+    thumbnail_key = generate_thumbnail_key(repo_id, image_path)
     thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
     
     # generate_thumbnail will handle mtime comparison internally
