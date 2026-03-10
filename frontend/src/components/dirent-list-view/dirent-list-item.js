@@ -581,7 +581,8 @@ class DirentListItem extends React.Component {
     const showStatus = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_STATUS);
     const statusCol = columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
     const showTags = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.TAGS);
-    const canEdit = !dirent.isDir() && dirent.permission === 'rw';
+    const canEdit = !isDir && dirent.permission === 'rw';
+    const showMetadata = !isDir && dirent.metadata;
 
     if (isMobile) {
       return (
@@ -797,7 +798,7 @@ class DirentListItem extends React.Component {
         {showCreator && (
           <div className="dirent-property dirent-property-creator">
             <CreatorFormatter
-              value={!isDir ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR] : ''}
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_CREATOR] : ''}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
               collaboratorsCache={this.props.collaboratorsCache}
@@ -809,7 +810,7 @@ class DirentListItem extends React.Component {
           <div className="dirent-property dirent-property-last-modifier">
             <Formatter
               field={{ type: CellType.LAST_MODIFIER, name: gettext('Last modifier') }}
-              value={!isDir ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_MODIFIER] : ''}
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_MODIFIER] : ''}
               collaborators={this.props.collaborators}
               queryUserAPI={this.props.queryUser}
             />
@@ -819,7 +820,7 @@ class DirentListItem extends React.Component {
         {showStatus && (
           <div className="dirent-property dirent-property-status">
             <StatusEditor
-              value={!isDir ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_STATUS] : ''}
+              value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_STATUS] : ''}
               record={dirent}
               column={statusCol}
               canEdit={canEdit}
@@ -829,7 +830,7 @@ class DirentListItem extends React.Component {
 
         {showTags && (
           <div className="dirent-property dirent-property-tags">
-            <FileTagsFormatter value={!isDir ? dirent.metadata[PRIVATE_COLUMN_KEY.TAGS] : ''} tagsData={this.props.tagsData} className="sf-metadata-tags-formatter" />
+            <FileTagsFormatter value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.TAGS] : ''} tagsData={this.props.tagsData} className="sf-metadata-tags-formatter" />
           </div>
         )}
       </div>
