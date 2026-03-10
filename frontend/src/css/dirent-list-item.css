@@ -150,12 +150,12 @@
 
 .dirent-live-photo-badge {
   display: inline-block;
-  padding: 1px 4px;
+  padding: 1px 5px;
   margin-left: 6px;
-  background: rgba(0, 0, 0, 0.06);
-  color: #666;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 3px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.5px;

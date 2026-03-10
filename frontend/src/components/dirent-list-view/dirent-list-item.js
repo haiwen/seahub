@@ -765,13 +765,15 @@ class DirentListItem extends React.Component {
           }
           {!this.state.isRenaming && (
             <div className="dirent-item-name-content">
-              <span className="dirent-item-name-text">
-                {(!dirent.isDir() && !this.canPreview) ?
-                  <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                  <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
-                }
+              <div style={{ flex: '1 1 auto', minWidth: 0, display: 'flex', alignItems: 'center' }}>
+                <span className="dirent-item-name-text" style={{ flex: '0 1 auto' }}>
+                  {(!dirent.isDir() && !this.canPreview) ?
+                    <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
+                    <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
+                  }
+                </span>
                 {dirent.is_live_photo && <span className="dirent-live-photo-badge">LIVE</span>}
-              </span>
+              </div>
               {this.state.isOperationShow && (
                 <ItemDropdownMenu
                   toggleClass="op-icon mr-0"

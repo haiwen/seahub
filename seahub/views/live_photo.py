@@ -77,7 +77,16 @@ def _check_is_live_photo(repo_id, file_id):
 
     try:
         xmp = _parse_xmp_metadata(file_content)
-        return xmp['MotionPhoto'] == 1 or xmp['MicroVideo'] == 1
+        if xmp['MotionPhoto'] == 1 or xmp['MicroVideo'] == 1:
+            return True
+            
+        # fallback: check for Apple Live Photo markers or generic MotionPhoto/MicroVideo strings
+        markers = [b'quicktime.live-photo', b'LivePhotoMetadata', b'MotionPhotoVideo']
+        for marker in markers:
+            if marker in file_content:
+                return True
+                
+        return False
     except Exception as e:
         logger.error('check live photo error: %s', e)
         return False
