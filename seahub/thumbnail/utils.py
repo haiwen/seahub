@@ -43,7 +43,8 @@ LARGE_PDF_SIZE_THRESHOLD = 50 * 1024 * 1024  # 50MB
 def generate_thumbnail_key(repo_id, path):
     """Generate thumbnail key using MD5(repo_id + path)."""
     path = normalize_file_path(path)
-    return hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    hash_key = hashlib.md5((repo_id + path).encode('utf-8')).hexdigest()
+    return "md5_%s" % hash_key
 
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
