@@ -1010,6 +1010,14 @@ def view_lib_file(request, repo_id, path):
             can_rotate = False
         return_dict['can_rotate'] = can_rotate
 
+        # check if HEIC file is a live photo
+        live_photo_video_url = ''
+        if fileext == 'heic':
+            from seahub.views.live_photo import _check_is_live_photo
+            if _check_is_live_photo(repo_id, file_id):
+                live_photo_video_url = reverse('live_photo_content', args=[repo_id, path.lstrip('/')])
+        return_dict['live_photo_video_url'] = live_photo_video_url
+
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
 

@@ -200,6 +200,7 @@ class DirentListView extends React.Component {
       src,
       parentDir,
       is_locked,
+      is_live_photo: item.is_live_photo || false,
       'url': `${siteRoot}lib/${repoID}/file${path}`,
       'downloadURL': `${fileServerRoot}repos/${repoID}/files${path}/?op=download`
     };

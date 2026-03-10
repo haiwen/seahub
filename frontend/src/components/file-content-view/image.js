@@ -12,6 +12,7 @@ const {
   thumbnailSizeForOriginal,
   previousImage, nextImage, rawPath,
   lastModificationTime,
+  livePhotoVideoUrl,
 } = window.app.pageOptions;
 
 let previousImageUrl;
@@ -28,7 +29,8 @@ class FileContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadFailed: false
+      loadFailed: false,
+      isPlayingLivePhoto: false,
     };
   }
 
@@ -47,6 +49,19 @@ class FileContent extends React.Component {
     this.setState({
       loadFailed: true
     });
+  };
+
+  handlePlayLivePhoto = () => {
+    this.setState({ isPlayingLivePhoto: true });
+  };
+
+  handleVideoEnded = () => {
+    this.setState({ isPlayingLivePhoto: false });
+  };
+
+  handleVideoError = () => {
+    // Not a live photo or video extraction failed
+    this.setState({ isPlayingLivePhoto: false });
   };
 
   render() {
@@ -86,6 +101,8 @@ class FileContent extends React.Component {
       style.position = 'relative';
     }
 
+    const { isPlayingLivePhoto } = this.state;
+
     return (
       <div className="file-view-content flex-1 image-file-view d-flex align-items-center justify-content-center">
         {previousImage && (
@@ -98,7 +115,24 @@ class FileContent extends React.Component {
             <Icon symbol="down" className="rotate-270" />
           </a>
         )}
-        <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={style} />
+        {isPlayingLivePhoto ? (
+          <video
+            src={livePhotoVideoUrl}
+            autoPlay
+            onEnded={this.handleVideoEnded}
+            onError={this.handleVideoError}
+            style={{ maxWidth: '100%', maxHeight: '100%' }}
+          />
+        ) : (
+          <>
+            <img src={thumbnailURL || rawPath} alt={fileName} id="image-view" onError={this.handleLoadFailure} style={style} />
+            {livePhotoVideoUrl && (
+              <button className="live-photo-badge" onClick={this.handlePlayLivePhoto} title={gettext('Play Live Photo')}>
+                LIVE
+              </button>
+            )}
+          </>
+        )}
       </div>
     );
   }
@@ -112,3 +146,4 @@ FileContent.propTypes = {
 };
 
 export default FileContent;
+
