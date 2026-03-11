@@ -98,9 +98,6 @@ class InnerFileView extends React.Component {
     let content;
     switch (fileType) {
       case 'Image':
-      case 'RAW':
-      case 'EXR':
-      case 'EPS':
         content = (
           <div
             ref={this.imageContainerRef}

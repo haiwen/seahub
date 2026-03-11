@@ -130,9 +130,6 @@ PREVIEW_FILEEXT = {
     TLDRAW: ('draw',),
     EXCALIDRAW: ('exdraw',),
     TEXT: ('admin', 'txt', 'log', 'csv', 'py', 'c', 'cpp', 'h', 'java', 'js', 'css', 'html', 'htm', 'xml', 'json', 'yml', 'yaml', 'sh', 'rb', 'php', 'go', 'rs', 'swift', 'kt", "kts', 'dart', 'ini', 'cfg', 'conf', 'toml'),
-    RAW: ('cr2', 'cr3', 'nef', 'arw', 'dng'),
-    EXR: ('exr',),
-    EPS: ('eps',),
 }
 
 def get_non_sdoc_file_exts():
