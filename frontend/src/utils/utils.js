@@ -450,12 +450,12 @@ export const Utils = {
       size = Utils.isHiDPI() ? 48 : 24;
     }
     size = size > 24 ? 192 : 24;
-    if (readonly) {
-      return `${mediaUrl}img/folder-read-only'-${size}.png`;
-    }
-
     if (sharedOut) {
       return `${mediaUrl}img/folder-shared-out-${size}.png`;
+    }
+
+    if (readonly) {
+      return `${mediaUrl}img/folder-read-only-${size}.png`;
     }
 
     return `${mediaUrl}img/folder-${size}.png`;
