@@ -88,6 +88,10 @@ class RepoArchiveView(APIView):
         if is_wiki_repo(repo):
             error_msg = 'Wiki library not support archive/unarchive operation.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        
+        if repo.is_virtual:
+            error_msg = 'Virtual library not support archive/unarchive operation.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # permission check
         if not is_repo_admin(request.user.username, repo_id):

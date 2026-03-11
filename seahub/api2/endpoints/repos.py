@@ -472,7 +472,11 @@ class RepoView(APIView):
 
         # Add archive_status if storage classes is enabled
         if is_pro_version() and ENABLE_STORAGE_CLASSES:
-            archive_status = RepoArchiveStatus.objects.get_archive_status(repo_id)
+            if repo.is_virtual:
+                origin_repo_id = repo.origin_repo_id
+                archive_status = RepoArchiveStatus.objects.get_archive_status(origin_repo_id)
+            else:
+                archive_status = RepoArchiveStatus.objects.get_archive_status(repo_id)
             result['archive_status'] = archive_status
 
         # Set permission to 'r' for read-only repos
