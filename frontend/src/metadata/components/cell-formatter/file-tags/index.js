@@ -22,7 +22,7 @@ const FileTagsFormatter = ({ tagsData, value: oldValue, className, children: emp
           const tagColor = getTagColor(tag);
           const tagName = getTagName(tag);
           if (!showName) return (
-            <span key={item} className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }}></span>
+            <span key={item} className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }} title={tagName}></span>
           );
           return (
             <div key={item} className="sf-metadata-ui-tag" title={tagName}>

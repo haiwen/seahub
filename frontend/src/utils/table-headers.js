@@ -74,9 +74,9 @@ export const createTableHeaders = (
       className: COLUMN_CONFIG.name.className,
       minWidth: COLUMN_CONFIG.name.width,
       children: React.createElement(
-        'a',
+        'span',
         {
-          className: 'd-flex align-items-center table-sort-op',
+          className: 'd-flex align-items-center table-sort-op cursor-pointer',
           href: '#',
           onClick: (e) => { e.preventDefault(); onSort && onSort('name'); }
         },
@@ -90,9 +90,9 @@ export const createTableHeaders = (
       className: COLUMN_CONFIG.size.className,
       minWidth: COLUMN_CONFIG.size.width,
       children: React.createElement(
-        'a',
+        'span',
         {
-          className: 'd-flex align-items-center table-sort-op',
+          className: 'd-flex align-items-center table-sort-op cursor-pointer',
           href: '#',
           onClick: (e) => { e.preventDefault(); onSort && onSort('size'); }
         },
@@ -106,9 +106,9 @@ export const createTableHeaders = (
       className: COLUMN_CONFIG.modified.className,
       minWidth: COLUMN_CONFIG.modified.width,
       children: React.createElement(
-        'a',
+        'span',
         {
-          className: 'd-flex align-items-center table-sort-op',
+          className: 'd-flex align-items-center table-sort-op cursor-pointer',
           href: '#',
           onClick: (e) => { e.preventDefault(); onSort && onSort('time'); }
         },
@@ -122,7 +122,7 @@ export const createTableHeaders = (
       className: COLUMN_CONFIG.file_creator.className,
       minWidth: COLUMN_CONFIG.file_creator.width,
       children: React.createElement(
-        'a',
+        'span',
         {
           className: 'd-flex align-items-center table-sort-op',
           href: '#',
@@ -138,7 +138,7 @@ export const createTableHeaders = (
       className: COLUMN_CONFIG.file_modifier.className,
       minWidth: COLUMN_CONFIG.file_modifier.width,
       children: React.createElement(
-        'a',
+        'span',
         {
           className: 'd-flex align-items-center table-sort-op',
           href: '#',

@@ -227,7 +227,8 @@ class DirentListItem extends React.Component {
     this.props.onItemSelected(this.props.dirent, event);
   };
 
-  onItemStarred = () => {
+  onItemStarred = (e) => {
+    e.stopPropagation();
     const { dirent, repoID, path, updateDirent } = this.props;
     toggleStar(repoID, path, dirent, updateDirent);
   };
@@ -236,11 +237,7 @@ class DirentListItem extends React.Component {
     e.stopPropagation();
 
     if (this.state.isRenaming) return;
-
-    const isCellClick = e.target.tagName === 'TD' || e.target.closest('.dirent-virtual-item');
-    if (isCellClick) {
-      this.props.onDirentClick(this.props.dirent, e);
-    }
+    this.props.onDirentClick(this.props.dirent, e);
   };
 
   onItemClick = (e) => {

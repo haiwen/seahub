@@ -28,11 +28,12 @@
 }
 
 .star-icon {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .star-icon .seafile-multicolor-icon {
@@ -85,7 +86,11 @@
 }
 
 .dirent-operation-star {
-  padding: 0 8px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
 }
 
 .dirent-thumbnail {
@@ -131,15 +136,12 @@
 }
 
 .dirent-item-name-text {
-  flex: 1 1 auto;
+  display: flex;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .dirent-item-name-text a {
-  width: 100%;
+  width: fit-content;
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -170,12 +172,17 @@
 .dirent-property.dirent-property-creator,
 .dirent-property.dirent-property-last-modifier,
 .dirent-property.dirent-property-status {
+  height: 100%;
   max-width: 120px;
   flex: 0 0 120px;
 }
 
 .dirent-property.dirent-property-tags {
   flex: 0 0 100px;
+}
+
+.dirent-property.dirent-property-tags .sf-metadata-ui.tags-formatter .sf-metadata-ui-tags-container {
+  cursor: default;
 }
 
 .item-meta-info {
