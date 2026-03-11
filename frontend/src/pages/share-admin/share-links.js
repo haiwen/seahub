@@ -98,11 +98,12 @@ class Content extends Component {
               )
             }, // checkbox
             { isFixed: true, width: 40 }, // icon
-            { isFixed: false, width: 0.35, children: gettext('Name') },
+            { isFixed: false, width: 0.20, children: gettext('Name') },
             { isFixed: false, width: columnWidths[0], children: gettext('Library') },
             isPro ? { isFixed: false, width: 0.2, children: gettext('Permission') } : null,
             { isFixed: false, width: columnWidths[1], children: gettext('Visits') },
             { isFixed: false, width: columnWidths[2], children: gettext('Expiration') },
+            { isFixed: false, width: 0.15, children: gettext('Description') },
             { isFixed: false, width: 0.1 }, // operations
           ].filter(i => i) : [
             { isFixed: false, width: 0.12 },
@@ -320,6 +321,7 @@ class Item extends Component {
             }
             <td>{item.view_cnt}</td>
             <td>{this.renderExpiration()}</td>
+            <td>{item.description || '--'}</td>
             <td>
               <div className="d-flex align-items-center">
                 {!item.is_expired &&

@@ -34,6 +34,7 @@ class GenerateUploadLink extends React.Component {
       password: '',
       passwordnew: '',
       description: '',
+      isShowDescriptionInput: false,
       storedPasswordVisible: false,
       sharedUploadInfo: null,
       isSendLinkShown: false,
@@ -111,6 +112,13 @@ class GenerateUploadLink extends React.Component {
   inputDescription = (e) => {
     this.setState({
       description: e.target.value
+    });
+  };
+
+  onDescriptionInputChecked = () => {
+    this.setState({
+      isShowDescriptionInput: !this.state.isShowDescriptionInput,
+      description: ''
     });
   };
 
@@ -439,15 +447,30 @@ class GenerateUploadLink extends React.Component {
           </div>
           }
         </FormGroup>
-        <FormGroup>
-          <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Description (optional):')}</Label>
-          <textarea
-            className="form-control w-75"
-            id="msg"
-            value={this.state.description}
-            onChange={this.inputDescription}
-          >
-          </textarea>
+        <FormGroup check>
+          <Label check>
+            <Input
+              type="checkbox"
+              checked={this.state.isShowDescriptionInput}
+              onChange={this.onDescriptionInputChecked}
+              onKeyDown={Utils.onKeyDown}
+            />
+            <span>{gettext('Add description')}</span>
+          </Label>
+          {this.state.isShowDescriptionInput && (
+            <div className="ml-4">
+              <FormGroup>
+                <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Description')}</Label>
+                <textarea
+                  className="form-control w-75"
+                  id="msg"
+                  value={this.state.description}
+                  onChange={this.inputDescription}
+                >
+                </textarea>
+              </FormGroup>
+            </div>
+          )}
         </FormGroup>
         {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
         <Button color="primary" className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>

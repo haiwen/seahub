@@ -92,9 +92,10 @@ class LinkList extends React.Component {
                       />
                     </th>
                     <th width="18%">{gettext('Link')}</th>
-                    <th width="25%">{gettext('Permission')}</th>
-                    <th width="20%">{gettext('Access scope')}</th>
-                    <th width="20%">{gettext('Expiration')}</th>
+                    <th width="20%">{gettext('Permission')}</th>
+                    <th width="15%">{gettext('Access scope')}</th>
+                    <th width="15%">{gettext('Expiration')}</th>
+                    <th width="15%">{gettext('Description')}</th>
                     <th width="11%">{gettext('Password')}</th>
                     <th width="14%"></th>
                   </tr>
@@ -106,9 +107,10 @@ class LinkList extends React.Component {
                     <tr>
                       <th width="3%" className="text-center"></th>
                       <th width="18%">{gettext('Link')}</th>
-                      <th width="25%">{gettext('Permission')}</th>
-                      <th width="20%">{gettext('Access scope')}</th>
-                      <th width="20%">{gettext('Expiration')}</th>
+                      <th width="20%">{gettext('Permission')}</th>
+                      <th width="15%">{gettext('Access scope')}</th>
+                      <th width="15%">{gettext('Expiration')}</th>
+                      <th width="15%">{gettext('Description')}</th>
                       <th width="11%">{gettext('Password')}</th>
                       <th width="14%"></th>
                     </tr>

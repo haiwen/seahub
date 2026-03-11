@@ -46,6 +46,7 @@ class LinkCreation extends React.Component {
       password: '',
       newPassword: '',
       description: '',
+      isShowDescriptionInput: false,
       errorInfo: '',
       currentPermission: props.currentPermission,
 
@@ -107,6 +108,13 @@ class LinkCreation extends React.Component {
   inputDescription = (e) => {
     let description = e.target.value.trim();
     this.setState({ description: description });
+  };
+
+  onDescriptionInputChecked = () => {
+    this.setState({
+      isShowDescriptionInput: !this.state.isShowDescriptionInput,
+      description: ''
+    });
   };
 
   generateShareLink = () => {
@@ -428,15 +436,30 @@ class LinkCreation extends React.Component {
             </FormGroup>
           )}
           {type !== 'batch' && (
-            <FormGroup>
-              <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Description (optional):')}</Label>
-              <textarea
-                className="form-control w-75"
-                id="msg"
-                value={this.state.description}
-                onChange={this.inputDescription}
-              >
-              </textarea>
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="checkbox"
+                  checked={this.state.isShowDescriptionInput}
+                  onChange={this.onDescriptionInputChecked}
+                  onKeyDown={Utils.onKeyDown}
+                />
+                <span>{gettext('Add description')}</span>
+              </Label>
+              {this.state.isShowDescriptionInput && (
+                <div className="ml-4">
+                  <FormGroup>
+                    <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Description')}</Label>
+                    <textarea
+                      className="form-control w-75"
+                      id="msg"
+                      value={this.state.description}
+                      onChange={this.inputDescription}
+                    >
+                    </textarea>
+                  </FormGroup>
+                </div>
+              )}
             </FormGroup>
           )}
           {this.state.errorInfo && <Alert color="danger" className="mt-2">{gettext(this.state.errorInfo)}</Alert>}
