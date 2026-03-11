@@ -31,11 +31,14 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
   }, []);
 
   const updatePageCover = useCallback((imageName) => {
-    onUpdatePageConfig(currentPageConfig.id, { cover_img_url: imageName });
+    onUpdatePageConfig(currentPageConfig.id, {
+      ...currentPageConfig,
+      cover_img_url: imageName,
+    });
     setTimeout(() => {
       popoverRef.current?.toggle();
     }, 300);
-  }, [currentPageConfig.id, onUpdatePageConfig]);
+  }, [currentPageConfig, onUpdatePageConfig]);
 
   const removeCoverImage = useCallback(() => {
     updatePageCover('');
