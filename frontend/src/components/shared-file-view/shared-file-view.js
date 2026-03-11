@@ -191,7 +191,7 @@ class SharedFileView extends React.Component {
           )}
           {loginUser && <Account />}
         </div>
-        <div className="flex-fill d-flex flex-column shared-file-view-content-container">
+        <div className="flex-fill d-flex flex-column overflow-auto">
           {!isDesktop && (
             <div className={'shared-file-view-head'}>
               {this.renderFileViewHeader()}
