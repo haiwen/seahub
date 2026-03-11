@@ -63,7 +63,6 @@ def get_dir_file_info_list(username, request_type, repo_obj, parent_dir,
     if ENABLE_THUMBNAIL_SERVER:
         thumbnail_support_file_types.append(SEADOC)
         thumbnail_support_file_types.append(VIDEO)
-
     # only get dir info list
     if not request_type or request_type == 'd':
 

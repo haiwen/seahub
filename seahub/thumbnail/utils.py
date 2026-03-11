@@ -150,7 +150,7 @@ def generate_thumbnail(request, repo_id, size, path):
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
         return (False, 400)
 
-    if fileext.lower() == 'psd':
+    if fileext.lower() in ('psd', 'psb'):
         return create_psd_thumbnails(repo, file_id, path, size,
                                            thumbnail_file, file_size)
     

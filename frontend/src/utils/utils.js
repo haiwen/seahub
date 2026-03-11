@@ -120,6 +120,7 @@ export const Utils = {
 
     // photoshop file
     'psd': 'psd.png',
+    'psb': 'psd.png',
 
     // zip file
     'zip': 'zip.png',
