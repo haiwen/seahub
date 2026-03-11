@@ -45,7 +45,7 @@ class LinkCreation extends React.Component {
       expDate: null,
       password: '',
       newPassword: '',
-      comment: '',
+      description: '',
       errorInfo: '',
       currentPermission: props.currentPermission,
 
@@ -104,9 +104,9 @@ class LinkCreation extends React.Component {
     this.setState({ currentPermission: e.target.value });
   };
 
-  inputComment = (e) => {
-    let comment = e.target.value.trim();
-    this.setState({ comment: comment });
+  inputDescription = (e) => {
+    let description = e.target.value.trim();
+    this.setState({ description: description });
   };
 
   generateShareLink = () => {
@@ -114,7 +114,7 @@ class LinkCreation extends React.Component {
     if (isValid) {
       this.setState({ errorInfo: '' });
       let { type, itemPath, repoID } = this.props;
-      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate, comment } = this.state;
+      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate, description } = this.state;
 
       const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
       let permissions;
@@ -142,7 +142,7 @@ class LinkCreation extends React.Component {
         if (currentScope === 'specific_emails' && inputEmails) {
           users = inputEmails;
         }
-        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users, comment);
+        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users, description);
       }
 
       request.then((res) => {
@@ -429,12 +429,12 @@ class LinkCreation extends React.Component {
           )}
           {type !== 'batch' && (
             <FormGroup>
-              <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Comment (optional):')}</Label>
+              <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Description (optional):')}</Label>
               <textarea
                 className="form-control w-75"
                 id="msg"
-                value={this.state.comment}
-                onChange={this.inputComment}
+                value={this.state.description}
+                onChange={this.inputDescription}
               >
               </textarea>
             </FormGroup>

@@ -117,7 +117,7 @@ def get_share_link_info(fileshare):
     data['permissions'] = fileshare.get_permissions()
     data['password'] = fileshare.get_password()
     data['user_scope'] = fileshare.user_scope
-    data['comment'] = fileshare.comment
+    data['description'] = fileshare.description
     data['can_edit'] = False
     if repo and path != '/' and not data['is_dir']:
         try:
@@ -311,7 +311,7 @@ class ShareLinks(APIView):
             link_info['permissions'] = fs.get_permissions()
             link_info['password'] = fs.get_password()
             link_info['user_scope'] = fs.user_scope
-            link_info['comment'] = fs.comment
+            link_info['description'] = fs.description
 
             link_info['can_edit'] = can_edit
             tmp_key = f"{repo_id}_{path}"
@@ -541,9 +541,9 @@ class ShareLinks(APIView):
             fs.user_scope = user_scope
             fs.save()
 
-        comment = request.data.get('comment', '')
-        if comment:
-            fs.comment = comment
+        description = request.data.get('description', '')
+        if description:
+            fs.description = description
             fs.save()
 
         if emails_list:
@@ -788,9 +788,9 @@ class ShareLink(APIView):
             fs.authed_details = None
             fs.save()
 
-        comment = request.data.get('comment', '')
-        if comment:
-            fs.comment = comment
+        description = request.data.get('description', '')
+        if description:
+            fs.description = description
             fs.save()
 
         link_info = get_share_link_info(fs)

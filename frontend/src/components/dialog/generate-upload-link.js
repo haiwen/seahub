@@ -33,7 +33,7 @@ class GenerateUploadLink extends React.Component {
       passwordVisible: false,
       password: '',
       passwordnew: '',
-      comment: '',
+      description: '',
       storedPasswordVisible: false,
       sharedUploadInfo: null,
       isSendLinkShown: false,
@@ -108,9 +108,9 @@ class GenerateUploadLink extends React.Component {
     });
   };
 
-  inputComment = (e) => {
+  inputDescription = (e) => {
     this.setState({
-      comment: e.target.value
+      description: e.target.value
     });
   };
 
@@ -120,7 +120,7 @@ class GenerateUploadLink extends React.Component {
       this.setState({ errorInfo: '' });
 
       let { itemPath, repoID } = this.props;
-      let { password, isExpireChecked, expType, expireDays, expDate, comment } = this.state;
+      let { password, isExpireChecked, expType, expireDays, expDate, description } = this.state;
 
       let expirationTime = '';
       if (isExpireChecked) {
@@ -131,7 +131,7 @@ class GenerateUploadLink extends React.Component {
         }
       }
 
-      seafileAPI.createUploadLink(repoID, itemPath, password, expirationTime, comment).then((res) => {
+      seafileAPI.createUploadLink(repoID, itemPath, password, expirationTime, description).then((res) => {
         let sharedUploadInfo = new UploadLink(res.data);
         this.setState({ sharedUploadInfo: sharedUploadInfo });
       }).catch(error => {
@@ -440,12 +440,12 @@ class GenerateUploadLink extends React.Component {
           }
         </FormGroup>
         <FormGroup>
-          <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Comment (optional):')}</Label>
+          <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Description (optional):')}</Label>
           <textarea
             className="form-control w-75"
             id="msg"
-            value={this.state.comment}
-            onChange={this.inputComment}
+            value={this.state.description}
+            onChange={this.inputDescription}
           >
           </textarea>
         </FormGroup>
