@@ -1,10 +1,13 @@
 import os
-import re
 import logging
+import tempfile
+import subprocess
 
+import exiftool
 from django.http import HttpResponse, JsonResponse
 
 from seaserv import seafile_api
+from seafobj import fs_mgr
 
 from seahub.auth.decorators import login_required
 from seahub.utils import normalize_file_path
@@ -13,108 +16,47 @@ from seahub.views import check_folder_permission
 logger = logging.getLogger(__name__)
 
 
-def _read_file_content(repo_id, file_id):
-    """Read file content via seafobj."""
-    from seafobj import fs_mgr
-    f = fs_mgr.load_seafile(repo_id, 1, file_id)
-    return f.get_content()
-
-
-def _parse_xmp_metadata(file_content):
-    """Extract XMP metadata values from raw file bytes.
-
-    Searches all XMP blocks in the file since HEIC live photos may have
-    multiple XMP blocks with GCamera tags in a later block.
-
-    Returns a dict with parsed XMP values:
-      - MotionPhoto (int)
-      - MicroVideo (int)
-      - MicroVideoOffset (int)
-    """
-    result = {'MotionPhoto': 0, 'MicroVideo': 0, 'MicroVideoOffset': 0}
-
-    xmp_start_tag = b'<x:xmpmeta'
-    xmp_end_tag = b'</x:xmpmeta>'
-    search_pos = 0
-
-    while True:
-        xmp_start = file_content.find(xmp_start_tag, search_pos)
-        if xmp_start == -1:
-            break
-        xmp_end = file_content.find(xmp_end_tag, xmp_start)
-        if xmp_end == -1:
-            break
-
-        xmp_data = file_content[xmp_start:xmp_end + len(xmp_end_tag)].decode('utf-8', errors='ignore')
-        search_pos = xmp_end + len(xmp_end_tag)
-
-        if 'GCamera' not in xmp_data:
-            continue
-
-        # parse key XMP tags — support both attribute and element formats
-        tags = ['MotionPhoto', 'MicroVideo', 'MicroVideoOffset']
-        for tag in tags:
-            match = re.search(r'GCamera:%s="(\d+)"' % tag, xmp_data)
-            if not match:
-                match = re.search(r'<GCamera:%s>(\d+)</GCamera:%s>' % (tag, tag), xmp_data)
-            if match:
-                result[tag] = int(match.group(1))
-        break  # found the GCamera XMP block, no need to continue
-
-    return result
-
-
 def _check_is_live_photo(repo_id, file_id):
-    """Check if a HEIC file is a live photo by checking XMP metadata.
+    """Check if file content is a live photo using exiftool.
 
-    Returns True if the file has MotionPhoto=1 or MicroVideo=1.
+    Writes content to a temp file and uses exiftool to parse XMP metadata.
+    Returns True if XMP:MotionPhoto=1 or XMP:MicroVideo=1.
     """
-    try:
-        file_content = _read_file_content(repo_id, file_id)
-    except Exception as e:
-        logger.error('read file content via seafobj error: %s', e)
-        return False
+    f = fs_mgr.load_seafile(repo_id, 1, file_id)
+    content = f.get_content()
 
-    try:
-        xmp = _parse_xmp_metadata(file_content)
-        if xmp['MotionPhoto'] == 1 or xmp['MicroVideo'] == 1:
-            return True
-            
-        # fallback: check for Apple Live Photo markers or generic MotionPhoto/MicroVideo strings
-        markers = [b'quicktime.live-photo', b'LivePhotoMetadata', b'MotionPhotoVideo']
-        for marker in markers:
-            if marker in file_content:
+    with tempfile.NamedTemporaryFile(suffix='.heic') as temp_file:
+        temp_file.write(content)
+        temp_file.flush()
+        with exiftool.ExifToolHelper() as et:
+            metadata = et.get_metadata(temp_file.name)[0]
+            if metadata.get('XMP:MotionPhoto') == 1 or metadata.get('XMP:MicroVideo') == 1:
                 return True
-                
-        return False
-    except Exception as e:
-        logger.error('check live photo error: %s', e)
-        return False
+    return False
 
 
-def _extract_video_data(file_content):
-    """Extract embedded video data from a live photo file.
+def _extract_video_data(repo_id, file_id):
+    """Extract embedded video data from a live photo using exiftool.
 
-    Tries two strategies:
-    1. Use MicroVideoOffset from XMP metadata (offset from end of file)
-    2. Search for MP4 ftyp box signature as fallback (skip HEIC's own ftyp)
+    Writes content to a temp file and uses exiftool command line to extract
+    the QuickTime:MotionPhotoVideo binary data.
     """
-    xmp = _parse_xmp_metadata(file_content)
+    f = fs_mgr.load_seafile(repo_id, 1, file_id)
+    content = f.get_content()
 
-    # strategy 1: use MicroVideoOffset from XMP
-    offset = xmp.get('MicroVideoOffset', 0)
-    if offset > 0 and offset < len(file_content):
-        return file_content[len(file_content) - offset:]
-
-    # strategy 2: search for MP4 ftyp box after XMP block
-    # skip HEIC file's own ftyp header at the beginning
-    xmp_end = file_content.find(b'</x:xmpmeta>')
-    search_start = xmp_end if xmp_end != -1 else 1024
-    idx = file_content.find(b'ftyp', search_start)
-    if idx >= 4:
-        video_start = idx - 4
-        return file_content[video_start:]
-
+    with tempfile.NamedTemporaryFile(suffix='.heic') as temp_file:
+        temp_file.write(content)
+        temp_file.flush()
+        cmd_extract = [
+            'exiftool',
+            '-b',   # output binary data
+            '-s3',  # return data only, no extra tags
+            '-QuickTime:MotionPhotoVideo',
+            temp_file.name
+        ]
+        video_data = subprocess.run(cmd_extract, stdout=subprocess.PIPE).stdout
+        if video_data:
+            return video_data
     return None
 
 
@@ -146,7 +88,12 @@ def check_live_photo(request, repo_id, path):
     if not permission:
         return HttpResponse('Permission denied.', status=403)
 
-    is_live = _check_is_live_photo(repo_id, file_id)
+    try:
+        is_live = _check_is_live_photo(repo_id, file_id)
+    except Exception as e:
+        logger.error('check live photo error: %s', e)
+        is_live = False
+
     return JsonResponse({'is_live_photo': is_live})
 
 
@@ -178,16 +125,9 @@ def live_photo_content(request, repo_id, path):
     if not permission:
         return HttpResponse('Permission denied.', status=403)
 
-    # read file content via seafobj
-    try:
-        file_content = _read_file_content(repo_id, file_id)
-    except Exception as e:
-        logger.error('read file content via seafobj error: %s', e)
-        return HttpResponse('Internal Server Error', status=500)
-
     # extract video data
     try:
-        video_data = _extract_video_data(file_content)
+        video_data = _extract_video_data(repo_id, file_id)
         if not video_data:
             return HttpResponse('Not a live photo or no video data found.', status=404)
     except Exception as e:

@@ -173,7 +173,7 @@ class DirentListItem extends React.Component {
       const { dirent, repoID, path } = this.props;
       livePhotoCenter.cancelCheck({
         repoID,
-        path: [path, dirent.name].join('/'),
+        path: urlJoin(path, dirent.name),
       });
     }
     this.setState = () => {};
