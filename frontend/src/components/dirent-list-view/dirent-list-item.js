@@ -235,6 +235,8 @@ class DirentListItem extends React.Component {
   onDirentClick = (e) => {
     e.stopPropagation();
 
+    if (this.state.isRenaming) return;
+
     const isCellClick = e.target.tagName === 'TD' || e.target.closest('.dirent-virtual-item');
     if (isCellClick) {
       this.props.onDirentClick(this.props.dirent, e);
@@ -518,7 +520,6 @@ class DirentListItem extends React.Component {
   };
 
   onItemMouseDown = (event) => {
-    event.preventDefault();
     this.props.onItemMouseDown(event);
   };
 
