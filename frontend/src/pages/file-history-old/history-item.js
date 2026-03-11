@@ -55,7 +55,7 @@ class HistoryItem extends React.Component {
           {this.props.index === 0 && <span className="ml-1">{gettext('(current version)')}</span>}
         </td>
         <td>
-          <img className="avatar" src={item.creator_avatar_url} alt=''></img>{' '}
+          <img className="avatar mr-1" src={item.creator_avatar_url} alt='' />
           <a
             href={`${siteRoot}profile/${encodeURIComponent(item.creator_email)}/`}
             target='_blank'
@@ -67,16 +67,15 @@ class HistoryItem extends React.Component {
         </td>
         <td>{Utils.bytesToSize(item.size)}</td>
         <td>
-          {this.state.active &&
-            <MoreMenu
-              index={this.props.index}
-              downloadUrl={URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id })}
-              viewUrl={`${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${Utils.encodePath(filePath)}`}
-              snapshotURL={`${siteRoot}repo/${historyRepoID}/snapshot/?commit_id=${item.commit_id}`}
-              onItemRestore={this.onItemRestore}
-              canDownload={this.props.canDownload}
-            />
-          }
+          <MoreMenu
+            index={this.props.index}
+            downloadUrl={URLDecorator.getUrl({ type: 'download_historic_file', filePath: filePath, objID: item.rev_file_id })}
+            viewUrl={`${siteRoot}repo/${historyRepoID}/history/files/?obj_id=${item.rev_file_id}&commit_id=${item.commit_id}&p=${Utils.encodePath(filePath)}`}
+            snapshotURL={`${siteRoot}repo/${historyRepoID}/snapshot/?commit_id=${item.commit_id}`}
+            onItemRestore={this.onItemRestore}
+            canDownload={this.props.canDownload}
+            className={this.state.active ? '' : 'invisible'}
+          />
         </td>
       </tr>
     );
@@ -93,6 +92,7 @@ const MoreMenuPropTypes = {
   onItemRestore: PropTypes.func.isRequired,
   canDownload: PropTypes.bool.isRequired,
   snapshotURL: PropTypes.string.isRequired,
+  className: PropTypes.string.isRequired,
 };
 
 class MoreMenu extends React.PureComponent {
@@ -109,9 +109,9 @@ class MoreMenu extends React.PureComponent {
   };
 
   render() {
-    const { index, downloadUrl, viewUrl, snapshotURL, onItemRestore, canDownload } = this.props;
+    const { index, downloadUrl, viewUrl, snapshotURL, onItemRestore, canDownload, className } = this.props;
     return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className="mx-1 old-history-more-operation">
+      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle} direction="down" className={`mx-1 old-history-more-operation ${className}`}>
         <DropdownToggle
           tag='span'
           className='op-icon'
