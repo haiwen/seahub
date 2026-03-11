@@ -1,7 +1,7 @@
 import React from 'react';
 import { gettext } from './constants';
 import Icon from '../components/icon';
-import { DIR_COLUMN_KEYS } from '../constants/dir-column-visibility';
+import { DIR_COLUMN_KEYS } from '../constants/dir-column-config';
 import { COLUMN_CONFIG } from '../components/dirent-list-view/column-config';
 import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 
@@ -112,7 +112,7 @@ export const createTableHeaders = (
           href: '#',
           onClick: (e) => { e.preventDefault(); onSort && onSort('time'); }
         },
-        gettext('Last update'),
+        gettext('Last modified'),
         sortBy === 'time' && sortIcon
       )
     }] : []),

@@ -1,3 +1,5 @@
+import { formatUnixWithTimezone } from '@/utils/time';
+
 export const transformDirentsToTableData = (dirents, repoID) => {
   if (!dirents || !Array.isArray(dirents)) {
     return;
@@ -5,16 +7,23 @@ export const transformDirentsToTableData = (dirents, repoID) => {
 
   const id_row_map = {};
   const rows = dirents.map((dirent) => {
-    const { ...props } = dirent;
-
     const transformedRow = {};
-
-    Object.keys(props).forEach(key => {
-      const mappedKey = key.startsWith('_') ? key : `_${key}`; // Adapt to the shape of table perameter of SFTable
-      transformedRow[mappedKey] = props[key];
+    Object.keys(dirent).forEach(key => {
+      if (key === 'metadata') {
+        const metadata = dirent[key];
+        if (metadata) {
+          Object.keys(metadata).forEach(metadataKey => {
+            transformedRow[metadataKey] = metadata[metadataKey];
+          });
+        }
+        return;
+      }
+      transformedRow[`_${key}`] = dirent[key]; // Adapt to the shape of table perameter of SFTable
     });
 
-    transformedRow._is_dir = transformedRow._type !== 'file';
+    transformedRow._is_dir = dirent.type !== 'file';
+    transformedRow._size = transformedRow._size_original;
+    transformedRow._mtime = formatUnixWithTimezone(transformedRow._mtime);
     transformedRow._id = `${transformedRow._id}_${transformedRow._name}`;
 
     id_row_map[transformedRow._id] = transformedRow;

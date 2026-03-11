@@ -28,7 +28,7 @@ import { MetadataStatusProvider, FileOperationsProvider, MetadataMiddlewareProvi
 import { MetadataProvider } from '../../metadata/hooks';
 import metadataAPI from '../../metadata/api';
 import { PRIVATE_COLUMN_KEY } from '../../metadata/constants/column/private';
-import { LIST_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE } from '../../components/dir-view-mode/constants';
+import { LIST_MODE, TABLE_MODE, METADATA_MODE, TAGS_MODE, HISTORY_MODE, TRASH_MODE } from '../../components/dir-view-mode/constants';
 import CurDirPath from '../../components/cur-dir-path';
 import DirTool from '../../components/cur-dir-path/dir-tool';
 import Detail from '../../components/dirent-detail';
@@ -38,7 +38,7 @@ import ViewToolbar from '../../components/toolbar/view-toolbar';
 import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
-import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS } from '@/constants/dir-column-visibility';
+import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, DIR_TABLE_HIDDEN_COLUMN_KEYS, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
 import { getColumnOptionNameById } from '@/metadata/utils/cell';
 import { normalizeColumns } from '@/metadata/utils/column';
 
@@ -111,8 +111,11 @@ class LibContentView extends React.Component {
       tagId: '',
       currentDirent: null,
       columns: DIR_BASE_COLUMNS,
+      tableViewColumns: DIR_BASE_COLUMNS,
       hiddenColumnKeys: JSON.parse(localStorage.getItem(DIR_HIDDEN_COLUMN_KEYS)) || DIR_METADATA_COLUMNS,
+      hiddenTableViewColumnKeys: JSON.parse(localStorage.getItem(DIR_TABLE_HIDDEN_COLUMN_KEYS)) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
+      metadata: null,
       isCrossRepoMove: false,
     };
     this.oldOnpopstate = window.onpopstate;
@@ -164,6 +167,7 @@ class LibContentView extends React.Component {
     this.unsubscribeUpdateTrashPath = eventBus.subscribe(EVENT_BUS_TYPE.UPDATE_TRASH_PATH, this.updateTrashPath);
 
     this.unsubscribeColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, this.onHiddenColumnKeys);
+    this.unsubscribeTableViewColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_TABLE_VIEW_COLUMNS_CHANGED, this.onHiddenTableViewColumnKeys);
     this.unsubscribeDirentStatusChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, this.updateDirentStatus);
     this.unsubscribeColumnDataModified = eventBus.subscribe(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, this.onColumnDataModified);
     this.unsubscribeDirentTagsModified = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_TAGS_CHANGED, this.updateDirentTags);
@@ -219,6 +223,7 @@ class LibContentView extends React.Component {
         const { dirent_list, user_perm: userPerm, dir_id: dirID, metadata } = res.data;
 
         const columns = this.enrichColumns(metadata);
+        const tableViewColumns = this.getTableViewColumns(metadata);
         const enrichedDirentList = this.enrichDirentListWithMetadata(dirent_list, metadata);
         const direntList = Utils.sortDirents(enrichedDirentList, this.state.sortBy, this.state.sortOrder);
 
@@ -232,6 +237,8 @@ class LibContentView extends React.Component {
           isSessionExpired: false,
           currentDirent: null,
           columns,
+          tableViewColumns,
+          metadata,
         });
 
         // Synchronize tree panel with updated directory list
@@ -669,9 +676,10 @@ class LibContentView extends React.Component {
     window.history.pushState({ url: url, path: '' }, '', url);
   };
 
+  // List view columns
   enrichColumns = (metadata) => {
     if (!metadata?.columns) {
-      if (this.cachedColumns) {
+      if (this.state.enableMetadata && this.cachedColumns) {
         return this.cachedColumns;
       }
       return DIR_BASE_COLUMNS;
@@ -690,6 +698,35 @@ class LibContentView extends React.Component {
     return this.cachedColumns;
   };
 
+  // Get all metadata columns for DirTableView (not filtered)
+  getTableViewColumns = (metadata) => {
+    if (!metadata?.columns) {
+      return DIR_BASE_COLUMNS;
+    }
+
+    // Filter metadata columns
+    const normalizedColumns = normalizeColumns(metadata.columns);
+    const filteredColumns = normalizedColumns.filter(col => !DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS.includes(col.key));
+
+    const originalColumns = [];
+    const additionalColumns = [];
+
+    filteredColumns.forEach(col => {
+      if (DIR_TABLE_DEFAULT_METADATA_COLUMNS.includes(col.key)) {
+        originalColumns.push(col);
+      } else {
+        additionalColumns.push(col);
+      }
+    });
+
+    originalColumns.sort((a, b) => {
+      return DIR_TABLE_DEFAULT_METADATA_COLUMNS.indexOf(a.key) - DIR_TABLE_DEFAULT_METADATA_COLUMNS.indexOf(b.key);
+    });
+
+    // Combine: original columns first, then additional metadata columns in their API order
+    return [...originalColumns, ...additionalColumns].map(col => new Column(col));
+  };
+
   enrichDirentListWithMetadata = (direntList, metadata) => {
     const files = direntList.filter(item => item.type === 'file');
     if (files.length === 0) {
@@ -704,13 +741,7 @@ class LibContentView extends React.Component {
       rows.forEach(record => {
         const filename = record[PRIVATE_COLUMN_KEY.FILE_NAME];
         if (filename) {
-          metadataMap.set(filename, {
-            id: record[PRIVATE_COLUMN_KEY.ID],
-            creator: record[PRIVATE_COLUMN_KEY.FILE_CREATOR],
-            modifier: record[PRIVATE_COLUMN_KEY.FILE_MODIFIER],
-            status: record[PRIVATE_COLUMN_KEY.FILE_STATUS],
-            tags: record[PRIVATE_COLUMN_KEY.TAGS],
-          });
+          metadataMap.set(filename, record);
         }
       });
     }
@@ -724,13 +755,16 @@ class LibContentView extends React.Component {
 
       const metadataInfo = metadataMap.get(item.name);
       if (metadataInfo) {
-        enrichedItem[PRIVATE_COLUMN_KEY.ID] = metadataInfo.id;
-        enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = metadataInfo.creator;
-        enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = metadataInfo.modifier;
-        enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = metadataInfo.status;
-        enrichedItem[PRIVATE_COLUMN_KEY.TAGS] = metadataInfo.tags;
+        Object.keys(metadataInfo).forEach(key => {
+          if (!enrichedItem.metadata) {
+            enrichedItem.metadata = {};
+          }
+          enrichedItem.metadata[key] = metadataInfo[key];
+          return;
+        });
       } else {
         const cachedDirent = cachedDirentMap.get(item.name);
+        // Fallback to cached dirent data for basic fields
         enrichedItem[PRIVATE_COLUMN_KEY.ID] = cachedDirent?.[PRIVATE_COLUMN_KEY.ID] || '';
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
         enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
@@ -765,6 +799,7 @@ class LibContentView extends React.Component {
       } = direntRes.data;
 
       const columns = this.enrichColumns(metadata);
+      const tableViewColumns = this.getTableViewColumns(metadata);
       const enrichedDirentList = this.enrichDirentListWithMetadata(dirent_list, metadata);
       const direntList = Utils.sortDirents(enrichedDirentList, sortBy, sortOrder);
 
@@ -775,9 +810,11 @@ class LibContentView extends React.Component {
         direntList,
         dirID,
         path,
+        columns,
+        tableViewColumns,
+        metadata,
         isSessionExpired: false,
         currentDirent: null,
-        columns,
       }, () => {
         if (this.state.currentRepoInfo.is_admin) {
           if (this.foldersSharedOut) {
@@ -2214,16 +2251,17 @@ class LibContentView extends React.Component {
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
         if (d.name === direntName) {
-          return new Dirent({ ...d, ...update });
+          return new Dirent({
+            ...d,
+            metadata: {
+              ...d.metadata,
+              ...update
+            } });
         }
         return d;
       });
 
       const newState = { direntList: newDirentList };
-
-      if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
-        newState.currentDirent = new Dirent({ ...prevState.currentDirent, ...update });
-      }
       return newState;
     });
   };
@@ -2231,6 +2269,11 @@ class LibContentView extends React.Component {
   onHiddenColumnKeys = (colKeys) => {
     localStorage.setItem(DIR_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
     this.setState({ hiddenColumnKeys: colKeys });
+  };
+
+  onHiddenTableViewColumnKeys = (colKeys) => {
+    localStorage.setItem(DIR_TABLE_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
+    this.setState({ hiddenTableViewColumnKeys: colKeys });
   };
 
   onColumnDataModified = async (key, data, isLocal = false) => {
@@ -2918,8 +2961,8 @@ class LibContentView extends React.Component {
                           onCloseDetail={this.closeDirentDetail}
                           eventBus={this.props.eventBus}
                           enableMetadata={this.state.enableMetadata}
-                          columns={this.state.columns}
-                          hiddenColumnKeys={this.state.hiddenColumnKeys}
+                          columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
+                          hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
                         />
                       </div>
                       }
@@ -2993,8 +3036,8 @@ class LibContentView extends React.Component {
                           toggleShowDirentToolbar={this.toggleShowDirentToolbar}
                           updateTreeNode={this.updateTreeNode}
                           sortTreeNode={this.sortTreeNode}
-                          columns={this.state.columns}
-                          hiddenColumnKeys={this.state.hiddenColumnKeys}
+                          columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
+                          hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>

@@ -28,7 +28,7 @@ class Dirent {
       this.mtime_relative = dayjs.unix(json.mtime).locale(lang).fromNow();
     }
     this.permission = json.permission || 'rw';
-    this.isSelected = false;
+    this.isSelected = json.isSelected || false;
     this.starred = json.starred || false;
     if (json.type === 'dir') {
       this.has_been_shared_out = false;
@@ -62,21 +62,8 @@ class Dirent {
         this.revision_id = json.revision_id || null;
       }
 
-      // metadata fields
-      if (json._id) {
-        this._id = json._id;
-      }
-      if (json._file_creator) {
-        this._file_creator = json._file_creator;
-      }
-      if (json._file_modifier) {
-        this._file_modifier = json._file_modifier;
-      }
-      if (json._status) {
-        this._status = json._status;
-      }
-      if (json._tags) {
-        this._tags = json._tags;
+      if (json.metadata) {
+        this.metadata = json.metadata;
       }
     }
   }

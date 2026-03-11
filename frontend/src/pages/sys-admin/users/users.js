@@ -60,6 +60,7 @@ class Users extends Component {
 
     if (prevProps.sortBy !== sortBy ||
       prevProps.sortOrder !== sortOrder ||
+      prevProps.perPage !== perPage ||
       prevProps.currentPage !== currentPage) {
       this.updateURLSearchParams({
         'page': currentPage,
@@ -329,14 +330,6 @@ class Users extends Component {
     });
   };
 
-  resetPerPage = (perPage) => {
-    this.setState({
-      perPage: perPage
-    }, () => {
-      this.getUsersListByPage(1);
-    });
-  };
-
   updateUser = (email, key, value, options = {}) => {
     systemAdminAPI.sysAdminUpdateUser(email, key, value, options).then(res => {
       let newUserList = this.state.userList.map(item => {
@@ -440,7 +433,7 @@ class Users extends Component {
             currentPage={this.state.currentPage}
             hasNextPage={this.state.hasNextPage}
             curPerPage={this.props.perPage}
-            resetPerPage={this.resetPerPage}
+            resetPerPage={this.props.setPerPage}
             getListByPage={this.getUsersListByPage}
             updateUser={this.updateUser}
             deleteUser={this.deleteUser}

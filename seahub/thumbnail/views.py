@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import hashlib
 import os
 import json
 import logging
@@ -17,7 +18,7 @@ from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
     THUMBNAIL_ROOT
 import seahub.settings as settings
-from seahub.thumbnail.utils import generate_thumbnail, \
+from seahub.thumbnail.utils import generate_thumbnail, generate_thumbnail_key, \
     get_thumbnail_src, get_share_link_thumbnail_src
 from seahub.share.models import FileShare, check_share_link_common
 
@@ -67,21 +68,17 @@ def thumbnail_create(request, repo_id):
 
 
 def latest_entry(request, repo_id, size, path):
-    obj_id = get_file_id_by_path(repo_id, path)
-    if obj_id:
-        try:
-            thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
-            last_modified_time = os.path.getmtime(thumbnail_file)
-            # convert float to datatime obj
-            return datetime.datetime.fromtimestamp(last_modified_time)
-        except os.error:
-            # no thumbnail file exists
-            return None
-        except Exception as e:
-            # catch all other errors
-            logger.error(e, exc_info=True)
-            return None
-    else:
+    """Get the last modified time of the thumbnail file."""
+    thumbnail_key = generate_thumbnail_key(repo_id, path)
+    try:
+        thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
+        last_modified_time = os.path.getmtime(thumbnail_file)
+        # convert float to datetime obj
+        return datetime.datetime.fromtimestamp(last_modified_time)
+    except os.error:
+        return None
+    except Exception as e:
+        logger.error(e, exc_info=True)
         return None
 
 
@@ -92,7 +89,6 @@ def thumbnail_get(request, repo_id, size, path):
 
     return thumbnail file to web
     """
-
     repo = get_repo(repo_id)
     obj_id = get_file_id_by_path(repo_id, path)
 
@@ -110,10 +106,11 @@ def thumbnail_get(request, repo_id, size, path):
         logger.error(e)
         return HttpResponse()
 
-    success = True
-    thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
-    if not os.path.exists(thumbnail_file):
-        success, status_code = generate_thumbnail(request, repo_id, size, path)
+    # Use MD5 of repo_id + path as thumbnail filename
+    thumbnail_key = generate_thumbnail_key(repo_id, path)
+    thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
+    
+    success, status_code = generate_thumbnail(request, repo_id, size, path)
 
     if success:
         try:
@@ -196,6 +193,7 @@ def share_link_thumbnail_create(request, token):
 
 
 def share_link_latest_entry(request, token, size, path):
+    """Get the last modified time of the thumbnail file for share link."""
     fileshare = FileShare.objects.get_valid_file_link_by_token(token)
     if not fileshare:
         return None
@@ -206,19 +204,15 @@ def share_link_latest_entry(request, token, size, path):
         return None
 
     image_path = get_real_path_by_fs_and_req_path(fileshare, path)
-
-    obj_id = get_file_id_by_path(repo_id, image_path)
-    if obj_id:
-        try:
-            thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
-            last_modified_time = os.path.getmtime(thumbnail_file)
-            # convert float to datatime obj
-            return datetime.datetime.fromtimestamp(last_modified_time)
-        except Exception as e:
-            logger.error(e)
-            # no thumbnail file exists
-            return None
-    else:
+    thumbnail_key = generate_thumbnail_key(repo_id, image_path)
+    
+    try:
+        thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
+        last_modified_time = os.path.getmtime(thumbnail_file)
+        # convert float to datetime obj
+        return datetime.datetime.fromtimestamp(last_modified_time)
+    except Exception as e:
+        logger.error(e)
         return None
 
 
@@ -228,7 +222,6 @@ def share_link_thumbnail_get(request, token, size, path):
 
     return thumbnail file to web
     """
-
     try:
         size = int(size)
     except ValueError as e:
@@ -257,10 +250,12 @@ def share_link_thumbnail_get(request, token, size, path):
     if repo.encrypted:
         return HttpResponse()
 
-    success = True
-    thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
-    if not os.path.exists(thumbnail_file):
-        success, status_code = generate_thumbnail(request, repo_id, size, image_path)
+    # Use MD5 of repo_id + path as thumbnail filename
+    thumbnail_key = generate_thumbnail_key(repo_id, image_path)
+    thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), thumbnail_key)
+    
+    # generate_thumbnail will handle mtime comparison internally
+    success, status_code = generate_thumbnail(request, repo_id, size, image_path)
 
     if success:
         try:

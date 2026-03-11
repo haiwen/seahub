@@ -18,6 +18,8 @@ import WebSocketClient from '../../utils/websocket-service';
 import ResizeWidth from './resize-width';
 import LocalStorage from '../../utils/local-storage-utils';
 import I18nCommentPanel from './i18n-comment-panel';
+import ModalPortal from '../modal-portal';
+import ShareDialog from '../dialog/share-dialog';
 
 import '../../css/file-view.css';
 
@@ -43,6 +45,7 @@ class FileView extends React.Component {
   constructor(props) {
     super(props);
     const storedIsHeaderShown = localStorage.getItem('sf_onlyoffile_file_view_header_shown');
+
     this.state = {
       isStarred: isStarred,
       isLocked: isLocked,
@@ -52,6 +55,8 @@ class FileView extends React.Component {
       isDetailsPanelOpen: false,
       isCommentUpdated: false,
       width: MIN_PANEL_WIDTH,
+      isShareEnabled: false,
+      isShareDialogOpen: false
     };
 
     this.socketManager = new WebSocketClient(this.onMessageCallback, repoID);
@@ -69,7 +74,35 @@ class FileView extends React.Component {
       Math.min(parseInt(panelWidth, 10) || MIN_PANEL_WIDTH, MAX_PANEL_WIDTH)
     );
     this.setState({ width });
+
+    this.checkShareEnabled();
   }
+
+  checkShareEnabled = () => {
+    let isShareEnabled = false;
+    if (repoEncrypted) {
+      isShareEnabled = true; // for internal link
+    } else if (filePerm == 'rw' || filePerm == 'r') {
+      isShareEnabled = true;
+    }
+
+    if (filePerm && filePerm.startsWith('custom-')) {
+      const permissionID = filePerm.split('-')[1];
+      seafileAPI.getCustomPermission(repoID, permissionID).then((res) => {
+        const customPermission = res.data.permission;
+        window.custom_permission = customPermission; // share dialog need a global custom_permission
+        const { download_external_link } = customPermission.permission;
+        isShareEnabled = download_external_link;
+        this.setState({ isShareEnabled });
+        return;
+      }).catch((error) => {
+        let errorMsg = Utils.getErrorMsg(error);
+        toaster.danger(errorMsg);
+      });
+    }
+
+    this.setState({ isShareEnabled });
+  };
 
   onMessageCallback = (data) => {
     const { type, content } = data;
@@ -83,6 +116,10 @@ class FileView extends React.Component {
         }
       }
     }
+  };
+
+  toggleShareDialog = () => {
+    this.setState({ isShareDialogOpen: !this.state.isShareDialogOpen });
   };
 
   toggleCommentPanel = () => {
@@ -185,7 +222,7 @@ class FileView extends React.Component {
 
   render() {
     const { isOnlyofficeFile = false } = this.props;
-    const { isDetailsPanelOpen, isHeaderShown } = this.state;
+    const { isDetailsPanelOpen, isHeaderShown, isShareEnabled } = this.state;
     const repoInfo = {
       permission: filePerm,
       encrypted: repoEncrypted,
@@ -205,6 +242,8 @@ class FileView extends React.Component {
               {isOnlyofficeFile ?
                 <OnlyofficeFileToolbar
                   isCommentUpdated={this.state.isCommentUpdated}
+                  isShareEnabled={isShareEnabled}
+                  toggleShareDialog={this.toggleShareDialog}
                   toggleDetailsPanel={this.toggleDetailsPanel}
                   toggleHeader={this.toggleHeader}
                   toggleCommentPanel={this.toggleCommentPanel}
@@ -224,8 +263,23 @@ class FileView extends React.Component {
                   lineWrapping={this.props.lineWrapping}
                   updateLineWrapping={this.props.updateLineWrapping}
                   setDefaultPageFitScale={this.props.setDefaultPageFitScale}
+                  isShareEnabled={isShareEnabled}
+                  toggleShareDialog={this.toggleShareDialog}
                 />
               }
+              {this.state.isShareDialogOpen && (
+                <ModalPortal>
+                  <ShareDialog
+                    itemType='file'
+                    itemName={fileName}
+                    itemPath={filePath}
+                    userPerm={filePerm}
+                    repoID={repoID}
+                    repoEncrypted={repoEncrypted}
+                    toggleDialog={this.toggleShareDialog}
+                  />
+                </ModalPortal>
+              )}
             </div>
             <div className={`file-view-body flex-auto d-flex ${fileType == 'PDF' ? '' : 'o-hidden'} ${(isOnlyofficeFile && !isHeaderShown) ? 'position-relative' : ''}`}>
               {(isOnlyofficeFile && !isHeaderShown) &&

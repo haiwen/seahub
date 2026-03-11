@@ -194,13 +194,15 @@ def sdoc_to_docx(request, repo_id):
     return response
 
 
-def sdoc_preview(request, repo_id, file_uuid):
+def sdoc_preview(request, repo_id, file_path):
+
+    file_path = normalize_file_path(file_path)
     repo = get_repo(repo_id)
     if not repo:
         error_msg = _("Library does not exist")
         logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
-    
+
     access_token = request.GET.get('access_token')
     if not access_token:
         error_msg = 'Token cannot be empty.'
@@ -208,8 +210,9 @@ def sdoc_preview(request, repo_id, file_uuid):
         return render_error(request, error_msg)
     try:
         payload = jwt.decode(access_token, JWT_PRIVATE_KEY, algorithms=['HS256'])
-        if payload.get('file_uuid') != file_uuid:
-            error_msg = 'Permission denied.'
+        is_internal = payload.get('is_internal', False)
+        if not is_internal:
+            error_msg = 'Token invalid.'
             logger.warning(f'Sdoc preview failed: {error_msg}')
             return render_error(request, error_msg)
     except:
@@ -217,7 +220,16 @@ def sdoc_preview(request, repo_id, file_uuid):
         logger.warning(f'Sdoc preview failed: {error_msg}')
         return render_error(request, error_msg)
 
-    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(file_uuid)
+    file_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not file_id:
+        error_msg = 'File %s not found.' % file_path
+        logger.warning(f'Sdoc preview failed: {error_msg}')
+        return render_error(request, error_msg)
+
+    filename = os.path.basename(file_path)
+    parent_path = os.path.dirname(file_path)
+    uuid_map = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, parent_path, filename, is_dir=False)
+    file_uuid = str(uuid_map.uuid)  # 36 chars str
     return_dict = {
         'repo': repo,
         'file_uuid': file_uuid,

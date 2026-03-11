@@ -24,14 +24,14 @@ const FileName = ({ record, className: propsClassName, value, hideIcon = false, 
     const defaultIconUrl = Utils.getFileIconUrl(value);
     if (Utils.imageCheck(value)) {
       const path = Utils.encodePath(Utils.joinPath(parentDir, value));
-      const repoID = window.sfMetadataStore.repoId;
+      const repoID = window.sfMetadataStore?.repoId || params.repoID;
       const thumbnail = `${siteRoot}thumbnail/${repoID}/${thumbnailDefaultSize}${path}?mtime=${getFileMTimeFromRecord(record)}`;
       return { iconUrl: thumbnail, defaultIconUrl };
     }
     return { iconUrl: defaultIconUrl, defaultIconUrl };
-  }, [isDir, hideIcon, value, parentDir, record]);
+  }, [isDir, hideIcon, value, parentDir, record, params.repoID]);
 
-  return (<FileNameFormatter { ...params } className={className} value={value} onClickName={onFileNameClick} { ...iconUrl } />);
+  return (<FileNameFormatter { ...params } className={className} value={value} record={record} onClickName={onFileNameClick} { ...iconUrl } />);
 
 };
 

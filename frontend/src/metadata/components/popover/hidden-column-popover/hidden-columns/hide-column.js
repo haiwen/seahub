@@ -15,7 +15,6 @@ const HideColumnItem = ({
   dragOverColumnKey,
   updateDraggingKey,
   updateDragOverKey,
-  canReorder = true,
   onChange,
   onMove,
 }) => {
@@ -84,7 +83,7 @@ const HideColumnItem = ({
       onDragLeave={onDragLeave}
       onDragEnd={onDragEnd}
     >
-      {!readOnly && canReorder && onMove && (
+      {!readOnly && onMove && (
         <span className="d-flex drag-hide-column-handle" draggable="true" onDragStart={onDragStart}>
           <Icon symbol="drag" />
         </span>
@@ -115,7 +114,6 @@ HideColumnItem.propTypes = {
   dragOverColumnKey: PropTypes.string,
   updateDraggingKey: PropTypes.func,
   updateDragOverKey: PropTypes.func,
-  canReorder: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   onMove: PropTypes.func,
 };

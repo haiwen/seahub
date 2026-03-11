@@ -2,6 +2,10 @@
   height: 100%;
 }
 
+.shared-file-view .top-header {
+  background-color: var(--bs-body-bg);
+}
+
 .shared-file-view-top-head {
   border-left: 1px solid #eee;
 }
@@ -41,9 +45,8 @@
 
 .shared-file-view-body {
   flex: 1 1 auto;
-  padding: 30px 0 15px;
+  padding: 30px 0;
   background: var(--bs-body-secondary-bg);
-  border: 1px solid var(--bs-border-secondary-color);
   overflow: auto;
 }
 
@@ -55,6 +58,17 @@
 
 .shared-file-view-body .sf-slate-viewer-outline {
   top: 145px !important;
+}
+
+.shared-image-file-view .shared-file-view-content-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.shared-image-file-view .shared-file-view-content-container img {
+  height: 100% !important;
+  object-fit: contain;
 }
 
 @media (max-width: 991.98px) {
