@@ -22,10 +22,13 @@ import RepoAPITokenDialog from '../../components/dialog/repo-api-token-dialog';
 import RepoWebhookDialog from '../../components/dialog/repo-webhook-dialog';
 import RepoShareAdminDialog from '../../components/dialog/repo-share-admin-dialog';
 import OfficeSuiteDialog from '../../components/dialog/repo-office-suite-dialog';
+import RepoArchiveDialog from '../../components/dialog/repo-archive-dialog';
 import { LIST_MODE } from '../../components/dir-view-mode/constants';
 import { userAPI } from '../../utils/user-api';
 import OpIcon from '../../components/op-icon';
 import { formatWithTimezone } from '../../utils/time';
+import Icon from '../../components/icon';
+import ArchiveIcon from '../../components/archive-icon';
 
 const propTypes = {
   currentViewMode: PropTypes.string,
@@ -62,6 +65,7 @@ class MylibRepoListItem extends React.Component {
       isRepoDeleted: false,
       isOfficeSuiteDialogShow: false,
       isWebhookDialogShow: false,
+      isArchiveDialogShow: false,
     };
   }
 
@@ -125,6 +129,9 @@ class MylibRepoListItem extends React.Component {
         break;
       case 'Office Suite':
         this.onOfficeSuiteToggle();
+        break;
+      case 'Archive':
+        this.onArchiveToggle();
         break;
       default:
         break;
@@ -207,6 +214,10 @@ class MylibRepoListItem extends React.Component {
     this.setState({ isOfficeSuiteDialogShow: !this.state.isOfficeSuiteDialogShow });
   };
 
+  onArchiveToggle = () => {
+    this.setState({ isArchiveDialogShow: !this.state.isArchiveDialogShow });
+  };
+
   toggleRepoShareAdminDialog = () => {
     this.setState({ isRepoShareAdminDialogOpen: !this.state.isRepoShareAdminDialogOpen });
   };
@@ -275,6 +286,11 @@ class MylibRepoListItem extends React.Component {
     });
   };
 
+  onArchiveRepo = (repo) => {
+    const newStatus = !repo.archive_status ? 'archived' : null;
+    this.props.updateRepoStatus(repo, newStatus);
+  };
+
   handleContextMenu = (event) => {
     this.props.onContextMenu(event, this.props.repo);
   };
@@ -311,7 +327,10 @@ class MylibRepoListItem extends React.Component {
             />
           )}
           {!this.state.isRenaming && repo.repo_name && (
-            <Link to={repoURL}>{repo.repo_name}</Link>
+            <>
+              <Link to={repoURL}>{repo.repo_name}</Link>
+              <ArchiveIcon currentRepoInfo={repo} />
+            </>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
             (gettext('Broken (please contact your administrator to fix this library)'))
@@ -427,6 +446,7 @@ class MylibRepoListItem extends React.Component {
           {!this.state.isRenaming && repo.repo_name && (
             <div>
               <Link to={repoURL}>{repo.repo_name}</Link>
+              {repo.archive_status === 'archived' && <Icon className="ml-1" symbol="archive"></Icon>}
             </div>
           )}
           {!this.state.isRenaming && !repo.repo_name &&
@@ -566,6 +586,16 @@ class MylibRepoListItem extends React.Component {
               repoID={repo.repo_id}
               repoName={repo.repo_name}
               toggleDialog={this.onOfficeSuiteToggle}
+            />
+          </ModalPortal>
+        )}
+
+        {this.state.isArchiveDialogShow && (
+          <ModalPortal>
+            <RepoArchiveDialog
+              repo={repo}
+              onArchiveRepo={this.onArchiveRepo}
+              toggle={this.onArchiveToggle}
             />
           </ModalPortal>
         )}

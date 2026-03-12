@@ -45,8 +45,10 @@ class UserAPI {
 
   queryIOStatus(task_id, task_type) {
     let url = this.server + '/api/v2.1/query-io-status/?task_id=' + task_id;
-    if (task_type == 'import') {
+    if (task_type === 'import') {
       url = url + '&task_type=import';
+    } else if (task_type === 'archive') {
+      url = url + '&task_type=archive';
     }
     return this.req.get(url);
   }

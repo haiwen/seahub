@@ -138,6 +138,7 @@ class SharedRepoListView extends React.Component {
               onItemRename={this.props.onItemRename}
               currentViewMode={currentViewMode}
               onContextMenu={this.onContextMenu}
+              updateRepoStatus={this.props.updateRepoStatus}
             />
           );
         })}
