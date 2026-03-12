@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import CreatableSelect from 'react-select/creatable';
+import { MenuSelectStyle } from '../common/select/seahub-select-style';
 import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -115,6 +116,7 @@ class Content extends React.Component {
           onChange={this.props.handleChange}
           placeholder=''
           options={existingLabels.map((item, index) => { return { label: item, value: item }; })}
+          styles={MenuSelectStyle}
         />
         {formErrorMsg && <p className="error m-0 mt-2">{formErrorMsg}</p>}
       </React.Fragment>
