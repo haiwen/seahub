@@ -31,24 +31,23 @@ const initializeScene = async () => {
   const docUuid = context.getDocUuid();
   const localDataState = importFromLocalStorage(docUuid); // {appState, elements}
 
-  let data = null;
   // load remote data from server
   const scene = await loadFromServerStorage();
-  const { elements } = scene;
-  const restoredRemoteElements = restoreElements(elements, null);
+  const remoteElements = Array.isArray(scene?.elements) ? scene.elements : [];
+  const remoteVersion = Number.isFinite(scene?.version) ? scene.version : 0;
+  const restoredRemoteElements = restoreElements(remoteElements, null);
   const reconciledElements = reconcileElements(
-    localDataState.elements,
+    localDataState.elements || [],
     restoredRemoteElements,
     localDataState.appState,
   );
-  data = {
-    elements: reconciledElements,
-    appState: null,
-    version: scene.version,
-  };
-
   return {
-    scene: data
+    scene: {
+      elements: reconciledElements,
+      appState: localDataState.appState,
+      version: remoteVersion,
+    },
+    remoteElements,
   };
 };
 
@@ -115,7 +114,12 @@ const SimpleEditor = ({ isSharedView = false }) => {
     const config = context.getExdrawConfig();
     initializeScene().then(async (data) => {
       // init socket
-      SocketManager.getInstance(excalidrawAPI, data.scene, config);
+      const socketManager = SocketManager.getInstance(excalidrawAPI, data.scene, config);
+      // Track last synced version with remote scene so local offline edits can be auto-synced.
+      socketManager.setLastBroadcastedOrReceivedSceneVersion(data.remoteElements);
+      if (socketManager.isNeedToSync(data.scene.elements)) {
+        socketManager.syncLocalElementsToOthers(data.scene.elements);
+      }
       loadImages(data, /* isInitialLoad */true);
       initialStatePromiseRef.current.promise.resolve(data.scene);
     });
@@ -176,6 +180,7 @@ const SimpleEditor = ({ isSharedView = false }) => {
   }, []);
 
   const beforeUnload = useCallback((event) => {
+    LocalData.flushSave();
     const socketManager = SocketManager.getInstance();
     const fileManager = socketManager.fileManager;
     const elements = excalidrawAPI.getSceneElementsIncludingDeleted();
