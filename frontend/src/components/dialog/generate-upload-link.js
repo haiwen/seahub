@@ -460,7 +460,7 @@ class GenerateUploadLink extends React.Component {
           {this.state.isShowDescriptionInput && (
             <div className="ml-4">
               <FormGroup>
-                <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Description')}</Label>
+                <Label htmlFor="msg">{gettext('Description')}</Label>
                 <textarea
                   className="form-control w-75"
                   id="msg"
