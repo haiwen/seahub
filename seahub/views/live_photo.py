@@ -15,6 +15,24 @@ from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
+def _get_metadata_value(metadata, key, default=None):
+    value = metadata.get(key, default)
+    if isinstance(value, list):
+        return value[0] if value else default
+    return value
+
+def _is_truthy_flag(value):
+    try:
+        return int(str(value).strip()) == 1
+    except (TypeError, ValueError):
+        return False
+
+def _get_int_value(value, default=0):
+    try:
+        return int(str(value).strip())
+    except (TypeError, ValueError):
+        return default
+
 
 def _check_is_live_photo(repo_id, file_id):
     """Check if file content is a live photo using exiftool.
@@ -30,7 +48,16 @@ def _check_is_live_photo(repo_id, file_id):
         temp_file.flush()
         with exiftool.ExifToolHelper() as et:
             metadata = et.get_metadata(temp_file.name)[0]
-            if metadata.get('XMP:MotionPhoto') == 1 or metadata.get('XMP:MicroVideo') == 1:
+            motion_photo = _get_metadata_value(metadata, 'XMP:MotionPhoto')
+            micro_video = _get_metadata_value(metadata, 'XMP:MicroVideo')
+            gcam_motion_photo = _get_metadata_value(metadata, 'XMP-GCamera:MotionPhoto')
+            gcam_micro_video = _get_metadata_value(metadata, 'XMP-GCamera:MicroVideo')
+            if (
+                _is_truthy_flag(motion_photo) or
+                _is_truthy_flag(micro_video) or
+                _is_truthy_flag(gcam_motion_photo) or
+                _is_truthy_flag(gcam_micro_video)
+            ):
                 return True
     return False
 
@@ -47,6 +74,7 @@ def _extract_video_data(repo_id, file_id):
     with tempfile.NamedTemporaryFile(suffix='.heic') as temp_file:
         temp_file.write(content)
         temp_file.flush()
+
         cmd_extract = [
             'exiftool',
             '-b',   # output binary data
@@ -54,9 +82,21 @@ def _extract_video_data(repo_id, file_id):
             '-QuickTime:MotionPhotoVideo',
             temp_file.name
         ]
-        video_data = subprocess.run(cmd_extract, stdout=subprocess.PIPE).stdout
-        if video_data:
-            return video_data
+        proc = subprocess.run(
+            cmd_extract,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        if proc.stdout:
+            return proc.stdout
+
+        # fallback for GCamera Motion Photo: use MicroVideoOffset from end of file
+        with exiftool.ExifToolHelper() as et:
+            metadata = et.get_metadata(temp_file.name)[0]
+        micro_offset = _get_metadata_value(metadata, 'XMP-GCamera:MicroVideoOffset')
+        offset = _get_int_value(micro_offset, default=0)
+        if offset > 0 and offset < len(content):
+            return content[len(content) - offset:]
     return None
 
 
