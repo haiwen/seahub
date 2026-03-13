@@ -83,6 +83,18 @@ const MenuSelectStyle = {
       color: '#666',
     },
   }),
+  input: (styles) => ({
+    ...styles,
+    color: 'var(--bs-body-color)',
+  }),
+  indicatorSeparator: (styles, state) => {
+    if (state.selectProps.isMulti) {
+      return styles;
+    }
+    return {
+      'display': 'none'
+    };
+  }
 };
 
 export { MenuSelectStyle };
