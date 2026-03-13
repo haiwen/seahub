@@ -5,6 +5,7 @@ import { PublishedRevisionViewer } from '@seafile/seafile-sdoc-editor';
 import i18n from '../../../_i18n/i18n-sdoc-editor';
 import { Utils } from '../../../utils/utils';
 import Loading from '../../../components/loading';
+import { mediaUrl } from '../../../utils/constants';
 
 const { serviceURL, avatarURL, siteRoot, lang } = window.app.config;
 const { username, name } = window.app.userInfo || {};
@@ -49,7 +50,7 @@ const root = createRoot(document.getElementById('wrapper'));
 root.render(
   <I18nextProvider i18n={ i18n } >
     <Suspense fallback={<Loading />}>
-      <PublishedRevisionViewer />
+      <PublishedRevisionViewer mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}/>
     </Suspense>
   </I18nextProvider>
 );

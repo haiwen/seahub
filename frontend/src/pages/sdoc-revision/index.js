@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from 'reactstrap';
 import { DiffViewer } from '@seafile/seafile-sdoc-editor';
-import { gettext } from '../../utils/constants';
+import { gettext, mediaUrl } from '../../utils/constants';
 import Loading from '../../components/loading';
 import GoBack from '../../components/common/go-back';
 import { Utils } from '../../utils/utils';
@@ -100,6 +100,7 @@ class SdocRevision extends React.Component {
       <DiffViewer
         currentContent={revisionContent}
         lastContent={originContent}
+        mathJaxSource={mediaUrl + 'js/mathjax/tex-svg.js'}
       />
     );
   };
