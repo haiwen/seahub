@@ -14,16 +14,16 @@ class WebhookItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false,
+      isHighlighted: false,
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({ isHighlighted: true });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({ isHighlighted: false });
   };
 
   onDeleteWebhook = () => {
@@ -36,19 +36,22 @@ class WebhookItem extends React.Component {
 
   render() {
     const { item } = this.props;
+    const { isHighlighted } = this.state;
 
     return (
-      <div
-        className="webhook-list-item"
+      <tr
+        className={isHighlighted ? 'tr-highlight' : ''}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
       >
-        <div className="text-truncate" title={item.url}>{item.url}</div>
-        <div className={`webhook-item-operations ${this.state.isOperationShow ? '' : 'invisible'}`}>
-          <OpIcon symbol="edit" className="op-icon mr-1" op={this.onEditWebhook} title={gettext('Edit')} />
-          <OpIcon symbol="delete" className="op-icon" op={this.onDeleteWebhook} title={gettext('Delete')} />
-        </div>
-      </div>
+        <td className="text-truncate" title={item.url}>{item.url}</td>
+        <td>
+          <div className={isHighlighted ? '' : 'invisible'}>
+            <OpIcon symbol="edit" className="op-icon mr-1" op={this.onEditWebhook} title={gettext('Edit')} />
+            <OpIcon symbol="delete" className="op-icon" op={this.onDeleteWebhook} title={gettext('Delete')} />
+          </div>
+        </td>
+      </tr>
     );
   }
 }

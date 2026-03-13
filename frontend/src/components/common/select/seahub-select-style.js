@@ -12,10 +12,6 @@ const FOCUS_CONTROL_STYLE = {
   boxShadow: '0 0 0 2px rgba(70, 127, 207, 0.25)',
 };
 
-const noneCallback = () => ({
-  display: 'none',
-});
-
 const controlCallback = (provided, state) => {
   const { isDisabled, isFocused } = state;
   if (isFocused && !isDisabled) {
@@ -67,7 +63,6 @@ const MenuSelectStyle = {
     color: 'var(--bs-body-color)',
     borderColor: 'var(--bs-border-secondary-color)',
   }),
-  indicatorSeparator: noneCallback,
   singleValue: (provided) => {
     return {
       ...provided,
@@ -80,6 +75,14 @@ const MenuSelectStyle = {
       color: 'var(--bs-body-color)',
     };
   },
+  multiValueRemove: (styles) => ({
+    ...styles,
+    color: '#909090',
+    ':hover': {
+      backgroundColor: 'transparent',
+      color: '#666',
+    },
+  }),
 };
 
 export { MenuSelectStyle };

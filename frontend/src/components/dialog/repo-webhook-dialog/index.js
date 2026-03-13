@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalBody } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter, Button } from 'reactstrap';
 import SeahubModalHeader from '@/components/common/seahub-modal-header';
 import { gettext } from '../../../utils/constants';
 import { seafileAPI } from '../../../utils/seafile-api';
 import { Utils } from '../../../utils/utils';
 import Loading from '../../loading';
-import OpIcon from '../../op-icon';
+import Icon from '../../icon';
 import EmptyTip from '../../empty-tip';
 import WebhookItem from './webhook-item';
 import DeleteWebHookDialog from './delete-webhook-dialog';
@@ -131,8 +131,7 @@ class RepoWebhookDialog extends React.Component {
       <Fragment>
         <Modal isOpen={true} style={{ maxWidth: '720px' }} toggle={onRepoWebhookToggle} contentClassName="webhook-content-container">
           <SeahubModalHeader toggle={onRepoWebhookToggle}>
-            {gettext('Webhooks')}{' '}
-            <span className="op-target text-truncate mr-1">{Utils.HTMLescape(this.props.repo.repo_name)}</span>
+            {gettext('Webhooks')}
           </SeahubModalHeader>
           <ModalBody className='webhook-content-body'>
             {loading && <Loading />}
@@ -140,9 +139,15 @@ class RepoWebhookDialog extends React.Component {
               <EmptyTip text={gettext('No webhook')} className="h-100 m-0" />
             )}
             {!loading && webhookList.length > 0 && (
-              <div className="webhook-list-wrapper">
-                <div className='webhook-list-header'>{gettext('URL')}</div>
-                <div className='webhook-list-container'>
+              <table className='table-thead-hidden'>
+                <caption className='webhooks-caption sf-border-bottom'>{gettext('URL')}</caption>
+                <thead>
+                  <tr>
+                    <th width="80%">{gettext('URL')}</th>
+                    <th width="20"></th>
+                  </tr>
+                </thead>
+                <tbody>
                   {webhookList.map((item, index) => {
                     return (
                       <WebhookItem
@@ -153,14 +158,20 @@ class RepoWebhookDialog extends React.Component {
                       />
                     );
                   })}
-                </div>
-              </div>
+                </tbody>
+              </table>
             )}
           </ModalBody>
-          <div className="webhook-add-toolbar" onClick={this.onAddWebhookToggle}>
-            <OpIcon symbol="add-table" className="mr-1" />{' '}
-            <span>{gettext('Add webhook')}</span>
-          </div>
+          <ModalFooter className='justify-content-start'>
+            <Button
+              className="border-0"
+              color="secondary"
+              onClick={this.onAddWebhookToggle}
+            >
+              <Icon symbol="new" className="mr-2" />
+              <span>{gettext('Add webhook')}</span>
+            </Button>
+          </ModalFooter>
         </Modal>
         {showEditDialog && (
           <EditWebHookDialog
