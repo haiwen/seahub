@@ -1014,7 +1014,7 @@ def view_lib_file(request, repo_id, path):
         live_photo_video_url = ''
         if fileext == 'heic':
             from seahub.views.live_photo import _check_is_live_photo
-            if _check_is_live_photo(repo_id, file_id):
+            if _check_is_live_photo(repo_id, file_id, filename, request.user.username):
                 live_photo_video_url = reverse('live_photo_content', args=[repo_id, path.lstrip('/')])
         return_dict['live_photo_video_url'] = live_photo_video_url
 

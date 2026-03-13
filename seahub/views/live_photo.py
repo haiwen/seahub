@@ -4,13 +4,13 @@ import tempfile
 import subprocess
 
 import exiftool
+import requests
 from django.http import HttpResponse, JsonResponse
 
 from seaserv import seafile_api
-from seafobj import fs_mgr
 
 from seahub.auth.decorators import login_required
-from seahub.utils import normalize_file_path
+from seahub.utils import normalize_file_path, gen_inner_file_get_url
 from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
@@ -34,14 +34,28 @@ def _get_int_value(value, default=0):
         return default
 
 
-def _check_is_live_photo(repo_id, file_id):
+def _get_file_content(repo_id, file_id, filename, username):
+    token = seafile_api.get_fileserver_access_token(
+        repo_id, file_id, 'view', username, use_onetime=False
+    )
+    if not token:
+        raise RuntimeError('failed to get fileserver access token')
+
+    file_url = gen_inner_file_get_url(token, filename)
+    response = requests.get(file_url)
+    if response.status_code != 200:
+        raise RuntimeError(f'failed to fetch file content, status code: {response.status_code}')
+
+    return response.content
+
+
+def _check_is_live_photo(repo_id, file_id, filename, username):
     """Check if file content is a live photo using exiftool.
 
     Writes content to a temp file and uses exiftool to parse XMP metadata.
     Returns True if XMP:MotionPhoto=1 or XMP:MicroVideo=1.
     """
-    f = fs_mgr.load_seafile(repo_id, 1, file_id)
-    content = f.get_content()
+    content = _get_file_content(repo_id, file_id, filename, username)
 
     with tempfile.NamedTemporaryFile(suffix='.heic') as temp_file:
         temp_file.write(content)
@@ -62,14 +76,13 @@ def _check_is_live_photo(repo_id, file_id):
     return False
 
 
-def _extract_video_data(repo_id, file_id):
+def _extract_video_data(repo_id, file_id, filename, username):
     """Extract embedded video data from a live photo using exiftool.
 
     Writes content to a temp file and uses exiftool command line to extract
     the QuickTime:MotionPhotoVideo binary data.
     """
-    f = fs_mgr.load_seafile(repo_id, 1, file_id)
-    content = f.get_content()
+    content = _get_file_content(repo_id, file_id, filename, username)
 
     with tempfile.NamedTemporaryFile(suffix='.heic') as temp_file:
         temp_file.write(content)
@@ -129,7 +142,8 @@ def check_live_photo(request, repo_id, path):
         return HttpResponse('Permission denied.', status=403)
 
     try:
-        is_live = _check_is_live_photo(repo_id, file_id)
+        username = request.user.username
+        is_live = _check_is_live_photo(repo_id, file_id, filename, username)
     except Exception as e:
         logger.error('check live photo error: %s', e)
         is_live = False
@@ -167,7 +181,8 @@ def live_photo_content(request, repo_id, path):
 
     # extract video data
     try:
-        video_data = _extract_video_data(repo_id, file_id)
+        username = request.user.username
+        video_data = _extract_video_data(repo_id, file_id, filename, username)
         if not video_data:
             return HttpResponse('Not a live photo or no video data found.', status=404)
     except Exception as e:
