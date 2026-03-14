@@ -23,8 +23,8 @@ const TagViewName = ({ id, canSelectAllTags, repoID }) => {
       );
     }
 
-    const canModify = context.canModify();
-    const canAddTag = context.canAddTag();
+    const canModify = context && context.canModifyTags();
+    const canAddTag = context && context.canAddTag();
     if (!canModify || !canAddTag) {
       return (
         <span className="path-item path-item-read-only">{gettext('All tags')}</span>
