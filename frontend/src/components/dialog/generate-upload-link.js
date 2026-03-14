@@ -33,6 +33,8 @@ class GenerateUploadLink extends React.Component {
       passwordVisible: false,
       password: '',
       passwordnew: '',
+      description: '',
+      isShowDescriptionInput: false,
       storedPasswordVisible: false,
       sharedUploadInfo: null,
       isSendLinkShown: false,
@@ -107,13 +109,26 @@ class GenerateUploadLink extends React.Component {
     });
   };
 
+  inputDescription = (e) => {
+    this.setState({
+      description: e.target.value
+    });
+  };
+
+  onDescriptionInputChecked = () => {
+    this.setState({
+      isShowDescriptionInput: !this.state.isShowDescriptionInput,
+      description: ''
+    });
+  };
+
   generateUploadLink = () => {
     let isValid = this.validateParamsInput();
     if (isValid) {
       this.setState({ errorInfo: '' });
 
       let { itemPath, repoID } = this.props;
-      let { password, isExpireChecked, expType, expireDays, expDate } = this.state;
+      let { password, isExpireChecked, expType, expireDays, expDate, description } = this.state;
 
       let expirationTime = '';
       if (isExpireChecked) {
@@ -124,7 +139,7 @@ class GenerateUploadLink extends React.Component {
         }
       }
 
-      seafileAPI.createUploadLink(repoID, itemPath, password, expirationTime).then((res) => {
+      seafileAPI.createUploadLink(repoID, itemPath, password, expirationTime, description).then((res) => {
         let sharedUploadInfo = new UploadLink(res.data);
         this.setState({ sharedUploadInfo: sharedUploadInfo });
       }).catch(error => {
@@ -431,6 +446,31 @@ class GenerateUploadLink extends React.Component {
             />
           </div>
           }
+        </FormGroup>
+        <FormGroup check>
+          <Label check>
+            <Input
+              type="checkbox"
+              checked={this.state.isShowDescriptionInput}
+              onChange={this.onDescriptionInputChecked}
+              onKeyDown={Utils.onKeyDown}
+            />
+            <span>{gettext('Add description')}</span>
+          </Label>
+          {this.state.isShowDescriptionInput && (
+            <div className="ml-4">
+              <FormGroup>
+                <Label htmlFor="msg">{gettext('Description')}</Label>
+                <textarea
+                  className="form-control w-75"
+                  id="msg"
+                  value={this.state.description}
+                  onChange={this.inputDescription}
+                >
+                </textarea>
+              </FormGroup>
+            </div>
+          )}
         </FormGroup>
         {this.state.errorInfo && <Alert color="danger" className="mt-2">{this.state.errorInfo}</Alert>}
         <Button color="primary" className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>

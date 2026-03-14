@@ -45,6 +45,8 @@ class LinkCreation extends React.Component {
       expDate: null,
       password: '',
       newPassword: '',
+      description: '',
+      isShowDescriptionInput: false,
       errorInfo: '',
       currentPermission: props.currentPermission,
 
@@ -103,12 +105,24 @@ class LinkCreation extends React.Component {
     this.setState({ currentPermission: e.target.value });
   };
 
+  inputDescription = (e) => {
+    let description = e.target.value.trim();
+    this.setState({ description: description });
+  };
+
+  onDescriptionInputChecked = () => {
+    this.setState({
+      isShowDescriptionInput: !this.state.isShowDescriptionInput,
+      description: ''
+    });
+  };
+
   generateShareLink = () => {
     let isValid = this.validateParamsInput();
     if (isValid) {
       this.setState({ errorInfo: '' });
       let { type, itemPath, repoID } = this.props;
-      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate } = this.state;
+      let { linkAmount, isShowPasswordInput, password, isExpireChecked, expType, expireDays, expDate, description } = this.state;
 
       const permissionDetails = Utils.getShareLinkPermissionObject(this.state.currentPermission).permissionDetails;
       let permissions;
@@ -136,7 +150,7 @@ class LinkCreation extends React.Component {
         if (currentScope === 'specific_emails' && inputEmails) {
           users = inputEmails;
         }
-        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users);
+        request = shareLinkAPI.createMultiShareLink(repoID, itemPath, password, expirationTime, permissions, currentScope, users, description);
       }
 
       request.then((res) => {
@@ -418,6 +432,33 @@ class LinkCreation extends React.Component {
                   <input type="text" className="form-control" value={this.state.inputEmails} onChange={this.handleInputChange} placeholder={gettext('Emails, separated by \',\'')}/>
                   }
                 </FormGroup>
+              )}
+            </FormGroup>
+          )}
+          {type !== 'batch' && (
+            <FormGroup check>
+              <Label check>
+                <Input
+                  type="checkbox"
+                  checked={this.state.isShowDescriptionInput}
+                  onChange={this.onDescriptionInputChecked}
+                  onKeyDown={Utils.onKeyDown}
+                />
+                <span>{gettext('Add description')}</span>
+              </Label>
+              {this.state.isShowDescriptionInput && (
+                <div className="ml-4">
+                  <FormGroup>
+                    <Label htmlFor="msg">{gettext('Description')}</Label>
+                    <textarea
+                      className="form-control w-75"
+                      id="msg"
+                      value={this.state.description}
+                      onChange={this.inputDescription}
+                    >
+                    </textarea>
+                  </FormGroup>
+                </div>
               )}
             </FormGroup>
           )}

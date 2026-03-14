@@ -158,6 +158,7 @@ class LinkItem extends React.Component {
           <td>
             {expire_date ? dayjs(expire_date).format('YYYY-MM-DD HH:mm') : '--'}
           </td>
+          <td>{item.description}</td>
           <td>{item.password && <Icon symbol="check-thin" />}</td>
           <td>
             <a href="#" role="button" onClick={this.onCopyIconClicked} className={`sf3-font sf3-font-copy1 op-icon ${opsVisible ? '' : 'invisible'}`} title={gettext('Copy')} aria-label={gettext('Copy')}></a>

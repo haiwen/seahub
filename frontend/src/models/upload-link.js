@@ -14,6 +14,7 @@ class UploadLink {
     this.expire_date = object.expire_date;
     this.is_expired = object.is_expired;
     this.password = object.password;
+    this.description = object.description;
   }
 
 }

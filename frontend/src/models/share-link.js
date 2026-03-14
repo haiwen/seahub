@@ -21,6 +21,7 @@ class ShareLink {
     this.user_scope = object.user_scope;
     this.download_link = object.download_link;
     this.show_download_link = object.show_download_link;
+    this.description = object.description;
   }
 
 }

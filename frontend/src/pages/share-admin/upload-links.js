@@ -80,10 +80,11 @@ class Content extends Component {
             )
           }, // checkbox
           { isFixed: true, width: 40 }, // icon
-          { isFixed: false, width: 0.33, children: gettext('Name') },
+          { isFixed: false, width: 0.18, children: gettext('Name') },
           { isFixed: false, width: 0.25, children: gettext('Library') },
           { isFixed: false, width: 0.16, children: gettext('Visits') },
           { isFixed: false, width: 0.16, children: gettext('Expiration') },
+          { isFixed: false, width: 0.15, children: gettext('Description') },
           { isFixed: false, width: 0.1 }, // Operations
         ] : [
           { isFixed: false, width: 0.12 },
@@ -206,6 +207,7 @@ class Item extends Component {
             <td><Link to={repoUrl}>{item.repo_name}</Link></td>
             <td>{item.view_cnt}</td>
             <td>{this.renderExpiration()}</td>
+            <td>{item.description || '--'}</td>
             <td>
               <div className="d-flex align-items-center">
                 {!item.is_expired &&
