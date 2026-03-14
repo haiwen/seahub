@@ -146,7 +146,6 @@
     "eslint-webpack-plugin": "^3.1.1",
     "file-loader": "^6.2.0",
     "fs-extra": "^10.0.0",
-    "html-webpack-plugin": "^5.5.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
@@ -174,8 +173,6 @@
     "web-vitals": "2.1.4",
     "webpack": "^5.105.0",
     "webpack-bundle-tracker": "1.7.0",
-    "webpack-dev-server": "^5.2.2",
-    "webpack-manifest-plugin": "^4.0.2",
-    "workbox-webpack-plugin": "^7.4.0"
+    "webpack-dev-server": "^5.2.2"
   }
 }
