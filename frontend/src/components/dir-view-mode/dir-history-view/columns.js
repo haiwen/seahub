@@ -76,7 +76,7 @@ export function createHistoryColumns(options = {}) {
     baseColumns.push({
       key: 'tags',
       name: 'tags',
-      display_name: gettext('Tags'),
+      display_name: gettext('Labels'),
       icon_name: 'tag-filled',
       type: 'multiple-select',
       width: 200,
