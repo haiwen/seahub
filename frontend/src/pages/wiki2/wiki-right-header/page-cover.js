@@ -24,7 +24,6 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const fileInputRef = useRef(null);
-  const popoverRef = useRef(null);
   const galleryTabRef = useRef(null);
   const uploadTabRef = useRef(null);
   const isDraggingRef = useRef(false);
@@ -92,7 +91,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
     setUploadProgress(0);
     setIsUploading(true);
 
-    popoverRef.current?.toggle();
+    setIsPopoverOpen(false);
 
     const formData = new FormData();
     formData.append('file', file);
@@ -221,7 +220,6 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
             {gettext('Change cover')}
           </button>
           <Popover
-            ref={popoverRef}
             flip
             target="wiki-change-cover-btn"
             placement="bottom-start"

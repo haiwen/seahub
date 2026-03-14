@@ -12,11 +12,14 @@ const PageIcon = ({ currentPageConfig, onUpdatePageConfig }) => {
   const isDesktop = Utils.isDesktop();
 
   const handleSetIcon = useCallback((emoji) => {
-    onUpdatePageConfig && onUpdatePageConfig(currentPageConfig.id, { icon: emoji });
+    onUpdatePageConfig && onUpdatePageConfig(currentPageConfig.id, {
+      ...currentPageConfig,
+      icon: emoji
+    });
     setTimeout(() => {
       popoverRef.current?.toggle();
     }, 300);
-  }, [currentPageConfig.id, onUpdatePageConfig]);
+  }, [currentPageConfig, onUpdatePageConfig]);
 
   const handleIconRemove = useCallback(() => {
     handleSetIcon('');

@@ -177,10 +177,10 @@ class WikiAPI {
     if (pageConfig.name) {
       params['page_name'] = pageConfig.name;
     }
-    if (pageConfig.icon) {
+    if (pageConfig.hasOwnProperty('icon')) {
       params['page_icon'] = pageConfig.icon;
     }
-    if (pageConfig.cover_img_url) {
+    if (pageConfig.hasOwnProperty('cover_img_url')) {
       params['page_cover'] = pageConfig.cover_img_url;
     }
 
