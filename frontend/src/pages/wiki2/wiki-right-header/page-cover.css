@@ -30,36 +30,161 @@
   background: rgb(102 102 102 / 70%);
 }
 
+.wiki-cover-controller-btn .seafile-multicolor-icon-gallery {
+  color: inherit;
+}
+
 .wiki-page-cover-popover {
   max-width: max-content !important;
+  transform: translate3d(-31px, 90px, 0px) !important;
 }
 
 .wiki-page-cover-panel__header {
   background: var(--bs-body-bg);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 6px 14px;
+}
+
+.wiki-page-cover-panel__tabs {
+  display: flex;
+  gap: 24px;
+  position: relative;
+}
+
+.wiki-page-cover-panel__tabs .wiki-page-cover-panel__tab {
+  position: relative;
+  font-size: 14px;
+  color: var(--bs-body-color);
+  cursor:pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.wiki-page-cover-panel__tabs  .wiki-page-cover-panel__tab.active {
+  color: var(--bs-orange);
+}
+
+.wiki-page-cover-panel__tabs  .wiki-page-cover-panel__tab-indicator {
+  position: absolute;
+  bottom: -8px;
+  height: 2px;
+  background-color: var(--bs-orange);
+  border-radius: 1px;
+  transition: all 0.25s ease;
 }
 
 .wiki-page-cover-panel__body {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 240px 240px;
+  padding: 16px;
   gap: 10px;
   background: var(--bs-body-bg);
   overflow-y: auto;
+}
+
+.wiki-page-cover-panel__body.upload-panel {
+  grid-template-columns: 522px;
+  gap: 0;
+  padding: 0;
+}
+
+.wiki-cover-gallery-grid {
+  display: contents;
 }
 
 .wiki-page-cover-panel .wiki-cover-gallery-img {
   width: 240px;
   height: 72px;
   cursor: pointer;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 .wiki-page-cover-panel .wiki-cover-gallery-img:hover {
   filter: brightness(1.1);
 }
 
-/* icon */
+.wiki-page-cover-panel .wiki-cover-gallery-img.selected {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* Upload area */
+.wiki-cover-upload-area {
+  grid-column: 1 / -1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  transition: all 0.2s;
+}
+
+.wiki-cover-upload-area:hover {
+  border-color: var(--bs-primary);
+}
+
+.wiki-cover-upload-area.dragging {
+  background-color: rgba(237, 113, 9, 0.1);
+}
+
+.wiki-cover-upload-area .wiki-cover-upload-button {
+  width: 100%;
+  height: 2.5rem;
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  border-radius: 3px;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.wiki-cover-upload-area .wiki-cover-upload-button:hover {
+  background-color: var(--bs-hover-bg);
+}
+
+.wiki-cover-upload-text {
+  font-size: 0.75rem;
+  color: var(--bs-body-secondary-color);
+  margin-top: 10px;
+}
+
+/* Upload progress overlay */
+.wiki-page-cover-upload-mask {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}
+
+.wiki-page-cover-upload-progress {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: fit-content;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.wiki-page-cover-upload-progress .loading-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.wiki-page-cover-progress-text {
+  font-size: 14px;
+  color: #fff;
+}
 
 /* common */
 .wiki-page-panel .popover-header {

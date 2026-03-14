@@ -1163,12 +1163,14 @@ class SeafileAPI {
     return this._sendPostRequest(url, form);
   }
 
-  uploadImage(uploadLink, formData, onUploadProgress = null) {
+  uploadImage(uploadLink, formData, token = null, onUploadProgress = null) {
+    const headers = token ? { 'Authorization': `Token ${token}` } : {};
     return (
       axios.create()({
         method: 'post',
         data: formData,
         url: uploadLink,
+        headers,
         onUploadProgress: onUploadProgress
       })
     );
