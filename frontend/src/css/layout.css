@@ -205,12 +205,15 @@ select {
 .cur-view-path .cur-view-path-btn .seafile-multicolor-icon {
   width: 16px;
   height: 16px;
-  color: inherit;
+  color: var(--bs-icon-color);
+}
+
+.cur-view-path-btn.dir-tool-hide-column-setter .seafile-multicolor-icon-hide {
+  color: #666;
 }
 
 .cur-view-path-btn.dir-tool-hide-column-setter.active {
   background-color: #d7e8ff;
-  color: #666;
 }
 
 .cur-view-path-btn.dir-tool-hide-column-setter.active:hover {
