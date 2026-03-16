@@ -689,7 +689,6 @@ class DirentListItem extends React.Component {
         onMouseEnter={this.onMouseEnter}
         onMouseOver={this.onMouseOver}
         onMouseLeave={this.onMouseLeave}
-        onClick={this.onDirentClick}
         onDragStart={this.onItemDragStart}
         onDragEnter={this.onItemDragEnter}
         onDragOver={this.onItemDragOver}
