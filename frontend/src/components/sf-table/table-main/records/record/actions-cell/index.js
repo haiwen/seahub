@@ -92,8 +92,9 @@ class ActionsCell extends Component {
               type='checkbox'
               name='row-selection'
               checked={isSelected || false}
-              onChange={this.props.onSelectRecord}
+              onClick={this.props.onSelectRecord}
               onKeyDown={Utils.onKeyDown}
+              readOnly
             />
           </div>
         </label>
