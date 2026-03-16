@@ -6,7 +6,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import PageItem from './pages/page-item';
 import PageDragLayer from './pages/page-drag-layer';
-import { gettext, wikiPermission } from '../../../utils/constants';
+import { gettext, wikiPermission, enableMetadataManagement } from '../../../utils/constants';
 import { Utils } from '../../../utils/utils';
 import toaster from '../../../components/toast';
 import Icon from '../../../components/icon';
@@ -258,10 +258,12 @@ class WikiNav extends Component {
             <div className="wiki-nav-group-header px-2">
               <h2 className="h6 font-weight-normal m-0">{gettext('Other')}</h2>
             </div>
-            <div role='button' tabIndex={0} className={classNames('other-op wiki2-set-up', { 'mt-0': !pagesLen })} onClick={this.props.toggleSettingDialog}>
-              <span className="d-flex align-items-center mr-2"><Icon symbol="set-up" /></span>
-              <span className="other-op-label">{gettext('Settings')}</span>
-            </div>
+            {enableMetadataManagement && (
+              <div role='button' tabIndex={0} className={classNames('other-op wiki2-set-up', { 'mt-0': !pagesLen })} onClick={this.props.toggleSettingDialog}>
+                <span className="d-flex align-items-center mr-2"><Icon symbol="set-up" /></span>
+                <span className="other-op-label">{gettext('Settings')}</span>
+              </div>
+            )}
             <div role='button' tabIndex={1} className={classNames('other-op wiki2-trash', { 'mt-0': !pagesLen })} onClick={this.props.toggleTrashDialog}>
               <span className="d-flex align-items-center mr-2"><Icon symbol="trash" /></span>
               <span className="other-op-label">{gettext('Trash')}</span>
