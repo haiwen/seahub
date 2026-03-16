@@ -93,10 +93,6 @@
   overflow: auto;
 }
 
-.wiki-linked-repos__body .linked-repos-table .repo-name {
-  color: #666;
-}
-
 .wiki-linked-repos__body .linked-repos-table .repo-op {
   text-align: center;
   cursor: pointer;

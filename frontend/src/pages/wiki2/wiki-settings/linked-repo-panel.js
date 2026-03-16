@@ -102,6 +102,7 @@ export default function LinkedRepoPanel() {
   };
 
   const tipMessage = gettext('After connecting libraries, you can list files from them in the Wiki pages.');
+  const tipMessage2 = gettext('Note, the library must turn on extended properties feature to be connected to a Wiki.');
 
   if (isLoading) {
     return <Loading />;
@@ -111,6 +112,7 @@ export default function LinkedRepoPanel() {
     <>
       <ModalBody className="metadata-status-management-dialog">
         <p className="tip m-0">{tipMessage}</p>
+        <p className="tip mt-1">{tipMessage2}</p>
         {isOpen && (
           <div className='wiki-linked-repos'>
             <div className='wiki-linked-repos__header'>
