@@ -694,7 +694,14 @@ class LibContentView extends React.Component {
       columns = [...columns, ...validColumns];
     }
 
-    this.cachedColumns = columns.map(col => new Column(col));
+    this.cachedColumns = columns.map(col => {
+      const column = new Column(col);
+      if (col.key === PRIVATE_COLUMN_KEY.FILE_NAME || col.key === PRIVATE_COLUMN_KEY.MTIME) {
+        column.name = col.name;
+      }
+      return column;
+    });
+
     return this.cachedColumns;
   };
 
