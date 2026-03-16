@@ -58,7 +58,7 @@ from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
     validate_group_name, is_group_member, group_id_to_name, is_group_admin
-from seahub.thumbnail.utils import generate_thumbnail
+from seahub.thumbnail.utils import generate_thumbnail, generate_thumbnail_key
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
@@ -5013,7 +5013,8 @@ class ThumbnailView(APIView):
         success, status_code = generate_thumbnail(request, repo_id, size, path)
         if success:
             thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
-            thumbnail_file = os.path.join(thumbnail_dir, obj_id)
+            thumbnail_key = generate_thumbnail_key(repo_id, path)
+            thumbnail_file = os.path.join(thumbnail_dir, thumbnail_key)
             try:
                 with open(thumbnail_file, 'rb') as f:
                     thumbnail = f.read()
