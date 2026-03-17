@@ -667,5 +667,9 @@
   "The_link_address_or_link_page_or_link_block_is_required": "链接地址或链接页面或链接节点是必填项。",
   "Link_page": "链接页面",
   "Whiteboard_link_invalid_tip": "白板链接无效,需要将其删除并重新添加。",
-  "The_link_is_invalid": "该链接无效。"
+  "The_link_is_invalid": "该链接无效。",
+  "Edit_formula": "编辑公式",
+  "Toggle_header_one": "可折叠一级标题",
+  "Toggle_header_two": "可折叠二级标题",
+  "Toggle_header_three": "可折叠三级标题"
 }

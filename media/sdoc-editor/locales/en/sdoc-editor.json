@@ -667,5 +667,10 @@
   "The_link_address_or_link_page_or_link_block_is_required": "The link address or link page or link block is required",
   "Link_page": "Link page",
   "Whiteboard_link_invalid_tip": "The whiteboard link is invalid, it needs to be deleted and added again.",
-  "The_link_is_invalid": "The link is invalid."
+  "The_link_is_invalid": "The link is invalid.",
+  "Edit_formula": "Edit formula",
+  "Show_files_from_a_linked_library": "Show files from a linked library",
+  "Toggle_header_one": "Toggle header one",
+  "Toggle_header_two": "Toggle header two",
+  "Toggle_header_three": "Toggle header three"
 }
