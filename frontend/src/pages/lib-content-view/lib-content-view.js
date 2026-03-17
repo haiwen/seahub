@@ -1880,6 +1880,13 @@ class LibContentView extends React.Component {
   };
 
   onSelectedDirentListUpdate = (newSelectedDirentList, lastSelectedIndex = null) => {
+    let currentDirent = null;
+    if (newSelectedDirentList.length === 1) {
+      currentDirent = newSelectedDirentList[0];
+    } else if (lastSelectedIndex !== null && lastSelectedIndex >= 0 && lastSelectedIndex < this.state.direntList.length) {
+      currentDirent = this.state.direntList[lastSelectedIndex];
+    }
+
     this.setState({
       direntList: this.state.direntList.map(dirent => {
         dirent.isSelected = newSelectedDirentList.some(selectedDirent => selectedDirent.name === dirent.name);
@@ -1889,7 +1896,7 @@ class LibContentView extends React.Component {
       selectedDirentList: newSelectedDirentList,
       lastSelectedIndex: lastSelectedIndex,
       isAllDirentSelected: newSelectedDirentList.length === this.state.direntList.length,
-      currentDirent: lastSelectedIndex ? this.state.direntList[lastSelectedIndex] : null,
+      currentDirent,
     });
   };
 
@@ -2200,7 +2207,13 @@ class LibContentView extends React.Component {
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
         if (d.name === direntName) {
-          return new Dirent({ ...d, ...updateData });
+          return new Dirent({
+            ...d,
+            metadata: {
+              ...d.metadata,
+              ...updateData
+            }
+          });
         }
         return d;
       });
@@ -2208,7 +2221,13 @@ class LibContentView extends React.Component {
       const newState = { direntList: newDirentList };
 
       if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
-        newState.currentDirent = new Dirent({ ...prevState.currentDirent, ...updateData });
+        newState.currentDirent = new Dirent({
+          ...prevState.currentDirent,
+          metadata: {
+            ...prevState.currentDirent.metadata,
+            ...updateData
+          }
+        });
       }
       return newState;
     });
