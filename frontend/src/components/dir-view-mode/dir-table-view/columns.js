@@ -6,7 +6,6 @@ import Empty from '@/metadata/components/formatter/empty';
 import NumberFormatter from '@/metadata/components/cell-formatter/number';
 import CTimeFormatter from '@/metadata/components/cell-formatter/ctime';
 import DateFormatter from '@/metadata/components/cell-formatter/date';
-import CollaboratorsFormatter from '@/metadata/components/cell-formatter/collaborators';
 import MultipleSelectFormatter from '@/metadata/components/cell-formatter/multiple-select';
 import SingleSelectFormatter from '@/metadata/components/cell-formatter/single-select';
 import CheckboxFormatter from '@/metadata/components/cell-formatter/checkbox';
@@ -16,6 +15,7 @@ import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
 import RateFormatter from '@/metadata/components/cell-formatter/rate';
 import FileName from '@/metadata/components/cell-formatter/file-name';
 import Creator from './formatter/creator';
+import CollaboratorsFormatter from './formatter/collaborators';
 
 export const EDITABLE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
@@ -121,7 +121,7 @@ const createColumnFormatter = ({ repoID, record, column, value, queryUserAPI, ta
     }
     case CellType.COLLABORATOR: {
       return (
-        <CollaboratorsFormatter value={value} api={queryUserAPI} className={className} {...otherProps}>
+        <CollaboratorsFormatter value={value} className={className} {...otherProps}>
           <Empty fieldType={type} placeholder='' />
         </CollaboratorsFormatter>
       );
