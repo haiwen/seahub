@@ -58,7 +58,13 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           rm -r tests/seahub/repo_metadata
-          export CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data TRAVIS=1 SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub
+          export TRAVIS=1
+          export SEAFILE_MYSQL_DB_CCNET_DB_NAME=ccnet
+          export SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=seafile
+          export SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=seahub
+          export SEAFILE_DATA_DIR=/tmp/seafile-data
+          export SEAFILE_CENTRAL_CONF_DIR=/tmp/conf
+
           if ./tests/test_seahub_changes.sh; then ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test; else true; fi
 
       - uses: actions/setup-node@v2
@@ -69,3 +75,10 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE/tests/
           if chmod +x test_frontend_changes.sh && ./test_frontend_changes.sh; then chmod +x github_actions_npm_lint.sh && ./github_actions_npm_lint.sh; else true; fi
+
+        # tmate ssh debug when failed
+      - name: Setup tmate session for debugging
+        if: failure()
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
