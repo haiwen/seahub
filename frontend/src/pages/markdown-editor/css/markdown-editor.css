@@ -88,3 +88,7 @@ html, body, #root {
   min-height: 0;
   min-width: 0;
 }
+
+.sf-markdown-help-wrapper .sf-panel-container {
+  border-left: 1px solid #e6e6dd;
+}

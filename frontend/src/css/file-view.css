@@ -77,7 +77,7 @@ body {
 }
 
 .file-view-header .file-toolbar-btn:hover {
-  background-color: var(--bs-hover-bg)!important;
+  background-color: var(--bs-hover-bg) !important;
 }
 
 .file-view-header .file-toolbar-btn.disabled {
