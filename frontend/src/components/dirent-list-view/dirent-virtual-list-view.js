@@ -4,6 +4,7 @@ import VirtualList from '../virtual-list/virtual-list';
 import DirentListItem from './dirent-list-item';
 import { useCollaborators } from '../../metadata';
 import { useTags } from '@/tag/hooks';
+import { Utils } from '@/utils/utils';
 
 import './dirent-virtual-list.css';
 
@@ -61,12 +62,8 @@ const DirentVirtualListView = ({
   const [scrollTop, setScrollTop] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
 
-  const isMobile = useMemo(() => {
-    return typeof window !== 'undefined' && window.innerWidth < 768;
-  }, []);
-
   const tableWrapperWidth = useMemo(() => {
-    if (containerWidth === 0) {
+    if (containerWidth === 0 || !Utils.isDesktop()) {
       return '100%';
     }
     return containerWidth > 768 ? containerWidth : 768;
@@ -118,7 +115,7 @@ const DirentVirtualListView = ({
         onScroll={handleScroll}
       >
         <div style={{ width: tableWrapperWidth }}>
-          {!isMobile && (
+          {Utils.isDesktop() && (
             <div
               ref={headerRef}
               className="d-flex dirent-virtual-list-header"

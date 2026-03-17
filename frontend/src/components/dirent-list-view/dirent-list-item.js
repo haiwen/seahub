@@ -24,6 +24,7 @@ import { toggleStar } from '../../utils/dirent-operations';
 import { menuHandlers } from '../dir-view-mode/utils/menuHandlers';
 import FileTagsFormatter from '@/metadata/components/cell-formatter/file-tags';
 import { getNumberDisplayString } from '@/metadata/utils/cell';
+import TextTranslation from '@/utils/text-translation';
 
 import '../../css/dirent-list-item.css';
 import '../../metadata/components/cell-formatter/collaborator/index.css';
@@ -567,8 +568,6 @@ class DirentListItem extends React.Component {
     const lockedImageUrl = `${mediaUrl}img/file-${dirent.is_freezed ? 'freezed-32.svg' : 'locked-32.png'}`;
     const lockedMessage = dirent.is_freezed ? gettext('freezed') : gettext('locked');
 
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-
     // Check if configurable columns are visible
     const isDir = dirent.isDir();
     const visibleColumnKeys = columns.filter(col => !hiddenColumnKeys.includes(col.key)).map(col => col.key);
@@ -582,30 +581,11 @@ class DirentListItem extends React.Component {
     const canEdit = !isDir && dirent.permission === 'rw';
     const showMetadata = !isDir && dirent.metadata;
 
-    if (isMobile) {
+    if (!Utils.isDesktop()) {
       return (
-        <div
-          className={classnames(
-            'dirent-mobile-item',
-            { 'tr-drop-effect': this.state.isDropTipShow },
-            { 'tr-active': isSelected },
-          )}
-          draggable={canDrag}
-          onFocus={this.onMouseEnter}
-          onMouseEnter={this.onMouseEnter}
-          onMouseOver={this.onMouseOver}
-          onMouseLeave={this.onMouseLeave}
-          onClick={this.onDirentClick}
-          onDragStart={this.onItemDragStart}
-          onDragEnter={this.onItemDragEnter}
-          onDragOver={this.onItemDragOver}
-          onDragLeave={this.onItemDragLeave}
-          onDrop={this.onItemDragDrop}
-          onMouseDown={this.onItemMouseDown}
-          onContextMenu={this.onItemContextMenu}
-        >
+        <div className="dirent-mobile-item">
           {/* Thumbnail */}
-          <div className="dirent-mobile-thumb">
+          <div className="dirent-mobile-thumb" onClick={this.onItemClick}>
             <div className={classnames('dir-icon', { 'sdoc-dir-icon': isSdocFile && dirent.encoded_thumbnail_src })}>
               {(this.canPreview && dirent.encoded_thumbnail_src) ?
                 <img
@@ -626,7 +606,7 @@ class DirentListItem extends React.Component {
           </div>
 
           {/* Name and metadata */}
-          <div className="dirent-mobile-content">
+          <div className="dirent-mobile-content" onClick={this.onItemClick}>
             {this.state.isRenaming &&
               <Rename
                 hasSuffix={dirent.type !== 'dir'}
@@ -652,13 +632,8 @@ class DirentListItem extends React.Component {
           {/* Operations */}
           <div className="dirent-mobile-ops">
             <MobileItemMenu>
-              {dirent.starred !== undefined &&
-                <DropdownItem className="mobile-menu-item" onClick={this.onItemStarred}>
-                  {dirent.starred ? gettext('Unstar') : gettext('Star')}
-                </DropdownItem>
-              }
               {this.props.getDirentItemMenuList(dirent, true)
-                .filter(item => item != 'Divider' && item.key != 'Open via Client')
+                .filter(item => item != 'Divider' && item.key != TextTranslation.OPEN_WITH.key && item.key !== TextTranslation.MORE.key)
                 .map((item, index) => {
                   return (
                     <DropdownItem

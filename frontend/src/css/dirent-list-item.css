@@ -192,11 +192,11 @@
 }
 
 .mobile-menu-item {
-  padding: 8px 12px;
   color: var(--bs-body-color);
   background: transparent;
   border: none;
-  text-align: left;
+  text-align: center;
+  line-height: 1;
   width: 100%;
   font-size: 14px;
 }
