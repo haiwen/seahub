@@ -1,11 +1,11 @@
 @font-face {
   font-family: "sdocfont"; /* Project id 5078528 */
-  src: url('iconfont.eot?t=1770015835082'); /* IE9 */
-  src: url('iconfont.eot?t=1770015835082#iefix') format('embedded-opentype'), /* IE6-IE8 */
-       url('iconfont.woff2?t=1770015835082') format('woff2'),
-       url('iconfont.woff?t=1770015835082') format('woff'),
-       url('iconfont.ttf?t=1770015835082') format('truetype'),
-       url('iconfont.svg?t=1770015835082#sdocfont') format('svg');
+  src: url('iconfont.eot?t=1773726475673'); /* IE9 */
+  src: url('iconfont.eot?t=1773726475673#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1773726475673') format('woff2'),
+       url('iconfont.woff?t=1773726475673') format('woff'),
+       url('iconfont.ttf?t=1773726475673') format('truetype'),
+       url('iconfont.svg?t=1773726475673#sdocfont') format('svg');
 }
 
 .sdocfont {
@@ -14,6 +14,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.sdoc-mark-as-resolved:before {
+  content: "\e6fe";
+}
+
+.sdoc-toggle-header3:before {
+  content: "\e602";
+}
+
+.sdoc-toggle-header5:before {
+  content: "\e603";
+}
+
+.sdoc-toggle-header6:before {
+  content: "\e604";
+}
+
+.sdoc-toggle-header2:before {
+  content: "\e605";
+}
+
+.sdoc-toggle-header1:before {
+  content: "\e606";
+}
+
+.sdoc-toggle-header4:before {
+  content: "\e607";
 }
 
 .sdoc-formula:before {
