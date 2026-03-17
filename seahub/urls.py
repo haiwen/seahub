@@ -20,8 +20,7 @@ from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, download_file, view_lib_file, \
     view_lib_file_via_smart_link, view_media_file_via_share_link, \
-    view_media_file_via_public_wiki, view_sdoc_revision
-from seahub.views.live_photo import live_photo_content, check_live_photo
+    view_media_file_via_public_wiki, view_sdoc_revision, live_photo_content
 from seahub.views.repo import repo_history_view, repo_snapshot, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
 
@@ -70,7 +69,7 @@ from seahub.api2.endpoints.repos_batch import BatchMoveItemsUpdatePath, ReposBat
         ReposSyncBatchCopyItemView, ReposSyncBatchMoveItemView, \
         ReposBatchDeleteItemView, RepoFoldersItemBatchDelete
 from seahub.api2.endpoints.repos import RepoView, ReposView, RepoShareInfoView, RepoImageRotateView
-from seahub.api2.endpoints.file import FileView
+from seahub.api2.endpoints.file import CheckLivePhoto, FileView
 from seahub.api2.endpoints.file_access_log import FileAccessLogView
 from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
@@ -494,7 +493,7 @@ urlpatterns = [
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/upload-links/(?P<token>[a-f0-9]+)/$', RepoUploadLink.as_view(), name='api-v2.1-repo-upload-link'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/share-info/$', RepoShareInfoView.as_view(), name='api-v2.1-repo-share-info-view'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/image-rotate/$', RepoImageRotateView.as_view(), name='api-v2.1-repo-image-rotate-view'),
-    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.+)/check-live-photo/$', check_live_photo, name='api-v2.1-check-live-photo'),
+    re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.+)/check-live-photo/$', CheckLivePhoto.as_view(), name='api-v2.1-check-live-photo'),
     re_path(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/office-suite/$', OfficeSuiteConfig.as_view(), name='api-v2.1-repo-office-suite'),
 
 

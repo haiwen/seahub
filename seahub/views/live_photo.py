@@ -49,7 +49,7 @@ def _get_file_content(repo_id, file_id, filename, username):
     return response.content
 
 
-def _check_is_live_photo(repo_id, file_id, filename, username):
+def check_is_live_photo(repo_id, file_id, filename, username):
     """Check if file content is a live photo using exiftool.
 
     Writes content to a temp file and uses exiftool to parse XMP metadata.
@@ -76,7 +76,7 @@ def _check_is_live_photo(repo_id, file_id, filename, username):
     return False
 
 
-def _extract_video_data(repo_id, file_id, filename, username):
+def extract_video_data(repo_id, file_id, filename, username):
     """Extract embedded video data from a live photo using exiftool.
 
     Writes content to a temp file and uses exiftool command line to extract
@@ -112,84 +112,3 @@ def _extract_video_data(repo_id, file_id, filename, username):
             return content[len(content) - offset:]
     return None
 
-
-@login_required
-def check_live_photo(request, repo_id, path):
-    """Check if a HEIC file is a live photo.
-
-    GET /api/v2.1/repos/:repo_id/:path/check-live-photo
-    """
-    # resource check
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        return HttpResponse('Library not found.', status=404)
-
-    path = normalize_file_path(path)
-    file_id = seafile_api.get_file_id_by_path(repo_id, path)
-    if not file_id:
-        return HttpResponse('File not found.', status=404)
-
-    # check file extension
-    filename = os.path.basename(path)
-    file_ext = os.path.splitext(filename)[1].lower()
-    if file_ext != '.heic':
-        return JsonResponse({'is_live_photo': False})
-
-    # permission check
-    parent_dir = os.path.dirname(path)
-    permission = check_folder_permission(request, repo_id, parent_dir)
-    if not permission:
-        return HttpResponse('Permission denied.', status=403)
-
-    try:
-        username = request.user.username
-        is_live = _check_is_live_photo(repo_id, file_id, filename, username)
-    except Exception as e:
-        logger.error('check live photo error: %s', e)
-        is_live = False
-
-    return JsonResponse({'is_live_photo': is_live})
-
-
-@login_required
-def live_photo_content(request, repo_id, path):
-    """Return live photo video content as binary stream.
-
-    URL: GET /repo/:repo_id/live-photo/:path/content
-    """
-    # resource check
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        return HttpResponse('Library not found.', status=404)
-
-    path = normalize_file_path(path)
-    file_id = seafile_api.get_file_id_by_path(repo_id, path)
-    if not file_id:
-        return HttpResponse('File not found.', status=404)
-
-    # check file extension
-    filename = os.path.basename(path)
-    file_ext = os.path.splitext(filename)[1].lower()
-    if file_ext != '.heic':
-        return HttpResponse('Not a HEIC file.', status=400)
-
-    # permission check
-    parent_dir = os.path.dirname(path)
-    permission = check_folder_permission(request, repo_id, parent_dir)
-    if not permission:
-        return HttpResponse('Permission denied.', status=403)
-
-    # extract video data
-    try:
-        username = request.user.username
-        video_data = _extract_video_data(repo_id, file_id, filename, username)
-        if not video_data:
-            return HttpResponse('Not a live photo or no video data found.', status=404)
-    except Exception as e:
-        logger.error('extract live photo video error: %s', e)
-        return HttpResponse('Internal Server Error', status=500)
-
-    resp = HttpResponse(video_data, content_type='video/mp4')
-    resp['Content-Disposition'] = 'inline; filename=livephoto.mov'
-    resp['Accept-Ranges'] = 'bytes'
-    return resp
