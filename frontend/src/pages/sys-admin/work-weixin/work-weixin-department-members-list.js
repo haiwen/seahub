@@ -35,7 +35,7 @@ class WorkWeixinDepartmentMembersList extends Component {
         <tr key={checkedDepartmentId.toString() + member.userid}>
           <td>
             {!member.email &&
-              <input type="checkbox" className="form-check-input" onChange={() => this.props.onUserChecked(member)}
+              <input type="checkbox" className="form-check-input align-middle mt-0" onChange={() => this.props.onUserChecked(member)}
                 checked={(member.userid in newUsersTempObj) ? 'checked' : ''}>
               </input>}
           </td>
