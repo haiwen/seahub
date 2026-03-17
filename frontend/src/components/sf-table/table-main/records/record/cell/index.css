@@ -52,6 +52,8 @@
 /* cell formatter */
 .sf-table-cell .sf-metadata-ui.cell-formatter-container {
   height: 100%;
+  display: flex;
+  align-items: center;
   line-height: 20px;
 }
 

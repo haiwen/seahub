@@ -19,7 +19,6 @@ import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { openFile } from '@/metadata/utils/file';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
-import { useCollaborators } from '@/metadata';
 
 import './index.css';
 
@@ -58,7 +57,6 @@ const DirTableView = ({
   const sfTableEventBus = useRef(EventBus.getInstance());
 
   const { tagsData } = useTags();
-  const { collaborators, queryUser } = useCollaborators();
 
   const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo });
 
@@ -82,7 +80,7 @@ const DirTableView = ({
   }, [repoID, direntList, onItemClick]);
 
   const enrichedColumns = useMemo(() => {
-    return createDirentTableColumns(columns, hiddenColumnKeys, { repoID, repoInfo, tableData, onFileNameClick, updateDirentStatus, tagsData: tagsData || {}, collaborators, queryUserAPI: queryUser });
+    return createDirentTableColumns(columns, hiddenColumnKeys, { repoID, repoInfo, tableData, onFileNameClick, updateDirentStatus, tagsData: tagsData || {} });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, onFileNameClick, updateDirentStatus, columnWidthVersion, tagsData]);
 

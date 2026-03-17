@@ -15,6 +15,7 @@ import OpIcon from '../../components/op-icon';
 import { HideColumnSetter } from '../../metadata/components/data-process-setter';
 import { EVENT_BUS_TYPE } from '../../components/common/event-bus-type';
 import TrashViewToolbar from '../dir-view-mode/dir-trash-view/trash-view-toolbar';
+import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -100,6 +101,7 @@ class DirTool extends React.Component {
     }
 
     const propertiesText = TextTranslation.PROPERTIES.value;
+    const columns = this.props.columns.filter(col => col.key !== PRIVATE_COLUMN_KEY.FILE_NAME);
     return (
       <div className="dir-tool d-flex">
         <ViewModes currentViewMode={currentMode} switchViewMode={this.props.switchViewMode} />
@@ -111,7 +113,7 @@ class DirTool extends React.Component {
             wrapperClass="ml-2 cur-view-path-btn dir-tool-hide-column-setter"
             target="dir-hide-column-popover"
             readOnly={isCustomPermission}
-            columns={this.props.columns}
+            columns={columns}
             hiddenColumns={this.props.hiddenColumnKeys}
             modifyHiddenColumns={this.modifyHiddenColumns}
           />

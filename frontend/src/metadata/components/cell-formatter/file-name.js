@@ -38,7 +38,7 @@ const FileName = ({ record, className: propsClassName, value, hideIcon = false, 
 FileName.propTypes = {
   value: PropTypes.string,
   hideIcon: PropTypes.bool,
-  record: PropTypes.object.isRequired,
+  record: PropTypes.object,
   className: PropTypes.string,
   onFileNameClick: PropTypes.func,
 };
