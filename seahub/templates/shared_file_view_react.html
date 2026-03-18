@@ -42,6 +42,11 @@
 {% elif filetype == 'SpreadSheet' %}
     {% render_bundle 'sharedFileViewSpreadsheet' 'css' %}
 {% elif filetype == 'SDoc' %}
+<style type="text/css">
+body {
+  overflow: hidden !important;
+}
+</style>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css">
 {% render_bundle 'sharedFileViewSdoc' 'css' %}
 {% elif filetype == 'Unknown' %}
