@@ -36,3 +36,13 @@
 .rendered-markdown tbody tr:first-child {
   font-weight: 400;
 }
+
+.sf-plain-editor-right-panel table th[align='center'] {
+  display: flex;
+  justify-content: center;
+}
+
+.sf-plain-editor-right-panel table th[align='right'] {
+  display: flex;
+  justify-content: right;
+}
