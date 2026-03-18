@@ -1,3 +1,7 @@
+#sdoc-editor-wrapper {
+  overflow: hidden;
+}
+
 .sdoc-content-right-panel .cur-view-detail {
   border-left: none;
   height: calc(100vh - 100px);

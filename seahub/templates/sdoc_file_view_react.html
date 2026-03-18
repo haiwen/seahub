@@ -2,6 +2,7 @@
 {% load render_bundle from webpack_loader %}
 {% load seahub_tags i18n static %}
 
+{% block body_id %}sdoc-editor-wrapper{% endblock %}
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css" />
 {% render_bundle 'viewFileSdoc' 'css' %}
