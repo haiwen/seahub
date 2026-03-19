@@ -56,7 +56,7 @@ const propTypes = {
   sortOrder: PropTypes.string.isRequired,
   sortItems: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  updateDirentStatus: PropTypes.func.isRequired,
+  updateDirentMetadata: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -337,13 +337,15 @@ class DirColumnView extends React.Component {
               onItemsDelete={this.props.onItemsDelete}
               onItemRename={this.props.onItemRename}
               onItemSelected={this.props.onItemSelected}
+              selectedDirentList={this.props.selectedDirentList}
               onSelectedDirentListUpdate={this.props.onSelectedDirentListUpdate}
               updateDirent={this.props.updateDirent}
-              updateDirentStatus={this.props.updateDirentStatus}
+              updateDirentMetadata={this.props.updateDirentMetadata}
               onItemConvert={this.props.onItemConvert}
               showDirentDetail={this.props.showDirentDetail}
               onItemsMove={this.props.onItemsMove}
               onItemMove={this.props.onItemMove}
+              isDirentDetailShow={this.props.isDirentDetailShow}
             />
           )}
           {currentMode === HISTORY_MODE && (

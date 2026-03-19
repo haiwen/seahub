@@ -101,7 +101,7 @@ class PopupEditorContainer extends React.Component {
     }
 
     return (
-      <Editor column={column} editorProps={editorProps} />
+      <Editor ref={this.setEditorRef} column={column} editorProps={editorProps} />
     );
   };
 

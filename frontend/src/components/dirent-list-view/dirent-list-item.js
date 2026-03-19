@@ -792,6 +792,7 @@ class DirentListItem extends React.Component {
         {showStatus && (
           <div className="dirent-property dirent-property-status">
             <StatusEditor
+              repoID={this.props.repoID}
               value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_STATUS] : ''}
               record={dirent}
               column={statusCol}

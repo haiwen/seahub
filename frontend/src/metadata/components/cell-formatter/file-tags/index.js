@@ -17,15 +17,15 @@ const FileTagsFormatter = ({ tagsData, value: oldValue, className, children: emp
   return (
     <div className={classnames('sf-metadata-ui cell-formatter-container tags-formatter', className)}>
       <div className="sf-metadata-ui-tags-container">
-        {value.map((item) => {
-          const tag = getRowById(tagsData, item);
+        {value.map((id) => {
+          const tag = getRowById(tagsData, id);
           const tagColor = getTagColor(tag);
           const tagName = getTagName(tag);
           if (!showName) return (
-            <span key={item} className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }} title={tagName}></span>
+            <span key={id} className="sf-metadata-ui-tag-color" style={{ backgroundColor: tagColor }} title={tagName}></span>
           );
           return (
-            <div key={item} className="sf-metadata-ui-tag" title={tagName}>
+            <div key={id} className="sf-metadata-ui-tag" title={tagName}>
               <span className="sf-metadata-ui-tag-color mr-1" style={{ backgroundColor: tagColor }}></span>
               <span className="sf-metadata-ui-tag-text">{tagName}</span>
             </div>

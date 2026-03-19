@@ -14,9 +14,9 @@ class LongTextEditor extends React.PureComponent {
   constructor(props) {
     super(props);
     this.isLongTextValueChanged = false;
-    this.repoID = window.sfMetadataContext.getSetting('repoID');
+    this.repoID = window.sfMetadataContext?.getSetting('repoID') || this.props.repoID;
     this.filePath = '/';
-    const repoInfo = window.sfMetadataContext.getSetting('repoInfo');
+    const repoInfo = window.sfMetadataContext?.getSetting('repoInfo') || this.props.repoInfo;
     this.api = new LongtextAPI({
       repoID: this.repoID,
       repoName: repoInfo.repo_name,

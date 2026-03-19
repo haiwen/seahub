@@ -12,12 +12,15 @@
 
 .dir-table-view .sf-metadata-ui.ctime-formatter,
 .dir-table-view .sf-metadata-ui.mtime-formatter,
+.dir-table-view .sf-metadata-ui.date-formatter,
 .dir-table-view .sf-metadata-ui.number-formatter,
 .dir-table-view .sf-metadata-ui.text-formatter,
 .dir-table-view .sf-metadata-ui.long-text-formatter,
 .dir-table-view .sf-metadata-ui.geolocation-formatter {
+  display: block;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 24px;
 }
 
 .sf-table-context-menu {
@@ -26,4 +29,9 @@
 
 .table-cell-editor .sf-metadata-text-editor {
   height: 100%;
+}
+
+.dir-table-view .sf-table-cell.sf-table-number-cell .sf-metadata-number-formatter {
+  width: 100%;
+  text-align: right;
 }

@@ -20,6 +20,7 @@ const MultipleSelectEditor = forwardRef(({
   onCommit,
   onPressTab,
   modifyColumnData,
+  canEdit = false,
 }, ref) => {
   const [value, setValue] = useState(getColumnOptionIdsByNames(column, oldValue));
   const [searchValue, setSearchValue] = useState('');
@@ -29,7 +30,7 @@ const MultipleSelectEditor = forwardRef(({
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const selectItemRef = useRef(null);
-  const canEditData = window.sfMetadataContext.canModifyColumnData(column);
+  const canEditData = window.sfMetadataContext && window.sfMetadataContext.canModifyColumnData(column) || canEdit;
 
   const options = useMemo(() => {
     return getColumnOptions(column);

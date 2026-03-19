@@ -54,9 +54,8 @@ export const EVENT_BUS_TYPE = {
   HIDDEN_TABLE_VIEW_COLUMNS_CHANGED: 'hidden_table_view_columns_changed',
 
   // dirent properties
-  DIRENT_STATUS_CHANGED: 'dirent_status_changed',
+  DIRENT_METADATA_CHANGED: 'dirent_metadata_changed',
   COLUMN_DATA_MODIFIED: 'column_data_modified',
-  DIRENT_TAGS_CHANGED: 'dirent_tags_changed',
 
   // trash
   SWITCH_TO_TRASH_VIEW: 'switch_to_trash_view',

@@ -8,7 +8,7 @@ import { siteRoot, enableSeadoc, enableWhiteboard } from '@/utils/constants';
 import { Utils } from '@/utils/utils';
 import Icon from '@/components/icon';
 import TextTranslation from '@/utils/text-translation';
-import { PRIVATE_COLUMN_KEY } from '@/metadata/constants';
+import { PRIVATE_COLUMN_KEY, EVENT_BUS_TYPE as METADATA_EVENT_BUS_TYPE, CellType } from '@/metadata/constants';
 import { useTags } from '@/tag/hooks';
 import { RecordMetrics } from '../../sf-table/utils/record-metrics';
 import { menuHandlers } from '../utils/menuHandlers';
@@ -19,6 +19,10 @@ import { EVENT_BUS_TYPE } from '@/components/sf-table/constants/event-bus-type';
 import { getRowById, getRowsByIds } from '@/components/sf-table/utils/table';
 import { openFile } from '@/metadata/utils/file';
 import { EDITOR_TYPE } from '@/components/sf-table/constants/grid';
+import { useMetadataStatus } from '@/hooks';
+import { metadataAPI } from '@/metadata';
+import { getColumnByKey } from '@/components/sf-table/utils/column';
+import { getColumnOptionNameById, getColumnOptionNamesByIds } from '@/metadata/utils/cell';
 
 import './index.css';
 
@@ -43,11 +47,13 @@ const DirTableView = ({
   onItemRename,
   onItemSelected,
   updateDirent,
-  updateDirentStatus,
+  updateDirentMetadata,
   onItemConvert,
+  isDirentDetailShow,
   showDirentDetail,
   onItemsMove,
   onItemMove,
+  selectedDirentList,
   onSelectedDirentListUpdate,
 }) => {
   const [isSubMenuShown, setSubMenuShown] = useState(false);
@@ -56,6 +62,7 @@ const DirTableView = ({
   const hideMenuRef = useRef(null);
   const sfTableEventBus = useRef(EventBus.getInstance());
 
+  const { globalHiddenColumns } = useMetadataStatus();
   const { tagsData } = useTags();
 
   const { getBatchMenuList, getItemMenuList } = useDirentContextMenu({ repoInfo });
@@ -64,6 +71,7 @@ const DirTableView = ({
     return transformDirentsToTableData(direntList, repoID);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [direntList, repoID, sortBy, sortOrder]);
+
 
   const onFileNameClick = useCallback((e, record) => {
     e.preventDefault();
@@ -79,10 +87,31 @@ const DirTableView = ({
     onItemClick && onItemClick(dirent);
   }, [repoID, direntList, onItemClick]);
 
+  const updateDirentDetail = useCallback((parentDir, fileName, update) => {
+    if (!isDirentDetailShow || window?.sfMetadataContext?.eventBus) return;
+    window.sfMetadataContext.eventBus.dispatch(
+      METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
+      { parentDir, fileName },
+      update
+    );
+  }, [isDirentDetailShow]);
+
+  const handleDirentMetadata = useCallback((id, direntName, update) => {
+    const dirent = direntList.find(d => d.name === direntName);
+    const parentDir = dirent.parent_dir || path;
+    const key = Object.keys(update)[0];
+    if (key !== PRIVATE_COLUMN_KEY.TAGS) {
+      metadataAPI.modifyRecord(repoID, { recordId: id }, update);
+    }
+    updateDirentMetadata(direntName, update);
+    updateDirentDetail(parentDir, direntName, update);
+  }, [direntList, path, repoID, updateDirentDetail, updateDirentMetadata]);
+
   const enrichedColumns = useMemo(() => {
-    return createDirentTableColumns(columns, hiddenColumnKeys, { repoID, repoInfo, tableData, onFileNameClick, updateDirentStatus, tagsData: tagsData || {} });
+    const validColumns = columns.filter(col => !globalHiddenColumns.includes(col.key));
+    return createDirentTableColumns(validColumns, hiddenColumnKeys, { repoID, repoInfo, tableData, onFileNameClick, onDirentMetadata: handleDirentMetadata, columns, tagsData: tagsData || {} });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, onFileNameClick, updateDirentStatus, columnWidthVersion, tagsData]);
+  }, [columns, hiddenColumnKeys, repoID, repoInfo, tableData, onFileNameClick, updateDirentMetadata, columnWidthVersion, tagsData]);
 
   const modifyColumnWidth = useCallback((column, newWidth) => {
     setDirTableColumnWidth(column.key, newWidth);
@@ -106,15 +135,28 @@ const DirTableView = ({
     return direntList.filter(d => recordNames.includes(d.name));
   }, [tableData, direntList]);
 
-  const modifyRecord = useCallback(({ rowId, updates, otherProps }) => {
+  const modifyRecord = useCallback(({ rowId, cellKey, updates }) => {
     const dirent = getDirentByRowId(rowId);
     if (!dirent) return;
     Object.entries(updates).forEach(([key, value]) => {
       if (key === PRIVATE_COLUMN_KEY.FILE_NAME) {
         onItemRename(dirent, value);
+      } else {
+        // Handle metadata columns - call handleDirentMetadata
+        const record = getRowById(tableData, rowId);
+        if (record) {
+          let update = { [key]: value };
+          const column = getColumnByKey(enrichedColumns, cellKey);
+          if (column.type === CellType.SINGLE_SELECT) {
+            update = { [key]: getColumnOptionNameById(column, value) };
+          } else if (column.type === CellType.MULTIPLE_SELECT) {
+            update = { [key]: getColumnOptionNamesByIds(column, value) };
+          }
+          handleDirentMetadata(rowId, record._name, update);
+        }
       }
     });
-  }, [getDirentByRowId, onItemRename]);
+  }, [getDirentByRowId, onItemRename, tableData, enrichedColumns, handleDirentMetadata]);
 
   const toggleSubMenu = (e, subMenuOptionKey) => {
     e.stopPropagation();
@@ -380,6 +422,7 @@ const DirTableView = ({
         onRecordSelected={onRecordSelected}
         renderCustomDraggedRows={renderCustomDraggedRows}
         moveRecords={moveDirents}
+        selectedDirentList={selectedDirentList}
         updateSelectedRecordIds={handleSelectedRecord}
       />
     </div>
@@ -403,7 +446,7 @@ DirTableView.propTypes = {
   onItemSelected: PropTypes.func,
   onBatchDelete: PropTypes.func,
   updateDirent: PropTypes.func,
-  updateDirentStatus: PropTypes.func,
+  updateDirentMetadata: PropTypes.func,
   onItemConvert: PropTypes.func,
   showDirentDetail: PropTypes.func,
   onItemsMove: PropTypes.func,

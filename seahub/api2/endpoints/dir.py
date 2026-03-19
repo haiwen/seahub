@@ -329,6 +329,7 @@ class DirView(APIView):
 
         all_dir_info_list = []
         all_file_info_list = []
+        current_dir_info_list = None  # Directory list for current path (for metadata query)
 
         try:
             for parent_dir in parent_dir_list:
@@ -337,6 +338,7 @@ class DirView(APIView):
                         request_type, repo, parent_dir, with_thumbnail, thumbnail_size)
                 all_dir_info_list.extend(dir_info_list)
                 all_file_info_list.extend(file_info_list)
+                current_dir_info_list = dir_info_list  # Save last iteration for metadata
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -359,12 +361,22 @@ class DirView(APIView):
                         from seahub.repo_metadata.metadata_server_api import MetadataServerAPI
                         from seafevents.repo_metadata.constants import METADATA_TABLE
 
-                        files = []
+                        # Build entries list (files + directories from current path)
+                        entries = []
                         for file_info in file_info_list:
-                            files.append({
+                            entries.append({
                                 'parent_dir': file_info.get('parent_dir', parent_dir),
-                                'file_name': file_info['name']
+                                'file_name': file_info['name'],
+                                'is_dir': False
                             })
+
+                        if current_dir_info_list:
+                            for dir_info in current_dir_info_list:
+                                entries.append({
+                                    'parent_dir': dir_info.get('parent_dir', parent_dir),
+                                    'file_name': dir_info['name'],
+                                    'is_dir': True
+                                })
 
                         metadata_server_api = MetadataServerAPI(repo_id, username)
                         columns_data = metadata_server_api.list_columns(METADATA_TABLE.id)
@@ -377,21 +389,30 @@ class DirView(APIView):
                                 'type': column.get('type'),
                                 'data': column.get('data', {})
                             })
-                        if files:
+                        if entries:
                             where_conditions = []
                             parameters = []
 
-                            for file_info in files:
-                                parent_dir = file_info.get('parent_dir')
-                                if parent_dir and parent_dir != '/' and parent_dir.endswith('/'):
-                                    parent_dir = parent_dir.rstrip('/')
-                                file_name = file_info.get('file_name')
+                            for entry in entries:
+                                entry_parent_dir = entry.get('parent_dir')
+                                if entry_parent_dir and entry_parent_dir != '/' and entry_parent_dir.endswith('/'):
+                                    entry_parent_dir = entry_parent_dir.rstrip('/')
+                                entry_file_name = entry.get('file_name')
+                                entry_is_dir = entry.get('is_dir', False)
 
-                                if not parent_dir or not file_name:
+                                if not entry_parent_dir or not entry_file_name:
                                     continue
 
-                                where_conditions.append(f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=?)')
-                                parameters.extend([parent_dir, file_name])
+                                # Add _is_dir condition to distinguish files from directories
+                                if entry_is_dir:
+                                    where_conditions.append(
+                                        f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=? AND `{METADATA_TABLE.columns.is_dir.name}`=TRUE)'
+                                    )
+                                else:
+                                    where_conditions.append(
+                                        f'(`{METADATA_TABLE.columns.parent_dir.name}`=? AND `{METADATA_TABLE.columns.file_name.name}`=? AND `{METADATA_TABLE.columns.is_dir.name}`=FALSE)'
+                                    )
+                                parameters.extend([entry_parent_dir, entry_file_name])
 
                             if where_conditions:
                                 where_clause = ' OR '.join(where_conditions)
