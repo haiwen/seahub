@@ -4,7 +4,6 @@ import FileNameEditor from '@/metadata/components/cell-editors/file-name-editor'
 import TextFormatter from '@/metadata/components/cell-formatter/text';
 import Empty from '@/metadata/components/formatter/empty';
 import NumberFormatter from '@/metadata/components/cell-formatter/number';
-import CTimeFormatter from '@/metadata/components/cell-formatter/ctime';
 import DateFormatter from '@/metadata/components/cell-formatter/date';
 import MultipleSelectFormatter from '@/metadata/components/cell-formatter/multiple-select';
 import SingleSelectFormatter from '@/metadata/components/cell-formatter/single-select';
@@ -16,6 +15,7 @@ import RateFormatter from '@/metadata/components/cell-formatter/rate';
 import FileName from '@/metadata/components/cell-formatter/file-name';
 import Creator from './formatter/creator';
 import CollaboratorsFormatter from './formatter/collaborators';
+import CTimeFormatterWrapper from './formatter/time';
 
 export const EDITABLE_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.FILE_NAME,
@@ -85,9 +85,7 @@ const createColumnFormatter = ({ repoID, record, column, value, queryUserAPI, ta
     case CellType.CTIME:
     case CellType.MTIME: {
       return (
-        <CTimeFormatter value={value} className={className} {...otherProps}>
-          <Empty fieldType={type} placeholder='' />
-        </CTimeFormatter>
+        <CTimeFormatterWrapper value={value} className={className} {...otherProps} />
       );
     }
     case CellType.CREATOR:
