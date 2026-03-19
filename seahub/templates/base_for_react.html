@@ -109,6 +109,7 @@
             shareLinkForceUsePassword: {% if share_link_force_use_password %} true {% else %} false {% endif %},
             shareLinkPasswordMinLength: {{ share_link_password_min_length }},
             shareLinkPasswordStrengthLevel: {{ share_link_password_strength_level }},
+            shareLinkAlwaysSendPasswordSeparately: {% if share_link_always_send_password_separately %} true {% else %} false {% endif %},
             sideNavFooterCustomHtml: "{{ side_nav_footer_custom_html|safe|escapejs }}",
             helpLink: "{{ help_link }}",
             aboutDialogCustomHtml: "{{ about_dialog_custom_html|safe|escapejs }}",

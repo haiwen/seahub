@@ -16,7 +16,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, \
     is_valid_email, string2list, gen_shared_link, send_html_email, \
     get_site_name
 from seahub.share.models import FileShare
-from seahub.settings import ADD_REPLY_TO_HEADER
+from seahub.settings import ADD_REPLY_TO_HEADER, SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY
 from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -46,7 +46,10 @@ class SendShareLinkView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         extra_msg = request.POST.get('extra_msg', '')
-        send_password_separately = request.POST.get('send_password_separately', '') == 'true'
+        if SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY:
+            send_password_separately = True
+        else:
+            send_password_separately = request.POST.get('send_password_separately', '') == 'true'
 
         # check if token exists
         try:

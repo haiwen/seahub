@@ -456,6 +456,9 @@ ENABLE_SHARE_LINK_REPORT_ABUSE = False
 # share link audit code timeout
 SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60
 
+# always share link send password separately
+SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY = True
+
 # enable or disable limit ip
 ENABLE_LIMIT_IPADDRESS = False
 TRUSTED_IP_LIST = ['127.0.0.1']

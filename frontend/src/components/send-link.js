@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { seafileAPI } from '../utils/seafile-api';
-import { gettext } from '../utils/constants';
+import { gettext, shareLinkAlwaysSendPasswordSeparately } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
 
@@ -24,7 +24,7 @@ class SendLink extends React.Component {
       errorMsg: '',
       btnDisabled: false,
       sending: false,
-      sendPasswordSeparately: false,
+      sendPasswordSeparately: shareLinkAlwaysSendPasswordSeparately,
       showMsg: false,
     };
   }
@@ -121,8 +121,9 @@ class SendLink extends React.Component {
                 type="checkbox"
                 checked={sendPasswordSeparately}
                 onChange={this.handleSendPasswordSeparatelyChange}
+                disabled={shareLinkAlwaysSendPasswordSeparately}
               />
-              {gettext('Send password in a separate email')}
+              {gettext('Send password separately')}
             </Label>
           </FormGroup>
         )}
