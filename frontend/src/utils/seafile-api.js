@@ -385,13 +385,16 @@ class SeafileAPI {
     return this.req.delete(url);
   }
 
-  sendShareLink(token, email, extraMsg) {
+  sendShareLink(token, email, extraMsg, sendPasswordSeparately) {
     const url = this.server + '/api2/send-share-link/';
     let form = new FormData();
     form.append('token', token);
     form.append('email', email);
     if (extraMsg) {
       form.append('extra_msg', extraMsg);
+    }
+    if (sendPasswordSeparately) {
+      form.append('send_password_separately', 'true');
     }
     return this._sendPostRequest(url, form);
   }
@@ -485,13 +488,16 @@ class SeafileAPI {
     return this.req.delete(url);
   }
 
-  sendUploadLink(token, email, extraMsg) {
+  sendUploadLink(token, email, extraMsg, sendPasswordSeparately) {
     const url = this.server + '/api2/send-upload-link/';
     let form = new FormData();
     form.append('token', token);
     form.append('email', email);
     if (extraMsg) {
       form.append('extra_msg', extraMsg);
+    }
+    if (sendPasswordSeparately) {
+      form.append('send_password_separately', 'true');
     }
     return this._sendPostRequest(url, form);
   }

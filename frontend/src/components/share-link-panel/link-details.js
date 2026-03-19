@@ -292,6 +292,7 @@ class LinkDetails extends React.Component {
           <SendLink
             linkType='shareLink'
             token={sharedLinkInfo.token}
+            hasPassword={!!sharedLinkInfo.password}
             toggleSendLink={this.toggleSendLink}
             closeShareDialog={this.props.closeShareDialog}
           />
