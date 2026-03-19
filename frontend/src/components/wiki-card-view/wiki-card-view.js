@@ -63,7 +63,6 @@ class WikiCardView extends Component {
     return { department2WikisMap, myWikis, v1Wikis, sharedWikis };
   };
 
-
   render() {
     let { loading, errorMsg, wikis, groupWikis } = this.props.data;
     const { toggleAddWikiDialog, sidePanelRate, isSidePanelFolded } = this.props;
@@ -125,7 +124,7 @@ class WikiCardView extends Component {
             title={groupWiki.group_name}
             isDepartment={true}
             isShowAvatar={false}
-            toggleAddWikiDialog={(canCreateWiki && this.state.departmentMap[groupWiki.group_id]) ? toggleAddWikiDialog.bind(this, groupWiki.group_id) : null}
+            toggleAddWikiDialog={(canCreateWiki && this.state.departmentMap[groupWiki.group_id]) ? toggleAddWikiDialog.bind(this, groupWiki.group_id, false) : null}
           />
         );
       }
