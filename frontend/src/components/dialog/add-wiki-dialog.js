@@ -11,7 +11,7 @@ import { SeahubSelect } from '../common/select';
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
   addWiki: PropTypes.func.isRequired,
-  currentDeptID: PropTypes.string,
+  currentDeptID: PropTypes.number,
   isMyWiki: PropTypes.bool,
 };
 
