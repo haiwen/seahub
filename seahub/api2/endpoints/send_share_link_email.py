@@ -115,6 +115,7 @@ class SendShareLinkView(APIView):
                 c_password = {
                     'email': username,
                     'to_email': to_email,
+                    'extra_msg': extra_msg,
                     'password': password,
                     'file_shared_name': file_shared_name,
                     'file_shared_type': file_shared_type,

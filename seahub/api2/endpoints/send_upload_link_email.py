@@ -108,6 +108,7 @@ class SendUploadLinkView(APIView):
                 c_password = {
                     'email': username,
                     'to_email': to_email,
+                    'extra_msg': extra_msg,
                     'password': password,
                     'folder_name': folder_name,
                     'send_password_separately': True,
