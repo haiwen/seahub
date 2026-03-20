@@ -529,6 +529,12 @@
   z-index: 0;
 }
 
+.custom-modal .repo-list-item .library {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .custom-modal .file-list-col {
   max-width: 500px;
   padding: 0;
@@ -620,4 +626,23 @@
   color: #2b76f6;
   background-color: #fff;
   border-radius: .25rem;
+}
+
+@media (max-width: 768px) {
+  .custom-modal .repo-list-col,
+  .custom-modal .file-list-col {
+    max-width: 100% !important;
+    display: flex;
+  }
+
+  .custom-modal .repo-list-col {
+    border-right: none !important;
+    border-bottom: 1px solid var(--bs-border-color);
+    overflow-x: scroll;
+    scrollbar-width: none;
+  }
+
+  .custom-modal .repo-list-item.active::before {
+    display: none;
+  }
 }
