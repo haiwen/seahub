@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RepoListView from './repo-list-view';
 import RecentlyUsedListView from './recently-used-list-view';
+import FavoritesListView from './favorites-list-view';
 import { gettext } from '../../utils/constants';
 import SearchedListView from './searched-list-view';
 import { SearchStatus } from './searcher';
@@ -154,6 +155,15 @@ const RepoListWrapper = (props) => {
         {mode === MODE_TYPE_MAP.RECENTLY_USED && (
           <div className="list-view">
             <RecentlyUsedListView
+              currentRepoInfo={currentRepoInfo}
+              repoList={repoList}
+              onDirentItemClick={props.handleClickDirent}
+            />
+          </div>
+        )}
+        {mode === MODE_TYPE_MAP.FAVORITES && (
+          <div className="list-view">
+            <FavoritesListView
               currentRepoInfo={currentRepoInfo}
               repoList={repoList}
               onDirentItemClick={props.handleClickDirent}
