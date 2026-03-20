@@ -399,7 +399,7 @@ class Wiki2View(APIView):
 
         Wiki2Publish.objects.filter(repo_id=wiki.repo_id).delete()
 
-        return Response()
+        return Response({'success': True})
 
 
 class Wiki2ConfigView(APIView):
