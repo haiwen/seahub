@@ -162,7 +162,7 @@ class WikiView(APIView):
 
         wiki.delete()
 
-        return Response()
+        return Response({'success': True})
 
     def put(self, request, wiki_id):
         """Edit a wiki permission
