@@ -73,7 +73,7 @@ class MainPanel extends Component {
     const { repos, wikiSettings } = window.wiki.config;
     const enableMetadataRepos = repos.filter(item => item.enable_metadata);
     const { assetsUrl, seadocServerUrl: sdocServer, publishUrl, wikiId, navConfig, permission } = window.wiki.config;
-    
+
     const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     window.seafile = {
       ...window.seafile, // need docUuid

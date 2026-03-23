@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SortOptionsDialog from '../../components/dialog/sort-options';
 import DirPath from './dir-path';
+import withDynamicPathWidth from './withDynamicPathWidth';
 import Icon from '../icon';
+
+// Wrap DirPath with dynamic width HOC (without extra wrapper)
+const DirPathWithDynamicWidth = withDynamicPathWidth(DirPath);
+
+DirPathWithDynamicWidth.displayName = 'DirPathWithDynamicWidth';
 
 const propTypes = {
   currentRepoInfo: PropTypes.object.isRequired,
@@ -52,7 +58,7 @@ class CurDirPath extends React.Component {
   render() {
     return (
       <div className="cur-dir-path d-flex justify-content-between align-items-center">
-        <DirPath
+        <DirPathWithDynamicWidth
           currentRepoInfo={this.props.currentRepoInfo}
           repoID={this.props.repoID}
           repoName={this.props.repoName}
