@@ -78,3 +78,39 @@
   line-height: 1;
   color: var(--bs-icon-color);
 }
+
+/* Live Photo styles */
+.live-photo-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  padding: 1px 5px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s;
+}
+
+.live-photo-badge:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.live-photo-video-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+

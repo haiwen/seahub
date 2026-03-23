@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { gettext } from '../../../utils/constants';
@@ -6,6 +6,7 @@ import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { SYSTEM_FOLDERS } from '../../../constants';
+import { seafileAPI } from '../../../utils/seafile-api';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
@@ -14,8 +15,39 @@ const SIDE_PANEL_EXPANDED_WIDTH = 300;
 
 const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, imageItems, imageIndex, setImageIndex, closeImagePopup, moveToPrevImage, moveToNextImage, onDeleteImage, onRotateImage, isCustomPermission }) => {
   const [expanded, setExpanded] = useState(false);
+  const [isPlayingLivePhoto, setIsPlayingLivePhoto] = useState(false);
+  const [livePhotoVideoUrl, setLivePhotoVideoUrl] = useState('');
+  const videoRef = useRef(null);
 
   const { enableMetadata, canModify, onOCRByImageDialog } = useMetadataAIOperations();
+
+  // Check if current image is a HEIC file and build live photo video URL
+  useEffect(() => {
+    setIsPlayingLivePhoto(false);
+    setLivePhotoVideoUrl('');
+    if (imageItems.length === 0) return;
+    const currentItem = imageItems[imageIndex];
+    if (!currentItem) return;
+    if (currentItem.is_live_photo && repoID) {
+      const filePath = currentItem.parentDir + currentItem.name;
+      const videoUrl = seafileAPI.getLivePhotoVideoUrl(repoID, filePath);
+      setLivePhotoVideoUrl(videoUrl);
+    }
+  }, [imageIndex, imageItems, repoID]);
+
+  const handlePlayLivePhoto = useCallback(() => {
+    setIsPlayingLivePhoto(true);
+  }, []);
+
+  const handleVideoEnded = useCallback(() => {
+    setIsPlayingLivePhoto(false);
+  }, []);
+
+  const handleVideoError = useCallback(() => {
+    // Not a live photo or video extraction failed, hide video
+    setIsPlayingLivePhoto(false);
+    setLivePhotoVideoUrl('');
+  }, []);
 
   const downloadImage = useCallback((url) => {
     location.href = url;
@@ -81,48 +113,76 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
     );
   };
 
+  const renderLivePhotoOverlay = () => {
+    if (!livePhotoVideoUrl) return null;
+    return (
+      <>
+        {!isPlayingLivePhoto && (
+          <button className="live-photo-badge" onClick={handlePlayLivePhoto} title={gettext('Play Live Photo')}>
+            LIVE
+          </button>
+        )}
+        {isPlayingLivePhoto && (
+          <div className="live-photo-video-overlay">
+            <video
+              ref={videoRef}
+              src={livePhotoVideoUrl}
+              autoPlay
+              onEnded={handleVideoEnded}
+              onError={handleVideoError}
+              style={{ maxWidth: '100%', maxHeight: '100%' }}
+            />
+          </div>
+        )}
+      </>
+    );
+  };
+
   return (
-    <Lightbox
-      imageItems={imageItems}
-      currentIndex={imageIndex}
-      setImageIndex={setImageIndex}
-      wrapperClassName='custom-image-previewer'
-      imageTitle={`${name} (${imageIndex + 1}/${imageItemsLength})`}
-      mainSrc={mainImg.thumbnail || mainImg.src}
-      nextSrc={nextImg.thumbnail || nextImg.src}
-      prevSrc={prevImg.thumbnail || prevImg.src}
-      onCloseRequest={closeImagePopup}
-      onMovePrevRequest={moveToPrevImage}
-      onMoveNextRequest={moveToNextImage}
-      imagePadding={70}
-      imageLoadErrorMessage={gettext('The image could not be previewed.')}
-      prevLabel={gettext('Previous (Left arrow key)')}
-      nextLabel={gettext('Next (Right arrow key)')}
-      closeLabel={gettext('Close (Esc)')}
-      zoomInLabel={gettext('Zoom in')}
-      zoomOutLabel={gettext('Zoom out')}
-      metadataLabel={gettext('Metadata')}
-      zoomInTip={gettext('Zoom in')}
-      zoomOutTip={gettext('Zoom out')}
-      rotateTip={gettext('Rotate')}
-      deleteTip={gettext('Delete')}
-      downloadImageTip={gettext('Download')}
-      openMetadataTip={gettext('Open metadata')}
-      closeMetadataTip={gettext('Close metadata')}
-      onClickMetadata={onToggleSidePanel}
-      enableRotate={enableRotate}
-      onClickDownload={() => downloadImage(imageItems[imageIndex].downloadURL)}
-      onClickDelete={onDeleteImage ? () => onDeleteImage(name) : null}
-      onViewOriginal={onViewOriginal}
-      viewOriginalImageLabel={gettext('View original image')}
-      onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
-      onOCR={onOCR}
-      OCRLabel={gettext('OCR')}
-      sidePanel={isCustomPermission ? null : {
-        render: renderSidePanel,
-        width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : 0,
-      }}
-    />
+    <>
+      <Lightbox
+        imageItems={imageItems}
+        currentIndex={imageIndex}
+        setImageIndex={setImageIndex}
+        wrapperClassName='custom-image-previewer'
+        imageTitle={`${name} (${imageIndex + 1}/${imageItemsLength})`}
+        mainSrc={mainImg.thumbnail || mainImg.src}
+        nextSrc={nextImg.thumbnail || nextImg.src}
+        prevSrc={prevImg.thumbnail || prevImg.src}
+        onCloseRequest={closeImagePopup}
+        onMovePrevRequest={moveToPrevImage}
+        onMoveNextRequest={moveToNextImage}
+        imagePadding={70}
+        imageLoadErrorMessage={gettext('The image could not be previewed.')}
+        prevLabel={gettext('Previous (Left arrow key)')}
+        nextLabel={gettext('Next (Right arrow key)')}
+        closeLabel={gettext('Close (Esc)')}
+        zoomInLabel={gettext('Zoom in')}
+        zoomOutLabel={gettext('Zoom out')}
+        metadataLabel={gettext('Metadata')}
+        zoomInTip={gettext('Zoom in')}
+        zoomOutTip={gettext('Zoom out')}
+        rotateTip={gettext('Rotate')}
+        deleteTip={gettext('Delete')}
+        downloadImageTip={gettext('Download')}
+        openMetadataTip={gettext('Open metadata')}
+        closeMetadataTip={gettext('Close metadata')}
+        onClickMetadata={onToggleSidePanel}
+        enableRotate={enableRotate}
+        onClickDownload={() => downloadImage(imageItems[imageIndex].downloadURL)}
+        onClickDelete={onDeleteImage ? () => onDeleteImage(name) : null}
+        onViewOriginal={onViewOriginal}
+        viewOriginalImageLabel={gettext('View original image')}
+        onRotateImage={(onRotateImage && enableRotate) ? (angle) => onRotateImage(imageIndex, angle) : null}
+        onOCR={onOCR}
+        OCRLabel={gettext('OCR')}
+        sidePanel={isCustomPermission ? null : {
+          render: renderSidePanel,
+          width: expanded ? SIDE_PANEL_EXPANDED_WIDTH : 0,
+        }}
+      />
+      {renderLivePhotoOverlay()}
+    </>
   );
 };
 
@@ -142,3 +202,4 @@ ImageDialog.propTypes = {
 };
 
 export default ImageDialog;
+

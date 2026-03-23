@@ -21,6 +21,7 @@ thumbnailSizeForOriginal: {{ thumbnail_size_for_original }},
 thumbnailSizeForGrid: {{ thumbnail_size_for_grid }},
 thumbnailDefaultSize: {{ thumbnail_default_size }},
 canRotate: {% if can_rotate %} true {% else %} false {% endif %},
+livePhotoVideoUrl: '{{ live_photo_video_url|escapejs }}',
 {% endif %}
 
 {% if filetype == 'Video' %}

@@ -148,6 +148,22 @@
   white-space: nowrap;
 }
 
+.dirent-live-photo-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  margin-left: 6px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
 .dirent-property.dirent-item-name .rename-container {
   width: 100%;
 }

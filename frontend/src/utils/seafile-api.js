@@ -2265,6 +2265,15 @@ class SeafileAPI {
     return this.req.post(url, { op_type: opType });
   }
 
+  // Live Photo
+  checkLivePhoto(repoID, path) {
+    const url = this.server + '/api/v2.1/repos/' + repoID + '/' + encodeURIComponent(path.startsWith('/') ? path.substring(1) : path) + '/check-live-photo/';
+    return this.req.get(url);
+  }
+
+  getLivePhotoVideoUrl(repoID, path) {
+    return this.server + '/repo/' + repoID + '/live-photo/' + encodeURIComponent(path.startsWith('/') ? path.substring(1) : path) + '/content/';
+  }
 }
 
 let seafileAPI = new SeafileAPI();

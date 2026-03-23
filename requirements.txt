@@ -30,3 +30,4 @@ dnspython==2.8.*
 pillow-heif==1.2.*
 redis==7.1.*
 cairosvg==2.8.*
+pyexiftool==0.5.*

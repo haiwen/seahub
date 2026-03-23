@@ -7,6 +7,7 @@ import { gettext, siteRoot, mediaUrl, enableVideoThumbnail, enablePDFThumbnail }
 import { Utils } from '../../utils/utils';
 import URLDecorator from '../../utils/url-decorator';
 import { imageThumbnailCenter, videoThumbnailCenter } from '../../utils/thumbnail-center';
+import { livePhotoCenter } from '../../utils/live-photo-center';
 import Rename from '../rename';
 import MobileItemMenu from '../../components/mobile-item-menu';
 import OpIcon from '../../components/op-icon';
@@ -115,6 +116,15 @@ class DirentListItem extends React.Component {
         callback: this.updateDirentThumbnail,
       });
     }
+    // check if HEIC file is a live photo
+    if (this.checkIsHeicFile(dirent)) {
+      this.isCheckingLivePhoto = true;
+      livePhotoCenter.checkLivePhoto({
+        repoID,
+        path: urlJoin(path, dirent.name),
+        callback: this.updateDirentLivePhoto,
+      });
+    }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -159,6 +169,13 @@ class DirentListItem extends React.Component {
       });
       this.thumbnailCenter = null;
     }
+    if (this.isCheckingLivePhoto) {
+      const { dirent, repoID, path } = this.props;
+      livePhotoCenter.cancelCheck({
+        repoID,
+        path: urlJoin(path, dirent.name),
+      });
+    }
     this.setState = () => {};
   }
 
@@ -182,6 +199,19 @@ class DirentListItem extends React.Component {
     this.isGeneratingThumbnail = false;
     // Let parent handle thumbnail update through props update
     this.props.updateDirent(this.props.dirent, { encoded_thumbnail_src });
+  };
+
+  checkIsHeicFile = (dirent) => {
+    if (dirent.isDir() || this.props.repoEncrypted) return false;
+    const ext = dirent.name.split('.').pop().toLowerCase();
+    return ext === 'heic';
+  };
+
+  updateDirentLivePhoto = (isLivePhoto) => {
+    this.isCheckingLivePhoto = false;
+    if (isLivePhoto) {
+      this.props.updateDirent(this.props.dirent, { is_live_photo: true });
+    }
   };
 
   onMouseEnter = () => {
@@ -735,12 +765,15 @@ class DirentListItem extends React.Component {
           }
           {!this.state.isRenaming && (
             <div className="dirent-item-name-content">
-              <span className="dirent-item-name-text">
-                {(!dirent.isDir() && !this.canPreview) ?
-                  <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
-                  <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
-                }
-              </span>
+              <div style={{ flex: '1 1 auto', minWidth: 0, display: 'flex', alignItems: 'center' }}>
+                <span className="dirent-item-name-text" style={{ flex: '0 1 auto' }}>
+                  {(!dirent.isDir() && !this.canPreview) ?
+                    <a className="sf-link" onClick={this.onItemClick}>{dirent.name}</a> :
+                    <a href={this.getDirentHref()} onClick={this.onItemClick}>{dirent.name}</a>
+                  }
+                </span>
+                {dirent.is_live_photo && <span className="dirent-live-photo-badge">LIVE</span>}
+              </div>
               {this.state.isOperationShow && (
                 <ItemDropdownMenu
                   toggleClass="op-icon mr-0"

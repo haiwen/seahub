@@ -39,6 +39,7 @@ from seahub.api2.endpoints.utils import convert_file, sdoc_convert_to_docx
 from seahub.seadoc.utils import get_seadoc_file_uuid
 from seahub.exdraw.utils import get_exdraw_file_uuid
 from seahub.seadoc.sdoc_server_api import SdocServerAPI
+from seahub.views.live_photo import check_is_live_photo
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -884,3 +885,41 @@ class FileView(APIView):
         result['success'] = True
         result['commit_id'] = repo.head_cmmt_id
         return Response(result)
+    
+class CheckLivePhoto(APIView): 
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+    def get(self, request, repo_id, path):
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = normalize_file_path(path)
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check file extension
+        filename = os.path.basename(path)
+        file_ext = os.path.splitext(filename)[1].lower()
+        if file_ext != '.heic':
+            return Response({'is_live_photo': False})
+
+        # permission check
+        parent_dir = os.path.dirname(path)
+        permission = check_folder_permission(request, repo_id, parent_dir)
+        if not permission:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            username = request.user.username
+            is_live = check_is_live_photo(repo_id, file_id, filename, username)
+        except Exception as e:
+            logger.error('check live photo error: %s', e)
+            is_live = False
+
+        return Response({'is_live_photo': is_live})

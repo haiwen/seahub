@@ -23,12 +23,13 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import F
-from django.http import Http404, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.utils.translation import get_language, gettext as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template.defaultfilters import filesizeformat
 
+from seahub.views.live_photo import extract_video_data
 from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
@@ -1009,6 +1010,14 @@ def view_lib_file(request, repo_id, path):
         if parse_repo_perm(permission).can_edit_on_web is False:
             can_rotate = False
         return_dict['can_rotate'] = can_rotate
+
+        # check if HEIC file is a live photo
+        live_photo_video_url = ''
+        if fileext == 'heic':
+            from seahub.views.live_photo import check_is_live_photo
+            if check_is_live_photo(repo_id, file_id, filename, request.user.username):
+                live_photo_video_url = reverse('live_photo_content', args=[repo_id, path.lstrip('/')])
+        return_dict['live_photo_video_url'] = live_photo_video_url
 
         send_file_access_msg(request, repo, path, 'web')
         return render(request, template, return_dict)
@@ -2343,3 +2352,47 @@ def view_sdoc_revision(request, repo_id, revision_id):
         return render(request, 'sdoc_published_revision_file_view.html', return_dict)
 
     return render(request, 'sdoc_file_view_react.html', return_dict)
+
+
+@login_required
+def live_photo_content(request, repo_id, path):
+    """Return live photo video content as binary stream.
+
+    URL: GET /repo/:repo_id/live-photo/:path/content
+    """
+    # resource check
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        render_error(request, 'Library not found.')
+
+    path = normalize_file_path(path)
+    file_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not file_id:
+        return render_error(request, 'File not found.')
+
+    # check file extension
+    filename = os.path.basename(path)
+    file_ext = os.path.splitext(filename)[1].lower()
+    if file_ext != '.heic':
+        return render_error(request, 'Not a HEIC file.')
+
+    # permission check
+    parent_dir = os.path.dirname(path)
+    permission = check_folder_permission(request, repo_id, parent_dir)
+    if not permission:
+        return render_error(request, _('Permission denied'))
+
+    # extract video data
+    try:
+        username = request.user.username
+        video_data = extract_video_data(repo_id, file_id, filename, username)
+        if not video_data:
+            return render_error(request, 'No video data found.')
+    except Exception as e:
+        logger.error('extract live photo video error: %s', e)
+        return render_error(request, 'Internal Server Error')
+
+    resp = HttpResponse(video_data, content_type='video/mp4')
+    resp['Content-Disposition'] = 'inline; filename=livephoto.mov'
+    resp['Accept-Ranges'] = 'bytes'
+    return resp
