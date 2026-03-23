@@ -2071,3 +2071,10 @@ export const updateImageThumbnail = (newThumbnailSrc) => {
   }
   return adjustedThumbnailSrc;
 };
+
+export const isImageRotateable = (fileExt) => {
+  if (typeof fileExt !== 'string') {
+    return false;
+  }
+  return !['psd', 'heic', 'ico', 'svg', 'gif'].includes(fileExt.toLowerCase());
+};

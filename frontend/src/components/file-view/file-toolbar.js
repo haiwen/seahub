@@ -4,7 +4,7 @@ import { Button, ButtonGroup, Dropdown, DropdownToggle, DropdownMenu, DropdownIt
 import Switch from '../switch';
 import IconButton from '../icon-button';
 import { gettext, siteRoot } from '../../utils/constants';
-import { Utils } from '../../utils/utils';
+import { Utils, isImageRotateable } from '../../utils/utils';
 import ModalPortal from '../modal-portal';
 import ShareDialog from '../dialog/share-dialog';
 import Icon from '../../components/icon';
@@ -109,15 +109,13 @@ class FileToolbar extends React.Component {
                 setImageScale={this.props.setImageScale}
                 setDefaultPageFitScale={this.props.setDefaultPageFitScale}
               />
-              {['psd', 'heic'].indexOf(fileExt) == -1 && (
-                <IconButton
-                  id="rotate-image"
-                  icon="rotate"
-                  text={gettext('Rotate')}
-                  onClick={this.props.rotateImage}
-                  disabled={isLocked || !canRotate} // disable rotate when file is locked
-                />
-              )}
+              <IconButton
+                id="rotate-image"
+                icon="rotate"
+                text={gettext('Rotate')}
+                onClick={this.props.rotateImage}
+                disabled={isLocked || !canRotate || !isImageRotateable(fileExt)}
+              />
             </>
           )}
           {fileType == 'PDF' && (
