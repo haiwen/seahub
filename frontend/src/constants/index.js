@@ -36,6 +36,7 @@ export const MODE_TYPE_MAP = {
   ONLY_ALL_REPOS: 'only_all_repos',
   ONLY_OTHER_LIBRARIES: 'only_other_libraries',
   RECENTLY_USED: 'recently_used',
+  FAVORITES: 'favorites',
   SEARCH_RESULTS: 'search_results',
 };
 

@@ -129,6 +129,9 @@ class SelectDirentBody extends React.Component {
       case MODE_TYPE_MAP.RECENTLY_USED:
         this.props.selectRepo(null);
         break;
+      case MODE_TYPE_MAP.FAVORITES:
+        this.props.selectRepo(null);
+        break;
       default:
         break;
     }
@@ -165,6 +168,12 @@ class SelectDirentBody extends React.Component {
             currentMode={mode}
             onUpdateMode={this.selectMode}
           />
+          <LibraryOption
+            mode={MODE_TYPE_MAP.FAVORITES}
+            label={gettext('Favorites')}
+            currentMode={mode}
+            onUpdateMode={this.selectMode}
+          />
         </Col>
         <Col xs="12" md="8" className='file-list-col'>
           <ModalBody>
@@ -194,7 +203,11 @@ class SelectDirentBody extends React.Component {
               className="footer-left-btn"
               color="secondary"
               onClick={this.onToggleCreateFolder}
-              disabled={mode === MODE_TYPE_MAP.SEARCH_RESULTS || mode === MODE_TYPE_MAP.RECENTLY_USED}
+              disabled={
+                mode === MODE_TYPE_MAP.SEARCH_RESULTS ||
+                mode === MODE_TYPE_MAP.RECENTLY_USED ||
+                mode === MODE_TYPE_MAP.FAVORITES
+              }
             >
               <Icon symbol="new" className="mr-2" />
               <span>{gettext('New folder')}</span>
