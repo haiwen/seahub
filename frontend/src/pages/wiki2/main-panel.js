@@ -21,6 +21,7 @@ import SDocServerApi from '../../utils/sdoc-server-api';
 import Icon from '../../components/icon';
 import WikiCollaboratorsOperation from './wiki-collaborators-operation';
 import { seafileAPI } from '../../utils/seafile-api';
+import isHotkey from 'is-hotkey';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -71,7 +72,9 @@ class MainPanel extends Component {
     const pageOptions = window.app.pageOptions;
     const { repos, wikiSettings } = window.wiki.config;
     const enableMetadataRepos = repos.filter(item => item.enable_metadata);
-    const { assetsUrl, seadocServerUrl: sdocServer, publishUrl, wikiId, navConfig } = window.wiki.config;
+    const { assetsUrl, seadocServerUrl: sdocServer, publishUrl, wikiId, navConfig, permission } = window.wiki.config;
+    
+    const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     window.seafile = {
       ...window.seafile, // need docUuid
       ...appConfig,
@@ -88,8 +91,9 @@ class MainPanel extends Component {
       navConfig,
       repos: enableMetadataRepos,
       wikiSettings,
+      isLocked: currentPageConfig?.locked,
+      permission
     };
-    const currentPageConfig = getCurrentPageConfig(config.pages, currentPageId);
     return { ...props, docUuid: window.seafile.docUuid, currentPageConfig };
   }
 
@@ -100,12 +104,14 @@ class MainPanel extends Component {
     this.unsubscribeUnseenNotificationsCount = eventBus.subscribe(EXTERNAL_EVENT.UNSEEN_NOTIFICATIONS_COUNT, this.updateUnseenNotificationsCount);
     this.unsubscribeWikiFilePreview = eventBus.subscribe(EXTERNAL_EVENT.TRANSFER_PREVIEW_FILE_ID, this.toggleWikiFilePreview);
     this.unsubscribeGenerateExdrawReadOnlyLink = eventBus.subscribe(EXTERNAL_EVENT.GENERATE_EXDRAW_READ_ONLY_LINK, this.generateExdrawReadOnlyLink);
+    document.addEventListener('keydown', this.handleGlobalKeyDown, true);
   }
 
   componentWillUnmount() {
     this.unsubscribeUnseenNotificationsCount();
     this.unsubscribeWikiFilePreview();
     this.unsubscribeGenerateExdrawReadOnlyLink();
+    document.removeEventListener('keydown', this.handleGlobalKeyDown, true);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -116,6 +122,16 @@ class MainPanel extends Component {
       });
     }
   }
+
+  handleGlobalKeyDown = (event) => {
+    // dispatch mod + f to trigger search and replace menu
+    if (isHotkey('mod+f', event)) {
+      event.preventDefault();
+      event.stopPropagation();
+      const eventBus = EventBus.getInstance();
+      eventBus.dispatch(EXTERNAL_EVENT.OPEN_SEARCH_REPLACE_MODAL);
+    }
+  };
 
   toggleWikiFilePreview = (data) => {
     this.setState({
