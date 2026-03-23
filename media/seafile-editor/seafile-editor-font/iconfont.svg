@@ -14,6 +14,8 @@
     />
       <missing-glyph />
       
+      <glyph glyph-name="divider" unicode="&#58885;" d="M960 432v-96H64v96h896z"  horiz-adv-x="1024" />
+      
       <glyph glyph-name="arrow-down" unicode="&#59086;" d="M513.92 128l385.952 385.92L832 581.824l-318.08-318.08-318.048 318.08L128 513.92 513.92 128z"  horiz-adv-x="1024" />
       
       <glyph glyph-name="arrow-up" unicode="&#59083;" d="M513.92 640l385.952-385.92-67.84-67.904-318.08 318.08-318.08-318.08-67.84 67.904L513.92 640z"  horiz-adv-x="1024" />
