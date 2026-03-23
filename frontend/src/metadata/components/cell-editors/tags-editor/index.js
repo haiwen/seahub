@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useCallback, useState, useRef, useEffect } from 'react';
+import React, { forwardRef, useMemo, useCallback, useState, useRef, useEffect, useImperativeHandle } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import CommonAddTool from '../../../../components/common-add-tool';
@@ -61,6 +61,12 @@ const TagsEditor = forwardRef(({
   const style = useMemo(() => {
     return { width: column.width };
   }, [column]);
+
+  useImperativeHandle(ref, () => ({
+    getValue: () => {
+      return { [column.key]: value.map(id => ({ row_id: id })) };
+    }
+  }));
 
   const onChangeSearch = useCallback((newSearchValue) => {
     if (searchValue === newSearchValue) return;

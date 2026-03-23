@@ -12,13 +12,22 @@ import { getCellValueByColumn } from '../../utils/cell';
 import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { CellType } from '../../../../metadata/constants';
 
+const TAGS_EDITOR_WIDTH = 400;
+
 class PopupEditorContainer extends React.Component {
 
   static displayName = 'PopupEditorContainer';
 
   constructor(props) {
     super(props);
-    const { width, height, left, top } = this.props;
+    const { width, height, left, top, column } = this.props;
+    let additionalStyles = {};
+    if (column.type === CellType.SINGLE_SELECT || column.type === CellType.MULTIPLE_SELECT) {
+      additionalStyles = { width, height };
+    }
+    if (column.type === CellType.TAGS) {
+      additionalStyles = { left: left - (TAGS_EDITOR_WIDTH - column.width) };
+    }
     this.state = {
       isInvalid: false,
       style: {
@@ -28,6 +37,7 @@ class PopupEditorContainer extends React.Component {
         top,
         width,
         height,
+        ...additionalStyles
       }
     };
     this.eventBus = EventBus.getInstance();
@@ -93,7 +103,7 @@ class PopupEditorContainer extends React.Component {
       operation,
     };
 
-    if (column.type === CellType.LINK) {
+    if (column.type === CellType.LINK || column.type === CellType.TAGS) {
       editorProps = {
         ...editorProps,
         customStyle: this.computeTagsEditorCustomStyle()
@@ -101,7 +111,7 @@ class PopupEditorContainer extends React.Component {
     }
 
     return (
-      <Editor column={column} editorProps={editorProps} />
+      <Editor ref={this.setEditorRef} column={column} editorProps={editorProps} />
     );
   };
 

@@ -43,7 +43,6 @@ const propTypes = {
   updateTreeNode: PropTypes.func,
   columns: PropTypes.array,
   hiddenColumnKeys: PropTypes.array,
-  updateDirentStatus: PropTypes.func,
 };
 
 class DirListView extends React.Component {
@@ -111,7 +110,6 @@ class DirListView extends React.Component {
             updateTreeNode={this.props.updateTreeNode}
             columns={this.props.columns}
             hiddenColumnKeys={this.props.hiddenColumnKeys}
-            updateDirentStatus={this.props.updateDirentStatus}
           />
         )}
       </Fragment>

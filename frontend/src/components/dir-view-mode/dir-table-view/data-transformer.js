@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 
+const NEW_EMPTY_FILE_DEFAULT_ID = '0000000000000000000000000000000000000000';
+
 export const transformDirentsToTableData = (dirents, repoID) => {
   if (!dirents || !Array.isArray(dirents)) {
     return;
@@ -24,7 +26,7 @@ export const transformDirentsToTableData = (dirents, repoID) => {
     transformedRow._is_dir = dirent.type !== 'file';
     transformedRow._size = transformedRow._size_original;
     transformedRow._mtime = dayjs.unix(transformedRow._mtime);
-    transformedRow._id = `${transformedRow._id}_${transformedRow._name}`;
+    transformedRow._id = transformedRow._id === NEW_EMPTY_FILE_DEFAULT_ID ? `${transformedRow._id}_${transformedRow._name}` : transformedRow._id;
 
     id_row_map[transformedRow._id] = transformedRow;
 

@@ -8,7 +8,8 @@ import { eventBus } from '../common/event-bus';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import SingleSelectFormatter from '@/metadata/components/cell-formatter/single-select';
 import { DEFAULT_FILE_STATUS_OPTIONS } from '@/metadata/constants/column/format';
-import { getServerOptions } from '@/metadata/utils/cell';
+import { getColumnOptionNameById, getServerOptions } from '@/metadata/utils/cell';
+import { metadataAPI } from '@/metadata';
 
 import './index.css';
 
@@ -20,6 +21,7 @@ const STATUS_EDITOR_CONFIG = {
 };
 
 const StatusEditor = ({
+  repoID,
   value,
   record,
   column,
@@ -67,8 +69,12 @@ const StatusEditor = ({
 
     setCurrentValue(id);
     setIsEditing(false);
-    eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, record.name, id);
-  }, [canEdit, record.name]);
+    const recordId = record.metadata._id;
+    const update = { [column.key]: getColumnOptionNameById(column, id) };
+    metadataAPI.modifyRecord(repoID, { recordId }, update).then(res => {
+      eventBus.dispatch(EVENT_BUS_TYPE.DIRENT_METADATA_CHANGED, record.name, update);
+    });
+  }, [canEdit, column, record, repoID]);
 
   const handleEditorCommit = useCallback((id) => {
     if (!id || id === currentValue) {

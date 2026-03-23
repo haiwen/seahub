@@ -39,7 +39,6 @@ import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
 import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, DIR_TABLE_HIDDEN_COLUMN_KEYS, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
-import { getColumnOptionNameById } from '@/metadata/utils/cell';
 import { normalizeColumns } from '@/metadata/utils/column';
 
 import '../../css/lib-content-view.css';
@@ -168,9 +167,8 @@ class LibContentView extends React.Component {
 
     this.unsubscribeColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_COLUMNS_CHANGED, this.onHiddenColumnKeys);
     this.unsubscribeTableViewColumnVisibilityChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.HIDDEN_TABLE_VIEW_COLUMNS_CHANGED, this.onHiddenTableViewColumnKeys);
-    this.unsubscribeDirentStatusChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_STATUS_CHANGED, this.updateDirentStatus);
+    this.unsubscribeDirentMetadataChanged = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_METADATA_CHANGED, this.updateDirentMetadata);
     this.unsubscribeColumnDataModified = eventBus.subscribe(EVENT_BUS_TYPE.COLUMN_DATA_MODIFIED, this.onColumnDataModified);
-    this.unsubscribeDirentTagsModified = eventBus.subscribe(EVENT_BUS_TYPE.DIRENT_TAGS_CHANGED, this.updateDirentTags);
 
     this.calculatePara(this.props);
     window.addEventListener('popstate', this.onpopstate);
@@ -2192,17 +2190,10 @@ class LibContentView extends React.Component {
     this.setState({ direntList: newDirentList });
   };
 
-  updateDirentStatus = async (direntName, optionID, isLocal = false) => {
-    const { repoID } = this.props;
-    const { path, direntList } = this.state;
-
+  updateDirentMetadata = (direntName, updateData) => {
+    const { direntList } = this.state;
     const dirent = direntList.find(d => d.name === direntName);
-    if (!dirent) return false;
-
-    const oldStatus = dirent[PRIVATE_COLUMN_KEY.FILE_STATUS];
-    const parentDir = dirent.parent_dir || path;
-    const column = this.state.columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
-    const updateData = { [PRIVATE_COLUMN_KEY.FILE_STATUS]: getColumnOptionNameById(column, optionID) };
+    if (!dirent) return;
 
     this.setState(prevState => {
       const newDirentList = prevState.direntList.map(d => {
@@ -2229,65 +2220,7 @@ class LibContentView extends React.Component {
           }
         });
       }
-      return newState;
-    });
 
-    if (!isLocal) {
-      try {
-        await metadataAPI.modifyRecord(repoID, { recordId: dirent._id, parentDir, fileName: direntName }, updateData);
-
-        if (this.state.isDirentDetailShow && window?.sfMetadataContext?.eventBus) {
-          window.sfMetadataContext.eventBus.dispatch(
-            METADATA_EVENT_BUS_TYPE.LOCAL_RECORD_DETAIL_CHANGED,
-            { parentDir, fileName: direntName },
-            updateData
-          );
-        }
-
-        return true;
-      } catch (error) {
-        this.setState(prevState => {
-          const newDirentList = prevState.direntList.map(d => {
-            if (d.name === direntName) {
-              return new Dirent({ ...d, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
-            }
-            return d;
-          });
-
-          const newState = {
-            direntList: newDirentList
-          };
-
-          if (prevState.currentDirent && prevState.currentDirent.name === direntName) {
-            newState.currentDirent = new Dirent({ ...prevState.currentDirent, [PRIVATE_COLUMN_KEY.FILE_STATUS]: oldStatus });
-          }
-
-          return newState;
-        });
-        return false;
-      }
-    }
-  };
-
-  updateDirentTags = async (direntName, update) => {
-    const { direntList } = this.state;
-    const dirent = direntList.find(d => d.name === direntName);
-    if (!dirent) return false;
-
-    this.setState(prevState => {
-      const newDirentList = prevState.direntList.map(d => {
-        if (d.name === direntName) {
-          return new Dirent({
-            ...d,
-            metadata: {
-              ...d.metadata,
-              ...update
-            } });
-        }
-        return d;
-      });
-
-      const newState = { direntList: newDirentList };
       return newState;
     });
   };
@@ -3047,7 +2980,7 @@ class LibContentView extends React.Component {
                           onItemConvert={this.onConvertItem}
                           onDirentClick={this.onDirentClick}
                           updateDirent={this.updateDirent}
-                          updateDirentStatus={this.updateDirentStatus}
+                          updateDirentMetadata={this.updateDirentMetadata}
                           isAllItemSelected={this.state.isAllDirentSelected}
                           onAllItemSelected={this.onAllDirentSelected}
                           selectedDirentList={this.state.selectedDirentList}

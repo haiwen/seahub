@@ -1,5 +1,9 @@
-import StatusEditor from './status';
+import DateEditorWrapper from './date';
+import TagsEditorWrapper from './tags';
+import CollaboratorEditorWrapper from './collaborator';
 
 export {
-  StatusEditor,
+  DateEditorWrapper,
+  TagsEditorWrapper,
+  CollaboratorEditorWrapper,
 };
