@@ -2,6 +2,7 @@ import { forwardRef, useCallback } from 'react';
 import TagsEditor from '@/metadata/components/cell-editors/tags-editor';
 import { getRecordIdFromRecord } from '@/metadata/utils/cell';
 import tagsAPI from '@/tag/api';
+import { checkIsDir } from '@/metadata/utils/row';
 
 const TagsEditorWrapper = forwardRef((props, ref) => {
   const { repoID, value, record, column } = props;
@@ -18,6 +19,8 @@ const TagsEditorWrapper = forwardRef((props, ref) => {
     const recordID = getRecordIdFromRecord(record);
     tagsAPI.updateFileTags(repoID, [{ record_id: recordID, tags: newValue }]);
   }, [value, record, repoID]);
+
+  if (checkIsDir(record)) return null;
 
   return (
     <TagsEditor
