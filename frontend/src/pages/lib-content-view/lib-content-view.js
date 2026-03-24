@@ -38,7 +38,7 @@ import ViewToolbar from '../../components/toolbar/view-toolbar';
 import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
-import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, DIR_TABLE_HIDDEN_COLUMN_KEYS, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
+import { DIR_METADATA_COLUMNS, getDirHiddenColumnKeys, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, getDirTableHiddenColumnKeys, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
 import { normalizeColumns } from '@/metadata/utils/column';
 
 import '../../css/lib-content-view.css';
@@ -111,8 +111,8 @@ class LibContentView extends React.Component {
       currentDirent: null,
       columns: DIR_BASE_COLUMNS,
       tableViewColumns: DIR_BASE_COLUMNS,
-      hiddenColumnKeys: JSON.parse(localStorage.getItem(DIR_HIDDEN_COLUMN_KEYS)) || DIR_METADATA_COLUMNS,
-      hiddenTableViewColumnKeys: JSON.parse(localStorage.getItem(DIR_TABLE_HIDDEN_COLUMN_KEYS)) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
+      hiddenColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(this.props.repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS,
+      hiddenTableViewColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(this.props.repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
       metadata: null,
       isCrossRepoMove: false,
@@ -384,6 +384,11 @@ class LibContentView extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.repoID !== this.props.repoID) {
+      // Update hidden column keys when repo changes
+      const repoID = this.props.repoID;
+      const hiddenColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS;
+      const hiddenTableViewColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS;
+      this.setState({ hiddenColumnKeys, hiddenTableViewColumnKeys });
       this.calculatePara(this.props);
     }
 
@@ -2226,12 +2231,18 @@ class LibContentView extends React.Component {
   };
 
   onHiddenColumnKeys = (colKeys) => {
-    localStorage.setItem(DIR_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
+    const { repoID } = this.props;
+    if (repoID) {
+      localStorage.setItem(getDirHiddenColumnKeys(repoID), JSON.stringify(colKeys));
+    }
     this.setState({ hiddenColumnKeys: colKeys });
   };
 
   onHiddenTableViewColumnKeys = (colKeys) => {
-    localStorage.setItem(DIR_TABLE_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
+    const { repoID } = this.props;
+    if (repoID) {
+      localStorage.setItem(getDirTableHiddenColumnKeys(repoID), JSON.stringify(colKeys));
+    }
     this.setState({ hiddenTableViewColumnKeys: colKeys });
   };
 
@@ -2688,11 +2699,12 @@ class LibContentView extends React.Component {
 
   metadataStatusCallback = (status) => {
     const { enableTags, enableMetadata } = status;
+    const { repoID } = this.props;
 
     if (enableMetadata !== this.state.enableMetadata) {
       this.setState({ enableMetadata });
-      if (!enableMetadata) {
-        localStorage.removeItem(DIR_HIDDEN_COLUMN_KEYS);
+      if (!enableMetadata && repoID) {
+        localStorage.removeItem(getDirHiddenColumnKeys(repoID));
       }
     }
 

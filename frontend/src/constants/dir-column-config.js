@@ -31,7 +31,8 @@ export const DIR_METADATA_COLUMNS = [
 
 export const ESSENTIAL_COLUMNS = ['checkbox', 'star', 'icon', 'name'];
 
-export const DIR_HIDDEN_COLUMN_KEYS = 'dir_hidden_column_keys';
+// List mode hidden column keys - per repo
+export const getDirHiddenColumnKeys = (repoID) => `dir_hidden_column_keys_${repoID}`;
 
 // table mode
 export const DIR_TABLE_DEFAULT_METADATA_COLUMNS = [
@@ -57,4 +58,5 @@ export const DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS = [
   PRIVATE_COLUMN_KEY.SUFFIX,
 ];
 
-export const DIR_TABLE_HIDDEN_COLUMN_KEYS = 'dir_table_hidden_column_keys';
+// Table mode hidden column keys - per repo
+export const getDirTableHiddenColumnKeys = (repoID) => `dir_table_hidden_column_keys_${repoID}`;
