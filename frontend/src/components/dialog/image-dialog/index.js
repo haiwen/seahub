@@ -6,6 +6,7 @@ import Lightbox from '@seafile/react-image-lightbox';
 import { useMetadataAIOperations } from '../../../hooks';
 import EmbeddedFileDetails from '../../dirent-detail/embedded-file-details';
 import { SYSTEM_FOLDERS } from '../../../constants';
+import { isImageRotateable } from '../../../utils/utils';
 
 import '@seafile/react-image-lightbox/style.css';
 import './index.css';
@@ -39,10 +40,9 @@ const ImageDialog = ({ repoID, repoInfo, enableRotate: oldEnableRotate = true, i
 
   let enableRotate = oldEnableRotate;
   if (enableRotate === true) {
-    // The backend server does not support rotating HEIC, GIF, SVG images
     const urlParts = mainImg.src.split('?')[0].split('.');
-    const suffix = urlParts[urlParts.length - 1].toLowerCase();
-    if (suffix === 'heic' || suffix === 'svg' || suffix === 'gif') {
+    const suffix = urlParts[urlParts.length - 1];
+    if (!isImageRotateable(suffix)) {
       enableRotate = false;
     }
     // disable rotate when repo is read-only or encrypted
