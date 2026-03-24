@@ -3,6 +3,7 @@
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
+central_config_dir=${TOPDIR}/conf
 default_ccnet_conf_dir=${TOPDIR}/ccnet
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_seahub_db=${TOPDIR}/seahub.db

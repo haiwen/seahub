@@ -3,6 +3,12 @@
 # This is a wrapper shell script for the real seaf-backup command.
 # It prepares necessary environment variables and exec the real script.
 
+SCRIPT=$(readlink -f "$0")
+INSTALLPATH=$(dirname "${SCRIPT}")
+TOPDIR=$(dirname "${INSTALLPATH}")
+central_config_dir=${TOPDIR}/conf
+default_seafile_data_dir=${TOPDIR}/seafile-data
+
 function check_python_executable() {
     if [[ "$PYTHON" != "" && -x $PYTHON ]]; then
         return 0
@@ -28,7 +34,38 @@ function check_python_executable() {
     fi
 }
 
-check_python_executable
+function set_env_config () {
+    if [ -z "${JWT_PRIVATE_KEY}" ]; then
+        if [ ! -e "${central_config_dir}/.env" ]; then
+            echo "Error: .env file not found."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+
+        # load the .env file
+        set -a
+        source "${central_config_dir}/.env"
+        set +a
+
+        if [ -z "${JWT_PRIVATE_KEY}" ]; then
+            echo "Error: JWT_PRIVATE_KEY not found in .env file."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+        export JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+        export SEAFILE_MYSQL_DB_CCNET_DB_NAME=${SEAFILE_MYSQL_DB_CCNET_DB_NAME:-ccnet_db}
+        export SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_MYSQL_DB_SEAFILE_DB_NAME:-seafile_db}
+        export SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAFILE_MYSQL_DB_SEAHUB_DB_NAME:-seahub_db}
+        export SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
+        export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+        export SITE_ROOT=${SITE_ROOT:-/}
+    fi
+}
+
+check_python_executable;
+set_env_config;
 
 # seafile cli client requires the argparse module
 if ! $PYTHON -c 'import argparse' 2>/dev/null 1>&2; then
@@ -38,12 +75,6 @@ if ! $PYTHON -c 'import argparse' 2>/dev/null 1>&2; then
     echo
     exit 1
 fi
-
-SCRIPT=$(readlink -f "$0")
-INSTALLPATH=$(dirname "${SCRIPT}")
-TOPDIR=$(dirname "${INSTALLPATH}")
-central_config_dir=${TOPDIR}/conf
-default_seafile_data_dir=${TOPDIR}/seafile-data
 
 
 function validate_seafile_data_dir () {

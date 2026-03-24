@@ -54,7 +54,38 @@ function prepare_seahub_log_dir() {
     export SEAHUB_LOG_DIR=${logdir}
 }
 
+function set_env_config () {
+    if [ -z "${JWT_PRIVATE_KEY}" ]; then
+        if [ ! -e "${central_config_dir}/.env" ]; then
+            echo "Error: .env file not found."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+
+        # load the .env file
+        set -a
+        source "${central_config_dir}/.env"
+        set +a
+
+        if [ -z "${JWT_PRIVATE_KEY}" ]; then
+            echo "Error: JWT_PRIVATE_KEY not found in .env file."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+        export JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+        export SEAFILE_MYSQL_DB_CCNET_DB_NAME=${SEAFILE_MYSQL_DB_CCNET_DB_NAME:-ccnet_db}
+        export SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_MYSQL_DB_SEAFILE_DB_NAME:-seafile_db}
+        export SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAFILE_MYSQL_DB_SEAHUB_DB_NAME:-seahub_db}
+        export SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
+        export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+        export SITE_ROOT=${SITE_ROOT:-/}
+    fi
+}
+
 check_python_executable;
+set_env_config;
 validate_seafile_data_dir;
 prepare_seahub_log_dir;
 

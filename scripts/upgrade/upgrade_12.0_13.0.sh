@@ -4,6 +4,7 @@ SCRIPT=$(readlink -f "$0") # haiwen/seafile-server-1.3.0/upgrade/upgrade_xx_xx.s
 UPGRADE_DIR=$(dirname "$SCRIPT") # haiwen/seafile-server-1.3.0/upgrade/
 INSTALLPATH=$(dirname "$UPGRADE_DIR") # haiwen/seafile-server-1.3.0/
 TOPDIR=$(dirname "${INSTALLPATH}") # haiwen/
+central_config_dir=${TOPDIR}/conf
 default_conf_dir=${TOPDIR}/conf
 default_pids_dir=${TOPDIR}/pids
 default_logs_dir=${TOPDIR}/logs
@@ -56,7 +57,7 @@ function check_python_executable() {
 
 function set_env_config () {
     if [ -z "${JWT_PRIVATE_KEY}" ]; then
-        if [ ! -e "${SEAFILE_CENTRAL_CONF_DIR}/.env" ]; then
+        if [ ! -e "${central_config_dir}/.env" ]; then
             echo "Error: .env file not found."
             echo "Please follow the upgrade manual to set the .env file."
             echo ""
@@ -65,7 +66,7 @@ function set_env_config () {
 
         # load the .env file
         set -a
-        source "${SEAFILE_CENTRAL_CONF_DIR}/.env"
+        source "${central_config_dir}/.env"
         set +a
 
         if [ -z "${JWT_PRIVATE_KEY}" ]; then
