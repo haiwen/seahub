@@ -1,17 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { isPro, gettext, showLogoutIcon, SF_COLOR_MODE, siteRoot } from '../../utils/constants';
+import { isPro, gettext, showLogoutIcon, siteRoot } from '../../utils/constants';
 import Search from '../search/search';
 import SearchByName from '../search/search-by-name';
 import Wiki2GlobalSearch from '../search/wiki2-global-search';
 import toaster from '../toast';
 import Notification from '../common/notification';
 import Account from '../common/account';
+import ColorMode from '../common/color-mode';
 import Logout from '../common/logout';
 import { EVENT_BUS_TYPE } from '../common/event-bus-type';
 import tagsAPI from '../../tag/api';
-import IconBtn from '../icon-btn';
-import { getColorScheme, Utils } from '../../utils/utils';
 
 const propTypes = {
   repoID: PropTypes.string,
@@ -39,7 +38,6 @@ class CommonToolbar extends React.Component {
       currentRepoInfo: props.currentRepoInfo,
       isTagEnabled: false,
       tagsData: [],
-      colorMode: getColorScheme(),
     };
   }
 
@@ -49,21 +47,12 @@ class CommonToolbar extends React.Component {
       this.unsubscribeTagStatus = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAG_STATUS, (status) => this.onTagStatus(status));
       this.unsubscribeTagsChanged = this.props.eventBus.subscribe(EVENT_BUS_TYPE.TAGS_CHANGED, (tags) => this.setState({ tagsData: tags }));
     }
-    this.initializeColorMode();
   }
 
   componentWillUnmount() {
     this.unsubscribeLibChange && this.unsubscribeLibChange();
     this.unsubscribeMetadataStatus && this.unsubscribeMetadataStatus();
     this.unsubscribeTagsChanged && this.unsubscribeTagsChanged();
-  }
-
-  initializeColorMode() {
-    const colorMode = localStorage.getItem(SF_COLOR_MODE);
-    if (colorMode) {
-      this.setState({ colorMode });
-      document.body.setAttribute('data-bs-theme', colorMode);
-    }
   }
 
   onTagStatus = (status) => {
@@ -91,13 +80,6 @@ class CommonToolbar extends React.Component {
     } else {
       this.props.onSearchedClick(searchedItem);
     }
-  };
-
-  onColorModeChange = () => {
-    const colorMode = this.state.colorMode === 'light' ? 'dark' : 'light';
-    this.setState({ colorMode });
-    localStorage.setItem(SF_COLOR_MODE, colorMode);
-    document.body.setAttribute('data-bs-theme', colorMode);
   };
 
   onWikiSearchedClick = (item) => {
@@ -153,23 +135,10 @@ class CommonToolbar extends React.Component {
   };
 
   render() {
-    const { colorMode } = this.state;
-    const symbol = colorMode === 'light' ? 'dark-mode' : 'light-mode';
-    const title = colorMode === 'light' ? gettext('Dark mode') : gettext('Light mode');
     return (
       <div className="common-toolbar">
         {this.renderSearch()}
-        <IconBtn
-          symbol={symbol}
-          size={32}
-          className="sf-icon-color-mode"
-          title={title}
-          onClick={this.onColorModeChange}
-          tabIndex={0}
-          role="button"
-          aria-label={title}
-          onKeyDown={Utils.onKeyDown}
-        />
+        <ColorMode />
         <Notification />
         <Account />
         {showLogoutIcon && (<Logout />)}
