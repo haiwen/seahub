@@ -14,7 +14,7 @@ seahub_data_dir=${TOPDIR}/seahub-data
 
 manage_py=${INSTALLPATH}/seahub/manage.py
 
-export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+export SEAFILE_DATA_DIR=${default_seafile_data_dir}
 export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
 export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}

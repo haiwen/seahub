@@ -92,7 +92,7 @@ function before_start() {
     prepare_log_dir;
     set_env_config;
 
-    export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+    export SEAFILE_DATA_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
     export SEAFES_DIR=$pro_pylibs_dir/seafes
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH

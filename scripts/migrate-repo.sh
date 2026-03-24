@@ -77,7 +77,7 @@ function set_env_config () {
 }
 
 function do_migrate () {
-    export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+    export SEAFILE_DATA_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
     export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH

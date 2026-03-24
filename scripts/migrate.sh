@@ -74,7 +74,7 @@ function set_env_config () {
 }
 
 function do_migrate () {
-    export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+    export SEAFILE_DATA_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${default_conf_dir}
     export DEST_SEAFILE_CENTRAL_CONF_DIR=${dest_seafile_central_conf_dir}
 

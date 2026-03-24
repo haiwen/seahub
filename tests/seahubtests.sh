@@ -12,10 +12,10 @@ export SEAHUB_TEST_ADMIN_USERNAME
 export SEAHUB_TEST_ADMIN_PASSWORD
 
 # If you run this script on your local machine, you must set CCNET_CONF_DIR
-# and SEAFILE_CONF_DIR like this:
+# and SEAFILE_DATA_DIR like this:
 #
 #       export CCNET_CONF_DIR=/your/path/to/ccnet
-#       export SEAFILE_CONF_DIR=/your/path/to/seafile-data
+#       export SEAFILE_DATA_DIR=/your/path/to/seafile-data
 #
 
 set -e

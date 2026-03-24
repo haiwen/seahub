@@ -13,7 +13,7 @@ seafile_rpc_pipe_path=${INSTALLPATH}/runtime
 export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
-export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+export SEAFILE_DATA_DIR=${default_seafile_data_dir}
 export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
 export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
 export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
@@ -117,7 +117,7 @@ function start_seaf_server() {
     if [[ $IS_PRO_VERSION = "true" ]]; then
         LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
             -F ${SEAFILE_CENTRAL_CONF_DIR} \
-            -d ${SEAFILE_CONF_DIR} \
+            -d ${SEAFILE_DATA_DIR} \
             -l ${TOPDIR}/logs/seafile.log \
             -P ${TOPDIR}/pids/seaf-server.pid \
             -p ${SEAFILE_RPC_PIPE_PATH} \
@@ -125,7 +125,7 @@ function start_seaf_server() {
     else
         LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
             -F ${SEAFILE_CENTRAL_CONF_DIR} \
-            -d ${SEAFILE_CONF_DIR} \
+            -d ${SEAFILE_DATA_DIR} \
             -l ${TOPDIR}/logs/seafile.log \
             -P ${TOPDIR}/pids/seaf-server.pid \
             -p ${SEAFILE_RPC_PIPE_PATH} \
@@ -137,7 +137,7 @@ function start_seaf_server() {
 function start_fileserver() {
     LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/fileserver \
         -F ${SEAFILE_CENTRAL_CONF_DIR} \
-        -d ${SEAFILE_CONF_DIR} \
+        -d ${SEAFILE_DATA_DIR} \
         -l ${TOPDIR}/logs/fileserver.log \
         -p ${SEAFILE_RPC_PIPE_PATH} \
         -P ${TOPDIR}/pids/fileserver.pid &

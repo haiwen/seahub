@@ -94,6 +94,6 @@ SEAF_BACKUP_CMD=${INSTALLPATH}/seaf-backup-cmd.py
 
 export SEAFILE_RPC_PIPE_PATH=${INSTALLPATH}/runtime
 export PYTHONPATH=${SEAFILE_PYTHON_PATH}:${PYTHONPATH}
-export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+export SEAFILE_DATA_DIR=${default_seafile_data_dir}
 export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
 $PYTHON ${SEAF_BACKUP_CMD} "$@"

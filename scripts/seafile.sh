@@ -26,7 +26,7 @@ export PATH=${INSTALLPATH}/seafile/bin:$PATH
 export ORIG_LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 export SEAFILE_LD_LIBRARY_PATH=${INSTALLPATH}/seafile/lib/:${INSTALLPATH}/seafile/lib64:${LD_LIBRARY_PATH}
 export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
-export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+export SEAFILE_DATA_DIR=${default_seafile_data_dir}
 export SEAFILE_RPC_PIPE_PATH=${seafile_rpc_pipe_path}
 export SEAHUB_DIR=$seahubdir
 export SEAFDAV_CONF=${central_config_dir}/seafdav.conf
@@ -155,7 +155,7 @@ function start_seafile_server () {
     if [[ $IS_PRO_VERSION = "true" ]]; then
         LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
             -F ${SEAFILE_CENTRAL_CONF_DIR} \
-            -d ${SEAFILE_CONF_DIR} \
+            -d ${SEAFILE_DATA_DIR} \
             -l ${TOPDIR}/logs/seafile.log \
             -P ${TOPDIR}/pids/seaf-server.pid \
             -p ${SEAFILE_RPC_PIPE_PATH} \
@@ -163,7 +163,7 @@ function start_seafile_server () {
     else
         LD_LIBRARY_PATH=${SEAFILE_LD_LIBRARY_PATH} ${INSTALLPATH}/seafile/bin/seaf-server \
             -F ${SEAFILE_CENTRAL_CONF_DIR} \
-            -d ${SEAFILE_CONF_DIR} \
+            -d ${SEAFILE_DATA_DIR} \
             -l ${TOPDIR}/logs/seafile.log \
             -P ${TOPDIR}/pids/seaf-server.pid \
             -p ${SEAFILE_RPC_PIPE_PATH} \

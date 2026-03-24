@@ -7,7 +7,7 @@ def get_seafile_db_name():
     if  seafile_db_name_from_env := os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', ''):
         return seafile_db_name_from_env, None
     
-    seafile_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR') or os.environ.get('SEAFILE_CONF_DIR')
+    seafile_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR') or os.environ.get('SEAFILE_DATA_DIR')
     if not seafile_conf_dir:
         error_msg = 'Environment variable seafile_conf_dir is not define.'
         return None, error_msg
