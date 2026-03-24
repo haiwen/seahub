@@ -10,7 +10,7 @@ before_cache:
 
 env:
   global:
-    - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_DATA_DIR=/tmp/seafile-data
+    - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
 
 # install & start seafile-server CE, install nginx
 before_install:

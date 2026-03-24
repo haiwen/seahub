@@ -11,40 +11,38 @@ central_config_dir = os.path.join(top_dir, 'conf')
 sys.path.insert(0, central_config_dir)
 
 try:
-    from seahub_settings import DATABASES
-except ImportError:
-    raise RuntimeError("Can not import seahub settings.")
-
-try:
     from seahub_settings import SAML_CERTS_DIR
 except ImportError:
     SAML_CERTS_DIR = '/opt/seafile/seahub-data/certs'
 
 
+def load_env_file():
+    file_path = os.path.join(central_config_dir, ".env")
+    if not os.path.exists(file_path):
+        return
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" in line:
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                os.environ[key] = value
+
+load_env_file()
+
 def init_db_connect():
-    try:
-        db_conf = DATABASES['default']
-    except KeyError:
-        raise RuntimeError('Failed to init seahub db, can not find db info in seahub settings.')
-
-    if db_conf.get('ENGINE') != 'django.db.backends.mysql':
-        raise RuntimeError('Failed to init seahub db, only mysql db supported.')
-
-    db_name = db_conf.get('NAME')
-    if not db_name:
-        raise RuntimeError('Failed to init seahub db, db name is not setted.')
-
-    db_user = db_conf.get('USER')
-    if not db_user:
-        raise RuntimeError('Failed to init seahub db, db user is not setted.')
-
-    db_passwd = db_conf.get('PASSWORD')
-    db_host = db_conf.get('HOST', '127.0.0.1')
-    db_port = int(db_conf.get('PORT', '3306'))
+    db_name = os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', 'seahub_db')
+    db_user = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
+    db_passwd = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
+    db_host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
+    db_port = int(os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306))
 
     try:
         conn = pymysql.connect(host=db_host, port=db_port, user=db_user,
-                               passwd=db_passwd, db=db_name, charset='utf8')
+                               password=db_passwd, database=db_name, charset='utf8')
         conn.autocommit(True)
         cursor = conn.cursor()
         return conn, cursor
