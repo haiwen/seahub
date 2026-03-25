@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
+import posixpath
 from datetime import datetime
 
 from rest_framework.authentication import SessionAuthentication
@@ -24,7 +25,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 
 logger = logging.getLogger(__name__)
 
-def get_new_file_history_info(ent):
+def get_new_file_history_info(ent, virtual_path=None):
 
     info = {}
 
@@ -41,7 +42,7 @@ def get_new_file_history_info(ent):
     info['size'] = ent.size
     info['rev_file_id'] = ent.file_id
     info['old_path'] = ent.old_path if hasattr(ent, 'old_path') else ''
-    info['path'] = ent.path
+    info['path'] = virtual_path if virtual_path else ent.path
 
     return info
 
@@ -198,6 +199,12 @@ class NewFileHistoryView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        virtual_path = None
+        if repo.is_virtual:
+            virtual_path= path
+            repo_id = repo.origin_repo_id
+            path = posixpath.join(repo.origin_path, path.lstrip('/'))
+
         # get repo history limit
         try:
             history_limit = seafile_api.get_repo_history_limit(repo_id)
@@ -216,7 +223,7 @@ class NewFileHistoryView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        data = [get_new_file_history_info(ent) for ent in file_revisions]
+        data = [get_new_file_history_info(ent, virtual_path) for ent in file_revisions]
         result = {
             "data": data,
             "page": page,

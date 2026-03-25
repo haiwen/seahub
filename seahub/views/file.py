@@ -55,7 +55,7 @@ from seahub.utils import render_error, is_org_context, \
     get_conf_text_ext, PREVIEW_FILEEXT, \
     normalize_file_path, get_service_url, \
     normalize_cache_key, gen_file_get_url_by_sharelink, gen_file_get_url_new, \
-    get_site_scheme_and_netloc
+    get_site_scheme_and_netloc, get_file_history_suffix
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, SVG, AUDIO,
                                      MARKDOWN, TEXT, VIDEO, SEADOC, TLDRAW, EXCALIDRAW, EXCALIDRAW)
@@ -275,7 +275,8 @@ def repo_file_get(raw_path, file_enc):
 
 
 def get_file_view_path_and_perm(request, repo_id, obj_id, path,
-                                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY):
+                                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY,
+                                perm_repo_id=None):
     """ Get path and the permission to view file.
 
     Returns:
@@ -284,7 +285,10 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path,
     username = request.user.username
     filename = os.path.basename(path)
 
-    user_perm = check_folder_permission(request, repo_id, '/')
+    if perm_repo_id is None:
+        perm_repo_id = repo_id
+
+    user_perm = check_folder_permission(request, perm_repo_id, '/')
     if user_perm is None:
         return ('', '', user_perm)
     else:
@@ -298,6 +302,21 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path,
         outer_url = gen_file_get_url(token, filename)
         inner_url = gen_inner_file_get_url(token, filename)
         return (outer_url, inner_url, user_perm)
+
+def should_use_origin_file_history(repo, path):
+    if not repo.is_virtual:
+        return False
+
+    suffix_list = get_file_history_suffix()
+    if suffix_list and isinstance(suffix_list, list):
+        suffix_list = [x.lower() for x in suffix_list]
+    else:
+        suffix_list = []
+
+    filename = os.path.basename(path)
+    _, file_ext = [x.lower() for x in get_file_type_and_ext(filename)]
+
+    return file_ext in suffix_list
 
 def handle_textual_file(request, filetype, raw_path, ret_dict):
     # encoding option a user chose
@@ -1078,6 +1097,17 @@ def view_history_file_common(request, repo_id, ret_dict):
 
     path = request.GET.get('p', '/')
     path = normalize_file_path(path)
+    origin_repo = repo
+    origin_repo_id = repo_id
+    origin_path = path
+
+    if should_use_origin_file_history(repo, path):
+        origin_repo_id = repo.origin_repo_id
+        origin_repo = get_repo(origin_repo_id)
+        if not origin_repo:
+            raise Http404
+        origin_path = normalize_file_path(
+            posixpath.join(repo.origin_path, path.lstrip('/')))
 
     ENABLE_ONLYOFFICE, ENABLE_OFFICE_WEB_APP = get_office_feature_by_repo(repo)
 
@@ -1091,7 +1121,7 @@ def view_history_file_common(request, repo_id, ret_dict):
 
     # construct some variables
     u_filename = os.path.basename(path)
-    current_commit = get_commit(repo.id, repo.version, commit_id)
+    current_commit = get_commit(origin_repo.id, origin_repo.version, commit_id)
     if not current_commit:
         raise Http404
 
@@ -1102,10 +1132,11 @@ def view_history_file_common(request, repo_id, ret_dict):
     # render error page if permission  deny.
     if filetype == VIDEO or filetype == AUDIO:
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path, use_onetime=False)
+            request, origin_repo_id, obj_id, path, use_onetime=False,
+            perm_repo_id=repo_id)
     else:
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path)
+            request, origin_repo_id, obj_id, path, perm_repo_id=repo_id)
 
     request.user_perm = user_perm
     can_download_file = parse_repo_perm(user_perm).can_download
@@ -1119,7 +1150,7 @@ def view_history_file_common(request, repo_id, ret_dict):
             if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
                 # obj_id for view trash/history file
-                wopi_dict = get_wopi_dict(username, repo_id, path,
+                wopi_dict = get_wopi_dict(username, origin_repo_id, origin_path,
                                           language_code=request.LANGUAGE_CODE,
                                           obj_id=obj_id,
                                           can_download=parse_repo_perm(user_perm).can_download)
@@ -1135,7 +1166,7 @@ def view_history_file_common(request, repo_id, ret_dict):
 
                 from seahub.constants import PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
                 can_copy_content = user_perm not in (PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT)
-                onlyoffice_dict = get_onlyoffice_dict(request, username, repo_id, path,
+                onlyoffice_dict = get_onlyoffice_dict(request, username, origin_repo_id, origin_path,
                                                       file_id=obj_id,
                                                       can_download=parse_repo_perm(user_perm).can_download,
                                                       can_copy=can_copy_content)
@@ -1148,8 +1179,8 @@ def view_history_file_common(request, repo_id, ret_dict):
                     ret_dict['err'] = _('Error when prepare OnlyOffice file preview page.')
 
         # Check if can preview file
-        fsize = get_file_size(repo.store_id, repo.version, obj_id)
-        can_preview, err_msg = can_preview_file(u_filename, fsize, repo)
+        fsize = get_file_size(origin_repo.store_id, origin_repo.version, obj_id)
+        can_preview, err_msg = can_preview_file(u_filename, fsize, origin_repo)
         if can_preview:
 
             # send file audit message
@@ -1973,8 +2004,13 @@ def download_file(request, repo_id, obj_id):
     # if it has been renamed
     if parse_repo_perm(check_folder_permission(
             request, repo_id, '/')).can_download is True:
+        path = request.GET.get('p', '')
+        path = normalize_file_path(path)
+        origin_repo_id = repo_id
+        if should_use_origin_file_history(repo, path):
+            origin_repo_id = repo.origin_repo_id
         # Get a token to access file
-        token = seafile_api.get_fileserver_access_token(repo_id,
+        token = seafile_api.get_fileserver_access_token(origin_repo_id,
                 obj_id, 'download', username)
 
         if not token:
