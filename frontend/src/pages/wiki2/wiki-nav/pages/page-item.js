@@ -315,7 +315,6 @@ const PageItem = ({
             >
               <div
                 className="wiki-page-content"
-                onClick={() => { toggleExpand(page.id); }}
                 style={pathStr ? {
                   marginLeft: (pathStr.split('-').length - 1) * 20
                 } : {}}
