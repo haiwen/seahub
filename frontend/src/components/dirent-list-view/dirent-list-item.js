@@ -578,7 +578,6 @@ class DirentListItem extends React.Component {
     const showStatus = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.FILE_STATUS);
     const statusCol = columns.find(col => col.key === PRIVATE_COLUMN_KEY.FILE_STATUS);
     const showTags = visibleColumnKeys.includes(PRIVATE_COLUMN_KEY.TAGS);
-    const canEdit = !isDir && dirent.permission === 'rw';
     const showMetadata = !isDir && dirent.metadata;
 
     if (!Utils.isDesktop()) {
@@ -796,7 +795,7 @@ class DirentListItem extends React.Component {
               value={showMetadata ? dirent.metadata[PRIVATE_COLUMN_KEY.FILE_STATUS] : ''}
               record={dirent}
               column={statusCol}
-              canEdit={canEdit}
+              canEdit={false}
             />
           </div>
         )}
