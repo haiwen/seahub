@@ -38,7 +38,7 @@ import ViewToolbar from '../../components/toolbar/view-toolbar';
 import EventBus, { eventBus } from '../../components/common/event-bus';
 import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
-import { DIR_METADATA_COLUMNS, DIR_HIDDEN_COLUMN_KEYS, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, DIR_TABLE_HIDDEN_COLUMN_KEYS, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
+import { DIR_METADATA_COLUMNS, getDirHiddenColumnKeys, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, getDirTableHiddenColumnKeys, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
 import { normalizeColumns } from '@/metadata/utils/column';
 
 import '../../css/lib-content-view.css';
@@ -111,8 +111,8 @@ class LibContentView extends React.Component {
       currentDirent: null,
       columns: DIR_BASE_COLUMNS,
       tableViewColumns: DIR_BASE_COLUMNS,
-      hiddenColumnKeys: JSON.parse(localStorage.getItem(DIR_HIDDEN_COLUMN_KEYS)) || DIR_METADATA_COLUMNS,
-      hiddenTableViewColumnKeys: JSON.parse(localStorage.getItem(DIR_TABLE_HIDDEN_COLUMN_KEYS)) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
+      hiddenColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(this.props.repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS,
+      hiddenTableViewColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(this.props.repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
       metadata: null,
       isCrossRepoMove: false,
@@ -125,6 +125,7 @@ class LibContentView extends React.Component {
     this.currentMoveItemPath = '';
     this.unsubscribeEventBus = null;
     this.cachedColumns = null;
+    this.cachedTableViewColumns = null;
   }
 
   updateCurrentDirent = (dirent = null) => {
@@ -368,6 +369,7 @@ class LibContentView extends React.Component {
     this.unsubscribeSelectSearchedTag && this.unsubscribeSelectSearchedTag();
     this.unsubscribeSwitchToHistoryView && this.unsubscribeSwitchToHistoryView();
     this.unsubscribeColumnVisibilityChanged && this.unsubscribeColumnVisibilityChanged();
+    this.unsubscribeTableViewColumnVisibilityChanged && this.unsubscribeTableViewColumnVisibilityChanged();
     this.unsubscribeDirentStatusChanged && this.unsubscribeDirentStatusChanged();
     this.unsubscribeColumnDataModified && this.unsubscribeColumnDataModified();
     this.props.eventBus.dispatch(EVENT_BUS_TYPE.CURRENT_LIBRARY_CHANGED, {
@@ -384,6 +386,10 @@ class LibContentView extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.repoID !== this.props.repoID) {
+      const repoID = this.props.repoID;
+      const hiddenColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS;
+      const hiddenTableViewColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS;
+      this.setState({ hiddenColumnKeys, hiddenTableViewColumnKeys });
       this.calculatePara(this.props);
     }
 
@@ -706,6 +712,10 @@ class LibContentView extends React.Component {
   // Get all metadata columns for DirTableView (not filtered)
   getTableViewColumns = (metadata) => {
     if (!metadata?.columns) {
+      // Use cached columns if available
+      if (this.state.enableMetadata && this.cachedTableViewColumns) {
+        return this.cachedTableViewColumns;
+      }
       return DIR_BASE_COLUMNS;
     }
 
@@ -729,7 +739,8 @@ class LibContentView extends React.Component {
     });
 
     // Combine: original columns first, then additional metadata columns in their API order
-    return [...originalColumns, ...additionalColumns].map(col => new Column(col));
+    this.cachedTableViewColumns = [...originalColumns, ...additionalColumns].map(col => new Column(col));
+    return this.cachedTableViewColumns;
   };
 
   enrichDirentListWithMetadata = (direntList, metadata) => {
@@ -769,12 +780,16 @@ class LibContentView extends React.Component {
         });
       } else {
         const cachedDirent = cachedDirentMap.get(item.name);
-        // Fallback to cached dirent data for basic fields
-        enrichedItem[PRIVATE_COLUMN_KEY.ID] = cachedDirent?.[PRIVATE_COLUMN_KEY.ID] || '';
-        enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
-        enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
-        enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = cachedDirent?.[PRIVATE_COLUMN_KEY.FILE_STATUS] || '';
-        enrichedItem[PRIVATE_COLUMN_KEY.TAGS] = cachedDirent?.[PRIVATE_COLUMN_KEY.TAGS] || [];
+        // Fallback to cached dirent metadata
+        if (cachedDirent?.metadata) {
+          const { _name, ...restMetadata } = cachedDirent.metadata;
+          enrichedItem.metadata = restMetadata;
+        }
+        enrichedItem[PRIVATE_COLUMN_KEY.ID] = cachedDirent?.metadata?.[PRIVATE_COLUMN_KEY.ID] || '';
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_CREATOR] = cachedDirent?.metadata?.[PRIVATE_COLUMN_KEY.FILE_CREATOR] || username;
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_MODIFIER] = cachedDirent?.metadata?.[PRIVATE_COLUMN_KEY.FILE_MODIFIER] || username;
+        enrichedItem[PRIVATE_COLUMN_KEY.FILE_STATUS] = cachedDirent?.metadata?.[PRIVATE_COLUMN_KEY.FILE_STATUS] || '';
+        enrichedItem[PRIVATE_COLUMN_KEY.TAGS] = cachedDirent?.metadata?.[PRIVATE_COLUMN_KEY.TAGS] || [];
       }
 
       return new Dirent(enrichedItem);
@@ -2226,12 +2241,12 @@ class LibContentView extends React.Component {
   };
 
   onHiddenColumnKeys = (colKeys) => {
-    localStorage.setItem(DIR_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
+    localStorage.setItem(getDirHiddenColumnKeys(this.props.repoID), JSON.stringify(colKeys));
     this.setState({ hiddenColumnKeys: colKeys });
   };
 
   onHiddenTableViewColumnKeys = (colKeys) => {
-    localStorage.setItem(DIR_TABLE_HIDDEN_COLUMN_KEYS, JSON.stringify(colKeys));
+    localStorage.setItem(getDirTableHiddenColumnKeys(this.props.repoID), JSON.stringify(colKeys));
     this.setState({ hiddenTableViewColumnKeys: colKeys });
   };
 
@@ -2688,11 +2703,12 @@ class LibContentView extends React.Component {
 
   metadataStatusCallback = (status) => {
     const { enableTags, enableMetadata } = status;
+    const { repoID } = this.props;
 
     if (enableMetadata !== this.state.enableMetadata) {
       this.setState({ enableMetadata });
-      if (!enableMetadata) {
-        localStorage.removeItem(DIR_HIDDEN_COLUMN_KEYS);
+      if (!enableMetadata && repoID) {
+        localStorage.removeItem(getDirHiddenColumnKeys(repoID));
       }
     }
 
