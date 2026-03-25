@@ -207,7 +207,7 @@ const DirTableView = ({
 
     hideMenuRef.current = hideMenu;
 
-    const selectedRecordIds = RecordMetrics.getSelectedIds(recordMetrics);
+    const selectedRecordIds = recordMetrics && RecordMetrics.getSelectedIds(recordMetrics) || [];
     const selectedDirents = selectedRecordIds
       .map(id => getDirentByRowId(id))
       .filter(Boolean);

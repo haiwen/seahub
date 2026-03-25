@@ -204,8 +204,8 @@ class Record extends React.Component {
   };
 
   getRecordStyle = () => {
-    const { isGroupView, height } = this.props;
-    let style = { height };
+    const { isGroupView, height, totalWidth, sequenceColumnWidth } = this.props;
+    let style = { height, width: totalWidth + sequenceColumnWidth };
     if (isGroupView) {
       const { top, left } = this.props;
       style.top = top;

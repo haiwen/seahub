@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import EmptyTip from '../../empty-tip';
 import Records from './records';
+import ContextMenu from '../context-menu';
 import { gettext } from '../../../utils/constants';
 import { GROUP_VIEW_OFFSET } from '../constants/group';
 import { SEQUENCE_COLUMN_WIDTH } from '../constants/grid';
@@ -91,8 +92,16 @@ const TableMain = ({
 
   return (
     <div className={classnames('sf-table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0, 'sf-table-tree': showRecordAsTree })}>
-      {hasNoRecords && <EmptyTip text={noRecordsTipsText || gettext('No record')} />}
-      {!hasNoRecords &&
+      {hasNoRecords && (
+        <div className="sf-table-canvas-ctx-wrapper">
+          <EmptyTip text={noRecordsTipsText || gettext('No record')} />
+          <ContextMenu
+            createContextMenuOptions={customProps.createContextMenuOptions}
+            selectedPosition={{ idx: -1, rowIdx: -1 }}
+          />
+        </div>
+      )}
+      {!hasNoRecords && (
         <Records
           {...customProps}
           tableId={tableId}
@@ -122,7 +131,7 @@ const TableMain = ({
           getClientCellValueDisplayString={getInternalClientCellValueDisplayString}
           getCopiedRecordsAndColumnsFromRange={getCopiedRecordsAndColumnsFromRange}
         />
-      }
+      )}
     </div>
   );
 
