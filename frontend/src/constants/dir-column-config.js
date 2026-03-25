@@ -59,4 +59,4 @@ export const DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS = [
 ];
 
 // Table mode hidden column keys - per repo
-export const getDirTableHiddenColumnKeys = (repoID) => `dir_table_hidden_column_keys_${repoID}`;
+export const getDirTableHiddenColumnKeys = (repoID) => `sf_dir_table_hidden_column_keys_${repoID}`;
