@@ -593,14 +593,33 @@ class SharedDirView extends React.Component {
     }));
   };
 
-  toggleItemSelected = (targetItem, isSelected) => {
-    this.setState({
-      items: this.state.items.map((item) => {
+  toggleItemSelected = (targetItem, isSelected, isShiftKeyPressed) => {
+    const { items, lastSelectedItemIndex } = this.state;
+    let currentSelectedItemIndex;
+    let updatedItems;
+    if (isSelected) {
+      currentSelectedItemIndex = items.findIndex(item => item == targetItem);
+    }
+    if (lastSelectedItemIndex != undefined && currentSelectedItemIndex != undefined && isShiftKeyPressed) {
+      const startIndex = Math.min(lastSelectedItemIndex, currentSelectedItemIndex);
+      const endIndex = Math.max(lastSelectedItemIndex, currentSelectedItemIndex);
+      updatedItems = items.map((item, index) => {
+        if (index === startIndex || index === endIndex || (index > startIndex && index < endIndex)) {
+          item.isSelected = true;
+        }
+        return item;
+      });
+    } else {
+      updatedItems = items.map(item => {
         if (item === targetItem) {
           item.isSelected = isSelected;
         }
         return item;
-      })
+      });
+    }
+    this.setState({
+      lastSelectedItemIndex: currentSelectedItemIndex,
+      items: updatedItems
     }, () => {
       this.setState({
         isAllItemsSelected: !this.state.items.some(item => !item.isSelected)
@@ -1170,7 +1189,8 @@ class Item extends React.Component {
   };
 
   toggleItemSelected = (e) => {
-    this.props.toggleItemSelected(this.props.item, e.target.checked);
+    const { item } = this.props;
+    this.props.toggleItemSelected(item, e.target.checked, e.nativeEvent.shiftKey);
   };
 
   onFolderItemClick = (e) => {
@@ -1187,7 +1207,8 @@ class Item extends React.Component {
       return isDesktop ? (
         <tr
           className={classnames({
-            'tr-highlight': isHighlighted
+            'tr-highlight': isHighlighted,
+            'tr-active': item.isSelected
           })}
           onMouseOver={this.handleMouseOver}
           onMouseOut={this.handleMouseOut}
@@ -1195,7 +1216,13 @@ class Item extends React.Component {
         >
           {showDownloadIcon &&
             <td className="text-center">
-              <input type="checkbox" className="form-check-input" checked={item.isSelected} onChange={this.toggleItemSelected} onKeyDown={Utils.onKeyDown} />
+              <input
+                type="checkbox"
+                className="form-check-input"
+                checked={item.isSelected}
+                onChange={this.toggleItemSelected}
+                onKeyDown={Utils.onKeyDown}
+              />
             </td>
           }
           <td className="text-center"><img src={Utils.getFolderIconUrl()} alt="" width="24" /></td>
@@ -1239,7 +1266,8 @@ class Item extends React.Component {
       return isDesktop ? (
         <tr
           className={classnames({
-            'tr-highlight': isHighlighted
+            'tr-highlight': isHighlighted,
+            'tr-active': item.isSelected
           })}
           onMouseOver={this.handleMouseOver}
           onMouseOut={this.handleMouseOut}

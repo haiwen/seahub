@@ -1197,7 +1197,7 @@ export const Utils = {
   getPathFromWikiInternalMarkdownLink: function (url, slug) {
     slug = encodeURIComponent(slug);
     // eslint-disable-next-line
-    var re = new RegExp(serviceURL + '/published/' + slug + '.*(\\.md)$');
+    var re = new RegExp(serviceURL + '/published/' + slug + '(.*\\.md)$');
     var array = re.exec(url);
     var path = array[1];
     try {
