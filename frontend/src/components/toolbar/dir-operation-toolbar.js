@@ -236,7 +236,7 @@ class DirOperationToolbar extends React.Component {
               tag="span"
               role="button"
               tabIndex="0"
-              className="path-item"
+              className="path-dropdown-item"
               onClick={this.toggleDesktopOpMenu}
               data-toggle="dropdown"
               aria-label={gettext('More operations')}

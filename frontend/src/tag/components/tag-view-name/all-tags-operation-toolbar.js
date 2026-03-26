@@ -68,7 +68,7 @@ const AllTagsOperationToolbar = ({ repoID }) => {
             tag="span"
             role="button"
             tabIndex="0"
-            className="path-item all-tags-operation-toggle"
+            className="path-dropdown-item all-tags-operation-toggle"
             onClick={toggleMenuOpen}
             data-toggle="dropdown"
             aria-label={gettext('More operations')}
