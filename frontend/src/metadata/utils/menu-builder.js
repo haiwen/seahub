@@ -645,8 +645,8 @@ export const buildCardToolbarMenuOptions = (records, readOnly, metadataStatus) =
   return menuOptions;
 };
 
-export const buildCardMenuOptions = (records, readOnly, metadataStatus) => {
-  if (!records || records.length === 0) {
+export const buildCardMenuOptions = (records, readOnly, metadataStatus, selectedCard) => {
+  if (!records || records.length === 0 || !selectedCard) {
     return [];
   }
 
