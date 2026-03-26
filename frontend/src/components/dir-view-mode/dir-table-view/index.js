@@ -55,6 +55,7 @@ const DirTableView = ({
   onItemMove,
   selectedDirentList,
   onSelectedDirentListUpdate,
+  onColumnOrderChange,
 }) => {
   const [isSubMenuShown, setSubMenuShown] = useState(false);
   const [hoveredOptionKey, setHoveredOptionKey] = useState('');
@@ -117,6 +118,12 @@ const DirTableView = ({
     setDirTableColumnWidth(column.key, newWidth);
     setColumnWidthVersion(prev => prev + 1);
   }, []);
+
+  const modifyColumnOrder = useCallback((source, target) => {
+    if (!onColumnOrderChange) return;
+    // Pass full source and target objects to preserve draggingColumnIndex and columnIndex
+    onColumnOrderChange(source, target);
+  }, [onColumnOrderChange]);
 
   const checkCanModifyRecord = (record) => {
     return record._permission !== 'r';
@@ -445,6 +452,7 @@ const DirTableView = ({
         isLoadingMoreRecords={false}
         enableScrollToLoad={false}
         modifyColumnWidth={modifyColumnWidth}
+        modifyColumnOrder={modifyColumnOrder}
         checkCanModifyRecord={checkCanModifyRecord}
         modifyRecord={modifyRecord}
         supportCopy={false}
@@ -487,6 +495,7 @@ DirTableView.propTypes = {
   showDirentDetail: PropTypes.func,
   onItemsMove: PropTypes.func,
   onItemMove: PropTypes.func,
+  onColumnOrderChange: PropTypes.func,
 };
 
 export default DirTableView;

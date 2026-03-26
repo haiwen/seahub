@@ -65,7 +65,8 @@ export const SUPPORT_PREVIEW_COLUMN_KEYS = [
 const DEFAULT_NAME_COLUMN_WIDTH = 200;
 const DEFAULT_COLUMN_WIDTH = 200;
 
-const DIR_TABLE_COLUMNS_WIDTH_KEY = 'dir_table_columns_width';
+const DIR_TABLE_COLUMNS_WIDTH_KEY = 'sf_dir_table_columns_width';
+const DIR_TABLE_COLUMNS_ORDER_KEY = 'sf_dir_table_columns_order';
 
 export const getDirTableColumnWidths = () => {
   try {
@@ -77,13 +78,19 @@ export const getDirTableColumnWidths = () => {
 };
 
 export const setDirTableColumnWidth = (columnKey, width) => {
-  try {
-    const savedWidths = getDirTableColumnWidths();
-    savedWidths[columnKey] = width;
-    localStorage.setItem(DIR_TABLE_COLUMNS_WIDTH_KEY, JSON.stringify(savedWidths));
-  } catch (err) {
-    // Ignore errors
-  }
+  const savedWidths = getDirTableColumnWidths();
+  savedWidths[columnKey] = width;
+  localStorage.setItem(DIR_TABLE_COLUMNS_WIDTH_KEY, JSON.stringify(savedWidths));
+};
+
+export const getDirTableColumnOrder = () => {
+  const savedOrder = localStorage.getItem(DIR_TABLE_COLUMNS_ORDER_KEY);
+  return savedOrder ? JSON.parse(savedOrder) : null;
+};
+
+export const setDirTableColumnOrder = (columnKeys) => {
+  if (!Array.isArray(columnKeys) || !columnKeys.every(key => typeof key === 'string')) return;
+  localStorage.setItem(DIR_TABLE_COLUMNS_ORDER_KEY, JSON.stringify(columnKeys));
 };
 
 const createColumnFormatter = ({ repoID, record, column, value, queryUserAPI, tagsData, onFileNameClick, onDirentMetadata, ...otherProps }) => {

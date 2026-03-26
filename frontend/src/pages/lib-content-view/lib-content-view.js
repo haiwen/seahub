@@ -40,6 +40,7 @@ import WebSocketClient from '../../utils/websocket-service';
 import Column from '@/metadata/model/column';
 import { DIR_METADATA_COLUMNS, getDirHiddenColumnKeys, DIR_BASE_COLUMNS, DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS, getDirTableHiddenColumnKeys, DIR_TABLE_DEFAULT_METADATA_COLUMNS } from '@/constants/dir-column-config';
 import { normalizeColumns } from '@/metadata/utils/column';
+import { getDirTableColumnOrder, setDirTableColumnOrder } from '@/components/dir-view-mode/dir-table-view/columns';
 
 import '../../css/lib-content-view.css';
 
@@ -111,6 +112,7 @@ class LibContentView extends React.Component {
       currentDirent: null,
       columns: DIR_BASE_COLUMNS,
       tableViewColumns: DIR_BASE_COLUMNS,
+      tableViewColumnOrder: null,
       hiddenColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(this.props.repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS,
       hiddenTableViewColumnKeys: this.props.repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(this.props.repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS,
       enableMetadata: false,
@@ -389,7 +391,8 @@ class LibContentView extends React.Component {
       const repoID = this.props.repoID;
       const hiddenColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirHiddenColumnKeys(repoID))) || DIR_METADATA_COLUMNS : DIR_METADATA_COLUMNS;
       const hiddenTableViewColumnKeys = repoID ? JSON.parse(localStorage.getItem(getDirTableHiddenColumnKeys(repoID))) || DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS : DIR_TABLE_NOT_DISPLAY_COLUMN_KEYS;
-      this.setState({ hiddenColumnKeys, hiddenTableViewColumnKeys });
+      const tableViewColumnOrder = repoID ? getDirTableColumnOrder() : null;
+      this.setState({ hiddenColumnKeys, hiddenTableViewColumnKeys, tableViewColumnOrder });
       this.calculatePara(this.props);
     }
 
@@ -739,8 +742,36 @@ class LibContentView extends React.Component {
     });
 
     // Combine: original columns first, then additional metadata columns in their API order
-    this.cachedTableViewColumns = [...originalColumns, ...additionalColumns].map(col => new Column(col));
+    let cachedColumns = [...originalColumns, ...additionalColumns].map(col => new Column(col));
+
+    // Apply saved column order if exists
+    const savedOrder = this.state.tableViewColumnOrder;
+    if (savedOrder && Array.isArray(savedOrder)) {
+      const orderMap = new Map(savedOrder.map((key, index) => [key, index]));
+      cachedColumns.sort((a, b) => {
+        const indexA = orderMap.has(a.key) ? orderMap.get(a.key) : Infinity;
+        const indexB = orderMap.has(b.key) ? orderMap.get(b.key) : Infinity;
+        return indexA - indexB;
+      });
+    }
+
+    this.cachedTableViewColumns = cachedColumns;
     return this.cachedTableViewColumns;
+  };
+
+  // Apply column order to a list of columns
+  applyColumnOrder = (columns, order) => {
+    if (!order || !Array.isArray(order) || order.length === 0) {
+      return columns;
+    }
+    const orderMap = new Map(order.map((key, index) => [key, index]));
+    const orderedColumns = [...columns];
+    orderedColumns.sort((a, b) => {
+      const indexA = orderMap.has(a.key) ? orderMap.get(a.key) : Infinity;
+      const indexB = orderMap.has(b.key) ? orderMap.get(b.key) : Infinity;
+      return indexA - indexB;
+    });
+    return orderedColumns;
   };
 
   enrichDirentListWithMetadata = (direntList, metadata) => {
@@ -2250,6 +2281,49 @@ class LibContentView extends React.Component {
     this.setState({ hiddenTableViewColumnKeys: colKeys });
   };
 
+  onTableViewColumnOrder = (source, target) => {
+    const { tableViewColumns, tableViewColumnOrder } = this.state;
+    if (!tableViewColumns || tableViewColumns.length === 0) return;
+
+    // Handle both string keys (from HideColumn) and objects (from SFTable header)
+    const sourceKey = typeof source === 'string' ? source : source.key;
+    const targetKey = typeof target === 'string' ? target : target.key;
+    const draggingColumnIndex = typeof source === 'string' ? undefined : source.draggingColumnIndex;
+    const targetColumnIndex = typeof target === 'string' ? undefined : target.columnIndex;
+
+    // Build current order from tableViewColumnOrder or from current tableViewColumns keys
+    const currentOrder = tableViewColumnOrder || tableViewColumns.map(col => col.key);
+
+    const newOrder = [...currentOrder];
+    const sourceIndex = newOrder.indexOf(sourceKey);
+    const targetIndex = newOrder.indexOf(targetKey);
+
+    if (sourceIndex === -1 || targetIndex === -1 || sourceIndex === targetIndex) return;
+
+    newOrder.splice(sourceIndex, 1);
+
+    let insertIndex;
+    if (draggingColumnIndex !== undefined && targetColumnIndex !== undefined) {
+      if (draggingColumnIndex < targetColumnIndex) {
+        insertIndex = newOrder.indexOf(targetKey) + 1;
+      } else {
+        insertIndex = newOrder.indexOf(targetKey);
+      }
+    } else {
+      insertIndex = newOrder.indexOf(targetKey);
+    }
+
+    newOrder.splice(insertIndex, 0, sourceKey);
+
+    const newTableViewColumns = this.applyColumnOrder(tableViewColumns, newOrder);
+
+    setDirTableColumnOrder(newOrder);
+    this.setState({
+      tableViewColumnOrder: newOrder,
+      tableViewColumns: newTableViewColumns,
+    });
+  };
+
   onColumnDataModified = async (key, data, isLocal = false) => {
     const { repoID } = this.props;
     const updatedColumns = this.state.columns.map(column => {
@@ -2938,6 +3012,7 @@ class LibContentView extends React.Component {
                           enableMetadata={this.state.enableMetadata}
                           columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
                           hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
+                          modifyColumnOrder={this.onTableViewColumnOrder}
                         />
                       </div>
                       }
@@ -3013,6 +3088,7 @@ class LibContentView extends React.Component {
                           sortTreeNode={this.sortTreeNode}
                           columns={this.state.currentMode === TABLE_MODE ? this.state.tableViewColumns : this.state.columns}
                           hiddenColumnKeys={this.state.currentMode === TABLE_MODE ? this.state.hiddenTableViewColumnKeys : this.state.hiddenColumnKeys}
+                          onColumnOrderChange={this.onTableViewColumnOrder}
                         />
                         :
                         <div className="message err-tip">{gettext('Folder does not exist.')}</div>

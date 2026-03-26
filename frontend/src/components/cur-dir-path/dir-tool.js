@@ -35,6 +35,7 @@ const propTypes = {
   enableMetadata: PropTypes.bool,
   columns: PropTypes.array,
   hiddenColumnKeys: PropTypes.array,
+  modifyColumnOrder: PropTypes.func,
 };
 
 class DirTool extends React.Component {
@@ -117,6 +118,7 @@ class DirTool extends React.Component {
             columns={columns}
             hiddenColumns={this.props.hiddenColumnKeys}
             modifyHiddenColumns={this.modifyHiddenColumns}
+            modifyColumnOrder={currentMode === TABLE_MODE ? this.props.modifyColumnOrder : undefined}
           />
         )}
 
