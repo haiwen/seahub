@@ -45,8 +45,9 @@ const CardContextMenu = ({ selectedCard, onDelete, onRename }) => {
       [record],
       readOnly,
       metadataStatus,
+      selectedCard,
     );
-  }, [enableFaceRecognition, metadata.columns, enableTags, record, readOnly]);
+  }, [enableFaceRecognition, metadata.columns, enableTags, record, readOnly, selectedCard]);
 
   const openRenameDialog = useCallback(() => {
     setIsRenameDialogShow(true);
