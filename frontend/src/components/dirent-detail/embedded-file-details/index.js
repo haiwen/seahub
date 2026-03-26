@@ -37,7 +37,7 @@ const EmbeddedFileDetails = ({ repoID, repoInfo, dirent, path, onClose, width = 
       const errMessage = Utils.getErrorMsg(error);
       toaster.danger(errMessage);
     });
-  }, [repoID, path, dirent]);
+  }, [repoID, path, dirent?.name]);
 
   useEffect(() => {
     if (isView) return;
