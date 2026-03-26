@@ -11,7 +11,6 @@ import { EVENT_BUS_TYPE } from '../../constants/event-bus-type';
 import { isShiftKeyDown } from '../../../../utils/keyboard-utils';
 import { checkEditableViaClickCell, checkIsColumnSupportDirectEdit, getColumnByIndex, getColumnIndexByKey } from '../../utils/column';
 import { checkIsCellSupportOpenEditor } from '../../utils/selected-cell-utils';
-import ContextMenu from '../../context-menu';
 
 const ROW_HEIGHT = 33;
 const RENDER_MORE_NUMBER = 10;
@@ -472,7 +471,7 @@ class RecordsBody extends Component {
   renderRecords = () => {
     this.recordFrozenRefs = [];
     const {
-      recordsCount, columns, sequenceColumnWidth, colOverScanStartIdx, colOverScanEndIdx, lastFrozenColumnKey,
+      recordsCount, columns, totalWidth, sequenceColumnWidth, colOverScanStartIdx, colOverScanEndIdx, lastFrozenColumnKey,
       recordMetrics, showSequenceColumn, showCellColoring, columnColors,
     } = this.props;
     const { startRenderIndex, endRenderIndex, selectedPosition } = this.state;
@@ -506,6 +505,7 @@ class RecordsBody extends Component {
           lastFrozenColumnKey={lastFrozenColumnKey}
           scrollLeft={scrollLeft}
           height={rowHeight}
+          totalWidth={totalWidth}
           cellMetaData={cellMetaData}
           columnColor={columnColor}
           searchResult={this.props.searchResult}
@@ -586,15 +586,8 @@ class RecordsBody extends Component {
             getCopiedRecordsAndColumnsFromRange={this.props.getCopiedRecordsAndColumnsFromRange}
             getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
           />
-          <div className="sf-table-records-wrapper" style={{ width: this.props.totalWidth + this.props.sequenceColumnWidth }} ref={this.setResultRef}>
+          <div className="sf-table-records-wrapper" ref={this.setResultRef}>
             {this.renderRecords()}
-          </div>
-          <div className="sf-table-canvas-ctx-wrapper" onClick={(e) => this.onContainerClick(e)} onContextMenu={((e) => {e.preventDefault();})}>
-            <ContextMenu
-              createContextMenuOptions={this.props.createContextMenuOptions}
-              getTableContentRect={this.props.getTableContentRect}
-              getTableCanvasContainerRect={this.props.getTableCanvasContainerRect}
-            />
           </div>
         </div>
         <RightScrollbar
