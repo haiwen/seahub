@@ -298,16 +298,10 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
   const isMultipleImages = selectedImages.length > 1;
 
   if (isMultipleImages) {
-    menuOptions.push({
-      key: TextTranslation.DOWNLOAD.key,
-      value: TextTranslation.DOWNLOAD.value
-    });
+    menuOptions.push(TextTranslation.DOWNLOAD);
 
     if (!readOnly) {
-      menuOptions.push({
-        key: TextTranslation.DELETE.key,
-        value: TextTranslation.DELETE.value
-      });
+      menuOptions.push(TextTranslation.DELETE);
     }
 
     const aiOptions = buildAISubmenuOptions(selectedImages, readOnly, metadataStatus, isMultipleImages);
@@ -327,56 +321,28 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
         menuOptions.push('Divider');
       }
       if (isSomeone && canRemovePhotoFromPeople) {
-        menuOptions.push({
-          key: TextTranslation.REMOVE_FROM_GROUP.key,
-          value: TextTranslation.REMOVE_FROM_GROUP.value
-        });
+        menuOptions.push(TextTranslation.REMOVE_FROM_GROUP);
       }
       if (!isSomeone && canAddPhotoToPeople) {
-        menuOptions.push({
-          key: TextTranslation.ADD_TO_GROUPS.key,
-          value: TextTranslation.ADD_TO_GROUPS.value
-        });
+        menuOptions.push(TextTranslation.ADD_TO_GROUPS);
       }
     }
 
     return menuOptions;
   }
 
-  menuOptions.push({
-    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-  });
-
-  menuOptions.push({
-    key: TextTranslation.OPEN_PARENT_FOLDER.key,
-    value: TextTranslation.OPEN_PARENT_FOLDER.value
-  });
+  menuOptions.push(TextTranslation.OPEN_FILE_IN_NEW_TAB, TextTranslation.OPEN_PARENT_FOLDER);
 
   menuOptions.push('Divider');
 
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.MOVE.key,
-      value: TextTranslation.MOVE.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.COPY.key,
-      value: TextTranslation.COPY.value
-    });
+    menuOptions.push(TextTranslation.MOVE, TextTranslation.COPY);
   }
 
-  menuOptions.push({
-    key: TextTranslation.DOWNLOAD.key,
-    value: TextTranslation.DOWNLOAD.value
-  });
+  menuOptions.push(TextTranslation.DOWNLOAD);
 
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.DELETE.key,
-      value: TextTranslation.DELETE.value
-    });
+    menuOptions.push(TextTranslation.DELETE);
   }
 
   const aiOptions = buildAISubmenuOptions(selectedImages, readOnly, metadataStatus, isMultipleImages);
@@ -394,24 +360,15 @@ export const buildGalleryMenuOptions = (selectedImages, readOnly, metadataStatus
 
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
     if (isSomeone && canRemovePhotoFromPeople) {
-      menuOptions.push({
-        key: TextTranslation.REMOVE_FROM_GROUP.key,
-        value: TextTranslation.REMOVE_FROM_GROUP.value
-      });
+      menuOptions.push(TextTranslation.REMOVE_FROM_GROUP);
     }
 
     if (!isSomeone && canAddPhotoToPeople) {
-      menuOptions.push({
-        key: TextTranslation.ADD_TO_GROUPS.key,
-        value: TextTranslation.ADD_TO_GROUPS.value
-      });
+      menuOptions.push(TextTranslation.ADD_TO_GROUPS);
     }
 
     if (canSetPeoplePhoto) {
-      menuOptions.push({
-        key: TextTranslation.SET_AS_COVER.key,
-        value: TextTranslation.SET_AS_COVER.value
-      });
+      menuOptions.push(TextTranslation.SET_AS_COVER);
     }
   }
   return menuOptions;
@@ -441,30 +398,16 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
         menuOptions.push('Divider');
       }
       if (isSomeone && canRemovePhotoFromPeople) {
-        menuOptions.push({
-          key: TextTranslation.REMOVE_FROM_GROUP.key,
-          value: TextTranslation.REMOVE_FROM_GROUP.value
-        });
+        menuOptions.push(TextTranslation.REMOVE_FROM_GROUP);
       }
       if (!isSomeone && canAddPhotoToPeople) {
-        menuOptions.push({
-          key: TextTranslation.ADD_TO_GROUPS.key,
-          value: TextTranslation.ADD_TO_GROUPS.value
-        });
+        menuOptions.push(TextTranslation.ADD_TO_GROUPS);
       }
     }
     return menuOptions;
   }
 
-  menuOptions.push({
-    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-  });
-
-  menuOptions.push({
-    key: TextTranslation.OPEN_PARENT_FOLDER.key,
-    value: TextTranslation.OPEN_PARENT_FOLDER.value
-  });
+  menuOptions.push(TextTranslation.OPEN_FILE_IN_NEW_TAB, TextTranslation.OPEN_PARENT_FOLDER);
 
   const aiOptions = buildAISubmenuOptions(selectedImages, readOnly, metadataStatus, isMultipleImages);
   if (aiOptions.length > 0) {
@@ -482,24 +425,15 @@ export const buildGalleryToolbarMenuOptions = (selectedImages, readOnly, metadat
     menuOptions.push('Divider');
     const { canRemovePhotoFromPeople, canAddPhotoToPeople, canSetPeoplePhoto } = faceRecognitionPermission;
     if (isSomeone && canRemovePhotoFromPeople) {
-      menuOptions.push({
-        key: TextTranslation.REMOVE_FROM_GROUP.key,
-        value: TextTranslation.REMOVE_FROM_GROUP.value
-      });
+      menuOptions.push(TextTranslation.REMOVE_FROM_GROUP);
     }
 
     if (!isSomeone && canAddPhotoToPeople) {
-      menuOptions.push({
-        key: TextTranslation.ADD_TO_GROUPS.key,
-        value: TextTranslation.ADD_TO_GROUPS.value
-      });
+      menuOptions.push(TextTranslation.ADD_TO_GROUPS);
     }
 
     if (canSetPeoplePhoto) {
-      menuOptions.push({
-        key: TextTranslation.SET_AS_COVER.key,
-        value: TextTranslation.SET_AS_COVER.value
-      });
+      menuOptions.push(TextTranslation.SET_AS_COVER);
     }
   }
 
@@ -513,45 +447,18 @@ export const buildKanbanMenuOptions = (records, readOnly, metadataStatus) => {
 
   const menuOptions = [];
 
-  menuOptions.push({
-    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-  });
-
-  menuOptions.push({
-    key: TextTranslation.OPEN_PARENT_FOLDER.key,
-    value: TextTranslation.OPEN_PARENT_FOLDER.value
-  });
+  menuOptions.push(TextTranslation.OPEN_FILE_IN_NEW_TAB, TextTranslation.OPEN_PARENT_FOLDER);
 
   menuOptions.push('Divider');
 
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.RENAME.key,
-      value: TextTranslation.RENAME.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.MOVE.key,
-      value: TextTranslation.MOVE.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.COPY.key,
-      value: TextTranslation.COPY.value
-    });
+    menuOptions.push(TextTranslation.RENAME, TextTranslation.MOVE, TextTranslation.COPY);
   }
 
-  menuOptions.push({
-    key: TextTranslation.DOWNLOAD.key,
-    value: TextTranslation.DOWNLOAD.value
-  });
+  menuOptions.push(TextTranslation.DOWNLOAD);
 
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.DELETE.key,
-      value: TextTranslation.DELETE.value
-    });
+    menuOptions.push(TextTranslation.DELETE);
   }
 
   const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus);
@@ -573,22 +480,11 @@ export const buildKanbanToolbarMenuOptions = (records, readOnly, metadataStatus)
 
   const menuOptions = [];
 
-  menuOptions.push({
-    key: TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
-    value: TextTranslation.OPEN_FILE_IN_NEW_TAB.value
-  });
-
-  menuOptions.push({
-    key: TextTranslation.OPEN_PARENT_FOLDER.key,
-    value: TextTranslation.OPEN_PARENT_FOLDER.value
-  });
+  menuOptions.push(TextTranslation.OPEN_FILE_IN_NEW_TAB, TextTranslation.OPEN_PARENT_FOLDER);
 
   if (!readOnly) {
     menuOptions.push('Divider');
-    menuOptions.push({
-      key: TextTranslation.RENAME.key,
-      value: TextTranslation.RENAME.value
-    });
+    menuOptions.push(TextTranslation.RENAME);
   }
 
   const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus);
@@ -615,19 +511,11 @@ export const buildCardToolbarMenuOptions = (records, readOnly, metadataStatus) =
       key: isFolder ? TextTranslation.OPEN_FOLDER_IN_NEW_TAB.key : TextTranslation.OPEN_FILE_IN_NEW_TAB.key,
       value: isFolder ? TextTranslation.OPEN_FOLDER_IN_NEW_TAB.value : TextTranslation.OPEN_FILE_IN_NEW_TAB.value,
     },
-    {
-      key: TextTranslation.OPEN_PARENT_FOLDER.key,
-      value: TextTranslation.OPEN_PARENT_FOLDER.value
-    }
+    TextTranslation.OPEN_PARENT_FOLDER,
   ];
   if (!readOnly) {
     menuOptions.push('Divider');
-    menuOptions.push(
-      {
-        key: TextTranslation.RENAME.key,
-        value: TextTranslation.RENAME.value
-      }
-    );
+    menuOptions.push(TextTranslation.RENAME);
   }
   const aiOptions = buildAISubmenuOptions(records, readOnly, metadataStatus);
   if (aiOptions.length > 0) {
@@ -658,34 +546,15 @@ export const buildCardMenuOptions = (records, readOnly, metadataStatus, selected
     value: isFolder ? TextTranslation.OPEN_FOLDER_IN_NEW_TAB.value : TextTranslation.OPEN_FILE_IN_NEW_TAB.value,
   });
 
-  menuOptions.push({
-    key: TextTranslation.OPEN_PARENT_FOLDER.key,
-    value: TextTranslation.OPEN_PARENT_FOLDER.value
-  });
+  menuOptions.push(TextTranslation.OPEN_PARENT_FOLDER);
 
   menuOptions.push('Divider');
 
   if (!readOnly) {
-    menuOptions.push({
-      key: TextTranslation.RENAME.key,
-      value: TextTranslation.RENAME.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.MOVE.key,
-      value: TextTranslation.MOVE.value
-    });
-
-    menuOptions.push({
-      key: TextTranslation.COPY.key,
-      value: TextTranslation.COPY.value
-    });
+    menuOptions.push(TextTranslation.RENAME, TextTranslation.MOVE, TextTranslation.COPY);
   }
 
-  menuOptions.push({
-    key: TextTranslation.DOWNLOAD.key,
-    value: TextTranslation.DOWNLOAD.value
-  });
+  menuOptions.push(TextTranslation.DOWNLOAD);
 
   if (!readOnly) {
     menuOptions.push({
