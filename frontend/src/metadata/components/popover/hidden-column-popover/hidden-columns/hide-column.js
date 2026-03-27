@@ -52,9 +52,10 @@ const HideColumnItem = ({
     dragData = JSON.parse(dragData);
     if (dragData.type !== 'sf-metadata-field-display-setting' || !dragData.column_key) return false;
     if (dragData.column_key !== column.key) {
-      onMove && onMove(dragData.column_key, column.key);
+      // Pass position info: draggingColumnIndex to determine insert position
+      onMove && onMove({ key: dragData.column_key, draggingColumnIndex: dragData.draggingColumnIndex }, { key: column.key, columnIndex });
     }
-  }, [column, onMove]);
+  }, [column, onMove, columnIndex]);
 
   const onDragEnd = useCallback(() => {
     updateDraggingKey(null);
@@ -68,13 +69,20 @@ const HideColumnItem = ({
 
   const isOver = dragOverColumnKey === column.key;
 
+  // When draggingColumnIndex < columnIndex: dragging item is ABOVE target, moving DOWN
+  // -> show BOTTOM drop line, insert AFTER target (insertIndex = indexOf(targetKey) + 1)
+  // When draggingColumnIndex > columnIndex: dragging item is BELOW target, moving UP
+  // -> show TOP drop line, insert BEFORE target (insertIndex = indexOf(targetKey))
+  const showTopDrop = isOver && draggingColumnIndex > columnIndex;
+  const showBottomDrop = isOver && draggingColumnIndex < columnIndex;
+
   return (
     <div
       ref={ref}
       className={classNames('hide-column-item', {
         'disabled': readOnly,
-        'hide-column-can-drop-top': isOver && draggingColumnIndex >= columnIndex,
-        'hide-column-can-drop': isOver && draggingColumnIndex < columnIndex,
+        'hide-column-can-drop-top': showTopDrop,
+        'hide-column-can-drop': showBottomDrop,
         'dragging': draggingColumnKey === column.key
       })}
       onDrop={onDrop}
