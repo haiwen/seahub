@@ -67,6 +67,7 @@ export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshot
 export const shareLinkForceUsePassword = window.app.pageOptions.shareLinkForceUsePassword;
 export const shareLinkPasswordMinLength = window.app.pageOptions.shareLinkPasswordMinLength;
 export const shareLinkPasswordStrengthLevel = window.app.pageOptions.shareLinkPasswordStrengthLevel;
+export const shareLinkAlwaysSendPasswordSeparately = window.app.pageOptions.shareLinkAlwaysSendPasswordSeparately;
 export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 export const sideNavFooterCustomHtml = window.app.pageOptions.sideNavFooterCustomHtml;

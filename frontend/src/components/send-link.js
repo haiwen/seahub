@@ -1,14 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { seafileAPI } from '../utils/seafile-api';
-import { gettext } from '../utils/constants';
+import { gettext, shareLinkAlwaysSendPasswordSeparately } from '../utils/constants';
 import { Utils } from '../utils/utils';
 import toaster from './toast';
 
 const propTypes = {
   token: PropTypes.string.isRequired,
   linkType: PropTypes.string.isRequired,
+  hasPassword: PropTypes.bool,
   toggleSendLink: PropTypes.func.isRequired,
   closeShareDialog: PropTypes.func.isRequired
 };
@@ -22,7 +23,9 @@ class SendLink extends React.Component {
       msg: '',
       errorMsg: '',
       btnDisabled: false,
-      sending: false
+      sending: false,
+      sendPasswordSeparately: shareLinkAlwaysSendPasswordSeparately,
+      showMsg: false,
     };
   }
 
@@ -38,8 +41,21 @@ class SendLink extends React.Component {
     });
   };
 
+  handleSendPasswordSeparatelyChange = (e) => {
+    this.setState({
+      sendPasswordSeparately: e.target.checked
+    });
+  };
+
+  handleShowMsgChange = (e) => {
+    this.setState({
+      showMsg: e.target.checked,
+      msg: e.target.checked ? this.state.msg : '',
+    });
+  };
+
   sendLink = () => {
-    const { emails, msg } = this.state;
+    const { emails, msg, sendPasswordSeparately } = this.state;
     if (!emails.trim()) {
       this.setState({
         errorMsg: gettext('Please input at least an email.')
@@ -54,8 +70,8 @@ class SendLink extends React.Component {
 
     const { token, linkType } = this.props;
     const request = linkType == 'uploadLink' ?
-      seafileAPI.sendUploadLink(token, emails.trim(), msg.trim()) :
-      seafileAPI.sendShareLink(token, emails.trim(), msg.trim());
+      seafileAPI.sendUploadLink(token, emails.trim(), msg.trim(), sendPasswordSeparately) :
+      seafileAPI.sendShareLink(token, emails.trim(), msg.trim(), sendPasswordSeparately);
     request.then((res) => {
       this.props.closeShareDialog();
       const { success, failed } = res.data;
@@ -83,7 +99,8 @@ class SendLink extends React.Component {
   };
 
   render() {
-    const { emails, msg, errorMsg, btnDisabled, sending } = this.state;
+    const { emails, msg, errorMsg, btnDisabled, sending, sendPasswordSeparately, showMsg } = this.state;
+    const { hasPassword } = this.props;
     return (
       <Form>
         <FormGroup>
@@ -97,15 +114,41 @@ class SendLink extends React.Component {
             placeholder={gettext('Emails, separated by \',\'')}
           />
         </FormGroup>
-        <FormGroup>
-          <Label htmlFor="msg" className="text-secondary font-weight-normal">{gettext('Message (optional):')}</Label>
-          <textarea
-            className="form-control w-75"
-            id="msg"
-            value={msg}
-            onChange={this.handleMsgInputChange}
-          >
-          </textarea>
+        {hasPassword && (
+          <FormGroup check>
+            <Label check>
+              <Input
+                type="checkbox"
+                checked={sendPasswordSeparately}
+                onChange={this.handleSendPasswordSeparatelyChange}
+                disabled={shareLinkAlwaysSendPasswordSeparately}
+              />
+              {gettext('Send password separately')}
+            </Label>
+          </FormGroup>
+        )}
+        <FormGroup check>
+          <Label check>
+            <Input
+              type="checkbox"
+              checked={showMsg}
+              onChange={this.handleShowMsgChange}
+            />
+            {gettext('Message')}
+          </Label>
+          {showMsg && (
+            <div className="ml-4">
+              <FormGroup>
+                <textarea
+                  className="form-control w-75"
+                  id="msg"
+                  value={msg}
+                  onChange={this.handleMsgInputChange}
+                >
+                </textarea>
+              </FormGroup>
+            </div>
+          )}
         </FormGroup>
         {errorMsg && <p className="error">{errorMsg}</p>}
         <Button color="primary" onClick={this.sendLink} disabled={btnDisabled} className="mr-2">{gettext('Send')}</Button>

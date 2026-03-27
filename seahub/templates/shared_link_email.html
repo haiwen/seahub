@@ -13,8 +13,14 @@
 <a href="{{ file_shared_link }}">{{ file_shared_link }}</a>
 </p>
 
+{% if send_password_separately %}
+<p style="font-size:14px;color:#434144;">
+{% trans "For security reasons, the link and the password are sent in two separate emails. This email contains the link. Please check the other email for the password." %}
+</p>
+{% else %}
 {% if password %}
 <p>{% trans "Password:"%} {{ password|escape }}</p>
+{% endif %}
 {% endif %}
 
 {% if extra_msg %}

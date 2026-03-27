@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
 import logging
 
 from rest_framework.authentication import SessionAuthentication
@@ -15,7 +16,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, \
     is_valid_email, string2list, gen_shared_upload_link, send_html_email, \
     get_site_name
 from seahub.share.models import UploadLinkShare
-from seahub.settings import ADD_REPLY_TO_HEADER
+from seahub.settings import ADD_REPLY_TO_HEADER, SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY
 from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -45,6 +46,10 @@ class SendUploadLinkView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         extra_msg = request.POST.get('extra_msg', '')
+        if SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY:
+            send_password_separately = True
+        else:
+            send_password_separately = request.POST.get('send_password_separately', '') == 'true'
 
         # check if token exists
         try:
@@ -59,12 +64,21 @@ class SendUploadLinkView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        password = link.get_password()
+        # Only send separately when there is actually a password
+        do_send_separately = send_password_separately and bool(password)
+
+        shared_upload_link = gen_shared_upload_link(token)
+        folder_name = os.path.basename(link.path.rstrip('/'))
+        link_title = _('An upload link is shared to you on %s') % get_site_name()
+
         result = {}
         result['failed'] = []
         result['success'] = []
         to_email_list = string2list(email)
         # use contact_email, if present
         useremail = Profile.objects.get_contact_email_by_user(request.user.username)
+
         for to_email in to_email_list:
 
             failed_info = {}
@@ -75,31 +89,60 @@ class SendUploadLinkView(APIView):
                 result['failed'].append(failed_info)
                 continue
 
-            # prepare basic info
-            c = {
-                'email': username,
-                'to_email': to_email,
-                'extra_msg': extra_msg,
-                'password': link.get_password(),
-            }
-
             if ADD_REPLY_TO_HEADER:
                 reply_to = useremail
             else:
                 reply_to = None
 
-            c['shared_upload_link'] = gen_shared_upload_link(token)
-            title = _('An upload link is shared to you on %s') % get_site_name()
-            template = 'shared_upload_link_email.html'
-
-            # send email
-            try:
-                send_html_email(title, template, c, None, [to_email], reply_to=reply_to)
-                result['success'].append(to_email)
-            except Exception as e:
-                logger.error(e)
-                failed_info['email'] = to_email
-                failed_info['error_msg'] = _('Internal Server Error')
-                result['failed'].append(failed_info)
+            if do_send_separately:
+                # Email 1: upload link only, no password
+                c_link = {
+                    'email': username,
+                    'to_email': to_email,
+                    'extra_msg': extra_msg,
+                    'shared_upload_link': shared_upload_link,
+                    'folder_name': folder_name,
+                    'send_password_separately': True,
+                }
+                # Email 2: password only, no link
+                c_password = {
+                    'email': username,
+                    'to_email': to_email,
+                    'extra_msg': extra_msg,
+                    'password': password,
+                    'folder_name': folder_name,
+                    'send_password_separately': True,
+                }
+                try:
+                    send_html_email(link_title, 'shared_upload_link_email.html', c_link,
+                                    None, [to_email], reply_to=reply_to)
+                    password_title = _('Password for the upload link on %s') % get_site_name()
+                    send_html_email(password_title, 'shared_upload_link_password_email.html', c_password,
+                                    None, [to_email], reply_to=reply_to)
+                    result['success'].append(to_email)
+                except Exception as e:
+                    logger.error(e)
+                    failed_info['email'] = to_email
+                    failed_info['error_msg'] = _('Internal Server Error')
+                    result['failed'].append(failed_info)
+            else:
+                # Original behaviour: single email with link + password
+                c = {
+                    'email': username,
+                    'to_email': to_email,
+                    'extra_msg': extra_msg,
+                    'password': password,
+                    'shared_upload_link': shared_upload_link,
+                    'folder_name': folder_name,
+                }
+                try:
+                    send_html_email(link_title, 'shared_upload_link_email.html', c,
+                                    None, [to_email], reply_to=reply_to)
+                    result['success'].append(to_email)
+                except Exception as e:
+                    logger.error(e)
+                    failed_info['email'] = to_email
+                    failed_info['error_msg'] = _('Internal Server Error')
+                    result['failed'].append(failed_info)
 
         return Response(result)

@@ -372,6 +372,7 @@ class GenerateUploadLink extends React.Component {
           <SendLink
             linkType='uploadLink'
             token={sharedUploadInfo.token}
+            hasPassword={!!sharedUploadInfo.password}
             toggleSendLink={this.toggleSendLink}
             closeShareDialog={this.props.closeShareDialog}
           />

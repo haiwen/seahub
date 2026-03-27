@@ -28,7 +28,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_DESCRIPTION, \
     FILE_SERVER_ROOT, ENABLE_WHITEBOARD, NOTIFICATION_SERVER_URL, \
     ENABLE_METADATA_MANAGEMENT, BAIDU_MAP_KEY, GOOGLE_MAP_KEY, GOOGLE_MAP_ID, \
     ENABLE_SEAFILE_AI, ENABLE_NOTIFICATION_SERVER, OFFICE_SUITE_ENABLED_EDIT_FILE_TYPES, ENABLE_THUMBNAIL_SERVER, \
-    ENABLE_FACE_RECOGNITION, ENABLE_STORAGE_CLASSES
+    ENABLE_FACE_RECOGNITION, ENABLE_STORAGE_CLASSES, SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY
 
 from seahub.organizations.models import OrgAdminSettings
 from seahub.organizations.settings import ORG_ENABLE_ADMIN_CUSTOM_LOGO
@@ -146,6 +146,7 @@ def base(request):
         'share_link_force_use_password': config.SHARE_LINK_FORCE_USE_PASSWORD,
         'share_link_password_min_length': config.SHARE_LINK_PASSWORD_MIN_LENGTH,
         'share_link_password_strength_level': config.SHARE_LINK_PASSWORD_STRENGTH_LEVEL,
+        'share_link_always_send_password_separately': SHARE_LINK_ALWAYS_SEND_PASSWORD_SEPARATELY,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'sysadmin_extra_enabled': True if is_pro_version() else False,
