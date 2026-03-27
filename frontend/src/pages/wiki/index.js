@@ -272,7 +272,8 @@ class Wiki extends Component {
   onLinkClick = (link) => {
     let url = link;
     if (Utils.isRelativePath(url)) {
-      url = `${serviceURL}/published/${slug}/${link}`;
+      const validLink = link.replace(/^\//, '');
+      url = `${serviceURL}/published/${slug}/${validLink}`;
     }
     if (Utils.isWikiInternalMarkdownLink(url, slug)) {
       let path = Utils.getPathFromWikiInternalMarkdownLink(url, slug);
