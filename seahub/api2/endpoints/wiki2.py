@@ -23,6 +23,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from seahub.api2.authentication import TokenAuthentication, SdocJWTTokenAuthentication
+from seahub.api2.ssr_authentication import SsrInternalAuthentication
 from seahub.api2.endpoints.utils import sdoc_export_to_md
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, is_wiki_repo, to_python_boolean
@@ -474,6 +475,9 @@ class Wiki2ConfigView(APIView):
 
 
 class Wiki2PublishConfigView(APIView):
+    # Allow both normal browser sessions and internal SSR service calls.
+    # The SSR service authenticates via X-Wiki-SSR-Secret header.
+    authentication_classes = (SsrInternalAuthentication, TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, wiki_id):
@@ -986,6 +990,8 @@ class Wiki2PageConfigView(APIView):
 
 
 class Wiki2PublishPageView(APIView):
+    # Allow both normal browser sessions and internal SSR service calls.
+    authentication_classes = (SsrInternalAuthentication, TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, wiki_id, page_id):
@@ -1036,8 +1042,12 @@ class Wiki2PublishPageView(APIView):
             latest_contributor, last_modified = None, 0
 
         assets_url = '/api/v2.1/seadoc/download-image/' + doc_uuid
-        seadoc_access_token = gen_seadoc_access_token(doc_uuid, filename, request.user.username, permission='r',
-                                                      default_title='')
+
+        # When called by the SSR service there is no real logged-in user;
+        # use an empty username so the token is still valid for read-only access.
+        token_username = getattr(request.user, 'username', '') or ''
+        seadoc_access_token = gen_seadoc_access_token(
+            doc_uuid, filename, token_username, permission='r', default_title='')
 
         return Response({
             "latest_contributor": email2nickname(latest_contributor),
