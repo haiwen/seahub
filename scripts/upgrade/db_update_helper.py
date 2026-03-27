@@ -23,7 +23,7 @@ class EnvManager(object):
         self.install_path = os.path.dirname(self.upgrade_dir)
         self.top_dir = os.path.dirname(self.install_path)
         self.ccnet_dir = os.environ.get('CCNET_CONF_DIR')
-        self.seafile_dir = os.environ.get('SEAFILE_CONF_DIR')
+        self.seafile_dir = os.environ.get('SEAFILE_DATA_DIR')
         self.central_config_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR')
         self.seafevents_db_dir = os.path.join(os.path.dirname(self.install_path), 'pro-data')
 
@@ -136,7 +136,7 @@ class DBUpdater(object):
     @staticmethod
     def get_ccnet_mysql_info(version):
         host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
-        port = os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306)
+        port = int(os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306))
         username = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
         password = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
         db = os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', 'ccnet_db')
@@ -147,7 +147,7 @@ class DBUpdater(object):
     @staticmethod
     def get_seafile_mysql_info(version):
         host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
-        port = os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306)
+        port = int(os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306))
         username = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
         password = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
         db = os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', 'seafile_db')
@@ -158,7 +158,7 @@ class DBUpdater(object):
     @staticmethod
     def get_seahub_mysql_info():
         host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
-        port = os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306)
+        port = int(os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306))
         username = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
         password = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
         db = os.environ.get('SEAFILE_MYSQL_DB_SEAHUB_DB_NAME', 'seahub_db')

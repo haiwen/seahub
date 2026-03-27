@@ -351,7 +351,7 @@ class EnvManager(object):
         '''Prepare for seahub syncdb'''
         self.load_env_file()
         env = dict(os.environ)
-        env['SEAFILE_CONF_DIR'] = self.seafile_dir
+        env['SEAFILE_DATA_DIR'] = self.seafile_dir
         env['SEAFILE_CENTRAL_CONF_DIR'] = self.central_config_dir
         env['SEAFILE_RPC_PIPE_PATH'] = self.seafile_rpc_pipe_path
         env['SEAFES_DIR'] = self.seafes_dir
@@ -360,7 +360,7 @@ class EnvManager(object):
         return env
 
     def setup_python_path(self, env):
-        '''And PYTHONPATH and SEAFILE_CONF_DIR to env, which is
+        '''And PYTHONPATH and SEAFILE_DATA_DIR to env, which is
         needed by seahub
 
         '''

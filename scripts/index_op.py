@@ -1,3 +1,4 @@
+import os
 import logging
 import argparse
 
@@ -10,6 +11,27 @@ mq = get_mq(seafes_config.subscribe_mq,
             seafes_config.subscribe_server,
             seafes_config.subscribe_port,
             seafes_config.subscribe_password)
+
+install_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+top_dir = os.path.dirname(install_path)
+central_config_dir = os.path.join(top_dir, 'conf')
+
+def load_env_file():
+    file_path = os.path.join(central_config_dir, ".env")
+    if not os.path.exists(file_path):
+        return
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" in line:
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                os.environ[key] = value
+
+load_env_file()
 
 def put_to_redis(repo_id, cmt_id):
     msg = "index_recover\t%s\t%s" % (repo_id, cmt_id)

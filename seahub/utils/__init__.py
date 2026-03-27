@@ -82,7 +82,7 @@ def is_cluster_mode():
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
         confdir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
     else:
-        confdir = os.environ['SEAFILE_CONF_DIR']
+        confdir = os.environ['SEAFILE_DATA_DIR']
     conf = os.path.join(confdir, 'seafile.conf')
     cfg.read(conf)
     if cfg.has_option('cluster', 'enabled'):
@@ -936,7 +936,7 @@ def get_webdav_url():
     if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
         conf_dir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
     else:
-        conf_dir = os.environ['SEAFILE_CONF_DIR']
+        conf_dir = os.environ['SEAFILE_DATA_DIR']
 
     conf_file = os.path.join(conf_dir, 'seafdav.conf')
     if not os.path.exists(conf_file):

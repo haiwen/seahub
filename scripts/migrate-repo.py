@@ -45,20 +45,19 @@ def main(argv):
         migrate_repo(repo_id, orig_storage_id, dest_storage_id, list_src_by_commit)
 
 def parse_seafile_config():
+    host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
+    port = int(os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306))
+    user = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
+    passwd = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
+    db_name = os.environ.get('SEAFILE_MYSQL_DB_SEAFILE_DB_NAME', 'seafile_db')
     env = os.environ
     seafile_conf = os.path.join(env['SEAFILE_CENTRAL_CONF_DIR'], 'seafile.conf')
     cp = configparser.ConfigParser()
     cp.read(seafile_conf)
-    host = cp.get('database', 'host')
-    port = cp.get('database', 'port')
-    user = cp.get('database', 'user')
-    passwd = cp.get('database', 'password')
-    db_name = cp.get('database', 'db_name')
     keep_days = -1
     if cp.has_section("history"):
         if cp.has_option('history', 'keep_days'):
             keep_days = cp.get('history', 'keep_days')
-
 
     return host, port, user, passwd, db_name, keep_days
 

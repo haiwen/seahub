@@ -5,6 +5,7 @@ echo ""
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
 TOPDIR=$(dirname "${INSTALLPATH}")
+central_config_dir=${TOPDIR}/conf
 default_seafile_data_dir=${TOPDIR}/seafile-data
 default_conf_dir=${TOPDIR}/conf
 seaf_gc=${INSTALLPATH}/seafile/bin/seafserv-gc
@@ -53,7 +54,7 @@ function check_python_executable() {
 
 function set_env_config () {
     if [ -z "${JWT_PRIVATE_KEY}" ]; then
-        if [ ! -e "${SEAFILE_CENTRAL_CONF_DIR}/.env" ]; then
+        if [ ! -e "${central_config_dir}/.env" ]; then
             echo "Error: .env file not found."
             echo "Please follow the upgrade manual to set the .env file."
             echo ""
@@ -62,7 +63,7 @@ function set_env_config () {
 
         # load the .env file
         set -a
-        source "${SEAFILE_CENTRAL_CONF_DIR}/.env"
+        source "${central_config_dir}/.env"
         set +a
 
         if [ -z "${JWT_PRIVATE_KEY}" ]; then

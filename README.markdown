@@ -30,13 +30,13 @@ Install python libraries by pip:
 Configuration
 ==========
 
-Modify `CCNET_CONF_DIR`, `SEAFILE_CENTRAL_CONF_DIR`, `SEAFILE_CONF_DIR` and `PYTHONPATH` in `setenv.sh.template` to fit your path.
+Modify `CCNET_CONF_DIR`, `SEAFILE_CENTRAL_CONF_DIR`, `SEAFILE_DATA_DIR` and `PYTHONPATH` in `setenv.sh.template` to fit your path.
 
 `CCNET_CONF_DIR` is the directory, that contains the ccnet socket (and formerly ccnet.conf).
 
 Since 5.0 `SEAFILE_CENTRAL_CONF_DIR` contains most config files.
 
-`SEAFILE_CONF_DIR` is the seafile-data directory (and formerly contained seafile.conf).
+`SEAFILE_DATA_DIR` is the seafile-data directory (and formerly contained seafile.conf).
 
 Run and Verify
 ==========
