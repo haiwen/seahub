@@ -8,24 +8,38 @@ pymysql.install_as_MySQLdb()
 
 install_path = os.path.dirname(os.path.abspath(__file__))
 top_dir = os.path.dirname(install_path)
-seafile_conf = os.path.join(top_dir, 'conf', 'seafile.conf')
+central_config_dir = os.path.join(top_dir, 'conf')
 
 sql = "INSERT IGNORE INTO EmailUser (email, passwd, is_staff, is_active, ctime) SELECT email, '!', is_staff, is_active, REPLACE(UNIX_TIMESTAMP(CURRENT_TIMESTAMP(6)),'.','') FROM LDAPUsers"
 
+def load_env_file():
+    file_path = os.path.join(central_config_dir, ".env")
+    if not os.path.exists(file_path):
+        return
+    with open(file_path, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):
+                continue
+            if "=" in line:
+                key, value = line.split("=", 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                os.environ[key] = value
+
+load_env_file()
 
 def migrate_ldapusers():
     print('Start migrate LDAPUsers')
 
-    config = configparser.ConfigParser()
     try:
-        config.read(seafile_conf)
-        db_user = config.get('database', 'user')
-        db_host = config.get('database', 'host')
-        db_port = config.getint('database', 'port')
-        db_password = config.get('database', 'password')
-        db_name = os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', '') or 'ccnet_db'
+        db_user = os.environ.get('SEAFILE_MYSQL_DB_USER', 'seafile')
+        db_host = os.environ.get('SEAFILE_MYSQL_DB_HOST', 'db')
+        db_port = int(os.environ.get('SEAFILE_MYSQL_DB_PORT', 3306))
+        db_password = os.environ.get('SEAFILE_MYSQL_DB_PASSWORD')
+        db_name = os.environ.get('SEAFILE_MYSQL_DB_CCNET_DB_NAME', 'ccnet_db')
     except Exception as e:
-        print("Failed to read seafile config file %s: %s" % (seafile_conf, e))
+        print('Failed to init ccnet db: %s' % e)
         return
 
     try:

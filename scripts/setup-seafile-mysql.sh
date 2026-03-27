@@ -8,6 +8,8 @@ set -e
 
 SCRIPT=$(readlink -f "$0")
 INSTALLPATH=$(dirname "${SCRIPT}")
+TOPDIR=$(dirname "${INSTALLPATH}")
+central_config_dir=${TOPDIR}/conf
 
 cd "$INSTALLPATH"
 

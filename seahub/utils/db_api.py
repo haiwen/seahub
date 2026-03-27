@@ -39,7 +39,7 @@ class SeafileDB:
             return env_seafile_db_name
 
         conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR') or \
-                os.environ.get('SEAFILE_CONF_DIR')
+                os.environ.get('SEAFILE_DATA_DIR')
 
         if not conf_dir:
             return ''

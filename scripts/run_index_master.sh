@@ -46,6 +46,36 @@ function check_python_executable() {
     fi
 }
 
+function set_env_config () {
+    if [ -z "${JWT_PRIVATE_KEY}" ]; then
+        if [ ! -e "${central_config_dir}/.env" ]; then
+            echo "Error: .env file not found."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+
+        # load the .env file
+        set -a
+        source "${central_config_dir}/.env"
+        set +a
+
+        if [ -z "${JWT_PRIVATE_KEY}" ]; then
+            echo "Error: JWT_PRIVATE_KEY not found in .env file."
+            echo "Please follow the upgrade manual to set the .env file."
+            echo ""
+            exit -1;
+        fi
+        export JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+        export SEAFILE_MYSQL_DB_CCNET_DB_NAME=${SEAFILE_MYSQL_DB_CCNET_DB_NAME:-ccnet_db}
+        export SEAFILE_MYSQL_DB_SEAFILE_DB_NAME=${SEAFILE_MYSQL_DB_SEAFILE_DB_NAME:-seafile_db}
+        export SEAFILE_MYSQL_DB_SEAHUB_DB_NAME=${SEAFILE_MYSQL_DB_SEAHUB_DB_NAME:-seahub_db}
+        export SEAFILE_SERVER_PROTOCOL=${SEAFILE_SERVER_PROTOCOL}
+        export SEAFILE_SERVER_HOSTNAME=${SEAFILE_SERVER_HOSTNAME}
+        export SITE_ROOT=${SITE_ROOT:-/}
+    fi
+}
+
 function prepare_log_dir() {
     logdir=${TOPDIR}/logs
     if ! [[ -d ${logdir} ]]; then
@@ -60,8 +90,9 @@ function prepare_log_dir() {
 function before_start() {
     check_python_executable;
     prepare_log_dir;
+    set_env_config;
 
-    export SEAFILE_CONF_DIR=${default_seafile_data_dir}
+    export SEAFILE_DATA_DIR=${default_seafile_data_dir}
     export SEAFILE_CENTRAL_CONF_DIR=${central_config_dir}
     export SEAFES_DIR=$pro_pylibs_dir/seafes
     export PYTHONPATH=${INSTALLPATH}/seafile/lib/python3/site-packages:${INSTALLPATH}/seafile/lib64/python3/site-packages:${INSTALLPATH}/seahub:${INSTALLPATH}/seahub/thirdpart:$PYTHONPATH
