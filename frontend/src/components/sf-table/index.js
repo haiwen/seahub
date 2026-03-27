@@ -21,6 +21,7 @@ const SFTable = ({
   keyTreeNodeFoldedMap,
   noRecordsTipsText,
   isLoadingMoreRecords = false,
+  isLoading = false,
   hasMoreRecords = false,
   showGridFooter = true,
   enableScrollToLoad = true,
@@ -96,6 +97,7 @@ const SFTable = ({
         noRecordsTipsText={noRecordsTipsText}
         hasMoreRecords={hasMoreRecords}
         isLoadingMoreRecords={isLoadingMoreRecords}
+        isLoading={isLoading}
         showGridFooter={showGridFooter}
         showRecordAsTree={showRecordAsTree}
         enableScrollToLoad={enableScrollToLoad}
@@ -138,6 +140,7 @@ SFTable.propTypes = {
   noRecordsTipsText: PropTypes.string,
   hasMoreRecords: PropTypes.bool,
   isLoadingMoreRecords: PropTypes.bool,
+  isLoading: PropTypes.bool,
   showGridFooter: PropTypes.bool,
   enableScrollToLoad: PropTypes.bool,
   canModifyRecords: PropTypes.bool,

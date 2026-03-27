@@ -33,6 +33,7 @@ const DIR_TABLE_UNSUPPORTED_MENU_OPTION_KEYS = [
 
 const DirTableView = ({
   direntList,
+  isDirentListLoading,
   repoID,
   repoInfo,
   path,
@@ -450,6 +451,7 @@ const DirTableView = ({
         showGridFooter={false}
         hasMoreRecords={false}
         isLoadingMoreRecords={false}
+        isLoading={isDirentListLoading}
         enableScrollToLoad={false}
         modifyColumnWidth={modifyColumnWidth}
         modifyColumnOrder={modifyColumnOrder}
@@ -475,6 +477,7 @@ const DirTableView = ({
 
 DirTableView.propTypes = {
   direntList: PropTypes.array.isRequired,
+  isDirentListLoading: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired,
   repoInfo: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
