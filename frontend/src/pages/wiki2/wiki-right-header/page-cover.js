@@ -53,8 +53,7 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
     const { serviceUrl: svcUrl } = window.seafile;
     if (!filename) return '';
     const name = filename.startsWith('/') ? filename.substring(1) : filename;
-    const timestamp = Date.now();
-    return `${svcUrl}/api/v2.1/seadoc/download-image/${docUuid}/${name}/?t=${timestamp}`;
+    return `${svcUrl}/api/v2.1/seadoc/download-image/${docUuid}/${name}`;
   }, []);
 
   const updatePageCover = useCallback((imageName) => {
