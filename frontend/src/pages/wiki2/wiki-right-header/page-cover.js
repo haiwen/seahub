@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { Popover } from 'reactstrap';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -48,6 +48,17 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
     // Predefined gallery images from WIKI_COVER_LIST
     return `${svcUrl}${mediaUrl}img/wiki/cover/${imageName}`;
   }, []);
+
+  // Initialize indicator style on mount based on current active panel
+  useEffect(() => {
+    const activeTab = activePanel === 'gallery' ? galleryTabRef.current : uploadTabRef.current;
+    if (activeTab) {
+      setIndicatorStyle({
+        left: activeTab.offsetLeft,
+        width: activeTab.offsetWidth
+      });
+    }
+  }, [activePanel]);
 
   const getCustomCoverUrl = useCallback((filename, docUuid) => {
     const { serviceUrl: svcUrl } = window.seafile;
