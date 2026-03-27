@@ -87,7 +87,8 @@ const RecordsHeader = ({
   }, [modifyColumnWidthAPI]);
 
   const modifyColumnOrder = useCallback((source, target) => {
-    modifyColumnOrderAPI && modifyColumnOrderAPI(source.key, target.key);
+    // Pass full source and target objects to preserve draggingColumnIndex and columnIndex
+    modifyColumnOrderAPI && modifyColumnOrderAPI(source, target);
   }, [modifyColumnOrderAPI]);
 
   const updateDraggingKey = useCallback((cellKey) => {
@@ -135,6 +136,7 @@ const RecordsHeader = ({
                 height={height}
                 column={column}
                 columnIndex={columnIndex}
+                fullIndex={columnIndex}
                 groupOffsetLeft={groupOffsetLeft}
                 isLastFrozenCell={isLastFrozenCell}
                 frozenColumnsWidth={frozenColumnsWidth}
@@ -152,7 +154,9 @@ const RecordsHeader = ({
           })}
         </div>
         {/* scroll */}
-        {displayColumns.map((column, columnIndex) => {
+        {displayColumns.map((column, displayIndex) => {
+          // fullIndex is the column's index in the complete columnMetrics.columns array
+          const fullIndex = colOverScanStartIdx + displayIndex;
           return (
             <Cell
               key={`sf-table-header-cell-${column.key}`}
@@ -163,7 +167,8 @@ const RecordsHeader = ({
               groupOffsetLeft={groupOffsetLeft}
               height={height}
               column={column}
-              columnIndex={columnIndex}
+              columnIndex={displayIndex}
+              fullIndex={fullIndex}
               draggingColumnKey={draggingColumnKey}
               draggingColumnIndex={draggingColumnIndex}
               dragOverColumnKey={dragOverColumnKey}

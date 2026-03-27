@@ -25,6 +25,7 @@ const Cell = ({
   ColumnDropdownMenu,
   column,
   columnIndex,
+  fullIndex,
   style: propsStyle = null,
   draggingColumnKey,
   draggingColumnIndex,
@@ -82,11 +83,12 @@ const Cell = ({
 
   const onDragStart = useCallback((event) => {
     if (disableDragColumn) return false;
-    const dragData = JSON.stringify({ type: 'sf-table-header-order', column_key: column.key, column });
+    // Use fullIndex since draggingColumnIndex (React state) is stale at drag start
+    const dragData = JSON.stringify({ type: 'sf-table-header-order', column_key: column.key, frozen: column.frozen, draggingColumnIndex: fullIndex });
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/drag-sf-table-header-order', dragData);
     updateDraggingKey(column.key);
-  }, [column, disableDragColumn, updateDraggingKey]);
+  }, [column, disableDragColumn, updateDraggingKey, fullIndex]);
 
   const onDragEnter = useCallback(() => {
     if (!draggingColumnKey) return;
@@ -127,11 +129,11 @@ const Cell = ({
       if (!dragData) return false;
       dragData = JSON.parse(dragData);
       if (dragData.type !== 'sf-table-header-order' || !dragData.column_key) return false;
-      if (dragData.column_key !== column.key && dragData.column.frozen === column.frozen) {
-        onMove && onMove({ key: dragData.column_key }, { key: column.key });
+      if (dragData.column_key !== column.key && dragData.frozen === column.frozen) {
+        onMove && onMove({ key: dragData.column_key, draggingColumnIndex: dragData.draggingColumnIndex }, { key: column.key, columnIndex: fullIndex });
       }
     }
-  }, [column, onMove, disableDragColumn]);
+  }, [column, onMove, disableDragColumn, fullIndex]);
 
   const onDragEnd = useCallback(() => {
     updateDraggingKey(null);
@@ -225,9 +227,9 @@ const Cell = ({
         style={{ opacity: draggingColumnKey === column.key ? 0.2 : 1 }}
         className={classnames('rdg-can-drop', {
           'rdg-dropping rdg-dropping-position': isOver,
-          'rdg-dropping-position-left': isOver && draggingColumnIndex > columnIndex,
-          'rdg-dropping-position-right': isOver && draggingColumnIndex < columnIndex,
-          'rdg-dropping-position-none': isOver && draggingColumnIndex === columnIndex
+          'rdg-dropping-position-left': isOver && draggingColumnIndex > fullIndex,
+          'rdg-dropping-position-right': isOver && draggingColumnIndex < fullIndex,
+          'rdg-dropping-position-none': isOver && draggingColumnIndex === fullIndex
         })}
         {...dragDropEvents}
       >
@@ -243,6 +245,7 @@ Cell.propTypes = {
   column: PropTypes.object,
   ColumnDropdownMenu: PropTypes.object,
   columnIndex: PropTypes.number,
+  fullIndex: PropTypes.number,
   style: PropTypes.object,
   frozen: PropTypes.bool,
   moveable: PropTypes.bool,

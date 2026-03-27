@@ -26,9 +26,9 @@
   position: absolute;
   top: 10%;
   height: 80%;
-  width: 1px;
-  background-color: #2d7ff9;
-  border-radius: 50%;
+  width: 2px;
+  background-color: rgb(200, 220, 240);
+  border-radius: 2px;
   z-index: 1;
 }
 

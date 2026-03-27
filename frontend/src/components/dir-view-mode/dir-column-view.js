@@ -86,6 +86,7 @@ const propTypes = {
   sortTreeNode: PropTypes.func,
   columns: PropTypes.array,
   hiddenColumnKeys: PropTypes.array,
+  onColumnOrderChange: PropTypes.func,
 };
 
 class DirColumnView extends React.Component {
@@ -346,6 +347,7 @@ class DirColumnView extends React.Component {
               onItemsMove={this.props.onItemsMove}
               onItemMove={this.props.onItemMove}
               isDirentDetailShow={this.props.isDirentDetailShow}
+              onColumnOrderChange={this.props.onColumnOrderChange}
             />
           )}
           {currentMode === HISTORY_MODE && (

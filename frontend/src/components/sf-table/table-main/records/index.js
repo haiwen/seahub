@@ -859,6 +859,10 @@ class Records extends Component {
   };
 
   handleDragRecordStart = (event, { draggingRecordId, draggingTreeNodeKey }) => {
+    // Call optional external drag start callback (for setting external drag data like TreeView format)
+    if (this.props.onTableDragStart) {
+      this.props.onTableDragStart(event, { draggingRecordId, draggingTreeNodeKey });
+    }
     this.setState({
       draggingRecordSource: {
         event,
@@ -1091,6 +1095,7 @@ Records.propTypes = {
   moveRecords: PropTypes.func,
   updateSelectedRecordIds: PropTypes.func,
   onRecordSelected: PropTypes.func,
+  onTableDragStart: PropTypes.func,
   checkCanModifyRecord: PropTypes.func,
 };
 

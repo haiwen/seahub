@@ -55,6 +55,7 @@ const DirTableView = ({
   onItemMove,
   selectedDirentList,
   onSelectedDirentListUpdate,
+  onColumnOrderChange,
 }) => {
   const [isSubMenuShown, setSubMenuShown] = useState(false);
   const [hoveredOptionKey, setHoveredOptionKey] = useState('');
@@ -117,6 +118,12 @@ const DirTableView = ({
     setDirTableColumnWidth(column.key, newWidth);
     setColumnWidthVersion(prev => prev + 1);
   }, []);
+
+  const modifyColumnOrder = useCallback((source, target) => {
+    if (!onColumnOrderChange) return;
+    // Pass full source and target objects to preserve draggingColumnIndex and columnIndex
+    onColumnOrderChange(source, target);
+  }, [onColumnOrderChange]);
 
   const checkCanModifyRecord = (record) => {
     return record._permission !== 'r';
@@ -393,6 +400,41 @@ const DirTableView = ({
     }
   }, [repoID, path, getDirentByRowId, onItemMove, onItemsMove]);
 
+  // Callback to set drag data for TreeView compatibility
+  const onTableDragStart = useCallback((event, { draggingRecordId }) => {
+    if (Utils.isIEBrowser()) return;
+
+    const sourceDirent = getDirentByRowId(draggingRecordId);
+    if (!sourceDirent) return;
+
+    // Check if the dragged item is part of the current selection
+    const isSelected = selectedDirentList.some(d => d.name === sourceDirent.name);
+
+    if (isSelected && selectedDirentList.length > 1) {
+      // Multiple items selected - include all in drag data
+      const selectedList = selectedDirentList.map(dirent => {
+        const parentPath = dirent.parent_dir || path;
+        return {
+          nodeDirent: dirent,
+          nodeParentPath: parentPath,
+          nodeRootPath: parentPath === '/' ? `/${dirent.name}` : `${parentPath}/${dirent.name}`
+        };
+      });
+      event.dataTransfer.setData('application/drag-item-info', JSON.stringify(selectedList));
+    } else {
+      // Single item drag
+      const parentPath = sourceDirent.parent_dir || path;
+      const dragData = {
+        nodeDirent: sourceDirent,
+        nodeParentPath: parentPath,
+        nodeRootPath: parentPath === '/' ? `/${sourceDirent.name}` : `${parentPath}/${sourceDirent.name}`
+      };
+      event.dataTransfer.setData('application/drag-item-info', JSON.stringify(dragData));
+    }
+
+    event.dataTransfer.effectAllowed = 'move';
+  }, [path, getDirentByRowId, selectedDirentList]);
+
   return (
     <div className="dir-table-view dir-table-wrapper">
       <SFTable
@@ -410,6 +452,7 @@ const DirTableView = ({
         isLoadingMoreRecords={false}
         enableScrollToLoad={false}
         modifyColumnWidth={modifyColumnWidth}
+        modifyColumnOrder={modifyColumnOrder}
         checkCanModifyRecord={checkCanModifyRecord}
         modifyRecord={modifyRecord}
         supportCopy={false}
@@ -424,6 +467,7 @@ const DirTableView = ({
         moveRecords={moveDirents}
         selectedDirentList={selectedDirentList}
         updateSelectedRecordIds={handleSelectedRecord}
+        onTableDragStart={onTableDragStart}
       />
     </div>
   );
@@ -451,6 +495,7 @@ DirTableView.propTypes = {
   showDirentDetail: PropTypes.func,
   onItemsMove: PropTypes.func,
   onItemMove: PropTypes.func,
+  onColumnOrderChange: PropTypes.func,
 };
 
 export default DirTableView;

@@ -21,12 +21,12 @@ const HideColumnItem = ({
   const ref = useRef(null);
 
   const onDragStart = useCallback((event) => {
-    const dragData = JSON.stringify({ type: 'sf-metadata-field-display-setting', column_key: column.key });
+    const dragData = JSON.stringify({ type: 'sf-metadata-field-display-setting', column_key: column.key, draggingColumnIndex: columnIndex });
     event.dataTransfer.setDragImage(ref.current, 10, 10);
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/drag-sf-metadata-field-display-setting', dragData);
     updateDraggingKey(column.key);
-  }, [column, updateDraggingKey]);
+  }, [column, updateDraggingKey, columnIndex]);
 
   const onDragEnter = useCallback(() => {
     if (!draggingColumnKey) return;
