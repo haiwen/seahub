@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import EmptyTip from '../../empty-tip';
+import CenteredLoading from '../../centered-loading';
 import Records from './records';
 import ContextMenu from '../context-menu';
 import { gettext } from '../../../utils/constants';
@@ -22,6 +23,7 @@ const TableMain = ({
   noRecordsTipsText,
   hasMoreRecords,
   isLoadingMoreRecords,
+  isLoading = false,
   showGridFooter,
   recordsTree,
   showRecordAsTree,
@@ -92,7 +94,12 @@ const TableMain = ({
 
   return (
     <div className={classnames('sf-table-main-container container-fluid p-0', { [`group-level-${groupbysCount + 1}`]: groupbysCount > 0, 'sf-table-tree': showRecordAsTree })}>
-      {hasNoRecords && (
+      {isLoading && (
+        <div className="sf-table-canvas-ctx-wrapper">
+          <CenteredLoading />
+        </div>
+      )}
+      {!isLoading && hasNoRecords && (
         <div className="sf-table-canvas-ctx-wrapper">
           <EmptyTip text={noRecordsTipsText || gettext('No record')} />
           <ContextMenu
@@ -101,7 +108,7 @@ const TableMain = ({
           />
         </div>
       )}
-      {!hasNoRecords && (
+      {!isLoading && !hasNoRecords && (
         <Records
           {...customProps}
           tableId={tableId}
@@ -152,6 +159,7 @@ TableMain.propTypes = {
   enableScrollToLoad: PropTypes.bool,
   loadMore: PropTypes.func,
   loadAll: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 export default TableMain;

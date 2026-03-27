@@ -325,6 +325,7 @@ class DirColumnView extends React.Component {
           {currentMode === TABLE_MODE && (
             <DirTableView
               direntList={this.props.direntList}
+              isDirentListLoading={this.props.isDirentListLoading}
               repoID={this.props.repoID}
               repoInfo={this.props.currentRepoInfo}
               path={this.props.path}
