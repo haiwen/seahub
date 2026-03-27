@@ -4,7 +4,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import MediaQuery from 'react-responsive';
 import { Modal } from 'reactstrap';
 import { Utils } from '../../utils/utils';
-import { wikiId, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang } from '../../utils/constants';
+import { wikiId, slug, siteRoot, initialPath, isDir, sharedToken, hasIndex, lang, serviceURL } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
 import TreeNode from '../../components/tree-view/tree-node';
@@ -272,8 +272,7 @@ class Wiki extends Component {
   onLinkClick = (link) => {
     let url = link;
     if (Utils.isRelativePath(url)) {
-      url = window.location.href.replace('home.md', '');
-      url = url + link;
+      url = `${serviceURL}/published/${slug}/${link}`;
     }
     if (Utils.isWikiInternalMarkdownLink(url, slug)) {
       let path = Utils.getPathFromWikiInternalMarkdownLink(url, slug);
