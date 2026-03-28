@@ -2,7 +2,6 @@
 import os
 import json
 import logging
-import requests
 import posixpath
 from datetime import datetime
 
@@ -15,15 +14,16 @@ from django.urls import reverse
 
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.models import Wiki2Publish, WikiFileViews, Wiki2Settings
-from seahub.utils import get_file_type_and_ext, render_permission_error, \
-        gen_inner_file_get_url
+from seahub.utils import get_file_type_and_ext, render_permission_error
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
-
+from seahub.views import get_seadoc_file_uuid
+from seahub.utils import gen_file_get_url
 from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
 from seahub.settings import SEADOC_SERVER_URL
-from seahub.seadoc.utils import gen_seadoc_access_token, seadoc_to_html
+from seahub.seadoc.utils import gen_seadoc_access_token
+from seahub.api2.endpoints.utils import sdoc_export_to_html
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -225,16 +225,20 @@ def wiki_publish_view(request, publish_url, page_id=None):
 
     # get wiki html
     file_id = seafile_api.get_file_id_by_path(wiki_id, file_path)
-    token = seafile_api.get_fileserver_access_token(wiki_id,
-                                                    file_id,
-                                                    'download',
-                                                    '',
-                                                    use_onetime=False)
-    file_name = posixpath.basename(file_path)
-    url = gen_inner_file_get_url(token, file_name)
-    resp = requests.get(url)
-    sdoc_str = resp.content
-    wiki_html = seadoc_to_html(sdoc_str)
+    download_token = seafile_api.get_fileserver_access_token(wiki_id,
+                                                             file_id,
+                                                             'download',
+                                                             '',
+                                                             use_onetime=False)
+    src_type = 'sdoc'
+    dst_type = 'html'
+    filename = os.path.basename(file_path)
+    doc_uuid = get_seadoc_file_uuid(repo, file_path)
+    download_url = gen_file_get_url(download_token, filename)
+    html_resp = sdoc_export_to_html(file_path, '', doc_uuid,
+                                    download_url, src_type, dst_type)
+    wiki_html = html_resp.content
+    wiki_html = wiki_html.decode('utf-8')
 
     # render
     template_name = 'wiki/wiki_publish_ssr.html'
