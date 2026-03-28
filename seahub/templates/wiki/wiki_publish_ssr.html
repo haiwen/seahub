@@ -1,0 +1,1174 @@
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+{% load seahub_tags %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ wiki_title }} - {{ wiki_repo_name }}</title>
+
+  {# OGP / SEO meta #}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ site_name }}">
+  <meta property="og:url" content="{{ service_url }}{{ request.path }}">
+  <meta property="og:title" content="{{ wiki_title }} - {{ wiki_repo_name }}">
+  <meta property="og:description" content="{{ wiki_title }}">
+
+  {# Seafile / sdoc fonts (needed for sf3-font icon glyphs used in wiki CSS) #}
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}seafile-editor/seafile-editor-font.css">
+  <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}sdoc-editor/sdoc-editor-font.css">
+
+  {# Wiki2 compiled CSS bundle – brings in all wiki component styles + Bootstrap 5 vars #}
+  {% render_bundle 'wiki2' 'css' %}
+
+  <style>
+    /* ───────────────────────────────────────────────────────────
+       Layout shell
+    ─────────────────────────────────────────────────────────── */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   "Helvetica Neue", Arial, sans-serif;
+      font-size: 14px;
+      color: var(--bs-body-color, #212529);
+      background-color: var(--bs-body-bg, #fff);
+    }
+
+    #wiki-ssr-root {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       Side panel
+    ─────────────────────────────────────────────────────────── */
+    .wiki2-side-panel {
+      width: var(--wiki-side-width, 260px);
+      min-width: var(--wiki-side-width, 260px);
+      max-width: var(--wiki-side-width, 260px);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-color: var(--bs-body-bg, #fff);
+      border-right: 1px solid #f1f1ef;
+      transition: transform 0.3s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    .wiki2-side-panel-top {
+      padding: 8px 12px 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      height: 44px;
+      border-bottom: 1px solid transparent;
+    }
+
+    .wiki2-side-panel-top h1 {
+      font-size: 1rem;
+      font-weight: 500;
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      min-width: 0;
+      color: var(--bs-body-color, #212529);
+    }
+
+    .wiki2-side-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .wiki2-pages-container {
+      flex: 1;
+      overflow: hidden;
+      padding: 0 8px 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wiki2-pages-container:hover {
+      overflow-y: auto;
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       Nav tree
+    ─────────────────────────────────────────────────────────── */
+    .wiki-nav {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wiki-nav-body {
+      overflow: auto;
+      user-select: none;
+      flex: 1;
+    }
+
+    .wiki-nav-group-header {
+      margin-top: 10px;
+      height: 32px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+    }
+
+    .wiki-nav-group-header h2 {
+      font-size: 0.875rem;
+      font-weight: 400;
+      margin: 0;
+      color: #888;
+    }
+
+    /* Nav tree list */
+    .wiki-nav-tree,
+    .wiki-nav-children {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .wiki-nav-item {
+      position: relative;
+    }
+
+    .wiki-page-item {
+      position: relative;
+      display: flex;
+      width: 100%;
+      height: 32px;
+      padding: 0 8px 0 0;
+      font-size: 14px;
+      align-items: center;
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      box-sizing: border-box;
+    }
+
+    .wiki-page-item:hover {
+      background-color: var(--bs-wiki-nav-hover-bg, #f0f0ee);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .wiki-page-item.selected-page {
+      background-color: var(--bs-wiki-nav-active-bg, #e8e8e5);
+      font-weight: 500;
+    }
+
+    .wiki-page-item.selected-page:hover {
+      background-color: var(--bs-wiki-nav-active-bg, #e8e8e5);
+    }
+
+    .wiki-page-item-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      height: 100%;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Toggle arrow (expand/collapse) */
+    .wiki-toggle-btn {
+      width: 22px;
+      min-width: 22px;
+      height: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+      background: transparent;
+      padding: 0;
+      cursor: pointer;
+      color: #666;
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-left: 4px;
+    }
+
+    .wiki-toggle-btn:hover {
+      background-color: #e5e5e5;
+    }
+
+    .wiki-toggle-btn svg {
+      width: 12px;
+      height: 12px;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .wiki-toggle-btn.expanded svg {
+      transform: rotate(90deg);
+    }
+
+    .wiki-toggle-btn.leaf {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Page icon */
+    .wiki-nav-item-icon {
+      width: 22px;
+      min-width: 22px;
+      height: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #666;
+      font-size: 13px;
+      border-radius: 3px;
+      margin-right: 4px;
+      flex-shrink: 0;
+    }
+
+    .wiki-nav-item-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .wiki-page-item-name {
+      flex: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    /* Children container */
+    .wiki-nav-children {
+      overflow: hidden;
+      transition: height 0.2s ease-in-out;
+    }
+
+    .wiki-nav-children.collapsed {
+      height: 0 !important;
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       Main panel
+    ─────────────────────────────────────────────────────────── */
+    .wiki2-main-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* Top nav bar (breadcrumb) */
+    .wiki2-main-panel-north {
+      height: 44px;
+      position: relative;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 103;
+    }
+
+    .wiki2-main-panel-north-content {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    /* Breadcrumb / top-nav */
+    .wiki2-top-nav {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .wiki2-top-nav-item {
+      display: flex;
+      align-items: center;
+      padding: 2px 6px;
+      max-width: 200px;
+      border-radius: 3px;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      flex-shrink: 1;
+      min-width: 0;
+    }
+
+    .wiki2-top-nav-item:hover {
+      background-color: var(--bs-nav-hover-bg, #f0f0ee);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .wiki2-top-nav-item span.nav-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    .wiki2-top-nav-item .nav-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 4px;
+      flex-shrink: 0;
+      color: #666;
+    }
+
+    .wiki2-top-nav-item .nav-icon svg {
+      width: 14px;
+      height: 14px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    .item-split {
+      margin: 0 2px;
+      color: #999;
+      flex-shrink: 0;
+    }
+
+    /* Content area */
+    .main-panel-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .cur-view-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sdoc-scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wiki-editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    /* Page title area */
+    .wiki-page-title-wrapper {
+      position: relative;
+      width: 100%;
+      padding: 0 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .wiki-page-title-wrapper {
+        padding: 0 142px;
+      }
+    }
+
+    .wiki-sdoc-title {
+      border: none;
+      font-size: 26pt;
+      font-weight: bold;
+      padding: 0.5rem 0 0;
+      color: var(--bs-body-color, #212529);
+      margin-bottom: 0.4em;
+      word-break: break-word;
+    }
+
+    /* sdoc content article */
+    .sdoc-editor-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      width: 100%;
+    }
+
+    .sdoc-article-container {
+      padding-top: 0;
+      padding-bottom: 0;
+      width: 100%;
+    }
+
+    .article.sdoc-editor__article {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 800px;
+      width: 100%;
+      padding: 0 142px 80px;
+      box-shadow: none;
+      border: none;
+      background-color: var(--bs-body-bg, #fff);
+      color: var(--bs-body-color, #212529);
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 767px) {
+      .article.sdoc-editor__article {
+        padding: 0 1rem 80px;
+      }
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       Resize handle (desktop)
+    ─────────────────────────────────────────────────────────── */
+    #wiki-resize-handle {
+      width: 5px;
+      cursor: col-resize;
+      background: transparent;
+      flex-shrink: 0;
+      position: relative;
+      z-index: 20;
+      transition: background 0.15s;
+    }
+
+    #wiki-resize-handle:hover,
+    #wiki-resize-handle.dragging {
+      background: rgba(0,0,0,0.12);
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       Mobile styles
+    ─────────────────────────────────────────────────────────── */
+    .wiki-mobile-btn {
+      display: none;
+      background: transparent;
+      border: none;
+      padding: 4px;
+      cursor: pointer;
+      color: var(--bs-body-color, #555);
+      border-radius: 4px;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-right: 4px;
+    }
+
+    .wiki-mobile-btn:hover {
+      background-color: var(--bs-nav-hover-bg, #f0f0ee);
+    }
+
+    .wiki-mobile-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .wiki-mobile-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1030;
+    }
+
+    @media (max-width: 767px) {
+      :root {
+        --wiki-side-width: 280px;
+      }
+
+      .wiki-mobile-btn {
+        display: flex;
+      }
+
+      .wiki2-side-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 1031;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+      }
+
+      .wiki2-side-panel.mobile-open {
+        transform: translateX(0);
+      }
+
+      .wiki-mobile-overlay.visible {
+        display: block;
+      }
+
+      .wiki-mobile-close {
+        display: flex !important;
+      }
+    }
+
+    /* Close button in side panel (mobile only) */
+    .wiki-mobile-close {
+      display: none;
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      padding: 2px 6px;
+      cursor: pointer;
+      color: #666;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .wiki-mobile-close:hover {
+      background-color: #f0f0ee;
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       sdoc content normalisation
+       (seadoc_to_html output uses these conventions)
+    ─────────────────────────────────────────────────────────── */
+    .article.sdoc-editor__article h1,
+    .article.sdoc-editor__article h2,
+    .article.sdoc-editor__article h3,
+    .article.sdoc-editor__article h4,
+    .article.sdoc-editor__article h5,
+    .article.sdoc-editor__article h6 {
+      font-weight: 600;
+      line-height: 1.3;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+      color: var(--bs-body-color, #212529);
+    }
+
+    .article.sdoc-editor__article p {
+      margin-bottom: 0.8em;
+      line-height: 1.6;
+    }
+
+    .article.sdoc-editor__article a {
+      color: #2383e2;
+      text-decoration: underline;
+      text-underline-position: under;
+      text-decoration-color: rgba(35,131,226,0.35);
+    }
+
+    .article.sdoc-editor__article a:hover {
+      text-decoration-color: #2383e2;
+    }
+
+    .article.sdoc-editor__article code {
+      background: rgba(135,131,120,0.15);
+      border-radius: 3px;
+      padding: 0.2em 0.4em;
+      font-size: 87%;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    .article.sdoc-editor__article pre {
+      background: #f7f6f3;
+      border-radius: 4px;
+      padding: 1em 1.2em;
+      overflow-x: auto;
+      margin-bottom: 1em;
+    }
+
+    .article.sdoc-editor__article pre code {
+      background: transparent;
+      padding: 0;
+      font-size: 85%;
+    }
+
+    .article.sdoc-editor__article blockquote {
+      margin: 0 0 1em;
+      padding: 0.4em 1em;
+      border-left: 3px solid #ddd;
+      color: #666;
+    }
+
+    .article.sdoc-editor__article ul,
+    .article.sdoc-editor__article ol {
+      padding-left: 1.6em;
+      margin-bottom: 0.8em;
+    }
+
+    .article.sdoc-editor__article li {
+      margin-bottom: 0.2em;
+      line-height: 1.6;
+    }
+
+    .article.sdoc-editor__article table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 1em;
+      font-size: 14px;
+    }
+
+    .article.sdoc-editor__article th,
+    .article.sdoc-editor__article td {
+      border: 1px solid #e0e0e0;
+      padding: 6px 12px;
+      text-align: left;
+    }
+
+    .article.sdoc-editor__article th {
+      background: #f7f6f3;
+      font-weight: 600;
+    }
+
+    .article.sdoc-editor__article img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+
+    .article.sdoc-editor__article hr {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 1.5em 0;
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       Dark mode support
+    ─────────────────────────────────────────────────────────── */
+    @media (prefers-color-scheme: dark) {
+      .article.sdoc-editor__article pre {
+        background: #2a2a2a;
+      }
+
+      .article.sdoc-editor__article th {
+        background: #2a2a2a;
+      }
+
+      .article.sdoc-editor__article blockquote {
+        border-left-color: #555;
+        color: #aaa;
+      }
+    }
+
+    /* ───────────────────────────────────────────────────────────
+       Indent levels for nested nav items
+    ─────────────────────────────────────────────────────────── */
+    .wiki-nav-children .wiki-page-item { padding-left: 0; }
+    .indent-1 { padding-left: 12px; }
+    .indent-2 { padding-left: 24px; }
+    .indent-3 { padding-left: 36px; }
+    .indent-4 { padding-left: 48px; }
+    .indent-5 { padding-left: 60px; }
+  </style>
+</head>
+<body>
+
+<div id="wiki-ssr-root">
+
+  {# ── Side Panel ── #}
+  <aside class="wiki2-side-panel" id="wiki-side-panel" aria-label="{% trans 'Wiki navigation' %}">
+    <div class="wiki2-side-panel-top">
+      <h1 title="{{ wiki_repo_name }}">{{ wiki_repo_name }}</h1>
+      <button class="wiki-mobile-close" id="side-panel-close"
+              aria-label="{% trans 'Close navigation' %}" title="{% trans 'Close' %}">
+        &times;
+      </button>
+    </div>
+
+    <div class="wiki2-side-nav">
+      <div class="wiki2-pages-container">
+        <div class="wiki-nav">
+          <div class="wiki-nav-body" id="wiki-nav-body">
+            <div class="wiki-nav-group-header">
+              <h2>{% trans "Pages" %}</h2>
+            </div>
+            {# Tree populated by JS #}
+            <ul class="wiki-nav-tree" id="wiki-nav-tree" role="tree" aria-label="{% trans 'Pages' %}"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  {# ── Resize handle (desktop) ── #}
+  <div id="wiki-resize-handle" role="separator" aria-orientation="vertical"
+       aria-label="{% trans 'Resize navigation panel' %}"></div>
+
+  {# ── Main Panel ── #}
+  <main class="wiki2-main-panel" id="wiki-main-panel">
+
+    {# Top nav / breadcrumb bar #}
+    <div class="wiki2-main-panel-north" id="wiki-top-bar">
+      <div class="wiki2-main-panel-north-content">
+        <button class="wiki-mobile-btn" id="menu-toggle-btn"
+                aria-label="{% trans 'Open navigation' %}" title="{% trans 'Navigation' %}">
+          {# Hamburger icon #}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        {# Breadcrumb – rendered by JS #}
+        <nav class="wiki2-top-nav" id="wiki-breadcrumb" aria-label="{% trans 'Breadcrumb' %}"></nav>
+      </div>
+    </div>
+
+    {# Content area #}
+    <div class="main-panel-center">
+      <div class="cur-view-content">
+        <div class="sdoc-scroll-container" id="wiki-scroll-container">
+          <div class="wiki-editor-container">
+
+            {# Page title #}
+            <div class="wiki-page-title-wrapper">
+              <h1 class="wiki-sdoc-title" id="wiki-page-title">{{ wiki_title }}</h1>
+            </div>
+
+            {# Page HTML content (server-rendered from sdoc) #}
+            <div class="sdoc-editor-container">
+              <div class="sdoc-article-container">
+                <article class="article sdoc-editor__article" id="wiki-content">
+                  {{ wiki_html|safe }}
+                </article>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+{# Mobile overlay backdrop #}
+<div class="wiki-mobile-overlay" id="wiki-mobile-overlay" aria-hidden="true"></div>
+
+{# ── Navigation data injected by Django (safe JSON) ── #}
+{{ wiki_navigation|json_script:"wiki-nav-data" }}
+
+<script>
+(function () {
+  'use strict';
+
+  /* ──────────────────────────────────────────────────────────────
+     1. Parse server-side navigation data
+  ────────────────────────────────────────────────────────────── */
+  var navData = [];
+  try {
+    var navEl = document.getElementById('wiki-nav-data');
+    if (navEl) navData = JSON.parse(navEl.textContent || '[]');
+  } catch (e) {
+    console.error('[wiki-ssr] Failed to parse navigation data:', e);
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     2. Determine current page ID from the URL
+        URL pattern: /wiki/publish/{publish_url}/{page_id}/
+  ────────────────────────────────────────────────────────────── */
+  function getCurrentPageId() {
+    var parts = window.location.pathname.replace(/\/$/, '').split('/').filter(Boolean);
+    // parts[0]='wiki', parts[1]='publish', parts[2]=publishUrl, parts[3]=pageId
+    var candidate = parts[parts.length - 1];
+    // page IDs are 4-character alphanumeric strings
+    if (candidate && candidate.length === 4) return candidate;
+    return null;
+  }
+
+  var currentPageId = getCurrentPageId();
+
+  /* ──────────────────────────────────────────────────────────────
+     3. Tree helpers
+  ────────────────────────────────────────────────────────────── */
+
+  /**
+   * Find the path (array of nodes) from the root to the node with targetId.
+   * Returns [] if not found.
+   */
+  function findPath(items, targetId) {
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      if (item.id === targetId) return [item];
+      if (item.children && item.children.length) {
+        var sub = findPath(item.children, targetId);
+        if (sub.length) return [item].concat(sub);
+      }
+    }
+    return [];
+  }
+
+  /**
+   * Collect all ancestor IDs of targetId (not including itself).
+   */
+  function getAncestorIds(items, targetId) {
+    var path = findPath(items, targetId);
+    return path.slice(0, -1).map(function (n) { return n.id; });
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     4. Expand / collapse state
+  ────────────────────────────────────────────────────────────── */
+  var expandedIds = {};
+
+  // Pre-expand all ancestors of the current page so it is visible on load
+  if (currentPageId) {
+    var ancestors = getAncestorIds(navData, currentPageId);
+    ancestors.forEach(function (id) { expandedIds[id] = true; });
+  }
+
+  function isExpanded(id) { return !!expandedIds[id]; }
+
+  function setExpanded(id, value) {
+    expandedIds[id] = value;
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     5. SVG icon helpers
+  ────────────────────────────────────────────────────────────── */
+  var SVG_FILE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>';
+  var SVG_ARROW = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+
+  /* ──────────────────────────────────────────────────────────────
+     6. Render navigation tree (recursive, vanilla DOM)
+  ────────────────────────────────────────────────────────────── */
+
+  /**
+   * Create a single nav item <li> with optional nested children <ul>.
+   */
+  function createNavItem(node, depth) {
+    depth = depth || 0;
+    var hasChildren = node.children && node.children.length > 0;
+    var isActive = (node.id === currentPageId);
+    var expanded = isExpanded(node.id);
+
+    var li = document.createElement('li');
+    li.className = 'wiki-nav-item';
+    li.setAttribute('role', 'treeitem');
+    li.setAttribute('aria-expanded', hasChildren ? String(expanded) : 'false');
+    li.setAttribute('data-page-id', node.id);
+
+    // ── Row: toggle + icon + name ──
+    var row = document.createElement('div');
+    row.className = 'wiki-page-item' + (isActive ? ' selected-page' : '');
+    if (depth > 0) row.classList.add('indent-' + Math.min(depth, 5));
+    row.setAttribute('data-page-id', node.id);
+
+    // Toggle arrow button
+    var toggleBtn = document.createElement('button');
+    toggleBtn.className = 'wiki-toggle-btn' +
+      (hasChildren ? (expanded ? ' expanded' : '') : ' leaf');
+    toggleBtn.setAttribute('aria-label', expanded ? 'Collapse' : 'Expand');
+    toggleBtn.setAttribute('tabindex', hasChildren ? '0' : '-1');
+    toggleBtn.innerHTML = SVG_ARROW;
+    if (hasChildren) {
+      toggleBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleItem(node.id, li, toggleBtn, childrenEl);
+      });
+    }
+
+    // Page icon (emoji if present, else file svg)
+    var iconEl = document.createElement('span');
+    iconEl.className = 'wiki-nav-item-icon';
+    if (node.icon && node.icon.trim()) {
+      // Custom emoji / character icon
+      iconEl.style.fontSize = '14px';
+      iconEl.textContent = node.icon;
+    } else {
+      iconEl.innerHTML = SVG_FILE;
+    }
+
+    // Page name (also the link)
+    var nameEl = document.createElement('a');
+    nameEl.className = 'wiki-page-item-main';
+    nameEl.href = node.url || '#';
+    nameEl.setAttribute('aria-current', isActive ? 'page' : 'false');
+    nameEl.setAttribute('title', node.name || '');
+    nameEl.setAttribute('tabindex', '0');
+
+    var labelEl = document.createElement('span');
+    labelEl.className = 'wiki-page-item-name';
+    labelEl.textContent = node.name || '';
+
+    nameEl.appendChild(labelEl);
+
+    row.appendChild(toggleBtn);
+    row.appendChild(iconEl);
+    row.appendChild(nameEl);
+    li.appendChild(row);
+
+    // ── Children sub-list ──
+    var childrenEl = null;
+    if (hasChildren) {
+      childrenEl = document.createElement('ul');
+      childrenEl.className = 'wiki-nav-children' + (expanded ? '' : ' collapsed');
+      childrenEl.setAttribute('role', 'group');
+
+      node.children.forEach(function (child) {
+        childrenEl.appendChild(createNavItem(child, depth + 1));
+      });
+
+      li.appendChild(childrenEl);
+
+      // Set initial height so CSS transition works
+      if (expanded) {
+        // No height constraint – let it be auto
+        childrenEl.style.height = 'auto';
+      } else {
+        childrenEl.style.height = '0';
+      }
+    }
+
+    return li;
+  }
+
+  /**
+   * Toggle expand/collapse of a nav item.
+   */
+  function toggleItem(id, li, toggleBtn, childrenEl) {
+    var expanding = !isExpanded(id);
+    setExpanded(id, expanding);
+
+    li.setAttribute('aria-expanded', String(expanding));
+    toggleBtn.setAttribute('aria-label', expanding ? 'Collapse' : 'Expand');
+
+    if (expanding) {
+      toggleBtn.classList.add('expanded');
+    } else {
+      toggleBtn.classList.remove('expanded');
+    }
+
+    if (!childrenEl) return;
+
+    if (expanding) {
+      // Expand: measure scrollHeight, animate, then set to auto
+      childrenEl.classList.remove('collapsed');
+      var targetH = childrenEl.scrollHeight;
+      childrenEl.style.height = '0';
+      // Force reflow
+      void childrenEl.offsetHeight;
+      childrenEl.style.height = targetH + 'px';
+      childrenEl.addEventListener('transitionend', function onEnd() {
+        childrenEl.removeEventListener('transitionend', onEnd);
+        childrenEl.style.height = 'auto';
+      });
+    } else {
+      // Collapse: set explicit height first, then animate to 0
+      childrenEl.style.height = childrenEl.scrollHeight + 'px';
+      void childrenEl.offsetHeight;
+      childrenEl.classList.add('collapsed');
+      childrenEl.style.height = '0';
+    }
+  }
+
+  /**
+   * Render all top-level nav items into the tree container.
+   */
+  function renderNavTree() {
+    var treeEl = document.getElementById('wiki-nav-tree');
+    if (!treeEl) return;
+    treeEl.innerHTML = '';
+
+    if (!navData || !navData.length) {
+      var emptyEl = document.createElement('li');
+      emptyEl.style.cssText = 'padding: 8px 16px; color: #999; font-size: 13px;';
+      treeEl.appendChild(emptyEl);
+      return;
+    }
+
+    navData.forEach(function (node) {
+      treeEl.appendChild(createNavItem(node, 0));
+    });
+
+    // Scroll the active item into view (smooth, if supported)
+    var activeEl = treeEl.querySelector('.selected-page');
+    if (activeEl) {
+      requestAnimationFrame(function () {
+        activeEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+    }
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     7. Breadcrumb
+  ────────────────────────────────────────────────────────────── */
+  function renderBreadcrumb() {
+    var bcEl = document.getElementById('wiki-breadcrumb');
+    if (!bcEl || !currentPageId) return;
+
+    var path = findPath(navData, currentPageId);
+    if (!path.length) return;
+
+    path.forEach(function (node, idx) {
+      var isLast = (idx === path.length - 1);
+
+      var item = document.createElement('a');
+      item.className = 'wiki2-top-nav-item';
+      item.href = node.url || '#';
+      if (isLast) item.setAttribute('aria-current', 'page');
+      item.setAttribute('title', node.name || '');
+
+      // Icon
+      var iconSpan = document.createElement('span');
+      iconSpan.className = 'nav-icon';
+      if (node.icon && node.icon.trim()) {
+        iconSpan.style.fontSize = '14px';
+        iconSpan.textContent = node.icon;
+      } else {
+        iconSpan.innerHTML = SVG_FILE;
+      }
+
+      var labelSpan = document.createElement('span');
+      labelSpan.className = 'nav-label';
+      labelSpan.textContent = node.name || '';
+
+      item.appendChild(iconSpan);
+      item.appendChild(labelSpan);
+      bcEl.appendChild(item);
+
+      if (!isLast) {
+        var sep = document.createElement('span');
+        sep.className = 'item-split';
+        sep.setAttribute('aria-hidden', 'true');
+        sep.textContent = '/';
+        bcEl.appendChild(sep);
+      }
+    });
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     8. Mobile side-panel toggle
+  ────────────────────────────────────────────────────────────── */
+  var sidePanel = document.getElementById('wiki-side-panel');
+  var overlay = document.getElementById('wiki-mobile-overlay');
+  var menuBtn = document.getElementById('menu-toggle-btn');
+  var closeBtn = document.getElementById('side-panel-close');
+
+  function openSidePanel() {
+    if (!sidePanel) return;
+    sidePanel.classList.add('mobile-open');
+    if (overlay) {
+      overlay.classList.add('visible');
+      overlay.removeAttribute('aria-hidden');
+    }
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeSidePanel() {
+    if (!sidePanel) return;
+    sidePanel.classList.remove('mobile-open');
+    if (overlay) {
+      overlay.classList.remove('visible');
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+    if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+  }
+
+  if (menuBtn) menuBtn.addEventListener('click', openSidePanel);
+  if (closeBtn) closeBtn.addEventListener('click', closeSidePanel);
+  if (overlay) overlay.addEventListener('click', closeSidePanel);
+
+  // Close on Escape
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeSidePanel();
+  });
+
+  /* ──────────────────────────────────────────────────────────────
+     9. Side-panel resize (desktop only)
+  ────────────────────────────────────────────────────────────── */
+  var resizeHandle = document.getElementById('wiki-resize-handle');
+  var SIDE_MIN = 160;
+  var SIDE_MAX = 520;
+  var STORAGE_KEY = 'sf_wiki_side_panel_width';
+
+  function loadSavedWidth() {
+    try {
+      var saved = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+      if (!isNaN(saved) && saved >= SIDE_MIN && saved <= SIDE_MAX) return saved;
+    } catch (e) { /* ignore */ }
+    return 260;
+  }
+
+  function applySideWidth(w) {
+    w = Math.max(SIDE_MIN, Math.min(SIDE_MAX, w));
+    document.documentElement.style.setProperty('--wiki-side-width', w + 'px');
+    if (sidePanel) {
+      sidePanel.style.width = w + 'px';
+      sidePanel.style.minWidth = w + 'px';
+      sidePanel.style.maxWidth = w + 'px';
+    }
+    return w;
+  }
+
+  applySideWidth(loadSavedWidth());
+
+  if (resizeHandle) {
+    var resizing = false;
+
+    resizeHandle.addEventListener('mousedown', function (e) {
+      if (window.innerWidth < 768) return; // no resize on mobile
+      e.preventDefault();
+      resizing = true;
+      resizeHandle.classList.add('dragging');
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', function (e) {
+      if (!resizing) return;
+      var newW = applySideWidth(e.clientX);
+      void newW; // suppress lint
+    });
+
+    document.addEventListener('mouseup', function () {
+      if (!resizing) return;
+      resizing = false;
+      resizeHandle.classList.remove('dragging');
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+      try {
+        var currentW = parseFloat(
+          getComputedStyle(document.documentElement)
+            .getPropertyValue('--wiki-side-width')
+        );
+        if (!isNaN(currentW)) localStorage.setItem(STORAGE_KEY, String(currentW));
+      } catch (e) { /* ignore */ }
+    });
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     10. Browser history / popstate (navigation within SSR pages)
+  ────────────────────────────────────────────────────────────── */
+  window.addEventListener('popstate', function () {
+    // Full page reload to get fresh SSR content
+    window.location.reload();
+  });
+
+  /* ──────────────────────────────────────────────────────────────
+     11. Initialise
+  ────────────────────────────────────────────────────────────── */
+  renderNavTree();
+  renderBreadcrumb();
+
+})();
+</script>
+</body>
+</html>

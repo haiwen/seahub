@@ -40,6 +40,7 @@ class WikiCardItem extends Component {
       isShowPublishDialog: false,
       isShowConvertDialog: false,
       customUrlString: this.props.wiki.public_url_suffix,
+      enableServerRender: !!this.props.wiki.enable_server_render,
     };
   }
 
@@ -110,12 +111,15 @@ class WikiCardItem extends Component {
     this.setState({ isShowRenameDialog: false });
   };
 
-  publishWiki = (url) => {
+  publishWiki = (url, enableServerRender = false) => {
     const urlIndex = url.indexOf('/publish/');
     const publish_url = url.substring(urlIndex + '/publish/'.length);
-    wikiAPI.publishWiki(this.props.wiki.id, publish_url).then((res) => {
-      const { publish_url } = res.data;
-      this.setState({ customUrlString: publish_url });
+    wikiAPI.publishWiki(this.props.wiki.id, publish_url, enableServerRender).then((res) => {
+      const { publish_url, enable_server_render } = res.data;
+      this.setState({
+        customUrlString: publish_url,
+        enableServerRender: !!enable_server_render,
+      });
       toaster.success(gettext('Wiki published'));
     }).catch((error) => {
       if (error.response) {
@@ -345,6 +349,7 @@ class WikiCardItem extends Component {
               onPublish={this.publishWiki}
               wiki={wiki}
               customUrlString={this.state.customUrlString}
+              enableServerRender={this.state.enableServerRender}
             />
           </ModalPortal>
         }

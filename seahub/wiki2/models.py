@@ -94,6 +94,7 @@ class Wiki2Publish(models.Model):
     username = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     visit_count = models.IntegerField(default=0)
+    enable_server_render = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'wiki_wiki2_publish'
@@ -104,7 +105,8 @@ class Wiki2Publish(models.Model):
             'publish_url': self.publish_url,
             'username': self.username,
             'created_at': self.created_at,
-            'visit_count': self.visit_count
+            'visit_count': self.visit_count,
+            'enable_server_render': self.enable_server_render,
         }
 
 
