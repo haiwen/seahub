@@ -8,6 +8,7 @@ import posixpath
 import shutil
 import requests
 from zipfile import ZipFile, is_zipfile
+import html as html_module
 
 from seaserv import seafile_api, USE_GO_FILESERVER
 
@@ -431,3 +432,188 @@ def export_sdoc(uuid_map, username):
         raise Exception('make zip failed. ERROR: {}'.format(e))
     logger.info('Create /tmp/sdoc/{}/zip_file.zip success!'.format(doc_uuid))
     return tmp_zip_path
+
+
+def seadoc_to_html(sdoc_str):
+
+    doc = json.loads(sdoc_str)
+
+    def render_element(el):
+        heading_tags = {
+            "title": "h1", "subtitle": "h2",
+            "header1": "h1", "header2": "h2", "header3": "h3",
+            "header4": "h4", "header5": "h5", "header6": "h6",
+        }
+        el_type = el.get("type", "")
+
+        if el_type in heading_tags:
+            return render_heading(el, heading_tags[el_type])
+        if el_type == "paragraph":
+            return render_paragraph(el)
+        if el_type == "blockquote":
+            inner = "".join(render_element(c) for c in el.get("children", []))
+            return f"<blockquote>{inner}</blockquote>"
+        if el_type == "callout":
+            bg = el.get("style", {}).get("background_color", "#fef7e0")
+            inner = "".join(render_element(c) for c in el.get("children", []))
+            return f'<div class="callout" style="background-color:{bg};">{inner}</div>'
+        if el_type == "unordered_list":
+            items = "\n".join(render_list_item(c) for c in el.get("children", []))
+            return f"<ul>\n{items}\n</ul>"
+        if el_type == "ordered_list":
+            items = "\n".join(render_list_item(c) for c in el.get("children", []))
+            return f"<ol>\n{items}\n</ol>"
+        if el_type == "check_list_item":
+            checked = " checked" if el.get("checked") else ""
+            inner = render_inline_children(el.get("children", []))
+            return (f'<div class="check-list-item">'
+                    f'<input type="checkbox" disabled{checked}> {inner}</div>')
+        if el_type == "code_block":
+            return render_code_block(el)
+        if el_type == "table":
+            return render_table(el)
+        if el_type == "image":
+            return render_image(el)
+        if el_type == "mention":
+            return render_mention(el)
+        if "children" in el:
+            return "".join(render_element(c) for c in el["children"])
+        return ""
+
+    def render_heading(el, tag):
+        align = el.get("align", "")
+        style = f' style="text-align:{align};"' if align else ""
+        inner = render_inline_children(el.get("children", []))
+        return f"<{tag}{style}>{inner}</{tag}>"
+
+    def render_paragraph(el):
+        align = el.get("align", "")
+        style = f' style="text-align:{align};"' if align else ""
+        parts = []
+        for child in el.get("children", []):
+            child_type = child.get("type", "")
+            if child_type == "image":
+                parts.append(render_image(child))
+            elif child_type == "link":
+                parts.append(render_link(child))
+            elif child_type == "sdoc_link":
+                parts.append(render_sdoc_link(child))
+            elif child_type == "mention":
+                parts.append(render_mention(child))
+            else:
+                parts.append(render_text_node(child))
+        inner = "".join(parts) or "&nbsp;"
+        return f"<p{style}>{inner}</p>"
+
+    def render_list_item(el):
+        inner = "".join(render_element(c) for c in el.get("children", []))
+        return f"<li>{inner}</li>"
+
+    def render_code_block(el):
+        lang = el.get("language", "")
+        lang_class = f' class="language-{html_module.escape(lang)}"' if lang else ""
+        lines = []
+        for line in el.get("children", []):
+            if line.get("type") == "code_line":
+                text = "".join(c.get("text", "") for c in line.get("children", []))
+                lines.append(html_module.escape(text))
+        return f"<pre><code{lang_class}>{chr(10).join(lines)}</code></pre>"
+
+    def render_table(el):
+        cols = "".join(
+            f'<col style="width:{c["width"]}px;">' if c.get("width") else "<col>"
+            for c in el.get("columns", [])
+        )
+        colgroup = f"<colgroup>{cols}</colgroup>" if cols else ""
+        rows = "\n".join(render_table_row(r) for r in el.get("children", []))
+        return f"<table>{colgroup}\n{rows}\n</table>"
+
+    def render_table_row(el):
+        min_h = el.get("style", {}).get("min_height")
+        style = f' style="height:{min_h}px;"' if min_h else ""
+        cells = "".join(render_table_cell(c) for c in el.get("children", []))
+        return f"<tr{style}>{cells}</tr>"
+
+    def render_table_cell(el):
+        s = el.get("style", {})
+        css = ""
+        if s.get("text_align"):
+            css += f"text-align:{s['text_align']};"
+        if s.get("background_color"):
+            css += f"background-color:{s['background_color']};"
+        style = f' style="{css}"' if css else ""
+        inner = render_inline_children(el.get("children", []))
+        return f"<td{style}>{inner}</td>"
+
+    def render_image(el):
+        data = el.get("data", {})
+        src = html_module.escape(data.get("src", ""))
+        width = data.get("width")
+        width_attr = f' width="{width}"' if width else ""
+        return f'<img src="{src}"{width_attr} alt="">'
+
+    def render_link(el):
+        href = html_module.escape(el.get("href", el.get("title", "#")))
+        title = html_module.escape(el.get("title", ""))
+        title_attr = f' title="{title}"' if title else ""
+        inner = render_inline_children(el.get("children", []))
+        return f'<a href="{href}"{title_attr}>{inner}</a>'
+
+    def render_sdoc_link(el):
+        uuid = html_module.escape(el.get("doc_uuid", ""))
+        title = html_module.escape(el.get("title", ""))
+        inner = render_inline_children(el.get("children", []))
+        return f'<a href="{uuid}" title="{title}" class="sdoc-link">{inner}</a>'
+
+    def render_mention(el):
+        username = html_module.escape(el.get("username", ""))
+        inner = render_inline_children(el.get("children", []))
+        return f'<span class="mention" data-username="{username}">{inner}</span>'
+
+    def render_inline_children(children):
+        parts = []
+        for child in children:
+            t = child.get("type", "")
+            if t == "link":
+                parts.append(render_link(child))
+            elif t == "sdoc_link":
+                parts.append(render_sdoc_link(child))
+            elif t == "mention":
+                parts.append(render_mention(child))
+            elif t == "image":
+                parts.append(render_image(child))
+            elif t == "paragraph":
+                parts.append(render_paragraph(child))
+            else:
+                parts.append(render_text_node(child))
+        return "".join(parts)
+
+    def render_text_node(node):
+        text = html_module.escape(node.get("text", ""))
+        css = ""
+        if node.get("color"):
+            css += f"color:{node['color']};"
+        if node.get("highlight_color"):
+            css += f"background-color:{node['highlight_color']};"
+        if node.get("font_size"):
+            css += f"font-size:{node['font_size']}px;"
+        if node.get("font"):
+            css += f"font-family:{html_module.escape(node['font'])};"
+        if css:
+            text = f'<span style="{css}">{text}</span>'
+        if node.get("subscript"):
+            text = f"<sub>{text}</sub>"
+        if node.get("superscript"):
+            text = f"<sup>{text}</sup>"
+        if node.get("strikethrough"):
+            text = f"<s>{text}</s>"
+        if node.get("underline"):
+            text = f"<u>{text}</u>"
+        if node.get("italic"):
+            text = f"<em>{text}</em>"
+        if node.get("bold"):
+            text = f"<strong>{text}</strong>"
+        return text
+
+    body = "\n".join(render_element(el) for el in doc.get("elements", []))
+    return body

@@ -1,8 +1,9 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
-import logging
-import posixpath
 import json
+import logging
+import requests
+import posixpath
 from datetime import datetime
 
 from constance import config
@@ -12,17 +13,17 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from seahub.api2.endpoints.repos import ReposView
 from seahub.wiki2.models import Wiki2 as Wiki
 from seahub.wiki2.models import Wiki2Publish, WikiFileViews, Wiki2Settings
-from seahub.utils import get_file_type_and_ext, render_permission_error
+from seahub.utils import get_file_type_and_ext, render_permission_error, \
+        gen_inner_file_get_url
 from seahub.utils.file_types import SEADOC
 from seahub.auth.decorators import login_required
 from seahub.wiki2.utils import check_wiki_permission, get_wiki_config
 
 from seahub.utils.repo import get_repo_owner, is_repo_admin, list_user_admin_reops
-from seahub.settings import SEADOC_SERVER_URL, SITE_ROOT
-from seahub.seadoc.utils import gen_seadoc_access_token
+from seahub.settings import SEADOC_SERVER_URL
+from seahub.seadoc.utils import gen_seadoc_access_token, seadoc_to_html
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -175,7 +176,8 @@ def wiki_publish_view(request, publish_url, page_id=None):
     except Exception as e:
         logger.warning(e)
 
-    return render(request, "wiki/wiki_publish.html", {
+    template_name = 'wiki/wiki_publish.html'
+    render_context = {
         "wiki": wiki,
         "file_path": file_path,
         "repo_name": repo.name if repo else '',
@@ -183,8 +185,67 @@ def wiki_publish_view(request, publish_url, page_id=None):
         "modify_time": last_modified,
         "seadoc_server_url": SEADOC_SERVER_URL,
         "permission": 'public',
-        "publish_url": publish_url
+        "publish_url": publish_url,
+    }
+
+    if not wiki_publish.enable_server_render:
+        return render(request, template_name, render_context)
+
+    # ------------------------------------------------------------------
+    # SEO: server-side rendering of sdoc → HTML
+    # When enable_server_render is True, convert the .sdoc file to HTML
+    # in Python before responding, so search-engine crawlers can index
+    # the page content without executing JavaScript.
+    # ------------------------------------------------------------------
+
+    if not page_id:
+        wiki_config = get_wiki_config(wiki.repo_id, '')
+        pages = wiki_config.get('pages', [])
+        page_id = pages[0]['id']
+
+    page_info = next(filter(lambda t: t['id'] == page_id, pages), {})
+    file_path = page_info.get('path', '')
+
+    # get wiki title
+    wiki_file_name = os.path.basename(file_path)
+    wiki_title = os.path.splitext(wiki_file_name)[0]
+
+    # get wiki navigation
+    def add_url_recursive(item):
+        item['url'] = f"/wiki/publish/{publish_url}/{item['id']}/"
+        item['name'] = id_name_dict[item['id']]
+        if 'children' in item:
+            for child in item['children']:
+                add_url_recursive(child)
+        return item
+
+    id_name_dict = {page['id']: page['name'] for page in pages}
+    wiki_navigation = wiki_config.get('navigation', [])
+    wiki_navigation = [add_url_recursive(item) for item in wiki_navigation]
+
+    # get wiki html
+    file_id = seafile_api.get_file_id_by_path(wiki_id, file_path)
+    token = seafile_api.get_fileserver_access_token(wiki_id,
+                                                    file_id,
+                                                    'download',
+                                                    '',
+                                                    use_onetime=False)
+    file_name = posixpath.basename(file_path)
+    url = gen_inner_file_get_url(token, file_name)
+    resp = requests.get(url)
+    sdoc_str = resp.content
+    wiki_html = seadoc_to_html(sdoc_str)
+
+    # render
+    template_name = 'wiki/wiki_publish_ssr.html'
+    render_context.update({
+        "wiki_repo_name": wiki.name,
+        "wiki_title": wiki_title,
+        "wiki_html": wiki_html,
+        "wiki_navigation": wiki_navigation
     })
+    return render(request, template_name, render_context)
+
 
 def wiki_history_view(request, wiki_id):
     """ view wiki history page. for wiki2
