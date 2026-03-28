@@ -699,7 +699,7 @@ class Search(APIView):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-                repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name)]
+                repos = [(repo.id, repo.origin_repo_id, repo.origin_path, repo.name, repo.last_modifier, repo.last_modify, repo.size)]
 
             searched_repos, repos_map = format_repos(repos)
 
@@ -730,6 +730,9 @@ class Search(APIView):
                 real_repo_id = repo[0]
                 origin_path = repo[1]
                 repo_name = repo[2]
+                last_modifier = repo[3]
+                last_modify = repo[4]
+                size = repo[5]
                 f['repo_name'] = repo_name
                 f.pop('_id', None)
 
@@ -747,6 +750,23 @@ class Search(APIView):
                         f['fullpath'] = f['fullpath'].removeprefix(origin_path)
 
                 f['repo_owner_email'] = owner_map.get(repo_id, '')
+                if f['fullpath'] == '/':
+                    f['last_modified_by'] = last_modifier
+                    f['last_modified'] = last_modify
+                    f['size'] = size
+                else:
+                    try:
+                        dirent = seafile_api.get_dirent_by_path(f['repo_id'], f['fullpath'])
+                    except Exception as e:
+                        logger.error(e)
+                        continue
+
+                    if not dirent:
+                        continue
+
+                    f['last_modified_by'] = dirent.modifier
+                    f['last_modified'] = dirent.mtime
+                    f['size'] = dirent.size
 
                 new_results.append(f)
 
