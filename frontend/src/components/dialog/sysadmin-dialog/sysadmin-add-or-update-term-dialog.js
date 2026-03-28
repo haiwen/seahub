@@ -136,6 +136,7 @@ class AddOrUpdateTermDialog extends React.Component {
             {this.state.errMsg && <Alert color="danger">{this.state.errMsg}</Alert>}
           </ModalBody>
           <ModalFooter>
+            <Button color="secondary" onClick={this.props.toggle}>{gettext('Cancel')}</Button>
             <Button color="primary" onClick={this.addTerm}>{gettext('Submit')}</Button>
           </ModalFooter>
         </Modal>

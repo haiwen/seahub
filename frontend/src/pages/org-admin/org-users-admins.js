@@ -99,11 +99,9 @@ class OrgUsers extends Component {
       <>
         <button
           className={topBtn}
-          title={gettext('Add admin')}
           onClick={this.toggleAddOrgAdmin}
-          aria-label={gettext('Add admin')}
         >
-          <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />
+          <Icon symbol="new" className="mr-1" aria-hidden="true" />
           {gettext('Add admin')}
         </button>
         {this.state.isShowAddOrgAdminDialog &&

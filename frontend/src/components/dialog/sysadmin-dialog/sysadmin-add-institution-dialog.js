@@ -53,6 +53,7 @@ class SysAdminAddInstitutionDialog extends React.Component {
           </Form>
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.handleSubmit} disabled={!this.state.isSubmitBtnActive}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

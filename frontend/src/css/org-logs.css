@@ -3,19 +3,12 @@
   border: 1px solid #ccc;
   border-radius: 2px;
   padding: 1px 8px;
-  background: #f0f0f0;
+  background: var(--bs-body-secondary-bg);
   cursor: pointer;
   font-size: 14px;
-  margin: 10px 5px 0;
+  margin: 8px 0 5px;
 }
-.audit-unselect-item:hover {
-  background-color: #ddd;
-}
-.no-deco,
-.no-deco:hover,
-.no-deco:focus {
-  text-decoration: none;
-}
+
 .cur-view-path .nav .nav-item a {
   padding: 7px 10px;
 }

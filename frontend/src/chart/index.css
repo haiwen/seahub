@@ -15,10 +15,6 @@
   stroke: #fff;
 }
 
-.sf-chart .axis .tick text {
-  fill: #666;
-}
-
 /* grid */
 .sf-chart .grid line {
   shape-rendering: crispEdges;
@@ -82,6 +78,7 @@
   font-size: 16px;
   font-weight: 500;
   text-anchor: middle;
+  fill: var(--bs-body-color);
 }
 
 /* legend */
@@ -91,7 +88,7 @@
 }
 
 .sf-chart .legend .legend-text {
-  fill: #333;
+  fill: var(--bs-body-color);
   user-select: none;
 }
 

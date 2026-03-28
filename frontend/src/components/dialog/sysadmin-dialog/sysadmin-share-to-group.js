@@ -17,16 +17,16 @@ class GroupItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isOperationShow: false
+      isHighlighted: false
     };
   }
 
   onMouseEnter = () => {
-    this.setState({ isOperationShow: true });
+    this.setState({ isHighlighted: true });
   };
 
   onMouseLeave = () => {
-    this.setState({ isOperationShow: false });
+    this.setState({ isHighlighted: false });
   };
 
   deleteShareItem = () => {
@@ -42,15 +42,20 @@ class GroupItem extends React.Component {
   render() {
     let item = this.props.item;
     let currentPermission = Utils.getSharedPermission(item);
+    const { isHighlighted } = this.state;
     return (
-      <tr onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        className={isHighlighted ? 'tr-highlight' : ''}
+      >
         <td className='name'>{item.group_name}</td>
         <td>
           <SharePermissionEditor
             repoID={item.repo_id}
             isTextMode={true}
             autoFocus={true}
-            isEditIconShow={this.state.isOperationShow}
+            isEditIconShow={isHighlighted}
             currentPermission={currentPermission}
             permissions={this.props.permissions}
             onPermissionChanged={this.onChangeUserPermission}
@@ -59,7 +64,7 @@ class GroupItem extends React.Component {
         </td>
         <td>
           <span
-            className={`op-icon ${this.state.isOperationShow ? '' : 'hide'}`}
+            className={`op-icon ${isHighlighted ? '' : 'invisible'}`}
             role="button"
             tabIndex="0"
             onClick={this.deleteShareItem}

@@ -23,7 +23,7 @@
 }
 
 .sf-single-selector .option-item:hover {
-  background: #f5f5f5;
+  background: var(--bs-body-secondary-bg);
 }
 
 .sf-single-selector .option-item-text {
