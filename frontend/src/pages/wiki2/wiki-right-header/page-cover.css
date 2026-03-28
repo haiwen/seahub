@@ -136,6 +136,7 @@
   height: 2.5rem;
   border: 1px solid rgba(0, 40, 100, 0.12);
   border-radius: 3px;
+  color: var(--bs-body-color);
   background-color: transparent;
   cursor: pointer;
 }
