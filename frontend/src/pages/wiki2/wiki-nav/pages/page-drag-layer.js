@@ -4,6 +4,7 @@ import CustomIcon from '../../custom-icon';
 import NavItemIcon from '../../common/nav-item-icon';
 import Icon from '../../../../components/icon';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 const PageDragLayer = ({ pages, getFoldState }) => {
   const { isDragging, item, currentOffset } = useDragLayer((monitor) => ({
@@ -32,7 +33,7 @@ const PageDragLayer = ({ pages, getFoldState }) => {
 
     return (
       <div key={page.id} className="wiki-page-item-wrapper" style={{ '--depth': depth }}>
-        <div className="wiki-page-item">
+        <div className={classNames('wiki-page-item', { 'root': depth === 0 })}>
           <div className="wiki-page-item-main">
             <div className="wiki-page-content">
               {!hasChildren && (customIcon ? (
@@ -68,6 +69,7 @@ const PageDragLayer = ({ pages, getFoldState }) => {
   };
 
   const { x, y } = currentOffset;
+  const ghostWidth = item.width || 'auto';
 
   return (
     <div className="wiki-page-drag-layer">
@@ -76,6 +78,7 @@ const PageDragLayer = ({ pages, getFoldState }) => {
         style={{
           left: x,
           top: y,
+          width: ghostWidth,
         }}
       >
         {renderPageTree(item.data, 0)}

@@ -58,9 +58,12 @@ const PageItem = ({
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: 'wiki-page',
     item: () => {
+      // Get the actual width of the wrapper element for ghost display
+      const wrapperWidth = wrapperRef.current ? wrapperRef.current.offsetWidth : 0;
       return {
         idx: pageIndex,
         data: { ...page, index: pageIndex },
+        width: wrapperWidth,
       };
     },
     collect: (monitor) => ({
