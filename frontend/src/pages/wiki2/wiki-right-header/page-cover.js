@@ -49,16 +49,23 @@ function PageCover({ currentPageConfig, onUpdatePageConfig }) {
     return `${svcUrl}${mediaUrl}img/wiki/cover/${imageName}`;
   }, []);
 
-  // Initialize indicator style on mount based on current active panel
+  // Update indicator style when popover opens or active panel changes
   useEffect(() => {
-    const activeTab = activePanel === 'gallery' ? galleryTabRef.current : uploadTabRef.current;
-    if (activeTab) {
-      setIndicatorStyle({
-        left: activeTab.offsetLeft,
-        width: activeTab.offsetWidth
-      });
-    }
-  }, [activePanel]);
+    if (!isPopoverOpen) return;
+
+    // Use requestAnimationFrame to ensure DOM is rendered before measuring
+    const updateIndicator = () => {
+      const activeTab = activePanel === 'gallery' ? galleryTabRef.current : uploadTabRef.current;
+      if (activeTab) {
+        setIndicatorStyle({
+          left: activeTab.offsetLeft,
+          width: activeTab.offsetWidth
+        });
+      }
+    };
+
+    requestAnimationFrame(updateIndicator);
+  }, [isPopoverOpen, activePanel]);
 
   const getCustomCoverUrl = useCallback((filename, docUuid) => {
     const { serviceUrl: svcUrl } = window.seafile;
