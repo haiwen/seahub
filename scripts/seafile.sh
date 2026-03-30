@@ -192,11 +192,13 @@ function start_seafile_server () {
 }
 
 function kill_all () {
+    pkill -9 -f "seafile-monitor.sh"
     pkill -f "seaf-server"
     pkill -f "fileserver"
     pkill -f "seafevents.main"
-    pkill -f "wsgidav.server.server_cli"
-    pkill -f "seafile-monitor.sh"
+    pkill -9 -f "wsgidav.server.server_cli"
+
+    rm -f $TOPDIR/pids/*
 }
 
 function stop_seafile_server () {
