@@ -52,12 +52,12 @@
   color: #212529;
 }
 
-.unselect-activity-user {
+.unselect-activity-user .seafile-multicolor-icon {
   color: #909090;
   cursor: pointer;
 }
 
-.unselect-activity-user:hover {
+.unselect-activity-user .seafile-multicolor-icon:hover {
   color: #5a5a5a;
 }
 

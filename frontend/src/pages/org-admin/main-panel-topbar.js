@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Account from '../../components/common/account';
+import ColorMode from '../../components/common/color-mode';
 import Icon from '../../components/icon';
 
 const propTypes = {
@@ -23,7 +24,8 @@ class MainPanelTopbar extends Component {
         </div>
         <div className="common-toolbar">
           {this.props.search && this.props.search}
-          <Account isAdminPanel={true}/>
+          <ColorMode />
+          <Account isAdminPanel={true} />
         </div>
       </div>
     );

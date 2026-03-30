@@ -273,16 +273,16 @@ class OrgUsers extends Component {
           {gettext('Import users')}
         </button>
         <button className={topBtn} title={gettext('Add user')} onClick={this.toggleAddOrgUser} aria-label={gettext('Add user')}>
-          <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />{gettext('Add user')}
+          <Icon symbol="new" className="mr-1" aria-hidden="true" />{gettext('Add user')}
         </button>
         {orgEnableAdminInviteUser &&
           <button className={topBtn} title={gettext('Invite users')} onClick={this.toggleInviteUserDialog} aria-label={gettext('Invite users')}>
-            <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />{gettext('Invite users')}
+            <Icon symbol="new" className="mr-1" aria-hidden="true" />{gettext('Invite users')}
           </button>
         }
         {invitationLink &&
           <button className={topBtn} title={gettext('Invite users via WeChat')} onClick={this.toggleInviteUserViaWeiXinDialog} aria-label={gettext('Invite users via WeChat')}>
-            <Icon symbol="new" className="text-secondary mr-1" aria-hidden="true" />{gettext('Invite users via WeChat')}
+            <Icon symbol="new" className="mr-1" aria-hidden="true" />{gettext('Invite users via WeChat')}
           </button>
         }
         {this.state.isImportOrgUsersDialogOpen &&

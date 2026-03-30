@@ -47,9 +47,9 @@ class FileUpdateDetailDialog extends React.Component {
 
   renderContentItem = (items) => {
     let con = '';
-    con += '<ul class="list-group list-group-flush">';
+    con += '<ul class="list-unstyled">';
     for (var i = 0, len = items.length; i < len; i++) {
-      con += '<li class="list-group-item">' + items[i] + '</li>';
+      con += '<li class="text-truncate">' + items[i] + '</li>';
     }
     con += '</ul>';
     return { __html: con };

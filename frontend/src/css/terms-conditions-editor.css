@@ -3,7 +3,7 @@
   min-height: 38px;
   max-height: 300px;
   overflow: auto;
-  background-color: #f5f5f5;
+  background-color: var(--bs-body-secondary-bg);
 }
 
 .conditions-preview-wrapper .conditions-preview-container {

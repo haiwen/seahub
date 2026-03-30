@@ -29,6 +29,10 @@
   color: var(--bs-body-color);
 }
 
+.selected-user-item-container .user-item .user-name {
+  color: #212529;
+}
+
 .user-item .user-avatar img {
   width: 16px;
   height: 16px;
