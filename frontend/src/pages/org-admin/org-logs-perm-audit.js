@@ -72,7 +72,7 @@ class OrgLogsFileUpdate extends Component {
       <div className="cur-view-content">
         {this.state.userSelected &&
           <span className="audit-unselect-item" onClick={this.filterUser.bind(this, null)}>
-            <span className="no-deco">{this.state.userSelected}</span>{' ✖'}
+            {this.state.userSelected}{' ✖'}
           </span>
         }
         <table>

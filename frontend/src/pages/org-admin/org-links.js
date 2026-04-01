@@ -204,25 +204,23 @@ class RepoItem extends React.Component {
         <td>{dayjs(link.created_time).fromNow()}</td>
         <td>{link.view_count}</td>
         <td className="cursor-pointer text-center">
-          {this.state.showMenu &&
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="span"
-                className="op-icon"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-                onClick={this.onDropdownToggleClick}
-              >
-                <Icon symbol="more-level" />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={deleteOrgLink.bind(this, link.token)}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.props.openLinkDialog.bind(this, link)}>{gettext('View Link')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          }
+          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+            <DropdownToggle
+              tag="span"
+              className={`op-icon ${this.state.showMenu ? '' : 'invisible'}`}
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
+              data-toggle="dropdown"
+              aria-expanded={this.state.isItemMenuShow}
+              onClick={this.onDropdownToggleClick}
+            >
+              <Icon symbol="more-level" />
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={deleteOrgLink.bind(this, link.token)}>{gettext('Delete')}</DropdownItem>
+              <DropdownItem onClick={this.props.openLinkDialog.bind(this, link)}>{gettext('View Link')}</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </td>
       </tr>
     );

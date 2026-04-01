@@ -54,7 +54,7 @@ class SetOrgUserContactEmail extends React.Component {
   render() {
     const { inputValue, formErrorMsg, submitBtnDisabled } = this.state;
     return (
-      <Modal isOpen={true} centered={true} toggle={this.props.toggleDialog}>
+      <Modal isOpen={true} toggle={this.props.toggleDialog}>
         <SeahubModalHeader toggle={this.props.toggleDialog}>{gettext('Set user contact email')}</SeahubModalHeader>
         <ModalBody>
           <React.Fragment>

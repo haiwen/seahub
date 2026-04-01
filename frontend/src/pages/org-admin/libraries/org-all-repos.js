@@ -226,13 +226,12 @@ class RepoItem extends React.Component {
           <td>{`${repo.file_count} / ${Utils.bytesToSize(repo.size)}`}</td>
           <td>{repo.repoID}</td>
           <td><a href={this.renderRepoOwnerHref(repo)}>{repo.ownerName}</a></td>
-          <td className="text-center cursor-pointer">
-            {isOperationMenuShow &&
+          <td className="text-center">
             <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
               <DropdownToggle
                 tag="span"
                 role="button"
-                className="op-icon"
+                className={`op-icon ${isOperationMenuShow ? '' : 'invisible'}`}
                 title={gettext('More operations')}
                 aria-label={gettext('More operations')}
                 data-toggle="dropdown"
@@ -246,7 +245,6 @@ class RepoItem extends React.Component {
                 <DropdownItem onClick={this.toggleTransfer}>{gettext('Transfer')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
-            }
           </td>
         </tr>
         {this.state.isTransferDialogShow && (

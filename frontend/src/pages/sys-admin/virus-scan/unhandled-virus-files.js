@@ -255,14 +255,7 @@ class UnhandledVirusFiles extends Component {
       this.getListByPage(this.state.currentPage);
     });
     this.unsubscribeHandleSelectedOp = eventBus.subscribe(EVENT_BUS_TYPE.HANDLE_SELECTED_OPERATIONS, (op) => {
-      switch (op) {
-        case 'delete-virus':
-          this.deleteSelectedItems();
-          break;
-        case 'ignore-virus':
-          this.ignoreSelectedItems();
-          break;
-      }
+      this.handleSelectedItems(op);
     });
   }
 
@@ -367,6 +360,7 @@ class UnhandledVirusFiles extends Component {
         }
       })
       .map(item => item.virus_id);
+    if (!virusIDs.length) return;
     systemAdminAPI.sysAdminBatchProcessVirusFiles(virusIDs, op).then((res) => {
       let fileList = this.state.virusFiles;
       res.data.success.forEach(item => {
