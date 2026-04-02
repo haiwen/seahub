@@ -125,7 +125,12 @@ class Item extends Component {
           onMouseLeave={this.handleMouseLeave}
         >
           <td><a href={groupUrl}>{item.group_name}</a></td>
-          <td><UserLink email={item.creator_email} name={item.creator_name} /></td>
+          <td>
+            {item.creator_name == 'system admin'
+              ? '--'
+              : <UserLink email={item.creator_email} name={item.creator_name} />
+            }
+          </td>
           <td>{dayjs(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
           <td>
             <OpIcon

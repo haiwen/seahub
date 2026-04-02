@@ -164,6 +164,7 @@ class AddOrgUserDialog extends React.Component {
           {this.state.errMessage && <Label className="err-message">{this.state.errMessage}</Label>}
         </ModalBody>
         <ModalFooter>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" disabled={this.state.isAddingUser} onClick={this.handleSubmit} className={this.state.isAddingUser ? 'btn-loading' : ''}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

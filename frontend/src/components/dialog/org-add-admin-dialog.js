@@ -62,7 +62,7 @@ class AddOrgAdminDialog extends React.Component {
           {this.state.errMessage && <Alert color="danger" className="mt-2">{this.state.errMessage}</Alert>}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
           <Button color="primary" onClick={this.addOrgAdmin}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>

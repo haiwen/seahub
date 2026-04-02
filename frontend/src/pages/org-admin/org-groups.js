@@ -318,25 +318,23 @@ class GroupItem extends React.Component {
         {this.renderGroupCreator(group)}
         <td>{group.ctime}</td>
         <td className="text-center cursor-pointer">
-          {isOperationMenuShow &&
-            <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-              <DropdownToggle
-                tag="span"
-                className="op-icon"
-                title={gettext('More operations')}
-                aria-label={gettext('More operations')}
-                data-toggle="dropdown"
-                aria-expanded={this.state.isItemMenuShow}
-                onClick={this.onDropdownToggleClick}
-              >
-                <Icon symbol="more-level" />
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
-                <DropdownItem onClick={this.toggleChangeDialog}>{gettext('Change to department')}</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          }
+          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+            <DropdownToggle
+              tag="span"
+              className={`op-icon ${isOperationMenuShow ? '' : 'invisible'}`}
+              title={gettext('More operations')}
+              aria-label={gettext('More operations')}
+              data-toggle="dropdown"
+              aria-expanded={this.state.isItemMenuShow}
+              onClick={this.onDropdownToggleClick}
+            >
+              <Icon symbol="more-level" />
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={this.toggleDelete}>{gettext('Delete')}</DropdownItem>
+              <DropdownItem onClick={this.toggleChangeDialog}>{gettext('Change to department')}</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
           {this.state.isChangeDialogOpen &&
             <ChangeGroupDialog
               groupName={group.groupName}

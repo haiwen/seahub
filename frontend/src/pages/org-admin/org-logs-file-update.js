@@ -100,12 +100,12 @@ class OrgLogsFileUpdate extends Component {
           <React.Fragment>
             {this.state.userSelected &&
               <span className="audit-unselect-item" onClick={this.filterUser.bind(this, null)}>
-                <span className="no-deco">{this.state.userSelected}</span>{' ✖'}
+                {this.state.userSelected}{' ✖'}
               </span>
             }
             {this.state.repoSelected &&
               <span className="audit-unselect-item" onClick={this.filterRepo.bind(this, null)}>
-                <span className="no-deco">{this.state.repoSelected}</span>{' ✖'}
+                {this.state.repoSelected}{' ✖'}
               </span>
             }
           </React.Fragment>
