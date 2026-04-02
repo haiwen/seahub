@@ -38,6 +38,7 @@
 .seafile-select-option {
   position: relative;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   line-height: 24px;

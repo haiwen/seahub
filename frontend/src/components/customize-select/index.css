@@ -107,6 +107,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #212529;
+}
+
+.seafile-customize-select .selected-option-delete .seafile-multicolor-icon {
+  color: #909090;
+}
+
+.seafile-customize-select .selected-option-delete .seafile-multicolor-icon:hover {
+  color: #666;
 }
 
 .seafile-customize-select .select-placeholder {
